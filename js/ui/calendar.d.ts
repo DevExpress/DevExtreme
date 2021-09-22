@@ -57,8 +57,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @type_function_param1_field1 date:Date
      * @type_function_param1_field2 view:string
      * @type_function_param1_field3 text:string
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -76,7 +74,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @type_function_param1_field1 component:object
      * @type_function_param1_field2 date:Date
      * @type_function_param1_field3 view:string
-     * @type_function_return boolean
      * @public
      */
     disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
@@ -156,8 +153,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
  * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/calendar
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

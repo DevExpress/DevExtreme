@@ -1,3 +1,4 @@
+import { setWidth } from '../../../core/utils/size';
 import { getBoundingRect } from '../../../core/utils/position';
 import CurrentTimeShader from '../shaders/ui.scheduler.current_time_shader';
 
@@ -8,8 +9,6 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
         for(let i = 0; i < groupCount; i++) {
             const isFirstShader = i === 0;
             const $shader = isFirstShader ? this._$shader : this.createShader();
-
-            this.applyShaderMargin($shader);
 
             if(this._workSpace.isGroupedByDate()) {
                 this._customizeGroupedByDateShader($shader, i);
@@ -43,7 +42,7 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
         }
 
         if(width > 0) {
-            $shader.width(width);
+            setWidth($shader, width);
         }
     }
 

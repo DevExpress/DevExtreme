@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
@@ -984,7 +985,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         // NOTE: The height of node container is should be used when the container is shown (T606878)
         $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
-        const nodeHeight = $nodeContainer.height();
+        const nodeHeight = getHeight($nodeContainer);
 
         fx.stop($nodeContainer, true);
         fx.animate($nodeContainer, {

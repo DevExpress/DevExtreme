@@ -11,7 +11,7 @@ import {
   getOffset,
 } from '../../../core/utils/size';
 
-const borderStyles = {
+export const borderWidthStyles = {
   left: 'borderLeftWidth',
   top: 'borderTopWidth',
   right: 'borderRightWidth',
@@ -20,7 +20,7 @@ const borderStyles = {
 
 function getBorderWidth(el: HTMLElement, direction: Handle): number {
   if (!isWindow(el)) {
-    const borderWidth = el.style[borderStyles[direction]];
+    const borderWidth = el.style[borderWidthStyles[direction]];
 
     return parseInt(borderWidth, 10) || 0;
   }

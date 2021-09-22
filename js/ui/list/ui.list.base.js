@@ -1,3 +1,4 @@
+import { getHeight, getOuterHeight, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { ensureDefined, noop } from '../../core/utils/common';
@@ -71,7 +72,7 @@ export const ListBase = CollectionWidget.inherit({
 
         function getEdgeVisibleItem(direction) {
             const scrollTop = that.scrollTop();
-            const containerHeight = that.$element().height();
+            const containerHeight = getHeight(that.$element());
 
             let $item = $(that.option('focusedElement'));
             let isItemVisible = true;
@@ -87,7 +88,7 @@ export const ListBase = CollectionWidget.inherit({
                     break;
                 }
 
-                const nextItemLocation = $nextItem.position().top + $nextItem.outerHeight() / 2;
+                const nextItemLocation = $nextItem.position().top + getOuterHeight($nextItem) / 2;
                 isItemVisible = nextItemLocation < containerHeight + scrollTop && nextItemLocation > scrollTop;
 
                 if(isItemVisible) {
@@ -102,7 +103,7 @@ export const ListBase = CollectionWidget.inherit({
             let resultPosition = $item.position().top;
 
             if(direction === 'prev') {
-                resultPosition = $item.position().top - that.$element().height() + $item.outerHeight();
+                resultPosition = $item.position().top - getHeight(that.$element()) + getOuterHeight($item);
             }
 
             that.scrollTo(resultPosition);
@@ -626,8 +627,12 @@ export const ListBase = CollectionWidget.inherit({
 
         const $groupBody = $group.children('.' + LIST_GROUP_BODY_CLASS);
 
-        const startHeight = $groupBody.outerHeight();
-        const endHeight = startHeight === 0 ? $groupBody.height('auto').outerHeight() : 0;
+        const startHeight = getOuterHeight($groupBody);
+        let endHeight = 0;
+        if(startHeight === 0) {
+            setHeight($groupBody, 'auto');
+            endHeight = getOuterHeight($groupBody);
+        }
 
         $group.toggleClass(LIST_GROUP_COLLAPSED_CLASS, toggle);
 

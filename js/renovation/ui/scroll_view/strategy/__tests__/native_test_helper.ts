@@ -102,7 +102,7 @@ class ScrollableTestHelper {
       { width: containerSize, height: containerSize },
       { width: contentSize, height: contentHeight });
 
-    this.viewModel.updateSizes();
+    this.viewModel.updateElementDimensions();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -198,8 +198,8 @@ class ScrollableTestHelper {
       const scrollbar = scrollbarRef.instance();
       scrollbar.scrollbarRef = React.createRef();
       scrollbar.scrollbarRef.current = scrollbarRef.getDOMNode();
-      scrollbar.scrollRef = React.createRef();
-      scrollbar.scrollRef.current = scrollbarRef.find('.dx-scrollable-scroll').getDOMNode();
+      scrollbar.thumbRef = React.createRef();
+      scrollbar.thumbRef.current = scrollbarRef.find('.dx-scrollable-scroll').getDOMNode();
 
       Object.assign(scrollbar, {
         props: {

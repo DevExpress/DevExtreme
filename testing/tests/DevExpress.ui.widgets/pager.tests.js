@@ -1,3 +1,4 @@
+import { setWidth, getWidth, getOuterWidth } from 'core/utils/size';
 import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
@@ -1270,9 +1271,9 @@ function() {
 
         const pager = $pager.dxPager('instance');
 
-        const optimalPagerWidth = pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() - pager._pages[pager._pages.length - 1]._$page.width();
+        const optimalPagerWidth = getWidth(pager._$pagesSizeChooser) + getWidth(pager._$pagesChooser) - getWidth(pager._pages[pager._pages.length - 1]._$page);
 
-        $pager.width(optimalPagerWidth - pager._$info.outerWidth(true) - 1);
+        $pager.width(optimalPagerWidth - getOuterWidth(pager._$info, true) - 1);
 
         pager._dimensionChanged();
         assert.equal(isLightMode(pager), true, 'lightModeEnabled is enabled');
@@ -1291,7 +1292,7 @@ function() {
 
         const pager = $pager.dxPager('instance');
 
-        const optimalPagerWidth = pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() + 20;
+        const optimalPagerWidth = getWidth(pager._$pagesSizeChooser) + getWidth(pager._$pagesChooser) + 20;
         $pager.width(optimalPagerWidth);
         pager._dimensionChanged();
         assert.ok(pager._$info.length === 1 && pager._$info.css('display') !== 'none', 'info element is visible');
@@ -1458,7 +1459,7 @@ function() {
         });
         const pager = $pager.dxPager('instance');
 
-        $pager.width(pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() - 50);
+        $pager.width(getWidth(pager._$pagesSizeChooser) + getWidth(pager._$pagesChooser) - 50);
         pager._dimensionChanged();
 
         assert.ok(!isLightMode(pager), 'lightModeEnabled');
@@ -1476,12 +1477,18 @@ function() {
             pagesCountText: 'of'
         });
         const pager = $pager.dxPager('instance');
-        const infoWidth = pager._$info.width();
+        const infoWidth = getWidth(pager._$info);
 
-        $pager.width(pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() - 50);
+        setWidth(
+            $pager,
+            getWidth(pager._$pagesSizeChooser) + getWidth(pager._$pagesChooser) - 50
+        );
         pager._dimensionChanged();
 
-        $pager.width(pager._$pagesSizeChooser.width() + pager._$pagesChooser.width() + infoWidth + 50);
+        setWidth(
+            $pager,
+            getWidth(pager._$pagesSizeChooser) + getWidth(pager._$pagesChooser) + infoWidth + 50
+        );
         pager._dimensionChanged();
 
         assert.ok(!isLightMode(pager), 'lightModeEnabled');

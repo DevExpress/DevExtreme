@@ -6,7 +6,6 @@ import { extend } from '../../core/utils/extend';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
 import { utils } from './utils';
 import {
-    getResourceManager,
     getAppointmentDataProvider,
     getTimeZoneCalculator
 } from './instanceFactory';
@@ -16,10 +15,6 @@ import { getFormatType, formatDates } from './appointments/textUtils';
 const toMs = dateUtils.dateToMilliseconds;
 
 const subscribes = {
-    getResourceManager: function() {
-        return getResourceManager(this.key);
-    },
-
     getAppointmentDataProvider: function() {
         return getAppointmentDataProvider(this.key);
     },
@@ -215,15 +210,6 @@ const subscribes = {
         return this.getRenderingStrategyInstance().getDirection();
     },
 
-    getWorkSpaceDateTableOffset: function() {
-        return this.getWorkSpaceDateTableOffset();
-    },
-
-    getMaxAppointmentWidth: function(options) {
-        const workSpace = this._workSpace;
-        return workSpace.getCellCountToLastViewDate(options.date) * workSpace.getCellWidth();
-    },
-
     updateAppointmentStartDate: function(options) {
         const appointment = options.appointment;
         const firstViewDate = this._workSpace.getStartViewDate();
@@ -288,14 +274,6 @@ const subscribes = {
             appointmentElement: config.itemElement,
             targetedAppointmentData: targetedData,
         };
-    },
-
-    getOffsetByAllDayPanel: function(groupIndex) {
-        return this._workSpace._getOffsetByAllDayPanel(groupIndex);
-    },
-
-    getGroupTop: function(groupIndex) {
-        return this._workSpace._getGroupTop(groupIndex);
     },
 
     dayHasAppointment: function(day, appointment, trimTime) {

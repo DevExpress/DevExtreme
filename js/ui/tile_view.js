@@ -1,7 +1,7 @@
+import { getWidth, getHeight, setWidth, setHeight, getOuterWidth, getOuterHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
-import { captionize } from '../core/utils/inflector';
 import { map, each } from '../core/utils/iterator';
 import { isDefined } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
@@ -203,8 +203,12 @@ const TileView = CollectionWidget.inherit({
             return Math.round(item[config.itemCrossRatio] || 1);
         }));
 
-        const crossDimensionValue = hasWindow() ?
-            this.$element()[config.crossDimension]() : parseInt(this.$element().get(0).style[config.crossDimension]);
+        let crossDimensionValue;
+        if(hasWindow) {
+            crossDimensionValue = (config.crossDimension === 'width' ? getWidth : getHeight)(this.$element());
+        } else {
+            crossDimensionValue = parseInt(this.$element().get(0).style[config.crossDimension]);
+        }
 
         this._cellsPerDimension = Math.floor(crossDimensionValue / (this.option(config.baseItemCrossDimension) + itemMargin));
         this._cellsPerDimension = Math.max(this._cellsPerDimension, maxItemCrossRatio);
@@ -218,9 +222,9 @@ const TileView = CollectionWidget.inherit({
     _renderContentSize: function({ mainDimension, baseItemMainDimension }, itemMargin) {
         if(hasWindow()) {
             const actualContentSize = this._cells.length * this.option(baseItemMainDimension) + (this._cells.length + 1) * itemMargin;
-            const elementSize = this.$element()[mainDimension]();
+            const elementSize = (mainDimension === 'width' ? getWidth : getHeight)(this.$element());
 
-            this._$container[mainDimension](Math.max(actualContentSize, elementSize));
+            (mainDimension === 'width' ? setWidth : setHeight)(this._$container, Math.max(actualContentSize, elementSize));
         }
     },
 
@@ -340,7 +344,7 @@ const TileView = CollectionWidget.inherit({
         cssProps[config.crossPosition] = itemPositionCross * baseItemCross + (itemPositionCross + 1) * itemMargin;
 
         if(this.option('rtlEnabled')) {
-            const offsetCorrection = this._$container.width();
+            const offsetCorrection = getWidth(this._$container);
             const baseItemWidth = this.option('baseItemWidth');
             const itemPositionX = itemPosition.left;
             const offsetPosition = itemPositionX * baseItemWidth;
@@ -437,13 +441,13 @@ const TileView = CollectionWidget.inherit({
         }
 
         const config = this._config;
-        const outerMainProp = 'outer' + captionize(config.mainDimension);
+        const outerMainGetter = (config.mainDimension === 'width' ? getOuterWidth : getOuterHeight);
         const itemMargin = this.option('itemMargin');
         const itemPosition = $itemElement.position()[config.mainPosition];
-        const itemDimension = $itemElement[outerMainProp]();
+        const itemDimension = outerMainGetter($itemElement);
         const itemTail = itemPosition + itemDimension;
         const scrollPosition = this.scrollPosition();
-        const clientWidth = this.$element()[outerMainProp]();
+        const clientWidth = outerMainGetter(this.$element());
 
         if(scrollPosition <= itemPosition && itemTail <= scrollPosition + clientWidth) {
             return;

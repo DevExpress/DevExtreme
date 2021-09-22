@@ -96,7 +96,6 @@ describe('WorkSpace', () => {
     const dateTableTemplate = () => null;
     const timePanelTemplate = () => null;
     const renderConfig = {
-      isAllDayPanelSupported: false,
       className: 'custom',
       isRenderDateHeader: true,
       scrollingDirection: 'vertical',
@@ -131,6 +130,7 @@ describe('WorkSpace', () => {
       const viewModel = {
         viewDataProvider,
         isAllDayPanelVisible: true,
+        isRenderHeaderEmptyCell: true,
         groupPanelData: {
           baseColSpan: 5,
           groupPanelItems: [],
@@ -151,6 +151,7 @@ describe('WorkSpace', () => {
           ...props,
           isAllDayPanelCollapsed: true,
           isAllDayPanelVisible: true,
+          isRenderHeaderEmptyCell: true,
           dateHeaderData,
           viewData,
           timePanelData,
@@ -468,6 +469,54 @@ describe('WorkSpace', () => {
 
           expect(workSpace.isAllDayPanelVisible)
             .toBe(true);
+        });
+      });
+
+      describe('isRenderHeaderEmptyCell', () => {
+        it('should return true when vertical grouping is used', () => {
+          const workSpace = new WorkSpace({
+            groups,
+            groupOrientation: 'vertical',
+            type: 'month',
+          } as any);
+
+          expect(workSpace.isRenderHeaderEmptyCell)
+            .toBe(true);
+        });
+
+        it('should return false when horizontal grouping is used', () => {
+          const workSpace = new WorkSpace({
+            groups,
+            groupOrientation: 'horizontal',
+            type: 'month',
+          } as any);
+
+          expect(workSpace.isRenderHeaderEmptyCell)
+            .toBe(false);
+        });
+
+        it('should return false without groups', () => {
+          const workSpace = new WorkSpace({
+            groups: [],
+            groupOrientation: 'vertical',
+            type: 'month',
+          } as any);
+
+          expect(workSpace.isRenderHeaderEmptyCell)
+            .toBe(false);
+        });
+
+        ['day', 'week', 'workWeek'].forEach((view) => {
+          it(`should return true for "${view}" view`, () => {
+            const workSpace = new WorkSpace({
+              groups,
+              groupOrientation: 'horizontal',
+              type: view,
+            } as any);
+
+            expect(workSpace.isRenderHeaderEmptyCell)
+              .toBe(true);
+          });
         });
       });
 

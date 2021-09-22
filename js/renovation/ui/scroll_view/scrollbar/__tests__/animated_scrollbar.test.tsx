@@ -32,14 +32,13 @@ describe('AnimatedScrollbar', () => {
     const viewModel = mount<AnimatedScrollbar>(<AnimatedScrollbar {...props} />);
 
     expect({ ...viewModel.props() }).toEqual({
-      activeStateEnabled: false,
+      direction: 'vertical',
       bottomPocketSize: 0,
       containerHasSizes: false,
       containerSize: 0,
       contentPaddingBottom: 0,
       contentSize: 0,
-      forceVisibility: false,
-      isScrollableHovered: false,
+      visible: false,
       maxOffset: 0,
       minOffset: 0,
       scrollLocation: 0,
@@ -52,8 +51,6 @@ describe('AnimatedScrollbar', () => {
     { name: 'moveTo', calledWith: ['arg1'] },
     { name: 'isScrollbar', calledWith: ['arg1'] },
     { name: 'isThumb', calledWith: ['arg1'] },
-    { name: 'show', calledWith: [] },
-    { name: 'hide', calledWith: [] },
   ]).describe('Method: %o', (methodInfo) => {
     it(`${methodInfo.name}() method should call according scrollbar method`, () => {
       const viewModel = new AnimatedScrollbar({});
@@ -235,11 +232,9 @@ describe('Handlers', () => {
               const scrollbar = mount(AnimatedScrollbarComponent(viewModel as any));
 
               const initHandler = jest.fn();
-              const hideHandler = jest.fn();
               (viewModel as any).scrollbarRef = {
                 current: {
                   initHandler,
-                  hide: hideHandler,
                   isScrollbar: jest.fn(() => targetClass === 'dx-scrollable-scrollbar'),
                   isThumb: jest.fn(() => targetClass === 'dx-scrollable-scroll'),
                 },
@@ -251,7 +246,6 @@ describe('Handlers', () => {
 
               viewModel.initHandler(event, crossThumbScrolling, 30);
 
-              expect(hideHandler).toHaveBeenCalledTimes(1);
               expect(viewModel.pendingBounceAnimator).toEqual(false);
               expect(viewModel.pendingInertiaAnimator).toEqual(false);
               expect(viewModel.stopped).toEqual(true);
@@ -268,13 +262,15 @@ describe('Handlers', () => {
 
                 expectedThumbScrolling = isScrollbarClicked || (scrollByThumb && targetClass === 'dx-scrollable-scroll');
                 expectedCrossThumbScrolling = !expectedThumbScrolling && crossThumbScrolling;
+
+                expect(initHandler).toHaveBeenCalledTimes(1);
+                expect(initHandler).toHaveBeenCalledWith(event, expectedThumbScrolling, 30);
+              } else {
+                expect(initHandler).toHaveBeenCalledTimes(0);
               }
 
               expect(viewModel.thumbScrolling).toEqual(expectedThumbScrolling);
               expect(viewModel.crossThumbScrolling).toEqual(expectedCrossThumbScrolling);
-
-              expect(initHandler).toHaveBeenCalledTimes(1);
-              expect(initHandler).toHaveBeenCalledWith(event, expectedThumbScrolling, 30);
             });
         });
       });

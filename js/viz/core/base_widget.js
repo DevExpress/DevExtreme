@@ -12,6 +12,7 @@ import { changes, replaceInherit } from './helpers';
 import { parseScalar as _parseScalar } from './utils';
 import warnings from './errors_warnings';
 import { Renderer } from './renderers/renderer';
+import { getWidth, getHeight } from '../../core/utils/size';
 import _Layout from './layout';
 import devices from '../../core/devices';
 import eventsEngine from '../../events/core/events_engine';
@@ -453,15 +454,15 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const size = that.option('size') || {};
         const margin = that.option('margin') || {};
         const defaultCanvas = that._getDefaultSize() || {};
-        const getSizeOfSide = (size, side) => {
+        const getSizeOfSide = (size, side, getter) => {
             if(sizeIsValid(size[side]) || !hasWindow()) {
                 return 0;
             }
-            const elementSize = that._$element[side]();
+            const elementSize = getter(that._$element);
             return elementSize <= 1 ? 0 : elementSize;
         };
-        const elementWidth = getSizeOfSide(size, 'width');
-        const elementHeight = getSizeOfSide(size, 'height');
+        const elementWidth = getSizeOfSide(size, 'width', (x) => getWidth(x));
+        const elementHeight = getSizeOfSide(size, 'height', (x) => getHeight(x));
         let canvas = {
             width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
             height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),

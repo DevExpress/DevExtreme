@@ -25,20 +25,19 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
     scrollableRef,
     reachBottomEnabled,
     props: {
-      useNative, activeStateUnit, children,
+      useNative, children,
       aria, disabled, width, height, visible, rtlEnabled,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
       scrollByContent, useKeyboard, pullDownEnabled,
       useSimulatedScrollbar, inertiaEnabled,
       onScroll, onUpdated, onPullDown, onReachBottom, onStart, onEnd, onBounce,
-      pulledDownText, refreshingText, pullingDownText, reachBottomText,
+      pulledDownText, refreshingText, pullingDownText, reachBottomText, refreshStrategy,
     },
     restAttributes,
   } = viewModel;
 
   return (
     <Scrollable
-      activeStateUnit={activeStateUnit}
       useNative={useNative}
       classes="dx-scrollview"
       ref={scrollableRef}
@@ -57,6 +56,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       onUpdated={onUpdated}
       onPullDown={onPullDown}
       onReachBottom={onReachBottom}
+      refreshStrategy={refreshStrategy}
       pulledDownText={pulledDownText}
       pullingDownText={pullingDownText}
       refreshingText={refreshingText}
@@ -191,6 +191,7 @@ export class ScrollView extends JSXComponent<ScrollViewProps>() {
     this.scrollableRef.current!.finishLoading();
   }
 
+  @Method()
   updateHandler(): void {
     this.scrollableRef.current!.updateHandler();
   }
