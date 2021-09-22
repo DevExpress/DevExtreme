@@ -9,21 +9,28 @@
     <script type="text/javascript" src="../../../../../artifacts/js/jquery.min.js"></script>
     <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
 </head>
+<style>
+    #container {
+        width: 600px;
+        height: 550px;
+    }
+</style>
 <body>
+    <div id="container"></div>
     <script>
         function createDateBoxInTheme(theme, config) {
             return new Promise((resolve) => {
                 $(() => {
-                    $('body > div').remove();
+                    $('body > #container > div').remove();
 
                     $('<div>')
-                            .appendTo($('body'))
-                            .dxDateBox(Object.assign({
-                                opened: true,
-                                pickerType: 'calendar',
-                                width: 200,
-                                value: new Date(1.5e12)
-                            }, config))
+                        .appendTo($('body > #container'))
+                        .dxDateBox(Object.assign({
+                            opened: true,
+                            pickerType: 'calendar',
+                            width: 200,
+                            value: new Date(1.5e12)
+                        }, config));
 
                     resolve();
                 });

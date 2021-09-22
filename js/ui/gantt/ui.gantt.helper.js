@@ -79,7 +79,7 @@ export const GanttHelper = {
     },
 
     convertTreeToList(node, array) {
-        if(node.data) {
+        if(node?.data && node?.visible) {
             array.push(node.data);
         }
 
@@ -210,7 +210,9 @@ export const GanttHelper = {
                 clearText: messageLocalization.format('dxGantt-sortingClearText'),
                 mode: 'single',
                 showSortIndexes: false
-            }
+            },
+            filterRow: undefined,
+            headerFilter: undefined
         };
     }
 
