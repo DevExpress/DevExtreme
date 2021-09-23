@@ -1054,17 +1054,17 @@ export const rowsModule = {
                         const rowElements = that._getRowElements(tableElement).filter(':visible');
 
                         if(!isTop) {
-                            const height = this._hasHeight ? this.element().outerHeight() : $(getWindow()).outerHeight();
+                            const height = this._hasHeight ? getOuterHeight(this.element()) : $(getWindow()).outerHeight();
 
                             viewportBoundary += height;
                         }
 
                         for(itemIndex = 0; itemIndex < items.length; itemIndex++) {
                             prevOffset = offset;
-                            const rowElement = rowElements.get(itemIndex);
-                            if(rowElement) {
-                                const boundingClientRect = rowElement.getBoundingClientRect();
-                                offset = boundingClientRect[isTop ? 'top' : 'bottom'] - contentElementOffsetTop;
+                            const $rowElement = $(rowElements).eq(itemIndex);
+                            if($rowElement.length) {
+                                offset = $rowElement.offset();
+                                offset = (isTop ? offset.top : offset.top + getOuterHeight($rowElement)) - contentElementOffsetTop;
 
                                 if(offset > viewportBoundary) {
                                     if(itemIndex) {
