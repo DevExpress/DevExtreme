@@ -8,7 +8,6 @@ describe('Scheduler common', () => {
         testStartDateExpr: '2021-09-21T11:11:00',
         testEndDateExpr: '2021-09-21T12:11:00',
       };
-      const instance = { };
       const props = {
         ...new SchedulerProps(),
         startDateExpr: 'testStartDateExpr',
@@ -23,29 +22,18 @@ describe('Scheduler common', () => {
         dateSerializationFormat: '',
         forceIsoDateParsing: true,
       };
-      const currentDataAccessors = {
-        getter: {},
-        setter: {},
-        expr: {},
-      };
       const dataAccessors = createDataAccessors(
-        instance,
         props,
-        currentDataAccessors,
-        (value: string) => { props.dateSerializationFormat = value; },
       );
 
       const startDate = dataAccessors.getter.startDate(testData);
       const endDate = dataAccessors.getter.endDate(testData);
 
-      expect(props.dateSerializationFormat)
-        .toEqual('yyyy-MM-ddTHH:mm:ss');
-
       expect(startDate)
-        .toEqual(new Date('2021-09-21T11:11:00'));
+        .toEqual('2021-09-21T11:11:00');
 
       expect(endDate)
-        .toEqual(new Date('2021-09-21T12:11:00'));
+        .toEqual('2021-09-21T12:11:00');
 
       expect(dataAccessors.expr)
         .toEqual({

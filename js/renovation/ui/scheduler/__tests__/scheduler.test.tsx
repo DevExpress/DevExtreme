@@ -308,6 +308,27 @@ describe('Scheduler', () => {
           .toBeGreaterThan(-1);
       });
 
+      it('dataAccessors should be correctly created', () => {
+        const scheduler = new Scheduler({
+          ...new SchedulerProps(),
+          startDateExpr: 'testStartDate',
+          endDateExpr: 'testEndDate',
+        });
+
+        expect(scheduler.dataAccessors.expr)
+          .toEqual({
+            startDateExpr: 'testStartDate',
+            endDateExpr: 'testEndDate',
+            startDateTimeZoneExpr: 'startDateTimeZone',
+            endDateTimeZoneExpr: 'endDateTimeZone',
+            allDayExpr: 'allDay',
+            textExpr: 'text',
+            descriptionExpr: 'description',
+            recurrenceRuleExpr: 'recurrenceRule',
+            recurrenceExceptionExpr: 'recurrenceException',
+          });
+      });
+
       describe('onViewRendered', () => {
         it('should save viewDataProvider and cells meta data to the state', () => {
           const scheduler = new Scheduler(new SchedulerProps());
@@ -353,60 +374,6 @@ describe('Scheduler', () => {
               .toBeDefined();
             expect(getTimeZoneCalculator(scheduler.key))
               .toBeDefined();
-          });
-
-          it('should correctly create data accessors', () => {
-            const props = {
-              ...new SchedulerProps(),
-              startDateExpr: 'testStartDate',
-            };
-            const scheduler = new Scheduler(props);
-
-            const viewDataProvider = new ViewDataProvider('week') as any;
-            const cellsMetaData = {
-              dateTableCellsMeta: [],
-              allDayPanelCellsMeta: [],
-            };
-
-            scheduler.onViewRendered({
-              viewDataProvider,
-              cellsMetaData,
-            });
-
-            expect(scheduler.dataAccessors.expr)
-              .toEqual({
-                startDateExpr: 'testStartDate',
-                endDateExpr: 'endDate',
-                startDateTimeZoneExpr: 'startDateTimeZone',
-                endDateTimeZoneExpr: 'endDateTimeZone',
-                allDayExpr: 'allDay',
-                textExpr: 'text',
-                descriptionExpr: 'description',
-                recurrenceRuleExpr: 'recurrenceRule',
-                recurrenceExceptionExpr: 'recurrenceException',
-              });
-
-            scheduler.dataAccessors.getter.startDate({ testStartDate: '2021-09-21T11:11:00' });
-            expect(props.dateSerializationFormat)
-              .toEqual('yyyy-MM-ddTHH:mm:ss');
-          });
-
-          it('should not create instances without viewDataProvider', () => {
-            const scheduler = new Scheduler(new SchedulerProps());
-
-            expect(scheduler.viewDataProvider)
-              .toBe(undefined);
-            expect(scheduler.cellsMetaData)
-              .toBe(undefined);
-
-            scheduler.createInstances();
-
-            expect(scheduler.dataAccessors)
-              .toBeUndefined();
-            expect(getAppointmentDataProvider(scheduler.key))
-              .toBeUndefined();
-            expect(getTimeZoneCalculator(scheduler.key))
-              .toBeUndefined();
           });
         });
       });

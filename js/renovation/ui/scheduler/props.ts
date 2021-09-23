@@ -237,7 +237,7 @@ export class SchedulerProps extends BaseWidgetProps {
   @OneWay()
   dataSource?: string | dxSchedulerAppointment[] | DataSource | DataSourceOptions;
 
-  @TwoWay()
+  @OneWay()
   dateSerializationFormat?: string;
 
   @OneWay()
@@ -324,9 +324,6 @@ export class SchedulerProps extends BaseWidgetProps {
 
   @OneWay()
   maxAppointmentsPerCell: number | 'auto' | 'unlimited' = 'auto';
-
-  @OneWay()
-  forceIsoDateParsing = true;
 
   /* Events */
 
