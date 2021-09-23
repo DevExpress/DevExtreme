@@ -55,7 +55,7 @@ if(Quill) {
     const USER_ACTION = 'user';
     const SILENT_ACTION = 'silent';
 
-    const ICON_MAPPER = {
+    const ICON_MAP = {
         insertHeaderRow: 'header',
         clear: 'clearformat'
     };
@@ -516,7 +516,7 @@ if(Quill) {
         }
 
         _prepareButtonItemConfig(name) {
-            const iconName = ICON_MAPPER[name] ?? name;
+            const iconName = ICON_MAP[name] ?? name;
             const buttonText = titleize(name);
 
             return {

@@ -13,7 +13,9 @@ const TABLE_OPERATIONS = [
 
 function getTableFormats(quill) {
     const tableModule = quill.getModule('table');
-    return tableModule?.tableFormats ? tableModule.tableFormats() : TABLE_FORMATS; // backward compatibility with previous devextreme-quill versions
+
+    // backward compatibility with an old devextreme-quill packages
+    return tableModule?.tableFormats ? tableModule.tableFormats() : TABLE_FORMATS;
 }
 
 function getTableOperationHandler(quill, operationName, ...rest) {
