@@ -229,9 +229,14 @@
     "qunit-in-docker": "gulp qunit-in-docker --constel"
   },
   "browserslist": [
-    "last 2 versions",
-    "ios > 8",
-    "> 1%"
+    "last 2 Android major versions",
+    "last 2 Chrome major versions",
+    "last 2 Edge major versions",
+    "last 2 Firefox major versions",
+    "last 2 Opera major versions",
+    "last 2 Safari major versions",
+    "last 2 ChromeAndroid major versions",
+    "last 1 Electron versions"
   ],
   "jest": {
     "modulePathIgnorePatterns": [
