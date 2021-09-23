@@ -2880,29 +2880,35 @@ QUnit.module('Editing', baseModuleConfig, () => {
         });
     });
 
-    QUnit.test('Editing cell should not be focused twice', function(assert) {
+    QUnit.test('Editing cell editor\'s content should not be selected twice', function(assert) {
         // arrange
         const dataGrid = createDataGrid({
             dataSource: [{ field1: 'test1', field2: 'test2' }],
             editing: {
                 mode: 'cell',
-                allowUpdating: true
+                allowUpdating: true,
+                selectTextOnEditStart: true
             }
         });
 
-        const editingController = dataGrid.getController('editing');
-        const focusedSpy = sinon.spy(editingController, '_delayedInputFocus');
+        const onSelectedSpy = sinon.spy();
 
         // act
         this.clock.tick(100);
-        $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
+        const $cell = $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
         this.clock.tick(100);
-        $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').trigger('change');
+
+        // arrange
+        const $editor = $cell.find('.dx-texteditor-input');
+        $editor.on('select', onSelectedSpy);
+
+        // act
+        $editor.val('asd').trigger('change');
         this.clock.tick(100);
 
         // assert
 
-        assert.strictEqual(focusedSpy.callCount, 1, 'focused only once');
+        assert.strictEqual(onSelectedSpy.callCount, 0, 'is not selected after change');
     });
 });
 
