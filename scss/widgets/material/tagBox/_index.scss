@@ -45,27 +45,29 @@
 
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
+    &.dx-editor-outlined {
+      .dx-tag-container.dx-texteditor-input-container {
+        padding-top: $material-tagbox-outlined-with-label-top-padding;
+      }
+    }
+
     &.dx-editor-filled {
       .dx-tag-container.dx-texteditor-input-container {
-        padding-top: 12px;
-        padding-bottom: 0;
-      }
-
-      .dx-texteditor-input {
-        margin-top: 0;
-        min-height: $material-base-inline-widget-height;
+        padding-top: $material-tagbox-filled-with-label-top-padding;
+        padding-bottom: $material-tagbox-filled-with-label-bottom-padding;
       }
     }
 
     &.dx-editor-underlined {
       .dx-tag-container.dx-texteditor-input-container {
-        padding-top: 16px;
-        padding-bottom: 0;
+        padding-top: $material-tagbox-filled-with-label-top-padding;
+        padding-bottom: $material-tagbox-filled-with-label-bottom-padding;
       }
 
-      .dx-texteditor-input {
-        margin-top: 0;
-        min-height: $material-base-inline-widget-height;
+      &.dx-tagbox:not(.dx-texteditor-empty):not(.dx-editor-filled):not(.dx-editor-outlined) {
+        .dx-tag-container {
+          margin-top: 0;
+        }
       }
     }
   }

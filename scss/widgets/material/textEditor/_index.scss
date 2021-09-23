@@ -495,15 +495,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   &.dx-texteditor-with-floating-label {
     position: relative;
 
-
-    .dx-texteditor-input {
-      min-height: $material-editor-filled-with-label-height;
-    }
-
-    &.dx-lookup {
-      height: $material-editor-filled-with-label-height;
-    }
-
     .dx-texteditor-input,
     &.dx-lookup .dx-lookup-field,
     &.dx-textarea .dx-texteditor-container {
@@ -837,6 +828,16 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     outline: none;
     position: relative;
 
+    &.dx-textarea {
+      .dx-texteditor-input-container {
+        padding-top: $material-filled-texteditor-input-top-padding;
+
+        .dx-texteditor-input {
+          padding-top: 0;
+        }
+      }
+    }
+
     &.dx-state-readonly,
     &.dx-state-readonly.dx-state-hover,
     &.dx-state-disabled {
@@ -951,14 +952,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 
     .dx-placeholder::before {
       padding-top: $input-top-padding;
-    }
-
-    .dx-texteditor-input {
-      min-height: $material-editor-underlined-with-label-height;
-    }
-
-    &.dx-lookup {
-      height: $material-editor-underlined-with-label-height;
     }
 
     .dx-texteditor-input,

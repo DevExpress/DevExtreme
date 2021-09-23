@@ -99,9 +99,10 @@ const TextBox = TextEditor.inherit({
         this.callBase();
 
         if(this._$searchIcon && this._$label) {
-            const labelBeforeWidth = this._$label.find('.dx-label-before').width() + this._$searchIcon.outerWidth();
+            const labelBeforeElement = this._$label.find('.dx-label-before');
+            const labelBeforeWidth = labelBeforeElement.width() + this._$searchIcon.outerWidth();
 
-            this._$label.find('.dx-label-before').css('width', labelBeforeWidth);
+            labelBeforeElement.css('width', labelBeforeWidth);
 
             this._$label.find('.dx-label').css('max-width', this._input().parent().width() - labelBeforeWidth - this._$label.find('.dx-label-after').width());
         }

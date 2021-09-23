@@ -271,14 +271,6 @@ $generic-texteditor-label-transition:
   &.dx-texteditor-with-floating-label {
     position: relative;
 
-    .dx-texteditor-input {
-      min-height: $genric-editor-filled-with-label-height;
-    }
-
-    &.dx-lookup {
-      height: $genric-editor-filled-with-label-height;
-    }
-
     .dx-texteditor-input,
     &.dx-lookup .dx-lookup-field,
     &.dx-textarea .dx-texteditor-container {
@@ -568,12 +560,14 @@ $generic-texteditor-label-transition:
     outline: none;
     position: relative;
 
-    .dx-texteditor-input {
-      min-height: $genric-editor-outlined-with-label-height;
-    }
+    &.dx-textarea {
+      .dx-texteditor-input-container {
+        padding-top: $generic-base-inline-borderedwidget-top-padding;
 
-    &.dx-lookup {
-      height: $genric-editor-outlined-with-label-height;
+        .dx-texteditor-input {
+          padding-top: 0;
+        }
+      }
     }
 
     &.dx-invalid {
@@ -679,14 +673,6 @@ $generic-texteditor-label-transition:
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
     position: relative;
-
-    .dx-texteditor-input {
-      min-height: $genric-editor-underlined-with-label-height;
-    }
-
-    &.dx-lookup {
-      height: $genric-editor-underlined-with-label-height;
-    }
 
     .dx-texteditor-label {
       transform: $label-transform;

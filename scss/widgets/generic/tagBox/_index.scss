@@ -51,21 +51,21 @@
 .dx-texteditor-with-floating-label {
   &.dx-editor-outlined {
     .dx-tag-container.dx-texteditor-input-container {
-      padding-top: 8px;
+      padding-top: $generic-tagbox-outlined-with-label-top-padding;
     }
   }
 
   &.dx-editor-filled {
     .dx-tag-container.dx-texteditor-input-container {
-      padding-top: 12px;
-      padding-bottom: 2px;
+      padding-top: $generic-tagbox-filled--with-label-top-padding;
+      padding-bottom: $generic-tagbox-filled--with-label-bottom-padding;
     }
   }
 
   &.dx-editor-underlined {
     .dx-tag-container.dx-texteditor-input-container {
-      padding-top: 12px;
-      padding-bottom: 2px;
+      padding-top: $generic-tagbox-filled--with-label-top-padding;
+      padding-bottom: $generic-tagbox-filled--with-label-bottom-padding;
     }
   }
 }
