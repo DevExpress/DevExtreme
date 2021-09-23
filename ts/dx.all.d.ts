@@ -1770,9 +1770,9 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.on(events)]
      */
-    on(
-      events: { [key in DevExpress.data.DataSource.EventName]?: Function }
-    ): this;
+    on(events: {
+      [key in DevExpress.data.DataSource.EventName]?: Function;
+    }): this;
     /**
      * [descr:DataSource.pageIndex()]
      */
@@ -2440,11 +2440,9 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSource.on(events)]
      */
-    on(
-      events: {
-        [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
-      }
-    ): this;
+    on(events: {
+      [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
+    }): this;
     /**
      * [descr:PivotGridDataSource.reload()]
      */
@@ -14678,20 +14676,6 @@ declare module DevExpress.ui {
    */
   export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
-     * [descr:dxLookupOptions.animation]
-     * @deprecated [depNote:dxLookupOptions.animation]
-     */
-    animation?: {
-      /**
-       * [descr:dxLookupOptions.animation.hide]
-       */
-      hide?: AnimationConfig;
-      /**
-       * [descr:dxLookupOptions.animation.show]
-       */
-      show?: AnimationConfig;
-    };
-    /**
      * [descr:dxLookupOptions.applyButtonText]
      */
     applyButtonText?: string;
@@ -14711,13 +14695,6 @@ declare module DevExpress.ui {
      * [descr:dxLookupOptions.clearButtonText]
      */
     clearButtonText?: string;
-    /**
-     * [descr:dxLookupOptions.closeOnOutsideClick]
-     * @deprecated [depNote:dxLookupOptions.closeOnOutsideClick]
-     */
-    closeOnOutsideClick?:
-      | boolean
-      | ((event: DevExpress.events.DxEvent) => boolean);
     /**
      * [descr:dxLookupOptions.fieldTemplate]
      */
@@ -14767,11 +14744,6 @@ declare module DevExpress.ui {
      */
     onScroll?: (e: DevExpress.ui.dxLookup.ScrollEvent) => void;
     /**
-     * [descr:dxLookupOptions.onTitleRendered]
-     * @deprecated [depNote:dxLookupOptions.onTitleRendered]
-     */
-    onTitleRendered?: (e: DevExpress.ui.dxLookup.TitleRenderedEvent) => void;
-    /**
      * [descr:dxLookupOptions.onValueChanged]
      */
     onValueChanged?: (e: DevExpress.ui.dxLookup.ValueChangedEvent) => void;
@@ -14787,21 +14759,6 @@ declare module DevExpress.ui {
      * [descr:dxLookupOptions.placeholder]
      */
     placeholder?: string;
-    /**
-     * [descr:dxLookupOptions.popupHeight]
-     * @deprecated [depNote:dxLookupOptions.popupHeight]
-     */
-    popupHeight?: number | string | (() => number | string);
-    /**
-     * [descr:dxLookupOptions.popupWidth]
-     * @deprecated [depNote:dxLookupOptions.popupWidth]
-     */
-    popupWidth?: number | string | (() => number | string);
-    /**
-     * [descr:dxLookupOptions.position]
-     * @deprecated [depNote:dxLookupOptions.position]
-     */
-    position?: PositionConfig;
     /**
      * [descr:dxLookupOptions.pullRefreshEnabled]
      */
@@ -14827,11 +14784,6 @@ declare module DevExpress.ui {
      */
     searchPlaceholder?: string;
     /**
-     * [descr:dxLookupOptions.shading]
-     * @deprecated [depNote:dxLookupOptions.shading]
-     */
-    shading?: boolean;
-    /**
      * [descr:dxLookupOptions.showCancelButton]
      */
     showCancelButton?: boolean;
@@ -14839,25 +14791,6 @@ declare module DevExpress.ui {
      * [descr:dxLookupOptions.showClearButton]
      */
     showClearButton?: boolean;
-    /**
-     * [descr:dxLookupOptions.showPopupTitle]
-     * @deprecated [depNote:dxLookupOptions.showPopupTitle]
-     */
-    showPopupTitle?: boolean;
-    /**
-     * [descr:dxLookupOptions.title]
-     * @deprecated [depNote:dxLookupOptions.title]
-     */
-    title?: string;
-    /**
-     * [descr:dxLookupOptions.titleTemplate]
-     * @deprecated [depNote:dxLookupOptions.titleTemplate]
-     */
-    titleTemplate?:
-      | DevExpress.core.template
-      | ((
-          titleElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxLookupOptions.useNativeScrolling]
      */
@@ -14972,26 +14905,6 @@ declare module DevExpress.ui {
      * [descr:dxMapOptions.height]
      */
     height?: number | string | (() => number | string);
-    /**
-     * [descr:dxMapOptions.key]
-     * @deprecated [depNote:dxMapOptions.key]
-     */
-    key?:
-      | string
-      | {
-          /**
-           * [descr:dxMapOptions.key.bing]
-           */
-          bing?: string;
-          /**
-           * [descr:dxMapOptions.key.google]
-           */
-          google?: string;
-          /**
-           * [descr:dxMapOptions.key.googleStatic]
-           */
-          googleStatic?: string;
-        };
     /**
      * [descr:dxMapOptions.markerIconSrc]
      */
@@ -19492,11 +19405,6 @@ declare module DevExpress.ui {
      * [descr:dxTextEditorOptions.onKeyDown]
      */
     onKeyDown?: (e: DevExpress.events.NativeEventInfo<TComponent>) => void;
-    /**
-     * [descr:dxTextEditorOptions.onKeyPress]
-     * @deprecated [depNote:dxTextEditorOptions.onKeyPress]
-     */
-    onKeyPress?: (e: DevExpress.events.NativeEventInfo<TComponent>) => void;
     /**
      * [descr:dxTextEditorOptions.onKeyUp]
      */
