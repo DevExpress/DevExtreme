@@ -2171,8 +2171,7 @@
             "Widget": "Diagram",
             "DemoType": "Web",
             "WideDemo": true,
-            "Modules": "whatwg-fetch",
-            "Badge": "Updated"
+            "Modules": "whatwg-fetch"
           },
           {
             "Title": "Editing Restrictions",
@@ -2180,8 +2179,7 @@
             "DocUrl": "",
             "Widget": "Diagram",
             "DemoType": "Web",
-            "WideDemo": true,
-            "Badge": "Updated"
+            "WideDemo": true
           }
         ]
       },
@@ -3320,6 +3318,7 @@
       },
       {
         "Name": "Data",
+        "Badge": "Updated",
         "Equivalents": "",
         "Demos": [
           {
