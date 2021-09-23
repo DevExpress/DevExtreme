@@ -156,7 +156,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() key = generateKey();
 
-  @InternalState() dataAccessors!: DataAccessorType;
+  @InternalState() dataAccessors = createDataAccessors(this.props);
 
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
@@ -282,19 +282,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   createInstances(): void {
-    if (!this.viewDataProvider) {
-      return;
-    }
-
-    this.dataAccessors = createDataAccessors(
-      this.instance,
-      this.props,
-      this.dataAccessors,
-      (value: string) => {
-        this.props.dateSerializationFormat = value;
-      },
-    );
-
     createFactoryInstances({
       key: this.key,
       resources: this.props.resources,
@@ -305,7 +292,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       firstDayOfWeek: this.currentViewConfig.firstDayOfWeek,
       showAllDayPanel: this.props.showAllDayPanel,
       timeZone: this.props.timeZone,
-      getIsVirtualScrolling: () => this.props.scrolling.mode === 'virtual',
+      getIsVirtualScrolling: () => this.props.scrolling.mode === 'virtual' || this.currentViewProps.scrolling?.mode === 'virtual',
       getDataAccessors: (): DataAccessorType => this.dataAccessors,
     });
   }
