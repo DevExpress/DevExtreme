@@ -3339,6 +3339,7 @@
           {
             "Title": "Validation",
             "Name": "Validation",
+            "Badge": "Updated",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,
@@ -3375,7 +3376,6 @@
           {
             "Title": "Task Template",
             "Name": "TaskTemplate",
-            "Badge": "New",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,
@@ -3390,6 +3390,7 @@
           {
             "Title": "Toolbar",
             "Name": "Toolbar",
+            "Badge": "Updated",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,
@@ -3461,12 +3462,50 @@
       },
       {
         "Name": "Sorting",
+        "Badge": "New",
         "Equivalents": "",
         "Demos": [
           {
             "Title": "Sorting",
             "Badge": "New",
             "Name": "Sorting",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          }
+        ]
+      },
+      {
+        "Name": "Filtering",
+        "Badge": "New",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Filter Row",
+            "Badge": "New",
+            "Name": "FilterRow",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs",
+              "/Models/Gantt/Dependency.cs",
+              "/Models/Gantt/Resource.cs",
+              "/Models/Gantt/ResourceAssignment.cs",
+              "/Models/Gantt/Task.cs"
+            ]
+          },
+          {
+            "Title": "Header Filter",
+            "Badge": "New",
+            "Name": "HeaderFilter",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,
