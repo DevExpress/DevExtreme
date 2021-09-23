@@ -37,7 +37,8 @@ import {
     LAST_NEW_ROW_POSITION,
     PAGE_BOTTOM_NEW_ROW_POSITION,
     PAGE_TOP_NEW_ROW_POSITION,
-    VIEWPORT_BOTTOM_NEW_ROW_POSITION
+    VIEWPORT_BOTTOM_NEW_ROW_POSITION,
+    VIEWPORT_TOP_NEW_ROW_POSITION
 } from './ui.grid_core.editing_constants';
 
 const READONLY_CLASS = 'readonly';
@@ -2181,7 +2182,7 @@ export const editingModule = {
             editing: {
                 mode: 'row', // "batch"
                 refreshMode: 'full',
-                newRowPosition: 'viewportTop',
+                newRowPosition: VIEWPORT_TOP_NEW_ROW_POSITION,
                 allowAdding: false,
                 allowUpdating: false,
                 allowDeleting: false,

@@ -1647,6 +1647,14 @@ export interface DataChange {
      * @docid
      */
     pageIndex?: number;
+    /**
+     * @docid
+     */
+    insertAfterKey?: any;
+    /**
+     * @docid
+     */
+    insertBeforeKey?: any;
 }
 
 /**
