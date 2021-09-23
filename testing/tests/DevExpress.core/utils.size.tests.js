@@ -319,33 +319,75 @@ QUnit.test('height for element with transform', function(assert) {
     assert.strictEqual(dxHeight, jqHeight, 'getHeight should be equal to $.height');
 });
 
-['border-box', 'content-box'].forEach((sizing) => {
-    [true, false].forEach((showScrollBar) => {
-        QUnit.test(`height helpers should return the same value as jquery. Params: (${sizing}), ${showScrollBar}`, function(assert) {
-            const overflow = showScrollBar ? 'auto' : 'hidden';
-            const $target = $(`<div style='height: 40px; width: 50px; padding: 3px; margin: 7px; border: 9px solid black; display: inline-block; box-sizing: ${sizing}; overflow: ${overflow};'/>`).appendTo('#qunit-fixture').get(0);
-            $('<div style=\'width: 100px; height: 100px\'>').appendTo($target);
+QUnit.test('size helpers should return the same value as jquery. Params: (box-sizing: border-box; overflow: hidden)', function(assert) {
+    const $target = $('<div style=\'height: 40px; width: 50px; padding: 3px; margin: 7px; border: 9px solid black; display: inline-block; box-sizing: border-box; overflow: hidden;\'/>').appendTo('#qunit-fixture').get(0);
+    $('<div style=\'width: 100px; height: 100px\'>').appendTo($target);
 
-            assert.strictEqual(getHeight($target), $($target).height(), 'getHeight should be equal to $.height');
-            assert.strictEqual(getWidth($target), $($target).width(), 'getWidth(this.$element[0]) should be equal to $.width');
+    assert.strictEqual(getHeight($target), 16, 'getHeight');
+    assert.strictEqual(getWidth($target), 26, 'getWidth');
 
-            assert.strictEqual(getInnerHeight($target), $($target).innerHeight(), 'getInnerHeight should be equal to $.innerHeight');
-            assert.strictEqual(getInnerWidth($target), $($target).innerWidth(), 'getInnerWidth should be equal to $.innerWidth');
+    assert.strictEqual(getInnerHeight($target), 22, 'getInnerHeight');
+    assert.strictEqual(getInnerWidth($target), 32, 'getInnerWidth');
 
-            assert.strictEqual(getOuterHeight($target), $($target).outerHeight(), 'getOuterHeight should be equal to $.outerHeight');
-            assert.strictEqual(getOuterWidth($target), $($target).outerWidth(), 'getOuterWidth should be equal to $.outerWidth');
+    assert.strictEqual(getOuterHeight($target), 40, 'getOuterHeight');
+    assert.strictEqual(getOuterWidth($target), 50, 'getOuterWidth');
 
-            if(sizing === 'content-box' && showScrollBar) {
-                // jQuery produces incorrect result for some reason. You can try it with the following markup:
-                // <div id="qunit-fixture" style="border: 7px solid red;padding: 0;display: inline-block;font-size: 0px;letter-spacing: 0px;word-spacing: 0px;"><div id="test" style="height: 40px;width: 50px;padding: 3px;margin: 7px;border: 9px solid black;display: inline-block;font-size: 0px;letter-spacing: 0px;word-spacing: 0px;box-sizing: content-box;overflow: auto;"><div style="width: 100px; height: 100px"></div></div></div>
-                // Paste to a html document, open the DevTools and select outer element (#qunit-fixture). In the boxes view you can see that content size is 78x88
+    assert.strictEqual(getOuterHeight($target, true), 54, 'getOuterHeight(true)');
+    assert.strictEqual(getOuterWidth($target, true), 64, 'getOuterWidth(true)');
+});
 
-                assert.strictEqual(getOuterHeight($target, true), 78, 'getOuterHeight should be equal to $.outerHeight');
-                assert.strictEqual(getOuterWidth($target, true), 88, 'getOuterWidth should be equal to $.outerWidth');
-            } else {
-                assert.strictEqual(getOuterHeight($target, true), $($target).outerHeight(true), 'getOuterHeight should be equal to $.outerHeight');
-                assert.strictEqual(getOuterWidth($target, true), $($target).outerWidth(true), 'getOuterWidth should be equal to $.outerWidth');
-            }
-        });
-    });
+QUnit.test('size helpers should return the same value as jquery. Params: (box-sizing: border-box; overflow: auto)', function(assert) {
+    const $target = $('<div style=\'height: 40px; width: 50px; padding: 3px; margin: 7px; border: 9px solid black; display: inline-block; box-sizing: border-box; overflow: auto;\'/>').appendTo('#qunit-fixture').get(0);
+    $('<div style=\'width: 100px; height: 100px\'>').appendTo($target);
+
+    assert.strictEqual(getHeight($target), 16, 'getHeight');
+    assert.strictEqual(getWidth($target), 26, 'getWidth');
+
+    assert.strictEqual(getInnerHeight($target), 22, 'getInnerHeight');
+    assert.strictEqual(getInnerWidth($target), 32, 'getInnerWidth');
+
+    assert.strictEqual(getOuterHeight($target), 40, 'getOuterHeight');
+    assert.strictEqual(getOuterWidth($target), 50, 'getOuterWidth');
+
+    assert.strictEqual(getOuterHeight($target, true), 54, 'getOuterHeight(true)');
+    assert.strictEqual(getOuterWidth($target, true), 64, 'getOuterWidth(true)');
+
+});
+
+QUnit.test('size helpers should return the same value as jquery. Params: (box-sizing: content-box, overflow: hidden)', function(assert) {
+    const $target = $('<div style=\'height: 40px; width: 50px; padding: 3px; margin: 7px; border: 9px solid black; display: inline-block; box-sizing: content-box; overflow: hidden};\'/>').appendTo('#qunit-fixture').get(0);
+    $('<div style=\'width: 100px; height: 100px\'>').appendTo($target);
+
+    assert.strictEqual(getHeight($target), 40, 'getHeight');
+    assert.strictEqual(getWidth($target), 50, 'getWidth');
+
+    assert.strictEqual(getInnerHeight($target), 46, 'getInnerHeight');
+    assert.strictEqual(getInnerWidth($target), 56, 'getInnerWidth');
+
+    assert.strictEqual(getOuterHeight($target), 64, 'getOuterHeight');
+    assert.strictEqual(getOuterWidth($target), 74, 'getOuterWidth');
+
+    assert.strictEqual(getOuterHeight($target, true), 78, 'getOuterHeight(true)');
+    assert.strictEqual(getOuterWidth($target, true), 88, 'getOuterWidth(true)');
+});
+
+QUnit.test('height helpers should return the same value as jquery. Params: (box-sizing: content-box, overflow: auto)', function(assert) {
+    const $target = $('<div style=\'height: 40px; width: 50px; padding: 3px; margin: 7px; border: 9px solid black; display: inline-block; box-sizing: content-box; overflow: auto;\'/>').appendTo('#qunit-fixture').get(0);
+    $('<div style=\'width: 100px; height: 100px\'>').appendTo($target);
+
+    assert.strictEqual(getHeight($target), 23, 'getHeight');
+    assert.strictEqual(getWidth($target), 33, 'getWidth');
+
+    assert.strictEqual(getInnerHeight($target), 46, 'getInnerHeight');
+    assert.strictEqual(getInnerWidth($target), 56, 'getInnerWidth');
+
+    assert.strictEqual(getOuterHeight($target), 64, 'getOuterHeight');
+    assert.strictEqual(getOuterWidth($target), 74, 'getOuterWidth');
+
+    // jQuery produces incorrect result for some reason. You can try it with the following markup:
+    // <div id="qunit-fixture" style="border: 7px solid red;padding: 0;display: inline-block;font-size: 0px;letter-spacing: 0px;word-spacing: 0px;"><div id="test" style="height: 40px;width: 50px;padding: 3px;margin: 7px;border: 9px solid black;display: inline-block;font-size: 0px;letter-spacing: 0px;word-spacing: 0px;box-sizing: content-box;overflow: auto;"><div style="width: 100px; height: 100px"></div></div></div>
+    // Paste to a html document, open the DevTools and select outer element (#qunit-fixture). In the boxes view you can see that content size is 78x88
+
+    assert.strictEqual(getOuterHeight($target, true), 78, 'getOuterHeight(true)');
+    assert.strictEqual(getOuterWidth($target, true), 88, 'getOuterWidth(true)');
 });
