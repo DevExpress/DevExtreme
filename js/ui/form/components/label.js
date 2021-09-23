@@ -42,7 +42,7 @@ function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, option
         .text(String.fromCharCode(160) + (isRequiredMark ? requiredMark : optionalMark));
 }
 
-export function getLabelWidthByText(options) {
+export function getLabelWidthByInnerHTML(options) {
     const { innerHTML, ...renderLabelOptions } = options;
     const $hiddenContainer = $('<div>')
         .addClass(WIDGET_CLASS)

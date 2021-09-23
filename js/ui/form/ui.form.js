@@ -171,7 +171,7 @@ const Form = Widget.inherit({
         let maxWidth = 0;
 
         for(i = 0; i < $labelTextsLength; i++) {
-            labelWidth = layoutManager._getLabelWidthByText({
+            labelWidth = layoutManager._getLabelWidthByInnerHTML({
                 // _hiddenLabelText was introduced in https://hg/mobile/rev/27b4f57f10bb , "dxForm: add alignItemLabelsInAllGroups and fix type script"
                 // It's not clear why offsetWidth cannot be get directly from $labelTexts
                 innerHTML: this._getLabelInnerHTML($labelTexts[i]),
