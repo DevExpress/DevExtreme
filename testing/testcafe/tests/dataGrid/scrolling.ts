@@ -94,45 +94,46 @@ test('DataGrid should set the scrollbar position to the right on resize when RTL
   columnWidth: 100,
 }));
 
-test('DataGrid should not reset its left scroll position on window resize when columnRenderingMode is virtual with fixed columns', async (t) => {
-  const dataGrid = new DataGrid('#container');
+// test('DataGrid should not reset its left scroll
+// position on window resize when columnRenderingMode is virtual with fixed columns', async (t) => {
+//   const dataGrid = new DataGrid('#container');
 
-  // act
-  await t.resizeWindow(900, 250);
-  await dataGrid.scrollTo({ x: 100 });
+//   // act
+//   await t.resizeWindow(900, 250);
+//   await dataGrid.scrollTo({ x: 100 });
 
-  // assert
-  await t
-    .expect(dataGrid.getScrollLeft()).eql(100);
+//   // assert
+//   await t
+//     .expect(dataGrid.getScrollLeft()).eql(100);
 
-  // act
-  await t.resizeWindow(700, 250);
+//   // act
+//   await t.resizeWindow(700, 250);
 
-  // assert
-  await t
-    .expect(dataGrid.getScrollLeft()).eql(100);
+//   // assert
+//   await t
+//     .expect(dataGrid.getScrollLeft()).eql(100);
 
-  // act
-  await t.resizeWindow(600, 250);
+//   // act
+//   await t.resizeWindow(600, 250);
 
-  // assert
-  await t
-    .expect(dataGrid.getScrollLeft()).eql(100);
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: getData(1, 50),
-  columnWidth: 100,
-  scrolling: {
-    columnRenderingMode: 'virtual',
-  },
-  customizeColumns(columns) {
-    columns[0].fixed = true;
-    columns[1].fixed = true;
-    columns[48].fixed = true;
-    columns[48].fixedPosition = 'right';
-    columns[49].fixed = true;
-    columns[49].fixedPosition = 'right';
-  },
-}));
+//   // assert
+//   await t
+//     .expect(dataGrid.getScrollLeft()).eql(100);
+// }).before(async () => createWidget('dxDataGrid', {
+//   dataSource: getData(1, 50),
+//   columnWidth: 100,
+//   scrolling: {
+//     columnRenderingMode: 'virtual',
+//   },
+//   customizeColumns(columns) {
+//     columns[0].fixed = true;
+//     columns[1].fixed = true;
+//     columns[48].fixed = true;
+//     columns[48].fixedPosition = 'right';
+//     columns[49].fixed = true;
+//     columns[49].fixedPosition = 'right';
+//   },
+// }));
 
 test('DataGrid should not reset its right scroll position on window resize when columnRenderingMode is virtual with fixed columns (rtlEnabled)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -282,50 +283,50 @@ test('Ungrouping after grouping should work correctly if row rendering mode is v
   });
 });
 
-test('Scroll position after grouping when RTL (T388508)', async (t) => {
-  const dataGrid = new DataGrid('#container');
+// test('Scroll position after grouping when RTL (T388508)', async (t) => {
+//   const dataGrid = new DataGrid('#container');
 
-  // assert
-  await t
-    .expect(dataGrid.getScrollLeft())
-    .eql(300);
+//   // assert
+//   await t
+//     .expect(dataGrid.getScrollLeft())
+//     .eql(300);
 
-  // act
-  await dataGrid.scrollTo({ x: 100 });
-  const scrollRight = await dataGrid.getScrollRight();
-  await dataGrid.apiColumnOption('field1', 'groupIndex', 0);
+//   // act
+//   await dataGrid.scrollTo({ x: 100 });
+//   const scrollRight = await dataGrid.getScrollRight();
+//   await dataGrid.apiColumnOption('field1', 'groupIndex', 0);
 
-  // assert
-  await t
-    .expect(groupRow.exists)
-    .ok();
+//   // assert
+//   await t
+//     .expect(groupRow.exists)
+//     .ok();
 
-  const visibleRows = await dataGrid.apiGetVisibleRows();
-  const scrollRightAfterGrouping = await dataGrid.getScrollRight();
+//   const visibleRows = await dataGrid.apiGetVisibleRows();
+//   const scrollRightAfterGrouping = await dataGrid.getScrollRight();
 
-  // assert
-  await t
-    .expect(visibleRows[0].rowType)
-    .eql('group')
-    .expect(Math.floor(scrollRightAfterGrouping))
-    .eql(Math.floor(scrollRight));
-}).before(async () => createWidget('dxDataGrid', {
-  width: 200,
-  rtlEnabled: true,
-  columns: [
-    { dataField: 'field1', width: 100 },
-    { dataField: 'field2', width: 100 },
-    { dataField: 'field3', width: 100 },
-    { dataField: 'field4', width: 100 },
-    { dataField: 'field5', width: 100 },
-  ],
-  dataSource: [{
-    field1: '1',
-    field2: '2',
-    field3: '3',
-    field4: '4',
-  }],
-}));
+//   // assert
+//   await t
+//     .expect(visibleRows[0].rowType)
+//     .eql('group')
+//     .expect(Math.floor(scrollRightAfterGrouping))
+//     .eql(Math.floor(scrollRight));
+// }).before(async () => createWidget('dxDataGrid', {
+//   width: 200,
+//   rtlEnabled: true,
+//   columns: [
+//     { dataField: 'field1', width: 100 },
+//     { dataField: 'field2', width: 100 },
+//     { dataField: 'field3', width: 100 },
+//     { dataField: 'field4', width: 100 },
+//     { dataField: 'field5', width: 100 },
+//   ],
+//   dataSource: [{
+//     field1: '1',
+//     field2: '2',
+//     field3: '3',
+//     field4: '4',
+//   }],
+// }));
 
 test('Header container should have padding-right after expanding the master row with a detail grid when using native scrolling (T1004507)', async (t) => {
   const dataGrid = new DataGrid('#container');
