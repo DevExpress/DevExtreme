@@ -929,7 +929,7 @@ QUnit.module('api', moduleConfig, () => {
     });
 
     QUnit.test('events work when relevant actions is not set', function(assert) {
-        assert.expect(12);
+        assert.expect(8);
         const textBox = this.instance;
         const keyboard = this.keyboard;
 
@@ -951,7 +951,7 @@ QUnit.module('api', moduleConfig, () => {
     });
 
     QUnit.test('events supports chains', function(assert) {
-        assert.expect(3);
+        assert.expect(2);
         const textBox = this.instance;
         const keyboard = this.keyboard;
 

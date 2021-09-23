@@ -275,17 +275,17 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
         assert.equal(pos.at, 'left bottom', 'Message should be below dropdown');
     });
 
-    QUnit.test('\'popupPosition\' option default value should depend on \'rtlEnabled\' option value (T180106)', function(assert) {
+    QUnit.test('\'dropDownOptions.position\' option default value should depend on \'rtlEnabled\' option value (T180106)', function(assert) {
         const dropDownEditor = this.dropDownEditor;
 
-        const positionLTR = dropDownEditor.option('popupPosition');
+        const positionLTR = dropDownEditor.option('dropDownOptions.position');
 
         config({ rtlEnabled: true });
 
         const dropDownEditorRTL = $('<div id="dropDownEditorRTL">').dxDropDownEditor();
 
         try {
-            const positionRTL = dropDownEditorRTL.dxDropDownEditor('option', 'popupPosition');
+            const positionRTL = dropDownEditorRTL.dxDropDownEditor('option', 'dropDownOptions.position');
 
             const at = positionLTR.at.indexOf('left') > -1 ? 'right' : 'left';
             const my = positionLTR.my.indexOf('left') > -1 ? 'right' : 'left';

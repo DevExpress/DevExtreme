@@ -95,11 +95,13 @@ const DropDownList = DropDownEditor.inherit({
 
             groupTemplate: 'group',
 
-            popupPosition: {
-                my: 'left top',
-                at: 'left bottom',
-                offset: { h: 0, v: 0 },
-                collision: 'flip'
+            dropDownOptions: {
+                position: {
+                    my: 'left top',
+                    at: 'left bottom',
+                    offset: { h: 0, v: 0 },
+                    collision: 'flip'
+                }
             },
 
             wrapItemText: false,
@@ -130,7 +132,7 @@ const DropDownList = DropDownEditor.inherit({
             {
                 device: { platform: 'ios' },
                 options: {
-                    popupPosition: { offset: { v: -1 } }
+                    dropDownOptions: { position: { offset: { v: -1 } } }
                 }
             },
             {

@@ -137,7 +137,7 @@ module('option change', function() {
     [false, true].forEach((rtlEnabled) => {
         test(`after updating of the "rtlEnabled" option to "${rtlEnabled}" Popup should update its position`, function(assert) {
             const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ rtlEnabled }).dxDropDownEditor('instance');
-            const { my: initialMyPosition, at: initialAtPosition } = dropDownEditor.option('popupPosition');
+            const { my: initialMyPosition, at: initialAtPosition } = dropDownEditor.option('dropDownOptions.position');
             const initialStartDirection = getStartDirection(rtlEnabled);
 
             assert.strictEqual(initialAtPosition, `${initialStartDirection} bottom`, 'correct initial "at" position');
@@ -145,7 +145,7 @@ module('option change', function() {
 
             dropDownEditor.option('rtlEnabled', !rtlEnabled);
 
-            const { my: newMyPosition, at: newAtPosition } = dropDownEditor.option('popupPosition');
+            const { my: newMyPosition, at: newAtPosition } = dropDownEditor.option('dropDownOptions.position');
             const newStartDirection = getStartDirection(!rtlEnabled);
 
             assert.strictEqual(newAtPosition, `${newStartDirection} bottom`, 'correct new "at" position');
@@ -153,7 +153,7 @@ module('option change', function() {
 
             dropDownEditor.option('rtlEnabled', rtlEnabled);
 
-            const { my: revertedMyPosition, at: revertedAtPosition } = dropDownEditor.option('popupPosition');
+            const { my: revertedMyPosition, at: revertedAtPosition } = dropDownEditor.option('dropDownOptions.position');
 
             assert.strictEqual(revertedAtPosition, `${initialStartDirection} bottom`, 'correct initial "at" position');
             assert.strictEqual(revertedMyPosition, `${initialStartDirection} top`, 'correct initial "my" position');
