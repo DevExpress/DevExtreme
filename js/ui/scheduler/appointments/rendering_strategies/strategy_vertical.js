@@ -138,9 +138,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getGroupHeight() {
-        const workspace = this.instance.getWorkSpace();
-
-        return workspace.getCellHeight() * workspace._getRowCount();
+        return this.cellHeight * this.rowCount;
     }
 
     _getGroupTopOffset(appointmentSettings) {

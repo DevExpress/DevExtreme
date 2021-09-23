@@ -43,6 +43,7 @@ class AppointmentLayoutManager {
             DOMMetaData
         );
         const { positionHelper } = workspace;
+        const rowCount = workspace._getRowCount();
 
         return {
             resources: this.instance.option('resources'),
@@ -70,6 +71,7 @@ class AppointmentLayoutManager {
             isGroupedAllDayPanel: workspace.isGroupedAllDayPanel(),
             modelGroups: this.modelProvider.getCurrentViewOption('groups'),
             groupCount,
+            rowCount,
             startViewDate: workspace.getStartViewDate(),
             groupOrientation: workspace._getRealGroupOrientation(),
             getIsGroupedByDate: () => workspace.isGroupedByDate(),
