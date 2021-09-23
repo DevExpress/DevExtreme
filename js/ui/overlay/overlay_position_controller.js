@@ -46,7 +46,7 @@ class OverlayPositionController {
         $root, $content, $wrapper,
         onPositioned, onVisualPositionChanged,
         dragOutsideBoundary, dragAndResizeArea, outsideDragFactor,
-        restorePosition,
+        restorePositionOnOpening,
         _fixWrapperPosition
     }) {
         this._props = {
@@ -56,7 +56,7 @@ class OverlayPositionController {
             dragOutsideBoundary,
             dragAndResizeArea,
             outsideDragFactor,
-            restorePosition,
+            restorePositionOnOpening,
             onPositioned,
             onVisualPositionChanged,
             _fixWrapperPosition
@@ -113,8 +113,8 @@ class OverlayPositionController {
         this._updateOutsideDragFactor();
     }
 
-    set restorePosition(restorePosition) {
-        this._props.restorePosition = restorePosition;
+    set restorePositionOnOpening(restorePositionOnOpening) {
+        this._props.restorePositionOnOpening = restorePositionOnOpening;
     }
 
     restorePositionOnNextRender(value) {
@@ -123,24 +123,17 @@ class OverlayPositionController {
     }
 
     openingHandled() {
-        const shouldRestorePosition = this._props.restorePosition.onOpening
-            || this._props.restorePosition.always;
+        const shouldRestorePosition = this._props.restorePositionOnOpening;
 
         this.restorePositionOnNextRender(shouldRestorePosition);
     }
 
     dragHandled() {
-        const shouldRestorePosition = this._props.restorePosition.onDimensionChangeAfterDragOrResize
-            || this._props.restorePosition.always;
-
-        this.restorePositionOnNextRender(shouldRestorePosition);
+        this.restorePositionOnNextRender(false);
     }
 
     resizeHandled() {
-        const shouldRestorePosition = this._props.restorePosition.onDimensionChangeAfterDragOrResize
-            || this._props.restorePosition.always;
-
-        this.restorePositionOnNextRender(shouldRestorePosition);
+        this.restorePositionOnNextRender(false);
     }
 
     updateTarget(target) {
@@ -366,9 +359,7 @@ class PopupPositionController extends OverlayPositionController {
     }
 
     _fullScreenDisabled() {
-        const shouldRestorePosition = this._props.restorePosition.onFullScreenDisable
-            || this._props.restorePosition.always;
-        this.restorePositionOnNextRender(shouldRestorePosition);
+        this.restorePositionOnNextRender(false);
     }
 }
 

@@ -168,12 +168,7 @@ const Overlay = Widget.inherit({
             onResizeEnd: null,
             innerOverlay: false,
 
-            restorePosition: {
-                always: false,
-                onDimensionChangeAfterDragOrResize: false,
-                onFullScreenDisable: false,
-                onOpening: true
-            },
+            restorePositionOnOpening: true,
 
             // NOTE: private options
 
@@ -937,7 +932,7 @@ const Overlay = Widget.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { target, container, dragAndResizeArea, dragOutsideBoundary, outsideDragFactor, _fixWrapperPosition, restorePosition } = this.option();
+        const { target, container, dragAndResizeArea, dragOutsideBoundary, outsideDragFactor, _fixWrapperPosition, restorePositionOnOpening } = this.option();
         // NOTE: position is passed to controller in renderGeometry to prevent window field using in server side mode
 
         return {
@@ -948,7 +943,7 @@ const Overlay = Widget.inherit({
             $wrapper: this._$wrapper,
             onPositioned: this._actions.onPositioned,
             onVisualPositionChanged: this._actions.onVisualPositionChanged,
-            restorePosition,
+            restorePositionOnOpening,
             dragAndResizeArea,
             dragOutsideBoundary,
             outsideDragFactor,
@@ -1391,8 +1386,8 @@ const Overlay = Widget.inherit({
             case 'outsideDragFactor':
                 this._positionController.outsideDragFactor = value;
                 break;
-            case 'restorePosition':
-                this._positionController.restorePosition = this.option('restorePosition');
+            case 'restorePositionOnOpening':
+                this._positionController.restorePositionOnOpening = args.value;
                 break;
             default:
                 this.callBase(args);
