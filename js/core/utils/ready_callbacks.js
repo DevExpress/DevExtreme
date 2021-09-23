@@ -14,8 +14,7 @@ const subscribeReady = callOnce(() => {
 const readyCallbacks = {
     add: callback => {
         const windowExists = hasWindow();
-        const isReady = domAdapter.getReadyState() !== 'loading';
-        if(windowExists && isReady) {
+        if(windowExists && domAdapter.getReadyState() !== 'loading') {
             callback();
         } else {
             callbacks.push(callback);
