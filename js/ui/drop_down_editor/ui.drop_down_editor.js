@@ -827,9 +827,16 @@ const DropDownEditor = TextBox.inherit({
                 this._updateButtons(['dropDown']);
                 break;
             case 'dropDownOptions':
-                if(args.position) {
-                    this._popupOptionChanged(args);
-                    this._options.cache('dropDownOptions', this.option('dropDownOptions'));
+                switch(args.fullName) {
+                    case 'dropDownOptions.position':
+                        break;
+                    case 'dropDownOptions.showTitle':
+                        this._setPopupOption('showTitle', args.value);
+                        break;
+                    default:
+                        this._popupOptionChanged(args);
+                        this._options.cache('dropDownOptions', this.option('dropDownOptions'));
+                        break;
                 }
                 break;
             case 'deferRendering':

@@ -1028,10 +1028,25 @@ const Lookup = DropDownList.inherit({
         this.callBase();
     },
 
-    _optionChanged: function(args) {
-        const name = args.name;
+    _setDeprecatedOptions: function() {
+        this.callBase();
 
-        switch(name) {
+        extend(this._deprecatedOptions, {
+            'title': { since: '20.1', alias: 'dropDownOptions.title' },
+            'titleTemplate': { since: '20.1', alias: 'dropDownOptions.titleTemplate' },
+            'onTitleRendered': { since: '20.1', alias: 'dropDownOptions.onTitleRendered' },
+            'fullScreen': { since: '20.1', alias: 'dropDownOptions.fullScreen' },
+            'shading': { since: '20.1', alias: 'dropDownOptions.shading' },
+            'closeOnOutsideClick': { since: '20.1', alias: 'dropDownOptions.closeOnOutsideClick' },
+            'position': { since: '20.1', alias: 'dropDownOptions.position' },
+            'animation': { since: '20.1', alias: 'dropDownOptions.animation' }
+        });
+    },
+
+    _optionChanged: function(args) {
+        const { name, fullName, value } = args;
+
+        switch(fullName) {
             case 'dataSource':
                 this.callBase(...arguments);
                 this._renderField();
@@ -1086,6 +1101,22 @@ const Lookup = DropDownList.inherit({
                 break;
             case 'cleanSearchOnOpening':
             case '_scrollToSelectedItemEnabled':
+                break;
+            case 'title':
+            case 'titleTemplate':
+            case 'onTitleRendered':
+            case 'shading':
+            case 'animation':
+            case 'position':
+            case 'closeOnOutsideClick':
+            case 'fullScreen':
+                this._setPopupOption(name, value);
+                break;
+            case 'dropDownOptions.width':
+                this._setPopupOption('width', value === 'auto' ? this.initialOption('dropDownOptions').width : value);
+                break;
+            case 'dropDownOptions.height':
+                this._setPopupOption('height', value === 'auto' ? this.initialOption('dropDownOptions').height : value);
                 break;
             case 'dropDownCentered':
                 if(this.option('_scrollToSelectedItemEnabled')) {
