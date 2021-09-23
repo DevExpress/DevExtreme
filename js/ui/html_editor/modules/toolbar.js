@@ -20,7 +20,7 @@ import { titleize, camelize } from '../../../core/utils/inflector';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
-import { getTableOperationHandler } from './tableOperations';
+import { getTableFormats, getTableOperationHandler, TABLE_OPERATIONS } from '../utils/table_helper';
 
 let ToolbarModule = BaseModule;
 
@@ -52,19 +52,13 @@ if(Quill) {
     const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
     const DIALOG_TABLE_CAPTION = 'dxHtmlEditor-dialogInsertTableCaption';
 
-    const TABLE_OPERATIONS = [
-        'insertTable',
-        'insertRowAbove',
-        'insertRowBelow',
-        'insertColumnLeft',
-        'insertColumnRight',
-        'deleteColumn',
-        'deleteRow',
-        'deleteTable'
-    ];
-
     const USER_ACTION = 'user';
     const SILENT_ACTION = 'silent';
+
+    const ICON_MAP = {
+        insertHeaderRow: 'header',
+        clear: 'clearformat'
+    };
 
     const localize = (name) => {
         return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
@@ -85,6 +79,7 @@ if(Quill) {
 
             this._toolbarWidgets = new WidgetCollector();
             this._formatHandlers = this._getFormatHandlers();
+            this._tableFormats = getTableFormats(quill);
 
             if(isDefined(options.items)) {
                 this._addCallbacks();
@@ -340,8 +335,9 @@ if(Quill) {
         _prepareInsertTableHandler() {
             return () => {
                 const formats = this.quill.getFormat();
-                const isTableFocused = Object.prototype.hasOwnProperty.call(formats, 'table') ||
-                    Object.prototype.hasOwnProperty.call(formats, 'tableHeaderCell');
+                const isTableFocused = this._tableFormats.some(
+                    format => Object.prototype.hasOwnProperty.call(formats, format)
+                );
                 const formData = { rows: 1, columns: 1 };
 
                 if(isTableFocused) {
@@ -371,19 +367,6 @@ if(Quill) {
                     .always(() => {
                         this.quill.focus();
                     });
-            };
-        }
-
-        // ToDo: extract it to the table module
-        _getTableOperationHandler(operationName, ...rest) {
-            return () => {
-                const table = this.quill.getModule('table');
-
-                if(!table) {
-                    return;
-                }
-                this.quill.focus();
-                return table[operationName](...rest);
             };
         }
 
@@ -533,7 +516,7 @@ if(Quill) {
         }
 
         _prepareButtonItemConfig(name) {
-            const iconName = name === 'clear' ? 'clearformat' : name;
+            const iconName = ICON_MAP[name] ?? name;
             const buttonText = titleize(name);
 
             return {
@@ -652,6 +635,11 @@ if(Quill) {
                         disabled: true
                     }
                 },
+                insertHeaderRow: {
+                    options: {
+                        disabled: true
+                    }
+                },
                 insertColumnLeft: {
                     options: {
                         disabled: true
@@ -715,8 +703,8 @@ if(Quill) {
             }
 
             const selection = this.quill.getSelection();
-            const { table: tableCell, tableHeaderCell } = selection && this.quill.getFormat(selection) || {};
-            const isTableOperationsEnabled = Boolean(tableCell) || Boolean(tableHeaderCell);
+            const formats = selection && this.quill.getFormat(selection) || {};
+            const isTableOperationsEnabled = this._tableFormats.some(format => Boolean(formats[format]));
             TABLE_OPERATIONS.forEach((operationName) => {
                 const isInsertTable = operationName === 'insertTable';
                 const widget = this._toolbarWidgets.getByName(operationName);

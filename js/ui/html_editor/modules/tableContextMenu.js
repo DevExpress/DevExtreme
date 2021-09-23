@@ -4,7 +4,7 @@ import BaseModule from './base';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 import ContextMenu from '../../context_menu';
-import { getTableOperationHandler } from './tableOperations';
+import { getTableOperationHandler } from '../utils/table_helper';
 
 
 const MODULE_NAMESPACE = 'dxHtmlTableContextMenu';
