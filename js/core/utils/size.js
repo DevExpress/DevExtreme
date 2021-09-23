@@ -32,14 +32,7 @@ const getElementComputedStyle = function(element) {
     return view.getComputedStyle && view.getComputedStyle(element);
 };
 const getCSSProperty = function(element, styles, name, defaultValue) {
-    let result = styles && styles[name];
-    if(result === '' && element.style) {
-        result = element.style[name];
-    }
-    if(result === '' || result === undefined) {
-        return defaultValue;
-    }
-    return result;
+    return styles?.[name] || element.style?.[name] || defaultValue;
 };
 
 
