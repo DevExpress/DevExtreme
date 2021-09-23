@@ -182,7 +182,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             isGroupedAllDayPanel: this.isGroupedAllDayPanel
         }));
         const cellsDiff = this.isGroupedByDate
-            ? this.instance.fire('getGroupCount')
+            ? this.groupCount
             : 1;
         const offset = this.cellWidth * cellsDiff;
         const left = appointmentSettings.left + offset;
@@ -291,7 +291,11 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             return true;
         }
 
-        return this.instance.appointmentTakesAllDay(appointmentData);
+        return this.appointmentDataProvider.appointmentTakesAllDay(
+            appointmentData,
+            this.startDayHour,
+            this.endDayHour
+        );
     }
 
     _getAppointmentMaxWidth() {

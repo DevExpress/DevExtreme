@@ -23,7 +23,6 @@ class BaseRenderingStrategy {
         this._initPositioningStrategy();
     }
 
-    get instance() { return this.options.instance; } // TODO get rid of this
     get key() { return this.options.key; }
     get isAdaptive() { return this.options.adaptivityEnabled; }
     get rtlEnabled() { return this.options.rtlEnabled; }
@@ -47,11 +46,13 @@ class BaseRenderingStrategy {
     get isGroupedAllDayPanel() { return this.options.isGroupedAllDayPanel; }
     get groupOrientation() { return this.options.groupOrientation; }
     get rowCount() { return this.options.rowCount; }
+    get groupCount() { return this.options.groupCount; }
     get currentDate() { return this.options.currentDate; }
     get appointmentCountPerCell() { return this.options.appointmentCountPerCell; }
     get appointmentOffset() { return this.options.appointmentOffset; }
     get allowResizing() { return this.options.allowResizing; }
     get allowAllDayResizing() { return this.options.allowAllDayResizing; }
+    get appointmentDataProvider() { return this.options.appointmentDataProvider; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
