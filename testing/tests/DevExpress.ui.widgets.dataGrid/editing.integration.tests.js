@@ -814,7 +814,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 scrolling: {
                     mode: 'infinite',
                     useNative: false,
-                    rowPageSize: 20
+                    rowPageSize: 20,
+                    prerenderedRowChunkSize: 20
                 },
                 columns: ['id', {
                     dataField: 'group',
@@ -889,7 +890,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.getScrollable().scrollTo({ y: 10000 });
         this.clock.tick();
 
-        for(let i = 0; i < 10; i++) {
+        for(let i = 0; i < 25; i++) {
             dataGrid.getScrollable().scrollTo({ y: 10000 });
         }
 
@@ -933,7 +934,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.getScrollable().scrollTo({ y: 0 });
             dataGrid.addRow();
             dataGrid.saveEditData();
-            for(let i = 0; i < 12; i++) {
+            for(let i = 0; i < 20; i++) {
                 dataGrid.getScrollable().scrollTo({ y: 10000 });
             }
 
@@ -976,7 +977,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.getScrollable().scrollTo({ y: 0 });
             dataGrid.getDataSource().store().push([{ type: 'insert', data: { id: 987654321 }, index: 0 }]);
             this.clock.tick();
-            for(let i = 0; i < 12; i++) {
+            for(let i = 0; i < 20; i++) {
                 dataGrid.getScrollable().scrollTo({ y: 10000 });
             }
 
@@ -1099,7 +1100,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             scrolling: {
                 rowRenderingMode: 'virtual',
                 mode: 'virtual',
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
 
@@ -1121,7 +1122,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const startValue = parseInt($rows.eq(0).text());
 
-        assert.equal(startValue, 25, 'visible row #1 is correct');
+        assert.equal(startValue, 29, 'visible row #1 is correct');
 
         for(let i = 1; i < $rows.length; i++) {
             if(i !== 5) {
@@ -1173,7 +1174,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok($editorCell.length, 'row has editor');
-        assert.equal($editorCell.find('input').val(), '86', 'input value');
+        assert.equal($editorCell.find('input').val(), '89', 'input value');
         assert.notOk(visibleRows[-1], 'no visible row with index -1');
     });
 
@@ -3452,7 +3453,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
             dataSource: [{ firstName: 'Andrey', lastName: 'Prohorov' }],
             editing: {
                 mode: 'cell',
-                allowUpdating: true
+                allowUpdating: true,
             },
             onContentReady: function(e) {
                 // act
@@ -3538,7 +3539,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
 
@@ -3550,8 +3551,8 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 10, 'visible row count');
-        assert.equal(visibleRows[0].key, 6, 'first visible row key');
+        assert.equal(visibleRows.length, 2, 'visible row count');
+        assert.equal(visibleRows[0].key, 11, 'first visible row key');
         assert.equal($(dataGrid.getRowElement(1, 0)).find('.dx-texteditor').length, 1, 'row has editor');
     });
 
@@ -3805,7 +3806,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
             },
             columns: ['id', 'text']
         });
@@ -3815,9 +3816,9 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.addRow();
 
         // assert
-        assert.strictEqual(dataGrid.getVisibleRows()[0].key, 6, 'first visible row key');
-        assert.ok(dataGrid.getVisibleRows()[5].isNewRow, 'inserted row exists');
-        assert.deepEqual(dataGrid.getVisibleRows()[5].values, [undefined, undefined], 'inserted row values');
+        assert.ok(dataGrid.getVisibleRows()[0].isNewRow, 'inserted row exists');
+        assert.deepEqual(dataGrid.getVisibleRows()[0].values, [undefined, undefined], 'inserted row values');
+        assert.strictEqual(dataGrid.getVisibleRows()[1].key, 11, 'first visible row key');
     });
 
     // T652111
@@ -4186,7 +4187,8 @@ QUnit.module('API methods', baseModuleConfig, () => {
             scrolling: {
                 mode: 'infinite',
                 useNative: false,
-                preloadCount: 0
+                preloadCount: 0,
+                prerenderedRowChunkSize: 5
             },
             editing: {
                 allowUpdating: true,
@@ -5689,7 +5691,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         },
                         scrolling: {
                             mode: 'virtual',
-                            useNative: false
+                            useNative: false,
+                            prerenderedRowChunkSize: 5
                         }
                     }).dxDataGrid('instance');
 
