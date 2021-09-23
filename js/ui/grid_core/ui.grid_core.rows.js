@@ -981,13 +981,7 @@ export const rowsModule = {
                     that._hasHeight = hasHeight === undefined ? height !== 'auto' : hasHeight;
 
                     if(isDefined(height) && $element) {
-                        const scrollable = this.getScrollable();
-
-                        if(scrollable?.isRenovated()) {
-                            scrollable.option('height', height);
-                        } else {
-                            setHeight($element, height);
-                        }
+                        setHeight($element, height);
                     }
                 },
 
