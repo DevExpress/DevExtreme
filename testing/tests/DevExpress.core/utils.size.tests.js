@@ -375,8 +375,8 @@ QUnit.test('height helpers should return the same value as jquery. Params: (box-
     const $target = $('<div style=\'height: 40px; width: 50px; padding: 3px; margin: 7px; border: 9px solid black; display: inline-block; box-sizing: content-box; overflow: auto;\'/>').appendTo('#qunit-fixture').get(0);
     $('<div style=\'width: 100px; height: 100px\'>').appendTo($target);
 
-    assert.strictEqual(getHeight($target), 23, 'getHeight');
-    assert.strictEqual(getWidth($target), 33, 'getWidth');
+    assert.strictEqual(getHeight($target), 25, 'getHeight');
+    assert.strictEqual(getWidth($target), 35, 'getWidth');
 
     assert.strictEqual(getInnerHeight($target), 46, 'getInnerHeight');
     assert.strictEqual(getInnerWidth($target), 56, 'getInnerWidth');
