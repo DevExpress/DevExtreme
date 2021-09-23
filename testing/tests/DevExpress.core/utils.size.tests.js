@@ -340,10 +340,8 @@ QUnit.test('height for element with transform', function(assert) {
                 // <div id="qunit-fixture" style="border: 7px solid red;padding: 0;display: inline-block;font-size: 0px;letter-spacing: 0px;word-spacing: 0px;"><div id="test" style="height: 40px;width: 50px;padding: 3px;margin: 7px;border: 9px solid black;display: inline-block;font-size: 0px;letter-spacing: 0px;word-spacing: 0px;box-sizing: content-box;overflow: auto;"><div style="width: 100px; height: 100px"></div></div></div>
                 // Paste to a html document, open the DevTools and select outer element (#qunit-fixture). In the boxes view you can see that content size is 78x88
 
-                // I also use roughEqual instead of strictEqual: this only needed to pass tests with hard-coded width and height on non-standard system DPI
-
-                assert.roughEqual(getOuterHeight($target, true), 78, 0.334, 'getOuterHeight should be equal to $.outerHeight');
-                assert.roughEqual(getOuterWidth($target, true), 88, 0.334, 'getOuterWidth should be equal to $.outerWidth');
+                assert.strictEqual(getOuterHeight($target, true), 78, 'getOuterHeight should be equal to $.outerHeight');
+                assert.strictEqual(getOuterWidth($target, true), 88, 'getOuterWidth should be equal to $.outerWidth');
             } else {
                 assert.strictEqual(getOuterHeight($target, true), $($target).outerHeight(true), 'getOuterHeight should be equal to $.outerHeight');
                 assert.strictEqual(getOuterWidth($target, true), $($target).outerWidth(true), 'getOuterWidth should be equal to $.outerWidth');
