@@ -21,7 +21,7 @@ const createFormPopup = (editorInstance) => {
     const $popup = $('<div>').appendTo(editorInstance.$element());
     formPopup = editorInstance._createComponent($popup, Popup, {
         deferRendering: true,
-        showTitle: false,
+        showTitle: true,
         width: 600,
         height: 'auto',
         shading: false,
@@ -186,6 +186,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
 
     const formOptions = {
+        colCount: 2,
         formData: {
             width: startTableWidth,
             height: getOuterHeight($table),
@@ -198,7 +199,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
         items: [{
             itemType: 'group',
             caption: 'Border',
-            colCount: 3,
+            colCount: 2,
             items: [
                 {
                     dataField: 'borderStyle',
@@ -209,9 +210,14 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                     }
                 },
                 {
+                    dataField: 'borderWidth',
+                    caption: 'Width'
+                },
+                {
                     itemType: 'simple',
                     dataField: 'borderColor',
                     label: { text: 'Color' },
+                    colSpan: 2,
                     template: (e) => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ColorBox, {
@@ -223,10 +229,24 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                         });
                         return $content;
                     }
+                }
+            ]
+        }, {
+            itemType: 'group',
+            caption: 'Dimentions',
+            colCount: 2,
+            items: [
+                {
+                    dataField: 'width',
+                    editorOptions: {
+                        min: 0
+                    }
                 },
                 {
-                    dataField: 'borderWidth',
-                    caption: 'Width'
+                    dataField: 'height',
+                    editorOptions: {
+                        min: 0
+                    }
                 }
             ]
         }, {
@@ -252,38 +272,24 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             ]
         }, {
             itemType: 'group',
-            caption: 'Dimentions',
-            colCount: 3,
-            items: [
-                {
-                    dataField: 'width',
-                    editorOptions: {
-                        min: 0
-                    }
-                },
-                {
-                    dataField: 'height',
-                    editorOptions: {
-                        min: 0
-                    }
-                },
-                {
-                    itemType: 'simple',
-                    label: { text: 'Alignment' },
-                    template: () => {
-                        const $content = $('<div>');
-                        editorInstance._createComponent($content, ButtonGroup, {
-                            items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }],
-                            keyExpr: 'value',
-                            selectedItemKeys: [startTextAlign],
-                            onInitialized: (e) => {
-                                alignmentEditorInstance = e.component;
-                            }
-                        });
-                        return $content;
-                    }
+            caption: 'Alignment',
+            // colCount: 2,
+            items: [{
+                itemType: 'simple',
+                label: { text: 'Horizontal' },
+                template: () => {
+                    const $content = $('<div>');
+                    editorInstance._createComponent($content, ButtonGroup, {
+                        items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }, { value: 'justify', icon: 'alignjustify' }],
+                        keyExpr: 'value',
+                        selectedItemKeys: [startTextAlign],
+                        onInitialized: (e) => {
+                            alignmentEditorInstance = e.component;
+                        }
+                    });
+                    return $content;
                 }
-            ]
+            }]
         }, {
             itemType: 'button',
             horizontalAlignment: 'left',
@@ -311,14 +317,17 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
         minColWidth: 300
     };
 
-    formPopup.option('contentTemplate', (container) => {
-        const $content = $('<div>').appendTo(container);
-        const $form = $('<div>').appendTo($content);
-        editorInstance._createComponent($form, Form, formOptions);
-        editorInstance._createComponent($content, ScrollView, {});
-        formInstance = $form.dxForm('instance');
+    formPopup.option({
+        'contentTemplate': (container) => {
+            const $content = $('<div>').appendTo(container);
+            const $form = $('<div>').appendTo($content);
+            editorInstance._createComponent($form, Form, formOptions);
+            editorInstance._createComponent($content, ScrollView, {});
+            formInstance = $form.dxForm('instance');
 
-        return $content;
+            return $content;
+        },
+        title: 'Table Properties'
     });
 
     formPopup.show();
@@ -492,14 +501,17 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
         minColWidth: 300
     };
 
-    formPopup.option('contentTemplate', (container) => {
-        const $content = $('<div>').appendTo(container);
-        const $form = $('<div>').appendTo($content);
-        editorInstance._createComponent($form, Form, formOptions);
-        editorInstance._createComponent($content, ScrollView, {});
-        formInstance = $form.dxForm('instance');
+    formPopup.option({
+        'contentTemplate': (container) => {
+            const $content = $('<div>').appendTo(container);
+            const $form = $('<div>').appendTo($content);
+            editorInstance._createComponent($form, Form, formOptions);
+            editorInstance._createComponent($content, ScrollView, {});
+            formInstance = $form.dxForm('instance');
 
-        return $content;
+            return $content;
+        },
+        title: 'Cell Properties'
     });
     formPopup.show();
 
