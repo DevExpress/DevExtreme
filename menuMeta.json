@@ -1127,7 +1127,6 @@
           {
             "Title": "Layout Customization",
             "Name": "LayoutCustomization",
-            "DocUrl": "Guide/UI_Components/PivotGrid/Visual_Elements/#Headers",
             "Widget": "PivotGrid",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/PivotGridDataController.cs",
