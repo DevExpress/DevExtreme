@@ -49,6 +49,8 @@ class BaseRenderingStrategy {
     get currentDate() { return this.options.currentDate; }
     get appointmentCountPerCell() { return this.options.appointmentCountPerCell; }
     get appointmentOffset() { return this.options.appointmentOffset; }
+    get allowResizing() { return this.options.allowResizing; }
+    get allowAllDayResizing() { return this.options.allowAllDayResizing; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 

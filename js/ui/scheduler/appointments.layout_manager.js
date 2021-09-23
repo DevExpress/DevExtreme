@@ -74,6 +74,8 @@ class AppointmentLayoutManager {
             rowCount,
             appointmentCountPerCell: this.instance.option('_appointmentCountPerCell'),
             appointmentOffset: this.instance.option('_appointmentOffset'),
+            allowResizing: this.instance._allowResizing(),
+            allowAllDayResizing: this.instance._allowAllDayResizing(),
             startViewDate: workspace.getStartViewDate(),
             groupOrientation: workspace._getRealGroupOrientation(),
             getIsGroupedByDate: () => workspace.isGroupedByDate(),

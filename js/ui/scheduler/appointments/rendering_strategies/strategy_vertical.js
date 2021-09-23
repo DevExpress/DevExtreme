@@ -353,7 +353,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _calculateGeometryConfig(coordinates) {
-        if(!this.instance._allowResizing() || !this.instance._allowAllDayResizing()) {
+        if(!this.allowResizing || !this.allowAllDayResizing) {
             coordinates.skipResizing = true;
         }
 
