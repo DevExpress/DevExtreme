@@ -161,14 +161,6 @@ const Map = Widget.inherit({
         ]);
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            'key': { since: '20.2', alias: 'apiKey' }
-        });
-    },
-
     _init: function() {
         this.callBase();
 
@@ -284,7 +276,6 @@ const Map = Widget.inherit({
                 this._suppressAsyncAction = true;
                 this._invalidate();
                 break;
-            case 'key':
             case 'apiKey':
                 errors.log('W1001');
                 break;

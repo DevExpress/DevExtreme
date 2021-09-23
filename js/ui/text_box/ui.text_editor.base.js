@@ -96,8 +96,6 @@ const TextEditorBase = Editor.inherit({
 
             onKeyDown: null,
 
-            onKeyPress: null,
-
             onKeyUp: null,
 
             onChange: null,
@@ -144,14 +142,6 @@ const TextEditorBase = Editor.inherit({
                 }
             }
         ]);
-    },
-
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            'onKeyPress': { since: '20.1', message: 'This event is removed from the web standards and will be deprecated in modern browsers soon.' }
-        });
     },
 
     _getDefaultButtons: function() {
