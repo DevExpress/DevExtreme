@@ -118,7 +118,7 @@ if(Quill) {
                     my: 'left top',
                     at: 'left top',
                     collision: 'fit flip',
-                    offset: { x: event.clientX - startPosition.x, y: event.clientY - startPosition.y }
+                    offset: { x: event.clientX - startPosition.left, y: event.clientY - startPosition.top }
                 }
             });
         }

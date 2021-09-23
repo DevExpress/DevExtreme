@@ -64,7 +64,7 @@ module('Table properties forms', {
         };
 
         this.applyFormChanges = (formInstance) => {
-            const $okButton = $(formInstance.$element().find('.dx-button.dx-button-success'));
+            const $okButton = $('.dx-popup-bottom .dx-button:visible').eq(0);
             $okButton.trigger('dxclick');
 
             this.clock.tick();
@@ -123,7 +123,7 @@ module('Table properties forms', {
             borderStyleEditor.option('value', 'dotted');
 
             const borderWidthEditor = formInstance.getEditor('borderWidth');
-            borderWidthEditor.option('value', '3px');
+            borderWidthEditor.option('value', 3);
 
             const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
             borderColorEditor.option('value', 'red');
@@ -209,7 +209,7 @@ module('Table properties forms', {
             borderStyleEditor.option('value', 'dotted');
 
             const borderWidthEditor = formInstance.getEditor('borderWidth');
-            borderWidthEditor.option('value', '3px');
+            borderWidthEditor.option('value', 3);
 
             const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
             borderColorEditor.option('value', 'red');
@@ -217,8 +217,11 @@ module('Table properties forms', {
             const backgroundColorEditor = formInstance.$element().find('.dx-colorbox').eq(1).dxColorBox('instance');
             backgroundColorEditor.option('value', 'green');
 
-            const paddingEditor = formInstance.getEditor('padding');
-            paddingEditor.option('value', '5px');
+            const horizontalPaddingEditor = formInstance.getEditor('horizontalPadding');
+            horizontalPaddingEditor.option('value', 10);
+
+            const verticalPaddingEditor = formInstance.getEditor('verticalPadding');
+            verticalPaddingEditor.option('value', 15);
 
             const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
             alignmentEditor.option('selectedItemKeys', ['right']);
@@ -232,7 +235,10 @@ module('Table properties forms', {
             assert.strictEqual($targetCell.css('borderWidth'), '3px', 'border width is applied');
             assert.strictEqual($targetCell.css('borderColor'), 'rgb(255, 0, 0)', 'border color is applied');
             assert.strictEqual($targetCell.css('backgroundColor'), 'rgb(0, 128, 0)', 'background color is applied');
-            assert.strictEqual($targetCell.css('padding'), '5px', 'padding is applied');
+            assert.strictEqual($targetCell.css('paddingLeft'), '10px', 'padding is applied');
+            assert.strictEqual($targetCell.css('paddingRight'), '10px', 'padding is applied');
+            assert.strictEqual($targetCell.css('paddingTop'), '15px', 'padding is applied');
+            assert.strictEqual($targetCell.css('paddingBottom'), '15px', 'padding is applied');
             assert.strictEqual($targetCell.css('textAlign'), 'right', 'text align is applied');
             assert.strictEqual($targetCell.css('verticalAlign'), 'bottom', 'vertical align is applied');
         });
