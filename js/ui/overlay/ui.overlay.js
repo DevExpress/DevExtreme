@@ -1308,6 +1308,9 @@ const Overlay = Widget.inherit({
                 break;
             case 'width':
             case 'height':
+                this._renderGeometry();
+                this._resizable?.option(args.name, args.value);
+                break;
             case 'minWidth':
             case 'maxWidth':
             case 'minHeight':
