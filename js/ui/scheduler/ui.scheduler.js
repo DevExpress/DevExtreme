@@ -684,7 +684,9 @@ class Scheduler extends Widget {
                 this._workSpace.option('draggingMode', value);
                 break;
             case 'toolbar':
-                this._header?.option('items', value);
+                this._header
+                    ? this._header.option('items', value)
+                    : this.repaint();
                 break;
             case 'loadedResources':
             case 'resourceLoaderMap':
