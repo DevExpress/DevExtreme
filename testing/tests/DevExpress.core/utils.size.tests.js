@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import sizeUtils, { getHeight, getWidth, getInnerHeight, getInnerWidth, getOuterHeight, getOuterWidth } from 'core/utils/size';
+import browser from 'core/utils/browser';
 
 const testStyles = [
     '',
@@ -12,6 +13,9 @@ const testStyles = [
 const windowHeight = $(window).height();
 
 function getScrollbarThickness() {
+    if(browser.mozilla) {
+        return 0;
+    }
     const scrollbarTest = $('<div>')
         .css({
             width: '100px',
