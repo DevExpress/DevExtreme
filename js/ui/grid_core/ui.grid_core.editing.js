@@ -1165,7 +1165,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             $editCell = $editCell || rowsView && rowsView._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex);
 
-            if($editCell && !$editCell.hasClass('dx-focused')) {
+            if($editCell) {
                 this._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
             }
         },
