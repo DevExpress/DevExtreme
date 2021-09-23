@@ -582,9 +582,9 @@ const LayoutManager = Widget.inherit({
         });
     },
 
-    _getLabelWidthByText: function({ text, location }) {
+    _getLabelWidthByText: function({ innerHTML, location }) {
         return getLabelWidthByText({
-            text, location, markOptions: convertToLabelMarkOptions(this._getMarkOptions())
+            innerHTML, location, markOptions: convertToLabelMarkOptions(this._getMarkOptions())
         });
     },
 
