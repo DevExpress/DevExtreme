@@ -19,7 +19,6 @@ import devices from 'core/devices';
 import dataUtils from 'core/element_data';
 import {
     setHeight,
-    getSize,
     getOuterHeight,
     getHeight,
     getOuterWidth,
@@ -5127,11 +5126,7 @@ QUnit.module('Tests with stubs', {
 
         setHeight(descriptionCell, 80);
 
-        const delta = (getSize(descriptionCell[0], 'height', {
-            paddings: true,
-            borders: true,
-            margins: true
-        }) - 28) / 2;
+        const delta = (getOuterHeight(descriptionCell[0], true) - 28) / 2;
 
         pivot.updateDimensions();
 
