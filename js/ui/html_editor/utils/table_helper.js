@@ -16,7 +16,20 @@ function getTableFormats(quill) {
     return tableModule?.tableFormats ? tableModule.tableFormats() : TABLE_FORMATS; // backward compatibility with previous devextreme-quill versions
 }
 
+function getTableOperationHandler(quill, operationName, ...rest) {
+    return () => {
+        const table = quill.getModule('table');
+
+        if(!table) {
+            return;
+        }
+        quill.focus();
+        return table[operationName](...rest);
+    };
+}
+
 export {
     TABLE_OPERATIONS,
-    getTableFormats
+    getTableFormats,
+    getTableOperationHandler
 };

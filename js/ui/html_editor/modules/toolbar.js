@@ -20,8 +20,7 @@ import { titleize, camelize } from '../../../core/utils/inflector';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
-import { getTableOperationHandler } from './tableOperations';
-import { getTableFormats, TABLE_OPERATIONS } from '../utils/table_helper';
+import { getTableFormats, getTableOperationHandler, TABLE_OPERATIONS } from '../utils/table_helper';
 
 let ToolbarModule = BaseModule;
 
