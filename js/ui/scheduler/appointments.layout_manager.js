@@ -96,6 +96,7 @@ class AppointmentLayoutManager {
             positionHelper,
             isGroupedByDate: workspace.isGroupedByDate(),
             cellDuration: workspace.getCellDuration(),
+            cellDurationInMinute: workspace.option('cellDuration'),
             viewDataProvider: workspace.viewDataProvider,
             supportAllDayRow: workspace.supportAllDayRow(),
             dateRange: workspace.getDateRange(),

@@ -19,7 +19,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             deltaTime = this._getDeltaWidth(args, initialSize) * toMs('day');
         } else {
             const deltaHeight = args.height - initialSize.height;
-            deltaTime = toMs('minute') * Math.round(deltaHeight / this.cellHeight * this.instance.getAppointmentDurationInMinutes());
+            deltaTime = toMs('minute') * Math.round(deltaHeight / this.cellHeight * this.cellDurationInMinute);
         }
         return deltaTime;
     }
@@ -217,7 +217,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getMinuteHeight() {
-        return this.cellHeight / this.instance.getAppointmentDurationInMinutes();
+        return this.cellHeight / this.cellDurationInMinute;
     }
 
     _getCompactLeftCoordinate(itemLeft, index) {
