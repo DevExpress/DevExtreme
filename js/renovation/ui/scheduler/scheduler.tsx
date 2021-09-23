@@ -156,8 +156,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() key = generateKey();
 
-  @InternalState() dataAccessors = createDataAccessors(this.props);
-
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
     const { views, currentView } = this.props;
@@ -167,6 +165,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   get currentViewConfig(): CurrentViewConfigType {
     return getCurrentViewConfig(this.currentViewProps, this.props);
+  }
+
+  get dataAccessors(): DataAccessorType {
+    return createDataAccessors(this.props);
   }
 
   get startViewDate(): Date {
@@ -191,6 +193,11 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     const startViewDate = viewDataGenerator.getStartViewDate(options) as Date;
 
     return startViewDate;
+  }
+
+  get isVirtualScrolling(): boolean {
+    return this.props.scrolling.mode === 'virtual'
+      || this.currentViewProps.scrolling?.mode === 'virtual';
   }
 
   @Method()
@@ -292,7 +299,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       firstDayOfWeek: this.currentViewConfig.firstDayOfWeek,
       showAllDayPanel: this.props.showAllDayPanel,
       timeZone: this.props.timeZone,
-      getIsVirtualScrolling: () => this.props.scrolling.mode === 'virtual' || this.currentViewProps.scrolling?.mode === 'virtual',
+      getIsVirtualScrolling: () => this.isVirtualScrolling,
       getDataAccessors: (): DataAccessorType => this.dataAccessors,
     });
   }

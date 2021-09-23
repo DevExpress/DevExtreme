@@ -466,6 +466,68 @@ describe('Scheduler', () => {
             .toBe(new Date(2021, 7, 15).getTime());
         });
       });
+
+      describe('dataAccessors', () => {
+        it('should be correctly generated', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          expect(scheduler.dataAccessors.expr)
+            .toEqual({
+              allDayExpr: 'allDay',
+              descriptionExpr: 'description',
+              endDateExpr: 'endDate',
+              endDateTimeZoneExpr: 'endDateTimeZone',
+              recurrenceExceptionExpr: 'recurrenceException',
+              recurrenceRuleExpr: 'recurrenceRule',
+              startDateExpr: 'startDate',
+              startDateTimeZoneExpr: 'startDateTimeZone',
+              textExpr: 'text',
+            });
+        });
+      });
+
+      describe('isVirtualScrolling', () => {
+        [
+          {
+            scrollingMode: 'standard',
+            viewScrollingMode: 'virtual',
+            expected: true,
+          },
+          {
+            scrollingMode: 'virtual',
+            viewScrollingMode: 'virtual',
+            expected: true,
+          },
+          {
+            scrollingMode: 'standard',
+            viewScrollingMode: 'standard',
+            expected: false,
+          },
+          {
+            scrollingMode: 'virtual',
+            viewScrollingMode: 'standard',
+            expected: true,
+          },
+        ].forEach(({ scrollingMode, viewScrollingMode, expected }) => {
+          it(`should has correct value if scheduler scrolling.mode is ${scrollingMode} and view scrolling.mode is ${viewScrollingMode}`, () => {
+            const scheduler = new Scheduler({
+              ...new SchedulerProps(),
+              scrolling: {
+                mode: scrollingMode as any,
+              },
+              views: [{
+                type: 'day',
+                scrolling: {
+                  mode: viewScrollingMode as any,
+                },
+              }],
+            });
+
+            expect(scheduler.isVirtualScrolling)
+              .toBe(expected);
+          });
+        });
+      });
     });
   });
 });
