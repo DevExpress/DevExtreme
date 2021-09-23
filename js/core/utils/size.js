@@ -36,10 +36,10 @@ const getCSSProperty = function(element, styles, name, defaultValue) {
     if(result === '' && element.style) {
         result = element.style[name];
     }
-    if(result === '') {
+    if(result === '' || result === undefined) {
         return defaultValue;
     }
-    return result || defaultValue;
+    return result;
 };
 
 
@@ -63,8 +63,14 @@ function getComponentThickness(elem, dimension, component, styles) {
 }
 
 export const getSize = function(element, dimension, box) {
+    const offsetFieldName = dimension === 'width' ? 'offsetWidth' : 'offsetHeight';
+
     const styles = getElementComputedStyle(element);
-    const result = parseFloat(getCSSProperty(element, styles, dimension, '')) || 0;
+    let result = getCSSProperty(element, styles, dimension);
+    if(result === '' || result === 'auto') {
+        result = element[offsetFieldName];
+    }
+    result = parseFloat(result) || 0;
 
     const currentBox = getCSSProperty(element, styles, 'boxSizing', 'content-box');
     const targetBox = box || currentBox;
@@ -109,14 +115,14 @@ export const getSize = function(element, dimension, box) {
     }
 
     if(padding || border) {
-        const paddingAndBorder = (padding === false ? getComponentThickness(element, dimension, 'padding', styles) : padding)
-            + (border === false ? getComponentThickness(element, dimension, 'border', styles) : border);
+        const paddingAndBorder =
+            (padding === false ? coeff * getComponentThickness(element, dimension, 'padding', styles) : padding)
+            + (border === false ? coeff * getComponentThickness(element, dimension, 'border', styles) : border);
 
-        scrollThickness = coeff * Math.max(0, Math.ceil(
-            element['offset' + dimension[0].toUpperCase() + dimension.slice(1)] -
+        scrollThickness = coeff * Math.max(0, Math.floor(
+            element[offsetFieldName] -
             result -
-            (coeff * paddingAndBorder) -
-            0.5
+            (coeff * paddingAndBorder)
         )) || 0;
     }
 
