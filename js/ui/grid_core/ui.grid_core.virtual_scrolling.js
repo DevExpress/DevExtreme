@@ -1393,9 +1393,6 @@ export const virtualScrollingModule = {
                         }
 
                         return result;
-                    },
-                    isEmpty: function() {
-                        return this.option(NEW_SCROLLING_MODE) && isVirtualPaging(this) ? !this._itemCount : this.callBase(this, arguments);
                     }
                 };
 
