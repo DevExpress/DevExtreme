@@ -107,12 +107,6 @@ const ListEdit = ListBase.inherit({
 
             onSelectAllValueChanged: null,
 
-            /**
-            * @name dxListOptions.selectAllText
-            * @type string
-            * @default "Select All"
-            * @hidden
-            */
             selectAllText: localizationMessage.format('dxList-selectAll'),
 
             menuItems: [],

@@ -13,10 +13,8 @@ jest.mock('../../../overlays/validation_message', () => ({ ValidationMessage: ()
 describe('Editor', () => {
   describe('Render', () => {
     it('should pass all necessary properties to Widget', () => {
-      const onRootElementRendered = (): null => null;
       const renderOptions = {
         aria: { role: 'aria' },
-        onRootElementRendered,
       };
       const keyDown = (): null => null;
       const onWidgetClick = (): null => null;
@@ -54,13 +52,13 @@ describe('Editor', () => {
 
     describe('validation', () => {
       it('widget should pass correct props to validationMessage', () => {
-        const rootElement = {} as RefObject<HTMLDivElement>;
+        const rootElementRef = { current: {} } as RefObject<HTMLDivElement>;
 
         const validationErrors = [{ message: 'error message' }];
         const CustomTree = () => (
           <div>
             {viewFunction({
-              rootElement,
+              validationMessageTarget: rootElementRef.current,
               validationErrors,
               props: {
                 isValid: false,
@@ -69,7 +67,7 @@ describe('Editor', () => {
                 validationMessageMode: 'always',
                 rtlEnabled: false,
               },
-              shouldShowValidationMessage: true,
+              isValidationMessageVisible: true,
             } as any)}
           </div>
         );
@@ -77,23 +75,20 @@ describe('Editor', () => {
 
         const validationMessage = tree.find(ValidationMessage);
         const props = validationMessage.props();
-        expect(props.container).toBe(rootElement);
-        expect(props.target).toBe(rootElement);
-        expect(props.boundary).toBe(rootElement);
+        expect(props.container).toBe(rootElementRef.current);
+        expect(props.target).toBe(rootElementRef.current);
+        expect(props.boundary).toBe(rootElementRef.current);
         expect(props.positionRequest).toBe('below');
         expect(props.mode).toBe('always');
         expect(props.rtlEnabled).toBe(false);
         expect(props.validationErrors).toEqual(validationErrors);
       });
 
-      it('should render ValidationMessage if rootElement is specified and shouldRenderValidationMessage=true', () => {
-        const rootElement = {} as RefObject<HTMLDivElement>;
-
+      it('should render ValidationMessage if isValidationMessageVisible=true', () => {
         const CustomTree = () => (
           <div>
             {viewFunction({
-              rootElement,
-              shouldShowValidationMessage: true,
+              isValidationMessageVisible: true,
               props: {},
             } as any)}
           </div>
@@ -104,29 +99,11 @@ describe('Editor', () => {
         expect(validationMessage.exists()).toBe(true);
       });
 
-      it('should not render ValidationMessage if rootElement is not specified', () => {
+      it('should not render ValidationMessage if isValidationMessageVisible=false', () => {
         const CustomTree = () => (
           <div>
             {viewFunction({
-              shouldShowValidationMessage: true,
-              props: {},
-            } as any)}
-          </div>
-        );
-        const tree = mount(<CustomTree />);
-
-        const validationMessage = tree.find(ValidationMessage);
-        expect(validationMessage.exists()).toBe(false);
-      });
-
-      it('should not render ValidationMessage if shouldRenderValidationMessage=false', () => {
-        const rootElement = {} as RefObject<HTMLDivElement>;
-
-        const CustomTree = () => (
-          <div>
-            {viewFunction({
-              rootElement,
-              shouldShowValidationMessage: false,
+              isValidationMessageVisible: false,
               props: {},
             } as any)}
           </div>
@@ -140,6 +117,29 @@ describe('Editor', () => {
   });
 
   describe('Behavior', () => {
+    describe('Effects', () => {
+      describe('updateValidationMessageVisibility', () => {
+        it('should set isValidationMessageVisible to true if shouldShowValidationMessage is true', () => {
+          const editor = new Editor({
+            isValid: false,
+            validationError: { message: 'error' },
+          });
+
+          editor.updateValidationMessageVisibility();
+
+          expect(editor.isValidationMessageVisible).toEqual(true);
+        });
+
+        it('should set isValidationMessageVisible to false if shouldShowValidationMessage is false', () => {
+          const editor = new Editor({});
+
+          editor.updateValidationMessageVisibility();
+
+          expect(editor.isValidationMessageVisible).toEqual(false);
+        });
+      });
+    });
+
     describe('Methods', () => {
       describe('focus', () => {
         it('should call widget focus method', () => {
@@ -159,17 +159,6 @@ describe('Editor', () => {
           editor.blur();
 
           expect(editor.widgetRef.current?.blur).toHaveBeenCalledTimes(1);
-        });
-      });
-
-      describe('onRootElementRendered', () => {
-        it('should set rootElement to passed parameter', () => {
-          const editor = new Editor({});
-          const rootElement = {} as HTMLDivElement;
-
-          editor.onRootElementRendered(rootElement);
-
-          expect(editor.rootElement).toEqual(rootElement);
         });
       });
     });
@@ -307,6 +296,21 @@ describe('Editor', () => {
           });
 
           expect(editor.shouldShowValidationMessage).toBe(true);
+        });
+      });
+
+      describe('validationMessageTarget', () => {
+        it('should return roolElementRef.current', () => {
+          const editor = new Editor({});
+          editor.rootElementRef = { current: {} } as RefObject<HTMLDivElement>;
+
+          expect(editor.validationMessageTarget).toEqual(editor.rootElementRef.current);
+        });
+
+        it('should not raise any error if rootElementRef is not initialized', () => {
+          const editor = new Editor({});
+
+          expect(() => editor.validationMessageTarget).not.toThrow();
         });
       });
     });

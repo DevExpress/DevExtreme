@@ -520,6 +520,12 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     showSelectionControls?: boolean;
     /**
      * @docid
+     * @default "Select All"
+     * @public
+     */
+    selectAllText?: string;
+    /**
+     * @docid
      * @default false &for(desktop except Mac)
      * @default true
      * @public

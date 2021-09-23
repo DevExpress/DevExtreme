@@ -28,6 +28,8 @@ export class GanttTreeList {
             selection: { mode: GanttHelper.getSelectionMode(this._gantt.option('allowSelection')) },
             selectedRowKeys: GanttHelper.getArrayFromOneElement(this._gantt.option('selectedRowKey')),
             sorting: this._gantt.option('sorting'),
+            filterRow: this._gantt.option('filterRow'),
+            headerFilter: this._gantt.option('headerFilter'),
             scrolling: { showScrollbar: 'onHover', mode: 'virtual' },
             allowColumnResizing: true,
             autoExpandAll: true,
@@ -66,7 +68,7 @@ export class GanttTreeList {
             this._gantt._initGanttView();
             this._initScrollSync(e.component);
         }
-        this._gantt._sort();
+        this._gantt._sortAndFilter();
         this._gantt._sizeHelper.updateGanttRowHeights();
     }
 
@@ -210,7 +212,7 @@ export class GanttTreeList {
         return columns;
     }
 
-    getSortedItems() {
+    getSievedItems() {
         const rootNode = this._treeList.getRootNode();
         if(!rootNode) { return undefined; }
         const resultArray = [];

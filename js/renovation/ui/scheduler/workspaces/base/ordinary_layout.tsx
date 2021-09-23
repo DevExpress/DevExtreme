@@ -36,7 +36,6 @@ export const viewFunction = ({
   classes,
   isRenderGroupPanel,
   isStandaloneAllDayPanel,
-  isSetAllDayTitleClass,
   groupPanelHeight,
   headerEmptyCellWidth,
 
@@ -58,7 +57,6 @@ export const viewFunction = ({
     groupByDate,
     groupPanelClassName,
     isRenderHeaderEmptyCell,
-    isAllDayPanelVisible,
     scrollingDirection,
 
     dataCellTemplate,
@@ -81,7 +79,6 @@ export const viewFunction = ({
         <HeaderPanelEmptyCell
           width={headerEmptyCellWidth}
           isRenderAllDayTitle={isStandaloneAllDayPanel}
-          isSetAllDayTitleClass={isSetAllDayTitleClass}
         />
       )}
       <div className="dx-scheduler-header-tables-container">
@@ -99,9 +96,8 @@ export const viewFunction = ({
             resourceCellTemplate={resourceCellTemplate}
           />
         </table>
-        {isAllDayPanelVisible && (
+        {isStandaloneAllDayPanel && (
           <AllDayPanelLayout
-            visible={isStandaloneAllDayPanel}
             viewData={viewData}
             dataCellTemplate={dataCellTemplate}
             tableRef={allDayPanelRef}
@@ -286,12 +282,6 @@ OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderDa
     } = this.props;
 
     return !isVerticalGroupingApplied(groups, groupOrientation) && isAllDayPanelVisible;
-  }
-
-  get isSetAllDayTitleClass(): boolean {
-    const { groups, groupOrientation } = this.props;
-
-    return !isVerticalGroupingApplied(groups, groupOrientation);
   }
 
   @Effect({ run: 'always' })
