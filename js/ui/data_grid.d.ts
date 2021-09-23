@@ -538,7 +538,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @docid
      * @default null
      * @public
-     * @type DataSourceDefinition
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
     dataSource?: DataSourceDefinition<TRowData, TKey>;
     /**

@@ -258,7 +258,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
-       * @type DataSourceDefinition
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
       dataSource?: DataSourceDefinition<any>;
       /**
@@ -734,7 +734,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
-       * @type DataSourceDefinition
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
       dataSource?: DataSourceDefinition<any>;
       /**
@@ -767,7 +767,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
-       * @type DataSourceDefinition
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
       dataSource?: DataSourceDefinition<any>;
       /**
@@ -864,7 +864,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
-       * @type DataSourceDefinition
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
       dataSource?: DataSourceDefinition<any>;
       /**

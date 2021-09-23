@@ -297,7 +297,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @docid
      * @notUsedInTheme
      * @public
-     * @type DataSourceDefinition
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
     dataSource?: DataSourceDefinition<any>;
     /**

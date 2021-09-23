@@ -469,7 +469,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        * @default null
-       * @type DataSourceDefinition
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
       dataSource?: DataSourceDefinition<any>;
       /**
@@ -626,7 +626,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        * @default null
-       * @type DataSourceDefinition
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
       dataSource?: DataSourceDefinition<any>;
       /**

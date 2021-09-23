@@ -75,7 +75,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      * @docid
      * @notUsedInTheme
      * @public
-     * @type DataSourceDefinition
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
     dataSource?: DataSourceDefinition<any>;
     /**
