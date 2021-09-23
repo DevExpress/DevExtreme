@@ -193,25 +193,32 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             backgroundColor: tableStyles.backgroundColor,
             borderStyle: tableStyles.borderStyle,
             borderColor: tableStyles.borderColor,
-            borderWidth: tableStyles.borderWidth,
+            borderWidth: parseInt(tableStyles.borderWidth),
             alignment: startTextAlign
         },
         items: [{
             itemType: 'group',
             caption: 'Border',
+            colCountByScreen: {
+                xs: 2
+            },
             colCount: 2,
             items: [
                 {
                     dataField: 'borderStyle',
-                    caption: 'Style',
+                    label: { text: 'Style' },
                     editorType: 'dxSelectBox',
                     editorOptions: {
-                        items: BORDER_STYLES
+                        items: BORDER_STYLES,
+                        placeholder: 'Select style'
                     }
                 },
                 {
                     dataField: 'borderWidth',
-                    caption: 'Width'
+                    label: { text: 'Width' },
+                    editorOptions: {
+                        placeholder: 'Pixels'
+                    }
                 },
                 {
                     itemType: 'simple',
@@ -233,19 +240,24 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             ]
         }, {
             itemType: 'group',
-            caption: 'Dimentions',
+            caption: 'Dimensions',
+            colCountByScreen: {
+                xs: 2
+            },
             colCount: 2,
             items: [
                 {
                     dataField: 'width',
                     editorOptions: {
-                        min: 0
+                        min: 0,
+                        placeholder: 'Pixels'
                     }
                 },
                 {
                     dataField: 'height',
                     editorOptions: {
-                        min: 0
+                        min: 0,
+                        placeholder: 'Pixels'
                     }
                 }
             ]
@@ -273,7 +285,6 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
         }, {
             itemType: 'group',
             caption: 'Alignment',
-            // colCount: 2,
             items: [{
                 itemType: 'simple',
                 label: { text: 'Horizontal' },
@@ -294,7 +305,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             itemType: 'button',
             horizontalAlignment: 'left',
             buttonOptions: {
-                text: 'Ok',
+                text: 'OK',
                 type: 'success',
                 onClick: (e) => {
                     const formData = formInstance.option('formData');
@@ -351,33 +362,46 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
     const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
 
     const formOptions = {
+        colCount: 2,
         formData: {
             width: startCellWidth,
             height: getOuterHeight($cell),
             backgroundColor: cellStyles.backgroundColor,
             borderStyle: cellStyles.borderStyle,
             borderColor: cellStyles.borderColor,
-            borderWidth: cellStyles.borderWidth,
+            borderWidth: parseInt(cellStyles.borderWidth),
             alignment: startTextAlign,
             verticalAlignment: cellStyles.verticalAlign,
-            padding: cellStyles.padding
+            verticalPadding: parseInt(cellStyles.paddingTop),
+            horizontalPadding: parseInt(cellStyles.paddingLeft),
         },
         items: [{
             itemType: 'group',
             caption: 'Border',
-            colCount: 3,
+            colCountByScreen: {
+                xs: 2
+            },
+            colCount: 2,
             items: [
                 {
                     dataField: 'borderStyle',
-                    caption: 'Style',
+                    label: { text: 'Style' },
                     editorType: 'dxSelectBox',
                     editorOptions: {
                         items: BORDER_STYLES
                     }
                 },
                 {
+                    dataField: 'borderWidth',
+                    label: { text: 'Width' },
+                    editorOptions: {
+                        placeholder: 'Pixels'
+                    }
+                },
+                {
                     itemType: 'simple',
                     dataField: 'borderColor',
+                    colSpan: 2,
                     label: { text: 'Color' },
                     template: (e) => {
                         const $content = $('<div>');
@@ -390,10 +414,43 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                         });
                         return $content;
                     }
+                }
+            ]
+        }, {
+            itemType: 'group',
+            caption: 'Dimensions',
+            colCount: 2,
+            colCountByScreen: {
+                xs: 2
+            },
+            items: [
+                {
+                    dataField: 'width',
+                    editorOptions: {
+                        min: 0,
+                        placeholder: 'Pixels'
+                    }
                 },
                 {
-                    dataField: 'borderWidth',
-                    caption: 'Width'
+                    dataField: 'height',
+                    editorOptions: {
+                        min: 0,
+                        placeholder: 'Pixels'
+                    }
+                },
+                {
+                    dataField: 'verticalPadding',
+                    label: { text: 'Vertical' },
+                    editorOptions: {
+                        placeholder: 'Pixels'
+                    }
+                },
+                {
+                    label: { text: 'Horizontal' },
+                    dataField: 'horizontalPadding',
+                    editorOptions: {
+                        placeholder: 'Pixels'
+                    }
                 }
             ]
         }, {
@@ -419,26 +476,8 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             ]
         }, {
             itemType: 'group',
-            caption: 'Dimentions',
-            colCount: 3,
-            items: [
-                {
-                    dataField: 'width',
-                    editorOptions: {
-                        min: 0
-                    }
-                },
-                {
-                    dataField: 'height',
-                    editorOptions: {
-                        min: 0
-                    }
-                }, 'padding'
-            ]
-        }, {
-            itemType: 'group',
             caption: 'Alignment',
-            colCount: 3,
+            colCount: 2,
             items: [
                 {
                     itemType: 'simple',
@@ -446,7 +485,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                     template: () => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ButtonGroup, {
-                            items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }],
+                            items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }, { value: 'justify', icon: 'alignjustify' }],
                             keyExpr: 'value',
                             selectedItemKeys: [startTextAlign],
                             onInitialized: (e) => {
@@ -476,7 +515,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             itemType: 'button',
             horizontalAlignment: 'left',
             buttonOptions: {
-                text: 'Ok',
+                text: 'OK',
                 type: 'success',
                 onClick: (e) => {
                     const formData = formInstance.option('formData');
@@ -486,10 +525,13 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                         'backgroundColor': backgroundColorEditorInstance.option('value'),
                         'borderStyle': formData.borderStyle,
                         'borderColor': borderColorEditorInstance.option('value'),
-                        'borderWidth': formData.borderWidth,
+                        'borderWidth': formData.borderWidth + 'px',
                         'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0],
                         'verticalAlign': verticalAlignmentEditorInstance.option('selectedItemKeys')[0],
-                        'padding': formData.padding
+                        'paddingLeft': formData.horizontalPadding + 'px',
+                        'paddingRight': formData.horizontalPadding + 'px',
+                        'paddingTop': formData.verticalPadding + 'px',
+                        'paddingBottom': formData.verticalPadding + 'px'
                     });
 
                     formPopup.hide();
