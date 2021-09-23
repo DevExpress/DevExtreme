@@ -20117,10 +20117,8 @@ QUnit.module('Editing - new row position', {
                 assert.ok(rows[0].isNewRow, 'new row');
 
                 const $insertRow = $testElement.find('tbody > .dx-data-row').first();
-                const $input = $insertRow.find('td').eq(0).find('.dx-texteditor-input');
                 assert.ok($insertRow.hasClass('dx-row-inserted'), 'first row is inserted');
-                assert.ok($insertRow.hasClass('dx-edit-row'), 'inserted row is edited');
-                assert.ok($input.is(':focus'), 'editor of the first cell is focused');
+                assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
             });
 
             QUnit.test('The pageindex should not be reset on subsequent changes when newRowPosition = first and change with type = insert in init configuration', function(assert) {
@@ -20283,6 +20281,222 @@ QUnit.module('Editing - new row position', {
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
                 assert.strictEqual(rows.length, 11, 'row count');
                 assert.ok(rows[1].isNewRow, 'new row');
+            });
+        });
+    });
+});
+
+QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        this.$element = () => $('#container');
+
+        this.array = generateItems(100);
+        this.columns = ['id', 'field1', 'field2', 'field3', 'field4'];
+
+        this.options = {
+            tabIndex: 0,
+            loadingTimeout: 0,
+            editing: {
+                mode: 'row',
+                allowUpdating: true,
+                allowAdding: true
+            },
+            paging: {
+                pageSize: 10
+            },
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            columns: this.columns,
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: {
+                    type: 'array',
+                    data: this.array,
+                    key: 'id'
+                },
+                paginate: true
+            },
+            scrolling: {
+                mode: 'standard'
+            },
+            onRowPrepared: function(e) {
+                $(e.rowElement).height(34);
+            }
+        };
+
+        this.setupModules = () => {
+            setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'virtualScrolling'], {
+                initViews: true
+            });
+        };
+    },
+    afterEach: function() {
+        this.dispose();
+        this.clock.restore();
+    }
+}, () => {
+    const configWithPaging = {
+        name: 'paging',
+        options: {
+            paging: {
+                enabled: true,
+                pageSize: 10
+            }
+        }
+    };
+    const configWithVirtualScrolling = {
+        name: 'virtual scrolling',
+        options: {
+            scrolling: {
+                mode: 'virtual'
+            }
+        }
+    };
+
+    [configWithPaging, configWithVirtualScrolling].forEach((config) => {
+        QUnit.module(`with ${config.name}`, {
+            beforeEach: function() {
+                this.options = $.extend(true, {}, this.options, config.options);
+            }
+        }, () => {
+            QUnit.test('Insert row when specified insertAfterKey', function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
+                this.setupModules();
+                this.clock.tick();
+
+                this.rowsView.render($testElement);
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 10, 'row count');
+
+                // act
+                this.option('editing.changes', [{ type: 'insert', insertAfterKey: 5 }]);
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 11, 'row count');
+                assert.strictEqual(rows[4].key, 5, 'key of the fifth row');
+                assert.ok(rows[5].isNewRow, 'new row');
+
+                const $insertRow = $testElement.find('tbody > .dx-data-row').eq(5);
+                assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
+                assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
+            });
+
+            QUnit.test('Insert row when specified insertBeforeKey', function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
+                this.setupModules();
+                this.clock.tick();
+
+                this.rowsView.render($testElement);
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 10, 'row count');
+
+                // act
+                this.option('editing.changes', [{ type: 'insert', insertBeforeKey: 5 }]);
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 11, 'row count');
+                assert.ok(rows[4].isNewRow, 'new row');
+                assert.strictEqual(rows[5].key, 5, 'key of the fifth row');
+
+                const $insertRow = $testElement.find('tbody > .dx-data-row').eq(4);
+                assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
+                assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
+            });
+
+            QUnit.test('Go to the page with the inserted row when specified insertAfterKey', function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
+                this.setupModules();
+                this.clock.tick();
+
+                this.rowsView.render($testElement);
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 10, 'row count');
+
+                // act
+                this.option('editing.changes', [{ type: 'insert', insertAfterKey: 15 }]);
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 10, 'row count');
+
+                // act
+                this.pageIndex(1);
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
+                // TODO remove condition with config.name when the pageIndex method is fixed in newMode of the virtual scrolling
+                assert.strictEqual(rows[config.name === 'virtual scrolling' ? 14 : 4].key, 15, 'key of the fifth row');
+                assert.ok(rows[config.name === 'virtual scrolling' ? 15 : 5].isNewRow, 'new row');
+
+                const $insertRow = $testElement.find('tbody > .dx-data-row').eq(config.name === 'virtual scrolling' ? 15 : 5);
+                assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
+                assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
+            });
+
+            QUnit.test('Go to the page with the inserted row when specified insertBeforeKey', function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
+                this.setupModules();
+                this.clock.tick();
+
+                this.rowsView.render($testElement);
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 10, 'row count');
+
+                // act
+                this.option('editing.changes', [{ type: 'insert', insertBeforeKey: 15 }]);
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 10, 'row count');
+                // act
+                this.pageIndex(1);
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
+                // TODO remove condition with config.name when the pageIndex method is fixed in newMode of the virtual scrolling
+                assert.ok(rows[config.name === 'virtual scrolling' ? 14 : 4].isNewRow, 'new row');
+                assert.strictEqual(rows[config.name === 'virtual scrolling' ? 15 : 5].key, 15, 'key of the fifth row');
+
+                const $insertRow = $testElement.find('tbody > .dx-data-row').eq(config.name === 'virtual scrolling' ? 14 : 4);
+                assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
+                assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
             });
         });
     });
