@@ -11,6 +11,21 @@ const testStyles = [
 
 const windowHeight = $(window).height();
 
+function getScrollbarThickness() {
+    const scrollbarTest = $('<div>')
+        .css({
+            width: '100px',
+            height: '100px',
+            overflow: 'scroll',
+        })
+        .appendTo('#qunit-fixture')
+        .get(0);
+    const scrollbarWidth = scrollbarTest.offsetWidth - scrollbarTest.clientWidth;
+    $(scrollbarTest).remove();
+
+    return scrollbarWidth;
+}
+
 QUnit.module('get width and height', {
     beforeEach: function() {
         this.$parent = $('<div style=\'width: 100px; height: 110px\'></div>').appendTo('#qunit-fixture');
@@ -375,8 +390,10 @@ QUnit.test('height helpers should return the same value as jquery. Params: (box-
     const $target = $('<div style=\'height: 40px; width: 50px; padding: 3px; margin: 7px; border: 9px solid black; display: inline-block; box-sizing: content-box; overflow: auto;\'/>').appendTo('#qunit-fixture').get(0);
     $('<div style=\'width: 100px; height: 100px\'>').appendTo($target);
 
-    assert.strictEqual(getHeight($target), 25, 'getHeight');
-    assert.strictEqual(getWidth($target), 35, 'getWidth');
+    const scrollbarThickness = getScrollbarThickness();
+
+    assert.strictEqual(getHeight($target), 40 - scrollbarThickness, 'getHeight');
+    assert.strictEqual(getWidth($target), 50 - scrollbarThickness, 'getWidth');
 
     assert.strictEqual(getInnerHeight($target), 46, 'getInnerHeight');
     assert.strictEqual(getInnerWidth($target), 56, 'getInnerWidth');
