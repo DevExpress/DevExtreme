@@ -3442,7 +3442,7 @@
         "Demos": [
           {
             "Title": "Export To PDF",
-            "Badge": "New",
+            "Badge": "Updated",
             "Name": "ExportToPDF",
             "Widget": "Gantt",
             "DemoType": "Web",
