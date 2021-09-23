@@ -846,6 +846,7 @@ export const dataControllerModule = {
 
                     if(that._repaintChangesOnly !== undefined) {
                         change.repaintChangesOnly = that._repaintChangesOnly;
+                        change.needUpdateDimensions = change.needUpdateDimensions || that._needUpdateDimensions;
                     } else if(change.changes) {
                         change.repaintChangesOnly = that.option('repaintChangesOnly');
                     } else if(isDataChanged) {
