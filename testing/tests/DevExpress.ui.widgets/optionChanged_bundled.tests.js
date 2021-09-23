@@ -43,6 +43,7 @@ define(function(require) {
                     name === 'templatesRenderAsynchronously' ||
                     name === 'ignoreChildEvents' ||
                     name === 'copyRootClassesToWrapper' ||
+                    name === '_ignoreCopyRootClassesToWrapperDeprecation' ||
                     name === '_checkParentVisibility') {
                     return;
                 }
