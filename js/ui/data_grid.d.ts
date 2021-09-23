@@ -1530,7 +1530,7 @@ interface CustomStateStoring {
 }
 
 interface LocalOrSessionStateStoring {
-  type: 'localStorage' | 'sessionStorage';
+  type?: 'localStorage' | 'sessionStorage';
   /**
    * @docid GridBaseOptions.stateStoring.storageKey
    * @default null
