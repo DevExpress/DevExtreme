@@ -72,6 +72,8 @@ class AppointmentLayoutManager {
             modelGroups: this.modelProvider.getCurrentViewOption('groups'),
             groupCount,
             rowCount,
+            appointmentCountPerCell: this.instance.option('_appointmentCountPerCell'),
+            appointmentOffset: this.instance.option('_appointmentOffset'),
             startViewDate: workspace.getStartViewDate(),
             groupOrientation: workspace._getRealGroupOrientation(),
             getIsGroupedByDate: () => workspace.isGroupedByDate(),

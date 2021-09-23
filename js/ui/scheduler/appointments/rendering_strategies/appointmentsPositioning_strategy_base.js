@@ -42,7 +42,7 @@ class AppointmentPositioningStrategy {
             return COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET;
         }
 
-        return this.getRenderingStrategy().instance.option('_appointmentOffset');
+        return this.getRenderingStrategy().appointmentOffset;
     }
 
     getDynamicAppointmentCountPerCell() {
@@ -54,7 +54,7 @@ class AppointmentPositioningStrategy {
         // NOTE: Simplify using only object
         if(renderingStrategy.allDaySupported()) {
             return {
-                allDay: renderingStrategy.groupOrientation === 'vertical' ? allDayCount : renderingStrategy.instance.option('_appointmentCountPerCell'),
+                allDay: renderingStrategy.groupOrientation === 'vertical' ? allDayCount : renderingStrategy.appointmentCountPerCell,
                 simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()
             };
         } else {

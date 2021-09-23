@@ -371,7 +371,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getDefaultRatio(coordinates, appointmentCountPerCell) {
-        return coordinates.count > this.instance.option('_appointmentCountPerCell') ? 0.65 : 1;
+        return coordinates.count > this.appointmentCountPerCell ? 0.65 : 1;
     }
 
     _getOffsets() {

@@ -47,6 +47,8 @@ class BaseRenderingStrategy {
     get groupOrientation() { return this.options.groupOrientation; }
     get rowCount() { return this.options.rowCount; }
     get currentDate() { return this.options.currentDate; }
+    get appointmentCountPerCell() { return this.options.appointmentCountPerCell; }
+    get appointmentOffset() { return this.options.appointmentOffset; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
