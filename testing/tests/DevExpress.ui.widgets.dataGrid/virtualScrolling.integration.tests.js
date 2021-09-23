@@ -4130,6 +4130,60 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             assert.ok($(dataGrid.element()).find(`.dx-pager .dx-page:eq(${i})`).hasClass('dx-selection'), `page button is selected ${i}`);
         }
     });
+
+    QUnit.test('Scroll position should be synchronized with pageIndex', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 400,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            pager: {
+                visible: true,
+            }
+        });
+
+        this.clock.tick();
+
+        // navigate forward
+        [0, 750, 1500, 2250, 3000].forEach(position => {
+            if(position > 0) {
+                dataGrid.getScrollable().scrollTo({ top: position });
+                this.clock.tick();
+            }
+            const pageIndex = position / 750;
+
+
+            // assert
+            assert.equal(dataGrid.pageIndex(), pageIndex, `pageIndex for ${position}`);
+            assert.ok($(dataGrid.element()).find(`.dx-pager .dx-page:eq(${pageIndex})`).hasClass('dx-selection'), `page button is selected ${pageIndex}`);
+        });
+
+        // navigate backward
+        [2250, 1500, 750, 0].forEach(position => {
+            dataGrid.getScrollable().scrollTo({ top: position });
+            this.clock.tick();
+            const pageIndex = position / 750;
+
+            // assert
+            assert.equal(dataGrid.pageIndex(), pageIndex, `pageIndex for ${position}`);
+            assert.ok($(dataGrid.element()).find(`.dx-pager .dx-page:eq(${pageIndex})`).hasClass('dx-selection'), `page button is selected ${pageIndex}`);
+        });
+    });
 });
 
 
