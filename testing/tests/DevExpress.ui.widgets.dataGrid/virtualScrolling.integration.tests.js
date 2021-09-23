@@ -4110,7 +4110,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
             // assert
             assert.equal(dataGrid.pageIndex(), i, `pageIndex ${i}`);
-            assert.roughEqual(dataGrid.getScrollable().scrollTop(), scrollPosition, 1, `scroll position ${scrollPosition}`);
+            assert.roughEqual(dataGrid.getScrollable().scrollTop(), scrollPosition, 2.01, `scroll position ${scrollPosition}`);
             assert.equal(dataGrid.getTopVisibleRowData().id, topId, `top id ${topId}`);
             assert.ok($(dataGrid.element()).find(`.dx-pager .dx-page:eq(${i})`).hasClass('dx-selection'), `page button is selected ${i}`);
         }
@@ -4125,7 +4125,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
             // assert
             assert.equal(dataGrid.pageIndex(), i, `pageIndex ${i}`);
-            assert.roughEqual(dataGrid.getScrollable().scrollTop(), scrollPosition, 1, `scroll position ${scrollPosition}`);
+            assert.roughEqual(dataGrid.getScrollable().scrollTop(), scrollPosition, 2.01, `scroll position ${scrollPosition}`);
             assert.equal(dataGrid.getTopVisibleRowData().id, topId, `top id ${topId}`);
             assert.ok($(dataGrid.element()).find(`.dx-pager .dx-page:eq(${i})`).hasClass('dx-selection'), `page button is selected ${i}`);
         }
