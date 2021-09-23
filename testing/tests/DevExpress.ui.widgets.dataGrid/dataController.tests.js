@@ -3629,6 +3629,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
             changeType: 'update',
             isLiveUpdate: true,
             repaintChangesOnly: true,
+            needUpdateDimensions: true,
             changeTypes: [
                 'remove',
                 'remove',

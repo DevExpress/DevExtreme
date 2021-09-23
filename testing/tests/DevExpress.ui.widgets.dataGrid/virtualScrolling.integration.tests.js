@@ -589,11 +589,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             paging: { pageSize: 2 },
             scrolling: {
                 mode: 'virtual',
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(300);
 
         // act
         dataGrid.getScrollable().scrollTo({ y: 300 });
@@ -660,7 +660,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(300);
 
         // act
         dataGrid.getScrollable().scrollTo({ y: 300 });
@@ -1448,7 +1448,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(300);
 
         dataGrid.on('contentReady', function() {
             contentReadyCount++;
@@ -3426,7 +3426,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }]
         });
 
-        this.clock.tick();
+        this.clock.tick(300);
         let visibleRows = dataGrid.getVisibleRows();
         let visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
@@ -4110,7 +4110,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
             // assert
             assert.equal(dataGrid.pageIndex(), i, `pageIndex ${i}`);
-            assert.roughEqual(dataGrid.getScrollable().scrollTop(), scrollPosition, 1, `scroll position ${scrollPosition}`);
+            assert.roughEqual(dataGrid.getScrollable().scrollTop(), scrollPosition, 2.01, `scroll position ${scrollPosition}`);
             assert.equal(dataGrid.getTopVisibleRowData().id, topId, `top id ${topId}`);
             assert.ok($(dataGrid.element()).find(`.dx-pager .dx-page:eq(${i})`).hasClass('dx-selection'), `page button is selected ${i}`);
         }
@@ -4125,7 +4125,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
             // assert
             assert.equal(dataGrid.pageIndex(), i, `pageIndex ${i}`);
-            assert.roughEqual(dataGrid.getScrollable().scrollTop(), scrollPosition, 1, `scroll position ${scrollPosition}`);
+            assert.roughEqual(dataGrid.getScrollable().scrollTop(), scrollPosition, 2.01, `scroll position ${scrollPosition}`);
             assert.equal(dataGrid.getTopVisibleRowData().id, topId, `top id ${topId}`);
             assert.ok($(dataGrid.element()).find(`.dx-pager .dx-page:eq(${i})`).hasClass('dx-selection'), `page button is selected ${i}`);
         }
@@ -4268,7 +4268,8 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
                 mode: 'infinite',
                 useNative: false,
                 minGap: 10,
-                rowPageSize: 20
+                rowPageSize: 20,
+                updateTimeout: 0
             }
         });
 
@@ -4980,7 +4981,8 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
                 mode: 'infinite',
                 newMode: true,
                 useNative: false,
-                minGap: 5
+                minGap: 5,
+                updateTimeout: 0
             },
             columns: ['ID', 'Name', {
                 dataField: 'Category',

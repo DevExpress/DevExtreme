@@ -422,7 +422,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                 const itemCount = e.items ? e.items.length : 20;
                 const viewportSize = this._dataController.viewportSize() || 20;
 
-                if(gridCoreUtils.isVirtualRowRendering(this) && itemCount > 0) {
+                if(gridCoreUtils.isVirtualRowRendering(this) && itemCount > 0 && !this.option(NEW_SCROLLING_MODE)) {
                     dataSource._renderTime = (new Date() - startRenderTime) * viewportSize / itemCount;
                 } else {
                     dataSource._renderTime = (new Date() - startRenderTime);
@@ -959,6 +959,9 @@ export const virtualScrollingModule = {
 
                         this.callBase.apply(this, arguments);
                         if(this.option(NEW_SCROLLING_MODE) && gridCoreUtils.isVirtualRowRendering(this)) {
+                            if(change.changeType === 'update' && change.rowIndices.length === 0 && change.cancelEmptyChanges) {
+                                change.cancel = true;
+                            }
                             return;
                         }
 
@@ -1251,9 +1254,11 @@ export const virtualScrollingModule = {
                             dataSourceAdapter.pageIndex(changedParams.pageIndex);
                             dataSourceAdapter.loadPageCount(changedParams.loadPageCount);
                             this._repaintChangesOnly = true;
+                            this._needUpdateDimensions = true;
                             const viewportChanging = this._viewportChanging;
                             this.load().always(() => {
                                 this._repaintChangesOnly = undefined;
+                                this._needUpdateDimensions = undefined;
                             }).done(() => {
                                 const isLastPage = this.pageCount() > 0 && this.pageIndex() === this.pageCount() - 1;
                                 (viewportChanging || isLastPage) && this._updateVisiblePageIndex();
@@ -1276,7 +1281,9 @@ export const virtualScrollingModule = {
 
                             if(!loadingItemsStarted && !(this._isLoading && checkLoading) && !checkLoadedParamsOnly) {
                                 this.updateItems({
-                                    repaintChangesOnly: true
+                                    repaintChangesOnly: true,
+                                    needUpdateDimensions: true,
+                                    cancelEmptyChanges: true
                                 });
                             }
                         }
