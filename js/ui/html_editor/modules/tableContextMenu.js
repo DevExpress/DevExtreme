@@ -56,7 +56,7 @@ if(Quill) {
         }
 
         showCellProperties(e) {
-            const $cell = $(this._targetElement);
+            const $cell = $(this._targetElement).closest('th, td');
             this._contextMenu.hide();
             this._popupForm = showCellPropertiesForm(this.editorInstance, $cell);
             this._targetElement = null;

@@ -12,17 +12,21 @@ import { each } from '../../../core/utils/iterator';
 import devices from '../../../core/devices';
 
 import { getOuterHeight, getOuterWidth } from '../../../core/utils/size';
+import { noop } from '../../../core/utils/common';
+
+import localizationMessage from '../../../localization/message';
 
 const MIN_HEIGHT = 400;
 const BORDER_STYLES = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset'];
 let formPopup;
+let applyHandler = noop;
 
 const createFormPopup = (editorInstance) => {
     const $popup = $('<div>').appendTo(editorInstance.$element());
     formPopup = editorInstance._createComponent($popup, Popup, {
         deferRendering: true,
         showTitle: true,
-        width: 600,
+        width: 800,
         height: 'auto',
         shading: false,
         closeOnTargetScroll: true,
@@ -33,7 +37,30 @@ const createFormPopup = (editorInstance) => {
         },
         fullScreen: getFullScreen(),
         visible: false,
-        maxHeight: getMaxHeight()
+        maxHeight: getMaxHeight(),
+        toolbarItems: [
+            {
+                toolbar: 'bottom',
+                location: 'after',
+                widget: 'dxButton',
+                options: {
+                    text: localizationMessage.format('OK'),
+                    onClick: () => {
+                        applyHandler();
+                    }
+                }
+            }, {
+                toolbar: 'bottom',
+                location: 'after',
+                widget: 'dxButton',
+                options: {
+                    text: localizationMessage.format('Cancel'),
+                    onClick: () => {
+                        formPopup.hide();
+                    }
+                }
+            }
+        ]
     });
 };
 
@@ -301,31 +328,25 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                     return $content;
                 }
             }]
-        }, {
-            itemType: 'button',
-            horizontalAlignment: 'left',
-            buttonOptions: {
-                text: 'OK',
-                type: 'success',
-                onClick: (e) => {
-                    const formData = formInstance.option('formData');
-                    const widthArg = formData.width === startTableWidth ? undefined : formData.width;
-                    applyTableDimensionChanges($table, formData.height, widthArg);
-                    $table.css({
-                        'backgroundColor': backgroundColorEditorInstance.option('value'),
-                        'borderStyle': formData.borderStyle,
-                        'borderColor': borderColorEditorInstance.option('value'),
-                        'borderWidth': formData.borderWidth,
-                        'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0]
-                    });
-
-                    formPopup.hide();
-                }
-            }
         }],
         showColonAfterLabel: true,
         labelLocation: 'top',
         minColWidth: 300
+    };
+
+    applyHandler = () => {
+        const formData = formInstance.option('formData');
+        const widthArg = formData.width === startTableWidth ? undefined : formData.width;
+        applyTableDimensionChanges($table, formData.height, widthArg);
+        $table.css({
+            'backgroundColor': backgroundColorEditorInstance.option('value'),
+            'borderStyle': formData.borderStyle,
+            'borderColor': borderColorEditorInstance.option('value'),
+            'borderWidth': formData.borderWidth,
+            'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0]
+        });
+
+        formPopup.hide();
     };
 
     formPopup.option({
@@ -440,13 +461,13 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                 },
                 {
                     dataField: 'verticalPadding',
-                    label: { text: 'Vertical' },
+                    label: { text: 'Padding Vertical' },
                     editorOptions: {
                         placeholder: 'Pixels'
                     }
                 },
                 {
-                    label: { text: 'Horizontal' },
+                    label: { text: 'Padding Horizontal' },
                     dataField: 'horizontalPadding',
                     editorOptions: {
                         placeholder: 'Pixels'
@@ -511,36 +532,30 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                     }
                 }
             ]
-        }, {
-            itemType: 'button',
-            horizontalAlignment: 'left',
-            buttonOptions: {
-                text: 'OK',
-                type: 'success',
-                onClick: (e) => {
-                    const formData = formInstance.option('formData');
-                    const widthArg = formData.width === startCellWidth ? undefined : formData.width;
-                    applyCellDimensionChanges($cell, formData.height, widthArg);
-                    $cell.css({
-                        'backgroundColor': backgroundColorEditorInstance.option('value'),
-                        'borderStyle': formData.borderStyle,
-                        'borderColor': borderColorEditorInstance.option('value'),
-                        'borderWidth': formData.borderWidth + 'px',
-                        'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0],
-                        'verticalAlign': verticalAlignmentEditorInstance.option('selectedItemKeys')[0],
-                        'paddingLeft': formData.horizontalPadding + 'px',
-                        'paddingRight': formData.horizontalPadding + 'px',
-                        'paddingTop': formData.verticalPadding + 'px',
-                        'paddingBottom': formData.verticalPadding + 'px'
-                    });
-
-                    formPopup.hide();
-                }
-            }
         }],
         showColonAfterLabel: true,
         labelLocation: 'top',
         minColWidth: 300
+    };
+
+    applyHandler = () => {
+        const formData = formInstance.option('formData');
+        const widthArg = formData.width === startCellWidth ? undefined : formData.width;
+        applyCellDimensionChanges($cell, formData.height, widthArg);
+        $cell.css({
+            'backgroundColor': backgroundColorEditorInstance.option('value'),
+            'borderStyle': formData.borderStyle,
+            'borderColor': borderColorEditorInstance.option('value'),
+            'borderWidth': formData.borderWidth + 'px',
+            'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0],
+            'verticalAlign': verticalAlignmentEditorInstance.option('selectedItemKeys')[0],
+            'paddingLeft': formData.horizontalPadding + 'px',
+            'paddingRight': formData.horizontalPadding + 'px',
+            'paddingTop': formData.verticalPadding + 'px',
+            'paddingBottom': formData.verticalPadding + 'px'
+        });
+
+        formPopup.hide();
     };
 
     formPopup.option({
