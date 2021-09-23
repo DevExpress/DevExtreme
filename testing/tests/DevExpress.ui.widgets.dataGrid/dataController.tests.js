@@ -3773,7 +3773,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.strictEqual(this.dataController.items()[0].key, 20);
         assert.strictEqual(this.dataController.getContentOffset('begin'), 200);
         assert.strictEqual(this.dataController.getContentOffset('end'), 700);
-        assert.deepEqual(this.changedArgs.length, 1);
+        assert.deepEqual(this.changedArgs.length, 2);
         assert.deepEqual(this.changedArgs[0].changeTypes, [
             'remove',
             'remove',
@@ -3797,6 +3797,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
             'insert',
         ]);
         assert.deepEqual(this.changedArgs[0].rowIndices, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        assert.strictEqual(this.changedArgs[1].changeType, 'pageIndex');
     });
 
     QUnit.test('scroll to far', function(assert) {
@@ -3807,7 +3808,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.strictEqual(this.dataController.items()[0].key, 50);
         assert.strictEqual(this.dataController.getContentOffset('begin'), 500);
         assert.strictEqual(this.dataController.getContentOffset('end'), 400);
-        assert.deepEqual(this.changedArgs.length, 1);
+        assert.deepEqual(this.changedArgs.length, 2);
         assert.deepEqual(this.changedArgs[0].changeTypes, [
             'remove',
             'remove',
@@ -3831,11 +3832,12 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
             'insert',
         ]);
         assert.deepEqual(this.changedArgs[0].rowIndices, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        assert.strictEqual(this.changedArgs[1].changeType, 'pageIndex');
 
     });
 
     // T730143
-    QUnit.test('scroll to end if data if grouped and remoteOperations are enabled (sorting, filtering, paging)', function(assert) {
+    QUnit.test('scroll to end if data is grouped and remoteOperations are enabled (sorting, filtering, paging)', function(assert) {
         this.pageSize(200);
         this.columnOption('value', 'groupIndex', 0);
         this.option('remoteOperations', {
@@ -3955,11 +3957,12 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.strictEqual(this.dataController.items()[0].key, 40);
         assert.strictEqual(this.dataController.getContentOffset('begin'), 400);
         assert.strictEqual(this.dataController.getContentOffset('end'), 500);
-        assert.deepEqual(this.changedArgs.length, 1);
+        assert.deepEqual(this.changedArgs.length, 2);
         assert.deepEqual(this.changedArgs[0].changeType, 'update');
         assert.deepEqual(this.changedArgs[0].changeTypes.filter(type => type === 'remove').length, 11);
         assert.deepEqual(this.changedArgs[0].changeTypes.filter(type => type === 'insert').length, 10);
         assert.deepEqual(this.changedArgs[0].items.length, 21);
+        assert.strictEqual(this.changedArgs[1].changeType, 'pageIndex');
     });
 
     // T641290
@@ -5531,7 +5534,8 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 
         this.options = {
             scrolling: { mode: 'infinite' },
-            grouping: { autoExpandAll: true }
+            grouping: { autoExpandAll: true },
+            paging: {}
         };
         setupModule.apply(this);
 
