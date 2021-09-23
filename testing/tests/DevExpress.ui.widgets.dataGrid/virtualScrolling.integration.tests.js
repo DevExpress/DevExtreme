@@ -4185,7 +4185,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
     });
 
-    QUnit.test('noDataText should notbe shown on paging', function(assert) {
+    QUnit.test('noDataText should not be shown on paging', function(assert) {
         // arrange
         const done = assert.async();
         const getData = function() {
