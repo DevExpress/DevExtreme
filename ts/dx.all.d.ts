@@ -16865,9 +16865,9 @@ declare module DevExpress.ui {
      */
     resizeEnabled?: boolean;
     /**
-     * [descr:dxPopupOptions.restorePositionOnOpening]
+     * [descr:dxPopupOptions.restorePosition]
      */
-    restorePositionOnOpening?: boolean;
+    restorePosition?: boolean;
     /**
      * [descr:dxPopupOptions.showCloseButton]
      */

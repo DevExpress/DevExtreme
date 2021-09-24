@@ -177,7 +177,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @default true
      * @public
      */
-    restorePositionOnOpening?: boolean;
+    restorePosition?: boolean;
     /**
      * @docid
      * @default false

@@ -46,7 +46,7 @@ class OverlayPositionController {
         $root, $content, $wrapper,
         onPositioned, onVisualPositionChanged,
         dragOutsideBoundary, dragAndResizeArea, outsideDragFactor,
-        restorePositionOnOpening,
+        restorePosition,
         _fixWrapperPosition
     }) {
         this._props = {
@@ -56,7 +56,7 @@ class OverlayPositionController {
             dragOutsideBoundary,
             dragAndResizeArea,
             outsideDragFactor,
-            restorePositionOnOpening,
+            restorePosition,
             onPositioned,
             onVisualPositionChanged,
             _fixWrapperPosition
@@ -113,8 +113,8 @@ class OverlayPositionController {
         this._updateOutsideDragFactor();
     }
 
-    set restorePositionOnOpening(restorePositionOnOpening) {
-        this._props.restorePositionOnOpening = restorePositionOnOpening;
+    set restorePosition(restorePosition) {
+        this._props.restorePosition = restorePosition;
     }
 
     restorePositionOnNextRender(value) {
@@ -123,7 +123,7 @@ class OverlayPositionController {
     }
 
     openingHandled() {
-        const shouldRestorePosition = this._props.restorePositionOnOpening;
+        const shouldRestorePosition = this._props.restorePosition;
 
         this.restorePositionOnNextRender(shouldRestorePosition);
     }

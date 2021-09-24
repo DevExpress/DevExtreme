@@ -1910,7 +1910,7 @@ QUnit.module('positioning', {
                     at: 'top left',
                     of: $target
                 },
-                restorePositionOnOpening: false
+                restorePosition: false
             });
             this.popup.option('fullScreen', false);
 
@@ -2067,8 +2067,8 @@ QUnit.module('positioning', {
             assert.ok(visualPositionChangedStub.notCalled, 'visualPositionChanged event is not called');
         });
 
-        QUnit.test('restorePositionOnOpening option runtime change', function(assert) {
-            this.popup.option('restorePositionOnOpening', false);
+        QUnit.test('restorePosition option runtime change', function(assert) {
+            this.popup.option('restorePosition', false);
 
             this.drag();
             const expectedPosition = this.getPosition();
@@ -2184,8 +2184,8 @@ QUnit.module('positioning', {
                         assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
                     });
 
-                    QUnit.test('should not be restored to position from option after reopening if restorePositionOnOpening=false', function(assert) {
-                        this.reinit({ restorePositionOnOpening: false });
+                    QUnit.test('should not be restored to position from option after reopening if restorePosition=false', function(assert) {
+                        this.reinit({ restorePosition: false });
 
                         this[moveMethodName]();
 
