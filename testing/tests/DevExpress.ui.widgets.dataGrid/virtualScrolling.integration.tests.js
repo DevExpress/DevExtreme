@@ -2563,6 +2563,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const dataGrid = createDataGrid({
             height: 300,
             remoteOperations: true,
+            showRowLines: false,
             dataSource: {
                 load: function(loadOptions) {
                     const d = $.Deferred();
@@ -4086,6 +4087,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             return items;
         };
         const dataGrid = createDataGrid({
+            showRowLines: false,
             dataSource: getData(),
             keyExpr: 'id',
             height: 400,
