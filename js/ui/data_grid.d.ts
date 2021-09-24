@@ -15,7 +15,7 @@ import {
 import Store from '../data/abstract_store';
 
 import DataSource, {
-    DataSourceOptions,
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import {
