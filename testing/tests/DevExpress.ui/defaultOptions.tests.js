@@ -275,13 +275,11 @@ testComponentDefaults(DropDownEditor,
         { platform: 'generic' }
     ],
     {
-        dropDownOptions: {
-            position: {
-                offset: { h: 0, v: 0 },
-                my: 'left top',
-                at: 'left bottom',
-                collision: 'flip flip'
-            }
+        popupPosition: {
+            offset: { h: 0, v: 0 },
+            my: 'left top',
+            at: 'left bottom',
+            collision: 'flip flip'
         }
     }
 );
