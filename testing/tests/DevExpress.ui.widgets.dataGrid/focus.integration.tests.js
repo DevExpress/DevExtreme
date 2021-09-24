@@ -191,16 +191,19 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: data,
             keyExpr: 'name',
             focusedRowEnabled: true,
-            scrolling: { mode: 'virtual' }
+            scrolling: { mode: 'virtual', useNative: false }
         }).dxDataGrid('instance');
 
         // act
         dataGrid.option('focusedRowKey', 'Smith');
         this.clock.tick();
 
+        const rowIndex = dataGrid.getRowIndexByKey('Smith');
+
         // assert
-        assert.ok(rowsViewWrapper.getDataRow(4).isFocusedRow(), 'Focused row');
-        assert.ok(rowsViewWrapper.isRowVisible(4, 2), 'Navigation row is visible');
+        assert.ok(rowsViewWrapper.getDataRow(rowIndex).isFocusedRow(), 'Focused row');
+        assert.ok(rowsViewWrapper.getRow(0).getElement().is(rowsViewWrapper.getVirtualRow().getElement()), 'First row is virtual');
+        assert.ok(rowsViewWrapper.isRowVisible(rowIndex + 1, 2), 'Navigation row is visible');
     });
 
     QUnit.test('Test \'autoNavigateToFocusedRow\' option if focused row key is not visible', function(assert) {
@@ -374,10 +377,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         this.clock.tick();
+        const rowIndex = dataGrid.getRowIndexByKey('Sean');
 
         // assert
-        assert.ok(rowsView.getRow(3).hasClass('dx-row-focused'), 'Focused row');
-        assert.ok(dataGridWrapper.rowsView.isRowVisible(3, 1), 'Navigation row is visible');
+        assert.ok(rowsView.getRow(rowIndex).hasClass('dx-row-focused'), 'Focused row');
+        assert.ok(dataGridWrapper.rowsView.isRowVisible(rowIndex, 1), 'Navigation row is visible');
     });
 
     QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual and useNative is true (T988877)', function(assert) {
@@ -411,7 +415,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $scrollContainer.trigger('scroll');
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 10, 'Visible row count');
+        assert.equal(dataGrid.getVisibleRows().length, devices.real().ios ? 4 : 3, 'Visible row count');
         assert.equal(dataGrid.getTopVisibleRowData().id, 11, 'Focused row is visible');
         assert.equal(dataGrid.pageIndex(), devices.real().ios ? 1 : 2, 'Page index');
     });
@@ -449,7 +453,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 15, 'Visible row count');
         assert.equal(dataGrid.getTopVisibleRowData().id, 150, 'Focused row is visible');
         assert.equal(dataGrid.pageIndex(), 2, 'Page index');
         assert.equal(focusedRowChangedArgs.length, 1, 'focusedRowChanged event is called once');
@@ -493,7 +496,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         assert.roughEqual(dataGrid.getScrollable().scrollTop(), 250, 0.2, 'scroll top');
         assert.equal(dataGrid.getVisibleRows()[0].key, 6, 'first visible row');
-        assert.equal(dataGrid.getVisibleRows().length, 5, 'visible row count');
+        assert.equal(dataGrid.getVisibleRows().length, 1, 'visible row count');
     });
 
     QUnit.test('Focused row should be in viewport if focusedRowKey specified and autoNavigateToFocusedRow is true', function(assert) {
@@ -511,7 +514,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             focusedRowKey: 30,
             dataSource: data,
             scrolling: {
-                mode: 'virtual'
+                mode: 'virtual',
+                useNative: false
             }
         }).dxDataGrid('instance');
         this.clock.tick();
@@ -521,7 +525,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.columnOption(0, 'sortOrder', 'desc');
         this.clock.tick();
 
-        assert.ok(dataGridWrapper.rowsView.isRowVisible(0, 1), 'navigated row in viewport');
+        assert.strictEqual(dataGrid.getRowIndexByKey(30), 0, 'navigated row is rendered');
+        assert.ok(dataGridWrapper.rowsView.isRowVisible(dataGrid.getRowIndexByKey(30), 1), 'navigated row in viewport');
     });
 
     QUnit.test('DataGrid - Focus row by visible content in \'rowRenderingMode\' should not render rows (T820296)', function(assert) {
@@ -607,9 +612,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             onFocusedCellChanged: function(e) {
                 ++focusedCellChangedCount;
                 assert.ok(e.row, 'Row object present');
-                assert.equal(e.row.key, 16, 'Key');
+                assert.equal(e.row.key, 18, 'Key');
                 assert.equal(e.row.rowIndex, 0, 'Local rowIndex');
-                assert.equal(e.rowIndex, 15, 'Global rowIndex');
+                assert.equal(e.rowIndex, 17, 'Global rowIndex');
             }
         }).dxDataGrid('instance');
 
@@ -660,8 +665,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(500);
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 15, 'Visible row count');
-        assert.equal(dataGrid.getVisibleRows()[0].key, 56, 'First visible row key');
+        assert.equal(dataGrid.getVisibleRows().length, 10, 'Visible row count');
+        assert.equal(dataGrid.getVisibleRows()[0].key, 59, 'First visible row key');
         assert.equal(dataGrid.getRowIndexByKey(1), -1, 'Focused row is not visible');
         assert.equal(dataGrid.getScrollable().scrollTop(), 2000, 'Scroll position is not changed');
     });
@@ -837,10 +842,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: data,
             keyExpr: 'name',
             focusedRowEnabled: true,
-            scrolling: { mode: 'infinite' }
+            scrolling: { mode: 'infinite', useNative: false }
         }).dxDataGrid('instance');
-        const rowsView = dataGrid.getView('rowsView');
-
         this.clock.tick();
 
         // act
@@ -848,8 +851,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.ok(rowsView.getRow(4).hasClass('dx-row-focused'), 'Focused row');
-        assert.ok(dataGridWrapper.rowsView.isRowVisible(4, 1), 'Navigation row is visible');
+        const rowIndex = dataGrid.getRowIndexByKey('Smith');
+        assert.ok(dataGridWrapper.rowsView.getDataRow(rowIndex).isFocusedRow(), 'Focused row');
+        assert.ok(dataGridWrapper.rowsView.getRow(0).getElement().is(dataGridWrapper.rowsView.getVirtualRow().getElement()), 'First row is virtual');
+        assert.ok(dataGridWrapper.rowsView.isRowVisible(rowIndex + 1, 2), 'Navigation row is visible');
     });
 
     QUnit.test('Paging should not raise the exception if OData and a group row was focused', function(assert) {
@@ -1657,7 +1662,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         assert.ok($cell.hasClass('dx-focused'), 'cell is focused');
         assert.ok($cell.hasClass('dx-editor-cell'), 'cell is edited');
-        assert.equal($cell.siblings().text(), '13', 'sibling\'s text');
+        assert.equal($cell.siblings().text(), '14', 'sibling\'s text');
     });
 
     ['standard', 'virtual'].forEach(scrollingMode => {

@@ -575,6 +575,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.updateElementDimensions();
   }
 
+  @Method()
   scrollByLocation(location: ScrollOffset): void {
     this.scrolling = true;
 

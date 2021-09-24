@@ -3577,7 +3577,7 @@ const setupVirtualRenderingModule = function() {
 
 
     this.dataController.viewportItemSize(10);
-    this.dataController.viewportSize(9);
+    this.dataController.viewportSize(10);
     this.dataController._dataSource._renderTime = 50;
 
     this.clock.tick();
@@ -3610,9 +3610,9 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         this.dataController.setViewportPosition(49);
 
         assert.strictEqual(this.dataController.pageIndex(), 0);
-        assert.strictEqual(this.dataController.items().length, 15);
-        assert.strictEqual(this.dataController.items()[0].key, 0);
-        assert.strictEqual(this.dataController.getContentOffset('begin'), 0);
+        assert.strictEqual(this.dataController.items().length, 11);
+        assert.strictEqual(this.dataController.items()[0].key, 4);
+        assert.strictEqual(this.dataController.getContentOffset('begin'), 40);
         assert.strictEqual(this.dataController.getContentOffset('end'), 850);
     });
 
@@ -3889,7 +3889,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     QUnit.test('disabled row render virtualization does not disable it', function(assert) {
         this.option('scrolling.rowRenderingMode', 'standard');
         this.dataController.viewportItemSize(10);
-        this.dataController.viewportSize(9);
+        this.dataController.viewportSize(10);
         this.clock.tick(0);
 
         assert.strictEqual(this.dataController.items().length, 10);
@@ -3915,7 +3915,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
 
         this.dataController.optionChanged({ name: 'scrolling' });
         this.dataController.viewportItemSize(10);
-        this.dataController.viewportSize(9);
+        this.dataController.viewportSize(10);
         this.clock.tick(0);
 
         assert.strictEqual(this.dataController.items().length, 10);
@@ -3938,7 +3938,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     QUnit.test('scroll to to the next page after expand', function(assert) {
         this.option('scrolling.rowRenderingMode', 'standard');
         this.dataController.viewportItemSize(10);
-        this.dataController.viewportSize(9);
+        this.dataController.viewportSize(10);
         this.clock.tick();
 
         this.dataController.expandRow(1);
@@ -4003,6 +4003,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     });
 
     QUnit.test('addRow > scroll to near > add row > scroll back', function(assert) {
+        this.options.scrolling.prerenderedRowChunkSize = 5;
         // act
         this.addRow();
         this.dataController.setViewportPosition(60);
@@ -4016,6 +4017,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     });
 
     QUnit.test('addRow > scroll to little near > add row', function(assert) {
+        this.options.scrolling.prerenderedRowChunkSize = 5;
         // act
         this.addRow();
         this.dataController.setViewportPosition(20);
@@ -4050,10 +4052,10 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         this.dataController.setViewportPosition(150);
 
         // assert
-        assert.strictEqual(this.dataController.items().length, 15, 'item count');
-        assert.strictEqual(this.dataController.items()[0].key, 10, 'item 10 from first page');
-        assert.strictEqual(this.dataController.items()[9].key, 19, 'item 19 from first page');
-        assert.strictEqual(this.dataController.items()[10].key, 20, 'item 20 from second page');
+        assert.strictEqual(this.dataController.items().length, 11, 'item count');
+        assert.strictEqual(this.dataController.items()[0].key, 15, 'item 15 from first page');
+        assert.strictEqual(this.dataController.items()[4].key, 19, 'item 19 from first page');
+        assert.strictEqual(this.dataController.items()[5].key, 20, 'item 20 from second page');
     });
 
     QUnit.test('scroll to second page > add row > scroll back > scroll to second page', function(assert) {
@@ -4086,14 +4088,14 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         [{
             changeType: 'update',
             addCount: 5,
-            removeCount: 5
+            removeCount: 6
         }, {
             changeType: 'update',
-            addCount: 5,
+            addCount: 6,
             removeCount: 5
         }], 'changed call args');
 
-        assert.strictEqual(this.dataController.items().length, 21, 'item count');
+        assert.strictEqual(this.dataController.items().length, 17, 'item count');
         assert.strictEqual(this.dataController.items()[15].isNewRow, true, 'item 15 is new');
     });
 
@@ -4857,15 +4859,15 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const loadedItems = this.dataController.dataSource().items();
 
         // assert
-        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 4, skipForCurrentPage: 0 }, 'load page params after scrolling');
+        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 4, skipForCurrentPage: 5 }, 'load page params after scrolling');
         assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
         assert.strictEqual(this.dataController.dataSource().loadPageCount(), 4, 'load page count after scrolling');
         assert.equal(loadedItems.length, 40, 'loaded items count');
         assert.deepEqual(loadedItems[0], { id: 21, name: 'Name 21' }, 'first loaded item');
         assert.deepEqual(loadedItems[39], { id: 60, name: 'Name 60' }, 'last loaded item');
-        assert.equal(visibleItems.length, 25, 'visible items count');
-        assert.deepEqual(visibleItems[0].data, { id: 21, name: 'Name 21' }, 'first visible item');
-        assert.deepEqual(visibleItems[24].data, { id: 45, name: 'Name 45' }, 'last visible item');
+        assert.equal(visibleItems.length, 16, 'visible items count');
+        assert.deepEqual(visibleItems[0].data, { id: 26, name: 'Name 26' }, 'first visible item');
+        assert.deepEqual(visibleItems[15].data, { id: 41, name: 'Name 41' }, 'last visible item');
     });
 
     QUnit.test('New mode. View port items should be rendered partially on scroll', function(assert) {
@@ -4906,7 +4908,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         let renderedItemIds = this.dataController.items().map(i => i.data.id);
 
         // assert
-        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], 'initially rendered item IDs');
 
         // act
         this.dataController.setViewportPosition(100);
@@ -4919,10 +4921,10 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // assert
         assert.equal(changedSpy.callCount, 1, 'changed called');
         assert.ok(change.repaintChangesOnly, 'repaint changes only');
-        assert.strictEqual(change.items.length, 5, 'items count');
-        assert.deepEqual(changedItemIds, [21, 22, 23, 24, 25], 'change item IDs');
-        assert.deepEqual(change.changeTypes, ['insert', 'insert', 'insert', 'insert', 'insert'], 'change types');
-        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], 'finally rendered item IDs');
+        assert.strictEqual(change.items.length, 11, 'items count');
+        assert.deepEqual(changedItemIds, [1, 2, 3, 4, 5, 16, 17, 18, 19, 20, 21], 'change item IDs');
+        assert.deepEqual(change.changeTypes, ['remove', 'remove', 'remove', 'remove', 'remove', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert'], 'change types');
+        assert.deepEqual(renderedItemIds, [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 'finally rendered item IDs');
     });
 
     QUnit.test('New mode. View port items should not be changed on small scroll', function(assert) {
@@ -4957,29 +4959,24 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.dataController.setViewportPosition(50);
         this.clock.tick();
         this.dataController.setViewportPosition(0);
+        this.dataController.setViewportPosition(1);
         this.clock.tick();
         this.dataController.changed.add(changedSpy);
 
         let renderedItemIds = this.dataController.items().map(i => i.data.id);
 
         // assert
-        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 'initially rendered item IDs');
 
         // act
-        this.dataController.setViewportPosition(20);
+        this.dataController.setViewportPosition(10);
         this.clock.tick();
 
         renderedItemIds = this.dataController.items().map(i => i.data.id);
-        const change = changedSpy.args[0][0];
-        const changedItemIds = change.items.map(i => i.data.id);
 
         // assert
-        assert.equal(changedSpy.callCount, 1, 'changed called');
-        assert.ok(change.repaintChangesOnly, 'repaint changes only');
-        assert.strictEqual(change.items.length, 0, 'items count');
-        assert.deepEqual(changedItemIds, [], 'change item IDs');
-        assert.deepEqual(change.changeTypes, [], 'change types');
-        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'finally rendered item IDs');
+        assert.equal(changedSpy.callCount, 0, 'changed not called');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 'finally rendered item IDs');
     });
 
     QUnit.test('New mode. DataSourceAdapter.viewportSize should not be called when viewPortSize is called', function(assert) {
@@ -5182,7 +5179,7 @@ QUnit.module('Virtual scrolling preload', {
         assert.strictEqual(dataSourceAdapter.loadPageCount(), 2, 'load page count after scrolling');
         assert.equal(loadedItems.length, 40, 'loaded items count');
         assert.deepEqual(loadedItems[0].id, 1, 'first loaded item');
-        assert.equal(visibleRows.length, 20, 'visible items count');
+        assert.equal(visibleRows.length, 16, 'visible items count');
         assert.deepEqual(visibleRows[0].data.id, 1, 'first visible item');
     });
 
@@ -5199,7 +5196,7 @@ QUnit.module('Virtual scrolling preload', {
         assert.strictEqual(dataSourceAdapter.loadPageCount(), 3, 'load page count after scrolling');
         assert.equal(loadedItems.length, 60, 'loaded items count');
         assert.deepEqual(loadedItems[0].id, 1, 'first loaded item');
-        assert.equal(visibleRows.length, 20, 'visible items count');
+        assert.equal(visibleRows.length, 16, 'visible items count');
         assert.deepEqual(visibleRows[0].data.id, 1, 'first visible item');
     });
 
@@ -5216,7 +5213,7 @@ QUnit.module('Virtual scrolling preload', {
         assert.strictEqual(dataSourceAdapter.loadPageCount(), 1, 'load page count after scrolling');
         assert.equal(loadedItems.length, 20, 'loaded items count');
         assert.deepEqual(loadedItems[0].id, 1, 'first loaded item');
-        assert.equal(visibleRows.length, 20, 'visible items count');
+        assert.equal(visibleRows.length, 16, 'visible items count');
         assert.deepEqual(visibleRows[0].data.id, 1, 'first visible item');
     });
 
@@ -5233,7 +5230,7 @@ QUnit.module('Virtual scrolling preload', {
         assert.strictEqual(dataSourceAdapter.loadPageCount(), 4, 'load page count after scrolling');
         assert.equal(loadedItems.length, 80, 'loaded items count');
         assert.deepEqual(loadedItems[0].id, 1, 'first loaded item');
-        assert.equal(visibleRows.length, 20, 'visible items count');
+        assert.equal(visibleRows.length, 16, 'visible items count');
         assert.deepEqual(visibleRows[0].data.id, 1, 'first visible item');
     });
 
@@ -5266,8 +5263,8 @@ QUnit.module('Virtual scrolling preload', {
         assert.strictEqual(dataSourceAdapter.loadPageCount(), 3, 'load page count after scrolling');
         assert.equal(loadedItems.length, 60, 'loaded items count');
         assert.deepEqual(loadedItems[0].id, 21, 'first loaded item');
-        assert.equal(visibleRows.length, 20, 'visible items count');
-        assert.deepEqual(visibleRows[0].data.id, 46, 'first visible item');
+        assert.equal(visibleRows.length, 16, 'visible items count');
+        assert.deepEqual(visibleRows[0].data.id, 50, 'first visible item');
     });
 
     QUnit.test('New mode. Data should be preloaded before viewport on scroll back if preloadCount is defined', function(assert) {
@@ -5284,8 +5281,8 @@ QUnit.module('Virtual scrolling preload', {
         assert.strictEqual(dataSourceAdapter.loadPageCount(), 4, 'load page count after scrolling');
         assert.equal(loadedItems.length, 80, 'loaded items count');
         assert.deepEqual(loadedItems[0].id, 1, 'first loaded item');
-        assert.equal(visibleRows.length, 20, 'visible items count');
-        assert.deepEqual(visibleRows[0].data.id, 46, 'first visible item');
+        assert.equal(visibleRows.length, 16, 'visible items count');
+        assert.deepEqual(visibleRows[0].data.id, 50, 'first visible item');
     });
 });
 
@@ -5723,15 +5720,15 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         const loadedItems = this.dataController.dataSource().items();
 
         // assert
-        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 4, skipForCurrentPage: 0 }, 'load page params after scrolling');
+        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 2, loadPageCount: 4, skipForCurrentPage: 5 }, 'load page params after scrolling');
         assert.deepEqual(this.dataController.pageIndex(), 2, 'page index after scrolling');
         assert.strictEqual(this.dataController.dataSource().loadPageCount(), 4, 'load page count after scrolling');
         assert.equal(loadedItems.length, 40, 'loaded items count');
         assert.deepEqual(loadedItems[0], { id: 21, name: 'Name 21' }, 'first loaded item');
         assert.deepEqual(loadedItems[39], { id: 60, name: 'Name 60' }, 'last loaded item');
-        assert.equal(visibleItems.length, 25, 'visible items count');
-        assert.deepEqual(visibleItems[0].data, { id: 21, name: 'Name 21' }, 'first visible item');
-        assert.deepEqual(visibleItems[24].data, { id: 45, name: 'Name 45' }, 'last visible item');
+        assert.equal(visibleItems.length, 16, 'visible items count');
+        assert.deepEqual(visibleItems[0].data, { id: 26, name: 'Name 26' }, 'first visible item');
+        assert.deepEqual(visibleItems[15].data, { id: 41, name: 'Name 41' }, 'last visible item');
     });
 
     QUnit.test('New mode. View port items should be rendered partially on scroll', function(assert) {
@@ -5772,7 +5769,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         let renderedItemIds = this.dataController.items().map(i => i.data.id);
 
         // assert
-        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], 'initially rendered item IDs');
 
         // act
         this.dataController.setViewportPosition(100);
@@ -5785,10 +5782,10 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         // assert
         assert.equal(changedSpy.callCount, 1, 'changed called');
         assert.ok(change.repaintChangesOnly, 'repaint changes only');
-        assert.strictEqual(change.items.length, 5, 'items count');
-        assert.deepEqual(changedItemIds, [21, 22, 23, 24, 25], 'change item IDs');
-        assert.deepEqual(change.changeTypes, ['insert', 'insert', 'insert', 'insert', 'insert'], 'change types');
-        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25], 'finally rendered item IDs');
+        assert.strictEqual(change.items.length, 11, 'items count');
+        assert.deepEqual(changedItemIds, [1, 2, 3, 4, 5, 16, 17, 18, 19, 20, 21], 'change item IDs');
+        assert.deepEqual(change.changeTypes, ['remove', 'remove', 'remove', 'remove', 'remove', 'insert', 'insert', 'insert', 'insert', 'insert', 'insert'], 'change types');
+        assert.deepEqual(renderedItemIds, [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21], 'finally rendered item IDs');
     });
 
     QUnit.test('New mode. View port items should not be changed on small scroll', function(assert) {
@@ -5823,29 +5820,24 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         this.dataController.setViewportPosition(50);
         this.clock.tick();
         this.dataController.setViewportPosition(0);
+        this.dataController.setViewportPosition(1);
         this.clock.tick();
         this.dataController.changed.add(changedSpy);
 
         let renderedItemIds = this.dataController.items().map(i => i.data.id);
 
         // assert
-        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'initially rendered item IDs');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 'initially rendered item IDs');
 
         // act
-        this.dataController.setViewportPosition(20);
+        this.dataController.setViewportPosition(10);
         this.clock.tick();
 
         renderedItemIds = this.dataController.items().map(i => i.data.id);
-        const change = changedSpy.args[0][0];
-        const changedItemIds = change.items.map(i => i.data.id);
 
         // assert
-        assert.equal(changedSpy.callCount, 1, 'changed called');
-        assert.ok(change.repaintChangesOnly, 'repaint changes only');
-        assert.strictEqual(change.items.length, 0, 'items count');
-        assert.deepEqual(changedItemIds, [], 'change item IDs');
-        assert.deepEqual(change.changeTypes, [], 'change types');
-        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20], 'finally rendered item IDs');
+        assert.equal(changedSpy.callCount, 0, 'changed is not called');
+        assert.deepEqual(renderedItemIds, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17], 'finally rendered item IDs');
     });
 });
 
