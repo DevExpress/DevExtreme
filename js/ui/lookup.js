@@ -646,7 +646,7 @@ const Lookup = DropDownList.inherit({
                     ? (function() { return getOuterWidth(this.$element()); }).bind(this)
                     : this._popupConfig().width,
                 height: this._isInitialOptionValue('dropDownOptions.height')
-                    ? (function() { return getOuterWidth(this.$element()); }).bind(this)
+                    ? (function() { return getOuterHeight(this.$element()); }).bind(this)
                     : this._popupConfig().height,
             }));
 
