@@ -644,10 +644,7 @@ const Lookup = DropDownList.inherit({
                 _fixWrapperPosition: false,
                 width: this._isInitialOptionValue('dropDownOptions.width')
                     ? (function() { return getOuterWidth(this.$element()); }).bind(this)
-                    : this._popupConfig().width,
-                height: this._isInitialOptionValue('dropDownOptions.height')
-                    ? (function() { return getOuterHeight(this.$element()); }).bind(this)
-                    : this._popupConfig().height,
+                    : this._popupConfig().width
             }));
 
         this._popup.on({
@@ -1091,10 +1088,20 @@ const Lookup = DropDownList.inherit({
             case '_scrollToSelectedItemEnabled':
                 break;
             case 'dropDownOptions.width':
-                this._setPopupOption('width', value === 'auto' ? this.initialOption('dropDownOptions').width : value);
+                this._popupOptionChanged({
+                    name,
+                    fullName,
+                    value: value === 'auto' ? this.initialOption('dropDownOptions').width : value
+                });
+                this._options.cache('dropDownOptions', this.option('dropDownOptions'));
                 break;
             case 'dropDownOptions.height':
-                this._setPopupOption('height', value === 'auto' ? this.initialOption('dropDownOptions').height : value);
+                this._popupOptionChanged({
+                    name,
+                    fullName,
+                    value: value === 'auto' ? this.initialOption('dropDownOptions').height : value
+                });
+                this._options.cache('dropDownOptions', this.option('dropDownOptions'));
                 break;
             case 'dropDownCentered':
                 if(this.option('_scrollToSelectedItemEnabled')) {
