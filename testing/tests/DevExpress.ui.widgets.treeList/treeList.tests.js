@@ -1891,7 +1891,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
 
         setTimeout(function() {
             // assert
-            assert.strictEqual(treeList.pageIndex(), 1, 'page index');
+            assert.strictEqual(treeList.pageIndex(), 2, 'page index');
             done();
         }, 1000);
     });
