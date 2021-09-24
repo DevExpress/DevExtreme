@@ -98,6 +98,7 @@ module.exports = {
                         'ignoreRestSiblings': true
                     }
                 ],
+                'no-use-before-define': ['error', { 'functions': false, 'classes': false }],
                 'no-extend-native': 'error',
                 'no-alert': 'error',
                 'no-console': 'error',
