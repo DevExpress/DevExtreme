@@ -92,7 +92,7 @@ const getInterval = (options) => {
     };
 };
 
-const getIntervalStartDate = (options) => {
+function getIntervalStartDate(options) {
     const { date, step, firstDayOfWeek } = options;
 
     switch(step) {
@@ -107,9 +107,9 @@ const getIntervalStartDate = (options) => {
         case 'agenda':
             return new Date(date);
     }
-};
+}
 
-const getIntervalEndDate = (startDate, options) => {
+function getIntervalEndDate(startDate, options) {
     const { intervalCount, step, agendaDuration } = options;
 
     let periodStartDate;
@@ -125,9 +125,9 @@ const getIntervalEndDate = (startDate, options) => {
     }
 
     return periodEndDate;
-};
+}
 
-const getPeriodEndDate = (currentPeriodStartDate, step, agendaDuration) => {
+function getPeriodEndDate(currentPeriodStartDate, step, agendaDuration) {
     let date;
 
     switch(step) {
@@ -149,9 +149,9 @@ const getPeriodEndDate = (currentPeriodStartDate, step, agendaDuration) => {
     }
 
     return subMS(date);
-};
+}
 
-const getNextPeriodStartDate = (currentPeriodEndDate, step) => {
+function getNextPeriodStartDate(currentPeriodEndDate, step) {
     let date = addMS(currentPeriodEndDate);
 
     if(step === 'workWeek') {
@@ -161,7 +161,7 @@ const getNextPeriodStartDate = (currentPeriodEndDate, step) => {
     }
 
     return date;
-};
+}
 
 export const getNextIntervalDate = (options, direction) => {
     const { date, step, intervalCount, agendaDuration } = options;
@@ -185,7 +185,7 @@ export const getNextIntervalDate = (options, direction) => {
     return addDateInterval(date, { days: dayDuration }, direction);
 };
 
-const getNextMonthDate = (date, intervalCount, direction) => {
+function getNextMonthDate(date, intervalCount, direction) {
     const currentDate = date.getDate();
 
     const currentMonthFirstDate = new Date(new Date(date.getTime()).setDate(1));
@@ -204,7 +204,7 @@ const getNextMonthDate = (date, intervalCount, direction) => {
     );
 
     return thatMonthMinDate;
-};
+}
 
 const getDateMonthFormatter = (isShort) => {
     const monthType = isShort ? 'abbreviated' : 'wide';
@@ -332,16 +332,16 @@ const STEP_MAP = {
     agenda: 'agenda'
 };
 
-export const getStep = (view) => {
-    return STEP_MAP[getViewType(view)];
-};
-
 export const getViewType = (view) => {
     if(isObject(view) && view.type) {
         return view.type;
     }
 
     return view;
+};
+
+export const getStep = (view) => {
+    return STEP_MAP[getViewType(view)];
 };
 
 export const getViewName = (view) => {

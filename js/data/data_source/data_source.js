@@ -421,6 +421,8 @@ export const DataSource = Class.inherit({
     load() {
         const d = new Deferred();
 
+        const loadOperation = this._createLoadOperation(d);
+
         const loadTask = () => {
             if(this._disposed) {
                 return undefined;
@@ -436,8 +438,6 @@ export const DataSource = Class.inherit({
         this._scheduleLoadCallbacks(d);
         this._scheduleFailCallbacks(d);
         this._scheduleChangedCallbacks(d);
-
-        const loadOperation = this._createLoadOperation(d);
 
         this._eventsStrategy.fireEvent('customizeStoreLoadOptions', [loadOperation]);
 

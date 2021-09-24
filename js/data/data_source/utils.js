@@ -21,18 +21,20 @@ export const normalizeStoreLoadOptionAccessorArguments = (originalArguments) => 
     return [].slice.call(originalArguments);
 };
 
-const mapGroup = (group, level, mapper) => map(group, item => {
-    const { items, ...restItem } = item;
-    return {
-        ...restItem,
-        items: mapRecursive(item.items, level - 1, mapper)
-    };
-});
+function mapGroup(group, level, mapper) {
+    return map(group, item => {
+        const { items, ...restItem } = item;
+        return {
+            ...restItem,
+            items: mapRecursive(item.items, level - 1, mapper)
+        };
+    });
+}
 
-const mapRecursive = (items, level, mapper) => {
+function mapRecursive(items, level, mapper) {
     if(!Array.isArray(items)) return items;
     return level ? mapGroup(items, level, mapper) : map(items, mapper);
-};
+}
 
 export const mapDataRespectingGrouping = (items, mapper, groupInfo) => {
     const level = groupInfo ? normalizeSortingInfo(groupInfo).length : 0;

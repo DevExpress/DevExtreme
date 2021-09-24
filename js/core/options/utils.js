@@ -6,21 +6,6 @@ import { compileGetter } from '../utils/data';
 
 const cachedGetters = {};
 
-export const convertRulesToOptions = (rules) => {
-    const currentDevice = devices.current();
-    return rules.reduce((options, { device, options: ruleOptions }) => {
-        const deviceFilter = device || {};
-        const match = isFunction(deviceFilter) ?
-            deviceFilter(currentDevice) :
-            deviceMatch(currentDevice, deviceFilter);
-
-        if(match) {
-            extend(true, options, ruleOptions);
-        }
-        return options;
-    }, {});
-};
-
 export const normalizeOptions = (options, value) => {
     return typeof options !== 'string' ? options : { [options]: value };
 };
@@ -37,3 +22,18 @@ export const getNestedOptionValue = function(optionsObject, name) {
 };
 
 export const createDefaultOptionRules = (options = []) => options;
+
+export const convertRulesToOptions = (rules) => {
+    const currentDevice = devices.current();
+    return rules.reduce((options, { device, options: ruleOptions }) => {
+        const deviceFilter = device || {};
+        const match = isFunction(deviceFilter) ?
+            deviceFilter(currentDevice) :
+            deviceMatch(currentDevice, deviceFilter);
+
+        if(match) {
+            extend(true, options, ruleOptions);
+        }
+        return options;
+    }, {});
+};

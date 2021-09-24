@@ -13,92 +13,6 @@ import { when, Deferred } from '../../core/utils/deferred';
 const DEFAULT_DATA_TYPE = 'string';
 const DEFAUL_COLUMN_WIDTH = 100;
 
-export const ExportController = extend({}, exportMixin, {
-    exportToExcel: function() {
-        const that = this;
-
-        exportMethod(that.getDataProvider(), {
-            fileName: that.option('export.fileName'),
-            proxyUrl: that.option('export.proxyUrl'),
-            format: 'EXCEL',
-            rtlEnabled: that.option('rtlEnabled'),
-            ignoreErrors: that.option('export.ignoreExcelErrors'),
-            exportingAction: that._actions.onExporting,
-            exportedAction: that._actions.onExported,
-            fileSavingAction: that._actions.onFileSaving
-        }, excelExporter.getData);
-    },
-
-    _getLength: function(items) {
-        let i;
-        const itemCount = items[0].length;
-        let cellCount = 0;
-
-        for(i = 0; i < itemCount; i++) {
-            cellCount += items[0][i].colspan || 1;
-        }
-
-        return cellCount;
-    },
-
-    _correctCellsInfoItemLengths: function(cellsInfo, expectedLength) {
-        for(let i = 0; i < cellsInfo.length; i++) {
-            while(cellsInfo[i].length < expectedLength) {
-                cellsInfo[i].push({});
-            }
-        }
-        return cellsInfo;
-    },
-
-    _calculateCellInfoItemLength: function(columnsRow) {
-        let result = 0;
-        for(let columnIndex = 0; columnIndex < columnsRow.length; columnIndex++) {
-            result += isDefined(columnsRow[columnIndex].colspan) ? columnsRow[columnIndex].colspan : 1;
-        }
-        return result;
-    },
-
-    _getAllItems: function(columnsInfo, rowsInfoItems, cellsInfo) {
-        let cellIndex;
-        let rowIndex;
-        let correctedCellsInfo = cellsInfo;
-        const rowsLength = this._getLength(rowsInfoItems);
-        const headerRowsCount = columnsInfo.length;
-
-        if(columnsInfo.length > 0 && columnsInfo[0].length > 0 && cellsInfo.length > 0 && cellsInfo[0].length === 0) {
-            const cellInfoItemLength = this._calculateCellInfoItemLength(columnsInfo[0]);
-            if(cellInfoItemLength > 0) {
-                correctedCellsInfo = this._correctCellsInfoItemLengths(cellsInfo, cellInfoItemLength);
-            }
-        }
-        const sourceItems = columnsInfo.concat(correctedCellsInfo);
-
-        for(rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex++) {
-            for(cellIndex = rowsInfoItems[rowIndex].length - 1; cellIndex >= 0; cellIndex--) {
-                if(!isDefined(sourceItems[rowIndex + headerRowsCount])) {
-                    sourceItems[rowIndex + headerRowsCount] = [];
-                }
-
-                sourceItems[rowIndex + headerRowsCount].splice(0, 0,
-                    extend({}, rowsInfoItems[rowIndex][cellIndex]));
-            }
-        }
-
-        sourceItems[0].splice(0, 0, extend({}, this._getEmptyCell(),
-            {
-                alignment: getDefaultAlignment(this._options.rtlEnabled),
-                colspan: rowsLength,
-                rowspan: headerRowsCount
-            }));
-
-        return this._prepareItems(sourceItems);
-    },
-
-    getDataProvider: function() {
-        return new DataProvider(this);
-    }
-});
-
 export const DataProvider = Class.inherit({
     ctor: function(exportController) {
         this._exportController = exportController;
@@ -321,6 +235,93 @@ export const DataProvider = Class.inherit({
         }
     },
 });
+
+export const ExportController = extend({}, exportMixin, {
+    exportToExcel: function() {
+        const that = this;
+
+        exportMethod(that.getDataProvider(), {
+            fileName: that.option('export.fileName'),
+            proxyUrl: that.option('export.proxyUrl'),
+            format: 'EXCEL',
+            rtlEnabled: that.option('rtlEnabled'),
+            ignoreErrors: that.option('export.ignoreExcelErrors'),
+            exportingAction: that._actions.onExporting,
+            exportedAction: that._actions.onExported,
+            fileSavingAction: that._actions.onFileSaving
+        }, excelExporter.getData);
+    },
+
+    _getLength: function(items) {
+        let i;
+        const itemCount = items[0].length;
+        let cellCount = 0;
+
+        for(i = 0; i < itemCount; i++) {
+            cellCount += items[0][i].colspan || 1;
+        }
+
+        return cellCount;
+    },
+
+    _correctCellsInfoItemLengths: function(cellsInfo, expectedLength) {
+        for(let i = 0; i < cellsInfo.length; i++) {
+            while(cellsInfo[i].length < expectedLength) {
+                cellsInfo[i].push({});
+            }
+        }
+        return cellsInfo;
+    },
+
+    _calculateCellInfoItemLength: function(columnsRow) {
+        let result = 0;
+        for(let columnIndex = 0; columnIndex < columnsRow.length; columnIndex++) {
+            result += isDefined(columnsRow[columnIndex].colspan) ? columnsRow[columnIndex].colspan : 1;
+        }
+        return result;
+    },
+
+    _getAllItems: function(columnsInfo, rowsInfoItems, cellsInfo) {
+        let cellIndex;
+        let rowIndex;
+        let correctedCellsInfo = cellsInfo;
+        const rowsLength = this._getLength(rowsInfoItems);
+        const headerRowsCount = columnsInfo.length;
+
+        if(columnsInfo.length > 0 && columnsInfo[0].length > 0 && cellsInfo.length > 0 && cellsInfo[0].length === 0) {
+            const cellInfoItemLength = this._calculateCellInfoItemLength(columnsInfo[0]);
+            if(cellInfoItemLength > 0) {
+                correctedCellsInfo = this._correctCellsInfoItemLengths(cellsInfo, cellInfoItemLength);
+            }
+        }
+        const sourceItems = columnsInfo.concat(correctedCellsInfo);
+
+        for(rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex++) {
+            for(cellIndex = rowsInfoItems[rowIndex].length - 1; cellIndex >= 0; cellIndex--) {
+                if(!isDefined(sourceItems[rowIndex + headerRowsCount])) {
+                    sourceItems[rowIndex + headerRowsCount] = [];
+                }
+
+                sourceItems[rowIndex + headerRowsCount].splice(0, 0,
+                    extend({}, rowsInfoItems[rowIndex][cellIndex]));
+            }
+        }
+
+        sourceItems[0].splice(0, 0, extend({}, this._getEmptyCell(),
+            {
+                alignment: getDefaultAlignment(this._options.rtlEnabled),
+                colspan: rowsLength,
+                rowspan: headerRowsCount
+            }));
+
+        return this._prepareItems(sourceItems);
+    },
+
+    getDataProvider: function() {
+        return new DataProvider(this);
+    }
+});
+
 
 //#DEBUG
 export const PivotGridExport = {

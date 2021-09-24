@@ -1416,6 +1416,26 @@ export let SvgElement = function(renderer, tagName, type) {
     }
 };
 
+// paths modifier
+const fixFuncIriCallbacks = (function() {
+    let callbacks = [];
+
+    return {
+        add: function(fn) {
+            callbacks.push(fn);
+        },
+        remove: function(fn) {
+            callbacks = callbacks.filter(function(el) { return el !== fn; });
+        },
+        removeByRenderer: function(renderer) {
+            callbacks = callbacks.filter(function(el) { return el.renderer !== renderer; });
+        },
+        fire: function() {
+            callbacks.forEach(function(fn) { fn(); });
+        }
+    };
+})();
+
 function removeFuncIriCallback(callback) {
     fixFuncIriCallbacks.remove(callback);
 }
@@ -2252,26 +2272,6 @@ Renderer.prototype = {
 function getHatchingHash(color, hatching) {
     return '@' + color + '::' + hatching.step + ':' + hatching.width + ':' + hatching.opacity + ':' + hatching.direction;
 }
-
-// paths modifier
-const fixFuncIriCallbacks = (function() {
-    let callbacks = [];
-
-    return {
-        add: function(fn) {
-            callbacks.push(fn);
-        },
-        remove: function(fn) {
-            callbacks = callbacks.filter(function(el) { return el !== fn; });
-        },
-        removeByRenderer: function(renderer) {
-            callbacks = callbacks.filter(function(el) { return el.renderer !== renderer; });
-        },
-        fire: function() {
-            callbacks.forEach(function(fn) { fn(); });
-        }
-    };
-})();
 
 export const refreshPaths = function() {
     fixFuncIriCallbacks.fire();

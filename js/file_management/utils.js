@@ -17,6 +17,26 @@ export const getParentPath = path => {
     return index !== -1 ? path.substr(0, index) : '';
 };
 
+export const getEscapedFileName = function(fileName) {
+    return fileName.replace(/\//g, '//');
+};
+
+export const pathCombine = function() {
+    let result = '';
+
+    each(arguments, (_, arg) => {
+        if(arg) {
+            if(result) {
+                result += PATH_SEPARATOR;
+            }
+
+            result += arg;
+        }
+    });
+
+    return result;
+};
+
 export const getPathParts = (path, includeFullPath) => {
     if(!path || path === '/') {
         return [];
@@ -49,26 +69,6 @@ export const getPathParts = (path, includeFullPath) => {
             result[i] = pathCombine(i === 0 ? '' : result[i - 1], getEscapedFileName(result[i]));
         }
     }
-
-    return result;
-};
-
-export const getEscapedFileName = function(fileName) {
-    return fileName.replace(/\//g, '//');
-};
-
-export const pathCombine = function() {
-    let result = '';
-
-    each(arguments, (_, arg) => {
-        if(arg) {
-            if(result) {
-                result += PATH_SEPARATOR;
-            }
-
-            result += arg;
-        }
-    });
 
     return result;
 };

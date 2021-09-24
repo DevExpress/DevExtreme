@@ -297,7 +297,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     child: function(direction, fieldValue) {
         const children = this.children(direction);
         for(let i = 0; i < children.length; i++) {
-            const childLevelField = childLevelField || children[i].field(direction);
+            const childLevelField = children[i].field(direction);
             if(children[i].value(childLevelField) === fieldValue) {
                 return children[i];
             }

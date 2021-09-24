@@ -139,7 +139,7 @@ const compileCriteria = (() => {
         return bag.join(` ${groupOperator} `);
     };
 
-    const compileCore = (criteria) => {
+    function compileCore(criteria) {
         if(Array.isArray(criteria[0])) {
             return compileGroup(criteria);
         }
@@ -149,7 +149,7 @@ const compileCriteria = (() => {
         }
 
         return compileBinary(criteria);
-    };
+    }
 
     return (criteria, version, types, filterToLower) => {
         fieldTypes = types;

@@ -3,6 +3,28 @@ import { extend } from '../../core/utils/extend';
 import { fitIntoRange } from '../../core/utils/math';
 import { noop } from '../../core/utils/common';
 
+const getLimits = (pattern, date, forcedPattern) => {
+    const limits = {
+        y: { min: 0, max: 9999 },
+        M: { min: 1, max: 12 },
+        L: { min: 1, max: 12 },
+        d: { min: 1, max: 31 },
+        dM: {
+            min: 1,
+            max: new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
+        },
+        E: { min: 0, max: 6 },
+        H: { min: 0, max: 23 },
+        h: { min: 0, max: 23 },
+        m: { min: 0, max: 59 },
+        s: { min: 0, max: 59 },
+        S: { min: 0, max: 999 },
+        a: { min: 0, max: 1 }
+    };
+
+    return limits[forcedPattern || pattern] || limits['getAmPm'];
+};
+
 const monthGetter = (date) => {
     return date.getMonth() + 1;
 };
@@ -108,28 +130,6 @@ export const renderDateParts = (text, regExpInfo) => {
     }
 
     return sections;
-};
-
-const getLimits = (pattern, date, forcedPattern) => {
-    const limits = {
-        y: { min: 0, max: 9999 },
-        M: { min: 1, max: 12 },
-        L: { min: 1, max: 12 },
-        d: { min: 1, max: 31 },
-        dM: {
-            min: 1,
-            max: new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
-        },
-        E: { min: 0, max: 6 },
-        H: { min: 0, max: 23 },
-        h: { min: 0, max: 23 },
-        m: { min: 0, max: 59 },
-        s: { min: 0, max: 59 },
-        S: { min: 0, max: 999 },
-        a: { min: 0, max: 1 }
-    };
-
-    return limits[forcedPattern || pattern] || limits['getAmPm'];
 };
 
 export const getDatePartIndexByPosition = (dateParts, position) => {

@@ -86,7 +86,7 @@ export const custom = function(options) {
 
     each(options.buttons || [DEFAULT_BUTTON], function() {
         const action = new Action(this.onClick, {
-            context: popupInstance
+            context: undefined
         });
 
         popupToolbarItems.push({

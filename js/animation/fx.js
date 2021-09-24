@@ -32,6 +32,8 @@ const RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i;
 const ANIM_DATA_KEY = 'dxAnimData';
 const ANIM_QUEUE_KEY = 'dxAnimQueue';
 const TRANSFORM_PROP = 'transform';
+let simulatedTransitionEndDelay = 100;
+let off = false;
 
 const TransitionAnimationStrategy = {
     initAnimation: function($element, config) {
@@ -96,6 +98,16 @@ const TransitionAnimationStrategy = {
         let simulatedEndEventTimer;
         const transitionEndEventFullName = transitionEndEventName() + '.dxFX';
 
+        const waitForJSCompleteTimer = setTimeout(function() { // Fix for a visual bug (T244514): do not setup the timer until all js code has finished working
+            simulatedEndEventTimer = setTimeout(function() {
+                simulatedTransitionEndFired.reject();
+            }, config.duration + config.delay + simulatedTransitionEndDelay /* T255863 */);
+
+            when(transitionEndFired, simulatedTransitionEndFired).fail((function() {
+                deferred.resolve();
+            }).bind(this));
+        });
+
         config.transitionAnimation.cleanup = function() {
             clearTimeout(simulatedEndEventTimer);
             clearTimeout(waitForJSCompleteTimer);
@@ -113,16 +125,6 @@ const TransitionAnimationStrategy = {
         eventsEngine.on($element, removeEventName, function() {
             that.stop($element, config);
             deferred.reject();
-        });
-
-        const waitForJSCompleteTimer = setTimeout(function() { // Fix for a visual bug (T244514): do not setup the timer until all js code has finished working
-            simulatedEndEventTimer = setTimeout(function() {
-                simulatedTransitionEndFired.reject();
-            }, config.duration + config.delay + fx._simulatedTransitionEndDelay /* T255863 */);
-
-            when(transitionEndFired, simulatedTransitionEndFired).fail((function() {
-                deferred.resolve();
-            }).bind(this));
         });
 
         return deferred.promise();
@@ -605,7 +607,7 @@ function setupAnimationOnElement() {
 
     $element.data(ANIM_DATA_KEY, animation);
 
-    if(fx.off) {
+    if(off) {
         config.duration = 0;
         config.delay = 0;
     }
@@ -661,10 +663,34 @@ const stopAnimationOnElement = function(jumpToEnd) {
 
 const scopedRemoveEvent = addNamespace(removeEvent, 'dxFXStartAnimation');
 
+let stop = function(element, jumpToEnd) {
+    const $element = $(element);
+    const queueData = getAnimQueueData($element);
+
+    // TODO: think about complete all animation in queue
+    each(queueData, function(_, animation) {
+        animation.config.delay = 0;
+        animation.config.duration = 0;
+        animation.isSynchronous = true;
+    });
+
+    if(!isAnimating($element)) {
+        shiftFromAnimationQueue($element, queueData);
+    }
+    const animation = $element.data(ANIM_DATA_KEY);
+
+    if(animation) {
+        animation.stop(jumpToEnd);
+    }
+
+    $element.removeData(ANIM_DATA_KEY);
+    destroyAnimQueueData($element);
+};
+
 const subscribeToRemoveEvent = function(animation) {
     eventsEngine.off(animation.element, scopedRemoveEvent);
     eventsEngine.on(animation.element, scopedRemoveEvent, function() {
-        fx.stop(animation.element);
+        stop(animation.element);
     });
 
     animation.deferred.always(function() {
@@ -729,9 +755,9 @@ function writeAnimQueueData($element, queueData) {
     $element.data(ANIM_QUEUE_KEY, queueData);
 }
 
-const destroyAnimQueueData = function($element) {
+function destroyAnimQueueData($element) {
     $element.removeData(ANIM_QUEUE_KEY);
-};
+}
 
 function isAnimating($element) {
     return !!$element.data(ANIM_DATA_KEY);
@@ -757,7 +783,7 @@ function shiftFromAnimationQueue($element, queueData) {
 
 function executeAnimation(animation) {
     animation.setup();
-    if(fx.off || animation.isSynchronous) {
+    if(off || animation.isSynchronous) {
         animation.start();
     } else {
         animation.startTimeout = setTimeout(function() {
@@ -804,38 +830,17 @@ function setProps($element, props) {
     });
 }
 
-const stop = function(element, jumpToEnd) {
-    const $element = $(element);
-    const queueData = getAnimQueueData($element);
-
-    // TODO: think about complete all animation in queue
-    each(queueData, function(_, animation) {
-        animation.config.delay = 0;
-        animation.config.duration = 0;
-        animation.isSynchronous = true;
-    });
-
-    if(!isAnimating($element)) {
-        shiftFromAnimationQueue($element, queueData);
-    }
-    const animation = $element.data(ANIM_DATA_KEY);
-
-    if(animation) {
-        animation.stop(jumpToEnd);
-    }
-
-    $element.removeData(ANIM_DATA_KEY);
-    destroyAnimQueueData($element);
-};
-
 const fx = {
-    off: false,
+    get off() { return off; },
+    set off(value) { off = value; },
     animationTypes: animationConfigurators,
     animate: animate,
     createAnimation: createAnimation,
     isAnimating: isAnimating,
-    stop: stop,
-    _simulatedTransitionEndDelay: 100
+    get stop() { return stop; },
+    set stop(value) { stop = value; },
+    get _simulatedTransitionEndDelay() { return simulatedTransitionEndDelay; },
+    set _simulatedTransitionEndDelay(value) { simulatedTransitionEndDelay = value; }
 };
 
 export default fx;

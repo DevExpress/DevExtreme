@@ -933,9 +933,9 @@ export const columnsControllerModule = {
                 });
             };
 
-            const resetBandColumnsCache = (that) => {
+            function resetBandColumnsCache(that) {
                 that._bandColumnsCache = undefined;
-            };
+            }
 
             const findColumn = (columns, identifier) => {
                 const identifierOptionName = isString(identifier) && identifier.substr(0, identifier.indexOf(':'));

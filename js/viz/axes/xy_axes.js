@@ -457,15 +457,6 @@ export default {
             let dateMarkers = [];
             let dateMarker;
 
-            function draw(markerDate, format, withoutStick) {
-                return that._drawDateMarker(markerDate, {
-                    x: translator.translate(markerDate),
-                    y: markersAreaTop,
-                    labelOptions: that._getLabelFormatOptions(format),
-                    withoutStick: withoutStick
-                }, viewport);
-            }
-
             if(viewport.isEmpty() || !options.marker.visible || options.argumentType !== 'datetime' || options.type === 'discrete' || that._majorTicks.length <= 1) {
                 return [];
             }
@@ -475,6 +466,15 @@ export default {
             const markerInterval = getMarkerInterval(tickInterval);
 
             const markerDates = getMarkerDates(minBound, viewport.maxVisible, markerInterval);
+
+            function draw(markerDate, format, withoutStick) {
+                return that._drawDateMarker(markerDate, {
+                    x: translator.translate(markerDate),
+                    y: markersAreaTop,
+                    labelOptions: that._getLabelFormatOptions(format),
+                    withoutStick: withoutStick
+                }, viewport);
+            }
 
             if(markerDates.length > 1
                 || (markerDates.length === 1 && minBound < markerDates[0])) {

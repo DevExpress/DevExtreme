@@ -888,6 +888,10 @@ class ContextMenu extends MenuBase {
 
     _positionContextMenu(jQEvent) {
         let position = this._getContextMenuPosition();
+        const actionArgs = {
+            position: position,
+            event: jQEvent
+        };
         const isInitialPosition = this._isInitialOptionValue('position');
         const positioningAction = this._createActionByOption('onPositioning', actionArgs);
 
@@ -895,10 +899,6 @@ class ContextMenu extends MenuBase {
             position.of = jQEvent;
         }
 
-        const actionArgs = {
-            position: position,
-            event: jQEvent
-        };
 
         positioningAction(actionArgs);
 

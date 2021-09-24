@@ -32,7 +32,7 @@ class TimeZoneCache {
 
     tryGet(id) {
         if(!this.map.get(id)) {
-            const config = timeZoneDataUtils.getTimezoneById(id);
+            const config = getTimezoneById(id);
             if(!config) {
                 return false;
             }
@@ -155,5 +155,9 @@ const timeZoneDataUtils = {
         return -offset / 60 || offset;
     }
 };
+
+function getTimezoneById(id) {
+    return timeZoneDataUtils.getTimezoneById(id);
+}
 
 export default timeZoneDataUtils;

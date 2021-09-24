@@ -499,7 +499,7 @@ function getFirstWeekDate(date, firstDayOfWeek) {
 }
 
 const normalizeDateByWeek = function(date, currentDate) {
-    const differenceInDays = dateUtils.getDatesInterval(date, currentDate, 'day');
+    const differenceInDays = getDatesInterval(date, currentDate, 'day');
     let resultDate = new Date(date);
 
     if(differenceInDays >= 6) {
@@ -511,9 +511,9 @@ const normalizeDateByWeek = function(date, currentDate) {
 
 const dateInRange = function(date, min, max, format) {
     if(format === 'date') {
-        min = min && dateUtils.correctDateWithUnitBeginning(min, 'day');
-        max = max && dateUtils.correctDateWithUnitBeginning(max, 'day');
-        date = date && dateUtils.correctDateWithUnitBeginning(date, 'day');
+        min = min && correctDateWithUnitBeginning(min, 'day');
+        max = max && correctDateWithUnitBeginning(max, 'day');
+        date = date && correctDateWithUnitBeginning(date, 'day');
     }
 
     return normalizeDate(date, min, max) === date;
@@ -622,11 +622,11 @@ const getDatesOfInterval = function(startDate, endDate, step) {
     return result;
 };
 
-const createDateWithFullYear = function(year) {
+function createDateWithFullYear(year) {
     const result = new Date(...arguments);
     result.setFullYear(year);
     return result;
-};
+}
 
 const dateUtils = {
     dateUnitIntervals: dateUnitIntervals,
