@@ -33,8 +33,8 @@ class BaseRenderingStrategy {
     get cellHeight() { return this.options.cellHeight; }
     get allDayHeight() { return this.options.allDayHeight; }
     get resizableStep() { return this.options.resizableStep; }
-    get isGroupedByDate() { return this.options.getIsGroupedByDate(); }
-    get visibleDayDuration() { return this.options.getVisibleDayDuration(); }
+    get isGroupedByDate() { return this.options.isGroupedByDate; }
+    get visibleDayDuration() { return this.options.visibleDayDuration; }
     get viewStartDayHour() { return this.options.viewStartDayHour; }
     get viewEndDayHour() { return this.options.viewEndDayHour; }
     get cellDuration() { return this.options.cellDuration; }
