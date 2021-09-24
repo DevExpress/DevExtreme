@@ -2153,6 +2153,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             allowColumnResizing: true,
             loadingTimeout: null,
             columnResizingMode: 'widget',
+            showRowLines: false,
             dataSource: {
                 store: {
                     type: 'array',
@@ -4421,7 +4422,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
             data.push({ id: i + 1 });
         }
         const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 500,
+            height: 505,
             dataSource: data,
             loadingTimeout: null,
             scrolling: {
@@ -4445,7 +4446,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 16, 'visible rows');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 19, 'top visible row');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 18, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 1, 'bottom loading exists');
 
         // act
@@ -4453,7 +4454,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 16, 'visible rows');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 29, 'top visible row');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 28, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'no bottom loading');
     });
 
