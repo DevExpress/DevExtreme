@@ -583,7 +583,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
 
@@ -593,11 +593,11 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 10, 'visible row count');
-        assert.equal(visibleRows[0].key, 6, 'first visible row key');
-        assert.equal(visibleRows[6].key, 12, 'selected row key');
-        assert.equal(visibleRows[6].isSelected, true, 'isSelected for selected row');
-        assert.ok($(dataGrid.getRowElement(6)).hasClass('dx-selection'), 'dx-selection class is added');
+        assert.equal(visibleRows.length, 2, 'visible row count');
+        assert.equal(visibleRows[0].key, 11, 'first visible row key');
+        assert.equal(visibleRows[1].key, 12, 'selected row key');
+        assert.equal(visibleRows[1].isSelected, true, 'isSelected for selected row');
+        assert.ok($(dataGrid.getRowElement(1)).hasClass('dx-selection'), 'dx-selection class is added');
     });
 
     // T726385
@@ -633,7 +633,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 20, 'visible row count');
+        assert.equal(visibleRows.length, 16, 'visible row count');
         assert.equal(dataGrid.getSelectedRowKeys().length, 30, 'selected row key count equals pageSize');
     });
 
@@ -650,15 +650,16 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             height: 100,
             dataSource: array,
             keyExpr: 'id',
-            loadingTimeout: null,
             selection: {
                 mode: 'single'
             },
             scrolling: {
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
+
+        this.clock.tick(300);
 
         // act
         dataGrid.getScrollable().scrollTo({ y: 10000 });
@@ -667,9 +668,9 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 5, 'visible row count');
+        assert.equal(visibleRows.length, 1, 'visible row count');
         assert.equal(visibleRows[0].isSelected, true, 'first visible row is selected');
-        assert.deepEqual(dataGrid.getSelectedRowKeys(), [16], 'selected row key count equals pageSize');
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [20], 'selected row key count equals pageSize');
     });
 });
 

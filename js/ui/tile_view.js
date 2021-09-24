@@ -51,7 +51,6 @@ const TileView = CollectionWidget.inherit({
         return extend(this.callBase(), {
             items: null,
 
-
             direction: 'horizontal',
 
             hoverStateEnabled: true,
@@ -156,11 +155,13 @@ const TileView = CollectionWidget.inherit({
     },
 
     _initScrollView: function() {
+        const { direction, showScrollbar } = this.option();
+
         this._scrollView = this._createComponent(this.$element(), ScrollView, {
-            direction: this.option('direction'),
+            direction,
             scrollByContent: true,
             useKeyboard: false,
-            showScrollbar: this.option('showScrollbar')
+            showScrollbar,
         });
 
         this._$container = $(this._scrollView.content());
