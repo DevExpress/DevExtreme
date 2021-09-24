@@ -300,7 +300,7 @@
         "dxHtmlEditor-redo": "Wiederholen",
         "dxHtmlEditor-clear": "Formate löschen",
         "dxHtmlEditor-insertTable": "Tabelle einfügen",
-        "dxHtmlEditor-insertHeaderAbove": "TODO",
+        "dxHtmlEditor-insertHeaderRow": "TODO",
         "dxHtmlEditor-insertRowAbove": "Spalte oberhalb einfügen",
         "dxHtmlEditor-insertRowBelow": "Spalte unterhalb einfügen",
         "dxHtmlEditor-insertColumnLeft": "Spalte links einfügen",

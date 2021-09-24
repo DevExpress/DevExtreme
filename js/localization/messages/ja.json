@@ -300,7 +300,7 @@
         "dxHtmlEditor-redo": "やり直す",
         "dxHtmlEditor-clear": "書式のクリア",
         "dxHtmlEditor-insertTable": "テーブルの挿入",
-        "dxHtmlEditor-insertHeaderAbove": "TODO",
+        "dxHtmlEditor-insertHeaderRow": "TODO",
         "dxHtmlEditor-insertRowAbove": "上に行を挿入",
         "dxHtmlEditor-insertRowBelow": "下に行を挿入",
         "dxHtmlEditor-insertColumnLeft": "左に列を挿入",

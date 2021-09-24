@@ -332,7 +332,7 @@
         "dxHtmlEditor-redo": "Redo",
         "dxHtmlEditor-clear": "Clear Formatting",
         "dxHtmlEditor-insertTable": "Insert Table",
-        "dxHtmlEditor-insertHeaderAbove": "Insert Header Row",
+        "dxHtmlEditor-insertHeaderRow": "Insert Header Row",
         "dxHtmlEditor-insertRowAbove": "Insert Row Above",
         "dxHtmlEditor-insertRowBelow": "Insert Row Below",
         "dxHtmlEditor-insertColumnLeft": "Insert Column Left",
