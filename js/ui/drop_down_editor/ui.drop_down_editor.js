@@ -829,7 +829,7 @@ const DropDownEditor = TextBox.inherit({
                 break;
             case 'dropDownOptions':
                 switch(args.fullName) {
-                    case 'showTitle':
+                    case 'dropDownOptions.showTitle':
                         this._setPopupOption('showTitle', args.value);
                         break;
                     default:

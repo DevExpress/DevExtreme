@@ -644,7 +644,10 @@ const Lookup = DropDownList.inherit({
                 _fixWrapperPosition: false,
                 width: this._isInitialOptionValue('dropDownOptions.width')
                     ? (function() { return getOuterWidth(this.$element()); }).bind(this)
-                    : this._popupConfig().width
+                    : this._popupConfig().width,
+                height: this._isInitialOptionValue('dropDownOptions.height')
+                    ? (function() { return getOuterWidth(this.$element()); }).bind(this)
+                    : this._popupConfig().height,
             }));
 
         this._popup.on({
@@ -1086,16 +1089,6 @@ const Lookup = DropDownList.inherit({
                 break;
             case 'cleanSearchOnOpening':
             case '_scrollToSelectedItemEnabled':
-                break;
-            case 'dropDownOptions.title':
-            case 'dropDownOptions.titleTemplate':
-            case 'dropDownOptions.onTitleRendered':
-            case 'dropDownOptions.shading':
-            case 'dropDownOptions.animation':
-            case 'dropDownOptions.position':
-            case 'dropDownOptions.closeOnOutsideClick':
-            case 'dropDownOptions.fullScreen':
-                this._setPopupOption(fullName.split('.')[1], value);
                 break;
             case 'dropDownOptions.width':
                 this._setPopupOption('width', value === 'auto' ? this.initialOption('dropDownOptions').width : value);
