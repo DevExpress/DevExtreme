@@ -4184,6 +4184,65 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             assert.ok($(dataGrid.element()).find(`.dx-pager .dx-page:eq(${pageIndex})`).hasClass('dx-selection'), `page button is selected ${pageIndex}`);
         });
     });
+
+    QUnit.test('noDataText should not be shown on paging', function(assert) {
+        // arrange
+        const done = assert.async();
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 80; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 400,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual'
+            },
+            pager: {
+                visible: true,
+            },
+            filterRow: {
+                visible: true
+            },
+        });
+
+        this.clock.tick(300);
+
+        // act
+        $(dataGrid.element()).find('.dx-pager .dx-page:eq(3)').trigger('dxclick');
+        this.clock.tick(300);
+        const $noDataTextElement = $(dataGrid.element()).find('.dx-datagrid-nodata');
+
+        // assert
+        assert.strictEqual($noDataTextElement.length, 1, 'no datatext is rendered');
+        assert.ok($noDataTextElement.hasClass('dx-hidden'), 'no datatext is hidden');
+
+        // act
+        this.clock.restore();
+        const noDataTextHidden = [];
+        dataGrid.on('contentReady', function() {
+            const $noDataTextElement = $(dataGrid.element()).find('.dx-datagrid-nodata');
+            noDataTextHidden.push($noDataTextElement.hasClass('dx-hidden'));
+        });
+        $(dataGrid.element()).find('.dx-pager .dx-page:eq(0)').trigger('dxclick');
+        setTimeout(() => {
+            const rowData = dataGrid.getTopVisibleRowData();
+            if(dataGrid.pageIndex() === 0 && rowData && rowData.id === 1) {
+                // assert
+                assert.strictEqual(noDataTextHidden.filter(it => it === false).length, 0, 'no data text is hidden');
+
+                done();
+            }
+        }, 300);
+    });
 });
 
 
