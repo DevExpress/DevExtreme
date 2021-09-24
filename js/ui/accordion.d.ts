@@ -101,7 +101,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     /**
      * @docid
      * @default undefined
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -115,8 +114,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @docid
      * @default "item"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -125,8 +122,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @docid
      * @default "title"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -175,8 +170,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/accordion
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

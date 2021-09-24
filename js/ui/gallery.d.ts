@@ -159,8 +159,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/gallery
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -170,7 +168,6 @@ export default class dxGallery extends CollectionWidget {
      * @docid
      * @publicName goToItem(itemIndex, animation)
      * @param1 itemIndex:numeric
-     * @param2 animation:boolean
      * @return Promise<void>
      * @public
      */
@@ -178,7 +175,6 @@ export default class dxGallery extends CollectionWidget {
     /**
      * @docid
      * @publicName nextItem(animation)
-     * @param1 animation:boolean
      * @return Promise<void>
      * @public
      */
@@ -186,7 +182,6 @@ export default class dxGallery extends CollectionWidget {
     /**
      * @docid
      * @publicName prevItem(animation)
-     * @param1 animation:boolean
      * @return Promise<void>
      * @public
      */

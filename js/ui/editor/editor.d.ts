@@ -88,8 +88,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/editor/editor
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */

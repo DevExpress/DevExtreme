@@ -94,8 +94,6 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
  * @docid
  * @isEditor
  * @inherits dxTextEditor
- * @module ui/text_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

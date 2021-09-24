@@ -52,8 +52,6 @@ export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
  * @docid
  * @isEditor
  * @inherits dxSliderBase
- * @module ui/slider
- * @export default
 * @namespace DevExpress.ui
  * @public
  */

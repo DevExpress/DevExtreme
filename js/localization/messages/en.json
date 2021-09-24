@@ -613,6 +613,13 @@
         "dxGantt-zoomIn": "Zoom In",
         "dxGantt-zoomOut": "Zoom Out",
         "dxGantt-fullScreen": "Full Screen",
-        "dxGantt-quarter": "Q{0}"
+        "dxGantt-quarter": "Q{0}",
+        "dxGantt-sortingAscendingText": "Sort Ascending",
+        "dxGantt-sortingDescendingText": "Sort Descending",
+        "dxGantt-sortingClearText": "Clear Sorting",
+        "dxGantt-showResources": "Show Resources",
+        "dxGantt-showDependencies": "Show Dependencies",
+        "dxGantt-dialogStartDateValidation": "Start date must be after {0}",
+        "dxGantt-dialogEndDateValidation": "End date must be after {0}"
       }
 }

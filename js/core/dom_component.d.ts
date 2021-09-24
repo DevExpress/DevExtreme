@@ -32,7 +32,6 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
     /**
      * @docid
      * @default undefined
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -59,7 +58,6 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
     /**
      * @docid
      * @default undefined
-     * @type_function_return number|string
      * @public
      */
     width?: number | string | (() => number | string);
@@ -69,8 +67,6 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
  * @section uiWidgets
  * @inherits Component
  * @namespace DevExpress
- * @module core/dom_component
- * @export default
  * @hidden
  */
 /* eslint-disable no-underscore-dangle */
@@ -85,7 +81,6 @@ export default class DOMComponent extends Component {
      * @section uiWidgets
      * @publicName getInstance(element)
      * @param1 element:Element|JQuery
-     * @return DOMComponent
      * @public
      */
     static getInstance(element: UserDefinedElement): DOMComponent;
@@ -111,7 +106,6 @@ export default class DOMComponent extends Component {
     /**
      * @docid
      * @publicName element()
-     * @return DxElement
      * @public
      */
     element(): DxElement;

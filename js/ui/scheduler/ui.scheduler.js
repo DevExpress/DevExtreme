@@ -481,7 +481,6 @@ class Scheduler extends Widget {
             case 'resourceCellTemplate':
             case 'dataCellTemplate':
             case 'timeCellTemplate':
-                this._updateOption('workSpace', name, value);
                 this.repaint();
                 break;
             case 'groups':
@@ -2100,6 +2099,7 @@ class Scheduler extends Widget {
     }
 
     scrollToTime(hours, minutes, date) {
+        errors.log('W0002', 'dxScheduler', 'scrollToTime', '21.1', 'Use the "scrollTo" method instead');
         this._workSpace.scrollToTime(hours, minutes, date);
     }
 

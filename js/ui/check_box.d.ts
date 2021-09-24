@@ -75,8 +75,6 @@ export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
  * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/check_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

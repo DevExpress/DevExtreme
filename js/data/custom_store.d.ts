@@ -30,16 +30,13 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
     insert?: ((values: any) => PromiseLike<any>);
     /**
      * @docid
-     * @type_function_param1 options:LoadOptions
      * @type_function_return Promise<any>|Array<any>
      * @public
      */
     load?: ((options: LoadOptions) => PromiseLike<any> | Array<any>);
     /**
      * @docid
-     * @type string
      * @default 'processed'
-     * @acceptValues 'processed'|'raw'
      * @public
      */
     loadMode?: 'processed' | 'raw';
@@ -52,7 +49,6 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
     remove?: ((key: any | string | number) => PromiseLike<void>);
     /**
      * @docid
-     * @type_function_param1 loadOptions:object
      * @type_function_param1_field1 filter:object
      * @type_function_param1_field2 group:object
      * @type_function_return Promise<number>
@@ -77,8 +73,6 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
 /**
  * @docid
  * @inherits Store
- * @module data/custom_store
- * @export default
  * @public
  */
 export default class CustomStore extends Store {

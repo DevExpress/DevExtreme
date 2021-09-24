@@ -1,5 +1,7 @@
 'use strict';
 
+require('./ts');
+
 const eol = require('gulp-eol');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');

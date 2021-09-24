@@ -522,6 +522,9 @@ const LayoutManager = Widget.inherit({
                 if(isDefined(item.rowSpan)) {
                     generatedItem.location.rowspan = item.rowSpan;
                 }
+                if(isDefined(item._forceItemFlexSizeCorrectionInIE)) {
+                    generatedItem._forceItemFlexSizeCorrectionInIE = item._forceItemFlexSizeCorrectionInIE;
+                }
                 result.push(generatedItem);
             }
         }

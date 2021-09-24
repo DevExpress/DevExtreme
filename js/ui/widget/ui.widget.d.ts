@@ -75,8 +75,6 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
 /**
  * @docid
  * @inherits DOMComponent
- * @module ui/widget/ui.widget
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */
@@ -91,7 +89,6 @@ export default class Widget extends DOMComponent {
     /**
      * @docid
      * @publicName registerKeyHandler(key, handler)
-     * @param1 key:string
      * @param2 handler:function
      * @public
      */
@@ -117,7 +114,6 @@ export var dxItem: any;
  * @docid
  * @type Enums.Format|string|function|Object
  * @type_function_param1 value:number|date
- * @type_function_return string
  * @default undefined
  * @section Common
  * @namespace DevExpress.ui
@@ -131,12 +127,10 @@ export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential'
   /**
    * @docid
    * @type_function_param1 value:number|date
-   * @type_function_return string
    */
   formatter?: ((value: number | Date) => string);
   /**
    * @docid
-   * @type_function_param1 value:string
    * @type_function_return number|date
    */
   parser?: ((value: string) => number | Date);

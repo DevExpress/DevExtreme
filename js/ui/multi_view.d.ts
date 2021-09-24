@@ -108,8 +108,6 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/multi_view
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

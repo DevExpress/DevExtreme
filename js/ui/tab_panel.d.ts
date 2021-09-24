@@ -104,8 +104,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @docid
      * @default "title"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -192,8 +190,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
 /**
  * @docid
  * @inherits dxMultiView
- * @module ui/tab_panel
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
