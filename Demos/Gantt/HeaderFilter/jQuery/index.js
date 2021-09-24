@@ -29,5 +29,8 @@ $(() => {
     }],
     scaleType: 'weeks',
     taskListWidth: 500,
+    headerFilter: {
+      visible: true,
+    },
   });
 });

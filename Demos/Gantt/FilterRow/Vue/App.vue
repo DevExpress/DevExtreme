@@ -26,6 +26,7 @@
       data-field="end"
       caption="End Date"
     />
+    <DxFilterRow :visible="true"/>
   </DxGantt>
 </template>
 <script>
@@ -37,6 +38,7 @@ import {
   DxResourceAssignments,
   DxColumn,
   DxEditing,
+  DxFilterRow,
 } from 'devextreme-vue/gantt';
 
 import {
@@ -55,6 +57,7 @@ export default {
     DxResourceAssignments,
     DxColumn,
     DxEditing,
+    DxFilterRow,
   },
   data() {
     return {

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Gantt, {
-  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing,
+  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, HeaderFilter,
 } from 'devextreme-react/gantt';
 
 import {
@@ -27,6 +27,7 @@ class App extends React.Component {
         <Column dataField="end" caption="End Date" />
 
         <Editing enabled={true} />
+        <HeaderFilter visible={true} />
       </Gantt>
     );
   }
