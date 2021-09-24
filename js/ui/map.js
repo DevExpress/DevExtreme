@@ -118,12 +118,6 @@ const Map = Widget.inherit({
 
             onRouteRemoved: null,
 
-            key: {
-                bing: '',
-                google: '',
-                googleStatic: ''
-            },
-
             apiKey: {
                 bing: '',
                 google: '',
