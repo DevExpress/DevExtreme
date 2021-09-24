@@ -155,12 +155,10 @@ const TileView = CollectionWidget.inherit({
     },
 
     _initScrollView: function() {
-        const { width, height, direction, showScrollbar } = this.option();
+        const { direction, showScrollbar } = this.option();
 
         this._scrollView = this._createComponent(this.$element(), ScrollView, {
             direction,
-            width,
-            height,
             scrollByContent: true,
             useKeyboard: false,
             showScrollbar,
@@ -486,7 +484,6 @@ const TileView = CollectionWidget.inherit({
             case 'height':
                 this.callBase(args);
                 this._renderGeometry();
-                this._scrollView.option(args.name, args.value);
                 this._updateScrollView();
                 break;
             case 'direction':
