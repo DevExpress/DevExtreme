@@ -136,9 +136,9 @@ module('Table properties forms', {
 
             this.applyFormChanges(formInstance);
 
-            assert.strictEqual($tableElement.css('borderStyle'), 'dotted', 'border style is applied');
-            assert.strictEqual($tableElement.css('borderWidth'), '3px', 'border width is applied');
-            assert.strictEqual($tableElement.css('borderColor'), 'rgb(255, 0, 0)', 'border color is applied');
+            assert.strictEqual($tableElement.css('borderTopStyle'), 'dotted', 'border style is applied');
+            assert.strictEqual($tableElement.css('borderTopWidth'), '3px', 'border width is applied');
+            assert.strictEqual($tableElement.css('borderTopColor'), 'rgb(255, 0, 0)', 'border color is applied');
             assert.strictEqual($tableElement.css('backgroundColor'), 'rgb(0, 128, 0)', 'background color is applied');
             assert.strictEqual($tableElement.css('textAlign'), 'right', 'text align is applied');
         });
@@ -231,9 +231,9 @@ module('Table properties forms', {
 
             this.applyFormChanges(formInstance);
 
-            assert.strictEqual($targetCell.css('borderStyle'), 'dotted', 'border style is applied');
-            assert.strictEqual($targetCell.css('borderWidth'), '3px', 'border width is applied');
-            assert.strictEqual($targetCell.css('borderColor'), 'rgb(255, 0, 0)', 'border color is applied');
+            assert.strictEqual($targetCell.css('borderTopStyle'), 'dotted', 'border style is applied');
+            assert.strictEqual($targetCell.css('borderTopWidth'), '3px', 'border width is applied');
+            assert.strictEqual($targetCell.css('borderTopColor'), 'rgb(255, 0, 0)', 'border color is applied');
             assert.strictEqual($targetCell.css('backgroundColor'), 'rgb(0, 128, 0)', 'background color is applied');
             assert.strictEqual($targetCell.css('paddingLeft'), '10px', 'padding is applied');
             assert.strictEqual($targetCell.css('paddingRight'), '10px', 'padding is applied');
@@ -637,10 +637,10 @@ module('Table properties forms', {
 
             this.applyFormChanges(formInstance);
 
-            assert.strictEqual($targetCell.outerHeight(), 24, 'cell height is applied');
+            assert.roughEqual($targetCell.outerHeight(), 24, 2, 'cell height is applied');
             assert.strictEqual($targetCell.attr('height'), '10px', 'cell height attribute is correct');
 
-            assert.roughEqual($tableElement.outerHeight(), 48, 2), 'table height is changed as expected';
+            assert.roughEqual($tableElement.outerHeight(), 48, 3), 'table height is changed as expected';
         });
 
     });
@@ -664,8 +664,8 @@ module('Table properties forms', {
             assert.roughEqual($tableElement.outerHeight(), 150, 2, 'table height is changed as expected');
             assert.roughEqual($verticalCells.eq(0).outerHeight(), 50, 2, 'first row cell height is applied');
             assert.roughEqual(parseInt($verticalCells.eq(0).attr('height')), 50, 2, 'first row cell height attr is applied');
-            assert.roughEqual(parseInt($verticalCells.eq(1).outerHeight()), 99, 2, 'second row cell height attr is applied');
-            assert.roughEqual(parseInt($verticalCells.eq(1).attr('height')), 99, 2, 'second row cell height attr is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(1).outerHeight()), 99, 3, 'second row cell height attr is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(1).attr('height')), 99, 3, 'second row cell height attr is applied');
         });
 
         test('Check table height edititng if new value is less than the content', function(assert) {
@@ -684,7 +684,7 @@ module('Table properties forms', {
 
             const $verticalCells = $tableElement.find('td:nth-child(1)');
 
-            assert.roughEqual($tableElement.outerHeight(), 48, 2, 'table height is changed as expected');
+            assert.roughEqual($tableElement.outerHeight(), 48, 3, 'table height is changed as expected');
             assert.roughEqual($verticalCells.eq(0).outerHeight(), 24, 2, 'first row cell height is applied');
             assert.roughEqual(parseInt($verticalCells.eq(0).attr('height')), 10, 2, 'first row cell height attr is applied');
             assert.roughEqual(parseInt($verticalCells.eq(1).outerHeight()), 24, 2, 'second row cell height attr is applied');
