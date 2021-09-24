@@ -688,12 +688,12 @@ QUnit.module('popup options', moduleConfig, () => {
         });
     });
 
-    QUnit.test('popup should be positioned with the correct dropDownOptions.position offset', function(assert) {
+    QUnit.test('popup should be positioned with the correct popupPosition offset', function(assert) {
         const vOffset = 2;
         const instance = new DropDownBox(this.$element, {
             opened: true,
             width: 100,
-            dropDownOptions: { position: { offset: { v: vOffset } } }
+            popupPosition: { offset: { v: vOffset } }
         });
 
         const { bottom: elementBottom } = this.$element.get(0).getBoundingClientRect();

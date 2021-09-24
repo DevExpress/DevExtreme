@@ -127,7 +127,8 @@ const DropDownEditor = TextBox.inherit({
 
             buttons: void 0,
 
-            dropDownOptions: { showTitle: false, position: this._getDefaultPopupPosition() },
+            dropDownOptions: { showTitle: false },
+            popupPosition: this._getDefaultPopupPosition(),
             onPopupInitialized: null,
             applyButtonText: messageLocalization.format('OK'),
             cancelButtonText: messageLocalization.format('Cancel'),
@@ -194,7 +195,7 @@ const DropDownEditor = TextBox.inherit({
                     return isGeneric;
                 },
                 options: {
-                    dropDownOptions: { position: { offset: { v: 0 } } }
+                    popupPosition: { offset: { v: 0 } }
                 }
             }
         ]);
@@ -214,9 +215,9 @@ const DropDownEditor = TextBox.inherit({
 
     _updatePopupPosition: function(isRtlEnabled) {
         const { my, at } = this._getDefaultPopupPosition(isRtlEnabled);
-        const currentPosition = this.option('dropDownOptions.position');
+        const currentPosition = this.option('popupPosition');
 
-        this.option('dropDownOptions.position', extend({}, currentPosition, { my, at }));
+        this.option('popupPosition', extend({}, currentPosition, { my, at }));
     },
 
     _initVisibilityActions: function() {
@@ -562,7 +563,7 @@ const DropDownEditor = TextBox.inherit({
 
         return {
             onInitialized: this._popupInitializedHandler(),
-            position: extend(this.option('dropDownOptions.position'), {
+            position: extend(this.option('popupPosition'), {
                 of: this.$element()
             }),
             showTitle: this.option('dropDownOptions.showTitle'),
@@ -634,7 +635,7 @@ const DropDownEditor = TextBox.inherit({
             const { top: myTop } = animationPosition.setup(this.$element());
             const { top: popupTop } = animationPosition.setup(this._popup.$content());
 
-            positionRequest = (myTop + this.option('dropDownOptions.position').offset.v) > popupTop ? 'below' : 'above';
+            positionRequest = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'below' : 'above';
         }
 
         return positionRequest;
@@ -828,16 +829,15 @@ const DropDownEditor = TextBox.inherit({
                 break;
             case 'dropDownOptions':
                 switch(args.fullName) {
-                    case 'dropDownOptions.position':
-                        break;
-                    case 'dropDownOptions.showTitle':
+                    case 'showTitle':
                         this._setPopupOption('showTitle', args.value);
                         break;
                     default:
                         this._popupOptionChanged(args);
                         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
-                        break;
                 }
+                break;
+            case 'popupPosition':
                 break;
             case 'deferRendering':
                 if(hasWindow()) {

@@ -287,7 +287,7 @@ const DropDownBox = DropDownEditor.inherit({
             focusStateEnabled,
             contentTemplate: ANONYMOUS_TEMPLATE_NAME,
             hideOnParentScroll: this._shouldHideOnParentScroll.bind(this),
-            position: extend(this.option('dropDownOptions.position'), {
+            position: extend(this.option('popupPosition'), {
                 of: this.$element(),
             }),
             onKeyboardHandled: opts => focusStateEnabled && this._popupElementTabHandler(opts),
