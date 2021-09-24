@@ -16,6 +16,8 @@ import { noop } from '../../../core/utils/common';
 
 import localizationMessage from '../../../localization/message';
 
+import { unfixTableWidth, getColumnElements, getAutoSizedElements, setLineElementsAttrValue, getLineElements, getRowElements } from '../utils/table_helper';
+
 const MIN_HEIGHT = 400;
 const BORDER_STYLES = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset'];
 let formPopup;
@@ -74,18 +76,6 @@ const getFullScreen = () => {
     return devices.real().deviceType === 'phone';
 };
 
-const getRowElements = ($table, index = 0) => {
-    return $table.find(`th:nth-child(${(1 + index)}), td:nth-child(${(1 + index)})`);
-};
-
-export const unfixTableWidth = ($table) => {
-    $table.css('width', 'initial');
-};
-
-export const getColumnElements = ($table, index = 0) => {
-    return $table.find('tr').eq(index).find('th, td');
-};
-
 const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
     if(isDefined(newWidth)) {
         const autoWidthColumns = getAutoSizedElements($table);
@@ -126,21 +116,6 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
             setLineElementsAttrValue($lineElements, 'height', newElementHeight);
         });
     }
-};
-
-export const getAutoSizedElements = ($table, direction = 'horizontal') => {
-    const result = [];
-    const isHorizontal = direction === 'horizontal';
-    const $lineElements = isHorizontal ? getColumnElements($table) : getRowElements($table);
-
-    $lineElements.each((index, element) => {
-        const $element = $(element);
-        if(!isDefined($element.attr(isHorizontal ? 'width' : 'height'))) {
-            result.push($element);
-        }
-    });
-
-    return result;
 };
 
 const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
@@ -187,16 +162,6 @@ const applyCellDimensionChanges = ($target, newHeight, newWidth) => {
     if(autoHeightRows.length === 0) {
         $table.css('height', 'auto');
     }
-};
-
-export const setLineElementsAttrValue = ($lineElements, property, value) => {
-    each($lineElements, (i, element) => {
-        $(element).attr(property, value + 'px');
-    });
-};
-
-export const getLineElements = ($table, index, direction = 'horizontal') => {
-    return direction === 'horizontal' ? getRowElements($table, index) : getColumnElements($table, index);
 };
 
 export const showTablePropertiesForm = (editorInstance, $table) => {
@@ -577,16 +542,4 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
     formPopup.show();
 
     return formPopup;
-};
-
-export const getTableOperationHandler = (quill, operationName, ...rest) => {
-    return () => {
-        const table = quill.getModule('table');
-
-        if(!table) {
-            return;
-        }
-        quill.focus();
-        return table[operationName](...rest);
-    };
 };

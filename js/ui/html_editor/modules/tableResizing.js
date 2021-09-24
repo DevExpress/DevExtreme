@@ -11,7 +11,7 @@ import Draggable from '../../draggable';
 import { each } from '../../../core/utils/iterator';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { extend } from '../../../core/utils/extend';
-import { setLineElementsAttrValue, getLineElements, getAutoSizedElements, getColumnElements, unfixTableWidth } from './tableOperations';
+import { setLineElementsAttrValue, getLineElements, getAutoSizedElements, getColumnElements, unfixTableWidth } from '../utils/table_helper';
 
 
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
