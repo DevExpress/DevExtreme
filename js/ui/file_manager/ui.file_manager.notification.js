@@ -178,9 +178,10 @@ export default class FileManagerNotificationControl extends Widget {
         this._isInAdaptiveState = this._isSmallScreen();
         if(oldState !== this._isInAdaptiveState && this._progressDrawer) {
             const notificationManager = this._getNotificationManager();
-            notificationManager.handleDimensionChanged();
-            const options = this._getProgressDrawerAdaptiveOptions();
-            this._progressDrawer.option(options);
+            if(notificationManager.handleDimensionChanged()) {
+                const options = this._getProgressDrawerAdaptiveOptions();
+                this._progressDrawer.option(options);
+            }
         }
     }
 
