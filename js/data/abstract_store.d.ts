@@ -6,6 +6,8 @@ import {
     LoadOptions,
 } from './load_options';
 
+export type Options = StoreOptions;
+
 /** @namespace DevExpress.data */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface StoreOptions<T = Store> {
@@ -101,7 +103,7 @@ export interface StoreOptions<T = Store> {
  * @namespace DevExpress.data
  */
 export default class Store {
-    constructor(options?: StoreOptions)
+    constructor(options?: Options)
     /**
      * @docid
      * @publicName byKey(key)

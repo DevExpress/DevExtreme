@@ -1,5 +1,5 @@
 import Store, {
-    StoreOptions,
+    Options as StoreOptions,
 } from './abstract_store';
 
 import {
@@ -7,7 +7,7 @@ import {
 } from './load_options';
 
 /** @namespace DevExpress.data */
-export interface CustomStoreOptions extends StoreOptions<CustomStore> {
+export interface CustomStoreOptions extends StoreOptions {
     /**
      * @docid
      * @type_function_param1 key:object|string|number

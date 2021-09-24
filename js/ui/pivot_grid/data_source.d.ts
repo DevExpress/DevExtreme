@@ -3,7 +3,7 @@ import {
 } from '../../core/utils/deferred';
 
 import Store, {
-    StoreOptions,
+    Options as StoreOptions,
 } from '../../data/abstract_store';
 
 import DataSource from '../../data/data_source';

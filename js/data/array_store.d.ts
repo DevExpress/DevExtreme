@@ -1,9 +1,9 @@
 import Store, {
-    StoreOptions,
+    Options as StoreOptions,
 } from './abstract_store';
 
 /** @namespace DevExpress.data */
-export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
+export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions { // eslint-disable-line @typescript-eslint/no-unused-vars
     /**
      * @docid
      * @public

@@ -1442,7 +1442,9 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
+  export interface ArrayStoreOptions<T = ArrayStore>
+    extends DevExpress.data.Store.Options {
+    // eslint-disable-line @typescript-eslint/no-unused-vars
     /**
      * [descr:ArrayStoreOptions.data]
      */
@@ -1465,7 +1467,7 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface CustomStoreOptions extends StoreOptions<CustomStore> {
+  export interface CustomStoreOptions extends DevExpress.data.Store.Options {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
@@ -1750,7 +1752,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.store]
      */
-    store?: Store | StoreOptions | Array<any> | any;
+    store?: Store | DevExpress.data.Store.Options | Array<any> | any;
   }
   /**
    * [descr:EdmLiteral]
@@ -2412,7 +2414,7 @@ declare module DevExpress.data {
      */
     store?:
       | Store
-      | StoreOptions
+      | DevExpress.data.Store.Options
       | XmlaStore
       | XmlaStoreOptions
       | Array<{
@@ -2543,7 +2545,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export class Store {
-    constructor(options?: StoreOptions);
+    constructor(options?: DevExpress.data.Store.Options);
     /**
      * [descr:Store.byKey(key)]
      */
@@ -2606,6 +2608,12 @@ declare module DevExpress.data {
       key: any | string | number,
       values: any
     ): DevExpress.core.utils.DxPromise<any>;
+  }
+  module Store {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type Options = StoreOptions;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
