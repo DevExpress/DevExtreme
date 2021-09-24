@@ -81,6 +81,11 @@ if(Quill) {
         return localize(value) || value;
     };
 
+    const getTargetTableNode = (quill, partName) => {
+        const [table, cell] = quill.getModule('table').getTable();
+        return partName === 'table' ? table.domNode : cell.domNode;
+    };
+
     ToolbarModule = class ToolbarModule extends BaseModule {
         constructor(quill, options) {
             super(quill, options);
@@ -193,8 +198,14 @@ if(Quill) {
                 deleteColumn: getTableOperationHandler(this.quill, 'deleteColumn'),
                 deleteRow: getTableOperationHandler(this.quill, 'deleteRow'),
                 deleteTable: getTableOperationHandler(this.quill, 'deleteTable'),
-                cellProperties: () => { showCellPropertiesForm(this.editorInstance, $(this.quill.getModule('table').getTable()[2].domNode)); },
-                tableProperties: () => { showTablePropertiesForm(this.editorInstance, $(this.quill.getModule('table').getTable()[0].domNode)); }
+                cellProperties: () => {
+                    const domNode = getTargetTableNode(this.quill, 'cell');
+                    showCellPropertiesForm(this.editorInstance, $(domNode));
+                },
+                tableProperties: () => {
+                    const domNode = getTargetTableNode(this.quill, 'table');
+                    showTablePropertiesForm(this.editorInstance, $(domNode));
+                }
             };
         }
 
