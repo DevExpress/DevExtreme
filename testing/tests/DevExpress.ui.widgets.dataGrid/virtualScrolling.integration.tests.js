@@ -184,7 +184,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 dataGrid.navigateToRow(20);
 
                 // assert
-                assert.equal(dataGrid.pageIndex(), scrollingMode === 'virtual' ? 0 : 1, 'Page index'); // TODO pageIndex should return another value then dataSource pageIndex
+                assert.equal(dataGrid.pageIndex(), 1, 'Page index');
             });
         });
 
@@ -395,7 +395,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(dataGrid.pageIndex(), 1, 'Page index');
+        assert.equal(dataGrid.pageIndex(), 2, 'Page index');
         assert.equal(keyboardController.getVisibleRowIndex(), -1, 'Visible row index');
         assert.ok(dataGridWrapper.rowsView.isRowVisible(dataGrid.getRowIndexByKey('Zeb'), 1), 'Navigation row is visible');
     });
@@ -589,11 +589,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             paging: { pageSize: 2 },
             scrolling: {
                 mode: 'virtual',
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(300);
 
         // act
         dataGrid.getScrollable().scrollTo({ y: 300 });
@@ -660,7 +660,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(300);
 
         // act
         dataGrid.getScrollable().scrollTo({ y: 300 });
@@ -1448,7 +1448,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick();
+        this.clock.tick(300);
 
         dataGrid.on('contentReady', function() {
             contentReadyCount++;
@@ -3112,7 +3112,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         $(dataGrid.getScrollable().container()).trigger('scroll');
 
         // assert
-        assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reseted');
+        assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reset');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'first page is rendered');
     });
 
@@ -3426,7 +3426,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }]
         });
 
-        this.clock.tick();
+        this.clock.tick(300);
         let visibleRows = dataGrid.getVisibleRows();
         let visibleGroupRowCount = visibleRows.filter(r => r.rowType === 'group').length;
 
@@ -4068,6 +4068,181 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // assert
         assert.strictEqual(dataGrid.getView('footerView').element().children().scrollLeft(), footerScrollLeft, 'scrollLeft restored');
     });
+
+    QUnit.test('Page index should be synchronized with scroll position', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 400,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            pager: {
+                visible: true,
+            }
+        });
+
+        this.clock.tick();
+        const rowHeight = parseFloat(getComputedStyle($(dataGrid.getRowElement(1)).get(0)).height);
+
+        // navigate forward
+        for(let i = 0; i < dataGrid.pageCount(); i++) {
+            if(i > 0) {
+                $(dataGrid.element()).find(`.dx-pager .dx-page:eq(${i})`).trigger('dxclick');
+                this.clock.tick();
+            }
+
+            const scrollPosition = rowHeight * dataGrid.pageSize() * dataGrid.pageIndex();
+            const topId = dataGrid.pageIndex() * dataGrid.pageSize() + 1;
+
+            // assert
+            assert.equal(dataGrid.pageIndex(), i, `pageIndex ${i}`);
+            assert.roughEqual(dataGrid.getScrollable().scrollTop(), scrollPosition, 2.01, `scroll position ${scrollPosition}`);
+            assert.equal(dataGrid.getTopVisibleRowData().id, topId, `top id ${topId}`);
+            assert.ok($(dataGrid.element()).find(`.dx-pager .dx-page:eq(${i})`).hasClass('dx-selection'), `page button is selected ${i}`);
+        }
+
+        // navigate backward
+        for(let i = dataGrid.pageCount() - 2; i > 0; i--) {
+            $(dataGrid.element()).find(`.dx-pager .dx-page:eq(${i})`).trigger('dxclick');
+            this.clock.tick();
+
+            const scrollPosition = rowHeight * dataGrid.pageSize() * dataGrid.pageIndex();
+            const topId = dataGrid.pageIndex() * dataGrid.pageSize() + 1;
+
+            // assert
+            assert.equal(dataGrid.pageIndex(), i, `pageIndex ${i}`);
+            assert.roughEqual(dataGrid.getScrollable().scrollTop(), scrollPosition, 2.01, `scroll position ${scrollPosition}`);
+            assert.equal(dataGrid.getTopVisibleRowData().id, topId, `top id ${topId}`);
+            assert.ok($(dataGrid.element()).find(`.dx-pager .dx-page:eq(${i})`).hasClass('dx-selection'), `page button is selected ${i}`);
+        }
+    });
+
+    QUnit.test('Scroll position should be synchronized with pageIndex', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 400,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            pager: {
+                visible: true,
+            }
+        });
+
+        this.clock.tick();
+
+        // navigate forward
+        [0, 750, 1500, 2250, 3000].forEach(position => {
+            if(position > 0) {
+                dataGrid.getScrollable().scrollTo({ top: position });
+                this.clock.tick();
+            }
+            const pageIndex = position / 750;
+
+
+            // assert
+            assert.equal(dataGrid.pageIndex(), pageIndex, `pageIndex for ${position}`);
+            assert.ok($(dataGrid.element()).find(`.dx-pager .dx-page:eq(${pageIndex})`).hasClass('dx-selection'), `page button is selected ${pageIndex}`);
+        });
+
+        // navigate backward
+        [2250, 1500, 750, 0].forEach(position => {
+            dataGrid.getScrollable().scrollTo({ top: position });
+            this.clock.tick();
+            const pageIndex = position / 750;
+
+            // assert
+            assert.equal(dataGrid.pageIndex(), pageIndex, `pageIndex for ${position}`);
+            assert.ok($(dataGrid.element()).find(`.dx-pager .dx-page:eq(${pageIndex})`).hasClass('dx-selection'), `page button is selected ${pageIndex}`);
+        });
+    });
+
+    QUnit.test('noDataText should not be shown on paging', function(assert) {
+        // arrange
+        const done = assert.async();
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 80; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            height: 400,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual'
+            },
+            pager: {
+                visible: true,
+            },
+            filterRow: {
+                visible: true
+            },
+        });
+
+        this.clock.tick(300);
+
+        // act
+        $(dataGrid.element()).find('.dx-pager .dx-page:eq(3)').trigger('dxclick');
+        this.clock.tick(300);
+        const $noDataTextElement = $(dataGrid.element()).find('.dx-datagrid-nodata');
+
+        // assert
+        assert.strictEqual($noDataTextElement.length, 1, 'no datatext is rendered');
+        assert.ok($noDataTextElement.hasClass('dx-hidden'), 'no datatext is hidden');
+
+        // act
+        this.clock.restore();
+        const noDataTextHidden = [];
+        dataGrid.on('contentReady', function() {
+            const $noDataTextElement = $(dataGrid.element()).find('.dx-datagrid-nodata');
+            noDataTextHidden.push($noDataTextElement.hasClass('dx-hidden'));
+        });
+        $(dataGrid.element()).find('.dx-pager .dx-page:eq(0)').trigger('dxclick');
+        setTimeout(() => {
+            const rowData = dataGrid.getTopVisibleRowData();
+            if(dataGrid.pageIndex() === 0 && rowData && rowData.id === 1) {
+                // assert
+                assert.strictEqual(noDataTextHidden.filter(it => it === false).length, 0, 'no data text is hidden');
+
+                done();
+            }
+        }, 300);
+    });
 });
 
 
@@ -4152,7 +4327,8 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
                 mode: 'infinite',
                 useNative: false,
                 minGap: 10,
-                rowPageSize: 20
+                rowPageSize: 20,
+                updateTimeout: 0
             }
         });
 
@@ -4864,7 +5040,8 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
                 mode: 'infinite',
                 newMode: true,
                 useNative: false,
-                minGap: 5
+                minGap: 5,
+                updateTimeout: 0
             },
             columns: ['ID', 'Name', {
                 dataField: 'Category',

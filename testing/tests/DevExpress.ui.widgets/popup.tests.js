@@ -1381,6 +1381,32 @@ QUnit.module('resize', {
         assert.roughEqual(getOuterHeight(popup.$content()), getHeight($overlayContent), 0.1, 'size of popup and overlay is equal');
     });
 
+    QUnit.test('resize should work correct after runtime dimension change', function(assert) {
+        const $popup = $('#popup').dxPopup({
+            resizeEnabled: true,
+            visible: true,
+            width: 500,
+            height: 500
+        });
+        const popup = $popup.dxPopup('instance');
+        const $overlayContent = popup.$content().parent();
+        let $handle = $overlayContent.find(`.${POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS}`);
+        let pointer = pointerMock($handle).start();
+
+        pointer.dragStart().drag(0, -100).dragEnd();
+        popup.option({
+            width: 100,
+            height: 100
+        });
+
+        $handle = $overlayContent.find(`.${POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS}`);
+        pointer = pointerMock($handle).start();
+        pointer.dragStart().drag(100, 0).dragEnd();
+
+        assert.strictEqual(popup.option('width'), 200, 'width is correct');
+        assert.strictEqual(popup.option('height'), 100, 'height is correct');
+    });
+
     QUnit.test('resize callbacks', function(assert) {
         const onResizeStartStub = sinon.stub();
         const onResizeStub = sinon.stub();
@@ -2108,7 +2134,7 @@ QUnit.module('positioning', {
                 assert.strictEqual(newPosition.top, position.top - 100, 'top coordinate is correct');
             });
 
-            [{ onDimensionChangeAfterDrag: true }, { always: true }].forEach(restorePosition => {
+            [{ onDimensionChangeAfterDragOrResize: true }, { always: true }].forEach(restorePosition => {
                 QUnit.test(`drag should be restored after dimension change if restorePosition=${JSON.stringify(restorePosition)}`, function(assert) {
                     this.reinit({ restorePosition });
 
@@ -2120,9 +2146,7 @@ QUnit.module('positioning', {
                     const newPosition = this.getPosition();
                     assert.deepEqual(newPosition, initialPosition, 'position is restored');
                 });
-            });
 
-            [{ onDimensionChangeAfterResize: true }, { always: true }].forEach(restorePosition => {
                 QUnit.test(`resize should be restored after dimension change if restorePosition=${JSON.stringify(restorePosition)}`, function(assert) {
                     this.reinit({ restorePosition });
 

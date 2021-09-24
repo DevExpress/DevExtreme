@@ -1,5 +1,5 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { AllDayPanelTitle, AllDayPanelTitleProps } from '../date_table/all_day_panel/title';
+import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { viewFunction as HeaderEmptyCellView } from '../header_panel_empty_cell';
 
 jest.mock('../../utils', () => ({
@@ -32,32 +32,23 @@ describe('DateTableCellBase', () => {
       const root = render({
         props: {
           isRenderAllDayTitle: true,
-          isSetAllDayTitleClass: true,
         },
       });
 
       const allDayTitle = root.childAt(0);
       expect(allDayTitle.is(AllDayPanelTitle))
         .toBe(true);
-
-      expect(allDayTitle.props())
-        .toEqual({
-          ...new AllDayPanelTitleProps(),
-          visible: true,
-          isSetTitleClass: true,
-        });
     });
 
     it('should not render all-day title when "isRenderAllDayTitle" is flase', () => {
       const root = render({
         props: {
-          isRenderAllDayTitle: true,
-          isSetAllDayTitleClass: true,
+          isRenderAllDayTitle: false,
         },
       });
 
       expect(root.find(AllDayPanelTitle).exists())
-        .toBe(true);
+        .toBe(false);
     });
   });
 });

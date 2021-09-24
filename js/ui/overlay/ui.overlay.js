@@ -16,6 +16,7 @@ import readyCallbacks from '../../core/utils/ready_callbacks';
 import { isDefined, isFunction, isPlainObject, isObject } from '../../core/utils/type';
 import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
+import errors from '../../core/errors';
 import eventsEngine from '../../events/core/events_engine';
 import {
     move as dragEventMove
@@ -143,6 +144,8 @@ const Overlay = Widget.inherit({
 
             copyRootClassesToWrapper: false,
 
+            _ignoreCopyRootClassesToWrapperDeprecation: false,
+
             onShowing: null,
 
             onShown: null,
@@ -167,10 +170,9 @@ const Overlay = Widget.inherit({
 
             restorePosition: {
                 always: false,
-                onDimensionChangeAfterDrag: false,
-                onDimensionChangeAfterResize: false,
-                onOpening: true,
-                onFullScreenDisable: false
+                onDimensionChangeAfterDragOrResize: false,
+                onFullScreenDisable: false,
+                onOpening: true
             },
 
             // NOTE: private options
@@ -223,6 +225,14 @@ const Overlay = Widget.inherit({
         extend(this._deprecatedOptions, {
             'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' }
         });
+    },
+
+    ctor: function(element, options) {
+        this.callBase(element, options);
+
+        if(options && options.copyRootClassesToWrapper && !options._ignoreCopyRootClassesToWrapperDeprecation) {
+            errors.log('W0001', this.NAME, 'copyRootClassesToWrapper', '21.2', 'Use the "wrapperAttr" option instead');
+        }
     },
 
     _init: function() {
@@ -1298,6 +1308,9 @@ const Overlay = Widget.inherit({
                 break;
             case 'width':
             case 'height':
+                this._renderGeometry();
+                this._resizable?.option(args.name, args.value);
+                break;
             case 'minWidth':
             case 'maxWidth':
             case 'minHeight':

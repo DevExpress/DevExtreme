@@ -40,7 +40,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       contentSize, containerSize,
       showScrollbar, scrollByThumb, bounceEnabled,
       scrollLocation, scrollLocationChange,
-      isScrollableHovered, rtlEnabled,
+      visible, rtlEnabled,
       containerHasSizes,
       minOffset, maxOffset,
     },
@@ -53,7 +53,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       contentSize={contentSize}
       containerSize={containerSize}
       containerHasSizes={containerHasSizes}
-      isScrollableHovered={isScrollableHovered}
+      visible={visible}
       minOffset={minOffset}
       maxOffset={maxOffset}
       scrollLocation={scrollLocation}
@@ -69,7 +69,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
 & Pick<BaseWidgetProps, 'rtlEnabled'>
-& Pick<ScrollableSimulatedProps, 'direction' | 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'
+& Pick<ScrollableSimulatedProps, 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'
 | 'inertiaEnabled' | 'showScrollbar' | 'scrollByThumb' | 'bounceEnabled' | 'scrollLocationChange'>;
 
 @Component({
@@ -140,7 +140,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     crossThumbScrolling: boolean,
     offset: number,
   ): void {
-    this.scrollbarRef.current!.hide();
     this.cancel();
 
     this.refreshing = false;
@@ -148,23 +147,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
     if (!isDxMouseWheelEvent(event.originalEvent)) {
       this.calcThumbScrolling(event, crossThumbScrolling);
+      this.scrollbarRef.current!.initHandler(event, this.thumbScrolling, offset);
     }
-
-    this.scrollbarRef.current!.initHandler(event, this.thumbScrolling, offset);
-
-    // if (this.thumbScrolling) {
-    //   this.needRiseEnd = true;
-    // }
-  }
-
-  @Method()
-  show(): void {
-    this.scrollbarRef.current!.show();
-  }
-
-  @Method()
-  hide(): void {
-    this.scrollbarRef.current!.hide();
   }
 
   @Method()
@@ -231,7 +215,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   risePullDown(): void {
     if (
       this.props.forceGeneratePockets
-      // && !this.props.scrolling
       && this.needRiseEnd
       && this.inRange
       && !(this.pendingBounceAnimator || this.pendingInertiaAnimator)
@@ -260,7 +243,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     ) {
       this.needRiseEnd = false;
       this.wasRelease = false;
-      this.hide();
 
       this.props.onUnlock?.();
 

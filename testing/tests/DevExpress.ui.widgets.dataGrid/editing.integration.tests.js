@@ -1028,7 +1028,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(300);
 
         const $dataGridTables = $dataGrid.find('.dx-datagrid-table');
         // assert

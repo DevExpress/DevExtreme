@@ -88,7 +88,7 @@ const ResizingController = modules.ViewController.inherit({
                     }
                 }
 
-                if(changeType && changeType !== 'updateSelection' && changeType !== 'updateFocusedRow' && !isDelayed) {
+                if(changeType && changeType !== 'updateSelection' && changeType !== 'updateFocusedRow' && changeType !== 'pageIndex' && !isDelayed) {
                     when(resizeDeferred).done(function() {
                         that._setAriaRowColCount();
                         that.fireContentReadyAction();

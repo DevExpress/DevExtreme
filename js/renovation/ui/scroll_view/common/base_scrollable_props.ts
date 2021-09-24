@@ -28,8 +28,6 @@ export class BaseScrollableProps {
 
   @OneWay() classes?: string = '';
 
-  @OneWay() activeStateUnit?: string;
-
   @OneWay() direction: ScrollableDirection = 'vertical';
 
   @OneWay() bounceEnabled = getDefaultBounceEnabled();

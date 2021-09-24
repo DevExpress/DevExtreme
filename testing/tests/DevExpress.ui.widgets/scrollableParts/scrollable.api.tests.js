@@ -26,8 +26,8 @@ import {
 
 import {
     DIRECTION_HORIZONTAL,
-    DIRECTION_VERTICAL
-} from 'renovation/ui/scroll_view/common/consts.js';
+    DIRECTION_VERTICAL,
+    SCROLLABLE_WRAPPER_CLASS } from 'renovation/ui/scroll_view/common/consts.js';
 
 
 const moduleConfig = {
@@ -525,6 +525,71 @@ QUnit.test('switching useNative to false turns off native scrolling', function(a
     assert.equal(getElementOverflowX(containerEl), 'hidden');
     assert.equal(getElementOverflowY(containerEl), 'hidden');
 });
+
+QUnit.test('event handlers should be reattached after changing to simulated strategy ', function(assert) {
+    if(QUnit.urlParams['nojquery']) {
+        assert.ok(true);
+    } else {
+        const $scrollable = $('#scrollable').dxScrollable({
+            useNative: true
+        });
+
+        const scrollable = $scrollable.dxScrollable('instance');
+
+        let wrapperEl = $scrollable.find(`.${SCROLLABLE_WRAPPER_CLASS}`).get(0);
+
+        let eventListeners = Object.values($._data(wrapperEl).events || {});
+
+        assert.equal(eventListeners.length, isRenovation ? 4 : 6, 'event listeners');
+        eventListeners.forEach((event) => {
+            assert.equal(event.length, 1, 'event handler');
+        });
+
+        scrollable.option('useNative', false);
+
+        wrapperEl = $scrollable.find(`.${SCROLLABLE_WRAPPER_CLASS}`).get(0);
+
+        eventListeners = Object.values($._data(wrapperEl).events || {});
+
+        assert.equal(eventListeners.length, 6, 'event listeners');
+        eventListeners.forEach((event) => {
+            assert.equal(event.length, 1, 'event handler');
+        });
+    }
+});
+
+QUnit.test('event handlers should be reattached after changing to native strategy ', function(assert) {
+    if(QUnit.urlParams['nojquery']) {
+        assert.ok(true);
+    } else {
+        const $scrollable = $('#scrollable').dxScrollable({
+            useNative: false
+        });
+
+        const scrollable = $scrollable.dxScrollable('instance');
+
+        let wrapperEl = $scrollable.find(`.${SCROLLABLE_WRAPPER_CLASS}`).get(0);
+
+        let eventListeners = Object.values($._data(wrapperEl).events || {});
+
+        assert.equal(eventListeners.length, 6, 'event listeners');
+        eventListeners.forEach((event) => {
+            assert.equal(event.length, 1, 'event handler');
+        });
+
+        scrollable.option('useNative', true);
+
+        wrapperEl = $scrollable.find(`.${SCROLLABLE_WRAPPER_CLASS}`).get(0);
+
+        eventListeners = Object.values($._data(wrapperEl).events || {});
+
+        assert.equal(eventListeners.length, isRenovation ? 4 : 6, 'event listeners');
+        eventListeners.forEach((event) => {
+            assert.equal(event.length, 1, 'event handler');
+        });
+    }
+});
+
 
 QUnit.test('scrollToElement', function(assert) {
     const $scrollable = $('#scrollable').height(50);

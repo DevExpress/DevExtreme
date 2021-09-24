@@ -130,14 +130,14 @@ class OverlayPositionController {
     }
 
     dragHandled() {
-        const shouldRestorePosition = this._props.restorePosition.onDimensionChangeAfterDrag
+        const shouldRestorePosition = this._props.restorePosition.onDimensionChangeAfterDragOrResize
             || this._props.restorePosition.always;
 
         this.restorePositionOnNextRender(shouldRestorePosition);
     }
 
     resizeHandled() {
-        const shouldRestorePosition = this._props.restorePosition.onDimensionChangeAfterResize
+        const shouldRestorePosition = this._props.restorePosition.onDimensionChangeAfterDragOrResize
             || this._props.restorePosition.always;
 
         this.restorePositionOnNextRender(shouldRestorePosition);

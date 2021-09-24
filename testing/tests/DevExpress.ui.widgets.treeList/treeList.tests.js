@@ -1558,12 +1558,17 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     QUnit.test('TreeList navigateTo', function(assert) {
         // arrange
         const treeList = createTreeList({
+            height: 100,
             loadingTimeout: null,
             dataSource: generateData(10),
             paging: {
                 pageSize: 4
+            },
+            scrolling: {
+                useNative: false
             }
         });
+        this.clock.tick(300);
         const callback = sinon.spy();
 
         // act
@@ -1758,6 +1763,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             // act
             treeList.searchByText('');
             this.clock.tick(200);
+            $(treeList.getScrollable().content()).trigger('scroll');
 
             // assert
             assert.strictEqual(treeList.pageIndex(), 1, 'page is changed');
