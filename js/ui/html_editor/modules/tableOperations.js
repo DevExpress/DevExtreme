@@ -225,7 +225,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
         },
         items: [{
             itemType: 'group',
-            caption: 'Border',
+            caption: localizationMessage.format('dxHtmlEditor-border'),
             colCountByScreen: {
                 xs: 2
             },
@@ -233,7 +233,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             items: [
                 {
                     dataField: 'borderStyle',
-                    label: { text: 'Style' },
+                    label: { text: localizationMessage.format('dxHtmlEditor-style') },
                     editorType: 'dxSelectBox',
                     editorOptions: {
                         items: BORDER_STYLES,
@@ -242,15 +242,15 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
                 },
                 {
                     dataField: 'borderWidth',
-                    label: { text: 'Width' },
+                    label: { text: localizationMessage.format('dxHtmlEditor-borderWidth') },
                     editorOptions: {
-                        placeholder: 'Pixels'
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
                     }
                 },
                 {
                     itemType: 'simple',
                     dataField: 'borderColor',
-                    label: { text: 'Color' },
+                    label: { text: localizationMessage.format('dxHtmlEditor-borderColor') },
                     colSpan: 2,
                     template: (e) => {
                         const $content = $('<div>');
@@ -267,7 +267,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             ]
         }, {
             itemType: 'group',
-            caption: 'Dimensions',
+            caption: localizationMessage.format('dxHtmlEditor-dimensions'),
             colCountByScreen: {
                 xs: 2
             },
@@ -275,27 +275,29 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             items: [
                 {
                     dataField: 'width',
+                    label: { text: localizationMessage.format('dxHtmlEditor-width') },
                     editorOptions: {
                         min: 0,
-                        placeholder: 'Pixels'
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
                     }
                 },
                 {
                     dataField: 'height',
+                    label: { text: localizationMessage.format('dxHtmlEditor-height') },
                     editorOptions: {
                         min: 0,
-                        placeholder: 'Pixels'
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
                     }
                 }
             ]
         }, {
             itemType: 'group',
-            caption: 'Background',
+            caption: localizationMessage.format('dxHtmlEditor-tableBackground'),
             items: [
                 {
                     itemType: 'simple',
                     dataField: 'backgroundColor',
-                    label: { text: 'Color' },
+                    label: { text: localizationMessage.format('dxHtmlEditor-borderColor') },
                     template: (e) => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ColorBox, {
@@ -311,10 +313,10 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
             ]
         }, {
             itemType: 'group',
-            caption: 'Alignment',
+            caption: localizationMessage.format('dxHtmlEditor-alignment'),
             items: [{
                 itemType: 'simple',
-                label: { text: 'Horizontal' },
+                label: { text: localizationMessage.format('dxHtmlEditor-horizontal') },
                 template: () => {
                     const $content = $('<div>');
                     editorInstance._createComponent($content, ButtonGroup, {
@@ -359,7 +361,7 @@ export const showTablePropertiesForm = (editorInstance, $table) => {
 
             return $content;
         },
-        title: 'Table Properties'
+        title: localizationMessage.format('dxHtmlEditor-tableProperties')
     });
 
     formPopup.show();
@@ -398,7 +400,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
         },
         items: [{
             itemType: 'group',
-            caption: 'Border',
+            caption: localizationMessage.format('dxHtmlEditor-border'),
             colCountByScreen: {
                 xs: 2
             },
@@ -406,7 +408,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             items: [
                 {
                     dataField: 'borderStyle',
-                    label: { text: 'Style' },
+                    label: { text: localizationMessage.format('dxHtmlEditor-style') },
                     editorType: 'dxSelectBox',
                     editorOptions: {
                         items: BORDER_STYLES
@@ -414,16 +416,16 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                 },
                 {
                     dataField: 'borderWidth',
-                    label: { text: 'Width' },
+                    label: { text: localizationMessage.format('dxHtmlEditor-borderWidth') },
                     editorOptions: {
-                        placeholder: 'Pixels'
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
                     }
                 },
                 {
                     itemType: 'simple',
                     dataField: 'borderColor',
                     colSpan: 2,
-                    label: { text: 'Color' },
+                    label: { text: localizationMessage.format('dxHtmlEditor-borderColor') },
                     template: (e) => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ColorBox, {
@@ -439,7 +441,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             ]
         }, {
             itemType: 'group',
-            caption: 'Dimensions',
+            caption: localizationMessage.format('dxHtmlEditor-dimensions'),
             colCount: 2,
             colCountByScreen: {
                 xs: 2
@@ -447,41 +449,43 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             items: [
                 {
                     dataField: 'width',
+                    label: { text: localizationMessage.format('dxHtmlEditor-width') },
                     editorOptions: {
                         min: 0,
-                        placeholder: 'Pixels'
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
                     }
                 },
                 {
                     dataField: 'height',
+                    label: { text: localizationMessage.format('dxHtmlEditor-height') },
                     editorOptions: {
                         min: 0,
-                        placeholder: 'Pixels'
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
                     }
                 },
                 {
                     dataField: 'verticalPadding',
-                    label: { text: 'Padding Vertical' },
+                    label: { text: localizationMessage.format('dxHtmlEditor-paddingVertical') },
                     editorOptions: {
-                        placeholder: 'Pixels'
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
                     }
                 },
                 {
-                    label: { text: 'Padding Horizontal' },
+                    label: { text: localizationMessage.format('dxHtmlEditor-paddingHorizontal') },
                     dataField: 'horizontalPadding',
                     editorOptions: {
-                        placeholder: 'Pixels'
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
                     }
                 }
             ]
         }, {
             itemType: 'group',
-            caption: 'Background',
+            caption: localizationMessage.format('dxHtmlEditor-tableBackground'),
             items: [
                 {
                     itemType: 'simple',
                     dataField: 'backgroundColor',
-                    label: { text: 'Color' },
+                    label: { text: localizationMessage.format('dxHtmlEditor-borderColor') },
                     template: (e) => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ColorBox, {
@@ -497,12 +501,12 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
             ]
         }, {
             itemType: 'group',
-            caption: 'Alignment',
+            caption: localizationMessage.format('dxHtmlEditor-alignment'),
             colCount: 2,
             items: [
                 {
                     itemType: 'simple',
-                    label: { text: 'Horizontal' },
+                    label: { text: localizationMessage.format('dxHtmlEditor-horizontal') },
                     template: () => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ButtonGroup, {
@@ -517,7 +521,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
                     }
                 }, {
                     itemType: 'simple',
-                    label: { text: 'Vertical' },
+                    label: { text: localizationMessage.format('dxHtmlEditor-vertical') },
                     template: () => {
                         const $content = $('<div>');
                         editorInstance._createComponent($content, ButtonGroup, {
@@ -568,7 +572,7 @@ export const showCellPropertiesForm = (editorInstance, $cell) => {
 
             return $content;
         },
-        title: 'Cell Properties'
+        title: localizationMessage.format('dxHtmlEditor-cellProperties')
     });
     formPopup.show();
 
