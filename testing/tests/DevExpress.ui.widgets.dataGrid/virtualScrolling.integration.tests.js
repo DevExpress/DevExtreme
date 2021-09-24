@@ -4204,8 +4204,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             height: 400,
             remoteOperations: true,
             scrolling: {
-                mode: 'virtual',
-                useNative: false
+                mode: 'virtual'
             },
             pager: {
                 visible: true,
@@ -4230,18 +4229,19 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.restore();
         const noDataTextHidden = [];
         dataGrid.on('contentReady', function() {
-            const rowData = dataGrid.getTopVisibleRowData();
             const $noDataTextElement = $(dataGrid.element()).find('.dx-datagrid-nodata');
             noDataTextHidden.push($noDataTextElement.hasClass('dx-hidden'));
-
-            if(rowData && rowData.id === 1) {
+        });
+        $(dataGrid.element()).find('.dx-pager .dx-page:eq(0)').trigger('dxclick');
+        setTimeout(() => {
+            const rowData = dataGrid.getTopVisibleRowData();
+            if(dataGrid.pageIndex() === 0 && rowData && rowData.id === 1) {
                 // assert
                 assert.strictEqual(noDataTextHidden.filter(it => it === false).length, 0, 'no data text is hidden');
 
                 done();
             }
-        });
-        $(dataGrid.element()).find('.dx-pager .dx-page:eq(0)').trigger('dxclick');
+        }, 300);
     });
 });
 
