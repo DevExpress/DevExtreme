@@ -2,7 +2,7 @@ import $ from 'jquery';
 import 'ui/html_editor';
 import devices from 'core/devices';
 
-import { showTablePropertiesForm, showCellPropertiesForm } from 'ui/html_editor/modules/tableOperations';
+import { showTablePropertiesForm, showCellPropertiesForm } from 'ui/html_editor/ui/tableOperations';
 
 const tableMarkup = '\
     before table text<br>\
