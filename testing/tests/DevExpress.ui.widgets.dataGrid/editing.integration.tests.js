@@ -2940,6 +2940,37 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), 'unmodified cell is invalid');
         });
     });
+
+    QUnit.test('Editing cell editor\'s content should not be selected twice', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1', field2: 'test2' }],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+                selectTextOnEditStart: true
+            }
+        });
+
+        const onSelectedSpy = sinon.spy();
+
+        // act
+        this.clock.tick(100);
+        const $cell = $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
+        this.clock.tick(100);
+
+        // arrange
+        const $editor = $cell.find('.dx-texteditor-input');
+        $editor.on('select', onSelectedSpy);
+
+        // act
+        $editor.val('asd').trigger('change');
+        this.clock.tick(100);
+
+        // assert
+
+        assert.strictEqual(onSelectedSpy.callCount, 0, 'is not selected after change');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
