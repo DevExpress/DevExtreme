@@ -2085,7 +2085,7 @@ declare module DevExpress.data {
    * [descr:PivotGridDataSource]
    */
   export class PivotGridDataSource {
-    constructor(options?: PivotGridDataSourceOptions);
+    constructor(options?: DevExpress.data.PivotGridDataSource.Options);
     /**
      * [descr:PivotGridDataSource.collapseAll(id)]
      */
@@ -2187,6 +2187,9 @@ declare module DevExpress.data {
      * [descr:PivotGridDataSource.state(state)]
      */
     state(state: any): void;
+  }
+  module PivotGridDataSource {
+    export type Options = PivotGridDataSourceOptions;
   }
   /**
    * @deprecated Use Field instead
@@ -2368,6 +2371,7 @@ declare module DevExpress.data {
     wordWrapEnabled?: boolean;
   }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface PivotGridDataSourceOptions {
@@ -15350,7 +15354,7 @@ declare module DevExpress.ui {
     dataSource?:
       | Array<any>
       | DevExpress.data.PivotGridDataSource
-      | DevExpress.data.PivotGridDataSourceOptions;
+      | DevExpress.data.PivotGridDataSource.Options;
     /**
      * [descr:dxPivotGridOptions.encodeHtml]
      */
