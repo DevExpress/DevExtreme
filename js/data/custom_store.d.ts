@@ -6,7 +6,13 @@ import {
     LoadOptions,
 } from './load_options';
 
-/** @namespace DevExpress.data */
+/** @public */
+export type Options = CustomStoreOptions;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ */
 export interface CustomStoreOptions extends StoreOptions {
     /**
      * @docid
@@ -76,7 +82,7 @@ export interface CustomStoreOptions extends StoreOptions {
  * @public
  */
 export default class CustomStore extends Store {
-    constructor(options?: CustomStoreOptions)
+    constructor(options?: Options)
     /**
      * @docid
      * @publicName clearRawDataCache()

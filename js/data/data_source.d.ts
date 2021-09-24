@@ -7,7 +7,7 @@ import Store, {
 } from './abstract_store';
 
 import {
-    CustomStoreOptions,
+    Options as CustomStoreOptions,
 } from './custom_store';
 
 /** @public */

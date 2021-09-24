@@ -1458,13 +1458,17 @@ declare module DevExpress.data {
    * [descr:CustomStore]
    */
   export class CustomStore extends Store {
-    constructor(options?: CustomStoreOptions);
+    constructor(options?: DevExpress.data.CustomStore.Options);
     /**
      * [descr:CustomStore.clearRawDataCache()]
      */
     clearRawDataCache(): void;
   }
+  module CustomStore {
+    export type Options = CustomStoreOptions;
+  }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface CustomStoreOptions extends DevExpress.data.Store.Options {
@@ -1514,7 +1518,9 @@ declare module DevExpress.data {
   export class DataSource {
     constructor(data: Array<any>);
     constructor(
-      options: CustomStoreOptions | DevExpress.data.DataSource.Options
+      options:
+        | DevExpress.data.CustomStore.Options
+        | DevExpress.data.DataSource.Options
     );
     constructor(store: Store);
     constructor(url: string);
