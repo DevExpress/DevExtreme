@@ -1031,7 +1031,7 @@ const Lookup = DropDownList.inherit({
     _optionChanged: function(args) {
         const { name, fullName, value } = args;
 
-        switch(fullName) {
+        switch(name) {
             case 'dataSource':
                 this.callBase(...arguments);
                 this._renderField();
@@ -1087,21 +1087,27 @@ const Lookup = DropDownList.inherit({
             case 'cleanSearchOnOpening':
             case '_scrollToSelectedItemEnabled':
                 break;
-            case 'dropDownOptions.width':
-                this._popupOptionChanged({
-                    name,
-                    fullName,
-                    value: value === 'auto' ? this.initialOption('dropDownOptions').width : value
-                });
-                this._options.cache('dropDownOptions', this.option('dropDownOptions'));
-                break;
-            case 'dropDownOptions.height':
-                this._popupOptionChanged({
-                    name,
-                    fullName,
-                    value: value === 'auto' ? this.initialOption('dropDownOptions').height : value
-                });
-                this._options.cache('dropDownOptions', this.option('dropDownOptions'));
+            case 'dropDownOptions':
+                switch(fullName) {
+                    case 'dropDownOptions.width':
+                        this._popupOptionChanged({
+                            name,
+                            fullName,
+                            value: value === 'auto' ? this.initialOption('dropDownOptions').width : value
+                        });
+                        this._options.cache('dropDownOptions', this.option('dropDownOptions'));
+                        break;
+                    case 'dropDownOptions.height':
+                        this._popupOptionChanged({
+                            name,
+                            fullName,
+                            value: value === 'auto' ? this.initialOption('dropDownOptions').height : value
+                        });
+                        this._options.cache('dropDownOptions', this.option('dropDownOptions'));
+                        break;
+                    default:
+                        this.callBase(...arguments);
+                }
                 break;
             case 'dropDownCentered':
                 if(this.option('_scrollToSelectedItemEnabled')) {
