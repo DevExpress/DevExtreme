@@ -1429,7 +1429,7 @@ declare module DevExpress.data {
    * [descr:ArrayStore]
    */
   export class ArrayStore extends Store {
-    constructor(options?: ArrayStoreOptions);
+    constructor(options?: DevExpress.data.ArrayStore.Options);
     /**
      * [descr:ArrayStore.clear()]
      */
@@ -1439,7 +1439,11 @@ declare module DevExpress.data {
      */
     createQuery(): any;
   }
+  module ArrayStore {
+    export type Options = ArrayStoreOptions;
+  }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface ArrayStoreOptions<T = ArrayStore>

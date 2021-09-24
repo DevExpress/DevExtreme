@@ -2,7 +2,13 @@ import Store, {
     Options as StoreOptions,
 } from './abstract_store';
 
-/** @namespace DevExpress.data */
+/** @public */
+export type Options = ArrayStoreOptions;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ */
 export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions { // eslint-disable-line @typescript-eslint/no-unused-vars
     /**
      * @docid
@@ -16,7 +22,7 @@ export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions { // esl
  * @public
  */
 export default class ArrayStore extends Store {
-    constructor(options?: ArrayStoreOptions)
+    constructor(options?: Options)
     /**
      * @docid
      * @publicName clear()
