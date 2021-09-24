@@ -4,7 +4,7 @@ import BaseModule from './base';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 import ContextMenu from '../../context_menu';
-import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableOperations';
+import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableForms';
 import localizationMessage from '../../../localization/message';
 import { getTableOperationHandler } from '../utils/table_helper';
 

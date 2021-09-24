@@ -20,7 +20,7 @@ import { titleize, camelize } from '../../../core/utils/inflector';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
-import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableOperations';
+import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableForms';
 import { getTableFormats, getTableOperationHandler, TABLE_OPERATIONS } from '../utils/table_helper';
 
 let ToolbarModule = BaseModule;
