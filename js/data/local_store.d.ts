@@ -3,7 +3,11 @@ import ArrayStore, {
 } from './array_store';
 
 /** @namespace DevExpress.data */
-export interface LocalStoreOptions<TKey = any, TValue = any> extends ArrayStoreOptions<TKey, TValue> {
+export interface LocalStoreOptions
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> extends ArrayStoreOptions<TValue, TKeyExpr, TKey> {
     /**
      * @docid
      * @default 10000
@@ -27,8 +31,12 @@ export interface LocalStoreOptions<TKey = any, TValue = any> extends ArrayStoreO
  * @inherits ArrayStore
  * @public
  */
-export default class LocalStore<TKey = any, TValue = any> extends ArrayStore<TKey, TValue> {
-    constructor(options?: LocalStoreOptions<TKey, TValue>)
+export default class LocalStore
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> extends ArrayStore<TValue, TKeyExpr, TKey> {
+    constructor(options?: LocalStoreOptions<TValue, TKeyExpr, TKey>)
     /**
      * @docid
      * @publicName clear()
