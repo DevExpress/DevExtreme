@@ -500,9 +500,9 @@ module('Table properties forms', {
 
             this.applyFormChanges(formInstance);
 
-            assert.roughEqual($targetCell.outerWidth(), 567, 1, 'cell width is applied');
+            assert.roughEqual($targetCell.outerWidth(), 567, 3, 'cell width is applied');
             assert.strictEqual($targetCell.attr('width'), '700px', 'cell width attr is applied');
-            assert.roughEqual($targetCell.next().outerWidth(), 32, 1, 'next cell width attr is correct');
+            assert.roughEqual($targetCell.next().outerWidth(), 32, 3, 'next cell width attr is correct');
             assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is correct');
             assert.roughEqual($tableElement.outerWidth(), 600, 2, 'table width is not changed');
         });
@@ -522,9 +522,9 @@ module('Table properties forms', {
 
             this.applyFormChanges(formInstance);
 
-            assert.roughEqual($targetCell.outerWidth(), 567, 1, 'cell width is applied');
+            assert.roughEqual($targetCell.outerWidth(), 567, 3, 'cell width is applied');
             assert.strictEqual($targetCell.attr('width'), '700px', 'cell width attr is applied');
-            assert.roughEqual($targetCell.next().outerWidth(), 32, 1, 'next cell width attr is correct');
+            assert.roughEqual($targetCell.next().outerWidth(), 32, 3, 'next cell width attr is correct');
             assert.strictEqual($targetCell.next().attr('width'), '0px', 'next cell width attr is correct');
             assert.roughEqual($tableElement.outerWidth(), 600, 2, 'table width is not changed');
         });
@@ -766,10 +766,10 @@ module('Table properties forms', {
 
             const $horizontalCells = $tableElement.find('tr:eq(0) td');
 
-            assert.roughEqual($tableElement.outerWidth(), 90, 2, 'table width is changed as expected');
-            assert.roughEqual($horizontalCells.eq(0).outerWidth(), 60, 2, 'first column cell width is applied');
+            assert.roughEqual($tableElement.outerWidth(), 90, 3, 'table width is changed as expected');
+            assert.roughEqual($horizontalCells.eq(0).outerWidth(), 60, 3, 'first column cell width is applied');
             assert.roughEqual(parseInt($horizontalCells.eq(0).attr('width')), 30, 2, 'first column cell width attr is applied');
-            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 30, 2, 'second column cell width attr is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 30, 3, 'second column cell width attr is applied');
             assert.roughEqual(parseInt($horizontalCells.eq(1).attr('width')), 30, 2, 'second column cell width attr is applied');
         });
 
