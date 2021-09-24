@@ -767,9 +767,9 @@ module('Table properties forms', {
             const $horizontalCells = $tableElement.find('tr:eq(0) td');
 
             assert.roughEqual($tableElement.outerWidth(), 90, 3, 'table width is changed as expected');
-            assert.roughEqual($horizontalCells.eq(0).outerWidth(), 60, 3, 'first column cell width is applied');
+            assert.roughEqual($horizontalCells.eq(0).outerWidth(), 60, 4.01, 'first column cell width is applied');
             assert.roughEqual(parseInt($horizontalCells.eq(0).attr('width')), 30, 2, 'first column cell width attr is applied');
-            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 30, 3, 'second column cell width attr is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 30, 4.01, 'second column cell width attr is applied');
             assert.roughEqual(parseInt($horizontalCells.eq(1).attr('width')), 30, 2, 'second column cell width attr is applied');
         });
 
