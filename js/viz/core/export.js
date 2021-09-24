@@ -236,20 +236,6 @@ export const exportFromMarkup = function(markup, options) {
     _export(markup, options, getCreatorFunc(options.format));
 };
 
-export const getMarkup = widgets => combineMarkups(widgets).markup;
-
-export const exportWidgets = function(widgets, options) {
-    options = options || {};
-    const markupInfo = combineMarkups(widgets, {
-        gridLayout: options.gridLayout,
-        verticalAlignment: options.verticalAlignment,
-        horizontalAlignment: options.horizontalAlignment
-    });
-    options.width = markupInfo.width;
-    options.height = markupInfo.height;
-    exportFromMarkup(markupInfo.markup, options);
-};
-
 export let combineMarkups = function(widgets, options = { }) {
     if(!Array.isArray(widgets)) {
         widgets = [[widgets]];
@@ -321,6 +307,20 @@ export let combineMarkups = function(widgets, options = { }) {
         width: totalWidth,
         height: totalHeight
     };
+};
+
+export const getMarkup = widgets => combineMarkups(widgets).markup;
+
+export const exportWidgets = function(widgets, options) {
+    options = options || {};
+    const markupInfo = combineMarkups(widgets, {
+        gridLayout: options.gridLayout,
+        verticalAlignment: options.verticalAlignment,
+        horizontalAlignment: options.horizontalAlignment
+    });
+    options.width = markupInfo.width;
+    options.height = markupInfo.height;
+    exportFromMarkup(markupInfo.markup, options);
 };
 
 export let ExportMenu = function(params) {

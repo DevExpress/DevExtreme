@@ -31,11 +31,6 @@ const createDateFromUTCWithLocalOffset = date => {
     return result.source;
 };
 
-const getTimeZones = (date = new Date()) => {
-    const dateInUTC = createUTCDate(date);
-    return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
-};
-
 const createUTCDate = (date) => {
     return new Date(Date.UTC(
         date.getUTCFullYear(),
@@ -46,16 +41,21 @@ const createUTCDate = (date) => {
     ));
 };
 
+const getTimeZones = (date = new Date()) => {
+    const dateInUTC = createUTCDate(date);
+    return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
+};
+
+const getDaylightOffset = (startDate, endDate) => {
+    return new Date(startDate).getTimezoneOffset() - new Date(endDate).getTimezoneOffset();
+};
+
 const getTimezoneOffsetChangeInMinutes = (startDate, endDate, updatedStartDate, updatedEndDate) => {
     return getDaylightOffset(updatedStartDate, updatedEndDate) - getDaylightOffset(startDate, endDate);
 };
 
 const getTimezoneOffsetChangeInMs = (startDate, endDate, updatedStartDate, updatedEndDate) => {
     return getTimezoneOffsetChangeInMinutes(startDate, endDate, updatedStartDate, updatedEndDate) * toMs('minute');
-};
-
-const getDaylightOffset = (startDate, endDate) => {
-    return new Date(startDate).getTimezoneOffset() - new Date(endDate).getTimezoneOffset();
 };
 
 const getDaylightOffsetInMs = (startDate, endDate) => {
@@ -121,15 +121,17 @@ const getClientTimezoneOffset = (date = new Date()) => {
     return date.getTimezoneOffset() * 60000;
 };
 
-const isEqualLocalTimeZone = (timeZoneName, date = new Date()) => {
-    if(Intl) {
-        const localTimeZoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        if(localTimeZoneName === timeZoneName) {
-            return true;
-        }
-    }
+// TODO: Getting two dates in january or june is the standard mechanism for determining that an offset has occurred.
+const getExtremeDates = () => {
+    const nowDate = new Date(Date.now());
 
-    return isEqualLocalTimeZoneByDeclaration(timeZoneName, date);
+    const startDate = new Date();
+    const endDate = new Date();
+
+    startDate.setFullYear(nowDate.getFullYear(), 0, 1);
+    endDate.setFullYear(nowDate.getFullYear(), 6, 1);
+
+    return [startDate, endDate];
 };
 
 // TODO: Not used anywhere, if it isn't use in the future, then it must be removed
@@ -180,18 +182,15 @@ const isEqualLocalTimeZoneByDeclaration = (timeZoneName, date) => {
     return true;
 };
 
+const isEqualLocalTimeZone = (timeZoneName, date = new Date()) => {
+    if(Intl) {
+        const localTimeZoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if(localTimeZoneName === timeZoneName) {
+            return true;
+        }
+    }
 
-// TODO: Getting two dates in january or june is the standard mechanism for determining that an offset has occurred.
-const getExtremeDates = () => {
-    const nowDate = new Date(Date.now());
-
-    const startDate = new Date();
-    const endDate = new Date();
-
-    startDate.setFullYear(nowDate.getFullYear(), 0, 1);
-    endDate.setFullYear(nowDate.getFullYear(), 6, 1);
-
-    return [startDate, endDate];
+    return isEqualLocalTimeZoneByDeclaration(timeZoneName, date);
 };
 
 const utils = {

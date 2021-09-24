@@ -5,21 +5,13 @@ import { toComparable } from './data';
 import { each } from './iterator';
 import { isDefined, isFunction, isString, isObject, type } from './type';
 
-export const ensureDefined = function(value, defaultValue) {
+function ensureDefined(value, defaultValue) {
     return isDefined(value) ? value : defaultValue;
-};
+}
 
-export const executeAsync = function(action, context/* , internal */) {
+function executeAsync(action, context/* , internal */) {
     const deferred = new Deferred();
     const normalizedContext = context || this;
-    const task = {
-        promise: deferred.promise(),
-        abort: function() {
-            clearTimeout(timerId);
-            deferred.rejectWith(normalizedContext);
-        }
-    };
-
     const callback = function() {
         const result = action.call(normalizedContext);
 
@@ -34,15 +26,21 @@ export const executeAsync = function(action, context/* , internal */) {
 
     const timerId = (arguments[2] || setTimeout)(callback, typeof context === 'number' ? context : 0);
 
-    return task;
-};
+    return {
+        promise: deferred.promise(),
+        abort: function() {
+            clearTimeout(timerId);
+            deferred.rejectWith(normalizedContext);
+        }
+    };
+}
 
 const delayedFuncs = [];
 const delayedNames = [];
 const delayedDeferreds = [];
 let executingName;
 
-const deferExecute = function(name, func, deferred) {
+function deferExecute(name, func, deferred) {
     if(executingName && executingName !== name) {
         delayedFuncs.push(func);
         delayedNames.push(name);
@@ -75,35 +73,35 @@ const deferExecute = function(name, func, deferred) {
         }
         return result || when();
     }
-};
+}
 
-export const deferRender = function(func, deferred) {
+function deferRender(func, deferred) {
     return deferExecute('render', func, deferred);
-};
+}
 
-export const deferUpdate = function(func, deferred) {
+function deferUpdate(func, deferred) {
     return deferExecute('update', func, deferred);
-};
+}
 
-export const deferRenderer = function(func) {
+function deferRenderer(func) {
     return function() {
         const that = this;
         return deferExecute('render', function() {
             return func.call(that);
         });
     };
-};
+}
 
-export const deferUpdater = function(func) {
+function deferUpdater(func) {
     return function() {
         const that = this;
         return deferExecute('update', function() {
             return func.call(that);
         });
     };
-};
+}
 
-export const findBestMatches = function(targetFilter, items, mapFn) {
+function findBestMatches(targetFilter, items, mapFn) {
     const bestMatches = [];
     let maxMatchCount = 0;
 
@@ -137,9 +135,9 @@ export const findBestMatches = function(targetFilter, items, mapFn) {
     });
 
     return bestMatches;
-};
+}
 
-const match = function(value, targetValue) {
+function match(value, targetValue) {
     if(Array.isArray(value) && Array.isArray(targetValue)) {
         let mismatch = false;
 
@@ -162,9 +160,9 @@ const match = function(value, targetValue) {
     }
 
     return false;
-};
+}
 
-export const splitPair = function(raw) {
+function splitPair(raw) {
     switch(type(raw)) {
         case 'string':
             return raw.split(/\s+/, 2);
@@ -177,9 +175,9 @@ export const splitPair = function(raw) {
         default:
             return null;
     }
-};
+}
 
-export const normalizeKey = function(id) {
+function normalizeKey(id) {
     let key = isString(id) ? id : id.toString();
     const arr = key.match(/[^a-zA-Z0-9_]/g);
 
@@ -187,9 +185,9 @@ export const normalizeKey = function(id) {
         key = key.replace(sign, '__' + sign.charCodeAt() + '__');
     });
     return key;
-};
+}
 
-export const denormalizeKey = function(key) {
+function denormalizeKey(key) {
     const arr = key.match(/__\d+__/g);
 
     arr && arr.forEach((char) => {
@@ -199,9 +197,9 @@ export const denormalizeKey = function(key) {
     });
 
     return key;
-};
+}
 
-export const pairToObject = function(raw, preventRound) {
+function pairToObject(raw, preventRound) {
     const pair = splitPair(raw);
     let h = preventRound ? parseFloat(pair && pair[0]) : parseInt(pair && pair[0], 10);
     let v = preventRound ? parseFloat(pair && pair[1]) : parseInt(pair && pair[1], 10);
@@ -214,9 +212,9 @@ export const pairToObject = function(raw, preventRound) {
     }
 
     return { h, v };
-};
+}
 
-export const getKeyHash = function(key) {
+function getKeyHash(key) {
     if(key instanceof Guid) {
         return key.toString();
     } else if(isObject(key) || Array.isArray(key)) {
@@ -229,24 +227,24 @@ export const getKeyHash = function(key) {
     }
 
     return key;
-};
+}
 
-export const escapeRegExp = function(string) {
+function escapeRegExp(string) {
     return string.replace(/[[\]{}\-()*+?.\\^$|\s]/g, '\\$&');
-};
+}
 
-export const applyServerDecimalSeparator = function(value) {
+function applyServerDecimalSeparator(value) {
     const separator = config().serverDecimalSeparator;
     if(isDefined(value)) {
         value = value.toString().replace('.', separator);
     }
     return value;
-};
+}
 
-export const noop = function() {};
-export const asyncNoop = function() { return new Deferred().resolve().promise(); };
+function noop() {}
+function asyncNoop() { return new Deferred().resolve().promise(); }
 
-export const grep = function(elements, checkFunction, invert) {
+function grep(elements, checkFunction, invert) {
     const result = [];
     let check;
     const expectedCheck = !invert;
@@ -260,9 +258,9 @@ export const grep = function(elements, checkFunction, invert) {
     }
 
     return result;
-};
+}
 
-const arraysEqualByValue = function(array1, array2, depth) {
+function arraysEqualByValue(array1, array2, depth) {
     if(array1.length !== array2.length) {
         return false;
     }
@@ -274,9 +272,9 @@ const arraysEqualByValue = function(array1, array2, depth) {
     }
 
     return true;
-};
+}
 
-const objectsEqualByValue = function(object1, object2, depth, strict) {
+function objectsEqualByValue(object1, object2, depth, strict) {
     for(const propertyName in object1) {
         if(
             Object.prototype.hasOwnProperty.call(object1, propertyName) &&
@@ -293,11 +291,11 @@ const objectsEqualByValue = function(object1, object2, depth, strict) {
     }
 
     return true;
-};
+}
 
 const maxEqualityDepth = 3;
 
-export const equalByValue = function(object1, object2, depth = 0, strict = true) {
+function equalByValue(object1, object2, depth = 0, strict = true) {
 
     object1 = toComparable(object1, true);
     object2 = toComparable(object2, true);
@@ -316,4 +314,25 @@ export const equalByValue = function(object1, object2, depth = 0, strict = true)
     }
 
     return false;
+}
+
+export {
+    ensureDefined,
+    executeAsync,
+    deferRender,
+    deferUpdate,
+    deferRenderer,
+    deferUpdater,
+    findBestMatches,
+    splitPair,
+    normalizeKey,
+    denormalizeKey,
+    pairToObject,
+    getKeyHash,
+    escapeRegExp,
+    applyServerDecimalSeparator,
+    noop,
+    asyncNoop,
+    grep,
+    equalByValue
 };

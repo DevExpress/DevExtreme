@@ -5,46 +5,46 @@ const types = {
     '[object String]': 'string',
     '[object Null]': 'null' };
 
-const type = function(object) {
+function type(object) {
     const typeOfObject = Object.prototype.toString.call(object);
 
     return typeof object === 'object' ?
         types[typeOfObject] || 'object' : typeof object;
-};
+}
 
-const isBoolean = function(object) {
+function isBoolean(object) {
     return typeof object === 'boolean';
-};
+}
 
-const isExponential = function(value) {
+function isExponential(value) {
     return isNumeric(value) && value.toString().indexOf('e') !== -1;
-};
+}
 
-const isDate = function(object) {
+function isDate(object) {
     return type(object) === 'date';
-};
+}
 
-const isDefined = function(object) {
+function isDefined(object) {
     return (object !== null) && (object !== undefined);
-};
+}
 
-const isFunction = function(object) {
+function isFunction(object) {
     return typeof object === 'function';
-};
+}
 
-const isString = function(object) {
+function isString(object) {
     return typeof object === 'string';
-};
+}
 
-const isNumeric = function(object) {
+function isNumeric(object) {
     return ((typeof object === 'number') && isFinite(object) || !isNaN(object - parseFloat(object)));
-};
+}
 
-const isObject = function(object) {
+function isObject(object) {
     return type(object) === 'object';
-};
+}
 
-const isEmptyObject = function(object) {
+function isEmptyObject(object) {
     let property;
 
     for(property in object) {
@@ -52,9 +52,9 @@ const isEmptyObject = function(object) {
     }
 
     return true;
-};
+}
 
-const isPlainObject = function(object) {
+function isPlainObject(object) {
     if(!object || Object.prototype.toString.call(object) !== '[object Object]') {
         return false;
     }
@@ -63,31 +63,31 @@ const isPlainObject = function(object) {
 
     return typeof ctor === 'function'
         && Object.toString.call(ctor) === Object.toString.call(Object);
-};
+}
 
-const isPrimitive = function(value) {
+function isPrimitive(value) {
     return ['object', 'array', 'function'].indexOf(type(value)) === -1;
-};
+}
 
-const isWindow = function(object) {
+function isWindow(object) {
     return object != null && object === object.window;
-};
+}
 
-const isRenderer = function(object) {
+function isRenderer(object) {
     return !!object && !!(object.jquery || object.dxRenderer);
-};
+}
 
-const isPromise = function(object) {
+function isPromise(object) {
     return !!object && isFunction(object.then);
-};
+}
 
-const isDeferred = function(object) {
+function isDeferred(object) {
     return !!object && isFunction(object.done) && isFunction(object.fail);
-};
+}
 
-const isEvent = function(object) {
+function isEvent(object) {
     return !!(object && object.preventDefault);
-};
+}
 
 export {
     isBoolean,

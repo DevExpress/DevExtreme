@@ -12,28 +12,34 @@ const NEXT_BUTTON_CLASS = 'dx-scheduler-navigator-next';
 const DIRECTION_LEFT = -1;
 const DIRECTION_RIGHT = 1;
 
-export const getDateNavigator = (header, item) => {
-    const items = [
-        getPreviousButtonOptions(header),
-        getCalendarButtonOptions(header),
-        getNextButtonOptions(header),
-    ];
+const isPreviousButtonDisabled = (header) => {
+    let min = header.option('min');
 
-    const stylingMode = isMaterial() ? 'text' : 'contained';
+    if(!min) return false;
 
-    return {
-        widget: 'dxButtonGroup',
-        cssClass: DATE_NAVIGATOR_CLASS,
-        options: {
-            items,
-            stylingMode,
-            selectionMode: 'none',
-            onItemClick: (e) => {
-                e.itemData.clickHandler(e);
-            },
-        },
-        ...item,
-    };
+    min = new Date(min);
+
+    const caption = header._getCaption();
+
+    min = trimTime(min);
+
+    const previousDate = header._getNextDate(-1, caption.endDate);
+    return previousDate < min;
+};
+
+const isNextButtonDisabled = (header) => {
+    let max = header.option('max');
+
+    if(!max) return false;
+
+    max = new Date(max);
+
+    const caption = header._getCaption();
+
+    max = max.setHours(23, 59, 59);
+
+    const nextDate = header._getNextDate(1, caption.startDate);
+    return nextDate > max;
 };
 
 const getPreviousButtonOptions = (header) => {
@@ -93,6 +99,7 @@ const getCalendarButtonOptions = (header) => {
     };
 };
 
+
 const getNextButtonOptions = (header) => {
     return {
         key: 'next',
@@ -119,32 +126,26 @@ const getNextButtonOptions = (header) => {
     };
 };
 
-const isPreviousButtonDisabled = (header) => {
-    let min = header.option('min');
+export const getDateNavigator = (header, item) => {
+    const items = [
+        getPreviousButtonOptions(header),
+        getCalendarButtonOptions(header),
+        getNextButtonOptions(header),
+    ];
 
-    if(!min) return false;
+    const stylingMode = isMaterial() ? 'text' : 'contained';
 
-    min = new Date(min);
-
-    const caption = header._getCaption();
-
-    min = trimTime(min);
-
-    const previousDate = header._getNextDate(-1, caption.endDate);
-    return previousDate < min;
-};
-
-const isNextButtonDisabled = (header) => {
-    let max = header.option('max');
-
-    if(!max) return false;
-
-    max = new Date(max);
-
-    const caption = header._getCaption();
-
-    max = max.setHours(23, 59, 59);
-
-    const nextDate = header._getNextDate(1, caption.startDate);
-    return nextDate > max;
+    return {
+        widget: 'dxButtonGroup',
+        cssClass: DATE_NAVIGATOR_CLASS,
+        options: {
+            items,
+            stylingMode,
+            selectionMode: 'none',
+            onItemClick: (e) => {
+                e.itemData.clickHandler(e);
+            },
+        },
+        ...item,
+    };
 };

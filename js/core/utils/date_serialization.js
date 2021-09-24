@@ -152,7 +152,7 @@ const serializeDate = function(value, serializationFormat) {
     return getLDMLFormatter(serializationFormat, defaultDateNames)(value);
 };
 
-const getDateSerializationFormat = function(value) {
+function getDateSerializationFormat(value) {
     if(typeof value === 'number') {
         return NUMBER_SERIALIZATION_FORMAT;
     } else if(isString(value)) {
@@ -171,7 +171,7 @@ const getDateSerializationFormat = function(value) {
     } else if(value) {
         return null;
     }
-};
+}
 
 export default {
     dateParser: dateParser,

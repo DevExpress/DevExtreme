@@ -358,7 +358,7 @@ const setScaleProperty = function(element, scale, transformProp, styleAttr, isEm
     }
 };
 
-const getOffsetWithoutScale = function($startElement, $currentElement = $startElement) {
+function getOffsetWithoutScale($startElement, $currentElement = $startElement) {
     const currentElement = $currentElement.get(0);
     if(!currentElement) {
         return $startElement.offset();
@@ -378,7 +378,7 @@ const getOffsetWithoutScale = function($startElement, $currentElement = $startEl
     }
 
     return offset;
-};
+}
 
 const position = function(what, options) {
     const $what = $(what);

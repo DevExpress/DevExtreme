@@ -18,14 +18,13 @@ const TIMEVIEW_FORMAT12_AM = -1;
 const TIMEVIEW_FORMAT12_PM = 1;
 const TIMEVIEW_MINUTEARROW_CLASS = 'dx-timeview-minutearrow';
 
-const rotateArrow = function($arrow, angle, offset) {
-    cssRotate($arrow, angle, offset);
-};
-
 const cssRotate = function($arrow, angle, offset) {
     $arrow.css('transform', 'rotate(' + angle + 'deg)' + ' translate(0,' + offset + 'px)');
 };
 
+const rotateArrow = function($arrow, angle, offset) {
+    cssRotate($arrow, angle, offset);
+};
 
 const TimeView = Editor.inherit({
 

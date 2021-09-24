@@ -1,19 +1,6 @@
 import dateUtils from '../../../core/utils/date';
 import dateLocalization from '../../../localization/date';
 
-export const createFormattedDateText = (options) => {
-    const {
-        startDate,
-        endDate,
-        allDay,
-        format
-    } = options;
-
-    const formatType = format || getFormatType(startDate, endDate, allDay);
-
-    return formatDates(startDate, endDate, formatType);
-};
-
 export const getFormatType = (startDate, endDate, isAllDay, isDateAndTimeView) => {
     if(isAllDay) {
         return 'DATE';
@@ -44,4 +31,17 @@ export const formatDates = (startDate, endDate, formatType) => {
         case 'DATE':
             return `${dateLocalization.format(startDate, dateFormat)}${isSameDate ? '' : ' - ' + dateLocalization.format(endDate, dateFormat)}`;
     }
+};
+
+export const createFormattedDateText = (options) => {
+    const {
+        startDate,
+        endDate,
+        allDay,
+        format
+    } = options;
+
+    const formatType = format || getFormatType(startDate, endDate, allDay);
+
+    return formatDates(startDate, endDate, formatType);
 };

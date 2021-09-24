@@ -20,19 +20,6 @@ export const generateKey = (key) => {
         : ++tailIndex;
 };
 
-export const createFactoryInstances = (options) => {
-    const key = generateKey(options.key);
-
-    createModelProvider(key, options.model);
-    const timeZoneCalculator = createTimeZoneCalculator(key, options.timeZone);
-    createAppointmentDataProvider(key, {
-        ...options,
-        timeZoneCalculator,
-    });
-
-    return key;
-};
-
 export const createInstance = (name, key, callback) => {
     if(!isDefined(factoryInstances[name])) {
         factoryInstances[name] = { };
@@ -43,18 +30,6 @@ export const createInstance = (name, key, callback) => {
     factoryInstances[name][key] = result;
 
     return result;
-};
-
-const getInstance = (name, key) => {
-    return factoryInstances[name]
-        ? factoryInstances[name][key]
-        : undefined;
-};
-
-const removeInstance = (name, key) => {
-    if(getInstance(name, key)) {
-        factoryInstances[name] = null;
-    }
 };
 
 const createAppointmentDataProvider = (key, options) => {
@@ -76,6 +51,18 @@ const createTimeZoneCalculator = (key, currentTimeZone) => {
     });
 };
 
+const getInstance = (name, key) => {
+    return factoryInstances[name]
+        ? factoryInstances[name][key]
+        : undefined;
+};
+
+const removeInstance = (name, key) => {
+    if(getInstance(name, key)) {
+        factoryInstances[name] = null;
+    }
+};
+
 export const createModelProvider = (key, model) => {
     return createInstance(
         Names.modelProvider,
@@ -89,6 +76,19 @@ export const createModelProvider = (key, model) => {
     );
 };
 
+
+export const createFactoryInstances = (options) => {
+    const key = generateKey(options.key);
+
+    createModelProvider(key, options.model);
+    const timeZoneCalculator = createTimeZoneCalculator(key, options.timeZone);
+    createAppointmentDataProvider(key, {
+        ...options,
+        timeZoneCalculator,
+    });
+
+    return key;
+};
 
 export const disposeFactoryInstances = (key) => {
     Object.getOwnPropertyNames(Names).forEach((name) => {

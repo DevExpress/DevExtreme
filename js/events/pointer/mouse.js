@@ -13,6 +13,7 @@ const eventMap = {
     'dxpointerleave': 'mouseleave'
 };
 
+let observer;
 const normalizeMouseEvent = function(e) {
     e.pointerId = 1;
 
@@ -23,7 +24,6 @@ const normalizeMouseEvent = function(e) {
 };
 
 
-let observer;
 let activated = false;
 const activateStrategy = function() {
     if(activated) {

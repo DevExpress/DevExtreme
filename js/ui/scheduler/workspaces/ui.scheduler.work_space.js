@@ -2976,7 +2976,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 }
 
-const createDragBehaviorConfig = (
+function createDragBehaviorConfig(
     container,
     isDefaultDraggingMode,
     dragBehavior,
@@ -2985,7 +2985,7 @@ const createDragBehaviorConfig = (
     getDroppableCell,
     removeDroppableCellClass,
     getCellWidth,
-    options) => {
+    options) {
 
     const state = {
         dragElement: undefined,
@@ -3110,6 +3110,6 @@ const createDragBehaviorConfig = (
         cursorOffset,
         filter: options.filter
     };
-};
+}
 
 export default SchedulerWorkSpace;

@@ -226,7 +226,7 @@ export const setInnerWidth = (el, value) => implementationsMap.setInnerWidth(el,
 export const getInnerHeight = (el) => implementationsMap.getInnerHeight(el);
 export const setInnerHeight = (el, value) => implementationsMap.setInnerHeight(el, value);
 
-const elementSize = function(el, sizeProperty, value) {
+function elementSize(el, sizeProperty, value) {
     const partialName = sizeProperty.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';
     const propName = partialName.toLowerCase();
     const isOuter = sizeProperty.indexOf('outer') === 0;
@@ -293,7 +293,7 @@ const elementSize = function(el, sizeProperty, value) {
     domAdapter.setStyle(el, propName, value);
 
     return null;
-};
+}
 
 export const getWindowByElement = (el) => {
     return isWindow(el) ? el : el.defaultView;

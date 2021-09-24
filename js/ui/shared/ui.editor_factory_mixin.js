@@ -149,14 +149,8 @@ const EditorFactoryMixin = (function() {
             options.editorOptions = editorOptions;
 
             let selectBox;
-            const onInitialized = editorOptions.onInitialized;
-            editorOptions.onInitialized = function(e) {
-                onInitialized && onInitialized.apply(this, arguments);
-                selectBox = e.component;
-                selectBox.on('disposing', stopWatch);
-            };
-
             let dataSource;
+
             const stopWatch = options.row.watch(() => {
                 dataSource = options.lookup.dataSource(options.row);
                 return dataSource && dataSource.filter;
@@ -164,6 +158,14 @@ const EditorFactoryMixin = (function() {
                 options.row = row;
                 selectBox.option('dataSource', dataSource);
             });
+
+            const onInitialized = editorOptions.onInitialized;
+            editorOptions.onInitialized = function(e) {
+                onInitialized && onInitialized.apply(this, arguments);
+                selectBox = e.component;
+                selectBox.on('disposing', stopWatch);
+            };
+
         }
     }
 

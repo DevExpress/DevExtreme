@@ -44,10 +44,6 @@ function parseAndClampArray(value, minValue, maxValue, defaultValue) {
     ];
 }
 
-function getEngine(engine) {
-    return (engine instanceof Engine && engine) || projection.get(engine) || projection(engine) || projection.get(DEFAULT_ENGINE_NAME);
-}
-
 export const Projection = function(parameters) {
     const that = this;
     that._initEvents();
@@ -482,6 +478,10 @@ function findMinMax(p1, p2) {
 export const projection = function(parameters) {
     return parameters && parameters.to ? new Engine(parameters) : null;
 };
+
+function getEngine(engine) {
+    return (engine instanceof Engine && engine) || projection.get(engine) || projection(engine) || projection.get(DEFAULT_ENGINE_NAME);
+}
 
 const projectionsCache = {};
 

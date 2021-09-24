@@ -38,7 +38,7 @@ class BaseRuleValidator {
         return messageLocalization.getFormatter(`validation-${this.NAME}-formatted`)(value);
     }
     _isValueEmpty(value) {
-        return !rulesValidators.required.validate(value, {});
+        return !getRulesValidator('required').validate(value, {});
     }
     validate(value, rule) {
         const valueArray = Array.isArray(value) ? value : [value];
@@ -104,7 +104,7 @@ class RangeRuleValidator extends BaseRuleValidator {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
-        const validNumber = rulesValidators['numeric'].validate(value, rule);
+        const validNumber = getRulesValidator('numeric').validate(value, rule);
         const validValue = isDefined(value) && value !== '';
         const number = validNumber ? parseFloat(value) : validValue && value.valueOf();
         const min = rule.min;
@@ -141,7 +141,7 @@ class StringLengthRuleValidator extends BaseRuleValidator {
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
-        return rulesValidators.range.validate(value.length,
+        return getRulesValidator('range').validate(value.length,
             extend({}, rule));
     }
 }
@@ -288,7 +288,7 @@ class EmailRuleValidator extends BaseRuleValidator {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
-        return rulesValidators.pattern.validate(value,
+        return getRulesValidator('pattern').validate(value,
             extend({},
                 rule,
                 {
@@ -316,6 +316,10 @@ const rulesValidators = {
 
     'email': new EmailRuleValidator()
 };
+
+function getRulesValidator(key) {
+    return rulesValidators[key];
+}
 
 const GroupConfig = Class.inherit({
     ctor(group) {
@@ -596,7 +600,7 @@ const ValidationEngine = {
 
         const asyncRuleItems = [];
         each(rules || [], (_, rule) => {
-            const ruleValidator = rulesValidators[rule.type];
+            const ruleValidator = getRulesValidator(rule.type);
             let ruleValidationResult;
             if(ruleValidator) {
                 if(isDefined(rule.isValid) && rule.value === value && !rule.reevaluate) {

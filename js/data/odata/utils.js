@@ -310,7 +310,7 @@ const errorFromResponse = (obj, textStatus, ajaxOptions) => {
     return null;
 };
 
-const interpretJsonFormat = (obj, textStatus, transformOptions, ajaxOptions) => {
+function interpretJsonFormat(obj, textStatus, transformOptions, ajaxOptions) {
     const error = errorFromResponse(obj, textStatus, ajaxOptions);
 
     if(error) {
@@ -328,9 +328,9 @@ const interpretJsonFormat = (obj, textStatus, transformOptions, ajaxOptions) => 
     transformTypes(value, transformOptions);
 
     return value;
-};
+}
 
-const interpretVerboseJsonFormat = ({ d: data }) => {
+function interpretVerboseJsonFormat({ d: data }) {
     if(!isDefined(data)) {
         return { error: Error('Malformed or unsupported JSON response received') };
     }
@@ -340,13 +340,15 @@ const interpretVerboseJsonFormat = ({ d: data }) => {
         nextUrl: data.__next,
         count: parseInt(data.__count, 10)
     };
-};
+}
 
-const interpretLightJsonFormat = obj => ({
-    data: obj.value ?? obj,
-    nextUrl: obj['@odata.nextLink'],
-    count: parseInt(obj['@odata.count'], 10)
-});
+function interpretLightJsonFormat(obj) {
+    return ({
+        data: obj.value ?? obj,
+        nextUrl: obj['@odata.nextLink'],
+        count: parseInt(obj['@odata.count'], 10)
+    });
+}
 
 // Serialization and parsing
 
@@ -365,7 +367,7 @@ export const EdmLiteral = Class.inherit({
     }
 });
 
-const transformTypes = (obj, options = {}) => {
+function transformTypes(obj, options = {}) {
     each(obj, (key, value) => {
         if(value !== null && typeof value === 'object') {
 
@@ -392,7 +394,7 @@ const transformTypes = (obj, options = {}) => {
             }
         }
     });
-};
+}
 
 const serializeDate = date => `datetime'${formatISO8601(date, true, true)}'`;
 
@@ -403,7 +405,7 @@ export const serializePropName = propName =>
         ? propName.valueOf()
         : propName.replace(/\./g, '/');
 
-const serializeValueV4 = (value) => {
+function serializeValueV4(value) {
     if(value instanceof Date) {
         return formatISO8601(value, false, false);
     }
@@ -414,9 +416,9 @@ const serializeValueV4 = (value) => {
         return `[${value.map((item) => serializeValueV4(item)).join(',')}]`;
     }
     return serializeValueV2(value);
-};
+}
 
-const serializeValueV2 = (value) => {
+function serializeValueV2(value) {
     if(value instanceof Date) {
         return serializeDate(value);
     }
@@ -430,7 +432,7 @@ const serializeValueV2 = (value) => {
         return serializeString(value);
     }
     return String(value);
-};
+}
 
 export const serializeValue = (value, protocolVersion) => {
     switch(protocolVersion) {

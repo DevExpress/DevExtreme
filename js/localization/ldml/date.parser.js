@@ -177,6 +177,35 @@ const createPattern = function(char, count) {
     return result;
 };
 
+const digitFieldSymbols = ['d', 'H', 'h', 'm', 's', 'w', 'M', 'L', 'Q'];
+export const isPossibleForParsingFormat = function(patterns) {
+    const isDigitPattern = (pattern) => {
+        if(!pattern) {
+            return false;
+        }
+        const char = pattern[0];
+        return ['y', 'S'].includes(char) || digitFieldSymbols.includes(char) && pattern.length < 3;
+    };
+
+    const isAmbiguousDigitPattern = (pattern) => {
+        return pattern[0] !== 'S' && pattern.length !== 2;
+    };
+
+    let possibleForParsing = true;
+    let ambiguousDigitPatternsCount = 0;
+    return patterns.every((pattern, index, patterns) => {
+        if(isDigitPattern(pattern)) {
+            if(isAmbiguousDigitPattern(pattern)) {
+                possibleForParsing = (++ambiguousDigitPatternsCount) < 2;
+            }
+            if(!isDigitPattern(patterns[index + 1])) {
+                ambiguousDigitPatternsCount = 0;
+            }
+        }
+        return possibleForParsing;
+    });
+};
+
 export const getRegExpInfo = function(format, dateParts) {
     let regexpText = '';
     let stubText = '';
@@ -229,35 +258,6 @@ export const getRegExpInfo = function(format, dateParts) {
         patterns: patterns,
         regexp: new RegExp(`^${regexpText}$`, 'i')
     };
-};
-
-const digitFieldSymbols = ['d', 'H', 'h', 'm', 's', 'w', 'M', 'L', 'Q'];
-export const isPossibleForParsingFormat = function(patterns) {
-    const isDigitPattern = (pattern) => {
-        if(!pattern) {
-            return false;
-        }
-        const char = pattern[0];
-        return ['y', 'S'].includes(char) || digitFieldSymbols.includes(char) && pattern.length < 3;
-    };
-
-    const isAmbiguousDigitPattern = (pattern) => {
-        return pattern[0] !== 'S' && pattern.length !== 2;
-    };
-
-    let possibleForParsing = true;
-    let ambiguousDigitPatternsCount = 0;
-    return patterns.every((pattern, index, patterns) => {
-        if(isDigitPattern(pattern)) {
-            if(isAmbiguousDigitPattern(pattern)) {
-                possibleForParsing = (++ambiguousDigitPatternsCount) < 2;
-            }
-            if(!isDigitPattern(patterns[index + 1])) {
-                ambiguousDigitPatternsCount = 0;
-            }
-        }
-        return possibleForParsing;
-    });
 };
 
 export const getPatternSetters = function() {

@@ -939,7 +939,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
                         width = getWidthStyle(width);
                         minWidth = getWidthStyle(columns[i].minWidth || width);
-                        const $rows = $rows || $tableElement.children().children('.dx-row').not('.' + GROUP_ROW_CLASS).not('.' + DETAIL_ROW_CLASS);
+                        const $rows = $tableElement.children().children('.dx-row').not('.' + GROUP_ROW_CLASS).not('.' + DETAIL_ROW_CLASS);
                         for(let rowIndex = 0; rowIndex < $rows.length; rowIndex++) {
                             const visibleIndex = this.getVisibleColumnIndex(i, rowIndex);
                             const cell = $rows[rowIndex].cells[visibleIndex];

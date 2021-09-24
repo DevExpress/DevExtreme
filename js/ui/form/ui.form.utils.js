@@ -21,6 +21,8 @@ export const getOptionNameFromFullName = fullName => {
     return parts[parts.length - 1].replace(/\[\d+]/, '');
 };
 
+export const isFullPathContainsTabs = fullPath => fullPath.indexOf('tabs') > -1;
+
 export const tryGetTabPath = fullPath => {
     const pathParts = fullPath.split('.');
     const resultPathParts = [...pathParts];
@@ -33,8 +35,6 @@ export const tryGetTabPath = fullPath => {
     }
     return '';
 };
-
-export const isFullPathContainsTabs = fullPath => fullPath.indexOf('tabs') > -1;
 
 export const getItemPath = (items, item, isTabs) => {
     const index = items.indexOf(item);

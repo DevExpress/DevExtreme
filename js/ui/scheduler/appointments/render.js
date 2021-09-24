@@ -2,6 +2,18 @@ import $ from '../../../core/renderer';
 import { utils } from '../utils';
 import dxrAppointmentLayout from '../../../renovation/ui/scheduler/appointment/layout.j';
 
+const getAppointmentsContainer = ($dateTable) => {
+    let container = $('.dx-appointments-container');
+
+    if(container.length === 0) {
+        container = $('<div>')
+            .addClass('dx-appointments-container')
+            .appendTo($dateTable);
+    }
+
+    return container;
+};
+
 // This is temporary - to creating appointments from the old code
 export const renderAppointments = (options) => {
     const {
@@ -17,16 +29,4 @@ export const renderAppointments = (options) => {
         'renovatedAppointments',
         viewModel,
     );
-};
-
-const getAppointmentsContainer = ($dateTable) => {
-    let container = $('.dx-appointments-container');
-
-    if(container.length === 0) {
-        container = $('<div>')
-            .addClass('dx-appointments-container')
-            .appendTo($dateTable);
-    }
-
-    return container;
 };

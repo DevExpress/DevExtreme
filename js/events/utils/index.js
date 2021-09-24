@@ -66,9 +66,6 @@ const EVENT_SOURCES_REGEX = {
 
 let fixMethod = e => e;
 const copyEvent = originalEvent => fixMethod(eventsEngine.Event(originalEvent, originalEvent), originalEvent);
-const isDxEvent = e => eventSource(e) === 'dx';
-const isNativeMouseEvent = e => eventSource(e) === 'mouse';
-const isNativeTouchEvent = e => eventSource(e) === 'touch';
 
 export const eventSource = ({ type }) => {
     let result = 'other';
@@ -83,6 +80,10 @@ export const eventSource = ({ type }) => {
 
     return result;
 };
+
+const isDxEvent = e => eventSource(e) === 'dx';
+const isNativeMouseEvent = e => eventSource(e) === 'mouse';
+const isNativeTouchEvent = e => eventSource(e) === 'touch';
 
 export const isPointerEvent = e => eventSource(e) === 'pointer';
 
