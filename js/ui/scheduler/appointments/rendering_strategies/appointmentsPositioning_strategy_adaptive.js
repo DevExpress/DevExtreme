@@ -1,5 +1,5 @@
 
-import BasePositioningStrategy from './appointmentsPositioning_strategy_base';
+import AppointmentPositioningStrategy from './appointmentsPositioning_strategy_base';
 
 const COLLECTOR_ADAPTIVE_SIZE = 28;
 const COLLECTOR_ADAPTIVE_BOTTOM_OFFSET = 40;
@@ -7,7 +7,7 @@ const COLLECTOR_ADAPTIVE_BOTTOM_OFFSET = 40;
 const ADAPTIVE_APPOINTMENT_DEFAULT_OFFSET = 35;
 const ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH = 30;
 
-class AdaptivePositioningStrategy extends BasePositioningStrategy {
+class AdaptivePositioningStrategy extends AppointmentPositioningStrategy {
     getDropDownAppointmentWidth(intervalCount, isAllDay) {
         return this.getDropDownButtonAdaptiveSize();
     }

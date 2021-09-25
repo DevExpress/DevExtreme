@@ -1,4 +1,4 @@
-import BasePositioningStrategy from './appointmentsPositioning_strategy_base';
+import AppointmentPositioningStrategy from './appointmentsPositioning_strategy_base';
 import AdaptivePositioningStrategy from './appointmentsPositioning_strategy_adaptive';
 import { extend } from '../../../../core/utils/extend';
 import dateUtils from '../../../../core/utils/date';
@@ -52,6 +52,7 @@ class BaseRenderingStrategy {
     get appointmentOffset() { return this.options.appointmentOffset; }
     get allowResizing() { return this.options.allowResizing; }
     get allowAllDayResizing() { return this.options.allowAllDayResizing; }
+    get viewDataProvider() { return this.options.viewDataProvider; }
     get appointmentDataProvider() { return this.options.appointmentDataProvider; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
@@ -64,7 +65,7 @@ class BaseRenderingStrategy {
     _initPositioningStrategy() {
         this._positioningStrategy = this.isAdaptive
             ? new AdaptivePositioningStrategy(this)
-            : new BasePositioningStrategy(this);
+            : new AppointmentPositioningStrategy(this);
     }
 
     getPositioningStrategy() {
@@ -236,7 +237,7 @@ class BaseRenderingStrategy {
     }
 
     isAppointmentTakesAllDay(rawAppointment) {
-        return this.options.appointmentDataProvider.appointmentTakesAllDay(
+        return this.appointmentDataProvider.appointmentTakesAllDay(
             rawAppointment,
             this.viewStartDayHour,
             this.viewEndDayHour
