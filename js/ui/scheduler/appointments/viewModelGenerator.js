@@ -18,10 +18,9 @@ export class AppointmentViewModel {
         this.renderingStrategy = new RenderingStrategy(options);
     }
 
-    generate(options) {
+    generate(filteredItems, options) {
         const {
             isRenovatedAppointments,
-            filteredItems,
             appointmentRenderingStrategyName
         } = options;
         const appointments = filteredItems
@@ -30,7 +29,8 @@ export class AppointmentViewModel {
 
         this.initRenderingStrategy(options);
 
-        const positionMap = this.getRenderingStrategy().createTaskPositionMap(appointments); // TODO - appointments are mutated inside!
+        const renderingStrategy = this.getRenderingStrategy();
+        const positionMap = renderingStrategy.createTaskPositionMap(appointments); // TODO - appointments are mutated inside!
         let viewModel = this.postProcess(appointments, positionMap, appointmentRenderingStrategyName, isRenovatedAppointments);
 
         if(isRenovatedAppointments) {
