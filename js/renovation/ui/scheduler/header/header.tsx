@@ -115,7 +115,7 @@ export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps
       intervalCount: this.props.intervalCount,
       firstDayOfWeek: this.props.firstDayOfWeek,
       agendaDuration: this.props.agendaDuration,
-      date: this.displayedDate,
+      date: trimTime(this.displayedDate),
     };
 
     return getCaption(
