@@ -92,7 +92,7 @@ export type SchedulerToolbarProps = SchedulerToolbarBaseProps
 & Pick<SchedulerProps, 'currentView' | 'min' | 'max' | 'useDropDownViewSwitcher'>;
 
 @Component({ view: viewFunction })
-export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'currentDate' | 'onCurrentDateUpdate' | 'startViewDate'>() {
+export class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'currentDate' | 'onCurrentDateUpdate' | 'startViewDate'>() {
   @InternalState() calendarVisible = false;
 
   get step(): string {
