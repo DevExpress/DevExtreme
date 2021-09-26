@@ -31,7 +31,6 @@ describe('Scheduler', () => {
       shadeUntilCurrentTime: false,
       crossScrollingEnabled: false,
       hoursInterval: 0.5,
-      groups: [],
 
       indicatorTime: undefined,
       allowMultipleCellSelection: true,
