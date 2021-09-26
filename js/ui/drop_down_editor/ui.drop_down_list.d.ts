@@ -45,8 +45,6 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @docid
      * @default "group"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -178,8 +176,6 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
 /**
  * @docid
  * @inherits DataExpressionMixin, dxDropDownEditor
- * @module ui/drop_down_editor/ui.drop_down_list
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */

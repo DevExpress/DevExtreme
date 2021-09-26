@@ -72,8 +72,6 @@ export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponen
 /**
  * @docid
  * @inherits DOMComponent
- * @module ui/widget/ui.widget
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */
@@ -87,7 +85,6 @@ export default class Widget<TProperties> extends DOMComponent<TProperties> {
     /**
      * @docid
      * @publicName registerKeyHandler(key, handler)
-     * @param1 key:string
      * @param2 handler:function
      * @public
      */

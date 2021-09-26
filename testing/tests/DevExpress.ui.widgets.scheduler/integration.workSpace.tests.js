@@ -4,7 +4,6 @@ import { createWrapper, CLASSES, initTestMarkup, isDesktopEnvironment } from '..
 import keyboardMock from '../../helpers/keyboardMock.js';
 import localization from 'localization';
 import eventsEngine from 'events/core/events_engine';
-import renderer from 'core/renderer';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'events/drag';
@@ -12,6 +11,7 @@ import CustomStore from 'data/custom_store';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import translator from 'animation/translator';
+import { implementationsMap, getOuterHeight, getInnerHeight, getOuterWidth } from 'core/utils/size';
 
 const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
 const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
@@ -766,9 +766,9 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.expect(1);
 
         let counter = 0;
-        const originalWidthFn = renderer.fn.width;
+        const originalWidthFn = implementationsMap.setWidth;
 
-        sinon.stub(renderer.fn, 'width', function(value) {
+        sinon.stub(implementationsMap, 'setWidth', function(source, value) {
             if(value === 999 && !counter) {
                 const $headerTable = $('#scheduler').find('table').first();
                 assert.notOk($headerTable.attr('class'), 'Header table doesn\'t have any css classes yet');
@@ -787,7 +787,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
                 width: 999
             });
         } finally {
-            renderer.fn.width.restore();
+            implementationsMap.setWidth.restore();
         }
     });
 
@@ -932,8 +932,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             endDayHour: 12,
             height: 600
         });
-        const $headerContent = scheduler.workSpace.groups.getGroupHeader(0).outerHeight();
-        const cellHeight = scheduler.workSpace.getCell(1).outerHeight();
+        const $headerContent = getOuterHeight(scheduler.workSpace.groups.getGroupHeader(0));
+        const cellHeight = getOuterHeight(scheduler.workSpace.getCell(1));
 
         assert.roughEqual($headerContent, 7 * cellHeight, 1, 'Group header content has right height');
     });
@@ -1179,8 +1179,8 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         const fifthHeaderCell = headerCells.eq(4);
         const dateTableCell = scheduler.workSpace.getCells().eq(0);
 
-        assert.equal(firstHeaderCell.innerHeight(), fifthHeaderCell.innerHeight(), 'Header cells have same height');
-        assert.equal(fifthHeaderCell.innerHeight(), dateTableCell.innerHeight(), 'Header cell and table cell have same height');
+        assert.equal(getInnerHeight(firstHeaderCell), getInnerHeight(fifthHeaderCell), 'Header cells have same height');
+        assert.equal(getInnerHeight(fifthHeaderCell), getInnerHeight(dateTableCell), 'Header cell and table cell have same height');
     });
 
     isDesktopEnvironment() && test('SelectedCellData option should be correct when virtual scrolling is enabled', function(assert) {
@@ -1243,7 +1243,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             height: 300,
             scrolling: { mode: 'virtual', orientation: 'both' },
         });
-        scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+        scheduler.instance.getWorkSpace().renderer.getRenderTimeout = () => -1;
 
         const $cells = scheduler.workSpace.getCells();
         const $table = scheduler.workSpace.getDateTable();
@@ -1284,11 +1284,13 @@ module('Integration: Work space', { ...moduleConfig }, () => {
             currentDate: new Date(2020, 8, 21),
             height: 300,
             scrolling: { mode: 'virtual', orientation: 'both' },
-            onOptionChanged: () => {
-                onOptionChangedCalls += 1;
+            onOptionChanged: ({ name }) => {
+                if(name !== 'loadedResources') {
+                    onOptionChangedCalls += 1;
+                }
             },
         });
-        scheduler.instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+        scheduler.instance.getWorkSpace().renderer.getRenderTimeout = () => -1;
 
         const $cells = scheduler.workSpace.getCells();
         const $table = scheduler.workSpace.getDateTable();
@@ -1330,7 +1332,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         });
 
         const { instance } = scheduler;
-        instance.getWorkSpace().virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
+        instance.getWorkSpace().renderer.getRenderTimeout = () => -1;
         const showAppointmentPopupSpy = sinon.spy();
         instance.showAppointmentPopup = showAppointmentPopupSpy;
 
@@ -1724,8 +1726,8 @@ module('Resource Cell Template', () => {
                         if(!cellIndex) {
                             assert.equal(isRenderer(cellElement), !!config().useJQuery, 'element is correct');
                             const $cell = $(cellElement).parent();
-                            assert.roughEqual($cell.outerWidth(), 299, 2.001, 'Resource cell width is OK');
-                            assert.equal($cell.outerHeight(), 30, 'Resource cell height is OK');
+                            assert.roughEqual(getOuterWidth($cell), 299, 2.001, 'Resource cell width is OK');
+                            assert.equal(getOuterHeight($cell), 30, 'Resource cell height is OK');
                         }
                     }
                 });
@@ -1750,8 +1752,8 @@ module('Resource Cell Template', () => {
                     resourceCellTemplate: function(cellData, cellIndex, cellElement) {
                         if(!cellIndex) {
                             const $cell = $(cellElement);
-                            assert.equal($cell.outerWidth(), 99, 'Resource cell width is OK');
-                            assert.roughEqual($cell.outerHeight(), 276, 1.001, 'Resource cell height is OK');
+                            assert.equal(getOuterWidth($cell), 99, 'Resource cell width is OK');
+                            assert.roughEqual(getOuterHeight($cell), 276, 1.001, 'Resource cell height is OK');
                         }
                     }
                 });
@@ -1896,75 +1898,6 @@ module('Resource Cell Template', () => {
                 assert.deepEqual(params, { id: 1, text: 'John', color: '#A2a' }, 'Cell text is OK');
             });
 
-            test('workSpace recalculation after render cellTemplates', function(assert) {
-                const scheduler = this.createInstance({
-                    currentView: 'month',
-                    currentDate: new Date(2016, 8, 5),
-                    groups: ['ownerId'],
-                    resources: [
-                        {
-                            fieldExpr: 'ownerId',
-                            dataSource: [
-                                { id: 1, text: 'John' },
-                                { id: 2, text: 'Mike' }
-                            ]
-                        }
-                    ],
-                    resourceCellTemplate: function() {
-                        return $('<div>').css({ height: '150px' });
-                    }
-                });
-
-                const schedulerHeaderPanelHeight = parseInt(scheduler.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
-                const $dateTableScrollable = scheduler.instance.$element().find('.dx-scheduler-date-table-scrollable');
-
-                assert.equal(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight, 'dateTableScrollable element padding bottom');
-                assert.equal(parseInt($dateTableScrollable.css('marginBottom'), 10), -schedulerHeaderPanelHeight, 'dateTableScrollable element margin bottom');
-            });
-
-            test('WorkSpace recalculation works fine after render resourceCellTemplate if workspace has allDay appointment', function(assert) {
-                const scheduler = this.createInstance({
-                    currentView: 'week',
-                    currentDate: new Date(2016, 8, 5),
-                    groups: ['ownerId'],
-                    resources: [
-                        {
-                            fieldExpr: 'ownerId',
-                            dataSource: [
-                                { id: 1, text: 'John' },
-                                { id: 2, text: 'Mike' }
-                            ]
-                        }
-                    ],
-                    dataSource: [{
-                        text: 'a',
-                        ownerId: 1,
-                        startDate: new Date(2016, 8, 5, 7),
-                        endDate: new Date(2016, 8, 5, 8),
-                        allDay: true
-                    }],
-                    crossScrollingEnabled: true,
-                    resourceCellTemplate: function(itemData, index, $container) {
-                        return $('<div>').css({ height: '150px' });
-                    }
-                });
-
-                const schedulerHeaderHeight = parseInt(scheduler.instance.$element().find('.dx-scheduler-header').outerHeight(true), 10);
-                const schedulerHeaderPanelHeight = parseInt(scheduler.instance.$element().find('.dx-scheduler-header-panel').outerHeight(true), 10);
-                const $allDayTitle = scheduler.instance.$element().find('.dx-scheduler-all-day-title');
-                const $dateTableScrollable = scheduler.instance.$element().find('.dx-scheduler-date-table-scrollable');
-                const allDayPanelHeight = scheduler.instance._workSpace._$allDayTable.outerHeight();
-                const $sidebarScrollable = scheduler.instance.$element().find('.dx-scheduler-sidebar-scrollable');
-                const $headerScrollable = scheduler.instance.$element().find('.dx-scheduler-header-scrollable');
-
-                assert.equal(parseInt($allDayTitle.css('top'), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, 'All day title element top value');
-                assert.roughEqual(parseInt($dateTableScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'dateTableScrollable element padding bottom');
-                assert.roughEqual(parseInt($dateTableScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'dateTableScrollable element margin bottom');
-
-                assert.roughEqual(parseInt($sidebarScrollable.css('paddingBottom'), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'sidebarScrollable element padding bottom');
-                assert.roughEqual(parseInt($sidebarScrollable.css('marginBottom'), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, 'sidebarScrollable element margin bottom');
-                assert.roughEqual($headerScrollable.outerHeight(), schedulerHeaderPanelHeight + allDayPanelHeight, 1, 'headerScrollable height is correct');
-            });
 
             test('Scheduler should have specific resourceCellTemplate setting of the view', function(assert) {
                 let countCallTemplate1 = 0;
@@ -2017,9 +1950,9 @@ module('Markup', () => {
         const firstRow = scheduler.workSpace.getRows(0);
         const cells = scheduler.workSpace.getCells().slice(0, 7);
 
-        const rowWidth = firstRow.outerWidth();
+        const rowWidth = getOuterWidth(firstRow);
         const rowWidthByCells = [...(new Array(7))].reduce((currentWidth, _, index) => {
-            return currentWidth + cells.eq(index).outerWidth();
+            return currentWidth + getOuterWidth(cells.eq(index));
         }, 0);
 
         assert.roughEqual(rowWidth, rowWidthByCells, 1.1, 'Correct row width');

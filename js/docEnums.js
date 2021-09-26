@@ -1194,6 +1194,16 @@
  */
 
 /**
+ * @typedef {string} Enums.GanttPdfExportMode
+ * @enum { 'all'|'treeList'|'chart' }
+ */
+
+/**
+ * @typedef {string} Enums.GanttPdfExportDateRange
+ * @enum { 'all'|'visible' }
+ */
+
+/**
  * @typedef {string} Enums.LegendMarkerState
  * @enum {'normal'|'hovered'|'selected'}
  */
@@ -1221,6 +1231,11 @@
 /**
  * @typedef {string} Enums.GridDataChangeType
  * @enum {'insert' | 'update' | 'remove'}
+ */
+
+/**
+ * @typedef {string} Enums.GridNewRowPosition
+ * @enum {'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop'}
  */
 
 /**

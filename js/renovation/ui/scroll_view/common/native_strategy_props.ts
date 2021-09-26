@@ -7,6 +7,10 @@ import browser from '../../../../core/utils/browser';
 import {
   BaseScrollableProps,
 } from './base_scrollable_props';
+import { getDefaultNativeRefreshStrategy } from '../utils/get_default_option_value';
+import {
+  RefreshStrategy,
+} from './types.d';
 
 @ComponentBindings()
 export class ScrollableNativeProps extends BaseScrollableProps {
@@ -15,4 +19,6 @@ export class ScrollableNativeProps extends BaseScrollableProps {
   && !browser.mozilla;
 
   @OneWay() showScrollbar = 'onScroll';
+
+  @OneWay() refreshStrategy: RefreshStrategy = getDefaultNativeRefreshStrategy();
 }

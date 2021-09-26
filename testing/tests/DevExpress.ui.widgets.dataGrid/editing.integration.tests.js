@@ -50,6 +50,7 @@ import 'ui/drop_down_box';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { generateItems } from '../../helpers/dataGridMocks.js';
+import { getOuterHeight } from 'core/utils/size';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -813,7 +814,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 scrolling: {
                     mode: 'infinite',
                     useNative: false,
-                    rowPageSize: 20
+                    rowPageSize: 20,
+                    prerenderedRowChunkSize: 20
                 },
                 columns: ['id', {
                     dataField: 'group',
@@ -888,7 +890,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.getScrollable().scrollTo({ y: 10000 });
         this.clock.tick();
 
-        for(let i = 0; i < 10; i++) {
+        for(let i = 0; i < 25; i++) {
             dataGrid.getScrollable().scrollTo({ y: 10000 });
         }
 
@@ -932,7 +934,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.getScrollable().scrollTo({ y: 0 });
             dataGrid.addRow();
             dataGrid.saveEditData();
-            for(let i = 0; i < 12; i++) {
+            for(let i = 0; i < 20; i++) {
                 dataGrid.getScrollable().scrollTo({ y: 10000 });
             }
 
@@ -975,7 +977,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.getScrollable().scrollTo({ y: 0 });
             dataGrid.getDataSource().store().push([{ type: 'insert', data: { id: 987654321 }, index: 0 }]);
             this.clock.tick();
-            for(let i = 0; i < 12; i++) {
+            for(let i = 0; i < 20; i++) {
                 dataGrid.getScrollable().scrollTo({ y: 10000 });
             }
 
@@ -1027,7 +1029,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(300);
 
         const $dataGridTables = $dataGrid.find('.dx-datagrid-table');
         // assert
@@ -1098,7 +1100,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             scrolling: {
                 rowRenderingMode: 'virtual',
                 mode: 'virtual',
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
 
@@ -1120,7 +1122,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const startValue = parseInt($rows.eq(0).text());
 
-        assert.equal(startValue, 25, 'visible row #1 is correct');
+        assert.equal(startValue, 29, 'visible row #1 is correct');
 
         for(let i = 1; i < $rows.length; i++) {
             if(i !== 5) {
@@ -1172,7 +1174,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok($editorCell.length, 'row has editor');
-        assert.equal($editorCell.find('input').val(), '86', 'input value');
+        assert.equal($editorCell.find('input').val(), '89', 'input value');
         assert.notOk(visibleRows[-1], 'no visible row with index -1');
     });
 
@@ -1269,7 +1271,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, 'height main table');
+        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 35, 3, 'height main table');
 
         // act
         dataGrid.editCell(0, 0);
@@ -1277,14 +1279,14 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 3.01, 'height main table');
+        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 68, 3.01, 'height main table');
 
         dataGrid.closeEditCell();
         this.clock.tick();
 
         // assert
         $tableElements = dataGrid.$element().find('.dx-datagrid-rowsview').find('table');
-        assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, 'height main table');
+        assert.roughEqual(getOuterHeight($tableElements.eq(0)), 35, 3, 'height main table');
     });
 
     QUnit.test('Error row is not hidden when rowKey is undefined by mode is cell', function(assert) {
@@ -2938,6 +2940,37 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), 'unmodified cell is invalid');
         });
     });
+
+    QUnit.test('Editing cell editor\'s content should not be selected twice', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1', field2: 'test2' }],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+                selectTextOnEditStart: true
+            }
+        });
+
+        const onSelectedSpy = sinon.spy();
+
+        // act
+        this.clock.tick(100);
+        const $cell = $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
+        this.clock.tick(100);
+
+        // arrange
+        const $editor = $cell.find('.dx-texteditor-input');
+        $editor.on('select', onSelectedSpy);
+
+        // act
+        $editor.val('asd').trigger('change');
+        this.clock.tick(100);
+
+        // assert
+
+        assert.strictEqual(onSelectedSpy.callCount, 0, 'is not selected after change');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
@@ -3451,7 +3484,7 @@ QUnit.module('Validation with virtual scrolling and rendering', {
             dataSource: [{ firstName: 'Andrey', lastName: 'Prohorov' }],
             editing: {
                 mode: 'cell',
-                allowUpdating: true
+                allowUpdating: true,
             },
             onContentReady: function(e) {
                 // act
@@ -3537,7 +3570,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
             }
         }).dxDataGrid('instance');
 
@@ -3549,8 +3582,8 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
         // assert
         const visibleRows = dataGrid.getVisibleRows();
-        assert.equal(visibleRows.length, 10, 'visible row count');
-        assert.equal(visibleRows[0].key, 6, 'first visible row key');
+        assert.equal(visibleRows.length, 2, 'visible row count');
+        assert.equal(visibleRows[0].key, 11, 'first visible row key');
         assert.equal($(dataGrid.getRowElement(1, 0)).find('.dx-texteditor').length, 1, 'row has editor');
     });
 
@@ -3804,7 +3837,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
-                useNative: false
+                useNative: false,
             },
             columns: ['id', 'text']
         });
@@ -3814,9 +3847,9 @@ QUnit.module('API methods', baseModuleConfig, () => {
         dataGrid.addRow();
 
         // assert
-        assert.strictEqual(dataGrid.getVisibleRows()[0].key, 6, 'first visible row key');
-        assert.ok(dataGrid.getVisibleRows()[5].isNewRow, 'inserted row exists');
-        assert.deepEqual(dataGrid.getVisibleRows()[5].values, [undefined, undefined], 'inserted row values');
+        assert.ok(dataGrid.getVisibleRows()[0].isNewRow, 'inserted row exists');
+        assert.deepEqual(dataGrid.getVisibleRows()[0].values, [undefined, undefined], 'inserted row values');
+        assert.strictEqual(dataGrid.getVisibleRows()[1].key, 11, 'first visible row key');
     });
 
     // T652111
@@ -4184,7 +4217,9 @@ QUnit.module('API methods', baseModuleConfig, () => {
             },
             scrolling: {
                 mode: 'infinite',
-                useNative: false
+                useNative: false,
+                preloadCount: 0,
+                prerenderedRowChunkSize: 5
             },
             editing: {
                 allowUpdating: true,
@@ -5687,7 +5722,8 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         },
                         scrolling: {
                             mode: 'virtual',
-                            useNative: false
+                            useNative: false,
+                            prerenderedRowChunkSize: 5
                         }
                     }).dxDataGrid('instance');
 

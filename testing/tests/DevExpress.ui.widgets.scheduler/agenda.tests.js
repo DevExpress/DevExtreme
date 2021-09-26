@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import SchedulerAgenda from 'ui/scheduler/workspaces/ui.scheduler.agenda';
 import dateLocalization from 'localization/date';
-import { createFactoryInstances, getAppointmentDataProvider, getResourceManager } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
 const HOVER_CLASS = 'dx-state-hover';
@@ -36,8 +36,6 @@ module('Agenda', {}, () => {
             resources,
         });
 
-        const resourceManager = getResourceManager(key);
-
         const config = {
             onContentReady: e => {
                 e.component.onDataSourceChanged(rows);
@@ -55,7 +53,6 @@ module('Agenda', {}, () => {
                     }
                 }
             },
-            resourceManager,
         };
 
         const $element = $('#scheduler-agenda').dxSchedulerAgenda({ ...options, ...config });

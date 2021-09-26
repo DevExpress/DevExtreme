@@ -1,3 +1,4 @@
+import { getOuterHeight } from '../core/utils/size';
 import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
 import Promise from '../core/polyfills/promise';
@@ -237,11 +238,6 @@ export function current(options) {
     }
 
     if(currentThemeData) {
-        // NOTE:
-        // 1. <link> element re-creation leads to incorrect CSS rules priority in Internet Explorer (T246821).
-        // 2. We have no reliable info, why this hack has been applied and whether it is still relevant.
-        // 3. This hack leads Internet Explorer crashing after icon font has been implemented.
-        //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
         $activeThemeLink.attr('href', knownThemes[currentThemeName].url);
         if((themeReadyCallback.has() || initDeferred.state() !== 'resolved' || options._forceTimeout)) {
             waitForThemeLoad(currentThemeName);
@@ -297,7 +293,7 @@ export function attachCssClasses(element, themeName) {
         const $tester = $('<div>');
         $tester.css('border', '.5px solid transparent');
         $('body').append($tester);
-        if($tester.outerHeight() === 1) {
+        if(getOuterHeight($tester) === 1) {
             $(element).addClass(DX_HAIRLINES_CLASS);
             themeClasses += ' ' + DX_HAIRLINES_CLASS;
         }

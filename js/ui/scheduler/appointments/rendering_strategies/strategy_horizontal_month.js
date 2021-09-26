@@ -8,7 +8,6 @@ const MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36;
 const MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
 
 class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrategy {
-    get dateTableOffset() { return this.options.dateTableOffset; }
     get endViewDate() { return this.options.endViewDate; }
     get adaptivityEnabled() { return this.options.adaptivityEnabled; }
     get DOMMetaData() { return this.options.DOMMetaData; }
@@ -16,14 +15,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     _getLeftPosition(settings) {
         const fullWeekAppointmentWidth = this.getWorkspaceGroupWidth(settings.groupIndex);
 
-        let result = this._calculateMultiWeekAppointmentLeftOffset(settings.hMax, fullWeekAppointmentWidth);
-
-        // TODO get rid of this after rework date table layout
-        if(this.isVerticalOrientation) {
-            result += this.dateTableOffset;
-        }
-
-        return result;
+        return this._calculateMultiWeekAppointmentLeftOffset(settings.hMax, fullWeekAppointmentWidth);
     }
 
     _getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth) {

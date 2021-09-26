@@ -1,3 +1,4 @@
+import { getHeight, getOuterHeight, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
@@ -780,8 +781,8 @@ export const rowsModule = {
                                 freeSpaceRowElements.hide();
                                 deferUpdate(() => {
                                     const scrollbarWidth = this.getScrollbarWidth(true);
-                                    const elementHeightWithoutScrollbar = this.element().height() - scrollbarWidth;
-                                    const contentHeight = contentElement.outerHeight();
+                                    const elementHeightWithoutScrollbar = getHeight(this.element()) - scrollbarWidth;
+                                    const contentHeight = getOuterHeight(contentElement);
                                     const showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0;
                                     const rowsHeight = this._getRowsHeight(contentElement.children().first());
                                     const $tableElement = $table || this.getTableElements();
@@ -874,7 +875,7 @@ export const rowsModule = {
                 },
 
                 contentWidth: function() {
-                    return this.element().width() - this.getScrollbarWidth();
+                    return getWidth(this.element()) - this.getScrollbarWidth();
                 },
 
                 getScrollbarWidth: function(isHorizontal) {
@@ -974,7 +975,7 @@ export const rowsModule = {
                     const $element = this.element();
 
                     if(arguments.length === 0) {
-                        return $element ? $element.outerHeight(true) : 0;
+                        return $element ? getOuterHeight($element, true) : 0;
                     }
 
                     that._hasHeight = hasHeight === undefined ? height !== 'auto' : hasHeight;
@@ -1006,6 +1007,9 @@ export const rowsModule = {
                             animation: animation,
                             visible: isLoading
                         };
+                        if(isLoading) {
+                            visibilityOptions.position = gridCoreUtils.calculateLoadPanelPosition($element);
+                        }
                         clearTimeout(that._hideLoadingTimeoutID);
                         if(loadPanel.option('visible') && !isLoading) {
                             that._hideLoadingTimeoutID = setTimeout(function() {
@@ -1034,28 +1038,37 @@ export const rowsModule = {
                     return $cells;
                 },
 
-                getTopVisibleItemIndex: function(isFloor) {
+                _getBoundaryVisibleItemIndex: function(isTop, isFloor) {
                     const that = this;
                     let itemIndex = 0;
-                    let prevOffsetTop = 0;
-                    let offsetTop = 0;
-                    const scrollPosition = that._scrollTop;
+                    let prevOffset = 0;
+                    let offset = 0;
+                    let viewportBoundary = that._scrollTop;
                     const $contentElement = that._findContentElement();
                     const contentElementOffsetTop = $contentElement && $contentElement.offset().top;
-                    const items = that._dataController.items();
+                    const dataController = this.getController('data');
+                    const items = dataController.items();
                     const tableElement = that.getTableElement();
 
                     if(items.length && tableElement) {
                         const rowElements = that._getRowElements(tableElement).filter(':visible');
 
+                        if(!isTop) {
+                            const height = this._hasHeight ? getOuterHeight(this.element()) : $(getWindow()).outerHeight();
+
+                            viewportBoundary += height;
+                        }
+
                         for(itemIndex = 0; itemIndex < items.length; itemIndex++) {
-                            prevOffsetTop = offsetTop;
-                            const rowElement = rowElements.eq(itemIndex);
-                            if(rowElement.length) {
-                                offsetTop = rowElement.offset().top - contentElementOffsetTop;
-                                if(offsetTop > scrollPosition) {
+                            prevOffset = offset;
+                            const $rowElement = $(rowElements).eq(itemIndex);
+                            if($rowElement.length) {
+                                offset = $rowElement.offset();
+                                offset = (isTop ? offset.top : offset.top + getOuterHeight($rowElement)) - contentElementOffsetTop;
+
+                                if(offset > viewportBoundary) {
                                     if(itemIndex) {
-                                        if(isFloor || scrollPosition * 2 < Math.round(offsetTop + prevOffsetTop)) {
+                                        if(isFloor || viewportBoundary * 2 < Math.round(offset + prevOffset)) {
                                             itemIndex--;
                                         }
                                     }
@@ -1069,6 +1082,14 @@ export const rowsModule = {
                     }
 
                     return itemIndex;
+                },
+
+                getTopVisibleItemIndex: function(isFloor) {
+                    return this._getBoundaryVisibleItemIndex(true, isFloor);
+                },
+
+                getBottomVisibleItemIndex: function(isFloor) {
+                    return this._getBoundaryVisibleItemIndex(false, isFloor);
                 },
 
                 getTopVisibleRowData: function() {

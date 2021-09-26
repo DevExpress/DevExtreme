@@ -8,6 +8,7 @@
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../textEditor/colors" as *;
+@use "../calendar/sizes" as *;
 @use "../../base/dateBox";
 
 // adduse
@@ -30,6 +31,10 @@
       width: auto;
     }
   }
+}
+
+.dx-datebox-datetime-time-side {
+  background-color: $timeview-bg;
 }
 
 .dx-datebox-wrapper-rollers.dx-datebox-wrapper-time .dx-popup-content {
@@ -88,17 +93,8 @@
 }
 
 .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
-  .dx-calendar {
-    margin-right: math.div($material-datebox-overlay-item-margin, 2);
-    margin-bottom: math.div($material-datebox-overlay-item-margin, 2);
-  }
-
   .dx-timeview {
     padding: $material-datebox-overlay-item-margin;
-
-    @at-root #{selector-append(".dx-datebox-adaptivity-mode", &)} {
-      margin: 0 math.div($material-datebox-overlay-item-margin, 2) math.div($material-datebox-overlay-item-margin, 2);
-    }
   }
 
   .dx-datebox-container-cell {
@@ -122,18 +118,6 @@
           margin-left: 0;
         }
       }
-    }
-  }
-
-  .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
-    .dx-calendar {
-      margin-left: math.div($material-datebox-overlay-item-margin, 2);
-      margin-right: $material-datebox-overlay-item-margin;
-    }
-
-    .dx-timeview {
-      margin-right: math.div($material-datebox-overlay-item-margin, 2);
-      margin-left: $material-datebox-overlay-item-margin;
     }
   }
 }

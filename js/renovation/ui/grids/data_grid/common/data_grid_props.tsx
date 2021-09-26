@@ -497,6 +497,9 @@ export class DataGridEditing {
   mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup' = 'row';
 
   @OneWay()
+  newRowPosition?: 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop' = 'viewportTop';
+
+  @OneWay()
   popup?: PopupProperties = {};
 
   @OneWay()
@@ -1178,6 +1181,10 @@ export interface DataGridToolbarItem extends dxToolbarItem {
 @ComponentBindings()
 export class DataGridToolbar {
   @OneWay() items?: (DataGridDefaultToolbarItemName | DataGridToolbarItem)[];
+
+  @OneWay() visible?: boolean;
+
+  @OneWay() disabled?: boolean;
 }
 
 @ComponentBindings()
@@ -1186,6 +1193,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Nested() editing?: DataGridEditing = {
     mode: 'row',
+    newRowPosition: 'viewportTop',
     refreshMode: 'full',
     allowAdding: false,
     allowUpdating: false,

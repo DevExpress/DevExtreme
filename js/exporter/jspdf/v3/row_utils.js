@@ -1,15 +1,33 @@
 import { isDefined } from '../../../core/utils/type';
 import { calculateRowHeight } from './pdf_utils_v3';
 
+function calculateColumnsWidths(doc, dataProvider, topLeft) {
+    const columnsWidths = dataProvider.getColumnsWidths();
+    if(!columnsWidths.length) {
+        return [];
+    }
 
-function initializeCellsWidth(rows, columnWidths) {
-    // TODO: handle colSpan in this method !!!!
+    const summaryGridWidth = columnsWidths
+        .reduce((accumulator, width) => accumulator + width);
+
+    // TODO: check future orientation, measure units and margins there
+    const availablePageWidth = doc.internal.pageSize.getWidth() - (topLeft?.x ?? 0);
+    const ratio = availablePageWidth >= summaryGridWidth
+        ? 1
+        : availablePageWidth / summaryGridWidth;
+
+    return columnsWidths.map(width => width * ratio);
+}
+
+function initializeCellsWidth(doc, dataProvider, rows, options) {
+    const columnWidths = options?.columnWidths ?? calculateColumnsWidths(doc, dataProvider, options?.topLeft);
     rows.forEach(row => {
         row.cells.forEach(({ gridCell, pdfCell }, index) => {
             pdfCell._rect.w = columnWidths[index];
         });
     });
 }
+
 
 function calculateHeights(doc, rows, options) {
     rows.forEach(row => {
@@ -67,6 +85,12 @@ function applyRowSpans(rows) {
     }
 }
 
+function resizeFirstColumnByIndentLevel(rows, options) {
+    rows.forEach(row => {
+        row.cells[0].pdfCell._rect.w -= row.indentLevel * options.indent;
+    });
+}
+
 function applyBordersConfig(rows) {
     for(let rowIndex = 0; rowIndex < rows.length; rowIndex++) {
         const cells = rows[rowIndex].cells;
@@ -75,7 +99,7 @@ function applyBordersConfig(rows) {
             const leftPdfCell = (columnIndex >= 1) ? cells[columnIndex - 1].pdfCell : null;
             const topPdfCell = (rowIndex >= 1) ? rows[rowIndex - 1].cells[columnIndex].pdfCell : null;
 
-            if(pdfCell.drawLeftBorder === false && !isDefined(pdfCell.colSpan)) { // TODO: Check this logic after implementing splitting to pages
+            if(pdfCell.drawLeftBorder === false && !isDefined(cells[columnIndex].colSpan)) { // TODO: Check this logic after implementing splitting to pages
                 if(isDefined(leftPdfCell)) {
                     leftPdfCell.drawRightBorder = false;
                 }
@@ -102,8 +126,9 @@ function calculateCoordinates(doc, rows, options) {
     let y = options?.topLeft?.y ?? 0;
     rows.forEach(row => {
         let x = options?.topLeft?.x ?? 0;
+        const intend = row.indentLevel * options.indent;
         row.cells.forEach(cell => {
-            cell.pdfCell._rect.x = x;
+            cell.pdfCell._rect.x = x + intend;
             cell.pdfCell._rect.y = y;
             x += cell.pdfCell._rect.w;
         });
@@ -124,4 +149,4 @@ function calculateTableSize(doc, rows, options) {
     };
 }
 
-export { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize };
+export { initializeCellsWidth, applyColSpans, applyRowSpans, resizeFirstColumnByIndentLevel, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize };

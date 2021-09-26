@@ -1470,24 +1470,6 @@ QUnit.module('Layout manager', () => {
         assert.equal($testContainer.find('.' + FIELD_EMPTY_ITEM_CLASS).length, 1);
     });
 
-    test('Templates of form\'s items render with deferring_T638831', function(assert) {
-        let spy;
-
-        $('#container').dxLayoutManager({
-            onInitialized: function(e) {
-                spy = sinon.spy(e.component, '_renderTemplates');
-            },
-            items: [{
-                dataField: 'StartDate',
-                editorType: 'dxDateBox'
-            }]
-        });
-
-        const templatesInfo = spy.args[0][0];
-        assert.ok(templatesInfo[0].container.hasClass('dx-field-item'), 'template container of field item');
-        assert.equal(templatesInfo[0].formItem.dataField, 'StartDate', 'correct a form item for template');
-    });
-
     test('layoutData with \'null\' fields shouldn\'t reset editor\'s \'isValid\' option', function(assert) {
         const instance = $('#container').dxLayoutManager({
             layoutData: {

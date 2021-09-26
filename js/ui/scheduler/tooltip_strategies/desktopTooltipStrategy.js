@@ -45,7 +45,8 @@ export class DesktopTooltipStrategy extends TooltipStrategyBase {
             rtlEnabled: this._extraOptions.rtlEnabled,
             onShown: this._onShown.bind(this),
             contentTemplate: this._getContentTemplate(dataList),
-            copyRootClassesToWrapper: true
+            copyRootClassesToWrapper: true,
+            _ignoreCopyRootClassesToWrapperDeprecation: true
         });
     }
 

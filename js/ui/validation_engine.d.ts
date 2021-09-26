@@ -6,8 +6,6 @@ import {
  * @docid
  * @section Core
  * @namespace DevExpress
- * @module ui/validation_engine
- * @export default
  * @public
  */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
@@ -68,7 +66,6 @@ export default class validationEngine {
      * @docid
      * @section Core
      * @publicName validateGroup()
-     * @return dxValidationGroupResult
      * @static
      * @public
      */
@@ -78,7 +75,6 @@ export default class validationEngine {
      * @section Core
      * @publicName validateGroup(group)
      * @param1 group:string|object
-     * @return dxValidationGroupResult
      * @static
      * @public
      */

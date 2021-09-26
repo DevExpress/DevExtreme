@@ -32,14 +32,11 @@ export class CheckBoxIcon extends JSXComponent(CheckBoxIconProps) {
   updateFontSize(): void {
     const { size, isChecked } = this.props;
 
-    if (hasWindow()) {
-      const newIconSize = isNumber(size) ? size : this.getComputedIconSize();
+    if (hasWindow() && size) {
+      const newIconSize = this.getIconSize(size);
+      const newFontSize = getFontSizeByIconSize(newIconSize, isChecked);
 
-      if (newIconSize) {
-        const newFontSize = getFontSizeByIconSize(newIconSize, isChecked);
-
-        this.setIconFontSize(newFontSize);
-      }
+      this.setIconFontSize(newFontSize);
     }
   }
 
@@ -47,6 +44,18 @@ export class CheckBoxIcon extends JSXComponent(CheckBoxIconProps) {
     const element = this.elementRef.current!;
 
     element.style.fontSize = `${fontSize}px`;
+  }
+
+  getIconSize(size: number | string): number {
+    if (isNumber(size)) {
+      return size;
+    }
+
+    if (size.endsWith('px')) {
+      return parseInt(size, 10);
+    }
+
+    return this.getComputedIconSize();
   }
 
   getComputedIconSize(): number {
