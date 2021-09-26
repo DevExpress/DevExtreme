@@ -83,7 +83,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       }
 
       .dx-texteditor {
-        .dx-texteditor-input {
+        .dx-texteditor-input,
+        .dx-placeholder::before {
           padding-left: $material-grid-base-texteditor-input-padding;
         }
       }

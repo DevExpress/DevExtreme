@@ -27,49 +27,99 @@ export const getElementBoxParams = function(name, elementStyles) {
     };
 };
 
-const getBoxSizingOffset = function(name, elementStyles, boxParams) {
-    const size = elementStyles[name];
-
-    if(elementStyles.boxSizing === 'border-box' && size.length && size[size.length - 1] !== '%') {
-        return boxParams.border + boxParams.padding;
-    }
-
-    return 0;
-};
 const getElementComputedStyle = function(element) {
     const view = element?.ownerDocument?.defaultView || window;
     return view.getComputedStyle && view.getComputedStyle(element);
 };
+const getCSSProperty = function(element, styles, name, defaultValue) {
+    return styles?.[name] || element.style?.[name] || defaultValue;
+};
 
-export const getSize = function(element, name, include) {
-    const elementStyles = getElementComputedStyle(element);
 
-    const boxParams = getElementBoxParams(name, elementStyles);
+const boxIndices = {
+    content: 0,
+    padding: 1,
+    border: 2,
+    margin: 3,
+    'content-box': 0,
+    'border-box': 2,
+};
+const dimensionComponents = {
+    width: ['left', 'right'],
+    height: ['top', 'bottom']
+};
+function getComponentThickness(elem, dimension, component, styles) {
+    const get = (elem, styles, field) => parseFloat(getCSSProperty(elem, styles, field, '0')) || 0;
+    const suffix = component === 'border' ? '-width' : '';
+    return get(elem, styles, `${component}-${dimensionComponents[dimension][0]}${suffix}`)
+        + get(elem, styles, `${component}-${dimensionComponents[dimension][1]}${suffix}`);
+}
 
-    const clientRect = element.getClientRects && element.getClientRects().length;
-    const boundingClientRect = element.getBoundingClientRect && element.getBoundingClientRect()[name];
+export const getSize = function(element, dimension, box) {
+    const offsetFieldName = dimension === 'width' ? 'offsetWidth' : 'offsetHeight';
 
-    let result = clientRect ? boundingClientRect : 0;
+    const styles = getElementComputedStyle(element);
+    let result = getCSSProperty(element, styles, dimension);
+    if(result === '' || result === 'auto') {
+        result = element[offsetFieldName];
+    }
+    result = parseFloat(result) || 0;
 
-    if(result <= 0) {
-        result = parseFloat(elementStyles[name] || element.style[name]) || 0;
+    const currentBox = getCSSProperty(element, styles, 'boxSizing', 'content-box');
+    const targetBox = box || currentBox;
 
-        result -= getBoxSizingOffset(name, elementStyles, boxParams);
-    } else {
-        result -= boxParams.padding + boxParams.border;
+    let targetBoxIndex = boxIndices[targetBox];
+    let currentBoxIndex = boxIndices[currentBox];
+
+    if(targetBoxIndex === undefined || currentBoxIndex === undefined) {
+        throw new Error();
     }
 
-    if(include.paddings) {
-        result += boxParams.padding;
-    }
-    if(include.borders) {
-        result += boxParams.border;
-    }
-    if(include.margins) {
-        result += boxParams.margin;
+    if(currentBoxIndex === targetBoxIndex) {
+        return result;
     }
 
-    return result;
+    const coeff = Math.sign(targetBoxIndex - currentBoxIndex);
+    let padding = false;
+    let border = false;
+    let margin = false;
+    let scrollThickness = false;
+
+    if(coeff === 1) {
+        targetBoxIndex += 1;
+        currentBoxIndex += 1;
+    }
+
+    for(let boxPart = currentBoxIndex; boxPart !== targetBoxIndex; boxPart += coeff) {
+
+        switch(boxPart) {
+            case boxIndices.content:
+                break;
+            case boxIndices.padding:
+                padding = coeff * getComponentThickness(element, dimension, 'padding', styles);
+                break;
+            case boxIndices.border:
+                border = coeff * getComponentThickness(element, dimension, 'border', styles);
+                break;
+            case boxIndices.margin:
+                margin = coeff * getComponentThickness(element, dimension, 'margin', styles);
+                break;
+        }
+    }
+
+    if(padding || border) {
+        const paddingAndBorder =
+            (padding === false ? coeff * getComponentThickness(element, dimension, 'padding', styles) : padding)
+            + (border === false ? coeff * getComponentThickness(element, dimension, 'border', styles) : border);
+
+        scrollThickness = coeff * Math.max(0, Math.floor(
+            element[offsetFieldName] -
+            result -
+            (coeff * paddingAndBorder)
+        )) || 0;
+    }
+
+    return result + margin + padding + border + scrollThickness;
 };
 
 const getContainerHeight = function(container) {
@@ -176,7 +226,7 @@ export const setInnerWidth = (el, value) => implementationsMap.setInnerWidth(el,
 export const getInnerHeight = (el) => implementationsMap.getInnerHeight(el);
 export const setInnerHeight = (el, value) => implementationsMap.setInnerHeight(el, value);
 
-export const elementSize = function(el, sizeProperty, value) {
+const elementSize = function(el, sizeProperty, value) {
     const partialName = sizeProperty.toLowerCase().indexOf('width') >= 0 ? 'Width' : 'Height';
     const propName = partialName.toLowerCase();
     const isOuter = sizeProperty.indexOf('outer') === 0;
@@ -213,13 +263,15 @@ export const elementSize = function(el, sizeProperty, value) {
     }
 
     if(isGetter) {
-        const include = {
-            paddings: isInner || isOuter,
-            borders: isOuter,
-            margins: value
-        };
+        let box = 'content';
+        if(isOuter) {
+            box = value ? 'margin' : 'border';
+        }
+        if(isInner) {
+            box = 'padding';
+        }
 
-        return getSize(el, propName, include);
+        return getSize(el, propName, box);
     }
 
     if(isNumeric(value)) {

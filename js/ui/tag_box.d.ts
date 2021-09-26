@@ -187,6 +187,12 @@ export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
     selectedItems?: Array<string | number | any>;
     /**
      * @docid
+     * @default "Select All"
+     * @public
+     */
+    selectAllText?: string;
+    /**
+     * @docid
      * @default false
      * @public
      */

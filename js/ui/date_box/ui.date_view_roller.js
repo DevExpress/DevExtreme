@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import registerComponent from '../../core/component_registrator';
@@ -260,9 +261,7 @@ class DateViewRoller extends Scrollable {
     _itemHeight() {
         const $item = this._$items.first();
 
-        // TODO: use getHeight instead of clientHeight after resolving the following:
-        // getHeight returns an incorrect value when a transform applied to an element;
-        return $item.get(0).clientHeight;
+        return getHeight($item);
     }
 
     _toggleActive(state) {

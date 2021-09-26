@@ -115,19 +115,6 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
                 assert.equal(headerEmptyCell.children(toSelector(ALL_DAY_TITLE_CLASS)).length, 1, 'All-day-title is OK');
             });
 
-            QUnit.test('All day title has a special CSS class, if showAllDayPanel = false', function(assert) {
-                this.instance.option('showAllDayPanel', false);
-
-                const $element = this.instance.$element();
-                const $allDayTitle = $element.find('.dx-scheduler-all-day-title');
-
-                assert.ok($allDayTitle.hasClass('dx-scheduler-all-day-title-hidden'), 'CSS class is OK');
-
-                this.instance.option('showAllDayPanel', true);
-
-                assert.notOk($allDayTitle.hasClass('dx-scheduler-all-day-title-hidden'), 'CSS class is OK');
-            });
-
             QUnit.test('Workspace should have specific css class, if showAllDayPanel = true ', function(assert) {
                 this.instance.option('showAllDayPanel', true);
 

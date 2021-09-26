@@ -18,22 +18,18 @@
 <body>
     <div id="container"></div>
     <script>
-        function createDateBoxInTheme(theme, config) {
-            return new Promise((resolve) => {
-                $(() => {
-                    $('body > #container > div').remove();
+        function createDateBoxInTheme(config) {
+            return DevExpress.ui.themes.waitWebFont('1234567890APM/:', 400).then(() => {
+                $('body > #container > div').remove();
 
-                    $('<div>')
-                        .appendTo($('body > #container'))
-                        .dxDateBox(Object.assign({
-                            opened: true,
-                            pickerType: 'calendar',
-                            width: 200,
-                            value: new Date(1.5e12)
-                        }, config));
-
-                    resolve();
-                });
+                $('<div>')
+                    .appendTo($('body > #container'))
+                    .dxDateBox(Object.assign({
+                        opened: true,
+                        pickerType: 'calendar',
+                        width: 200,
+                        value: new Date(1.5e12)
+                    }, config));
             });
         }
     </script>

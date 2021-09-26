@@ -912,11 +912,11 @@ export const adaptivityModule = {
                     }
                 },
 
-                _afterInsertRow: function(options) {
-                    this.callBase(options);
+                _afterInsertRow: function(key) {
+                    this.callBase.apply(this, arguments);
 
                     if(this._adaptiveController.hasHiddenColumns()) {
-                        this._adaptiveController.toggleExpandAdaptiveDetailRow(options.key, this.isRowEditMode());
+                        this._adaptiveController.toggleExpandAdaptiveDetailRow(key, this.isRowEditMode());
                         this._isForceRowAdaptiveExpand = true;
                     }
                 },
