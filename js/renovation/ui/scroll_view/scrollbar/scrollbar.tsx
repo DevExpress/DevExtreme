@@ -72,8 +72,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @InternalState() expanded = false;
 
-  @InternalState() visibility = false;
-
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
   @Ref() thumbRef!: RefObject<HTMLDivElement>;
@@ -93,7 +91,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return subscribeToDXPointerUpEvent(
       domAdapter.getDocument(), () => {
         this.expanded = false;
-        this.visibility = false;
         this.pendingPointerUp = false;
       },
     );
@@ -226,8 +223,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     const mouseLocation = event[`page${this.axis.toUpperCase()}`] - offset;
     const delta = mouseLocation / this.containerToContentRatio - this.props.containerSize / 2;
 
-    this.visibility = true;
-
     this.moveTo(Math.round(-delta));
   }
 
@@ -296,13 +291,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       return false;
     }
     if (this.isHoverMode) {
-      return this.props.visible || this.visibility || this.hovered || this.pendingPointerUp;
+      return this.props.visible || this.hovered || this.pendingPointerUp;
     }
     if (this.isAlwaysMode) {
       return true;
     }
 
-    return this.props.visible || this.visibility;
+    return this.props.visible;
   }
 
   get isExpandable(): boolean {
