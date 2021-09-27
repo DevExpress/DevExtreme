@@ -125,7 +125,6 @@ WorkSpaceProps,
 | 'allowMultipleCellSelection'
 | 'allDayPanelExpanded'
 | 'hoursInterval'
-| 'groups'
 | 'selectedCellData'
 | 'type'
 >;
