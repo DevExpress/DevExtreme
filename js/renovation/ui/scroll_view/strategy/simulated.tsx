@@ -322,7 +322,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @Method()
   release(): void {
-    this.updateElementDimensions();
+    this.updateHandler();
 
     this.hScrollbarRef.current?.releaseHandler();
     this.vScrollbarRef.current?.releaseHandler();

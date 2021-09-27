@@ -32,6 +32,16 @@ import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './simulat
 import { ScrollableTestHelper as ScrollableNativeTestHelper } from './native_test_helper';
 
 import { getTranslateValues } from '../../utils/get_translate_values';
+import {
+  getElementOverflowX,
+  getElementOverflowY,
+} from '../../utils/get_element_style';
+
+jest.mock('../../utils/get_element_style', () => ({
+  ...jest.requireActual('../../utils/get_element_style'),
+  getElementOverflowX: jest.fn(() => 'visible'),
+  getElementOverflowY: jest.fn(() => 'visible'),
+}));
 
 jest.mock('../../utils/get_translate_values', () => ({
   ...jest.requireActual('../../utils/get_translate_values'),
@@ -491,7 +501,7 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
 
         expect(viewModel.validate(event)).toEqual(false);
         expect(viewModel.updateHandler)
-          .toHaveBeenCalledTimes(Scrollable === ScrollableNative ? 0 : 1);
+          .toHaveBeenCalledTimes(1);
       });
 
       it('validate(event), locked: true, disabled: false', () => {
@@ -507,6 +517,30 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
     });
 
     describe('Getters', () => {
+      each(['visible', 'scroll', 'hidden', 'auto']).describe('overflow: %o,', (overflow) => {
+        it('contentWidth()', () => {
+          (getElementOverflowX as jest.Mock).mockReturnValue(overflow);
+          const viewModel = new Scrollable({});
+
+          viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+          viewModel.contentClientWidth = 200;
+          viewModel.contentScrollWidth = 700;
+
+          expect(viewModel.contentWidth).toEqual(overflow === 'hidden' ? 200 : 700);
+        });
+
+        it('contentHeight()', () => {
+          (getElementOverflowY as jest.Mock).mockReturnValue(overflow);
+          const viewModel = new Scrollable({});
+
+          viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+          viewModel.contentClientHeight = 200;
+          viewModel.contentScrollHeight = 700;
+
+          expect(viewModel.contentHeight).toEqual(overflow === 'hidden' ? 200 : 700);
+        });
+      });
+
       describe('cssClasses', () => {
         each(optionValues.direction).describe('Direction: %o', (direction) => {
           each(['onScroll', 'onHover', 'always', 'never']).describe('showScrollbar: %o', (showScrollbar) => {
