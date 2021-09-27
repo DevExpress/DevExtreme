@@ -134,7 +134,7 @@ export interface ViewRenderConfig {
   headerPanelTemplate: JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'>;
   dateTableTemplate: JSXTemplate<DateTableLayoutProps>;
   timePanelTemplate?: JSXTemplate<TimePaneLayoutProps>;
-  className?: string;
+  className: string;
   isAllDayPanelSupported: boolean;
   isProvideVirtualCellsWidth: boolean;
   isRenderTimePanel: boolean;
