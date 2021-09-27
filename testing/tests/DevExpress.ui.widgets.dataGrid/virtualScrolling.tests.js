@@ -920,8 +920,8 @@ QUnit.module('VirtualScrollingController. New mode', {
         const virtualItemsCount = this.scrollController.virtualItemsCount();
 
         // assert
-        assert.deepEqual(virtualItemsCount, { begin: 0, end: DEFAULT_TOTAL_ITEMS_COUNT - 30 }, 'virtual items');
-        assert.deepEqual(viewportParams, { skip: 0, take: 30 }, 'viewport params');
+        assert.deepEqual(virtualItemsCount, { begin: 0, end: DEFAULT_TOTAL_ITEMS_COUNT - 26 }, 'virtual items');
+        assert.deepEqual(viewportParams, { skip: 0, take: 26 }, 'viewport params');
     });
 
     QUnit.test('Viewport params at the middle', function(assert) {
@@ -933,8 +933,8 @@ QUnit.module('VirtualScrollingController. New mode', {
         const virtualItemsCount = this.scrollController.virtualItemsCount();
 
         // assert
-        assert.deepEqual(virtualItemsCount, { begin: Math.floor(viewportItemIndex) - 5, end: 9970 }, 'virtual items');
-        assert.deepEqual(viewportParams, { skip: Math.floor(viewportItemIndex) - 5, take: viewportSize + 10 }, 'viewport params');
+        assert.deepEqual(virtualItemsCount, { begin: Math.floor(viewportItemIndex), end: 9974 }, 'virtual items');
+        assert.deepEqual(viewportParams, { skip: Math.floor(viewportItemIndex), take: viewportSize + 1 }, 'viewport params');
     });
 
     QUnit.test('Viewport params at the bottom', function(assert) {
@@ -946,7 +946,7 @@ QUnit.module('VirtualScrollingController. New mode', {
         const virtualItemsCount = this.scrollController.virtualItemsCount();
 
         // assert
-        assert.deepEqual(virtualItemsCount, { begin: DEFAULT_TOTAL_ITEMS_COUNT - viewportSize - 5, end: 0 }, 'virtual items');
-        assert.deepEqual(viewportParams, { skip: DEFAULT_TOTAL_ITEMS_COUNT - viewportSize - 5, take: viewportSize + 5 }, 'viewport params');
+        assert.deepEqual(virtualItemsCount, { begin: DEFAULT_TOTAL_ITEMS_COUNT - viewportSize, end: 0 }, 'virtual items');
+        assert.deepEqual(viewportParams, { skip: DEFAULT_TOTAL_ITEMS_COUNT - viewportSize, take: viewportSize }, 'viewport params');
     });
 });

@@ -4360,6 +4360,14 @@ declare module DevExpress.ui {
      * [descr:DataChange.pageIndex]
      */
     pageIndex?: number;
+    /**
+     * [descr:DataChange.insertAfterKey]
+     */
+    insertAfterKey?: any;
+    /**
+     * [descr:DataChange.insertBeforeKey]
+     */
+    insertBeforeKey?: any;
   }
   /**
    * [descr:DataExpressionMixin]
@@ -6306,6 +6314,16 @@ declare module DevExpress.ui {
        * [descr:GridBaseOptions.editing.mode]
        */
       mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
+      /**
+       * [descr:GridBaseOptions.editing.newRowPosition]
+       */
+      newRowPosition?:
+        | 'first'
+        | 'last'
+        | 'pageBottom'
+        | 'pageTop'
+        | 'viewportBottom'
+        | 'viewportTop';
       /**
        * [descr:GridBaseOptions.editing.popup]
        */
@@ -14649,6 +14667,10 @@ declare module DevExpress.ui {
      */
     showSelectionControls?: boolean;
     /**
+     * [descr:dxListOptions.selectAllText]
+     */
+    selectAllText?: string;
+    /**
      * [descr:dxListOptions.useNativeScrolling]
      */
     useNativeScrolling?: boolean;
@@ -16863,13 +16885,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.restorePosition]
      */
-    restorePosition?: {
-      always: boolean;
-      onDimensionChangeAfterDrag: boolean;
-      onDimensionChangeAfterResize: boolean;
-      onOpening: boolean;
-      onFullScreenDisable: boolean;
-    };
+    restorePosition?: boolean;
     /**
      * [descr:dxPopupOptions.showCloseButton]
      */
@@ -19385,6 +19401,10 @@ declare module DevExpress.ui {
      * [descr:dxTagBoxOptions.selectedItems]
      */
     selectedItems?: Array<string | number | any>;
+    /**
+     * [descr:dxTagBoxOptions.selectAllText]
+     */
+    selectAllText?: string;
     /**
      * [descr:dxTagBoxOptions.showDropDownButton]
      */

@@ -962,7 +962,7 @@ QUnit.module('valueChanged handler should receive correct event', {
 
         this.keyboard.press('up');
 
-        this.checkEvent(assert, 'keydown', this.$input, 'up');
+        this.checkEvent(assert, 'keydown', this.$input, 'arrowUp');
         this.testProgramChange(assert);
     });
 
