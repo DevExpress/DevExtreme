@@ -8,6 +8,7 @@ import { noop } from '../core/utils/common';
 import { getPublicElement } from '../core/element';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
+import { getFieldName } from '../core/options/utils';
 import messageLocalization from '../localization/message';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
@@ -1090,18 +1091,11 @@ const Lookup = DropDownList.inherit({
             case 'dropDownOptions':
                 switch(fullName) {
                     case 'dropDownOptions.width':
-                        this._popupOptionChanged({
-                            name,
-                            fullName,
-                            value: value === 'auto' ? this.initialOption('dropDownOptions').width : value
-                        });
-                        this._options.cache('dropDownOptions', this.option('dropDownOptions'));
-                        break;
                     case 'dropDownOptions.height':
                         this._popupOptionChanged({
                             name,
                             fullName,
-                            value: value === 'auto' ? this.initialOption('dropDownOptions').height : value
+                            value: value === 'auto' ? this.initialOption('dropDownOptions')[getFieldName(fullName)] : value
                         });
                         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
                         break;
