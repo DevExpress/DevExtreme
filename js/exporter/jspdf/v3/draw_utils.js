@@ -28,7 +28,7 @@ function drawCellText(doc, cell, docStyles) {
             w: _rect.w - (padding.left + padding.right),
             h: _rect.h - (padding.top + padding.bottom)
         };
-        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.wordWrapEnabled, cell.jsPdfTextOptions);
+        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign, cell.wordWrapEnabled, cell.jsPdfTextOptions);
     }
 }
 
