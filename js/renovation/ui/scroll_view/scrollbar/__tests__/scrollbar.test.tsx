@@ -178,14 +178,14 @@ describe('Scrollbar', () => {
       emit('dxpointerdown');
 
       expect(scrollbar.expanded).toEqual(true);
-      expect(scrollbar.pendingPointerUp).toEqual(false);
+      expect(scrollbar.pendingPointerUp).toEqual(true);
       expect(scrollbar.scrollbarClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbar-active'));
 
       scrollbar.pointerUpEffect();
       emit('dxpointerup');
 
       expect(scrollbar.expanded).toEqual(false);
-      expect(scrollbar.pendingPointerUp).toEqual(true);
+      expect(scrollbar.pendingPointerUp).toEqual(false);
       expect(scrollbar.scrollbarClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbar-active'));
     });
 
