@@ -1529,6 +1529,10 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
+  export type Except<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
   export class FunctionTemplate {
     render(template: {
       container: unknown;
@@ -15891,7 +15895,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxMenuBaseOptions<TComponent>
-    extends Omit<
+    extends DevExpress.core.Except<
       HierarchicalCollectionWidgetOptions<TComponent>,
       'dataSource'
     > {
@@ -22026,7 +22030,10 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeViewOptions
-    extends Omit<HierarchicalCollectionWidgetOptions<dxTreeView>, 'dataSource'>,
+    extends DevExpress.core.Except<
+        HierarchicalCollectionWidgetOptions<dxTreeView>,
+        'dataSource'
+      >,
       SearchBoxMixinOptions {
     /**
      * [descr:dxTreeViewOptions.animationEnabled]

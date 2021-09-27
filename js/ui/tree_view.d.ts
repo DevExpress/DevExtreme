@@ -1,3 +1,4 @@
+import { Except } from '../core';
 import { CommonDataSource } from '../data/data_source_aliases';
 import {
     DxElement,
@@ -106,7 +107,7 @@ export type SelectionChangedEvent = EventInfo<dxTreeView>;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxTreeViewOptions extends Omit<HierarchicalCollectionWidgetOptions<dxTreeView>, 'dataSource'>, SearchBoxMixinOptions {
+export interface dxTreeViewOptions extends Except<HierarchicalCollectionWidgetOptions<dxTreeView>, 'dataSource'>, SearchBoxMixinOptions {
     /**
      * @docid
      * @default true

@@ -1,3 +1,4 @@
+import { Except } from '../../core';
 import { CommonDataSource } from '../../data/data_source_aliases';
 import {
     AnimationConfig,
@@ -12,7 +13,7 @@ import {
 } from '../menu';
 
 /** @namespace DevExpress.ui */
-export interface dxMenuBaseOptions<TComponent> extends Omit<HierarchicalCollectionWidgetOptions<TComponent>, 'dataSource'> {
+export interface dxMenuBaseOptions<TComponent> extends Except<HierarchicalCollectionWidgetOptions<TComponent>, 'dataSource'> {
     /**
      * @docid
      * @default true
