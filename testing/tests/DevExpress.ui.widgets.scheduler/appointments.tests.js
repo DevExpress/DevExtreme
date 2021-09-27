@@ -602,7 +602,7 @@ QUnit.module('Appointments', moduleOptions, () => {
             appointmentDataProvider: {
                 appointmentTakesAllDay: commonUtils.noop
             },
-            cellDurationInMinute: 30,
+            cellDurationInMinutes: 30,
             cellHeight: 50
         });
         const deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });
