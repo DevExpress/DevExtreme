@@ -25,7 +25,6 @@ export class AppComponent {
     sortingMode: 'single' | 'multiple' | 'none';
     showSortIndexes: boolean;
     showSortIndexDisabled: boolean;
-    sorting: any;
 
     constructor(service: Service) {
         this.tasks = service.getTasks();
@@ -35,11 +34,9 @@ export class AppComponent {
         this.sortingMode = 'single';
         this.showSortIndexes = false;
         this.showSortIndexDisabled = true;
-        this.sorting = {mode: this.sortingMode, showSortIndexes: this.showSortIndexes};
     }
 
     onSortingValueChanged(e) {
-        this.sorting = {mode: this.sortingMode, showSortIndexes: this.showSortIndexes}
         this.showSortIndexDisabled = this.sortingMode !== 'multiple'
     }
 }

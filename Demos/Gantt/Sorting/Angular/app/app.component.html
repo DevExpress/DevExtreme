@@ -14,8 +14,7 @@
             <dx-check-box
                 text="Show Sort Indexes"
                 [(value)]="showSortIndexes"
-                [disabled]="showSortIndexDisabled"
-                (onValueChanged)="onSortingValueChanged($event)"></dx-check-box>
+                [disabled]="showSortIndexDisabled"></dx-check-box>
         </div>
     </div>
     <div class="widget-container">
@@ -23,8 +22,7 @@
             taskListWidth="500"
             scaleType="weeks"
             height="700"
-            [rootValue]="-1"
-            [sorting]="sorting">
+            [rootValue]="-1">
 
             <dxo-tasks [dataSource]="tasks"></dxo-tasks>
             <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
@@ -36,6 +34,7 @@
             <dxi-column dataField="end" caption="End Date" dataType="date"></dxi-column>
 
             <dxo-editing [enabled]="true"></dxo-editing>
+            <dxo-sorting [mode]="sortingMode" [showSortIndexes]="showSortIndexes"></dxo-sorting>
         </dx-gantt>
     </div>
 </div>

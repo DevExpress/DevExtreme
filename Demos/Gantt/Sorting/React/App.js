@@ -1,6 +1,6 @@
 import React from 'react';
 import Gantt, {
-  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing,
+  Tasks, Dependencies, Resources, ResourceAssignments, Column, Editing, Sorting,
 } from 'devextreme-react/gantt';
 import CheckBox from 'devextreme-react/check-box';
 import { SelectBox } from 'devextreme-react';
@@ -15,7 +15,6 @@ class App extends React.Component {
     this.state = {
       sortingMode: 'single',
       showSortIndexes: false,
-      sorting: { mode: 'single', showSortIndexes: false },
       showSortIndexesDisabled: true,
     };
     this.onSortingModeChanged = this.onSortingModeChanged.bind(this);
@@ -26,7 +25,6 @@ class App extends React.Component {
     const {
       sortingMode,
       showSortIndexes,
-      sorting,
       showSortIndexesDisabled,
 
     } = this.state;
@@ -60,8 +58,7 @@ class App extends React.Component {
             taskListWidth={500}
             scaleType="weeks"
             height={700}
-            rootValue={-1}
-            sorting={sorting}>
+            rootValue={-1}>
 
             <Tasks dataSource={tasks} />
             <Dependencies dataSource={dependencies} />
@@ -73,6 +70,7 @@ class App extends React.Component {
             <Column dataField="end" caption="End Date" />
 
             <Editing enabled={true} />
+            <Sorting mode={sortingMode} showSortIndexes={showSortIndexes}></Sorting>
           </Gantt>
         </div>
       </div>
@@ -82,7 +80,6 @@ class App extends React.Component {
   onSortingModeChanged(e) {
     this.setState({
       sortingMode: e.value,
-      sorting: { mode: e.value, showSortIndexes: this.state.showSortIndexes },
       showSortIndexesDisabled: e.value !== 'multiple',
     });
   }
@@ -90,7 +87,6 @@ class App extends React.Component {
   onShowSortIndexesChanged(e) {
     this.setState({
       showSortIndexes: e.value,
-      sorting: { mode: this.state.sortingMode, showSortIndexes: e.value },
     });
   }
 }

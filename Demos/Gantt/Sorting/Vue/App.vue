@@ -17,7 +17,6 @@
           v-model:value="showSortIndexes"
           :disabled="showSortIndexesDisabled"
           text="Show Sort Indexes"
-          @value-changed="sortingChanged($event)"
         />
       </div>
     </div>
@@ -27,7 +26,6 @@
         :height="700"
         scale-type="weeks"
         :root-value="-1"
-        :sorting="sorting"
       >
 
         <DxTasks :data-source="tasks"/>
@@ -51,6 +49,10 @@
           data-field="end"
           caption="End Date"
         />
+        <DxSorting
+          :mode="sortingMode"
+          :show-sort-indexes="showSortIndexes"
+        />
       </DxGantt>
     </div>
   </div>
@@ -64,6 +66,7 @@ import {
   DxResourceAssignments,
   DxColumn,
   DxEditing,
+  DxSorting,
 } from 'devextreme-vue/gantt';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxSelectBox from 'devextreme-vue/select-box';
@@ -86,6 +89,7 @@ export default {
     DxEditing,
     DxCheckBox,
     DxSelectBox,
+    DxSorting,
   },
   data() {
     return {
@@ -95,13 +99,11 @@ export default {
       resourceAssignments,
       sortingMode: 'single',
       showSortIndexes: false,
-      sorting: { mode: 'single', showSortIndexes: false },
       showSortIndexesDisabled: true,
     };
   },
   methods: {
     sortingChanged() {
-      this.sorting = { mode: this.sortingMode, showSortIndexes: this.showSortIndexes };
       this.showSortIndexesDisabled = this.sortingMode !== 'multiple';
     },
   },
