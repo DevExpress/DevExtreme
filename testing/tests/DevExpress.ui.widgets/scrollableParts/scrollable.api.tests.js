@@ -387,7 +387,7 @@ QUnit.test('scrollTop', function(assert) {
     assert.equal($scrollable.dxScrollable('scrollTop'), 10, 'scrollTop is correct');
 });
 
-QUnit.test('scrollbar hidden while scrolling when showScrollbar is false', function(assert) {
+QUnit.test('scrollbar hidden while scrolling when showScrollbar is never', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         showScrollbar: 'never'
@@ -909,7 +909,9 @@ class ScrollableTestHelper {
     setContainerWidth(width) {
         this.$scrollable.css('width', width);
 
-        resizeCallbacks.fire();
+        if(!isRenovation) {
+            resizeCallbacks.fire();
+        }
     }
 }
 

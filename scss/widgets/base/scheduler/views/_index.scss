@@ -442,21 +442,7 @@ $scheduler-month-date-text-padding: 6px;
   font-size: $scheduler-workspace-info-font-size;
 }
 
-.dx-scheduler-all-day-title-hidden {
-  display: none;
-  border: none;
-}
-
 .dx-scheduler-work-space { // stylelint-disable-line no-duplicate-selectors
-  &:not(.dx-scheduler-work-space-all-day) {
-    .dx-scheduler-all-day-title-hidden {
-      display: block;
-      background-color: transparent;
-      color: transparent;
-      height: 0;
-    }
-  }
-
   &.dx-scheduler-work-space-all-day .dx-scheduler-header-panel-empty-cell {
     border-bottom: none;
   }

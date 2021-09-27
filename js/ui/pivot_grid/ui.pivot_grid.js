@@ -18,7 +18,7 @@ import { setFieldProperty, findField, mergeArraysByMaxValue } from './ui.pivot_g
 import { DataController } from './ui.pivot_grid.data_controller';
 import { DataArea } from './ui.pivot_grid.data_area';
 import { VerticalHeadersArea, HorizontalHeadersArea } from './ui.pivot_grid.headers_area';
-import { getSize, setHeight, getHeight, getWidth, getOuterHeight } from '../../core/utils/size';
+import { setHeight, getHeight, getWidth, getOuterHeight } from '../../core/utils/size';
 
 import { FieldsArea } from './ui.pivot_grid.fields_area';
 
@@ -483,10 +483,13 @@ const PivotGrid = Widget.inherit({
 
     _subscribeToEvents: function(columnsArea, rowsArea, dataArea) {
         const that = this;
-        const scrollHandler = function(e) {
+        const scrollHandler = function(e, area) {
             const scrollOffset = e.scrollOffset;
-            const leftOffset = isDefined(scrollOffset.left) ? scrollOffset.left : that._scrollLeft;
-            const topOffset = isDefined(scrollOffset.top) && that._hasHeight ? scrollOffset.top : that._scrollTop;
+
+            const scrollable = area._getScrollable();
+
+            const leftOffset = scrollable.option('direction') !== 'vertical' ? scrollOffset.left : that._scrollLeft;
+            const topOffset = scrollable.option('direction') !== 'horizontal' && that._hasHeight ? scrollOffset.top : that._scrollTop;
 
             if((that._scrollLeft || 0) !== (leftOffset || 0) || (that._scrollTop || 0) !== (topOffset || 0)) {
 
@@ -502,7 +505,7 @@ const PivotGrid = Widget.inherit({
         };
 
         each([columnsArea, rowsArea, dataArea], function(_, area) {
-            subscribeToScrollEvent(area, scrollHandler);
+            subscribeToScrollEvent(area, (e) => scrollHandler(e, area));
         });
 
         !that._hasHeight && that._dataController.subscribeToWindowScrollEvents(dataArea.groupElement());
@@ -1226,11 +1229,7 @@ const PivotGrid = Widget.inherit({
             const rowsAreaHeights = needSynchronizeFieldPanel ? rowHeights.slice(1) : rowHeights;
             const dataAreaHeights = that._dataArea.getRowsHeight();
 
-            const descriptionCellHeight = getSize(descriptionCell[0], 'height', {
-                paddings: true,
-                borders: true,
-                margins: true
-            }) + (needSynchronizeFieldPanel ? rowHeights[0] : 0);
+            const descriptionCellHeight = getOuterHeight(descriptionCell[0], true) + (needSynchronizeFieldPanel ? rowHeights[0] : 0);
 
             const columnsAreaRowCount = that._dataController.getColumnsInfo().length;
 

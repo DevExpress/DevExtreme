@@ -1328,7 +1328,7 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
                 this.keyboard = keyboardMock(this.$handle);
             }
         }, () => {
-            ['right', 'left', 'home', 'end', 'pageUp', 'pageDown'].forEach(key => {
+            ['rightArrow', 'leftArrow', 'home', 'end', 'pageUp', 'pageDown'].forEach(key => {
                 QUnit.test(`on ${key} press`, function(assert) {
                     this.keyboard.press(key);
 
