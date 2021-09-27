@@ -93,6 +93,32 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('1 col - 1 text line. fontSize default, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [{ caption: 'very long line' }]
+                });
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,very long\nline,15,29.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,46.8'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('1 col - 1 text line. fontSize 20', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -195,6 +221,35 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('1 col - 1 text line. fontSize 20, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [{ caption: 'long line' }]
+                });
+
+                const expectedLog = [
+                    'setFontSize,20',
+                    'text,long line,15,31.5,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,33',
+                    'setFontSize,16'
+                ];
+
+                const customizeCell = ({ pdfCell }) => {
+                    pdfCell.font = { size: 20 };
+                    pdfCell.padding = 5;
+                };
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('1 col - 2 text lines. fontSize default', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -279,6 +334,32 @@ const JSPdfWordWrapTests = {
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 col - 2 text lines. fontSize default, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [{ caption: 'very long text very long text' }]
+                });
+
+                const customizeCell = ({ pdfCell }) => {
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,very long\ntext very\nlong text,15,29.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,65.2'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -387,6 +468,35 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('1 col - 2 text lines. fontSize 20, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [{ caption: 'long line long line' }]
+                });
+
+                const expectedLog = [
+                    'setFontSize,20',
+                    'text,long line\nlong line,15,31.5,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,56',
+                    'setFontSize,16'
+                ];
+
+                const customizeCell = ({ pdfCell }) => {
+                    pdfCell.font = { size: 20 };
+                    pdfCell.padding = 5;
+                };
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('1 col - 3 text lines. fontSize default', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -477,6 +587,32 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('1 col - 3 text lines. fontSize default, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [{ caption: 'very long line very long line very long line' }]
+                });
+
+                const customizeCell = ({ pdfCell }) => {
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,very long\nline very\nlong line\nvery long\nline,15,29.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,102'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('1 col - 3 text lines with line breaks. fontSize default, height auto', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -515,6 +651,32 @@ const JSPdfWordWrapTests = {
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 col - 3 text lines with line breaks. fontSize default, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [{ caption: 'very long line\nvery long line very long line' }]
+                });
+
+                const customizeCell = ({ pdfCell }) => {
+                    pdfCell.padding = 5;
+                };
+
+                const expectedLog = [
+                    'text,very long\nline\nvery long\nline very\nlong line,15,29.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,102'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -623,6 +785,35 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('1 col - 3 text lines. fontSize 20, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [{ caption: 'long line long line long line' }]
+                });
+
+                const expectedLog = [
+                    'setFontSize,20',
+                    'text,long line\nlong line\nlong line,15,31.5,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,79',
+                    'setFontSize,16'
+                ];
+
+                const customizeCell = ({ pdfCell }) => {
+                    pdfCell.font = { size: 20 };
+                    pdfCell.padding = 5;
+                };
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('1 col - 3 text lines. onRowExporting.setfontSize=20, height auto, wordWrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -642,6 +833,33 @@ const JSPdfWordWrapTests = {
 
                 const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 col - 3 text lines. onRowExporting.setfontSize=20, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [{ caption: 'long line long line long line' }]
+                });
+
+                const expectedLog = [
+                    'setFontSize,20',
+                    'text,long line\nlong line\nlong line,15,31.5,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,79',
+                    'setFontSize,16'
+                ];
+
+                const onRowExporting = (e) => { e.rowCells[0].font = { size: 20 }; };
+                const customizeCell = ({ pdfCell }) => { pdfCell.padding = 5; };
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
@@ -782,6 +1000,42 @@ const JSPdfWordWrapTests = {
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     if(gridCell.column.index === 1) {
                         pdfCell.font = { size: 20 };
+                    }
+                };
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 col - 1 text line. col1.fontSize default, col2.fontSize 20, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'vert long line' },
+                        { caption: 'long line' }
+                    ]
+                });
+
+                const expectedLog = [
+                    'text,vert long line,10,31.5,{baseline:middle}',
+                    'setFontSize,20',
+                    'text,long line,115,31.5,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,33',
+                    'setLineWidth,1',
+                    'rect,110,15,100,33',
+                    'setFontSize,16'
+                ];
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    if(gridCell.column.index === 1) {
+                        pdfCell.font = { size: 20 };
+                        pdfCell.padding = 5;
                     }
                 };
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
@@ -945,6 +1199,45 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('2 col - 1 text line. col1.fontSize 20, col2.fontSize 30, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'long line' },
+                        { caption: 'big line' }
+                    ]
+                });
+
+                const expectedLog = [
+                    'setFontSize,20',
+                    'text,long line,15,54.5,{baseline:middle}',
+                    'setFontSize,30',
+                    'text,big\nline,115,37.25,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,79',
+                    'setLineWidth,1',
+                    'rect,110,15,100,79',
+                    'setFontSize,16'
+                ];
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    pdfCell.font = {
+                        size: gridCell.column.index === 0
+                            ? 20
+                            : 30
+                    };
+                    pdfCell.padding = 5;
+                };
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('2 col - 2 text lines. col1.fontSize default, col2.fontSize: 20', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -1079,6 +1372,42 @@ const JSPdfWordWrapTests = {
                     if(gridCell.column.index === 1) {
                         pdfCell.font = { size: 20 };
                     }
+                };
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 col - 2 text lines. col1.fontSize default, col2.fontSize: 20, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'very long line very long line' },
+                        { caption: 'long line long line' }
+                    ]
+                });
+
+                const expectedLog = [
+                    'text,very long\nline very\nlong line,15,29.2,{baseline:middle}',
+                    'setFontSize,20',
+                    'text,long line\nlong line,115,36.1,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,65.2',
+                    'setLineWidth,1',
+                    'rect,110,15,100,65.2',
+                    'setFontSize,16'
+                ];
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    if(gridCell.column.index === 1) {
+                        pdfCell.font = { size: 20 };
+                    }
+                    pdfCell.padding = 5;
                 };
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
@@ -1241,6 +1570,45 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('2 col - 2 text lines. col1.fontSize 20 col2.fontSize: 30, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'long line long line' },
+                        { caption: 'big line big line' }
+                    ]
+                });
+
+                const expectedLog = [
+                    'setFontSize,20',
+                    'text,long line\nlong line,15,77.5,{baseline:middle}',
+                    'setFontSize,30',
+                    'text,big\nline\nbig\nline,115,37.25,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,148',
+                    'setLineWidth,1',
+                    'rect,110,15,100,148',
+                    'setFontSize,16'
+                ];
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    pdfCell.font = {
+                        size: gridCell.column.index === 0
+                            ? 20
+                            : 30
+                    };
+                    pdfCell.padding = 5;
+                };
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('2 col - 3 text lines. col1.fontSize default, col2.fontSize: 20', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -1375,6 +1743,42 @@ const JSPdfWordWrapTests = {
                     if(gridCell.column.index === 1) {
                         pdfCell.font = { size: 20 };
                     }
+                };
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 col - 3 text lines. col1.fontSize default, col2.fontSize: 20, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'very long line very long line very long line' },
+                        { caption: 'long line long line long line' }
+                    ]
+                });
+
+                const expectedLog = [
+                    'text,very long\nline very\nlong line\nvery long\nline,15,29.2,{baseline:middle}',
+                    'setFontSize,20',
+                    'text,long line\nlong line\nlong line,115,43,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,102',
+                    'setLineWidth,1',
+                    'rect,110,15,100,102',
+                    'setFontSize,16'
+                ];
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    if(gridCell.column.index === 1) {
+                        pdfCell.font = { size: 20 };
+                    }
+                    pdfCell.padding = 5;
                 };
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
                     // doc.save();
@@ -1537,6 +1941,45 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('2 col - 3 text lines. col1.fontSize 20, col2.fontSize: 30, height auto, padding, wordWrap enabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'long line long line long line' },
+                        { caption: 'big line big line big line' }
+                    ]
+                });
+
+                const expectedLog = [
+                    'setFontSize,20',
+                    'text,long line\nlong line\nlong line,15,100.5,{baseline:middle}',
+                    'setFontSize,30',
+                    'text,big\nline\nbig\nline\nbig\nline,115,37.25,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,217',
+                    'setLineWidth,1',
+                    'rect,110,15,100,217',
+                    'setFontSize,16'
+                ];
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    pdfCell.font = {
+                        size: gridCell.column.index === 0
+                            ? 20
+                            : 30
+                    };
+                    pdfCell.padding = 5;
+                };
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('1 col - 2 text lines. fontSize default, width equals for 1 line', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -1620,6 +2063,45 @@ const JSPdfWordWrapTests = {
                 });
             });
 
+            QUnit.test('2 col - 3 text lines. col1.fontSize 20.wordWrap enabled col1.padding, col2.fontSize: 30, height auto, wordWrap disabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    columns: [
+                        { caption: 'long line long line long line' },
+                        { caption: 'big line big line big line' }
+                    ]
+                });
+
+                const expectedLog = [
+                    'setFontSize,20',
+                    'text,long line\nlong line\nlong line,15,31.5,{baseline:middle}',
+                    'setFontSize,30',
+                    'text,big line big line big line,110,54.5,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,79',
+                    'setLineWidth,1',
+                    'rect,110,15,100,79',
+                    'setFontSize,16'
+                ];
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    pdfCell.wordWrapEnabled = gridCell.column.index === 0;
+                    pdfCell.font = {
+                        size: gridCell.column.index === 0
+                            ? 20
+                            : 30
+                    };
+                    pdfCell.padding = gridCell.column.index === 0 ? 5 : 0;
+                };
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100, 100 ], customizeCell }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('1 col - 5 text lines. fontSize default, wordWrap enabled multiline text', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -1659,6 +2141,32 @@ const JSPdfWordWrapTests = {
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ] }).then(() => {
+                    // doc.save();
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 col - 5 text lines. fontSize default, wordWrap enabled multiline text, padding, height auto', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    wordWrapEnabled: true,
+                    columns: [{ caption: 'very long text very long text\nvery long text\nvery long text\nvery long text' }]
+                });
+
+                const expectedLog = [
+                    'text,very long\ntext very\nlong text\nvery long\ntext\nvery long\ntext\nvery long\ntext,15,29.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,15,100,175.6'
+                ];
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    pdfCell.padding = 5;
+                };
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
                     // doc.save();
                     assert.deepEqual(doc.__log, expectedLog);
                     done();

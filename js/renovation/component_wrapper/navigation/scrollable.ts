@@ -11,9 +11,7 @@ export class ScrollableWrapper extends Component {
   }
 
   update(): unknown {
-    console.log('ScrollableWrapper##############Start');
     (this.viewRef as Scrollable)?.updateHandler();
-    console.log('ScrollableWrapper##############End');
     return Deferred().resolve();
   }
 

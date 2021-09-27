@@ -85,6 +85,7 @@ import { getTranslateValues } from '../utils/get_translate_values';
 import { clampIntoRange } from '../utils/clamp_into_range';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { subscribeToResize } from '../utils/subscribe_to_resize';
+import { getBoundingRect } from '../utils/get_bounding_rect';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -712,11 +713,27 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   get hScrollOffsetMax(): number {
-    return -Math.max(this.contentWidth - this.containerClientWidth, 0);
+    // el.scrollWidth returns 1363 & el.clientWidth returns 1362
+    // in case when realSizes: container=1362.32, content=1362.33
+    const contentEl = this.contentRef?.current;
+    const containerEl = this.containerRef?.current;
+    if (getBoundingRect(contentEl).width - getBoundingRect(containerEl).width > 0.5) {
+      return -Math.max(this.contentWidth - this.containerClientWidth, 0);
+    }
+
+    return 0;
   }
 
   get vScrollOffsetMax(): number {
-    return -Math.max(this.contentHeight - this.containerClientHeight, 0);
+    // el.scrollHeight returns 1363 & el.clientHeight returns 1362
+    // in case when realSizes: container=1362.32, content=1362.33
+    const contentEl = this.contentRef?.current;
+    const containerEl = this.containerRef?.current;
+    if (getBoundingRect(contentEl).height - getBoundingRect(containerEl).height > 0.5) {
+      return -Math.max(this.contentHeight - this.containerClientHeight, 0);
+    }
+
+    return 0;
   }
 
   get vScrollOffsetMin(): number {
@@ -1154,6 +1171,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   get contentTranslateX(): number {
+    // https://stackoverflow.com/questions/49219462/webkit-scrollleft-css-translate-horizontal-bug
     const location = this.hScrollLocation;
     let transformValue = location % 1;
 
