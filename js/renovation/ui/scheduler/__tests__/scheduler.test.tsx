@@ -7,7 +7,6 @@ import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { WorkSpace } from '../workspaces/base/work_space';
-import SchedulerToolbar from '../header/header';
 import { getAppointmentDataProvider, getTimeZoneCalculator } from '../../../../ui/scheduler/instanceFactory';
 import { SchedulerToolbar } from '../header/header';
 
