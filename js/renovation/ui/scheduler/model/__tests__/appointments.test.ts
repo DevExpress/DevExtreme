@@ -72,17 +72,15 @@ const prepareInstances = (
       [], [], [], [], [], [], [], [], [],
       [], [], [], [], [], [], [], [], [],
       [ // Row #20
-        { left: 0, top: 0 }, { left: 0, top: 0 }, { left: 0, top: 0 },
-        { left: 0, top: 0 },
-        {
+        { }, { }, { }, { },
+        { // Cell #4
           left: 100, top: 200, width: 50, height: 60,
         },
       ],
       [],
       [ // Row #22
-        { left: 0, top: 0 }, { left: 0, top: 0 }, { left: 0, top: 0 },
-        { left: 0, top: 0 }, { left: 0, top: 0 },
-        {
+        { }, { }, { }, { }, { },
+        { // Cell #5
           left: 100, top: 300, width: 50, height: 60,
         },
       ],
