@@ -597,6 +597,9 @@ export class DataGridScrolling {
   columnRenderingThreshold?: number;
 
   @OneWay()
+  prerenderedRowChunkSize?: number;
+
+  @OneWay()
   newMode?: boolean;
 
   @OneWay()
@@ -1280,6 +1283,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     columnPageSize: 5,
     columnRenderingThreshold: 300,
     useNative: 'auto',
+    prerenderedRowChunkSize: 1,
     newMode: true,
     minGap: 1,
   };

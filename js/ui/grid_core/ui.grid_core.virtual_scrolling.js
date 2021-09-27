@@ -742,6 +742,7 @@ export const virtualScrollingModule = {
                 renderingThreshold: 100,
                 removeInvisiblePages: true,
                 rowPageSize: 5,
+                prerenderedRowChunkSize: 1,
                 mode: 'standard',
                 preloadEnabled: false,
                 rowRenderingMode: 'standard',
