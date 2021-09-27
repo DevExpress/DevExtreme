@@ -5795,7 +5795,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         scrolling: {
                             mode: 'virtual',
                             useNative: false,
-                            minGap: 0
+                            prerenderedRowCount: 0
                         }
                     }).dxDataGrid('instance');
 

@@ -748,7 +748,7 @@ export const virtualScrollingModule = {
                 rowRenderingMode: 'standard',
                 loadTwoPagesOnStart: false,
                 legacyMode: false,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         };
     },

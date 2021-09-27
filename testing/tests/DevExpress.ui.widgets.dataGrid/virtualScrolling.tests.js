@@ -859,7 +859,7 @@ QUnit.module('VirtualScrollingController. New mode', {
         moduleConfig.beforeEach.call(this);
         mockComponent.option.withArgs('scrolling.rowRenderingMode').returns('virtual');
         mockComponent.option.withArgs('scrolling.legacyMode').returns(false);
-        mockComponent.option.withArgs('scrolling.minGap').returns(1);
+        mockComponent.option.withArgs('scrolling.prerenderedRowCount').returns(1);
         mockDataSource.pageSize.returns(5);
         mockDataSource.loadedOffset.returns(0);
         mockDataSource.loadedItemCount.returns(100000);

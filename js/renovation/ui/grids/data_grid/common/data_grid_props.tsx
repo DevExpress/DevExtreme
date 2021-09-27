@@ -603,7 +603,7 @@ export class DataGridScrolling {
   legacyMode?: boolean;
 
   @OneWay()
-  minGap?: number;
+  prerenderedRowCount?: number;
 }
 
 @ComponentBindings()
@@ -1285,7 +1285,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     useNative: 'auto',
     prerenderedRowChunkSize: 1,
     legacyMode: false,
-    minGap: 1,
+    prerenderedRowCount: 1,
   };
 
   @Nested() selection?: DataGridSelection = {
