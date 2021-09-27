@@ -1449,7 +1449,10 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   type ComponentFactory<TComponent> = {
-    new (): TComponent;
+    new (
+      element: UserDefinedElement,
+      options?: Record<string, unknown>
+    ): TComponent;
     getInstance(element: UserDefinedElement): TComponent;
   };
   /**
@@ -1591,11 +1594,12 @@ declare module DevExpress.data {
   /**
    * [descr:ArrayStore]
    */
-  export class ArrayStore<TKey = any, TValue = any> extends Store<
-    TKey,
-    TValue
-  > {
-    constructor(options?: ArrayStoreOptions<TKey, TValue>);
+  export class ArrayStore<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends Store<TValue, TKeyExpr, TKey> {
+    constructor(options?: ArrayStoreOptions<TValue, TKeyExpr, TKey>);
     /**
      * [descr:ArrayStore.clear()]
      */
@@ -1608,8 +1612,11 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ArrayStoreOptions<TKey = any, TValue = any>
-    extends StoreOptions<TKey, TValue> {
+  export interface ArrayStoreOptions<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends StoreOptions<TValue, TKeyExpr, TKey> {
     /**
      * [descr:ArrayStoreOptions.data]
      */
@@ -1628,11 +1635,12 @@ declare module DevExpress.data {
   /**
    * [descr:CustomStore]
    */
-  export class CustomStore<TKey = any, TValue = any> extends Store<
-    TKey,
-    TValue
-  > {
-    constructor(options?: CustomStoreOptions<TKey, TValue>);
+  export class CustomStore<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends Store<TValue, TKeyExpr, TKey> {
+    constructor(options?: CustomStoreOptions<TValue, TKeyExpr, TKey>);
     /**
      * [descr:CustomStore.clearRawDataCache()]
      */
@@ -1641,8 +1649,11 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface CustomStoreOptions<TKey = any, TValue = any>
-    extends StoreOptions<TKey, TValue> {
+  export interface CustomStoreOptions<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends StoreOptions<TValue, TKeyExpr, TKey> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
@@ -1686,14 +1697,18 @@ declare module DevExpress.data {
   /**
    * [descr:DataSource]
    */
-  export class DataSource<TKey = any, TValue = any> {
+  export class DataSource<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > {
     constructor(data: Array<TValue>);
     constructor(
       options:
-        | CustomStoreOptions<TKey, TValue>
-        | DataSourceOptions<TKey, any, TValue, any>
+        | CustomStoreOptions<TValue, TKeyExpr, TKey>
+        | DataSourceOptions<any, TValue, any, TKeyExpr, TKey>
     );
-    constructor(store: Store<TKey, TValue>);
+    constructor(store: Store<TValue, TKeyExpr, TKey>);
     constructor(url: string);
     /**
      * [descr:DataSource.cancel(operationId)]
@@ -1740,7 +1755,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.key()]
      */
-    key(): string | Array<string>;
+    key(): TKeyExpr;
     /**
      * [descr:DataSource.load()]
      */
@@ -1856,7 +1871,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.store()]
      */
-    store(): Store<TKey, TValue>;
+    store(): Store<TValue, TKeyExpr, TKey>;
     /**
      * [descr:DataSource.totalCount()]
      */
@@ -1872,10 +1887,11 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface DataSourceOptions<
-    TKey = any,
     TSourceValue = any,
     TValue = TSourceValue,
-    TMappedValue = TValue
+    TMappedValue = TValue,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
   > {
     /**
      * [descr:DataSourceOptions.customQueryParams]
@@ -1958,11 +1974,11 @@ declare module DevExpress.data {
      */
     store?:
       | Array<TSourceValue>
-      | Store<TKey, TSourceValue>
-      | (ArrayStoreOptions<TKey, TSourceValue> & { type: 'array' })
-      | (LocalStoreOptions<TKey, TSourceValue> & { type: 'local' })
-      | (ODataStoreOptions<TKey, TSourceValue> & { type: 'odata' })
-      | CustomStoreOptions<TKey, TSourceValue>;
+      | Store<TSourceValue, TKeyExpr, TKey>
+      | (ArrayStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'array' })
+      | (LocalStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'local' })
+      | (ODataStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'odata' })
+      | CustomStoreOptions<TSourceValue, TKeyExpr, TKey>;
   }
   /**
    * [descr:EdmLiteral]
@@ -2087,11 +2103,12 @@ declare module DevExpress.data {
   /**
    * [descr:LocalStore]
    */
-  export class LocalStore<TKey = any, TValue = any> extends ArrayStore<
-    TKey,
-    TValue
-  > {
-    constructor(options?: LocalStoreOptions<TKey, TValue>);
+  export class LocalStore<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends ArrayStore<TValue, TKeyExpr, TKey> {
+    constructor(options?: LocalStoreOptions<TValue, TKeyExpr, TKey>);
     /**
      * [descr:LocalStore.clear()]
      */
@@ -2100,8 +2117,11 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface LocalStoreOptions<TKey = any, TValue = any>
-    extends ArrayStoreOptions<TKey, TValue> {
+  export interface LocalStoreOptions<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends ArrayStoreOptions<TValue, TKeyExpr, TKey> {
     /**
      * [descr:LocalStoreOptions.flushInterval]
      */
@@ -2218,11 +2238,12 @@ declare module DevExpress.data {
   /**
    * [descr:ODataStore]
    */
-  export class ODataStore<TKey = any, TValue = any> extends Store<
-    TKey,
-    TValue
-  > {
-    constructor(options?: ODataStoreOptions<TKey, TValue>);
+  export class ODataStore<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends Store<TValue, TKeyExpr, TKey> {
+    constructor(options?: ODataStoreOptions<TValue, TKeyExpr, TKey>);
     byKey(key: TKey): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:ODataStore.byKey(key, extraOptions)]
@@ -2274,8 +2295,11 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ODataStoreOptions<TKey = any, TValue = any>
-    extends StoreOptions<TKey, TValue> {
+  export interface ODataStoreOptions<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends StoreOptions<TValue, TKeyExpr, TKey> {
     /**
      * [descr:ODataStoreOptions.beforeSend]
      */
@@ -2846,8 +2870,12 @@ declare module DevExpress.data {
    * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export class Store<TKey = any, TValue = any> {
-    constructor(options?: StoreOptions<TKey, TValue>);
+  export class Store<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > {
+    constructor(options?: StoreOptions<TValue, TKeyExpr, TKey>);
     /**
      * [descr:Store.byKey(key)]
      */
@@ -2862,7 +2890,7 @@ declare module DevExpress.data {
     /**
      * [descr:Store.key()]
      */
-    key(): string | Array<string>;
+    key(): TKeyExpr;
     /**
      * [descr:Store.keyOf(obj)]
      */
@@ -2946,7 +2974,11 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface StoreOptions<TKey = any, TValue = any> {
+  export interface StoreOptions<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > {
     /**
      * [descr:StoreOptions.errorHandler]
      */
@@ -2954,7 +2986,7 @@ declare module DevExpress.data {
     /**
      * [descr:StoreOptions.key]
      */
-    key?: string | Array<string>;
+    key?: TKeyExpr;
     /**
      * [descr:StoreOptions.onInserted]
      */
