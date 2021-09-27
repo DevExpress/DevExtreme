@@ -81,7 +81,7 @@ import { DxPromise } from '../../../../../core/utils/deferred'; // eslint-disabl
 import type { UserDefinedElement, DxElement } from '../../../../../core/element'; // eslint-disable-line import/named
 import type { template } from '../../../../../core/templates/template';
 import DataSource from '../../../../../data/data_source';
-import type { DataSourceOptions } from '../../../../../data/data_source';
+import type { Options as DataSourceOptions } from '../../../../../data/data_source';
 import type { Properties as PopupProperties } from '../../../../../ui/popup';
 import type {
   RequiredRule,
