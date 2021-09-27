@@ -274,21 +274,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return () => { this.instance.dispose(); };
   }
 
-  onViewRendered(viewMetaData: ViewMetaData): void {
-    this.viewDataProvider = viewMetaData.viewDataProvider;
-    this.cellsMetaData = viewMetaData.cellsMetaData;
-    this.createInstances();
-  }
-
-  setCurrentView(view: string): void {
-    this.props.currentView = view;
-  }
-
-  setCurrentDate(date: Date): void {
-    this.props.currentDate = date;
-  }
-
-  createInstances(): void {
+  @Effect({ run: 'once' })
+  initialization(): void {
     createFactoryInstances({
       key: this.key,
       resources: this.props.resources,
@@ -302,5 +289,18 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       getIsVirtualScrolling: () => this.isVirtualScrolling,
       getDataAccessors: (): DataAccessorType => this.dataAccessors,
     });
+  }
+
+  onViewRendered(viewMetaData: ViewMetaData): void {
+    this.viewDataProvider = viewMetaData.viewDataProvider;
+    this.cellsMetaData = viewMetaData.cellsMetaData;
+  }
+
+  setCurrentView(view: string): void {
+    this.props.currentView = view;
+  }
+
+  setCurrentDate(date: Date): void {
+    this.props.currentDate = date;
   }
 }

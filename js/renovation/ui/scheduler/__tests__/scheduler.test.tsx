@@ -159,6 +159,17 @@ describe('Scheduler', () => {
           startViewDate,
         });
     });
+
+    it('should correctly create factory instances', () => {
+      const scheduler = new Scheduler(new SchedulerProps());
+
+      scheduler.initialization();
+
+      expect(getAppointmentDataProvider(scheduler.key))
+        .toBeDefined();
+      expect(getTimeZoneCalculator(scheduler.key))
+        .toBeDefined();
+    });
   });
 
   describe('Behaviour', () => {
@@ -353,28 +364,6 @@ describe('Scheduler', () => {
             .toBe(viewDataProvider);
           expect(scheduler.cellsMetaData)
             .toBe(cellsMetaData);
-        });
-
-        describe('createInstances', () => {
-          it('should correctly create factory instances', () => {
-            const scheduler = new Scheduler(new SchedulerProps());
-
-            const viewDataProvider = new ViewDataProvider('week') as any;
-            const cellsMetaData = {
-              dateTableCellsMeta: [],
-              allDayPanelCellsMeta: [],
-            };
-
-            scheduler.onViewRendered({
-              viewDataProvider,
-              cellsMetaData,
-            });
-
-            expect(getAppointmentDataProvider(scheduler.key))
-              .toBeDefined();
-            expect(getTimeZoneCalculator(scheduler.key))
-              .toBeDefined();
-          });
         });
       });
 
