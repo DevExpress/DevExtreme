@@ -1654,9 +1654,9 @@ declare module DevExpress.data {
   export type CommonDataSource<T> =
     | string
     | Array<T>
-    | Store<any, T>
-    | DataSourceOptions<any, T>
-    | DataSource<any, T>;
+    | Store<T>
+    | DataSourceOptions<T>
+    | DataSource<T>;
   /**
    * [descr:CustomStore]
    */
