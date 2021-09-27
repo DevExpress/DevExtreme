@@ -23,7 +23,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
 
         duration = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate);
 
-        const cellDuration = this.instance.getAppointmentDurationInMinutes() * toMs('minute');
+        const cellDuration = this.cellDurationInMinutes * toMs('minute');
         const durationInCells = duration / cellDuration;
         const width = this.cropAppointmentWidth(durationInCells * cellWidth, cellWidth);
 
@@ -91,7 +91,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         let deltaTime = 0;
         const deltaWidth = args.width - initialSize.width;
 
-        deltaTime = toMs('minute') * Math.round(deltaWidth / this.cellWidth * this.instance.getAppointmentDurationInMinutes());
+        deltaTime = toMs('minute') * Math.round(deltaWidth / this.cellWidth * this.cellDurationInMinutes);
 
         return deltaTime;
     }
