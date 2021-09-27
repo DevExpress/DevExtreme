@@ -4360,6 +4360,14 @@ declare module DevExpress.ui {
      * [descr:DataChange.pageIndex]
      */
     pageIndex?: number;
+    /**
+     * [descr:DataChange.insertAfterKey]
+     */
+    insertAfterKey?: any;
+    /**
+     * [descr:DataChange.insertBeforeKey]
+     */
+    insertBeforeKey?: any;
   }
   /**
    * [descr:DataExpressionMixin]
@@ -6306,6 +6314,16 @@ declare module DevExpress.ui {
        * [descr:GridBaseOptions.editing.mode]
        */
       mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
+      /**
+       * [descr:GridBaseOptions.editing.newRowPosition]
+       */
+      newRowPosition?:
+        | 'first'
+        | 'last'
+        | 'pageBottom'
+        | 'pageTop'
+        | 'viewportBottom'
+        | 'viewportTop';
       /**
        * [descr:GridBaseOptions.editing.popup]
        */
@@ -16782,12 +16800,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.restorePosition]
      */
-    restorePosition?: {
-      always: boolean;
-      onDimensionChangeAfterDragOrResize: boolean;
-      onFullScreenDisable: boolean;
-      onOpening: boolean;
-    };
+    restorePosition?: boolean;
     /**
      * [descr:dxPopupOptions.showCloseButton]
      */

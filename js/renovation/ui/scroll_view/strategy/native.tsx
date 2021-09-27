@@ -445,6 +445,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     );
   }
 
+  @Method()
   scrollByLocation(location: ScrollOffset): void {
     const containerEl = this.containerRef.current!;
 

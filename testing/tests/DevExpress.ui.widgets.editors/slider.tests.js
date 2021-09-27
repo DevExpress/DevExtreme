@@ -974,7 +974,7 @@ module('events', () => {
             this.testProgramChange(assert);
         });
 
-        ['right', 'left', 'home', 'end', 'pageUp', 'pageDown'].forEach(key => {
+        ['rightArrow', 'leftArrow', 'home', 'end', 'pageUp', 'pageDown'].forEach(key => {
             test(`on ${key} press`, function(assert) {
                 this.keyboard.press(key);
 

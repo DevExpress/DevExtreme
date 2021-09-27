@@ -397,6 +397,8 @@ QUnit.test('initViewport disables panning for non-native scrolling', function(as
 QUnit.test('dxpointermove is prevented when scrolling is disabled (Q574378)', function(assert) {
     const $scrollable = $('#scrollable');
 
+    $scrollable.find('.content1').height(50);
+
     $scrollable
         .height('auto')
         .wrapInner('<div>').children().height(50);

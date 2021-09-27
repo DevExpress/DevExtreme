@@ -253,7 +253,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
         assert.equal(treeList.option('scrolling.mode'), 'virtual', 'scrolling mode is virtual');
         const $rowsViewTables = $(treeList.$element().find('.dx-treelist-rowsview table'));
         assert.equal($rowsViewTables.length, 1, 'one table are rendered');
-        assert.equal($rowsViewTables.eq(0).find('.dx-data-row').length, 2, 'data rows in table');
+        assert.equal($rowsViewTables.eq(0).find('.dx-data-row').length, 1, 'data rows in table');
         assert.equal($rowsViewTables.eq(0).find('.dx-virtual-row').length, 2, 'two virtual rows in table');
         assert.equal($rowsViewTables.eq(0).find('.dx-freespace-row').length, 1, 'one freespace row in table');
     });
@@ -1891,7 +1891,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
 
         setTimeout(function() {
             // assert
-            assert.strictEqual(treeList.pageIndex(), 1, 'page index');
+            assert.ok(treeList.pageIndex() > 0, 'page index');
             done();
         }, 1000);
     });

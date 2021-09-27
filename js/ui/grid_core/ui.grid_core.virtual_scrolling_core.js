@@ -357,10 +357,13 @@ export const VirtualScrollController = Class.inherit((function() {
                 ? Math.min(this._viewportItemIndex, Math.max(0, totalItemsCount - this._viewportSize))
                 : this._viewportItemIndex;
             const bottomIndex = this._viewportSize + topIndex;
-            const maxGap = this.pageSize();
+            const maxGap = this.option('scrolling.prerenderedRowChunkSize') || 1;
+            const isScrollingBack = this.isScrollingBack();
             const minGap = this.option('scrolling.minGap');
-            const skip = Math.floor(Math.max(0, topIndex - minGap) / maxGap) * maxGap;
-            let take = Math.ceil((bottomIndex + minGap - skip) / maxGap) * maxGap;
+            const topMinGap = isScrollingBack ? minGap : 0;
+            const bottomMinGap = isScrollingBack ? 0 : minGap;
+            const skip = Math.floor(Math.max(0, topIndex - topMinGap) / maxGap) * maxGap;
+            let take = Math.ceil((bottomIndex + bottomMinGap - skip) / maxGap) * maxGap;
 
             if(virtualMode) {
                 const remainedItems = Math.max(0, totalItemsCount - skip);
