@@ -1,4 +1,5 @@
 import {
+  ElementOffset,
   ScrollableDirection, ScrollOffset,
 } from '../common/types.d';
 
@@ -15,7 +16,7 @@ export function getElementLocationInternal(
   direction: ScrollableDirection,
   containerElement: HTMLDivElement,
   scrollOffset: ScrollOffset,
-  offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
+  offset?: ElementOffset,
 ): number {
   const additionalOffset = {
     top: 0,
