@@ -1,6 +1,6 @@
 import { isNumeric } from '../../../core/utils/type';
 
-function normalize(value) {
+function normalizeBoundaryValue(value) {
     if(isNumeric(value)) {
         return {
             top: value,
@@ -20,7 +20,7 @@ function normalize(value) {
 function normalizeOptions(rows) {
     rows.forEach(row => {
         row.cells.forEach(({ pdfCell }) => {
-            pdfCell.padding = normalize(pdfCell.padding);
+            pdfCell.padding = normalizeBoundaryValue(pdfCell.padding);
             // TODO: normalizeTextColor()
             // TODO: normalizeBackgroundColor()
             // TODO: ...
@@ -28,4 +28,4 @@ function normalizeOptions(rows) {
     });
 }
 
-export { normalizeOptions, normalize };
+export { normalizeOptions, normalizeBoundaryValue };
