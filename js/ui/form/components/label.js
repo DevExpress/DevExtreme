@@ -56,7 +56,7 @@ export function getLabelWidthByInnerHTML(options) {
 
     // this code has slow performance
     // innerHTML was added in https://hg/mobile/rev/3ed89cf230a4 for T350537
-    // It looks like a security issue: a JS code can be passed in 'text' and will be executed
+    // innerHTML is received from a DOM element (see _getLabelInnerHTML in ui.form.js)
     labelTextElement.innerHTML = innerHTML;
     const result = labelTextElement.offsetWidth;
 
