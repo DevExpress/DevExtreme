@@ -154,7 +154,7 @@ describe('Appointments models', () => {
           timeZone: '',
           firstDayOfWeek: 0,
           viewType: 'week',
-          cellDurationInMinute: 30,
+          cellDurationInMinutes: 30,
           supportAllDayRow: false,
           isVerticalGroupOrientation: false,
           loadedResources: [],

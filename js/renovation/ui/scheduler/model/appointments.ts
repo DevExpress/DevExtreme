@@ -87,7 +87,7 @@ const getAppointmentConfig = (
   timeZone: schedulerConfig.timeZone,
   firstDayOfWeek: viewConfig.firstDayOfWeek,
   viewType: viewConfig.type,
-  cellDurationInMinute: viewConfig.cellDuration,
+  cellDurationInMinutes: viewConfig.cellDuration,
   supportAllDayRow: viewConfig.showAllDayPanel, // ?
   isVerticalGroupOrientation: viewConfig.groupOrientation === 'vertical',
 });

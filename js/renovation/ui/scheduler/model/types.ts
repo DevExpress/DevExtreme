@@ -29,7 +29,7 @@ export interface AppointmentsConfigType {
   timeZone: string;
   firstDayOfWeek: number;
   viewType: string;
-  cellDurationInMinute: number;
+  cellDurationInMinutes: number;
   supportAllDayRow: boolean; // ?
   isVerticalGroupOrientation: boolean; // ?
 }
