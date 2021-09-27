@@ -492,8 +492,8 @@ describe('Simulated > Behavior', () => {
       });
     });
 
-    [true, false].forEach((forceGeneratePockets) => {
-      it('Should assign swipeDown, pullDown strategy, forceGeneratePockets: %o', () => {
+    each([true, false]).describe('forceGeneratePockets: %o,', (forceGeneratePockets) => {
+      it('Should assign swipeDown, pullDown strategy', () => {
         (getElementPadding as jest.Mock).mockReturnValue(8);
 
         [-50, 0, 50].forEach((vScrollLocation) => {
@@ -527,6 +527,10 @@ describe('Simulated > Behavior', () => {
                   clientHeight: 20,
                   scrollLeft: 150,
                   scrollTop: 200,
+                  getBoundingClientRect: () => ({
+                    width: 10,
+                    height: 20,
+                  }),
                 },
               } as RefObject;
 
@@ -536,6 +540,10 @@ describe('Simulated > Behavior', () => {
                   clientHeight: 60,
                   scrollWidth: 70,
                   scrollHeight: 80,
+                  getBoundingClientRect: () => ({
+                    width: 10,
+                    height: 20,
+                  }),
                 },
               } as RefObject;
 

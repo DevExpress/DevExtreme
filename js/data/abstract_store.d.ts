@@ -2,7 +2,11 @@ import { DxPromise } from '../core/utils/deferred';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 
 /** @namespace DevExpress.data */
-export interface StoreOptions<TKey = any, TValue = any> {
+export interface StoreOptions
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> {
     /**
      * @docid
      * @public
@@ -12,7 +16,7 @@ export interface StoreOptions<TKey = any, TValue = any> {
      * @docid
      * @public
      */
-    key?: string | Array<string>;
+    key?: TKeyExpr;
     /**
      * @docid
      * @type_function_param1 values:object
@@ -99,8 +103,12 @@ type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | '
  * @hidden
  * @namespace DevExpress.data
  */
-export default class Store<TKey = any, TValue = any> {
-    constructor(options?: StoreOptions<TKey, TValue>)
+export default class Store
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> {
+    constructor(options?: StoreOptions<TValue, TKeyExpr, TKey>)
     /**
      * @docid
      * @publicName byKey(key)
@@ -123,7 +131,7 @@ export default class Store<TKey = any, TValue = any> {
      * @publicName key()
      * @public
      */
-    key(): string | Array<string>;
+    key(): TKeyExpr;
     /**
      * @docid
      * @publicName keyOf(obj)

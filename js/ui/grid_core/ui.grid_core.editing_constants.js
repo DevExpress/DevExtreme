@@ -23,6 +23,13 @@ export const EDIT_MODE_CELL = 'cell';
 export const EDIT_MODE_FORM = 'form';
 export const EDIT_MODE_POPUP = 'popup';
 
+export const FIRST_NEW_ROW_POSITION = 'first';
+export const LAST_NEW_ROW_POSITION = 'last';
+export const PAGE_BOTTOM_NEW_ROW_POSITION = 'pageBottom';
+export const PAGE_TOP_NEW_ROW_POSITION = 'pageTop';
+export const VIEWPORT_BOTTOM_NEW_ROW_POSITION = 'viewportBottom';
+export const VIEWPORT_TOP_NEW_ROW_POSITION = 'viewportTop';
+
 export const EDIT_MODES = [EDIT_MODE_BATCH, EDIT_MODE_ROW, EDIT_MODE_CELL, EDIT_MODE_FORM, EDIT_MODE_POPUP];
 export const ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP];
 export const MODES_WITH_DELAYED_FOCUS = [EDIT_MODE_ROW, EDIT_MODE_FORM];

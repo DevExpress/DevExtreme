@@ -123,24 +123,17 @@ class OverlayPositionController {
     }
 
     openingHandled() {
-        const shouldRestorePosition = this._props.restorePosition.onOpening
-            || this._props.restorePosition.always;
+        const shouldRestorePosition = this._props.restorePosition;
 
         this.restorePositionOnNextRender(shouldRestorePosition);
     }
 
     dragHandled() {
-        const shouldRestorePosition = this._props.restorePosition.onDimensionChangeAfterDragOrResize
-            || this._props.restorePosition.always;
-
-        this.restorePositionOnNextRender(shouldRestorePosition);
+        this.restorePositionOnNextRender(false);
     }
 
     resizeHandled() {
-        const shouldRestorePosition = this._props.restorePosition.onDimensionChangeAfterDragOrResize
-            || this._props.restorePosition.always;
-
-        this.restorePositionOnNextRender(shouldRestorePosition);
+        this.restorePositionOnNextRender(false);
     }
 
     updateTarget(target) {
@@ -366,9 +359,7 @@ class PopupPositionController extends OverlayPositionController {
     }
 
     _fullScreenDisabled() {
-        const shouldRestorePosition = this._props.restorePosition.onFullScreenDisable
-            || this._props.restorePosition.always;
-        this.restorePositionOnNextRender(shouldRestorePosition);
+        this.restorePositionOnNextRender(false);
     }
 }
 

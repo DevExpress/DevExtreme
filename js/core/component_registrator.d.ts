@@ -2,7 +2,7 @@ import DOMComponent from './dom_component';
 import { UserDefinedElement } from './element';
 
 type ComponentFactory<TComponent> = {
-    new(): TComponent;
+    new(element: UserDefinedElement, options?: Record<string, unknown>): TComponent;
     getInstance(element: UserDefinedElement): TComponent;
 };
 

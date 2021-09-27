@@ -127,7 +127,7 @@ module('Table resizing integration', {
 
         const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
 
-        assert.strictEqual($textItems.length, 2, 'text items count is correct');
+        assert.strictEqual($textItems.length, 4, 'text items count is correct');
         assert.strictEqual($ItemsHasSubmenu.length, 2, 'submenu items count is correct');
     });
 
@@ -169,6 +169,27 @@ module('Table resizing integration', {
         const $submenuItems = $contextMenu.find(SUBMENU_ITEMS_SELECTOR);
 
         assert.strictEqual($submenuItems.length, 3);
+    });
+
+    test('Context menu Table Properties should open the Form', function(assert) {
+        this.createWidget();
+
+        const $tableElement = this.$element.find('td').eq(0);
+
+        $tableElement.trigger('dxcontextmenu');
+        this.clock.tick();
+
+        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+
+        const $textItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
+
+        $textItems.eq(2).trigger('dxclick');
+        this.clock.tick(500);
+
+        const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+        assert.strictEqual($form.length, 1);
+        assert.ok($form.eq(0).is(':visible'));
     });
 
     test('Check context menu Insert Header Row action', function(assert) {

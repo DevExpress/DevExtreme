@@ -7,7 +7,7 @@ import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { WorkSpace } from '../workspaces/base/work_space';
-import SchedulerToolbar from '../header/header';
+import { SchedulerToolbar } from '../header/header';
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -157,6 +157,13 @@ describe('Scheduler', () => {
           onCurrentDateUpdate: setCurrentDate,
           startViewDate,
         });
+    });
+
+    it('should not render toolbar if toolbar prop is an empty array', () => {
+      const tree = renderComponent({ props: { toolbar: [] } });
+      const schedulerToolbar = tree.find(SchedulerToolbar);
+
+      expect(schedulerToolbar.exists()).toBe(false);
     });
   });
 

@@ -132,29 +132,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     height?: number | string | (() => number | string);
     /**
      * @docid
-     * @default { bing: '', google: '', googleStatic: '' }
-     * @public
-     * @deprecated dxMapOptions.apiKey
-     */
-    key?: string | {
-      /**
-       * @docid
-       * @default ""
-       */
-      bing?: string;
-      /**
-       * @docid
-       * @default ""
-       */
-      google?: string;
-      /**
-       * @docid
-       * @default ""
-       */
-      googleStatic?: string;
-    };
-    /**
-     * @docid
      * @public
      */
     markerIconSrc?: string;

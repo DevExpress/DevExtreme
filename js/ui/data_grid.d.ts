@@ -1574,6 +1574,13 @@ export interface EditingBase {
      */
     mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
     /**
+     * @docid GridBaseOptions.editing.newRowPosition
+     * @type Enums.GridNewRowPosition
+     * @default "viewportTop"
+     * @public
+     */
+    newRowPosition?: 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop';
+    /**
      * @docid GridBaseOptions.editing.popup
      * @public
      * @type dxPopupOptions
@@ -1640,6 +1647,14 @@ export interface DataChange {
      * @docid
      */
     pageIndex?: number;
+    /**
+     * @docid
+     */
+    insertAfterKey?: any;
+    /**
+     * @docid
+     */
+    insertBeforeKey?: any;
 }
 
 /**

@@ -195,8 +195,8 @@ export const stateStoringModule = {
 
                     that.option('filterPanel.filterEnabled', state.filterPanel ? state.filterPanel.filterEnabled : true);
 
-                    that.option('paging.pageSize', (!isVirtualScrollingMode || showPageSizeSelector) && isDefined(state.pageSize) ? state.pageSize : that._initialPageSize);
                     that.option('paging.pageIndex', state.pageIndex || 0);
+                    that.option('paging.pageSize', (!isVirtualScrollingMode || showPageSizeSelector) && isDefined(state.pageSize) ? state.pageSize : that._initialPageSize);
 
                     dataController && dataController.reset();
                 }
