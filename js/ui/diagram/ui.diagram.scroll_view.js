@@ -27,7 +27,9 @@ class DiagramScrollView extends Widget {
             }
         };
         const useNativeScrolling = this.option('useNativeScrolling');
-        if(useNativeScrolling !== undefined) { options.useNative = useNativeScrolling; }
+        if(useNativeScrolling !== undefined) {
+            options.useNative = useNativeScrolling;
+        }
         this._scrollView = this._createComponent($scrollViewWrapper, ScrollView, options);
         this._onCreateDiagramAction({
             $parent: $(this._scrollView.content()),
@@ -79,6 +81,8 @@ class DiagramScrollView extends Widget {
         switch(args.name) {
             case 'onCreateDiagram':
                 this._createOnCreateDiagramAction();
+                break;
+            case 'useNativeScrolling':
                 break;
             default:
                 super._optionChanged(args);
