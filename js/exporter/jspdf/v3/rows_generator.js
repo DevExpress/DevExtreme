@@ -72,6 +72,7 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
                 verticalAlign: 'middle',
                 wordWrapEnabled,
                 backgroundColor,
+                padding: 0,
                 _rect: {}
             }
         };

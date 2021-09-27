@@ -28,7 +28,6 @@ function initializeCellsWidth(doc, dataProvider, rows, options) {
     });
 }
 
-
 function calculateHeights(doc, rows, options) {
     rows.forEach(row => {
         const pdfCells = row.cells.map(c => c.pdfCell);

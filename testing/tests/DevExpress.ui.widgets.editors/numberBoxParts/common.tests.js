@@ -1780,8 +1780,7 @@ QUnit.module('keyboard navigation', {}, () => {
     });
 
     QUnit.test('control keys should not be prevented', function(assert) {
-        const controlKeys = ['Tab', 'Del', 'Delete', 'Backspace', 'Left', 'ArrowLeft', 'Right', 'ArrowRight', 'Home', 'End'];
-
+        const controlKeys = ['Tab', 'Del', 'Delete', 'Backspace', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
         let isKeyPressPrevented = false;
         const $numberBox = $('#numberbox').dxNumberBox({
             focusStateEnabled: true
@@ -2186,7 +2185,7 @@ QUnit.module('valueChanged should receive correct event parameter', {
         });
     });
 
-    ['down', 'up'].forEach(arrow => {
+    ['arrowdown', 'arrowup'].forEach(arrow => {
         QUnit.test(`on ${arrow} press`, function(assert) {
             this.keyboard.press(arrow);
 

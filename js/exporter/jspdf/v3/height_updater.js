@@ -1,5 +1,5 @@
 import { isDefined } from '../../../core/utils/type';
-import { calculateTextHeight } from './pdf_utils_v3';
+import { calculateTextHeight, calculateTargetRectWidth } from './pdf_utils_v3';
 
 function updateRowsAndCellsHeights(doc, rows) {
     const rowsAdditionalHeights = calculateAdditionalRowsHeights(doc, rows);
@@ -27,18 +27,20 @@ function calculateAdditionalRowsHeights(doc, rows) {
             .filter(cell => isDefined(cell.rowSpan));
 
         cellsWithRowSpan.forEach(cell => {
-            const cellTextHeight = calculateTextHeight(doc, cell.pdfCell.text, cell.pdfCell.font, {
+            const targetRectWidth = calculateTargetRectWidth(cell.pdfCell._rect.w, cell.pdfCell.padding);
+            const textHeight = calculateTextHeight(doc, cell.pdfCell.text, cell.pdfCell.font, {
                 wordWrapEnabled: cell.pdfCell.wordWrapEnabled,
-                columnWidth: cell.pdfCell._rect.w
+                targetRectWidth
             });
+            const cellHeight = textHeight + cell.pdfCell.padding.top + cell.pdfCell.padding.bottom;
 
             const rowsCount = cell.rowSpan + 1;
             const currentRowSpanRowsHeight = rows
                 .slice(row.rowIndex, row.rowIndex + rowsCount)
                 .reduce((accumulator, rowInfo) => accumulator + rowInfo.height + rowsAdditionalHeights[rowInfo.rowIndex], 0);
 
-            if(cellTextHeight > currentRowSpanRowsHeight) {
-                const delta = (cellTextHeight - currentRowSpanRowsHeight) / rowsCount;
+            if(cellHeight > currentRowSpanRowsHeight) {
+                const delta = (cellHeight - currentRowSpanRowsHeight) / rowsCount;
                 for(let spanIndex = row.rowIndex; spanIndex < row.rowIndex + rowsCount; spanIndex++) {
                     rowsAdditionalHeights[spanIndex] += delta;
                 }
