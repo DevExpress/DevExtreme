@@ -232,41 +232,6 @@ QUnit.module('event utils', () => {
 
     [
         {
-            testData: { key: 'Up' },
-            expected: 'upArrow',
-            comment: 'IE11 API'
-        },
-        {
-            testData: { key: 'Left' },
-            expected: 'leftArrow',
-            comment: 'IE11 API'
-        },
-        {
-            testData: { key: 'Right' },
-            expected: 'rightArrow',
-            comment: 'IE11 API'
-        },
-        {
-            testData: { key: 'Down' },
-            expected: 'downArrow',
-            comment: 'IE11 API'
-        },
-        {
-            testData: { key: 'Del' },
-            expected: 'del',
-            comment: 'IE11 API'
-        },
-        {
-            testData: { key: 'Subtract' },
-            expected: 'minus',
-            comment: 'IE11 API'
-        },
-        {
-            testData: { key: 'Esc' },
-            expected: 'escape',
-            comment: 'IE11 API'
-        },
-        {
             testData: { key: 'Backspace' },
             expected: 'backspace',
             comment: 'Standard API'

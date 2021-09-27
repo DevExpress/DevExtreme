@@ -238,11 +238,6 @@ export function current(options) {
     }
 
     if(currentThemeData) {
-        // NOTE:
-        // 1. <link> element re-creation leads to incorrect CSS rules priority in Internet Explorer (T246821).
-        // 2. We have no reliable info, why this hack has been applied and whether it is still relevant.
-        // 3. This hack leads Internet Explorer crashing after icon font has been implemented.
-        //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
         $activeThemeLink.attr('href', knownThemes[currentThemeName].url);
         if((themeReadyCallback.has() || initDeferred.state() !== 'resolved' || options._forceTimeout)) {
             waitForThemeLoad(currentThemeName);

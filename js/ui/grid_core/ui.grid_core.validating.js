@@ -585,15 +585,14 @@ export const validatingModule = {
         controllers: {
             editing: {
                 _addChange: function(options, row) {
-                    const index = this.callBase(options, row);
+                    const change = this.callBase(options, row);
                     const validatingController = this.getController('validating');
 
-                    if(index >= 0 && options.type !== EDIT_DATA_REMOVE_TYPE) {
-                        const change = this.getChanges()[index];
-                        change && validatingController.updateValidationState(change);
+                    if(change && options.type !== EDIT_DATA_REMOVE_TYPE) {
+                        validatingController.updateValidationState(change);
                     }
 
-                    return index;
+                    return change;
                 },
 
                 _handleChangesChange: function(args) {

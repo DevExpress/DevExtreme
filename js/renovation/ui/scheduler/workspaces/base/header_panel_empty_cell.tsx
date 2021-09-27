@@ -9,7 +9,6 @@ import { AllDayPanelTitle } from './date_table/all_day_panel/title';
 export const viewFunction = ({
   props: {
     isRenderAllDayTitle,
-    isSetAllDayTitleClass,
     width,
   },
 }: HeaderPanelEmptyCell): JSX.Element => (
@@ -18,10 +17,7 @@ export const viewFunction = ({
     style={{ width }}
   >
     {isRenderAllDayTitle && (
-      <AllDayPanelTitle
-        visible
-        isSetTitleClass={isSetAllDayTitleClass}
-      />
+      <AllDayPanelTitle />
     )}
   </div>
 );
@@ -31,8 +27,6 @@ export class HeaderPanelEmptyCellProps {
   @OneWay() width?: number;
 
   @OneWay() isRenderAllDayTitle = false;
-
-  @OneWay() isSetAllDayTitleClass = true;
 }
 
 @Component({

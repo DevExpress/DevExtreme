@@ -89,6 +89,17 @@ const tableMarkupWidth = '\
     </table>\
     <br><br>';
 
+const tableMarkupAutoWidth = '\
+    <table>\
+        <tr>\
+            <td width="50px">0_0</td>\
+            <td>0_1</td>\
+            <td>0_2</td>\
+            <td width="50px">0_3</td>\
+        </tr>\
+    </table>\
+    <br><br>';
+
 const tableMarkupHeight = '\
     <table>\
         <tr>\
@@ -324,6 +335,24 @@ module('Table resizing integration', {
             const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
 
             assert.strictEqual($resizeFrame.length, 1, 'Frame is created');
+        });
+
+        test('Table with fixed width should not change size after tableResizing is enabled', function(assert) {
+            this.createWidget({
+                width: 700,
+                tableResizing: { enabled: false },
+                value: tableMarkupAutoWidth
+            });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $table = this.$element.find('table').eq(0);
+            $table.css('width', 400);
+
+            this.instance.option('tableResizing', { enabled: true });
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.roughEqual($table.outerWidth(), 400, 2, 'Table width is correct');
         });
     });
 

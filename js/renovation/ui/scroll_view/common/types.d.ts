@@ -36,3 +36,19 @@ export interface DxMouseWheelEvent extends MouseEvent {
 export interface DxKeyboardEvent extends KeyboardEvent {
   originalEvent: DxKeyboardEvent;
 }
+
+export interface DomRect {
+  width: number;
+  height: number;
+  bottom: number;
+  top: number;
+  left: number;
+  right: number;
+}
+
+export interface ElementOffset {
+  bottom?: number;
+  top?: number;
+  left?: number;
+  right?: number;
+}

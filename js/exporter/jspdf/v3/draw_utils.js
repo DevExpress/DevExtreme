@@ -20,9 +20,15 @@ function drawCellBackground(doc, cell) {
 
 function drawCellText(doc, cell, docStyles) {
     if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
-        const { textColor, font } = cell;
+        const { textColor, font, _rect, padding } = cell;
         setTextStyles(doc, { textColor, font }, docStyles);
-        drawTextInRect(doc, cell.text, cell._rect, cell.verticalAlign, cell.wordWrapEnabled, cell.jsPdfTextOptions);
+        const textRect = {
+            x: _rect.x + padding.left,
+            y: _rect.y + padding.top,
+            w: _rect.w - (padding.left + padding.right),
+            h: _rect.h - (padding.top + padding.bottom)
+        };
+        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.wordWrapEnabled, cell.jsPdfTextOptions);
     }
 }
 

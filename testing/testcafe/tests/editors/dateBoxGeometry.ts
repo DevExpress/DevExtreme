@@ -4,7 +4,7 @@ import url from '../../helpers/getPageUrl';
 import { changeTheme } from '../../helpers/changeTheme';
 
 const setConfig = ClientFunction(
-  (theme, config) => (window as any).createDateBoxInTheme(theme, config),
+  (config) => (window as any).createDateBoxInTheme(config),
 );
 
 fixture`DateBox (datetime) geometry (T896846)`
@@ -30,7 +30,7 @@ themes.forEach((theme) => {
     test(`Geometry is good (${name}, ${theme})`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await changeTheme(theme);
-      await setConfig(theme, config);
+      await setConfig(config);
 
       await t
         .expect(await takeScreenshot(`datebox-geometry-${theme}-${name}.png`, '#container'))
