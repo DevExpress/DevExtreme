@@ -642,22 +642,21 @@ testComponentDefaults(Gallery,
     }
 );
 
-if(!Scrollable.IS_RENOVATED_WIDGET) {
-    testComponentDefaults(Scrollable,
-        {},
-        {
-            useNative: false,
-            useSimulatedScrollbar: true
-        },
-        function() {
-            this._supportNativeScrolling = support.nativeScrolling;
-            support.nativeScrolling = false;
-        },
-        function() {
-            support.nativeScrolling = this._supportNativeScrolling;
-        }
-    );
-}
+testComponentDefaults(Scrollable,
+    {},
+    {
+        useNative: false,
+        // NOTE: useSimulatedScrollbar setting value doesn't affect on simulated strategy
+        useSimulatedScrollbar: Scrollable.IS_RENOVATED_WIDGET ? false : true
+    },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = false;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
 
 testComponentDefaults(Scrollable,
     [
@@ -684,22 +683,20 @@ testComponentDefaults(Scrollable,
     }
 );
 
-if(!Scrollable.IS_RENOVATED_WIDGET) {
-    testComponentDefaults(Scrollable,
-        {},
-        {
-            useNative: false,
-            useSimulatedScrollbar: true
-        },
-        function() {
-            this._supportNativeScrolling = support.nativeScrolling;
-            support.nativeScrolling = false;
-        },
-        function() {
-            support.nativeScrolling = this._supportNativeScrolling;
-        }
-    );
-}
+testComponentDefaults(Scrollable,
+    {},
+    { useSimulatedScrollbar: !browser.mozilla },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = true;
+        this._originalRealDevice = devices.real();
+        devices.real({ platform: 'android', version: [4] });
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+        devices.real(this._originalRealDevice);
+    }
+);
 
 testComponentDefaults(Scrollable,
     {},
