@@ -1229,6 +1229,11 @@
  */
 
 /**
+ * @typedef {string} Enums.GridNewRowPosition
+ * @enum {'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop'}
+ */
+
+/**
  * @typedef {string} Enums.DataGridToolbarItem
  * @enum {'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel'}
  */

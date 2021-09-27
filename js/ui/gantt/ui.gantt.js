@@ -808,13 +808,13 @@ class Gantt extends Widget {
                 this._sizeHelper?.setGanttHeight(getHeight(this._$element));
                 break;
             case 'sorting':
-                this._ganttTreeList?.setOption('sorting', args.value);
+                this._ganttTreeList?.setOption('sorting', this.option(args.name));
                 break;
             case 'filterRow':
-                this._ganttTreeList?.setOption('filterRow', args.value);
+                this._ganttTreeList?.setOption('filterRow', this.option(args.name));
                 break;
             case 'headerFilter':
-                this._ganttTreeList?.setOption('headerFilter', args.value);
+                this._ganttTreeList?.setOption('headerFilter', this.option(args.name));
                 break;
             default:
                 super._optionChanged(args);

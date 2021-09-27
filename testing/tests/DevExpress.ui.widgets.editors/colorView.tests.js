@@ -1213,7 +1213,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.testProgramChange(assert);
     });
 
-    ['up', 'down'].forEach(key => {
+    ['upArrow', 'downArrow'].forEach(key => {
         QUnit.test(`on ${key} press`, function(assert) {
             this.reinit({ value: 'rgba(15, 14, 14, 1)' });
 
@@ -1224,7 +1224,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         });
     });
 
-    ['up', 'down'].forEach(key => {
+    ['upArrow', 'downArrow'].forEach(key => {
         QUnit.test(`on ${key}+ctrl press`, function(assert) {
             this.reinit({ value: 'rgba(14, 15, 14, 1)' });
 
@@ -1237,7 +1237,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         });
     });
 
-    ['left', 'right'].forEach(key => {
+    ['leftArrow', 'rightArrow'].forEach(key => {
         QUnit.test(`on ${key}+ctrl press`, function(assert) {
             this.reinit({ value: 'rgba(14, 15, 14, 0.65)' });
 
@@ -1248,7 +1248,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         });
     });
 
-    ['left', 'right'].forEach(key => {
+    ['leftArrow', 'rightArrow'].forEach(key => {
         QUnit.test(`on ${key} press`, function(assert) {
             this.reinit({ value: 'rgba(15, 14, 14, 1)' });
 

@@ -9,6 +9,7 @@ import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/vie
 import { WorkSpace } from '../workspaces/base/work_space';
 import SchedulerToolbar from '../header/header';
 import { getAppointmentDataProvider, getTimeZoneCalculator } from '../../../../ui/scheduler/instanceFactory';
+import { SchedulerToolbar } from '../header/header';
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -169,6 +170,13 @@ describe('Scheduler', () => {
         .toBeDefined();
       expect(getTimeZoneCalculator(scheduler.key))
         .toBeDefined();
+    });
+
+    it('should not render toolbar if toolbar prop is an empty array', () => {
+      const tree = renderComponent({ props: { toolbar: [] } });
+      const schedulerToolbar = tree.find(SchedulerToolbar);
+
+      expect(schedulerToolbar.exists()).toBe(false);
     });
   });
 

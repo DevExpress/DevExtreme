@@ -78,7 +78,9 @@ export const utils = {
     },
     DOM: {
         getHeaderHeight: (header) => {
-            return header._$element && parseInt(getOuterHeight(header._$element), 10);
+            return header
+                ? header._$element && parseInt(getOuterHeight(header._$element), 10)
+                : 0;
         },
     },
     renovation: {
