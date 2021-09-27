@@ -4,4 +4,4 @@ Once the conditions above are met, use the [exportDataGrid(options)](/Documentat
 
 Review the [onExporting](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#onExporting) handler to see the data export code. DataGrid is exported as is to a single <a href="https://github.com/exceljs/exceljs#add-a-worksheet" target="_blank">worksheet</a>. You can also set [allowExportSelectedData](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/export/#allowExportSelectedData) to **true** to export only selected rows.
 
-You can export DataGrid to CSV. Implement the **exportDataGrid(options)** method as shown in the following ticket: <a href="https://supportcenter.devexpress.com/ticket/details/t920593/pivotgrid-exceljs-export-to-export-pivotgrid-into-csv-file" target="_blank">Export PivotGrid into CSV file</a>.
+You can export DataGrid to CSV. Call the **exportDataGrid(options)** method as shown in the following ticket: <a href="https://supportcenter.devexpress.com/ticket/details/t920593/pivotgrid-exceljs-export-to-export-pivotgrid-into-csv-file" target="_blank">Export PivotGrid into CSV file</a>.
