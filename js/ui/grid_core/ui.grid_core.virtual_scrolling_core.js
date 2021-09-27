@@ -11,7 +11,7 @@ import { VirtualDataLoader } from './ui.grid.core.virtual_data_loader';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
-const NEW_SCROLLING_MODE = 'scrolling.newMode';
+const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
 const isVirtualMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
 const isAppendMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
@@ -122,7 +122,7 @@ export const VirtualScrollController = Class.inherit((function() {
         ctor: function(component, dataOptions, isVirtual) {
             this._dataOptions = dataOptions;
             this.component = component;
-            this._viewportSize = component.option(NEW_SCROLLING_MODE) ? 15 : 0;
+            this._viewportSize = component.option(LEGACY_SCROLLING_MODE) === false ? 15 : 0;
             this._viewportItemSize = 20;
             this._viewportItemIndex = 0;
             this._position = 0;
@@ -150,7 +150,7 @@ export const VirtualScrollController = Class.inherit((function() {
             if(isVirtualMode(this)) {
                 const dataOptions = this._dataOptions;
                 const totalItemsCount = dataOptions.totalItemsCount();
-                if(this.option(NEW_SCROLLING_MODE) && totalItemsCount !== -1) {
+                if(this.option(LEGACY_SCROLLING_MODE) === false && totalItemsCount !== -1) {
                     const viewportParams = this.getViewportParams();
                     const loadedOffset = dataOptions.loadedOffset();
                     const loadedItemCount = dataOptions.loadedItemCount();
@@ -292,7 +292,7 @@ export const VirtualScrollController = Class.inherit((function() {
         },
         setViewportItemIndex: function(itemIndex) {
             this._viewportItemIndex = itemIndex;
-            if(this.option(NEW_SCROLLING_MODE)) {
+            if(this.option(LEGACY_SCROLLING_MODE) === false) {
                 return;
             }
 

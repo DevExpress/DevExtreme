@@ -1762,7 +1762,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
                 scrolling: {
                     mode: mode,
                     rowRenderingMode: 'virtual',
-                    newMode: true
+                    legacyMode: false
                 },
                 columns: ['Name', 'Description']
             });

@@ -4804,11 +4804,11 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.equal(items[pageSize].dataIndex, 1);
     });
 
-    QUnit.test('New mode. rowRenderingMode should be considered as \'virtual\' when newMode is enabled', function(assert) {
+    QUnit.test('New mode. rowRenderingMode should be considered as \'virtual\' when legacyMode is disabled', function(assert) {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -4833,7 +4833,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         };
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -4886,7 +4886,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -4943,7 +4943,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -4983,7 +4983,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -5010,7 +5010,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -5037,7 +5037,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -5064,7 +5064,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -5101,7 +5101,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -5148,7 +5148,7 @@ QUnit.module('Virtual scrolling preload', {
 
         this.options = {
             dataSource: getData(100),
-            scrolling: { mode: 'virtual', newMode: true, minGap: 0, rowPageSize: 5 },
+            scrolling: { mode: 'virtual', legacyMode: false, minGap: 0, rowPageSize: 5 },
             pager: { visible: 'auto' },
             paging: { pageSize: 20 },
             remoteOperations: { filtering: true, sorting: true, paging: true },
@@ -5665,11 +5665,11 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         assert.ok(dataController.isLoaded());
     });
 
-    QUnit.test('New mode. rowRenderingMode should be considered as \'virtual\' when newMode is enabled', function(assert) {
+    QUnit.test('New mode. rowRenderingMode should be considered as \'virtual\' when legacyMode is disabled', function(assert) {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -5694,7 +5694,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         };
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -5747,7 +5747,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }
@@ -5804,7 +5804,7 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
                 minGap: 1
             }

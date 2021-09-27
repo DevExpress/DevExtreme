@@ -2168,7 +2168,7 @@ QUnit.module('Virtual scrolling', defaultModuleConfig, () => {
             loadingTimeout: undefined,
             scrolling: {
                 mode: 'virtual',
-                newMode: true
+                legacyMode: false
             },
         });
 
