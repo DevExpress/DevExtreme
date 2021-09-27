@@ -485,6 +485,7 @@ QUnit.test('scrollbar is visible for parent scrollable after mouse leave for chi
         showScrollbar: 'onHover',
         direction: 'vertical'
     });
+
     const $parentContainer = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS).eq(0);
     const $childrenContainer = $childScrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
 
@@ -503,7 +504,7 @@ QUnit.test('scrollbar is visible for parent scrollable after mouse leave for chi
     assert.equal($childrenScroll.hasClass('dx-state-invisible'), true, 'children scrollbar is hidden');
 });
 
-QUnit.skip('scrollbar is visible for parent scrollable after start', function(assert) {
+QUnit.test('scrollbar is visible for parent scrollable after start', function(assert) {
     const $scrollable = $('#scrollable').height(25);
     const $childScrollable = $('<div>').height(50);
 
