@@ -24,6 +24,10 @@ import { combineClasses } from '../../../utils/combine_classes';
 import { getScrollLeftMax } from '../utils/get_scroll_left_max';
 import { getBoundaryProps, isReachedBottom } from '../utils/get_boundary_props';
 import { getScrollSign, normalizeOffsetLeft } from '../utils/normalize_offset_left';
+import {
+  getElementOverflowX,
+  getElementOverflowY,
+} from '../utils/get_element_style';
 
 import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return';
 import devices from '../../../../core/devices';
@@ -68,8 +72,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   const {
     cssClasses, wrapperRef, contentRef, containerRef, topPocketRef, bottomPocketRef, direction,
     hScrollbarRef, vScrollbarRef,
-    contentClientWidth, containerClientWidth, contentClientHeight, containerClientHeight,
-    updateHandleInternal, scrolling,
+    contentWidth, containerClientWidth, contentHeight, containerClientHeight, scrolling,
     scrollableRef, isLoadPanelVisible, topPocketState,
     pullDownTranslateTop, pullDownIconAngle, pullDownOpacity,
     topPocketHeight, contentStyles, scrollViewContentRef, contentTranslateTop,
@@ -96,7 +99,6 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
       height={height}
       width={width}
       visible={visible}
-      onDimensionChanged={updateHandleInternal}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <div className={SCROLLABLE_WRAPPER_CLASS} ref={wrapperRef}>
@@ -151,7 +153,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           direction="horizontal"
           showScrollbar="onScroll"
           ref={hScrollbarRef}
-          contentSize={contentClientWidth}
+          contentSize={contentWidth}
           containerSize={containerClientWidth}
           maxOffset={hScrollOffsetMax}
           scrollLocation={hScrollLocation}
@@ -163,7 +165,7 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
           direction="vertical"
           showScrollbar="onScroll"
           ref={vScrollbarRef}
-          contentSize={contentClientHeight}
+          contentSize={contentHeight}
           containerSize={containerClientHeight}
           maxOffset={vScrollOffsetMax}
           scrollLocation={vScrollLocation}
@@ -222,6 +224,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   @InternalState() contentClientWidth = 0;
 
   @InternalState() contentClientHeight = 0;
+
+  @InternalState() contentScrollWidth = 0;
+
+  @InternalState() contentScrollHeight = 0;
 
   @InternalState() topPocketHeight = 0;
 
@@ -403,6 +409,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       return false;
     }
 
+    this.updateHandler();
+
     return this.moveIsAllowed(event);
   }
 
@@ -418,7 +426,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
 
   @Method()
   updateHandler(): void {
-    this.updateHandleInternal();
+    this.updateElementDimensions();
+    this.onUpdated();
   }
 
   // if delete this effect we need to wait changing size inside resizeObservable
@@ -457,11 +466,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     }
   }
 
-  updateHandleInternal(): void {
-    this.updateElementDimensions();
-    this.onUpdated();
-  }
-
   clearReleaseTimer(): void {
     clearTimeout(this.releaseTimer as number);
     this.releaseTimer = undefined;
@@ -470,7 +474,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   onRelease(): void {
     this.loadingIndicatorEnabled = true;
     this.finishLoading();
-    this.onUpdated();
+    this.updateHandler();
   }
 
   onUpdated(): void {
@@ -604,6 +608,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     if (this.props.useSimulatedScrollbar) {
       this.contentClientWidth = contentEl.clientWidth;
       this.contentClientHeight = contentEl.clientHeight;
+
+      this.contentScrollWidth = contentEl.scrollWidth;
+      this.contentScrollHeight = contentEl.scrollHeight;
     }
 
     if (this.props.forceGeneratePockets) {
@@ -848,11 +855,27 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     return undefined;
   }
 
+  get contentHeight(): number {
+    // T320141
+    return getElementOverflowY(this.contentRef?.current) === 'hidden'
+      ? this.contentClientHeight
+      // for position absolute elements inside content
+      : Math.max(this.contentScrollHeight, this.contentClientHeight);
+  }
+
+  get contentWidth(): number {
+    // T320141
+    return getElementOverflowX(this.contentRef?.current) === 'hidden'
+      ? this.contentClientWidth
+      // for position absolute elements inside content
+      : Math.max(this.contentScrollWidth, this.contentClientWidth);
+  }
+
   get hScrollOffsetMax(): number {
-    return -Math.max(this.contentClientWidth - this.containerClientWidth, 0);
+    return -Math.max(this.contentWidth - this.containerClientWidth, 0);
   }
 
   get vScrollOffsetMax(): number {
-    return -Math.max(this.contentClientHeight - this.containerClientHeight, 0);
+    return -Math.max(this.contentHeight - this.containerClientHeight, 0);
   }
 }
