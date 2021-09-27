@@ -305,10 +305,11 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   loadGroupResources(): void {
     const { groups, resources } = this.props;
 
-    // eslint-disable-next-line max-len
-    (loadResources(groups, resources, this.resourcePromisesMap) as Promise<Group[]>).then((loadedResources) => {
-      this.loadedResources = loadedResources;
-    }, () => {});
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    (loadResources(groups, resources, this.resourcePromisesMap) as Promise<Group[]>)
+      .then((loadedResources) => {
+        this.loadedResources = loadedResources;
+      });
   }
 
   onViewRendered(viewMetaData: ViewMetaData): void {
