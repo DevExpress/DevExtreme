@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../../data/data_source_aliases';
+import { CommonDataSource } from '../../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -108,7 +108,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: DataSourceDefinition<any>;
+    dataSource?: CommonDataSource<any>;
     /**
      * @docid
      * @inherits BaseLegend

@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 
 import {
     DxElement,
@@ -471,7 +471,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @default null
        * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: DataSourceDefinition<any>;
+      dataSource?: CommonDataSource<any>;
       /**
        * @docid
        * @default "from"
@@ -628,7 +628,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @default null
        * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: DataSourceDefinition<any>;
+      dataSource?: CommonDataSource<any>;
       /**
        * @docid
        * @default undefined

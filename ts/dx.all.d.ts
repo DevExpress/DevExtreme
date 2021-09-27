@@ -1910,10 +1910,10 @@ declare module DevExpress.data {
     > = DataSourceOptions<TSourceValue, TValue, TMappedValue, TKeyExpr, TKey>;
   }
   /**
-   * [descr:DataSourceDefinition]
+   * [descr:CommonDataSource]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type DataSourceDefinition<T> =
+  export type CommonDataSource<T> =
     | string
     | Array<T>
     | Store<any, T>
@@ -4310,7 +4310,7 @@ declare module DevExpress.ui {
     /**
      * [descr:CollectionWidgetOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | CollectionWidgetItem
     >;
           TItem,
@@ -4500,7 +4500,7 @@ declare module DevExpress.ui {
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       CollectionWidgetItem | any
     >;
     /**
@@ -4666,7 +4666,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAccordionOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxAccordion.Item | any
     >;
     /**
@@ -4811,7 +4811,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxActionSheetOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxActionSheet.Item | any
     >;
     /**
@@ -4979,7 +4979,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxBoxOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxBox.Item | any
     >;
     /**
@@ -5469,7 +5469,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxContextMenuOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxContextMenu.Item
     >;
     /**
@@ -9658,7 +9658,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.edges.dataSource]
        */
-      dataSource?: DevExpress.data.DataSourceDefinition<any>;
+      dataSource?: DevExpress.data.CommonDataSource<any>;
       /**
        * [descr:dxDiagramOptions.edges.fromExpr]
        */
@@ -9789,7 +9789,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.nodes.dataSource]
        */
-      dataSource?: DevExpress.data.DataSourceDefinition<any>;
+      dataSource?: DevExpress.data.CommonDataSource<any>;
       /**
        * [descr:dxDiagramOptions.nodes.heightExpr]
        */
@@ -10765,7 +10765,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownBoxOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<any>;
+    dataSource?: DevExpress.data.CommonDataSource<any>;
     /**
      * [descr:dxDropDownBoxOptions.displayValueFormatter]
      */
@@ -10865,7 +10865,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       DevExpress.ui.dxDropDownButton.Item | any
     >;
     /**
@@ -12146,7 +12146,7 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export type FilterLookupDataSource<T> = Exclude<
-      DevExpress.data.DataSourceDefinition<T>,
+      DevExpress.data.CommonDataSource<T>,
       string | DevExpress.data.DataSource
     >;
     export type InitializedEvent =
@@ -13019,7 +13019,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGalleryOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxGallery.Item | any
     >;
     /**
@@ -13568,7 +13568,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.dependencies.dataSource]
        */
-      dataSource?: DevExpress.data.DataSourceDefinition<any>;
+      dataSource?: DevExpress.data.CommonDataSource<any>;
       /**
        * [descr:dxGanttOptions.dependencies.keyExpr]
        */
@@ -13801,7 +13801,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.resourceAssignments.dataSource]
        */
-      dataSource?: DevExpress.data.DataSourceDefinition<any>;
+      dataSource?: DevExpress.data.CommonDataSource<any>;
       /**
        * [descr:dxGanttOptions.resourceAssignments.keyExpr]
        */
@@ -13826,7 +13826,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.resources.dataSource]
        */
-      dataSource?: DevExpress.data.DataSourceDefinition<any>;
+      dataSource?: DevExpress.data.CommonDataSource<any>;
       /**
        * [descr:dxGanttOptions.resources.keyExpr]
        */
@@ -13914,7 +13914,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxGanttOptions.tasks.dataSource]
        */
-      dataSource?: DevExpress.data.DataSourceDefinition<any>;
+      dataSource?: DevExpress.data.CommonDataSource<any>;
       /**
        * [descr:dxGanttOptions.tasks.endExpr]
        */
@@ -14336,7 +14336,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorMention.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<string>;
+    dataSource?: DevExpress.data.CommonDataSource<string>;
     /**
      * [descr:dxHtmlEditorMention.displayExpr]
      */
@@ -14779,7 +14779,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorVariables.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<string>;
+    dataSource?: DevExpress.data.CommonDataSource<string>;
     /**
      * [descr:dxHtmlEditorVariables.escapeChar]
      */
@@ -15088,7 +15088,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxList.Item | any
     >;
           TItem,
@@ -15920,7 +15920,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuBaseOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<string | dxMenuBaseItem>;
+    dataSource?: DevExpress.data.CommonDataSource<string | dxMenuBaseItem>;
     /**
      * [descr:dxMenuBaseOptions.items]
      */
@@ -15983,7 +15983,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxMenu.Item
     >;
     /**
@@ -16097,7 +16097,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMultiViewOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxMultiView.Item | any
     >;
     /**
@@ -17836,7 +17836,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResponsiveBoxOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxResponsiveBox.Item | any
     >;
     /**
@@ -18270,7 +18270,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<DevExpress.ui.dxScheduler.Appointment>;
+    dataSource?: DevExpress.data.CommonDataSource<DevExpress.ui.dxScheduler.Appointment>;
     /**
      * [descr:dxSchedulerOptions.dateCellTemplate]
      */
@@ -18498,7 +18498,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxSchedulerOptions.resources.dataSource]
        */
-      dataSource?: DevExpress.data.DataSourceDefinition<any>;
+      dataSource?: DevExpress.data.CommonDataSource<any>;
       /**
        * [descr:dxSchedulerOptions.resources.displayExpr]
        */
@@ -19109,7 +19109,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSlideOutOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxSlideOut.Item | any
     >;
     /**
@@ -19687,7 +19687,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabPanelOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxTabPanel.Item | any
     >;
     /**
@@ -19795,7 +19795,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabsOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxTabs.Item | any
     >;
     /**
@@ -20297,7 +20297,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTileViewOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxTileView.Item | any
     >;
     /**
@@ -20496,7 +20496,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToolbarOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxToolbar.Item | any
     >;
     /**
@@ -22044,7 +22044,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<
+    dataSource?: DevExpress.data.CommonDataSource<
       string | DevExpress.ui.dxTreeView.Item
     >;
     /**
@@ -22873,7 +22873,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<any>;
+    dataSource?: DevExpress.data.CommonDataSource<any>;
           TRowData,
           TRowData,
           TRowData,
@@ -23862,7 +23862,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<any>;
+    dataSource?: DevExpress.data.CommonDataSource<any>;
     /**
      * [descr:BaseChartOptions.legend]
      */
@@ -29824,7 +29824,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<any>;
+    dataSource?: DevExpress.data.CommonDataSource<any>;
     /**
      * [descr:dxFunnelOptions.hoverEnabled]
      */
@@ -32611,7 +32611,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxRangeSelectorOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<any>;
+    dataSource?: DevExpress.data.CommonDataSource<any>;
     /**
      * [descr:dxRangeSelectorOptions.dataSourceField]
      */
@@ -33117,7 +33117,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSankeyOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<any>;
+    dataSource?: DevExpress.data.CommonDataSource<any>;
     /**
      * [descr:dxSankeyOptions.hoverEnabled]
      */
@@ -33510,7 +33510,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSparklineOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<any>;
+    dataSource?: DevExpress.data.CommonDataSource<any>;
     /**
      * [descr:dxSparklineOptions.firstLastColor]
      */
@@ -33792,7 +33792,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxTreeMapOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSourceDefinition<any>;
+    dataSource?: DevExpress.data.CommonDataSource<any>;
     /**
      * [descr:dxTreeMapOptions.group]
      */
@@ -34396,7 +34396,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.dataSource]
            */
-          dataSource?: DevExpress.data.DataSourceDefinition<any>;
+          dataSource?: DevExpress.data.CommonDataSource<any>;
           /**
            * [descr:dxVectorMapOptions.layers.elementType]
            */
@@ -34503,7 +34503,7 @@ declare module DevExpress.viz {
           colorGroups?: Array<number>;
           customize?: (elements: Array<MapLayerElement>) => any;
           dataField?: string;
-          dataSource?: DevExpress.data.DataSourceDefinition<any>;
+          dataSource?: DevExpress.data.CommonDataSource<any>;
           elementType?: 'bubble' | 'dot' | 'image' | 'pie';
           hoverEnabled?: boolean;
           hoveredBorderColor?: string;

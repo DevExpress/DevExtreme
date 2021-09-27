@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -371,7 +371,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @public
      * @type string|Array<dxSchedulerAppointment>|Store|DataSource|DataSourceOptions
      */
-    dataSource?: DataSourceDefinition<Appointment>;
+    dataSource?: CommonDataSource<Appointment>;
     /**
      * @docid
      * @default null
@@ -752,7 +752,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default null
        * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: DataSourceDefinition<any>;
+      dataSource?: CommonDataSource<any>;
       /**
        * @docid
        * @type_function_param1 resource:object

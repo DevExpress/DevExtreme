@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -122,7 +122,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: DataSourceDefinition<any>;
+    dataSource?: CommonDataSource<any>;
     /**
      * @docid
      * @public

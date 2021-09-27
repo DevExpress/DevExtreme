@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -155,7 +155,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: DataSourceDefinition<any>;
+    dataSource?: CommonDataSource<any>;
     /**
      * @docid
      * @default true

@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 
 import {
     PaletteType,
@@ -299,7 +299,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: DataSourceDefinition<any>;
+    dataSource?: CommonDataSource<any>;
     /**
      * @docid
      * @default 'arg'

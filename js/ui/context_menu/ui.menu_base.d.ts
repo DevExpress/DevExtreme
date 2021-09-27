@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../../data/data_source_aliases';
+import { CommonDataSource } from '../../data/data_source_aliases';
 import {
     AnimationConfig,
 } from '../../animation/fx';
@@ -49,7 +49,7 @@ export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWid
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: DataSourceDefinition<string | dxMenuBaseItem>;
+    dataSource?: CommonDataSource<string | dxMenuBaseItem>;
     /**
      * @docid
      * @public

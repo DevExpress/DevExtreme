@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -445,7 +445,7 @@ export interface dxHtmlEditorMention {
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: DataSourceDefinition<string>;
+    dataSource?: CommonDataSource<string>;
     /**
      * @docid
      * @default "this"
@@ -584,7 +584,7 @@ export interface dxHtmlEditorVariables {
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: DataSourceDefinition<string>;
+    dataSource?: CommonDataSource<string>;
     /**
      * @docid
      * @default ""

@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 
 import {
     EventInfo,
@@ -66,7 +66,7 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
      * @default null
      * @public
      */
-    dataSource?: DataSourceDefinition<string | Item | any>;
+    dataSource?: CommonDataSource<string | Item | any>;
     /**
      * @docid
      * @type Enums.Orientation

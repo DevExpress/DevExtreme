@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 import {
   UserDefinedElement,
   DxElement,
@@ -540,7 +540,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: DataSourceDefinition<TRowData, TKey>;
+    dataSource?: CommonDataSource<TRowData, TKey>;
     /**
      * @docid
      * @public

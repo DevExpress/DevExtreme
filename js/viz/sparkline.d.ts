@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 
 import {
     EventInfo,
@@ -77,7 +77,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: DataSourceDefinition<any>;
+    dataSource?: CommonDataSource<any>;
     /**
      * @docid
      * @default '#666666'

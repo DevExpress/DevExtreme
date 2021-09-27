@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../../data/data_source_aliases';
+import { CommonDataSource } from '../../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -24,7 +24,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @type Store|DataSource|DataSourceOptions|string|Array<any>
      * @public
      */
-    dataSource?: DataSourceDefinition<CollectionWidgetItem | any>;
+    dataSource?: CommonDataSource<CollectionWidgetItem | any>;
     /**
      * @docid
      * @default undefined

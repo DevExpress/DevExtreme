@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 import DataSource from '../data/data_source';
 import {
     UserDefinedElement,
@@ -366,7 +366,7 @@ export interface dxFilterBuilderCustomOperation {
     name?: string;
 }
 
-export type FilterLookupDataSource<T> = Exclude<DataSourceDefinition<T>, string | DataSource>;
+export type FilterLookupDataSource<T> = Exclude<CommonDataSource<T>, string | DataSource>;
 
 /**
  * @@docid

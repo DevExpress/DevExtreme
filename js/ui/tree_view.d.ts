@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 import {
     DxElement,
 } from '../core/element';
@@ -126,7 +126,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @public
      */
-    dataSource?: DataSourceDefinition<string | Item>;
+    dataSource?: CommonDataSource<string | Item>;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure

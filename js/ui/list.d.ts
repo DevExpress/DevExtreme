@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -157,7 +157,7 @@ export interface dxListOptions<
      * @default null
      * @public
      */
-    dataSource?: DataSourceDefinition<string | Item | any, TKey>;
+    dataSource?: CommonDataSource<string | Item | any, TKey>;
     /**
      * @docid
      * @default undefined

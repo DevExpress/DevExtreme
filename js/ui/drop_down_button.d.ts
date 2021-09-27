@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 
 import {
     UserDefinedElement,
@@ -74,7 +74,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default null
      * @public
      */
-    dataSource?: DataSourceDefinition<Item | any>;
+    dataSource?: CommonDataSource<Item | any>;
     /**
      * @docid
      * @default true

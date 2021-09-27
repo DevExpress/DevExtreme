@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 import {
     DxPromise,
 } from '../core/utils/deferred';
@@ -67,7 +67,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
      * @default null
      * @public
      */
-    dataSource?: DataSourceDefinition<string | Item | any>;
+    dataSource?: CommonDataSource<string | Item | any>;
     /**
      * @docid
      * @default true &for(desktop)

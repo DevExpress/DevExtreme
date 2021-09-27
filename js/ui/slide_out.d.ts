@@ -1,4 +1,4 @@
-import { DataSourceDefinition } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source_aliases';
 import {
     UserDefinedElement,
     DxElement,
@@ -83,7 +83,7 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @default null
      * @public
      */
-    dataSource?: DataSourceDefinition<string | Item | any>;
+    dataSource?: CommonDataSource<string | Item | any>;
     /**
      * @docid
      * @type Array<string | dxSlideOutItem | any>
