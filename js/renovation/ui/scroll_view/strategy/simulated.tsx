@@ -20,6 +20,8 @@ import {
   subscribeToDXScrollCancelEvent,
   subscribeToMouseEnterEvent,
   subscribeToMouseLeaveEvent,
+  subscribeToDXPointerDownEvent,
+  subscribeToDXPointerUpEvent,
 } from '../../../utils/subscribe_to_event';
 import { ScrollViewLoadPanel } from '../internal/load_panel';
 
@@ -86,6 +88,7 @@ import { clampIntoRange } from '../utils/clamp_into_range';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { subscribeToResize } from '../utils/subscribe_to_resize';
 import { getBoundingRect } from '../utils/get_bounding_rect';
+import domAdapter from '../../../../core/dom_adapter';
 
 export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
   const {
@@ -98,7 +101,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     onReachBottom, onRelease, onPullDown, onEnd, direction, topPocketState,
     isLoadPanelVisible, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom,
-    onVisibilityChangeHandler,
+    onVisibilityChangeHandler, pendingPointerUp,
     scrolling, lock, unlock, containerHasSizes,
     hScrollOffsetMax, vScrollOffsetMax, vScrollOffsetMin,
     props: {
@@ -168,7 +171,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               ref={hScrollbarRef}
               contentSize={contentWidth}
               containerSize={containerClientWidth}
-              visible={hovered || scrolling}
+              visible={hovered || scrolling || pendingPointerUp}
               minOffset={0}
               maxOffset={hScrollOffsetMax}
               scrollLocation={hScrollLocation}
@@ -189,7 +192,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               ref={vScrollbarRef}
               contentSize={contentHeight}
               containerSize={containerClientHeight}
-              visible={hovered || scrolling}
+              visible={hovered || scrolling || pendingPointerUp}
               minOffset={vScrollOffsetMin}
               maxOffset={vScrollOffsetMax}
               scrollLocation={vScrollLocation}
@@ -294,6 +297,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   @InternalState() topPocketState = TopPocketState.STATE_RELEASED;
 
   @InternalState() isLoadPanelVisible = false;
+
+  @InternalState() pendingPointerUp = false;
 
   @InternalState() vScrollLocation = 0;
 
@@ -440,6 +445,24 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       this.wrapperRef.current,
       (event: DxMouseEvent) => {
         this.handleCancel(event);
+      },
+    );
+  }
+
+  @Effect({ run: 'once' })
+  pointerDownEffect(): EffectReturn {
+    return subscribeToDXPointerDownEvent(
+      this.wrapperRef.current, () => {
+        this.pendingPointerUp = true;
+      },
+    );
+  }
+
+  @Effect({ run: 'once' })
+  pointerUpEffect(): EffectReturn {
+    return subscribeToDXPointerUpEvent(
+      domAdapter.getDocument(), () => {
+        this.pendingPointerUp = false;
       },
     );
   }
@@ -798,6 +821,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
     this.hScrollbarRef.current?.endHandler(0, false);
     this.vScrollbarRef.current?.endHandler(0, false);
+    this.scrolling = false;
   }
 
   isCrossThumbScrolling(event: DxMouseEvent): boolean {
