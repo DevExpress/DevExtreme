@@ -23,13 +23,13 @@ if(Quill) {
             this.addCleanCallback(this.prepareCleanCallback());
 
             if(this.enabled) {
-                this._enableContextMenu();
+                this._enableContextMenu(options.items);
             }
         }
 
-        _enableContextMenu() {
+        _enableContextMenu(items) {
             if(!this._contextMenu) {
-                this._contextMenu = this._createContextMenu();
+                this._contextMenu = this._createContextMenu(items);
             }
             this._attachEvents();
         }
@@ -42,9 +42,9 @@ if(Quill) {
             eventsEngine.off(this.editorInstance._getContent(), MODULE_NAMESPACE);
         }
 
-        _createContextMenu() {
+        _createContextMenu(items) {
             const $container = $('<div>').appendTo(this.editorInstance.$element());
-            const menuConfig = this._getMenuConfig();
+            const menuConfig = this._getMenuConfig(items);
 
             return this.editorInstance._createComponent($container, ContextMenu, menuConfig);
         }
@@ -63,29 +63,31 @@ if(Quill) {
             this._targetElement = null;
         }
 
-        _getMenuConfig(options) {
+        _getMenuConfig(items) {
+            const defaultConfig = [
+                { text: 'Insert', items: [
+                    { text: localizationMessage.format('dxHtmlEditor-insertHeaderRow'), icon: 'header', onClick: getTableOperationHandler(this.quill, 'insertHeaderRow') },
+                    { text: localizationMessage.format('dxHtmlEditor-insertRowAbove'), icon: 'insertrowabove', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
+                    { text: localizationMessage.format('dxHtmlEditor-insertRowBelow'), icon: 'insertrowbelow', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
+                    { text: localizationMessage.format('dxHtmlEditor-insertColumnLeft'), icon: 'insertcolumnleft', beginGroup: true, onClick: getTableOperationHandler(this.quill, 'insertColumnLeft') },
+                    { text: localizationMessage.format('dxHtmlEditor-insertColumnRight'), icon: 'insertcolumnright', onClick: getTableOperationHandler(this.quill, 'insertColumnRight') },
+                ] },
+                {
+                    text: 'Delete',
+                    items: [
+                        { text: localizationMessage.format('dxHtmlEditor-deleteColumn'), icon: 'deletecolumn', onClick: getTableOperationHandler(this.quill, 'deleteColumn') },
+                        { text: localizationMessage.format('dxHtmlEditor-deleteRow'), icon: 'deleterow', onClick: getTableOperationHandler(this.quill, 'deleteRow') },
+                        { text: localizationMessage.format('dxHtmlEditor-deleteTable'), icon: 'deletetable', onClick: getTableOperationHandler(this.quill, 'deleteTable') }
+                    ]
+                },
+                { text: localizationMessage.format('dxHtmlEditor-cellProperties'), icon: 'cellproperties', onClick: (e) => { this.showCellProperties(e); } },
+                { text: localizationMessage.format('dxHtmlEditor-tableProperties'), icon: 'tableproperties', onClick: (e) => { this.showTableProperties(e); } }
+            ];
+
             return {
                 target: this._quillContainer,
                 showEvent: null,
-                dataSource: [
-                    { text: 'Insert', items: [
-                        { text: localizationMessage.format('dxHtmlEditor-insertHeaderRow'), icon: 'header', onClick: getTableOperationHandler(this.quill, 'insertHeaderRow') },
-                        { text: localizationMessage.format('dxHtmlEditor-insertRowAbove'), icon: 'insertrowabove', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
-                        { text: localizationMessage.format('dxHtmlEditor-insertRowBelow'), icon: 'insertrowbelow', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
-                        { text: localizationMessage.format('dxHtmlEditor-insertColumnLeft'), icon: 'insertcolumnleft', beginGroup: true, onClick: getTableOperationHandler(this.quill, 'insertColumnLeft') },
-                        { text: localizationMessage.format('dxHtmlEditor-insertColumnRight'), icon: 'insertcolumnright', onClick: getTableOperationHandler(this.quill, 'insertColumnRight') },
-                    ] },
-                    {
-                        text: 'Delete',
-                        items: [
-                            { text: localizationMessage.format('dxHtmlEditor-deleteColumn'), icon: 'deletecolumn', onClick: getTableOperationHandler(this.quill, 'deleteColumn') },
-                            { text: localizationMessage.format('dxHtmlEditor-deleteRow'), icon: 'deleterow', onClick: getTableOperationHandler(this.quill, 'deleteRow') },
-                            { text: localizationMessage.format('dxHtmlEditor-deleteTable'), icon: 'deletetable', onClick: getTableOperationHandler(this.quill, 'deleteTable') }
-                        ]
-                    },
-                    { text: localizationMessage.format('dxHtmlEditor-cellProperties'), icon: 'cellproperties', onClick: (e) => { this.showCellProperties(e); } },
-                    { text: localizationMessage.format('dxHtmlEditor-tableProperties'), icon: 'tableproperties', onClick: (e) => { this.showTableProperties(e); } }
-                ]
+                items: items || defaultConfig
             };
         }
 
