@@ -37,7 +37,7 @@ export interface CollectionWidgetOptions<
     /**
      * @docid
      * @default null
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>
+     * @type Store|DataSource|DataSourceOptions|string|Array<string | CollectionWidgetItem>
      * @public
      * @type string | Array<string | CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions
      */

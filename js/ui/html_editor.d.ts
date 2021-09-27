@@ -582,7 +582,7 @@ export interface dxHtmlEditorVariables {
      * @docid
      * @default null
      * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<any>
+     * @type Store|DataSource|DataSourceOptions|string|Array<string>
      */
     dataSource?: CommonDataSource<string>;
     /**
