@@ -1114,7 +1114,6 @@
           {
             "Title": "Chart Integration",
             "Name": "ChartIntegration",
-            "DocUrl": "Guide/UI_Components/PivotGrid/Integration_with_Chart/",
             "Widget": "PivotGrid",
             "Modules": "globalize--vue&react",
             "MvcAdditionalFiles": [
