@@ -4628,7 +4628,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // act
         $('#dataGrid').height(1000);
-        dataGrid.repaint();
+        dataGrid.updateDimensions();
         this.clock.tick();
 
         // assert
