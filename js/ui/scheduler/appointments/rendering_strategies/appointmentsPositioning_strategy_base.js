@@ -17,13 +17,9 @@ class AppointmentPositioningStrategy {
         this._renderingStrategy = renderingStrategy;
     }
 
-    getRenderingStrategy() {
-        return this._renderingStrategy;
-    }
-
     getDropDownAppointmentWidth(intervalCount, isAllDay) {
         if(isAllDay || !isDefined(isAllDay)) {
-            return COLLECTOR_WIDTH_IN_PERCENTS * this.getRenderingStrategy().cellWidth / 100;
+            return COLLECTOR_WIDTH_IN_PERCENTS * this._renderingStrategy.cellWidth / 100;
         } else {
             return COLLECTOR_DEFAULT_WIDTH;
         }
@@ -38,23 +34,23 @@ class AppointmentPositioningStrategy {
     }
 
     getAppointmentDefaultOffset() {
-        if(this.getRenderingStrategy()._isCompactTheme()) {
+        if(this._renderingStrategy._isCompactTheme()) {
             return COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET;
         }
 
-        return this.getRenderingStrategy().instance.option('_appointmentOffset');
+        return this._renderingStrategy.appointmentOffset;
     }
 
     getDynamicAppointmentCountPerCell() {
-        const renderingStrategy = this.getRenderingStrategy();
+        const renderingStrategy = this._renderingStrategy;
 
-        const cellHeight = renderingStrategy.instance.fire('getCellHeight');
+        const cellHeight = renderingStrategy.cellHeight;
         const allDayCount = Math.floor((cellHeight - renderingStrategy._getAppointmentDefaultOffset()) / renderingStrategy._getAppointmentDefaultHeight()) || this._getAppointmentMinCount();
 
         // NOTE: Simplify using only object
         if(renderingStrategy.allDaySupported()) {
             return {
-                allDay: renderingStrategy.groupOrientation === 'vertical' ? allDayCount : renderingStrategy.instance.option('_appointmentCountPerCell'),
+                allDay: renderingStrategy.groupOrientation === 'vertical' ? allDayCount : renderingStrategy.appointmentCountPerCell,
                 simple: this._calculateDynamicAppointmentCountPerCell() || this._getAppointmentMinCount()
             };
         } else {
@@ -71,7 +67,7 @@ class AppointmentPositioningStrategy {
     }
 
     _calculateDynamicAppointmentCountPerCell() {
-        return Math.floor(this.getRenderingStrategy()._getAppointmentMaxWidth() / APPOINTMENT_INCREASED_WIDTH);
+        return Math.floor(this._renderingStrategy._getAppointmentMaxWidth() / APPOINTMENT_INCREASED_WIDTH);
     }
 
     _getAppointmentDefaultWidth() {

@@ -26,7 +26,7 @@ import { DateTableLayoutProps } from './date_table/layout';
 import { TimePaneLayoutProps } from './time_panel/layout';
 import { isVerticalGroupingApplied } from '../utils';
 
-const prepareGenerationOptions = (
+export const prepareGenerationOptions = (
   workSpaceProps: WorkSpaceProps,
   renderConfig: ViewRenderConfig,
   isAllDayPanelVisible: boolean,

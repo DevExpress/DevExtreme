@@ -6045,4 +6045,32 @@ QUnit.module('Editing state', baseModuleConfig, () => {
         // assert
         assert.ok($('#dataGrid .dx-datagrid-pager').is(':visible'), 'Pager is visible');
     });
+
+    QUnit.test('onEditCancling/onEditCanceled events should fire on cancel button click (T1030691)', function(assert) {
+        // arrange
+        const onEditCanceling = sinon.spy();
+        const onEditCanceled = sinon.spy();
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            keyExpr: 'id',
+            dataSource: [{ id: 1 }],
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            onEditCanceling,
+            onEditCanceled
+        }).dxDataGrid('instance');
+        this.clock.tick();
+
+        // act
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        $('#dataGrid .dx-link-cancel').eq(0).trigger('dxpointerdown').trigger('click');
+        this.clock.tick();
+
+        // assert
+        assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling call count');
+        assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled call count');
+    });
 });

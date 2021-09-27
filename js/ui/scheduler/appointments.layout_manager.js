@@ -7,6 +7,7 @@ import {
 import { AppointmentViewModel } from './appointments/viewModelGenerator';
 import { getGroupCount } from './resources/utils';
 import { getCellWidth, getCellHeight, getAllDayHeight } from './workspaces/helpers/positionHelper';
+import { getCellDuration } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 class AppointmentLayoutManager {
     constructor(instance) {
@@ -43,7 +44,14 @@ class AppointmentLayoutManager {
             DOMMetaData
         );
         const { positionHelper } = workspace;
+        const rowCount = workspace._getRowCount();
 
+        const cellDuration = getCellDuration(
+            workspace.type,
+            workspace.option('startDayHour'),
+            workspace.option('endDayHour'),
+            workspace.option('hoursInterval')
+        );
         return {
             resources: this.instance.option('resources'),
             loadedResources: this.instance.option('loadedResources'),
@@ -70,14 +78,18 @@ class AppointmentLayoutManager {
             isGroupedAllDayPanel: workspace.isGroupedAllDayPanel(),
             modelGroups: this.modelProvider.getCurrentViewOption('groups'),
             groupCount,
+            rowCount,
+            appointmentCountPerCell: this.instance.option('_appointmentCountPerCell'),
+            appointmentOffset: this.instance.option('_appointmentOffset'),
+            allowResizing: this.instance._allowResizing(),
+            allowAllDayResizing: this.instance._allowAllDayResizing(),
             startViewDate: workspace.getStartViewDate(),
             groupOrientation: workspace._getRealGroupOrientation(),
-            getIsGroupedByDate: () => workspace.isGroupedByDate(),
             cellWidth: getCellWidth(DOMMetaData),
             cellHeight: getCellHeight(DOMMetaData),
             allDayHeight: allDayHeight,
             resizableStep: positionHelper.getResizableStep(),
-            getVisibleDayDuration: () => workspace.getVisibleDayDuration(),
+            visibleDayDuration: workspace.getVisibleDayDuration(),
             // appointment settings
             timeZoneCalculator: getTimeZoneCalculator(key),
             appointmentDataProvider: getAppointmentDataProvider(key),
@@ -89,7 +101,8 @@ class AppointmentLayoutManager {
             endViewDate: workspace.getEndViewDate(),
             positionHelper,
             isGroupedByDate: workspace.isGroupedByDate(),
-            cellDuration: workspace.getCellDuration(),
+            cellDuration,
+            cellDurationInMinutes: workspace.option('cellDuration'),
             viewDataProvider: workspace.viewDataProvider,
             supportAllDayRow: workspace.supportAllDayRow(),
             dateRange: workspace.getDateRange(),

@@ -21,8 +21,6 @@ import {
   clear as clearEventHandlers, emit, defaultEvent,
 } from '../../../../test_utils/events_mock';
 import {
-  getElementOverflowX,
-  getElementOverflowY,
   getElementPadding,
 } from '../../utils/get_element_style';
 import { getDevicePixelRatio } from '../../utils/get_device_pixel_ratio';
@@ -56,8 +54,6 @@ jest.mock('../../../../../core/devices', () => {
 jest.mock('../../utils/get_element_style', () => ({
   ...jest.requireActual('../../utils/get_element_style'),
   getElementPadding: jest.fn(() => 8),
-  getElementOverflowX: jest.fn(() => 'visible'),
-  getElementOverflowY: jest.fn(() => 'visible'),
 }));
 
 jest.mock('../../../../utils/get_element_offset', () => ({
@@ -468,29 +464,29 @@ describe('Simulated > Behavior', () => {
       });
     });
 
-    each(['visible', 'scroll', 'hidden', 'auto']).describe('overflow: %o,', (overflow) => {
-      it('contentWidth()', () => {
-        (getElementOverflowX as jest.Mock).mockReturnValue(overflow);
-        const viewModel = new Scrollable({});
+    // each(['visible', 'scroll', 'hidden', 'auto']).describe('overflow: %o,', (overflow) => {
+    //   it('contentWidth()', () => {
+    //     (getElementOverflowX as jest.Mock).mockReturnValue(overflow);
+    //     const viewModel = new Scrollable({});
 
-        viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-        viewModel.contentClientWidth = 200;
-        viewModel.contentScrollWidth = 700;
+    //     viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+    //     viewModel.contentClientWidth = 200;
+    //     viewModel.contentScrollWidth = 700;
 
-        expect(viewModel.contentWidth).toEqual(overflow === 'hidden' ? 200 : 700);
-      });
+    //     expect(viewModel.contentWidth).toEqual(overflow === 'hidden' ? 200 : 700);
+    //   });
 
-      it('contentHeight()', () => {
-        (getElementOverflowY as jest.Mock).mockReturnValue(overflow);
-        const viewModel = new Scrollable({});
+    //   it('contentHeight()', () => {
+    //     (getElementOverflowY as jest.Mock).mockReturnValue(overflow);
+    //     const viewModel = new Scrollable({});
 
-        viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-        viewModel.contentClientHeight = 200;
-        viewModel.contentScrollHeight = 700;
+    //     viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+    //     viewModel.contentClientHeight = 200;
+    //     viewModel.contentScrollHeight = 700;
 
-        expect(viewModel.contentHeight).toEqual(overflow === 'hidden' ? 200 : 700);
-      });
-    });
+    //     expect(viewModel.contentHeight).toEqual(overflow === 'hidden' ? 200 : 700);
+    //   });
+    // });
 
     each([true, false]).describe('forceGeneratePockets: %o,', (forceGeneratePockets) => {
       it('Should assign swipeDown, pullDown strategy', () => {

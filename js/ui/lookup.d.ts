@@ -1,12 +1,4 @@
 import {
-    AnimationConfig,
-} from '../animation/fx';
-
-import {
-    PositionConfig,
-} from '../animation/position';
-
-import {
     UserDefinedElement,
     DxElement,
 } from '../core/element';
@@ -16,7 +8,6 @@ import {
 } from '../core/templates/template';
 
 import {
-    DxEvent,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -94,24 +85,6 @@ export type ValueChangedEvent = NativeEventInfo<dxLookup> & ValueChangedInfo;
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
-     * @default undefined
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    animation?: {
-      /**
-       * @docid
-       * @default undefined
-       */
-      hide?: AnimationConfig;
-      /**
-       * @docid
-       * @default undefined
-       */
-      show?: AnimationConfig;
-    };
-    /**
-     * @docid
      * @default "OK"
      * @public
      */
@@ -141,17 +114,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      */
     clearButtonText?: string;
-    /**
-     * @docid
-     * @default false
-     * @type_function_param1 event:event
-     * @type_function_return Boolean
-     * @publicName closeOnOutsideClick
-     * @default true &for(Material)
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
      * @default null
@@ -238,19 +200,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 e:object
-     * @type_function_param1_field4 titleElement:DxElement
-     * @type_function_param1_field1 component:dxLookup
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @action
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    onTitleRendered?: ((e: TitleRenderedEvent) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
      * @type_function_param1_field6 event:event
@@ -280,31 +229,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      */
     placeholder?: string;
-    /**
-     * @docid
-     * @default function() { return $(window).height() * 0.8 }
-     * @default 'auto' &for(desktop|iPad)
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    popupHeight?: number | string | (() => number | string);
-    /**
-     * @docid
-     * @default function() {return $(window).width() * 0.8 }
-     * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } &for(iPad)
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    popupWidth?: number | string | (() => number | string);
-    /**
-     * @docid
-     * @default undefined
-     * @publicName position
-     * @default { my: 'left top', at: 'left top', of: lookupContainer } &for(Material)
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    position?: PositionConfig;
     /**
      * @docid
      * @default false
@@ -346,13 +270,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default true
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    shading?: boolean;
-    /**
-     * @docid
-     * @default true
      * @publicName showCancelButton
      * @default false &for(Material)
      * @public
@@ -364,30 +281,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @public
      */
     showClearButton?: boolean;
-    /**
-     * @docid
-     * @default true
-     * @publicName showPopupTitle
-     * @default false &for(Material)
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    showPopupTitle?: boolean;
-    /**
-     * @docid
-     * @default ""
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    title?: string;
-    /**
-     * @docid
-     * @default "title"
-     * @type_function_return string|Element|jQuery
-     * @public
-     * @deprecated dxLookupOptions.dropDownOptions
-     */
-    titleTemplate?: template | ((titleElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
