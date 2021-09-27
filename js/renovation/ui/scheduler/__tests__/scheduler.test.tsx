@@ -8,6 +8,7 @@ import { ViewType } from '../types';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { WorkSpace } from '../workspaces/base/work_space';
 import SchedulerToolbar from '../header/header';
+import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -160,6 +161,40 @@ describe('Scheduler', () => {
   });
 
   describe('Behaviour', () => {
+    describe('Effects', () => {
+      it('loadResources should be call with valid arguments', () => {
+        const loadResources = jest.spyOn(resourceUtils, 'loadResources');
+
+        const groupsValue = ['priorityId'];
+        const resourcesValue = [
+          {
+            dataSource: [{
+              fieldExpr: 'priorityId',
+              dataSource: [{
+                text: 'Low Priority',
+                id: 1,
+                color: '#1e90ff',
+              }, {
+                text: 'High Priority',
+                id: 2,
+                color: '#ff9747',
+              }],
+              label: 'Priority',
+            }],
+          },
+        ];
+
+        const scheduler = new Scheduler({
+          groups: groupsValue,
+          resources: resourcesValue,
+        });
+
+        scheduler.loadGroupResources();
+
+        expect(loadResources).toBeCalledWith(groupsValue, resourcesValue, new Map());
+      });
+    });
+
     describe('Methods', () => {
       it('dispose should pass call to instance', () => {
         const scheduler = new Scheduler(new SchedulerProps());
