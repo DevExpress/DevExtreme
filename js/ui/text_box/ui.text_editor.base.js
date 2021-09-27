@@ -452,10 +452,10 @@ const TextEditorBase = Editor.inherit({
 
     _renderLabel: function() {
         const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
-        const TEXTEDITOR_LABEL_SELECTOR = '.' + TEXTEDITOR_LABEL_CLASS;
+        const labelElement = this.$element().find('.' + TEXTEDITOR_LABEL_CLASS);
 
-        if(!this.label && this.$element().find(TEXTEDITOR_LABEL_SELECTOR).length === 1 || this.$element().find(TEXTEDITOR_LABEL_SELECTOR).length === 2) {
-            this.$element().find(TEXTEDITOR_LABEL_SELECTOR).first().remove();
+        if(!this.label && labelElement.length === 1 || labelElement.length === 2) {
+            labelElement.first().remove();
         }
 
         if(this._$label) {
