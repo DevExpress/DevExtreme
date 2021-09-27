@@ -19,13 +19,18 @@ class DiagramScrollView extends Widget {
 
         const $scrollViewWrapper = $('<div>')
             .appendTo(this.$element());
-        this._scrollView = this._createComponent($scrollViewWrapper, ScrollView, {
+        const options = {
             direction: 'both',
             bounceEnabled: false,
             onScroll: ({ scrollOffset }) => {
                 this._raiseOnScroll(scrollOffset.left, scrollOffset.top);
             }
-        });
+        };
+        const useNativeScrolling = this.option('useNativeScrolling');
+        if(useNativeScrolling !== undefined) {
+            options.useNative = useNativeScrolling;
+        }
+        this._scrollView = this._createComponent($scrollViewWrapper, ScrollView, options);
         this._onCreateDiagramAction({
             $parent: $(this._scrollView.content()),
             scrollView: this
