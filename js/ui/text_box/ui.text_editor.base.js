@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
@@ -148,7 +149,6 @@ const TextEditorBase = Editor.inherit({
                 },
                 options: {
                     stylingMode: config().editorStylingMode || 'filled',
-                    label: '',
                     labelMode: 'floating'
                 }
             }
@@ -452,9 +452,10 @@ const TextEditorBase = Editor.inherit({
 
     _renderLabel: function() {
         const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
+        const TEXTEDITOR_LABEL_SELECTOR = '.' + TEXTEDITOR_LABEL_CLASS;
 
-        if(!this.label && this.$element().find('.' + TEXTEDITOR_LABEL_CLASS).length === 1 || this.$element().find('.' + TEXTEDITOR_LABEL_CLASS).length === 2) {
-            this.$element().find('.' + TEXTEDITOR_LABEL_CLASS).first().remove();
+        if(!this.label && this.$element().find(TEXTEDITOR_LABEL_SELECTOR).length === 1 || this.$element().find(TEXTEDITOR_LABEL_SELECTOR).length === 2) {
+            this.$element().find(TEXTEDITOR_LABEL_SELECTOR).first().remove();
         }
 
         if(this._$label) {
@@ -474,16 +475,18 @@ const TextEditorBase = Editor.inherit({
         const labelText = this.option('label');
         const $label = this._$label = $('<div>')
             .addClass(TEXTEDITOR_LABEL_CLASS)
-            .html('<div class="dx-label-before"></div><div class="dx-label"><span>' + labelText + '</span></div><div class="dx-label-after"></div>');
+            .html(`<div class="dx-label-before"></div><div class="dx-label"><span>${labelText}</span></div><div class="dx-label-after"></div>`);
 
         $label.appendTo(this.$element());
 
         if(this._$beforeButtonsContainer) {
             this.$element().addClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
-            this._$label.find('.dx-label-before').css('width', this._$beforeButtonsContainer.width());
+            this._$label.find('.dx-label-before').css('width', getWidth(this._$beforeButtonsContainer));
         }
 
-        this._$label.find('.dx-label').css('max-width', (this._$field ? this._$field.width() : (this._$tagsContainer ? this._$tagsContainer.width() : this._input().width()))) - this._$label.find('.dx-label-after').width();
+        const labelWidth = this._$field ? getWidth(this._$field) : (this._$tagsContainer ? getWidth(this._$tagsContainer) : getWidth(this._input()));
+
+        this._$label.find('.dx-label').css('max-width', labelWidth);
     },
 
     _renderPlaceholder: function() {

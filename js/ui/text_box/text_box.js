@@ -1,3 +1,4 @@
+import { getWidth, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -100,11 +101,11 @@ const TextBox = TextEditor.inherit({
 
         if(this._$searchIcon && this._$label) {
             const labelBeforeElement = this._$label.find('.dx-label-before');
-            const labelBeforeWidth = labelBeforeElement.width() + this._$searchIcon.outerWidth();
+            const labelBeforeWidth = getWidth(labelBeforeElement) + getOuterWidth(this._$searchIcon);
 
             labelBeforeElement.css('width', labelBeforeWidth);
 
-            this._$label.find('.dx-label').css('max-width', this._input().parent().width() - labelBeforeWidth - this._$label.find('.dx-label-after').width());
+            this._$label.find('.dx-label').css('max-width', getWidth(this._input().parent()) - labelBeforeWidth);
         }
     },
 
