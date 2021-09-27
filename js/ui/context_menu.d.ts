@@ -93,7 +93,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default null
      * @public
      */
-    dataSource?: CommonDataSource<string | Item>;
+    dataSource?: CommonDataSource<Item>;
     /**
      * @docid
      * @type Array<dxContextMenuItem>

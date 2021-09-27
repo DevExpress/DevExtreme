@@ -12,7 +12,7 @@ import {
 } from '../menu';
 
 /** @namespace DevExpress.ui */
-export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWidgetOptions<TComponent> {
+export interface dxMenuBaseOptions<TComponent> extends Omit<HierarchicalCollectionWidgetOptions<TComponent>, 'dataSource'> {
     /**
      * @docid
      * @default true
@@ -47,9 +47,9 @@ export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWid
      * @docid
      * @default null
      * @public
-     * @type Store|DataSource|DataSourceOptions|string|Array<string | dxMenuBaseItem>
+     * @type Store|DataSource|DataSourceOptions|string|Array<dxMenuBaseItem>
      */
-    dataSource?: CommonDataSource<string | dxMenuBaseItem>;
+    dataSource?: CommonDataSource<dxMenuBaseItem>;
     /**
      * @docid
      * @public

@@ -1644,6 +1644,16 @@ declare module DevExpress.data {
     selector: KeySelector<T>;
   };
   /**
+   * [descr:CommonDataSource]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type CommonDataSource<T> =
+    | string
+    | Array<T>
+    | Store<any, T>
+    | DataSourceOptions<any, T>
+    | DataSource<any, T>;
+  /**
    * [descr:CustomStore]
    */
   export class CustomStore<
@@ -1909,16 +1919,6 @@ declare module DevExpress.data {
       TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
     > = DataSourceOptions<TSourceValue, TValue, TMappedValue, TKeyExpr, TKey>;
   }
-  /**
-   * [descr:CommonDataSource]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type CommonDataSource<T> =
-    | string
-    | Array<T>
-    | Store<any, T>
-    | DataSourceOptions<any, T>
-    | DataSource<any, T>;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -4500,9 +4500,7 @@ declare module DevExpress.ui {
     /**
      * [descr:DataExpressionMixinOptions.dataSource]
      */
-    dataSource?: DevExpress.data.CommonDataSource<
-      CollectionWidgetItem | any
-    >;
+    dataSource?: DevExpress.data.CommonDataSource<CollectionWidgetItem | any>;
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
      */
@@ -5469,9 +5467,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxContextMenuOptions.dataSource]
      */
-    dataSource?: DevExpress.data.CommonDataSource<
-      string | DevExpress.ui.dxContextMenu.Item
-    >;
+    dataSource?: DevExpress.data.CommonDataSource<DevExpress.ui.dxContextMenu.Item>;
     /**
      * [descr:dxContextMenuOptions.items]
      */
@@ -15895,7 +15891,10 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxMenuBaseOptions<TComponent>
-    extends HierarchicalCollectionWidgetOptions<TComponent> {
+    extends Omit<
+      HierarchicalCollectionWidgetOptions<TComponent>,
+      'dataSource'
+    > {
     /**
      * [descr:dxMenuBaseOptions.activeStateEnabled]
      */
@@ -15920,7 +15919,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuBaseOptions.dataSource]
      */
-    dataSource?: DevExpress.data.CommonDataSource<string | dxMenuBaseItem>;
+    dataSource?: DevExpress.data.CommonDataSource<dxMenuBaseItem>;
     /**
      * [descr:dxMenuBaseOptions.items]
      */
@@ -15983,9 +15982,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuOptions.dataSource]
      */
-    dataSource?: DevExpress.data.CommonDataSource<
-      string | DevExpress.ui.dxMenu.Item
-    >;
+    dataSource?: DevExpress.data.CommonDataSource<DevExpress.ui.dxMenu.Item>;
     /**
      * [descr:dxMenuOptions.hideSubmenuOnMouseLeave]
      */
@@ -22029,7 +22026,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeViewOptions
-    extends HierarchicalCollectionWidgetOptions<dxTreeView>,
+    extends Omit<HierarchicalCollectionWidgetOptions<dxTreeView>, 'dataSource'>,
       SearchBoxMixinOptions {
     /**
      * [descr:dxTreeViewOptions.animationEnabled]
@@ -22044,9 +22041,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.dataSource]
      */
-    dataSource?: DevExpress.data.CommonDataSource<
-      string | DevExpress.ui.dxTreeView.Item
-    >;
+    dataSource?: DevExpress.data.CommonDataSource<DevExpress.ui.dxTreeView.Item>;
     /**
      * [descr:dxTreeViewOptions.dataStructure]
      */

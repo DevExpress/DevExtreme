@@ -106,7 +106,7 @@ export type SelectionChangedEvent = EventInfo<dxTreeView>;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions {
+export interface dxTreeViewOptions extends Omit<HierarchicalCollectionWidgetOptions<dxTreeView>, 'dataSource'>, SearchBoxMixinOptions {
     /**
      * @docid
      * @default true
@@ -126,7 +126,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @public
      */
-    dataSource?: CommonDataSource<string | Item>;
+    dataSource?: CommonDataSource<Item>;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure
