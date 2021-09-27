@@ -1168,8 +1168,8 @@ export const virtualScrollingModule = {
 
                         return dataSource?.setContentItemSizes(sizes);
                     },
-                    getPreloadCount: function() {
-                        const preloadCount = this.option('scrolling.preloadCount');
+                    getPreloadedRowCount: function() {
+                        const preloadCount = this.option('scrolling.preloadedRowCount');
                         const preloadEnabled = this.option('scrolling.preloadEnabled');
 
                         if(isDefined(preloadCount)) {
@@ -1187,8 +1187,8 @@ export const virtualScrollingModule = {
                         const loadedTake = lastLoadOptions?.take || 0;
 
                         const isScrollingBack = this._rowsScrollController.isScrollingBack();
-                        const topPreloadCount = isScrollingBack ? this.getPreloadCount() : 0;
-                        const bottomPreloadCount = isScrollingBack ? 0 : this.getPreloadCount();
+                        const topPreloadCount = isScrollingBack ? this.getPreloadedRowCount() : 0;
+                        const bottomPreloadCount = isScrollingBack ? 0 : this.getPreloadedRowCount();
                         const totalCountCorrection = this._dataSource?.totalCountCorrection() || 0;
                         const skipWithPreload = Math.max(0, viewportParams.skip - topPreloadCount);
                         const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(skipWithPreload / this.pageSize());

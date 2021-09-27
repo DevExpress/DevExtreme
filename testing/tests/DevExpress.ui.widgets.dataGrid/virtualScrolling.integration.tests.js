@@ -3425,7 +3425,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 mode: 'virtual',
                 legacyMode: false,
                 useNative: false,
-                rowPreloadCount: 0,
                 prerenderedRowChunkSize: 5
             },
             columns: ['ID', 'Name', {

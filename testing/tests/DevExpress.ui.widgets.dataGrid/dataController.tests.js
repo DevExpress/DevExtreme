@@ -5200,8 +5200,8 @@ QUnit.module('Virtual scrolling preload', {
         assert.deepEqual(visibleRows[0].data.id, 1, 'first visible item');
     });
 
-    QUnit.test('New mode. Data should not be preloaded on scroll if preloadCount is 0', function(assert) {
-        this.options.scrolling.preloadCount = 0;
+    QUnit.test('New mode. Data should not be preloaded on scroll if preloadedRowCount is 0', function(assert) {
+        this.options.scrolling.preloadedRowCount = 0;
         // act
         this.dataController.setViewportPosition(1);
         const visibleRows = this.getVisibleRows();
@@ -5217,8 +5217,8 @@ QUnit.module('Virtual scrolling preload', {
         assert.deepEqual(visibleRows[0].data.id, 1, 'first visible item');
     });
 
-    QUnit.test('New mode. Data should be preloaded on scroll if preloadCount is defined', function(assert) {
-        this.options.scrolling.preloadCount = 50;
+    QUnit.test('New mode. Data should be preloaded on scroll if preloadedRowCount is defined', function(assert) {
+        this.options.scrolling.preloadedRowCount = 50;
         // act
         this.dataController.setViewportPosition(1);
         const visibleRows = this.getVisibleRows();
@@ -5267,8 +5267,8 @@ QUnit.module('Virtual scrolling preload', {
         assert.deepEqual(visibleRows[0].data.id, 50, 'first visible item');
     });
 
-    QUnit.test('New mode. Data should be preloaded before viewport on scroll back if preloadCount is defined', function(assert) {
-        this.options.scrolling.preloadCount = 50;
+    QUnit.test('New mode. Data should be preloaded before viewport on scroll back if preloadedRowCount is defined', function(assert) {
+        this.options.scrolling.preloadedRowCount = 50;
         // act
         this.dataController.setViewportPosition(1000);
         this.dataController.setViewportPosition(999);
