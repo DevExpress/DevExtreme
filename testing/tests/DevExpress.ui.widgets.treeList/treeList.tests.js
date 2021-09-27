@@ -1748,11 +1748,11 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
                 columns: ['id']
             });
 
-            this.clock.tick(200);
+            this.clock.tick(300);
 
             // act
-            treeList.searchByText(3);
-            this.clock.tick(200);
+            treeList.searchByText('3');
+            this.clock.tick(300);
 
             // assert
             const visibleRows = treeList.getVisibleRows();
@@ -1762,7 +1762,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
 
             // act
             treeList.searchByText('');
-            this.clock.tick(200);
+            this.clock.tick(300);
             $(treeList.getScrollable().content()).trigger('scroll');
 
             // assert
