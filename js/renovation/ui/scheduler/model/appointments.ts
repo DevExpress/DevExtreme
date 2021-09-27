@@ -101,7 +101,7 @@ const getAppointmentConfig = (
     isVirtualScrolling,
     leftVirtualCellCount,
     topVirtualCellCount: topVirtualRowCount,
-    modelGroups: viewConfig.groups,
+    modelGroups: [], // TODO
     groupCount: getGroupCount(schedulerConfig.groups),
     dateTableOffset: 0,
     groupOrientation: viewConfig.groupOrientation,
