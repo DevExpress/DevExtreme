@@ -15,6 +15,7 @@ import { JSPdfBandsTests } from './jspdf_v3.dataGrid.bands.tests.js';
 import { JSPdfGroupingTests } from './jspdf_v3.dataGrid.grouping.tests.js';
 import { JSPdfSummariesTests } from './jspdf_v3.dataGrid.summaries.tests.js';
 import { JSPdfVerticalAlignTests } from './jspdf_v3.dataGrid.verticalAlign.tests.js';
+import { JSPdfHorizontalAlignTests } from './jspdf_v3.datagrid.horizontalAlign.tests.js';
 import { JSPdfColumnWidthsTests } from './jspdf_v3.dataGrid.columnAutoWidth.tests.js';
 
 import 'generic_light.css!';
@@ -179,7 +180,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20',
+            'text,f1,10,25,{baseline:middle,align:left}', 'setLineWidth,1', 'rect,10,15,100,20',
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting }).then(() => {
@@ -206,7 +207,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,15,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+            'text,f1,15,25,{baseline:middle,align:left}', 'setLineWidth,1', 'rect,10,15,100,20'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
@@ -233,7 +234,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,15,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+            'text,f1,15,25,{baseline:middle,align:left}', 'setLineWidth,1', 'rect,10,15,100,20'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
@@ -260,7 +261,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,27.5,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+            'text,f1,10,27.5,{baseline:middle,align:left}', 'setLineWidth,1', 'rect,10,15,100,20'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
@@ -287,7 +288,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+            'text,f1,10,25,{baseline:middle,align:left}', 'setLineWidth,1', 'rect,10,15,100,20'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
@@ -314,7 +315,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,22.5,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+            'text,f1,10,22.5,{baseline:middle,align:left}', 'setLineWidth,1', 'rect,10,15,100,20'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
@@ -333,7 +334,7 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,18.4',
+            'text,f1,10,24.2,{baseline:middle,align:left}', 'setLineWidth,1', 'rect,10,15,100,18.4',
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
@@ -356,7 +357,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,15,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,28.4'
+            'text,f1,15,29.2,{baseline:middle,align:left}', 'setLineWidth,1', 'rect,10,15,100,28.4'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -379,7 +380,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,15,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,18.4'
+            'text,f1,15,24.2,{baseline:middle,align:left}', 'setLineWidth,1', 'rect,10,15,100,18.4'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -402,7 +403,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,23.4'
+            'text,f1,10,29.2,{baseline:middle,align:left}', 'setLineWidth,1', 'rect,10,15,100,23.4'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -425,7 +426,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,18.4',
+            'text,f1,10,24.2,{baseline:middle,align:left}', 'setLineWidth,1', 'rect,10,15,100,18.4',
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -448,7 +449,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,23.4'
+            'text,f1,10,24.2,{baseline:middle,align:left}', 'setLineWidth,1', 'rect,10,15,100,23.4'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
@@ -477,7 +478,7 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,25,{baseline:middle}'
+            'text,f1,10,25,{baseline:middle,align:left}'
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell, onRowExporting, drawTableBorder: false }).then(() => {
@@ -504,8 +505,8 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,25,{baseline:middle}',
-            'text,v1,10,47,{baseline:middle}',
+            'text,F1,10,25,{baseline:middle,align:left}',
+            'text,v1,10,47,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,100,20',
             'setLineWidth,1', 'rect,10,35,100,24',
         ];
@@ -526,8 +527,8 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,F1,10,24.2,{baseline:middle}',
-            'text,v1,10,42.6,{baseline:middle}',
+            'text,F1,10,24.2,{baseline:middle,align:left}',
+            'text,v1,10,42.6,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,100,18.4',
             'setLineWidth,1', 'rect,10,33.4,100,18.4',
         ];
@@ -552,8 +553,8 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,15,29.2,{baseline:middle}',
-            'text,v1,15,57.6,{baseline:middle}',
+            'text,F1,15,29.2,{baseline:middle,align:left}',
+            'text,v1,15,57.6,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,100,28.4',
             'setLineWidth,1', 'rect,10,43.4,100,28.4'
         ];
@@ -584,9 +585,9 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
+            'text,F1,10,23,{baseline:middle,align:left}',
+            'text,v1_1,10,41,{baseline:middle,align:left}',
+            'text,v1_2,10,63,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,100,16',
             'setLineWidth,1', 'rect,10,31,100,20',
             'setLineWidth,1', 'rect,10,51,100,24',
@@ -608,9 +609,9 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,F1,10,24.2,{baseline:middle}',
-            'text,v1_1,10,42.6,{baseline:middle}',
-            'text,v1_2,10,61,{baseline:middle}',
+            'text,F1,10,24.2,{baseline:middle,align:left}',
+            'text,v1_1,10,42.6,{baseline:middle,align:left}',
+            'text,v1_2,10,61,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,100,18.4',
             'setLineWidth,1', 'rect,10,33.4,100,18.4',
             'setLineWidth,1', 'rect,10,51.8,100,18.4'
@@ -636,9 +637,9 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,15,29.2,{baseline:middle}',
-            'text,v1_1,15,57.6,{baseline:middle}',
-            'text,v1_2,15,86,{baseline:middle}',
+            'text,F1,15,29.2,{baseline:middle,align:left}',
+            'text,v1_1,15,57.6,{baseline:middle,align:left}',
+            'text,v1_2,15,86,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,100,28.4',
             'setLineWidth,1', 'rect,10,43.4,100,28.4',
             'setLineWidth,1', 'rect,10,71.8,100,28.4'
@@ -664,8 +665,8 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,10,23,{baseline:middle}',
-            'text,f2,50,23,{baseline:middle}',
+            'text,f1,10,23,{baseline:middle,align:left}',
+            'text,f2,50,23,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,16',
             'setLineWidth,1', 'rect,50,15,60,16',
         ];
@@ -685,8 +686,8 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,f1,10,24.2,{baseline:middle}',
-            'text,f2,50,24.2,{baseline:middle}',
+            'text,f1,10,24.2,{baseline:middle,align:left}',
+            'text,f2,50,24.2,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,18.4',
             'setLineWidth,1', 'rect,50,15,60,18.4'
         ];
@@ -711,8 +712,8 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,f1,15,34.2,{baseline:middle}',
-            'text,f2,60,34.2,{baseline:middle}',
+            'text,f1,15,34.2,{baseline:middle,align:left}',
+            'text,f2,60,34.2,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,38.4',
             'setLineWidth,1', 'rect,50,15,60,38.4'
         ];
@@ -740,10 +741,10 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,v1,10,41,{baseline:middle}',
-            'text,v2,50,41,{baseline:middle}',
+            'text,F1,10,23,{baseline:middle,align:left}',
+            'text,F2,50,23,{baseline:middle,align:left}',
+            'text,v1,10,41,{baseline:middle,align:left}',
+            'text,v2,50,41,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,16',
             'setLineWidth,1', 'rect,50,15,60,16',
             'setLineWidth,1', 'rect,10,31,40,20',
@@ -765,10 +766,10 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,F1,10,24.2,{baseline:middle}',
-            'text,F2,50,24.2,{baseline:middle}',
-            'text,v1,10,42.6,{baseline:middle}',
-            'text,v2,50,42.6,{baseline:middle}',
+            'text,F1,10,24.2,{baseline:middle,align:left}',
+            'text,F2,50,24.2,{baseline:middle,align:left}',
+            'text,v1,10,42.6,{baseline:middle,align:left}',
+            'text,v2,50,42.6,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,18.4',
             'setLineWidth,1', 'rect,50,15,60,18.4',
             'setLineWidth,1', 'rect,10,33.4,40,18.4',
@@ -795,10 +796,10 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,15,34.2,{baseline:middle}',
-            'text,F2,60,34.2,{baseline:middle}',
-            'text,v1,15,72.6,{baseline:middle}',
-            'text,v2,60,72.6,{baseline:middle}',
+            'text,F1,15,34.2,{baseline:middle,align:left}',
+            'text,F2,60,34.2,{baseline:middle,align:left}',
+            'text,v1,15,72.6,{baseline:middle,align:left}',
+            'text,v2,60,72.6,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,38.4',
             'setLineWidth,1', 'rect,50,15,60,38.4',
             'setLineWidth,1', 'rect,10,53.4,40,38.4',
@@ -830,12 +831,12 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
+            'text,F1,10,23,{baseline:middle,align:left}',
+            'text,F2,50,23,{baseline:middle,align:left}',
+            'text,v1_1,10,41,{baseline:middle,align:left}',
+            'text,v2_1,50,41,{baseline:middle,align:left}',
+            'text,v1_2,10,63,{baseline:middle,align:left}',
+            'text,v2_2,50,63,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,16',
             'setLineWidth,1', 'rect,50,15,60,16',
             'setLineWidth,1', 'rect,10,31,40,20',
@@ -859,12 +860,12 @@ QUnit.module('Table', moduleConfig, () => {
         });
 
         const expectedLog = [
-            'text,F1,10,24.2,{baseline:middle}',
-            'text,F2,50,24.2,{baseline:middle}',
-            'text,v1_1,10,42.6,{baseline:middle}',
-            'text,v2_1,50,42.6,{baseline:middle}',
-            'text,v1_2,10,61,{baseline:middle}',
-            'text,v2_2,50,61,{baseline:middle}',
+            'text,F1,10,24.2,{baseline:middle,align:left}',
+            'text,F2,50,24.2,{baseline:middle,align:left}',
+            'text,v1_1,10,42.6,{baseline:middle,align:left}',
+            'text,v2_1,50,42.6,{baseline:middle,align:left}',
+            'text,v1_2,10,61,{baseline:middle,align:left}',
+            'text,v2_2,50,61,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,18.4',
             'setLineWidth,1', 'rect,50,15,60,18.4',
             'setLineWidth,1', 'rect,10,33.4,40,18.4',
@@ -893,12 +894,12 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,15,34.2,{baseline:middle}',
-            'text,F2,60,34.2,{baseline:middle}',
-            'text,v1_1,15,72.6,{baseline:middle}',
-            'text,v2_1,60,72.6,{baseline:middle}',
-            'text,v1_2,15,111,{baseline:middle}',
-            'text,v2_2,60,111,{baseline:middle}',
+            'text,F1,15,34.2,{baseline:middle,align:left}',
+            'text,F2,60,34.2,{baseline:middle,align:left}',
+            'text,v1_1,15,72.6,{baseline:middle,align:left}',
+            'text,v2_1,60,72.6,{baseline:middle,align:left}',
+            'text,v1_2,15,111,{baseline:middle,align:left}',
+            'text,v2_2,60,111,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,38.4',
             'setLineWidth,1', 'rect,50,15,60,38.4',
             'setLineWidth,1', 'rect,10,53.4,40,38.4',
@@ -932,12 +933,12 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,10,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,10,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,10,63,{baseline:middle}',
+            'text,F1,10,23,{baseline:middle,align:left}',
+            'text,F2,10,23,{baseline:middle,align:left}',
+            'text,v1_1,10,41,{baseline:middle,align:left}',
+            'text,v2_1,10,41,{baseline:middle,align:left}',
+            'text,v1_2,10,63,{baseline:middle,align:left}',
+            'text,v2_2,10,63,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,0,16',
             'setLineWidth,1', 'rect,10,15,100,16',
             'setLineWidth,1', 'rect,10,31,0,20',
@@ -977,15 +978,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
+            'text,F1,10,23,{baseline:middle,align:left}',
+            'text,F2,50,23,{baseline:middle,align:left}',
+            'text,F3,100,23,{baseline:middle,align:left}',
+            'text,v1_1,10,41,{baseline:middle,align:left}',
+            'text,v2_1,50,41,{baseline:middle,align:left}',
+            'text,v3_1,100,41,{baseline:middle,align:left}',
+            'text,v1_2,10,63,{baseline:middle,align:left}',
+            'text,v2_2,50,63,{baseline:middle,align:left}',
+            'text,v3_2,100,63,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,16',
             'setLineWidth,1', 'rect,50,15,50,16',
             'setLineWidth,1', 'rect,100,15,60,16',
@@ -1028,15 +1029,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
+            'text,F1,10,23,{baseline:middle,align:left}',
+            'text,F2,50,23,{baseline:middle,align:left}',
+            'text,F3,100,23,{baseline:middle,align:left}',
+            'text,v1_1,10,41,{baseline:middle,align:left}',
+            'text,v2_1,50,41,{baseline:middle,align:left}',
+            'text,v3_1,100,41,{baseline:middle,align:left}',
+            'text,v1_2,10,63,{baseline:middle,align:left}',
+            'text,v2_2,50,63,{baseline:middle,align:left}',
+            'text,v3_2,100,63,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,16',
             'setLineWidth,1', 'rect,50,15,50,16',
             'setLineWidth,1', 'rect,100,15,60,16',
@@ -1078,15 +1079,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
+            'text,F1,10,23,{baseline:middle,align:left}',
+            'text,F2,50,23,{baseline:middle,align:left}',
+            'text,F3,100,23,{baseline:middle,align:left}',
+            'text,v1_1,10,41,{baseline:middle,align:left}',
+            'text,v2_1,50,41,{baseline:middle,align:left}',
+            'text,v3_1,100,41,{baseline:middle,align:left}',
+            'text,v1_2,10,63,{baseline:middle,align:left}',
+            'text,v2_2,50,63,{baseline:middle,align:left}',
+            'text,v3_2,100,63,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,16',
             'setLineWidth,1', 'line,50,15,100,15', 'line,50,15,50,31', 'line,100,15,100,31',
             'setLineWidth,1', 'rect,100,15,60,16',
@@ -1128,15 +1129,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
+            'text,F1,10,23,{baseline:middle,align:left}',
+            'text,F2,50,23,{baseline:middle,align:left}',
+            'text,F3,100,23,{baseline:middle,align:left}',
+            'text,v1_1,10,41,{baseline:middle,align:left}',
+            'text,v2_1,50,41,{baseline:middle,align:left}',
+            'text,v3_1,100,41,{baseline:middle,align:left}',
+            'text,v1_2,10,63,{baseline:middle,align:left}',
+            'text,v2_2,50,63,{baseline:middle,align:left}',
+            'text,v3_2,100,63,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,16',
             'setLineWidth,1', 'rect,50,15,50,16',
             'setLineWidth,1', 'rect,100,15,60,16',
@@ -1181,15 +1182,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
+            'text,F1,10,23,{baseline:middle,align:left}',
+            'text,F2,50,23,{baseline:middle,align:left}',
+            'text,F3,100,23,{baseline:middle,align:left}',
+            'text,v1_1,10,41,{baseline:middle,align:left}',
+            'text,v2_1,50,41,{baseline:middle,align:left}',
+            'text,v3_1,100,41,{baseline:middle,align:left}',
+            'text,v1_2,10,63,{baseline:middle,align:left}',
+            'text,v2_2,50,63,{baseline:middle,align:left}',
+            'text,v3_2,100,63,{baseline:middle,align:left}',
             'setLineWidth,1', 'rect,10,15,40,16',
             'setLineWidth,1', 'line,50,15,100,15', 'line,50,15,50,31', 'line,100,15,100,31',
             'setLineWidth,1', 'rect,100,15,60,16',
@@ -1231,15 +1232,15 @@ QUnit.module('Table', moduleConfig, () => {
         };
 
         const expectedLog = [
-            'text,F1,10,23,{baseline:middle}',
-            'text,F2,50,23,{baseline:middle}',
-            'text,F3,100,23,{baseline:middle}',
-            'text,v1_1,10,41,{baseline:middle}',
-            'text,v2_1,50,41,{baseline:middle}',
-            'text,v3_1,100,41,{baseline:middle}',
-            'text,v1_2,10,63,{baseline:middle}',
-            'text,v2_2,50,63,{baseline:middle}',
-            'text,v3_2,100,63,{baseline:middle}',
+            'text,F1,10,23,{baseline:middle,align:left}',
+            'text,F2,50,23,{baseline:middle,align:left}',
+            'text,F3,100,23,{baseline:middle,align:left}',
+            'text,v1_1,10,41,{baseline:middle,align:left}',
+            'text,v2_1,50,41,{baseline:middle,align:left}',
+            'text,v3_1,100,41,{baseline:middle,align:left}',
+            'text,v1_2,10,63,{baseline:middle,align:left}',
+            'text,v2_2,50,63,{baseline:middle,align:left}',
+            'text,v3_2,100,63,{baseline:middle,align:left}',
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 50, 60 ], customizeCell, onRowExporting }).then(() => {
             // doc.save();
@@ -1258,4 +1259,5 @@ JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfGroupingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfSummariesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfVerticalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfHorizontalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfColumnWidthsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

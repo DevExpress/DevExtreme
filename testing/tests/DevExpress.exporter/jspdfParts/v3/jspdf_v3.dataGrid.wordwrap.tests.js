@@ -13,7 +13,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line,10,45,{baseline:middle}',
+                    'text,very long line,10,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60'
                 ];
@@ -36,7 +36,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line,10,45,{baseline:middle}',
+                    'text,very long line,10,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60'
                 ];
@@ -59,7 +59,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line,10,24.2,{baseline:middle}',
+                    'text,very long line,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,18.4'
                 ];
@@ -81,7 +81,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line,10,24.2,{baseline:middle}',
+                    'text,very long line,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,18.4'
                 ];
@@ -107,7 +107,7 @@ const JSPdfWordWrapTests = {
                 };
 
                 const expectedLog = [
-                    'text,very long\nline,15,29.2,{baseline:middle}',
+                    'text,very long\nline,15,29.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,46.8'
                 ];
@@ -130,7 +130,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line,10,45,{baseline:middle}',
+                    'text,long line,10,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setFontSize,16',
@@ -156,7 +156,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line,10,45,{baseline:middle}',
+                    'text,long line,10,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setFontSize,16',
@@ -182,7 +182,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line,10,26.5,{baseline:middle}',
+                    'text,long line,10,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setFontSize,16',
@@ -207,7 +207,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line,10,26.5,{baseline:middle}',
+                    'text,long line,10,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setFontSize,16',
@@ -232,7 +232,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line,15,31.5,{baseline:middle}',
+                    'text,long line,15,31.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,33',
                     'setFontSize,16'
@@ -260,7 +260,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text very long text,10,45,{baseline:middle}',
+                    'text,very long text very long text,10,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60'
                 ];
@@ -283,7 +283,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text\nvery long text,10,35.8,{baseline:middle}',
+                    'text,very long text\nvery long text,10,35.8,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60'
                 ];
@@ -306,7 +306,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text very long text,10,24.2,{baseline:middle}',
+                    'text,very long text very long text,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,18.4'
                 ];
@@ -328,7 +328,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text\nvery long text,10,24.2,{baseline:middle}',
+                    'text,very long text\nvery long text,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,36.8'
                 ];
@@ -354,7 +354,7 @@ const JSPdfWordWrapTests = {
                 };
 
                 const expectedLog = [
-                    'text,very long\ntext very\nlong text,15,29.2,{baseline:middle}',
+                    'text,very long\ntext very\nlong text,15,29.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,65.2'
                 ];
@@ -377,7 +377,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line long line,10,45,{baseline:middle}',
+                    'text,long line long line,10,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setFontSize,16',
@@ -403,7 +403,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line,10,33.5,{baseline:middle}',
+                    'text,long line\nlong line,10,33.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setFontSize,16',
@@ -429,7 +429,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line long line,10,26.5,{baseline:middle}',
+                    'text,long line long line,10,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setFontSize,16',
@@ -454,7 +454,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line,10,26.5,{baseline:middle}',
+                    'text,long line\nlong line,10,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,46',
                     'setFontSize,16',
@@ -479,7 +479,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line,15,31.5,{baseline:middle}',
+                    'text,long line\nlong line,15,31.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,56',
                     'setFontSize,16'
@@ -507,7 +507,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line very long line,10,55,{baseline:middle}',
+                    'text,very long line very long line very long line,10,55,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,80'
                 ];
@@ -530,7 +530,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line\nvery long line,10,36.6,{baseline:middle}',
+                    'text,very long line\nvery long line\nvery long line,10,36.6,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,80'
                 ];
@@ -553,7 +553,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line very long line,10,24.2,{baseline:middle}',
+                    'text,very long line very long line very long line,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,18.4'
                 ];
@@ -575,7 +575,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line\nvery long line,10,24.2,{baseline:middle}',
+                    'text,very long line\nvery long line\nvery long line,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,55.2'
                 ];
@@ -601,7 +601,7 @@ const JSPdfWordWrapTests = {
                 };
 
                 const expectedLog = [
-                    'text,very long\nline very\nlong line\nvery long\nline,15,29.2,{baseline:middle}',
+                    'text,very long\nline very\nlong line\nvery long\nline,15,29.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,102'
                 ];
@@ -623,7 +623,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line very long line,10,24.2,{baseline:middle}',
+                    'text,very long line\nvery long line very long line,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,36.8'
                 ];
@@ -645,7 +645,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line\nvery long line,10,24.2,{baseline:middle}',
+                    'text,very long line\nvery long line\nvery long line,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,55.2'
                 ];
@@ -671,7 +671,7 @@ const JSPdfWordWrapTests = {
                 };
 
                 const expectedLog = [
-                    'text,very long\nline\nvery long\nline very\nlong line,15,29.2,{baseline:middle}',
+                    'text,very long\nline\nvery long\nline very\nlong line,15,29.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,102'
                 ];
@@ -694,7 +694,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line long line long line,10,55,{baseline:middle}',
+                    'text,long line long line long line,10,55,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,80',
                     'setFontSize,16',
@@ -720,7 +720,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,10,32,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,10,32,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,80',
                     'setFontSize,16',
@@ -746,7 +746,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line long line long line,10,26.5,{baseline:middle}',
+                    'text,long line long line long line,10,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setFontSize,16',
@@ -771,7 +771,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,10,26.5,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,10,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,69',
                     'setFontSize,16',
@@ -796,7 +796,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,15,31.5,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,15,31.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,79',
                     'setFontSize,16'
@@ -825,7 +825,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,10,26.5,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,10,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,69',
                     'setFontSize,16',
@@ -850,7 +850,7 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,15,31.5,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,15,31.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,79',
                     'setFontSize,16'
@@ -879,9 +879,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,vert long line,10,45,{baseline:middle}',
+                    'text,vert long line,10,45,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line,110,45,{baseline:middle}',
+                    'text,long line,110,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
@@ -916,9 +916,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,vert long line,10,45,{baseline:middle}',
+                    'text,vert long line,10,45,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line,110,45,{baseline:middle}',
+                    'text,long line,110,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
@@ -952,9 +952,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,vert long line,10,26.5,{baseline:middle}',
+                    'text,vert long line,10,26.5,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line,110,26.5,{baseline:middle}',
+                    'text,long line,110,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setLineWidth,1',
@@ -987,9 +987,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,vert long line,10,26.5,{baseline:middle}',
+                    'text,vert long line,10,26.5,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line,110,26.5,{baseline:middle}',
+                    'text,long line,110,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setLineWidth,1',
@@ -1022,9 +1022,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,vert long line,10,31.5,{baseline:middle}',
+                    'text,vert long line,10,31.5,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line,115,31.5,{baseline:middle}',
+                    'text,long line,115,31.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,33',
                     'setLineWidth,1',
@@ -1059,9 +1059,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line,10,45,{baseline:middle}',
+                    'text,long line,10,45,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line,110,45,{baseline:middle}',
+                    'text,big line,110,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
@@ -1098,9 +1098,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line,10,45,{baseline:middle}',
+                    'text,long line,10,45,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line,110,45,{baseline:middle}',
+                    'text,big line,110,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
@@ -1137,9 +1137,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line,10,32.25,{baseline:middle}',
+                    'text,long line,10,32.25,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line,110,32.25,{baseline:middle}',
+                    'text,big line,110,32.25,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,34.5',
                     'setLineWidth,1',
@@ -1175,9 +1175,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line,10,32.25,{baseline:middle}',
+                    'text,long line,10,32.25,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line,110,32.25,{baseline:middle}',
+                    'text,big line,110,32.25,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,34.5',
                     'setLineWidth,1',
@@ -1213,9 +1213,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line,15,54.5,{baseline:middle}',
+                    'text,long line,15,54.5,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big\nline,115,37.25,{baseline:middle}',
+                    'text,big\nline,115,37.25,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,79',
                     'setLineWidth,1',
@@ -1251,9 +1251,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line,10,45,{baseline:middle}',
+                    'text,very long line very long line,10,45,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line long line,110,45,{baseline:middle}',
+                    'text,long line long line,110,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
@@ -1287,9 +1287,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line,10,35.8,{baseline:middle}',
+                    'text,very long line\nvery long line,10,35.8,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line\nlong line,110,33.5,{baseline:middle}',
+                    'text,long line\nlong line,110,33.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
@@ -1323,9 +1323,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line,10,26.5,{baseline:middle}',
+                    'text,very long line very long line,10,26.5,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line long line,110,26.5,{baseline:middle}',
+                    'text,long line long line,110,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setLineWidth,1',
@@ -1358,9 +1358,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line,10,28.8,{baseline:middle}',
+                    'text,very long line\nvery long line,10,28.8,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line\nlong line,110,26.5,{baseline:middle}',
+                    'text,long line\nlong line,110,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,46',
                     'setLineWidth,1',
@@ -1393,9 +1393,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long\nline very\nlong line,15,29.2,{baseline:middle}',
+                    'text,very long\nline very\nlong line,15,29.2,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line\nlong line,115,36.1,{baseline:middle}',
+                    'text,long line\nlong line,115,36.1,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,65.2',
                     'setLineWidth,1',
@@ -1430,9 +1430,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line long line,10,45,{baseline:middle}',
+                    'text,long line long line,10,45,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line big line,110,45,{baseline:middle}',
+                    'text,big line big line,110,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
@@ -1469,9 +1469,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line,10,33.5,{baseline:middle}',
+                    'text,long line\nlong line,10,33.5,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line\nbig line,110,27.75,{baseline:middle}',
+                    'text,big line\nbig line,110,27.75,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
@@ -1508,9 +1508,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line long line,10,32.25,{baseline:middle}',
+                    'text,long line long line,10,32.25,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line big line,110,32.25,{baseline:middle}',
+                    'text,big line big line,110,32.25,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,34.5',
                     'setLineWidth,1',
@@ -1546,9 +1546,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line,10,38,{baseline:middle}',
+                    'text,long line\nlong line,10,38,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line\nbig line,110,32.25,{baseline:middle}',
+                    'text,big line\nbig line,110,32.25,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,69',
                     'setLineWidth,1',
@@ -1584,9 +1584,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line,15,77.5,{baseline:middle}',
+                    'text,long line\nlong line,15,77.5,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big\nline\nbig\nline,115,37.25,{baseline:middle}',
+                    'text,big\nline\nbig\nline,115,37.25,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,148',
                     'setLineWidth,1',
@@ -1622,9 +1622,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line very long line,10,55,{baseline:middle}',
+                    'text,very long line very long line very long line,10,55,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line long line long line,110,55,{baseline:middle}',
+                    'text,long line long line long line,110,55,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,80',
                     'setLineWidth,1',
@@ -1658,9 +1658,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line\nvery long line,10,36.6,{baseline:middle}',
+                    'text,very long line\nvery long line\nvery long line,10,36.6,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,110,32,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,110,32,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,80',
                     'setLineWidth,1',
@@ -1694,9 +1694,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line very long line,10,26.5,{baseline:middle}',
+                    'text,very long line very long line very long line,10,26.5,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line long line long line,110,26.5,{baseline:middle}',
+                    'text,long line long line long line,110,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setLineWidth,1',
@@ -1729,9 +1729,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line\nvery long line,10,31.1,{baseline:middle}',
+                    'text,very long line\nvery long line\nvery long line,10,31.1,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,110,26.5,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,110,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,69',
                     'setLineWidth,1',
@@ -1764,9 +1764,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long\nline very\nlong line\nvery long\nline,15,29.2,{baseline:middle}',
+                    'text,very long\nline very\nlong line\nvery long\nline,15,29.2,{baseline:middle,align:left}',
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,115,43,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,115,43,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,102',
                     'setLineWidth,1',
@@ -1801,9 +1801,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line long line long line,10,60,{baseline:middle}',
+                    'text,long line long line long line,10,60,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line big line big line,110,60,{baseline:middle}',
+                    'text,big line big line big line,110,60,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,90',
                     'setLineWidth,1',
@@ -1840,9 +1840,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,10,37,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,10,37,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line\nbig line\nbig line,110,25.5,{baseline:middle}',
+                    'text,big line\nbig line\nbig line,110,25.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,90',
                     'setLineWidth,1',
@@ -1879,9 +1879,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line long line long line,10,32.25,{baseline:middle}',
+                    'text,long line long line long line,10,32.25,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line big line big line,110,32.25,{baseline:middle}',
+                    'text,big line big line big line,110,32.25,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,34.5',
                     'setLineWidth,1',
@@ -1917,9 +1917,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,10,43.75,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,10,43.75,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line\nbig line\nbig line,110,32.25,{baseline:middle}',
+                    'text,big line\nbig line\nbig line,110,32.25,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,103.5',
                     'setLineWidth,1',
@@ -1955,9 +1955,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,15,100.5,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,15,100.5,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big\nline\nbig\nline\nbig\nline,115,37.25,{baseline:middle}',
+                    'text,big\nline\nbig\nline\nbig\nline,115,37.25,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,217',
                     'setLineWidth,1',
@@ -1990,7 +1990,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text very long text,10,45,{baseline:middle}',
+                    'text,very long text very long text,10,45,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,200,60'
                 ];
@@ -2013,7 +2013,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text very long text,10,24.2,{baseline:middle}',
+                    'text,very long text very long text,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,200,18.4'
                 ];
@@ -2038,9 +2038,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,10,26.5,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,10,26.5,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line big line big line,110,49.5,{baseline:middle}',
+                    'text,big line big line big line,110,49.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,69',
                     'setLineWidth,1',
@@ -2076,9 +2076,9 @@ const JSPdfWordWrapTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,long line\nlong line\nlong line,15,31.5,{baseline:middle}',
+                    'text,long line\nlong line\nlong line,15,31.5,{baseline:middle,align:left}',
                     'setFontSize,30',
-                    'text,big line big line big line,110,54.5,{baseline:middle}',
+                    'text,big line big line big line,110,54.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,79',
                     'setLineWidth,1',
@@ -2112,7 +2112,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text\nvery long text\nvery long text\nvery long text\nvery long text,10,8.2,{baseline:middle}',
+                    'text,very long text\nvery long text\nvery long text\nvery long text\nvery long text,10,8.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,60'
                 ];
@@ -2135,7 +2135,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long text\nvery long text\nvery long text\nvery long text\nvery long text,10,24.2,{baseline:middle}',
+                    'text,very long text\nvery long text\nvery long text\nvery long text\nvery long text,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,92'
                 ];
@@ -2157,7 +2157,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long\ntext very\nlong text\nvery long\ntext\nvery long\ntext\nvery long\ntext,15,29.2,{baseline:middle}',
+                    'text,very long\ntext very\nlong text\nvery long\ntext\nvery long\ntext\nvery long\ntext,15,29.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,175.6'
                 ];
@@ -2183,7 +2183,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line\nvery long line\nvery long line,10,24.2,{baseline:middle}',
+                    'text,very long line\nvery long line\nvery long line,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,55.2'
                 ];
@@ -2207,7 +2207,7 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,very long line very long line very long line,10,24.2,{baseline:middle}',
+                    'text,very long line very long line very long line,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,18.4'
                 ];
@@ -2239,9 +2239,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 line1\nline 2,10,24.2,{baseline:middle}',
-                    'text,F1,10,61,{baseline:middle}',
-                    'text,f1_1 long line\nvery long line,10,79.4,{baseline:middle}',
+                    'text,Band1 line1\nline 2,10,24.2,{baseline:middle,align:left}',
+                    'text,F1,10,61,{baseline:middle,align:left}',
+                    'text,f1_1 long line\nvery long line,10,79.4,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,100,36.8',
                     'setLineWidth,1',
@@ -2270,11 +2270,11 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 long line 1\nling line 2,10,24.2,{baseline:middle}',
-                    'text,F1,10,61,{baseline:middle}',
-                    'text,F2,80,61,{baseline:middle}',
-                    'text,f1_1 line,10,97.8,{baseline:middle}',
-                    'text,f2_1 line\nlong line\nlong line,80,79.4,{baseline:middle}',
+                    'text,Band1 long line 1\nling line 2,10,24.2,{baseline:middle,align:left}',
+                    'text,F1,10,61,{baseline:middle,align:left}',
+                    'text,F2,80,61,{baseline:middle,align:left}',
+                    'text,f1_1 line,10,97.8,{baseline:middle,align:left}',
+                    'text,f2_1 line\nlong line\nlong line,80,79.4,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,140,36.8',
                     'setLineWidth,1',
@@ -2307,13 +2307,13 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 long line 1 ling line 2,10,24.2,{baseline:middle}',
-                    'text,F1,10,42.6,{baseline:middle}',
-                    'text,F2,80,42.6,{baseline:middle}',
-                    'text,F3,150,42.6,{baseline:middle}',
-                    'text,f1_1 line,10,79.4,{baseline:middle}',
-                    'text,f2_1 line\nlong line\nlong line,80,61,{baseline:middle}',
-                    'text,f3,150,79.4,{baseline:middle}',
+                    'text,Band1 long line 1 ling line 2,10,24.2,{baseline:middle,align:left}',
+                    'text,F1,10,42.6,{baseline:middle,align:left}',
+                    'text,F2,80,42.6,{baseline:middle,align:left}',
+                    'text,F3,150,42.6,{baseline:middle,align:left}',
+                    'text,f1_1 line,10,79.4,{baseline:middle,align:left}',
+                    'text,f2_1 line\nlong line\nlong line,80,61,{baseline:middle,align:left}',
+                    'text,f3,150,79.4,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,210,18.4',
                     'setLineWidth,1',
@@ -2366,14 +2366,14 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle}',
-                    'text,Band1 line,80,30.333,{baseline:middle}',
-                    'text,Band1_2,80,79.4,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,160,67.133,{baseline:middle}',
-                    'text,f3,80,146.867,{baseline:middle}',
-                    'text,f1_1,10,189.8,{baseline:middle}',
-                    'text,f3_1,80,189.8,{baseline:middle}',
-                    'text,f4_1,160,189.8,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle,align:left}',
+                    'text,Band1 line,80,30.333,{baseline:middle,align:left}',
+                    'text,Band1_2,80,79.4,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6,160,67.133,{baseline:middle,align:left}',
+                    'text,f3,80,146.867,{baseline:middle,align:left}',
+                    'text,f1_1,10,189.8,{baseline:middle,align:left}',
+                    'text,f3_1,80,189.8,{baseline:middle,align:left}',
+                    'text,f4_1,160,189.8,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,165.6',
                     'setLineWidth,1',
@@ -2427,14 +2427,14 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,70.2,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8,160,42.6,{baseline:middle}',
-                    'text,f3,80,143.8,{baseline:middle}',
-                    'text,f1_1,10,189.8,{baseline:middle}',
-                    'text,f3_1,80,189.8,{baseline:middle}',
-                    'text,f4_1,160,189.8,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle,align:left}',
+                    'text,Band1 line,80,24.2,{baseline:middle,align:left}',
+                    'text,Band1_2,80,70.2,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8,160,42.6,{baseline:middle,align:left}',
+                    'text,f3,80,143.8,{baseline:middle,align:left}',
+                    'text,f1_1,10,189.8,{baseline:middle,align:left}',
+                    'text,f3_1,80,189.8,{baseline:middle,align:left}',
+                    'text,f4_1,160,189.8,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,165.6',
                     'setLineWidth,1',
@@ -2488,15 +2488,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,33.4,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,51.8,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,160,42.6,{baseline:middle}',
-                    'text,f1_2_3,80,88.6,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4,80,125.4,{baseline:middle}',
-                    'text,f1_1,10,208.2,{baseline:middle}',
-                    'text,f3_1_1,80,208.2,{baseline:middle}',
-                    'text,f4_1,160,208.2,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,33.4,{baseline:middle,align:left}',
+                    'text,Band1 line,80,24.2,{baseline:middle,align:left}',
+                    'text,Band1_2,80,51.8,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,160,42.6,{baseline:middle,align:left}',
+                    'text,f1_2_3,80,88.6,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4,80,125.4,{baseline:middle,align:left}',
+                    'text,f1_1,10,208.2,{baseline:middle,align:left}',
+                    'text,f3_1_1,80,208.2,{baseline:middle,align:left}',
+                    'text,f4_1,160,208.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,184',
                     'setLineWidth,1',
@@ -2552,15 +2552,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,33.4,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,45.667,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,160,42.6,{baseline:middle}',
-                    'text,f1_2_3,80,70.2,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,80,94.733,{baseline:middle}',
-                    'text,f1_1,10,208.2,{baseline:middle}',
-                    'text,f3_1_1,80,208.2,{baseline:middle}',
-                    'text,f4_1,160,208.2,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,33.4,{baseline:middle,align:left}',
+                    'text,Band1 line,80,24.2,{baseline:middle,align:left}',
+                    'text,Band1_2,80,45.667,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,160,42.6,{baseline:middle,align:left}',
+                    'text,f1_2_3,80,70.2,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6,80,94.733,{baseline:middle,align:left}',
+                    'text,f1_1,10,208.2,{baseline:middle,align:left}',
+                    'text,f3_1_1,80,208.2,{baseline:middle,align:left}',
+                    'text,f4_1,160,208.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,184',
                     'setLineWidth,1',
@@ -2621,16 +2621,16 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,97.8,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,61,{baseline:middle}',
-                    'text,f5 long\nline very\nlong line\nlong line\nvery long\nline long\nline very\nlong line,220,42.6,{baseline:middle}',
-                    'text,f3 long line\nvery long\nline,80,116.2,{baseline:middle}',
-                    'text,f4 long\nline very\nlong line,160,116.2,{baseline:middle}',
-                    'text,f1_1 line,10,208.2,{baseline:middle}',
-                    'text,f3_1,80,208.2,{baseline:middle}',
-                    'text,f4_1\nvery\nlong line,160,189.8,{baseline:middle}',
-                    'text,f5_1 long\nline,220,199,{baseline:middle}',
+                    'text,F1,10,97.8,{baseline:middle,align:left}',
+                    'text,Band1 line,80,24.2,{baseline:middle,align:left}',
+                    'text,Band1_2,80,61,{baseline:middle,align:left}',
+                    'text,f5 long\nline very\nlong line\nlong line\nvery long\nline long\nline very\nlong line,220,42.6,{baseline:middle,align:left}',
+                    'text,f3 long line\nvery long\nline,80,116.2,{baseline:middle,align:left}',
+                    'text,f4 long\nline very\nlong line,160,116.2,{baseline:middle,align:left}',
+                    'text,f1_1 line,10,208.2,{baseline:middle,align:left}',
+                    'text,f3_1,80,208.2,{baseline:middle,align:left}',
+                    'text,f4_1\nvery\nlong line,160,189.8,{baseline:middle,align:left}',
+                    'text,f5_1 long\nline,220,199,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,165.6',
                     'setLineWidth,1',
@@ -2694,16 +2694,16 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,97.8,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,78.9,{baseline:middle}',
-                    'text,f5 long\nline very\nlong line\nlong line\nvery long\nline long\nline very\nlong line,220,42.6,{baseline:middle}',
-                    'text,f3 long line\nvery long\nline,80,134.1,{baseline:middle}',
-                    'text,f4 long\nline very\nlong line,160,134.1,{baseline:middle}',
-                    'text,f1_1 line,10,208.2,{baseline:middle}',
-                    'text,f3_1,80,208.2,{baseline:middle}',
-                    'text,f4_1\nvery\nlong line,160,189.8,{baseline:middle}',
-                    'text,f5_1 long\nline,220,199,{baseline:middle}',
+                    'text,F1,10,97.8,{baseline:middle,align:left}',
+                    'text,Band1 line,80,24.2,{baseline:middle,align:left}',
+                    'text,Band1_2,80,78.9,{baseline:middle,align:left}',
+                    'text,f5 long\nline very\nlong line\nlong line\nvery long\nline long\nline very\nlong line,220,42.6,{baseline:middle,align:left}',
+                    'text,f3 long line\nvery long\nline,80,134.1,{baseline:middle,align:left}',
+                    'text,f4 long\nline very\nlong line,160,134.1,{baseline:middle,align:left}',
+                    'text,f1_1 line,10,208.2,{baseline:middle,align:left}',
+                    'text,f3_1,80,208.2,{baseline:middle,align:left}',
+                    'text,f4_1\nvery\nlong line,160,189.8,{baseline:middle,align:left}',
+                    'text,f5_1 long\nline,220,199,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,165.6',
                     'setLineWidth,1',
@@ -2774,16 +2774,16 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,61,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,42.6,{baseline:middle}',
-                    'text,f5 long\nline very\nlong line,220,51.8,{baseline:middle}',
-                    'text,f3 long line\nvery long\nline,80,61,{baseline:middle}',
-                    'text,f4 long\nline very\nlong line,160,61,{baseline:middle}',
-                    'text,f1_1 line,10,134.6,{baseline:middle}',
-                    'text,f3_1,80,134.6,{baseline:middle}',
-                    'text,f4_1\nvery\nlong line,160,116.2,{baseline:middle}',
-                    'text,f5_1 long\nline,220,125.4,{baseline:middle}',
+                    'text,F1,10,61,{baseline:middle,align:left}',
+                    'text,Band1 line,80,24.2,{baseline:middle,align:left}',
+                    'text,Band1_2,80,42.6,{baseline:middle,align:left}',
+                    'text,f5 long\nline very\nlong line,220,51.8,{baseline:middle,align:left}',
+                    'text,f3 long line\nvery long\nline,80,61,{baseline:middle,align:left}',
+                    'text,f4 long\nline very\nlong line,160,61,{baseline:middle,align:left}',
+                    'text,f1_1 line,10,134.6,{baseline:middle,align:left}',
+                    'text,f3_1,80,134.6,{baseline:middle,align:left}',
+                    'text,f4_1\nvery\nlong line,160,116.2,{baseline:middle,align:left}',
+                    'text,f5_1 long\nline,220,125.4,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,92',
                     'setLineWidth,1',
@@ -2847,18 +2847,18 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle}',
-                    'text,Band1 line,80,27.88,{baseline:middle}',
-                    'text,Band1_2,80,53.64,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,220,64.68,{baseline:middle}',
-                    'text,f1_2_3,80,79.4,{baseline:middle}',
-                    'text,line1,80,105.16,{baseline:middle}',
-                    'text,F3,80,149.32,{baseline:middle}',
-                    'text,line1\nline2\nline3,160,130.92,{baseline:middle}',
-                    'text,f1_1,10,189.8,{baseline:middle}',
-                    'text,f3_1_1,80,189.8,{baseline:middle}',
-                    'text,f4_1,160,189.8,{baseline:middle}',
-                    'text,f5_1,220,189.8,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle,align:left}',
+                    'text,Band1 line,80,27.88,{baseline:middle,align:left}',
+                    'text,Band1_2,80,53.64,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6,220,64.68,{baseline:middle,align:left}',
+                    'text,f1_2_3,80,79.4,{baseline:middle,align:left}',
+                    'text,line1,80,105.16,{baseline:middle,align:left}',
+                    'text,F3,80,149.32,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,160,130.92,{baseline:middle,align:left}',
+                    'text,f1_1,10,189.8,{baseline:middle,align:left}',
+                    'text,f3_1_1,80,189.8,{baseline:middle,align:left}',
+                    'text,f4_1,160,189.8,{baseline:middle,align:left}',
+                    'text,f5_1,220,189.8,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,165.6',
                     'setLineWidth,1',
@@ -2926,18 +2926,18 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle}',
-                    'text,Band1 line,80,27.88,{baseline:middle}',
-                    'text,Band1_2,80,58.24,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,220,64.68,{baseline:middle}',
-                    'text,f1_2_3,80,93.2,{baseline:middle}',
-                    'text,line1,80,128.16,{baseline:middle}',
-                    'text,F3,80,163.12,{baseline:middle}',
-                    'text,line1,160,163.12,{baseline:middle}',
-                    'text,f1_1,10,189.8,{baseline:middle}',
-                    'text,f3_1_1,80,189.8,{baseline:middle}',
-                    'text,f4_1,160,189.8,{baseline:middle}',
-                    'text,f5_1,220,189.8,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,24.2,{baseline:middle,align:left}',
+                    'text,Band1 line,80,27.88,{baseline:middle,align:left}',
+                    'text,Band1_2,80,58.24,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6,220,64.68,{baseline:middle,align:left}',
+                    'text,f1_2_3,80,93.2,{baseline:middle,align:left}',
+                    'text,line1,80,128.16,{baseline:middle,align:left}',
+                    'text,F3,80,163.12,{baseline:middle,align:left}',
+                    'text,line1,160,163.12,{baseline:middle,align:left}',
+                    'text,f1_1,10,189.8,{baseline:middle,align:left}',
+                    'text,f3_1_1,80,189.8,{baseline:middle,align:left}',
+                    'text,f4_1,160,189.8,{baseline:middle,align:left}',
+                    'text,f5_1,220,189.8,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,165.6',
                     'setLineWidth,1',
@@ -3005,18 +3005,18 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3,10,61,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,47.2,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,220,42.6,{baseline:middle}',
-                    'text,f1_2_3,80,74.8,{baseline:middle}',
-                    'text,line1,80,102.4,{baseline:middle}',
-                    'text,F3,80,130,{baseline:middle}',
-                    'text,line1,160,130,{baseline:middle}',
-                    'text,f1_1,10,153,{baseline:middle}',
-                    'text,f3_1_1,80,153,{baseline:middle}',
-                    'text,f4_1,160,153,{baseline:middle}',
-                    'text,f5_1,220,153,{baseline:middle}',
+                    'text,line1\nline2\nline3,10,61,{baseline:middle,align:left}',
+                    'text,Band1 line,80,24.2,{baseline:middle,align:left}',
+                    'text,Band1_2,80,47.2,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6,220,42.6,{baseline:middle,align:left}',
+                    'text,f1_2_3,80,74.8,{baseline:middle,align:left}',
+                    'text,line1,80,102.4,{baseline:middle,align:left}',
+                    'text,F3,80,130,{baseline:middle,align:left}',
+                    'text,line1,160,130,{baseline:middle,align:left}',
+                    'text,f1_1,10,153,{baseline:middle,align:left}',
+                    'text,f3_1_1,80,153,{baseline:middle,align:left}',
+                    'text,f4_1,160,153,{baseline:middle,align:left}',
+                    'text,f5_1,220,153,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,128.8',
                     'setLineWidth,1',
@@ -3084,18 +3084,18 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,33.4,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,44.9,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,220,42.6,{baseline:middle}',
-                    'text,f1_2_3,80,67.9,{baseline:middle}',
-                    'text,line1\nline2\nline3,80,90.9,{baseline:middle}',
-                    'text,F3,80,169.1,{baseline:middle}',
-                    'text,line1\nline2\nline3,160,150.7,{baseline:middle}',
-                    'text,f1_1,10,208.2,{baseline:middle}',
-                    'text,f3_1_1,80,208.2,{baseline:middle}',
-                    'text,f4_1,160,208.2,{baseline:middle}',
-                    'text,f5_1,220,208.2,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,33.4,{baseline:middle,align:left}',
+                    'text,Band1 line,80,24.2,{baseline:middle,align:left}',
+                    'text,Band1_2,80,44.9,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,220,42.6,{baseline:middle,align:left}',
+                    'text,f1_2_3,80,67.9,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,80,90.9,{baseline:middle,align:left}',
+                    'text,F3,80,169.1,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,160,150.7,{baseline:middle,align:left}',
+                    'text,f1_1,10,208.2,{baseline:middle,align:left}',
+                    'text,f3_1_1,80,208.2,{baseline:middle,align:left}',
+                    'text,f4_1,160,208.2,{baseline:middle,align:left}',
+                    'text,f5_1,220,208.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,184',
                     'setLineWidth,1',
@@ -3163,18 +3163,18 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,51.8,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,42.6,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,220,61,{baseline:middle}',
-                    'text,f1_2_3,80,61,{baseline:middle}',
-                    'text,line1\nline2\nline3,80,79.4,{baseline:middle}',
-                    'text,F3,80,180.6,{baseline:middle}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,160,134.6,{baseline:middle}',
-                    'text,f1_1,10,245,{baseline:middle}',
-                    'text,f3_1_1,80,245,{baseline:middle}',
-                    'text,f4_1,160,245,{baseline:middle}',
-                    'text,f5_1,220,245,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,10,51.8,{baseline:middle,align:left}',
+                    'text,Band1 line,80,24.2,{baseline:middle,align:left}',
+                    'text,Band1_2,80,42.6,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,220,61,{baseline:middle,align:left}',
+                    'text,f1_2_3,80,61,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,80,79.4,{baseline:middle,align:left}',
+                    'text,F3,80,180.6,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6,160,134.6,{baseline:middle,align:left}',
+                    'text,f1_1,10,245,{baseline:middle,align:left}',
+                    'text,f3_1_1,80,245,{baseline:middle,align:left}',
+                    'text,f4_1,160,245,{baseline:middle,align:left}',
+                    'text,f5_1,220,245,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,220.8',
                     'setLineWidth,1',
@@ -3238,16 +3238,16 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,96.8,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,Band1_2,80,78.4,{baseline:middle}',
-                    'text,f5 long\nline very\nlong line,220,87.6,{baseline:middle}',
-                    'text,f3 long line\nvery long\nline,80,132.6,{baseline:middle}',
-                    'text,f4 long\nline very\nlong line,160,132.6,{baseline:middle}',
-                    'text,f1_1 line,10,206.2,{baseline:middle}',
-                    'text,f3_1,80,206.2,{baseline:middle}',
-                    'text,f4_1\nvery\nlong line,160,187.8,{baseline:middle}',
-                    'text,f5_1 long\nline,220,197,{baseline:middle}',
+                    'text,F1,10,96.8,{baseline:middle,align:left}',
+                    'text,Band1 line,80,24.2,{baseline:middle,align:left}',
+                    'text,Band1_2,80,78.4,{baseline:middle,align:left}',
+                    'text,f5 long\nline very\nlong line,220,87.6,{baseline:middle,align:left}',
+                    'text,f3 long line\nvery long\nline,80,132.6,{baseline:middle,align:left}',
+                    'text,f4 long\nline very\nlong line,160,132.6,{baseline:middle,align:left}',
+                    'text,f1_1 line,10,206.2,{baseline:middle,align:left}',
+                    'text,f3_1,80,206.2,{baseline:middle,align:left}',
+                    'text,f4_1\nvery\nlong line,160,187.8,{baseline:middle,align:left}',
+                    'text,f5_1 long\nline,220,197,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,163.6',
                     'setLineWidth,1',
@@ -3305,12 +3305,12 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 line1,10,24.2,{baseline:middle}',
-                    'text,F1,10,61,{baseline:middle}',
-                    'text,Band1_2\nlong line,70,42.6,{baseline:middle}',
-                    'text,F2,70,79.4,{baseline:middle}',
-                    'text,f1_1 line\nlong line,10,116.2,{baseline:middle}',
-                    'text,f2_1_1\nvery long\nline very\nlong line,70,97.8,{baseline:middle}',
+                    'text,Band1 line1,10,24.2,{baseline:middle,align:left}',
+                    'text,F1,10,61,{baseline:middle,align:left}',
+                    'text,Band1_2\nlong line,70,42.6,{baseline:middle,align:left}',
+                    'text,F2,70,79.4,{baseline:middle,align:left}',
+                    'text,f1_1 line\nlong line,10,116.2,{baseline:middle,align:left}',
+                    'text,f2_1_1\nvery long\nline very\nlong line,70,97.8,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,130,18.4',
                     'setLineWidth,1',
@@ -3351,14 +3351,14 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle}',
-                    'text,F1,10,88.6,{baseline:middle}',
-                    'text,Band1_2 long line\nvery long line very\nlong,70,42.6,{baseline:middle}',
-                    'text,F2,70,116.2,{baseline:middle}',
-                    'text,f3 long line\nvery long\nline,140,97.8,{baseline:middle}',
-                    'text,f1_1 line,10,180.6,{baseline:middle}',
-                    'text,f2_1_2\nvery long\nline very\nlong line,70,153,{baseline:middle}',
-                    'text,f3_1_2\nlong line,140,171.4,{baseline:middle}',
+                    'text,Band1,10,24.2,{baseline:middle,align:left}',
+                    'text,F1,10,88.6,{baseline:middle,align:left}',
+                    'text,Band1_2 long line\nvery long line very\nlong,70,42.6,{baseline:middle,align:left}',
+                    'text,F2,70,116.2,{baseline:middle,align:left}',
+                    'text,f3 long line\nvery long\nline,140,97.8,{baseline:middle,align:left}',
+                    'text,f1_1 line,10,180.6,{baseline:middle,align:left}',
+                    'text,f2_1_2\nvery long\nline very\nlong line,70,153,{baseline:middle,align:left}',
+                    'text,f3_1_2\nlong line,140,171.4,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,210,18.4',
                     'setLineWidth,1',
@@ -3398,11 +3398,11 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,42.6,{baseline:middle}',
-                    'text,Band2\nlong line,80,24.2,{baseline:middle}',
-                    'text,F2,80,61,{baseline:middle}',
-                    'text,f1_1 line,10,107,{baseline:middle}',
-                    'text,f2_1 very\nlong line\nvery long\nline,80,79.4,{baseline:middle}',
+                    'text,F1,10,42.6,{baseline:middle,align:left}',
+                    'text,Band2\nlong line,80,24.2,{baseline:middle,align:left}',
+                    'text,F2,80,61,{baseline:middle,align:left}',
+                    'text,f1_1 line,10,107,{baseline:middle,align:left}',
+                    'text,f2_1 very\nlong line\nvery long\nline,80,79.4,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,55.2',
                     'setLineWidth,1',
@@ -3436,13 +3436,13 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,42.6,{baseline:middle}',
-                    'text,Band2 line long line\nvery long line,80,24.2,{baseline:middle}',
-                    'text,F2,80,61,{baseline:middle}',
-                    'text,F3,160,61,{baseline:middle}',
-                    'text,f1_1 line,10,107,{baseline:middle}',
-                    'text,f2_1 very\nlong line\nvery long\nline,80,79.4,{baseline:middle}',
-                    'text,f3_1,160,107,{baseline:middle}',
+                    'text,F1,10,42.6,{baseline:middle,align:left}',
+                    'text,Band2 line long line\nvery long line,80,24.2,{baseline:middle,align:left}',
+                    'text,F2,80,61,{baseline:middle,align:left}',
+                    'text,F3,160,61,{baseline:middle,align:left}',
+                    'text,f1_1 line,10,107,{baseline:middle,align:left}',
+                    'text,f2_1 very\nlong line\nvery long\nline,80,79.4,{baseline:middle,align:left}',
+                    'text,f3_1,160,107,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,55.2',
                     'setLineWidth,1',
@@ -3481,15 +3481,15 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,42.6,{baseline:middle}',
-                    'text,Band2,80,24.2,{baseline:middle}',
-                    'text,f4 very\nlong line,220,33.4,{baseline:middle}',
-                    'text,F2,80,51.8,{baseline:middle}',
-                    'text,f3 long\nline,160,42.6,{baseline:middle}',
-                    'text,f1_1,10,107,{baseline:middle}',
-                    'text,f2_1 line\nvery long\nline very\nlong line,80,79.4,{baseline:middle}',
-                    'text,f3_1,160,107,{baseline:middle}',
-                    'text,f4_1 long\nline,220,97.8,{baseline:middle}',
+                    'text,F1,10,42.6,{baseline:middle,align:left}',
+                    'text,Band2,80,24.2,{baseline:middle,align:left}',
+                    'text,f4 very\nlong line,220,33.4,{baseline:middle,align:left}',
+                    'text,F2,80,51.8,{baseline:middle,align:left}',
+                    'text,f3 long\nline,160,42.6,{baseline:middle,align:left}',
+                    'text,f1_1,10,107,{baseline:middle,align:left}',
+                    'text,f2_1 line\nvery long\nline very\nlong line,80,79.4,{baseline:middle,align:left}',
+                    'text,f3_1,160,107,{baseline:middle,align:left}',
+                    'text,f4_1 long\nline,220,97.8,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,55.2',
                     'setLineWidth,1',
@@ -3557,23 +3557,23 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,180.6,{baseline:middle}',
-                    'text,Band1 line,80,24.2,{baseline:middle}',
-                    'text,F2,80,189.8,{baseline:middle}',
-                    'text,Band1_1 long line\nvery long line,160,88.6,{baseline:middle}',
-                    'text,Band1_2,290,97.8,{baseline:middle}',
-                    'text,f7 long\nline\nvery\nlong li\nnelong\nline\nvery\nlong li\nnelong\nline\nvery\nlong li\nnelong\nline\nvery\nlong\nline,380,42.6,{baseline:middle}',
-                    'text,f3  long\nline,160,245,{baseline:middle}',
-                    'text,f4  long\nline very\nlong line,220,235.8,{baseline:middle}',
-                    'text,f5 long\nline\nvery\nlong\nline,290,217.4,{baseline:middle}',
-                    'text,F6,340,254.2,{baseline:middle}',
-                    'text,f1_1 line,10,392.2,{baseline:middle}',
-                    'text,f2_1 long\nline very\nlong line,80,373.8,{baseline:middle}',
-                    'text,f3_1,160,392.2,{baseline:middle}',
-                    'text,f4_1 very\nlong line\nvery long\nline very\nlong line,220,355.4,{baseline:middle}',
-                    'text,f5_1\nlong\nline,290,373.8,{baseline:middle}',
-                    'text,f6_1,340,392.2,{baseline:middle}',
-                    'text,f7_1\nline,380,383,{baseline:middle}',
+                    'text,F1,10,180.6,{baseline:middle,align:left}',
+                    'text,Band1 line,80,24.2,{baseline:middle,align:left}',
+                    'text,F2,80,189.8,{baseline:middle,align:left}',
+                    'text,Band1_1 long line\nvery long line,160,88.6,{baseline:middle,align:left}',
+                    'text,Band1_2,290,97.8,{baseline:middle,align:left}',
+                    'text,f7 long\nline\nvery\nlong li\nnelong\nline\nvery\nlong li\nnelong\nline\nvery\nlong li\nnelong\nline\nvery\nlong\nline,380,42.6,{baseline:middle,align:left}',
+                    'text,f3  long\nline,160,245,{baseline:middle,align:left}',
+                    'text,f4  long\nline very\nlong line,220,235.8,{baseline:middle,align:left}',
+                    'text,f5 long\nline\nvery\nlong\nline,290,217.4,{baseline:middle,align:left}',
+                    'text,F6,340,254.2,{baseline:middle,align:left}',
+                    'text,f1_1 line,10,392.2,{baseline:middle,align:left}',
+                    'text,f2_1 long\nline very\nlong line,80,373.8,{baseline:middle,align:left}',
+                    'text,f3_1,160,392.2,{baseline:middle,align:left}',
+                    'text,f4_1 very\nlong line\nvery long\nline very\nlong line,220,355.4,{baseline:middle,align:left}',
+                    'text,f5_1\nlong\nline,290,373.8,{baseline:middle,align:left}',
+                    'text,f6_1,340,392.2,{baseline:middle,align:left}',
+                    'text,f7_1\nline,380,383,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,331.2',
                     'setLineWidth,1',
@@ -3648,14 +3648,14 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,100,24.2,{baseline:middle}',
-                    'text,F1: f1 line line,10,42.6,{baseline:middle}',
-                    'text,f1_2 line\nlong line,20,70.2,{baseline:middle}',
-                    'text,f1_3 line\nlong line\nlong line,100,61,{baseline:middle}',
-                    'text,F1: f1 long line long line\nlong line,10,116.2,{baseline:middle}',
-                    'text,f2_2 line,20,171.4,{baseline:middle}',
-                    'text,f2_3 line\nlong line\nline,100,153,{baseline:middle}',
+                    'text,F2,10,24.2,{baseline:middle,align:left}',
+                    'text,F3,100,24.2,{baseline:middle,align:left}',
+                    'text,F1: f1 line line,10,42.6,{baseline:middle,align:left}',
+                    'text,f1_2 line\nlong line,20,70.2,{baseline:middle,align:left}',
+                    'text,f1_3 line\nlong line\nlong line,100,61,{baseline:middle,align:left}',
+                    'text,F1: f1 long line long line\nlong line,10,116.2,{baseline:middle,align:left}',
+                    'text,f2_2 line,20,171.4,{baseline:middle,align:left}',
+                    'text,f2_3 line\nlong line\nline,100,153,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,90,18.4',
                     'setLineWidth,1',
@@ -3707,14 +3707,14 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,100,24.2,{baseline:middle}',
-                    'text,F1: f1_1 long line,10,42.6,{baseline:middle}',
-                    'text,f1_2 long\nline long\nline long\nline,20,61,{baseline:middle}',
-                    'text,f1_3 line,100,88.6,{baseline:middle}',
-                    'text,F1: f2_1 long line long\nline long line,10,134.6,{baseline:middle}',
-                    'text,f2_2 line\nlong line,20,171.4,{baseline:middle}',
-                    'text,f2_3,100,180.6,{baseline:middle}',
+                    'text,F2,10,24.2,{baseline:middle,align:left}',
+                    'text,F3,100,24.2,{baseline:middle,align:left}',
+                    'text,F1: f1_1 long line,10,42.6,{baseline:middle,align:left}',
+                    'text,f1_2 long\nline long\nline long\nline,20,61,{baseline:middle,align:left}',
+                    'text,f1_3 line,100,88.6,{baseline:middle,align:left}',
+                    'text,F1: f2_1 long line long\nline long line,10,134.6,{baseline:middle,align:left}',
+                    'text,f2_2 line\nlong line,20,171.4,{baseline:middle,align:left}',
+                    'text,f2_3,100,180.6,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,90,18.4',
                     'setLineWidth,1',
@@ -3769,16 +3769,16 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,24.2,{baseline:middle}',
-                    'text,F4,100,24.2,{baseline:middle}',
-                    'text,F1: f1 long line,10,42.6,{baseline:middle}',
-                    'text,F2: f2_2 long line long\nline long line long line,20,61,{baseline:middle}',
-                    'text,f2_3 long\nline long\nline,30,97.8,{baseline:middle}',
-                    'text,f2_4,100,116.2,{baseline:middle}',
-                    'text,F1: f1 long line long line\nlong line,10,153,{baseline:middle}',
-                    'text,F2: f1_2 long line,20,189.8,{baseline:middle}',
-                    'text,f1_3 line,30,208.2,{baseline:middle}',
-                    'text,f1_4,100,208.2,{baseline:middle}',
+                    'text,F3,10,24.2,{baseline:middle,align:left}',
+                    'text,F4,100,24.2,{baseline:middle,align:left}',
+                    'text,F1: f1 long line,10,42.6,{baseline:middle,align:left}',
+                    'text,F2: f2_2 long line long\nline long line long line,20,61,{baseline:middle,align:left}',
+                    'text,f2_3 long\nline long\nline,30,97.8,{baseline:middle,align:left}',
+                    'text,f2_4,100,116.2,{baseline:middle,align:left}',
+                    'text,F1: f1 long line long line\nlong line,10,153,{baseline:middle,align:left}',
+                    'text,F2: f1_2 long line,20,189.8,{baseline:middle,align:left}',
+                    'text,f1_3 line,30,208.2,{baseline:middle,align:left}',
+                    'text,f1_4,100,208.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,90,18.4',
                     'setLineWidth,1',
@@ -3829,13 +3829,13 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,90,24.2,{baseline:middle}',
-                    'text,F4,180,24.2,{baseline:middle}',
-                    'text,F1: f1 line long line (Max: f1 line\nlong line),10,42.6,{baseline:middle}',
-                    'text,f2 line,20,97.8,{baseline:middle}',
-                    'text,f3 long line\nlong line\nlong line,90,79.4,{baseline:middle}',
-                    'text,f4 long line,180,97.8,{baseline:middle}',
+                    'text,F2,10,24.2,{baseline:middle,align:left}',
+                    'text,F3,90,24.2,{baseline:middle,align:left}',
+                    'text,F4,180,24.2,{baseline:middle,align:left}',
+                    'text,F1: f1 line long line (Max: f1 line\nlong line),10,42.6,{baseline:middle,align:left}',
+                    'text,f2 line,20,97.8,{baseline:middle,align:left}',
+                    'text,f3 long line\nlong line\nlong line,90,79.4,{baseline:middle,align:left}',
+                    'text,f4 long line,180,97.8,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,80,18.4',
                     'setLineWidth,1',
@@ -3881,14 +3881,14 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,24.2,{baseline:middle}',
-                    'text,F4,260,24.2,{baseline:middle}',
-                    'text,F1: f1 long line long line long line\n(Max: f1 long line long line long\nline),10,42.6,{baseline:middle}',
-                    'text,Max: f4 long\nline long line,260,51.8,{baseline:middle}',
-                    'text,F2: f2 long line (Max of F1 is f1\nlong line long line long line),20,97.8,{baseline:middle}',
-                    'text,Max: f4 long\nline long line,260,97.8,{baseline:middle}',
-                    'text,f3 line,30,143.8,{baseline:middle}',
-                    'text,f4 long line\nlong line,260,134.6,{baseline:middle}',
+                    'text,F3,10,24.2,{baseline:middle,align:left}',
+                    'text,F4,260,24.2,{baseline:middle,align:left}',
+                    'text,F1: f1 long line long line long line\n(Max: f1 long line long line long\nline),10,42.6,{baseline:middle,align:left}',
+                    'text,Max: f4 long\nline long line,260,51.8,{baseline:middle,align:left}',
+                    'text,F2: f2 long line (Max of F1 is f1\nlong line long line long line),20,97.8,{baseline:middle,align:left}',
+                    'text,Max: f4 long\nline long line,260,97.8,{baseline:middle,align:left}',
+                    'text,f3 line,30,143.8,{baseline:middle,align:left}',
+                    'text,f4 long line\nlong line,260,134.6,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,250,18.4',
                     'setLineWidth,1',
@@ -3944,14 +3944,14 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,160,24.2,{baseline:middle}',
-                    'text,F4,250,24.2,{baseline:middle}',
-                    'text,F1: f1 long line (Max: f1 long line),10,42.6,{baseline:middle}',
-                    'text,f2 very long line\nvery long line,20,61,{baseline:middle}',
-                    'text,f3 line,160,70.2,{baseline:middle}',
-                    'text,f4 long line,250,70.2,{baseline:middle}',
-                    'text,Max: f3 line,160,97.8,{baseline:middle}',
+                    'text,F2,10,24.2,{baseline:middle,align:left}',
+                    'text,F3,160,24.2,{baseline:middle,align:left}',
+                    'text,F4,250,24.2,{baseline:middle,align:left}',
+                    'text,F1: f1 long line (Max: f1 long line),10,42.6,{baseline:middle,align:left}',
+                    'text,f2 very long line\nvery long line,20,61,{baseline:middle,align:left}',
+                    'text,f3 line,160,70.2,{baseline:middle,align:left}',
+                    'text,f4 long line,250,70.2,{baseline:middle,align:left}',
+                    'text,Max: f3 line,160,97.8,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,150,18.4',
                     'setLineWidth,1',
@@ -4005,14 +4005,14 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,10,24.2,{baseline:middle}',
-                    'text,F3,90,24.2,{baseline:middle}',
-                    'text,F4,180,24.2,{baseline:middle}',
-                    'text,F1: f1 long line,10,42.6,{baseline:middle}',
-                    'text,f2 long\nline long\nline long\nline,20,61,{baseline:middle}',
-                    'text,f3 line long\nline long line,90,79.4,{baseline:middle}',
-                    'text,f4 line,180,88.6,{baseline:middle}',
-                    'text,Max: f3 line\nlong line\nlong line,90,134.6,{baseline:middle}',
+                    'text,F2,10,24.2,{baseline:middle,align:left}',
+                    'text,F3,90,24.2,{baseline:middle,align:left}',
+                    'text,F4,180,24.2,{baseline:middle,align:left}',
+                    'text,F1: f1 long line,10,42.6,{baseline:middle,align:left}',
+                    'text,f2 long\nline long\nline long\nline,20,61,{baseline:middle,align:left}',
+                    'text,f3 line long\nline long line,90,79.4,{baseline:middle,align:left}',
+                    'text,f4 line,180,88.6,{baseline:middle,align:left}',
+                    'text,Max: f3 line\nlong line\nlong line,90,134.6,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,80,18.4',
                     'setLineWidth,1',
@@ -4069,21 +4069,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,24.2,{baseline:middle}',
-                    'text,F4,90,24.2,{baseline:middle}',
-                    'text,F1: f1 very ling line very\nlong line very long line,10,42.6,{baseline:middle}',
-                    'text,F2: f2_1 line,20,79.4,{baseline:middle}',
-                    'text,f3line1\nline2\nline3\nline4,30,97.8,{baseline:middle}',
-                    'text,f4,90,125.4,{baseline:middle}',
-                    'text,Max:\nf3line1\nline2\nline3\nline4,30,171.4,{baseline:middle}',
-                    'text,Max:\nf3line1\nline2\nline3\nline4,20,263.4,{baseline:middle}',
-                    'text,F1: f1 very long line\nvery long line,10,355.4,{baseline:middle}',
-                    'text,F2: f2_2very long line\nvery long line,20,392.2,{baseline:middle}',
-                    'text,f3very\nlong line\nvery\nlong line,30,429,{baseline:middle}',
-                    'text,f4,90,456.6,{baseline:middle}',
-                    'text,Max:\nf3very\nlong line\nvery\nlong line,30,502.6,{baseline:middle}',
-                    'text,Max:\nf3very\nlong line\nvery long\nline,20,594.6,{baseline:middle}',
-                    'text,Max:\nf3very long\nline very\nlong line,10,686.6,{baseline:middle}',
+                    'text,F3,10,24.2,{baseline:middle,align:left}',
+                    'text,F4,90,24.2,{baseline:middle,align:left}',
+                    'text,F1: f1 very ling line very\nlong line very long line,10,42.6,{baseline:middle,align:left}',
+                    'text,F2: f2_1 line,20,79.4,{baseline:middle,align:left}',
+                    'text,f3line1\nline2\nline3\nline4,30,97.8,{baseline:middle,align:left}',
+                    'text,f4,90,125.4,{baseline:middle,align:left}',
+                    'text,Max:\nf3line1\nline2\nline3\nline4,30,171.4,{baseline:middle,align:left}',
+                    'text,Max:\nf3line1\nline2\nline3\nline4,20,263.4,{baseline:middle,align:left}',
+                    'text,F1: f1 very long line\nvery long line,10,355.4,{baseline:middle,align:left}',
+                    'text,F2: f2_2very long line\nvery long line,20,392.2,{baseline:middle,align:left}',
+                    'text,f3very\nlong line\nvery\nlong line,30,429,{baseline:middle,align:left}',
+                    'text,f4,90,456.6,{baseline:middle,align:left}',
+                    'text,Max:\nf3very\nlong line\nvery\nlong line,30,502.6,{baseline:middle,align:left}',
+                    'text,Max:\nf3very\nlong line\nvery long\nline,20,594.6,{baseline:middle,align:left}',
+                    'text,Max:\nf3very long\nline very\nlong line,10,686.6,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,80,18.4',
                     'setLineWidth,1',
@@ -4152,9 +4152,9 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1\nlong line\n1 ling line\n2,10,24.2,{baseline:middle}',
-                    'text,F1: f1_1\nline,10,97.8,{baseline:middle}',
-                    'text,F2: f2_1\nline long\nline long\nline,20,134.6,{baseline:middle}',
+                    'text,Band1\nlong line\n1 ling line\n2,10,24.2,{baseline:middle,align:left}',
+                    'text,F1: f1_1\nline,10,97.8,{baseline:middle,align:left}',
+                    'text,F2: f2_1\nline long\nline long\nline,20,134.6,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,73.6',
                     'setLineWidth,1',
@@ -4193,11 +4193,11 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1\nlong line\n1 ling line\n2,10,24.2,{baseline:middle}',
-                    'text,f3 line,80,51.8,{baseline:middle}',
-                    'text,F1: f1_1 line (Max:\nf1_1 line),10,97.8,{baseline:middle}',
-                    'text,F2: f2_1 line long\nline long line (Max\nof F1 is f1_1 line),20,134.6,{baseline:middle}',
-                    'text,long line\nvery long\nline,80,189.8,{baseline:middle}',
+                    'text,Band1\nlong line\n1 ling line\n2,10,24.2,{baseline:middle,align:left}',
+                    'text,f3 line,80,51.8,{baseline:middle,align:left}',
+                    'text,F1: f1_1 line (Max:\nf1_1 line),10,97.8,{baseline:middle,align:left}',
+                    'text,F2: f2_1 line long\nline long line (Max\nof F1 is f1_1 line),20,134.6,{baseline:middle,align:left}',
+                    'text,long line\nvery long\nline,80,189.8,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,70,73.6',
                     'setLineWidth,1',
@@ -4258,21 +4258,21 @@ const JSPdfWordWrapTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 line,10,24.2,{baseline:middle}',
-                    'text,Band1_1 long line\nvery long line,10,97.8,{baseline:middle}',
-                    'text,Band1_2,160,107,{baseline:middle}',
-                    'text,f7 long\nline\nvery\nlong li\nnelong\nline\nvery\nlong li\nnelong\nline\nvery\nlong li\nnelong\nline\nvery\nlong\nline,290,42.6,{baseline:middle}',
-                    'text,f3  long\nline,10,254.2,{baseline:middle}',
-                    'text,f4  long\nline very\nlong line,80,245,{baseline:middle}',
-                    'text,f5 long\nline very\nlong line,160,245,{baseline:middle}',
-                    'text,F6,220,263.4,{baseline:middle}',
-                    'text,F1: f1_1 line,10,355.4,{baseline:middle}',
-                    'text,F2: f2_1 long line very long line,20,373.8,{baseline:middle}',
-                    'text,f3_1,30,429,{baseline:middle}',
-                    'text,f4_1 very\nlong line\nvery long\nline very\nlong line,80,392.2,{baseline:middle}',
-                    'text,f5_1\nlong line,160,419.8,{baseline:middle}',
-                    'text,f6_1,220,429,{baseline:middle}',
-                    'text,f7_1\nline,290,419.8,{baseline:middle}',
+                    'text,Band1 line,10,24.2,{baseline:middle,align:left}',
+                    'text,Band1_1 long line\nvery long line,10,97.8,{baseline:middle,align:left}',
+                    'text,Band1_2,160,107,{baseline:middle,align:left}',
+                    'text,f7 long\nline\nvery\nlong li\nnelong\nline\nvery\nlong li\nnelong\nline\nvery\nlong li\nnelong\nline\nvery\nlong\nline,290,42.6,{baseline:middle,align:left}',
+                    'text,f3  long\nline,10,254.2,{baseline:middle,align:left}',
+                    'text,f4  long\nline very\nlong line,80,245,{baseline:middle,align:left}',
+                    'text,f5 long\nline very\nlong line,160,245,{baseline:middle,align:left}',
+                    'text,F6,220,263.4,{baseline:middle,align:left}',
+                    'text,F1: f1_1 line,10,355.4,{baseline:middle,align:left}',
+                    'text,F2: f2_1 long line very long line,20,373.8,{baseline:middle,align:left}',
+                    'text,f3_1,30,429,{baseline:middle,align:left}',
+                    'text,f4_1 very\nlong line\nvery long\nline very\nlong line,80,392.2,{baseline:middle,align:left}',
+                    'text,f5_1\nlong line,160,419.8,{baseline:middle,align:left}',
+                    'text,f6_1,220,429,{baseline:middle,align:left}',
+                    'text,f7_1\nline,290,419.8,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,330,18.4',
                     'setLineWidth,1',
