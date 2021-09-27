@@ -8,6 +8,7 @@ import {
 
 import {
   DxMouseEvent,
+  ElementOffset,
   ScrollableDirection,
   ScrollOffset,
 } from './common/types.d';
@@ -209,7 +210,7 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
   }
 
   @Method()
-  scrollToElement(element: HTMLElement, offset?: Partial<Omit<ClientRect, 'width' | 'height'>>): void {
+  scrollToElement(element: HTMLElement, offset?: ElementOffset): void {
     if (!this.content().contains(element)) {
       return;
     }
@@ -267,7 +268,7 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
   getScrollElementPosition(
     targetElement: HTMLElement,
     direction: ScrollableDirection,
-    offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
+    offset?: ElementOffset,
   ): number {
     const scrollOffset = this.scrollOffset();
 

@@ -66,6 +66,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() prevScrollLocation = 0;
 
+  @InternalState() pendingPointerUp = false;
+
   @InternalState() hovered = false;
 
   @InternalState() expanded = false;
@@ -80,6 +82,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   pointerDownEffect(): EffectReturn {
     return subscribeToDXPointerDownEvent(
       this.thumbRef.current, () => {
+        this.pendingPointerUp = true;
         this.expanded = true;
       },
     );
@@ -90,6 +93,8 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     return subscribeToDXPointerUpEvent(
       domAdapter.getDocument(), () => {
         this.expanded = false;
+        this.visibility = false;
+        this.pendingPointerUp = false;
       },
     );
   }
@@ -190,12 +195,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       let newScrollLocation = this.props.scrollLocation;
 
       if (this.isHorizontal && this.props.rtlEnabled) {
-        newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
-
-        if (newScrollLocation >= 0) {
-          newScrollLocation = 0;
+        if (this.props.maxOffset === 0) {
           this.rightScrollLocation = 0;
         }
+
+        newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
       }
 
       this.moveTo(newScrollLocation);
@@ -254,6 +258,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       [SCROLLABLE_SCROLLBAR_ACTIVE_CLASS]: this.expanded,
       [HOVER_ENABLED_STATE]: this.isExpandable,
       'dx-state-invisible': this.hidden,
+      'dx-state-hover': this.isExpandable && this.hovered,
     };
     return combineClasses(classesMap);
   }
@@ -291,7 +296,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       return false;
     }
     if (this.isHoverMode) {
-      return this.props.visible || this.visibility || this.hovered;
+      return this.props.visible || this.visibility || this.hovered || this.pendingPointerUp;
     }
     if (this.isAlwaysMode) {
       return true;

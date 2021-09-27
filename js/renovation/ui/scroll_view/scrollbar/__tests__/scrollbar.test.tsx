@@ -260,46 +260,44 @@ describe('Scrollbar', () => {
     each(optionValues.rtlEnabled).describe('rtlEnabled: %o', (rtlEnabled) => {
       each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
         each([true, false]).describe('containerHasSizes: %o', (containerHasSizes) => {
-          it('syncScrollLocation() should call moveTo(location)', () => {
-            const maxOffset = -300;
+          each([0, -300]).describe('maxOffset: %o', (maxOffset) => {
+            it('syncScrollLocation() should call moveTo(location)', () => {
+              const viewModel = new Scrollbar({
+                showScrollbar: 'always',
+                direction,
+                rtlEnabled,
+                scrollLocation,
+                containerHasSizes,
+                maxOffset,
+              });
 
-            const viewModel = new Scrollbar({
-              showScrollbar: 'always',
-              direction,
-              rtlEnabled,
-              scrollLocation,
-              containerHasSizes,
-              maxOffset,
-            });
+              [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
+                viewModel.moveTo = jest.fn();
 
-            [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
-              viewModel.moveTo = jest.fn();
+                viewModel.rightScrollLocation = rightScrollLocation;
 
-              viewModel.rightScrollLocation = rightScrollLocation;
+                viewModel.syncScrollLocation();
 
-              viewModel.syncScrollLocation();
+                let expectedRightScrollLocation = rightScrollLocation;
+                if (containerHasSizes) {
+                  let expectedLocation = scrollLocation;
 
-              let expectedRightScrollLocation = rightScrollLocation;
-              if (containerHasSizes) {
-                let expectedLocation = scrollLocation;
+                  expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
 
-                expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+                  if (direction === 'horizontal' && rtlEnabled) {
+                    if (maxOffset === 0) {
+                      expectedRightScrollLocation = 0;
+                    }
 
-                if (direction === 'horizontal' && rtlEnabled) {
-                  expectedLocation = maxOffset - rightScrollLocation;
-
-                  if (expectedLocation >= 0) {
-                    expectedLocation = 0;
-                    expectedRightScrollLocation = 0;
-                    expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
+                    expectedLocation = maxOffset - expectedRightScrollLocation;
                   }
-                }
 
-                expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
-              } else {
-                expect(viewModel.moveTo).not.toBeCalled();
-              }
-              expect(viewModel.rightScrollLocation).toEqual(expectedRightScrollLocation);
+                  expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
+                } else {
+                  expect(viewModel.moveTo).not.toBeCalled();
+                }
+                expect(viewModel.rightScrollLocation).toEqual(expectedRightScrollLocation);
+              });
             });
           });
         });
