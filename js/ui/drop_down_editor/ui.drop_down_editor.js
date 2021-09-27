@@ -795,14 +795,6 @@ const DropDownEditor = TextBox.inherit({
         this.callBase();
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            'showPopupTitle': { since: '20.1', alias: 'dropDownOptions.showTitle' },
-        });
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case 'width':
@@ -851,9 +843,6 @@ const DropDownEditor = TextBox.inherit({
             case 'cancelButtonText':
             case 'buttonsLocation':
                 this._setPopupOption('toolbarItems', this._getPopupToolbarItems());
-                break;
-            case 'showPopupTitle':
-                this._setPopupOption('showTitle', args.value);
                 break;
             case 'useHiddenSubmitElement':
                 if(this._$submitElement) {

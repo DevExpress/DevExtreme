@@ -110,9 +110,9 @@ describe('Scrollbar', () => {
 
         each([0, -100]).describe('maxOffset: %o', (maxOffset) => {
           each([10, 15, 20]).describe('containerSize: %o', (containerSize) => {
-            each([true, false]).describe('visibility: %o', (visibility) => {
-              each([true, false]).describe('visible: %o', (visible) => {
-                each([true, false]).describe('hovered: %o', (hovered) => {
+            each([true, false]).describe('visible: %o', (visible) => {
+              each([true, false]).describe('hovered: %o', (hovered) => {
+                each([true, false]).describe('pendingPointerUp: %o', (pendingPointerUp) => {
                   it('scroll visibility', () => {
                     const viewModel = new Scrollbar({
                       direction,
@@ -122,8 +122,8 @@ describe('Scrollbar', () => {
                       maxOffset,
                     });
 
-                    viewModel.visibility = visibility;
                     viewModel.hovered = hovered;
+                    viewModel.pendingPointerUp = pendingPointerUp;
 
                     const isScrollbarVisible = showScrollbar !== 'never' && maxOffset !== 0 && containerSize >= 15;
 
@@ -134,11 +134,11 @@ describe('Scrollbar', () => {
                     if (!isScrollbarVisible) {
                       expectedThumbVisibility = false;
                     } else if (showScrollbar === 'onHover') {
-                      expectedThumbVisibility = visibility || visible || hovered;
+                      expectedThumbVisibility = visible || hovered || pendingPointerUp;
                     } else if (showScrollbar === 'always') {
                       expectedThumbVisibility = true;
                     } else {
-                      expectedThumbVisibility = visibility || visible;
+                      expectedThumbVisibility = visible;
                     }
 
                     expect(viewModel.thumbClasses).toEqual(expectedThumbVisibility
@@ -161,11 +161,13 @@ describe('Scrollbar', () => {
       const scrollbar = new Scrollbar({ direction: 'vertical' });
       scrollbar.thumbRef = { current: {} as HTMLElement } as RefObject;
       scrollbar.expanded = false;
+      scrollbar.pendingPointerUp = false;
 
       scrollbar.pointerDownEffect();
       emit('dxpointerdown');
 
       expect(scrollbar.expanded).toEqual(true);
+      expect(scrollbar.pendingPointerUp).toEqual(true);
     });
 
     it('Down & Up effects should add & remove scroll active class', () => {
@@ -176,12 +178,14 @@ describe('Scrollbar', () => {
       emit('dxpointerdown');
 
       expect(scrollbar.expanded).toEqual(true);
+      expect(scrollbar.pendingPointerUp).toEqual(true);
       expect(scrollbar.scrollbarClasses).toEqual(expect.stringMatching('dx-scrollable-scrollbar-active'));
 
       scrollbar.pointerUpEffect();
       emit('dxpointerup');
 
       expect(scrollbar.expanded).toEqual(false);
+      expect(scrollbar.pendingPointerUp).toEqual(false);
       expect(scrollbar.scrollbarClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbar-active'));
     });
 
@@ -260,46 +264,44 @@ describe('Scrollbar', () => {
     each(optionValues.rtlEnabled).describe('rtlEnabled: %o', (rtlEnabled) => {
       each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
         each([true, false]).describe('containerHasSizes: %o', (containerHasSizes) => {
-          it('syncScrollLocation() should call moveTo(location)', () => {
-            const maxOffset = -300;
+          each([0, -300]).describe('maxOffset: %o', (maxOffset) => {
+            it('syncScrollLocation() should call moveTo(location)', () => {
+              const viewModel = new Scrollbar({
+                showScrollbar: 'always',
+                direction,
+                rtlEnabled,
+                scrollLocation,
+                containerHasSizes,
+                maxOffset,
+              });
 
-            const viewModel = new Scrollbar({
-              showScrollbar: 'always',
-              direction,
-              rtlEnabled,
-              scrollLocation,
-              containerHasSizes,
-              maxOffset,
-            });
+              [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
+                viewModel.moveTo = jest.fn();
 
-            [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
-              viewModel.moveTo = jest.fn();
+                viewModel.rightScrollLocation = rightScrollLocation;
 
-              viewModel.rightScrollLocation = rightScrollLocation;
+                viewModel.syncScrollLocation();
 
-              viewModel.syncScrollLocation();
+                let expectedRightScrollLocation = rightScrollLocation;
+                if (containerHasSizes) {
+                  let expectedLocation = scrollLocation;
 
-              let expectedRightScrollLocation = rightScrollLocation;
-              if (containerHasSizes) {
-                let expectedLocation = scrollLocation;
+                  expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
 
-                expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+                  if (direction === 'horizontal' && rtlEnabled) {
+                    if (maxOffset === 0) {
+                      expectedRightScrollLocation = 0;
+                    }
 
-                if (direction === 'horizontal' && rtlEnabled) {
-                  expectedLocation = maxOffset - rightScrollLocation;
-
-                  if (expectedLocation >= 0) {
-                    expectedLocation = 0;
-                    expectedRightScrollLocation = 0;
-                    expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
+                    expectedLocation = maxOffset - expectedRightScrollLocation;
                   }
-                }
 
-                expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
-              } else {
-                expect(viewModel.moveTo).not.toBeCalled();
-              }
-              expect(viewModel.rightScrollLocation).toEqual(expectedRightScrollLocation);
+                  expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
+                } else {
+                  expect(viewModel.moveTo).not.toBeCalled();
+                }
+                expect(viewModel.rightScrollLocation).toEqual(expectedRightScrollLocation);
+              });
             });
           });
         });
@@ -345,11 +347,9 @@ describe('Scrollbar', () => {
           });
 
           viewModel.moveTo = jest.fn();
-          viewModel.visibility = false;
 
           viewModel.moveToMouseLocation(testData.eventData, 40);
 
-          expect(viewModel.visibility).toEqual(true);
           expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
           expect(viewModel.moveTo).toHaveBeenCalledWith(testData.expected);
         });
