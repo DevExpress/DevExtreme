@@ -71,6 +71,8 @@ import type {
   RowValidatingEvent,
   SelectionChangedEvent,
   ToolbarPreparingEvent,
+  EditCancelingEvent,
+  EditCanceledEvent,
 } from '../../../../../ui/data_grid';
 import { BaseWidgetProps } from '../../../common/base_props';
 
@@ -1640,6 +1642,10 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Event() onSaving?: (e: SavingEvent) => void;
 
   @Event() onSaved?: (e: SavedEvent) => void;
+
+  @Event() onEditCanceling?: (e: EditCancelingEvent) => void;
+
+  @Event() onEditCanceled?: (e: EditCanceledEvent) => void;
 
   // private
   @OneWay() adaptColumnWidthByRatio?: boolean = true;
