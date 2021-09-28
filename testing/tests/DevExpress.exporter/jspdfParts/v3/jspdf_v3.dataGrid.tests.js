@@ -59,6 +59,8 @@ function createMockPdfDoc() {
     const result = _jsPDF({ unit: 'pt' });
     result.__log = [];
 
+    result.__skipCheckHorizontalAlignInLogs = false;
+
     result.__setDrawColor = result.setDrawColor;
     result.setDrawColor = function() {
         this.__log.push('setDrawColor,' + argumentsToString.apply(null, arguments));
@@ -118,7 +120,7 @@ function createMockPdfDoc() {
         if(arguments.length >= 3 && isDefined(arguments[3]) && arguments[3].baseline === 'alphabetic') {
             arguments[3] = undefined;
         }
-        if(arguments.length >= 3 && isDefined(arguments[3]) && arguments[3].align === 'left') {
+        if(!this.__checkHorizontalAlignInLogs && arguments.length >= 3 && isDefined(arguments[3]) && arguments[3].align === 'left') {
             delete arguments[3].align;
         }
         this.__log.push('text,' + argumentsToString.apply(null, arguments));

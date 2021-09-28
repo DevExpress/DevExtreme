@@ -6,6 +6,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 1 lines. Font size default, horizontal align: left. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1' } ],
@@ -15,7 +16,7 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
 
                 const expectedLog = [
-                    'text,line 1,10,24.2,{baseline:middle}',
+                    'text,line 1,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,200,18.4'
                 ];
@@ -30,6 +31,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 1 lines. Font size default, horizontal align: center. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1' } ],
@@ -54,6 +56,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 1 lines. Font size default, horizontal align: right. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1' } ],
@@ -78,6 +81,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 1 lines. Font size 10, horizontal align: left. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1' } ],
@@ -91,7 +95,7 @@ const JSPdfHorizontalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,line 1,10,20.75,{baseline:middle}',
+                    'text,line 1,10,20.75,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,200,11.5',
                     'setFontSize,16'
@@ -107,6 +111,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 1 lines. Font size 10, horizontal align: center. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1' } ],
@@ -136,6 +141,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 1 lines. Font size 10, horizontal align: right. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1' } ],
@@ -165,6 +171,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 1 lines. Font size 20, horizontal align: left. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1' } ],
@@ -178,7 +185,7 @@ const JSPdfHorizontalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line 1,10,26.5,{baseline:middle}',
+                    'text,line 1,10,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,200,23',
                     'setFontSize,16'
@@ -194,6 +201,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 1 lines. Font size 20, horizontal align: center. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1' } ],
@@ -223,6 +231,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 1 lines. Font size 20, horizontal align: right. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1' } ],
@@ -252,6 +261,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 2 lines. Font size default, horizontal align: left. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
@@ -261,7 +271,7 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
 
                 const expectedLog = [
-                    'text,line 1\nlong line 2,10,24.2,{baseline:middle}',
+                    'text,line 1\nlong line 2,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,200,36.8'
                 ];
@@ -276,6 +286,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 2 lines. Font size default, horizontal align: center. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
@@ -300,6 +311,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 2 lines. Font size default, horizontal align: right. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
@@ -324,6 +336,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 2 lines. Font size 10, horizontal align: left. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
@@ -337,7 +350,7 @@ const JSPdfHorizontalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,line 1\nlong line 2,10,20.75,{baseline:middle}',
+                    'text,line 1\nlong line 2,10,20.75,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,200,23',
                     'setFontSize,16'
@@ -353,6 +366,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 2 lines. Font size 10, horizontal align: center. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
@@ -382,6 +396,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 2 lines. Font size 10, horizontal align: right. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
@@ -411,6 +426,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 2 lines. Font size 20, horizontal align: left. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
@@ -424,7 +440,7 @@ const JSPdfHorizontalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line 1\nlong line 2,10,26.5,{baseline:middle}',
+                    'text,line 1\nlong line 2,10,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,200,46',
                     'setFontSize,16'
@@ -440,6 +456,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 2 lines. Font size 20, horizontal align: center. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
@@ -469,6 +486,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 2 lines. Font size 20, horizontal align: right. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
@@ -498,6 +516,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 3 lines. Font size default, horizontal align: left. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
@@ -507,7 +526,7 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
 
                 const expectedLog = [
-                    'text,line 1\nlong line 2\nvery long line 3,10,24.2,{baseline:middle}',
+                    'text,line 1\nlong line 2\nvery long line 3,10,24.2,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,200,55.2'
                 ];
@@ -522,6 +541,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 3 lines. Font size default, horizontal align: center. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
@@ -546,6 +566,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 3 lines. Font size default, horizontal align: right. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
@@ -570,6 +591,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 3 lines. Font size 10, horizontal align: left. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
@@ -583,7 +605,7 @@ const JSPdfHorizontalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,line 1\nlong line 2\nvery long line 3,10,20.75,{baseline:middle}',
+                    'text,line 1\nlong line 2\nvery long line 3,10,20.75,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,200,34.5',
                     'setFontSize,16'
@@ -599,6 +621,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 3 lines. Font size 10, horizontal align: center. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
@@ -628,6 +651,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 3 lines. Font size 10, horizontal align: right. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
@@ -657,6 +681,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 3 lines. Font size 20, horizontal align: left. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
@@ -670,7 +695,7 @@ const JSPdfHorizontalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line 1\nlong line 2\nvery long line 3,10,26.5,{baseline:middle}',
+                    'text,line 1\nlong line 2\nvery long line 3,10,26.5,{baseline:middle,align:left}',
                     'setLineWidth,1',
                     'rect,10,15,200,69',
                     'setFontSize,16'
@@ -686,6 +711,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 3 lines. Font size 20, horizontal align: center. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
@@ -715,6 +741,7 @@ const JSPdfHorizontalAlignTests = {
             QUnit.test('1 col - 3 lines. Font size 20, horizontal align: right. Cell width = 200px ', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__checkHorizontalAlignInLogs = true;
 
                 const dataGrid = createDataGrid({
                     columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
