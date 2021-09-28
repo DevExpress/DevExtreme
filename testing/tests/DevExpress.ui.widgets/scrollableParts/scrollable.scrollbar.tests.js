@@ -106,10 +106,7 @@ QUnit.test('scrollbar appears when scrolling is begun', function(assert) {
 
 QUnit.test('scrollbar is hidden when scrolling is completed', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
-        useNative: false,
-        onEnd: function() {
-            assert.equal($scroll.hasClass('dx-state-invisible'), true, 'scrollbar is hidden');
-        }
+        useNative: false
     });
 
     const $scroll = $scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .dx-scrollable-scroll`);
@@ -119,6 +116,8 @@ QUnit.test('scrollbar is hidden when scrolling is completed', function(assert) {
         .down()
         .move(0, -1)
         .up();
+
+    assert.equal($scroll.hasClass('dx-state-invisible'), true, 'scrollbar is hidden');
 });
 
 QUnit.test('scrollbar height calculated correctly', function(assert) {

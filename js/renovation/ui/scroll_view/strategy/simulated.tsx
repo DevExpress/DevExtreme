@@ -98,7 +98,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     hovered, pulledDown, scrollLocationChange,
     contentWidth, containerClientWidth, contentHeight, containerClientHeight,
     scrollableRef, contentStyles, containerStyles, onBounce,
-    onReachBottom, onRelease, onPullDown, onEnd, direction, topPocketState,
+    onReachBottom, onPullDown, onEnd, direction, topPocketState,
     isLoadPanelVisible, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom,
     onVisibilityChangeHandler, pendingPointerUp,
@@ -210,7 +210,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               contentPaddingBottom={contentPaddingBottom}
               pulledDown={pulledDown}
               onPullDown={onPullDown}
-              onRelease={onRelease}
               onReachBottom={onReachBottom}
               pullDownEnabled={pullDownEnabled}
               reachBottomEnabled={reachBottomEnabled}
@@ -304,6 +303,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @InternalState() hScrollLocation = 0;
 
+  @InternalState() contentHeightChanged = false;
+
+  @InternalState() contentWidthChanged = false;
+
+  @InternalState() containerHeightChanged = false;
+
+  @InternalState() containerWidthChanged = false;
+
   @Method()
   content(): HTMLDivElement {
     if (this.props.needScrollViewContentWrapper) {
@@ -327,7 +334,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @Method()
   release(): void {
-    this.updateHandler();
+    this.onRelease();
 
     this.hScrollbarRef.current?.releaseHandler();
     this.vScrollbarRef.current?.releaseHandler();
@@ -599,11 +606,29 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.updateElementDimensions();
   }
 
+  @Effect()
+  /* istanbul ignore next */
+  clampScrollbarWithinContainer(): void {
+    if (!this.scrolling) {
+      // clamp the scrollbar within the container
+      if (this.contentHeightChanged || this.containerHeightChanged) {
+        this.contentHeightChanged = false;
+        this.containerHeightChanged = false;
+        this.vScrollLocation = clampIntoRange(this.vScrollLocation, 0, this.vScrollOffsetMax);
+      }
+      if (this.contentWidthChanged || this.containerWidthChanged) {
+        this.contentWidthChanged = false;
+        this.containerWidthChanged = false;
+        this.hScrollLocation = clampIntoRange(this.hScrollLocation, 0, this.hScrollOffsetMax);
+      }
+    }
+  }
+
   @Method()
   scrollByLocation(location: ScrollOffset): void {
-    this.scrolling = true;
-
     this.updateHandler();
+
+    this.scrolling = true;
     this.prepareDirections(true);
     this.onStart();
 
@@ -708,7 +733,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
     this.loadingIndicatorEnabled = true;
     this.finishLoading();
-    this.onUpdated();
+    this.updateHandler();
   }
 
   onReachBottom(): void {
@@ -719,6 +744,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   scrollLocationChange(scrollProp: 'scrollLeft' | 'scrollTop', scrollValue: number, needFireScroll: boolean): void {
     const containerEl = this.containerRef.current!;
+
+    // TODO: value not change if is out of bound
     const prevScrollValue = containerEl[scrollProp];
 
     containerEl[scrollProp] = scrollValue;
@@ -1114,41 +1141,36 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   setContentDimensions(contentEl: HTMLDivElement): void {
-    const heightChanged = (this.contentClientHeight !== contentEl.clientHeight)
-      || (this.contentScrollHeight !== contentEl.scrollHeight);
+    if ((this.contentClientHeight !== contentEl.clientHeight)
+    || (this.contentScrollHeight !== contentEl.scrollHeight)) {
+      this.contentClientHeight = contentEl.clientHeight;
+      this.contentScrollHeight = contentEl.scrollHeight;
 
-    const widthChanged = (this.contentClientWidth !== contentEl.clientWidth)
-      || (this.contentScrollWidth !== contentEl.scrollWidth);
+      this.contentHeightChanged = true;
+    }
 
-    this.contentClientWidth = contentEl.clientWidth;
-    this.contentClientHeight = contentEl.clientHeight;
-    this.contentScrollWidth = contentEl.scrollWidth;
-    this.contentScrollHeight = contentEl.scrollHeight;
+    if ((this.contentClientWidth !== contentEl.clientWidth)
+      || (this.contentScrollWidth !== contentEl.scrollWidth)) {
+      this.contentClientWidth = contentEl.clientWidth;
+      this.contentScrollWidth = contentEl.scrollWidth;
+
+      this.contentWidthChanged = true;
+    }
 
     this.contentPaddingBottom = getElementPadding(this.contentRef.current, 'bottom');
-
-    // clamp the scrollbar within the container
-    if (heightChanged) {
-      this.vScrollLocation = clampIntoRange(this.vScrollLocation, 0, this.vScrollOffsetMax);
-    }
-    if (widthChanged) {
-      this.hScrollLocation = clampIntoRange(this.hScrollLocation, 0, this.hScrollOffsetMax);
-    }
   }
 
   setContainerDimensions(containerEl: HTMLDivElement): void {
-    const heightChanged = this.containerClientHeight !== containerEl.clientHeight;
-    const widthChanged = this.containerClientWidth !== containerEl.clientWidth;
+    if (this.containerClientHeight !== containerEl.clientHeight) {
+      this.containerClientHeight = containerEl.clientHeight;
 
-    this.containerClientWidth = containerEl.clientWidth;
-    this.containerClientHeight = containerEl.clientHeight;
-
-    // clamp the scrollbar within the container
-    if (heightChanged) {
-      this.vScrollLocation = clampIntoRange(this.vScrollLocation, 0, this.vScrollOffsetMax);
+      this.containerHeightChanged = true;
     }
-    if (widthChanged) {
-      this.hScrollLocation = clampIntoRange(this.hScrollLocation, 0, this.vScrollOffsetMax);
+
+    if (this.containerClientWidth !== containerEl.clientWidth) {
+      this.containerClientWidth = containerEl.clientWidth;
+
+      this.containerWidthChanged = true;
     }
   }
 
