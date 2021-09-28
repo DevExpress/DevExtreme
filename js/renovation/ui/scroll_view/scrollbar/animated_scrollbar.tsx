@@ -100,8 +100,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @InternalState() forceAnimationToBottomBound = false;
 
-  @InternalState() forceMoveToBound = false;
-
   @InternalState() pendingRefreshing = false;
 
   @InternalState() pendingLoading = false;
@@ -195,8 +193,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       this.forceAnimationToBottomBound = true;
     }
 
-    this.props.onRelease?.();
-
     this.wasRelease = true;
     this.needRiseEnd = true;
 
@@ -281,7 +277,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       && !(this.pendingRefreshing || this.pendingLoading)
       && -this.props.maxOffset > 0
     ) {
-      this.forceMoveToBound = false;
       this.start('bounce');
     }
   }

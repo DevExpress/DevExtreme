@@ -1546,6 +1546,7 @@ describe('Simulated > Behavior', () => {
           onUpdated: actionHandler,
         });
 
+        helper.viewModel.updateElementDimensions = jest.fn();
         helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
         helper.viewModel.topPocketState = TopPocketState.STATE_READY;
 
@@ -1556,6 +1557,7 @@ describe('Simulated > Behavior', () => {
         } else {
           helper.checkActionHandlerCalls(expect, [], []);
         }
+        expect(helper.viewModel.updateElementDimensions).toBeCalledTimes(1);
         expect(helper.viewModel.topPocketState).toEqual(TopPocketState.STATE_RELEASED);
         expect(helper.viewModel.loadingIndicatorEnabled).toEqual(true);
         expect(helper.viewModel.isLoadPanelVisible).toEqual(false);
