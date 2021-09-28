@@ -13,11 +13,11 @@ const createScheduler = async (
 ): Promise<void> => {
   await createWidget('dxScheduler', {
     dataSource: [],
-    currentDate: new Date(2021, 7, 2),
+    currentDate: new Date(2021, 7, 1),
     height: 400,
     width: 700,
     startDayHour: 5,
-    indicatorTime: new Date(2021, 7, 2, 6),
+    indicatorTime: new Date(2021, 7, 1, 6),
     currentView: 'day',
     resources: [{
       fieldExpr: 'priorityId',
