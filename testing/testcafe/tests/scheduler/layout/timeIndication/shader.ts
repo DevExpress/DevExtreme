@@ -34,7 +34,7 @@ const createScheduler = async (
       ],
       label: 'Priority',
     }],
-    shadeUntilCurrentTime: true,
+    // shadeUntilCurrentTime: true,
     ...additionalProps,
   }, true);
 };
