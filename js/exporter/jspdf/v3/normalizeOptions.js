@@ -1,4 +1,14 @@
-import { isNumeric } from '../../../core/utils/type';
+import { isNumeric, isDefined } from '../../../core/utils/type';
+import Color from '../../../color';
+
+function normalizeColor(value) {
+    const color = new Color(value);
+    if(!color.colorIsInvalid) {
+        const toHex = (num) => { return num.toString(16).padStart(2, '0'); };
+        return '#' + toHex(color.r) + toHex(color.g) + toHex(color.b);
+    }
+    return undefined;
+}
 
 function normalizeBoundaryValue(value) {
     if(isNumeric(value)) {
@@ -17,15 +27,27 @@ function normalizeBoundaryValue(value) {
     };
 }
 
+function normalizeRowOptions(rowOptions) {
+    if(isDefined(rowOptions?.headerStyles?.backgroundColor)) {
+        rowOptions.headerStyles.backgroundColor = normalizeColor(rowOptions.headerStyles.backgroundColor);
+    }
+}
+
 function normalizeOptions(rows) {
     rows.forEach(row => {
         row.cells.forEach(({ pdfCell }) => {
             pdfCell.padding = normalizeBoundaryValue(pdfCell.padding);
-            // TODO: normalizeTextColor()
-            // TODO: normalizeBackgroundColor()
-            // TODO: ...
+            if(isDefined(pdfCell.textColor)) {
+                pdfCell.textColor = normalizeColor(pdfCell.textColor);
+            }
+            if(isDefined(pdfCell.backgroundColor)) {
+                pdfCell.backgroundColor = normalizeColor(pdfCell.backgroundColor);
+            }
+            if(isDefined(pdfCell.borderColor)) {
+                pdfCell.borderColor = normalizeColor(pdfCell.borderColor);
+            }
         });
     });
 }
 
-export { normalizeOptions, normalizeBoundaryValue };
+export { normalizeOptions, normalizeRowOptions, normalizeBoundaryValue };
