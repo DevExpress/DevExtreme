@@ -9,11 +9,9 @@ import { CurrentViewConfigType } from '../workspaces/props';
 import { getGroupCount } from '../../../../ui/scheduler/resources/utils';
 import { isGroupingByDate } from '../workspaces/utils';
 import { CellsMetaData, Group, ViewDataProviderType } from '../workspaces/types';
-import { AppointmentViewModel } from '../../../../ui/scheduler/appointments/viewModelGenerator';
-import type { Appointment } from '../../../../ui/scheduler';
 import dateUtils from '../../../../core/utils/date';
 
-import { AppointmentsConfigType, AppointmentsModelType, AppointmentViewModelType } from './types';
+import { AppointmentsConfigType, AppointmentsModelType } from './types';
 
 import { DataAccessorType, ViewType } from '../types';
 import { calculateIsGroupedAllDayPanel, getCellDuration } from '../view_model/to_test/views/utils/base';
@@ -202,15 +200,4 @@ export const getAppointmentsModel = (
     resizableStep: positionHelper.getResizableStep(),
     DOMMetaData: cellsMetaData,
   };
-};
-
-export const getAppointmentsViewModel = (
-  model: AppointmentsModelType,
-  filteredItems: Appointment[],
-): AppointmentViewModelType => {
-  const appointmentViewModel = new AppointmentViewModel();
-
-  const result = appointmentViewModel.generate(filteredItems, model);
-
-  return result;
 };

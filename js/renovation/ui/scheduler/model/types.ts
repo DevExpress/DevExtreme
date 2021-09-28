@@ -61,8 +61,3 @@ export interface AppointmentsModelType extends AppointmentsConfigType {
   getAppointmentColor: (config: AppointmentColorConfigType) => Promise<string>;
   DOMMetaData: CellsMetaData;
 }
-
-export interface AppointmentViewModelType {
-  positionMap: unknown[];
-  viewModel: [];
-}
