@@ -27,14 +27,24 @@ function normalizeBoundaryValue(value) {
     };
 }
 
-function normalizeRowOptions(rowOptions) {
-    if(isDefined(rowOptions?.headerStyles?.backgroundColor)) {
-        rowOptions.headerStyles.backgroundColor = normalizeColor(rowOptions.headerStyles.backgroundColor);
+function normalizeOptions(options) {
+    // TODO: margins
+    // TODO: tableWidth
+    // TODO: tableLineWidth
+    // TODO: tableLineColor
+    // ?
+
+    if(isDefined(options.rowOptions)) {
+        const headerStyles = options.rowOptions?.headerStyles;
+        if(isDefined(headerStyles?.backgroundColor)) {
+            headerStyles.backgroundColor = normalizeColor(headerStyles.backgroundColor);
+        }
+        // TODO: groupStyles, summaryStyles, ... ???
     }
 }
 
-function normalizeOptions(rows) {
-    rows.forEach(row => {
+function normalizeRowsInfo(rowsInfo) {
+    rowsInfo.forEach(row => {
         row.cells.forEach(({ pdfCell }) => {
             pdfCell.padding = normalizeBoundaryValue(pdfCell.padding);
             if(isDefined(pdfCell.textColor)) {
@@ -50,4 +60,4 @@ function normalizeOptions(rows) {
     });
 }
 
-export { normalizeOptions, normalizeRowOptions, normalizeBoundaryValue };
+export { normalizeOptions, normalizeRowsInfo, normalizeBoundaryValue };
