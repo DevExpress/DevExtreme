@@ -10,6 +10,7 @@ import { WorkSpace } from '../workspaces/base/work_space';
 import { getAppointmentDataProvider, getTimeZoneCalculator } from '../../../../ui/scheduler/instanceFactory';
 import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
+import { Group } from '../workspaces/types';
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -185,23 +186,19 @@ describe('Scheduler', () => {
         const loadResources = jest.spyOn(resourceUtils, 'loadResources');
 
         const groupsValue = ['priorityId'];
-        const resourcesValue = [
-          {
-            dataSource: [{
-              fieldExpr: 'priorityId',
-              dataSource: [{
-                text: 'Low Priority',
-                id: 1,
-                color: '#1e90ff',
-              }, {
-                text: 'High Priority',
-                id: 2,
-                color: '#ff9747',
-              }],
-              label: 'Priority',
-            }],
-          },
-        ];
+        const resourcesValue = [{
+          fieldExpr: 'priorityId',
+          dataSource: [{
+            text: 'Low Priority',
+            id: 1,
+            color: '#1e90ff',
+          }, {
+            text: 'High Priority',
+            id: 2,
+            color: '#ff9747',
+          }],
+          label: 'Priority',
+        }];
 
         const scheduler = new Scheduler({
           groups: groupsValue,
@@ -210,7 +207,39 @@ describe('Scheduler', () => {
 
         scheduler.loadGroupResources();
 
-        expect(loadResources).toBeCalledWith(groupsValue, resourcesValue, new Map());
+        expect(loadResources)
+          .toBeCalledWith(groupsValue, resourcesValue, scheduler.resourcePromisesMap);
+
+        expect(scheduler.loadedResources)
+          .toEqual([
+            {
+              name: 'priorityId',
+              items: [
+                {
+                  id: 1,
+                  text: 'Low Priority',
+                  color: '#1e90ff',
+                },
+                {
+                  id: 2,
+                  text: 'High Priority',
+                  color: '#ff9747',
+                },
+              ],
+              data: [
+                {
+                  text: 'Low Priority',
+                  id: 1,
+                  color: '#1e90ff',
+                },
+                {
+                  text: 'High Priority',
+                  id: 2,
+                  color: '#ff9747',
+                },
+              ],
+            } as Group,
+          ]);
       });
     });
 
