@@ -190,7 +190,6 @@
                     'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
                     'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
-                    '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
                     '@@devextreme/runtime/inferno': '@Url.Content("~/node_modules/@devextreme/runtime/inferno")',
                     'devextreme-quill': '@Url.Content("~/node_modules/devextreme-quill/dist/dx-quill.js")',
                     'devexpress-diagram': '@Url.Content("~/artifacts/js/dx-diagram.js")',
@@ -215,8 +214,8 @@
                     'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")'
                 },
                 packages: {
-                    '@@devextreme/vdom': {
-                        main: './dist/cjs/index.js',
+                    '@@devextreme/runtime/inferno': {
+                        main: '../cjs/inferno/index.js',
                         defaultExtension: 'js',
                         format: 'cjs'
                     },
@@ -271,13 +270,6 @@
 
 <script>
     (function() {
-        // IE11 hack for promises error (http://stackoverflow.com/questions/35651193/ie11-promise-strange-behaviour)
-        jQuery.each([1, 2, 3, 5, 8, 13, 20, 40, 100], function(_, timeout) {
-            new Promise(function (resolve) {
-                window.setTimeout(resolve, timeout * 1000);
-            });
-        });
-
         var integrationImportPaths = @Html.Raw(Json.Serialize(GetJQueryIntegrationImports()));
 
         var imports = integrationImportPaths.map(function(importPath) {

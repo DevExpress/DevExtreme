@@ -3,6 +3,7 @@ export const Consts = {
     TREELIST_DATA_ROW_SELECTOR: '.dx-data-row',
     TREELIST_WRAPPER_SELECTOR: '.dx-gantt-treelist-wrapper',
     TREELIST_HEADER_ROW_SELECTOR: '.dx-header-row',
+    TREELIST_FILTER_ROW_SELECTOR: '.dx-treelist-filter-row',
     GANTT_VIEW_SELECTOR: '.dx-gantt-view',
     GANTT_VIEW_ROW_SELECTOR: '.dx-gantt-altRow',
     TASK_WRAPPER_SELECTOR: '.dx-gantt-taskWrapper',

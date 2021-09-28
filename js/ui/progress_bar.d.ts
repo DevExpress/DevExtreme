@@ -57,9 +57,6 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
      * @docid
      * @default function(ratio, value) { return "Progress: " + Math.round(ratio * 100) + "%" }
-     * @type_function_param1 ratio:number
-     * @type_function_param2 value:number
-     * @type_function_return string
      * @public
      */
     statusFormat?: string | ((ratio: number, value: number) => string);
@@ -73,8 +70,6 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
 /**
  * @docid
  * @inherits dxTrackBar
- * @module ui/progress_bar
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

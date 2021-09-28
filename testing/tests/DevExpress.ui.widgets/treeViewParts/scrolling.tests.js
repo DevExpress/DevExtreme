@@ -3,7 +3,6 @@ import {
     SCROLLABLE_SIMULATED_CLASS,
     SCROLLABLE_NATIVE_CLASS
 } from '../scrollableParts/scrollable.constants.js';
-import browser from 'core/utils/browser';
 import $ from 'jquery';
 
 import 'generic_light.css!';
@@ -16,10 +15,6 @@ QUnit.module('scrollToItem', {
         this.clock.restore();
     }
 }, () => {
-    if(browser.msie) {
-        return;
-    }
-
     function createWrapper({
         scrollDirection,
         initialPosition,

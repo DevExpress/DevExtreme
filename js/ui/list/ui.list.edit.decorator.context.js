@@ -1,3 +1,4 @@
+import { getOuterHeight, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import EditDecoratorMenuHelperMixin from './ui.list.edit.decorator_menu_helper';
 import messageLocalization from '../../localization/message';
@@ -38,7 +39,7 @@ registerDecorator(
                             opacity: 1
                         },
                         to: {
-                            height: (function() { return this._$menuList.outerHeight(); }).bind(this),
+                            height: (function() { return getOuterHeight(this._$menuList); }).bind(this),
                             opacity: 1
                         }
                     },
@@ -54,8 +55,8 @@ registerDecorator(
                     }
                 },
                 _ignoreFunctionValueDeprecation: true,
-                height: (function() { return this._$menuList ? this._$menuList.outerHeight() : 0; }).bind(this),
-                width: (function() { return this._list.$element().outerWidth(); }).bind(this),
+                height: (function() { return this._$menuList ? getOuterHeight(this._$menuList) : 0; }).bind(this),
+                width: (function() { return getOuterWidth(this._list.$element()); }).bind(this),
                 onContentReady: this._renderMenuContent.bind(this)
             });
         },

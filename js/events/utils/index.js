@@ -27,16 +27,6 @@ const KEY_MAP = {
     'alt': 'alt',
     'control': 'control',
     'shift': 'shift',
-    // IE11:
-    'left': 'leftArrow',
-    'up': 'upArrow',
-    'right': 'rightArrow',
-    'down': 'downArrow',
-    'multiply': 'asterisk',
-    'spacebar': 'space',
-    'del': 'del',
-    'subtract': 'minus',
-    'esc': 'escape'
 };
 
 const LEGACY_KEY_CODES = {

@@ -47,13 +47,13 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     /**
      * @docid
      * @default "content"
-     * @type_function_param1 contentElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
     contentTemplate?: template | ((contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
+     * @deprecated
      * @default false
      * @public
      */
@@ -91,36 +91,31 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     elementAttr?: any;
     /**
      * @docid
-     * @default function() { return $(window).height() * 0.8 }
-     * @type_function_return number|string
+     * @default '80vh'
      * @public
      */
     height?: number | string | (() => number | string);
     /**
      * @docid
      * @default null
-     * @type_function_return number|string
      * @public
      */
     maxHeight?: number | string | (() => number | string);
     /**
      * @docid
      * @default null
-     * @type_function_return number|string
      * @public
      */
     maxWidth?: number | string | (() => number | string);
     /**
      * @docid
      * @default null
-     * @type_function_return number|string
      * @public
      */
     minHeight?: number | string | (() => number | string);
     /**
      * @docid
      * @default null
-     * @type_function_return number|string
      * @public
      */
     minWidth?: number | string | (() => number | string);
@@ -199,8 +194,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     visible?: boolean;
     /**
      * @docid
-     * @default function() {return $(window).width() * 0.8 }
-     * @type_function_return number|string
+     * @default '80vw'
      * @public
      */
     width?: number | string | (() => number | string);
@@ -235,7 +229,6 @@ export interface dxOverlayAnimation {
 /**
  * @docid
  * @inherits Widget
- * @module ui/overlay
  * @hidden
  * @namespace DevExpress.ui
  */
@@ -243,7 +236,6 @@ export default class dxOverlay<TProperties> extends Widget<TProperties> {
     /**
      * @docid
      * @publicName content()
-     * @return DxElement
      * @public
      */
     content(): DxElement;
@@ -270,7 +262,6 @@ export default class dxOverlay<TProperties> extends Widget<TProperties> {
     /**
      * @docid
      * @publicName toggle(showing)
-     * @param1 showing:boolean
      * @return Promise<boolean>
      * @public
      */
@@ -280,10 +271,7 @@ export default class dxOverlay<TProperties> extends Widget<TProperties> {
 /**
  * @docid ui.dxOverlay.baseZIndex
  * @publicName baseZIndex(zIndex)
- * @param1 zIndex:number
  * @namespace DevExpress.ui.dxOverlay
- * @module ui/overlay
- * @export baseZIndex
  * @static
  * @public
  */

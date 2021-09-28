@@ -2,7 +2,11 @@ import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 import Store, { StoreOptions } from './abstract_store';
 
 /** @namespace DevExpress.data */
-export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptions<TKey, TValue> {
+export interface CustomStoreOptions
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> extends StoreOptions<TValue, TKeyExpr, TKey> {
     /**
      * @docid
      * @type_function_param1 key:object|string|number
@@ -29,12 +33,10 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
      * @type_function_return Promise<any>|Array<any>
      * @public
      */
-    load?: ((options: LoadOptions<TValue>) => PromiseLike<TValue> | Array<TValue>);
+    load: ((options: LoadOptions<TValue>) => PromiseLike<TValue> | Array<TValue>);
     /**
      * @docid
-     * @type string
      * @default 'processed'
-     * @acceptValues 'processed'|'raw'
      * @public
      */
     loadMode?: 'processed' | 'raw';
@@ -47,7 +49,6 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
     remove?: ((key: TKey) => PromiseLike<void>);
     /**
      * @docid
-     * @type_function_param1 loadOptions:object
      * @type_function_param1_field1 filter:object
      * @type_function_param1_field2 group:object
      * @type_function_return Promise<number>
@@ -72,12 +73,14 @@ export interface CustomStoreOptions<TKey = any, TValue = any> extends StoreOptio
 /**
  * @docid
  * @inherits Store
- * @module data/custom_store
- * @export default
  * @public
  */
-export default class CustomStore<TKey = any, TValue = any> extends Store<TKey, TValue> {
-    constructor(options?: CustomStoreOptions<TKey, TValue>)
+export default class CustomStore
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> extends Store<TValue, TKeyExpr, TKey> {
+    constructor(options?: CustomStoreOptions<TValue, TKeyExpr, TKey>)
     /**
      * @docid
      * @publicName clearRawDataCache()

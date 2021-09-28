@@ -8,6 +8,7 @@ export const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
 export const DATA_EDIT_DATA_REMOVE_TYPE = 'remove';
 
 export const EDITING_POPUP_OPTION_NAME = 'editing.popup';
+export const EDITING_FORM_OPTION_NAME = 'editing.form';
 export const EDITING_EDITROWKEY_OPTION_NAME = 'editing.editRowKey';
 export const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
 
@@ -21,6 +22,13 @@ export const EDIT_MODE_ROW = 'row';
 export const EDIT_MODE_CELL = 'cell';
 export const EDIT_MODE_FORM = 'form';
 export const EDIT_MODE_POPUP = 'popup';
+
+export const FIRST_NEW_ROW_POSITION = 'first';
+export const LAST_NEW_ROW_POSITION = 'last';
+export const PAGE_BOTTOM_NEW_ROW_POSITION = 'pageBottom';
+export const PAGE_TOP_NEW_ROW_POSITION = 'pageTop';
+export const VIEWPORT_BOTTOM_NEW_ROW_POSITION = 'viewportBottom';
+export const VIEWPORT_TOP_NEW_ROW_POSITION = 'viewportTop';
 
 export const EDIT_MODES = [EDIT_MODE_BATCH, EDIT_MODE_ROW, EDIT_MODE_CELL, EDIT_MODE_FORM, EDIT_MODE_POPUP];
 export const ROW_BASED_MODES = [EDIT_MODE_ROW, EDIT_MODE_FORM, EDIT_MODE_POPUP];

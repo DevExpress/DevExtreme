@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import fx from 'animation/fx';
@@ -78,10 +79,8 @@ module('Integration: Appointment editing', {
                     const scheduler = createInstance(options);
 
                     if(scrollingMode === 'virtual') {
-                        const virtualScrollingDispatcher = scheduler.instance.getWorkSpace().virtualScrollingDispatcher;
-                        if(virtualScrollingDispatcher) {
-                            virtualScrollingDispatcher.renderer.getRenderTimeout = () => -1;
-                        }
+                        const workspace = scheduler.instance.getWorkSpace();
+                        workspace.renderer.getRenderTimeout = () => -1;
                     }
 
                     return scheduler;
@@ -145,7 +144,7 @@ module('Integration: Appointment editing', {
 
                 scheduler.instance._updateAppointment = spy;
 
-                const cellWidth = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerWidth();
+                const cellWidth = getOuterWidth(scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0));
 
                 try {
                     const pointer = pointerMock(scheduler.instance.$element().find('.dx-resizable-handle-right').eq(0)).start();
@@ -174,7 +173,7 @@ module('Integration: Appointment editing', {
 
                 scheduler.instance._updateAppointment = spy;
 
-                const cellHeight = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).outerHeight();
+                const cellHeight = getOuterHeight(scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0));
                 const hourHeight = cellHeight * 2;
 
                 try {

@@ -125,3 +125,5 @@ $texteditor-input-border-radius: $base-border-radius !default;
   $texteditor-button-clear-icon-color: $base-icon-color !default;
   $texteditor-filled-invalid-background: color.change($texteditor-invalid-faded-border-color, $alpha: 0.1) !default;
 }
+
+$texteditor-label-color: $texteditor-placeholder-color;

@@ -127,33 +127,9 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid
      * @default 300
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
-    /**
-     * @docid
-     * @default { bing: '', google: '', googleStatic: '' }
-     * @public
-     * @deprecated dxMapOptions.apiKey
-     */
-    key?: string | {
-      /**
-       * @docid
-       * @default ""
-       */
-      bing?: string;
-      /**
-       * @docid
-       * @default ""
-       */
-      google?: string;
-      /**
-       * @docid
-       * @default ""
-       */
-      googleStatic?: string;
-    };
     /**
      * @docid
      * @public
@@ -322,7 +298,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid
      * @default 300
-     * @type_function_return number|string
      * @public
      */
     width?: number | string | (() => number | string);
@@ -337,8 +312,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/map
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

@@ -8,17 +8,26 @@ import { isDefined } from '../../../core/utils/type';
 //      indentLevel, - readonly
 //      cells: [ - readonly
 //        {
-//          gridCell, - readonly
 //          colSpan, - readonly (for internal use/hide from api/useless???)
 //          rowSpan, - readonly (for internal use/hide from api/useless???)
-//          text,
-//          wordWrapEnabled,
+//          gridCell, - readonly
+//          pdfCell : {
+//              text,
+//              textColor: '#0000ff', // TODO: specify color format for docs
+//              backgroundColor: '#0000ff', // TODO: specify color format for docs
+//              verticalAlign: 'top' | 'bottom' | 'middle | undefined. Default value is middle
+//              wordWrapEnabled, // true | false. Default value is inherited from grid props,
+//              drawRightBorder,
+//              drawLeftBorder
+//              drawTopBorder
+//              drawBottomBorder
+//          }
 //        }
 //      ],
 //    }
 // ]
 
-function generateRowsInfo(dataProvider, dataGrid, headerStyles) {
+function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
     const result = [];
 
     const rowsCount = dataProvider.getRowsCount();
@@ -43,7 +52,7 @@ function generateRowsInfo(dataProvider, dataGrid, headerStyles) {
                 columns,
                 rowType,
                 colCount: columns.length,
-                backgroundColor: (rowType === 'header') ? headerStyles?.backgroundColor : undefined
+                backgroundColor: (rowType === 'header') ? headerBackgroundColor : undefined
             }),
             rowIndex,
         });
@@ -60,8 +69,10 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
             gridCell: cellData.cellSourceData,
             pdfCell: {
                 text: cellData.value,
+                verticalAlign: 'middle',
                 wordWrapEnabled,
                 backgroundColor,
+                padding: 0,
                 _rect: {}
             }
         };
@@ -75,14 +86,15 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
                 cellInfo.colSpan = cellMerging.colspan;
             }
         } else if(rowType === 'group') {
-            cellInfo.drawLeftBorder = false;
-            cellInfo.drawRightBorder = false;
+            cellInfo.pdfCell.drawLeftBorder = cellIndex === 0;
+            cellInfo.pdfCell.drawRightBorder = cellIndex === colCount - 1;
 
             if(cellIndex > 0) {
                 const isEmptyCellsExceptFirst = result.slice(1).reduce(
                     (accumulate, cellInfo) => { return accumulate && !isDefined(cellInfo.pdfCell.text); },
                     true);
                 if(!isDefined(cellInfo.pdfCell.text) && isEmptyCellsExceptFirst) {
+                    result[0].pdfCell.drawRightBorder = true;
                     for(let i = 0; i < result.length; i++) {
                         result[i].colSpan = result.length;
                     }

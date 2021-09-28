@@ -1,24 +1,14 @@
 import { shallow, mount } from 'enzyme';
+import React from 'react';
 import { Scrollable } from '../../../../scroll_view/scrollable';
 import { Widget } from '../../../../common/widget';
 import {
-  OrdinaryLayout,
-  OrdinaryLayoutProps,
   viewFunction as LayoutView,
 } from '../ordinary_layout';
 import { GroupPanel } from '../group_panel/group_panel';
 import { AllDayPanelLayout, AllDayPanelLayoutProps } from '../date_table/all_day_panel/layout';
-import { AllDayPanelTitle, AllDayPanelTitleProps } from '../date_table/all_day_panel/title';
-import { combineClasses } from '../../../../../utils/combine_classes';
-import { isVerticalGroupingApplied } from '../../utils';
-
-jest.mock('../../../../../utils/combine_classes', () => ({
-  combineClasses: jest.fn(),
-}));
-jest.mock('../../utils', () => ({
-  ...jest.requireActual('../../utils'),
-  isVerticalGroupingApplied: jest.fn(),
-}));
+import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
+import { HeaderPanelEmptyCell } from '../header_panel_empty_cell';
 
 describe('OrdinaryLayout', () => {
   const viewData = {
@@ -94,6 +84,7 @@ describe('OrdinaryLayout', () => {
       viewData,
       dateHeaderData,
       timePanelData,
+      isRenderHeaderEmptyCell: true,
     };
 
     const render = (viewModel) => shallow(LayoutView({
@@ -113,13 +104,57 @@ describe('OrdinaryLayout', () => {
 
     it('should render widget as root component', () => {
       const layout = mountComponent({
-        classes: 'custom-classes',
+        props: { className: 'custom-classes' },
       });
 
       expect(layout.is(Widget))
         .toBe(true);
       expect(layout.prop('className'))
         .toBe('custom-classes');
+    });
+
+    it('should render heder panel container', () => {
+      const layout = render({});
+
+      expect(layout.find('.dx-scheduler-header-panel-container').exists())
+        .toBe(true);
+    });
+
+    it('should render correct content inside header panel container', () => {
+      const layout = render({
+        props: {
+          headerEmptyCellWidth: 132,
+          isStandaloneAllDayPanel: true,
+        },
+      });
+
+      const headerPanelContainer = layout.find('.dx-scheduler-header-panel-container');
+
+      expect(headerPanelContainer.children().length)
+        .toBe(2);
+
+      const headerEmptyCell = headerPanelContainer.childAt(0);
+      expect(headerEmptyCell.is(HeaderPanelEmptyCell))
+        .toBe(true);
+      expect(headerEmptyCell.props())
+        .toEqual({
+          width: 132,
+          isRenderAllDayTitle: true,
+        });
+
+      expect(headerPanelContainer.childAt(1).hasClass('dx-scheduler-header-tables-container'))
+        .toBe(true);
+    });
+
+    it('should not render header empty cell if isRenderHeaderEmptyCell is false', () => {
+      const layout = render({
+        props: {
+          isRenderHeaderEmptyCell: false,
+        },
+      });
+
+      expect(layout.find('.dx-scheduler-header-panel-empty-cell').exists())
+        .toBe(false);
     });
 
     it('should render HeaderPanel and pass to it correct props', () => {
@@ -198,6 +233,17 @@ describe('OrdinaryLayout', () => {
         });
     });
 
+    it('should render date-table scrollable content', () => {
+      const layout = render({});
+
+      const scrollable = layout.find(Scrollable);
+
+      expect(scrollable.children().length)
+        .toBe(1);
+      expect(scrollable.childAt(0).hasClass('dx-scheduler-date-table-scrollable-content'))
+        .toBe(true);
+    });
+
     it('should not render time panel and group panel', () => {
       const layout = render({});
 
@@ -205,11 +251,12 @@ describe('OrdinaryLayout', () => {
 
       expect(scrollable.children().length)
         .toBe(1);
-      expect(scrollable.childAt(0).is(dateTableTemplate))
+      expect(scrollable.childAt(0).childAt(0).hasClass('dx-scheduler-date-table-container'))
         .toBe(true);
     });
 
     it('should render time panel when it is passed as a prop', () => {
+      const timePanelRef = React.createRef();
       const timePanelTemplate = () => null;
       const props = {
         timeCellTemplate: () => {},
@@ -220,24 +267,30 @@ describe('OrdinaryLayout', () => {
       const layout = render({
         props: {
           timePanelTemplate,
+          timePanelRef,
           ...props,
         },
       });
 
       const scrollable = layout.find(Scrollable);
+      const scrollableContent = scrollable.childAt(0);
 
-      expect(scrollable.children().length)
+      expect(scrollableContent.children().length)
         .toBe(2);
 
-      const timePanel = scrollable.childAt(0);
+      const timePanel = scrollableContent.childAt(0);
 
       expect(timePanel.is(timePanelTemplate))
         .toBe(true);
       expect(timePanel.props())
-        .toEqual(props);
+        .toEqual({
+          ...props,
+          tableRef: timePanelRef,
+        });
     });
 
     it('should render group panel when isRenderGroupPanel is true', () => {
+      const groupPanelRef = React.createRef();
       const resourceCellTemplate = () => null;
       const props = {
         groupOrientation: 'vertical',
@@ -249,19 +302,21 @@ describe('OrdinaryLayout', () => {
           groupPanelItems: [],
           baseColSpan: 34,
         },
+        isRenderGroupPanel: true,
+        groupPanelHeight: 497,
+        groupPanelRef,
       };
       const layout = render({
-        isRenderGroupPanel: true,
         props,
-        groupPanelHeight: 497,
       });
 
       const scrollable = layout.find(Scrollable);
+      const scrollableContent = scrollable.childAt(0);
 
-      expect(scrollable.children().length)
+      expect(scrollableContent.children().length)
         .toBe(2);
 
-      const groupPanel = scrollable.childAt(0);
+      const groupPanel = scrollableContent.childAt(0);
 
       expect(groupPanel.is(GroupPanel))
         .toBe(true);
@@ -277,6 +332,7 @@ describe('OrdinaryLayout', () => {
             groupPanelItems: [],
             baseColSpan: 34,
           },
+          elementRef: groupPanelRef,
         });
     });
 
@@ -289,24 +345,19 @@ describe('OrdinaryLayout', () => {
         .toBe(false);
     });
 
-    it('should render all-day panel when it is supported', () => {
+    it('should render all-day panel when it is visible', () => {
       const dataCellTemplate = () => null;
       const layout = render({
         props: {
-          isAllDayPanelSupported: true,
           dataCellTemplate,
           allDayPanelRef: 'allDayPanelRef',
+          isStandaloneAllDayPanel: true,
         },
-        isStandaloneAllDayPanel: true,
-        isSetAllDayTitleClass: true,
       });
 
       const allDayPanel = layout.find(AllDayPanelLayout);
-      const allDayPanelTitle = layout.find(AllDayPanelTitle);
 
       expect(allDayPanel.exists())
-        .toBe(true);
-      expect(allDayPanelTitle.exists())
         .toBe(true);
 
       expect(allDayPanel.props())
@@ -314,421 +365,19 @@ describe('OrdinaryLayout', () => {
           ...new AllDayPanelLayoutProps(),
           viewData,
           dataCellTemplate,
-          visible: true,
           tableRef: 'allDayPanelRef',
         });
-      expect(allDayPanelTitle.props())
-        .toEqual({
-          ...new AllDayPanelTitleProps(),
-          isSetTitleClass: true,
-          visible: true,
-        });
-    });
-  });
-
-  describe('Behaviour', () => {
-    describe('Effects', () => {
-      describe('groupPanelHeightEffect', () => {
-        it('should set groupPanelHeight', () => {
-          const layout = new OrdinaryLayout({
-            dateTableRef: {
-              current: {
-                getBoundingClientRect: () => ({
-                  height: 325,
-                }),
-              },
-            },
-          } as any);
-
-          layout.groupPanelHeightEffect();
-
-          expect(layout.groupPanelHeight)
-            .toBe(325);
-        });
-
-        it('should work if tableRef was not initialized', () => {
-          const layout = new OrdinaryLayout({
-            dateTableRef: {
-              current: null,
-            },
-          } as any);
-
-          layout.groupPanelHeightEffect();
-
-          expect(layout.groupPanelHeight)
-            .toBe(undefined);
-        });
-      });
-    });
-  });
-
-  describe('Logic', () => {
-    describe('Getters', () => {
-      afterEach(jest.resetAllMocks);
-
-      describe('isRenderGroupPanel', () => {
-        it('should call isVerticalGroupingApplied', () => {
-          (isVerticalGroupingApplied as any).mockImplementationOnce(() => true);
-
-          const layout = new OrdinaryLayout({
-            groups,
-            groupOrientation: 'vertical',
-          } as any);
-
-          const result = layout.isRenderGroupPanel;
-
-          expect(result)
-            .toBe(true);
-          expect(isVerticalGroupingApplied)
-            .toBeCalledWith(groups, 'vertical');
-        });
-      });
-
-      describe('isStandaloneAllDayPanel', () => {
-        it('should return true when vertical group orientation is not used and all day panel is visible', () => {
-          (isVerticalGroupingApplied as any).mockImplementationOnce(() => false);
-
-          const layout = new OrdinaryLayout({
-            groups,
-            groupOrientation: 'horizontal',
-            isAllDayPanelVisible: true,
-          } as any);
-
-          const result = layout.isStandaloneAllDayPanel;
-
-          expect(result)
-            .toBe(true);
-          expect(isVerticalGroupingApplied)
-            .toBeCalledWith(groups, 'horizontal');
-        });
-      });
-
-      it('should return false all day panel is not visible', () => {
-        (isVerticalGroupingApplied as any).mockImplementationOnce(() => false);
-        const layout = new OrdinaryLayout({
-          groups,
-          groupOrientation: 'horizontal',
-          isAllDayPanelVisible: false,
-        } as any);
-
-        const result = layout.isStandaloneAllDayPanel;
-
-        expect(result)
-          .toBe(false);
-        expect(isVerticalGroupingApplied)
-          .toBeCalledWith(groups, 'horizontal');
-      });
     });
 
-    describe('isSetAllDayTitleClass', () => {
-      it('should call isVerticalGroupingApplied and revert its value', () => {
-        const layout = new OrdinaryLayout({
-          groups,
-          groupOrientation: 'horizontal',
-        } as any);
-
-        const result = layout.isSetAllDayTitleClass;
-
-        expect(result)
-          .toBe(true);
-        expect(isVerticalGroupingApplied)
-          .toBeCalledWith(groups, 'horizontal');
-      });
-    });
-
-    describe('classes', () => {
-      beforeEach(() => {
-        (isVerticalGroupingApplied as any).mockImplementation(() => true);
+    it('should render appointments', () => {
+      const layout = render({
+        props: {
+          appointments: <div className="appointments" />,
+        },
       });
 
-      afterEach(jest.resetAllMocks);
-
-      it('should call combineClasses with correct parameters', () => {
-        const layout = new OrdinaryLayout({
-          className: 'dx-scheduler-work-space-day',
-          intervalCount: 35,
-          isWorkSpaceWithOddCells: true,
-          isAllDayPanelCollapsed: true,
-          isAllDayPanelVisible: true,
-          groupByDate: true,
-          groups,
-          groupOrientation: 'vertical',
-        } as any);
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        layout.classes;
-
-        expect(combineClasses)
-          .toBeCalledWith({
-            'dx-scheduler-work-space-day': true,
-            'dx-scheduler-work-space-count': true,
-            'dx-scheduler-work-space-odd-cells': true,
-            'dx-scheduler-work-space-all-day-collapsed': true,
-            'dx-scheduler-work-space-all-day': true,
-            'dx-scheduler-work-space-group-by-date': true,
-            'dx-scheduler-work-space-grouped': true,
-            'dx-scheduler-work-space-vertical-grouped': true,
-            'dx-scheduler-group-row-count-one': false,
-            'dx-scheduler-group-row-count-two': false,
-            'dx-scheduler-group-row-count-three': false,
-            'dx-scheduler-group-column-count-one': true,
-            'dx-scheduler-group-column-count-two': false,
-            'dx-scheduler-group-column-count-three': false,
-            'dx-scheduler-work-space': true,
-          });
-      });
-
-      it('should call combineClasses with correct parameters when all-day panel is not collapsed', () => {
-        const layout = new OrdinaryLayout({
-          className: 'dx-scheduler-work-space-day',
-          intervalCount: 35,
-          isWorkSpaceWithOddCells: true,
-          isAllDayPanelCollapsed: false,
-          isAllDayPanelVisible: true,
-          groupByDate: true,
-          groups,
-          groupOrientation: 'vertical',
-        } as any);
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        layout.classes;
-
-        expect(combineClasses)
-          .toBeCalledWith({
-            'dx-scheduler-work-space-day': true,
-            'dx-scheduler-work-space-count': true,
-            'dx-scheduler-work-space-odd-cells': true,
-            'dx-scheduler-work-space-all-day-collapsed': false,
-            'dx-scheduler-work-space-all-day': true,
-            'dx-scheduler-work-space-group-by-date': true,
-            'dx-scheduler-work-space-grouped': true,
-            'dx-scheduler-work-space-vertical-grouped': true,
-            'dx-scheduler-group-row-count-one': false,
-            'dx-scheduler-group-row-count-two': false,
-            'dx-scheduler-group-row-count-three': false,
-            'dx-scheduler-group-column-count-one': true,
-            'dx-scheduler-group-column-count-two': false,
-            'dx-scheduler-group-column-count-three': false,
-            'dx-scheduler-work-space': true,
-          });
-      });
-
-      it('should call combineClasses with correct parameters when all-day panel is not visible', () => {
-        const layout = new OrdinaryLayout({
-          className: 'dx-scheduler-work-space-day',
-          intervalCount: 35,
-          isWorkSpaceWithOddCells: true,
-          isAllDayPanelCollapsed: true,
-          isAllDayPanelVisible: false,
-          groupByDate: true,
-          groups,
-          groupOrientation: 'vertical',
-        } as any);
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        layout.classes;
-
-        expect(combineClasses)
-          .toBeCalledWith({
-            'dx-scheduler-work-space-day': true,
-            'dx-scheduler-work-space-count': true,
-            'dx-scheduler-work-space-odd-cells': true,
-            'dx-scheduler-work-space-all-day-collapsed': false,
-            'dx-scheduler-work-space-all-day': false,
-            'dx-scheduler-work-space-group-by-date': true,
-            'dx-scheduler-work-space-grouped': true,
-            'dx-scheduler-work-space-vertical-grouped': true,
-            'dx-scheduler-group-row-count-one': false,
-            'dx-scheduler-group-row-count-two': false,
-            'dx-scheduler-group-row-count-three': false,
-            'dx-scheduler-group-column-count-one': true,
-            'dx-scheduler-group-column-count-two': false,
-            'dx-scheduler-group-column-count-three': false,
-            'dx-scheduler-work-space': true,
-          });
-      });
-
-      it('should call combineClasses with correct parameters when groups are empty', () => {
-        (isVerticalGroupingApplied as any).mockImplementation(() => false);
-
-        const layout = new OrdinaryLayout({
-          className: 'dx-scheduler-work-space-day',
-          intervalCount: 35,
-          isWorkSpaceWithOddCells: true,
-          isAllDayPanelCollapsed: true,
-          isAllDayPanelVisible: true,
-          groupByDate: false,
-          groups: [],
-          groupOrientation: 'horizontal',
-        } as any);
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        layout.classes;
-
-        expect(combineClasses)
-          .toBeCalledWith({
-            'dx-scheduler-work-space-day': true,
-            'dx-scheduler-work-space-count': true,
-            'dx-scheduler-work-space-odd-cells': true,
-            'dx-scheduler-work-space-all-day-collapsed': true,
-            'dx-scheduler-work-space-all-day': true,
-            'dx-scheduler-work-space-group-by-date': false,
-            'dx-scheduler-work-space-grouped': false,
-            'dx-scheduler-work-space-vertical-grouped': false,
-            'dx-scheduler-group-row-count-one': false,
-            'dx-scheduler-group-row-count-two': false,
-            'dx-scheduler-group-row-count-three': false,
-            'dx-scheduler-group-column-count-one': false,
-            'dx-scheduler-group-column-count-two': false,
-            'dx-scheduler-group-column-count-three': false,
-            'dx-scheduler-work-space': true,
-          });
-      });
-
-      it('should call combineClasses with correct parameters when groups are empty but groupOrientation is vertical', () => {
-        (isVerticalGroupingApplied as any).mockImplementation(() => true);
-
-        const layout = new OrdinaryLayout({
-          className: 'dx-scheduler-work-space-day',
-          intervalCount: 35,
-          isWorkSpaceWithOddCells: true,
-          isAllDayPanelCollapsed: true,
-          isAllDayPanelVisible: true,
-          groupByDate: false,
-          groups: [],
-          groupOrientation: 'vertical',
-        } as any);
-
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        layout.classes;
-
-        expect(combineClasses)
-          .toBeCalledWith({
-            'dx-scheduler-work-space-day': true,
-            'dx-scheduler-work-space-count': true,
-            'dx-scheduler-work-space-odd-cells': true,
-            'dx-scheduler-work-space-all-day-collapsed': true,
-            'dx-scheduler-work-space-all-day': true,
-            'dx-scheduler-work-space-group-by-date': false,
-            'dx-scheduler-work-space-grouped': false,
-            'dx-scheduler-work-space-vertical-grouped': true,
-            'dx-scheduler-group-row-count-one': false,
-            'dx-scheduler-group-row-count-two': false,
-            'dx-scheduler-group-row-count-three': false,
-            'dx-scheduler-group-column-count-one': false,
-            'dx-scheduler-group-column-count-two': false,
-            'dx-scheduler-group-column-count-three': false,
-            'dx-scheduler-work-space': true,
-          });
-      });
-
-      [{
-        groups: [{
-          items: [],
-          data: [],
-          name: 'group 1',
-        }],
-        groupOrientation: 'vertical',
-        className: 'dx-scheduler-group-column-count-one',
-      }, {
-        groups: [{
-          items: [],
-          data: [],
-          name: 'group 1',
-        }, {
-          items: [],
-          data: [],
-          name: 'group 2',
-        }],
-        groupOrientation: 'vertical',
-        className: 'dx-scheduler-group-column-count-two',
-      }, {
-        groups: [{
-          items: [],
-          data: [],
-          name: 'group 1',
-        }, {
-          items: [],
-          data: [],
-          name: 'group 2',
-        }, {
-          items: [],
-          data: [],
-          name: 'group 3',
-        }],
-        groupOrientation: 'vertical',
-        className: 'dx-scheduler-group-column-count-three',
-      }, {
-        groups: [{
-          items: [],
-          data: [],
-          name: 'group 1',
-        }],
-        groupOrientation: 'horizontal',
-        className: 'dx-scheduler-group-row-count-one',
-      }, {
-        groups: [{
-          items: [],
-          data: [],
-          name: 'group 1',
-        }, {
-          items: [],
-          data: [],
-          name: 'group 2',
-        }],
-        groupOrientation: 'horizontal',
-        className: 'dx-scheduler-group-row-count-two',
-      }, {
-        groups: [{
-          items: [],
-          data: [],
-          name: 'group 1',
-        }, {
-          items: [],
-          data: [],
-          name: 'group 2',
-        }, {
-          items: [],
-          data: [],
-          name: 'group 3',
-        }],
-        groupOrientation: 'horizontal',
-        className: 'dx-scheduler-group-row-count-three',
-      }].forEach(({ groups: currentGroups, groupOrientation, className }) => {
-        it(`should call combineClasses with correct parameters when groups count is ${currentGroups.length} and groupOrientation is ${groupOrientation}`, () => {
-          (isVerticalGroupingApplied as any).mockImplementation(() => groupOrientation === 'vertical');
-
-          const layout = new OrdinaryLayout({
-            ...new OrdinaryLayoutProps(),
-            className: 'dx-scheduler-work-space-day',
-            groups: currentGroups,
-            groupOrientation,
-          } as any);
-
-          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          layout.classes;
-
-          expect(combineClasses)
-            .toBeCalledWith({
-              'dx-scheduler-work-space-day': true,
-              'dx-scheduler-work-space-count': false,
-              'dx-scheduler-work-space-odd-cells': false,
-              'dx-scheduler-work-space-all-day-collapsed': false,
-              'dx-scheduler-work-space-all-day': false,
-              'dx-scheduler-work-space-group-by-date': false,
-              'dx-scheduler-work-space-grouped': true,
-              'dx-scheduler-work-space-vertical-grouped': groupOrientation === 'vertical',
-              'dx-scheduler-group-row-count-one': false,
-              'dx-scheduler-group-row-count-two': false,
-              'dx-scheduler-group-row-count-three': false,
-              'dx-scheduler-group-column-count-one': false,
-              'dx-scheduler-group-column-count-two': false,
-              'dx-scheduler-group-column-count-three': false,
-              'dx-scheduler-work-space': true,
-              [className]: true,
-            });
-        });
-      });
+      expect(layout.find('.appointments').exists())
+        .toBe(true);
     });
   });
 });

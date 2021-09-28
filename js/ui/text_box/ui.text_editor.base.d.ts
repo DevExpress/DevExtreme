@@ -39,6 +39,20 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     inputAttr?: any;
     /**
      * @docid
+     * @default ''
+     * @public
+     */
+    label?: boolean;
+    /**
+     * @docid
+     * @type Enums.EditorLabelMode
+     * @default 'static'
+     * @default 'floating' &for(Material)
+     * @public
+     */
+    labelMode?: 'static' | 'floating' | 'hidden';
+    /**
+     * @docid
      * @default ""
      * @public
      */
@@ -168,19 +182,6 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
-     * @deprecated
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @action
-     * @public
-     */
-    onKeyPress?: ((e: NativeEventInfo<TComponent>) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
@@ -280,7 +281,6 @@ export default class dxTextEditor<TProperties = Properties> extends Editor<TProp
     /**
      * @docid
      * @publicName getButton(name)
-     * @param1 name:string
      * @return dxButton | undefined
      * @public
      */

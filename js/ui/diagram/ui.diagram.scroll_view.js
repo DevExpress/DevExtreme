@@ -1,6 +1,8 @@
+import { getWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import ScrollView from '../scroll_view';
+import { calculateScrollbarWidth } from '../pivot_grid/utils/calculate_scrollbar_width';
 
 import { getDiagram } from './diagram.importer';
 
@@ -18,13 +20,18 @@ class DiagramScrollView extends Widget {
 
         const $scrollViewWrapper = $('<div>')
             .appendTo(this.$element());
-        this._scrollView = this._createComponent($scrollViewWrapper, ScrollView, {
+        const options = {
             direction: 'both',
             bounceEnabled: false,
             onScroll: ({ scrollOffset }) => {
                 this._raiseOnScroll(scrollOffset.left, scrollOffset.top);
             }
-        });
+        };
+        const useNativeScrolling = this.option('useNativeScrolling');
+        if(useNativeScrolling !== undefined) {
+            options.useNative = useNativeScrolling;
+        }
+        this._scrollView = this._createComponent($scrollViewWrapper, ScrollView, options);
         this._onCreateDiagramAction({
             $parent: $(this._scrollView.content()),
             scrollView: this
@@ -43,15 +50,15 @@ class DiagramScrollView extends Widget {
         const { Size } = getDiagram();
         const $element = this._scrollView.$element();
         return new Size(
-            Math.floor($element.width()),
-            Math.floor($element.height())
+            Math.floor(getWidth($element)),
+            Math.floor(getHeight($element))
         );
     }
     getScrollContainer() {
         return this._scrollView.$element()[0];
     }
     getScrollBarWidth() {
-        return 0;
+        return this.option('useNativeScrolling') ? calculateScrollbarWidth() : 0;
     }
     detachEvents() {
     }
@@ -75,6 +82,8 @@ class DiagramScrollView extends Widget {
         switch(args.name) {
             case 'onCreateDiagram':
                 this._createOnCreateDiagramAction();
+                break;
+            case 'useNativeScrolling':
                 break;
             default:
                 super._optionChanged(args);

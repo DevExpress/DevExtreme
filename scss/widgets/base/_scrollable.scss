@@ -172,6 +172,7 @@
 
 .dx-scrollable-scroll {
   position: relative;
+  box-sizing: border-box;
   background-color: #888; /* NOTE: fallback for rgba non-supporting */
   background-color: rgba(0, 0, 0, 0.5);
   -webkit-transform: translate(0, 0); // stylelint-disable-line property-no-vendor-prefix

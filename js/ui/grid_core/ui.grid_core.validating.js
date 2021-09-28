@@ -1,3 +1,4 @@
+import { getOuterWidth, getWidth, getOuterHeight, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import modules from './ui.grid_core.modules';
@@ -584,15 +585,14 @@ export const validatingModule = {
         controllers: {
             editing: {
                 _addChange: function(options, row) {
-                    const index = this.callBase(options, row);
+                    const change = this.callBase(options, row);
                     const validatingController = this.getController('validating');
 
-                    if(index >= 0 && options.type !== EDIT_DATA_REMOVE_TYPE) {
-                        const change = this.getChanges()[index];
-                        change && validatingController.updateValidationState(change);
+                    if(change && options.type !== EDIT_DATA_REMOVE_TYPE) {
+                        validatingController.updateValidationState(change);
                     }
 
-                    return index;
+                    return change;
                 },
 
                 _handleChangesChange: function(args) {
@@ -1043,6 +1043,7 @@ export const validatingModule = {
                             propagateOutsideClick: true,
                             closeOnOutsideClick: false,
                             copyRootClassesToWrapper: true,
+                            _ignoreCopyRootClassesToWrapperDeprecation: true,
                             contentTemplate: () => {
                                 const $buttonElement = $('<div>').addClass(REVERT_BUTTON_CLASS);
                                 const buttonOptions = {
@@ -1137,6 +1138,7 @@ export const validatingModule = {
                             propagateOutsideClick: true,
                             closeOnOutsideClick: false,
                             copyRootClassesToWrapper: true,
+                            _ignoreCopyRootClassesToWrapperDeprecation: true,
                             position: {
                                 collision: 'flip',
                                 boundary: this._rowsView.element(),
@@ -1170,7 +1172,7 @@ export const validatingModule = {
                         let position;
                         const visibleTableWidth = !isRevertButton && getWidthOfVisibleCells(this, options.element);
                         const $overlayContentElement = options.component.$content();
-                        const validationMessageWidth = $overlayContentElement.outerWidth(true);
+                        const validationMessageWidth = getOuterWidth($overlayContentElement, true);
                         const needMaxWidth = !isRevertButton && validationMessageWidth > visibleTableWidth;
                         const columnIndex = this._rowsView.getCellIndex($(options.element).closest('td'));
                         const boundaryNonFixedColumnsInfo = getBoundaryNonFixedColumnsInfo(fixedColumns);
@@ -1202,8 +1204,8 @@ export const validatingModule = {
                         const contentOffset = $content.offset();
                         const revertContentOffset = $revertContent.offset();
 
-                        if(contentOffset.top === revertContentOffset.top && contentOffset.left + $content.width() > revertContentOffset.left) {
-                            const left = $revertContent.width() + PADDING_BETWEEN_TOOLTIPS;
+                        if(contentOffset.top === revertContentOffset.top && contentOffset.left + getWidth($content) > revertContentOffset.left) {
+                            const left = getWidth($revertContent) + PADDING_BETWEEN_TOOLTIPS;
                             $content.css('left', revertContentOffset.left < $cell.offset().left ? -left : left);
                         }
                     },
@@ -1350,9 +1352,9 @@ export const validatingModule = {
                         $freeSpaceRowElements = that._getFreeSpaceRowElements($table);
                         $freeSpaceRowElement = $freeSpaceRowElements.first();
 
-                        if($freeSpaceRowElement && $rowElements.length === 1 && (!$freeSpaceRowElement.is(':visible') || $tooltipContent.outerHeight() > $freeSpaceRowElement.outerHeight())) {
+                        if($freeSpaceRowElement && $rowElements.length === 1 && (!$freeSpaceRowElement.is(':visible') || getOuterHeight($tooltipContent) > getOuterHeight($freeSpaceRowElement))) {
                             $freeSpaceRowElements.show();
-                            $freeSpaceRowElements.height($tooltipContent.outerHeight());
+                            setHeight($freeSpaceRowElements, getOuterHeight($tooltipContent));
                             return true;
                         }
                     }
