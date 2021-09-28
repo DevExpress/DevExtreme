@@ -15,7 +15,6 @@ import { JSPdfBandsTests } from './jspdf_v3.dataGrid.bands.tests.js';
 import { JSPdfGroupingTests } from './jspdf_v3.dataGrid.grouping.tests.js';
 import { JSPdfSummariesTests } from './jspdf_v3.dataGrid.summaries.tests.js';
 import { JSPdfVerticalAlignTests } from './jspdf_v3.dataGrid.verticalAlign.tests.js';
-import { JSPdfHorizontalAlignTests } from './jspdf_v3.datagrid.horizontalAlign.tests.js';
 import { JSPdfColumnWidthsTests } from './jspdf_v3.dataGrid.columnAutoWidth.tests.js';
 
 import 'generic_light.css!';
@@ -657,6 +656,793 @@ QUnit.module('Table', moduleConfig, () => {
         });
     });
 
+    QUnit.test('1 col - 1 row. Font size default, Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1' } ],
+            dataSource: [],
+        });
+
+        const expectedLog = [
+            'text,line 1,10,24.2,{baseline:middle}',
+            'setLineWidth,1',
+            'rect,10,15,200,18.4'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ] }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 1 row. Font size default, horizontal align: left. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
+
+        const expectedLog = [
+            'text,line 1,10,24.2,{baseline:middle,align:left}',
+            'setLineWidth,1',
+            'rect,10,15,200,18.4'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 1 row. Font size default, horizontal align: center. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'center'; };
+
+        const expectedLog = [
+            'text,line 1,110,24.2,{baseline:middle,align:center}',
+            'setLineWidth,1',
+            'rect,10,15,200,18.4'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 1 row. Font size default, horizontal align: right. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'right'; };
+
+        const expectedLog = [
+            'text,line 1,210,24.2,{baseline:middle,align:right}',
+            'setLineWidth,1',
+            'rect,10,15,200,18.4'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 1 row. Font size 10, horizontal align: left. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'left';
+            pdfCell.font = { size: 10 };
+        };
+
+        const expectedLog = [
+            'setFontSize,10',
+            'text,line 1,10,20.75,{baseline:middle,align:left}',
+            'setLineWidth,1',
+            'rect,10,15,200,11.5',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 1 row. Font size 10, horizontal align: center. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'center';
+            pdfCell.font = { size: 10 };
+        };
+
+        const expectedLog = [
+            'setFontSize,10',
+            'text,line 1,110,20.75,{baseline:middle,align:center}',
+            'setLineWidth,1',
+            'rect,10,15,200,11.5',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 1 row. Font size 10, horizontal align: right. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'right';
+            pdfCell.font = { size: 10 };
+        };
+
+        const expectedLog = [
+            'setFontSize,10',
+            'text,line 1,210,20.75,{baseline:middle,align:right}',
+            'setLineWidth,1',
+            'rect,10,15,200,11.5',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 1 row. Font size 20, horizontal align: left. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'left';
+            pdfCell.font = { size: 20 };
+        };
+
+        const expectedLog = [
+            'setFontSize,20',
+            'text,line 1,10,26.5,{baseline:middle,align:left}',
+            'setLineWidth,1',
+            'rect,10,15,200,23',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 1 row. Font size 20, horizontal align: center. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'center';
+            pdfCell.font = { size: 20 };
+        };
+
+        const expectedLog = [
+            'setFontSize,20',
+            'text,line 1,110,26.5,{baseline:middle,align:center}',
+            'setLineWidth,1',
+            'rect,10,15,200,23',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 1 row. Font size 20, horizontal align: right. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'right';
+            pdfCell.font = { size: 20 };
+        };
+
+        const expectedLog = [
+            'setFontSize,20',
+            'text,line 1,210,26.5,{baseline:middle,align:right}',
+            'setLineWidth,1',
+            'rect,10,15,200,23',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 row. Font size default, horizontal align: left. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
+
+        const expectedLog = [
+            'text,line 1\nlong line 2,10,24.2,{baseline:middle,align:left}',
+            'setLineWidth,1',
+            'rect,10,15,200,36.8'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 row. Font size default, horizontal align: center. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'center'; };
+
+        const expectedLog = [
+            'text,line 1\nlong line 2,110,24.2,{baseline:middle,align:center}',
+            'setLineWidth,1',
+            'rect,10,15,200,36.8'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 row. Font size default, horizontal align: right. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'right'; };
+
+        const expectedLog = [
+            'text,line 1\nlong line 2,210,24.2,{baseline:middle,align:right}',
+            'setLineWidth,1',
+            'rect,10,15,200,36.8'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 row. Font size 10, horizontal align: left. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'left';
+            pdfCell.font = { size: 10 };
+        };
+
+        const expectedLog = [
+            'setFontSize,10',
+            'text,line 1\nlong line 2,10,20.75,{baseline:middle,align:left}',
+            'setLineWidth,1',
+            'rect,10,15,200,23',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 row. Font size 10, horizontal align: center. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'center';
+            pdfCell.font = { size: 10 };
+        };
+
+        const expectedLog = [
+            'setFontSize,10',
+            'text,line 1\nlong line 2,110,20.75,{baseline:middle,align:center}',
+            'setLineWidth,1',
+            'rect,10,15,200,23',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 row. Font size 10, horizontal align: right. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'right';
+            pdfCell.font = { size: 10 };
+        };
+
+        const expectedLog = [
+            'setFontSize,10',
+            'text,line 1\nlong line 2,210,20.75,{baseline:middle,align:right}',
+            'setLineWidth,1',
+            'rect,10,15,200,23',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 row. Font size 20, horizontal align: left. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'left';
+            pdfCell.font = { size: 20 };
+        };
+
+        const expectedLog = [
+            'setFontSize,20',
+            'text,line 1\nlong line 2,10,26.5,{baseline:middle,align:left}',
+            'setLineWidth,1',
+            'rect,10,15,200,46',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 row. Font size 20, horizontal align: center. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'center';
+            pdfCell.font = { size: 20 };
+        };
+
+        const expectedLog = [
+            'setFontSize,20',
+            'text,line 1\nlong line 2,110,26.5,{baseline:middle,align:center}',
+            'setLineWidth,1',
+            'rect,10,15,200,46',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 2 row. Font size 20, horizontal align: right. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'right';
+            pdfCell.font = { size: 20 };
+        };
+
+        const expectedLog = [
+            'setFontSize,20',
+            'text,line 1\nlong line 2,210,26.5,{baseline:middle,align:right}',
+            'setLineWidth,1',
+            'rect,10,15,200,46',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 row. Font size default, horizontal align: left. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
+
+        const expectedLog = [
+            'text,line 1\nlong line 2\nvery long line 3,10,24.2,{baseline:middle,align:left}',
+            'setLineWidth,1',
+            'rect,10,15,200,55.2'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 row. Font size default, horizontal align: center. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'center'; };
+
+        const expectedLog = [
+            'text,line 1\nlong line 2\nvery long line 3,110,24.2,{baseline:middle,align:center}',
+            'setLineWidth,1',
+            'rect,10,15,200,55.2'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 row. Font size default, horizontal align: right. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'right'; };
+
+        const expectedLog = [
+            'text,line 1\nlong line 2\nvery long line 3,210,24.2,{baseline:middle,align:right}',
+            'setLineWidth,1',
+            'rect,10,15,200,55.2'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 row. Font size 10, horizontal align: left. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'left';
+            pdfCell.font = { size: 10 };
+        };
+
+        const expectedLog = [
+            'setFontSize,10',
+            'text,line 1\nlong line 2\nvery long line 3,10,20.75,{baseline:middle,align:left}',
+            'setLineWidth,1',
+            'rect,10,15,200,34.5',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 row. Font size 10, horizontal align: center. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'center';
+            pdfCell.font = { size: 10 };
+        };
+
+        const expectedLog = [
+            'setFontSize,10',
+            'text,line 1\nlong line 2\nvery long line 3,110,20.75,{baseline:middle,align:center}',
+            'setLineWidth,1',
+            'rect,10,15,200,34.5',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 row. Font size 10, horizontal align: right. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'right';
+            pdfCell.font = { size: 10 };
+        };
+
+        const expectedLog = [
+            'setFontSize,10',
+            'text,line 1\nlong line 2\nvery long line 3,210,20.75,{baseline:middle,align:right}',
+            'setLineWidth,1',
+            'rect,10,15,200,34.5',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 row. Font size 20, horizontal align: left. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'left';
+            pdfCell.font = { size: 20 };
+        };
+
+        const expectedLog = [
+            'setFontSize,20',
+            'text,line 1\nlong line 2\nvery long line 3,10,26.5,{baseline:middle,align:left}',
+            'setLineWidth,1',
+            'rect,10,15,200,69',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 row. Font size 20, horizontal align: center. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'center';
+            pdfCell.font = { size: 20 };
+        };
+
+        const expectedLog = [
+            'setFontSize,20',
+            'text,line 1\nlong line 2\nvery long line 3,110,26.5,{baseline:middle,align:center}',
+            'setLineWidth,1',
+            'rect,10,15,200,69',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - 3 row. Font size 20, horizontal align: right. Cell width = 200px ', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+        doc.__checkHorizontalAlignInLogs = true;
+
+        const dataGrid = createDataGrid({
+            columns: [ { dataField: 'f1', caption: 'line 1\nlong line 2\nvery long line 3' } ],
+            dataSource: [],
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.horizontalAlign = 'right';
+            pdfCell.font = { size: 20 };
+        };
+
+        const expectedLog = [
+            'setFontSize,20',
+            'text,line 1\nlong line 2\nvery long line 3,210,26.5,{baseline:middle,align:right}',
+            'setLineWidth,1',
+            'rect,10,15,200,69',
+            'setFontSize,16'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], customizeCell }).then(() => {
+            // doc.save(assert.test.testName + '.pdf');
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('2 cols', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
@@ -1264,5 +2050,4 @@ JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfGroupingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfSummariesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfVerticalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
-JSPdfHorizontalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfColumnWidthsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
