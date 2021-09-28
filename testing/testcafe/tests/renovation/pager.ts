@@ -5,7 +5,7 @@ import SelectBox from '../../model/selectBox';
 import TextBox from '../../model/textBox';
 import cloneTest from '../../helpers/check-all-platforms';
 
-const multiPlatformTest = cloneTest('declaration/pager', ['react', 'angular']);
+const multiPlatformTest = cloneTest('declaration/pager', ['react']);
 
 const PAGER_SELECTOR = '.pager';
 
