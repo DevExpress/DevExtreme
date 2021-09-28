@@ -9,6 +9,8 @@ import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/vie
 import { WorkSpace } from '../workspaces/base/work_space';
 import { getAppointmentDataProvider, getTimeZoneCalculator } from '../../../../ui/scheduler/instanceFactory';
 import { SchedulerToolbar } from '../header/header';
+import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
+import { Group } from '../workspaces/types';
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -32,7 +34,6 @@ describe('Scheduler', () => {
       shadeUntilCurrentTime: false,
       crossScrollingEnabled: false,
       hoursInterval: 0.5,
-      groups: [],
 
       indicatorTime: undefined,
       allowMultipleCellSelection: true,
@@ -180,6 +181,68 @@ describe('Scheduler', () => {
   });
 
   describe('Behaviour', () => {
+    describe('Effects', () => {
+      it('loadResources should be call with valid arguments', () => {
+        const loadResources = jest.spyOn(resourceUtils, 'loadResources');
+
+        const groupsValue = ['priorityId'];
+        const resourcesValue = [{
+          fieldExpr: 'priorityId',
+          dataSource: [{
+            text: 'Low Priority',
+            id: 1,
+            color: '#1e90ff',
+          }, {
+            text: 'High Priority',
+            id: 2,
+            color: '#ff9747',
+          }],
+          label: 'Priority',
+        }];
+
+        const scheduler = new Scheduler({
+          groups: groupsValue,
+          resources: resourcesValue,
+        });
+
+        scheduler.loadGroupResources();
+
+        expect(loadResources)
+          .toBeCalledWith(groupsValue, resourcesValue, scheduler.resourcePromisesMap);
+
+        expect(scheduler.loadedResources)
+          .toEqual([
+            {
+              name: 'priorityId',
+              items: [
+                {
+                  id: 1,
+                  text: 'Low Priority',
+                  color: '#1e90ff',
+                },
+                {
+                  id: 2,
+                  text: 'High Priority',
+                  color: '#ff9747',
+                },
+              ],
+              data: [
+                {
+                  text: 'Low Priority',
+                  id: 1,
+                  color: '#1e90ff',
+                },
+                {
+                  text: 'High Priority',
+                  id: 2,
+                  color: '#ff9747',
+                },
+              ],
+            } as Group,
+          ]);
+      });
+    });
+
     describe('Methods', () => {
       it('dispose should pass call to instance', () => {
         const scheduler = new Scheduler(new SchedulerProps());
