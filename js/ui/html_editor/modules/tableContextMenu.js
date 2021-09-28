@@ -6,13 +6,26 @@ import { addNamespace } from '../../../events/utils/index';
 import ContextMenu from '../../context_menu';
 import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableForms';
 import localizationMessage from '../../../localization/message';
-import { getTableOperationHandler } from '../utils/table_helper';
+import { getTableOperationHandler, getFormatHandlers } from '../utils/table_helper';
+import { each } from '../../../core/utils/iterator';
+import { isString, isObject } from '../../../core/utils/type';
+import { titleize, camelize } from '../../../core/utils/inflector';
+import { extend } from '../../../core/utils/extend';
 
 const MODULE_NAMESPACE = 'dxHtmlTableContextMenu';
 
 const CONTEXT_MENU_EVENT = addNamespace('dxcontextmenu', MODULE_NAMESPACE);
 
+const ICON_MAP = {
+    insertHeaderRow: 'header',
+    clear: 'clearformat'
+};
+
 let TableContextMenuModule = BaseModule;
+
+const localize = (name) => {
+    return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
+};
 
 if(Quill) {
     TableContextMenuModule = class TableContextMenuModule extends BaseModule {
@@ -21,6 +34,7 @@ if(Quill) {
             this.enabled = !!options.enabled;
             this._quillContainer = this.editorInstance._getQuillContainer();
             this.addCleanCallback(this.prepareCleanCallback());
+            this._formatHandlers = getFormatHandlers.bind(this)();
 
             if(this.enabled) {
                 this._enableContextMenu(options.items);
@@ -63,6 +77,59 @@ if(Quill) {
             this._targetElement = null;
         }
 
+        _isAcceptableItem(widget, acceptableWidgetName) {
+            return !widget || widget === acceptableWidgetName;
+        }
+
+        _handleObjectItem(item) {
+            if(item.name && item.acceptedValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
+                const selectItemConfig = this._prepareSelectItemConfig(item);
+
+                return this._getToolbarItem(selectItemConfig);
+            } else if(item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
+                const defaultButtonItemConfig = this._prepareButtonItemConfig(item.name);
+                const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
+
+                return this._getToolbarItem(buttonItemConfig);
+            } else {
+                return this._getToolbarItem(item);
+            }
+        }
+
+        _prepareButtonItemConfig(name) {
+            const iconName = ICON_MAP[name] ?? name;
+            const buttonText = titleize(name);
+
+            return {
+                text: localize(buttonText),
+                icon: iconName.toLowerCase(),
+                onClick: this._formatHandlers[name] || this._getDefaultClickHandler(name)
+            };
+        }
+
+        _getToolbarItem(item) {
+            return item;
+        }
+
+        _prepareMenuItems(items) {
+            const resultItems = [];
+            each(items, (_, item) => {
+                let newItem;
+                if(isObject(item)) {
+                    newItem = this._handleObjectItem(item);
+                } else if(isString(item)) {
+                    const buttonItemConfig = this._prepareButtonItemConfig(item);
+                    // newItem = this._getToolbarItem(buttonItemConfig);
+                    newItem = buttonItemConfig;
+                }
+                if(newItem) {
+                    resultItems.push(newItem);
+                }
+            });
+
+            return resultItems;
+        }
+
         _getMenuConfig(items) {
             const defaultConfig = [
                 { text: 'Insert', items: [
@@ -84,10 +151,18 @@ if(Quill) {
                 { text: localizationMessage.format('dxHtmlEditor-tableProperties'), icon: 'tableproperties', onClick: (e) => { this.showTableProperties(e); } }
             ];
 
+            let customItems;
+
+            if(items && items.length) {
+                customItems = this._prepareMenuItems(items);
+            }
+
+            // console.log(customItems);
+
             return {
                 target: this._quillContainer,
                 showEvent: null,
-                items: items || defaultConfig
+                items: customItems || defaultConfig
             };
         }
 

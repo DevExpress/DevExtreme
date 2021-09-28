@@ -70,226 +70,241 @@ module('Table resizing integration', {
         this.clock.restore();
     }
 }, () => {
-    test('Context menu should be created on table click', function(assert) {
-        this.createWidget();
+    module('Default context menu', {}, () => {
+        test('Context menu should be created on table click', function(assert) {
+            this.createWidget();
 
-        const $tableElement = this.$element.find('td').eq(0);
-        $tableElement.trigger('dxcontextmenu');
-        this.clock.tick();
-        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+            const $tableElement = this.$element.find('td').eq(0);
+            $tableElement.trigger('dxcontextmenu');
+            this.clock.tick();
+            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
-        assert.ok($contextMenu.length);
+            assert.ok($contextMenu.length);
+        });
+
+        test('Context menu should not be created on click out of the table', function(assert) {
+            this.createWidget();
+
+            this.$element.find('p').eq(0).trigger('dxcontextmenu');
+            this.clock.tick();
+            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+
+            assert.strictEqual($contextMenu.length, 0);
+        });
+
+        test('Context menu should be only one', function(assert) {
+            this.createWidget();
+
+            const $tableElement = this.$element.find('td').eq(0);
+
+            $tableElement.trigger('dxcontextmenu');
+            this.clock.tick();
+
+            this.$element.trigger('dxclick');
+
+            $tableElement.trigger('dxcontextmenu');
+            this.clock.tick();
+
+            $tableElement.trigger('dxcontextmenu');
+            this.clock.tick();
+
+            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+
+            assert.strictEqual($contextMenu.length, 1);
+        });
+
+
+        test('Context menu should have some items and submenu', function(assert) {
+            this.createWidget();
+
+            const $tableElement = this.$element.find('td').eq(0);
+
+            $tableElement.trigger('dxcontextmenu');
+            this.clock.tick();
+
+            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+
+            const $textItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
+
+            const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
+
+            assert.strictEqual($textItems.length, 4, 'text items count is correct');
+            assert.strictEqual($ItemsHasSubmenu.length, 2, 'submenu items count is correct');
+        });
+
+        test('Context menu Insert submenu should have some items', function(assert) {
+            this.createWidget();
+
+            const $tableElement = this.$element.find('td').eq(0);
+
+            $tableElement.trigger('dxcontextmenu');
+            this.clock.tick();
+
+            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+
+            const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
+
+            $ItemsHasSubmenu.eq(0).trigger('dxclick');
+            this.clock.tick();
+
+            const $submenuItems = $contextMenu.find(SUBMENU_ITEMS_SELECTOR);
+
+            assert.strictEqual($submenuItems.length, 5);
+        });
+
+        test('Context menu Delete submenu should have some items', function(assert) {
+            this.createWidget();
+
+            const $tableElement = this.$element.find('td').eq(0);
+
+            $tableElement.trigger('dxcontextmenu');
+            this.clock.tick();
+
+            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+
+            const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
+
+            $ItemsHasSubmenu.eq(1).trigger('dxclick');
+            this.clock.tick();
+
+            const $submenuItems = $contextMenu.find(SUBMENU_ITEMS_SELECTOR);
+
+            assert.strictEqual($submenuItems.length, 3);
+        });
+
+        test('Context menu Table Properties should open the Form', function(assert) {
+            this.createWidget();
+
+            const $tableElement = this.$element.find('td').eq(0);
+
+            $tableElement.trigger('dxcontextmenu');
+            this.clock.tick();
+
+            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+
+            const $textItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
+
+            $textItems.eq(2).trigger('dxclick');
+            this.clock.tick(500);
+
+            const $form = $('.dx-form:not(.dx-formdialog-form)');
+
+            assert.strictEqual($form.length, 1);
+            assert.ok($form.eq(0).is(':visible'));
+        });
+
+        test('Check context menu Insert Header Row action', function(assert) {
+            this.createWidget();
+
+            const $submenuItems = this.getSubmenuItems(0);
+
+            $submenuItems.eq(0).trigger('dxclick');
+
+            const $table = this.$element.find('table');
+
+            assert.strictEqual($table.find('tr').length, 4, 'Row is added');
+            assert.strictEqual($table.find('th').length, 4, 'Header row elements is added');
+        });
+
+        test('Check context menu Insert Row Above action', function(assert) {
+            this.createWidget();
+
+            const $submenuItems = this.getSubmenuItems(0);
+
+            $submenuItems.eq(1).trigger('dxclick');
+
+            const $table = this.$element.find('table');
+
+            assert.strictEqual($table.find('tr').length, 4, 'Row is added');
+            assert.strictEqual($table.find('td').eq(5).text(), '', 'Row is added to the correct place');
+        });
+
+        test('Check context menu Insert Row Below action', function(assert) {
+            this.createWidget();
+
+            const $submenuItems = this.getSubmenuItems(0);
+
+            $submenuItems.eq(2).trigger('dxclick');
+
+            const $table = this.$element.find('table');
+
+            assert.strictEqual($table.find('tr').length, 4, 'Row is added');
+            assert.strictEqual($table.find('td').eq(9).text(), '', 'Row is added to the correct place');
+        });
+
+        test('Check context menu Insert Column Left action', function(assert) {
+            this.createWidget();
+
+            const $submenuItems = this.getSubmenuItems(0);
+
+            $submenuItems.eq(3).trigger('dxclick');
+
+            const $table = this.$element.find('table');
+
+            assert.strictEqual($table.find('tr').eq(0).find('td').length, 5, 'Column is added');
+            assert.strictEqual($table.find('td').eq(2).text(), '', 'Row is added to the correct place');
+        });
+
+        test('Check context menu Insert Column Right action', function(assert) {
+            this.createWidget();
+
+            const $submenuItems = this.getSubmenuItems(0);
+
+            $submenuItems.eq(4).trigger('dxclick');
+
+            const $table = this.$element.find('table');
+
+            assert.strictEqual($table.find('tr').eq(0).find('td').length, 5, 'Column is added');
+            assert.strictEqual($table.find('td').eq(3).text(), '', 'Row is added to the correct place');
+        });
+
+        test('Check context menu Delete Column action', function(assert) {
+            this.createWidget();
+
+            const $submenuItems = this.getSubmenuItems(1);
+
+            $submenuItems.eq(0).trigger('dxclick');
+
+            const $table = this.$element.find('table');
+
+            assert.strictEqual($table.find('tr').eq(0).find('td').length, 3, 'Column is deleted');
+        });
+
+        test('Check context menu Delete Row action', function(assert) {
+            this.createWidget();
+
+            const $submenuItems = this.getSubmenuItems(1);
+
+            $submenuItems.eq(1).trigger('dxclick');
+
+            const $table = this.$element.find('table');
+
+            assert.strictEqual($table.find('tr').length, 2, 'Row is deleted');
+        });
+
+        test('Check context menu Delete Table action', function(assert) {
+            this.createWidget();
+
+            const $submenuItems = this.getSubmenuItems(1);
+
+            $submenuItems.eq(2).trigger('dxclick');
+
+            const $table = this.$element.find('table');
+
+            assert.strictEqual($table.length, 0, 'Table is deleted');
+        });
     });
 
-    test('Context menu should not be created on click out of the table', function(assert) {
-        this.createWidget();
+    module('Custom context menu', {}, () => {
+        'empty items array';
 
-        this.$element.find('p').eq(0).trigger('dxcontextmenu');
-        this.clock.tick();
-        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+        'array of objects';
 
-        assert.strictEqual($contextMenu.length, 0);
-    });
+        'array of custom objects';
 
-    test('Context menu should be only one', function(assert) {
-        this.createWidget();
+        'array of predefined strings and custom objects';
 
-        const $tableElement = this.$element.find('td').eq(0);
+        'array of predefined strings and custom objects with submenus';
 
-        $tableElement.trigger('dxcontextmenu');
-        this.clock.tick();
-
-        this.$element.trigger('dxclick');
-
-        $tableElement.trigger('dxcontextmenu');
-        this.clock.tick();
-
-        $tableElement.trigger('dxcontextmenu');
-        this.clock.tick();
-
-        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
-
-        assert.strictEqual($contextMenu.length, 1);
-    });
-
-
-    test('Context menu should have some items and submenu', function(assert) {
-        this.createWidget();
-
-        const $tableElement = this.$element.find('td').eq(0);
-
-        $tableElement.trigger('dxcontextmenu');
-        this.clock.tick();
-
-        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
-
-        const $textItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
-
-        const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
-
-        assert.strictEqual($textItems.length, 4, 'text items count is correct');
-        assert.strictEqual($ItemsHasSubmenu.length, 2, 'submenu items count is correct');
-    });
-
-    test('Context menu Insert submenu should have some items', function(assert) {
-        this.createWidget();
-
-        const $tableElement = this.$element.find('td').eq(0);
-
-        $tableElement.trigger('dxcontextmenu');
-        this.clock.tick();
-
-        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
-
-        const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
-
-        $ItemsHasSubmenu.eq(0).trigger('dxclick');
-        this.clock.tick();
-
-        const $submenuItems = $contextMenu.find(SUBMENU_ITEMS_SELECTOR);
-
-        assert.strictEqual($submenuItems.length, 5);
-    });
-
-    test('Context menu Delete submenu should have some items', function(assert) {
-        this.createWidget();
-
-        const $tableElement = this.$element.find('td').eq(0);
-
-        $tableElement.trigger('dxcontextmenu');
-        this.clock.tick();
-
-        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
-
-        const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
-
-        $ItemsHasSubmenu.eq(1).trigger('dxclick');
-        this.clock.tick();
-
-        const $submenuItems = $contextMenu.find(SUBMENU_ITEMS_SELECTOR);
-
-        assert.strictEqual($submenuItems.length, 3);
-    });
-
-    test('Context menu Table Properties should open the Form', function(assert) {
-        this.createWidget();
-
-        const $tableElement = this.$element.find('td').eq(0);
-
-        $tableElement.trigger('dxcontextmenu');
-        this.clock.tick();
-
-        const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
-
-        const $textItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
-
-        $textItems.eq(2).trigger('dxclick');
-        this.clock.tick(500);
-
-        const $form = $('.dx-form:not(.dx-formdialog-form)');
-
-        assert.strictEqual($form.length, 1);
-        assert.ok($form.eq(0).is(':visible'));
-    });
-
-    test('Check context menu Insert Header Row action', function(assert) {
-        this.createWidget();
-
-        const $submenuItems = this.getSubmenuItems(0);
-
-        $submenuItems.eq(0).trigger('dxclick');
-
-        const $table = this.$element.find('table');
-
-        assert.strictEqual($table.find('tr').length, 4, 'Row is added');
-        assert.strictEqual($table.find('th').length, 4, 'Header row elements is added');
-    });
-
-    test('Check context menu Insert Row Above action', function(assert) {
-        this.createWidget();
-
-        const $submenuItems = this.getSubmenuItems(0);
-
-        $submenuItems.eq(1).trigger('dxclick');
-
-        const $table = this.$element.find('table');
-
-        assert.strictEqual($table.find('tr').length, 4, 'Row is added');
-        assert.strictEqual($table.find('td').eq(5).text(), '', 'Row is added to the correct place');
-    });
-
-    test('Check context menu Insert Row Below action', function(assert) {
-        this.createWidget();
-
-        const $submenuItems = this.getSubmenuItems(0);
-
-        $submenuItems.eq(2).trigger('dxclick');
-
-        const $table = this.$element.find('table');
-
-        assert.strictEqual($table.find('tr').length, 4, 'Row is added');
-        assert.strictEqual($table.find('td').eq(9).text(), '', 'Row is added to the correct place');
-    });
-
-    test('Check context menu Insert Column Left action', function(assert) {
-        this.createWidget();
-
-        const $submenuItems = this.getSubmenuItems(0);
-
-        $submenuItems.eq(3).trigger('dxclick');
-
-        const $table = this.$element.find('table');
-
-        assert.strictEqual($table.find('tr').eq(0).find('td').length, 5, 'Column is added');
-        assert.strictEqual($table.find('td').eq(2).text(), '', 'Row is added to the correct place');
-    });
-
-    test('Check context menu Insert Column Right action', function(assert) {
-        this.createWidget();
-
-        const $submenuItems = this.getSubmenuItems(0);
-
-        $submenuItems.eq(4).trigger('dxclick');
-
-        const $table = this.$element.find('table');
-
-        assert.strictEqual($table.find('tr').eq(0).find('td').length, 5, 'Column is added');
-        assert.strictEqual($table.find('td').eq(3).text(), '', 'Row is added to the correct place');
-    });
-
-    test('Check context menu Delete Column action', function(assert) {
-        this.createWidget();
-
-        const $submenuItems = this.getSubmenuItems(1);
-
-        $submenuItems.eq(0).trigger('dxclick');
-
-        const $table = this.$element.find('table');
-
-        assert.strictEqual($table.find('tr').eq(0).find('td').length, 3, 'Column is deleted');
-    });
-
-    test('Check context menu Delete Row action', function(assert) {
-        this.createWidget();
-
-        const $submenuItems = this.getSubmenuItems(1);
-
-        $submenuItems.eq(1).trigger('dxclick');
-
-        const $table = this.$element.find('table');
-
-        assert.strictEqual($table.find('tr').length, 2, 'Row is deleted');
-    });
-
-    test('Check context menu Delete Table action', function(assert) {
-        this.createWidget();
-
-        const $submenuItems = this.getSubmenuItems(1);
-
-        $submenuItems.eq(2).trigger('dxclick');
-
-        const $table = this.$element.find('table');
-
-        assert.strictEqual($table.length, 0, 'Table is deleted');
     });
 });
