@@ -570,17 +570,18 @@ describe('Native > Effects', () => {
       jest.clearAllTimers();
       jest.useFakeTimers();
 
-      const viewModel = new Scrollable({
+      const helper = new ScrollableTestHelper({
         refreshStrategy,
       });
 
-      (viewModel.releaseTimer as number) = 10;
-      viewModel.topPocketState = pocketState;
-      viewModel.contentTranslateTop = 50;
-      viewModel.pullDownOpacity = 0.5;
-      viewModel.loadingIndicatorEnabled = false;
+      (helper.viewModel.releaseTimer as number) = 10;
+      helper.viewModel.topPocketState = pocketState;
+      helper.viewModel.contentTranslateTop = 50;
+      helper.viewModel.pullDownOpacity = 0.5;
+      helper.viewModel.loadingIndicatorEnabled = false;
+      helper.viewModel.getEventArgs = jest.fn();
 
-      viewModel.release();
+      helper.viewModel.release();
 
       let expectedTopPocketState = pocketState;
       const expectedTimeout = refreshStrategy === 'swipeDown' ? 800 : 400;
@@ -593,9 +594,9 @@ describe('Native > Effects', () => {
         }
       }
 
-      expect(viewModel.releaseTimer).not.toBe(undefined);
-      expect(viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
-      expect(viewModel.topPocketState).toEqual(expectedTopPocketState);
+      expect(helper.viewModel.releaseTimer).not.toBe(undefined);
+      expect(helper.viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
+      expect(helper.viewModel.topPocketState).toEqual(expectedTopPocketState);
 
       expect(setTimeout).toHaveBeenCalledTimes(1);
       expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), expectedTimeout);
@@ -611,14 +612,14 @@ describe('Native > Effects', () => {
         expectedPullDownOpacity = 0;
       }
 
-      expect(viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
-      expect(viewModel.pullDownOpacity).toEqual(expectedPullDownOpacity);
-      expect(viewModel.loadingIndicatorEnabled).toEqual(true);
-      expect(viewModel.isLoadPanelVisible).toEqual(false);
-      expect(viewModel.locked).toEqual(false);
+      expect(helper.viewModel.contentTranslateTop).toEqual(expectedContentTranslateTop);
+      expect(helper.viewModel.pullDownOpacity).toEqual(expectedPullDownOpacity);
+      expect(helper.viewModel.loadingIndicatorEnabled).toEqual(true);
+      expect(helper.viewModel.isLoadPanelVisible).toEqual(false);
+      expect(helper.viewModel.locked).toEqual(false);
 
-      viewModel.disposeReleaseTimer()();
-      expect(viewModel.releaseTimer).toBe(undefined);
+      helper.viewModel.disposeReleaseTimer()();
+      expect(helper.viewModel.releaseTimer).toBe(undefined);
     });
   });
 
@@ -651,6 +652,8 @@ describe('Native > Effects', () => {
 
       viewModel.contentClientWidth = 3;
       viewModel.contentClientHeight = 4;
+      viewModel.contentScrollWidth = 5;
+      viewModel.contentScrollHeight = 6;
 
       const containerRef = {
         current: {
@@ -663,6 +666,8 @@ describe('Native > Effects', () => {
         current: {
           clientWidth: 30,
           clientHeight: 40,
+          scrollWidth: 50,
+          scrollHeight: 60,
         },
       } as RefObject;
 
@@ -676,11 +681,15 @@ describe('Native > Effects', () => {
         expect(viewModel.containerClientHeight).toEqual(20);
         expect(viewModel.contentClientWidth).toEqual(30);
         expect(viewModel.contentClientHeight).toEqual(40);
+        expect(viewModel.contentScrollWidth).toEqual(50);
+        expect(viewModel.contentScrollHeight).toEqual(60);
       } else {
         expect(viewModel.containerClientWidth).toEqual(1);
         expect(viewModel.containerClientHeight).toEqual(2);
         expect(viewModel.contentClientWidth).toEqual(3);
         expect(viewModel.contentClientHeight).toEqual(4);
+        expect(viewModel.contentScrollWidth).toEqual(5);
+        expect(viewModel.contentScrollHeight).toEqual(6);
       }
     });
   });
@@ -835,6 +844,10 @@ describe('Methods', () => {
 
     each(optionValues.direction).describe('direction: %o', (direction) => {
       each(optionValues.useSimulatedScrollbar).describe('useSimulatedScrollbar: %o', (useSimulatedScrollbar) => {
+        afterEach(() => {
+          jest.clearAllMocks();
+        });
+
         each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
           // chrome 86 - true {decreasing: true, positive: false} - [-max, 0]
           // chrome 84 - false {decreasing: true, positive: true} - [0 -> max]

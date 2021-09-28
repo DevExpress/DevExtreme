@@ -10477,12 +10477,7 @@ declare module DevExpress.ui {
      * [descr:dxDropDownButtonItem.onClick]
      */
     onClick?:
-      | ((e: {
-          component?: dxDropDownButton;
-          element?: DevExpress.core.DxElement;
-          model?: any;
-          event?: DevExpress.events.DxEvent;
-        }) => void)
+      | ((e: DevExpress.ui.dxDropDownButton.ItemClickEvent) => void)
       | string;
   }
   /**
@@ -19550,6 +19545,14 @@ declare module DevExpress.ui {
      * [descr:dxTextEditorOptions.inputAttr]
      */
     inputAttr?: any;
+    /**
+     * [descr:dxTextEditorOptions.label]
+     */
+    label?: boolean;
+    /**
+     * [descr:dxTextEditorOptions.labelMode]
+     */
+    labelMode?: 'static' | 'floating' | 'hidden';
     /**
      * [descr:dxTextEditorOptions.mask]
      */

@@ -21,8 +21,6 @@ import {
   clear as clearEventHandlers, emit, defaultEvent,
 } from '../../../../test_utils/events_mock';
 import {
-  getElementOverflowX,
-  getElementOverflowY,
   getElementPadding,
 } from '../../utils/get_element_style';
 import { getDevicePixelRatio } from '../../utils/get_device_pixel_ratio';
@@ -56,8 +54,6 @@ jest.mock('../../../../../core/devices', () => {
 jest.mock('../../utils/get_element_style', () => ({
   ...jest.requireActual('../../utils/get_element_style'),
   getElementPadding: jest.fn(() => 8),
-  getElementOverflowX: jest.fn(() => 'visible'),
-  getElementOverflowY: jest.fn(() => 'visible'),
 }));
 
 jest.mock('../../../../utils/get_element_offset', () => ({
@@ -335,6 +331,40 @@ describe('Simulated > Behavior', () => {
       });
     });
 
+    it('should subscribe to dxpointerdown event', () => {
+      const helper = new ScrollableTestHelper({ direction: 'vertical' });
+
+      helper.viewModel.pendingPointerUp = false;
+
+      helper.viewModel.pointerDownEffect();
+      emit('dxpointerdown');
+
+      expect(helper.viewModel.pendingPointerUp).toEqual(true);
+    });
+
+    it('Down & Up effects should add & remove scroll active class', () => {
+      const helper = new ScrollableTestHelper({ direction: 'vertical' });
+
+      helper.viewModel.pointerDownEffect();
+      emit('dxpointerdown');
+
+      expect(helper.viewModel.pendingPointerUp).toEqual(true);
+
+      helper.viewModel.pointerUpEffect();
+      emit('dxpointerup');
+
+      expect(helper.viewModel.pendingPointerUp).toEqual(false);
+    });
+
+    it('should subscribe to dxpointerup event', () => {
+      const helper = new ScrollableTestHelper({ direction: 'vertical' });
+
+      helper.viewModel.pointerUpEffect();
+      emit('dxpointerup');
+
+      expect(helper.viewModel.hovered).toEqual(false);
+    });
+
     it('should subscribe to mouseenter event if showScrollbar mode is onHover', () => {
       const helper = new ScrollableTestHelper({
         direction: 'vertical',
@@ -468,29 +498,29 @@ describe('Simulated > Behavior', () => {
       });
     });
 
-    each(['visible', 'scroll', 'hidden', 'auto']).describe('overflow: %o,', (overflow) => {
-      it('contentWidth()', () => {
-        (getElementOverflowX as jest.Mock).mockReturnValue(overflow);
-        const viewModel = new Scrollable({});
+    // each(['visible', 'scroll', 'hidden', 'auto']).describe('overflow: %o,', (overflow) => {
+    //   it('contentWidth()', () => {
+    //     (getElementOverflowX as jest.Mock).mockReturnValue(overflow);
+    //     const viewModel = new Scrollable({});
 
-        viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-        viewModel.contentClientWidth = 200;
-        viewModel.contentScrollWidth = 700;
+    //     viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+    //     viewModel.contentClientWidth = 200;
+    //     viewModel.contentScrollWidth = 700;
 
-        expect(viewModel.contentWidth).toEqual(overflow === 'hidden' ? 200 : 700);
-      });
+    //     expect(viewModel.contentWidth).toEqual(overflow === 'hidden' ? 200 : 700);
+    //   });
 
-      it('contentHeight()', () => {
-        (getElementOverflowY as jest.Mock).mockReturnValue(overflow);
-        const viewModel = new Scrollable({});
+    //   it('contentHeight()', () => {
+    //     (getElementOverflowY as jest.Mock).mockReturnValue(overflow);
+    //     const viewModel = new Scrollable({});
 
-        viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-        viewModel.contentClientHeight = 200;
-        viewModel.contentScrollHeight = 700;
+    //     viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+    //     viewModel.contentClientHeight = 200;
+    //     viewModel.contentScrollHeight = 700;
 
-        expect(viewModel.contentHeight).toEqual(overflow === 'hidden' ? 200 : 700);
-      });
-    });
+    //     expect(viewModel.contentHeight).toEqual(overflow === 'hidden' ? 200 : 700);
+    //   });
+    // });
 
     each([true, false]).describe('forceGeneratePockets: %o,', (forceGeneratePockets) => {
       it('Should assign swipeDown, pullDown strategy', () => {
@@ -1516,6 +1546,7 @@ describe('Simulated > Behavior', () => {
           onUpdated: actionHandler,
         });
 
+        helper.viewModel.updateElementDimensions = jest.fn();
         helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
         helper.viewModel.topPocketState = TopPocketState.STATE_READY;
 
@@ -1526,6 +1557,7 @@ describe('Simulated > Behavior', () => {
         } else {
           helper.checkActionHandlerCalls(expect, [], []);
         }
+        expect(helper.viewModel.updateElementDimensions).toBeCalledTimes(1);
         expect(helper.viewModel.topPocketState).toEqual(TopPocketState.STATE_RELEASED);
         expect(helper.viewModel.loadingIndicatorEnabled).toEqual(true);
         expect(helper.viewModel.isLoadPanelVisible).toEqual(false);

@@ -674,7 +674,7 @@ const EditingController = modules.ViewController.inherit((function() {
             changes.forEach(change => {
                 const isInsert = change.type === DATA_EDIT_DATA_INSERT_TYPE;
 
-                if(!isInsert || this.needChangePageIndexToInsertRow()) {
+                if(!isInsert) {
                     return;
                 }
 
@@ -897,12 +897,6 @@ const EditingController = modules.ViewController.inherit((function() {
             return newRowPosition === FIRST_NEW_ROW_POSITION && pageIndex !== 0 || newRowPosition === LAST_NEW_ROW_POSITION && pageIndex !== (pageCount - 1);
         },
 
-        changePageIndexToInsertRow: function(insertChange) {
-            this._addInsertInfo(insertChange);
-
-            return this._dataController.pageIndex(insertChange.pageIndex);
-        },
-
         addRow: function(parentKey) {
             const dataController = this._dataController;
             const store = dataController.store();
@@ -955,36 +949,36 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
-            let change = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
+            const change = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
             const d = new Deferred();
+            const oldEditRowIndex = this._getVisibleEditRowIndex();
+            const insertInfo = this._addInsertInfo(change, parentKey);
+            const key = insertInfo.key;
+
+            let rowIndex = insertInfo.rowIndex;
+
+            this._setEditRowKey(key, true);
+            this._addChange(change);
 
             if(this.needChangePageIndexToInsertRow()) {
-                change = this._addChange(change);
-
-                const { key } = this._addInsertInfo(change, parentKey);
-                this._setEditRowKey(key, true);
-
-                return this.changePageIndexToInsertRow(change).done(() => {
-                    const rowIndex = this._dataController.getRowIndexByKey(key);
-
-                    this._showAddedRow(rowIndex);
-                    this._afterInsertRow(key);
+                this._dataController.pageIndex(change.pageIndex).done(() => {
+                    rowIndex = this._dataController.getRowIndexByKey(key);
+                    d.resolve();
                 }).fail(d.reject);
             } else {
-                const oldEditRowIndex = this._getVisibleEditRowIndex();
-                const { key, rowIndex } = this._addInsertInfo(change, parentKey);
-
-                this._setEditRowKey(key, true);
-                this._addChange(change);
                 this._dataController.updateItems({
                     changeType: 'update',
                     rowIndices: [initialOldEditRowIndex, oldEditRowIndex, rowIndex]
                 });
-                this._showAddedRow(rowIndex);
-                this._afterInsertRow(key);
+                d.resolve();
             }
 
-            return d.resolve();
+            d.done(() => {
+                this._showAddedRow(rowIndex);
+                this._afterInsertRow(key);
+            });
+
+            return d.promise();
         },
 
         _showAddedRow: function(rowIndex) {
@@ -2226,19 +2220,6 @@ export const editingModule = {
                 init: function() {
                     this._editingController = this.getController('editing');
                     this.callBase();
-                },
-                _fireChanged: function(e) {
-                    const editingController = this._editingController;
-                    const changes = editingController.getChanges();
-                    const insertChanges = changes.filter(change => change.type === 'insert');
-                    const unprocessedInsertChanges = insertChanges.filter((change) => !(editingController._getInternalData(change.key)?.insertInfo));
-                    const lastInsertChange = unprocessedInsertChanges.length && unprocessedInsertChanges[insertChanges.length - 1];
-
-                    this.callBase(e);
-
-                    if(lastInsertChange && editingController.needChangePageIndexToInsertRow()) {
-                        editingController.changePageIndexToInsertRow(lastInsertChange);
-                    }
                 },
                 reload: function(full, repaintChangesOnly) {
                     !repaintChangesOnly && this._editingController.refresh();

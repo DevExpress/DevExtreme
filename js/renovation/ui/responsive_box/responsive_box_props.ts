@@ -3,5 +3,5 @@ import { ScreenSizeQualifier } from './types';
 
 @ComponentBindings()
 export class ResponsiveBoxProps {
-  @OneWay() screenByWidth?: (width) => ScreenSizeQualifier;
+  @OneWay() screenByWidth?: (width: number) => ScreenSizeQualifier;
 }

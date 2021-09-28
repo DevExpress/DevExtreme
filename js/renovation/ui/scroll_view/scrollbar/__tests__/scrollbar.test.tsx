@@ -279,14 +279,13 @@ describe('Scrollbar', () => {
                 viewModel.moveTo = jest.fn();
 
                 viewModel.rightScrollLocation = rightScrollLocation;
+                viewModel.prevScrollLocation = -100;
 
                 viewModel.syncScrollLocation();
 
                 let expectedRightScrollLocation = rightScrollLocation;
                 if (containerHasSizes) {
                   let expectedLocation = scrollLocation;
-
-                  expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
 
                   if (direction === 'horizontal' && rtlEnabled) {
                     if (maxOffset === 0) {
@@ -296,7 +295,12 @@ describe('Scrollbar', () => {
                     expectedLocation = maxOffset - expectedRightScrollLocation;
                   }
 
-                  expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
+                  if (expectedLocation === -100 /* prev location */) {
+                    expect(viewModel.moveTo).not.toBeCalled();
+                  } else {
+                    expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+                    expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
+                  }
                 } else {
                   expect(viewModel.moveTo).not.toBeCalled();
                 }

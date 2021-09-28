@@ -326,7 +326,7 @@ class Gantt extends Widget {
     _sortAndFilter() {
         const columns = this._treeList.getVisibleColumns();
         const sortColumn = columns.filter(c => c.sortIndex === 0)[0];
-        const filterColumn = columns.filter(c => c.filterValue || c.filterValues?.length)[0];
+        const filterColumn = columns.filter(c => isDefined(c.filterValue) || c.filterValues?.length)[0];
         const sieveColumn = sortColumn || filterColumn;
         const isClearSieving = (this.sieveColumn && !sieveColumn);
 

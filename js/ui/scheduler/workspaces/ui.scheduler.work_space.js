@@ -71,6 +71,7 @@ import {
     getStartViewDateTimeOffset,
     isDateAndTimeView,
     calculateIsGroupedAllDayPanel,
+    getCellDuration
 } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
 import Semaphore from '../semaphore';
@@ -1430,8 +1431,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.viewDataProvider.getLastViewDateByEndDayHour(this.option('endDayHour'));
     }
 
-    getCellDuration() { // TODO move to the ModelProvider
-        return 3600000 * this.option('hoursInterval');
+    getCellDuration() {
+        return getCellDuration(
+            this.type,
+            this.option('startDayHour'),
+            this.option('endDayHour'),
+            this.option('hoursInterval')
+        );
     }
 
     getIntervalDuration(allDay) {

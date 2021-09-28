@@ -20097,53 +20097,6 @@ QUnit.module('Editing - new row position', {
                 assert.ok($input.is(':focus'), 'editor of the first cell is focused');
             });
 
-            QUnit.test('newRowPosition = first when change with type = insert in init configuration', function(assert) {
-                // arrange
-                const $testElement = $('#container');
-
-                this.options.paging.pageIndex = 2;
-                this.options.editing.newRowPosition = 'first';
-                this.options.editing.changes = [{ type: 'insert' }];
-
-                // act
-                this.setupModules();
-                this.rowsView.render($testElement);
-                this.clock.tick(100);
-
-                // assert
-                const rows = this.getVisibleRows();
-                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-                assert.strictEqual(rows.length, 11, 'row count');
-                assert.ok(rows[0].isNewRow, 'new row');
-
-                const $insertRow = $testElement.find('tbody > .dx-data-row').first();
-                assert.ok($insertRow.hasClass('dx-row-inserted'), 'first row is inserted');
-                assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
-            });
-
-            QUnit.test('The pageindex should not be reset on subsequent changes when newRowPosition = first and change with type = insert in init configuration', function(assert) {
-                // arrange
-                const $testElement = $('#container');
-
-                this.options.paging.pageIndex = 2;
-                this.options.editing.newRowPosition = 'first';
-                this.options.editing.changes = [{ type: 'insert' }];
-                this.setupModules();
-                this.clock.tick();
-                this.rowsView.render($testElement);
-                this.clock.tick();
-
-                // assert
-                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-
-                // act
-                this.pageIndex(3);
-                this.clock.tick();
-
-                // assert
-                assert.strictEqual(this.pageIndex(), 3, 'pageIndex');
-            });
-
             QUnit.test('newRowPosition = last', function(assert) {
                 // arrange
                 const $testElement = $('#container');
@@ -20495,6 +20448,138 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 assert.strictEqual(rows[config.name === 'virtual scrolling' ? 15 : 5].key, 15, 'key of the fifth row');
 
                 const $insertRow = $testElement.find('tbody > .dx-data-row').eq(config.name === 'virtual scrolling' ? 14 : 4);
+                assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
+                assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
+            });
+
+            QUnit.test('The insertAfterKey should not be ignored when newRowPosition = \'last\'', function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
+                this.options.height = 200;
+                this.options.editing.newRowPosition = 'last';
+                this.setupModules();
+                this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 10, 'row count');
+
+                // act
+                this.option('editing.changes', [{ type: 'insert', insertAfterKey: 5 }]);
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 11, 'row count');
+                assert.strictEqual(rows[4].key, 5, 'key of the fifth row');
+                assert.ok(rows[5].isNewRow, 'new row');
+
+                const $insertRow = $testElement.find('tbody > .dx-data-row').eq(5);
+                assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
+                assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
+            });
+
+            QUnit.test('The insertAfterKey should not be ignored when newRowPosition = \'first\'', function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
+                this.options.height = 200;
+                this.options.paging.pageIndex = 1;
+                this.options.editing.newRowPosition = 'first';
+                this.setupModules();
+                this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
+                assert.strictEqual(rows.length, 10, 'row count');
+
+                // act
+                this.option('editing.changes', [{ type: 'insert', insertAfterKey: 15 }]);
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
+                assert.strictEqual(rows.length, 11, 'row count');
+                assert.strictEqual(rows[4].key, 15, 'key of the fifth row');
+                assert.ok(rows[5].isNewRow, 'new row');
+
+                const $insertRow = $testElement.find('tbody > .dx-data-row').eq(5);
+                assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
+                assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
+            });
+
+            QUnit.test('The insertBeforeKey should not be ignored when newRowPosition = \'last\'', function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
+                this.options.height = 200;
+                this.options.editing.newRowPosition = 'last';
+                this.setupModules();
+                this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 10, 'row count');
+
+                // act
+                this.option('editing.changes', [{ type: 'insert', insertBeforeKey: 5 }]);
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 11, 'row count');
+                assert.ok(rows[4].isNewRow, 'new row');
+                assert.strictEqual(rows[5].key, 5, 'key of the fifth row');
+
+                const $insertRow = $testElement.find('tbody > .dx-data-row').eq(4);
+                assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
+                assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
+            });
+
+            QUnit.test('The insertBeforeKey should not be ignored when newRowPosition = \'first\'', function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
+                this.options.height = 200;
+                this.options.paging.pageIndex = 1;
+                this.options.editing.newRowPosition = 'first';
+                this.setupModules();
+                this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
+                assert.strictEqual(rows.length, 10, 'row count');
+
+                // act
+                this.option('editing.changes', [{ type: 'insert', insertBeforeKey: 15 }]);
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
+                assert.strictEqual(rows.length, 11, 'row count');
+                assert.ok(rows[4].isNewRow, 'new row');
+                assert.strictEqual(rows[5].key, 15, 'key of the fifth row');
+
+                const $insertRow = $testElement.find('tbody > .dx-data-row').eq(4);
                 assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
                 assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
             });

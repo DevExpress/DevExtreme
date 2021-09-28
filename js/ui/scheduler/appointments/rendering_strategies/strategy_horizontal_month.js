@@ -13,7 +13,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     get DOMMetaData() { return this.options.DOMMetaData; }
 
     _getLeftPosition(settings) {
-        const fullWeekAppointmentWidth = this.getWorkspaceGroupWidth(settings.groupIndex);
+        const fullWeekAppointmentWidth = this.getGroupWidth(settings.groupIndex);
 
         return this._calculateMultiWeekAppointmentLeftOffset(settings.hMax, fullWeekAppointmentWidth);
     }
@@ -42,7 +42,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     _getAppointmentParts(geometry, settings) {
         const result = [];
 
-        const weekWidth = Math.round(this.getWorkspaceGroupWidth(settings.groupIndex));
+        const weekWidth = Math.round(this.getGroupWidth(settings.groupIndex));
         const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry, settings, weekWidth);
         const leftPosition = this._getLeftPosition(settings);
 
@@ -76,7 +76,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
             : max - width;
     }
 
-    getWorkspaceGroupWidth(groupIndex) {
+    getGroupWidth(groupIndex) {
         return getGroupWidth(
             groupIndex,
             this.viewDataProvider,

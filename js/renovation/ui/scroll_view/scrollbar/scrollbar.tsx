@@ -76,7 +76,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Ref() thumbRef!: RefObject<HTMLDivElement>;
 
-  @Effect()
+  @Effect({ run: 'once' })
   pointerDownEffect(): EffectReturn {
     return subscribeToDXPointerDownEvent(
       this.thumbRef.current, () => {
@@ -86,7 +86,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     );
   }
 
-  @Effect()
+  @Effect({ run: 'once' })
   pointerUpEffect(): EffectReturn {
     return subscribeToDXPointerUpEvent(
       domAdapter.getDocument(), () => {
@@ -186,7 +186,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Effect()
-  /* istanbul ignore next */
   syncScrollLocation(): void {
     if (this.props.containerHasSizes) {
       let newScrollLocation = this.props.scrollLocation;
@@ -199,7 +198,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
         newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
       }
 
-      this.moveTo(newScrollLocation);
+      if (this.prevScrollLocation !== newScrollLocation) {
+        this.moveTo(newScrollLocation);
+      }
     }
   }
 

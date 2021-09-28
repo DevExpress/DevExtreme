@@ -1025,6 +1025,11 @@
  */
 
 /**
+ * @typedef {string} Enums.EditorLabelMode
+ * @enum {'static'|'floating'|'hidden'}
+ */
+
+/**
  * @typedef {string} Enums.GridCommandColumnType
  * @enum {'adaptive'|'buttons'|'detailExpand'|'groupExpand'|'selection'|'drag'}
  */

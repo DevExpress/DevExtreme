@@ -3,6 +3,7 @@ import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translat
 import animationFrame from 'animation/frame';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import pointerMock from '../../../helpers/pointerMock.js';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
 
@@ -15,6 +16,7 @@ import {
 const INERTIA_TIMEOUT = 100;
 
 const GESTURE_LOCK_KEY = 'dxGestureLock';
+const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -530,96 +532,101 @@ QUnit.test('velocity calculated correctly when content height less than containe
         .up();
 });
 
-QUnit.test('window resize should call update', function(assert) {
-    assert.expect(1);
+[true, false].forEach((useNative) => {
+    QUnit.test(`window resize should call update, useNative: ${useNative}`, function(assert) {
+        assert.expect(1);
 
-    const $scrollable = $('#scrollable');
+        const $scrollable = $('#scrollable');
 
-    const updateHandler = sinon.spy();
+        const updateHandler = sinon.spy();
 
-    $scrollable.dxScrollable({
-        useNative: true,
-        onUpdated: updateHandler
+        $scrollable.dxScrollable({
+            useNative: true,
+            onUpdated: updateHandler
+        });
+
+        updateHandler.reset();
+
+        resizeCallbacks.fire();
+
+        assert.equal(updateHandler.callCount, isRenovation ? 0 : 1, 'onUpdate handler was fired once');
     });
 
-    updateHandler.reset();
 
-    resizeCallbacks.fire();
+    QUnit.test(`scrollable should have correct scrollPosition when content is not cropped by overflow hidden, useNative: ${useNative}`, function(assert) {
+        const $scrollable = $('#scrollable').height(50).width(50);
 
-    assert.equal(updateHandler.callCount, 1, 'onUpdate handler was fired once');
-});
+        $scrollable.dxScrollable({
+            useNative,
+            direction: 'both',
+            scrollByContent: true,
+            useSimulatedScrollbar: true
+        });
 
-QUnit.test('scrollable should have correct scrollPosition when content is not cropped by overflow hidden', function(assert) {
-    const $scrollable = $('#scrollable').height(50).width(50);
+        const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
 
-    $scrollable.dxScrollable({
-        useNative: false,
-        direction: 'both',
-        scrollByContent: true
+        $content.children().eq(0).css({
+            width: '100px',
+            height: '100px'
+        });
+        $content.children().eq(1).css({
+            width: '300px',
+            height: '300px',
+            position: 'absolute',
+            top: 0,
+            left: 0
+        });
+
+        $content.css({
+            height: '100px',
+            width: '100px'
+        });
+
+        $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
+        $scrollable.dxScrollable('instance').update();
+        $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
+
+        assert.equal($scrollable.dxScrollable('instance').scrollTop(), 250);
+        assert.equal($scrollable.dxScrollable('instance').scrollLeft(), 250);
     });
 
-    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
+    QUnit.test(`scrollable should have correct scrollPosition when content is cropped by overflow hidden, useNative: ${useNative}`, function(assert) {
+        const $scrollable = $('#scrollable').height(50).width(50);
 
-    $content.children().eq(0).css({
-        width: '100px',
-        height: '100px'
+        const scrollable = $scrollable.dxScrollable({
+            useNative,
+            direction: 'both',
+            scrollByContent: true,
+            useSimulatedScrollbar: true
+        }).dxScrollable('instance');
+
+        const $content = $(scrollable.content());
+
+        $content.children().eq(0).css({
+            width: '100px',
+            height: '100px'
+        });
+        $content.children().eq(1).css({
+            width: '300px',
+            height: '300px',
+            position: 'absolute',
+            top: 0,
+            left: 0
+        });
+
+        $content.css({
+            height: '100px',
+            width: '100px',
+            overflow: 'hidden'
+        });
+
+        $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
+        $scrollable.dxScrollable('instance').update();
+        $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
+
+        assert.equal($scrollable.dxScrollable('instance').scrollTop(), 50);
+        assert.equal($scrollable.dxScrollable('instance').scrollLeft(), 50);
     });
-    $content.children().eq(1).css({
-        width: '300px',
-        height: '300px',
-        position: 'absolute',
-        top: 0,
-        left: 0
-    });
-
-    $content.css({
-        height: '100px',
-        width: '100px'
-    });
-
-    $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
-    $scrollable.dxScrollable('instance').update();
-    $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
-
-    assert.equal($scrollable.dxScrollable('instance').scrollTop(), 250);
-    assert.equal($scrollable.dxScrollable('instance').scrollLeft(), 250);
-});
-
-QUnit.test('scrollable should have correct scrollPosition when content is cropped by overflow hidden', function(assert) {
-    const $scrollable = $('#scrollable').height(50).width(50);
-
-    const scrollable = $scrollable.dxScrollable({
-        useNative: false,
-        direction: 'both',
-        scrollByContent: true
-    }).dxScrollable('instance');
-
-    const $content = $(scrollable.content());
-
-    $content.children().eq(0).css({
-        width: '100px',
-        height: '100px'
-    });
-    $content.children().eq(1).css({
-        width: '300px',
-        height: '300px',
-        position: 'absolute',
-        top: 0,
-        left: 0
-    });
-
-    $content.css({
-        height: '100px',
-        width: '100px',
-        overflow: 'hidden'
-    });
-
-    $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
-    $scrollable.dxScrollable('instance').update();
-    $scrollable.dxScrollable('instance').scrollTo({ top: 250, left: 250 });
-
-    assert.equal($scrollable.dxScrollable('instance').scrollTop(), 50);
-    assert.equal($scrollable.dxScrollable('instance').scrollLeft(), 50);
 });
 
 QUnit.test('scrollable prevents anchor events', function(assert) {
