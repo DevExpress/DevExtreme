@@ -11,7 +11,7 @@ import DxDataGrid from '../../../../../ui/data_grid';
 import type {
   Options,
   Column,
-  RowObject,
+  Row,
   ColumnButtonClickEvent,
   ColumnButtonTemplateData,
   ColumnCustomizeTextArg,
@@ -75,7 +75,7 @@ import { DxPromise } from '../../../../../core/utils/deferred'; // eslint-disabl
 import type { UserDefinedElement, DxElement } from '../../../../../core/element'; // eslint-disable-line import/named
 import type { template } from '../../../../../core/templates/template';
 import DataSource from '../../../../../data/data_source';
-import type { DataSourceOptions } from '../../../../../data/data_source';
+import type { Options as DataSourceOptions } from '../../../../../data/data_source';
 import type { dxPopupOptions } from '../../../../../ui/popup';
 import type {
   RequiredRule,
@@ -116,7 +116,7 @@ export class DataGridColumnButton {
   | boolean
   | ((options: {
     component?: DxDataGrid;
-    row?: RowObject;
+    row?: Row;
     column?: Column;
   }) => boolean);
 }
@@ -461,12 +461,12 @@ export class DataGridEditing {
   @OneWay()
   allowDeleting?:
   | boolean
-  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean);
+  | ((options: { component?: DxDataGrid; row?: Row }) => boolean);
 
   @OneWay()
   allowUpdating?:
   | boolean
-  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean);
+  | ((options: { component?: DxDataGrid; row?: Row }) => boolean);
 
   @OneWay()
   confirmDelete?: boolean;
@@ -1244,7 +1244,7 @@ export class DataGridProps extends BaseWidgetProps implements Options {
 
   @OneWay() customizeExportData?: (
     columns: Column[],
-    rows: RowObject[],
+    rows: Row[],
   ) => any;
 
   @OneWay() keyExpr?: string | string[];
