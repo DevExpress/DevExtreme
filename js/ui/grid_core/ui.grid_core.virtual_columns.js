@@ -1,6 +1,7 @@
 import { getWidth, getOuterWidth } from '../../core/utils/size';
 import { hasWindow } from '../../core/utils/window';
 import { createColumnsInfo } from './ui.grid_core.virtual_columns_core';
+import { isDefined } from '../../core/utils/type';
 
 const DEFAULT_COLUMN_WIDTH = 50;
 
@@ -102,18 +103,28 @@ const ColumnsControllerExtender = (function() {
             });
             this._renderTime = new Date() - date;
         },
+        getScrollingTimeout: function() {
+            const renderingThreshold = this.option('scrolling.columnRenderingThreshold');
+            const renderAsync = this.option('scrolling.renderAsync');
+            let scrollingTimeout = 0;
+
+            if((!isDefined(renderAsync) && this._renderTime > renderingThreshold) || renderAsync) {
+                scrollingTimeout = this.option('scrolling.timeout');
+            }
+
+            return scrollingTimeout;
+        },
         setScrollPosition: function(position) {
-            const that = this;
-            const renderingThreshold = that.option('scrolling.columnRenderingThreshold');
+            const scrollingTimeout = this.getScrollingTimeout();
 
-            if(that._renderTime > renderingThreshold) {
-                clearTimeout(that._changedTimeout);
+            if(scrollingTimeout > 0) {
+                clearTimeout(this._changedTimeout);
 
-                that._changedTimeout = setTimeout(function() {
-                    that._setScrollPositionCore(position);
-                }, that.option('scrolling.timeout'));
+                this._changedTimeout = setTimeout(() => {
+                    this._setScrollPositionCore(position);
+                }, scrollingTimeout);
             } else {
-                that._setScrollPositionCore(position);
+                this._setScrollPositionCore(position);
             }
         },
         isVirtualMode: function() {

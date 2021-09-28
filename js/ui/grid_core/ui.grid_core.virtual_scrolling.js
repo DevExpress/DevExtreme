@@ -947,7 +947,7 @@ export const virtualScrollingModule = {
                             changingDuration: function(e) {
                                 const dataSource = that.dataSource();
 
-                                if(dataSource.isLoading() && that.option(LEGACY_SCROLLING_MODE) !== false) {
+                                if(dataSource?.isLoading() && that.option(LEGACY_SCROLLING_MODE) !== false) {
                                     return LOAD_TIMEOUT;
                                 }
 
