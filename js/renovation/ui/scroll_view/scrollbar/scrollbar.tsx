@@ -198,7 +198,9 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
         newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
       }
 
-      this.moveTo(newScrollLocation);
+      if (this.prevScrollLocation !== newScrollLocation) {
+        this.moveTo(newScrollLocation);
+      }
     }
   }
 
