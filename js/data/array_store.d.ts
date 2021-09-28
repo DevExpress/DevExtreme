@@ -4,7 +4,11 @@ import Store, {
 import { Query } from './query';
 
 /** @namespace DevExpress.data */
-export interface ArrayStoreOptions<TKey = any, TValue = any> extends StoreOptions<TKey, TValue> {
+export interface ArrayStoreOptions
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> extends StoreOptions<TValue, TKeyExpr, TKey> {
     /**
      * @docid
      * @public
@@ -16,8 +20,12 @@ export interface ArrayStoreOptions<TKey = any, TValue = any> extends StoreOption
  * @inherits Store
  * @public
  */
-export default class ArrayStore<TKey = any, TValue = any> extends Store<TKey, TValue> {
-    constructor(options?: ArrayStoreOptions<TKey, TValue>)
+export default class ArrayStore
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> extends Store<TValue, TKeyExpr, TKey> {
+    constructor(options?: ArrayStoreOptions<TValue, TKeyExpr, TKey>)
     /**
      * @docid
      * @publicName clear()

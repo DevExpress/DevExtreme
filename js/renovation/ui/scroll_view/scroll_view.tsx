@@ -15,6 +15,7 @@ import {
 } from './scrollable';
 
 import {
+  ElementOffset,
   ScrollOffset,
 } from './common/types.d';
 
@@ -129,7 +130,7 @@ export class ScrollView extends JSXComponent<ScrollViewProps>() {
   }
 
   @Method()
-  scrollToElement(element: HTMLElement, offset?: Partial<Omit<ClientRect, 'width' | 'height'>>): void {
+  scrollToElement(element: HTMLElement, offset?: ElementOffset): void {
     this.scrollableRef.current!.scrollToElement(element, offset);
   }
 

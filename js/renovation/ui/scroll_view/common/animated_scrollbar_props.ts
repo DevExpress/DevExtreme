@@ -24,7 +24,5 @@ export class AnimatedScrollbarProps extends ScrollbarProps {
 
   @Event() onReachBottom?: EventCallback;
 
-  @Event() onRelease?: EventCallback;
-
   @Event() onEnd?: EventCallback<string>;
 }

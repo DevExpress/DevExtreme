@@ -8,7 +8,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 // eslint-disable-next-line import/named
-import dxScheduler, { dxSchedulerAppointment } from '../../../ui/scheduler';
+import dxScheduler, { Appointment } from '../../../ui/scheduler';
 import { ViewProps, SchedulerProps } from './props';
 
 import { Widget } from '../common/widget';
@@ -16,13 +16,20 @@ import { UserDefinedElement } from '../../../core/element'; // eslint-disable-li
 import DataSource from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
-import { CellsMetaData, ViewDataProviderType, ViewMetaData } from './workspaces/types';
+import {
+  CellsMetaData, Group, ViewDataProviderType, ViewMetaData,
+} from './workspaces/types';
 import { WorkSpace } from './workspaces/base/work_space';
-import SchedulerToolbar from './header/header';
+import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
+import { createFactoryInstances, generateKey } from '../../../ui/scheduler/instanceFactory';
+import { DataAccessorType } from './types';
+import { createDataAccessors } from './common';
+import { loadResources } from '../../../ui/scheduler/resources/utils';
 
 export const viewFunction = ({
   restAttributes,
+  loadedResources,
   currentViewConfig,
   onViewRendered,
   setCurrentDate,
@@ -66,7 +73,6 @@ export const viewFunction = ({
     shadeUntilCurrentTime,
     crossScrollingEnabled,
     hoursInterval,
-    groups,
 
     indicatorTime,
     allowMultipleCellSelection,
@@ -92,21 +98,24 @@ export const viewFunction = ({
       {...restAttributes}
     >
       <div className="dx-scheduler-container">
-        <SchedulerToolbar
-          items={toolbarItems}
-          views={views}
-          currentView={currentView}
-          onCurrentViewUpdate={setCurrentView}
-          currentDate={currentDate}
-          onCurrentDateUpdate={setCurrentDate}
-          startViewDate={startViewDate}
-          min={min}
-          max={max}
-          intervalCount={intervalCount}
-          firstDayOfWeek={firstDayOfWeek}
-          useDropDownViewSwitcher={useDropDownViewSwitcher}
-          customizationFunction={customizeDateNavigatorText}
-        />
+        {toolbarItems.length !== 0
+        && (
+          <SchedulerToolbar
+            items={toolbarItems}
+            views={views}
+            currentView={currentView}
+            onCurrentViewUpdate={setCurrentView}
+            currentDate={currentDate}
+            onCurrentDateUpdate={setCurrentDate}
+            startViewDate={startViewDate}
+            min={min}
+            max={max}
+            intervalCount={intervalCount}
+            firstDayOfWeek={firstDayOfWeek}
+            useDropDownViewSwitcher={useDropDownViewSwitcher}
+            customizationFunction={customizeDateNavigatorText}
+          />
+        )}
         <WorkSpace
           firstDayOfWeek={firstDayOfWeek}
           startDayHour={startDayHour}
@@ -124,7 +133,7 @@ export const viewFunction = ({
           shadeUntilCurrentTime={shadeUntilCurrentTime}
           crossScrollingEnabled={crossScrollingEnabled}
           hoursInterval={hoursInterval}
-          groups={groups}
+          groups={loadedResources}
           type={type}
 
           indicatorTime={indicatorTime}
@@ -151,6 +160,12 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() cellsMetaData!: CellsMetaData;
 
+  @InternalState() key = generateKey();
+
+  @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
+
+  @InternalState() loadedResources: Group[] = [];
+
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
     const { views, currentView } = this.props;
@@ -160,6 +175,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   get currentViewConfig(): CurrentViewConfigType {
     return getCurrentViewConfig(this.currentViewProps, this.props);
+  }
+
+  get dataAccessors(): DataAccessorType {
+    return createDataAccessors(this.props);
   }
 
   get startViewDate(): Date {
@@ -186,23 +205,28 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return startViewDate;
   }
 
+  get isVirtualScrolling(): boolean {
+    return this.props.scrolling.mode === 'virtual'
+      || this.currentViewProps.scrolling?.mode === 'virtual';
+  }
+
   @Method()
   getComponentInstance(): dxScheduler {
     return this.instance;
   }
 
   @Method()
-  addAppointment(appointment: dxSchedulerAppointment): void {
+  addAppointment(appointment: Appointment): void {
     this.instance.addAppointment(appointment);
   }
 
   @Method()
-  deleteAppointment(appointment: dxSchedulerAppointment): void {
+  deleteAppointment(appointment: Appointment): void {
     this.instance.deleteAppointment(appointment);
   }
 
   @Method()
-  updateAppointment(target: dxSchedulerAppointment, appointment: dxSchedulerAppointment): void {
+  updateAppointment(target: Appointment, appointment: Appointment): void {
     this.instance.updateAppointment(target, appointment);
   }
 
@@ -242,15 +266,15 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   @Method()
-  showAppointmentPopup(appointmentData?: dxSchedulerAppointment, createNewAppointment?: boolean,
-    currentAppointmentData?: dxSchedulerAppointment): void {
+  showAppointmentPopup(appointmentData?: Appointment, createNewAppointment?: boolean,
+    currentAppointmentData?: Appointment): void {
     this.instance.showAppointmentPopup(appointmentData, createNewAppointment,
       currentAppointmentData);
   }
 
   @Method()
-  showAppointmentTooltip(appointmentData: dxSchedulerAppointment,
-    target: string | UserDefinedElement, currentAppointmentData?: dxSchedulerAppointment): void {
+  showAppointmentTooltip(appointmentData: Appointment,
+    target: string | UserDefinedElement, currentAppointmentData?: Appointment): void {
     this.instance.showAppointmentTooltip(appointmentData, target,
       currentAppointmentData);
   }
@@ -258,6 +282,34 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   @Effect({ run: 'once' })
   dispose(): DisposeEffectReturn {
     return () => { this.instance.dispose(); };
+  }
+
+  @Effect({ run: 'once' })
+  initialization(): void {
+    createFactoryInstances({
+      key: this.key,
+      resources: this.props.resources,
+      dataSource: this.props.dataSource,
+      startDayHour: this.currentViewConfig.startDayHour,
+      endDayHour: this.currentViewConfig.endDayHour,
+      appointmentDuration: this.currentViewConfig.cellDuration,
+      firstDayOfWeek: this.currentViewConfig.firstDayOfWeek,
+      showAllDayPanel: this.props.showAllDayPanel,
+      timeZone: this.props.timeZone,
+      getIsVirtualScrolling: () => this.isVirtualScrolling,
+      getDataAccessors: (): DataAccessorType => this.dataAccessors,
+    });
+  }
+
+  @Effect()
+  loadGroupResources(): void {
+    const { groups, resources } = this.props;
+
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    (loadResources(groups, resources, this.resourcePromisesMap) as Promise<Group[]>)
+      .then((loadedResources) => {
+        this.loadedResources = loadedResources;
+      });
   }
 
   onViewRendered(viewMetaData: ViewMetaData): void {

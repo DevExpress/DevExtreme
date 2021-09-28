@@ -1936,9 +1936,7 @@ QUnit.module('positioning', {
                     at: 'top left',
                     of: $target
                 },
-                restorePosition: {
-                    onOpening: false
-                }
+                restorePosition: false
             });
             this.popup.option('fullScreen', false);
 
@@ -1982,21 +1980,6 @@ QUnit.module('positioning', {
 
             assert.ok(visualPositionChangedHandlerStub.calledOnce, 'visualPositionChanged event is raised');
             assert.deepEqual(visualPositionChangedHandlerStub.getCall(0).args[0].position, { top: 0, left: 0 }, 'parameter is correct');
-        });
-
-        [{ onFullScreenDisable: true }, { always: true }].forEach(restorePosition => {
-            QUnit.test(`popup should restore position after fullScreen disable if restorePosition=${JSON.stringify(restorePosition)}`, function(assert) {
-                const $container = $('#container');
-                this.reinit({ restorePosition });
-
-                this.popup.option('fullScreen', true);
-                this.popup.option('position', { my: 'top', at: 'top', of: $container });
-                this.popup.option('fullScreen', false);
-
-                const position = this.getPosition();
-                const containerPosition = $container.position();
-                assert.strictEqual(position.top, containerPosition.top, 'visual position is restored');
-            });
         });
     });
 
@@ -2111,16 +2094,16 @@ QUnit.module('positioning', {
         });
 
         QUnit.test('restorePosition option runtime change', function(assert) {
-            this.popup.option('restorePosition', undefined);
-            this.popup.option('restorePosition', { always: true });
+            this.popup.option('restorePosition', false);
 
-            const initialPosition = this.getPosition();
             this.drag();
+            const expectedPosition = this.getPosition();
 
-            this.popup.option('height', 'auto');
+            this.popup.hide();
+            this.popup.show();
 
             const newPosition = this.getPosition();
-            assert.deepEqual(newPosition, initialPosition, 'position is restored');
+            assert.deepEqual(newPosition, expectedPosition, 'position is not restored after runtime change to false');
         });
 
         QUnit.module('position after', () => {
@@ -2132,32 +2115,6 @@ QUnit.module('positioning', {
                 const newPosition = this.getPosition();
                 assert.strictEqual(newPosition.left, position.left - 100, 'left coordinate is correct');
                 assert.strictEqual(newPosition.top, position.top - 100, 'top coordinate is correct');
-            });
-
-            [{ onDimensionChangeAfterDragOrResize: true }, { always: true }].forEach(restorePosition => {
-                QUnit.test(`drag should be restored after dimension change if restorePosition=${JSON.stringify(restorePosition)}`, function(assert) {
-                    this.reinit({ restorePosition });
-
-                    const initialPosition = this.getPosition();
-                    this.drag();
-
-                    this.popup.option('height', 'auto');
-
-                    const newPosition = this.getPosition();
-                    assert.deepEqual(newPosition, initialPosition, 'position is restored');
-                });
-
-                QUnit.test(`resize should be restored after dimension change if restorePosition=${JSON.stringify(restorePosition)}`, function(assert) {
-                    this.reinit({ restorePosition });
-
-                    const initialPosition = this.getPosition();
-                    this.resize();
-
-                    this.popup.option('height', 'auto');
-
-                    const newPosition = this.getPosition();
-                    assert.deepEqual(newPosition, initialPosition, 'position is restored');
-                });
             });
 
             ['drag', 'resize'].forEach(moveMethodName => {
@@ -2253,8 +2210,8 @@ QUnit.module('positioning', {
                         assert.strictEqual(newPosition.top, position.top, 'top coordinate is correct');
                     });
 
-                    QUnit.test('should not be restored to position from option after reopening if restorePosition.onOpening=false', function(assert) {
-                        this.reinit({ restorePosition: { onOpening: false } });
+                    QUnit.test('should not be restored to position from option after reopening if restorePosition=false', function(assert) {
+                        this.reinit({ restorePosition: false });
 
                         this[moveMethodName]();
 

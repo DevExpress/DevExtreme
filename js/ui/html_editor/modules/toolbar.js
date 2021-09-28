@@ -20,6 +20,7 @@ import { titleize, camelize } from '../../../core/utils/inflector';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
+import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableForms';
 import { getTableFormats, getTableOperationHandler, TABLE_OPERATIONS } from '../utils/table_helper';
 
 let ToolbarModule = BaseModule;
@@ -71,6 +72,11 @@ if(Quill) {
         }
 
         return localize(value) || value;
+    };
+
+    const getTargetTableNode = (quill, partName) => {
+        const [table, cell] = quill.getModule('table').getTable();
+        return partName === 'table' ? table.domNode : cell.domNode;
     };
 
     ToolbarModule = class ToolbarModule extends BaseModule {
@@ -185,7 +191,15 @@ if(Quill) {
                 insertColumnRight: getTableOperationHandler(this.quill, 'insertColumnRight'),
                 deleteColumn: getTableOperationHandler(this.quill, 'deleteColumn'),
                 deleteRow: getTableOperationHandler(this.quill, 'deleteRow'),
-                deleteTable: getTableOperationHandler(this.quill, 'deleteTable')
+                deleteTable: getTableOperationHandler(this.quill, 'deleteTable'),
+                cellProperties: () => {
+                    const domNode = getTargetTableNode(this.quill, 'cell');
+                    showCellPropertiesForm(this.editorInstance, $(domNode));
+                },
+                tableProperties: () => {
+                    const domNode = getTargetTableNode(this.quill, 'table');
+                    showTablePropertiesForm(this.editorInstance, $(domNode));
+                }
             };
         }
 
@@ -661,6 +675,16 @@ if(Quill) {
                     }
                 },
                 deleteTable: {
+                    options: {
+                        disabled: true
+                    }
+                },
+                cellProperties: {
+                    options: {
+                        disabled: true
+                    }
+                },
+                tableProperties: {
                     options: {
                         disabled: true
                     }

@@ -1,3 +1,7 @@
+import $ from '../../../core/renderer';
+import { isDefined } from '../../../core/utils/type';
+import { each } from '../../../core/utils/iterator';
+
 const TABLE_FORMATS = ['table', 'tableHeaderCell'];
 const TABLE_OPERATIONS = [
     'insertTable',
@@ -8,7 +12,9 @@ const TABLE_OPERATIONS = [
     'insertColumnRight',
     'deleteColumn',
     'deleteRow',
-    'deleteTable'
+    'deleteTable',
+    'cellProperties',
+    'tableProperties'
 ];
 
 function getTableFormats(quill) {
@@ -30,8 +36,51 @@ function getTableOperationHandler(quill, operationName, ...rest) {
     };
 }
 
+function unfixTableWidth($table) {
+    $table.css('width', 'initial');
+}
+
+function getColumnElements($table, index = 0) {
+    return $table.find('tr').eq(index).find('th, td');
+}
+
+function getAutoSizedElements($table, direction = 'horizontal') {
+    const result = [];
+    const isHorizontal = direction === 'horizontal';
+    const $lineElements = isHorizontal ? getColumnElements($table) : getRowElements($table);
+
+    $lineElements.each((index, element) => {
+        const $element = $(element);
+        if(!isDefined($element.attr(isHorizontal ? 'width' : 'height'))) {
+            result.push($element);
+        }
+    });
+
+    return result;
+}
+
+function setLineElementsAttrValue($lineElements, property, value) {
+    each($lineElements, (i, element) => {
+        $(element).attr(property, value + 'px');
+    });
+}
+
+function getLineElements($table, index, direction = 'horizontal') {
+    return direction === 'horizontal' ? getRowElements($table, index) : getColumnElements($table, index);
+}
+
+function getRowElements($table, index = 0) {
+    return $table.find(`th:nth-child(${(1 + index)}), td:nth-child(${(1 + index)})`);
+}
+
 export {
     TABLE_OPERATIONS,
     getTableFormats,
-    getTableOperationHandler
+    getTableOperationHandler,
+    unfixTableWidth,
+    getColumnElements,
+    getAutoSizedElements,
+    setLineElementsAttrValue,
+    getLineElements,
+    getRowElements
 };

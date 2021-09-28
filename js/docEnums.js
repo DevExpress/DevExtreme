@@ -1025,6 +1025,11 @@
  */
 
 /**
+ * @typedef {string} Enums.EditorLabelMode
+ * @enum {'static'|'floating'|'hidden'}
+ */
+
+/**
  * @typedef {string} Enums.GridCommandColumnType
  * @enum {'adaptive'|'buttons'|'detailExpand'|'groupExpand'|'selection'|'drag'}
  */
@@ -1226,6 +1231,11 @@
 /**
  * @typedef {string} Enums.GridDataChangeType
  * @enum {'insert' | 'update' | 'remove'}
+ */
+
+/**
+ * @typedef {string} Enums.GridNewRowPosition
+ * @enum {'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop'}
  */
 
 /**

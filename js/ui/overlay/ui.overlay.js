@@ -168,12 +168,7 @@ const Overlay = Widget.inherit({
             onResizeEnd: null,
             innerOverlay: false,
 
-            restorePosition: {
-                always: false,
-                onDimensionChangeAfterDragOrResize: false,
-                onFullScreenDisable: false,
-                onOpening: true
-            },
+            restorePosition: true,
 
             // NOTE: private options
 
@@ -1395,7 +1390,7 @@ const Overlay = Widget.inherit({
                 this._positionController.outsideDragFactor = value;
                 break;
             case 'restorePosition':
-                this._positionController.restorePosition = this.option('restorePosition');
+                this._positionController.restorePosition = args.value;
                 break;
             default:
                 this.callBase(args);

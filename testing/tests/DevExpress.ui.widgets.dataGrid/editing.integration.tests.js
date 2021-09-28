@@ -2940,6 +2940,37 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), 'unmodified cell is invalid');
         });
     });
+
+    QUnit.test('Editing cell editor\'s content should not be selected twice', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1', field2: 'test2' }],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+                selectTextOnEditStart: true
+            }
+        });
+
+        const onSelectedSpy = sinon.spy();
+
+        // act
+        this.clock.tick(100);
+        const $cell = $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
+        this.clock.tick(100);
+
+        // arrange
+        const $editor = $cell.find('.dx-texteditor-input');
+        $editor.on('select', onSelectedSpy);
+
+        // act
+        $editor.val('asd').trigger('change');
+        this.clock.tick(100);
+
+        // assert
+
+        assert.strictEqual(onSelectedSpy.callCount, 0, 'is not selected after change');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
@@ -6013,5 +6044,33 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
         // assert
         assert.ok($('#dataGrid .dx-datagrid-pager').is(':visible'), 'Pager is visible');
+    });
+
+    QUnit.test('onEditCancling/onEditCanceled events should fire on cancel button click (T1030691)', function(assert) {
+        // arrange
+        const onEditCanceling = sinon.spy();
+        const onEditCanceled = sinon.spy();
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            keyExpr: 'id',
+            dataSource: [{ id: 1 }],
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            onEditCanceling,
+            onEditCanceled
+        }).dxDataGrid('instance');
+        this.clock.tick();
+
+        // act
+        dataGrid.editRow(0);
+        this.clock.tick();
+
+        $('#dataGrid .dx-link-cancel').eq(0).trigger('dxpointerdown').trigger('click');
+        this.clock.tick();
+
+        // assert
+        assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling call count');
+        assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled call count');
     });
 });
