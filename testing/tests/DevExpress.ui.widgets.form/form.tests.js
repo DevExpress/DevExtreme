@@ -1445,8 +1445,8 @@ QUnit.test('Align with "" required mark, T1031458', function(assert) {
     const $labelText = $testContainer.find('.dx-field-item-label-text');
     const $textBox = $testContainer.find('.dx-textbox');
 
-    assert.roughEqual(getWidth($labelText), 11, 1, 'labelsContent.width');
-    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 1, 'textBox.left');
+    assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
 });
 
 QUnit.test('Align with " " required mark, T1031458', function(assert) {
@@ -1462,8 +1462,8 @@ QUnit.test('Align with " " required mark, T1031458', function(assert) {
     const $labelText = $testContainer.find('.dx-field-item-label-text');
     const $textBox = $testContainer.find('.dx-textbox');
 
-    assert.roughEqual(getWidth($labelText), 11, 1, 'labelsContent.width');
-    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 1, 'textBox.left');
+    assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
 });
 
 QUnit.test('Align with "!" required mark, T1031458', function(assert) {
@@ -1479,8 +1479,8 @@ QUnit.test('Align with "!" required mark, T1031458', function(assert) {
     const $labelText = $testContainer.find('.dx-field-item-label-text');
     const $textBox = $testContainer.find('.dx-textbox');
 
-    assert.roughEqual(getWidth($labelText), 11, 1, 'labelsContent.width');
-    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 29, 1, 'textBox.left');
+    assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 29, 3, 'textBox.left');
 });
 
 QUnit.test('Align with "×" required mark, T1031458', function(assert) {
@@ -1496,8 +1496,8 @@ QUnit.test('Align with "×" required mark, T1031458', function(assert) {
     const $labelText = $testContainer.find('.dx-field-item-label-text');
     const $textBox = $testContainer.find('.dx-textbox');
 
-    assert.roughEqual(getWidth($labelText), 11, 1, 'labelsContent.width');
-    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 35, 1, 'textBox.left');
+    assert.roughEqual(getWidth($labelText), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 35, 3, 'textBox.left');
 });
 
 QUnit.test('optional mark aligned', function(assert) {
