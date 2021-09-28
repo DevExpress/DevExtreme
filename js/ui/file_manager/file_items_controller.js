@@ -12,7 +12,7 @@ import { Deferred, when } from '../../core/utils/deferred';
 import { find } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { equalByValue } from '../../core/utils/common';
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isObject, isPromise } from '../../core/utils/type';
 
 const DEFAULT_ROOT_FILE_SYSTEM_ITEM_NAME = 'Files';
 
@@ -237,27 +237,51 @@ export default class FileItemsController {
     }
 
     createDirectory(parentDirectoryInfo, name) {
+        const parentDirItem = parentDirectoryInfo.fileItem;
         const tempDirInfo = this._createDirInfoByName(name, parentDirectoryInfo);
         const actionInfo = this._createEditActionInfo('create', tempDirInfo, parentDirectoryInfo);
         return this._processEditAction(actionInfo,
-            () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name)
+            args => {
+                args.parentDirectory = parentDirItem;
+                args.name = name;
+                this._editingEvents.onDirectoryCreating(args);
+            },
+            () => this._fileProvider.createDirectory(parentDirItem, name)
                 .done(info => {
-                    if(!parentDirectoryInfo.fileItem.isRoot()) {
-                        parentDirectoryInfo.fileItem.hasSubDirectories = true;
+                    if(!parentDirItem.isRoot()) {
+                        parentDirItem.hasSubDirectories = true;
                     }
                     return info;
                 }),
+            () => {
+                const args = {
+                    parentDirectory: parentDirItem,
+                    name
+                };
+                this._editingEvents.onDirectoryCreated(args);
+            },
             () => this._resetDirectoryState(parentDirectoryInfo, true));
     }
 
     renameItem(fileItemInfo, name) {
+        const sourceItem = fileItemInfo.fileItem.createClone();
         const actionInfo = this._createEditActionInfo('rename', fileItemInfo, fileItemInfo.parentDirectory, { itemNewName: name });
         return this._processEditAction(actionInfo,
-            () => {
-                if(!fileItemInfo.fileItem.isDirectory) {
+            (args, itemInfo) => {
+                if(!itemInfo.fileItem.isDirectory) {
                     this._securityController.validateExtension(name);
                 }
-                return this._fileProvider.renameItem(fileItemInfo.fileItem, name);
+                args.item = sourceItem;
+                args.newName = name;
+                this._editingEvents.onItemRenaming(args);
+            },
+            item => this._fileProvider.renameItem(item, name),
+            () => {
+                const args = {
+                    sourceItem,
+                    itemName: name
+                };
+                this._editingEvents.onItemRenamed(args);
             },
             () => {
                 const parentDirectory = this._getActualDirectoryInfo(fileItemInfo.parentDirectory);
@@ -267,10 +291,23 @@ export default class FileItemsController {
     }
 
     moveItems(itemInfos, destinationDirectory) {
-        const items = itemInfos.map(i => i.fileItem);
         const actionInfo = this._createEditActionInfo('move', itemInfos, destinationDirectory);
         return this._processEditAction(actionInfo,
-            () => this._fileProvider.moveItems(items, destinationDirectory.fileItem),
+            (args, itemInfo) => {
+                args.item = itemInfo.fileItem;
+                args.destinationDirectory = destinationDirectory.fileItem;
+                this._editingEvents.onItemMoving(args);
+            },
+            item => this._fileProvider.moveItems([ item ], destinationDirectory.fileItem),
+            itemInfo => {
+                const args = {
+                    sourceItem: itemInfo.fileItem,
+                    parentDirectory: destinationDirectory.fileItem,
+                    itemName: itemInfo.fileItem.name,
+                    itemPath: pathCombine(destinationDirectory.fileItem.path, itemInfo.fileItem.name)
+                };
+                this._editingEvents.onItemMoved(args);
+            },
             () => {
                 destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
                 itemInfos.forEach(itemInfo => this._resetDirectoryState(itemInfo.parentDirectory, true));
@@ -281,10 +318,23 @@ export default class FileItemsController {
     }
 
     copyItems(itemInfos, destinationDirectory) {
-        const items = itemInfos.map(i => i.fileItem);
         const actionInfo = this._createEditActionInfo('copy', itemInfos, destinationDirectory);
         return this._processEditAction(actionInfo,
-            () => this._fileProvider.copyItems(items, destinationDirectory.fileItem),
+            (args, itemInfo) => {
+                args.item = itemInfo.fileItem;
+                args.destinationDirectory = destinationDirectory.fileItem;
+                this._editingEvents.onItemCopying(args);
+            },
+            item => this._fileProvider.copyItems([ item ], destinationDirectory.fileItem),
+            itemInfo => {
+                const args = {
+                    sourceItem: itemInfo.fileItem,
+                    parentDirectory: destinationDirectory.fileItem,
+                    itemName: itemInfo.fileItem.name,
+                    itemPath: pathCombine(destinationDirectory.fileItem.path, itemInfo.fileItem.name)
+                };
+                this._editingEvents.onItemCopied(args);
+            },
             () => {
                 destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
                 this._resetDirectoryState(destinationDirectory);
@@ -294,11 +344,15 @@ export default class FileItemsController {
     }
 
     deleteItems(itemInfos) {
-        const items = itemInfos.map(i => i.fileItem);
         const directory = itemInfos.length > 0 ? itemInfos[0].parentDirectory : null;
         const actionInfo = this._createEditActionInfo('delete', itemInfos, directory);
         return this._processEditAction(actionInfo,
-            () => this._fileProvider.deleteItems(items),
+            (args, itemInfo) => {
+                args.item = itemInfo.fileItem;
+                this._editingEvents.onItemDeleting(args);
+            },
+            item => this._fileProvider.deleteItems([ item ]),
+            itemInfo => this._editingEvents.onItemDeleted({ item: itemInfo.fileItem }),
             () => {
                 itemInfos.forEach(itemInfo => {
                     const parentDir = this._getActualDirectoryInfo(itemInfo.parentDirectory);
@@ -312,14 +366,41 @@ export default class FileItemsController {
         const itemInfos = this._getItemInfosForUploaderFiles(sessionInfo.files, uploadDirectoryInfo);
         const actionInfo = this._createEditActionInfo('upload', itemInfos, uploadDirectoryInfo, { sessionInfo });
         return this._processEditAction(actionInfo,
-            () => sessionInfo.deferreds,
+            () => { },
+            (_, index) => sessionInfo.deferreds[index],
+            () => { },
             () => this._resetDirectoryState(uploadDirectoryInfo, true));
     }
 
     uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
-        this._securityController.validateMaxFileSize(fileData.size);
-        this._securityController.validateExtension(fileData.name);
-        return when(this._fileProvider.uploadFileChunk(fileData, chunksInfo, destinationDirectory));
+        let startDeferred = null;
+
+        if(chunksInfo.chunkIndex === 0) {
+            this._securityController.validateMaxFileSize(fileData.size);
+            this._securityController.validateExtension(fileData.name);
+
+            startDeferred = this._processBeforeItemEditAction(args => {
+                args.fileData = fileData;
+                args.destinationDirectory = destinationDirectory;
+                this._editingEvents.onFileUploading(args);
+            });
+        } else {
+            startDeferred = new Deferred().resolve().promise();
+        }
+
+        let result = startDeferred.then(() => this._fileProvider.uploadFileChunk(fileData, chunksInfo, destinationDirectory));
+
+        if(chunksInfo.chunkIndex === chunksInfo.chunkCount - 1) {
+            result = result.done(() => {
+                const args = {
+                    fileData,
+                    parentDirectory: destinationDirectory
+                };
+                this._editingEvents.onFileUploaded(args);
+            });
+        }
+
+        return result;
     }
 
     abortFileUpload(fileData, chunksInfo, destinationDirectory) {
@@ -335,8 +416,25 @@ export default class FileItemsController {
     }
 
     downloadItems(itemInfos) {
-        const items = itemInfos.map(i => i.fileItem);
-        this._fileProvider.downloadItems(items);
+        let canceled = false;
+
+        const deferreds = itemInfos.map(itemInfo => {
+            return this._processBeforeItemEditAction(
+                args => {
+                    args.item = itemInfo.fileItem;
+                    this._editingEvents.onItemDownloading(args);
+                },
+                itemInfo
+            );
+        });
+
+        whenSome(deferreds, null, () => { canceled = true; })
+            .then(() => {
+                if(!canceled) {
+                    const items = itemInfos.map(i => i.fileItem);
+                    this._fileProvider.downloadItems(items);
+                }
+            });
     }
 
     getItemContent(itemInfos) {
@@ -364,23 +462,21 @@ export default class FileItemsController {
         return new Deferred().reject().promise();
     }
 
-    _processEditAction(actionInfo, action, completeAction) {
-        let actionResult = null;
-
+    _processEditAction(actionInfo, beforeAction, action, afterAction, completeAction) {
         this._raiseEditActionStarting(actionInfo);
 
-        try {
-            actionResult = action();
-        } catch(errorInfo) {
-            this._raiseEditActionError(actionInfo, errorInfo);
-            return new Deferred().reject().promise();
-        }
+        const actionResult = actionInfo.itemInfos.map((itemInfo, itemIndex) => {
+            return this._processBeforeItemEditAction(beforeAction, itemInfo)
+                .then(() => {
+                    let itemActionResult = action(itemInfo.fileItem, itemIndex);
+                    if(Array.isArray(itemActionResult)) {
+                        itemActionResult = itemActionResult[0];
+                    }
+                    return itemActionResult.done(() => afterAction(itemInfo));
+                });
+        });
 
-        if(!Array.isArray(actionResult)) {
-            actionResult = [ actionResult ];
-        } else if(actionResult.length > 1) {
-            actionInfo.singleRequest = false;
-        }
+        actionInfo.singleRequest = actionResult.length === 1;
 
         this._raiseEditActionResultAcquired(actionInfo);
 
@@ -400,6 +496,50 @@ export default class FileItemsController {
 
         const items = targetItemInfos.map(itemInfo => itemInfo.fileItem);
         return { name, itemInfos: targetItemInfos, items, directory, customData, singleRequest: true };
+    }
+
+    _processBeforeItemEditAction(action, itemInfo) {
+        const deferred = new Deferred();
+        const args = this._createBeforeActionArgs();
+
+        try {
+            action(args, itemInfo);
+        } catch(errorInfo) {
+            return deferred.reject(errorInfo).promise();
+        }
+
+        if(!args.cancel) {
+            deferred.resolve();
+        } else if(args.cancel === true) {
+            return deferred.reject({
+                errorText: args.errorText,
+                errorCode: args.errorCode
+            });
+        } else if(isPromise(args.cancel)) {
+            when(args.cancel)
+                .then(res => {
+                    if(res === true) {
+                        deferred.reject();
+                    } else if(isObject(res) && res.cancel === true) {
+                        deferred.reject({
+                            errorText: res.errorText,
+                            errorCode: res.errorCode
+                        });
+                    }
+                    deferred.resolve();
+                },
+                deferred.resolve);
+        }
+
+        return deferred.promise();
+    }
+
+    _createBeforeActionArgs() {
+        return {
+            errorCode: undefined,
+            errorText: '',
+            cancel: false
+        };
     }
 
     _getItemInfosForUploaderFiles(files, parentDirectoryInfo) {
@@ -717,6 +857,10 @@ export default class FileItemsController {
     on(eventName, eventHandler) {
         const finalEventName = `on${eventName}`;
         this._options[finalEventName] = eventHandler;
+    }
+
+    get _editingEvents() {
+        return this._options.editingEvents;
     }
 }
 

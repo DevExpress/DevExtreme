@@ -87,7 +87,6 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     /**
      * @docid
      * @default 500
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -120,8 +119,6 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/tile_view
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

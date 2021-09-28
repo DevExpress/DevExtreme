@@ -118,8 +118,6 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/tabs
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

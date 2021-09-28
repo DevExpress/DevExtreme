@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { deferUpdate, noop } from '../../core/utils/common';
 import modules from './ui.grid_core.modules';
@@ -153,6 +154,7 @@ const ColumnChooserView = ColumnsView.inherit({
             dragEnabled: true,
             resizeEnabled: true,
             copyRootClassesToWrapper: true,
+            _ignoreCopyRootClassesToWrapperDeprecation: true,
             toolbarItems: [
                 { text: columnChooserOptions.title, toolbar: 'top', location: isGenericTheme || isMaterial ? 'before' : 'center' }
             ],
@@ -379,8 +381,8 @@ const ColumnChooserView = ColumnsView.inherit({
             return {
                 left: offset.left,
                 top: offset.top,
-                right: offset.left + container.outerWidth(),
-                bottom: offset.top + container.outerHeight()
+                right: offset.left + getOuterWidth(container),
+                bottom: offset.top + getOuterHeight(container)
             };
         }
 

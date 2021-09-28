@@ -1,3 +1,4 @@
+import { setWidth, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Toolbar from '../toolbar';
 import ContextMenu from '../context_menu';
@@ -39,7 +40,7 @@ class DiagramToolbar extends DiagramPanel {
 
         const isServerSide = !hasWindow();
         if(!this.option('skipAdjustSize') && !isServerSide) {
-            this.$element().width('');
+            setWidth(this.$element(), '');
         }
 
         this._commands = this._getCommands();
@@ -52,7 +53,7 @@ class DiagramToolbar extends DiagramPanel {
 
         if(!this.option('skipAdjustSize') && !isServerSide) {
             const $toolbarContent = this.$element().find('.dx-toolbar-before');
-            this.$element().width($toolbarContent.width());
+            setWidth(this.$element(), getWidth($toolbarContent));
         }
     }
 

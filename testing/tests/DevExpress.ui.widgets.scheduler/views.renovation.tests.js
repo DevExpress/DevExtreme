@@ -101,76 +101,6 @@ module('Renovated Views', () => {
 
             assert.equal(scheduler.workSpace.getAllDayCells().length, cellCount, 'Correct number of cells');
         });
-
-        [true, false].forEach((crossScrollingEnabled) => {
-            test(`All-day title should be rendered when crossScrollingEnabled=${crossScrollingEnabled} in ${view} and all-day panel is not enabled`, function(assert) {
-                const scheduler = createWrapper({
-                    views: [view],
-                    currentView: view,
-                    showAllDayPanel: false,
-                    renovateRender: true,
-                    crossScrollingEnabled,
-                });
-
-                assert.equal(scheduler.workSpace.getAllDayTitle().length, 1, 'All-day title exists');
-            });
-        });
-
-        test(`All-day title should not be rendered in ${view} when all-day panel is not enabled and vertical grouping is used`, function(assert) {
-            const scheduler = createWrapper({
-                views: [{
-                    type: view,
-                    groupOrientation: 'vertical',
-                }],
-                currentView: view,
-                showAllDayPanel: false,
-                renovateRender: true,
-                groups: ['ownerId'],
-                resources: [{
-                    fieldExpr: 'ownerId',
-                    dataSource: [{
-                        text: 'O1',
-                        id: 1,
-                    }, {
-                        text: 'O2',
-                        id: 2,
-                    }, {
-                        text: 'O3',
-                        id: 3,
-                    }],
-                }],
-            });
-
-            assert.equal(scheduler.workSpace.getAllDayTitle().length, 0, 'All-day title does not exist');
-        });
-
-        test(`All-day title should be rendered in ${view} when all-day panel is not enabled and horizontal grouping is used`, function(assert) {
-            const scheduler = createWrapper({
-                views: [{
-                    type: view,
-                    groupOrientation: 'horizontal',
-                }],
-                currentView: view,
-                showAllDayPanel: false,
-                renovateRender: true,
-                groups: ['ownerId'],
-                resources: [{
-                    fieldExpr: 'ownerId',
-                    dataSource: [{
-                        text: 'O1',
-                        id: 1,
-                    }, {
-                        text: 'O2',
-                        id: 2,
-                    }, {
-                        text: 'O3',
-                        id: 3,
-                    }],
-                }],
-            });
-
-            assert.equal(scheduler.workSpace.getAllDayTitle().length, 1, 'All-day title exists');
-        });
     });
 
     ['timelineDay', 'timelineWeek', 'timelineMonth'].forEach((view) => {
@@ -243,5 +173,47 @@ module('Renovated Views', () => {
                 assert.equal($(this).text(), text, 'Correct text');
             });
         });
+    });
+
+    QUnit.test('Time panel scrollable should update position if date scrollable position is changed', function(assert) {
+        const done = assert.async();
+
+        const scheduler = createWrapper({
+            views: ['week'],
+            currentView: 'week',
+            crossScrollingEnabled: true,
+            height: 400,
+        });
+
+        const timePanelScrollable = scheduler.workSpace.getSideBarScrollable().dxScrollable('instance');
+        const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+
+        dateTableScrollable.scrollTo({ top: 100 });
+
+        setTimeout(() => {
+            assert.equal(timePanelScrollable.scrollTop(), 100, 'Scroll position is OK');
+            done();
+        }, 100);
+    });
+
+    QUnit.test('Date table scrollable should update position if time panel position is changed', function(assert) {
+        const done = assert.async();
+
+        const scheduler = createWrapper({
+            views: ['week'],
+            currentView: 'week',
+            crossScrollingEnabled: true,
+            height: 400,
+        });
+
+        const timePanelScrollable = scheduler.workSpace.getSideBarScrollable().dxScrollable('instance');
+        const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+
+        timePanelScrollable.scrollTo({ top: 100 });
+
+        setTimeout(() => {
+            assert.equal(dateTableScrollable.scrollTop(), 100, 'Scroll position is OK');
+            done();
+        }, 100);
     });
 });

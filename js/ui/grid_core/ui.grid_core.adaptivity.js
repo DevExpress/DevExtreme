@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
@@ -477,7 +478,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         if(that._isVisibleColumnsValid(visibleColumns) && hiddenQueue.length) {
             let totalWidth = 0;
             const $rootElement = that.component.$element();
-            let rootElementWidth = $rootElement.width() - that._getCommandColumnsWidth();
+            let rootElementWidth = getWidth($rootElement) - that._getCommandColumnsWidth();
             const getVisibleContentColumns = function() {
                 return visibleColumns.filter(item => !item.command && this._hiddenColumns.filter(i => i.index === item.index).length === 0);
             }.bind(this);
@@ -521,7 +522,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
                     }
                 }
 
-                needHideColumn = needHideColumn || totalWidth > $rootElement.width();
+                needHideColumn = needHideColumn || totalWidth > getWidth($rootElement);
 
                 if(needHideColumn) {
                     const column = hiddenQueue.pop();
@@ -911,11 +912,11 @@ export const adaptivityModule = {
                     }
                 },
 
-                _afterInsertRow: function(options) {
-                    this.callBase(options);
+                _afterInsertRow: function(key) {
+                    this.callBase.apply(this, arguments);
 
                     if(this._adaptiveController.hasHiddenColumns()) {
-                        this._adaptiveController.toggleExpandAdaptiveDetailRow(options.key, this.isRowEditMode());
+                        this._adaptiveController.toggleExpandAdaptiveDetailRow(key, this.isRowEditMode());
                         this._isForceRowAdaptiveExpand = true;
                     }
                 },

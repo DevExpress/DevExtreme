@@ -23,25 +23,36 @@ class BaseRenderingStrategy {
         this._initPositioningStrategy();
     }
 
-    get instance() { return this.options.instance; } // TODO get rid of this
     get key() { return this.options.key; }
     get isAdaptive() { return this.options.adaptivityEnabled; }
     get rtlEnabled() { return this.options.rtlEnabled; }
     get startDayHour() { return this.options.startDayHour; }
     get endDayHour() { return this.options.endDayHour; }
     get maxAppointmentsPerCell() { return this.options.maxAppointmentsPerCell; }
-    get cellWidth() { return this.options.getCellWidth(); }
-    get cellHeight() { return this.options.getCellHeight(); }
-    get allDayHeight() { return this.options.getAllDayHeight(); }
-    get resizableStep() { return this.options.getResizableStep(); }
-    get isGroupedByDate() { return this.options.getIsGroupedByDate(); }
-    get visibleDayDuration() { return this.options.getVisibleDayDuration(); }
+    get cellWidth() { return this.options.cellWidth; }
+    get cellHeight() { return this.options.cellHeight; }
+    get allDayHeight() { return this.options.allDayHeight; }
+    get resizableStep() { return this.options.resizableStep; }
+    get isGroupedByDate() { return this.options.isGroupedByDate; }
+    get visibleDayDuration() { return this.options.visibleDayDuration; }
     get viewStartDayHour() { return this.options.viewStartDayHour; }
     get viewEndDayHour() { return this.options.viewEndDayHour; }
-    get viewCellDuration() { return this.options.viewCellDuration; }
+    get cellDuration() { return this.options.cellDuration; }
+    get cellDurationInMinutes() { return this.options.cellDurationInMinutes; }
     get leftVirtualCellCount() { return this.options.leftVirtualCellCount; }
     get topVirtualCellCount() { return this.options.topVirtualCellCount; }
+    get positionHelper() { return this.options.positionHelper; }
+    get showAllDayPanel() { return this.options.showAllDayPanel; }
+    get isGroupedAllDayPanel() { return this.options.isGroupedAllDayPanel; }
     get groupOrientation() { return this.options.groupOrientation; }
+    get rowCount() { return this.options.rowCount; }
+    get groupCount() { return this.options.groupCount; }
+    get currentDate() { return this.options.currentDate; }
+    get appointmentCountPerCell() { return this.options.appointmentCountPerCell; }
+    get appointmentOffset() { return this.options.appointmentOffset; }
+    get allowResizing() { return this.options.allowResizing; }
+    get allowAllDayResizing() { return this.options.allowAllDayResizing; }
+    get appointmentDataProvider() { return this.options.appointmentDataProvider; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
@@ -216,6 +227,7 @@ class BaseRenderingStrategy {
         return new AppointmentSettingsGenerator({
             rawAppointment,
             appointmentTakesAllDay: this.isAppointmentTakesAllDay(rawAppointment), // TODO move to the settings
+            getPositionShiftCallback: this.getPositionShift.bind(this),
             ...this.options
         });
     }
@@ -776,7 +788,13 @@ class BaseRenderingStrategy {
         return result;
     }
 
-
+    getPositionShift(timeShift, isAllDay) {
+        return {
+            top: timeShift * this.cellHeight,
+            left: 0,
+            cellPosition: 0
+        };
+    }
 }
 
 export default BaseRenderingStrategy;

@@ -10,8 +10,8 @@ import { SIMPLE_ITEM_TYPE } from './constants';
 const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
 
 export function convertToRenderFieldItemOptions({
-    $container,
-    containerCssClass,
+    $parent,
+    rootElementCssClassList,
     parentComponent,
     createComponentCallback,
     useFlexLayout,
@@ -54,8 +54,8 @@ export function convertToRenderFieldItemOptions({
         );
 
     return {
-        $container,
-        containerCssClass,
+        $parent,
+        rootElementCssClassList,
         parentComponent,
         createComponentCallback,
         useFlexLayout,

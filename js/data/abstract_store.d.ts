@@ -2,7 +2,11 @@ import { DxPromise } from '../core/utils/deferred';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 
 /** @namespace DevExpress.data */
-export interface StoreOptions<TKey = any, TValue = any> {
+export interface StoreOptions
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> {
     /**
      * @docid
      * @public
@@ -12,7 +16,7 @@ export interface StoreOptions<TKey = any, TValue = any> {
      * @docid
      * @public
      */
-    key?: string | Array<string>;
+    key?: TKeyExpr;
     /**
      * @docid
      * @type_function_param1 values:object
@@ -30,7 +34,6 @@ export interface StoreOptions<TKey = any, TValue = any> {
     onInserting?: ((values: TValue) => void);
     /**
      * @docid
-     * @type_function_param1 result:Array<any>
      * @type_function_param2 loadOptions:LoadOptions
      * @action
      * @public
@@ -57,7 +60,6 @@ export interface StoreOptions<TKey = any, TValue = any> {
     onModifying?: Function;
     /**
      * @docid
-     * @type_function_param1 changes:Array<any>
      * @action
      * @public
      */
@@ -99,12 +101,14 @@ type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | '
 /**
  * @docid
  * @hidden
- * @module data/abstract_store
- * @export default
  * @namespace DevExpress.data
  */
-export default class Store<TKey = any, TValue = any> {
-    constructor(options?: StoreOptions<TKey, TValue>)
+export default class Store
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> {
+    constructor(options?: StoreOptions<TValue, TKeyExpr, TKey>)
     /**
      * @docid
      * @publicName byKey(key)
@@ -125,10 +129,9 @@ export default class Store<TKey = any, TValue = any> {
     /**
      * @docid
      * @publicName key()
-     * @return string|Array<string>
      * @public
      */
-    key(): string | Array<string>;
+    key(): TKeyExpr;
     /**
      * @docid
      * @publicName keyOf(obj)
@@ -204,7 +207,6 @@ export default class Store<TKey = any, TValue = any> {
     /**
      * @docid
      * @publicName totalCount(options)
-     * @param1 obj:object
      * @param1_field1 filter:object
      * @param1_field2 group:object
      * @return Promise<number>

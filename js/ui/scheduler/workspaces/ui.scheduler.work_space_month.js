@@ -9,7 +9,7 @@ import {
     getViewStartByOptions,
     getCellText,
 } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
-import { calculateDayDuration, formatWeekday } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { formatWeekday } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { VIEWS } from '../constants';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
@@ -96,32 +96,12 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return false;
     }
 
-    getCellDuration() {
-        return calculateDayDuration(this.option('startDayHour'), this.option('endDayHour')) * 3600000;
-    }
-
     getIntervalDuration() {
         return toMs('day');
     }
 
     getTimePanelWidth() {
         return 0;
-    }
-
-    getPositionShift(timeShift) {
-        return {
-            cellPosition: timeShift * this.getCellWidth(),
-            top: 0,
-            left: 0
-        };
-    }
-
-    getCellCountToLastViewDate(date) {
-        const firstDateTime = date.getTime();
-        const lastDateTime = this.getEndViewDate().getTime();
-        const dayDurationInMs = this.getCellDuration();
-
-        return Math.ceil((lastDateTime - firstDateTime) / dayDurationInMs);
     }
 
     supportAllDayRow() {

@@ -625,9 +625,9 @@ QUnit.module('valueChanged handler should receive correct event parameter', {
         });
     });
 
-    ['right', 'left'].forEach(arrow => {
-        QUnit.test(`on ${arrow} arrow press`, function(assert) {
-            this.reinit({ value: arrow === 'left' ? true : false });
+    ['rightArrow', 'leftArrow'].forEach(arrow => {
+        QUnit.test(`on ${arrow.replace('Arrow', '')} arrow press`, function(assert) {
+            this.reinit({ value: arrow === 'leftArrow' ? true : false });
 
             this.keyboard.press(arrow);
 

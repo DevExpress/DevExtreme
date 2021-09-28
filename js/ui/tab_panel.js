@@ -1,3 +1,4 @@
+import { getOuterHeight } from '../core/utils/size';
 import $ from '../core/renderer';
 import { touch } from '../core/utils/support';
 import { extend } from '../core/utils/extend';
@@ -173,7 +174,7 @@ const TabPanel = MultiView.inherit({
 
     _updateLayout: function() {
         if(hasWindow()) {
-            const tabsHeight = this._$tabContainer.outerHeight();
+            const tabsHeight = getOuterHeight(this._$tabContainer);
             this._$container.css({
                 'marginTop': -tabsHeight,
                 'paddingTop': tabsHeight

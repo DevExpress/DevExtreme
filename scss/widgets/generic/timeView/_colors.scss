@@ -4,65 +4,41 @@
 
 // adduse
 
-
-$timeview-clock-bg: null !default;
-$timeview-hourarrow-bg: null !default;
-$timeview-minutearrow-bg: null !default;
-
+$clock-digits-color: null !default;
+$clock-bg-color: null !default;
 
 @if $color == "carmine" {
-
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/min-arrow.svg') !default;
+  $clock-digits-color: $base-label-color !default;
 }
 
 @if $color == "contrast" {
-
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/contrast/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/contrast/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/contrast/timeView/min-arrow.svg') !default;
+  $clock-digits-color: $base-inverted-text-color !default;
+  $clock-bg-color: $base-inverted-bg !default;
 }
 
 @if $color == "dark" {
-
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/dark/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/dark/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/dark/timeView/min-arrow.svg') !default;
+  $clock-digits-color: darken($base-text-color, 38.5%) !default;
 }
 
 @if $color == "darkmoon" {
-
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/dark/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/dark/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/dark/timeView/min-arrow.svg') !default;
+  $clock-digits-color: $screen-text-color !default;
 }
 
 @if $color == "darkviolet" {
-
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/dark/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/dark/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/dark/timeView/min-arrow.svg') !default;
+  $clock-digits-color: darken($base-text-color, 38.5%) !default;
 }
 
 @if $color == "greenmist" {
-
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/min-arrow.svg') !default;
+  $clock-digits-color: lighten($base-text-color, 38.5%) !default;
 }
 
 @if $color == "light" {
-
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/min-arrow.svg') !default;
+  $clock-digits-color: lighten($base-text-color, 38.5%) !default;
 }
 
 @if $color == "softblue" {
-
-  $timeview-clock-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/clock-bg.svg') !default;
-  $timeview-hourarrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/hour-arrow.svg') !default;
-  $timeview-minutearrow-bg: data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/generic/color-schemes/light/timeView/min-arrow.svg') !default;
+  $clock-digits-color: $base-icon-color !default;
 }
+
+$clock-bg-color: $base-bg !default; // stylelint-disable-line scss/no-duplicate-dollar-variables
 

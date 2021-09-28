@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import renderer from 'core/renderer';
 import fx from 'animation/fx';
 import errors from 'ui/widget/ui.errors';
 import translator from 'animation/translator';
@@ -19,6 +18,7 @@ import ArrayStore from 'data/array_store';
 
 import 'ui/action_sheet';
 import 'ui/list';
+import { implementationsMap } from 'core/utils/size';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
@@ -945,7 +945,8 @@ QUnit.test('multiple swipes should not break deletion', function(assert) {
 });
 
 QUnit.test('optimizations', function(assert) {
-    const origOuterWidth = renderer.fn.outerWidth;
+    const getOrigOuterWidth = implementationsMap.getOuterWidth;
+    const setOrigOuterWidth = implementationsMap.setOuterWidth;
     const outerWidthStub = sinon.stub();
 
     try {
@@ -959,16 +960,21 @@ QUnit.test('optimizations', function(assert) {
         const $item = $items.eq(0);
         const pointer = pointerMock($item);
 
-        renderer.fn.outerWidth = function() {
+        implementationsMap.getOuterWidth = function() {
             outerWidthStub();
-            return origOuterWidth.apply(this, arguments);
+            return getOrigOuterWidth.apply(this, arguments);
+        };
+        implementationsMap.setOuterWidth = function() {
+            outerWidthStub();
+            return setOrigOuterWidth.apply(this, arguments);
         };
 
         pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
         pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
     } finally {
         assert.strictEqual(outerWidthStub.callCount, 2, 'outerWidth should be calculated only once for item and button');
-        renderer.fn.outerWidth = origOuterWidth;
+        implementationsMap.getOuterWidth = getOrigOuterWidth;
+        implementationsMap.setOuterWidth = setOrigOuterWidth;
     }
 });
 

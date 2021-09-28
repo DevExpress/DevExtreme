@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import { Component } from '../../core/component';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
@@ -71,7 +72,7 @@ const AnimationPresetCollection = Component.inherit({
 
         return {
             enter: function($element, configModifier) {
-                const width = $element.parent().width() * widthMultiplier;
+                const width = getWidth($element.parent()) * widthMultiplier;
                 const direction = configModifier.direction;
                 const config = createBaseConfig(configModifier);
 
@@ -100,7 +101,7 @@ const AnimationPresetCollection = Component.inherit({
                 return fx.createAnimation($element, config);
             },
             leave: function($element, configModifier) {
-                const width = $element.parent().width() * widthMultiplier;
+                const width = getWidth($element.parent()) * widthMultiplier;
                 const direction = configModifier.direction;
                 const config = createBaseConfig(configModifier);
 

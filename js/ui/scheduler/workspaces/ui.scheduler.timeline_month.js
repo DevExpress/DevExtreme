@@ -9,8 +9,6 @@ import { VIEWS } from '../constants';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
 
-const toMs = dateUtils.dateToMilliseconds;
-
 class SchedulerTimelineMonth extends SchedulerTimeline {
     get type() { return VIEWS.TIMELINE_MONTH; }
 
@@ -36,10 +34,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return timeDiff / this.getCellDuration();
     }
 
-    getCellDuration() {
-        return toMs('day');
-    }
-
     isIndicatorVisible() {
         return true;
     }
@@ -53,14 +47,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         const timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate);
 
         return currentDate.getTime() - (firstViewDate.getTime() - this.option('startDayHour') * 3600000) - timeZoneOffset;
-    }
-
-    getPositionShift() {
-        return {
-            top: 0,
-            left: 0,
-            cellPosition: 0
-        };
     }
 
     _getViewStartByOptions() {

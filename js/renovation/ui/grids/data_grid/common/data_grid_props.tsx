@@ -71,6 +71,8 @@ import type {
   RowValidatingEvent,
   SelectionChangedEvent,
   ToolbarPreparingEvent,
+  EditCancelingEvent,
+  EditCanceledEvent,
 } from '../../../../../ui/data_grid';
 import { BaseWidgetProps } from '../../../common/base_props';
 
@@ -495,6 +497,9 @@ export class DataGridEditing {
 
   @OneWay()
   mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup' = 'row';
+
+  @OneWay()
+  newRowPosition?: 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop' = 'viewportTop';
 
   @OneWay()
   popup?: PopupProperties = {};
@@ -1178,6 +1183,10 @@ export interface DataGridToolbarItem extends dxToolbarItem {
 @ComponentBindings()
 export class DataGridToolbar {
   @OneWay() items?: (DataGridDefaultToolbarItemName | DataGridToolbarItem)[];
+
+  @OneWay() visible?: boolean;
+
+  @OneWay() disabled?: boolean;
 }
 
 @ComponentBindings()
@@ -1186,6 +1195,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Nested() editing?: DataGridEditing = {
     mode: 'row',
+    newRowPosition: 'viewportTop',
     refreshMode: 'full',
     allowAdding: false,
     allowUpdating: false,
@@ -1636,6 +1646,10 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Event() onSaving?: (e: SavingEvent) => void;
 
   @Event() onSaved?: (e: SavedEvent) => void;
+
+  @Event() onEditCanceling?: (e: EditCancelingEvent) => void;
+
+  @Event() onEditCanceled?: (e: EditCanceledEvent) => void;
 
   // private
   @OneWay() adaptColumnWidthByRatio?: boolean = true;

@@ -1590,6 +1590,41 @@ QUnit.test('Groups disposing when tracker drawn', function(assert) {
     assert.ok(trackersGroupSpy.called);
 });
 
+QUnit.test('Series groups disposing private API (T1028256)', function(assert) {
+    const series = this.series;
+    series._elementsGroup = this.renderer.g();
+    series._bordersGroup = this.renderer.g();
+    series._markersGroup = this.renderer.g();
+
+    series.updateData([{ arg: 1, val: 1 }]);
+    series.createPoints();
+
+    series.draw(false);
+    series._graphics = [{ line: {} }];
+
+    const point = series.getAllPoints()[0];
+    point.deleteMarker = sinon.spy();
+    series._removeElement = sinon.spy();
+    const elementsDetachSpy = series._elementsGroup.stub('dispose');
+    const bordersDetachSpy = series._bordersGroup.stub('dispose');
+    const markersDetachSpy = series._markersGroup.stub('dispose');
+
+    series.removePointElements();
+    series.removeGraphicElements();
+    series.removeBordersGroup();
+
+    assert.ok(series._removeElement.calledOnce, 'graphic elements dispose');
+    assert.ok(elementsDetachSpy.calledOnce, 'elementsGroup dispose');
+    assert.ok(bordersDetachSpy.calledOnce, 'bordersGroup dispose');
+    assert.ok(markersDetachSpy.calledOnce, 'markersGroup dispose');
+    assert.ok(point.deleteMarker.calledOnce, 'point markers dispose');
+    assert.strictEqual(series._elementsGroup, null, 'elementsGroup is null');
+    assert.strictEqual(series._bordersGroup, null, 'bordersGroup is null');
+    assert.strictEqual(series._markersGroup, null, 'markersGroup is null');
+    assert.strictEqual(series._graphics, null, 'graphics is null');
+
+});
+
 QUnit.test('Arrays disposing', function(assert) {
     const series = this.series;
     const trackerElement = this.renderer.g();

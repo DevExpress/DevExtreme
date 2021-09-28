@@ -192,7 +192,6 @@ export interface PivotGridDataSourceOptions {
     onLoadError?: ((error: any) => void);
     /**
      * @docid
-     * @type_function_param1 isLoading:boolean
      * @action
      * @public
      */
@@ -291,17 +290,11 @@ export interface PivotGridDataSourceField {
     areaIndex?: number;
     /**
      * @docid PivotGridDataSourceOptions.fields.calculateCustomSummary
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 summaryProcess:string
-     * @type_function_param1_field2 value:any
-     * @type_function_param1_field3 totalValue:any
      * @public
      */
     calculateCustomSummary?: ((options: { summaryProcess?: string; value?: any; totalValue?: any }) => void);
     /**
      * @docid PivotGridDataSourceOptions.fields.calculateSummaryValue
-     * @type_function_param1 e:dxPivotGridSummaryCell
-     * @type_function_return number
      * @default undefined
      * @public
      */
@@ -314,10 +307,7 @@ export interface PivotGridDataSourceField {
     caption?: string;
     /**
      * @docid PivotGridDataSourceOptions.fields.customizeText
-     * @type_function_param1 cellInfo:object
      * @type_function_param1_field1 value:string|number|date
-     * @type_function_param1_field2 valueText:string
-     * @type_function_return string
      * @public
      */
     customizeText?: ((cellInfo: { value?: string | number | Date; valueText?: string }) => string);
@@ -461,13 +451,6 @@ export interface PivotGridDataSourceField {
     sortOrder?: 'asc' | 'desc';
     /**
      * @docid PivotGridDataSourceOptions.fields.sortingMethod
-     * @type_function_param1 a:object
-     * @type_function_param1_field1 value:string|number
-     * @type_function_param1_field2 children:Array<any>
-     * @type_function_param2 b:object
-     * @type_function_param2_field1 value:string|number
-     * @type_function_param2_field2 children:Array<any>
-     * @type_function_return number
      * @default undefined
      * @public
      */
@@ -508,8 +491,6 @@ export interface PivotGridDataSourceField {
 /**
  * @docid
  * @namespace DevExpress.data
- * @module ui/pivot_grid/data_source
- * @export default
  * @public
  */
 export default class PivotGridDataSource {
@@ -517,14 +498,12 @@ export default class PivotGridDataSource {
     /**
      * @docid
      * @publicName collapseAll(id)
-     * @param1 id:number|string
      * @public
      */
     collapseAll(id: number | string): void;
     /**
      * @docid
      * @publicName collapseHeaderItem(area, path)
-     * @param1 area:string
      * @param2 path:Array<string, number, Date>
      * @public
      */
@@ -532,13 +511,8 @@ export default class PivotGridDataSource {
     /**
      * @docid
      * @publicName createDrillDownDataSource(options)
-     * @param1 options:object
      * @param1_field1 columnPath:Array<string, number, Date>
      * @param1_field2 rowPath:Array<string, number, Date>
-     * @param1_field3 dataIndex:number
-     * @param1_field4 maxRowCount:number
-     * @param1_field5 customColumns:Array<string>
-     * @return DataSource
      * @public
      */
     createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>; rowPath?: Array<string | number | Date>; dataIndex?: number; maxRowCount?: number; customColumns?: Array<string> }): DataSource;
@@ -551,14 +525,12 @@ export default class PivotGridDataSource {
     /**
      * @docid
      * @publicName expandAll(id)
-     * @param1 id:number|string
      * @public
      */
     expandAll(id: number | string): void;
     /**
      * @docid
      * @publicName expandHeaderItem(area, path)
-     * @param1 area:string
      * @param2 path:Array<Object>
      * @public
      */
@@ -566,7 +538,6 @@ export default class PivotGridDataSource {
     /**
      * @docid
      * @publicName field(id)
-     * @param1 id:number|string
      * @return object
      * @public
      */
@@ -574,7 +545,6 @@ export default class PivotGridDataSource {
     /**
      * @docid
      * @publicName field(id, options)
-     * @param1 id:number|string
      * @param2 options:object
      * @public
      */
@@ -610,8 +580,6 @@ export default class PivotGridDataSource {
     /**
      * @docid
      * @publicName getAreaFields(area, collectGroups)
-     * @param1 area:string
-     * @param2 collectGroups:boolean
      * @return Array<PivotGridDataSourceOptions.fields>
      * @public
      */
@@ -626,7 +594,6 @@ export default class PivotGridDataSource {
     /**
      * @docid
      * @publicName isLoading()
-     * @return boolean
      * @public
      */
     isLoading(): boolean;

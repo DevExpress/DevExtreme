@@ -156,6 +156,14 @@ export interface ViewDataProviderType {
   getRowCount: (config: CountGenerationConfig) => number;
   update: (options: unknown, isGenerateNewData: boolean) => void;
   getGroupPanelData: (options: unknown) => GroupPanelData;
+  getLastCellEndDate: () => Date;
+  getVisibleDayDuration: (
+    startDayHour: number,
+    endDayHour: number,
+    hoursInterval: number
+  ) => number;
+  getLastViewDateByEndDayHour: (endDayHour: number) => Date;
+  getIntervalDuration: (intervalCount: number) => number;
   getStartViewDate: () => Date;
 }
 

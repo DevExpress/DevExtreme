@@ -1,8 +1,6 @@
 /**
  * @docid FileSystemItem
- * @module file_management/file_system_item
  * @namespace DevExpress.fileManagement
- * @export default
  * @public
  */
 export default class FileSystemItem {
@@ -71,7 +69,6 @@ export default class FileSystemItem {
     /**
      * @docid FileSystemItem.getFileExtension
      * @publicName getFileExtension()
-     * @return string
      * @public
      */
     getFileExtension(): string;

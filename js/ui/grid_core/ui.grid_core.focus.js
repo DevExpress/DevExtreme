@@ -204,7 +204,7 @@ const FocusController = core.ViewController.inherit((function() {
                     }
                     if(pageIndex === dataController.pageIndex()) {
                         dataController.reload().done(function() {
-                            if(that.isRowFocused(key)) {
+                            if(that.isRowFocused(key) && dataController.getRowIndexByKey(key) >= 0) {
                                 d.resolve(that.getFocusedRowIndexByKey(key));
                             } else {
                                 that._navigateTo(key, d, needFocusRow);
@@ -350,7 +350,7 @@ const FocusController = core.ViewController.inherit((function() {
                 that._clearPreviousFocusedRow($tableElement, focusedRowIndex);
 
                 that._prepareFocusedRow({
-                    changedItem: change?.items?.[focusedRowIndex],
+                    changedItem: that._dataController.getVisibleRows()[focusedRowIndex],
                     $tableElement: $tableElement,
                     focusedRowIndex: focusedRowIndex,
                     isMainTable: isMainTable

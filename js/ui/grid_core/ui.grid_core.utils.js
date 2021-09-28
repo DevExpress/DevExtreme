@@ -1,3 +1,4 @@
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { isDefined, isFunction } from '../../core/utils/type';
 import { when } from '../../core/utils/deferred';
@@ -188,17 +189,6 @@ export default {
             loadPanelOptions = extend({
                 shading: false,
                 message: loadPanelOptions.text,
-                position: function() {
-                    const $window = $(getWindow());
-                    if($element.height() > $window.height()) {
-                        return {
-                            of: $window,
-                            boundary: $element,
-                            collision: 'fit'
-                        };
-                    }
-                    return { of: $element };
-                },
                 container: $container
             }, loadPanelOptions);
 
@@ -206,6 +196,18 @@ export default {
         } else {
             that._loadPanel = null;
         }
+    },
+
+    calculateLoadPanelPosition($element) {
+        const $window = $(getWindow());
+        if(getHeight($element) > getHeight($window)) {
+            return {
+                of: $window,
+                boundary: $element,
+                collision: 'fit'
+            };
+        }
+        return { of: $element };
     },
 
     getIndexByKey: function(key, items, keyName) {
@@ -462,6 +464,8 @@ export default {
     },
 
     focusAndSelectElement: function(component, $element) {
+        const isFocused = $element.is(':focus');
+
         eventsEngine.trigger($element, 'focus');
 
         const isSelectTextOnEditingStart = component.option('editing.selectTextOnEditStart');
@@ -469,7 +473,7 @@ export default {
         const isEditingNavigationMode = keyboardController && keyboardController._isFastEditingStarted();
         const element = $element.get(0);
 
-        if(isSelectTextOnEditingStart && !isEditingNavigationMode && $element.is('.dx-texteditor-input') && !$element.is('[readonly]')) {
+        if(!isFocused && isSelectTextOnEditingStart && !isEditingNavigationMode && $element.is('.dx-texteditor-input') && !$element.is('[readonly]')) {
             const editor = getWidgetInstance($element.closest('.dx-texteditor'));
 
             when(editor && editor._loadItemDeferred).done(function() {

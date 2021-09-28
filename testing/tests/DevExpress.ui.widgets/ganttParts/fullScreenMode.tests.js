@@ -1,3 +1,4 @@
+import { getHeight, getWidth } from 'core/utils/size';
 import $ from 'jquery';
 import 'ui/gantt';
 import { Consts, options, data, showTaskEditDialog, getGanttViewCore } from '../../../helpers/ganttHelpers.js';
@@ -42,18 +43,18 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         this.instance.option('taskListWidth', 200);
         this.clock.tick();
         const fullScreenCommand = getGanttViewCore(this.instance).commandManager.getCommand(10);
-        assert.ok(this.instance.$element().height() < $(window).height(), '1.normalMode: gantt height < window height');
-        assert.ok(this.instance.$element().width() < $(window).width(), '1.normalMode: gantt width < window width');
+        assert.ok(getHeight(this.instance.$element()) < getHeight($(window)), '1.normalMode: gantt height < window height');
+        assert.ok(getWidth(this.instance.$element()) < getWidth($(window)), '1.normalMode: gantt width < window width');
         fullScreenCommand.execute();
-        assert.equal(this.instance.$element().height(), $(window).height(), '1.fullScreenMode: gantt height == window height');
-        assert.equal(this.instance.$element().width(), $(window).width(), '1.fullScreenMode: gantt width == window width');
+        assert.equal(getHeight(this.instance.$element()), getHeight($(window)), '1.fullScreenMode: gantt height == window height');
+        assert.equal(getWidth(this.instance.$element()), getWidth($(window)), '1.fullScreenMode: gantt width == window width');
         fullScreenCommand.execute();
         this.clock.tick();
-        assert.ok(this.instance.$element().height() < $(window).height(), '2.normalMode: gantt height < window height');
-        assert.ok(this.instance.$element().width() < $(window).width(), '2.normalMode: gantt width < window width');
+        assert.ok(getHeight(this.instance.$element()) < getHeight($(window)), '2.normalMode: gantt height < window height');
+        assert.ok(getWidth(this.instance.$element()) < getWidth($(window)), '2.normalMode: gantt width < window width');
         fullScreenCommand.execute();
-        assert.equal(this.instance.$element().height(), $(window).height(), '2.fullScreenMode: gantt height == window height');
-        assert.equal(this.instance.$element().width(), $(window).width(), '2.fullScreenMode: gantt width == window width');
+        assert.equal(getHeight(this.instance.$element()), getHeight($(window)), '2.fullScreenMode: gantt height == window height');
+        assert.equal(getWidth(this.instance.$element()), getWidth($(window)), '2.fullScreenMode: gantt width == window width');
         fullScreenCommand.execute();
     });
 
@@ -115,7 +116,7 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
 
         const ganttView = this.$element.find(Consts.GANTT_VIEW_SELECTOR);
 
-        const splitterContainerWrapperWidth = $(treeListWrapperElement).parent().width();
+        const splitterContainerWrapperWidth = getWidth($(treeListWrapperElement).parent());
 
         assert.ok(splitterWrapper, 'Splitter wrapper has been found');
         assert.ok(splitter, 'Splitter has been found');
@@ -127,8 +128,8 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
 
-        assert.equal(treeListWrapperElement.width(), 100);
-        assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
+        assert.equal(getWidth(treeListWrapperElement), 100);
+        assert.equal(getWidth(ganttView), splitterContainerWrapperWidth - 100);
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 100, 'Splitter has been moved by mouse');
 
         splitter.trigger($.Event('dxpointerdown', { pointerType: 'touch' }));
@@ -138,8 +139,8 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup', { pointerType: 'touch' }));
 
-        assert.equal(treeListWrapperElement.width(), 300);
-        assert.equal(ganttView.width(), splitterContainerWrapperWidth - 300);
+        assert.equal(getWidth(treeListWrapperElement), 300);
+        assert.equal(getWidth(ganttView), splitterContainerWrapperWidth - 300);
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 300, 'Splitter has been moved by touch');
 
         splitter.trigger($.Event('dxpointerdown'));
@@ -148,8 +149,8 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup'));
 
-        assert.equal(treeListWrapperElement.width(), 0);
-        assert.equal(ganttView.width(), splitterContainerWrapperWidth);
+        assert.equal(getWidth(treeListWrapperElement), 0);
+        assert.equal(getWidth(ganttView), splitterContainerWrapperWidth);
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 0, 'Splitter has not cross the left side');
 
         splitter.trigger($.Event('dxpointerdown'));
@@ -158,9 +159,9 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup'));
 
-        assert.equal(treeListWrapperElement.width(), splitterContainerWrapperWidth - splitter.width());
-        assert.equal(ganttView.width(), splitter.width());
-        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - splitter.width(), 'Splitter has not cross the right side');
+        assert.equal(getWidth(treeListWrapperElement), splitterContainerWrapperWidth - getWidth(splitter));
+        assert.equal(getWidth(ganttView), getWidth(splitter));
+        assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), splitterContainerWrapperWidth - getWidth(splitter), 'Splitter has not cross the right side');
         leftPanelWidth = this.instance._splitter._leftPanelPercentageWidth;
         fullScreenCommand.execute();
         assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in Normal mode');
