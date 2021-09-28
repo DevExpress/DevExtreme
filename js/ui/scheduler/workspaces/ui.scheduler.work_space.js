@@ -1368,7 +1368,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         for(let i = startIndex; i < totalCellCount + cellCount; i++) {
             const element = $($cells).eq(i).get(0);
-            width = element ? width + getBoundingRect(element).width : width;
+            width = width + hasWindow() && element ? getBoundingRect(element).width : width;
         }
 
         return width / (totalCellCount + cellCount - startIndex);
@@ -1762,7 +1762,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const dateTable = this._getDateTable();
         // We should use getBoundingClientRect in renovation
-        const dateTableRect = dateTable.get(0) ? getBoundingRect(dateTable.get(0)) : 0;
+        const dateTableRect = hasWindow() ? getBoundingRect(dateTable.get(0)) : 0;
 
         const columnsCount = this.viewDataProvider.getColumnsCount();
 
@@ -1791,7 +1791,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             }
 
             const allDayAppointmentContainer = this._$allDayPanel;
-            const allDayPanelRect = getBoundingRect(allDayAppointmentContainer.get(0));
+            const allDayPanelRect = hasWindow() ? getBoundingRect(allDayAppointmentContainer.get(0)) : 0;
 
             allDayCells.each((_, cell) => {
                 this._addCellMetaData(result, cell, allDayPanelRect);
@@ -1801,7 +1801,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return result;
     }
     _addCellMetaData(cellMetaDataArray, cell, parentRect) {
-        const cellRect = getBoundingRect(cell);
+        const cellRect = hasWindow() ? getBoundingRect(cell) : 0;
 
         cellMetaDataArray.push({
             left: cellRect.left - parentRect.left,
