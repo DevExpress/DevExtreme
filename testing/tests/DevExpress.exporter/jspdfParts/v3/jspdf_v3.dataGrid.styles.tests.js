@@ -379,7 +379,7 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line,10,26.5,{baseline:middle,align:left}',
+                    'text,line,10,26.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setFontSize,16',
@@ -404,7 +404,7 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line,10,26.5,{baseline:middle,align:left}',
+                    'text,line,10,26.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setFontSize,16',
@@ -429,7 +429,7 @@ const JSPdfStylesTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line,10,26.5,{baseline:middle,align:left}',
+                    'text,line,10,26.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setFontSize,16',

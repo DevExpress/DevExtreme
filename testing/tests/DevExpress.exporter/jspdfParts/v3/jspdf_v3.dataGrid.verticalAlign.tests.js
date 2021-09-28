@@ -16,7 +16,7 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'top'; };
 
                 const expectedLog = [
-                    'text,F1,10,15,{baseline:top,align:left}',
+                    'text,F1,10,15,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -41,7 +41,7 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'middle'; };
 
                 const expectedLog = [
-                    'text,F1,10,40,{baseline:middle,align:left}',
+                    'text,F1,10,40,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -66,7 +66,7 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'bottom'; };
 
                 const expectedLog = [
-                    'text,F1,10,65,{baseline:bottom,align:left}',
+                    'text,F1,10,65,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -95,7 +95,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,F1,10,15,{baseline:top,align:left}',
+                    'text,F1,10,15,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -125,7 +125,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,F1,10,40,{baseline:middle,align:left}',
+                    'text,F1,10,40,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -155,7 +155,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,F1,10,65,{baseline:bottom,align:left}',
+                    'text,F1,10,65,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -185,7 +185,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,F1,10,15,{baseline:top,align:left}',
+                    'text,F1,10,15,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -215,7 +215,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,F1,10,40,{baseline:middle,align:left}',
+                    'text,F1,10,40,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -245,7 +245,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,F1,10,65,{baseline:bottom,align:left}',
+                    'text,F1,10,65,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -273,7 +273,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'text,F1,10,12.6,{baseline:top,align:left}',
+                    'text,F1,10,12.6,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -300,7 +300,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'text,F1,10,37.6,{baseline:middle,align:left}',
+                    'text,F1,10,37.6,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -327,7 +327,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'text,F1,10,62.6,{baseline:bottom,align:left}',
+                    'text,F1,10,62.6,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -358,7 +358,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,10',
-                    'text,F1,10,13.5,{baseline:top,align:left}',
+                    'text,F1,10,13.5,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -390,7 +390,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,10',
-                    'text,F1,10,38.5,{baseline:middle,align:left}',
+                    'text,F1,10,38.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -422,7 +422,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,10',
-                    'text,F1,10,63.5,{baseline:bottom,align:left}',
+                    'text,F1,10,63.5,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -454,7 +454,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,20',
-                    'text,F1,10,12,{baseline:top,align:left}',
+                    'text,F1,10,12,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -486,7 +486,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,20',
-                    'text,F1,10,37,{baseline:middle,align:left}',
+                    'text,F1,10,37,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -518,7 +518,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,20',
-                    'text,F1,10,62,{baseline:bottom,align:left}',
+                    'text,F1,10,62,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -546,7 +546,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'text,F1,10,20.6,{baseline:top,align:left}',
+                    'text,F1,10,20.6,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -573,7 +573,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'text,F1,10,45.6,{baseline:middle,align:left}',
+                    'text,F1,10,45.6,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -600,7 +600,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'text,F1,10,70.6,{baseline:bottom,align:left}',
+                    'text,F1,10,70.6,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -631,7 +631,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,10',
-                    'text,F1,10,18.5,{baseline:top,align:left}',
+                    'text,F1,10,18.5,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -663,7 +663,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,10',
-                    'text,F1,10,43.5,{baseline:middle,align:left}',
+                    'text,F1,10,43.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -695,7 +695,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,10',
-                    'text,F1,10,68.5,{baseline:bottom,align:left}',
+                    'text,F1,10,68.5,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -727,7 +727,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,20',
-                    'text,F1,10,22,{baseline:top,align:left}',
+                    'text,F1,10,22,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -759,7 +759,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,20',
-                    'text,F1,10,47,{baseline:middle,align:left}',
+                    'text,F1,10,47,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -791,7 +791,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,20',
-                    'text,F1,10,72,{baseline:bottom,align:left}',
+                    'text,F1,10,72,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -819,7 +819,7 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'top'; };
 
                 const expectedLog = [
-                    'text,f1\nf2,10,15,{baseline:top,align:left}',
+                    'text,f1\nf2,10,15,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -844,7 +844,7 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'middle'; };
 
                 const expectedLog = [
-                    'text,f1\nf2,10,30.8,{baseline:middle,align:left}',
+                    'text,f1\nf2,10,30.8,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -869,7 +869,7 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'bottom'; };
 
                 const expectedLog = [
-                    'text,f1\nf2,10,46.6,{baseline:bottom,align:left}',
+                    'text,f1\nf2,10,46.6,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -898,7 +898,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,f1\nf2,10,15,{baseline:top,align:left}',
+                    'text,f1\nf2,10,15,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -928,7 +928,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,f1\nf2,10,34.25,{baseline:middle,align:left}',
+                    'text,f1\nf2,10,34.25,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -958,7 +958,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,f1\nf2,10,53.5,{baseline:bottom,align:left}',
+                    'text,f1\nf2,10,53.5,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -988,7 +988,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,f1\nf2,10,15,{baseline:top,align:left}',
+                    'text,f1\nf2,10,15,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1018,7 +1018,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,f1\nf2,10,28.5,{baseline:middle,align:left}',
+                    'text,f1\nf2,10,28.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1048,7 +1048,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,f1\nf2,10,42,{baseline:bottom,align:left}',
+                    'text,f1\nf2,10,42,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1076,7 +1076,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'text,f1\nf2,10,12.6,{baseline:top,align:left}',
+                    'text,f1\nf2,10,12.6,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -1103,7 +1103,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'text,f1\nf2,10,29.6,{baseline:middle,align:left}',
+                    'text,f1\nf2,10,29.6,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -1130,7 +1130,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'text,f1\nf2,10,46.6,{baseline:bottom,align:left}',
+                    'text,f1\nf2,10,46.6,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -1161,7 +1161,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,10',
-                    'text,f1\nf2,10,13.5,{baseline:top,align:left}',
+                    'text,f1\nf2,10,13.5,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1193,7 +1193,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,10',
-                    'text,f1\nf2,10,33.5,{baseline:middle,align:left}',
+                    'text,f1\nf2,10,33.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1225,7 +1225,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,10',
-                    'text,f1\nf2,10,53.5,{baseline:bottom,align:left}',
+                    'text,f1\nf2,10,53.5,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1257,7 +1257,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,20',
-                    'text,f1\nf2,10,12,{baseline:top,align:left}',
+                    'text,f1\nf2,10,12,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1289,7 +1289,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,20',
-                    'text,f1\nf2,10,27,{baseline:middle,align:left}',
+                    'text,f1\nf2,10,27,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1321,7 +1321,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,20',
-                    'text,f1\nf2,10,42,{baseline:bottom,align:left}',
+                    'text,f1\nf2,10,42,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1349,7 +1349,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'text,f1\nf2,10,20.6,{baseline:top,align:left}',
+                    'text,f1\nf2,10,20.6,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -1376,7 +1376,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'text,f1\nf2,10,33.6,{baseline:middle,align:left}',
+                    'text,f1\nf2,10,33.6,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -1403,7 +1403,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'text,f1\nf2,10,46.6,{baseline:bottom,align:left}',
+                    'text,f1\nf2,10,46.6,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -1434,7 +1434,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,10',
-                    'text,f1\nf2,10,18.5,{baseline:top,align:left}',
+                    'text,f1\nf2,10,18.5,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1466,7 +1466,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,10',
-                    'text,f1\nf2,10,36,{baseline:middle,align:left}',
+                    'text,f1\nf2,10,36,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1498,7 +1498,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,10',
-                    'text,f1\nf2,10,53.5,{baseline:bottom,align:left}',
+                    'text,f1\nf2,10,53.5,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1530,7 +1530,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,20',
-                    'text,f1\nf2,10,22,{baseline:top,align:left}',
+                    'text,f1\nf2,10,22,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1562,7 +1562,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,20',
-                    'text,f1\nf2,10,32,{baseline:middle,align:left}',
+                    'text,f1\nf2,10,32,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1594,7 +1594,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,20',
-                    'text,f1\nf2,10,42,{baseline:bottom,align:left}',
+                    'text,f1\nf2,10,42,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1620,7 +1620,7 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'top'; };
 
                 const expectedLog = [
-                    'text,f1\nf2\nf3,10,15,{baseline:top,align:left}',
+                    'text,f1\nf2\nf3,10,15,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -1645,7 +1645,7 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'middle'; };
 
                 const expectedLog = [
-                    'text,f1\nf2\nf3,10,21.6,{baseline:middle,align:left}',
+                    'text,f1\nf2\nf3,10,21.6,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -1670,7 +1670,7 @@ const JSPdfVerticalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.verticalAlign = 'bottom'; };
 
                 const expectedLog = [
-                    'text,f1\nf2\nf3,10,28.2,{baseline:bottom,align:left}',
+                    'text,f1\nf2\nf3,10,28.2,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -1699,7 +1699,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,f1\nf2\nf3,10,15,{baseline:top,align:left}',
+                    'text,f1\nf2\nf3,10,15,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1729,7 +1729,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,f1\nf2\nf3,10,28.5,{baseline:middle,align:left}',
+                    'text,f1\nf2\nf3,10,28.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1759,7 +1759,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,f1\nf2\nf3,10,42,{baseline:bottom,align:left}',
+                    'text,f1\nf2\nf3,10,42,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1789,7 +1789,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,f1\nf2\nf3,10,15,{baseline:top,align:left}',
+                    'text,f1\nf2\nf3,10,15,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1819,7 +1819,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,f1\nf2\nf3,10,17,{baseline:middle,align:left}',
+                    'text,f1\nf2\nf3,10,17,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1849,7 +1849,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,f1\nf2\nf3,10,19,{baseline:bottom,align:left}',
+                    'text,f1\nf2\nf3,10,19,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1877,7 +1877,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'text,f1\nf2\nf3,10,12.6,{baseline:top,align:left}',
+                    'text,f1\nf2\nf3,10,12.6,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -1904,7 +1904,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'text,f1\nf2\nf3,10,21.6,{baseline:middle,align:left}',
+                    'text,f1\nf2\nf3,10,21.6,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -1931,7 +1931,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1',
-                    'text,f1\nf2\nf3,10,30.6,{baseline:bottom,align:left}',
+                    'text,f1\nf2\nf3,10,30.6,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -1962,7 +1962,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,10',
-                    'text,f1\nf2\nf3,10,13.5,{baseline:top,align:left}',
+                    'text,f1\nf2\nf3,10,13.5,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -1994,7 +1994,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,10',
-                    'text,f1\nf2\nf3,10,28.5,{baseline:middle,align:left}',
+                    'text,f1\nf2\nf3,10,28.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -2026,7 +2026,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,10',
-                    'text,f1\nf2\nf3,10,43.5,{baseline:bottom,align:left}',
+                    'text,f1\nf2\nf3,10,43.5,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -2058,7 +2058,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,20',
-                    'text,f1\nf2\nf3,10,12,{baseline:top,align:left}',
+                    'text,f1\nf2\nf3,10,12,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -2090,7 +2090,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,20',
-                    'text,f1\nf2\nf3,10,17,{baseline:middle,align:left}',
+                    'text,f1\nf2\nf3,10,17,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -2122,7 +2122,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1',
                     'setFontSize,20',
-                    'text,f1\nf2\nf3,10,22,{baseline:bottom,align:left}',
+                    'text,f1\nf2\nf3,10,22,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -2150,7 +2150,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'text,f1\nf2\nf3,10,20.6,{baseline:top,align:left}',
+                    'text,f1\nf2\nf3,10,20.6,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -2177,7 +2177,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'text,f1\nf2\nf3,10,21.6,{baseline:middle,align:left}',
+                    'text,f1\nf2\nf3,10,21.6,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -2204,7 +2204,7 @@ const JSPdfVerticalAlignTests = {
 
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
-                    'text,f1\nf2\nf3,10,22.6,{baseline:bottom,align:left}',
+                    'text,f1\nf2\nf3,10,22.6,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50'
                 ];
@@ -2235,7 +2235,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,10',
-                    'text,f1\nf2\nf3,10,18.5,{baseline:top,align:left}',
+                    'text,f1\nf2\nf3,10,18.5,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -2267,7 +2267,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,10',
-                    'text,f1\nf2\nf3,10,28.5,{baseline:middle,align:left}',
+                    'text,f1\nf2\nf3,10,28.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -2299,7 +2299,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,10',
-                    'text,f1\nf2\nf3,10,38.5,{baseline:bottom,align:left}',
+                    'text,f1\nf2\nf3,10,38.5,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -2331,7 +2331,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,20',
-                    'text,f1\nf2\nf3,10,22,{baseline:top,align:left}',
+                    'text,f1\nf2\nf3,10,22,{baseline:top}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -2363,7 +2363,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,20',
-                    'text,f1\nf2\nf3,10,17,{baseline:middle,align:left}',
+                    'text,f1\nf2\nf3,10,17,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'
@@ -2395,7 +2395,7 @@ const JSPdfVerticalAlignTests = {
                 const expectedLog = [
                     'setLineHeightFactor,1.5',
                     'setFontSize,20',
-                    'text,f1\nf2\nf3,10,12,{baseline:bottom,align:left}',
+                    'text,f1\nf2\nf3,10,12,{baseline:bottom}',
                     'setLineWidth,1',
                     'rect,10,15,100,50',
                     'setFontSize,16'

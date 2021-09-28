@@ -12,7 +12,7 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1,10,45,{baseline:middle,align:left}',
+                    'text,line1,10,45,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,60'
                 ];
@@ -34,7 +34,7 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1,10,24.2,{baseline:middle,align:left}',
+                    'text,line1,10,24.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,18.4'
                 ];
@@ -56,7 +56,7 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1,10,45,{baseline:middle,align:left}',
+                    'text,line1,10,45,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setFontSize,16',
@@ -81,7 +81,7 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1,10,26.5,{baseline:middle,align:left}',
+                    'text,line1,10,26.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setFontSize,16',
@@ -105,7 +105,7 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1,15,31.5,{baseline:middle,align:left}',
+                    'text,line1,15,31.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,33',
                     'setFontSize,16'
@@ -131,7 +131,7 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2,10,35.8,{baseline:middle,align:left}',
+                    'text,line1\nline2,10,35.8,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,60'
                 ];
@@ -153,7 +153,7 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2,10,24.2,{baseline:middle,align:left}',
+                    'text,line1\nline2,10,24.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,36.8'
                 ];
@@ -175,7 +175,7 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1\nline2,10,33.5,{baseline:middle,align:left}',
+                    'text,line1\nline2,10,33.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setFontSize,16',
@@ -200,7 +200,7 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1\nline2,10,26.5,{baseline:middle,align:left}',
+                    'text,line1\nline2,10,26.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,46',
                     'setFontSize,16',
@@ -224,7 +224,7 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1\nline2,15,31.5,{baseline:middle,align:left}',
+                    'text,line1\nline2,15,31.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,56',
                     'setFontSize,16'
@@ -251,7 +251,7 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3,10,36.6,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,10,36.6,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,80'
                 ];
@@ -273,7 +273,7 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3,10,24.2,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,10,24.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,55.2'
                 ];
@@ -295,7 +295,7 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,10,32,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,10,32,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,80',
                     'setFontSize,16',
@@ -320,7 +320,7 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,10,26.5,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,10,26.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,69',
                     'setFontSize,16',
@@ -344,7 +344,7 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,15,31.5,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,15,31.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,79',
                     'setFontSize,16'
@@ -374,9 +374,9 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1,10,45,{baseline:middle,align:left}',
+                    'text,line1,10,45,{baseline:middle}',
                     'setFontSize,20',
-                    'text,line1,110,45,{baseline:middle,align:left}',
+                    'text,line1,110,45,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
@@ -409,9 +409,9 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1,10,26.5,{baseline:middle,align:left}',
+                    'text,line1,10,26.5,{baseline:middle}',
                     'setFontSize,20',
-                    'text,line1,110,26.5,{baseline:middle,align:left}',
+                    'text,line1,110,26.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,23',
                     'setLineWidth,1',
@@ -444,9 +444,9 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1,10,45,{baseline:middle,align:left}',
+                    'text,line1,10,45,{baseline:middle}',
                     'setFontSize,30',
-                    'text,line1,110,45,{baseline:middle,align:left}',
+                    'text,line1,110,45,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
@@ -482,9 +482,9 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1,10,32.25,{baseline:middle,align:left}',
+                    'text,line1,10,32.25,{baseline:middle}',
                     'setFontSize,30',
-                    'text,line1,110,32.25,{baseline:middle,align:left}',
+                    'text,line1,110,32.25,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,34.5',
                     'setLineWidth,1',
@@ -519,9 +519,9 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1,15,37.25,{baseline:middle,align:left}',
+                    'text,line1,15,37.25,{baseline:middle}',
                     'setFontSize,30',
-                    'text,line1,115,37.25,{baseline:middle,align:left}',
+                    'text,line1,115,37.25,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,44.5',
                     'setLineWidth,1',
@@ -556,9 +556,9 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2,10,35.8,{baseline:middle,align:left}',
+                    'text,line1\nline2,10,35.8,{baseline:middle}',
                     'setFontSize,20',
-                    'text,line1\nline2,110,33.5,{baseline:middle,align:left}',
+                    'text,line1\nline2,110,33.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
@@ -591,9 +591,9 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2,10,28.8,{baseline:middle,align:left}',
+                    'text,line1\nline2,10,28.8,{baseline:middle}',
                     'setFontSize,20',
-                    'text,line1\nline2,110,26.5,{baseline:middle,align:left}',
+                    'text,line1\nline2,110,26.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,46',
                     'setLineWidth,1',
@@ -626,9 +626,9 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1\nline2,10,33.5,{baseline:middle,align:left}',
+                    'text,line1\nline2,10,33.5,{baseline:middle}',
                     'setFontSize,30',
-                    'text,line1\nline2,110,27.75,{baseline:middle,align:left}',
+                    'text,line1\nline2,110,27.75,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,60',
                     'setLineWidth,1',
@@ -664,9 +664,9 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1\nline2,10,38,{baseline:middle,align:left}',
+                    'text,line1\nline2,10,38,{baseline:middle}',
                     'setFontSize,30',
-                    'text,line1\nline2,110,32.25,{baseline:middle,align:left}',
+                    'text,line1\nline2,110,32.25,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,69',
                     'setLineWidth,1',
@@ -701,9 +701,9 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1\nline2,15,43,{baseline:middle,align:left}',
+                    'text,line1\nline2,15,43,{baseline:middle}',
                     'setFontSize,30',
-                    'text,line1\nline2,115,37.25,{baseline:middle,align:left}',
+                    'text,line1\nline2,115,37.25,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,79',
                     'setLineWidth,1',
@@ -738,9 +738,9 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3,10,36.6,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,10,36.6,{baseline:middle}',
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,110,32,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,110,32,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,80',
                     'setLineWidth,1',
@@ -773,9 +773,9 @@ const JSPdfMultilineTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3,10,31.1,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,10,31.1,{baseline:middle}',
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,110,26.5,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,110,26.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,69',
                     'setLineWidth,1',
@@ -808,9 +808,9 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,10,37,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,10,37,{baseline:middle}',
                     'setFontSize,30',
-                    'text,line1\nline2\nline3,110,25.5,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,110,25.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,90',
                     'setLineWidth,1',
@@ -846,9 +846,9 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,10,43.75,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,10,43.75,{baseline:middle}',
                     'setFontSize,30',
-                    'text,line1\nline2\nline3,110,32.25,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,110,32.25,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,103.5',
                     'setLineWidth,1',
@@ -883,9 +883,9 @@ const JSPdfMultilineTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line1\nline2\nline3,15,48.75,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,15,48.75,{baseline:middle}',
                     'setFontSize,30',
-                    'text,line1\nline2\nline3,115,37.25,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3,115,37.25,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,113.5',
                     'setLineWidth,1',

@@ -28,9 +28,9 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle,align:left}',
-                    'text,F1,10,41,{baseline:middle,align:left}',
-                    'text,f1_1,10,63,{baseline:middle,align:left}',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,F1,10,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,100,16',
                     'setLineWidth,1', 'rect,10,31,100,20',
                     'setLineWidth,1', 'rect,10,51,100,24',
@@ -58,9 +58,9 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle,align:left}',
-                    'text,F1,10,42.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,61,{baseline:middle,align:left}',
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,F1,10,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,100,18.4',
                     'setLineWidth,1', 'rect,10,33.4,100,18.4',
                     'setLineWidth,1', 'rect,10,51.8,100,18.4',
@@ -94,9 +94,9 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,15,29.2,{baseline:middle,align:left}',
-                    'text,F1,10,52.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,71,{baseline:middle,align:left}',
+                    'text,Band1,15,29.2,{baseline:middle}',
+                    'text,F1,10,52.6,{baseline:middle}',
+                    'text,f1_1,10,71,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,28.4',
                     'setLineWidth,1',
@@ -134,11 +134,11 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle,align:left}',
-                    'text,F1,10,41,{baseline:middle,align:left}',
-                    'text,F2,80,41,{baseline:middle,align:left}',
-                    'text,f1_1,10,63,{baseline:middle,align:left}',
-                    'text,f2_1,80,63,{baseline:middle,align:left}',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,F1,10,41,{baseline:middle}',
+                    'text,F2,80,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'text,f2_1,80,63,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,140,16',
                     'setLineWidth,1', 'rect,10,31,70,20',
                     'setLineWidth,1', 'rect,80,31,70,20',
@@ -165,11 +165,11 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle,align:left}',
-                    'text,F1,10,42.6,{baseline:middle,align:left}',
-                    'text,F2,80,42.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,61,{baseline:middle,align:left}',
-                    'text,f2_1,80,61,{baseline:middle,align:left}',
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,F1,10,42.6,{baseline:middle}',
+                    'text,F2,80,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'text,f2_1,80,61,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,140,18.4',
                     'setLineWidth,1', 'rect,10,33.4,70,18.4',
                     'setLineWidth,1', 'rect,80,33.4,70,18.4',
@@ -202,11 +202,11 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,15,29.2,{baseline:middle,align:left}',
-                    'text,F1,10,52.6,{baseline:middle,align:left}',
-                    'text,F2,80,52.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,71,{baseline:middle,align:left}',
-                    'text,f2_1,80,71,{baseline:middle,align:left}',
+                    'text,Band1,15,29.2,{baseline:middle}',
+                    'text,F1,10,52.6,{baseline:middle}',
+                    'text,F2,80,52.6,{baseline:middle}',
+                    'text,f1_1,10,71,{baseline:middle}',
+                    'text,f2_1,80,71,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,140,28.4',
                     'setLineWidth,1',
@@ -249,13 +249,13 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle,align:left}',
-                    'text,F3,150,33,{baseline:middle,align:left}',
-                    'text,F1,10,41,{baseline:middle,align:left}',
-                    'text,F2,80,41,{baseline:middle,align:left}',
-                    'text,f1_1,10,63,{baseline:middle,align:left}',
-                    'text,f2_1,80,63,{baseline:middle,align:left}',
-                    'text,f3_1,150,63,{baseline:middle,align:left}',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,F3,150,33,{baseline:middle}',
+                    'text,F1,10,41,{baseline:middle}',
+                    'text,F2,80,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'text,f2_1,80,63,{baseline:middle}',
+                    'text,f3_1,150,63,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,140,16',
                     'setLineWidth,1', 'rect,150,15,60,36',
                     'setLineWidth,1', 'rect,10,31,70,20',
@@ -285,13 +285,13 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle,align:left}',
-                    'text,F3,150,33.4,{baseline:middle,align:left}',
-                    'text,F1,10,42.6,{baseline:middle,align:left}',
-                    'text,F2,80,42.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,61,{baseline:middle,align:left}',
-                    'text,f2_1,80,61,{baseline:middle,align:left}',
-                    'text,f3_1,150,61,{baseline:middle,align:left}',
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,F3,150,33.4,{baseline:middle}',
+                    'text,F1,10,42.6,{baseline:middle}',
+                    'text,F2,80,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'text,f2_1,80,61,{baseline:middle}',
+                    'text,f3_1,150,61,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,140,18.4',
                     'setLineWidth,1', 'rect,150,15,60,36.8',
                     'setLineWidth,1', 'rect,10,33.4,70,18.4',
@@ -327,13 +327,13 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,15,29.2,{baseline:middle,align:left}',
-                    'text,F3,150,38.4,{baseline:middle,align:left}',
-                    'text,F1,10,52.6,{baseline:middle,align:left}',
-                    'text,F2,80,52.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,71,{baseline:middle,align:left}',
-                    'text,f2_1,80,71,{baseline:middle,align:left}',
-                    'text,f3_1,150,71,{baseline:middle,align:left}',
+                    'text,Band1,15,29.2,{baseline:middle}',
+                    'text,F3,150,38.4,{baseline:middle}',
+                    'text,F1,10,52.6,{baseline:middle}',
+                    'text,F2,80,52.6,{baseline:middle}',
+                    'text,f1_1,10,71,{baseline:middle}',
+                    'text,f2_1,80,71,{baseline:middle}',
+                    'text,f3_1,150,71,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,140,28.4',
                     'setLineWidth,1',
@@ -387,12 +387,12 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle,align:left}',
-                    'text,Band1_1,10,41,{baseline:middle,align:left}',
-                    'text,F2,80,53,{baseline:middle,align:left}',
-                    'text,F1,10,63,{baseline:middle,align:left}',
-                    'text,f1_1_1,10,90,{baseline:middle,align:left}',
-                    'text,f2_1,80,90,{baseline:middle,align:left}',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,Band1_1,10,41,{baseline:middle}',
+                    'text,F2,80,53,{baseline:middle}',
+                    'text,F1,10,63,{baseline:middle}',
+                    'text,f1_1_1,10,90,{baseline:middle}',
+                    'text,f2_1,80,90,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,150,16',
                     'setLineWidth,1', 'rect,10,31,70,20',
                     'setLineWidth,1', 'rect,80,31,80,44',
@@ -425,12 +425,12 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle,align:left}',
-                    'text,Band1_1,10,42.6,{baseline:middle,align:left}',
-                    'text,F2,80,51.8,{baseline:middle,align:left}',
-                    'text,F1,10,61,{baseline:middle,align:left}',
-                    'text,f1_1_1,10,79.4,{baseline:middle,align:left}',
-                    'text,f2_1,80,79.4,{baseline:middle,align:left}',
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,Band1_1,10,42.6,{baseline:middle}',
+                    'text,F2,80,51.8,{baseline:middle}',
+                    'text,F1,10,61,{baseline:middle}',
+                    'text,f1_1_1,10,79.4,{baseline:middle}',
+                    'text,f2_1,80,79.4,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,150,18.4',
                     'setLineWidth,1', 'rect,10,33.4,70,18.4',
                     'setLineWidth,1', 'rect,80,33.4,80,36.8',
@@ -469,12 +469,12 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle,align:left}',
-                    'text,Band1_1,15,47.6,{baseline:middle,align:left}',
-                    'text,F2,80,56.8,{baseline:middle,align:left}',
-                    'text,F1,10,71,{baseline:middle,align:left}',
-                    'text,f1_1_1,10,89.4,{baseline:middle,align:left}',
-                    'text,f2_1,80,89.4,{baseline:middle,align:left}',
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,Band1_1,15,47.6,{baseline:middle}',
+                    'text,F2,80,56.8,{baseline:middle}',
+                    'text,F1,10,71,{baseline:middle}',
+                    'text,f1_1_1,10,89.4,{baseline:middle}',
+                    'text,f2_1,80,89.4,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,150,18.4',
                     'setLineWidth,1',
@@ -527,14 +527,14 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle,align:left}',
-                    'text,Band1_1,10,41,{baseline:middle,align:left}',
-                    'text,F3,140,53,{baseline:middle,align:left}',
-                    'text,F1,10,63,{baseline:middle,align:left}',
-                    'text,F2,70,63,{baseline:middle,align:left}',
-                    'text,f1_1_1,10,90,{baseline:middle,align:left}',
-                    'text,f2_1_1,70,90,{baseline:middle,align:left}',
-                    'text,f3_1,140,90,{baseline:middle,align:left}',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,Band1_1,10,41,{baseline:middle}',
+                    'text,F3,140,53,{baseline:middle}',
+                    'text,F1,10,63,{baseline:middle}',
+                    'text,F2,70,63,{baseline:middle}',
+                    'text,f1_1_1,10,90,{baseline:middle}',
+                    'text,f2_1_1,70,90,{baseline:middle}',
+                    'text,f3_1,140,90,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,210,16',
                     'setLineWidth,1', 'rect,10,31,130,20',
                     'setLineWidth,1', 'rect,140,31,80,44',
@@ -570,14 +570,14 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle,align:left}',
-                    'text,Band1_1,10,42.6,{baseline:middle,align:left}',
-                    'text,F3,140,51.8,{baseline:middle,align:left}',
-                    'text,F1,10,61,{baseline:middle,align:left}',
-                    'text,F2,70,61,{baseline:middle,align:left}',
-                    'text,f1_1_1,10,79.4,{baseline:middle,align:left}',
-                    'text,f2_1_1,70,79.4,{baseline:middle,align:left}',
-                    'text,f3_1,140,79.4,{baseline:middle,align:left}',
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,Band1_1,10,42.6,{baseline:middle}',
+                    'text,F3,140,51.8,{baseline:middle}',
+                    'text,F1,10,61,{baseline:middle}',
+                    'text,F2,70,61,{baseline:middle}',
+                    'text,f1_1_1,10,79.4,{baseline:middle}',
+                    'text,f2_1_1,70,79.4,{baseline:middle}',
+                    'text,f3_1,140,79.4,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,210,18.4',
                     'setLineWidth,1', 'rect,10,33.4,130,18.4',
                     'setLineWidth,1', 'rect,140,33.4,80,36.8',
@@ -619,14 +619,14 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle,align:left}',
-                    'text,Band1_1,15,47.6,{baseline:middle,align:left}',
-                    'text,F3,140,56.8,{baseline:middle,align:left}',
-                    'text,F1,10,71,{baseline:middle,align:left}',
-                    'text,F2,70,71,{baseline:middle,align:left}',
-                    'text,f1_1_1,10,89.4,{baseline:middle,align:left}',
-                    'text,f2_1_1,70,89.4,{baseline:middle,align:left}',
-                    'text,f3_1,140,89.4,{baseline:middle,align:left}',
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,Band1_1,15,47.6,{baseline:middle}',
+                    'text,F3,140,56.8,{baseline:middle}',
+                    'text,F1,10,71,{baseline:middle}',
+                    'text,F2,70,71,{baseline:middle}',
+                    'text,f1_1_1,10,89.4,{baseline:middle}',
+                    'text,f2_1_1,70,89.4,{baseline:middle}',
+                    'text,f3_1,140,89.4,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,210,18.4',
                     'setLineWidth,1',
@@ -683,12 +683,12 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle,align:left}',
-                    'text,F1,10,53,{baseline:middle,align:left}',
-                    'text,Band1_2,70,41,{baseline:middle,align:left}',
-                    'text,F2,70,63,{baseline:middle,align:left}',
-                    'text,f1_1,10,90,{baseline:middle,align:left}',
-                    'text,f2_1_1,70,90,{baseline:middle,align:left}',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,F1,10,53,{baseline:middle}',
+                    'text,Band1_2,70,41,{baseline:middle}',
+                    'text,F2,70,63,{baseline:middle}',
+                    'text,f1_1,10,90,{baseline:middle}',
+                    'text,f2_1_1,70,90,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,130,16',
                     'setLineWidth,1', 'rect,10,31,60,44',
                     'setLineWidth,1', 'rect,70,31,70,20',
@@ -724,12 +724,12 @@ const JSPdfBandsTests = {
                 const onRowExporting = () => { };
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle,align:left}',
-                    'text,F1,10,51.8,{baseline:middle,align:left}',
-                    'text,Band1_2,70,42.6,{baseline:middle,align:left}',
-                    'text,F2,70,61,{baseline:middle,align:left}',
-                    'text,f1_1,10,79.4,{baseline:middle,align:left}',
-                    'text,f2_1_1,70,79.4,{baseline:middle,align:left}',
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,F1,10,51.8,{baseline:middle}',
+                    'text,Band1_2,70,42.6,{baseline:middle}',
+                    'text,F2,70,61,{baseline:middle}',
+                    'text,f1_1,10,79.4,{baseline:middle}',
+                    'text,f2_1_1,70,79.4,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,130,18.4',
                     'setLineWidth,1', 'rect,10,33.4,60,36.8',
                     'setLineWidth,1', 'rect,70,33.4,70,18.4',
@@ -769,12 +769,12 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle,align:left}',
-                    'text,F1,10,56.8,{baseline:middle,align:left}',
-                    'text,Band1_2,75,47.6,{baseline:middle,align:left}',
-                    'text,F2,70,71,{baseline:middle,align:left}',
-                    'text,f1_1,10,89.4,{baseline:middle,align:left}',
-                    'text,f2_1_1,70,89.4,{baseline:middle,align:left}',
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,F1,10,56.8,{baseline:middle}',
+                    'text,Band1_2,75,47.6,{baseline:middle}',
+                    'text,F2,70,71,{baseline:middle}',
+                    'text,f1_1,10,89.4,{baseline:middle}',
+                    'text,f2_1_1,70,89.4,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,130,18.4',
                     'setLineWidth,1',
@@ -827,14 +827,14 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,23,{baseline:middle,align:left}',
-                    'text,F1,10,53,{baseline:middle,align:left}',
-                    'text,Band1_2,70,41,{baseline:middle,align:left}',
-                    'text,F2,70,63,{baseline:middle,align:left}',
-                    'text,F3,140,63,{baseline:middle,align:left}',
-                    'text,f1_1,10,90,{baseline:middle,align:left}',
-                    'text,f2_1_2,70,90,{baseline:middle,align:left}',
-                    'text,f3_1_2,140,90,{baseline:middle,align:left}',
+                    'text,Band1,10,23,{baseline:middle}',
+                    'text,F1,10,53,{baseline:middle}',
+                    'text,Band1_2,70,41,{baseline:middle}',
+                    'text,F2,70,63,{baseline:middle}',
+                    'text,F3,140,63,{baseline:middle}',
+                    'text,f1_1,10,90,{baseline:middle}',
+                    'text,f2_1_2,70,90,{baseline:middle}',
+                    'text,f3_1_2,140,90,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,210,16',
                     'setLineWidth,1', 'rect,10,31,60,44',
                     'setLineWidth,1', 'rect,70,31,150,20',
@@ -870,14 +870,14 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle,align:left}',
-                    'text,F1,10,51.8,{baseline:middle,align:left}',
-                    'text,Band1_2,70,42.6,{baseline:middle,align:left}',
-                    'text,F2,70,61,{baseline:middle,align:left}',
-                    'text,F3,140,61,{baseline:middle,align:left}',
-                    'text,f1_1,10,79.4,{baseline:middle,align:left}',
-                    'text,f2_1_2,70,79.4,{baseline:middle,align:left}',
-                    'text,f3_1_2,140,79.4,{baseline:middle,align:left}',
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,F1,10,51.8,{baseline:middle}',
+                    'text,Band1_2,70,42.6,{baseline:middle}',
+                    'text,F2,70,61,{baseline:middle}',
+                    'text,F3,140,61,{baseline:middle}',
+                    'text,f1_1,10,79.4,{baseline:middle}',
+                    'text,f2_1_2,70,79.4,{baseline:middle}',
+                    'text,f3_1_2,140,79.4,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,210,18.4',
                     'setLineWidth,1', 'rect,10,33.4,60,36.8',
                     'setLineWidth,1', 'rect,70,33.4,150,18.4',
@@ -919,14 +919,14 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,Band1,10,24.2,{baseline:middle,align:left}',
-                    'text,F1,10,56.8,{baseline:middle,align:left}',
-                    'text,Band1_2,75,47.6,{baseline:middle,align:left}',
-                    'text,F2,70,71,{baseline:middle,align:left}',
-                    'text,F3,140,71,{baseline:middle,align:left}',
-                    'text,f1_1,10,89.4,{baseline:middle,align:left}',
-                    'text,f2_1_2,70,89.4,{baseline:middle,align:left}',
-                    'text,f3_1_2,140,89.4,{baseline:middle,align:left}',
+                    'text,Band1,10,24.2,{baseline:middle}',
+                    'text,F1,10,56.8,{baseline:middle}',
+                    'text,Band1_2,75,47.6,{baseline:middle}',
+                    'text,F2,70,71,{baseline:middle}',
+                    'text,F3,140,71,{baseline:middle}',
+                    'text,f1_1,10,89.4,{baseline:middle}',
+                    'text,f2_1_2,70,89.4,{baseline:middle}',
+                    'text,f3_1_2,140,89.4,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,210,18.4',
                     'setLineWidth,1',
@@ -976,11 +976,11 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,33,{baseline:middle,align:left}',
-                    'text,Band2,80,23,{baseline:middle,align:left}',
-                    'text,F2,80,41,{baseline:middle,align:left}',
-                    'text,f1_1,10,63,{baseline:middle,align:left}',
-                    'text,f2_1,80,63,{baseline:middle,align:left}',
+                    'text,F1,10,33,{baseline:middle}',
+                    'text,Band2,80,23,{baseline:middle}',
+                    'text,F2,80,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'text,f2_1,80,63,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,70,36',
                     'setLineWidth,1', 'rect,80,15,80,16',
                     'setLineWidth,1', 'rect,80,31,80,20',
@@ -1008,11 +1008,11 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,33.4,{baseline:middle,align:left}',
-                    'text,Band2,80,24.2,{baseline:middle,align:left}',
-                    'text,F2,80,42.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,61,{baseline:middle,align:left}',
-                    'text,f2_1,80,61,{baseline:middle,align:left}',
+                    'text,F1,10,33.4,{baseline:middle}',
+                    'text,Band2,80,24.2,{baseline:middle}',
+                    'text,F2,80,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'text,f2_1,80,61,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,70,36.8',
                     'setLineWidth,1', 'rect,80,15,80,18.4',
                     'setLineWidth,1', 'rect,80,33.4,80,18.4',
@@ -1046,11 +1046,11 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,38.4,{baseline:middle,align:left}',
-                    'text,Band2,85,29.2,{baseline:middle,align:left}',
-                    'text,F2,80,52.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,71,{baseline:middle,align:left}',
-                    'text,f2_1,80,71,{baseline:middle,align:left}',
+                    'text,F1,10,38.4,{baseline:middle}',
+                    'text,Band2,85,29.2,{baseline:middle}',
+                    'text,F2,80,52.6,{baseline:middle}',
+                    'text,f1_1,10,71,{baseline:middle}',
+                    'text,f2_1,80,71,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,70,46.8',
                     'setLineWidth,1',
@@ -1094,13 +1094,13 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,33,{baseline:middle,align:left}',
-                    'text,Band2,80,23,{baseline:middle,align:left}',
-                    'text,F2,80,41,{baseline:middle,align:left}',
-                    'text,F3,160,41,{baseline:middle,align:left}',
-                    'text,f1_1,10,63,{baseline:middle,align:left}',
-                    'text,f2_1,80,63,{baseline:middle,align:left}',
-                    'text,f3_1,160,63,{baseline:middle,align:left}',
+                    'text,F1,10,33,{baseline:middle}',
+                    'text,Band2,80,23,{baseline:middle}',
+                    'text,F2,80,41,{baseline:middle}',
+                    'text,F3,160,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'text,f2_1,80,63,{baseline:middle}',
+                    'text,f3_1,160,63,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,70,36',
                     'setLineWidth,1', 'rect,80,15,140,16',
                     'setLineWidth,1', 'rect,80,31,80,20',
@@ -1130,13 +1130,13 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,33.4,{baseline:middle,align:left}',
-                    'text,Band2,80,24.2,{baseline:middle,align:left}',
-                    'text,F2,80,42.6,{baseline:middle,align:left}',
-                    'text,F3,160,42.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,61,{baseline:middle,align:left}',
-                    'text,f2_1,80,61,{baseline:middle,align:left}',
-                    'text,f3_1,160,61,{baseline:middle,align:left}',
+                    'text,F1,10,33.4,{baseline:middle}',
+                    'text,Band2,80,24.2,{baseline:middle}',
+                    'text,F2,80,42.6,{baseline:middle}',
+                    'text,F3,160,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'text,f2_1,80,61,{baseline:middle}',
+                    'text,f3_1,160,61,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,70,36.8',
                     'setLineWidth,1', 'rect,80,15,140,18.4',
                     'setLineWidth,1', 'rect,80,33.4,80,18.4',
@@ -1172,13 +1172,13 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,38.4,{baseline:middle,align:left}',
-                    'text,Band2,85,29.2,{baseline:middle,align:left}',
-                    'text,F2,80,52.6,{baseline:middle,align:left}',
-                    'text,F3,160,52.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,71,{baseline:middle,align:left}',
-                    'text,f2_1,80,71,{baseline:middle,align:left}',
-                    'text,f3_1,160,71,{baseline:middle,align:left}',
+                    'text,F1,10,38.4,{baseline:middle}',
+                    'text,Band2,85,29.2,{baseline:middle}',
+                    'text,F2,80,52.6,{baseline:middle}',
+                    'text,F3,160,52.6,{baseline:middle}',
+                    'text,f1_1,10,71,{baseline:middle}',
+                    'text,f2_1,80,71,{baseline:middle}',
+                    'text,f3_1,160,71,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,70,46.8',
                     'setLineWidth,1',
@@ -1227,13 +1227,13 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,33,{baseline:middle,align:left}',
-                    'text,Band2,80,23,{baseline:middle,align:left}',
-                    'text,F3,160,33,{baseline:middle,align:left}',
-                    'text,F2,80,41,{baseline:middle,align:left}',
-                    'text,f1_1,10,63,{baseline:middle,align:left}',
-                    'text,f2_1,80,63,{baseline:middle,align:left}',
-                    'text,f3_1,160,63,{baseline:middle,align:left}',
+                    'text,F1,10,33,{baseline:middle}',
+                    'text,Band2,80,23,{baseline:middle}',
+                    'text,F3,160,33,{baseline:middle}',
+                    'text,F2,80,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'text,f2_1,80,63,{baseline:middle}',
+                    'text,f3_1,160,63,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,70,36',
                     'setLineWidth,1', 'rect,80,15,80,16',
                     'setLineWidth,1', 'rect,160,15,60,36',
@@ -1264,13 +1264,13 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,33.4,{baseline:middle,align:left}',
-                    'text,Band2,80,24.2,{baseline:middle,align:left}',
-                    'text,F3,160,33.4,{baseline:middle,align:left}',
-                    'text,F2,80,42.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,61,{baseline:middle,align:left}',
-                    'text,f2_1,80,61,{baseline:middle,align:left}',
-                    'text,f3_1,160,61,{baseline:middle,align:left}',
+                    'text,F1,10,33.4,{baseline:middle}',
+                    'text,Band2,80,24.2,{baseline:middle}',
+                    'text,F3,160,33.4,{baseline:middle}',
+                    'text,F2,80,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'text,f2_1,80,61,{baseline:middle}',
+                    'text,f3_1,160,61,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,70,36.8',
                     'setLineWidth,1', 'rect,80,15,80,18.4',
                     'setLineWidth,1', 'rect,160,15,60,36.8',
@@ -1307,13 +1307,13 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,38.4,{baseline:middle,align:left}',
-                    'text,Band2,85,29.2,{baseline:middle,align:left}',
-                    'text,F3,160,38.4,{baseline:middle,align:left}',
-                    'text,F2,80,52.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,71,{baseline:middle,align:left}',
-                    'text,f2_1,80,71,{baseline:middle,align:left}',
-                    'text,f3_1,160,71,{baseline:middle,align:left}',
+                    'text,F1,10,38.4,{baseline:middle}',
+                    'text,Band2,85,29.2,{baseline:middle}',
+                    'text,F3,160,38.4,{baseline:middle}',
+                    'text,F2,80,52.6,{baseline:middle}',
+                    'text,f1_1,10,71,{baseline:middle}',
+                    'text,f2_1,80,71,{baseline:middle}',
+                    'text,f3_1,160,71,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,70,46.8',
                     'setLineWidth,1',
@@ -1362,15 +1362,15 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,33,{baseline:middle,align:left}',
-                    'text,Band2,80,23,{baseline:middle,align:left}',
-                    'text,F4,220,33,{baseline:middle,align:left}',
-                    'text,F2,80,41,{baseline:middle,align:left}',
-                    'text,F3,160,41,{baseline:middle,align:left}',
-                    'text,f1_1,10,63,{baseline:middle,align:left}',
-                    'text,f2_1,80,63,{baseline:middle,align:left}',
-                    'text,f3_1,160,63,{baseline:middle,align:left}',
-                    'text,f4_1,220,63,{baseline:middle,align:left}',
+                    'text,F1,10,33,{baseline:middle}',
+                    'text,Band2,80,23,{baseline:middle}',
+                    'text,F4,220,33,{baseline:middle}',
+                    'text,F2,80,41,{baseline:middle}',
+                    'text,F3,160,41,{baseline:middle}',
+                    'text,f1_1,10,63,{baseline:middle}',
+                    'text,f2_1,80,63,{baseline:middle}',
+                    'text,f3_1,160,63,{baseline:middle}',
+                    'text,f4_1,220,63,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,70,36',
                     'setLineWidth,1', 'rect,80,15,140,16',
                     'setLineWidth,1', 'rect,220,15,70,36',
@@ -1403,15 +1403,15 @@ const JSPdfBandsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,33.4,{baseline:middle,align:left}',
-                    'text,Band2,80,24.2,{baseline:middle,align:left}',
-                    'text,F4,220,33.4,{baseline:middle,align:left}',
-                    'text,F2,80,42.6,{baseline:middle,align:left}',
-                    'text,F3,160,42.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,61,{baseline:middle,align:left}',
-                    'text,f2_1,80,61,{baseline:middle,align:left}',
-                    'text,f3_1,160,61,{baseline:middle,align:left}',
-                    'text,f4_1,220,61,{baseline:middle,align:left}',
+                    'text,F1,10,33.4,{baseline:middle}',
+                    'text,Band2,80,24.2,{baseline:middle}',
+                    'text,F4,220,33.4,{baseline:middle}',
+                    'text,F2,80,42.6,{baseline:middle}',
+                    'text,F3,160,42.6,{baseline:middle}',
+                    'text,f1_1,10,61,{baseline:middle}',
+                    'text,f2_1,80,61,{baseline:middle}',
+                    'text,f3_1,160,61,{baseline:middle}',
+                    'text,f4_1,220,61,{baseline:middle}',
                     'setLineWidth,1', 'rect,10,15,70,36.8',
                     'setLineWidth,1', 'rect,80,15,140,18.4',
                     'setLineWidth,1', 'rect,220,15,70,36.8',
@@ -1450,15 +1450,15 @@ const JSPdfBandsTests = {
                 };
 
                 const expectedLog = [
-                    'text,F1,10,38.4,{baseline:middle,align:left}',
-                    'text,Band2,85,29.2,{baseline:middle,align:left}',
-                    'text,F4,220,38.4,{baseline:middle,align:left}',
-                    'text,F2,80,52.6,{baseline:middle,align:left}',
-                    'text,F3,160,52.6,{baseline:middle,align:left}',
-                    'text,f1_1,10,71,{baseline:middle,align:left}',
-                    'text,f2_1,80,71,{baseline:middle,align:left}',
-                    'text,f3_1,160,71,{baseline:middle,align:left}',
-                    'text,f4_1,220,71,{baseline:middle,align:left}',
+                    'text,F1,10,38.4,{baseline:middle}',
+                    'text,Band2,85,29.2,{baseline:middle}',
+                    'text,F4,220,38.4,{baseline:middle}',
+                    'text,F2,80,52.6,{baseline:middle}',
+                    'text,F3,160,52.6,{baseline:middle}',
+                    'text,f1_1,10,71,{baseline:middle}',
+                    'text,f2_1,80,71,{baseline:middle}',
+                    'text,f3_1,160,71,{baseline:middle}',
+                    'text,f4_1,220,71,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,70,46.8',
                     'setLineWidth,1',

@@ -30,7 +30,7 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,f1,0,24.2,{baseline:middle,align:left}',
+                    'text,f1,0,24.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,595.28,18.4'
                 ];
@@ -51,7 +51,7 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,f1,10,24.2,{baseline:middle,align:left}',
+                    'text,f1,10,24.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,585.28,18.4'
                 ];
@@ -72,7 +72,7 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,f1,10,24.2,{baseline:middle,align:left}',
+                    'text,f1,10,24.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,18.4'
                 ];
@@ -97,12 +97,12 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,24.2,{baseline:middle,align:left}',
-                    'text,F2,302.64,24.2,{baseline:middle,align:left}',
-                    'text,v1_1,10,42.6,{baseline:middle,align:left}',
-                    'text,v2_1,302.64,42.6,{baseline:middle,align:left}',
-                    'text,v1_2,10,61,{baseline:middle,align:left}',
-                    'text,v2_2,302.64,61,{baseline:middle,align:left}',
+                    'text,F1,10,24.2,{baseline:middle}',
+                    'text,F2,302.64,24.2,{baseline:middle}',
+                    'text,v1_1,10,42.6,{baseline:middle}',
+                    'text,v2_1,302.64,42.6,{baseline:middle}',
+                    'text,v1_2,10,61,{baseline:middle}',
+                    'text,v2_2,302.64,61,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,292.64,18.4',
                     'setLineWidth,1',
@@ -136,12 +136,12 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,24.2,{baseline:middle,align:left}',
-                    'text,F2,110,24.2,{baseline:middle,align:left}',
-                    'text,v1_1,10,42.6,{baseline:middle,align:left}',
-                    'text,v2_1,110,42.6,{baseline:middle,align:left}',
-                    'text,v1_2,10,61,{baseline:middle,align:left}',
-                    'text,v2_2,110,61,{baseline:middle,align:left}',
+                    'text,F1,10,24.2,{baseline:middle}',
+                    'text,F2,110,24.2,{baseline:middle}',
+                    'text,v1_1,10,42.6,{baseline:middle}',
+                    'text,v2_1,110,42.6,{baseline:middle}',
+                    'text,v1_2,10,61,{baseline:middle}',
+                    'text,v2_2,110,61,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,18.4',
                     'setLineWidth,1',
@@ -175,12 +175,12 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,24.2,{baseline:middle,align:left}',
-                    'text,F2,68.528,24.2,{baseline:middle,align:left}',
-                    'text,v1_1,10,42.6,{baseline:middle,align:left}',
-                    'text,v2_1,68.528,42.6,{baseline:middle,align:left}',
-                    'text,v1_2,10,61,{baseline:middle,align:left}',
-                    'text,v2_2,68.528,61,{baseline:middle,align:left}',
+                    'text,F1,10,24.2,{baseline:middle}',
+                    'text,F2,68.528,24.2,{baseline:middle}',
+                    'text,v1_1,10,42.6,{baseline:middle}',
+                    'text,v2_1,68.528,42.6,{baseline:middle}',
+                    'text,v1_2,10,61,{baseline:middle}',
+                    'text,v2_2,68.528,61,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,58.528,18.4',
                     'setLineWidth,1',
@@ -214,12 +214,12 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,24.2,{baseline:middle,align:left}',
-                    'text,F2,478.224,24.2,{baseline:middle,align:left}',
-                    'text,v1_1,10,42.6,{baseline:middle,align:left}',
-                    'text,v2_1,478.224,42.6,{baseline:middle,align:left}',
-                    'text,v1_2,10,61,{baseline:middle,align:left}',
-                    'text,v2_2,478.224,61,{baseline:middle,align:left}',
+                    'text,F1,10,24.2,{baseline:middle}',
+                    'text,F2,478.224,24.2,{baseline:middle}',
+                    'text,v1_1,10,42.6,{baseline:middle}',
+                    'text,v2_1,478.224,42.6,{baseline:middle}',
+                    'text,v1_2,10,61,{baseline:middle}',
+                    'text,v2_2,478.224,61,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,468.224,18.4',
                     'setLineWidth,1',
@@ -254,12 +254,12 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,24.2,{baseline:middle,align:left}',
-                    'text,F2,110,24.2,{baseline:middle,align:left}',
-                    'text,v1_1,10,42.6,{baseline:middle,align:left}',
-                    'text,v2_1,110,42.6,{baseline:middle,align:left}',
-                    'text,v1_2,10,61,{baseline:middle,align:left}',
-                    'text,v2_2,110,61,{baseline:middle,align:left}',
+                    'text,F1,10,24.2,{baseline:middle}',
+                    'text,F2,110,24.2,{baseline:middle}',
+                    'text,v1_1,10,42.6,{baseline:middle}',
+                    'text,v2_1,110,42.6,{baseline:middle}',
+                    'text,v1_2,10,61,{baseline:middle}',
+                    'text,v2_2,110,61,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,18.4',
                     'setLineWidth,1',
@@ -294,12 +294,12 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F1,10,24.2,{baseline:middle,align:left}',
-                    'text,F2,478.224,24.2,{baseline:middle,align:left}',
-                    'text,v1_1,10,42.6,{baseline:middle,align:left}',
-                    'text,v2_1,478.224,42.6,{baseline:middle,align:left}',
-                    'text,v1_2,10,61,{baseline:middle,align:left}',
-                    'text,v2_2,478.224,61,{baseline:middle,align:left}',
+                    'text,F1,10,24.2,{baseline:middle}',
+                    'text,F2,478.224,24.2,{baseline:middle}',
+                    'text,v1_1,10,42.6,{baseline:middle}',
+                    'text,v2_1,478.224,42.6,{baseline:middle}',
+                    'text,v1_2,10,61,{baseline:middle}',
+                    'text,v2_2,478.224,61,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,468.224,18.4',
                     'setLineWidth,1',
@@ -338,9 +338,9 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 line1 line 2,0,24.2,{baseline:middle,align:left}',
-                    'text,F1,0,42.6,{baseline:middle,align:left}',
-                    'text,f1_1 long line very long line,0,61,{baseline:middle,align:left}',
+                    'text,Band1 line1 line 2,0,24.2,{baseline:middle}',
+                    'text,F1,0,42.6,{baseline:middle}',
+                    'text,f1_1 long line very long line,0,61,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,595.28,18.4',
                     'setLineWidth,1',
@@ -369,11 +369,11 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 long line 1 ling line 2,0,24.2,{baseline:middle,align:left}',
-                    'text,F1,0,42.6,{baseline:middle,align:left}',
-                    'text,F2,297.64,42.6,{baseline:middle,align:left}',
-                    'text,f1_1 line,0,61,{baseline:middle,align:left}',
-                    'text,f2_1 line long line long line,297.64,61,{baseline:middle,align:left}',
+                    'text,Band1 long line 1 ling line 2,0,24.2,{baseline:middle}',
+                    'text,F1,0,42.6,{baseline:middle}',
+                    'text,F2,297.64,42.6,{baseline:middle}',
+                    'text,f1_1 line,0,61,{baseline:middle}',
+                    'text,f2_1 line long line long line,297.64,61,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,595.28,18.4',
                     'setLineWidth,1',
@@ -407,13 +407,13 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 long line 1 ling line 2,0,24.2,{baseline:middle,align:left}',
-                    'text,F1,0,42.6,{baseline:middle,align:left}',
-                    'text,F2,198.427,42.6,{baseline:middle,align:left}',
-                    'text,F3,396.853,42.6,{baseline:middle,align:left}',
-                    'text,f1_1 line,0,61,{baseline:middle,align:left}',
-                    'text,f2_1 line long line long line,198.427,61,{baseline:middle,align:left}',
-                    'text,f3,396.853,61,{baseline:middle,align:left}',
+                    'text,Band1 long line 1 ling line 2,0,24.2,{baseline:middle}',
+                    'text,F1,0,42.6,{baseline:middle}',
+                    'text,F2,198.427,42.6,{baseline:middle}',
+                    'text,F3,396.853,42.6,{baseline:middle}',
+                    'text,f1_1 line,0,61,{baseline:middle}',
+                    'text,f2_1 line long line long line,198.427,61,{baseline:middle}',
+                    'text,f3,396.853,61,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,595.28,18.4',
                     'setLineWidth,1',
@@ -467,14 +467,14 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,0,24.2,{baseline:middle,align:left}',
-                    'text,Band1 line,198.427,30.333,{baseline:middle,align:left}',
-                    'text,Band1_2,198.427,79.4,{baseline:middle,align:left}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,396.853,67.133,{baseline:middle,align:left}',
-                    'text,f3,198.427,146.867,{baseline:middle,align:left}',
-                    'text,f1_1,0,189.8,{baseline:middle,align:left}',
-                    'text,f3_1,198.427,189.8,{baseline:middle,align:left}',
-                    'text,f4_1,396.853,189.8,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,0,24.2,{baseline:middle}',
+                    'text,Band1 line,198.427,30.333,{baseline:middle}',
+                    'text,Band1_2,198.427,79.4,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6,396.853,67.133,{baseline:middle}',
+                    'text,f3,198.427,146.867,{baseline:middle}',
+                    'text,f1_1,0,189.8,{baseline:middle}',
+                    'text,f3_1,198.427,189.8,{baseline:middle}',
+                    'text,f4_1,396.853,189.8,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,198.427,165.6',
                     'setLineWidth,1',
@@ -529,14 +529,14 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,0,24.2,{baseline:middle,align:left}',
-                    'text,Band1 line,198.427,24.2,{baseline:middle,align:left}',
-                    'text,Band1_2,198.427,70.2,{baseline:middle,align:left}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8,396.853,42.6,{baseline:middle,align:left}',
-                    'text,f3,198.427,143.8,{baseline:middle,align:left}',
-                    'text,f1_1,0,189.8,{baseline:middle,align:left}',
-                    'text,f3_1,198.427,189.8,{baseline:middle,align:left}',
-                    'text,f4_1,396.853,189.8,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,0,24.2,{baseline:middle}',
+                    'text,Band1 line,198.427,24.2,{baseline:middle}',
+                    'text,Band1_2,198.427,70.2,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8,396.853,42.6,{baseline:middle}',
+                    'text,f3,198.427,143.8,{baseline:middle}',
+                    'text,f1_1,0,189.8,{baseline:middle}',
+                    'text,f3_1,198.427,189.8,{baseline:middle}',
+                    'text,f4_1,396.853,189.8,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,198.427,165.6',
                     'setLineWidth,1',
@@ -591,15 +591,15 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,0,33.4,{baseline:middle,align:left}',
-                    'text,Band1 line,198.427,24.2,{baseline:middle,align:left}',
-                    'text,Band1_2,198.427,51.8,{baseline:middle,align:left}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,396.853,42.6,{baseline:middle,align:left}',
-                    'text,f1_2_3,198.427,88.6,{baseline:middle,align:left}',
-                    'text,line1\nline2\nline3\nline4,198.427,125.4,{baseline:middle,align:left}',
-                    'text,f1_1,0,208.2,{baseline:middle,align:left}',
-                    'text,f3_1_1,198.427,208.2,{baseline:middle,align:left}',
-                    'text,f4_1,396.853,208.2,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,0,33.4,{baseline:middle}',
+                    'text,Band1 line,198.427,24.2,{baseline:middle}',
+                    'text,Band1_2,198.427,51.8,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,396.853,42.6,{baseline:middle}',
+                    'text,f1_2_3,198.427,88.6,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4,198.427,125.4,{baseline:middle}',
+                    'text,f1_1,0,208.2,{baseline:middle}',
+                    'text,f3_1_1,198.427,208.2,{baseline:middle}',
+                    'text,f4_1,396.853,208.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,198.427,184',
                     'setLineWidth,1',
@@ -656,15 +656,15 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,0,33.4,{baseline:middle,align:left}',
-                    'text,Band1 line,198.427,24.2,{baseline:middle,align:left}',
-                    'text,Band1_2,198.427,45.667,{baseline:middle,align:left}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,396.853,42.6,{baseline:middle,align:left}',
-                    'text,f1_2_3,198.427,70.2,{baseline:middle,align:left}',
-                    'text,line1\nline2\nline3\nline4\nline5\nline6,198.427,94.733,{baseline:middle,align:left}',
-                    'text,f1_1,0,208.2,{baseline:middle,align:left}',
-                    'text,f3_1_1,198.427,208.2,{baseline:middle,align:left}',
-                    'text,f4_1,396.853,208.2,{baseline:middle,align:left}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,0,33.4,{baseline:middle}',
+                    'text,Band1 line,198.427,24.2,{baseline:middle}',
+                    'text,Band1_2,198.427,45.667,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9,396.853,42.6,{baseline:middle}',
+                    'text,f1_2_3,198.427,70.2,{baseline:middle}',
+                    'text,line1\nline2\nline3\nline4\nline5\nline6,198.427,94.733,{baseline:middle}',
+                    'text,f1_1,0,208.2,{baseline:middle}',
+                    'text,f3_1_1,198.427,208.2,{baseline:middle}',
+                    'text,f4_1,396.853,208.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,198.427,184',
                     'setLineWidth,1',
@@ -719,14 +719,14 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,0,24.2,{baseline:middle,align:left}',
-                    'text,F3,297.64,24.2,{baseline:middle,align:left}',
-                    'text,F1: f1 line line,0,42.6,{baseline:middle,align:left}',
-                    'text,f1_2 line long line,10,61,{baseline:middle,align:left}',
-                    'text,f1_3 line long line long line,297.64,61,{baseline:middle,align:left}',
-                    'text,F1: f1 long line long line long line,0,79.4,{baseline:middle,align:left}',
-                    'text,f2_2 line,10,97.8,{baseline:middle,align:left}',
-                    'text,f2_3 line long line line,297.64,97.8,{baseline:middle,align:left}',
+                    'text,F2,0,24.2,{baseline:middle}',
+                    'text,F3,297.64,24.2,{baseline:middle}',
+                    'text,F1: f1 line line,0,42.6,{baseline:middle}',
+                    'text,f1_2 line long line,10,61,{baseline:middle}',
+                    'text,f1_3 line long line long line,297.64,61,{baseline:middle}',
+                    'text,F1: f1 long line long line long line,0,79.4,{baseline:middle}',
+                    'text,f2_2 line,10,97.8,{baseline:middle}',
+                    'text,f2_3 line long line line,297.64,97.8,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,297.64,18.4',
                     'setLineWidth,1',
@@ -778,14 +778,14 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,0,24.2,{baseline:middle,align:left}',
-                    'text,F3,297.64,24.2,{baseline:middle,align:left}',
-                    'text,F1: f1_1 long line,0,42.6,{baseline:middle,align:left}',
-                    'text,f1_2 long line long line long line,10,61,{baseline:middle,align:left}',
-                    'text,f1_3 line,297.64,61,{baseline:middle,align:left}',
-                    'text,F1: f2_1 long line long line long line,0,79.4,{baseline:middle,align:left}',
-                    'text,f2_2 line long line,10,97.8,{baseline:middle,align:left}',
-                    'text,f2_3,297.64,97.8,{baseline:middle,align:left}',
+                    'text,F2,0,24.2,{baseline:middle}',
+                    'text,F3,297.64,24.2,{baseline:middle}',
+                    'text,F1: f1_1 long line,0,42.6,{baseline:middle}',
+                    'text,f1_2 long line long line long line,10,61,{baseline:middle}',
+                    'text,f1_3 line,297.64,61,{baseline:middle}',
+                    'text,F1: f2_1 long line long line long line,0,79.4,{baseline:middle}',
+                    'text,f2_2 line long line,10,97.8,{baseline:middle}',
+                    'text,f2_3,297.64,97.8,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,297.64,18.4',
                     'setLineWidth,1',
@@ -840,16 +840,16 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,0,24.2,{baseline:middle,align:left}',
-                    'text,F4,297.64,24.2,{baseline:middle,align:left}',
-                    'text,F1: f1 long line,0,42.6,{baseline:middle,align:left}',
-                    'text,F2: f2_2 long line long line long line long line,10,61,{baseline:middle,align:left}',
-                    'text,f2_3 long line long line,20,79.4,{baseline:middle,align:left}',
-                    'text,f2_4,297.64,79.4,{baseline:middle,align:left}',
-                    'text,F1: f1 long line long line long line,0,97.8,{baseline:middle,align:left}',
-                    'text,F2: f1_2 long line,10,116.2,{baseline:middle,align:left}',
-                    'text,f1_3 line,20,134.6,{baseline:middle,align:left}',
-                    'text,f1_4,297.64,134.6,{baseline:middle,align:left}',
+                    'text,F3,0,24.2,{baseline:middle}',
+                    'text,F4,297.64,24.2,{baseline:middle}',
+                    'text,F1: f1 long line,0,42.6,{baseline:middle}',
+                    'text,F2: f2_2 long line long line long line long line,10,61,{baseline:middle}',
+                    'text,f2_3 long line long line,20,79.4,{baseline:middle}',
+                    'text,f2_4,297.64,79.4,{baseline:middle}',
+                    'text,F1: f1 long line long line long line,0,97.8,{baseline:middle}',
+                    'text,F2: f1_2 long line,10,116.2,{baseline:middle}',
+                    'text,f1_3 line,20,134.6,{baseline:middle}',
+                    'text,f1_4,297.64,134.6,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,297.64,18.4',
                     'setLineWidth,1',
@@ -901,13 +901,13 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,0,24.2,{baseline:middle,align:left}',
-                    'text,F3,190,24.2,{baseline:middle,align:left}',
-                    'text,F4,380,24.2,{baseline:middle,align:left}',
-                    'text,F1: f1 line long line (Max: f1 line long line),0,42.6,{baseline:middle,align:left}',
-                    'text,f2 line,10,70.2,{baseline:middle,align:left}',
-                    'text,f3 long line long line long\nline,190,61,{baseline:middle,align:left}',
-                    'text,f4 long line,380,70.2,{baseline:middle,align:left}',
+                    'text,F2,0,24.2,{baseline:middle}',
+                    'text,F3,190,24.2,{baseline:middle}',
+                    'text,F4,380,24.2,{baseline:middle}',
+                    'text,F1: f1 line long line (Max: f1 line long line),0,42.6,{baseline:middle}',
+                    'text,f2 line,10,70.2,{baseline:middle}',
+                    'text,f3 long line long line long\nline,190,61,{baseline:middle}',
+                    'text,f4 long line,380,70.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,190,18.4',
                     'setLineWidth,1',
@@ -953,14 +953,14 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,0,24.2,{baseline:middle,align:left}',
-                    'text,F4,297.64,24.2,{baseline:middle,align:left}',
-                    'text,F1: f1 long line long line long line (Max: f1\nlong line long line long line),0,42.6,{baseline:middle,align:left}',
-                    'text,Max: f4 long line long line,297.64,51.8,{baseline:middle,align:left}',
-                    'text,F2: f2 long line (Max of F1 is f1 long line\nlong line long line),10,79.4,{baseline:middle,align:left}',
-                    'text,Max: f4 long line long line,297.64,88.6,{baseline:middle,align:left}',
-                    'text,f3 line,20,116.2,{baseline:middle,align:left}',
-                    'text,f4 long line long line,297.64,116.2,{baseline:middle,align:left}',
+                    'text,F3,0,24.2,{baseline:middle}',
+                    'text,F4,297.64,24.2,{baseline:middle}',
+                    'text,F1: f1 long line long line long line (Max: f1\nlong line long line long line),0,42.6,{baseline:middle}',
+                    'text,Max: f4 long line long line,297.64,51.8,{baseline:middle}',
+                    'text,F2: f2 long line (Max of F1 is f1 long line\nlong line long line),10,79.4,{baseline:middle}',
+                    'text,Max: f4 long line long line,297.64,88.6,{baseline:middle}',
+                    'text,f3 line,20,116.2,{baseline:middle}',
+                    'text,f4 long line long line,297.64,116.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,297.64,18.4',
                     'setLineWidth,1',
@@ -1017,14 +1017,14 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F2,0,24.2,{baseline:middle,align:left}',
-                    'text,F3,190,24.2,{baseline:middle,align:left}',
-                    'text,F4,380,24.2,{baseline:middle,align:left}',
-                    'text,F1: f1 long line (Max: f1 long line),0,42.6,{baseline:middle,align:left}',
-                    'text,f2 very long line very\nlong line,10,61,{baseline:middle,align:left}',
-                    'text,f3 line,190,70.2,{baseline:middle,align:left}',
-                    'text,f4 long line,380,70.2,{baseline:middle,align:left}',
-                    'text,Max: f3 line,190,97.8,{baseline:middle,align:left}',
+                    'text,F2,0,24.2,{baseline:middle}',
+                    'text,F3,190,24.2,{baseline:middle}',
+                    'text,F4,380,24.2,{baseline:middle}',
+                    'text,F1: f1 long line (Max: f1 long line),0,42.6,{baseline:middle}',
+                    'text,f2 very long line very\nlong line,10,61,{baseline:middle}',
+                    'text,f3 line,190,70.2,{baseline:middle}',
+                    'text,f4 long line,380,70.2,{baseline:middle}',
+                    'text,Max: f3 line,190,97.8,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,190,18.4',
                     'setLineWidth,1',
@@ -1081,21 +1081,21 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,F3,10,24.2,{baseline:middle,align:left}',
-                    'text,F4,302.64,24.2,{baseline:middle,align:left}',
-                    'text,F1: f1 very ling line very long line very long line,10,42.6,{baseline:middle,align:left}',
-                    'text,F2: f2_1 line,20,61,{baseline:middle,align:left}',
-                    'text,f3line1\nline2\nline3\nline4,30,79.4,{baseline:middle,align:left}',
-                    'text,f4,302.64,107,{baseline:middle,align:left}',
-                    'text,Max: f3line1\nline2\nline3\nline4,30,153,{baseline:middle,align:left}',
-                    'text,Max: f3line1\nline2\nline3\nline4,20,226.6,{baseline:middle,align:left}',
-                    'text,F1: f1 very long line very long line,10,300.2,{baseline:middle,align:left}',
-                    'text,F2: f2_2very long line very long line,20,318.6,{baseline:middle,align:left}',
-                    'text,f3very long line very long line,30,337,{baseline:middle,align:left}',
-                    'text,f4,302.64,337,{baseline:middle,align:left}',
-                    'text,Max: f3very long line very long line,30,355.4,{baseline:middle,align:left}',
-                    'text,Max: f3very long line very long line,20,373.8,{baseline:middle,align:left}',
-                    'text,Max: f3very long line very long line,10,392.2,{baseline:middle,align:left}',
+                    'text,F3,10,24.2,{baseline:middle}',
+                    'text,F4,302.64,24.2,{baseline:middle}',
+                    'text,F1: f1 very ling line very long line very long line,10,42.6,{baseline:middle}',
+                    'text,F2: f2_1 line,20,61,{baseline:middle}',
+                    'text,f3line1\nline2\nline3\nline4,30,79.4,{baseline:middle}',
+                    'text,f4,302.64,107,{baseline:middle}',
+                    'text,Max: f3line1\nline2\nline3\nline4,30,153,{baseline:middle}',
+                    'text,Max: f3line1\nline2\nline3\nline4,20,226.6,{baseline:middle}',
+                    'text,F1: f1 very long line very long line,10,300.2,{baseline:middle}',
+                    'text,F2: f2_2very long line very long line,20,318.6,{baseline:middle}',
+                    'text,f3very long line very long line,30,337,{baseline:middle}',
+                    'text,f4,302.64,337,{baseline:middle}',
+                    'text,Max: f3very long line very long line,30,355.4,{baseline:middle}',
+                    'text,Max: f3very long line very long line,20,373.8,{baseline:middle}',
+                    'text,Max: f3very long line very long line,10,392.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,292.64,18.4',
                     'setLineWidth,1',
@@ -1164,9 +1164,9 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 long line 1 ling line 2,0,24.2,{baseline:middle,align:left}',
-                    'text,F1: f1_1 line,0,42.6,{baseline:middle,align:left}',
-                    'text,F2: f2_1 line long line long line,10,61,{baseline:middle,align:left}',
+                    'text,Band1 long line 1 ling line 2,0,24.2,{baseline:middle}',
+                    'text,F1: f1_1 line,0,42.6,{baseline:middle}',
+                    'text,F2: f2_1 line long line long line,10,61,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,595.28,18.4',
                     'setLineWidth,1',
@@ -1205,11 +1205,11 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 long line 1 ling line 2,0,24.2,{baseline:middle,align:left}',
-                    'text,f3 line,297.64,24.2,{baseline:middle,align:left}',
-                    'text,F1: f1_1 line (Max: f1_1 line),0,42.6,{baseline:middle,align:left}',
-                    'text,F2: f2_1 line long line long line (Max of F1 is f1_1 line),10,61,{baseline:middle,align:left}',
-                    'text,long line very long line,297.64,79.4,{baseline:middle,align:left}',
+                    'text,Band1 long line 1 ling line 2,0,24.2,{baseline:middle}',
+                    'text,f3 line,297.64,24.2,{baseline:middle}',
+                    'text,F1: f1_1 line (Max: f1_1 line),0,42.6,{baseline:middle}',
+                    'text,F2: f2_1 line long line long line (Max of F1 is f1_1 line),10,61,{baseline:middle}',
+                    'text,long line very long line,297.64,79.4,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,297.64,18.4',
                     'setLineWidth,1',
@@ -1270,21 +1270,21 @@ const JSPdfColumnWidthsTests = {
                 });
 
                 const expectedLog = [
-                    'text,Band1 line,0,24.2,{baseline:middle,align:left}',
-                    'text,Band1_1 long line very long line,0,56.4,{baseline:middle,align:left}',
-                    'text,Band1_2,238.112,56.4,{baseline:middle,align:left}',
-                    'text,f7 long line very\nlong linelong line\nvery long\nlinelong line very\nlong linelong line\nvery long line,476.224,42.6,{baseline:middle,align:left}',
-                    'text,f3  long line,0,111.6,{baseline:middle,align:left}',
-                    'text,f4  long line very\nlong line,119.056,102.4,{baseline:middle,align:left}',
-                    'text,f5 long line very\nlong line,238.112,102.4,{baseline:middle,align:left}',
-                    'text,F6,357.168,111.6,{baseline:middle,align:left}',
-                    'text,F1: f1_1 line,0,153,{baseline:middle,align:left}',
-                    'text,F2: f2_1 long line very long line,10,171.4,{baseline:middle,align:left}',
-                    'text,f3_1,20,217.4,{baseline:middle,align:left}',
-                    'text,f4_1 very long\nline very long\nline very long\nline,119.056,189.8,{baseline:middle,align:left}',
-                    'text,f5_1 long line,238.112,217.4,{baseline:middle,align:left}',
-                    'text,f6_1,357.168,217.4,{baseline:middle,align:left}',
-                    'text,f7_1 line,476.224,217.4,{baseline:middle,align:left}',
+                    'text,Band1 line,0,24.2,{baseline:middle}',
+                    'text,Band1_1 long line very long line,0,56.4,{baseline:middle}',
+                    'text,Band1_2,238.112,56.4,{baseline:middle}',
+                    'text,f7 long line very\nlong linelong line\nvery long\nlinelong line very\nlong linelong line\nvery long line,476.224,42.6,{baseline:middle}',
+                    'text,f3  long line,0,111.6,{baseline:middle}',
+                    'text,f4  long line very\nlong line,119.056,102.4,{baseline:middle}',
+                    'text,f5 long line very\nlong line,238.112,102.4,{baseline:middle}',
+                    'text,F6,357.168,111.6,{baseline:middle}',
+                    'text,F1: f1_1 line,0,153,{baseline:middle}',
+                    'text,F2: f2_1 long line very long line,10,171.4,{baseline:middle}',
+                    'text,f3_1,20,217.4,{baseline:middle}',
+                    'text,f4_1 very long\nline very long\nline very long\nline,119.056,189.8,{baseline:middle}',
+                    'text,f5_1 long line,238.112,217.4,{baseline:middle}',
+                    'text,f6_1,357.168,217.4,{baseline:middle}',
+                    'text,f7_1 line,476.224,217.4,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,0,15,595.28,18.4',
                     'setLineWidth,1',

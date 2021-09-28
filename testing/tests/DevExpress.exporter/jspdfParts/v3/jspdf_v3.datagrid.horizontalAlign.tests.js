@@ -15,7 +15,7 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
 
                 const expectedLog = [
-                    'text,line 1,10,24.2,{baseline:middle,align:left}',
+                    'text,line 1,10,24.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,200,18.4'
                 ];
@@ -91,7 +91,7 @@ const JSPdfHorizontalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,line 1,10,20.75,{baseline:middle,align:left}',
+                    'text,line 1,10,20.75,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,200,11.5',
                     'setFontSize,16'
@@ -178,7 +178,7 @@ const JSPdfHorizontalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line 1,10,26.5,{baseline:middle,align:left}',
+                    'text,line 1,10,26.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,200,23',
                     'setFontSize,16'
@@ -261,7 +261,7 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
 
                 const expectedLog = [
-                    'text,line 1\nlong line 2,10,24.2,{baseline:middle,align:left}',
+                    'text,line 1\nlong line 2,10,24.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,200,36.8'
                 ];
@@ -337,7 +337,7 @@ const JSPdfHorizontalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,line 1\nlong line 2,10,20.75,{baseline:middle,align:left}',
+                    'text,line 1\nlong line 2,10,20.75,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,200,23',
                     'setFontSize,16'
@@ -424,7 +424,7 @@ const JSPdfHorizontalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line 1\nlong line 2,10,26.5,{baseline:middle,align:left}',
+                    'text,line 1\nlong line 2,10,26.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,200,46',
                     'setFontSize,16'
@@ -507,7 +507,7 @@ const JSPdfHorizontalAlignTests = {
                 const customizeCell = ({ pdfCell }) => { pdfCell.horizontalAlign = 'left'; };
 
                 const expectedLog = [
-                    'text,line 1\nlong line 2\nvery long line 3,10,24.2,{baseline:middle,align:left}',
+                    'text,line 1\nlong line 2\nvery long line 3,10,24.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,200,55.2'
                 ];
@@ -583,7 +583,7 @@ const JSPdfHorizontalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,10',
-                    'text,line 1\nlong line 2\nvery long line 3,10,20.75,{baseline:middle,align:left}',
+                    'text,line 1\nlong line 2\nvery long line 3,10,20.75,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,200,34.5',
                     'setFontSize,16'
@@ -670,7 +670,7 @@ const JSPdfHorizontalAlignTests = {
 
                 const expectedLog = [
                     'setFontSize,20',
-                    'text,line 1\nlong line 2\nvery long line 3,10,26.5,{baseline:middle,align:left}',
+                    'text,line 1\nlong line 2\nvery long line 3,10,26.5,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,200,69',
                     'setFontSize,16'
