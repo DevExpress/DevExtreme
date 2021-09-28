@@ -4,7 +4,7 @@ import { Scrollable } from '../../../../scroll_view/scrollable';
 import { Widget } from '../../../../common/widget';
 import {
   viewFunction as LayoutView,
-} from '../ordinary_layout';
+} from '../cross_scrolling_layout';
 import { GroupPanel } from '../group_panel/group_panel';
 import { AllDayPanelLayout, AllDayPanelLayoutProps } from '../date_table/all_day_panel/layout';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
@@ -157,6 +157,23 @@ describe('OrdinaryLayout', () => {
         .toBe(false);
     });
 
+    it('should render header scrollable and pass correct props to it', () => {
+      const layout = render({});
+
+      const headerScrollable = layout.find(Scrollable).at(0);
+
+      expect(headerScrollable.props())
+        .toEqual({
+          className: 'dx-scheduler-header-scrollable',
+          useKeyboard: false,
+          showScrollbar: 'never',
+          direction: 'horizontal',
+          useNative: false,
+          bounceEnabled: false,
+          children: expect.anything(),
+        });
+    });
+
     it('should render HeaderPanel and pass to it correct props', () => {
       const props = {
         dateHeaderData,
@@ -192,12 +209,12 @@ describe('OrdinaryLayout', () => {
         .toEqual(props);
     });
 
-    it('should render scrollable and pass correct props to it', () => {
+    it('should render date-table scrollable and pass correct props to it', () => {
       const layout = render({
         props: { scrollingDirection: 'vertical' },
       });
 
-      const scrollable = layout.find(Scrollable);
+      const scrollable = layout.find(Scrollable).at(2);
 
       expect(scrollable.props())
         .toEqual({
@@ -236,7 +253,7 @@ describe('OrdinaryLayout', () => {
     it('should render date-table scrollable content', () => {
       const layout = render({});
 
-      const scrollable = layout.find(Scrollable);
+      const scrollable = layout.find(Scrollable).at(2);
 
       expect(scrollable.children().length)
         .toBe(1);
@@ -244,15 +261,39 @@ describe('OrdinaryLayout', () => {
         .toBe(true);
     });
 
+    it('should render side-bar scrollable', () => {
+      const layout = render({});
+
+      const scrollable = layout.find(Scrollable).at(1);
+
+      expect(scrollable.props())
+        .toEqual({
+          className: 'dx-scheduler-sidebar-scrollable',
+          useKeyboard: false,
+          showScrollbar: 'never',
+          direction: 'vertical',
+          useNative: false,
+          bounceEnabled: false,
+          children: expect.anything(),
+        });
+    });
+
+    it('should render side-bar scrollable content', () => {
+      const layout = render({});
+
+      expect(layout.find('.dx-scheduler-side-bar-scrollable-content').exists())
+        .toBe(true);
+    });
+
     it('should not render time panel and group panel', () => {
       const layout = render({});
 
-      const scrollable = layout.find(Scrollable);
+      const scrollable = layout.find(Scrollable).at(1);
 
       expect(scrollable.children().length)
         .toBe(1);
-      expect(scrollable.childAt(0).childAt(0).hasClass('dx-scheduler-date-table-container'))
-        .toBe(true);
+      expect(scrollable.childAt(0).children().length)
+        .toBe(0);
     });
 
     it('should render time panel when it is passed as a prop', () => {
@@ -272,11 +313,11 @@ describe('OrdinaryLayout', () => {
         },
       });
 
-      const scrollable = layout.find(Scrollable);
+      const scrollable = layout.find(Scrollable).at(1);
       const scrollableContent = scrollable.childAt(0);
 
       expect(scrollableContent.children().length)
-        .toBe(2);
+        .toBe(1);
 
       const timePanel = scrollableContent.childAt(0);
 
@@ -310,11 +351,11 @@ describe('OrdinaryLayout', () => {
         props,
       });
 
-      const scrollable = layout.find(Scrollable);
+      const scrollable = layout.find(Scrollable).at(1);
       const scrollableContent = scrollable.childAt(0);
 
       expect(scrollableContent.children().length)
-        .toBe(2);
+        .toBe(1);
 
       const groupPanel = scrollableContent.childAt(0);
 
@@ -377,6 +418,19 @@ describe('OrdinaryLayout', () => {
       });
 
       expect(layout.find('.appointments').exists())
+        .toBe(true);
+    });
+
+    it('should render flex-container for scrollables', () => {
+      const layout = render({});
+
+      const container = layout.find('.dx-scheduler-work-space-flex-container');
+
+      expect(container.exists())
+        .toBe(true);
+      expect(container.childAt(0).hasClass('dx-scheduler-sidebar-scrollable'))
+        .toBe(true);
+      expect(container.childAt(1).hasClass('dx-scheduler-date-table-scrollable'))
         .toBe(true);
     });
   });

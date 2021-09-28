@@ -19,7 +19,7 @@ import {
 import { BaseWidgetProps } from '../../common/base_props';
 import { HeaderPanelLayoutProps } from './base/header_panel/layout';
 import { DateTableLayoutProps } from './base/date_table/layout';
-import { TimePaneLayoutProps } from './base/time_panel/layout';
+import { TimePanelLayoutProps } from './base/time_panel/layout';
 import { GetDateForHeaderText } from '../view_model/to_test/views/types';
 import { ScrollableDirection } from '../../scroll_view/common/types';
 
@@ -132,8 +132,8 @@ WorkSpaceProps,
 export interface ViewRenderConfig {
   headerPanelTemplate: JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'>;
   dateTableTemplate: JSXTemplate<DateTableLayoutProps>;
-  timePanelTemplate?: JSXTemplate<TimePaneLayoutProps>;
-  className?: string;
+  timePanelTemplate?: JSXTemplate<TimePanelLayoutProps>;
+  className: string;
   isAllDayPanelSupported: boolean;
   isProvideVirtualCellsWidth: boolean;
   isRenderTimePanel: boolean;
