@@ -8,5 +8,5 @@ export class FormProps {
 
   @OneWay() useNativeScrolling?: boolean;
 
-  @OneWay() screenByWidth?: (width) => ScreenSizeQualifier = convertToScreenSizeQualifier;
+  @OneWay() screenByWidth?: (width: number) => ScreenSizeQualifier = convertToScreenSizeQualifier;
 }
