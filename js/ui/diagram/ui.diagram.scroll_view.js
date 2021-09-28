@@ -2,6 +2,7 @@ import { getWidth, getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import ScrollView from '../scroll_view';
+import { calculateScrollbarWidth } from '../pivot_grid/utils/calculate_scrollbar_width';
 
 import { getDiagram } from './diagram.importer';
 
@@ -57,7 +58,7 @@ class DiagramScrollView extends Widget {
         return this._scrollView.$element()[0];
     }
     getScrollBarWidth() {
-        return 0;
+        return this.option('useNativeScrolling') ? calculateScrollbarWidth() : 0;
     }
     detachEvents() {
     }
