@@ -76,7 +76,7 @@ const getAppointmentConfig = (
   intervalCount: viewConfig.intervalCount,
   hoursInterval: viewConfig.hoursInterval,
   showAllDayPanel: viewConfig.showAllDayPanel,
-  modelGroups: viewConfig.groups,
+  modelGroups: [],
   appointmentCountPerCell: 2, // TODO default
   appointmentOffset: 26, // TODO default
   allowResizing: false, // TODO resizing
