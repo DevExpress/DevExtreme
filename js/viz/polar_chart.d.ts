@@ -537,7 +537,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     minorTickCount?: number;
     /**
      * @docid dxPolarChartOptions.argumentAxis.minorTickInterval
-     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -576,7 +575,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     tick?: dxPolarChartArgumentAxisTick;
     /**
      * @docid dxPolarChartOptions.argumentAxis.tickInterval
-     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -1110,7 +1108,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     minValueMargin?: number;
     /**
      * @docid dxPolarChartOptions.valueAxis.minVisualRangeLength
-     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @default undefined
      * @notUsedInTheme
@@ -1125,7 +1122,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     minorTickCount?: number;
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickInterval
-     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -1152,7 +1148,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     tick?: dxPolarChartValueAxisTick;
     /**
      * @docid dxPolarChartOptions.valueAxis.tickInterval
-     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -1887,7 +1882,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     format?: Format;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position
-     * @type docEnums.RelativePosition
+     * @type RelativePosition
      * @default 'outside'
      * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
      * @public
@@ -2188,7 +2183,7 @@ export interface dxPolarChartSeriesTypesStackedbarpolarseries extends dxPolarCha
 export interface dxPolarChartSeriesTypesStackedbarpolarseriesLabel extends dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     /**
      * @docid dxPolarChartSeriesTypes.stackedbarpolarseries.label.position
-     * @type docEnums.RelativePosition
+     * @type RelativePosition
      * @default 'inside'
      * @public
      */

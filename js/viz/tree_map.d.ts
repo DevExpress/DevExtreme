@@ -129,7 +129,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
       colorizeGroups?: boolean;
       /**
        * @docid
-       * @type Array<string>|docEnums.PaletteType
        * @default "Material"
        */
       palette?: Array<string> | PaletteType;
@@ -297,7 +296,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @type_function_param1_field1 rect:Array<number>
      * @type_function_param1_field2 sum:number
      * @type_function_param1_field3 items:Array<any>
-     * @type docEnums.TreeMapLayoutAlgorithm|function
      * @default 'squarified'
      * @public
      */

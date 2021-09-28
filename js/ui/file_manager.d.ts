@@ -743,7 +743,6 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
     items?: Array<ContextMenuItem>;
     /**
      * @docid
-     * @type docEnums.FileManagerContextMenuItem|string
      * @public
      */
     name?: FileManagerContextMenuItem | string;
@@ -807,7 +806,6 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
     location?: ToolbarItemLocation;
     /**
      * @docid
-     * @type docEnums.FileManagerToolbarItem|string
      * @public
      */
     name?: FileManagerToolbarItem | string;

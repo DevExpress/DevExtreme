@@ -231,7 +231,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     onLegendClick?: ((e: LegendClickEvent) => void) | string;
     /**
      * @docid
-     * @type Array<string>|docEnums.PaletteType
      * @default "Material"
      * @public
      */

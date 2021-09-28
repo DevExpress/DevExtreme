@@ -102,7 +102,6 @@ export interface FormatObject {
    precision?: number;
    /**
     * @docid Format.type
-    * @type docEnums.PredefinedFormat|string
     * @public
     */
    type?: PredefinedFormat | string;

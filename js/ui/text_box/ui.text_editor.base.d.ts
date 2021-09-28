@@ -21,7 +21,6 @@ import {
 export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponent> {
     /**
      * @docid
-     * @type Array<string|docEnums.TextBoxButtonName|dxTextEditorButton>
      * @default undefined
      * @public
      */

@@ -1245,7 +1245,6 @@ export type ToolbarItem = dxGanttToolbarItem;
 export interface dxGanttToolbarItem extends dxToolbarItem {
     /**
      * @docid
-     * @type docEnums.GanttToolbarItem|string
      * @public
      */
     name?: GanttToolbarItem | string;
@@ -1331,7 +1330,7 @@ export interface dxGanttSorting {
     descendingText?: string;
     /**
      * @docid
-     * @type docEnums.GanttSortingMode
+     * @type GanttSortingMode
      * @default "single"
      */
     mode?: GanttSortingMode;

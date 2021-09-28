@@ -1222,7 +1222,6 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     aggregationGroupWidth?: number;
     /**
      * @docid dxChartOptions.argumentAxis.aggregationInterval
-     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -1304,7 +1303,6 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     logarithmBase?: number;
     /**
      * @docid dxChartOptions.argumentAxis.minVisualRangeLength
-     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @default undefined
      * @notUsedInTheme
@@ -1319,7 +1317,6 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     minorTickCount?: number;
     /**
      * @docid dxChartOptions.argumentAxis.minorTickInterval
-     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -1364,7 +1361,6 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     strips?: Array<dxChartArgumentAxisStrips>;
     /**
      * @docid dxChartOptions.argumentAxis.tickInterval
-     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -1845,7 +1841,6 @@ export interface dxChartCommonAxisSettingsConstantLineStyleLabel {
     font?: Font;
     /**
      * @docid dxChartOptions.commonAxisSettings.constantLineStyle.label.position
-     * @type docEnums.RelativePosition
      * @default 'inside'
      * @public
      */
@@ -1900,7 +1895,6 @@ export interface dxChartCommonAxisSettingsLabel {
     overlappingBehavior?: OverlappingBehavior;
     /**
      * @docid dxChartOptions.commonAxisSettings.label.position
-     * @type docEnums.RelativePosition|docEnums.Position
      * @default 'outside'
      * @public
      */
@@ -2220,7 +2214,6 @@ export interface dxChartLegend extends BaseChartLegend {
     /**
      * @docid dxChartOptions.legend.position
      * @default 'outside'
-     * @type docEnums.RelativePosition
      * @public
      */
     position?: RelativePosition;
@@ -2324,7 +2317,6 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|docEnums.TimeIntervalType
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -2338,7 +2330,6 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     minorTickCount?: number;
     /**
      * @docid dxChartOptions.valueAxis.minorTickInterval
-     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -2402,7 +2393,6 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     synchronizedValue?: number;
     /**
      * @docid dxChartOptions.valueAxis.tickInterval
-     * @type number|object|docEnums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -3665,7 +3655,6 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
     horizontalOffset?: number;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.label.position
-     * @type docEnums.RelativePosition
      * @default 'outside'
      * @propertyOf dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BubbleSeries
      * @public
@@ -4121,7 +4110,6 @@ export interface dxChartSeriesTypesFullStackedBarSeriesLabel extends dxChartSeri
     customizeText?: ((pointInfo: any) => string);
     /**
      * @docid dxChartSeriesTypes.FullStackedBarSeries.label.position
-     * @type docEnums.RelativePosition
      * @default 'inside'
      * @public
      */
@@ -4702,7 +4690,6 @@ export interface dxChartSeriesTypesStackedBarSeriesLabel extends dxChartSeriesTy
     customizeText?: ((pointInfo: any) => string);
     /**
      * @docid dxChartSeriesTypes.StackedBarSeries.label.position
-     * @type docEnums.RelativePosition
      * @default 'inside'
      * @public
      */

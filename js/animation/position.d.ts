@@ -19,7 +19,6 @@ import {
 export interface PositionConfig {
     /**
      * @docid
-     * @type docEnums.PositionAlignment|object
      * @public
      */
     at?: PositionAlignment | {
@@ -55,7 +54,6 @@ export interface PositionConfig {
     };
     /**
      * @docid
-     * @type docEnums.PositionResolveCollisionXY|object
      * @public
      */
     collision?: PositionResolveCollisionXY | {
@@ -72,7 +70,6 @@ export interface PositionConfig {
     };
     /**
      * @docid
-     * @type docEnums.PositionAlignment|object
      * @public
      */
     my?: PositionAlignment | {

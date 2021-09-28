@@ -113,7 +113,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     alignItemLabelsInAllGroups?: boolean;
     /**
      * @docid
-     * @type number|docEnums.Mode
      * @default 1
      * @public
      */

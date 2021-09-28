@@ -108,7 +108,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid
      * @default 'center'
-     * @type docEnums.VerticalAlignment|Array<docEnums.VerticalAlignment>
      * @public
      */
     alignment?: VerticalAlignment | Array<VerticalAlignment>;
@@ -479,7 +478,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     onNodeHoverChanged?: ((e: NodeHoverEvent) => void);
     /**
      * @docid
-     * @type Array<string>|docEnums.PaletteType
      * @default "Material"
      * @public
      */

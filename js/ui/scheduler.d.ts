@@ -498,7 +498,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     max?: Date | number | string;
     /**
      * @docid
-     * @type number|docEnums.MaxAppointmentsPerCell
      * @default "auto"
      * @public
      */
@@ -935,7 +934,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       intervalCount?: number;
       /**
        * @docid
-       * @type number|docEnums.MaxAppointmentsPerCell
        * @default "auto"
        */
       maxAppointmentsPerCell?: number | MaxAppointmentsPerCell;

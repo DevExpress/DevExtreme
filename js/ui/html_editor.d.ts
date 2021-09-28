@@ -522,13 +522,11 @@ export type ToolbarItem = dxHtmlEditorToolbarItem;
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
      * @docid
-     * @type docEnums.HtmlEditorToolbarItem|string
      * @public
      */
     name?: HtmlEditorToolbarItem | string;
     /**
      * @docid
-     * @type docEnums.HtmlEditorToolbarItem|string
      * @deprecated dxHtmlEditorToolbarItem.name
      */
     formatName?: HtmlEditorToolbarItem | string;

@@ -163,7 +163,6 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     orientation?: Orientation;
     /**
      * @docid
-     * @type object|docEnums.ShowSubmenuMode
      * @default { name: "onClick", delay: { show: 50, hide: 300 } }
      * @public
      */

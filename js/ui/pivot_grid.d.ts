@@ -534,7 +534,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
       mode?: PivotGridScrollingMode;
       /**
        * @docid
-       * @type boolean|docEnums.Mode
        * @default "auto"
        */
       useNative?: boolean | Mode;

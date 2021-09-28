@@ -137,7 +137,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     contextToolbox?: {
       /**
        * @docid
-       * @type docEnums.DiagramShapeCategory|string
        */
       category?: DiagramShapeCategory | string;
       /**
@@ -156,7 +155,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       shapeIconsPerRow?: number;
       /**
        * @docid
-       * @type Array<docEnums.DiagramShapeType>|Array<string>
        */
       shapes?: Array<DiagramShapeType> | Array<string>;
       /**
@@ -237,7 +235,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       backgroundImageWidth?: number;
       /**
        * @docid
-       * @type docEnums.DiagramShapeType|string
        */
       baseType?: DiagramShapeType | string;
       /**
@@ -604,7 +601,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     nodes?: {
       /**
        * @docid
-       * @type docEnums.DiagramDataLayoutType|object
        * @default "auto"
        */
       autoLayout?: DiagramDataLayoutType | {
@@ -614,7 +610,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         orientation?: DiagramDataLayoutOrientation;
         /**
          * @docid
-         * @type docEnums.DiagramDataLayoutType
          */
         type?: DiagramDataLayoutType;
       };
@@ -954,13 +949,11 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     toolbox?: {
       /**
        * @docid
-       * @type Array<Object>|Array<docEnums.DiagramShapeCategory>
        * @default undefined
        */
       groups?: Array<{
         /**
          * @docid
-         * @type docEnums.DiagramShapeCategory|string
          */
         category?: DiagramShapeCategory | string;
         /**
@@ -973,14 +966,13 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         expanded?: boolean;
         /**
          * @docid
-         * @type Array<docEnums.DiagramShapeType>|Array<string>
          */
         shapes?: Array<DiagramShapeType> | Array<string>;
         /**
          * @docid
          */
         title?: string;
-      }> | Array<'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom'>;
+      }> | Array<DiagramShapeCategory>;
       /**
        * @docid
        * @default 3
@@ -1227,7 +1219,6 @@ export interface dxDiagramShape extends Item {
     text?: string;
     /**
      * @docid
-     * @type docEnums.DiagramShapeType|string
      * @public
      */
     type?: DiagramShapeType | string;
@@ -1344,7 +1335,6 @@ export interface dxDiagramAddShapeArgs {
 export interface dxDiagramAddShapeFromToolboxArgs {
   /**
    * @docid
-   * @type docEnums.DiagramShapeType|string
    * @public
    */
   shapeType?: DiagramShapeType | string;

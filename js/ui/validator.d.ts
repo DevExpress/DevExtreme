@@ -172,7 +172,6 @@ export interface dxValidatorResult {
     pendingRules?: Array<AsyncRule>;
     /**
      * @docid
-     * @type docEnums.ValidationStatus
      * @public
      */
     status?: ValidationStatus;
