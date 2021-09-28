@@ -39,6 +39,20 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
     inputAttr?: any;
     /**
      * @docid
+     * @default ''
+     * @public
+     */
+    label?: boolean;
+    /**
+     * @docid
+     * @type Enums.EditorLabelMode
+     * @default 'static'
+     * @default 'floating' &for(Material)
+     * @public
+     */
+    labelMode?: 'static' | 'floating' | 'hidden';
+    /**
+     * @docid
      * @default ""
      * @public
      */
