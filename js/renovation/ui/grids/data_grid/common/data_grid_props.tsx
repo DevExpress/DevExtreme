@@ -604,6 +604,9 @@ export class DataGridScrolling {
 
   @OneWay()
   prerenderedRowCount?: number;
+
+  @OneWay()
+  preloadedRowCount?: number;
 }
 
 @ComponentBindings()
