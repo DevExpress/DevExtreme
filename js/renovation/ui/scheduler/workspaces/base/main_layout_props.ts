@@ -18,7 +18,7 @@ import {
 import { DateTableLayoutProps } from './date_table/layout';
 import { HeaderPanelLayoutProps } from './header_panel/layout';
 import { LayoutProps } from './layout_props';
-import { TimePaneLayoutProps } from './time_panel/layout';
+import { TimePanelLayoutProps } from './time_panel/layout';
 import { ScrollableDirection } from '../../../scroll_view/common/types';
 
 @ComponentBindings()
@@ -27,7 +27,7 @@ export class MainLayoutProps extends LayoutProps {
 
   @Template() dateTableTemplate!: JSXTemplate<DateTableLayoutProps>;
 
-  @Template() timePanelTemplate?: JSXTemplate<TimePaneLayoutProps>;
+  @Template() timePanelTemplate?: JSXTemplate<TimePanelLayoutProps>;
 
   @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 

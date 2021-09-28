@@ -86,7 +86,7 @@ export const viewFunction = ({
 );
 
 @ComponentBindings()
-export class TimePaneLayoutProps {
+export class TimePanelLayoutProps {
   @OneWay() groupOrientation?: GroupOrientation;
 
   @OneWay() timePanelData: TimePanelData = {
@@ -109,7 +109,7 @@ export class TimePaneLayoutProps {
     register: true,
   },
 })
-export class TimePanelTableLayout extends JSXComponent(TimePaneLayoutProps) {
+export class TimePanelTableLayout extends JSXComponent(TimePanelLayoutProps) {
   get topVirtualRowHeight(): number {
     return this.props.timePanelData.topVirtualRowHeight ?? 0;
   }

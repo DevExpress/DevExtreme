@@ -26,7 +26,7 @@ import { ViewRenderConfig, WorkSpaceProps } from '../props';
 import { getViewRenderConfigByType } from './work_space_config';
 import { HeaderPanelLayoutProps } from './header_panel/layout';
 import { DateTableLayoutProps } from './date_table/layout';
-import { TimePaneLayoutProps } from './time_panel/layout';
+import { TimePanelLayoutProps } from './time_panel/layout';
 import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 import { CrossScrollingLayout } from './cross_scrolling_layout';
 import { MainLayoutProps } from './main_layout_props';
@@ -294,7 +294,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return dateTableTemplate;
   }
 
-  get timePanelTemplate(): JSXTemplate<TimePaneLayoutProps> | undefined {
+  get timePanelTemplate(): JSXTemplate<TimePanelLayoutProps> | undefined {
     const { timePanelTemplate } = this.renderConfig;
     return timePanelTemplate;
   }

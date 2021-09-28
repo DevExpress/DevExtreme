@@ -510,7 +510,7 @@ describe('WorkSpace', () => {
             .toBe(100);
         });
 
-        it('should work when both time-panel and grup-panel are present', () => {
+        it('should work when both time-panel and group-panel are present', () => {
           const workSpace = new WorkSpace({} as any);
 
           workSpace.timePanelRef = timePanelRef as any;

@@ -120,7 +120,7 @@ describe('OrdinaryLayout', () => {
         .toBe(true);
     });
 
-    it('should render correct content inside headr panel container', () => {
+    it('should render correct content inside header panel container', () => {
       const layout = render({
         props: {
           headerEmptyCellWidth: 132,
