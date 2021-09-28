@@ -5133,6 +5133,80 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             updateItemsSpy.restore();
         }
     });
+
+    QUnit.test('Scrolling timeout should be zero when renderAsync is false', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                legacyMode: false,
+                rowPageSize: 5,
+                timeout: 100,
+                renderingThreshold: 100,
+                minTimeout: 50,
+                renderAsync: false
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const timeout = this.dataController._rowsScrollController.getScrollingTimeout();
+
+        // assert
+        assert.equal(timeout, 0);
+    });
+
+    QUnit.test('Scrolling timeout should be set to minTimeout if renderAsync is not defined', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                legacyMode: false,
+                rowPageSize: 5,
+                timeout: 100,
+                renderingThreshold: 100,
+                minTimeout: 50
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const timeout = this.dataController._rowsScrollController.getScrollingTimeout();
+
+        // assert
+        assert.equal(timeout, 50);
+    });
+
+    QUnit.test('Scrolling timeout should be set to timeout if renderAsync is true', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                legacyMode: false,
+                rowPageSize: 5,
+                timeout: 100,
+                renderingThreshold: 100,
+                minTimeout: 50,
+                renderAsync: true
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const timeout = this.dataController._rowsScrollController.getScrollingTimeout();
+
+        // assert
+        assert.equal(timeout, 100);
+    });
 });
 
 QUnit.module('Virtual scrolling preload', {

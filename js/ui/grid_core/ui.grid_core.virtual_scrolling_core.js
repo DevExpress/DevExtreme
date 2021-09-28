@@ -8,6 +8,7 @@ import Class from '../../core/class';
 import { Deferred } from '../../core/utils/deferred';
 import Callbacks from '../../core/utils/callbacks';
 import { VirtualDataLoader } from './ui.grid.core.virtual_data_loader';
+import { isDefined } from '../../core/utils/type';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
@@ -168,14 +169,25 @@ export const VirtualScrollController = Class.inherit((function() {
                 return this._dataLoader.virtualItemsCount.apply(this._dataLoader, arguments);
             }
         },
+        getScrollingTimeout: function() {
+            const renderAsync = this.option('scrolling.renderAsync');
+            let scrollingTimeout = 0;
 
+            if(!isDefined(renderAsync)) {
+                scrollingTimeout = Math.min(this.option('scrolling.timeout') || 0, this._dataOptions.changingDuration());
+
+                if(scrollingTimeout < this.option('scrolling.renderingThreshold')) {
+                    scrollingTimeout = this.option('scrolling.minTimeout') || 0;
+                }
+            } else if(renderAsync) {
+                scrollingTimeout = this.option('scrolling.timeout') ?? 0;
+            }
+
+            return scrollingTimeout;
+        },
         setViewportPosition: function(position) {
             const result = new Deferred();
-            let scrollingTimeout = Math.min(this.option('scrolling.timeout') || 0, this._dataOptions.changingDuration());
-
-            if(scrollingTimeout < this.option('scrolling.renderingThreshold')) {
-                scrollingTimeout = this.option('scrolling.minTimeout') || 0;
-            }
+            const scrollingTimeout = this.getScrollingTimeout();
 
             clearTimeout(this._scrollTimeoutID);
             if(scrollingTimeout > 0) {
