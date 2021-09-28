@@ -72,7 +72,6 @@
             suitesInProgress = [ ],
             urls = @Html.Raw(Json.Serialize(Model.Suites)),
             originalUrls = urls.slice(0),
-            ieMode = @Html.Raw(Json.Serialize(Model.IEMode)),
             noTryCatch = @Html.Raw(Json.Serialize(Model.NoTryCatch)),
             noGlobals = @Html.Raw(Json.Serialize(Model.NoGlobals)),
             noTimers = @Html.Raw(Json.Serialize(Model.NoTimers)),
@@ -87,21 +86,6 @@
             WORKER_COUNT;
 
         var isWinPhone = /iemobile/i.test(navigator.userAgent) || /Windows Phone 10/.test(navigator.userAgent);
-
-        var trimIEMemory = (function() {
-            var lastCollectTime = $.now();
-
-            if(!isWinPhone || !$.isFunction(window.CollectGarbage))
-                return $.noop;
-
-            return function(force) {
-                var now = $.now();
-                if(force || now - lastCollectTime > 1234) {
-                    CollectGarbage();
-                    lastCollectTime = now;
-                }
-            }
-        })();
 
         var calcWorkerFrameCount = function() {
             if(runWorkerInNewWindow)
@@ -185,8 +169,6 @@
                 worker = workerByIndex(i),
                 additionalParams = { };
 
-            if(ieMode !== "edge")
-                additionalParams.ieMode = ieMode;
             if(noTryCatch)
                 additionalParams.notrycatch = "true";
             if(noGlobals)
@@ -233,7 +215,6 @@
             worker.location = urlInfo.Url + "?" + $.param(additionalParams);
             busyCount++;
 
-            trimIEMemory(true);
         };
 
         var workers = [ ];
@@ -399,8 +380,7 @@
         };
 
         window.RUNNER_ON_TEST_DONE = function(worker, qunitData) {
-            trimIEMemory();
-
+            
             var i = indexFromWorkerName(worker),
                 testSuite = suitesInProgress[i],
                 testCases,
