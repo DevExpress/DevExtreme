@@ -1432,7 +1432,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     QUnit.test('TreeList with focusedRowKey', function(assert) {
         // arrange, act
         const treeList = createTreeList({
-            height: 100,
+            height: 105,
             keyExpr: 'id',
             dataSource: generateData(10),
             paging: {
@@ -1456,7 +1456,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     QUnit.test('TreeList with remoteOperations and focusedRowKey', function(assert) {
         // arrange, act
         const treeList = createTreeList({
-            height: 100,
+            height: 105,
             keyExpr: 'id',
             dataSource: generateData(10),
             remoteOperations: true,
