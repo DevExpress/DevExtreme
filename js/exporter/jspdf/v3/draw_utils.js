@@ -1,14 +1,54 @@
 import { isDefined } from '../../../core/utils/type';
-import { drawTextInRect, drawLine, drawRect } from './pdf_utils_v3';
 import { extend } from '../../../core/utils/extend';
+import { calculateTextHeight, getTextLines } from './pdf_utils_v3';
 
 const defaultBorderLineWidth = 1;
+
+function round(value) {
+    return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
+}
 
 function drawCellsContent(doc, cellsArray, docStyles) {
     cellsArray.forEach(cell => {
         drawCellBackground(doc, cell);
         drawCellText(doc, cell, docStyles);
     });
+}
+
+function drawLine(doc, startX, startY, endX, endY) {
+    doc.line(round(startX), round(startY), round(endX), round(endY));
+}
+
+function drawRect(doc, x, y, width, height, style) {
+    if(isDefined(style)) {
+        doc.rect(round(x), round(y), round(width), round(height), style);
+    } else {
+        doc.rect(round(x), round(y), round(width), round(height));
+    }
+}
+
+function getLineHeightShift(doc) {
+    const DEFAULT_LINE_HEIGHT = 1.15;
+
+    // TODO: check lineHeightFactor from text options. Currently supports only doc options - https://github.com/MrRio/jsPDF/issues/3234
+    return (doc.getLineHeightFactor() - DEFAULT_LINE_HEIGHT) * doc.getFontSize();
+}
+
+function drawTextInRect(doc, text, rect, verticalAlign, wordWrapEnabled, jsPdfTextOptions) {
+    const textArray = getTextLines(doc, text, doc.getFont(), { wordWrapEnabled, targetRectWidth: rect.w });
+    const linesCount = textArray.length;
+
+    const heightOfOneLine = calculateTextHeight(doc, textArray[0], doc.getFont(), { wordWrapEnabled: false });
+
+    const vAlign = verticalAlign ?? 'middle';
+    const verticalAlignCoefficientsMap = { top: 0, middle: 0.5, bottom: 1 };
+    const y = rect.y
+        + (rect.h * verticalAlignCoefficientsMap[vAlign])
+        - heightOfOneLine * (linesCount - 1) * verticalAlignCoefficientsMap[vAlign]
+        + getLineHeightShift(doc);
+
+    const textOptions = extend({ baseline: vAlign }, jsPdfTextOptions);
+    doc.text(textArray.join('\n'), round(rect.x), round(y), textOptions);
 }
 
 function drawCellBackground(doc, cell) {
@@ -151,5 +191,4 @@ function setDocumentStyles(doc, styles) {
     }
 }
 
-export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles };
-
+export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine };
