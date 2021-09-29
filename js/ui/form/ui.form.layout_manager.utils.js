@@ -43,7 +43,8 @@ export function convertToRenderFieldItemOptions({
     });
 
 
-    const needRenderLabel = labelOptions.visible && labelOptions.text && labelMode === 'default';
+    const isDefaultLabelMode = labelMode === 'default';
+    const needRenderLabel = labelOptions.visible && labelOptions.text && isDefaultLabelMode;
     const { location: labelLocation, labelID } = labelOptions;
     const labelNeedBaselineAlign =
         labelLocation !== 'top'
@@ -74,6 +75,8 @@ export function convertToRenderFieldItemOptions({
             editorInputId: itemId,
             editorValidationBoundary,
             editorStylingMode,
+            labelMode: isDefaultLabelMode ? 'hidden' : labelMode,
+            labelText: isDefaultLabelMode ? undefined : labelOptions.text,
         })
     };
 }
@@ -88,7 +91,16 @@ export function convertToLabelMarkOptions({ showRequiredMark, requiredMark, show
 }
 
 function _convertToEditorOptions({
-    editorType, defaultEditorName, editorValue, canAssignUndefinedValueToEditor, externalEditorOptions, editorInputId, editorValidationBoundary, editorStylingMode
+    editorType,
+    defaultEditorName,
+    editorValue,
+    canAssignUndefinedValueToEditor,
+    externalEditorOptions,
+    editorInputId,
+    editorValidationBoundary,
+    editorStylingMode,
+    labelMode,
+    labelText,
 }) {
     const editorOptionsWithValue = {};
     if(editorValue !== undefined || canAssignUndefinedValueToEditor) {
@@ -103,7 +115,9 @@ function _convertToEditorOptions({
         {
             inputAttr: { id: editorInputId },
             validationBoundary: editorValidationBoundary,
-            stylingMode: editorStylingMode
+            stylingMode: editorStylingMode,
+            label: labelText,
+            labelMode: labelMode,
         },
     );
 
