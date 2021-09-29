@@ -68,7 +68,9 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
 };
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<BaseWidgetProps, 'rtlEnabled'>
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<ScrollableSimulatedProps, 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'
 | 'inertiaEnabled' | 'showScrollbar' | 'scrollByThumb' | 'bounceEnabled' | 'scrollLocationChange'>;
 
