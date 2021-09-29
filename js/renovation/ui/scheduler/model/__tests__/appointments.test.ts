@@ -1,17 +1,33 @@
 import ViewDataProvider from '../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { SchedulerProps } from '../../props';
-import { ViewType } from '../../types';
+import { DataAccessorType, ViewType } from '../../types';
 import { prepareGenerationOptions } from '../../workspaces/base/work_space';
 import { getViewRenderConfigByType } from '../../workspaces/base/work_space_config';
 import { WorkSpaceProps } from '../../workspaces/props';
 import { CellsMetaData, ViewDataProviderType } from '../../workspaces/types';
 import { getAppointmentsModel } from '../appointments';
+import { compileGetter, compileSetter } from '../../../../../core/utils/data';
 import {
   createFactoryInstances,
   generateKey,
   getTimeZoneCalculator,
   getAppointmentDataProvider,
 } from '../../../../../ui/scheduler/instanceFactory';
+
+const defaultDataAccessors: DataAccessorType = {
+  getter: {
+    startDate: compileGetter('startDate') as any,
+    endDate: compileGetter('endDate') as any,
+  },
+  setter: {
+    startDate: compileSetter('startDate'),
+    endDate: compileSetter('endDate'),
+  },
+  expr: {
+    startDateExpr: 'startDate',
+    endDateExpr: 'endDate',
+  },
+};
 
 const prepareInstances = (
   viewType: ViewType,
@@ -32,6 +48,7 @@ const prepareInstances = (
   workspaceProps.type = viewType;
   workspaceProps.intervalCount = intervalCount;
   workspaceProps.currentDate = currentDate;
+  workspaceProps.startDate = currentDate;
 
   // TODO: convert ViewdataProvider to TS
   const viewDataProvider = (new ViewDataProvider('week') as unknown) as ViewDataProviderType;
@@ -46,19 +63,35 @@ const prepareInstances = (
   );
   viewDataProvider.update(generationOptions, true);
   const DOMMetaData = {
-    dateTableCellsMeta: [],
     allDayPanelCellsMeta: [],
+    dateTableCellsMeta: [
+      [],
+      [{
+        left: 0, top: 0, width: 100, height: 200,
+      }],
+      [], [], [], [], [], [], [], [], [],
+      [], [], [], [], [], [], [], [], [],
+      [ // Row #20
+        { }, { }, { }, { },
+        { // Cell #4
+          left: 100, top: 200, width: 50, height: 60,
+        },
+      ],
+      [],
+      [ // Row #22
+        { }, { }, { }, { }, { },
+        { // Cell #5
+          left: 100, top: 300, width: 50, height: 60,
+        },
+      ],
+    ],
   };
 
   const key = generateKey();
   createFactoryInstances({
     key,
     getIsVirtualScrolling: () => false,
-    getDataAccessors: () => ({
-      getter: { },
-      setter: { },
-      expr: { },
-    }),
+    getDataAccessors: () => defaultDataAccessors,
   });
 
   return {
@@ -68,73 +101,77 @@ const prepareInstances = (
     viewDataProvider,
     schedulerProps,
     workspaceProps,
-    DOMMetaData,
+    DOMMetaData: DOMMetaData as any,
   };
 };
 
-describe('Model appointmnets', () => {
+describe('Appointments model', () => {
+  const instances = prepareInstances(
+    'week',
+    new Date(2021, 8, 22),
+    7,
+  );
+
+  const appointmentsModel = getAppointmentsModel(
+    instances.key,
+    instances.schedulerProps,
+    instances.workspaceProps,
+    instances.viewDataProvider,
+    instances.timeZoneCalculator,
+    instances.appointmentDataProvider,
+    defaultDataAccessors,
+    instances.DOMMetaData,
+  );
+
   describe('getAppointmentsModel', () => {
-    const instances = prepareInstances(
-      'week',
-      new Date(2021, 8, 22),
-      7,
-    );
-
-    const appointmentModel = getAppointmentsModel(
-      0,
-      instances.schedulerProps,
-      instances.workspaceProps,
-      instances.viewDataProvider,
-      instances.DOMMetaData,
-    );
-
     it('should contains correct appointment config', () => {
-      expect(appointmentModel)
+      expect(appointmentsModel)
         .toMatchObject({
           key: 0,
-          appointmentRenderingStrategyName: 'vertical',
           adaptivityEnabled: false,
           rtlEnabled: false,
+          startDayHour: 0,
+          viewStartDayHour: 0, // TODO remove
+          endDayHour: 24,
+          viewEndDayHour: 24, // TODO remove
+          resources: [],
           maxAppointmentsPerCell: 'auto',
+          currentDate: new Date('2021-09-22T00:00:00'),
           isVirtualScrolling: false,
-          leftVirtualCellCount: 0,
-          topVirtualCellCount: 0,
+          intervalCount: 7,
+          hoursInterval: 0.5,
+          showAllDayPanel: false,
           modelGroups: [],
-          groupCount: 0,
+          appointmentCountPerCell: 2, // TODO default
+          appointmentOffset: 26, // TODO default
+          allowResizing: false, // TODO resizing
+          allowAllDayResizing: false, // TODO resizing
           dateTableOffset: 0,
           groupOrientation: 'horizontal',
-          endViewDate: new Date('2021-11-06T23:59:00'),
-          isGroupedByDate: false,
-          cellWidth: 0,
-          cellHeight: 0,
-          allDayHeight: 0,
-          visibleDayDuration: 86400000,
+          startViewDate: new Date('2021-09-22T00:00:00'),
           timeZone: '',
           firstDayOfWeek: 0,
           viewType: 'week',
-          cellDuration: 30,
+          cellDurationInMinutes: 30,
           supportAllDayRow: false,
-          dateRange: [
-            new Date('2021-09-19T00:00:00'),
-            new Date('2021-11-06T23:59:00'),
-          ],
+          isVerticalGroupOrientation: false,
+          loadedResources: [],
           intervalDuration: 4233600000,
           allDayIntervalDuration: 311040000000000,
-          isVerticalGroupOrientation: false,
         });
     });
 
     it('should contains correct instances', () => {
-      expect(appointmentModel.timeZoneCalculator)
+      expect(appointmentsModel.timeZoneCalculator)
         .toEqual(instances.timeZoneCalculator);
 
-      expect(appointmentModel.appointmentDataProvider)
+      expect(appointmentsModel.appointmentDataProvider)
         .toEqual(instances.appointmentDataProvider);
 
-      expect(appointmentModel.viewDataProvider)
+      expect(appointmentsModel.viewDataProvider)
         .toEqual(instances.viewDataProvider);
 
-      expect(appointmentModel.DOMMetaData)
+      expect(appointmentsModel.DOMMetaData)
         .toEqual(instances.DOMMetaData);
     });
   });
