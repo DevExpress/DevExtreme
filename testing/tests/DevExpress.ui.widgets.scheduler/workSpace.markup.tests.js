@@ -277,7 +277,6 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
             const secondRowCells = rows.eq(1).find('.dx-scheduler-group-header');
 
             assert.equal(rows.length, 2, 'There are two group rows');
-            assert.ok(this.instance.$element().hasClass('dx-scheduler-group-row-count-two'), 'Correct class');
 
             assert.equal(firstRowCells.length, 2, 'The first group row contains two group headers');
             assert.equal(firstRowCells.attr('colspan'), `${3 * baseColSpan}`, 'Cells of the first group row have a right colspan attr');
@@ -729,7 +728,6 @@ QUnit.module('Workspace Week markup', weekModuleConfig, () => {
         const secondRowCells = rows.eq(1).find('.dx-scheduler-group-header');
 
         assert.equal(rows.length, 2, 'There are two group rows');
-        assert.ok(this.instance.$element().hasClass('dx-scheduler-group-row-count-two'), 'Correct class');
 
         assert.equal(firstRowCells.length, 14, 'The first group row contains 14 group headers');
         assert.equal(firstRowCells.attr('colspan'), '3', 'Cells of the first group row have a right colspan attr');
