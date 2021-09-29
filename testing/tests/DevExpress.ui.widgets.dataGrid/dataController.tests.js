@@ -3559,7 +3559,7 @@ const setupVirtualRenderingModule = function() {
     this.clock = sinon.useFakeTimers();
 
     const options = {
-        scrolling: { mode: 'virtual', rowRenderingMode: 'virtual', minGap: 0 },
+        scrolling: { mode: 'virtual', rowRenderingMode: 'virtual', prerenderedRowCount: 0 },
         keyExpr: 'id',
         paging: {
             pageSize: 20
@@ -4046,7 +4046,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
     });
 
     QUnit.test('add row > scroll to second page', function(assert) {
-        this.options.scrolling.minGap = 1;
+        this.options.scrolling.prerenderedRowCount = 1;
         // act
         this.addRow();
         this.dataController.setViewportPosition(150);
@@ -4804,13 +4804,13 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.equal(items[pageSize].dataIndex, 1);
     });
 
-    QUnit.test('New mode. rowRenderingMode should be considered as \'virtual\' when newMode is enabled', function(assert) {
+    QUnit.test('New mode. rowRenderingMode should be considered as \'virtual\' when legacyMode is disabled', function(assert) {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
         this.dataController.init();
@@ -4833,9 +4833,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         };
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
 
@@ -4886,9 +4886,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
 
@@ -4943,9 +4943,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
 
@@ -4983,9 +4983,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
 
@@ -5010,9 +5010,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
 
@@ -5037,9 +5037,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
 
@@ -5064,9 +5064,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
 
@@ -5101,9 +5101,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
 
@@ -5133,6 +5133,80 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             updateItemsSpy.restore();
         }
     });
+
+    QUnit.test('Scrolling timeout should be zero when renderAsync is false', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                legacyMode: false,
+                rowPageSize: 5,
+                timeout: 100,
+                renderingThreshold: 100,
+                minTimeout: 50,
+                renderAsync: false
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const timeout = this.dataController._rowsScrollController.getScrollingTimeout();
+
+        // assert
+        assert.equal(timeout, 0);
+    });
+
+    QUnit.test('Scrolling timeout should be set to minTimeout if renderAsync is not defined', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                legacyMode: false,
+                rowPageSize: 5,
+                timeout: 100,
+                renderingThreshold: 100,
+                minTimeout: 50
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const timeout = this.dataController._rowsScrollController.getScrollingTimeout();
+
+        // assert
+        assert.equal(timeout, 50);
+    });
+
+    QUnit.test('Scrolling timeout should be set to timeout if renderAsync is true', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                legacyMode: false,
+                rowPageSize: 5,
+                timeout: 100,
+                renderingThreshold: 100,
+                minTimeout: 50,
+                renderAsync: true
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        const timeout = this.dataController._rowsScrollController.getScrollingTimeout();
+
+        // assert
+        assert.equal(timeout, 100);
+    });
 });
 
 QUnit.module('Virtual scrolling preload', {
@@ -5148,7 +5222,7 @@ QUnit.module('Virtual scrolling preload', {
 
         this.options = {
             dataSource: getData(100),
-            scrolling: { mode: 'virtual', newMode: true, minGap: 0, rowPageSize: 5 },
+            scrolling: { mode: 'virtual', legacyMode: false, prerenderedRowCount: 0, rowPageSize: 5 },
             pager: { visible: 'auto' },
             paging: { pageSize: 20 },
             remoteOperations: { filtering: true, sorting: true, paging: true },
@@ -5200,8 +5274,8 @@ QUnit.module('Virtual scrolling preload', {
         assert.deepEqual(visibleRows[0].data.id, 1, 'first visible item');
     });
 
-    QUnit.test('New mode. Data should not be preloaded on scroll if preloadCount is 0', function(assert) {
-        this.options.scrolling.preloadCount = 0;
+    QUnit.test('New mode. Data should not be preloaded on scroll if preloadedRowCount is 0', function(assert) {
+        this.options.scrolling.preloadedRowCount = 0;
         // act
         this.dataController.setViewportPosition(1);
         const visibleRows = this.getVisibleRows();
@@ -5217,8 +5291,8 @@ QUnit.module('Virtual scrolling preload', {
         assert.deepEqual(visibleRows[0].data.id, 1, 'first visible item');
     });
 
-    QUnit.test('New mode. Data should be preloaded on scroll if preloadCount is defined', function(assert) {
-        this.options.scrolling.preloadCount = 50;
+    QUnit.test('New mode. Data should be preloaded on scroll if preloadedRowCount is defined', function(assert) {
+        this.options.scrolling.preloadedRowCount = 50;
         // act
         this.dataController.setViewportPosition(1);
         const visibleRows = this.getVisibleRows();
@@ -5267,8 +5341,8 @@ QUnit.module('Virtual scrolling preload', {
         assert.deepEqual(visibleRows[0].data.id, 50, 'first visible item');
     });
 
-    QUnit.test('New mode. Data should be preloaded before viewport on scroll back if preloadCount is defined', function(assert) {
-        this.options.scrolling.preloadCount = 50;
+    QUnit.test('New mode. Data should be preloaded before viewport on scroll back if preloadedRowCount is defined', function(assert) {
+        this.options.scrolling.preloadedRowCount = 50;
         // act
         this.dataController.setViewportPosition(1000);
         this.dataController.setViewportPosition(999);
@@ -5665,13 +5739,13 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         assert.ok(dataController.isLoaded());
     });
 
-    QUnit.test('New mode. rowRenderingMode should be considered as \'virtual\' when newMode is enabled', function(assert) {
+    QUnit.test('New mode. rowRenderingMode should be considered as \'virtual\' when legacyMode is disabled', function(assert) {
         // arrange
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
         this.dataController.init();
@@ -5694,9 +5768,9 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
         };
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
 
@@ -5747,9 +5821,9 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
 
@@ -5804,9 +5878,9 @@ QUnit.module('Infinite scrolling (ScrollingDataSource)', {
 
         this.applyOptions({
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 rowPageSize: 5,
-                minGap: 1
+                prerenderedRowCount: 1
             }
         });
 

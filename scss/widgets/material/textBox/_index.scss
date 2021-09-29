@@ -41,7 +41,7 @@
 
       @at-root #{selector-append(".dx-rtl", &)},
       .dx-rtl & {
-        padding-left: $material-base-standard-texteditor-input-horizontal-padding;
+        padding-left: 0;
         padding-right: $material-texteditor-icon-container-size + $material-base-standard-texteditor-input-horizontal-padding;
       }
     }
@@ -65,7 +65,7 @@
 
       @at-root #{selector-append(".dx-rtl", &)},
       .dx-rtl & {
-        padding-left: $material-filled-texteditor-input-horizontal-padding;
+        padding-left: 0;
         padding-right: $material-texteditor-icon-container-size + $material-filled-texteditor-input-horizontal-padding;
       }
     }

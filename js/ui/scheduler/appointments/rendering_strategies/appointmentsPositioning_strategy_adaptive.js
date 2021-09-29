@@ -17,19 +17,19 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
     }
 
     getCollectorTopOffset(allDay) {
-        const renderingStrategy = this.getRenderingStrategy();
+        const renderingStrategy = this._renderingStrategy;
 
         if(renderingStrategy.allDaySupported() && allDay) {
             return (renderingStrategy.allDayHeight - renderingStrategy.getDropDownButtonAdaptiveSize()) / 2;
         } else {
-            return this.getRenderingStrategy().cellHeight - COLLECTOR_ADAPTIVE_BOTTOM_OFFSET;
+            return this._renderingStrategy.cellHeight - COLLECTOR_ADAPTIVE_BOTTOM_OFFSET;
         }
     }
 
     getCollectorLeftOffset() {
-        const collectorWidth = this.getRenderingStrategy().getDropDownAppointmentWidth();
+        const collectorWidth = this._renderingStrategy.getDropDownAppointmentWidth();
 
-        return (this.getRenderingStrategy().cellWidth - collectorWidth) / 2;
+        return (this._renderingStrategy.cellWidth - collectorWidth) / 2;
     }
 
     getAppointmentDefaultOffset() {
@@ -37,7 +37,7 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
     }
 
     getDynamicAppointmentCountPerCell() {
-        const renderingStrategy = this.getRenderingStrategy();
+        const renderingStrategy = this._renderingStrategy;
 
         if(renderingStrategy.allDaySupported()) {
             return {
@@ -58,7 +58,7 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
     }
 
     _getAppointmentDefaultWidth() {
-        const renderingStrategy = this.getRenderingStrategy();
+        const renderingStrategy = this._renderingStrategy;
 
         if(renderingStrategy.allDaySupported()) {
             return ADAPTIVE_APPOINTMENT_DEFAULT_WIDTH;
@@ -68,7 +68,7 @@ class AdaptivePositioningStrategy extends BasePositioningStrategy {
     }
 
     _calculateDynamicAppointmentCountPerCell() {
-        return Math.floor(this.getRenderingStrategy()._getAppointmentMaxWidth() / this.getRenderingStrategy()._getAppointmentDefaultWidth());
+        return Math.floor(this._renderingStrategy._getAppointmentMaxWidth() / this._renderingStrategy._getAppointmentDefaultWidth());
     }
 
 }

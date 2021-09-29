@@ -247,7 +247,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 this.items().length - 1;
             },
             loadViewport: commonUtils.noop,
-            updateViewport: commonUtils.noop
+            updateViewport: commonUtils.noop,
+            getScrollingTimeout: function() {
+                return this.option('scrolling.renderAsync') ? this.option('scrolling.timeout') : 0;
+            }
         };
     };
 

@@ -10,7 +10,6 @@ import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import Overlay from 'ui/overlay/ui.overlay';
 import { isRenderer } from 'core/utils/type';
 import caretWorkaround from './textEditorParts/caretWorkaround.js';
-import { logger } from 'core/utils/console';
 import dxButton from 'ui/button';
 
 import 'generic_light.css!';
@@ -932,7 +931,7 @@ QUnit.module('Templates', () => {
 
     QUnit.test('events should be rendered for input after value is changed when field template is specified (T399896)', function(assert) {
         const events = [
-            'KeyDown', 'KeyPress', 'KeyUp',
+            'KeyDown', 'KeyUp',
             'Change', 'Cut', 'Copy', 'Paste', 'Input'
         ];
 
@@ -944,40 +943,29 @@ QUnit.module('Templates', () => {
                 return $('<div>').dxTextBox();
             }
         };
-        sinon.stub(logger, 'warn');
 
-        try {
-            $.each(events, function(_, event) {
-                const spy = sinon.spy();
-                options['on' + event] = spy;
-                spies[event] = spy;
-            });
+        $.each(events, function(_, event) {
+            const spy = sinon.spy();
+            options['on' + event] = spy;
+            spies[event] = spy;
+        });
 
-            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor(options);
-            const instance = $dropDownEditor.dxDropDownEditor('instance');
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor(options);
+        const instance = $dropDownEditor.dxDropDownEditor('instance');
 
-            instance.option('value', 2);
+        instance.option('value', 2);
 
-            $.each(events, function(_, eventName) {
-                const params = {};
+        $.each(events, function(_, eventName) {
+            const params = {};
 
-                if(eventName.indexOf('Key') !== -1) {
-                    params.key = '';
-                }
+            if(eventName.indexOf('Key') !== -1) {
+                params.key = '';
+            }
 
-                const event = $.Event(eventName.toLowerCase(), params);
-                $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).trigger(event);
-                assert.equal(spies[eventName].callCount, 1, 'the \'' + eventName + '\' event was fired after value change');
-            });
-
-            assert.ok(logger.warn.calledTwice, 'init + handle OnKeyPress');
-            const firstWarnMessage = logger.warn.firstCall.args[0];
-            const secondWarnMessage = logger.warn.lastCall.args[0];
-            const isOnKeyPressWarnings = firstWarnMessage.indexOf('onKeyPress') > -1 && secondWarnMessage.indexOf('onKeyPress') > -1;
-            assert.ok(isOnKeyPressWarnings);
-        } finally {
-            logger.warn.restore();
-        }
+            const event = $.Event(eventName.toLowerCase(), params);
+            $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).trigger(event);
+            assert.equal(spies[eventName].callCount, 1, 'the \'' + eventName + '\' event was fired after value change');
+        });
     });
 
     QUnit.test('should have no errors after value change if text editor buttons were directly removed (T743479)', function(assert) {
@@ -1258,24 +1246,6 @@ QUnit.module('options', () => {
         keyboardMock($input).type('b');
 
         assert.equal($input.val(), 'one', 'value is not changed');
-    });
-
-    QUnit.test('"showPopupTitle" should change built-in popup "showTitle" option', function(assert) {
-        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
-            opened: true,
-            dropDownOptions: { showTitle: true }
-        }).dxDropDownEditor('instance');
-
-        sinon.stub(logger, 'warn');
-
-        try {
-            instance.option('showPopupTitle', false);
-
-            assert.ok(logger.warn.calledOnce);
-            assert.strictEqual(instance._popup.option('showTitle'), false, 'Option has been changed');
-        } finally {
-            logger.warn.restore();
-        }
     });
 });
 

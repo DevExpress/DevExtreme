@@ -13,6 +13,15 @@ import { HeaderPanelLayout } from '../header_panel/layout';
 import { DateTableLayoutBase } from '../date_table/layout';
 import { TimePanelTableLayout } from '../time_panel/layout';
 
+import { combineClasses } from '../../../../../utils/combine_classes';
+import * as Utils from '../../utils';
+import { CrossScrollingLayout } from '../cross_scrolling_layout';
+
+jest.mock('../../../../../utils/combine_classes', () => ({
+  combineClasses: jest.fn(),
+}));
+const isVerticalGroupingApplied = jest.spyOn(Utils, 'isVerticalGroupingApplied');
+
 const mockUpdate = jest.fn();
 const mockGetGroupPanelData = jest.fn().mockImplementation(() => ({}));
 const mockViewDataProvider = {
@@ -135,6 +144,14 @@ describe('WorkSpace', () => {
           baseColSpan: 5,
           groupPanelItems: [],
         },
+        classes: 'custom-classes',
+        groupPanelHeight: 500,
+        headerEmptyCellWidth: 300,
+
+        timePanelRef: 'timePanelRef',
+        groupPanelRef: 'groupPanelRef',
+        dateTableRef: 'dateTableRef',
+        allDayPanelRef: 'allDayPanelRef',
       };
 
       const workSpace = renderComponent({
@@ -163,6 +180,13 @@ describe('WorkSpace', () => {
           headerPanelTemplate,
           dateTableTemplate,
           timePanelTemplate,
+          className: 'custom-classes',
+          groupPanelHeight: 500,
+          headerEmptyCellWidth: 300,
+          timePanelRef: 'timePanelRef',
+          groupPanelRef: 'groupPanelRef',
+          dateTableRef: 'dateTableRef',
+          allDayPanelRef: 'allDayPanelRef',
         });
     });
   });
@@ -400,6 +424,104 @@ describe('WorkSpace', () => {
             });
         });
       });
+
+      describe('groupPanelHeightEffect', () => {
+        it('should set groupPanelHeight', () => {
+          const workSpace = new WorkSpace({} as any);
+
+          workSpace.dateTableRef = {
+            current: {
+              getBoundingClientRect: () => ({
+                height: 325,
+              }),
+            },
+          } as any;
+          workSpace.groupPanelHeightEffect();
+
+          expect(workSpace.groupPanelHeight)
+            .toBe(325);
+        });
+
+        it('should work if tableRef was not initialized', () => {
+          const workSpace = new WorkSpace({} as any);
+
+          workSpace.dateTableRef = {
+            current: null,
+          } as any;
+          workSpace.groupPanelHeightEffect();
+
+          expect(workSpace.groupPanelHeight)
+            .toBe(undefined);
+        });
+      });
+
+      describe('headerEmptyCellWidthEffect', () => {
+        const timePanelRef = {
+          current: {
+            getBoundingClientRect: () => ({
+              width: 100,
+            }),
+          },
+        };
+        const groupPanelRef = {
+          current: {
+            getBoundingClientRect: () => ({
+              width: 160,
+            }),
+          },
+        };
+        const emptyRef = {
+          current: null,
+        };
+
+        it('should work if refs are not initialized', () => {
+          const workSpace = new WorkSpace({} as any);
+
+          workSpace.timePanelRef = emptyRef as any;
+          workSpace.groupPanelRef = emptyRef as any;
+
+          workSpace.headerEmptyCellWidthEffect();
+
+          expect(workSpace.headerEmptyCellWidth)
+            .toBe(0);
+        });
+
+        it('should work when group panel is present', () => {
+          const workSpace = new WorkSpace({} as any);
+
+          workSpace.timePanelRef = emptyRef as any;
+          workSpace.groupPanelRef = groupPanelRef as any;
+
+          workSpace.headerEmptyCellWidthEffect();
+
+          expect(workSpace.headerEmptyCellWidth)
+            .toBe(160);
+        });
+
+        it('should work when time-panel is present', () => {
+          const workSpace = new WorkSpace({} as any);
+
+          workSpace.timePanelRef = timePanelRef as any;
+          workSpace.groupPanelRef = emptyRef as any;
+
+          workSpace.headerEmptyCellWidthEffect();
+
+          expect(workSpace.headerEmptyCellWidth)
+            .toBe(100);
+        });
+
+        it('should work when both time-panel and group-panel are present', () => {
+          const workSpace = new WorkSpace({} as any);
+
+          workSpace.timePanelRef = timePanelRef as any;
+          workSpace.groupPanelRef = groupPanelRef as any;
+
+          workSpace.headerEmptyCellWidthEffect();
+
+          expect(workSpace.headerEmptyCellWidth)
+            .toBe(260);
+        });
+      });
     });
   });
 
@@ -425,7 +547,7 @@ describe('WorkSpace', () => {
           } as any);
 
           expect(workSpace.layout)
-            .toBe(OrdinaryLayout); // TODO: CrossScrollingLayout
+            .toBe(CrossScrollingLayout);
         });
       });
 
@@ -716,6 +838,366 @@ describe('WorkSpace', () => {
           expect(workSpace.timePanelTemplate)
             .toBe(TimePanelTableLayout);
         });
+      });
+
+      describe('isRenderGroupPanel', () => {
+        it('should call isVerticalGroupingApplied', () => {
+          const workSpace = new WorkSpace({
+            groups,
+            groupOrientation: 'vertical',
+          } as any);
+
+          const result = workSpace.isRenderGroupPanel;
+
+          expect(result)
+            .toBe(true);
+          expect(isVerticalGroupingApplied)
+            .toBeCalledWith(groups, 'vertical');
+        });
+      });
+
+      describe('isStandaloneAllDayPanel', () => {
+        it('should return true when vertical group orientation is not used and all day panel is visible', () => {
+          const workSpace = new WorkSpace({
+            groups,
+            groupOrientation: 'horizontal',
+            showAllDayPanel: true,
+            type: 'week',
+          } as any);
+
+          const result = workSpace.isStandaloneAllDayPanel;
+
+          expect(result)
+            .toBe(true);
+          expect(isVerticalGroupingApplied)
+            .toBeCalledWith(groups, 'horizontal');
+        });
+
+        it('should return false if all day panel is not visible', () => {
+          const workSpace = new WorkSpace({
+            groups,
+            groupOrientation: 'horizontal',
+            showAllDayPanel: false,
+            type: 'week',
+          } as any);
+
+          const result = workSpace.isStandaloneAllDayPanel;
+
+          expect(result)
+            .toBe(false);
+          expect(isVerticalGroupingApplied)
+            .toBeCalledWith(groups, 'horizontal');
+        });
+      });
+    });
+
+    describe('classes', () => {
+      // afterEach(jest.resetAllMocks);
+
+      it('should call combineClasses with correct parameters', () => {
+        const workSpace = new WorkSpace({
+          intervalCount: 35,
+          type: 'day',
+          hoursInterval: 0.5,
+          showAllDayPanel: true,
+          groupByDate: true,
+          groups,
+          groupOrientation: 'vertical',
+        } as any);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        workSpace.classes;
+
+        expect(combineClasses)
+          .toBeCalledWith({
+            'dx-scheduler-work-space-day': true,
+            'dx-scheduler-work-space-count': true,
+            'dx-scheduler-work-space-odd-cells': false,
+            'dx-scheduler-work-space-all-day-collapsed': true,
+            'dx-scheduler-work-space-all-day': true,
+            'dx-scheduler-work-space-group-by-date': true,
+            'dx-scheduler-work-space-grouped': true,
+            'dx-scheduler-work-space-vertical-grouped': true,
+            'dx-scheduler-group-row-count-one': false,
+            'dx-scheduler-group-row-count-two': false,
+            'dx-scheduler-group-row-count-three': false,
+            'dx-scheduler-group-column-count-one': true,
+            'dx-scheduler-group-column-count-two': false,
+            'dx-scheduler-group-column-count-three': false,
+            'dx-scheduler-work-space': true,
+          });
+      });
+
+      it('should call combineClasses with correct parameters when all-day panel is not collapsed', () => {
+        const workSpace = new WorkSpace({
+          intervalCount: 35,
+          type: 'day',
+          groupByDate: true,
+          groups,
+          groupOrientation: 'vertical',
+          allDayPanelExpanded: true,
+          showAllDayPanel: true,
+        } as any);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        workSpace.classes;
+
+        expect(combineClasses)
+          .toBeCalledWith({
+            'dx-scheduler-work-space-day': true,
+            'dx-scheduler-work-space-count': true,
+            'dx-scheduler-work-space-odd-cells': false,
+            'dx-scheduler-work-space-all-day-collapsed': false,
+            'dx-scheduler-work-space-all-day': true,
+            'dx-scheduler-work-space-group-by-date': true,
+            'dx-scheduler-work-space-grouped': true,
+            'dx-scheduler-work-space-vertical-grouped': true,
+            'dx-scheduler-group-row-count-one': false,
+            'dx-scheduler-group-row-count-two': false,
+            'dx-scheduler-group-row-count-three': false,
+            'dx-scheduler-group-column-count-one': true,
+            'dx-scheduler-group-column-count-two': false,
+            'dx-scheduler-group-column-count-three': false,
+            'dx-scheduler-work-space': true,
+          });
+      });
+
+      it('should call combineClasses with correct parameters when all-day panel is not visible', () => {
+        const workSpace = new WorkSpace({
+          type: 'day',
+          intervalCount: 35,
+          showAllDayPanel: false,
+          groupByDate: true,
+          groups,
+          groupOrientation: 'vertical',
+        } as any);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        workSpace.classes;
+
+        expect(combineClasses)
+          .toBeCalledWith({
+            'dx-scheduler-work-space-day': true,
+            'dx-scheduler-work-space-count': true,
+            'dx-scheduler-work-space-odd-cells': false,
+            'dx-scheduler-work-space-all-day-collapsed': false,
+            'dx-scheduler-work-space-all-day': false,
+            'dx-scheduler-work-space-group-by-date': true,
+            'dx-scheduler-work-space-grouped': true,
+            'dx-scheduler-work-space-vertical-grouped': true,
+            'dx-scheduler-group-row-count-one': false,
+            'dx-scheduler-group-row-count-two': false,
+            'dx-scheduler-group-row-count-three': false,
+            'dx-scheduler-group-column-count-one': true,
+            'dx-scheduler-group-column-count-two': false,
+            'dx-scheduler-group-column-count-three': false,
+            'dx-scheduler-work-space': true,
+          });
+      });
+
+      it('should call combineClasses with correct parameters when groups are empty', () => {
+        const workSpace = new WorkSpace({
+          type: 'day',
+          intervalCount: 35,
+          showAllDayPanel: true,
+          groupByDate: false,
+          groups: [],
+          groupOrientation: 'horizontal',
+        } as any);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        workSpace.classes;
+
+        expect(combineClasses)
+          .toBeCalledWith({
+            'dx-scheduler-work-space-day': true,
+            'dx-scheduler-work-space-count': true,
+            'dx-scheduler-work-space-odd-cells': false,
+            'dx-scheduler-work-space-all-day-collapsed': true,
+            'dx-scheduler-work-space-all-day': true,
+            'dx-scheduler-work-space-group-by-date': false,
+            'dx-scheduler-work-space-grouped': false,
+            'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-group-row-count-one': false,
+            'dx-scheduler-group-row-count-two': false,
+            'dx-scheduler-group-row-count-three': false,
+            'dx-scheduler-group-column-count-one': false,
+            'dx-scheduler-group-column-count-two': false,
+            'dx-scheduler-group-column-count-three': false,
+            'dx-scheduler-work-space': true,
+          });
+      });
+
+      it('should call combineClasses with correct parameters when groups are empty but groupOrientation is vertical', () => {
+        const workSpace = new WorkSpace({
+          type: 'day',
+          intervalCount: 35,
+          showAllDayPanel: true,
+          groupByDate: false,
+          groups: [],
+          groupOrientation: 'vertical',
+        } as any);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        workSpace.classes;
+
+        expect(combineClasses)
+          .toBeCalledWith({
+            'dx-scheduler-work-space-day': true,
+            'dx-scheduler-work-space-count': true,
+            'dx-scheduler-work-space-odd-cells': false,
+            'dx-scheduler-work-space-all-day-collapsed': true,
+            'dx-scheduler-work-space-all-day': true,
+            'dx-scheduler-work-space-group-by-date': false,
+            'dx-scheduler-work-space-grouped': false,
+            'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-group-row-count-one': false,
+            'dx-scheduler-group-row-count-two': false,
+            'dx-scheduler-group-row-count-three': false,
+            'dx-scheduler-group-column-count-one': false,
+            'dx-scheduler-group-column-count-two': false,
+            'dx-scheduler-group-column-count-three': false,
+            'dx-scheduler-work-space': true,
+          });
+      });
+
+      [{
+        groups: [{
+          items: [],
+          data: [],
+          name: 'group 1',
+        }],
+        groupOrientation: 'vertical',
+        className: 'dx-scheduler-group-column-count-one',
+      }, {
+        groups: [{
+          items: [],
+          data: [],
+          name: 'group 1',
+        }, {
+          items: [],
+          data: [],
+          name: 'group 2',
+        }],
+        groupOrientation: 'vertical',
+        className: 'dx-scheduler-group-column-count-two',
+      }, {
+        groups: [{
+          items: [],
+          data: [],
+          name: 'group 1',
+        }, {
+          items: [],
+          data: [],
+          name: 'group 2',
+        }, {
+          items: [],
+          data: [],
+          name: 'group 3',
+        }],
+        groupOrientation: 'vertical',
+        className: 'dx-scheduler-group-column-count-three',
+      }, {
+        groups: [{
+          items: [],
+          data: [],
+          name: 'group 1',
+        }],
+        groupOrientation: 'horizontal',
+        className: 'dx-scheduler-group-row-count-one',
+      }, {
+        groups: [{
+          items: [],
+          data: [],
+          name: 'group 1',
+        }, {
+          items: [],
+          data: [],
+          name: 'group 2',
+        }],
+        groupOrientation: 'horizontal',
+        className: 'dx-scheduler-group-row-count-two',
+      }, {
+        groups: [{
+          items: [],
+          data: [],
+          name: 'group 1',
+        }, {
+          items: [],
+          data: [],
+          name: 'group 2',
+        }, {
+          items: [],
+          data: [],
+          name: 'group 3',
+        }],
+        groupOrientation: 'horizontal',
+        className: 'dx-scheduler-group-row-count-three',
+      }].forEach(({ groups: currentGroups, groupOrientation, className }) => {
+        it(`should call combineClasses with correct parameters when groups count is ${currentGroups.length} and groupOrientation is ${groupOrientation}`, () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            groups: currentGroups,
+            groupOrientation,
+            type: 'day',
+            crossScrollingEnabled: false,
+          } as any);
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          workSpace.classes;
+
+          expect(combineClasses)
+            .toBeCalledWith({
+              'dx-scheduler-work-space-day': true,
+              'dx-scheduler-work-space-count': false,
+              'dx-scheduler-work-space-odd-cells': false,
+              'dx-scheduler-work-space-all-day-collapsed': false,
+              'dx-scheduler-work-space-all-day': false,
+              'dx-scheduler-work-space-group-by-date': false,
+              'dx-scheduler-work-space-grouped': true,
+              'dx-scheduler-work-space-vertical-grouped': groupOrientation === 'vertical',
+              'dx-scheduler-group-row-count-one': false,
+              'dx-scheduler-group-row-count-two': false,
+              'dx-scheduler-group-row-count-three': false,
+              'dx-scheduler-group-column-count-one': false,
+              'dx-scheduler-group-column-count-two': false,
+              'dx-scheduler-group-column-count-three': false,
+              'dx-scheduler-work-space': true,
+              'dx-scheduler-work-space-both-scrollbar': false,
+              [className]: true,
+            });
+        });
+      });
+
+      it('should work correctly when crossScrolling is used', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'day',
+          crossScrollingEnabled: true,
+        } as any);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        workSpace.classes;
+
+        expect(combineClasses)
+          .toBeCalledWith({
+            'dx-scheduler-work-space-day': true,
+            'dx-scheduler-work-space-count': false,
+            'dx-scheduler-work-space-odd-cells': false,
+            'dx-scheduler-work-space-all-day-collapsed': false,
+            'dx-scheduler-work-space-all-day': false,
+            'dx-scheduler-work-space-group-by-date': false,
+            'dx-scheduler-work-space-grouped': false,
+            'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-group-row-count-one': false,
+            'dx-scheduler-group-row-count-two': false,
+            'dx-scheduler-group-row-count-three': false,
+            'dx-scheduler-group-column-count-one': false,
+            'dx-scheduler-group-column-count-two': false,
+            'dx-scheduler-group-column-count-three': false,
+            'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-both-scrollbar': true,
+          });
       });
     });
   });

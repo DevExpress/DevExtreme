@@ -12,6 +12,21 @@ import { EventExtension, DxEvent } from '../../events/index';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
 import { BaseWidgetProps } from './common/base_props';
 
+export interface ItemClickInfo {
+  component?: LegacyList;
+  element?: DxElement;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  model?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  itemData: any;
+  itemElement?: DxElement;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  itemIndex?: number | any;
+  event?: DxEvent;
+}
+
+export type ItemClickEvent = ItemClickInfo & EventExtension;
+
 export const viewFunction = ({
   props,
   restAttributes,
@@ -77,19 +92,8 @@ export class ListProps extends BaseWidgetProps {
   //   groupElement?: DxElement, groupIndex?: number
   // }) => any);
 
-  @Event() onItemClick?: ((e: {
-    component?: LegacyList;
-    element?: DxElement;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    model?: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    itemData: any;
-    itemElement?: DxElement;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    itemIndex?: number | any;
-    event?: DxEvent;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } & EventExtension) => any) | string;
+  @Event() onItemClick?: ((e: ItemClickEvent) => any) | string;
 
   // @Event() onItemContextMenu?: ((e: {
   //   component?: dxList, element?: DxElement, model?: any, itemData?: any,

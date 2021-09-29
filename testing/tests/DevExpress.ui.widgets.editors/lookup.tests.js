@@ -3253,7 +3253,7 @@ QUnit.module('default options', {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
-        const $lookup = $('<div>').prependTo('body');
+        const $lookup = $('<div>').prependTo('#qunit-fixture');
 
         try {
 

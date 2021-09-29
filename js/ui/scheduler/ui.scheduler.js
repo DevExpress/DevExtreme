@@ -1073,7 +1073,6 @@ class Scheduler extends Widget {
 
     _initExpressions(fields) {
         this._dataAccessors = utils.dataAccessors.create(
-            this,
             fields,
             this._dataAccessors,
             config().forceIsoDateParsing,

@@ -2,7 +2,7 @@ import { Deferred, when } from '../../core/utils/deferred';
 import { isObject, isString } from '../../core/utils/type';
 
 
-const NEW_SCROLLING_MODE = 'scrolling.newMode';
+const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
 
 const needTwoPagesLoading = (that) => that.option('scrolling.loadTwoPagesOnStart') || that._controller.isVirtual() || that._controller.getViewportItemIndex() > 0;
@@ -231,7 +231,7 @@ export class VirtualDataLoader {
         const isVirtualMode = this._controller.isVirtualMode();
         const isAppendMode = this._controller.isAppendMode();
 
-        if(!this.option(NEW_SCROLLING_MODE) && (isVirtualMode || isAppendMode)) {
+        if(this.option(LEGACY_SCROLLING_MODE) !== false && (isVirtualMode || isAppendMode)) {
             if(pageIndex !== undefined) {
                 this._pageIndex = pageIndex;
             }
@@ -265,7 +265,7 @@ export class VirtualDataLoader {
         const isVirtualMode = this._controller.isVirtualMode();
         const isAppendMode = this._controller.isAppendMode();
 
-        if(!this.option(NEW_SCROLLING_MODE) && (isVirtualMode || isAppendMode)) {
+        if(this.option(LEGACY_SCROLLING_MODE) !== false && (isVirtualMode || isAppendMode)) {
             const pageIndexForLoad = getPageIndexForLoad(this);
 
             if(pageIndexForLoad >= 0) {
@@ -320,7 +320,7 @@ export class VirtualDataLoader {
 
         if(e && e.changes) {
             fireChanged(this, callBase, e);
-        } else if(!this.option(NEW_SCROLLING_MODE) && (isVirtualMode || isAppendMode)) {
+        } else if(this.option(LEGACY_SCROLLING_MODE) !== false && (isVirtualMode || isAppendMode)) {
             const beginPageIndex = getBeginPageIndex(this);
             if(beginPageIndex >= 0) {
                 if(isVirtualMode && beginPageIndex + this._cache.length !== dataOptions.pageIndex() && beginPageIndex - 1 !== dataOptions.pageIndex()) {

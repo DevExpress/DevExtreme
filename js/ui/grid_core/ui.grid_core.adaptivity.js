@@ -47,7 +47,7 @@ const GROUP_ROW_CLASS = 'dx-group-row';
 
 const EXPAND_ARIA_NAME = 'dxDataGrid-ariaAdaptiveExpand';
 const COLLAPSE_ARIA_NAME = 'dxDataGrid-ariaAdaptiveCollapse';
-const NEW_SCROLLING_MODE = 'scrolling.newMode';
+const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
 function getColumnId(that, column) {
     return that._columnsController.getColumnId(column);
@@ -1052,6 +1052,7 @@ export const adaptivityModule = {
                     }
 
                     const expandRowIndex = gridCoreUtils.getIndexByKey(this._adaptiveExpandedKey, items);
+                    const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
 
                     if(expandRowIndex >= 0) {
                         const item = items[expandRowIndex];
@@ -1065,7 +1066,7 @@ export const adaptivityModule = {
                             isNewRow: item.isNewRow,
                             values: item.values
                         });
-                    } else if(changeType === 'refresh' && !(this.option(NEW_SCROLLING_MODE) && change.repaintChangesOnly)) {
+                    } else if(changeType === 'refresh' && !(newMode && change.repaintChangesOnly)) {
                         this._adaptiveExpandedKey = undefined;
                     }
 

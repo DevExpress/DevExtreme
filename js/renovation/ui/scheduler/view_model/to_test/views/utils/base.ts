@@ -185,3 +185,21 @@ export const getDisplayedCellCount = (
 export const getDisplayedRowCount = (
   displayedRowCount: number | undefined, completeData: unknown[][],
 ): number => displayedRowCount ?? getTotalRowCountByCompleteData(completeData);
+
+export const getCellDuration = (
+  viewType: ViewType,
+  startDayHour: number,
+  endDayHour: number,
+  hoursInterval: number,
+): number => {
+  switch (viewType) {
+    case 'month':
+      return calculateDayDuration(startDayHour, endDayHour) * 3600000;
+
+    case 'timelineMonth':
+      return dateUtils.dateToMilliseconds('day');
+
+    default:
+      return 3600000 * hoursInterval;
+  }
+};
