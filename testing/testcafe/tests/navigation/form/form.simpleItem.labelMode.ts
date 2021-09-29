@@ -11,7 +11,7 @@ fixture`Form`
     ['default', 'static', 'floating'].forEach((labelMode) => {
       [true, false].forEach((showOptionalMark) => {
         [true, false].forEach((showColonAfterLabel) => {
-          const testName = `SimpleItem,rtl_${rtlEnabled},showOptionalMark_${showOptionalMark},labelMode_${labelMode},showColonAfterLabel_${showColonAfterLabel}`;
+          const testName = `SimpleItem,rtl_${rtlEnabled},showOptionalMark_${showOptionalMark},labelMode_${labelMode},showColonAfterLabel_${showColonAfterLabel},${theme}`;
           test(testName, async (t) => {
             const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
             await changeTheme(theme);
