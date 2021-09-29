@@ -24,6 +24,13 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollable {
             reRender();
         };
 
+        const handleScroll = scrollable.handleScroll;
+
+        scrollable.handleScroll = function() {
+            reRender();
+            handleScroll.apply(this, arguments);
+        };
+
         let vScrollbar;
         let hScrollbar;
 

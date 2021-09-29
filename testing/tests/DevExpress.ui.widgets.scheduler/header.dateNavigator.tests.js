@@ -107,6 +107,30 @@ test('should display correct caption after changing to month view if startDate i
     }
 );
 
+test('should display correct caption after switching to the next week', function(assert) {
+    const scheduler = createWrapper({
+        currentDate: new Date(2021, 8, 22),
+        views: [
+            {
+                type: 'workWeek',
+                startDayHour: 10,
+                endDayHour: 19
+            }
+        ],
+        currentView: 'workWeek',
+    });
+
+    const navigator = scheduler.header.navigator;
+    navigator.nextButton.click();
+
+    assert.equal(
+        navigator.caption.getText(),
+        '27 Sep-1 Oct 2021',
+        'caption correct'
+    );
+}
+);
+
 module('Option Changing', () => {
     test('should change caption text after changing "currentView"', function(assert) {
         const scheduler = createWrapper({

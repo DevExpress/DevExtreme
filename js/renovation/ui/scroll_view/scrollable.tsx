@@ -8,6 +8,7 @@ import {
 
 import {
   DxMouseEvent,
+  ElementOffset,
   ScrollableDirection,
   ScrollOffset,
 } from './common/types.d';
@@ -31,7 +32,7 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     scrollableNativeRef,
     scrollableSimulatedRef,
     props: {
-      useNative, activeStateUnit, children, classes,
+      useNative, children, classes,
       aria, disabled, width, height, visible, rtlEnabled,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
       scrollByContent, useKeyboard, pullDownEnabled,
@@ -49,7 +50,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     ? (
       <ScrollableNative
         ref={scrollableNativeRef}
-        activeStateUnit={activeStateUnit}
         aria={aria}
         classes={classes}
         width={width}
@@ -85,7 +85,6 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
     : (
       <ScrollableSimulated
         ref={scrollableSimulatedRef}
-        activeStateUnit={activeStateUnit}
         aria={aria}
         classes={classes}
         width={width}
@@ -211,7 +210,7 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
   }
 
   @Method()
-  scrollToElement(element: HTMLElement, offset?: Partial<Omit<ClientRect, 'width' | 'height'>>): void {
+  scrollToElement(element: HTMLElement, offset?: ElementOffset): void {
     if (!this.content().contains(element)) {
       return;
     }
@@ -269,7 +268,7 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
   getScrollElementPosition(
     targetElement: HTMLElement,
     direction: ScrollableDirection,
-    offset?: Partial<Omit<ClientRect, 'width' | 'height'>>,
+    offset?: ElementOffset,
   ): number {
     const scrollOffset = this.scrollOffset();
 

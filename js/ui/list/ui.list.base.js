@@ -395,7 +395,7 @@ export const ListBase = CollectionWidget.inherit({
             pulledDownText: this.option('pulledDownText'),
             refreshingText: this.option('refreshingText'),
             reachBottomText: this.option('pageLoadingText'),
-            useKeyboard: false
+            useKeyboard: false,
         });
 
         this._$container = $(this._scrollView.content());
@@ -1048,7 +1048,7 @@ export const ListBase = CollectionWidget.inherit({
     scrollToItem: function(itemElement) {
         const $item = this._editStrategy.getItemElement(itemElement);
 
-        this._scrollView.scrollToElement($item);
+        this._scrollView.scrollToElement($item?.get(0));
     },
 
     _dimensionChanged: function() {

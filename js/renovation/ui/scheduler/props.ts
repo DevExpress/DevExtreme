@@ -87,7 +87,7 @@ export class ViewProps {
   cellDuration?: number;
 
   @OneWay()
-  groups?: Record<string, unknown>[];
+  groups?: string[];
 
   @OneWay()
   maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
@@ -320,7 +320,7 @@ export class SchedulerProps extends BaseWidgetProps {
   cellDuration = 30;
 
   @OneWay()
-  groups: Record<string, unknown>[] = [];
+  groups: string[] = [];
 
   @OneWay()
   maxAppointmentsPerCell: number | 'auto' | 'unlimited' = 'auto';

@@ -71,6 +71,7 @@ import {
     getStartViewDateTimeOffset,
     isDateAndTimeView,
     calculateIsGroupedAllDayPanel,
+    getCellDuration
 } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
 import Semaphore from '../semaphore';
@@ -104,7 +105,6 @@ const ALL_DAY_PANEL_CLASS = 'dx-scheduler-all-day-panel';
 const ALL_DAY_TABLE_CLASS = 'dx-scheduler-all-day-table';
 const ALL_DAY_CONTAINER_CLASS = 'dx-scheduler-all-day-appointments';
 const ALL_DAY_TITLE_CLASS = 'dx-scheduler-all-day-title';
-const ALL_DAY_TITLE_HIDDEN_CLASS = 'dx-scheduler-all-day-title-hidden';
 const ALL_DAY_TABLE_CELL_CLASS = 'dx-scheduler-all-day-table-cell';
 const ALL_DAY_TABLE_ROW_CLASS = 'dx-scheduler-all-day-table-row';
 const WORKSPACE_WITH_ALL_DAY_CLASS = 'dx-scheduler-work-space-all-day';
@@ -462,6 +462,20 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(this._needCreateCrossScrolling()) {
             config = extend(config, this._createCrossScrollingConfig());
         }
+        if(this.isVirtualScrolling()
+            && (this.virtualScrollingDispatcher.horizontalScrollingAllowed
+                || this.virtualScrollingDispatcher.height)) {
+            const currentOnScroll = config.onScroll;
+            config = {
+                ...config,
+                onScroll: (e) => {
+
+                    currentOnScroll?.(e);
+
+                    this.virtualScrollingDispatcher.handleOnScrollEvent(e?.scrollOffset);
+                },
+            };
+        }
 
         return config;
     }
@@ -616,6 +630,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this._getVirtualScrollingDispatcherOptions());
+        this.virtualScrollingDispatcher.attachScrollableEvents();
         this.renderer = new VirtualScrollingRenderer(this);
     }
 
@@ -1352,7 +1367,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         for(let i = startIndex; i < totalCellCount + cellCount; i++) {
-            width = width + getBoundingRect($($cells).eq(i).get(0)).width;
+            const element = $($cells).eq(i).get(0);
+            width = element ? width + getBoundingRect(element).width : width;
         }
 
         return width / (totalCellCount + cellCount - startIndex);
@@ -1415,8 +1431,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.viewDataProvider.getLastViewDateByEndDayHour(this.option('endDayHour'));
     }
 
-    getCellDuration() { // TODO move to the ModelProvider
-        return 3600000 * this.option('hoursInterval');
+    getCellDuration() {
+        return getCellDuration(
+            this.type,
+            this.option('startDayHour'),
+            this.option('endDayHour'),
+            this.option('hoursInterval')
+        );
     }
 
     getIntervalDuration(allDay) {
@@ -1741,7 +1762,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const dateTable = this._getDateTable();
         // We should use getBoundingClientRect in renovation
-        const dateTableRect = getBoundingRect(dateTable.get(0));
+        const dateTableRect = dateTable.get(0) ? getBoundingRect(dateTable.get(0)) : 0;
 
         const columnsCount = this.viewDataProvider.getColumnsCount();
 
@@ -1884,14 +1905,13 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             const options = {
                 viewData: this.viewDataProvider.viewData,
-                visible,
                 dataCellTemplate: this.option('dataCellTemplate'),
                 startCellIndex: 0,
                 ...(this.virtualScrollingDispatcher.horizontalVirtualScrolling?.getRenderState() || {}),
             };
 
             utils.renovation.renderComponent(this, this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
-            utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });
+            utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', {});
 
             this._$allDayTable = this.renovatedAllDayPanel.$element().find(`.${ALL_DAY_TABLE_CLASS}`);
 
@@ -2449,11 +2469,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._initWorkSpaceUnits();
 
+        this._initVirtualScrolling();
+
         this._initDateTableScrollable();
 
         this._createWorkSpaceElements();
-
-        this._initVirtualScrolling();
 
         super._initMarkup();
 
@@ -2528,8 +2548,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _toggleAllDayVisibility(isUpdateScrollable) {
         const showAllDayPanel = this._isShowAllDayPanel();
-        this._$allDayPanel.toggle(showAllDayPanel);
-        this._$allDayTitle && this._$allDayTitle.toggleClass(ALL_DAY_TITLE_HIDDEN_CLASS, !showAllDayPanel);
         this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
 
         this._changeAllDayVisibility();

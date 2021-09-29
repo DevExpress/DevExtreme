@@ -39,17 +39,9 @@ describe('AllDayPanelLayout', () => {
       /> as any,
     );
 
-    it('should spread restAttributes', () => {
-      const layout = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
-
-      expect(layout.prop('custom-attribute'))
-        .toBe('customAttribute');
-    });
-
     it('should render components and pass correct arguments to them', () => {
       const dataCellTemplate = () => null;
       const layout = render({
-        classes: 'some-class',
         restAttributes: { style: { height: 500 } },
         emptyTableHeight: 123,
         props: {
@@ -57,17 +49,12 @@ describe('AllDayPanelLayout', () => {
         },
       });
 
-      expect(layout.hasClass('some-class'))
-        .toBe(true);
-
       const allDayTable = layout.find('.dx-scheduler-all-day-table');
 
       expect(allDayTable.prop('height'))
         .toBe(123);
 
       expect(allDayTable.exists())
-        .toBe(true);
-      expect(allDayTable.hasClass('dx-scheduler-all-day-table'))
         .toBe(true);
 
       const tableBody = allDayTable.find(AllDayPanelTableBody);
@@ -87,14 +74,6 @@ describe('AllDayPanelLayout', () => {
           leftVirtualCellCount: 34,
           rightVirtualCellCount: 44,
         });
-    });
-
-    it('should not be rendered if "visible" is false', () => {
-      const layout = render({ props: { visible: false } });
-
-      const allDayTable = layout.find('.dx-scheduler-all-day-table');
-      expect(allDayTable.exists())
-        .toBe(false);
     });
 
     it('should render all-day appointments', () => {
@@ -140,35 +119,6 @@ describe('AllDayPanelLayout', () => {
 
         expect(layout.emptyTableHeight)
           .toEqual(DefaultSizes.allDayPanelHeight);
-      });
-
-      describe('classes', () => {
-        it('should not add dx-hidden class if "visible" is true', () => {
-          const layout = new AllDayPanelLayout({
-            className: 'some-class',
-            visible: true,
-          });
-
-          expect(layout.classes.split(' '))
-            .toEqual([
-              'dx-scheduler-all-day-panel',
-              'some-class',
-            ]);
-        });
-
-        it('should add dx-hidden class if "visible" is false', () => {
-          const layout = new AllDayPanelLayout({
-            className: 'some-class',
-            visible: false,
-          });
-
-          expect(layout.classes.split(' '))
-            .toEqual([
-              'dx-scheduler-all-day-panel',
-              'dx-hidden',
-              'some-class',
-            ]);
-        });
       });
     });
   });

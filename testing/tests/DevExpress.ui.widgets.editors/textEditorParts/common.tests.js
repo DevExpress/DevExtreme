@@ -7,7 +7,6 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 import themes from 'ui/themes';
 import config from 'core/config';
-import { noop } from 'core/utils/common';
 import consoleUtils from 'core/utils/console';
 import { normalizeKeyName } from 'events/utils/index';
 
@@ -25,7 +24,7 @@ const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 const EVENTS = [
     'FocusIn', 'FocusOut',
-    'KeyDown', 'KeyPress', 'KeyUp',
+    'KeyDown', 'KeyUp',
     'Change', 'Cut', 'Copy', 'Paste', 'Input'
 ];
 
@@ -930,7 +929,7 @@ QUnit.module('api', moduleConfig, () => {
     });
 
     QUnit.test('events work when relevant actions is not set', function(assert) {
-        assert.expect(12);
+        assert.expect(8);
         const textBox = this.instance;
         const keyboard = this.keyboard;
 
@@ -939,13 +938,6 @@ QUnit.module('api', moduleConfig, () => {
             assert.equal($(e.element).get(0), textBox.$element().get(0), 'event has link on element');
             assert.equal(e.event.type, 'keydown', 'event has related Event');
             assert.ok(true, 'keyDown was fired');
-        });
-
-        textBox.on('keyPress', e => {
-            assert.equal(e.component, textBox, 'event has link on component');
-            assert.equal($(e.element).get(0), textBox.$element().get(0), 'event has link on element');
-            assert.equal(e.event.type, 'keypress', 'event has related Event');
-            assert.ok(true, 'keyPress was fired');
         });
 
         textBox.on('keyUp', e => {
@@ -959,14 +951,12 @@ QUnit.module('api', moduleConfig, () => {
     });
 
     QUnit.test('events supports chains', function(assert) {
-        assert.expect(3);
+        assert.expect(2);
         const textBox = this.instance;
         const keyboard = this.keyboard;
 
         textBox.on('keyDown', e => {
             assert.ok(true, 'keyDown was fired');
-        }).on('keyPress', e => {
-            assert.ok(true, 'keyPress was fired');
         }).on('keyUp', e => {
             assert.ok(true, 'keyUp was fired');
         });
@@ -1001,23 +991,6 @@ QUnit.module('deprecated options', {
         consoleUtils.logger.warn.restore();
     }
 }, () => {
-    QUnit.test('widget has no warnings if it is no user onKeyPress event subscriptions', function(assert) {
-        $('#texteditor').dxTextEditor({});
-        assert.strictEqual(consoleUtils.logger.warn.callCount, 0, 'Warning is not raised on init for widget without \'onKeyPress\' handler');
-    });
-
-    QUnit.test('user onKeyPress event subscriptions fires a deprecation warning', function(assert) {
-        const textBox = $('#texteditor').dxTextEditor({
-            onKeyPress: noop
-        }).dxTextEditor('instance');
-
-        assert.strictEqual(consoleUtils.logger.warn.callCount, 1, 'Warning is raised');
-        assert.strictEqual(consoleUtils.logger.warn.getCall(0).args[0].substring(0, 5), 'W0001', 'Warning is correct');
-
-        textBox.option('onKeyPress', null);
-        textBox.option('onKeyPress', noop);
-        assert.strictEqual(consoleUtils.logger.warn.callCount, 3, 'Warning is raised if set a new handler');
-    });
 });
 
 QUnit.module('regressions', moduleConfig, () => {
@@ -1026,7 +999,7 @@ QUnit.module('regressions', moduleConfig, () => {
 
         const EVENTS = [
             'focusIn', 'focusOut',
-            'keyDown', 'keyPress', 'keyUp',
+            'keyDown', 'keyUp',
             'change'
         ];
 
@@ -1115,13 +1088,11 @@ QUnit.module('regressions', moduleConfig, () => {
         const enterKeyStub = sinon.stub();
         const keyUpStub = sinon.stub();
         const keyDownStub = sinon.stub();
-        const keyPressStub = sinon.stub();
 
         const $textEditor = $('#texteditor').dxTextEditor({
             onEnterKey: enterKeyStub,
             onKeyUp: keyUpStub,
-            onKeyDown: keyDownStub,
-            onKeyPress: keyPressStub
+            onKeyDown: keyDownStub
         });
 
         const $input = $textEditor.find('input');
@@ -1135,7 +1106,6 @@ QUnit.module('regressions', moduleConfig, () => {
             assert.ok(!enterKeyStub.called, 'enter key action should not be called');
             assert.ok(!keyUpStub.called, 'key up action should not be called');
             assert.ok(!keyDownStub.called, 'key down action should not be called');
-            assert.ok(!keyPressStub.called, 'key press action should not be called');
         } finally {
             instance._disposed = disposed;
         }

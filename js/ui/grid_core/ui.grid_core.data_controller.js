@@ -36,7 +36,8 @@ export const dataControllerModule = {
 
                 if(dataSource) {
                     if(value !== undefined) {
-                        if(dataSource[optionName]() !== value) {
+                        const oldValue = that._getPagingOptionValue(optionName);
+                        if(oldValue !== value) {
                             if(optionName === 'pageSize') {
                                 dataSource.pageIndex(0);
                             }
@@ -89,6 +90,9 @@ export const dataControllerModule = {
                     });
 
                     that._refreshDataSource();
+                },
+                _getPagingOptionValue: function(optionName) {
+                    return this._dataSource[optionName]();
                 },
                 callbackNames: function() {
                     return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged'];
@@ -842,6 +846,7 @@ export const dataControllerModule = {
 
                     if(that._repaintChangesOnly !== undefined) {
                         change.repaintChangesOnly = that._repaintChangesOnly;
+                        change.needUpdateDimensions = change.needUpdateDimensions || that._needUpdateDimensions;
                     } else if(change.changes) {
                         change.repaintChangesOnly = that.option('repaintChangesOnly');
                     } else if(isDataChanged) {

@@ -148,6 +148,7 @@ class Diagram extends Widget {
                 .addClass(DIAGRAM_SCROLL_VIEW_CLASS)
                 .appendTo(this._$content);
             this._createComponent($scrollViewWrapper, DiagramScrollView, {
+                useNativeScrolling: this.option('useNativeScrolling'),
                 onCreateDiagram: (e) => {
                     this._diagramInstance.createDocument(e.$parent[0], e.scrollView);
                 }
@@ -276,7 +277,6 @@ class Diagram extends Widget {
         return this.option('historyToolbar.visible') && !this.isReadOnlyMode();
     }
     _renderHistoryToolbar($parent) {
-        const isServerSide = !hasWindow();
         const $container = $('<div>')
             .addClass(DIAGRAM_FLOATING_TOOLBAR_CONTAINER_CLASS)
             .appendTo($parent);
@@ -286,18 +286,18 @@ class Diagram extends Widget {
                 locateInMenu: 'never'
             })
         );
-        this._updateHistoryToolbarPosition($container, $parent, isServerSide);
+        this._updateHistoryToolbarPosition();
         this._historyToolbarResizeCallback = () => {
             this._historyToolbar.option('isMobileView', this.isMobileScreenSize());
         };
     }
-    _updateHistoryToolbarPosition($container, $parent, isServerSide) {
-        if(isServerSide) return;
+    _updateHistoryToolbarPosition() {
+        if(!hasWindow()) return;
 
-        positionUtils.setup($container, {
+        positionUtils.setup(this._historyToolbar.$element(), {
             my: 'left top',
             at: 'left top',
-            of: $parent,
+            of: this._historyToolbar.$element().parent(),
             offset: DIAGRAM_FLOATING_PANEL_OFFSET + ' ' + DIAGRAM_FLOATING_PANEL_OFFSET
         });
     }
@@ -1198,6 +1198,9 @@ class Diagram extends Widget {
         if(this._propertiesPanel) {
             this._propertiesPanel.repaint();
         }
+        if(this._historyToolbar) {
+            this._updateHistoryToolbarPosition();
+        }
     }
     _changeNativeFullscreen(setModeOn) {
         const window = getWindow();
@@ -2080,6 +2083,9 @@ class Diagram extends Widget {
                 break;
             case 'simpleView':
                 this._updateSimpleViewState();
+                break;
+            case 'useNativeScrolling':
+                this._invalidate();
                 break;
             case 'fullScreen':
                 this._updateFullscreenState();

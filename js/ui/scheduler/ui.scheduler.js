@@ -437,8 +437,8 @@ class Scheduler extends Widget {
                 value = dateUtils.trimTime(new Date(value));
                 this.option('selectedCellData', []);
                 this._workSpace.option(name, new Date(value));
-                this._header.option(name, new Date(value));
-                this._header.option('startViewDate', this.getStartViewDate());
+                this._header?.option(name, new Date(value));
+                this._header?.option('startViewDate', this.getStartViewDate());
                 this._appointments.option('items', []);
                 this._filterAppointmentsByDate();
 
@@ -466,11 +466,11 @@ class Scheduler extends Widget {
                 if(this._getCurrentViewOptions()) {
                     this.repaint();
                 } else {
-                    this._header.option(name, value);
+                    this._header?.option(name, value);
                 }
                 break;
             case 'useDropDownViewSwitcher':
-                this._header.option(name, value);
+                this._header?.option(name, value);
                 break;
             case 'currentView':
                 this.modelProvider.updateCurrentView();
@@ -684,7 +684,9 @@ class Scheduler extends Widget {
                 this._workSpace.option('draggingMode', value);
                 break;
             case 'toolbar':
-                this._header.option('items', value);
+                this._header
+                    ? this._header.option('items', value)
+                    : this.repaint();
                 break;
             case 'loadedResources':
             case 'resourceLoaderMap':
@@ -695,7 +697,7 @@ class Scheduler extends Widget {
     }
 
     _updateHeader() {
-        this._header.option(
+        this._header?.option(
             {
                 'intervalCount': this._getViewCountConfig().intervalCount,
                 'startViewDate': this.getStartViewDate(),
@@ -1070,14 +1072,13 @@ class Scheduler extends Widget {
     }
 
     _initExpressions(fields) {
-        this._dataAccessors = utils.dataAccessors.init({
-            instance: this,
+        this._dataAccessors = utils.dataAccessors.create(
             fields,
-            currentDataAccessors: this._dataAccessors,
-            forceIsoDateParsing: config().forceIsoDateParsing,
-            getDateSerializationFormat: () => this.option('dateSerializationFormat'),
-            setDateSerializationFormat: (value) => this.option('dateSerializationFormat', value)
-        });
+            this._dataAccessors,
+            config().forceIsoDateParsing,
+            () => this.option('dateSerializationFormat'),
+            (value) => this.option('dateSerializationFormat', value)
+        );
 
         this._dataAccessors.resources = createExpressions(this.option('resources'));
     }
@@ -1328,8 +1329,10 @@ class Scheduler extends Widget {
     }
 
     _renderHeader() {
-        const $header = $('<div>').appendTo(this._mainContainer);
-        this._header = this._createComponent($header, SchedulerHeader, this._headerConfig());
+        if(this.option('toolbar').length !== 0) {
+            const $header = $('<div>').appendTo(this._mainContainer);
+            this._header = this._createComponent($header, SchedulerHeader, this._headerConfig());
+        }
     }
 
     _headerConfig() {
@@ -1439,7 +1442,7 @@ class Scheduler extends Widget {
         this._workSpace.getWorkArea().append(this._appointments.$element());
 
         this._recalculateWorkspace();
-        countConfig.startDate && this._header && this._header.option('currentDate', this._workSpace._getHeaderDate());
+        countConfig.startDate && this._header?.option('currentDate', this._workSpace._getHeaderDate());
 
         this._appointments.option('_collectorOffset', this.getCollectorOffset());
     }
@@ -1740,7 +1743,8 @@ class Scheduler extends Widget {
                 onHidden: (e) => {
                     e.component.$element().remove();
                 },
-                copyRootClassesToWrapper: true
+                copyRootClassesToWrapper: true,
+                _ignoreCopyRootClassesToWrapperDeprecation: true
             },
         });
 

@@ -16,6 +16,7 @@ import readyCallbacks from '../../core/utils/ready_callbacks';
 import { isDefined, isFunction, isPlainObject, isObject } from '../../core/utils/type';
 import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
+import errors from '../../core/errors';
 import eventsEngine from '../../events/core/events_engine';
 import {
     move as dragEventMove
@@ -143,6 +144,8 @@ const Overlay = Widget.inherit({
 
             copyRootClassesToWrapper: false,
 
+            _ignoreCopyRootClassesToWrapperDeprecation: false,
+
             onShowing: null,
 
             onShown: null,
@@ -165,13 +168,7 @@ const Overlay = Widget.inherit({
             onResizeEnd: null,
             innerOverlay: false,
 
-            restorePosition: {
-                always: false,
-                onDimensionChangeAfterDrag: false,
-                onDimensionChangeAfterResize: false,
-                onOpening: true,
-                onFullScreenDisable: false
-            },
+            restorePosition: true,
 
             // NOTE: private options
 
@@ -223,6 +220,14 @@ const Overlay = Widget.inherit({
         extend(this._deprecatedOptions, {
             'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' }
         });
+    },
+
+    ctor: function(element, options) {
+        this.callBase(element, options);
+
+        if(options && options.copyRootClassesToWrapper && !options._ignoreCopyRootClassesToWrapperDeprecation) {
+            errors.log('W0001', this.NAME, 'copyRootClassesToWrapper', '21.2', 'Use the "wrapperAttr" option instead');
+        }
     },
 
     _init: function() {
@@ -1298,6 +1303,9 @@ const Overlay = Widget.inherit({
                 break;
             case 'width':
             case 'height':
+                this._renderGeometry();
+                this._resizable?.option(args.name, args.value);
+                break;
             case 'minWidth':
             case 'maxWidth':
             case 'minHeight':
@@ -1382,7 +1390,7 @@ const Overlay = Widget.inherit({
                 this._positionController.outsideDragFactor = value;
                 break;
             case 'restorePosition':
-                this._positionController.restorePosition = this.option('restorePosition');
+                this._positionController.restorePosition = args.value;
                 break;
             default:
                 this.callBase(args);

@@ -32,14 +32,13 @@ describe('AnimatedScrollbar', () => {
     const viewModel = mount<AnimatedScrollbar>(<AnimatedScrollbar {...props} />);
 
     expect({ ...viewModel.props() }).toEqual({
-      activeStateEnabled: false,
+      direction: 'vertical',
       bottomPocketSize: 0,
       containerHasSizes: false,
       containerSize: 0,
       contentPaddingBottom: 0,
       contentSize: 0,
-      forceVisibility: false,
-      isScrollableHovered: false,
+      visible: false,
       maxOffset: 0,
       minOffset: 0,
       scrollLocation: 0,
@@ -52,8 +51,6 @@ describe('AnimatedScrollbar', () => {
     { name: 'moveTo', calledWith: ['arg1'] },
     { name: 'isScrollbar', calledWith: ['arg1'] },
     { name: 'isThumb', calledWith: ['arg1'] },
-    { name: 'show', calledWith: [] },
-    { name: 'hide', calledWith: [] },
   ]).describe('Method: %o', (methodInfo) => {
     it(`${methodInfo.name}() method should call according scrollbar method`, () => {
       const viewModel = new AnimatedScrollbar({});
@@ -235,11 +232,9 @@ describe('Handlers', () => {
               const scrollbar = mount(AnimatedScrollbarComponent(viewModel as any));
 
               const initHandler = jest.fn();
-              const hideHandler = jest.fn();
               (viewModel as any).scrollbarRef = {
                 current: {
                   initHandler,
-                  hide: hideHandler,
                   isScrollbar: jest.fn(() => targetClass === 'dx-scrollable-scrollbar'),
                   isThumb: jest.fn(() => targetClass === 'dx-scrollable-scroll'),
                 },
@@ -251,7 +246,6 @@ describe('Handlers', () => {
 
               viewModel.initHandler(event, crossThumbScrolling, 30);
 
-              expect(hideHandler).toHaveBeenCalledTimes(1);
               expect(viewModel.pendingBounceAnimator).toEqual(false);
               expect(viewModel.pendingInertiaAnimator).toEqual(false);
               expect(viewModel.stopped).toEqual(true);
@@ -268,13 +262,15 @@ describe('Handlers', () => {
 
                 expectedThumbScrolling = isScrollbarClicked || (scrollByThumb && targetClass === 'dx-scrollable-scroll');
                 expectedCrossThumbScrolling = !expectedThumbScrolling && crossThumbScrolling;
+
+                expect(initHandler).toHaveBeenCalledTimes(1);
+                expect(initHandler).toHaveBeenCalledWith(event, expectedThumbScrolling, 30);
+              } else {
+                expect(initHandler).toHaveBeenCalledTimes(0);
               }
 
               expect(viewModel.thumbScrolling).toEqual(expectedThumbScrolling);
               expect(viewModel.crossThumbScrolling).toEqual(expectedCrossThumbScrolling);
-
-              expect(initHandler).toHaveBeenCalledTimes(1);
-              expect(initHandler).toHaveBeenCalledWith(event, expectedThumbScrolling, 30);
             });
         });
       });
@@ -385,53 +381,28 @@ describe('Action handlers', () => {
       jest.clearAllMocks();
     });
 
-    each([undefined, jest.fn()]).describe('handler: %o', (actionHandler) => {
-      // eslint-disable-next-line jest/no-commented-out-tests
-      // it('onEnd(direction)', () => {
-      //   const viewModel = new AnimatedScrollbar({
-      //     direction,
-      //     onEnd: actionHandler,
-      //   });
+    each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+      each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
+        each([() => true, () => false]).describe('inRange: %o', (inRangeFn) => {
+          it('releaseHandler()', () => {
+            (inRange as Mock).mockImplementation(inRangeFn);
 
-      //   viewModel.forceAnimationToBottomBound = true;
-
-      //   viewModel.onEnd(direction);
-
-      //   expect(viewModel.forceAnimationToBottomBound).toEqual(false);
-      //   if (actionHandler) {
-      //     expect(actionHandler).toHaveBeenCalledTimes(1);
-      //     expect(actionHandler).toHaveBeenCalledWith(direction);
-      //   }
-      // });
-
-      each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
-        each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
-          each([() => true, () => false]).describe('inRange: %o', (inRangeFn) => {
-            it('releaseHandler()', () => {
-              (inRange as Mock).mockImplementation(inRangeFn);
-
-              const viewModel = new AnimatedScrollbar({
-                direction,
-                forceGeneratePockets,
-                reachBottomEnabled,
-                onRelease: actionHandler,
-              });
-
-              viewModel.forceAnimationToBottomBound = false;
-
-              viewModel.releaseHandler();
-
-              expect(viewModel.forceAnimationToBottomBound)
-                .toEqual(inRangeFn() && forceGeneratePockets && reachBottomEnabled);
-
-              if (actionHandler) {
-                expect(actionHandler).toHaveBeenCalledTimes(1);
-              }
-
-              expect(viewModel.wasRelease).toEqual(true);
-              expect(viewModel.pendingRefreshing).toEqual(false);
-              expect(viewModel.pendingLoading).toEqual(false);
+            const viewModel = new AnimatedScrollbar({
+              direction,
+              forceGeneratePockets,
+              reachBottomEnabled,
             });
+
+            viewModel.forceAnimationToBottomBound = false;
+
+            viewModel.releaseHandler();
+
+            expect(viewModel.forceAnimationToBottomBound)
+              .toEqual(inRangeFn() && forceGeneratePockets && reachBottomEnabled);
+
+            expect(viewModel.wasRelease).toEqual(true);
+            expect(viewModel.pendingRefreshing).toEqual(false);
+            expect(viewModel.pendingLoading).toEqual(false);
           });
         });
       });
