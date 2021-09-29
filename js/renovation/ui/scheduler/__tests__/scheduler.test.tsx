@@ -7,7 +7,6 @@ import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { WorkSpace } from '../workspaces/base/work_space';
-import { getAppointmentDataProvider, getTimeZoneCalculator } from '../../../../ui/scheduler/instanceFactory';
 import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
 import { Group } from '../workspaces/types';
@@ -159,17 +158,6 @@ describe('Scheduler', () => {
           onCurrentDateUpdate: setCurrentDate,
           startViewDate,
         });
-    });
-
-    it('should correctly create factory instances', () => {
-      const scheduler = new Scheduler(new SchedulerProps());
-
-      scheduler.initialization();
-
-      expect(getAppointmentDataProvider(scheduler.key))
-        .toBeDefined();
-      expect(getTimeZoneCalculator(scheduler.key))
-        .toBeDefined();
     });
 
     it('should not render toolbar if toolbar prop is an empty array', () => {
@@ -382,13 +370,6 @@ describe('Scheduler', () => {
         expect(scrollToTime).toHaveBeenCalled();
       });
 
-      it('should initialize key', () => {
-        const scheduler = new Scheduler(new SchedulerProps());
-
-        expect(scheduler.key)
-          .toBeGreaterThan(-1);
-      });
-
       it('dataAccessors should be correctly created', () => {
         const scheduler = new Scheduler({
           ...new SchedulerProps(),
@@ -585,6 +566,22 @@ describe('Scheduler', () => {
             expect(scheduler.isVirtualScrolling)
               .toBe(expected);
           });
+        });
+      });
+
+      describe('timeZoneCalculator', () => {
+        it('should be created correctly', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            timeZone: 'America/Los_Angeles',
+          });
+
+          expect(scheduler.timeZoneCalculator.getOffsets(new Date(2021, 8, 19), 'Europe/Moscow'))
+            .toEqual({
+              client: 3,
+              common: -7,
+              appointment: 3,
+            });
         });
       });
     });
