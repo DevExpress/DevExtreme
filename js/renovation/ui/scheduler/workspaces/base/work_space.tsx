@@ -1,11 +1,14 @@
+/* eslint-disable class-methods-use-this */
 import {
   Component,
   Effect,
   ForwardRef,
+  InternalState,
   JSXComponent,
   JSXTemplate,
   RefObject,
 } from '@devextreme-generator/declarations';
+import { combineClasses } from '../../../../utils/combine_classes';
 import {
   DateHeaderData,
   GroupedViewData,
@@ -13,7 +16,7 @@ import {
   TimePanelData,
   ViewDataProviderType,
 } from '../types';
-import { OrdinaryLayout, OrdinaryLayoutProps } from './ordinary_layout';
+import { OrdinaryLayout } from './ordinary_layout';
 
 import ViewDataProvider from '../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import {
@@ -23,8 +26,10 @@ import { ViewRenderConfig, WorkSpaceProps } from '../props';
 import { getViewRenderConfigByType } from './work_space_config';
 import { HeaderPanelLayoutProps } from './header_panel/layout';
 import { DateTableLayoutProps } from './date_table/layout';
-import { TimePaneLayoutProps } from './time_panel/layout';
-import { isVerticalGroupingApplied } from '../utils';
+import { TimePanelLayoutProps } from './time_panel/layout';
+import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
+import { CrossScrollingLayout } from './cross_scrolling_layout';
+import { MainLayoutProps } from './main_layout_props';
 
 export const prepareGenerationOptions = (
   workSpaceProps: WorkSpaceProps,
@@ -89,8 +94,18 @@ export const viewFunction = ({
   isAllDayPanelVisible,
   isRenderHeaderEmptyCell,
   viewDataProvider,
+
   dateTableRef,
   allDayPanelRef,
+  timePanelRef,
+  groupPanelRef,
+
+  isRenderGroupPanel,
+  isStandaloneAllDayPanel,
+
+  groupPanelHeight,
+  headerEmptyCellWidth,
+  classes,
 
   props: {
     dataCellTemplate,
@@ -109,7 +124,6 @@ export const viewFunction = ({
   },
 
   renderConfig: {
-    className,
     isRenderDateHeader,
     scrollingDirection,
   },
@@ -140,11 +154,18 @@ export const viewFunction = ({
     isAllDayPanelVisible={isAllDayPanelVisible}
     isRenderDateHeader={isRenderDateHeader}
     isRenderHeaderEmptyCell={isRenderHeaderEmptyCell}
-    scrollingDirection={scrollingDirection}
+    isRenderGroupPanel={isRenderGroupPanel}
+    isStandaloneAllDayPanel={isStandaloneAllDayPanel}
 
-    className={className}
+    scrollingDirection={scrollingDirection}
+    groupPanelHeight={groupPanelHeight}
+    headerEmptyCellWidth={headerEmptyCellWidth}
+
+    className={classes}
     dateTableRef={dateTableRef}
     allDayPanelRef={allDayPanelRef}
+    timePanelRef={timePanelRef}
+    groupPanelRef={groupPanelRef}
 
     appointments={appointments}
     allDayAppointments={allDayAppointments}
@@ -156,21 +177,33 @@ export const viewFunction = ({
   view: viewFunction,
 })
 export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onViewRendered'>() {
+  @InternalState()
+  groupPanelHeight: number | undefined;
+
+  @InternalState()
+  headerEmptyCellWidth: number | undefined;
+
   @ForwardRef()
   dateTableRef!: RefObject<HTMLTableElement>;
 
   @ForwardRef()
   allDayPanelRef!: RefObject<HTMLTableElement>;
 
+  @ForwardRef()
+  timePanelRef!: RefObject<HTMLTableElement>;
+
+  @ForwardRef()
+  groupPanelRef!: RefObject<HTMLDivElement>;
+
   get renderConfig(): ViewRenderConfig {
     return getViewRenderConfigByType(this.props.type, this.props.intervalCount);
   }
 
   get layout(): JSXTemplate<
-  OrdinaryLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
+  MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
   > {
     return this.props.crossScrollingEnabled
-      ? OrdinaryLayout // TODO: CrossScrollingLayout
+      ? CrossScrollingLayout
       : OrdinaryLayout;
   }
 
@@ -261,7 +294,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return dateTableTemplate;
   }
 
-  get timePanelTemplate(): JSXTemplate<TimePaneLayoutProps> | undefined {
+  get timePanelTemplate(): JSXTemplate<TimePanelLayoutProps> | undefined {
     const { timePanelTemplate } = this.renderConfig;
     return timePanelTemplate;
   }
@@ -272,6 +305,76 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     );
 
     return isVerticalGrouping || !!this.timePanelTemplate;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+  get isWorkSpaceWithOddCells(): boolean {
+    return false; // TODO
+  }
+
+  get classes(): string {
+    const {
+      intervalCount,
+      allDayPanelExpanded,
+      groupByDate,
+      groups,
+      groupOrientation,
+    } = this.props;
+
+    return combineClasses({
+      [this.renderConfig.className]: true,
+      'dx-scheduler-work-space-count': intervalCount > 1,
+      'dx-scheduler-work-space-odd-cells': !!this.isWorkSpaceWithOddCells,
+      'dx-scheduler-work-space-all-day-collapsed': !allDayPanelExpanded && this.isAllDayPanelVisible,
+      'dx-scheduler-work-space-all-day': this.isAllDayPanelVisible,
+      'dx-scheduler-work-space-group-by-date': groupByDate,
+      'dx-scheduler-work-space-grouped': groups.length > 0,
+      'dx-scheduler-work-space-vertical-grouped': isVerticalGroupingApplied(groups, groupOrientation),
+      'dx-scheduler-group-row-count-one': isHorizontalGroupingApplied(groups, groupOrientation)
+        && groups.length === 1,
+      'dx-scheduler-group-row-count-two': isHorizontalGroupingApplied(groups, groupOrientation)
+        && groups.length === 2,
+      'dx-scheduler-group-row-count-three': isHorizontalGroupingApplied(groups, groupOrientation)
+        && groups.length === 3,
+      'dx-scheduler-group-column-count-one': isVerticalGroupingApplied(groups, groupOrientation)
+        && groups.length === 1,
+      'dx-scheduler-group-column-count-two': isVerticalGroupingApplied(groups, groupOrientation)
+        && groups.length === 2,
+      'dx-scheduler-group-column-count-three': isVerticalGroupingApplied(groups, groupOrientation)
+        && groups.length === 3,
+      'dx-scheduler-work-space-both-scrollbar': this.props.crossScrollingEnabled,
+      'dx-scheduler-work-space': true,
+    });
+  }
+
+  get isRenderGroupPanel(): boolean {
+    const {
+      groups, groupOrientation,
+    } = this.props;
+
+    return isVerticalGroupingApplied(groups, groupOrientation);
+  }
+
+  get isStandaloneAllDayPanel(): boolean {
+    const {
+      groups,
+      groupOrientation,
+    } = this.props;
+
+    return !isVerticalGroupingApplied(groups, groupOrientation) && this.isAllDayPanelVisible;
+  }
+
+  @Effect({ run: 'always' })
+  groupPanelHeightEffect(): void {
+    this.groupPanelHeight = this.dateTableRef.current?.getBoundingClientRect().height;
+  }
+
+  @Effect({ run: 'always' })
+  headerEmptyCellWidthEffect(): void {
+    const timePanelWidth = this.timePanelRef.current?.getBoundingClientRect().width ?? 0;
+    const groupPanelWidth = this.groupPanelRef.current?.getBoundingClientRect().width ?? 0;
+
+    this.headerEmptyCellWidth = timePanelWidth + groupPanelWidth;
   }
 
   @Effect()

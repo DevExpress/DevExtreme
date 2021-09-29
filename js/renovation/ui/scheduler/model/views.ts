@@ -128,7 +128,6 @@ export const getCurrentViewConfig = (
   return {
     ...result,
     hoursInterval: result.cellDuration / 60,
-    groups: [], // TODO
     selectedCellData: [], // TODO
   } as CurrentViewConfigType;
 };

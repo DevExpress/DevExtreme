@@ -5756,6 +5756,7 @@ QUnit.module('Virtual scrolling', {
             useNative: false,
             timeout: 10,
             renderingThreshold: 0,
+            renderAsync: true,
             mode: 'virtual'
         };
         rowsView.render(testElement);

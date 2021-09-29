@@ -331,6 +331,40 @@ describe('Simulated > Behavior', () => {
       });
     });
 
+    it('should subscribe to dxpointerdown event', () => {
+      const helper = new ScrollableTestHelper({ direction: 'vertical' });
+
+      helper.viewModel.pendingPointerUp = false;
+
+      helper.viewModel.pointerDownEffect();
+      emit('dxpointerdown');
+
+      expect(helper.viewModel.pendingPointerUp).toEqual(true);
+    });
+
+    it('Down & Up effects should add & remove scroll active class', () => {
+      const helper = new ScrollableTestHelper({ direction: 'vertical' });
+
+      helper.viewModel.pointerDownEffect();
+      emit('dxpointerdown');
+
+      expect(helper.viewModel.pendingPointerUp).toEqual(true);
+
+      helper.viewModel.pointerUpEffect();
+      emit('dxpointerup');
+
+      expect(helper.viewModel.pendingPointerUp).toEqual(false);
+    });
+
+    it('should subscribe to dxpointerup event', () => {
+      const helper = new ScrollableTestHelper({ direction: 'vertical' });
+
+      helper.viewModel.pointerUpEffect();
+      emit('dxpointerup');
+
+      expect(helper.viewModel.hovered).toEqual(false);
+    });
+
     it('should subscribe to mouseenter event if showScrollbar mode is onHover', () => {
       const helper = new ScrollableTestHelper({
         direction: 'vertical',
@@ -1512,6 +1546,7 @@ describe('Simulated > Behavior', () => {
           onUpdated: actionHandler,
         });
 
+        helper.viewModel.updateElementDimensions = jest.fn();
         helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
         helper.viewModel.topPocketState = TopPocketState.STATE_READY;
 
@@ -1522,6 +1557,7 @@ describe('Simulated > Behavior', () => {
         } else {
           helper.checkActionHandlerCalls(expect, [], []);
         }
+        expect(helper.viewModel.updateElementDimensions).toBeCalledTimes(1);
         expect(helper.viewModel.topPocketState).toEqual(TopPocketState.STATE_RELEASED);
         expect(helper.viewModel.loadingIndicatorEnabled).toEqual(true);
         expect(helper.viewModel.isLoadPanelVisible).toEqual(false);

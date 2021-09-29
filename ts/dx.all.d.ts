@@ -7448,6 +7448,10 @@ declare module DevExpress.ui {
        * [descr:GridBaseOptions.scrolling.useNative]
        */
       useNative?: boolean | 'auto';
+      /**
+       * [descr:GridBaseOptions.scrolling.renderAsync]
+       */
+      renderAsync?: boolean;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -9692,6 +9696,10 @@ declare module DevExpress.ui {
      */
     simpleView?: boolean;
     /**
+     * [descr:dxDiagramOptions.useNativeScrolling]
+     */
+    useNativeScrolling?: boolean;
+    /**
      * [descr:dxDiagramOptions.snapToGrid]
      */
     snapToGrid?: boolean;
@@ -10475,12 +10483,7 @@ declare module DevExpress.ui {
      * [descr:dxDropDownButtonItem.onClick]
      */
     onClick?:
-      | ((e: {
-          component?: dxDropDownButton;
-          element?: DevExpress.core.DxElement;
-          model?: any;
-          event?: DevExpress.events.DxEvent;
-        }) => void)
+      | ((e: DevExpress.ui.dxDropDownButton.ItemClickEvent) => void)
       | string;
   }
   /**
@@ -19548,6 +19551,14 @@ declare module DevExpress.ui {
      * [descr:dxTextEditorOptions.inputAttr]
      */
     inputAttr?: any;
+    /**
+     * [descr:dxTextEditorOptions.label]
+     */
+    label?: boolean;
+    /**
+     * [descr:dxTextEditorOptions.labelMode]
+     */
+    labelMode?: 'static' | 'floating' | 'hidden';
     /**
      * [descr:dxTextEditorOptions.mask]
      */
