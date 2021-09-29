@@ -254,4 +254,72 @@ QUnit.module('Actions', moduleConfig, () => {
         this.instance.showDependencies(true);
         assert.equal(this.$element.find(Consts.TASK_ARROW_SELECTOR).length, data.dependencies.length);
     });
+
+    test('collapse and check state after custom field updating', function(assert) {
+        const taskOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': '1', 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red', 'CustomText': 'c1' },
+                    { 'id': '2', 'parentId': 1, 'title': 'Scope', 'start': new Date('2020-02-21T05:00:00.000Z'), 'end': new Date('2020-02-26T09:00:00.000Z'), 'progress': 60, 'CustomText': 'c2' }
+                ]
+            },
+            validation: { autoUpdateParentTasks: false },
+            editing: { enabled: true },
+            columns: [
+                { dataField: 'CustomText', caption: 'Task', visible: false },
+                { dataField: 'start', caption: 'Start' },
+                { dataField: 'end', caption: 'End' }
+            ]
+        };
+
+        this.createInstance(taskOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
+        this.instance._collapseAll();
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+
+        const customText = 'new';
+        const data = {
+            'CustomText': customText
+        };
+
+        this.instance.updateTask('1', data);
+        this.clock.tick(500);
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+    });
+
+    test('collapse and check state after custom field updating (autoUpdateParentTasks=true)', function(assert) {
+        const taskOptions = {
+            tasks: {
+                dataSource: [
+                    { 'id': '1', 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red', 'CustomText': 'c1' },
+                    { 'id': '2', 'parentId': 1, 'title': 'Scope', 'start': new Date('2020-02-21T05:00:00.000Z'), 'end': new Date('2020-02-26T09:00:00.000Z'), 'progress': 60, 'CustomText': 'c2' }
+                ]
+            },
+            validation: { autoUpdateParentTasks: true },
+            editing: { enabled: true },
+            columns: [
+                { dataField: 'CustomText', caption: 'Task', visible: false },
+                { dataField: 'start', caption: 'Start' },
+                { dataField: 'end', caption: 'End' }
+            ]
+        };
+
+        this.createInstance(taskOptions);
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
+        this.instance._collapseAll();
+        this.clock.tick();
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+
+        const customText = 'new';
+        const data = {
+            'CustomText': customText
+        };
+
+        this.instance.updateTask('1', data);
+        this.clock.tick(500);
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+    });
 });

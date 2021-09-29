@@ -2,11 +2,18 @@ import {
  FilterDescriptor, GroupDescriptor, SelectDescriptor, SortDescriptor, LoadOptions, SearchOperation,
 } from './index';
 import { DxPromise } from '../core/utils/deferred';
-import Store, { StoreOptions } from './abstract_store';
+import Store from './abstract_store';
 import { CustomStoreOptions } from './custom_store';
+import { ArrayStoreOptions } from './array_store';
+import { LocalStoreOptions } from './local_store';
+import { ODataStoreOptions } from './odata/store';
 
 /** @namespace DevExpress.data */
-export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSourceValue, TMappedValue = TValue> {
+export interface DataSourceOptions
+<TSourceValue = any, TValue = TSourceValue, TMappedValue = TValue,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> {
     /**
      * @docid
      * @public
@@ -128,16 +135,25 @@ export interface DataSourceOptions<TKey = any, TSourceValue = any, TValue = TSou
      * @public
      * @type Store|StoreOptions|Array<any>
      */
-    store?: Store<TKey, TSourceValue> | StoreOptions<TKey, TSourceValue> | Array<TSourceValue>;
+    store?: Array<TSourceValue> |
+        Store<TSourceValue, TKeyExpr, TKey> |
+        ArrayStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'array' } |
+        LocalStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'local' } |
+        ODataStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'odata' } |
+        CustomStoreOptions<TSourceValue, TKeyExpr, TKey>;
 }
 /**
  * @docid
  * @public
  */
-export default class DataSource<TKey = any, TValue = any> {
+export default class DataSource
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> {
     constructor(data: Array<TValue>);
-    constructor(options: CustomStoreOptions<TKey, TValue> | DataSourceOptions<TKey, any, TValue, any>);
-    constructor(store: Store<TKey, TValue>);
+    constructor(options: CustomStoreOptions<TValue, TKeyExpr, TKey> | DataSourceOptions<any, TValue, any, TKeyExpr, TKey>);
+    constructor(store: Store<TValue, TKeyExpr, TKey>);
     constructor(url: string);
     /**
      * @docid
@@ -206,10 +222,10 @@ export default class DataSource<TKey = any, TValue = any> {
     /**
      * @docid
      * @publicName key()
-     * @return object|string|number
+     * @return string | Array<string>
      * @public
      */
-    key(): string | Array<string>;
+    key(): TKeyExpr;
     /**
      * @docid
      * @publicName load()
@@ -391,7 +407,7 @@ export default class DataSource<TKey = any, TValue = any> {
      * @return object
      * @public
      */
-    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
+    store(): Store<TValue, TKeyExpr, TKey>;
     /**
      * @docid
      * @publicName totalCount()

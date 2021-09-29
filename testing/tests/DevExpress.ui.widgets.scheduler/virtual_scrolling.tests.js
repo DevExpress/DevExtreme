@@ -59,24 +59,10 @@ module('Virtual Scrolling', {
                     }
                     return this._options[name];
                 },
-                scrollTo: e => this.scrollableMock.option('onScroll')(e)
-            };
-
-            this.scrollTo = scrollOffset => {
-                this.scrollableMock.option('onScroll')(
-                    { scrollOffset }
-                );
-            };
-
-            this.scrollVertical = top => {
-                this.scrollTo({ top });
-            };
-
-            this.scrollHorizontal = left => {
-                this.scrollTo({ left });
             };
 
             this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this.options);
+            this.virtualScrollingDispatcher.attachScrollableEvents();
 
             this.verticalVirtualScrolling = this.virtualScrollingDispatcher.verticalVirtualScrolling;
             this.horizontalVirtualScrolling = this.virtualScrollingDispatcher.horizontalVirtualScrolling;
@@ -374,7 +360,7 @@ module('Virtual Scrolling', {
                 const spyUpdateVerticalState = this.spy(this.verticalVirtualScrolling, 'updateState');
                 const spyUpdateHorizontalState = this.spy(this.horizontalVirtualScrolling, 'updateState');
 
-                this.scrollTo({
+                this.virtualScrollingDispatcher.handleOnScrollEvent({
                     left: offset,
                     top: offset
                 });
@@ -391,13 +377,13 @@ module('Virtual Scrolling', {
 
             const scrollOffset = { left: 300, top: 200 };
 
-            this.scrollTo(scrollOffset);
+            this.virtualScrollingDispatcher.handleOnScrollEvent(scrollOffset);
 
             assert.ok(spy.calledOnce, 'Render was updated');
             assert.equal(this.verticalVirtualScrolling.position, scrollOffset.top, 'Vertical scroll position is correct');
             assert.equal(this.horizontalVirtualScrolling.position, scrollOffset.left, 'Horizontal scroll position is correct');
 
-            this.scrollTo(scrollOffset);
+            this.virtualScrollingDispatcher.handleOnScrollEvent(scrollOffset);
 
             assert.ok(spy.calledOnce, 'Render was not updated');
             assert.equal(this.verticalVirtualScrolling.position, scrollOffset.top, 'Vertical scroll position is correct');
@@ -656,7 +642,7 @@ module('Virtual Scrolling', {
                     { top: 3980, stateTop: 3950, topVirtualRowCount: 76, bottomVirtualRowCount: 12, rowCount: 12 },
                     { top: 4950, stateTop: 4700, topVirtualRowCount: 91, bottomVirtualRowCount: 0, rowCount: 9 }
                 ].forEach(step => {
-                    this.scrollVertical(step.top);
+                    this.virtualScrollingDispatcher.handleOnScrollEvent({ top: step.top });
 
                     const { state } = this.verticalVirtualScrolling;
 
@@ -686,7 +672,7 @@ module('Virtual Scrolling', {
                 ].forEach(step => {
                     assert.ok(true, `Scroll top ${step.top}`);
 
-                    this.scrollVertical(step.top);
+                    this.virtualScrollingDispatcher.handleOnScrollEvent({ top: step.top });
 
                     const { state } = this.verticalVirtualScrolling;
 
@@ -714,7 +700,7 @@ module('Virtual Scrolling', {
                 ].forEach(step => {
                     assert.ok(true, `Scroll top ${step.top}`);
 
-                    this.scrollVertical(step.top);
+                    this.virtualScrollingDispatcher.handleOnScrollEvent({ top: step.top });
 
                     const { state } = this.verticalVirtualScrolling;
 
@@ -727,7 +713,7 @@ module('Virtual Scrolling', {
                 this.prepareInstance();
 
                 this.verticalVirtualScrolling.itemSize = 123;
-                this.scrollVertical(0);
+                this.virtualScrollingDispatcher.handleOnScrollEvent({ top: 0 });
 
                 const {
                     itemCount,
@@ -754,7 +740,7 @@ module('Virtual Scrolling', {
                     { y: 400, expectedNeedUpdate: false },
                     { y: 5000, expectedNeedUpdate: true }
                 ].forEach((option, index) => {
-                    this.scrollVertical(option.y);
+                    this.virtualScrollingDispatcher.handleOnScrollEvent({ top: option.y });
                     assert.equal(
                         spy.getCall(index).returnValue,
                         option.expectedNeedUpdate,
@@ -779,7 +765,7 @@ module('Virtual Scrolling', {
                     { left: 29000, stateLeft: 28950, leftOutlineCount: 2, leftVirtualCellCount: 191, rightVirtualCellCount: 1, rightOutlineCount: 2, cellCount: 8 },
                     { left: 30000, stateLeft: 29400, leftOutlineCount: 2, leftVirtualCellCount: 194, rightVirtualCellCount: 0, rightOutlineCount: 0, cellCount: 6 },
                 ].forEach(step => {
-                    this.scrollHorizontal(step.left);
+                    this.virtualScrollingDispatcher.handleOnScrollEvent({ left: step.left });
 
                     const { state } = this.horizontalVirtualScrolling;
 
@@ -810,7 +796,7 @@ module('Virtual Scrolling', {
                     { left: 10, stateLeft: 0, leftOutlineCount: 0, leftVirtualCellCount: 0, rightVirtualCellCount: 194, rightOutlineCount: 2, cellCount: 6 },
                     { left: 0, stateLeft: 0, leftOutlineCount: 0, leftVirtualCellCount: 0, rightVirtualCellCount: 194, rightOutlineCount: 2, cellCount: 6 }
                 ].forEach(step => {
-                    this.scrollHorizontal(step.left);
+                    this.virtualScrollingDispatcher.handleOnScrollEvent({ left: step.left });
 
                     const { state } = this.horizontalVirtualScrolling;
 
@@ -839,7 +825,7 @@ module('Virtual Scrolling', {
                     { left: 29000, leftVirtualCellWidth: 28650, rightVirtualCellWidth: 150 },
                     { left: 30000, leftVirtualCellWidth: 29100, rightVirtualCellWidth: 0 }
                 ].forEach(step => {
-                    this.scrollHorizontal(step.left);
+                    this.virtualScrollingDispatcher.handleOnScrollEvent({ left: step.left });
 
                     const { state } = this.horizontalVirtualScrolling;
 
@@ -866,7 +852,7 @@ module('Virtual Scrolling', {
                     { left: 30000, expectedNeedUpdate: true }
                 ].forEach((option, index) => {
 
-                    this.scrollHorizontal(option.left);
+                    this.virtualScrollingDispatcher.handleOnScrollEvent({ left: option.left });
 
                     assert.equal(
                         spy.getCall(index).returnValue,
@@ -888,7 +874,7 @@ module('Virtual Scrolling', {
 
                     for(offset = 0; offset <= 5000; offset += 15) {
                         try {
-                            this.scrollVertical(offset);
+                            this.virtualScrollingDispatcher.handleOnScrollEvent({ top: offset });
                         } catch(e) {
                             assert.ok(false, e.message);
                         }
@@ -896,7 +882,7 @@ module('Virtual Scrolling', {
 
                     for(; offset >= 0; offset -= 10) {
                         try {
-                            this.scrollVertical(offset);
+                            this.virtualScrollingDispatcher.handleOnScrollEvent({ top: offset });
                         } catch(e) {
                             assert.ok(false, e.message);
                         }
@@ -916,7 +902,7 @@ module('Virtual Scrolling', {
 
                     for(offset = 0; offset <= 15000; offset += 45) {
                         try {
-                            this.scrollVertical(offset);
+                            this.virtualScrollingDispatcher.handleOnScrollEvent({ top: offset });
                         } catch(e) {
                             assert.ok(false, e.message);
                         }
@@ -924,7 +910,7 @@ module('Virtual Scrolling', {
 
                     for(; offset >= 0; offset -= 10) {
                         try {
-                            this.scrollVertical(offset);
+                            this.virtualScrollingDispatcher.handleOnScrollEvent({ top: offset });
                         } catch(e) {
                             assert.ok(false, e.message);
                         }

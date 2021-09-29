@@ -1,3 +1,4 @@
+import { getOuterHeight, getHeight } from 'core/utils/size';
 import fx from 'animation/fx';
 import config from 'core/config';
 import dataUtils from 'core/element_data';
@@ -384,7 +385,7 @@ QUnit.module('Small size', {
             this.clock.tick();
 
             const $appointment = $(schedulerInstance.$element().find('.dx-scheduler-appointment'));
-            assert.roughEqual($appointment.position().left, 100, 1.001, 'Appointment is rendered correctly');
+            assert.roughEqual($appointment.position().left, 0, 1.001, 'Appointment is rendered correctly');
         }
     });
 });
@@ -741,7 +742,7 @@ QUnit.module('View with configuration', {
 
             const $groupHeaders = $(scheduler.workSpace.groups.getGroupHeaders(0));
             $groupHeaders.each((index, groupHeader) => {
-                const groupHeaderHeight = $(groupHeader).outerHeight();
+                const groupHeaderHeight = getOuterHeight($(groupHeader));
                 const groupingCellHeight = scheduler.workSpace.getCellHeight(index, 0);
                 assert.equal(groupHeaderHeight, groupingCellHeight, `Group header ${index} has min height`);
             });
@@ -816,9 +817,9 @@ QUnit.module('View with configuration', {
 
         const dateTableHeight = scheduler.workSpace.getDateTableHeight();
         const scrollHeight = scrollable.scrollHeight();
-        const scrollableHeight = scrollable.$element().height();
+        const scrollableHeight = getHeight(scrollable.$element());
 
-        assert.equal(scrollableHeight, dateTableHeight, 'Correct dateTable height');
+        assert.roughEqual(scrollableHeight, dateTableHeight, 1.001, 'Correct dateTable height');
         assert.equal(scrollableHeight, scrollHeight, 'Correct scroll content height');
     });
 
@@ -843,7 +844,7 @@ QUnit.module('View with configuration', {
 
         const dateTableHeight = scheduler.workSpace.getDateTableHeight();
         const scrollHeight = scrollable.scrollHeight();
-        const scrollableHeight = scrollable.$element().height();
+        const scrollableHeight = getHeight(scrollable.$element());
 
         assert.equal(scrollHeight, dateTableHeight, 'Correct dateTable height');
         assert.notEqual(scrollableHeight, scrollHeight, 'Correct scroll content height');

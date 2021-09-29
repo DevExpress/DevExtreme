@@ -15,6 +15,7 @@ import {
     TextEditorButtonLocation,
     TextBoxButtonName,
     EditorStylingMode,
+    EditorLabelMode,
 } from '../../docEnums';
 
 /** @namespace DevExpress.ui */
@@ -43,6 +44,19 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @public
      */
     inputAttr?: any;
+    /**
+     * @docid
+     * @default ''
+     * @public
+     */
+    label?: boolean;
+    /**
+     * @docid
+     * @default 'static'
+     * @default 'floating' &for(Material)
+     * @public
+     */
+    labelMode?: EditorLabelMode;
     /**
      * @docid
      * @default ""
@@ -169,19 +183,6 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @public
      */
     onKeyDown?: ((e: NativeEventInfo<TComponent>) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 event:event
-     * @deprecated
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @action
-     * @public
-     */
-    onKeyPress?: ((e: NativeEventInfo<TComponent>) => void);
     /**
      * @docid
      * @default null

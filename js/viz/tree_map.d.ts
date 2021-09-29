@@ -297,6 +297,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @type_function_param1_field2 sum:number
      * @type_function_param1_field3 items:Array<any>
      * @default 'squarified'
+     * @type_function_return void
      * @public
      */
     layoutAlgorithm?: TreeMapLayoutAlgorithm | ((e: { rect?: Array<number>; sum?: number; items?: Array<any> }) => any);

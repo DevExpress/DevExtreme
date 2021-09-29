@@ -270,13 +270,6 @@
 
 <script>
     (function() {
-        // IE11 hack for promises error (http://stackoverflow.com/questions/35651193/ie11-promise-strange-behaviour)
-        jQuery.each([1, 2, 3, 5, 8, 13, 20, 40, 100], function(_, timeout) {
-            new Promise(function (resolve) {
-                window.setTimeout(resolve, timeout * 1000);
-            });
-        });
-
         var integrationImportPaths = @Html.Raw(Json.Serialize(GetJQueryIntegrationImports()));
 
         var imports = integrationImportPaths.map(function(importPath) {

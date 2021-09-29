@@ -75,20 +75,25 @@ describe('TimePanelLayout', () => {
     });
 
     it('should render Table and Rows correctly', () => {
+      const ref = React.createRef();
       const layout = render({
         topVirtualRowHeight: 100,
         bottomVirtualRowHeight: 200,
+        props: {
+          tableRef: ref,
+        },
       });
 
       expect(layout.is(Table))
         .toBe(true);
-      expect(layout.hasClass('dx-scheduler-time-panel'))
-        .toBe(true);
       expect(layout.props())
-        .toMatchObject({
+        .toEqual({
           topVirtualRowHeight: 100,
           bottomVirtualRowHeight: 200,
           virtualCellsCount: 1,
+          tableRef: ref,
+          children: expect.anything(),
+          className: 'dx-scheduler-time-panel',
         });
 
       const rows = layout.find(Row);

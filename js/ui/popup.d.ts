@@ -180,6 +180,12 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     resizeEnabled?: boolean;
     /**
      * @docid
+     * @default true
+     * @public
+     */
+    restorePosition?: boolean;
+    /**
+     * @docid
      * @default false
      * @default true &for(desktop)
      * @default false &for(Material)

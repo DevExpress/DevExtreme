@@ -69,20 +69,6 @@ module('Work Space Base', {
             });
 
             if(viewName === 'Day' || viewName === 'Week') {
-                test('All day panel is invisible, if showAllDayPanel = false', function(assert) {
-
-                    this.instance.option('showAllDayPanel', false);
-
-                    const $element = this.instance.$element();
-                    const $allDayPanel = $element.find('.dx-scheduler-all-day-panel');
-
-                    assert.equal($allDayPanel.css('display'), 'none', 'allDay panel is invisible');
-
-                    this.instance.option('showAllDayPanel', true);
-
-                    assert.notEqual($allDayPanel.css('display'), 'none', 'allDay panel is visible');
-                });
-
                 test('Scheduler workspace scrollables should be updated after allDayExpanded option changed', function(assert) {
                     this.instance.option('allDayExpanded', false);
                     const stub = sinon.stub(this.instance, '_updateScrollable');

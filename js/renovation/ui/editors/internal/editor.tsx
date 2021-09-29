@@ -10,6 +10,8 @@ import {
   RefObject,
   Fragment,
   InternalState,
+  Effect,
+  ForwardRef,
 } from '@devextreme-generator/declarations';
 import Guid from '../../../../core/guid';
 import { Widget, WidgetProps } from '../../common/widget';
@@ -44,15 +46,16 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
     },
     widgetRef,
     aria, cssClasses: classes,
-    validationErrors, shouldShowValidationMessage, validationMessageGuid,
+    validationErrors, isValidationMessageVisible, validationMessageGuid, validationMessageTarget,
     onFocusIn,
     restAttributes,
-    onRootElementRendered, rootElement,
+    rootElementRef,
   } = viewModel;
 
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
       ref={widgetRef}
+      rootElementRef={rootElementRef}
       aria={aria}
       classes={classes}
       activeStateEnabled={activeStateEnabled}
@@ -70,22 +73,21 @@ export const viewFunction = (viewModel: Editor): JSX.Element => {
       onKeyDown={onKeyDown}
       tabIndex={tabIndex}
       visible={visible}
-      onRootElementRendered={onRootElementRendered}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       <Fragment>
         {children}
 
-        {rootElement && shouldShowValidationMessage
+        {isValidationMessageVisible
         && (
         <ValidationMessage
           validationErrors={validationErrors}
           mode={validationMessageMode}
           positionRequest="below"
           rtlEnabled={rtlEnabled}
-          target={rootElement}
-          boundary={rootElement}
-          container={rootElement}
+          target={validationMessageTarget}
+          boundary={validationMessageTarget}
+          container={validationMessageTarget}
           contentId={validationMessageGuid}
         />
         )}
@@ -119,6 +121,7 @@ export class EditorProps extends BaseWidgetProps {
 }
 
 export type EditorPropsType = EditorProps
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<WidgetProps, 'aria' | 'classes' | 'children'>;
 
 @Component({
@@ -134,7 +137,16 @@ export class Editor extends JSXComponent<EditorPropsType>() {
 
   @InternalState() validationMessageGuid = `dx-${new Guid()}`;
 
-  @InternalState() rootElement!: HTMLDivElement;
+  @ForwardRef() rootElementRef!: RefObject<HTMLDivElement>;
+
+  @InternalState() isValidationMessageVisible = false;
+
+  @Effect() updateValidationMessageVisibility(): void {
+    // NOTE: To improve performance.
+    // State should not be updated after root element init
+    // if no necessity to show validation message, but should otherwise
+    this.isValidationMessageVisible = this.shouldShowValidationMessage;
+  }
 
   @Method()
   focus(): void {
@@ -144,10 +156,6 @@ export class Editor extends JSXComponent<EditorPropsType>() {
   @Method()
   blur(): void {
     this.widgetRef.current!.blur();
-  }
-
-  onRootElementRendered(rootElement: HTMLDivElement): void {
-    this.rootElement = rootElement;
   }
 
   onFocusIn(event: Event): void {
@@ -187,10 +195,15 @@ export class Editor extends JSXComponent<EditorPropsType>() {
 
   get validationErrors(): Record<string, unknown>[] | null | undefined {
     const { validationErrors, validationError } = this.props;
-    let allValidationErrors = validationErrors;
+    let allValidationErrors = validationErrors && [...validationErrors];
+
     if (!allValidationErrors && validationError) {
-      allValidationErrors = [validationError];
+      allValidationErrors = [{ ...validationError }];
     }
     return allValidationErrors;
+  }
+
+  get validationMessageTarget(): HTMLDivElement | null | undefined {
+    return this.rootElementRef?.current;
   }
 }

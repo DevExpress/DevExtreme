@@ -1,5 +1,6 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
+import { normalizeOptions } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
@@ -43,7 +44,10 @@ function exportDataGrid(doc, dataGrid, options) {
                 ));
             }
 
-            initializeCellsWidth(rowsInfo, options.columnWidths); // customize via options.colWidths only
+            normalizeOptions(rowsInfo);
+
+            // computes withs of the cells depending of the options
+            initializeCellsWidth(doc, dataProvider, rowsInfo, options);
 
             // apply intends for correctly set width and colSpan for grouped rows
             resizeFirstColumnByIndentLevel(rowsInfo, options);
@@ -51,7 +55,7 @@ function exportDataGrid(doc, dataGrid, options) {
             // apply colSpans + recalculate cellsWidth
             applyColSpans(rowsInfo);
 
-            // set/update/initCellHeight - autocalculate by text+width+wordWrapEnabled or use value from customizeCell
+            // set/update/initCellHeight - autocalculate by text+width+wordWrapEnabled+padding or use value from customizeCell
             calculateHeights(doc, rowsInfo, options);
 
             // apply rowSpans + recalculate cells height

@@ -419,6 +419,8 @@ export type HtmlEditorFormat = 'background' | 'bold' | 'color' | 'font' | 'itali
 
 export type EditorStylingMode = 'outlined' | 'underlined' | 'filled';
 
+export type EditorLabelMode = 'static' | 'floating' | 'hidden';
+
 export type GridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 
 // has additional member | 'drag' - but ts has no such member
@@ -502,6 +504,8 @@ export type GridPagerDisplayMode = 'adaptive' | 'compact' | 'full';
 export type GridPagerPageSize = 'all';
 
 export type GridDataChangeType = 'insert' | 'update' | 'remove';
+
+export type GridNewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop';
 
 // was DataGridToolbarItem
 // eslint-disable-next-line @typescript-eslint/naming-convention

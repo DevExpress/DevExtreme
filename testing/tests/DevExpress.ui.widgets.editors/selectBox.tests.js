@@ -5850,7 +5850,7 @@ QUnit.module('valueChanged handler should receive correct event', {
         this.testProgramChange(assert);
     });
 
-    ['ArrowDown', 'ArrowUp', 'Down', 'Up'].forEach(key => {
+    ['ArrowDown', 'ArrowUp'].forEach(key => {
         QUnit.test(`on ${key} pressing if drop down is closed (T844170)`, function(assert) {
             this.instance.close();
 

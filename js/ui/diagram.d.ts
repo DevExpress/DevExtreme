@@ -884,6 +884,13 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @default true
+     * @default false &for(desktop except Mac)
+     * @public
+     */
+     useNativeScrolling?: boolean;
+    /**
+     * @docid
+     * @default true
      * @public
      */
     snapToGrid?: boolean;

@@ -119,6 +119,7 @@ import {
   GridPagerPageSize,
   GridDataChangeType,
   dxDataGridDefaultToolbarItemName,
+  GridNewRowPosition,
 } from '../docEnums';
 
 export interface AdaptiveDetailRowPreparingInfo {
@@ -1600,6 +1601,12 @@ export interface EditingBase {
      */
     mode?: GridEditMode;
     /**
+     * @docid GridBaseOptions.editing.newRowPosition
+     * @default "viewportTop"
+     * @public
+     */
+    newRowPosition?: GridNewRowPosition;
+    /**
      * @docid GridBaseOptions.editing.popup
      * @public
      * @type dxPopupOptions
@@ -1663,6 +1670,14 @@ export interface DataChange {
      * @docid
      */
     pageIndex?: number;
+    /**
+     * @docid
+     */
+    insertAfterKey?: any;
+    /**
+     * @docid
+     */
+    insertBeforeKey?: any;
 }
 
 /**
@@ -1819,6 +1834,13 @@ export interface ScrollingBase {
      * @public
      */
     useNative?: boolean | Mode;
+    /**
+     * @docid GridBaseOptions.scrolling.renderAsync
+     * @type boolean
+     * @default undefined
+     * @public
+     */
+    renderAsync?: boolean;
 }
 
 /**
@@ -4129,6 +4151,20 @@ export interface dxDataGridToolbar {
    * @public
    */
   items?: Array<dxDataGridDefaultToolbarItemName | dxDataGridToolbarItem>;
+  /**
+   * @docid
+   * @type boolean
+   * @default undefined
+   * @public
+   */
+  visible?: boolean;
+  /**
+   * @docid
+   * @type boolean
+   * @default false
+   * @public
+   */
+  disabled?: boolean;
 }
 
 /**

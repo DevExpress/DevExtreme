@@ -1,12 +1,12 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
-import renderer from 'core/renderer';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import { Consts, createTestFileSystem, FileManagerProgressPanelWrapper, FileManagerWrapper } from '../../../helpers/fileManagerHelpers.js';
 import FileManagerProgressPanelMock from '../../../helpers/fileManager/notification.progress_panel.mock.js';
 import FileManagerLogger from '../../../helpers/fileManager/logger.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
 import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
+import { implementationsMap } from 'core/utils/size';
 
 const { test } = QUnit;
 
@@ -476,8 +476,8 @@ QUnit.module('Progress panel tests', moduleConfig, () => {
 QUnit.module('Progress panel integration tests', integrationModuleConfig, () => {
 
     test('the progress panel cannot be shown if showPanel option is false', function(assert) {
-        const originalFunc = renderer.fn.width;
-        renderer.fn.width = () => 1200;
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
         resizeCallbacks.fire();
         this.fileManager.option({
             notifications: {
@@ -506,12 +506,12 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
 
         assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', 'progress panel is hidden');
         assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '0px', 'progress panel is hidden');
-        renderer.fn.width = originalFunc;
+        implementationsMap.getWidth = originalFunc;
     });
 
     test('the progress panel hides if to set showPanel option false when pane is shown', function(assert) {
-        const originalFunc = renderer.fn.width;
-        renderer.fn.width = () => 1200;
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
         resizeCallbacks.fire();
         this.fileManager.option({
             notifications: {
@@ -545,7 +545,7 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
 
         assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', 'progress panel is hidden');
         assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '0px', 'progress panel is hidden');
-        renderer.fn.width = originalFunc;
+        implementationsMap.getWidth = originalFunc;
     });
 
     test('it\'s impossible to add operations to the progress panel if showPanel option is false', function(assert) {
@@ -672,6 +672,48 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         assert.equal(this.wrapper.getRowsInDetailsView().length, initialCount - 1, 'files count decreased');
         assert.ok(this.wrapper.getNotificationPopup().is(':visible'), 'notification popup is visible');
         assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is still no operations');
+    });
+
+    test('the progress panel does not hides when window changes its width', function(assert) {
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
+        resizeCallbacks.fire();
+        this.fileManager.option({
+            notifications: {
+                showPanel: true
+            },
+            width: '1200px'
+        });
+        this.clock.tick(400);
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarRefreshButton(true).trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', '');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '340px', 'progress panel is shown');
+
+        implementationsMap.getWidth = () => 1205;
+        resizeCallbacks.fire();
+        this.fileManager.option('width', '1205px');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', '');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '340px', 'progress panel is shown');
+        assert.strictEqual(this.progressPanelWrapper.getInfosContainer().length, 1, 'progress panel content is still here');
+        implementationsMap.getWidth = originalFunc;
     });
 
 });

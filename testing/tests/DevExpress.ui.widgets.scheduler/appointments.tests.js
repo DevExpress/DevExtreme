@@ -1,3 +1,4 @@
+import { getOuterHeight, getWidth, getHeight } from 'core/utils/size';
 import 'generic_light.css!';
 
 import pointerMock from '../../helpers/pointerMock.js';
@@ -5,7 +6,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import { createFactoryInstances, getResourceManager, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import VerticalAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_vertical';
 import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_horizontal_month';
 import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
@@ -20,6 +21,8 @@ import Resizable from 'ui/resizable';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
+import { Deferred } from 'core/utils/deferred';
+import { createExpressions } from 'ui/scheduler/resources/utils';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
@@ -102,9 +105,6 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
         return result;
     },
     appendSingleAppointmentData: (data) => data,
-    getResourceManager: () => {
-        return getResourceManager(0);
-    },
     getAppointmentDataProvider: () => {
         return getAppointmentDataProvider(0);
     }
@@ -127,7 +127,6 @@ const createInstance = (options, subscribesConfig) => {
     };
 
     const key = createFactoryInstances({
-        resources: options.resources,
         getIsVirtualScrolling: () => false,
         getDataAccessors: () => dataAccessors
     });
@@ -136,17 +135,14 @@ const createInstance = (options, subscribesConfig) => {
         key,
         observer,
         ...options,
+        getResources: () => [],
+        getAgendaResourceProcessor: () => ({}),
+        getAppointmentColor: () => new Deferred(),
+        getResourceDataAccessors: () => createExpressions([])
     }).dxSchedulerAppointments('instance');
 
     const workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({
         draggingMode: 'default',
-        observer: {
-            fire: (functionName) => {
-                if(functionName === 'getResourceManager') {
-                    return getResourceManager(key);
-                }
-            }
-        }
     }).dxSchedulerWorkSpaceWeek('instance');
 
     workspaceInstance.getWorkArea().append(instance.$element());
@@ -287,7 +283,7 @@ QUnit.module('Appointments', moduleOptions, () => {
 
         const $appointment = instance.$element().find('.dx-scheduler-appointment');
 
-        assert.equal($appointment.outerHeight(), 40, 'Appointment has a right height');
+        assert.equal(getOuterHeight($appointment), 40, 'Appointment has a right height');
     });
 
     QUnit.test('Scheduler appointment should be resizable', function(assert) {
@@ -458,8 +454,8 @@ QUnit.module('Appointments', moduleOptions, () => {
         }, testConfig);
 
         const $appointment = instance.$element().find('.dx-scheduler-appointment');
-        const initialWidth = $appointment.width();
-        const initialHeight = $appointment.height();
+        const initialWidth = getWidth($appointment);
+        const initialHeight = getHeight($appointment);
         const keyboard = keyboardMock($appointment);
         const pointer = pointerMock(instance.$element().find('.dx-resizable-handle-bottom')).start();
 
@@ -467,8 +463,8 @@ QUnit.module('Appointments', moduleOptions, () => {
         keyboard.keyDown('esc');
         pointer.up();
 
-        assert.equal($appointment.width(), initialWidth, 'Appointment width is correct');
-        assert.equal($appointment.height(), initialHeight, 'Appointment height is correct');
+        assert.equal(getWidth($appointment), initialWidth, 'Appointment width is correct');
+        assert.equal(getHeight($appointment), initialHeight, 'Appointment height is correct');
     });
 
     QUnit.test('Allday appointment should stay in allDayContainer after small dragging', function(assert) {
@@ -603,15 +599,10 @@ QUnit.module('Appointments', moduleOptions, () => {
 
         const strategy = new VerticalAppointmentsStrategy({
             key,
-            instance: {
-                notifyObserver: commonUtils.noop,
-                invoke: commonUtils.noop,
-                fire: commonUtils.noop,
-                appointmentTakesAllDay: commonUtils.noop,
-                getAppointmentDurationInMinutes: function() {
-                    return 30;
-                }
+            appointmentDataProvider: {
+                appointmentTakesAllDay: commonUtils.noop
             },
+            cellDurationInMinutes: 30,
             cellHeight: 50
         });
         const deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });

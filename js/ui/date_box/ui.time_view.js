@@ -34,26 +34,9 @@ const TimeView = Editor.inherit({
             value: new Date(Date.now()),
             use24HourFormat: true,
             _showClock: true,
-            _arrowOffset: 0,
+            _arrowOffset: 5,
             stylingMode: undefined
         });
-    },
-
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
-            {
-                device: { platform: 'android' },
-                options: {
-                    _arrowOffset: 15
-                }
-            },
-            {
-                device: { platform: 'generic' },
-                options: {
-                    _arrowOffset: 5
-                }
-            }
-        ]);
     },
 
     _getValue: function() {
@@ -89,7 +72,7 @@ const TimeView = Editor.inherit({
         items.push({
             ratio: 0,
             shrink: 0,
-            baseSize: 50,
+            baseSize: 'auto',
             template: this._renderField.bind(this)
         });
 

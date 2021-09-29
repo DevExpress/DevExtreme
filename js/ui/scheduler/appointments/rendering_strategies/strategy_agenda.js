@@ -6,8 +6,8 @@ import { ExpressionUtils } from '../../expressionUtils';
 import { groupAppointmentsByResources } from '../../resources/utils';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
+    get instance() { return this.options.instance; }
     get agendaDuration() { return this.options.agendaDuration; }
-    get currentDate() { return this.options.currentDate; }
 
     getAppointmentMinSize() {
     }
@@ -24,13 +24,12 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
     }
 
     groupAppointmentByResources(appointments) {
-        const resourceManager = this.instance.fire('getResourceManager');
         const groups = this.instance._getCurrentViewOption('groups');
 
         const config = {
-            loadedResources: resourceManager.loadedResources,
+            loadedResources: this.options.loadedResources,
             resources: this.options.resources,
-            dataAccessors: this.options.resourceDataAccessors
+            dataAccessors: this.options.dataAccessors.resources
         };
 
         return groupAppointmentsByResources(

@@ -1,5 +1,7 @@
 1) Launch Google Chrome with the remote debugging port - 9223 and disable web-security 
---remote-debugging-port=9223 --disable-web-security
+--disable-web-security --remote-debugging-port=9223 --disable-popup-blocking --user-data-dir=SPECIFY_USER_DATA_DIR_HERE
+(Don't forget to replace the SPECIFY_USER_DATA_DIR_HERE with a valid dir path, it will be different for Win and Linux)
+
 (https://www.chromium.org/developers/how-tos/run-chromium-with-flags)
  
 Open localhost:9223 to check the result. This shows a list of opened browser tabs.

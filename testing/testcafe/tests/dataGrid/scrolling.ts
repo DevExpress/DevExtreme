@@ -440,7 +440,7 @@ test('New virtual mode. A detail row should be rendered when the last master row
     scrolling: {
       mode: 'virtual',
       rowRenderingMode: 'virtual',
-      newMode: true,
+      legacyMode: false,
     },
     masterDetail: {
       enabled: true,
@@ -493,7 +493,7 @@ test('New virtual mode. An adaptive row should be rendered when the last row is 
     scrolling: {
       mode: 'virtual',
       rowRenderingMode: 'virtual',
-      newMode: true,
+      legacyMode: false,
       useNative: false,
     },
     columnHidingEnabled: true,
@@ -503,7 +503,7 @@ test('New virtual mode. An adaptive row should be rendered when the last row is 
   });
 });
 
-test('New virtual mode. Virtual rows should not be in view port', async (t) => {
+test.skip('New virtual mode. Virtual rows should not be in view port', async (t) => {
   const dataGrid = new DataGrid('#container');
   const getVirtualRowInfo = ClientFunction(() => {
     const result: any = {};
@@ -630,7 +630,7 @@ test('New virtual mode. Virtual rows should not be in view port', async (t) => {
     remoteOperations: true,
     scrolling: {
       mode: 'virtual',
-      newMode: true,
+      legacyMode: false,
     },
   });
 });

@@ -31,6 +31,7 @@ export const viewFunction = ({
   />
 );
 
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 type DataGridPropsType = Pick<DataGridProps, 'showBorders'> & DataGridViewProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })

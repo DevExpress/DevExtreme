@@ -1,3 +1,4 @@
+import { getHeight } from '../core/utils/size';
 import { noop } from '../core/utils/common';
 import { extend as _extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
@@ -459,7 +460,7 @@ const dxChart = AdvancedChart.inherit({
     },
 
     _init() {
-        this._containerInitialHeight = hasWindow() ? this._$element.height() : 0;
+        this._containerInitialHeight = hasWindow() ? getHeight(this._$element) : 0;
         this.callBase();
     },
 

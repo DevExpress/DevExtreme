@@ -17,6 +17,7 @@ import Lookup from 'ui/lookup';
 import Popup from 'ui/popup';
 import List from 'ui/list';
 import Popover from 'ui/popover';
+import { getWidth } from 'core/utils/size';
 
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -1451,10 +1452,10 @@ QUnit.module('options', {
 
         $(instance._$field).trigger('dxclick');
 
-        assert.equal(Math.round(instance._$popup.width()), Math.round(instance.$element().width()), 'Option initialized correctly');
+        assert.equal(Math.round(getWidth(instance._$popup)), Math.round(getWidth(instance.$element())), 'Option initialized correctly');
 
         instance.option('width', 400);
-        assert.equal(Math.round(instance._$popup.width()), Math.round(instance.$element().width()), 'Option set correctly');
+        assert.equal(Math.round(getWidth(instance._$popup)), Math.round(getWidth(instance.$element())), 'Option set correctly');
     });
 
     QUnit.test('setting popupWidth to auto returns initial value', function(assert) {
@@ -3252,7 +3253,7 @@ QUnit.module('default options', {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
-        const $lookup = $('<div>').prependTo('body');
+        const $lookup = $('<div>').prependTo('#qunit-fixture');
 
         try {
 

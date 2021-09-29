@@ -1,3 +1,4 @@
+import { getWidth } from '../../../core/utils/size';
 import devices from '../../../core/devices';
 import $ from '../../../core/renderer';
 import dateUtils from '../../../core/utils/date';
@@ -126,7 +127,8 @@ export class AppointmentPopup {
             onHiding: () => this.scheduler.focus(),
             contentTemplate: () => this._createPopupContent(),
             onShowing: e => this._onShowing(e),
-            copyRootClassesToWrapper: true
+            copyRootClassesToWrapper: true,
+            _ignoreCopyRootClassesToWrapperDeprecation: true
         };
     }
 
@@ -220,7 +222,7 @@ export class AppointmentPopup {
     _tryGetWindowWidth() {
         if(hasWindow()) {
             const window = getWindow();
-            return $(window).width();
+            return getWidth(window);
         }
     }
 
@@ -350,7 +352,8 @@ export class AppointmentPopup {
             position: {
                 of: container
             },
-            copyRootClassesToWrapper: true
+            copyRootClassesToWrapper: true,
+            _ignoreCopyRootClassesToWrapperDeprecation: true
         });
     }
 

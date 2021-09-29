@@ -1,3 +1,4 @@
+import { setOuterWidth, getOuterWidth, setOuterHeight, getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
@@ -85,11 +86,11 @@ const EditorFactory = modules.ViewController.inherit({
         const location = positionUtils.calculate($element, extend({ collision: 'fit' }, position));
 
         if(location.h.oversize > 0) {
-            $element.outerWidth($element.outerWidth() - location.h.oversize);
+            setOuterWidth($element, getOuterWidth($element) - location.h.oversize);
         }
 
         if(location.v.oversize > 0) {
-            $element.outerHeight($element.outerHeight() - location.v.oversize);
+            setOuterHeight($element, getOuterHeight($element) - location.v.oversize);
         }
 
         $element.show();
@@ -150,9 +151,9 @@ const EditorFactory = modules.ViewController.inherit({
 
             that._$focusOverlay
                 .removeClass(DX_HIDDEN)
-                .appendTo($content)
-                .outerWidth(elemCoord.right - elemCoord.left + 1)
-                .outerHeight(elemCoord.bottom - elemCoord.top + 1);
+                .appendTo($content);
+            setOuterHeight(that._$focusOverlay, elemCoord.bottom - elemCoord.top + 1);
+            setOuterWidth(that._$focusOverlay, elemCoord.right - elemCoord.left + 1);
 
             const focusOverlayPosition = {
                 precise: true,

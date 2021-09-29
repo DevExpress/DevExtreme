@@ -7,7 +7,6 @@ import { dasherize } from '../core/utils/inflector';
 import { isDefined } from '../core/utils/type';
 import { normalizeStyleProp, styleProp, stylePropPrefix } from '../core/utils/style';
 import { each } from '../core/utils/iterator';
-import browser from '../core/utils/browser';
 import CollectionWidgetItem from './collection/item';
 import CollectionWidget from './collection/ui.collection_widget.edit';
 
@@ -172,19 +171,6 @@ class Box extends CollectionWidget {
 
 
         });
-    }
-
-    _defaultOptionsRules() {
-        return super._defaultOptionsRules().concat([
-            {
-                device: function() {
-                    return browser['msie'];
-                },
-                options: {
-                    _layoutStrategy: 'fallback'
-                }
-            }
-        ]);
     }
 
     _itemClass() {

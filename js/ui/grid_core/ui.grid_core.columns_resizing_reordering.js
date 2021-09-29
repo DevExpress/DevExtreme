@@ -1,3 +1,4 @@
+import { setHeight, getHeight, setWidth, getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
@@ -64,7 +65,7 @@ const TrackerView = modules.View.inherit({
             const $element = that.element();
             if($element && $element.hasClass(that.addWidgetPrefix(TRACKER_CLASS))) {
                 $element.css({ top: position.top });
-                $element.height(position.height);
+                setHeight($element, position.height);
             }
         };
         this._tablePositionController.positionChanged.add(that._positionChanged);
@@ -102,7 +103,7 @@ const TrackerView = modules.View.inherit({
     },
 
     setHeight: function(value) {
-        this.element().height(value);
+        setHeight(this.element(), value);
     },
 
     dispose: function() {
@@ -133,9 +134,9 @@ const SeparatorView = modules.View.inherit({
         const $element = this.element();
         if($element) {
             if(isDefined(value)) {
-                $element.height(value);
+                setHeight($element, value);
             } else {
-                return $element.height();
+                return getHeight($element);
             }
         }
     },
@@ -144,9 +145,9 @@ const SeparatorView = modules.View.inherit({
         const $element = this.element();
         if($element) {
             if(isDefined(value)) {
-                $element.width(value);
+                setWidth($element, value);
             } else {
-                return $element.width();
+                return getWidth($element);
             }
         }
     }
@@ -168,7 +169,7 @@ const ColumnsSeparatorView = SeparatorView.inherit({
             $element = that.element();
             if($element) {
                 $element.css({ top: position.top });
-                $element.height(position.height);
+                setHeight($element, position.height);
             }
         };
         that._tablePositionController.positionChanged.add(that._positionChanged);
@@ -453,8 +454,8 @@ const DraggingHeaderView = modules.View.inherit({
 
         that.element().css({
             textAlign: columnElement && columnElement.css('textAlign'),
-            height: columnElement && (isCommandColumn && columnElement.get(0).clientHeight || columnElement.height()),
-            width: columnElement && (isCommandColumn && columnElement.get(0).clientWidth || columnElement.width()),
+            height: columnElement && (isCommandColumn && columnElement.get(0).clientHeight || getHeight(columnElement)),
+            width: columnElement && (isCommandColumn && columnElement.get(0).clientWidth || getWidth(columnElement)),
             whiteSpace: columnElement && columnElement.css('whiteSpace')
         })
             .addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS))
@@ -631,7 +632,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         const isRtlParentStyle = this._isRtlParentStyle();
 
         if(that._isResizing && that._resizingInfo) {
-            if((parentOffsetLeft <= eventData.x || !isNextColumnMode && isRtlParentStyle) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
+            if((parentOffsetLeft <= eventData.x || !isNextColumnMode && isRtlParentStyle) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + getWidth(that._$parentContainer))) {
                 if(that._updateColumnsWidthIfNeeded(eventData.x)) {
                     const $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
                     const cell = $cell[0];
@@ -746,7 +747,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             const scrollable = that.component.getScrollable();
 
             if(scrollable && that._isRtlParentStyle()) {
-                that._scrollRight = scrollable.$content().width() - $(scrollable.container()).width() - scrollable.scrollLeft();
+                that._scrollRight = getWidth(scrollable.$content()) - getWidth(scrollable.container()) - scrollable.scrollLeft();
             }
 
             e.preventDefault();
@@ -901,7 +902,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
 
                 const scrollable = this.component.getScrollable();
                 if(scrollable && isRtlParentStyle) {
-                    const left = scrollable.$content().width() - $(scrollable.container()).width() - this._scrollRight;
+                    const left = getWidth(scrollable.$content()) - getWidth(scrollable.container()) - this._scrollRight;
                     scrollable.scrollTo({ left: left });
                 }
             }

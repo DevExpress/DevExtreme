@@ -1371,7 +1371,10 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   type ComponentFactory<TComponent> = {
-    new (): TComponent;
+    new (
+      element: UserDefinedElement,
+      options?: Record<string, unknown>
+    ): TComponent;
     getInstance(element: UserDefinedElement): TComponent;
   };
   /**
@@ -1513,11 +1516,12 @@ declare module DevExpress.data {
   /**
    * [descr:ArrayStore]
    */
-  export class ArrayStore<TKey = any, TValue = any> extends Store<
-    TKey,
-    TValue
-  > {
-    constructor(options?: ArrayStoreOptions<TKey, TValue>);
+  export class ArrayStore<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends Store<TValue, TKeyExpr, TKey> {
+    constructor(options?: ArrayStoreOptions<TValue, TKeyExpr, TKey>);
     /**
      * [descr:ArrayStore.clear()]
      */
@@ -1530,8 +1534,11 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ArrayStoreOptions<TKey = any, TValue = any>
-    extends StoreOptions<TKey, TValue> {
+  export interface ArrayStoreOptions<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends StoreOptions<TValue, TKeyExpr, TKey> {
     /**
      * [descr:ArrayStoreOptions.data]
      */
@@ -1550,11 +1557,12 @@ declare module DevExpress.data {
   /**
    * [descr:CustomStore]
    */
-  export class CustomStore<TKey = any, TValue = any> extends Store<
-    TKey,
-    TValue
-  > {
-    constructor(options?: CustomStoreOptions<TKey, TValue>);
+  export class CustomStore<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends Store<TValue, TKeyExpr, TKey> {
+    constructor(options?: CustomStoreOptions<TValue, TKeyExpr, TKey>);
     /**
      * [descr:CustomStore.clearRawDataCache()]
      */
@@ -1563,8 +1571,11 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface CustomStoreOptions<TKey = any, TValue = any>
-    extends StoreOptions<TKey, TValue> {
+  export interface CustomStoreOptions<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends StoreOptions<TValue, TKeyExpr, TKey> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
@@ -1580,9 +1591,7 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load?: (
-      options: LoadOptions<TValue>
-    ) => PromiseLike<TValue> | Array<TValue>;
+    load: (options: LoadOptions<TValue>) => PromiseLike<TValue> | Array<TValue>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -1610,14 +1619,18 @@ declare module DevExpress.data {
   /**
    * [descr:DataSource]
    */
-  export class DataSource<TKey = any, TValue = any> {
+  export class DataSource<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > {
     constructor(data: Array<TValue>);
     constructor(
       options:
-        | CustomStoreOptions<TKey, TValue>
-        | DataSourceOptions<TKey, any, TValue, any>
+        | CustomStoreOptions<TValue, TKeyExpr, TKey>
+        | DataSourceOptions<any, TValue, any, TKeyExpr, TKey>
     );
-    constructor(store: Store<TKey, TValue>);
+    constructor(store: Store<TValue, TKeyExpr, TKey>);
     constructor(url: string);
     /**
      * [descr:DataSource.cancel(operationId)]
@@ -1664,7 +1677,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.key()]
      */
-    key(): string | Array<string>;
+    key(): TKeyExpr;
     /**
      * [descr:DataSource.load()]
      */
@@ -1780,7 +1793,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.store()]
      */
-    store(): Store<TKey, TValue> | StoreOptions<TKey, TValue> | Array<TValue>;
+    store(): Store<TValue, TKeyExpr, TKey>;
     /**
      * [descr:DataSource.totalCount()]
      */
@@ -1796,10 +1809,11 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface DataSourceOptions<
-    TKey = any,
     TSourceValue = any,
     TValue = TSourceValue,
-    TMappedValue = TValue
+    TMappedValue = TValue,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
   > {
     /**
      * [descr:DataSourceOptions.customQueryParams]
@@ -1881,9 +1895,12 @@ declare module DevExpress.data {
      * [descr:DataSourceOptions.store]
      */
     store?:
-      | Store<TKey, TSourceValue>
-      | StoreOptions<TKey, TSourceValue>
-      | Array<TSourceValue>;
+      | Array<TSourceValue>
+      | Store<TSourceValue, TKeyExpr, TKey>
+      | (ArrayStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'array' })
+      | (LocalStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'local' })
+      | (ODataStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'odata' })
+      | CustomStoreOptions<TSourceValue, TKeyExpr, TKey>;
   }
   /**
    * [descr:EdmLiteral]
@@ -2008,8 +2025,12 @@ declare module DevExpress.data {
   /**
    * [descr:LocalStore]
    */
-  export class LocalStore extends ArrayStore {
-    constructor(options?: LocalStoreOptions);
+  export class LocalStore<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends ArrayStore<TValue, TKeyExpr, TKey> {
+    constructor(options?: LocalStoreOptions<TValue, TKeyExpr, TKey>);
     /**
      * [descr:LocalStore.clear()]
      */
@@ -2018,7 +2039,11 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
+  export interface LocalStoreOptions<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends ArrayStoreOptions<TValue, TKeyExpr, TKey> {
     /**
      * [descr:LocalStoreOptions.flushInterval]
      */
@@ -2135,11 +2160,12 @@ declare module DevExpress.data {
   /**
    * [descr:ODataStore]
    */
-  export class ODataStore<TKey = any, TValue = any> extends Store<
-    TKey,
-    TValue
-  > {
-    constructor(options?: ODataStoreOptions<TKey, TValue>);
+  export class ODataStore<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends Store<TValue, TKeyExpr, TKey> {
+    constructor(options?: ODataStoreOptions<TValue, TKeyExpr, TKey>);
     byKey(key: TKey): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:ODataStore.byKey(key, extraOptions)]
@@ -2191,8 +2217,11 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ODataStoreOptions<TKey = any, TValue = any>
-    extends StoreOptions<TKey, TValue> {
+  export interface ODataStoreOptions<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > extends StoreOptions<TValue, TKeyExpr, TKey> {
     /**
      * [descr:ODataStoreOptions.beforeSend]
      */
@@ -2754,8 +2783,12 @@ declare module DevExpress.data {
    * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export class Store<TKey = any, TValue = any> {
-    constructor(options?: StoreOptions<TKey, TValue>);
+  export class Store<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > {
+    constructor(options?: StoreOptions<TValue, TKeyExpr, TKey>);
     /**
      * [descr:Store.byKey(key)]
      */
@@ -2770,7 +2803,7 @@ declare module DevExpress.data {
     /**
      * [descr:Store.key()]
      */
-    key(): string | Array<string>;
+    key(): TKeyExpr;
     /**
      * [descr:Store.keyOf(obj)]
      */
@@ -2854,7 +2887,11 @@ declare module DevExpress.data {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface StoreOptions<TKey = any, TValue = any> {
+  export interface StoreOptions<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+  > {
     /**
      * [descr:StoreOptions.errorHandler]
      */
@@ -2862,7 +2899,7 @@ declare module DevExpress.data {
     /**
      * [descr:StoreOptions.key]
      */
-    key?: string | Array<string>;
+    key?: TKeyExpr;
     /**
      * [descr:StoreOptions.onInserted]
      */
@@ -4263,6 +4300,14 @@ declare module DevExpress.ui {
      * [descr:DataChange.pageIndex]
      */
     pageIndex?: number;
+    /**
+     * [descr:DataChange.insertAfterKey]
+     */
+    insertAfterKey?: any;
+    /**
+     * [descr:DataChange.insertBeforeKey]
+     */
+    insertBeforeKey?: any;
   }
   /**
    * [descr:DataExpressionMixin]
@@ -6157,6 +6202,10 @@ declare module DevExpress.ui {
        */
       mode?: GridEditMode;
       /**
+       * [descr:GridBaseOptions.editing.newRowPosition]
+       */
+      newRowPosition?: GridNewRowPosition;
+      /**
        * [descr:GridBaseOptions.editing.popup]
        */
       popup?: DevExpress.ui.dxPopup.Properties;
@@ -7216,6 +7265,10 @@ declare module DevExpress.ui {
        * [descr:GridBaseOptions.scrolling.useNative]
        */
       useNative?: boolean | Mode;
+      /**
+       * [descr:GridBaseOptions.scrolling.renderAsync]
+       */
+      renderAsync?: boolean;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7877,6 +7930,14 @@ declare module DevExpress.ui {
      * [descr:dxDataGridToolbar.items]
      */
     items?: Array<dxDataGridDefaultToolbarItemName | dxDataGridToolbarItem>;
+    /**
+     * [descr:dxDataGridToolbar.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxDataGridToolbar.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxDataGridToolbarItem]
@@ -9130,6 +9191,10 @@ declare module DevExpress.ui {
      */
     simpleView?: boolean;
     /**
+     * [descr:dxDiagramOptions.useNativeScrolling]
+     */
+    useNativeScrolling?: boolean;
+    /**
      * [descr:dxDiagramOptions.snapToGrid]
      */
     snapToGrid?: boolean;
@@ -9655,12 +9720,7 @@ declare module DevExpress.ui {
      * [descr:dxDropDownButtonItem.onClick]
      */
     onClick?:
-      | ((e: {
-          component?: dxDropDownButton;
-          element?: DevExpress.core.DxElement;
-          model?: any;
-          event?: DevExpress.events.DxEvent;
-        }) => void)
+      | ((e: DevExpress.ui.dxDropDownButton.ItemClickEvent) => void)
       | string;
   }
   /**
@@ -12113,6 +12173,138 @@ declare module DevExpress.ui {
     name?: GanttContextMenuItem | 'resourceManager' | string;
   }
   /**
+   * [descr:dxGanttFilterRow]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxGanttFilterRow {
+    /**
+     * [descr:dxGanttFilterRow.betweenEndText]
+     */
+    betweenEndText?: string;
+    /**
+     * [descr:dxGanttFilterRow.betweenStartText]
+     */
+    betweenStartText?: string;
+    /**
+     * [descr:dxGanttFilterRow.operationDescriptions]
+     */
+    operationDescriptions?: dxGanttFilterRowOperationDescriptions;
+    /**
+     * [descr:dxGanttFilterRow.resetOperationText]
+     */
+    resetOperationText?: string;
+    /**
+     * [descr:dxGanttFilterRow.showAllText]
+     */
+    showAllText?: string;
+    /**
+     * [descr:dxGanttFilterRow.showOperationChooser]
+     */
+    showOperationChooser?: boolean;
+    /**
+     * [descr:dxGanttFilterRow.visible]
+     */
+    visible?: boolean;
+  }
+  /**
+   * [descr:dxGanttFilterRowOperationDescriptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxGanttFilterRowOperationDescriptions {
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.between]
+     */
+    between?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.contains]
+     */
+    contains?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.endsWith]
+     */
+    endsWith?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.equal]
+     */
+    equal?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.greaterThan]
+     */
+    greaterThan?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.greaterThanOrEqual]
+     */
+    greaterThanOrEqual?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.lessThan]
+     */
+    lessThan?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.lessThanOrEqual]
+     */
+    lessThanOrEqual?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.notContains]
+     */
+    notContains?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.notEqual]
+     */
+    notEqual?: string;
+    /**
+     * [descr:dxGanttFilterRowOperationDescriptions.startsWith]
+     */
+    startsWith?: string;
+  }
+  /**
+   * [descr:dxGanttHeaderFilter]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxGanttHeaderFilter {
+    /**
+     * [descr:dxGanttHeaderFilter.allowSearch]
+     */
+    allowSearch?: boolean;
+    /**
+     * [descr:dxGanttHeaderFilter.height]
+     */
+    height?: number;
+    /**
+     * [descr:dxGanttHeaderFilter.searchTimeout]
+     */
+    searchTimeout?: number;
+    /**
+     * [descr:dxGanttHeaderFilter.texts]
+     */
+    texts?: dxGanttHeaderFilterTexts;
+    /**
+     * [descr:dxGanttHeaderFilter.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxGanttHeaderFilter.width]
+     */
+    width?: number;
+  }
+  /**
+   * [descr:dxGanttHeaderFilterTexts]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxGanttHeaderFilterTexts {
+    /**
+     * [descr:dxGanttHeaderFilterTexts.cancel]
+     */
+    cancel?: string;
+    /**
+     * [descr:dxGanttHeaderFilterTexts.emptyValue]
+     */
+    emptyValue?: string;
+    /**
+     * [descr:dxGanttHeaderFilterTexts.ok]
+     */
+    ok?: string;
+  }
+  /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -12220,6 +12412,14 @@ declare module DevExpress.ui {
      * [descr:dxGanttOptions.sorting]
      */
     sorting?: dxGanttSorting;
+    /**
+     * [descr:dxGanttOptions.filterRow]
+     */
+    filterRow?: dxGanttFilterRow;
+    /**
+     * [descr:dxGanttOptions.headerFilter]
+     */
+    headerFilter?: dxGanttHeaderFilter;
     /**
      * [descr:dxGanttOptions.onSelectionChanged]
      */
@@ -12408,6 +12608,33 @@ declare module DevExpress.ui {
      * [descr:dxGanttOptions.scaleType]
      */
     scaleType?: GanttScaleType;
+    /**
+     * [descr:dxGanttOptions.scaleTypeRange]
+     */
+    scaleTypeRange?: {
+      /**
+       * [descr:dxGanttOptions.scaleTypeRange.start]
+       */
+      start?:
+        | 'minutes'
+        | 'hours'
+        | 'days'
+        | 'weeks'
+        | 'months'
+        | 'quarters'
+        | 'years';
+      /**
+       * [descr:dxGanttOptions.scaleTypeRange.end]
+       */
+      end?:
+        | 'minutes'
+        | 'hours'
+        | 'days'
+        | 'weeks'
+        | 'months'
+        | 'quarters'
+        | 'years';
+    };
     /**
      * [descr:dxGanttOptions.selectedRowKey]
      */
@@ -13377,6 +13604,10 @@ declare module DevExpress.ui {
      */
     showSelectionControls?: boolean;
     /**
+     * [descr:dxListOptions.selectAllText]
+     */
+    selectAllText?: string;
+    /**
      * [descr:dxListOptions.useNativeScrolling]
      */
     useNativeScrolling?: boolean;
@@ -13535,20 +13766,6 @@ declare module DevExpress.ui {
    */
   export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
-     * [descr:dxLookupOptions.animation]
-     * @deprecated [depNote:dxLookupOptions.animation]
-     */
-    animation?: {
-      /**
-       * [descr:dxLookupOptions.animation.hide]
-       */
-      hide?: AnimationConfig;
-      /**
-       * [descr:dxLookupOptions.animation.show]
-       */
-      show?: AnimationConfig;
-    };
-    /**
      * [descr:dxLookupOptions.applyButtonText]
      */
     applyButtonText?: string;
@@ -13568,13 +13785,6 @@ declare module DevExpress.ui {
      * [descr:dxLookupOptions.clearButtonText]
      */
     clearButtonText?: string;
-    /**
-     * [descr:dxLookupOptions.closeOnOutsideClick]
-     * @deprecated [depNote:dxLookupOptions.closeOnOutsideClick]
-     */
-    closeOnOutsideClick?:
-      | boolean
-      | ((event: DevExpress.events.DxEvent) => boolean);
     /**
      * [descr:dxLookupOptions.fieldTemplate]
      */
@@ -13624,11 +13834,6 @@ declare module DevExpress.ui {
      */
     onScroll?: (e: DevExpress.ui.dxLookup.ScrollEvent) => void;
     /**
-     * [descr:dxLookupOptions.onTitleRendered]
-     * @deprecated [depNote:dxLookupOptions.onTitleRendered]
-     */
-    onTitleRendered?: (e: DevExpress.ui.dxLookup.TitleRenderedEvent) => void;
-    /**
      * [descr:dxLookupOptions.onValueChanged]
      */
     onValueChanged?: (e: DevExpress.ui.dxLookup.ValueChangedEvent) => void;
@@ -13644,21 +13849,6 @@ declare module DevExpress.ui {
      * [descr:dxLookupOptions.placeholder]
      */
     placeholder?: string;
-    /**
-     * [descr:dxLookupOptions.popupHeight]
-     * @deprecated [depNote:dxLookupOptions.popupHeight]
-     */
-    popupHeight?: number | string | (() => number | string);
-    /**
-     * [descr:dxLookupOptions.popupWidth]
-     * @deprecated [depNote:dxLookupOptions.popupWidth]
-     */
-    popupWidth?: number | string | (() => number | string);
-    /**
-     * [descr:dxLookupOptions.position]
-     * @deprecated [depNote:dxLookupOptions.position]
-     */
-    position?: PositionConfig;
     /**
      * [descr:dxLookupOptions.pullRefreshEnabled]
      */
@@ -13684,11 +13874,6 @@ declare module DevExpress.ui {
      */
     searchPlaceholder?: string;
     /**
-     * [descr:dxLookupOptions.shading]
-     * @deprecated [depNote:dxLookupOptions.shading]
-     */
-    shading?: boolean;
-    /**
      * [descr:dxLookupOptions.showCancelButton]
      */
     showCancelButton?: boolean;
@@ -13696,25 +13881,6 @@ declare module DevExpress.ui {
      * [descr:dxLookupOptions.showClearButton]
      */
     showClearButton?: boolean;
-    /**
-     * [descr:dxLookupOptions.showPopupTitle]
-     * @deprecated [depNote:dxLookupOptions.showPopupTitle]
-     */
-    showPopupTitle?: boolean;
-    /**
-     * [descr:dxLookupOptions.title]
-     * @deprecated [depNote:dxLookupOptions.title]
-     */
-    title?: string;
-    /**
-     * [descr:dxLookupOptions.titleTemplate]
-     * @deprecated [depNote:dxLookupOptions.titleTemplate]
-     */
-    titleTemplate?:
-      | DevExpress.core.template
-      | ((
-          titleElement: DevExpress.core.DxElement
-        ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxLookupOptions.useNativeScrolling]
      */
@@ -13829,26 +13995,6 @@ declare module DevExpress.ui {
      * [descr:dxMapOptions.height]
      */
     height?: number | string | (() => number | string);
-    /**
-     * [descr:dxMapOptions.key]
-     * @deprecated [depNote:dxMapOptions.key]
-     */
-    key?:
-      | string
-      | {
-          /**
-           * [descr:dxMapOptions.key.bing]
-           */
-          bing?: string;
-          /**
-           * [descr:dxMapOptions.key.google]
-           */
-          google?: string;
-          /**
-           * [descr:dxMapOptions.key.googleStatic]
-           */
-          googleStatic?: string;
-        };
     /**
      * [descr:dxMapOptions.markerIconSrc]
      */
@@ -14475,6 +14621,7 @@ declare module DevExpress.ui {
         ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxOverlayOptions.copyRootClassesToWrapper]
+     * @deprecated [depNote:dxOverlayOptions.copyRootClassesToWrapper]
      */
     copyRootClassesToWrapper?: boolean;
     /**
@@ -15571,6 +15718,10 @@ declare module DevExpress.ui {
      * [descr:dxPopupOptions.resizeEnabled]
      */
     resizeEnabled?: boolean;
+    /**
+     * [descr:dxPopupOptions.restorePosition]
+     */
+    restorePosition?: boolean;
     /**
      * [descr:dxPopupOptions.showCloseButton]
      */
@@ -18059,6 +18210,10 @@ declare module DevExpress.ui {
      */
     selectedItems?: Array<string | number | any>;
     /**
+     * [descr:dxTagBoxOptions.selectAllText]
+     */
+    selectAllText?: string;
+    /**
      * [descr:dxTagBoxOptions.showDropDownButton]
      */
     showDropDownButton?: boolean;
@@ -18255,6 +18410,14 @@ declare module DevExpress.ui {
      */
     inputAttr?: any;
     /**
+     * [descr:dxTextEditorOptions.label]
+     */
+    label?: boolean;
+    /**
+     * [descr:dxTextEditorOptions.labelMode]
+     */
+    labelMode?: EditorLabelMode;
+    /**
      * [descr:dxTextEditorOptions.mask]
      */
     mask?: string;
@@ -18306,11 +18469,6 @@ declare module DevExpress.ui {
      * [descr:dxTextEditorOptions.onKeyDown]
      */
     onKeyDown?: (e: DevExpress.events.NativeEventInfo<TComponent>) => void;
-    /**
-     * [descr:dxTextEditorOptions.onKeyPress]
-     * @deprecated [depNote:dxTextEditorOptions.onKeyPress]
-     */
-    onKeyPress?: (e: DevExpress.events.NativeEventInfo<TComponent>) => void;
     /**
      * [descr:dxTextEditorOptions.onKeyUp]
      */
@@ -19622,6 +19780,14 @@ declare module DevExpress.ui {
      * [descr:dxTreeListToolbarItem.name]
      */
     name?: dxTreeListDefaultToolbarItemName | string;
+    /**
+     * [descr:dxTreeListToolbarItem.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxTreeListToolbarItem.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxTreeView]
