@@ -1,6 +1,6 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { normalizeOptions, normalizeRowsInfo } from './normalizeOptions';
+import { normalizeRowsInfo } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
@@ -24,9 +24,6 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
-
-            // normalize the parameters entered by the client
-            normalizeOptions(options);
 
             // TODO: pass rowOptions: { headerStyles: { backgroundColor }, groupStyles: {...}, totalStyles: {...} }
             const rowsInfo = generateRowsInfo(dataProvider, dataGrid, options.rowOptions?.headerStyles?.backgroundColor);
