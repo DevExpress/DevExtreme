@@ -1,5 +1,6 @@
 import $ from '../../../core/renderer';
 import { isDefined } from '../../../core/utils/type';
+import { getLabelMarkText } from '../ui.form.layout_manager.utils';
 
 import {
     WIDGET_CLASS,
@@ -32,14 +33,15 @@ export function renderLabel({ text, id, location, alignment, labelID = null, mar
         );
 }
 
-function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, optionalMark }) {
-    if(!isRequiredMark && !isOptionalMark) {
+function _renderLabelMark(markOptions) {
+    const markText = getLabelMarkText(markOptions);
+    if(markText === '') {
         return null;
     }
 
     return $('<span>')
-        .addClass(isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS)
-        .text(String.fromCharCode(160) + (isRequiredMark ? requiredMark : optionalMark));
+        .addClass(markOptions.isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS)
+        .text(markText);
 }
 
 export function getLabelWidthByInnerHTML(options) {
