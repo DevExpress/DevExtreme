@@ -287,7 +287,7 @@ export interface PivotGridDataSourceField {
     allowSortingBySummary?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.area
-     * @type PivotGridArea
+     * @type Enums.PivotGridArea
      * @default undefined
      * @acceptValues undefined
      * @public

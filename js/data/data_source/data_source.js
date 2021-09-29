@@ -54,7 +54,7 @@ export const DataSource = Class.inherit({
 
         /**
         * @name DataSourceOptions.store.type
-        * @type docEnums.DataSourceStoreType
+        * @type Enums.DataSourceStoreType
         */
 
         this._store = options.store;

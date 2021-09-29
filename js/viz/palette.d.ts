@@ -23,8 +23,8 @@ export function currentPalette(paletteName: string): void;
 /**
  * @docid viz.generateColors
  * @publicName generateColors(palette, count, options)
- * @param1 palette:docEnums.PaletteType|Array<string>
- * @param3_field1 paletteExtensionMode:docEnums.PaletteExtensionModeType
+ * @param1 palette:Enums.PaletteType|Array<string>
+ * @param3_field1 paletteExtensionMode:Enums.PaletteExtensionModeType
  * @static
  * @public
  */

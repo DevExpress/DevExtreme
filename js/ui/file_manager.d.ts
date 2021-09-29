@@ -300,7 +300,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 fileSystemItem:FileSystemItem
-     * @type_function_param1_field9 viewArea:docEnums.FileManagerViewArea
+     * @type_function_param1_field9 viewArea:Enums.FileManagerViewArea
      * @action
      * @public
      */
@@ -316,7 +316,7 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
      * @type_function_param1_field5 targetElement:DxElement
      * @type_function_param1_field6 cancel:boolean
      * @type_function_param1_field7 event:event
-     * @type_function_param1_field8 viewArea:docEnums.FileManagerViewArea
+     * @type_function_param1_field8 viewArea:Enums.FileManagerViewArea
      * @action
      * @public
      */
@@ -717,7 +717,7 @@ export default class dxFileManager extends Widget<dxFileManagerOptions> {
 export interface dxFileManagerContextMenu {
     /**
      * @docid
-     * @type Array<dxFileManagerContextMenuItem,docEnums.FileManagerContextMenuItem>
+     * @type Array<dxFileManagerContextMenuItem,Enums.FileManagerContextMenuItem>
      * @default [ "create", "upload", "rename", "move", "copy", "delete", "refresh", "download" ]
      * @public
      */
@@ -767,14 +767,14 @@ export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
 export interface dxFileManagerToolbar {
     /**
      * @docid
-     * @type Array<dxFileManagerToolbarItem,docEnums.FileManagerToolbarItem>
+     * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
      * @default [ "download", "separator", "move", "copy", "rename", "separator", "delete", "clearSelection", { name: "separator", location: "after" }, "refresh" ]
      * @public
      */
     fileSelectionItems?: Array<ToolbarItem | FileManagerToolbarItem>;
     /**
      * @docid
-     * @type Array<dxFileManagerToolbarItem,docEnums.FileManagerToolbarItem>
+     * @type Array<dxFileManagerToolbarItem,Enums.FileManagerToolbarItem>
      * @default [ "showNavPane", "create", "upload", "switchView", { name: "separator", location: "after" }, "refresh" ]
      * @public
      */
@@ -844,7 +844,7 @@ export interface dxFileManagerDetailsColumn {
      * @acceptValues undefined
      * @public
      */
-    alignment?: HorizontalAlignment | undefined;
+    alignment?: HorizontalAlignment;
     /**
      * @docid
      * @default undefined
@@ -883,7 +883,7 @@ export interface dxFileManagerDetailsColumn {
     sortIndex?: number;
     /**
      * @docid
-     * @type SortOrder
+     * @type Enums.SortOrder
      * @default undefined
      * @acceptValues undefined
      * @public

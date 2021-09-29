@@ -86,7 +86,7 @@ const FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderField.defaultFilterOperation
-             * @type docEnums.FilterBuilderFieldFilterOperations | string
+             * @type Enums.FilterBuilderFieldFilterOperations | string
              * @hidden
              */
 

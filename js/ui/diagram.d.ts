@@ -119,7 +119,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     contextMenu?: {
       /**
        * @docid
-       * @type Array<dxDiagramCustomCommand>|Array<docEnums.DiagramCommand>
+       * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
       commands?: Array<DiagramCommand >;
@@ -758,9 +758,9 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @type_function_param1_field1 component:dxDiagram
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 operation:docEnums.DiagramModelOperation
+     * @type_function_param1_field4 operation:Enums.DiagramModelOperation
      * @type_function_param1_field5 args:dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs
-     * @type_function_param1_field6 reason:docEnums.DiagramRequestEditOperationReason
+     * @type_function_param1_field6 reason:Enums.DiagramRequestEditOperationReason
      * @type_function_param1_field7 allowed:boolean
      * @action
      * @public
@@ -835,7 +835,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       tabs?: Array<{
         /**
          * @docid
-         * @type Array<dxDiagramCustomCommand>|Array<docEnums.DiagramCommand>
+         * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
          */
         commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
         /**
@@ -844,7 +844,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         groups?: Array<{
           /**
            * @docid
-           * @type Array<dxDiagramCustomCommand>|Array<docEnums.DiagramCommand>
+           * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
            */
           commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
           /**
@@ -902,7 +902,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     mainToolbar?: {
       /**
        * @docid
-       * @type Array<dxDiagramCustomCommand>|Array<docEnums.DiagramCommand>
+       * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
       commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
@@ -920,7 +920,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     historyToolbar?: {
       /**
        * @docid
-       * @type Array<dxDiagramCustomCommand>|Array<docEnums.DiagramCommand>
+       * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
       commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
@@ -938,7 +938,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     viewToolbar?: {
       /**
        * @docid
-       * @type Array<dxDiagramCustomCommand>|Array<docEnums.DiagramCommand>
+       * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
       commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
@@ -1102,7 +1102,7 @@ export default class dxDiagram extends Widget<dxDiagramOptions> {
     /**
      * @docid
      * @publicName exportTo(format, callback)
-     * @param1 format:docEnums.DiagramExportFormat
+     * @param1 format:Enums.DiagramExportFormat
      * @param2 callback:function
      * @public
      */
@@ -1289,7 +1289,7 @@ export interface dxDiagramShape extends Item {
 export interface dxDiagramCustomCommand {
     /**
      * @docid
-     * @type String|docEnums.DiagramCommand
+     * @type String|Enums.DiagramCommand
      * @public
      */
     name?: string;

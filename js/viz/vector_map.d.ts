@@ -598,7 +598,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     panningEnabled?: boolean;
     /**
      * @docid
-     * @type docEnums.VectorMapProjection|VectorMapProjectionConfig|string|object
+     * @type Enums.VectorMapProjection|VectorMapProjectionConfig|string|object
      * @default "mercator"
      * @notUsedInTheme
      * @public

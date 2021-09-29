@@ -3728,11 +3728,11 @@ export interface Export {
    * @deprecated
    * @type_function_param1 options:object
    * @type_function_param1_field1 component:dxDataGrid
-   * @type_function_param1_field2 horizontalAlignment:docEnums.ExcelCellHorizontalAlignment
-   * @type_function_param1_field3 verticalAlignment:docEnums.ExcelCellVerticalAlignment
+   * @type_function_param1_field2 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
+   * @type_function_param1_field3 verticalAlignment:Enums.ExcelCellVerticalAlignment
    * @type_function_param1_field4 wrapTextEnabled:boolean
    * @type_function_param1_field5 backgroundColor:string
-   * @type_function_param1_field6 fillPatternType:docEnums.ExcelCellPatternType
+   * @type_function_param1_field6 fillPatternType:Enums.ExcelCellPatternType
    * @type_function_param1_field7 fillPatternColor:string
    * @type_function_param1_field8 font:ExcelFont
    * @type_function_param1_field9 value:string|number|date
@@ -4469,7 +4469,7 @@ export interface dxDataGridColumn extends ColumnBase {
     autoExpandGroup?: boolean;
     /**
      * @docid dxDataGridColumn.buttons
-     * @type Array<docEnums.GridColumnButtonName,dxDataGridColumnButton>
+     * @type Array<Enums.GridColumnButtonName,dxDataGridColumnButton>
      * @public
      */
     buttons?: Array<GridColumnButtonName | ColumnButton>;

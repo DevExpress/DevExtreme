@@ -1209,7 +1209,7 @@ export interface dxTreeListToolbar {
      * @docid
      * @public
      */
-    items?: (dxTreeListDefaultToolbarItemName | dxTreeListToolbarItem)[];
+    items?: Array<dxTreeListDefaultToolbarItemName | dxTreeListToolbarItem>;
 }
 
 /**
@@ -1224,7 +1224,7 @@ export type Column = dxTreeListColumn;
 export interface dxTreeListColumn extends ColumnBase {
     /**
      * @docid dxTreeListColumn.buttons
-     * @type Array<docEnums.TreeListColumnButtonName,dxTreeListColumnButton>
+     * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
      * @public
      */
     buttons?: Array<TreeListColumnButtonName | ColumnButton>;
