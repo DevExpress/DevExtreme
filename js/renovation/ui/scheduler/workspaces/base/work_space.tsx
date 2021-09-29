@@ -196,13 +196,19 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   groupPanelRef!: RefObject<HTMLDivElement>;
 
   get renderConfig(): ViewRenderConfig {
-    return getViewRenderConfigByType(this.props.type, this.props.intervalCount);
+    return getViewRenderConfigByType(
+      this.props.type,
+      this.props.crossScrollingEnabled,
+      this.props.intervalCount,
+      this.props.groups,
+      this.props.groupOrientation,
+    );
   }
 
   get layout(): JSXTemplate<
   MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
   > {
-    return this.props.crossScrollingEnabled
+    return this.renderConfig.isCreateCrossScrolling
       ? CrossScrollingLayout
       : OrdinaryLayout;
   }
