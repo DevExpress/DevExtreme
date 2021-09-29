@@ -22,7 +22,7 @@ fixture`Form`
               .expect(compareResults.isValid())
               .ok(compareResults.errorMessages());
           }).before(async () => createWidget('dxForm', {
-            width: 500,
+            width: 200,
             rtlEnabled,
             labelMode,
             showOptionalMark,
@@ -32,6 +32,7 @@ fixture`Form`
               item1: 'some value',
             },
             items: [
+              { itemType: 'empty' },
               { dataField: 'item1', isRequired: true },
               { dataField: 'item2', isRequired: true },
               { dataField: 'item3', isRequired: false },
