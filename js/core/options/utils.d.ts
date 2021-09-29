@@ -3,13 +3,12 @@ import {
 } from '../devices';
 
 import {
-    DeepPartial,
-} from '../index';
+    DefaultOptionsRule,
+} from '../options';
 
-export type DefaultOptionsRule<T> = {
-    device?: Device | Device[] | ((device: Device) => boolean);
-    options: DeepPartial<T>;
-};
+export {
+    DefaultOptionsRule,
+} from '../options';
 
 // TODO: Remove after https://trello.com/c/me612NxO/2872-rename-rule-to-defauloptionrule is ready
 export type Rule<T> = DefaultOptionsRule<T>;
