@@ -106,6 +106,7 @@ WorkSpaceProps,
 | 'endDayHour'
 | 'cellDuration'
 | 'groupByDate'
+| 'groups'
 | 'scrolling'
 | 'currentDate'
 | 'intervalCount'
