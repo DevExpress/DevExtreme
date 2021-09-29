@@ -2,6 +2,10 @@ import { isDefined } from '../../../core/utils/type';
 import { calculateRowHeight } from './pdf_utils_v3';
 import { normalizeBoundaryValue } from './normalizeOptions';
 
+function getPageWidth(doc) {
+    // TODO: check future orientation, measure units there
+    return doc.internal.pageSize.getWidth();
+}
 
 function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
     const columnsWidths = dataProvider.getColumnsWidths();
@@ -14,8 +18,7 @@ function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
 
     const normalizedMargin = normalizeBoundaryValue(margin);
 
-    // TODO: check future orientation, measure units there
-    const availablePageWidth = doc.internal.pageSize.getWidth() - (topLeft?.x ?? 0)
+    const availablePageWidth = getPageWidth(doc) - (topLeft?.x ?? 0)
         - normalizedMargin.left - normalizedMargin.right;
 
     const ratio = availablePageWidth >= summaryGridWidth
@@ -127,18 +130,26 @@ function applyBordersConfig(rows) {
     }
 }
 
-function calculateCoordinates(doc, rows, options) {
+function calculateCoordinates(doc, rows, options, rtlEnabled) {
     const topLeft = options?.topLeft;
     const margin = normalizeBoundaryValue(options?.margin);
 
     let y = (topLeft?.y ?? 0) + margin.top;
     rows.forEach(row => {
-        let x = (topLeft?.x ?? 0) + margin.left;
+        let x = rtlEnabled
+            ? getPageWidth(doc) - (topLeft?.x ?? 0) - margin.right
+            : (topLeft?.x ?? 0) + margin.left;
+
         const intend = row.indentLevel * options.indent;
-        row.cells.forEach(cell => {
-            cell.pdfCell._rect.x = x + intend;
-            cell.pdfCell._rect.y = y;
-            x += cell.pdfCell._rect.w;
+        row.cells.forEach(({ pdfCell }) => {
+            if(rtlEnabled) {
+                pdfCell._rect.x = x - intend - pdfCell._rect.w;
+                x -= pdfCell._rect.w;
+            } else {
+                pdfCell._rect.x = x + intend;
+                x += pdfCell._rect.w;
+            }
+            pdfCell._rect.y = y;
         });
         y += row.height;
     });

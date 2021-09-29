@@ -65,7 +65,7 @@ function exportDataGrid(doc, dataGrid, options) {
             updateRowsAndCellsHeights(doc, rowsInfo);
 
             // when we known all sizes we can calculate all coordinates
-            calculateCoordinates(doc, rowsInfo, options); // set/init/update 'pdfCell.top/left'
+            calculateCoordinates(doc, rowsInfo, options, !!dataGrid.option('rtlEnabled')); // set/init/update 'pdfCell.top/left'
 
             // recalculate for grouped rows
             // TODO: applyGroupIndents()
