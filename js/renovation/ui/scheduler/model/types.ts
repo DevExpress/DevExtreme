@@ -1,42 +1,63 @@
-import { GroupOrientation } from '../types';
+import { ResourceProps } from '../props';
+import { AppointmentColorConfigType } from '../resources/utils';
+import { DataAccessorType, GroupOrientation } from '../types';
 import { CellsMetaData, Group } from '../workspaces/types';
 
 export interface AppointmentsConfigType {
   key: number;
-  appointmentRenderingStrategyName: string;
   adaptivityEnabled: boolean;
   rtlEnabled?: boolean;
+  startDayHour: number;
+  viewStartDayHour: number;
+  endDayHour: number;
+  viewEndDayHour: number;
+  currentDate: Date;
+  resources: ResourceProps[];
   maxAppointmentsPerCell: number | 'auto' | 'unlimited';
   isVirtualScrolling: boolean;
-  leftVirtualCellCount: number;
-  topVirtualCellCount: number;
+  intervalCount: number;
+  hoursInterval: number;
+  showAllDayPanel: boolean;
   modelGroups: Group[];
-  groupCount: number; // resource manager
+  appointmentCountPerCell: number;
+  appointmentOffset: number;
+  allowResizing: boolean;
+  allowAllDayResizing: boolean;
   dateTableOffset: number; // 0 always
   groupOrientation: GroupOrientation;
   startViewDate?: Date;
-  endViewDate?: Date;
-  isGroupedByDate: boolean; // TODO isGroupedByDate in viewDataProvider
-  cellWidth: number;
-  cellHeight: number;
-  allDayHeight: number;
-  visibleDayDuration: number; // viewDataProvider.getVisibleDayDuration(...);
   timeZone: string;
   firstDayOfWeek: number;
   viewType: string;
-  cellDuration: number;
+  cellDurationInMinutes: number;
   supportAllDayRow: boolean; // ?
-  dateRange: Date[]; // ? -> viewDataProvider
-  intervalDuration: number; // ?
-  allDayIntervalDuration: number; // ?
   isVerticalGroupOrientation: boolean; // ?
-  DOMMetaData: CellsMetaData;
 }
 
 export interface AppointmentsModelType extends AppointmentsConfigType {
+  appointmentRenderingStrategyName: string;
+  loadedResources: [];
+  dataAccessors: DataAccessorType;
   timeZoneCalculator: unknown;
   appointmentDataProvider: unknown;
   viewDataProvider: unknown;
   positionHelper: unknown;
   resizableStep: number; // positionHelper.getResizableStep()
+  isGroupedAllDayPanel: boolean;
+  rowCount: number;
+  groupCount: number; // resource manager
+  cellWidth: number;
+  cellHeight: number;
+  allDayHeight: number;
+  isGroupedByDate: boolean;
+  endViewDate: Date;
+  visibleDayDuration: number;
+  dateRange: Date[]; // ? -> viewDataProvider
+  intervalDuration: number; // ?
+  allDayIntervalDuration: number; // ?
+  leftVirtualCellCount: number;
+  topVirtualCellCount: number;
+  cellDuration: number;
+  getAppointmentColor: (config: AppointmentColorConfigType) => Promise<string>;
+  DOMMetaData: CellsMetaData;
 }
