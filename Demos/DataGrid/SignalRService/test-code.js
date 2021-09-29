@@ -60,7 +60,16 @@ testUtils.importAnd(() => ['devextreme/ui/data_grid', 'devextreme/data/data_sour
     dataGrid.option('dataSource', dataSource);
 
     // NOTE: Ensure, that 'React' can't restore `DataSourse`.
-    dataGrid.option = function () {};
+    const option = dataGrid.option;
+    dataGrid.option = function (name) {
+      if (arguments.length === 0) {
+        return option.call(this);
+      }
+      if (arguments.length === 1 && typeof name === 'string') {
+        return option.call(this, name);
+      }
+      return undefined;
+    };
     resolve();
   }, 100);
 }));
