@@ -213,7 +213,6 @@
             worker.name = WORKER_NAME_PREFIX + i;
             worker.location = urlInfo.Url + "?" + $.param(additionalParams);
             busyCount++;
-
         };
 
         var workers = [ ];
@@ -379,7 +378,7 @@
         };
 
         window.RUNNER_ON_TEST_DONE = function(worker, qunitData) {
-            
+
             var i = indexFromWorkerName(worker),
                 testSuite = suitesInProgress[i],
                 testCases,
