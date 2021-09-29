@@ -14,31 +14,22 @@
       <DxFieldChooser :enabled="false"/>
       <DxScrolling mode="virtual"/>
     </DxPivotGrid>
-    <DxCheckBox
-      :value="true"
-      :on-value-changed="changeAllowCrossGroupCalculation"
-      text="Allow cross-group running totals accumulation"
-    />
   </div>
 </template>
 <script>
 import DxPivotGrid, {
-  DxExport,
   DxFieldChooser,
   DxScrolling,
 } from 'devextreme-vue/pivot-grid';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-import DxCheckBox from 'devextreme-vue/check-box';
 
 import sales from './data.js';
 
 export default {
   components: {
     DxPivotGrid,
-    DxExport,
     DxFieldChooser,
     DxScrolling,
-    DxCheckBox,
   },
   data() {
     return {
@@ -64,6 +55,10 @@ export default {
           expanded: true,
         }, {
           groupName: 'date',
+          groupInterval: 'quarter',
+          expanded: true,
+        }, {
+          groupName: 'date',
           groupInterval: 'month',
           visible: false,
         }, {
@@ -86,12 +81,6 @@ export default {
         store: sales,
       }),
     };
-  },
-  methods: {
-    changeAllowCrossGroupCalculation(e) {
-      this.dataSource.field(6, { allowCrossGroupCalculation: e.value });
-      this.dataSource.load();
-    },
   },
 };
 </script>

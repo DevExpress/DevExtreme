@@ -4,26 +4,11 @@ import PivotGrid, {
   FieldChooser,
   Scrolling,
 } from 'devextreme-react/pivot-grid';
-import CheckBox from 'devextreme-react/check-box';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import sales from './data.js';
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.changeAllowCrossGroupCalculation = this.changeAllowCrossGroupCalculation.bind(this);
-    this.state = {
-      allowCrossGroupCalculation: true,
-    };
-  }
-
-  changeAllowCrossGroupCalculation(e) {
-    this.setState({ allowCrossGroupCalculation: e.value });
-    dataSource.field(6, { allowCrossGroupCalculation: this.state.allowCrossGroupCalculation });
-    dataSource.load();
-  }
-
   render() {
     return (
       <React.Fragment>
@@ -40,11 +25,6 @@ class App extends React.Component {
           <FieldChooser enabled={false} />
           <Scrolling mode="virtual" />
         </PivotGrid>
-        <CheckBox
-          value={this.state.allowCrossGroupCalculation}
-          text="Allow cross-group running totals accumulation"
-          onValueChanged={this.changeAllowCrossGroupCalculation}
-        />
       </React.Fragment>
     );
   }
@@ -68,6 +48,10 @@ const dataSource = new PivotGridDataSource({
   }, {
     groupName: 'date',
     groupInterval: 'year',
+    expanded: true,
+  }, {
+    groupName: 'date',
+    groupInterval: 'quarter',
     expanded: true,
   }, {
     groupName: 'date',

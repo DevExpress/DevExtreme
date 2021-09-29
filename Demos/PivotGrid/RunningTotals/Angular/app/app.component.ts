@@ -1,8 +1,8 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxPivotGridModule, DxCheckBoxModule } from 'devextreme-angular';
-import { Service, Sale } from './app.service';
+import { DxPivotGridModule } from 'devextreme-angular';
+import { Service } from './app.service';
 
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 
@@ -40,6 +40,10 @@ export class AppComponent {
                 groupInterval: "year",
                 expanded: true
             }, {
+                groupName: 'date',
+                groupInterval: 'quarter',
+                expanded: true,
+            }, {
                 groupName: "date",
                 groupInterval: "month",
                 visible: false
@@ -63,18 +67,12 @@ export class AppComponent {
             store: service.getSales()
         });
     }
-
-    checkBoxChanged(e) {
-        this.pivotGridDataSource.field(6, { allowCrossGroupCalculation: e.value });
-        this.pivotGridDataSource.load();
-    }
 }
 
 @NgModule({
     imports: [
         BrowserModule,
         DxPivotGridModule,
-        DxCheckBoxModule
     ],
     declarations: [AppComponent],
     bootstrap: [AppComponent]

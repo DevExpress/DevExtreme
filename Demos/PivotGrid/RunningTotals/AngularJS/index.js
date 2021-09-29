@@ -33,6 +33,10 @@ DemoApp.controller('DemoController', ($scope) => {
         expanded: true,
       }, {
         groupName: 'date',
+        groupInterval: 'quarter',
+        expanded: true,
+      }, {
+        groupName: 'date',
         groupInterval: 'month',
         visible: false,
       }, {
@@ -53,18 +57,6 @@ DemoApp.controller('DemoController', ($scope) => {
         allowCrossGroupCalculation: true,
       }],
       store: sales,
-    },
-  };
-
-  $scope.checkBoxOptions = {
-    value: true,
-    text: 'Allow cross-group running totals accumulation',
-    onValueChanged(e) {
-      const pivotGrid = $('#sales').dxPivotGrid('instance');
-      const pivotGridDataSource = pivotGrid.getDataSource();
-
-      pivotGridDataSource.field(6, { allowCrossGroupCalculation: e.value });
-      pivotGridDataSource.load();
     },
   };
 });

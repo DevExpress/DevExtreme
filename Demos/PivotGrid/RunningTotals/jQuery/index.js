@@ -1,5 +1,5 @@
 $(() => {
-  const pivotGrid = $('#sales').dxPivotGrid({
+  $('#sales').dxPivotGrid({
     allowSortingBySummary: true,
     allowSorting: true,
     allowFiltering: true,
@@ -31,6 +31,10 @@ $(() => {
         expanded: true,
       }, {
         groupName: 'date',
+        groupInterval: 'quarter',
+        expanded: true,
+      }, {
+        groupName: 'date',
         groupInterval: 'month',
         visible: false,
       }, {
@@ -51,17 +55,6 @@ $(() => {
         allowCrossGroupCalculation: true,
       }],
       store: sales,
-    },
-  }).dxPivotGrid('instance');
-
-  $('#running-total').dxCheckBox({
-    value: true,
-    text: 'Allow cross-group running totals accumulation',
-    onValueChanged(e) {
-      const pivotGridDataSource = pivotGrid.getDataSource();
-
-      pivotGridDataSource.field(6, { allowCrossGroupCalculation: e.value });
-      pivotGridDataSource.load();
     },
   });
 });
