@@ -507,7 +507,7 @@ describe('OrdinaryLayout', () => {
       });
 
       describe('onSideBarScroll', () => {
-        it('should call scrollTo of dateTabler scrollables', () => {
+        it('should call scrollTo of dateTable scrollable', () => {
           const layout = new CrossScrollingLayout({} as any);
 
           const dateTableScrollTo = jest.fn();
