@@ -74,7 +74,7 @@ import {
     getCellDuration
 } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
-import Semaphore from '../semaphore';
+import { Semaphore } from '../../../renovation/ui/scheduler/semaphore';
 import {
     getCellWidth,
     getCellHeight,
