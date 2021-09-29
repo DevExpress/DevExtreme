@@ -1,9 +1,26 @@
 import { isNumeric } from '../../../core/utils/type';
 
+function normalizeBoundaryValue(value) {
+    if(isNumeric(value)) {
+        return {
+            top: value,
+            right: value,
+            bottom: value,
+            left: value
+        };
+    }
+    return {
+        top: value?.top ?? 0,
+        right: value?.right ?? 0,
+        bottom: value?.bottom ?? 0,
+        left: value?.left ?? 0,
+    };
+}
+
 function normalizeOptions(rows) {
     rows.forEach(row => {
         row.cells.forEach(({ pdfCell }) => {
-            normalizePadding(pdfCell);
+            pdfCell.padding = normalizeBoundaryValue(pdfCell.padding);
             // TODO: normalizeTextColor()
             // TODO: normalizeBackgroundColor()
             // TODO: ...
@@ -11,21 +28,4 @@ function normalizeOptions(rows) {
     });
 }
 
-function normalizePadding(pdfCell) {
-    if(isNumeric(pdfCell.padding)) {
-        const padding = pdfCell.padding;
-        pdfCell.padding = {
-            top: padding,
-            right: padding,
-            bottom: padding,
-            left: padding
-        };
-    } else {
-        pdfCell.padding.top = pdfCell.padding.top ?? 0;
-        pdfCell.padding.right = pdfCell.padding.right ?? 0;
-        pdfCell.padding.bottom = pdfCell.padding.bottom ?? 0;
-        pdfCell.padding.left = pdfCell.padding.left ?? 0;
-    }
-}
-
-export { normalizeOptions };
+export { normalizeOptions, normalizeBoundaryValue };

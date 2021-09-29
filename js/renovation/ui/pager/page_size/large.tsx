@@ -30,6 +30,7 @@ export class PageSizeLargeProps {
   @OneWay() pageSizes!: FullPageSize[];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 type PageSizeLargePropsType = Pick<InternalPagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeLargeProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })

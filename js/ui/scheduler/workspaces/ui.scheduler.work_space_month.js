@@ -9,7 +9,7 @@ import {
     getViewStartByOptions,
     getCellText,
 } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/month';
-import { calculateDayDuration, formatWeekday } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { formatWeekday } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { VIEWS } from '../constants';
 
 const MONTH_CLASS = 'dx-scheduler-work-space-month';
@@ -94,10 +94,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
     isIndicationAvailable() {
         return false;
-    }
-
-    getCellDuration() {
-        return calculateDayDuration(this.option('startDayHour'), this.option('endDayHour')) * 3600000;
     }
 
     getIntervalDuration() {
