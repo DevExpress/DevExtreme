@@ -78,8 +78,12 @@ export default {
     },
 
     onTabDrop(e) {
-      e.fromData.splice(e.fromIndex, 1);
-      e.toData.splice(e.toIndex, 0, e.itemData);
+      const newEmployees = [...this.employees];
+
+      newEmployees.splice(e.fromIndex, 1);
+      newEmployees.splice(e.toIndex, 0, e.itemData);
+
+      this.employees = newEmployees;
     },
 
     addButtonHandler() {
