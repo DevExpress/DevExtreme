@@ -97,7 +97,7 @@ const prepareInstances = (
 
   return {
     key,
-    timeZoneCalculator: createTimeZoneCalculator('Europe/Moscow'),
+    timeZoneCalculator: createTimeZoneCalculator(''),
     appointmentDataProvider: getAppointmentDataProvider(key),
     viewDataProvider,
     schedulerProps,

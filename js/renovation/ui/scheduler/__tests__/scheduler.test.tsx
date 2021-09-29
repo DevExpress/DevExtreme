@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { SchedulerProps } from '../props';
+import { SchedulerProps, ScrollingProps } from '../props';
 import { Scheduler, viewFunction as ViewFunction } from '../scheduler';
 import { Widget, WidgetProps } from '../../common/widget';
 import * as viewsModel from '../model/views';
@@ -530,26 +530,36 @@ describe('Scheduler', () => {
         [
           {
             scrollingMode: 'standard',
-            viewScrollingMode: 'virtual',
+            viewScrolling: { mode: 'virtual' },
             expected: true,
           },
           {
             scrollingMode: 'virtual',
-            viewScrollingMode: 'virtual',
+            viewScrolling: { mode: 'virtual' },
             expected: true,
           },
           {
             scrollingMode: 'standard',
-            viewScrollingMode: 'standard',
+            viewScrolling: { mode: 'standard' },
             expected: false,
           },
           {
             scrollingMode: 'virtual',
-            viewScrollingMode: 'standard',
+            viewScrolling: { mode: 'standard' },
             expected: true,
           },
-        ].forEach(({ scrollingMode, viewScrollingMode, expected }) => {
-          it(`should has correct value if scheduler scrolling.mode is ${scrollingMode} and view scrolling.mode is ${viewScrollingMode}`, () => {
+          {
+            scrollingMode: 'virtual',
+            viewScrolling: undefined,
+            expected: true,
+          },
+          {
+            scrollingMode: 'standard',
+            viewScrolling: undefined,
+            expected: false,
+          },
+        ].forEach(({ scrollingMode, viewScrolling, expected }) => {
+          it(`should has correct value if scheduler scrolling.mode is ${scrollingMode} and view scrolling.mode is ${viewScrolling?.mode}`, () => {
             const scheduler = new Scheduler({
               ...new SchedulerProps(),
               scrolling: {
@@ -557,9 +567,7 @@ describe('Scheduler', () => {
               },
               views: [{
                 type: 'day',
-                scrolling: {
-                  mode: viewScrollingMode as any,
-                },
+                scrolling: viewScrolling as ScrollingProps,
               }],
             });
 
@@ -577,8 +585,7 @@ describe('Scheduler', () => {
           });
 
           expect(scheduler.timeZoneCalculator.getOffsets(new Date(2021, 8, 19), 'Europe/Moscow'))
-            .toEqual({
-              client: 3,
+            .toMatchObject({
               common: -7,
               appointment: 3,
             });
