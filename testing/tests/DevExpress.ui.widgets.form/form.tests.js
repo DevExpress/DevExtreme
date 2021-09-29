@@ -456,6 +456,27 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
     });
 });
 
+QUnit.test('From renders editors with the right labelMark', function(assert) {
+    [false, true].forEach(showOptionalMark => {
+        const form = $('#form').dxForm({
+            formData: { name: 'Name' },
+            labelMode: 'static',
+            showOptionalMark
+        }).dxForm('instance');
+
+        const renderedWidget = $('#form').find('.dx-field-item .dx-textbox').dxTextBox('instance');
+        const widgetLabelMark = renderedWidget.option('labelMark');
+        const widgetLabelRenderedMark = $('#form').find('.dx-field-item .dx-textbox .dx-label > span').attr('data-mark');
+
+        const expectedMarkValue = showOptionalMark ? String.fromCharCode(160) + 'optional' : '';
+
+        assert.equal(widgetLabelMark, expectedMarkValue, `showOptionalMark=${showOptionalMark}, option value`);
+        assert.equal(widgetLabelRenderedMark, expectedMarkValue, `showOptionalMark=${showOptionalMark}, data-mark attr`);
+
+        form.dispose();
+    });
+});
+
 QUnit.test('field1.required -> form.validate() -> form.option("onFieldDataChanged", "newHandler") -> check form is not re-rendered (T1014577)', function(assert) {
     const checkEditorIsInvalid = (form) => form.$element().find('.dx-textbox').hasClass(INVALID_CLASS);
     const form = $('#form').dxForm({

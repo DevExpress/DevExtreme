@@ -77,8 +77,17 @@ export function convertToRenderFieldItemOptions({
             editorStylingMode,
             labelMode: isDefaultLabelMode ? 'hidden' : labelMode,
             labelText: isDefaultLabelMode ? undefined : labelOptions.text,
+            labelMark: getLabelMarkText(labelOptions.markOptions),
         })
     };
+}
+
+export function getLabelMarkText({ isRequiredMark, requiredMark, isOptionalMark, optionalMark }) {
+    if(!isRequiredMark && !isOptionalMark) {
+        return '';
+    }
+
+    return String.fromCharCode(160) + (isRequiredMark ? requiredMark : optionalMark);
 }
 
 export function convertToLabelMarkOptions({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }, isRequired) {
@@ -101,6 +110,7 @@ function _convertToEditorOptions({
     editorStylingMode,
     labelMode,
     labelText,
+    labelMark,
 }) {
     const editorOptionsWithValue = {};
     if(editorValue !== undefined || canAssignUndefinedValueToEditor) {
@@ -118,6 +128,7 @@ function _convertToEditorOptions({
             stylingMode: editorStylingMode,
             label: labelText,
             labelMode: labelMode,
+            labelMark,
         },
     );
 
