@@ -217,7 +217,6 @@ namespace Runner.Controllers
         {
             var q = Request.Query;
 
-            m.IEMode = IEMode();
             m.IsContinuousIntegration = _runFlags.IsContinuousIntegration;
             m.IsIntranet = _runFlags.IsIntranet;
             m.JQueryVersion = JQueryVersion();
@@ -240,14 +239,6 @@ namespace Runner.Controllers
         bool HasDeviceModeFlag()
         {
             return Request.Query.ContainsKey("deviceMode");
-        }
-
-        string IEMode()
-        {
-            var requestValue = Request.Query["ieMode"];
-            if (!String.IsNullOrEmpty(requestValue))
-                return requestValue;
-            return "edge";
         }
 
         string ResultXmlPath()
