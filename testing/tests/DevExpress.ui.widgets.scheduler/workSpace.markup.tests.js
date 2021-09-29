@@ -188,22 +188,6 @@ const checkRowsAndCells = function($element, assert, interval, start, end, group
             QUnit.test('Scheduler workspace day should have right groupedStrategy by default', function(assert) {
                 assert.ok(this.instance._groupedStrategy instanceof SchedulerWorkSpaceHorizontalStrategy, 'Grouped strategy is right');
             });
-
-            QUnit.test('Work space should have \'grouped\' class & group row count attr if there are some groups', function(assert) {
-                assert.ok(!this.instance.$element().hasClass('dx-scheduler-work-space-grouped'), '\'grouped\' class is not applied');
-
-                this.instance.option('groups', [{
-                    name: 'one',
-                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
-                }]);
-
-                assert.ok(this.instance.$element().hasClass('dx-scheduler-work-space-grouped'), '\'grouped\' class is applied');
-                assert.ok(this.instance.$element().hasClass('dx-scheduler-group-row-count-one'), 'correct class');
-
-                this.instance.option('groups', []);
-                assert.ok(!this.instance.$element().hasClass('dx-scheduler-work-space-grouped'), '\'grouped\' class is not applied');
-                assert.notOk(this.instance.$element().hasClass('dx-scheduler-group-row-count-one'), 'Group count class has been removed');
-            });
         }
 
         QUnit.test('Scheduler workspace should be initialized', function(assert) {
