@@ -751,7 +751,7 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
       scrolling: {
         mode: scrollingMode,
         useNative: false,
-        minGap: 10,
+        prerenderedRowCount: 10,
       },
     });
   });

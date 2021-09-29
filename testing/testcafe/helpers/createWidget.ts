@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 
-type WidgetName =
+export type WidgetName =
 'dxGallery' |
 'dxTabPanel' |
 'dxForm' |
@@ -16,7 +16,12 @@ type WidgetName =
 'dxChart' |
 'dxPopup' |
 'dxSelectBox' |
-'dxButton';
+'dxButton' |
+'dxTextBox' |
+'dxTextArea' |
+'dxTagBox' |
+'dxDateBox' |
+'dxNumberBox';
 
 export default async function createWidget(
   widgetName: WidgetName,

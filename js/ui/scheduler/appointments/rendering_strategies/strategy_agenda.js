@@ -6,8 +6,8 @@ import { ExpressionUtils } from '../../expressionUtils';
 import { groupAppointmentsByResources } from '../../resources/utils';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
+    get instance() { return this.options.instance; }
     get agendaDuration() { return this.options.agendaDuration; }
-    get currentDate() { return this.options.currentDate; }
 
     getAppointmentMinSize() {
     }

@@ -381,53 +381,28 @@ describe('Action handlers', () => {
       jest.clearAllMocks();
     });
 
-    each([undefined, jest.fn()]).describe('handler: %o', (actionHandler) => {
-      // eslint-disable-next-line jest/no-commented-out-tests
-      // it('onEnd(direction)', () => {
-      //   const viewModel = new AnimatedScrollbar({
-      //     direction,
-      //     onEnd: actionHandler,
-      //   });
+    each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+      each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
+        each([() => true, () => false]).describe('inRange: %o', (inRangeFn) => {
+          it('releaseHandler()', () => {
+            (inRange as Mock).mockImplementation(inRangeFn);
 
-      //   viewModel.forceAnimationToBottomBound = true;
-
-      //   viewModel.onEnd(direction);
-
-      //   expect(viewModel.forceAnimationToBottomBound).toEqual(false);
-      //   if (actionHandler) {
-      //     expect(actionHandler).toHaveBeenCalledTimes(1);
-      //     expect(actionHandler).toHaveBeenCalledWith(direction);
-      //   }
-      // });
-
-      each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
-        each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
-          each([() => true, () => false]).describe('inRange: %o', (inRangeFn) => {
-            it('releaseHandler()', () => {
-              (inRange as Mock).mockImplementation(inRangeFn);
-
-              const viewModel = new AnimatedScrollbar({
-                direction,
-                forceGeneratePockets,
-                reachBottomEnabled,
-                onRelease: actionHandler,
-              });
-
-              viewModel.forceAnimationToBottomBound = false;
-
-              viewModel.releaseHandler();
-
-              expect(viewModel.forceAnimationToBottomBound)
-                .toEqual(inRangeFn() && forceGeneratePockets && reachBottomEnabled);
-
-              if (actionHandler) {
-                expect(actionHandler).toHaveBeenCalledTimes(1);
-              }
-
-              expect(viewModel.wasRelease).toEqual(true);
-              expect(viewModel.pendingRefreshing).toEqual(false);
-              expect(viewModel.pendingLoading).toEqual(false);
+            const viewModel = new AnimatedScrollbar({
+              direction,
+              forceGeneratePockets,
+              reachBottomEnabled,
             });
+
+            viewModel.forceAnimationToBottomBound = false;
+
+            viewModel.releaseHandler();
+
+            expect(viewModel.forceAnimationToBottomBound)
+              .toEqual(inRangeFn() && forceGeneratePockets && reachBottomEnabled);
+
+            expect(viewModel.wasRelease).toEqual(true);
+            expect(viewModel.pendingRefreshing).toEqual(false);
+            expect(viewModel.pendingLoading).toEqual(false);
           });
         });
       });

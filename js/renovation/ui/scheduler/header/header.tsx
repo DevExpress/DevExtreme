@@ -89,6 +89,7 @@ export class SchedulerToolbarBaseProps {
 }
 
 export type SchedulerToolbarProps = SchedulerToolbarBaseProps
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<SchedulerProps, 'currentView' | 'min' | 'max' | 'useDropDownViewSwitcher'>;
 
 @Component({ view: viewFunction })
