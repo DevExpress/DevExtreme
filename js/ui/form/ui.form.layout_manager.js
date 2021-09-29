@@ -63,6 +63,7 @@ const LayoutManager = Widget.inherit({
             screenByWidth: null,
             showOptionalMark: false,
             requiredMark: '*',
+            labelMode: 'default',
             optionalMark: messageLocalization.format('dxForm-optionalMark'),
             requiredMessage: messageLocalization.getFormatter('dxForm-requiredMessage')
         });
@@ -568,6 +569,7 @@ const LayoutManager = Widget.inherit({
             template: item.template ? this._getTemplate(item.template) : null,
             itemId: this.option('form') && this.option('form').getItemID(name),
             managerMarkOptions: this._getMarkOptions(),
+            labelMode: this.option('labelMode'),
         }));
 
         if(widgetInstance && item.dataField) {

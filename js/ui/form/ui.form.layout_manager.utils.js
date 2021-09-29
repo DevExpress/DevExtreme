@@ -28,7 +28,8 @@ export function convertToRenderFieldItemOptions({
     showColonAfterLabel,
     managerLabelLocation,
     itemId,
-    managerMarkOptions
+    managerMarkOptions,
+    labelMode
 }) {
     const isRequired = isDefined(item.isRequired) ? item.isRequired : !!_hasRequiredRuleInSet(item.validationRules);
     const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
@@ -42,7 +43,7 @@ export function convertToRenderFieldItemOptions({
     });
 
 
-    const needRenderLabel = labelOptions.visible && labelOptions.text;
+    const needRenderLabel = labelOptions.visible && labelOptions.text && labelMode === 'default';
     const { location: labelLocation, labelID } = labelOptions;
     const labelNeedBaselineAlign =
         labelLocation !== 'top'

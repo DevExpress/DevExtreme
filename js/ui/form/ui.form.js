@@ -106,7 +106,8 @@ const Form = Widget.inherit({
             items: undefined,
             scrollingEnabled: false,
             validationGroup: undefined,
-            stylingMode: config().editorStylingMode
+            stylingMode: config().editorStylingMode,
+            labelMode: 'default'
         });
     },
 
@@ -558,7 +559,7 @@ const Form = Widget.inherit({
                 colCount: item.colCount,
                 colCountByScreen: item.colCountByScreen,
                 alignItemLabels: item.alignItemLabels,
-                cssItemClass: item.cssItemClass
+                cssItemClass: item.cssItemClass,
             });
 
             this._itemsRunTimeInfo && this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(item.guid, { layoutManager });
@@ -613,6 +614,7 @@ const Form = Widget.inherit({
             minColWidth: this.option('minColWidth'),
             showColonAfterLabel: this.option('showColonAfterLabel'),
             onEditorEnterKey: this.option('onEditorEnterKey'),
+            labelMode: this.option('labelMode'),
             onFieldDataChanged: args => {
                 if(!this._isDataUpdating) {
                     this._triggerOnFieldDataChanged(args);
