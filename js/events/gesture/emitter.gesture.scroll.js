@@ -30,8 +30,11 @@ const Locker = Class.inherit((function() {
 
             this._locked = false;
 
-            const that = this;
-            this._proxiedScroll = function(e) { that._scroll(e); };
+            this._proxiedScroll = (e) => {
+                if(!this._disposed) {
+                    this._scroll(e);
+                }
+            };
             eventsEngine.on(this._element, NAMESPACED_SCROLL_EVENT, this._proxiedScroll);
         },
 
@@ -44,6 +47,7 @@ const Locker = Class.inherit((function() {
         },
 
         dispose: function() {
+            this._disposed = true;
             eventsEngine.off(this._element, NAMESPACED_SCROLL_EVENT, this._proxiedScroll);
         }
 

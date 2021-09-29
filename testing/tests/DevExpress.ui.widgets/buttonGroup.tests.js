@@ -1,3 +1,4 @@
+import { getWidth, getHeight, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import 'ui/button';
 import 'ui/button_group';
@@ -117,7 +118,7 @@ QUnit.module('option changed', {
         const buttonsSelector = `.${BUTTON_CLASS}`;
         const buttons = $(buttonsSelector);
 
-        assert.equal(this.$buttonGroup.width(), 500, 'button group width');
+        assert.equal(getWidth(this.$buttonGroup), 500, 'button group width');
         assert.ok(buttons.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), 'first item when button group has width');
         assert.ok(buttons.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), 'second item when button group has width');
     });
@@ -129,15 +130,15 @@ QUnit.module('option changed', {
 
         const buttons = $buttonGroup.find(`.${BUTTON_GROUP_ITEM_CLASS}`);
 
-        assert.equal($buttonGroup.height(), 500, 'button group height is right');
-        assert.equal(buttons.eq(0).outerHeight(), 500, 'button group item height is right');
+        assert.equal(getHeight($buttonGroup), 500, 'button group height is right');
+        assert.equal(getOuterHeight(buttons.eq(0)), 500, 'button group item height is right');
 
         this.buttonGroup.option('height', 700);
-        assert.equal($buttonGroup.height(), 700, 'button group height is right');
-        assert.equal(buttons.eq(0).outerHeight(), 700, 'button group item height is right');
+        assert.equal(getHeight($buttonGroup), 700, 'button group height is right');
+        assert.equal(getOuterHeight(buttons.eq(0)), 700, 'button group item height is right');
 
         this.buttonGroup.option('height', '');
-        assert.notEqual($buttonGroup.height(), 700, 'button group height changed to default');
+        assert.notEqual(getHeight($buttonGroup), 700, 'button group height changed to default');
     });
 
     QUnit.test('change the width option when item has template', function(assert) {
@@ -149,7 +150,7 @@ QUnit.module('option changed', {
         buttonGroup.option('width', 500);
 
         const $items = $(`.${BUTTON_GROUP_ITEM_CLASS}`);
-        assert.equal(buttonGroup.$element().width(), 500, 'button group width');
+        assert.equal(getWidth(buttonGroup.$element()), 500, 'button group width');
         assert.ok($items.eq(0).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), 'first item when button group has width');
         assert.ok($items.eq(1).hasClass(BUTTON_GROUP_ITEM_HAS_WIDTH), 'second item when button group has width');
     });

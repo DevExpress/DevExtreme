@@ -12,14 +12,13 @@ interface PromiseExtension<T> {
 }
 
 /** @namespace DevExpress.data */
-export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOptions<TKey, TValue> {
+export interface ODataStoreOptions
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> extends StoreOptions<TValue, TKeyExpr, TKey> {
     /**
      * @docid
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 url:string
-     * @type_function_param1_field2 async:boolean
-     * @type_function_param1_field3 method:string
-     * @type_function_param1_field4 timeout:number
      * @type_function_param1_field5 params:object
      * @type_function_param1_field6 payload:object
      * @type_function_param1_field7 headers:object
@@ -34,7 +33,6 @@ export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOption
     /**
      * @docid
      * @type_function_param1 e:Error
-     * @type_function_param1_field1 httpStatus:number
      * @type_function_param1_field2 errorDetails:object
      * @type_function_param1_field3 requestOptions:object
      * @public
@@ -93,20 +91,19 @@ export interface ODataStoreOptions<TKey = any, TValue = any> extends StoreOption
 /**
  * @docid
  * @inherits Store
- * @module data/odata/store
- * @export default
  * @public
  */
-export default class ODataStore<TKey = any, TValue = any> extends Store<TKey, TValue> {
-    constructor(options?: ODataStoreOptions<TKey, TValue>)
+export default class ODataStore
+<TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> extends Store<TValue, TKeyExpr, TKey> {
+    constructor(options?: ODataStoreOptions<TValue, TKeyExpr, TKey>)
     byKey(key: TKey): DxPromise<TValue>;
     /**
      * @docid
      * @publicName byKey(key, extraOptions)
      * @param1 key:object|string|number
-     * @param2 extraOptions:object
-     * @param2_field1 expand:string|Array<string>
-     * @param2_field2 select:string|Array<string>
      * @return Promise<any>
      * @public
      */
@@ -114,7 +111,6 @@ export default class ODataStore<TKey = any, TValue = any> extends Store<TKey, TV
     /**
      * @docid
      * @publicName createQuery(loadOptions)
-     * @param1 loadOptions:object
      * @return object
      * @public
      */

@@ -3,6 +3,7 @@ import {
   Event,
   JSXTemplate,
   OneWay,
+  Slot,
   Template,
 } from '@devextreme-generator/declarations';
 import type { dxSchedulerScrolling } from '../../../../ui/scheduler';
@@ -18,7 +19,7 @@ import {
 import { BaseWidgetProps } from '../../common/base_props';
 import { HeaderPanelLayoutProps } from './base/header_panel/layout';
 import { DateTableLayoutProps } from './base/date_table/layout';
-import { TimePaneLayoutProps } from './base/time_panel/layout';
+import { TimePanelLayoutProps } from './base/time_panel/layout';
 import { GetDateForHeaderText } from '../view_model/to_test/views/types';
 import { ScrollableDirection } from '../../scroll_view/common/types';
 
@@ -91,6 +92,10 @@ export class WorkSpaceProps extends BaseWidgetProps {
   @OneWay() type: ViewType = 'week';
 
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
+
+  @Slot() appointments?: JSX.Element;
+
+  @Slot() allDayAppointments?: JSX.Element;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
@@ -101,6 +106,7 @@ WorkSpaceProps,
 | 'endDayHour'
 | 'cellDuration'
 | 'groupByDate'
+| 'groups'
 | 'scrolling'
 | 'currentDate'
 | 'intervalCount'
@@ -120,7 +126,6 @@ WorkSpaceProps,
 | 'allowMultipleCellSelection'
 | 'allDayPanelExpanded'
 | 'hoursInterval'
-| 'groups'
 | 'selectedCellData'
 | 'type'
 >;
@@ -128,8 +133,8 @@ WorkSpaceProps,
 export interface ViewRenderConfig {
   headerPanelTemplate: JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'>;
   dateTableTemplate: JSXTemplate<DateTableLayoutProps>;
-  timePanelTemplate?: JSXTemplate<TimePaneLayoutProps>;
-  className?: string;
+  timePanelTemplate?: JSXTemplate<TimePanelLayoutProps>;
+  className: string;
   isAllDayPanelSupported: boolean;
   isProvideVirtualCellsWidth: boolean;
   isRenderTimePanel: boolean;

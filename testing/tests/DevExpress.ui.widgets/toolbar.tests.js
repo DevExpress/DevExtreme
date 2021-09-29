@@ -10,8 +10,8 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import eventsEngine from 'events/core/events_engine';
 import { deferUpdate } from 'core/utils/common';
+import { getHeight } from 'core/utils/size';
 import domAdapter from 'core/dom_adapter';
-import browser from 'core/utils/browser';
 import devices from 'core/devices';
 
 import 'ui/button_group';
@@ -1759,11 +1759,6 @@ QUnit.module('adaptivity', {
     });
 
     QUnit.test('dropdown menu should have height less then document height on android (T1010948)', function(assert) {
-        if(browser.msie) {
-            assert.ok('not relevant browser');
-            return;
-        }
-
         devices.current({ platform: 'android' });
         const toolbar = $('#widget').dxToolbar({
             items: Array(300).fill({ locateInMenu: 'always', text: 'item' })
@@ -1777,7 +1772,7 @@ QUnit.module('adaptivity', {
             .dxDropDownMenu('instance')._popup._$content;
 
         const document = domAdapter.getDocumentElement();
-        assert.equal($popupContent.height() < document.clientHeight, true, `popup height must be less then document height (${$popupContent.height()} < ${document.clientHeight})`);
+        assert.equal(getHeight($popupContent) < document.clientHeight, true, `popup height must be less then document height (${getHeight($popupContent)} < ${document.clientHeight})`);
         devices.current(null);
     });
 });

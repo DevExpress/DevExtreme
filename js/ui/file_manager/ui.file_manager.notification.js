@@ -1,3 +1,4 @@
+import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
@@ -163,12 +164,11 @@ export default class FileManagerNotificationControl extends Widget {
         if(!hasWindow()) {
             return false;
         }
-        return $(window).width() <= ADAPTIVE_STATE_SCREEN_WIDTH;
+        return getWidth(window) <= ADAPTIVE_STATE_SCREEN_WIDTH;
     }
 
     _dimensionChanged(dimension) {
-        const notificationManager = this._getNotificationManager();
-        if(!(dimension && dimension === 'height') && notificationManager.handleDimensionChanged()) {
+        if(!(dimension && dimension === 'height')) {
             this._checkAdaptiveState();
         }
     }
@@ -176,9 +176,12 @@ export default class FileManagerNotificationControl extends Widget {
     _checkAdaptiveState() {
         const oldState = this._isInAdaptiveState;
         this._isInAdaptiveState = this._isSmallScreen();
-        if(this._progressDrawer && oldState !== this._isInAdaptiveState) {
-            const options = this._getProgressDrawerAdaptiveOptions();
-            this._progressDrawer.option(options);
+        if(oldState !== this._isInAdaptiveState && this._progressDrawer) {
+            const notificationManager = this._getNotificationManager();
+            if(notificationManager.handleDimensionChanged()) {
+                const options = this._getProgressDrawerAdaptiveOptions();
+                this._progressDrawer.option(options);
+            }
         }
     }
 

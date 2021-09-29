@@ -94,6 +94,8 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 
     @include dx-icon(check);
     @include dx-icon-font-centered-sizing($material-checkbox-arrow-icon-size);
+
+    font-size: $material-checkbox-arrow-font-size;
   }
 
   .dx-checkbox-indeterminate & {
@@ -103,6 +105,8 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 
     @include dx-font-icon("\f074");
     @include dx-icon-font-centered-sizing($material-checkbox-indeterminate-icon-size);
+
+    font-size: $material-checkbox-indeterminate-font-size;
   }
 }
 

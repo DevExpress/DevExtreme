@@ -12,6 +12,7 @@ import {
   DIRECTION_BOTH,
   TopPocketState,
   HOVER_ENABLED_STATE,
+  ShowScrollbarMode,
 } from '../../common/consts';
 
 import devices from '../../../../../core/devices';
@@ -20,8 +21,6 @@ import {
   clear as clearEventHandlers, emit, defaultEvent,
 } from '../../../../test_utils/events_mock';
 import {
-  getElementOverflowX,
-  getElementOverflowY,
   getElementPadding,
 } from '../../utils/get_element_style';
 import { getDevicePixelRatio } from '../../utils/get_device_pixel_ratio';
@@ -44,6 +43,7 @@ import {
 } from '../../common/types';
 import { AnimatedScrollbar } from '../../scrollbar/animated_scrollbar';
 import { getElementOffset } from '../../../../utils/get_element_offset';
+import { permissibleWheelDirection } from '../../utils/get_permissible_wheel_direction';
 
 jest.mock('../../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../../core/devices').default;
@@ -54,8 +54,6 @@ jest.mock('../../../../../core/devices', () => {
 jest.mock('../../utils/get_element_style', () => ({
   ...jest.requireActual('../../utils/get_element_style'),
   getElementPadding: jest.fn(() => 8),
-  getElementOverflowX: jest.fn(() => 'visible'),
-  getElementOverflowY: jest.fn(() => 'visible'),
 }));
 
 jest.mock('../../../../utils/get_element_offset', () => ({
@@ -66,6 +64,11 @@ jest.mock('../../../../utils/get_element_offset', () => ({
 jest.mock('../../utils/get_device_pixel_ratio', () => ({
   ...jest.requireActual('../../utils/get_device_pixel_ratio'),
   getDevicePixelRatio: jest.fn(() => 10),
+}));
+
+jest.mock('../../utils/get_permissible_wheel_direction', () => ({
+  ...jest.requireActual('../../utils/get_permissible_wheel_direction'),
+  permissibleWheelDirection: jest.fn(() => 'vertical'),
 }));
 
 describe('Simulated > View', () => {
@@ -90,13 +93,13 @@ describe('Simulated > View', () => {
       pullingDownText: 'Pull down to refresh...',
       reachBottomEnabled: false,
       reachBottomText: 'Loading...',
+      refreshStrategy: 'simulated',
       refreshingText: 'Refreshing...',
       rtlEnabled: false,
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',
       useKeyboard: true,
-      useNative: false,
       visible: true,
     });
   });
@@ -126,7 +129,7 @@ describe('Simulated > Render', () => {
 
             viewModel.containerClientHeight = 100;
             viewModel.contentClientHeight = 500;
-            viewModel.topPocketClientHeight = topPocketSize;
+            viewModel.topPocketHeight = topPocketSize;
             viewModel.vScrollLocation = location;
             const maxOffset = -400;
 
@@ -173,31 +176,52 @@ describe('Simulated > Render', () => {
       });
     });
 
-    each([true, false]).describe('AllowVertical: %o', (allowVertical) => {
-      each([true, false]).describe('AllowHorizontal: %o', (allowHorizontal) => {
-        it('containerStyles()', () => {
-          const helper = new ScrollableTestHelper({ direction });
+    it(`containerStyles(), permissibleDirection: ${DIRECTION_VERTICAL}`, () => {
+      const helper = new ScrollableTestHelper({ direction });
 
-          Object.defineProperties(helper.viewModel, {
-            allowedDirections: {
-              get() { return { vertical: allowVertical, horizontal: allowHorizontal }; },
-            },
-          });
-
-          let expectedTouchAction = '';
-          if (allowVertical) {
-            expectedTouchAction = 'pan-x';
-          }
-          if (allowHorizontal) {
-            expectedTouchAction = 'pan-y';
-          }
-          if (allowVertical && allowHorizontal) {
-            expectedTouchAction = 'none';
-          }
-
-          expect(helper.viewModel.containerStyles).toEqual({ touchAction: expectedTouchAction });
-        });
+      Object.defineProperties(helper.viewModel, {
+        permissibleDirection: {
+          get() { return DIRECTION_VERTICAL; },
+        },
       });
+
+      expect(helper.viewModel.containerStyles).toEqual({ touchAction: 'pan-x' });
+    });
+
+    it(`containerStyles(), permissibleDirection: ${DIRECTION_HORIZONTAL}`, () => {
+      const helper = new ScrollableTestHelper({ direction });
+
+      Object.defineProperties(helper.viewModel, {
+        permissibleDirection: {
+          get() { return DIRECTION_HORIZONTAL; },
+        },
+      });
+
+      expect(helper.viewModel.containerStyles).toEqual({ touchAction: 'pan-y' });
+    });
+
+    it(`containerStyles(), permissibleDirection: ${DIRECTION_BOTH}`, () => {
+      const helper = new ScrollableTestHelper({ direction });
+
+      Object.defineProperties(helper.viewModel, {
+        permissibleDirection: {
+          get() { return DIRECTION_BOTH; },
+        },
+      });
+
+      expect(helper.viewModel.containerStyles).toEqual({ touchAction: 'none' });
+    });
+
+    it(`containerStyles(), permissibleDirection: ${undefined}`, () => {
+      const helper = new ScrollableTestHelper({ direction });
+
+      Object.defineProperties(helper.viewModel, {
+        permissibleDirection: {
+          get() { return undefined; },
+        },
+      });
+
+      expect(helper.viewModel.containerStyles).toEqual({ touchAction: '' });
     });
 
     each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
@@ -215,14 +239,14 @@ describe('Simulated > Render', () => {
         const scrollbars = helper.getScrollbars();
         const commonOptions = {
           scrollByThumb: true,
-          isScrollableHovered: false,
+          visible: false,
           bounceEnabled: true,
           showScrollbar,
         };
 
         const isHoverable = showScrollbar === 'onHover' || showScrollbar === 'always';
-        const vScrollbarClasses = `dx-widget dx-scrollable-scrollbar dx-scrollbar-vertical ${isHoverable ? `${HOVER_ENABLED_STATE} ` : ''}dx-state-invisible`;
-        const hScrollbarClasses = `dx-widget dx-scrollable-scrollbar dx-scrollbar-horizontal ${isHoverable ? `${HOVER_ENABLED_STATE} ` : ''}dx-state-invisible`;
+        const vScrollbarClasses = `dx-scrollable-scrollbar dx-scrollbar-vertical ${isHoverable ? `${HOVER_ENABLED_STATE} ` : ''}dx-state-invisible`;
+        const hScrollbarClasses = `dx-scrollable-scrollbar dx-scrollbar-horizontal ${isHoverable ? `${HOVER_ENABLED_STATE} ` : ''}dx-state-invisible`;
 
         if (helper.isBoth) {
           expect(scrollbars.length).toEqual(2);
@@ -307,10 +331,100 @@ describe('Simulated > Behavior', () => {
       });
     });
 
+    it('should subscribe to dxpointerdown event', () => {
+      const helper = new ScrollableTestHelper({ direction: 'vertical' });
+
+      helper.viewModel.pendingPointerUp = false;
+
+      helper.viewModel.pointerDownEffect();
+      emit('dxpointerdown');
+
+      expect(helper.viewModel.pendingPointerUp).toEqual(true);
+    });
+
+    it('Down & Up effects should add & remove scroll active class', () => {
+      const helper = new ScrollableTestHelper({ direction: 'vertical' });
+
+      helper.viewModel.pointerDownEffect();
+      emit('dxpointerdown');
+
+      expect(helper.viewModel.pendingPointerUp).toEqual(true);
+
+      helper.viewModel.pointerUpEffect();
+      emit('dxpointerup');
+
+      expect(helper.viewModel.pendingPointerUp).toEqual(false);
+    });
+
+    it('should subscribe to dxpointerup event', () => {
+      const helper = new ScrollableTestHelper({ direction: 'vertical' });
+
+      helper.viewModel.pointerUpEffect();
+      emit('dxpointerup');
+
+      expect(helper.viewModel.hovered).toEqual(false);
+    });
+
+    it('should subscribe to mouseenter event if showScrollbar mode is onHover', () => {
+      const helper = new ScrollableTestHelper({
+        direction: 'vertical',
+        showScrollbar: 'onHover',
+      });
+      helper.viewModel.hovered = false;
+
+      helper.viewModel.mouseEnterEffect();
+      emit('mouseenter');
+
+      expect(helper.viewModel.hovered).toEqual(true);
+    });
+
+    each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
+      it(`should not subscribe to mouseenter event if showScrollbar mode is ${showScrollbar}`, () => {
+        const helper = new ScrollableTestHelper({
+          direction: 'vertical',
+          showScrollbar,
+        });
+        helper.viewModel.hovered = false;
+
+        helper.viewModel.mouseEnterEffect();
+        emit('mouseenter');
+
+        expect(helper.viewModel.hovered).toEqual(false);
+      });
+    });
+
+    it('should subscribe to mouseleave event if showScrollbar mode is onHover', () => {
+      const helper = new ScrollableTestHelper({
+        direction: 'vertical',
+        showScrollbar: 'onHover',
+      });
+      helper.viewModel.hovered = true;
+
+      helper.viewModel.mouseLeaveEffect();
+      emit('mouseleave');
+
+      expect(helper.viewModel.hovered).toEqual(false);
+    });
+
+    each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
+      it(`should not subscribe to mouseleave event if showScrollbar mode is ${showScrollbar}`, () => {
+        const helper = new ScrollableTestHelper({
+          direction: 'vertical',
+          showScrollbar,
+        });
+        helper.viewModel.hovered = true;
+
+        helper.viewModel.mouseLeaveEffect();
+        emit('mouseleave');
+
+        expect(helper.viewModel.hovered).toEqual(true);
+      });
+    });
+
     each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
       each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
         each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
-          each([0, 80]).describe('topPocketClientHeight: %o', (topPocketClientHeight) => {
+          each([0, 80]).describe('topPocketHeight: %o', (topPocketHeight) => {
             each([-200, -81, -80, -79, -50, 0, 28, 79, 80, 81, 100]).describe('scrollLocation: %o', (scrollLocation) => {
               it('pulledDown()', () => {
                 const viewModel = new Scrollable({
@@ -321,11 +435,11 @@ describe('Simulated > Behavior', () => {
                 });
 
                 viewModel.vScrollLocation = scrollLocation;
-                viewModel.topPocketClientHeight = topPocketClientHeight;
+                viewModel.topPocketHeight = topPocketHeight;
 
                 expect(viewModel.pulledDown).toEqual(
-                  pullDownEnabled && topPocketClientHeight !== 0
-                  && bounceEnabled && scrollLocation >= topPocketClientHeight,
+                  pullDownEnabled && topPocketHeight !== 0
+                  && bounceEnabled && scrollLocation >= topPocketHeight,
                 );
               });
             });
@@ -363,7 +477,7 @@ describe('Simulated > Behavior', () => {
           pulledDown: { get() { return false; } },
         });
 
-        viewModel.topPocketClientHeight = 80;
+        viewModel.topPocketHeight = 80;
         viewModel.topPocketState = pocketState;
 
         expect(viewModel.vScrollOffsetMin).toEqual(0);
@@ -376,7 +490,7 @@ describe('Simulated > Behavior', () => {
           pulledDown: { get() { return true; } },
         });
 
-        viewModel.topPocketClientHeight = 80;
+        viewModel.topPocketHeight = 80;
         viewModel.topPocketState = pocketState;
 
         expect(viewModel.vScrollOffsetMin)
@@ -384,161 +498,124 @@ describe('Simulated > Behavior', () => {
       });
     });
 
-    each(['visible', 'scroll', 'hidden', 'auto']).describe('overflow: %o,', (overflow) => {
-      it('contentWidth()', () => {
-        (getElementOverflowX as jest.Mock).mockReturnValue(overflow);
-        const viewModel = new Scrollable({});
+    // each(['visible', 'scroll', 'hidden', 'auto']).describe('overflow: %o,', (overflow) => {
+    //   it('contentWidth()', () => {
+    //     (getElementOverflowX as jest.Mock).mockReturnValue(overflow);
+    //     const viewModel = new Scrollable({});
 
-        viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-        viewModel.contentClientWidth = 200;
-        viewModel.contentScrollWidth = 700;
+    //     viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+    //     viewModel.contentClientWidth = 200;
+    //     viewModel.contentScrollWidth = 700;
 
-        expect(viewModel.contentWidth).toEqual(overflow === 'hidden' ? 200 : 700);
-      });
+    //     expect(viewModel.contentWidth).toEqual(overflow === 'hidden' ? 200 : 700);
+    //   });
 
-      it('contentHeight()', () => {
-        (getElementOverflowY as jest.Mock).mockReturnValue(overflow);
-        const viewModel = new Scrollable({});
+    //   it('contentHeight()', () => {
+    //     (getElementOverflowY as jest.Mock).mockReturnValue(overflow);
+    //     const viewModel = new Scrollable({});
 
-        viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-        viewModel.contentClientHeight = 200;
-        viewModel.contentScrollHeight = 700;
+    //     viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+    //     viewModel.contentClientHeight = 200;
+    //     viewModel.contentScrollHeight = 700;
 
-        expect(viewModel.contentHeight).toEqual(overflow === 'hidden' ? 200 : 700);
-      });
-    });
+    //     expect(viewModel.contentHeight).toEqual(overflow === 'hidden' ? 200 : 700);
+    //   });
+    // });
 
-    each([0, 200]).describe('contentSize: %o', (contentSize) => {
-      each([0, 55]).describe('bottomPocketSize: %o', (bottomPocketSize) => {
-        each([0, 80]).describe('topPocketSize: %o', (topPocketSize) => {
-          each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
-            each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
-              each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
-                each([0, 8]).describe('contentPaddingBottom: %o', (contentPaddingBottom) => {
-                  it('contentHeightWithoutPockets()', () => {
-                    const viewModel = new Scrollable({
-                      direction: 'both',
-                      reachBottomEnabled,
-                      pullDownEnabled,
-                      forceGeneratePockets,
-                    });
+    each([true, false]).describe('forceGeneratePockets: %o,', (forceGeneratePockets) => {
+      it('Should assign swipeDown, pullDown strategy', () => {
+        (getElementPadding as jest.Mock).mockReturnValue(8);
 
-                    viewModel.contentPaddingBottom = contentPaddingBottom;
-                    viewModel.bottomPocketClientHeight = bottomPocketSize;
-                    viewModel.topPocketClientHeight = topPocketSize;
-
-                    Object.defineProperties(viewModel, {
-                      contentHeight: { get() { return contentSize; } },
-                    });
-
-                    let expectedContentSize = contentSize - bottomPocketSize - topPocketSize;
-
-                    if (forceGeneratePockets && reachBottomEnabled) {
-                      expectedContentSize -= contentPaddingBottom;
-                    }
-
-                    expect(viewModel.contentHeightWithoutPockets)
-                      .toEqual(expectedContentSize < 0 ? 0 : expectedContentSize);
-                  });
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-
-    it('Should assign swipeDown, pullDown strategy, forceGeneratePockets: %o, pullDownEnabled: %o, reachBottomEnabled: %o', () => {
-      (getElementPadding as jest.Mock).mockReturnValue(8);
-
-      const viewModel = new Scrollable({});
-
-      viewModel.scrollableRef = {
-        current: {},
-      } as RefObject;
-
-      viewModel.containerClientWidth = 1;
-      viewModel.containerClientHeight = 2;
-
-      viewModel.contentClientWidth = 5;
-      viewModel.contentClientHeight = 6;
-      viewModel.contentScrollWidth = 7;
-      viewModel.contentScrollHeight = 8;
-
-      viewModel.topPocketClientHeight = 11;
-      viewModel.bottomPocketClientHeight = 12;
-
-      viewModel.contentPaddingBottom = 13;
-
-      [-50, 0, 50].forEach((vScrollLocation) => {
-        [true, false].forEach((elementRefExist) => {
+        [-50, 0, 50].forEach((vScrollLocation) => {
           [true, false].forEach((pullDownEnabled) => {
             [true, false].forEach((reachBottomEnabled) => {
+              const viewModel = new Scrollable({
+                forceGeneratePockets,
+                pullDownEnabled,
+                reachBottomEnabled,
+              });
+
+              viewModel.scrollableRef = {
+                current: {},
+              } as RefObject;
+
+              viewModel.containerClientWidth = 1;
+              viewModel.containerClientHeight = 2;
+
+              viewModel.contentClientWidth = 5;
+              viewModel.contentClientHeight = 6;
+              viewModel.contentScrollWidth = 7;
+              viewModel.contentScrollHeight = 8;
+
+              viewModel.contentPaddingBottom = 13;
+
               viewModel.vScrollLocation = vScrollLocation;
 
-              const containerRef = {
-                current: elementRefExist ? {
+              viewModel.containerRef = {
+                current: {
                   clientWidth: 10,
                   clientHeight: 20,
                   scrollLeft: 150,
                   scrollTop: 200,
-                } : null,
+                  getBoundingClientRect: () => ({
+                    width: 10,
+                    height: 20,
+                  }),
+                },
               } as RefObject;
 
-              const contentRef = {
-                current: elementRefExist ? {
+              viewModel.contentRef = {
+                current: {
                   clientWidth: 50,
                   clientHeight: 60,
                   scrollWidth: 70,
                   scrollHeight: 80,
-                } : null,
+                  getBoundingClientRect: () => ({
+                    width: 10,
+                    height: 20,
+                  }),
+                },
               } as RefObject;
 
-              const topPocketRef = {
-                current: elementRefExist ? { // elementRefExist = forceGeneratePockets
-                  clientHeight: pullDownEnabled ? 80 : 0,
-                } : null,
-              } as RefObject;
+              if (forceGeneratePockets) {
+                viewModel.topPocketRef = {
+                  current: {
+                    clientHeight: pullDownEnabled ? 80 : 0,
+                  },
+                } as RefObject;
 
-              const bottomPocketRef = {
-                current: elementRefExist // elementRefExist = forceGeneratePockets
-                  ? {
+                viewModel.bottomPocketRef = {
+                  current: {
                     clientHeight: reachBottomEnabled ? 55 : 0,
-                  } : null,
-              } as RefObject;
+                  },
+                } as RefObject;
+              }
 
-              viewModel.containerRef = containerRef;
-              viewModel.contentRef = contentRef;
-              viewModel.topPocketRef = topPocketRef;
-              viewModel.bottomPocketRef = bottomPocketRef;
-
-              viewModel.updateScrollbarSize();
+              viewModel.updateDimensions();
 
               let expectedTopPocketSize = 0;
               let expectedBottomPocketSize = 0;
 
-              if (elementRefExist) {
-                expect(viewModel.containerClientWidth).toEqual(10);
-                expect(viewModel.containerClientHeight).toEqual(20);
+              expect(viewModel.containerClientWidth).toEqual(10);
+              expect(viewModel.containerClientHeight).toEqual(20);
 
-                expect(viewModel.contentClientWidth).toEqual(50);
-                expect(viewModel.contentClientHeight).toEqual(60);
-                expect(viewModel.contentScrollWidth).toEqual(70);
-                expect(viewModel.contentScrollHeight).toEqual(80);
+              expect(viewModel.contentClientWidth).toEqual(50);
+              expect(viewModel.contentClientHeight).toEqual(60);
+              expect(viewModel.contentScrollWidth).toEqual(70);
+              expect(viewModel.contentScrollHeight).toEqual(80);
 
-                if (pullDownEnabled) {
-                  expectedTopPocketSize = 80;
-                }
+              if (forceGeneratePockets && pullDownEnabled) {
+                expectedTopPocketSize = 80;
+              }
 
-                if (reachBottomEnabled) {
-                  expectedBottomPocketSize = 55;
-                }
+              if (forceGeneratePockets && reachBottomEnabled) {
+                expectedBottomPocketSize = 55;
               }
 
               expect(viewModel.contentPaddingBottom).toEqual(8);
 
-              expect(viewModel.topPocketClientHeight).toEqual(expectedTopPocketSize);
-              expect(viewModel.bottomPocketClientHeight).toEqual(expectedBottomPocketSize);
+              expect(viewModel.topPocketHeight).toEqual(expectedTopPocketSize);
+              expect(viewModel.bottomPocketHeight).toEqual(expectedBottomPocketSize);
             });
           });
         });
@@ -885,44 +962,45 @@ describe('Simulated > Behavior', () => {
             if (!scrollByContent && !isScrollbarTarget) {
               expect(validateMoveResult).toBe(false);
             } else {
-              expect(validateMoveResult).toBe(helper.viewModel.allowedDirection() !== undefined);
+              expect(validateMoveResult).toBe(true);
             }
           });
         });
       });
 
-      test.each(getPermutations([
-        [100, 200],
-        [0, 100, 200],
-        optionValues.bounceEnabled,
-        optionValues.isDxWheelEvent,
-        [true, false],
-      ]))('tryGetAllowedDirection(event), containerSize: %o, contentSize: %o, bounceEnabled: %o, isDxWheelEvent: %o, isShiftKeyPressed: %o',
-        (containerSize, contentSize, bounceEnabled, isDxWheelEvent, shiftKey) => {
-          const helper = new ScrollableTestHelper({
-            direction, bounceEnabled, contentSize, containerSize,
-          });
+      // test.each(getPermutations([
+      //   [100, 200],
+      //   [0, 100, 200],
+      //   optionValues.bounceEnabled,
+      //   optionValues.isDxWheelEvent,
+      //   [true, false],
+      // ]))('tryGetAllowedDirection(event), containerSize: %o,
+      // contentSize: %o, bounceEnabled: %o, isDxWheelEvent: %o, isShiftKeyPressed: %o',
+      //   (containerSize, contentSize, bounceEnabled, isDxWheelEvent, shiftKey) => {
+      //     const helper = new ScrollableTestHelper({
+      //       direction, bounceEnabled, contentSize, containerSize,
+      //     });
 
-          let expectedDirectionResult = containerSize < contentSize || bounceEnabled
-            ? direction
-            : undefined;
+      //     let expectedDirectionResult = containerSize < contentSize || bounceEnabled
+      //       ? direction
+      //       : undefined;
 
-          const event = { ...defaultEvent, shiftKey };
-          if (isDxWheelEvent) {
-            event.type = 'dxmousewheel';
-          }
+      //     const event = { ...defaultEvent, shiftKey };
+      //     if (isDxWheelEvent) {
+      //       event.type = 'dxmousewheel';
+      //     }
 
-          if (isDxWheelEvent) {
-            expectedDirectionResult = direction;
-            if (direction === DIRECTION_BOTH) {
-              expectedDirectionResult = shiftKey ? DIRECTION_HORIZONTAL : DIRECTION_VERTICAL;
-            }
-          }
+      //     if (isDxWheelEvent) {
+      //       expectedDirectionResult = direction;
+      //       if (direction === DIRECTION_BOTH) {
+      //         expectedDirectionResult = shiftKey ? DIRECTION_HORIZONTAL : DIRECTION_VERTICAL;
+      //       }
+      //     }
 
-          expect(helper.viewModel
-            .tryGetAllowedDirection(event as unknown as DxMouseWheelEvent))
-            .toBe(expectedDirectionResult);
-        });
+      //     expect(helper.viewModel
+      //       .tryGetAllowedDirection(event as unknown as DxMouseWheelEvent))
+      //       .toBe(expectedDirectionResult);
+      //   });
 
       each([-1, 1]).describe('wheelDelta: %o', (delta) => {
         each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL]).describe('wheelDirection(): %o', (wheelDirection) => {
@@ -930,10 +1008,12 @@ describe('Simulated > Behavior', () => {
             each([true, false]).describe('animationScrollbar.reachedMax: %o', (reachedMax) => {
               each([undefined, 0, 54]).describe('validateWheelTimer: %o', (validateWheelTimer) => {
                 it('validateWheel(event)', () => {
+                  (permissibleWheelDirection as jest.Mock)
+                    .mockReturnValue(wheelDirection);
+
                   const viewModel = new Scrollable({ direction });
                   const event = { ...defaultEvent, delta } as unknown as DxMouseWheelEvent;
 
-                  viewModel.wheelDirection = jest.fn(() => wheelDirection);
                   viewModel.validateWheelTimer = validateWheelTimer;
 
                   viewModel[`${wheelDirection === DIRECTION_HORIZONTAL ? 'h' : 'v'}ScrollbarRef`] = {
@@ -966,31 +1046,6 @@ describe('Simulated > Behavior', () => {
               });
             });
           });
-        });
-      });
-
-      describe('wheelDirection(event?)', () => {
-        it('event: undefined', () => {
-          const viewModel = new Scrollable({ direction });
-
-          expect(viewModel.wheelDirection())
-            .toEqual(direction === DIRECTION_BOTH ? DIRECTION_VERTICAL : direction);
-        });
-
-        it('event: { shiftKey: true }', () => {
-          const viewModel = new Scrollable({ direction });
-
-          expect(
-            viewModel.wheelDirection({ shiftKey: true } as DxMouseWheelEvent),
-          ).toEqual(direction === DIRECTION_BOTH ? DIRECTION_HORIZONTAL : direction);
-        });
-
-        it('event: { shiftKey: false }', () => {
-          const viewModel = new Scrollable({ direction });
-
-          expect(
-            viewModel.wheelDirection({ shiftKey: false } as DxMouseWheelEvent),
-          ).toEqual(direction === DIRECTION_BOTH ? DIRECTION_VERTICAL : direction);
         });
       });
 
@@ -1037,20 +1092,6 @@ describe('Simulated > Behavior', () => {
             }
           });
         });
-      });
-    });
-
-    each(['always', 'onHover', 'never', 'onScroll']).describe('HoverEffect params. showScrollbar: %o', (showScrollbar) => {
-      it('hoverStart, hoverEnd handlers should update hovered state only for onHover mode', () => {
-        const viewModel = new Scrollable({ direction: DIRECTION_HORIZONTAL, showScrollbar }) as any;
-
-        expect(viewModel.hovered).toBe(false);
-
-        viewModel.hoverInHandler();
-        expect(viewModel.hovered).toBe(showScrollbar === 'onHover');
-
-        viewModel.hoverOutHandler();
-        expect(viewModel.hovered).toBe(false);
       });
     });
   });
@@ -1210,7 +1251,7 @@ describe('Simulated > Behavior', () => {
       });
 
       each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
-        it('should scroll to start by "home" key', () => {
+        it('should scroll to min scroll position by "home" key', () => {
           const event = {
             key: 'home',
             originalEvent: {
@@ -1230,7 +1271,7 @@ describe('Simulated > Behavior', () => {
           expect(helper.viewModel.scrollByLocation).toBeCalledWith(expectedDistance);
         });
 
-        it('should scroll to start by "end" key', () => {
+        it('should scroll to max scroll position by "end" key', () => {
           const event = {
             key: 'end',
             originalEvent: {
@@ -1241,12 +1282,14 @@ describe('Simulated > Behavior', () => {
           const helper = new ScrollableTestHelper({ direction, rtlEnabled });
           helper.initContainerPosition({ top: 80, left: 55 });
 
+          helper.viewModel.contentPaddingBottom = 8;
+          helper.viewModel.bottomPocketHeight = 55;
           helper.viewModel.scrollByLocation = jest.fn();
           helper.viewModel.handleKeyDown(event);
 
           expect(helper.viewModel.scrollByLocation).toBeCalledTimes(1);
 
-          const expectedDistance = { top: 20, left: rtlEnabled ? -55 : 45 };
+          const expectedDistance = { top: 83, left: rtlEnabled ? -55 : 45 };
           expect(helper.viewModel.scrollByLocation).toBeCalledWith(expectedDistance);
         });
       });
@@ -1321,7 +1364,7 @@ describe('Simulated > Behavior', () => {
         });
 
         helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
-        helper.viewModel.updateSizes = jest.fn();
+        helper.viewModel.updateElementDimensions = jest.fn();
 
         helper.viewModel.updateHandler();
 
@@ -1330,7 +1373,7 @@ describe('Simulated > Behavior', () => {
         } else {
           helper.checkActionHandlerCalls(expect, [], []);
         }
-        expect(helper.viewModel.updateSizes).toBeCalledTimes(1);
+        expect(helper.viewModel.updateElementDimensions).toBeCalledTimes(1);
       });
 
       each([{ scrollTop: 1, scrollLeft: 1 }, undefined]).describe('initialSavedScrollOffset: %o', (initialSavedScrollOffset) => {
@@ -1503,6 +1546,7 @@ describe('Simulated > Behavior', () => {
           onUpdated: actionHandler,
         });
 
+        helper.viewModel.updateElementDimensions = jest.fn();
         helper.viewModel.getEventArgs = jest.fn(() => ({ scrollOffset: { top: 5, left: 10 } }));
         helper.viewModel.topPocketState = TopPocketState.STATE_READY;
 
@@ -1513,6 +1557,7 @@ describe('Simulated > Behavior', () => {
         } else {
           helper.checkActionHandlerCalls(expect, [], []);
         }
+        expect(helper.viewModel.updateElementDimensions).toBeCalledTimes(1);
         expect(helper.viewModel.topPocketState).toEqual(TopPocketState.STATE_RELEASED);
         expect(helper.viewModel.loadingIndicatorEnabled).toEqual(true);
         expect(helper.viewModel.isLoadPanelVisible).toEqual(false);

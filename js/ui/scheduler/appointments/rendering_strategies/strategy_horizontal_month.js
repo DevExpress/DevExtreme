@@ -8,22 +8,14 @@ const MONTH_DROPDOWN_APPOINTMENT_MIN_RIGHT_OFFSET = 36;
 const MONTH_DROPDOWN_APPOINTMENT_MAX_RIGHT_OFFSET = 60;
 
 class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrategy {
-    get dateTableOffset() { return this.options.dateTableOffset; }
     get endViewDate() { return this.options.endViewDate; }
     get adaptivityEnabled() { return this.options.adaptivityEnabled; }
     get DOMMetaData() { return this.options.DOMMetaData; }
 
     _getLeftPosition(settings) {
-        const fullWeekAppointmentWidth = this.getWorkspaceGroupWidth(settings.groupIndex);
+        const fullWeekAppointmentWidth = this.getGroupWidth(settings.groupIndex);
 
-        let result = this._calculateMultiWeekAppointmentLeftOffset(settings.hMax, fullWeekAppointmentWidth);
-
-        // TODO get rid of this after rework date table layout
-        if(this.isVerticalOrientation) {
-            result += this.dateTableOffset;
-        }
-
-        return result;
+        return this._calculateMultiWeekAppointmentLeftOffset(settings.hMax, fullWeekAppointmentWidth);
     }
 
     _getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth) {
@@ -50,7 +42,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     _getAppointmentParts(geometry, settings) {
         const result = [];
 
-        const weekWidth = Math.round(this.getWorkspaceGroupWidth(settings.groupIndex));
+        const weekWidth = Math.round(this.getGroupWidth(settings.groupIndex));
         const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry, settings, weekWidth);
         const leftPosition = this._getLeftPosition(settings);
 
@@ -84,7 +76,7 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
             : max - width;
     }
 
-    getWorkspaceGroupWidth(groupIndex) {
+    getGroupWidth(groupIndex) {
         return getGroupWidth(
             groupIndex,
             this.viewDataProvider,

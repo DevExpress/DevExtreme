@@ -16,6 +16,7 @@ import {
   SCROLLABLE_CONTAINER_CLASS,
   SCROLLABLE_CONTENT_CLASS,
   SCROLLVIEW_BOTTOM_POCKET_CLASS,
+  SCROLLVIEW_CONTENT_CLASS,
   SCROLLVIEW_TOP_POCKET_CLASS,
 } from '../../common/consts';
 
@@ -86,6 +87,11 @@ class ScrollableTestHelper {
     const { contentSize = 200, containerSize = 100, overflow = 'hidden' } = this.options;
     let contentHeight = contentSize;
 
+    if (this.options.needScrollViewContentWrapper) {
+      this.viewModel.scrollViewContentRef = React.createRef() as RefObject<HTMLDivElement>;
+      this.viewModel.scrollViewContentRef.current = this.getScrollViewContentElement();
+    }
+
     if (this.options.forceGeneratePockets) {
       if (this.options.pullDownEnabled) {
         contentHeight += TOP_POCKET_HEIGHT;
@@ -119,7 +125,7 @@ class ScrollableTestHelper {
       { width: containerSize, height: containerSize },
       { width: contentSize, height: contentHeight });
 
-    this.viewModel.updateSizes();
+    this.viewModel.updateElementDimensions();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -187,6 +193,10 @@ class ScrollableTestHelper {
     return this.scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`).getDOMNode();
   }
 
+  getScrollViewContentElement(): HTMLDivElement {
+    return this.scrollable.find(`.${SCROLLVIEW_CONTENT_CLASS}`).getDOMNode();
+  }
+
   getTopPocketElement(): HTMLDivElement {
     return this.scrollable.find(`.${SCROLLVIEW_TOP_POCKET_CLASS}`).getDOMNode();
   }
@@ -230,8 +240,8 @@ class ScrollableTestHelper {
       scrollbar.scrollbarRef = React.createRef();
       scrollbar.scrollbarRef.current = scrollbars.at(index).getDOMNode();
 
-      scrollbar.scrollRef = React.createRef();
-      scrollbar.scrollRef.current = scrollbars.at(index).find('.dx-scrollable-scroll').getDOMNode();
+      scrollbar.thumbRef = React.createRef();
+      scrollbar.thumbRef.current = scrollbars.at(index).find('.dx-scrollable-scroll').getDOMNode();
 
       Object.assign(animatedScrollbar, {
         props: {

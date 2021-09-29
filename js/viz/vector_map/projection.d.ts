@@ -12,15 +12,11 @@ export interface VectorMapProjectionConfig {
     aspectRatio?: number;
     /**
      * @docid
-     * @type_function_param1 coordinates:Array<number>
-     * @type_function_return Array<number>
      * @public
      */
     from?: ((coordinates: Array<number>) => Array<number>);
     /**
      * @docid
-     * @type_function_param1 coordinates:Array<number>
-     * @type_function_return Array<number>
      * @public
      */
     to?: ((coordinates: Array<number>) => Array<number>);
@@ -33,8 +29,6 @@ export interface VectorMapProjectionConfig {
  * @return object
  * @static
  * @namespace DevExpress.viz.map
- * @module viz/vector_map/projection
- * @export projection
  */
 // eslint-disable-next-line @typescript-eslint/init-declarations
 export const projection: {

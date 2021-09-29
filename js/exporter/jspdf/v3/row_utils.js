@@ -1,9 +1,32 @@
 import { isDefined } from '../../../core/utils/type';
 import { calculateRowHeight } from './pdf_utils_v3';
+import { normalizeBoundaryValue } from './normalizeOptions';
 
 
-function initializeCellsWidth(rows, columnWidths) {
-    // TODO: handle colSpan in this method !!!!
+function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
+    const columnsWidths = dataProvider.getColumnsWidths();
+    if(!columnsWidths.length) {
+        return [];
+    }
+
+    const summaryGridWidth = columnsWidths
+        .reduce((accumulator, width) => accumulator + width);
+
+    const normalizedMargin = normalizeBoundaryValue(margin);
+
+    // TODO: check future orientation, measure units there
+    const availablePageWidth = doc.internal.pageSize.getWidth() - (topLeft?.x ?? 0)
+        - normalizedMargin.left - normalizedMargin.right;
+
+    const ratio = availablePageWidth >= summaryGridWidth
+        ? 1
+        : availablePageWidth / summaryGridWidth;
+
+    return columnsWidths.map(width => width * ratio);
+}
+
+function initializeCellsWidth(doc, dataProvider, rows, options) {
+    const columnWidths = options?.columnWidths ?? calculateColumnsWidths(doc, dataProvider, options?.topLeft, options?.margin);
     rows.forEach(row => {
         row.cells.forEach(({ gridCell, pdfCell }, index) => {
             pdfCell._rect.w = columnWidths[index];
@@ -105,9 +128,12 @@ function applyBordersConfig(rows) {
 }
 
 function calculateCoordinates(doc, rows, options) {
-    let y = options?.topLeft?.y ?? 0;
+    const topLeft = options?.topLeft;
+    const margin = normalizeBoundaryValue(options?.margin);
+
+    let y = (topLeft?.y ?? 0) + margin.top;
     rows.forEach(row => {
-        let x = options?.topLeft?.x ?? 0;
+        let x = (topLeft?.x ?? 0) + margin.left;
         const intend = row.indentLevel * options.indent;
         row.cells.forEach(cell => {
             cell.pdfCell._rect.x = x + intend;

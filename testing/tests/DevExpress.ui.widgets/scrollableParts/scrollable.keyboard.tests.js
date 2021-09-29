@@ -282,7 +282,9 @@ if(devices.real().deviceType === 'desktop') {
                 QUnit.assert.deepEqual(scrollLocation, expectedLocation, 'scroll location');
             }
 
-            QUnit.testInActiveWindow(`Update vertical scroll location on tab: useNative - ${useNativeMode}, direction: ${scrollbarDirection}`, function(assert) {
+            QUnit.testInActiveWindow(`Update scroll location on tab: useNative - ${useNativeMode}, direction: ${scrollbarDirection}`, function(assert) {
+                assert.expect(2);
+
                 const done = assert.async();
 
                 const scrollableContainerSize = 200;
@@ -306,24 +308,20 @@ if(devices.real().deviceType === 'desktop') {
                     $contentContainer2.css('display', 'inline-block');
                 }
 
-                return new Promise((resolve) => {
-                    $scrollable.dxScrollable('option', 'onScroll', () => {
-                        setTimeout(() => {
-                            this.clock.tick(400);
-                            checkScrollLocation($scrollable, scrollbarDirection === 'vertical' ? { top: 100, left: 0 } : { top: 0, left: 100 });
-                            done();
-                        });
-                        this.clock.tick();
-
-                        resolve();
+                $scrollable.dxScrollable('option', 'onScroll', () => {
+                    setTimeout(() => {
+                        this.clock.tick(400);
+                        checkScrollLocation($scrollable, scrollbarDirection === 'vertical' ? { top: 100, left: 0 } : { top: 0, left: 100 });
+                        done();
                     });
-
-                    checkScrollLocation($scrollable, { top: 0, left: 0 });
-
-                    const keyboard = keyboardMock($contentContainer1);
-                    $contentContainer2.focus();
-                    keyboard.keyDown('tab');
+                    this.clock.tick();
                 });
+
+                checkScrollLocation($scrollable, { top: 0, left: 0 });
+
+                const keyboard = keyboardMock($contentContainer1);
+                $contentContainer2.focus();
+                keyboard.keyDown('tab');
             });
         });
     });

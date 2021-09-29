@@ -197,8 +197,6 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
 /**
  * @docid
  * @inherits dxMenuBase
- * @module ui/menu
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

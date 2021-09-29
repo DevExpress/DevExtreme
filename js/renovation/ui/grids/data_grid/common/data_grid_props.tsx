@@ -71,6 +71,8 @@ import type {
   RowValidatingEvent,
   SelectionChangedEvent,
   ToolbarPreparingEvent,
+  EditCancelingEvent,
+  EditCanceledEvent,
 } from '../../../../../ui/data_grid';
 import { BaseWidgetProps } from '../../../common/base_props';
 
@@ -497,6 +499,9 @@ export class DataGridEditing {
   mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup' = 'row';
 
   @OneWay()
+  newRowPosition?: 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop' = 'viewportTop';
+
+  @OneWay()
   popup?: PopupProperties = {};
 
   @OneWay()
@@ -592,10 +597,19 @@ export class DataGridScrolling {
   columnRenderingThreshold?: number;
 
   @OneWay()
-  newMode?: boolean;
+  prerenderedRowChunkSize?: number;
 
   @OneWay()
-  minGap?: number;
+  legacyMode?: boolean;
+
+  @OneWay()
+  prerenderedRowCount?: number;
+
+  @OneWay()
+  preloadedRowCount?: number;
+
+  @OneWay()
+  renderAsync?: boolean;
 }
 
 @ComponentBindings()
@@ -1178,6 +1192,10 @@ export interface DataGridToolbarItem extends dxToolbarItem {
 @ComponentBindings()
 export class DataGridToolbar {
   @OneWay() items?: (DataGridDefaultToolbarItemName | DataGridToolbarItem)[];
+
+  @OneWay() visible?: boolean;
+
+  @OneWay() disabled?: boolean;
 }
 
 @ComponentBindings()
@@ -1186,6 +1204,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Nested() editing?: DataGridEditing = {
     mode: 'row',
+    newRowPosition: 'viewportTop',
     refreshMode: 'full',
     allowAdding: false,
     allowUpdating: false,
@@ -1270,8 +1289,9 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     columnPageSize: 5,
     columnRenderingThreshold: 300,
     useNative: 'auto',
-    newMode: true,
-    minGap: 1,
+    prerenderedRowChunkSize: 1,
+    legacyMode: false,
+    prerenderedRowCount: 1,
   };
 
   @Nested() selection?: DataGridSelection = {
@@ -1636,6 +1656,10 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
   @Event() onSaving?: (e: SavingEvent) => void;
 
   @Event() onSaved?: (e: SavedEvent) => void;
+
+  @Event() onEditCanceling?: (e: EditCancelingEvent) => void;
+
+  @Event() onEditCanceled?: (e: EditCanceledEvent) => void;
 
   // private
   @OneWay() adaptColumnWidthByRatio?: boolean = true;

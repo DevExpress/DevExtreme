@@ -1,3 +1,4 @@
+import { getOuterWidth, getOuterHeight, getHeight, getWidth, setWidth, setHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { isDefined } from '../../core/utils/type';
@@ -27,8 +28,8 @@ function elementHasPoint(element, x, y) {
     const $item = $(element);
     const offset = $item.offset();
 
-    if(x >= offset.left && x <= offset.left + $item.outerWidth(true)) {
-        if(y >= offset.top && y <= offset.top + $item.outerHeight(true)) {
+    if(x >= offset.left && x <= offset.left + getOuterWidth($item, true)) {
+        if(y >= offset.top && y <= offset.top + getOuterHeight($item, true)) {
             return true;
         }
     }
@@ -87,13 +88,13 @@ function getItemsOffset($elements, isVertical, $itemsContainer) {
             const offset = {
                 item: $item,
                 index: result.length,
-                posHorizontal: isVertical ? undefined : ($item.last().outerWidth(true) + $item.last().offset().left + $item.offset().left) / 2
+                posHorizontal: isVertical ? undefined : (getOuterWidth($item.last(), true) + $item.last().offset().left + $item.offset().left) / 2
             };
 
             if(isVertical) {
-                offset.posVertical = ($item.last().offset().top + $item.offset().top + $item.last().outerHeight(true)) / 2;
+                offset.posVertical = ($item.last().offset().top + $item.offset().top + getOuterHeight($item.last(), true)) / 2;
             } else {
-                offset.posVertical = $item.last().outerHeight(true) + $item.last().offset().top;
+                offset.posVertical = getOuterHeight($item.last(), true) + $item.last().offset().top;
             }
             result.push(offset);
         }
@@ -107,7 +108,7 @@ function getScrollWrapper(scrollable) {
     let scrollTop = scrollable.scrollTop();
     const $element = scrollable.$element();
     const top = $element.offset().top;
-    const height = $element.height();
+    const height = getHeight($element);
     let delta = 0;
 
     function onScroll(e) {
@@ -180,16 +181,16 @@ const Sortable = DOMComponent.inherit({
         } else {
             $item = $sourceItem.clone();
             $item.css({
-                width: $sourceItem.width(),
-                height: $sourceItem.height()
+                width: getWidth($sourceItem),
+                height: getHeight($sourceItem)
             });
         }
         return $item;
     },
 
     _renderIndicator: function($item, isVertical, $targetGroup, isLast) {
-        const height = $item.outerHeight(true);
-        const width = $item.outerWidth(true);
+        const height = getOuterHeight($item, true);
+        const width = getOuterWidth($item, true);
         const top = $item.offset().top - $targetGroup.offset().top;
         const left = $item.offset().left - $targetGroup.offset().left;
 
@@ -202,11 +203,16 @@ const Sortable = DOMComponent.inherit({
             .toggleClass('dx-position-indicator-horizontal', !isVertical)
             .toggleClass('dx-position-indicator-vertical', !!isVertical)
             .toggleClass('dx-position-indicator-last', !!isLast)
-            .height('')
-            .width('')
             .appendTo($targetGroup);
+        setHeight(this._indicator, '');
+        setWidth(this._indicator, '');
 
-        isVertical ? this._indicator.width(width) : this._indicator.height(height);
+
+        if(isVertical) {
+            setWidth(this._indicator, width);
+        } else {
+            setHeight(this._indicator, height);
+        }
     },
 
     _renderDraggable: function($sourceItem) {

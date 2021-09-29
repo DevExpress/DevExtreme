@@ -27,11 +27,11 @@ describe('InkRipple', () => {
 
   describe('Behavior', () => {
     describe('Methods', () => {
-      const event = {};
+      const event: { element?: HTMLElement; event: Event } = { event: {} as Event };
 
       describe('hideWave', () => {
         it('should call hide wave function', () => {
-          new InkRipple({}).hideWave(event as Event);
+          new InkRipple({}).hideWave(event);
 
           expect(hideWave).toHaveBeenCalledTimes(1);
           expect(hideWave).toHaveBeenCalledWith('config', event);
@@ -40,7 +40,7 @@ describe('InkRipple', () => {
 
       describe('showWave', () => {
         it('should call show wave function', () => {
-          new InkRipple({}).showWave(event as Event);
+          new InkRipple({}).showWave(event);
 
           expect(showWave).toHaveBeenCalledTimes(1);
           expect(showWave).toHaveBeenCalledWith('config', event);

@@ -1,3 +1,4 @@
+import React from 'react';
 import { mount } from 'enzyme';
 import {
   GroupPanel,
@@ -48,6 +49,18 @@ describe('GroupPanel', () => {
             baseColSpan: 4,
           },
         });
+    });
+
+    it('should pass ref to the root', () => {
+      const ref = React.createRef();
+      render({
+        props: {
+          elementRef: ref,
+        },
+      });
+
+      expect(ref.current)
+        .not.toBe(null);
     });
   });
 

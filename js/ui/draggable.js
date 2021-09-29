@@ -1,7 +1,8 @@
+import { getWidth, getHeight, getOuterWidth, getOuterHeight } from '../core/utils/size';
 import $ from '../core/renderer';
+import domAdapter from '../core/dom_adapter';
 import { getWindow } from '../core/utils/window';
-import { getElementsFromPoint, getBoundingRect } from '../core/utils/position';
-const window = getWindow();
+import { getBoundingRect } from '../core/utils/position';
 import eventsEngine from '../events/core/events_engine';
 import { quadToObject } from '../core/utils/string';
 import registerComponent from '../core/component_registrator';
@@ -26,6 +27,8 @@ import { noop, splitPair } from '../core/utils/common';
 import { value as viewPort } from '../core/utils/view_port';
 import { EmptyTemplate } from '../core/templates/empty_template';
 import { when, fromPromise, Deferred } from '../core/utils/deferred';
+
+const window = getWindow();
 
 const DRAGGABLE = 'dxDraggable';
 const DRAGSTART_EVENT_NAME = addNamespace(dragEventStart, DRAGGABLE);
@@ -109,7 +112,7 @@ class ScrollHelper {
         const that = this;
 
         return ($element.css(that._overFlowAttr) === 'auto' || $element.hasClass('dx-scrollable-container'))
-            && $element.prop(that._scrollSizeProp) > $element[that._sizeAttr]();
+            && $element.prop(that._scrollSizeProp) > (that._sizeAttr === 'width' ? getWidth($element) : getHeight($element));
     }
 
     _trySetScrollable(element, mousePosition) {
@@ -568,11 +571,11 @@ const Draggable = DOMComponent.inherit({
         const dragDirection = this.option('dragDirection');
 
         if(dragDirection === 'horizontal' || dragDirection === 'both') {
-            position.left = e.pageX - $element.offset().left + locate($element).left - $element.width() / 2;
+            position.left = e.pageX - $element.offset().left + locate($element).left - getWidth($element) / 2;
         }
 
         if(dragDirection === 'vertical' || dragDirection === 'both') {
-            position.top = e.pageY - $element.offset().top + locate($element).top - $element.height() / 2;
+            position.top = e.pageY - $element.offset().top + locate($element).top - getHeight($element) / 2;
         }
 
         this._move(position, $element);
@@ -633,10 +636,10 @@ const Draggable = DOMComponent.inherit({
         const $area = this._getArea();
         const areaOffset = this._getAreaOffset($area);
         const boundOffset = this._getBoundOffset();
-        const areaWidth = $area.outerWidth();
-        const areaHeight = $area.outerHeight();
-        const elementWidth = $dragElement.width();
-        const elementHeight = $dragElement.height();
+        const areaWidth = getOuterWidth($area);
+        const areaHeight = getOuterHeight($area);
+        const elementWidth = getWidth($dragElement);
+        const elementHeight = getHeight($dragElement);
 
         const startOffset = {
             left: $dragElement.offset().left - areaOffset.left,
@@ -736,7 +739,7 @@ const Draggable = DOMComponent.inherit({
 
         if(that.option('autoScroll')) {
             const mousePosition = getMousePosition(e);
-            const allObjects = getElementsFromPoint(mousePosition.x, mousePosition.y);
+            const allObjects = domAdapter.elementsFromPoint(mousePosition.x, mousePosition.y);
 
             that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
             that._horizontalScrollHelper.updateScrollable(allObjects, mousePosition);
@@ -860,7 +863,7 @@ const Draggable = DOMComponent.inherit({
         const $targetDraggableElement = this.$element();
 
         const mousePosition = getMousePosition(e);
-        const elements = getElementsFromPoint(mousePosition.x, mousePosition.y);
+        const elements = domAdapter.elementsFromPoint(mousePosition.x, mousePosition.y);
         const firstWidgetElement = elements.filter((element) => {
             const $element = $(element);
 

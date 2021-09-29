@@ -27,12 +27,6 @@ const createScheduler = async (
 };
 
 [false, true].forEach((crossScrollingEnabled) => {
-  // TODO: There is a bug in RTL in timeline views even without adaptivity which breaks markup.
-  // We should test timeline views too after we reowrk our markup
-  const lastVerticalView = crossScrollingEnabled ? 4 : 8;
-
-  const verticalViewsForRTL = verticalViews.slice(0, lastVerticalView);
-
   test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} in RTL`, async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -42,7 +36,7 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-rtl.png`),
+        await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-rtl.png`, scheduler.workSpace),
       ).ok();
     }
 
@@ -69,7 +63,7 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`),
+        await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`, scheduler.workSpace),
       ).ok();
     }
 
@@ -94,13 +88,13 @@ const createScheduler = async (
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const view of verticalViewsForRTL) {
+    for (const view of verticalViews) {
       await scheduler.option('currentView', view.type);
 
       // Another bug in RTL in month view
       if (crossScrollingEnabled || view.type !== 'month') {
         await t.expect(
-          await takeScreenshot(`material-view=${view.type}-crossScrolling=${!!crossScrollingEnabled}-vertical-rtl.png`),
+          await takeScreenshot(`material-view=${view.type}-crossScrolling=${!!crossScrollingEnabled}-vertical-rtl.png`, scheduler.workSpace),
         ).ok();
       }
     }
@@ -111,7 +105,7 @@ const createScheduler = async (
     await t.resizeWindow(400, 600);
 
     await createScheduler({
-      views: verticalViewsForRTL,
+      views: verticalViews,
       currentView: 'day',
       crossScrollingEnabled,
       groups: ['priorityId'],

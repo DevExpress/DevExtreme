@@ -493,8 +493,10 @@ const FadeAnimationConfigurator = {
     setup: function($element, config) {
         const from = config.from;
         const to = config.to;
-        let fromOpacity = isPlainObject(from) ? String(from.opacity || 0) : String(from);
-        let toOpacity = isPlainObject(to) ? String(to.opacity || 1) : String(to);
+        const defaultFromOpacity = config.type === 'fadeOut' ? 1 : 0;
+        const defaultToOpacity = config.type === 'fadeOut' ? 0 : 1;
+        let fromOpacity = isPlainObject(from) ? String(from.opacity ?? defaultFromOpacity) : String(from);
+        let toOpacity = isPlainObject(to) ? String(to.opacity ?? defaultToOpacity) : String(to);
 
         if(!config.skipElementInitialStyles) {
             fromOpacity = $element.css('opacity');

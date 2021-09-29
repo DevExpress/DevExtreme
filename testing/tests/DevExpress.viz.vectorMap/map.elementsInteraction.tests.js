@@ -1,10 +1,10 @@
 const $ = require('jquery');
 const noop = require('core/utils/common').noop;
-const renderer = require('core/renderer');
 const commons = require('./vectorMapParts/commons.js');
 const mapLayerModule = require('viz/vector_map/map_layer');
 const projectionModule = require('viz/vector_map/projection.main');
 const resizeCallbacks = require('core/utils/resize_callbacks');
+const { implementationsMap } = require('core/utils/size');
 const vizMocks = require('../../helpers/vizMocks.js');
 
 QUnit.module('Map - projection events', $.extend({}, commons.environment, {
@@ -61,8 +61,8 @@ const environmentForSize = $.extend({}, commons.environment, {
     },
 
     setContainerSize: function(width, height) {
-        renderer.fn.width = commons.returnValue(width);
-        renderer.fn.height = commons.returnValue(height);
+        implementationsMap.getWidth = commons.returnValue(width);
+        implementationsMap.getHeight = commons.returnValue(height);
     },
 
     checkSizes: function(assert, expected) {
