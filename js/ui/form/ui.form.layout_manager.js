@@ -29,7 +29,7 @@ import '../check_box';
 import '../date_box';
 import '../button';
 
-import { getLabelWidthByText } from './components/label';
+import { getLabelWidthByInnerHTML } from './components/label';
 import { renderFieldItemTo } from './components/field_item.js';
 import { renderButtonItemTo } from './components/button_item.js';
 import { renderEmptyItemTo } from './components/empty_item.js';
@@ -606,9 +606,9 @@ const LayoutManager = Widget.inherit({
         });
     },
 
-    _getLabelWidthByText: function({ text, location }) {
-        return getLabelWidthByText({
-            text, location, markOptions: convertToLabelMarkOptions(this._getMarkOptions())
+    _getLabelWidthByInnerHTML: function({ innerHTML, location }) {
+        return getLabelWidthByInnerHTML({
+            innerHTML, location, markOptions: convertToLabelMarkOptions(this._getMarkOptions())
         });
     },
 
