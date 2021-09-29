@@ -1466,7 +1466,7 @@ QUnit.test('Align with " " required mark, T1031458', function(assert) {
     const $textBox = $testContainer.find('.dx-textbox');
 
     assert.roughEqual($labelText.width(), 11, 3, 'labelsContent.width');
-    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 5, 'textBox.left');
 });
 
 QUnit.test('Align with "!" required mark, T1031458', function(assert) {
