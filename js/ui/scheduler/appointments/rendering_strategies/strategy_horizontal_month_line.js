@@ -8,9 +8,6 @@ const MILLISECONDS_IN_MINUTE = 60000;
 const ZERO_APPOINTMENT_DURATION_IN_DAYS = 1;
 
 class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrategy {
-    get viewDataProvider() { return this.options.viewDataProvider; }
-    get appointmentDataProvider() { return this.options.appointmentDataProvider; }
-
     calculateAppointmentWidth(appointment, position) {
         const startDate = dateUtils.trimTime(position.info.appointment.startDate);
         const { normalizedEndDate } = position.info.appointment;

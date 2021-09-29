@@ -232,7 +232,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             columns: ['name', 'age'],
             scrolling: {
                 useNative: false,
-                minGap: 0
+                prerenderedRowCount: 0
             },
             dataSource: [
                 { id: 1, parentId: 0, name: 'Name 1', age: 19 },
@@ -1205,7 +1205,7 @@ QUnit.module('Expand/Collapse rows', () => {
             },
             scrolling: {
                 mode: 'virtual',
-                minGap: 0
+                prerenderedRowCount: 0
             },
             expandedRowKeys: [1],
             dataSource: [
@@ -1432,7 +1432,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     QUnit.test('TreeList with focusedRowKey', function(assert) {
         // arrange, act
         const treeList = createTreeList({
-            height: 100,
+            height: 105,
             keyExpr: 'id',
             dataSource: generateData(10),
             paging: {
@@ -1441,7 +1441,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             focusedRowEnabled: true,
             focusedRowKey: 12,
             scrolling: {
-                minGap: 0
+                prerenderedRowCount: 0
             }
         });
 
@@ -1456,7 +1456,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
     QUnit.test('TreeList with remoteOperations and focusedRowKey', function(assert) {
         // arrange, act
         const treeList = createTreeList({
-            height: 100,
+            height: 105,
             keyExpr: 'id',
             dataSource: generateData(10),
             remoteOperations: true,
@@ -1466,7 +1466,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             focusedRowEnabled: true,
             focusedRowKey: 12,
             scrolling: {
-                minGap: 0
+                prerenderedRowCount: 0
             }
         });
 
@@ -1740,7 +1740,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
                 },
                 scrolling: {
                     mode: scrollingMode,
-                    minGap: 0,
+                    prerenderedRowCount: 0,
                     useNative: true
                 },
                 focusedRowEnabled: true,
@@ -1748,11 +1748,11 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
                 columns: ['id']
             });
 
-            this.clock.tick(200);
+            this.clock.tick(300);
 
             // act
-            treeList.searchByText(3);
-            this.clock.tick(200);
+            treeList.searchByText('3');
+            this.clock.tick(300);
 
             // assert
             const visibleRows = treeList.getVisibleRows();
@@ -1762,7 +1762,7 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
 
             // act
             treeList.searchByText('');
-            this.clock.tick(200);
+            this.clock.tick(300);
             $(treeList.getScrollable().content()).trigger('scroll');
 
             // assert
@@ -2168,7 +2168,7 @@ QUnit.module('Virtual scrolling', defaultModuleConfig, () => {
             loadingTimeout: undefined,
             scrolling: {
                 mode: 'virtual',
-                newMode: true
+                legacyMode: false
             },
         });
 

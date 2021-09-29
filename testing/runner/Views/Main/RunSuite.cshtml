@@ -42,7 +42,6 @@
 }
 <!DOCTYPE html>
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=@Model.IEMode">
     <title>@Model.Title - QUnit test page</title>
     <link rel="stylesheet" href="@Url.ContentWithCacheBuster("~/node_modules/qunitjs/qunit/qunit.css")" />
     <script src="@Url.ContentWithCacheBuster("~/node_modules/qunitjs/qunit/qunit.js")"></script>
@@ -149,7 +148,6 @@
     <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery.2/node_modules/jquery/dist/jquery.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/testing/helpers/sinon/sinon.js")"></script>
-    <script src="@Url.ContentWithCacheBuster("~/testing/helpers/sinon/sinon-timers-ie.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
     <script>

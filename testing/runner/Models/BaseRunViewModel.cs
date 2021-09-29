@@ -2,7 +2,6 @@ namespace Runner.Models
 {
     public abstract class BaseRunViewModel
     {
-        public string IEMode { get; set; }
         public bool NoTryCatch { get; set; }
         public bool NoGlobals { get; set; }
         public bool NoTimers { get; set; }

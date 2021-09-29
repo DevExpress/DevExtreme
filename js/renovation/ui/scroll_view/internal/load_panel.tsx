@@ -38,6 +38,7 @@ export class ScrollViewLoadPanelProps {
   @OneWay() refreshingText?: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 export type ScrollViewLoadPanelPropsType = ScrollViewLoadPanelProps & Pick<LoadPanelProps, 'visible'>;
 
 @Component({
