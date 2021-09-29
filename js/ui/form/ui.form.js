@@ -705,6 +705,7 @@ const Form = Widget.inherit({
             case 'colCount':
             case 'onEditorEnterKey':
             case 'labelLocation':
+            case 'labelMode':
             case 'alignItemLabels':
             case 'showColonAfterLabel':
             case 'customizeItem':

@@ -755,6 +755,7 @@ const LayoutManager = Widget.inherit({
                 break;
             case 'alignItemLabels':
             case 'labelLocation':
+            case 'labelMode':
             case 'requiredMessage':
                 this._invalidate();
                 break;
