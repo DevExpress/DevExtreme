@@ -53,7 +53,9 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 };
 
 export type ScrollbarPropsType = ScrollbarProps
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<BaseWidgetProps, 'rtlEnabled'>
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'showScrollbar' | 'scrollByThumb' | 'scrollLocationChange'>;
 
 @Component({

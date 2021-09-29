@@ -447,6 +447,50 @@ QUnit.module('Scrolling', { beforeEach: setupModule, afterEach: teardownModule }
         // assert
         assert.equal(offset, 3, 'offset with fixed column');
     });
+
+    QUnit.test('Scrolling timeout should be zero when renderAsync is false', function(assert) {
+        // arrange
+        this.setupVirtualColumns();
+        this.options.scrolling.renderAsync = false;
+        this.options.scrolling.columnRenderingThreshold = 110;
+        this.options.scrolling.timeout = 100;
+        this.columnsController._renderTime = 150;
+
+        // act
+        const timeout = this.columnsController.getScrollingTimeout();
+
+        // assert
+        assert.equal(timeout, 0);
+    });
+
+    QUnit.test('Scrolling timeout should be set to timeout if renderAsync is not defined', function(assert) {
+        // arrange
+        this.setupVirtualColumns();
+        this.options.scrolling.columnRenderingThreshold = 110;
+        this.options.scrolling.timeout = 100;
+        this.columnsController._renderTime = 150;
+
+        // act
+        const timeout = this.columnsController.getScrollingTimeout();
+
+        // assert
+        assert.equal(timeout, 100);
+    });
+
+    QUnit.test('Scrolling timeout should be set to timeout if renderAsync is true', function(assert) {
+        // arrange
+        this.setupVirtualColumns();
+        this.options.scrolling.renderAsync = true;
+        this.options.scrolling.columnRenderingThreshold = 110;
+        this.options.scrolling.timeout = 100;
+        this.columnsController._renderTime = 150;
+
+        // act
+        const timeout = this.columnsController.getScrollingTimeout();
+
+        // assert
+        assert.equal(timeout, 100);
+    });
 });
 
 QUnit.testStart(function() {
