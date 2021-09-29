@@ -1536,6 +1536,14 @@ class Diagram extends Widget {
     }
 
 
+    fitToContent() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.FitToScreen);
+    }
+    fitToWidth() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.FitToWidth);
+    }
     focus() {
         this._captureFocus();
     }
