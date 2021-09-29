@@ -580,6 +580,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.updateHeaderEmptyCellWidth();
 
+        this._updateScrollable();
+
         this.cache.clear();
     }
 
