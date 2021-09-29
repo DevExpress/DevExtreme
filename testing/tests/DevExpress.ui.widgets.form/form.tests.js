@@ -458,22 +458,24 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
 
 QUnit.test('From renders editors with the right labelMark', function(assert) {
     [false, true].forEach(showOptionalMark => {
-        const form = $('#form').dxForm({
-            formData: { name: 'Name' },
-            labelMode: 'static',
-            showOptionalMark
-        }).dxForm('instance');
+        ['static', 'floating'].forEach(labelMode => {
+            const form = $('#form').dxForm({
+                formData: { name: 'Name' },
+                labelMode,
+                showOptionalMark
+            }).dxForm('instance');
 
-        const renderedWidget = $('#form').find('.dx-field-item .dx-textbox').dxTextBox('instance');
-        const widgetLabelMark = renderedWidget.option('labelMark');
-        const widgetLabelRenderedMark = $('#form').find('.dx-field-item .dx-textbox .dx-label > span').attr('data-mark');
+            const renderedWidget = $('#form').find('.dx-field-item .dx-textbox').dxTextBox('instance');
+            const widgetLabelMark = renderedWidget.option('labelMark');
+            const widgetLabelRenderedMark = $('#form').find('.dx-field-item .dx-textbox .dx-label > span').attr('data-mark');
 
-        const expectedMarkValue = showOptionalMark ? String.fromCharCode(160) + 'optional' : '';
+            const expectedMarkValue = showOptionalMark ? String.fromCharCode(160) + 'optional' : '';
 
-        assert.equal(widgetLabelMark, expectedMarkValue, `showOptionalMark=${showOptionalMark}, option value`);
-        assert.equal(widgetLabelRenderedMark, expectedMarkValue, `showOptionalMark=${showOptionalMark}, data-mark attr`);
+            assert.equal(widgetLabelMark, expectedMarkValue, `showOptionalMark=${showOptionalMark}, option value`);
+            assert.equal(widgetLabelRenderedMark, expectedMarkValue, `showOptionalMark=${showOptionalMark}, data-mark attr`);
 
-        form.dispose();
+            form.dispose();
+        });
     });
 });
 
