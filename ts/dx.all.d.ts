@@ -9407,13 +9407,13 @@ declare module DevExpress.ui {
        */
       autoSizeEnabled?: boolean;
       /**
-       * [descr:dxDiagramOptions.nodes.containerChildrenExpr]
-       */
-      containerChildrenExpr?: string | ((data: any, value?: any) => any);
-      /**
        * [descr:dxDiagramOptions.nodes.containerKeyExpr]
        */
       containerKeyExpr?: string | ((data: any, value?: any) => any);
+      /**
+       * [descr:dxDiagramOptions.nodes.containerChildrenExpr]
+       */
+      containerChildrenExpr?: string | ((data: any, value?: any) => any);
       /**
        * [descr:dxDiagramOptions.nodes.customDataExpr]
        */
