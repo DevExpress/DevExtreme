@@ -15,194 +15,180 @@ import TaskTimeTooltipContentTemplate from './TaskTimeTooltipContentTemplate.js'
 const scaleTypes = ['auto', 'minutes', 'hours', 'days', 'weeks', 'months', 'quarters', 'years'];
 const titlePositions = ['inside', 'outside', 'none'];
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      scaleType: 'months',
-      taskTitlePosition: 'outside',
-      showResources: true,
-      showDependencies: true,
-      showCustomTaskTooltip: true,
-      startDateRange: new Date(2018, 11, 1),
-      endDateRange: new Date(2019, 11, 1),
-    };
-    this.onScaleTypeChanged = this.onScaleTypeChanged.bind(this);
-    this.onTaskTitlePositionChanged = this.onTaskTitlePositionChanged.bind(this);
-    this.onShowResourcesChanged = this.onShowResourcesChanged.bind(this);
-    this.onShowDependenciesChanged = this.onShowDependenciesChanged.bind(this);
-    this.onShowCustomTaskTooltip = this.onShowCustomTaskTooltip.bind(this);
-    this.onStartDateValueChanged = this.onStartDateValueChanged.bind(this);
-    this.onEndDateValueChanged = this.onEndDateValueChanged.bind(this);
-  }
+function App() {
+  const [ganttConfig, setGanttConfig] = React.useState({
+    scaleType: 'months',
+    taskTitlePosition: 'outside',
+    showResources: true,
+    showDependencies: true,
+    showCustomTaskTooltip: true,
+    startDateRange: new Date(2018, 11, 1),
+    endDateRange: new Date(2019, 11, 1),
+  });
 
-  render() {
-    const {
-      scaleType,
-      taskTitlePosition,
-      showResources,
-      showDependencies,
-      showCustomTaskTooltip,
-      startDateRange,
-      endDateRange,
-    } = this.state;
-    return (
-      <div id="form-demo">
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="column">
-            <div className="option">
-              <div className="label">Scale Type:</div>
-              {' '}
-              <div className="value">
-                <SelectBox
-                  items={scaleTypes}
-                  value={scaleType}
-                  onValueChanged={this.onScaleTypeChanged}
-                />
-              </div>
-            </div>
-            <div className="option">
-              <div className="label">Title Position:</div>
-              {' '}
-              <div className="value">
-                <SelectBox
-                  items={titlePositions}
-                  value={taskTitlePosition}
-                  onValueChanged={this.onTaskTitlePositionChanged}
-                />
-              </div>
-            </div>
-            <div className="option">
-              <div className="label">Show Resources:</div>
-              {' '}
-              <div className="value">
-                <CheckBox
-                  value={showResources}
-                  onValueChanged={this.onShowResourcesChanged}
-                />
-              </div>
-            </div>
-            <div className="option">
-              <div className="label">Show Dependencies:</div>
-              {' '}
-              <div className="value">
-                <CheckBox
-                  value={showDependencies}
-                  onValueChanged={this.onShowDependenciesChanged}
-                />
-              </div>
+  return (
+    <div id="form-demo">
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="column">
+          <div className="option">
+            <div className="label">Scale Type:</div>
+            {' '}
+            <div className="value">
+              <SelectBox
+                items={scaleTypes}
+                value={ganttConfig.scaleType}
+                onValueChanged={onScaleTypeChanged}
+              />
             </div>
           </div>
-          {' '}
-          <div className="column">
-            <div className="option">
-              <div className="label">Start Date Range:</div>
-              {' '}
-              <div className="value">
-                <DateBox
-                  value={startDateRange}
-                  type="date"
-                  onValueChanged={this.onStartDateValueChanged}
-                />
-              </div>
+          <div className="option">
+            <div className="label">Title Position:</div>
+            {' '}
+            <div className="value">
+              <SelectBox
+                items={titlePositions}
+                value={ganttConfig.taskTitlePosition}
+                onValueChanged={onTaskTitlePositionChanged}
+              />
             </div>
-            <div className="option">
-              <div className="label">End Date Range:</div>
-              {' '}
-              <div className="value">
-                <DateBox
-                  value={endDateRange}
-                  type="date"
-                  onValueChanged={this.onEndDateValueChanged}
-                />
-              </div>
+          </div>
+          <div className="option">
+            <div className="label">Show Resources:</div>
+            {' '}
+            <div className="value">
+              <CheckBox
+                value={ganttConfig.showResources}
+                onValueChanged={onShowResourcesChanged}
+              />
             </div>
-            <div className="option">
-              <div className="label">Customize Task Tooltip:</div>
-              {' '}
-              <div className="value">
-                <CheckBox
-                  value={showCustomTaskTooltip}
-                  onValueChanged={this.onShowCustomTaskTooltip}
-                />
-              </div>
+          </div>
+          <div className="option">
+            <div className="label">Show Dependencies:</div>
+            {' '}
+            <div className="value">
+              <CheckBox
+                value={ganttConfig.showDependencies}
+                onValueChanged={onShowDependenciesChanged}
+              />
             </div>
           </div>
         </div>
-        <div className="widget-container">
-          <Gantt
-            taskListWidth={500}
-            height={700}
-            taskTitlePosition={taskTitlePosition}
-            scaleType={scaleType}
-            showResources={showResources}
-            showDependencies={showDependencies}
-            taskTooltipContentRender = {showCustomTaskTooltip ? TaskTooltipTemplate : undefined}
-            taskTimeTooltipContentRender =
-              {showCustomTaskTooltip ? TaskTimeTooltipContentTemplate : undefined}
-            taskProgressTooltipContentRender =
-              {showCustomTaskTooltip ? TaskProgressTooltipContentTemplate : undefined}
-            startDateRange = {startDateRange}
-            endDateRange = {endDateRange}>
-
-            <Tasks dataSource={tasks} />
-            <Dependencies dataSource={dependencies} />
-            <Resources dataSource={resources} />
-            <ResourceAssignments dataSource={resourceAssignments} />
-
-            <Column dataField="title" caption="Subject" width={300} />
-            <Column dataField="start" caption="Start Date" />
-            <Column dataField="end" caption="End Date" />
-
-            <Editing enabled={true} />
-          </Gantt>
+        {' '}
+        <div className="column">
+          <div className="option">
+            <div className="label">Start Date Range:</div>
+            {' '}
+            <div className="value">
+              <DateBox
+                value={ganttConfig.startDateRange}
+                type="date"
+                onValueChanged={onStartDateValueChanged}
+              />
+            </div>
+          </div>
+          <div className="option">
+            <div className="label">End Date Range:</div>
+            {' '}
+            <div className="value">
+              <DateBox
+                value={ganttConfig.endDateRange}
+                type="date"
+                onValueChanged={onEndDateValueChanged}
+              />
+            </div>
+          </div>
+          <div className="option">
+            <div className="label">Customize Task Tooltip:</div>
+            {' '}
+            <div className="value">
+              <CheckBox
+                value={ganttConfig.showCustomTaskTooltip}
+                onValueChanged={onShowCustomTaskTooltip}
+              />
+            </div>
+          </div>
         </div>
       </div>
-    );
-  }
+      <div className="widget-container">
+        <Gantt
+          taskListWidth={500}
+          height={700}
+          taskTitlePosition={ganttConfig.taskTitlePosition}
+          scaleType={ganttConfig.scaleType}
+          showResources={ganttConfig.showResources}
+          showDependencies={ganttConfig.showDependencies}
+          taskTooltipContentRender =
+            {ganttConfig.showCustomTaskTooltip ? TaskTooltipTemplate : undefined}
+          taskTimeTooltipContentRender =
+            {ganttConfig.showCustomTaskTooltip ? TaskTimeTooltipContentTemplate : undefined}
+          taskProgressTooltipContentRender =
+            {ganttConfig.showCustomTaskTooltip ? TaskProgressTooltipContentTemplate : undefined}
+          startDateRange = {ganttConfig.startDateRange}
+          endDateRange = {ganttConfig.endDateRange}>
 
-  onScaleTypeChanged(e) {
-    this.setState({
+          <Tasks dataSource={tasks} />
+          <Dependencies dataSource={dependencies} />
+          <Resources dataSource={resources} />
+          <ResourceAssignments dataSource={resourceAssignments} />
+
+          <Column dataField="title" caption="Subject" width={300} />
+          <Column dataField="start" caption="Start Date" />
+          <Column dataField="end" caption="End Date" />
+
+          <Editing enabled />
+        </Gantt>
+      </div>
+    </div>
+  );
+
+  function onScaleTypeChanged(e) {
+    setGanttConfig({
+      ...ganttConfig,
       scaleType: e.value,
     });
   }
 
-  onTaskTitlePositionChanged(e) {
-    this.setState({
+  function onTaskTitlePositionChanged(e) {
+    setGanttConfig({
+      ...ganttConfig,
       taskTitlePosition: e.value,
     });
   }
 
-  onShowResourcesChanged(e) {
-    this.setState({
+  function onShowResourcesChanged(e) {
+    setGanttConfig({
+      ...ganttConfig,
       showResources: e.value,
     });
   }
 
-  onShowDependenciesChanged(e) {
-    this.setState({
+  function onShowDependenciesChanged(e) {
+    setGanttConfig({
+      ...ganttConfig,
       showDependencies: e.value,
     });
   }
 
-  onShowCustomTaskTooltip(e) {
-    this.setState({
+  function onShowCustomTaskTooltip(e) {
+    setGanttConfig({
+      ...ganttConfig,
       showCustomTaskTooltip: e.value,
     });
   }
 
-  onStartDateValueChanged(e) {
-    this.setState({
+  function onStartDateValueChanged(e) {
+    setGanttConfig({
+      ...ganttConfig,
       startDateRange: e.value,
     });
   }
 
-  onEndDateValueChanged(e) {
-    this.setState({
+  function onEndDateValueChanged(e) {
+    setGanttConfig({
+      ...ganttConfig,
       endDateRange: e.value,
     });
   }
 }
-
 export default App;

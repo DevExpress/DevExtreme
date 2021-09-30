@@ -9,84 +9,89 @@ import {
   tasks, dependencies, resources, resourceAssignments,
 } from './data.js';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      popupVisible: false,
-    };
-    this.aboutButtonOptions = {
-      text: 'About',
-      icon: 'info',
-      stylingMode: 'text',
-      onClick: this.aboutButtonClick.bind(this),
-    };
-  }
+function App() {
+  const [ganttConfig, setGanttConfig] = React.useState({
+    popupVisible: false,
+  });
 
-  render() {
-    return (
-      <React.Fragment>
-        <Gantt
-          taskListWidth={500}
-          scaleType="weeks"
-          height={700}>
+  const [aboutButtonOptions] = React.useState({
+    text: 'About',
+    icon: 'info',
+    stylingMode: 'text',
+    onClick: () => { aboutButtonClick(); },
+  });
 
-          <Tasks dataSource={tasks} />
-          <Dependencies dataSource={dependencies} />
-          <Resources dataSource={resources} />
-          <ResourceAssignments dataSource={resourceAssignments} />
+  return (
+    <React.Fragment>
+      <Gantt
+        taskListWidth={500}
+        scaleType="weeks"
+        height={700}>
 
-          <Toolbar>
-            <Item name="undo" />
-            <Item name="redo" />
-            <Item name="separator" />
-            <Item name="collapseAll" />
-            <Item name="expandAll" />
-            <Item name="separator" />
-            <Item name="addTask" />
-            <Item name="deleteTask" />
-            <Item name="separator" />
-            <Item name="zoomIn" />
-            <Item name="zoomOut" />
-            <Item name="separator" />
-            <Item name="showResources" />
-            <Item name="showDependencies" />
-            <Item name="separator" />
-            <Item widget="dxButton" options={this.aboutButtonOptions} />
-          </Toolbar>
+        <Tasks dataSource={tasks} />
+        <Dependencies dataSource={dependencies} />
+        <Resources dataSource={resources} />
+        <ResourceAssignments dataSource={resourceAssignments} />
 
-          <Column dataField="title" caption="Subject" width={300} />
-          <Column dataField="start" caption="Start Date" />
-          <Column dataField="end" caption="End Date" />
+        <Toolbar>
+          <Item name="undo" />
+          <Item name="redo" />
+          <Item name="separator" />
+          <Item name="collapseAll" />
+          <Item name="expandAll" />
+          <Item name="separator" />
+          <Item name="addTask" />
+          <Item name="deleteTask" />
+          <Item name="separator" />
+          <Item name="zoomIn" />
+          <Item name="zoomOut" />
+          <Item name="separator" />
+          <Item name="showResources" />
+          <Item name="showDependencies" />
+          <Item name="separator" />
+          <Item widget="dxButton" options={aboutButtonOptions} />
+        </Toolbar>
 
-          <Editing enabled={true} />
-        </Gantt>
-        <Popup
-          visible={this.state.popupVisible}
-          closeOnOutsideClick={true}
-          showTitle={true}
-          title="About"
-          height="auto"
-        >
-          <div>
+        <Column dataField="title" caption="Subject" width={300} />
+        <Column dataField="start" caption="Start Date" />
+        <Column dataField="end" caption="End Date" />
+
+        <Editing enabled />
+      </Gantt>
+      <Popup
+        visible={ganttConfig.popupVisible}
+        onHiding = {onHiding}
+        closeOnOutsideClick
+        showTitle
+        title="About"
+        height="auto"
+      >
+        <div>
             The DevExtreme JavaScript <b>Gantt</b> allows you to display the task
             flow and dependencies between tasks over a certain period.
-            <br />
-            <br />
+          <br />
+          <br />
             You can move and modify tasks (a task name, duration or progress, for example)
             directly from the chart. Adjust the timescale to display tasks in smaller or
             greater time intervals, from hours to years. Hold the CTRL key and rotate your
             mouse&apos;s scroll wheel to zoom (in or out) to browse data across various
             levels of detail.
-          </div>
-        </Popup>
-      </React.Fragment>
-    );
+        </div>
+      </Popup>
+    </React.Fragment>
+  );
+
+  function aboutButtonClick() {
+    setGanttConfig({
+      ...ganttConfig,
+      popupVisible: true,
+    });
   }
 
-  aboutButtonClick() {
-    this.setState({
-      popupVisible: true,
+  function onHiding() {
+    setGanttConfig({
+      ...ganttConfig,
+      popupVisible: false,
     });
   }
 }

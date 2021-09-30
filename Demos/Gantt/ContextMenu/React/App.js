@@ -7,99 +7,88 @@ import {
   tasks, dependencies, resources, resourceAssignments,
 } from './data.js';
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      showResources: true,
-      disableContextMenu: false,
-      contextMenuItems: this.getContextMenuItems(),
-    };
-    this.onPreventContextMenuShowing = this.onPreventContextMenuShowing.bind(this);
-    this.onCustomizeContextMenu = this.onCustomizeContextMenu.bind(this);
-    this.onCustomCommandClick = this.onCustomCommandClick.bind(this);
-    this.onContextMenuPreparing = this.onContextMenuPreparing.bind(this);
-  }
+function App() {
+  const [ganttConfig, setGanttConfig] = React.useState({
+    showResources: true,
+    disableContextMenu: false,
+    contextMenuItems: getContextMenuItems(),
+  });
 
-  render() {
-    const {
-      showResources,
-      disableContextMenu,
-      contextMenuItems,
-    } = this.state;
-    return (
-      <div id="form-demo">
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="option">
-            <CheckBox
-              text="Prevent Context Menu Showing"
-              value={disableContextMenu}
-              onValueChanged={this.onPreventContextMenuShowing}
-            />
-          </div>
-          &nbsp;
-          <div className="option">
-            <CheckBox
-              text="Customize Context Menu"
-              defaultValue={true}
-              onValueChanged={this.onCustomizeContextMenu}
-            />
-          </div>
+  return (
+    <div id="form-demo">
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="option">
+          <CheckBox
+            text="Prevent Context Menu Showing"
+            value={ganttConfig.disableContextMenu}
+            onValueChanged={onPreventContextMenuShowing}
+          />
         </div>
-        <div className="widget-container">
-          <Gantt
-            taskListWidth={500}
-            height={700}
-            showResources={showResources}
-            scaleType="weeks"
-            onCustomCommand={this.onCustomCommandClick}
-            onContextMenuPreparing={this.onContextMenuPreparing}
-          >
-            <ContextMenu
-              items={contextMenuItems} />
-
-            <Tasks dataSource={tasks} />
-            <Dependencies dataSource={dependencies} />
-            <Resources dataSource={resources} />
-            <ResourceAssignments dataSource={resourceAssignments} />
-
-            <Column dataField="title" caption="Subject" width={300} />
-            <Column dataField="start" caption="Start Date" />
-            <Column dataField="end" caption="End Date" />
-
-            <Editing enabled={true} />
-          </Gantt>
+          &nbsp;
+        <div className="option">
+          <CheckBox
+            text="Customize Context Menu"
+            defaultValue={true}
+            onValueChanged={onCustomizeContextMenu}
+          />
         </div>
       </div>
-    );
+      <div className="widget-container">
+        <Gantt
+          taskListWidth={500}
+          height={700}
+          showResources={ganttConfig.showResources}
+          scaleType="weeks"
+          onCustomCommand={onCustomCommandClick}
+          onContextMenuPreparing={onContextMenuPreparing}
+        >
+          <ContextMenu
+            items={ganttConfig.contextMenuItems} />
+
+          <Tasks dataSource={tasks} />
+          <Dependencies dataSource={dependencies} />
+          <Resources dataSource={resources} />
+          <ResourceAssignments dataSource={resourceAssignments} />
+
+          <Column dataField="title" caption="Subject" width={300} />
+          <Column dataField="start" caption="Start Date" />
+          <Column dataField="end" caption="End Date" />
+
+          <Editing enabled />
+        </Gantt>
+      </div>
+    </div>
+  );
+
+  function onContextMenuPreparing(e) {
+    e.cancel = ganttConfig.disableContextMenu;
   }
 
-  onContextMenuPreparing(e) {
-    e.cancel = this.state.disableContextMenu;
-  }
-
-  onCustomizeContextMenu(e) {
-    this.setState({
-      contextMenuItems: e.value ? this.getContextMenuItems() : undefined,
+  function onCustomizeContextMenu(e) {
+    setGanttConfig({
+      ...ganttConfig,
+      contextMenuItems: e.value ? getContextMenuItems() : undefined,
     });
   }
 
-  onPreventContextMenuShowing(e) {
-    this.setState({
+  function onPreventContextMenuShowing(e) {
+    setGanttConfig({
+      ...ganttConfig,
       disableContextMenu: e.value,
     });
   }
 
-  onCustomCommandClick(e) {
+  function onCustomCommandClick(e) {
     if (e.name === 'ToggleDisplayOfResources') {
-      this.setState({
-        showResources: !this.state.showResources,
+      setGanttConfig({
+        ...ganttConfig,
+        showResources: !ganttConfig.showResources,
       });
     }
   }
 
-  getContextMenuItems() {
+  function getContextMenuItems() {
     return [
       'addTask',
       'taskdetails',

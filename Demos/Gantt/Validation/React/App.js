@@ -5,92 +5,82 @@ import Gantt, {
 import CheckBox from 'devextreme-react/check-box';
 import { tasks, dependencies } from './data.js';
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      autoUpdateParentTasks: true,
-      validateDependencies: true,
-      enablePredecessorGap: true,
-    };
-    this.onAutoUpdateParentTasksChanged = this.onAutoUpdateParentTasksChanged.bind(this);
-    this.onValidateDependenciesChanged = this.onValidateDependenciesChanged.bind(this);
-    this.onEnablePredecessorGapChanged = this.onEnablePredecessorGapChanged.bind(this);
-  }
+function App() {
+  const [ganttConfig, setGanttConfig] = React.useState({
+    autoUpdateParentTasks: true,
+    validateDependencies: true,
+    enablePredecessorGap: true,
+  });
 
-  render() {
-    const {
-      autoUpdateParentTasks,
-      validateDependencies,
-      enablePredecessorGap,
-    } = this.state;
-    return (
-      <div id="form-demo">
-        <div className="options">
-          <div className="caption">Options</div>
-          <div className="option">
-            <CheckBox
-              text="Auto Update Parent Tasks"
-              value={autoUpdateParentTasks}
-              onValueChanged={this.onAutoUpdateParentTasksChanged}
-            />
-          </div>
-          {' '}
-          <div className="option">
-            <CheckBox
-              text="Enable Dependency Validation"
-              value={validateDependencies}
-              onValueChanged={this.onValidateDependenciesChanged}
-            />
-          </div>
-          {' '}
-          <div className="option">
-            <CheckBox
-              text="Enable Predecessor Gap"
-              value={enablePredecessorGap}
-              onValueChanged={this.onEnablePredecessorGapChanged}
-            />
-          </div>
+  return (
+    <div id="form-demo">
+      <div className="options">
+        <div className="caption">Options</div>
+        <div className="option">
+          <CheckBox
+            text="Auto Update Parent Tasks"
+            value={ganttConfig.autoUpdateParentTasks}
+            onValueChanged={onAutoUpdateParentTasksChanged}
+          />
         </div>
-        <div className="widget-container">
-          <Gantt
-            taskListWidth={500}
-            height={700}
-            taskTitlePosition="none">
-
-            <Validation
-              autoUpdateParentTasks={autoUpdateParentTasks}
-              validateDependencies={validateDependencies}
-              enablePredecessorGap={enablePredecessorGap} />
-
-            <Tasks dataSource={tasks} />
-            <Dependencies dataSource={dependencies} />
-
-            <Column dataField="title" caption="Task" width={300} />
-            <Column dataField="start" caption="Start Date" />
-            <Column dataField="end" caption="End Date" />
-
-            <Editing enabled={true} />
-          </Gantt>
+        {' '}
+        <div className="option">
+          <CheckBox
+            text="Enable Dependency Validation"
+            value={ganttConfig.validateDependencies}
+            onValueChanged={onValidateDependenciesChanged}
+          />
+        </div>
+        {' '}
+        <div className="option">
+          <CheckBox
+            text="Enable Predecessor Gap"
+            value={ganttConfig.enablePredecessorGap}
+            onValueChanged={onEnablePredecessorGapChanged}
+          />
         </div>
       </div>
-    );
-  }
+      <div className="widget-container">
+        <Gantt
+          taskListWidth={500}
+          height={700}
+          taskTitlePosition="none">
 
-  onAutoUpdateParentTasksChanged(e) {
-    this.setState({
+          <Validation
+            autoUpdateParentTasks={ganttConfig.autoUpdateParentTasks}
+            validateDependencies={ganttConfig.validateDependencies}
+            enablePredecessorGap={ganttConfig.enablePredecessorGap} />
+
+          <Tasks dataSource={tasks} />
+          <Dependencies dataSource={dependencies} />
+
+          <Column dataField="title" caption="Task" width={300} />
+          <Column dataField="start" caption="Start Date" />
+          <Column dataField="end" caption="End Date" />
+
+          <Editing enabled />
+        </Gantt>
+      </div>
+    </div>
+  );
+
+  function onAutoUpdateParentTasksChanged(e) {
+    setGanttConfig({
+      ...ganttConfig,
       autoUpdateParentTasks: e.value,
     });
   }
 
-  onValidateDependenciesChanged(e) {
-    this.setState({
+  function onValidateDependenciesChanged(e) {
+    setGanttConfig({
+      ...ganttConfig,
       validateDependencies: e.value,
     });
   }
 
-  onEnablePredecessorGapChanged(e) {
-    this.setState({
+  function onEnablePredecessorGapChanged(e) {
+    setGanttConfig({
+      ...ganttConfig,
       enablePredecessorGap: e.value,
     });
   }
