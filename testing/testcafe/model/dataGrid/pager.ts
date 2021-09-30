@@ -11,7 +11,9 @@ const CLASS = {
 
 export default class Pager extends FocusableElement {
   getPageSize(index: number): SelectableElement {
-    return new SelectableElement(this.element.find(`.${CLASS.pagerPageSize}:nth-child(${index + 1})`));
+    return new SelectableElement(this.element
+      .find(`.${CLASS.pagerPageSize}`)
+      .nth(index));
   }
 
   getPrevNavButton(): FocusableElement {
