@@ -1599,7 +1599,9 @@ declare module DevExpress.data {
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
   > extends Store<TValue, TKeyExpr, TKey> {
-    constructor(options?: ArrayStoreOptions<TValue, TKeyExpr, TKey>);
+    constructor(
+      options?: DevExpress.data.ArrayStore.Options<TValue, TKeyExpr, TKey>
+    );
     /**
      * [descr:ArrayStore.clear()]
      */
@@ -1609,14 +1611,22 @@ declare module DevExpress.data {
      */
     createQuery(): Query;
   }
+  module ArrayStore {
+    export type Options<
+      TValue = any,
+      TKeyExpr extends string | Array<string> = string | Array<string>,
+      TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+    > = ArrayStoreOptions<TValue, TKeyExpr, TKey>;
+  }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface ArrayStoreOptions<
     TValue = any,
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
-  > extends StoreOptions<TValue, TKeyExpr, TKey> {
+  > extends DevExpress.data.Store.Options<TValue, TKeyExpr, TKey> {
     /**
      * [descr:ArrayStoreOptions.data]
      */
@@ -1640,20 +1650,30 @@ declare module DevExpress.data {
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
   > extends Store<TValue, TKeyExpr, TKey> {
-    constructor(options?: CustomStoreOptions<TValue, TKeyExpr, TKey>);
+    constructor(
+      options?: DevExpress.data.CustomStore.Options<TValue, TKeyExpr, TKey>
+    );
     /**
      * [descr:CustomStore.clearRawDataCache()]
      */
     clearRawDataCache(): void;
   }
+  module CustomStore {
+    export type Options<
+      TValue = any,
+      TKeyExpr extends string | Array<string> = string | Array<string>,
+      TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+    > = CustomStoreOptions<TValue, TKeyExpr, TKey>;
+  }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface CustomStoreOptions<
     TValue = any,
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
-  > extends StoreOptions<TValue, TKeyExpr, TKey> {
+  > extends DevExpress.data.Store.Options<TValue, TKeyExpr, TKey> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
@@ -1705,8 +1725,8 @@ declare module DevExpress.data {
     constructor(data: Array<TValue>);
     constructor(
       options:
-        | CustomStoreOptions<TValue, TKeyExpr, TKey>
-        | DataSourceOptions<any, TValue, any, TKeyExpr, TKey>
+        | DevExpress.data.CustomStore.Options<TValue, TKeyExpr, TKey>
+        | DevExpress.data.DataSource.Options<any, TValue, any, TKeyExpr, TKey>
     );
     constructor(store: Store<TValue, TKeyExpr, TKey>);
     constructor(url: string);
@@ -1880,8 +1900,16 @@ declare module DevExpress.data {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     type EventName = 'changed' | 'loadError' | 'loadingChanged';
+    export type Options<
+      TSourceValue = any,
+      TValue = TSourceValue,
+      TMappedValue = TValue,
+      TKeyExpr extends string | Array<string> = string | Array<string>,
+      TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+    > = DataSourceOptions<TSourceValue, TValue, TMappedValue, TKeyExpr, TKey>;
   }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface DataSourceOptions<
@@ -1973,10 +2001,12 @@ declare module DevExpress.data {
     store?:
       | Array<TSourceValue>
       | Store<TSourceValue, TKeyExpr, TKey>
-      | (ArrayStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'array' })
+      | (DevExpress.data.ArrayStore.Options<TSourceValue, TKeyExpr, TKey> & {
+          type: 'array';
+        })
       | (LocalStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'local' })
       | (ODataStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'odata' })
-      | CustomStoreOptions<TSourceValue, TKeyExpr, TKey>;
+      | DevExpress.data.CustomStore.Options<TSourceValue, TKeyExpr, TKey>;
   }
   /**
    * [descr:EdmLiteral]
@@ -2369,7 +2399,7 @@ declare module DevExpress.data {
    * [descr:PivotGridDataSource]
    */
   export class PivotGridDataSource {
-    constructor(options?: PivotGridDataSourceOptions);
+    constructor(options?: DevExpress.data.PivotGridDataSource.Options);
     /**
      * [descr:PivotGridDataSource.collapseAll(id)]
      */
@@ -2491,6 +2521,7 @@ declare module DevExpress.data {
       | 'fieldsPrepared'
       | 'loadError'
       | 'loadingChanged';
+    export type Options = PivotGridDataSourceOptions;
   }
   /**
    * @deprecated Use Field instead
@@ -2672,6 +2703,7 @@ declare module DevExpress.data {
     wordWrapEnabled?: boolean;
   }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface PivotGridDataSourceOptions {
@@ -2718,7 +2750,7 @@ declare module DevExpress.data {
      */
     store?:
       | Store
-      | StoreOptions
+      | DevExpress.data.Store.Options
       | XmlaStore
       | XmlaStoreOptions
       | Array<{
@@ -2878,7 +2910,9 @@ declare module DevExpress.data {
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
   > {
-    constructor(options?: StoreOptions<TValue, TKeyExpr, TKey>);
+    constructor(
+      options?: DevExpress.data.Store.Options<TValue, TKeyExpr, TKey>
+    );
     /**
      * [descr:Store.byKey(key)]
      */
@@ -2973,6 +3007,14 @@ declare module DevExpress.data {
       | 'removing'
       | 'modified'
       | 'modifying';
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type Options<
+      TValue = any,
+      TKeyExpr extends string | Array<string> = string | Array<string>,
+      TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+    > = StoreOptions<TValue, TKeyExpr, TKey>;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -4225,7 +4267,7 @@ declare module DevExpress.ui {
       | Array<string | CollectionWidgetItem>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.DataSource.Options;
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
      */
@@ -4424,7 +4466,7 @@ declare module DevExpress.ui {
       | Array<CollectionWidgetItem | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.DataSource.Options;
     /**
      * [descr:DataExpressionMixinOptions.displayExpr]
      */
@@ -5405,7 +5447,7 @@ declare module DevExpress.ui {
       | Array<DevExpress.ui.dxContextMenu.Item>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.DataSource.Options;
     /**
      * [descr:dxContextMenuOptions.items]
      */
@@ -6138,9 +6180,9 @@ declare module DevExpress.ui {
         | DevExpress.data.Store
         | ((options: {
             component?: any;
-            dataSource?: DevExpress.data.DataSourceOptions;
+            dataSource?: DevExpress.data.DataSource.Options;
           }) => any)
-        | DevExpress.data.DataSourceOptions;
+        | DevExpress.data.DataSource.Options;
       /**
        * [descr:GridBaseColumn.headerFilter.groupInterval]
        */
@@ -6179,14 +6221,14 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | Array<any>
-        | DevExpress.data.DataSourceOptions
+        | DevExpress.data.DataSource.Options
         | DevExpress.data.Store
         | ((options: {
             data?: any;
             key?: any;
           }) =>
             | Array<any>
-            | DevExpress.data.DataSourceOptions
+            | DevExpress.data.DataSource.Options
             | DevExpress.data.Store);
       /**
        * [descr:GridBaseColumn.lookup.displayExpr]
@@ -11935,7 +11977,7 @@ declare module DevExpress.ui {
       dataSource?:
         | Array<any>
         | DevExpress.data.Store
-        | DevExpress.data.DataSourceOptions;
+        | DevExpress.data.DataSource.Options;
       /**
        * [descr:dxFilterBuilderField.lookup.displayExpr]
        */
@@ -14540,7 +14582,7 @@ declare module DevExpress.ui {
       | Array<string | DevExpress.ui.dxList.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.DataSource.Options;
     /**
      * [descr:dxListOptions.displayExpr]
      */
@@ -15347,7 +15389,7 @@ declare module DevExpress.ui {
       | Array<dxMenuBaseItem>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.DataSource.Options;
     /**
      * [descr:dxMenuBaseOptions.items]
      */
@@ -15415,7 +15457,7 @@ declare module DevExpress.ui {
       | Array<DevExpress.ui.dxMenu.Item>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.DataSource.Options;
     /**
      * [descr:dxMenuOptions.hideSubmenuOnMouseLeave]
      */
@@ -15532,7 +15574,7 @@ declare module DevExpress.ui {
       | Array<string | DevExpress.ui.dxMultiView.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.DataSource.Options;
     /**
      * [descr:dxMultiViewOptions.deferRendering]
      */
@@ -16100,7 +16142,7 @@ declare module DevExpress.ui {
     dataSource?:
       | Array<any>
       | DevExpress.data.PivotGridDataSource
-      | DevExpress.data.PivotGridDataSourceOptions;
+      | DevExpress.data.PivotGridDataSource.Options;
     /**
      * [descr:dxPivotGridOptions.encodeHtml]
      */
@@ -17711,7 +17753,7 @@ declare module DevExpress.ui {
       | Array<DevExpress.ui.dxScheduler.Appointment>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.DataSource.Options;
     /**
      * [descr:dxSchedulerOptions.dateCellTemplate]
      */
@@ -17933,7 +17975,7 @@ declare module DevExpress.ui {
         | Array<any>
         | DevExpress.data.Store
         | DevExpress.data.DataSource
-        | DevExpress.data.DataSourceOptions;
+        | DevExpress.data.DataSource.Options;
       /**
        * [descr:dxSchedulerOptions.resources.displayExpr]
        */
@@ -19119,7 +19161,7 @@ declare module DevExpress.ui {
       | Array<string | DevExpress.ui.dxTabPanel.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.DataSource.Options;
     /**
      * [descr:dxTabPanelOptions.hoverStateEnabled]
      */
@@ -19941,7 +19983,7 @@ declare module DevExpress.ui {
       | Array<string | DevExpress.ui.dxToolbar.Item | any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.DataSource.Options;
     /**
      * [descr:dxToolbarOptions.items]
      */
@@ -21229,7 +21271,7 @@ declare module DevExpress.ui {
       | Array<DevExpress.ui.dxTreeView.Item>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.DataSource.Options;
     /**
      * [descr:dxTreeViewOptions.dataStructure]
      */
@@ -22046,7 +22088,7 @@ declare module DevExpress.ui {
       | Array<any>
       | DevExpress.data.Store
       | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.DataSource.Options;
     /**
      * [descr:GridBaseOptions.dateSerializationFormat]
      */
