@@ -2346,7 +2346,7 @@ export interface ColumnCustomizeTextArg {
  * @namespace DevExpress.ui
  * @deprecated
  */
-export type GridBaseColumn<TRowData> = ColumnBase<TRowData>;
+export type GridBaseColumn<TRowData = any> = ColumnBase<TRowData>;
 /**
  * @docid GridBaseColumn
  * @type object
@@ -3169,7 +3169,7 @@ export type MasterDetailTemplateData<TRowData = any, TKey = any> = {
 };
 
 /** @public */
-export type RowDraggingTemplateData<TRowData> = RowDraggingTemplateDataModel<TRowData>;
+export type RowDraggingTemplateData<TRowData = any> = RowDraggingTemplateDataModel<TRowData>;
 
 /** @public */
 export type RowTemplateData<TRowData = any, TKey = any> = {
