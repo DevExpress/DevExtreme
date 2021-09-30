@@ -1030,6 +1030,11 @@
  */
 
 /**
+ * @typedef {string} Enums.FormLabelMode
+ * @enum {'static'|'floating'|'hidden'|'default'}
+ */
+
+/**
  * @typedef {string} Enums.GridCommandColumnType
  * @enum {'adaptive'|'buttons'|'detailExpand'|'groupExpand'|'selection'|'drag'}
  */

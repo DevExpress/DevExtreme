@@ -152,6 +152,15 @@
   padding-left: 10px;
 }
 
+.dx-field-item-required,
+.dx-field-item-optional {
+  .dx-label > span {
+    &::after {
+      content: attr(data-mark);
+    }
+  }
+}
+
 .dx-rtl {
   .dx-field-item-required-mark,
   .dx-field-item-optional-mark {
