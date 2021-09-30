@@ -13,7 +13,7 @@ import {
     DashStyle,
     SeriesType,
     Position,
-    TimeIntervalType,
+    VizTimeInterval as TimeIntervalType,
     LegendMarkerState,
 } from '../docEnums';
 
@@ -391,7 +391,7 @@ export interface VizRange {
     /**
      * @docid
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @default undefined
      * @public
      */

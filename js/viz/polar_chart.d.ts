@@ -538,7 +538,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     /**
      * @docid dxPolarChartOptions.argumentAxis.minorTickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -577,7 +577,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     /**
      * @docid dxPolarChartOptions.argumentAxis.tickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @public
      */
     tickInterval?: VizTimeInterval;
@@ -1111,7 +1111,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -1126,7 +1126,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -1153,7 +1153,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.tickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @public
      */
     tickInterval?: VizTimeInterval;

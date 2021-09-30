@@ -1222,7 +1222,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     aggregationGroupWidth?: number;
     /**
      * @docid dxChartOptions.argumentAxis.aggregationInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @inherits VizTimeInterval
      * @public
      */
@@ -1305,7 +1305,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -1320,7 +1320,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.minorTickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -1365,7 +1365,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.tickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @public
      */
     tickInterval?: VizTimeInterval;
@@ -2321,7 +2321,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -2336,7 +2336,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.minorTickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -2400,7 +2400,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.tickInterval
      * @inherits VizTimeInterval
-     * @type number|object|Enums.TimeIntervalType
+     * @type number|object|Enums.VizTimeInterval
      * @public
      */
     tickInterval?: VizTimeInterval;

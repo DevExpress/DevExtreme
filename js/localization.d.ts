@@ -1,4 +1,4 @@
-import { PredefinedFormat } from './docEnums';
+import { Format as PredefinedFormat } from './docEnums';
 
 /**
  * @docid localization.formatDate
@@ -110,7 +110,7 @@ type ExternalFormat = any;
 
 /**
  * @docid
- * @type Object|Enums.PredefinedFormat|string|function
+ * @type Object|Enums.Format|string|function
  * @type_function_param1 value:number|date
  * @default undefined
  * @section Common

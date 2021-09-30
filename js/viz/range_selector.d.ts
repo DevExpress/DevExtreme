@@ -359,7 +359,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       aggregationGroupWidth?: number;
       /**
        * @docid
-       * @type number|object|Enums.TimeIntervalType
+       * @type number|object|Enums.VizTimeInterval
        * @inherits VizTimeInterval
        */
       aggregationInterval?: VizTimeInterval;
@@ -510,13 +510,13 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       };
       /**
        * @docid
-       * @type number|object|Enums.TimeIntervalType
+       * @type number|object|Enums.VizTimeInterval
        * @inherits VizTimeInterval
        */
       maxRange?: VizTimeInterval;
       /**
        * @docid
-       * @type number|object|Enums.TimeIntervalType
+       * @type number|object|Enums.VizTimeInterval
        * @inherits VizTimeInterval
        */
       minRange?: VizTimeInterval;
@@ -552,7 +552,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       minorTickCount?: number;
       /**
        * @docid
-       * @type number|object|Enums.TimeIntervalType
+       * @type number|object|Enums.VizTimeInterval
        * @inherits VizTimeInterval
        */
       minorTickInterval?: VizTimeInterval;
@@ -599,7 +599,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       };
       /**
        * @docid
-       * @type number|object|Enums.TimeIntervalType
+       * @type number|object|Enums.VizTimeInterval
        * @inherits VizTimeInterval
        */
       tickInterval?: VizTimeInterval;

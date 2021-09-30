@@ -14,11 +14,7 @@ export type ValidationMessageMode = 'always' | 'auto';
 
 export type VizAnimationEasing = 'easeOutCubic' | 'linear';
 
-// Format. Must rename - part of a class Format in localization.d.ts
-/**
- * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
- */
-export type PredefinedFormat = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
+export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime';
 
 export type VizTheme = 'generic.dark' | 'generic.light' | 'generic.contrast' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
 
@@ -105,14 +101,13 @@ export type ScaleBreakLineStyle = 'straight' | 'waved';
 
 export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
 
-// VizTimeInterval
-export type TimeIntervalType = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+// TimeIntervalType
+export type VizTimeInterval = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
 
 export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
 
 export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
 
-// can simplify type if :deprecated is not used?
 export type ChartZoomPanActionType = 'zoom' | 'pan';
 
 export type AxisScaleType = 'continuous' | 'discrete' | 'logarithmic';
