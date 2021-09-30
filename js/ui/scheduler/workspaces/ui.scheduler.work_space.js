@@ -45,7 +45,6 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
     VERTICAL_GROUP_COUNT_CLASSES,
-    HORIZONTAL_GROUP_COUNT_CLASSES,
 } from '../classes';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
@@ -2533,7 +2532,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _detachGroupCountClass() {
         [
             ...VERTICAL_GROUP_COUNT_CLASSES,
-            ...HORIZONTAL_GROUP_COUNT_CLASSES,
         ].forEach((className) => {
             this.$element().removeClass(className);
         });
