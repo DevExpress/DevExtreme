@@ -8377,6 +8377,14 @@ declare module DevExpress.ui {
      * [descr:dxDiagram.updateToolbox()]
      */
     updateToolbox(): void;
+    /**
+     * [descr:dxDiagram.fitToContent()]
+     */
+    fitToContent(): void;
+    /**
+     * [descr:dxDiagram.fitToWidth()]
+     */
+    fitToWidth(): void;
   }
   module dxDiagram {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxDiagram>;
