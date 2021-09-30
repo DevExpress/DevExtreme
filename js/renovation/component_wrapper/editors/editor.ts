@@ -62,20 +62,13 @@ export default class Editor extends Component {
     this._valueChangeAction = this._createActionByOption('onValueChanged', {
       excludeValidators: ['disabled', 'readOnly'],
     });
-
-    this._syncValidationOptionsOnInit();
   }
 
-  _syncValidationOptionsOnInit(): void {
-    const props = this.getProps();
-    const syncOptions = Object.fromEntries(['isValid', 'validationStatus', 'validationError', 'validationErrors']
-      .filter((option) => {
-        const optionValue = props[option];
-        return optionValue !== this._getDefaultOptions()[option];
-      }).map((optionName) => [optionName, props[optionName]]));
+  _initOptions(options: Record<string, unknown>): void {
+    super._initOptions(options);
 
     this.option((ValidationEngine as unknown as ({ initValidationOptions }))
-      .initValidationOptions(syncOptions));
+      .initValidationOptions(options));
   }
 
   _getDefaultOptions(): Record<string, unknown> {
