@@ -54,7 +54,6 @@ export default class Editor extends Component {
 
   _init(): void {
     super._init();
-
     data(this.$element()[0], VALIDATION_TARGET, this);
     this.validationRequest = Callbacks();
     this.showValidationMessageTimeout = undefined;
@@ -62,6 +61,20 @@ export default class Editor extends Component {
     this._valueChangeAction = this._createActionByOption('onValueChanged', {
       excludeValidators: ['disabled', 'readOnly'],
     });
+
+    this._syncValidationOptionsOnInit();
+  }
+
+  _syncValidationOptionsOnInit(): void {
+    const props = this.getProps();
+    const syncOptions = Object.fromEntries(['isValid', 'validationStatus', 'validationError', 'validationErrors']
+      .filter((option) => {
+        const optionValue = props[option];
+        return optionValue !== this._getDefaultOptions()[option];
+      }).map((optionName) => [optionName, props[optionName]]));
+
+    this.option((ValidationEngine as unknown as ({ initValidationOptions }))
+      .initValidationOptions(syncOptions));
   }
 
   _getDefaultOptions(): Record<string, unknown> {
