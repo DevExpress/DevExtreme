@@ -166,6 +166,8 @@ function callMethodWithColorParameter(doc, method, color) {
             doc[method](color.ch1, color.ch2, color.ch3);
         } else if(argsCount === 4) {
             doc[method](color.ch1, color.ch2, color.ch3, color.ch4);
+        } else {
+            throw Error(`An incorrect color object was passed: 3 or 4 members are expected while the passed object has ${argsCount} members`);
         }
     }
 }
