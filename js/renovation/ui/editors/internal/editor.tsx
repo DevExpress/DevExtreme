@@ -121,6 +121,7 @@ export class EditorProps extends BaseWidgetProps {
 }
 
 export type EditorPropsType = EditorProps
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<WidgetProps, 'aria' | 'classes' | 'children'>;
 
 @Component({

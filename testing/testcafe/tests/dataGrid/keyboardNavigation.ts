@@ -2516,7 +2516,7 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
     height: 300,
     scrolling: {
       mode: 'virtual',
-      newMode: true,
+      legacyMode: false,
     },
     columns: ['Name', 'Description'],
     onFocusedCellChanging(e) {

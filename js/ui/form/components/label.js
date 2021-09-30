@@ -42,17 +42,22 @@ function _renderLabelMark({ isRequiredMark, requiredMark, isOptionalMark, option
         .text(String.fromCharCode(160) + (isRequiredMark ? requiredMark : optionalMark));
 }
 
-export function getLabelWidthByText(renderLabelOptions) {
+export function getLabelWidthByInnerHTML(options) {
+    const { innerHTML, ...renderLabelOptions } = options;
     const $hiddenContainer = $('<div>')
         .addClass(WIDGET_CLASS)
         .addClass(GET_LABEL_WIDTH_BY_TEXT_CLASS)
         .appendTo('body');
 
+    renderLabelOptions.text = ' '; // space was in initial PR https://hg/mobile/rev/27b4f57f10bb
     const $label = renderLabel(renderLabelOptions).appendTo($hiddenContainer);
 
     const labelTextElement = $label.find('.' + FIELD_ITEM_LABEL_TEXT_CLASS)[0];
 
     // this code has slow performance
+    // innerHTML was added in https://hg/mobile/rev/3ed89cf230a4 for T350537
+    // innerHTML is received from a DOM element (see _getLabelInnerHTML in ui.form.js)
+    labelTextElement.innerHTML = innerHTML;
     const result = labelTextElement.offsetWidth;
 
     $hiddenContainer.remove();

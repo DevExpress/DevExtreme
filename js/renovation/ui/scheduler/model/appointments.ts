@@ -1,8 +1,4 @@
 import {
-  getTimeZoneCalculator,
-  getAppointmentDataProvider,
-} from '../../../../ui/scheduler/instanceFactory';
-import {
   getCellWidth,
   getCellHeight,
   getAllDayHeight,
@@ -17,7 +13,9 @@ import dateUtils from '../../../../core/utils/date';
 
 import { AppointmentsConfigType, AppointmentsModelType } from './types';
 
-import { ViewType } from '../types';
+import { DataAccessorType, ViewType } from '../types';
+import { calculateIsGroupedAllDayPanel, getCellDuration } from '../view_model/to_test/views/utils/base';
+import { createGetAppointmentColor } from '../resources/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 const toMs = (name: string): number => dateUtils.dateToMilliseconds(name);
@@ -61,22 +59,91 @@ const getAppointmentConfig = (
   key: number,
   schedulerConfig: SchedulerProps,
   viewConfig: CurrentViewConfigType,
+): AppointmentsConfigType => ({
+  key,
+  adaptivityEnabled: schedulerConfig.adaptivityEnabled,
+  rtlEnabled: schedulerConfig.rtlEnabled,
+  startDayHour: viewConfig.startDayHour,
+  viewStartDayHour: viewConfig.startDayHour, // TODO remove
+  endDayHour: viewConfig.endDayHour,
+  viewEndDayHour: viewConfig.endDayHour, // TODO remove
+  resources: schedulerConfig.resources,
+  maxAppointmentsPerCell: schedulerConfig.maxAppointmentsPerCell,
+  currentDate: viewConfig.currentDate,
+  isVirtualScrolling: viewConfig.scrolling.mode === 'virtual',
+  intervalCount: viewConfig.intervalCount,
+  hoursInterval: viewConfig.hoursInterval,
+  showAllDayPanel: viewConfig.showAllDayPanel,
+  modelGroups: [],
+  appointmentCountPerCell: 2, // TODO default
+  appointmentOffset: 26, // TODO default
+  allowResizing: false, // TODO resizing
+  allowAllDayResizing: false, // TODO resizing
+  dateTableOffset: 0,
+  groupOrientation: viewConfig.groupOrientation,
+  startViewDate: viewConfig.startDate,
+  timeZone: schedulerConfig.timeZone,
+  firstDayOfWeek: viewConfig.firstDayOfWeek,
+  viewType: viewConfig.type,
+  cellDurationInMinutes: viewConfig.cellDuration,
+  supportAllDayRow: viewConfig.showAllDayPanel, // ?
+  isVerticalGroupOrientation: viewConfig.groupOrientation === 'vertical',
+});
+
+export const getAppointmentsModel = (
+  key: number,
+  schedulerConfig: SchedulerProps,
+  viewConfig: CurrentViewConfigType,
   viewDataProvider: ViewDataProviderType,
-  cellMetaData: CellsMetaData,
-): AppointmentsConfigType => {
+  timeZoneCalculator: unknown,
+  appointmentDataProvider: unknown,
+  dataAccessors: DataAccessorType,
+  cellsMetaData: CellsMetaData,
+): AppointmentsModelType => {
+  const appointmentConfig = getAppointmentConfig(
+    key,
+    schedulerConfig,
+    viewConfig,
+  );
+
+  const groupCount = getGroupCount(schedulerConfig.groups);
+
   const groupedByDate = isGroupingByDate(
     schedulerConfig.groups as unknown as Group[],
     viewConfig.groupOrientation,
     viewConfig.groupByDate,
   );
-  const isVerticalGroupOrientation = viewConfig.groupOrientation === 'vertical';
-  const isVirtualScrolling = schedulerConfig.scrolling.mode === 'virtual';
-  const endViewDate = viewDataProvider.getLastCellEndDate();
+
+  const positionHelper = new PositionHelper({
+    viewDataProvider,
+    groupedByDate,
+    rtlEnabled: appointmentConfig.rtlEnabled,
+    groupCount,
+    getDOMMetaDataCallback: (): CellsMetaData => cellsMetaData,
+  });
+
+  const isGroupedAllDayPanel = calculateIsGroupedAllDayPanel(
+    viewConfig.groups,
+    viewConfig.groupOrientation,
+    viewConfig.showAllDayPanel,
+  );
+
+  const rowCount = viewDataProvider.getRowCount({
+    intervalCount: viewConfig.intervalCount,
+    currentDate: viewConfig.currentDate,
+    viewType: viewConfig.type,
+    hoursInterval: viewConfig.hoursInterval,
+    startDayHour: viewConfig.startDayHour,
+    endDayHour: viewConfig.endDayHour,
+  });
+
   const allDayHeight = getAllDayHeight(
     viewConfig.showAllDayPanel,
-    isVerticalGroupOrientation,
-    cellMetaData,
+    appointmentConfig.isVerticalGroupOrientation,
+    cellsMetaData,
   );
+
+  const endViewDate = viewDataProvider.getLastCellEndDate();
   const visibleDayDuration = viewDataProvider.getVisibleDayDuration(
     viewConfig.startDayHour,
     viewConfig.endDayHour,
@@ -91,69 +158,46 @@ const getAppointmentConfig = (
   const intervalDuration = viewDataProvider.getIntervalDuration(viewConfig.intervalCount);
   const allDayIntervalDuration = toMs('day') * 3600000;
   const { leftVirtualCellCount, topVirtualRowCount } = viewDataProvider.viewData;
-
-  return {
-    key,
-    appointmentRenderingStrategyName: getAppointmentRenderingStrategyName(viewConfig.type),
-    adaptivityEnabled: schedulerConfig.adaptivityEnabled,
-    rtlEnabled: schedulerConfig.rtlEnabled,
-    maxAppointmentsPerCell: schedulerConfig.maxAppointmentsPerCell,
-    isVirtualScrolling,
-    leftVirtualCellCount,
-    topVirtualCellCount: topVirtualRowCount,
-    modelGroups: [], // TODO
-    groupCount: getGroupCount(schedulerConfig.groups),
-    dateTableOffset: 0,
-    groupOrientation: viewConfig.groupOrientation,
-    startViewDate: viewConfig.startDate,
-    endViewDate,
-    isGroupedByDate: groupedByDate,
-    cellWidth: getCellWidth(cellMetaData),
-    cellHeight: getCellHeight(cellMetaData),
-    allDayHeight,
-    visibleDayDuration,
-    timeZone: schedulerConfig.timeZone,
-    firstDayOfWeek: viewConfig.firstDayOfWeek,
-    viewType: viewConfig.type,
-    cellDuration: viewConfig.cellDuration,
-    supportAllDayRow: viewConfig.showAllDayPanel, // ?
-    dateRange,
-    intervalDuration,
-    allDayIntervalDuration,
-    isVerticalGroupOrientation,
-    DOMMetaData: cellMetaData,
-  };
-};
-
-export const getAppointmentsModel = (
-  key: number,
-  schedulerConfig: SchedulerProps,
-  viewConfig: CurrentViewConfigType,
-  viewDataProvider: ViewDataProviderType,
-  cellMetaData: CellsMetaData,
-): AppointmentsModelType => {
-  const appointmentConfig = getAppointmentConfig(
-    key,
-    schedulerConfig,
-    viewConfig,
-    viewDataProvider,
-    cellMetaData,
+  const cellDuration = getCellDuration(
+    viewConfig.type,
+    viewConfig.startDayHour,
+    viewConfig.endDayHour,
+    viewConfig.hoursInterval,
   );
 
-  const positionHelper = new PositionHelper({
-    viewDataProvider,
-    isGroupingByDate: appointmentConfig.isGroupedByDate,
-    rtlEnabled: appointmentConfig.rtlEnabled,
-    groupCount: appointmentConfig.groupCount,
-    getDOMMetaDataCallback: (): CellsMetaData => cellMetaData,
+  const getAppointmentColor = createGetAppointmentColor({
+    resources: schedulerConfig.resources,
+    resourceDataAccessors: dataAccessors,
+    loadedResources: [], // TODO fill after load resources
+    resourceLoaderMap: new Map(), // TODO fill after load resources
   });
 
   return {
     ...appointmentConfig,
-    timeZoneCalculator: getTimeZoneCalculator(key),
-    appointmentDataProvider: getAppointmentDataProvider(key),
+    appointmentRenderingStrategyName: getAppointmentRenderingStrategyName(viewConfig.type),
+    loadedResources: [],
+    dataAccessors,
+    timeZoneCalculator,
+    appointmentDataProvider,
     viewDataProvider,
     positionHelper,
+    isGroupedAllDayPanel,
+    rowCount,
+    groupCount,
+    cellWidth: getCellWidth(cellsMetaData),
+    cellHeight: getCellHeight(cellsMetaData),
+    allDayHeight,
+    isGroupedByDate: groupedByDate,
+    endViewDate,
+    visibleDayDuration,
+    dateRange,
+    intervalDuration,
+    allDayIntervalDuration,
+    leftVirtualCellCount,
+    topVirtualCellCount: topVirtualRowCount,
+    cellDuration,
+    getAppointmentColor,
     resizableStep: positionHelper.getResizableStep(),
+    DOMMetaData: cellsMetaData,
   };
 };

@@ -480,7 +480,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             scrolling: {
                 rowRenderingMode: 'virtual',
                 useNative: false,
-                minGap: 0
+                prerenderedRowCount: 0
             }
         }).dxDataGrid('instance');
 
@@ -814,7 +814,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             keyExpr: 'name',
             focusedRowEnabled: true,
             focusedRowIndex: 0,
-            scrolling: { mode: 'virtual', minGap: 0 },
+            scrolling: { mode: 'virtual', prerenderedRowCount: 0 },
             paging: { pageSize: 2 }
         }).dxDataGrid('instance');
 
@@ -1762,7 +1762,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
                 scrolling: {
                     mode: mode,
                     rowRenderingMode: 'virtual',
-                    newMode: true
+                    legacyMode: false
                 },
                 columns: ['Name', 'Description']
             });
