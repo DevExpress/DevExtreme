@@ -1204,7 +1204,7 @@ export interface dxTreeListToolbar {
     /**
      * @docid
      * @type boolean
-     * @default undefined
+     * @default false
      * @public
      */
     disabled?: boolean;
