@@ -181,10 +181,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return createDataAccessors(this.props);
   }
 
-  get internalDataSource(): DataSource<Appointment> {
-    return new DataSource(this.props.dataSource as Appointment[]);
-  }
-
   get startViewDate(): Date {
     const type = this.props.currentView;
     const {
