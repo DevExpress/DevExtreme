@@ -2327,7 +2327,7 @@ export const editingModule = {
                     return (devices.real().ios || devices.real().android) && this.option('editing.allowUpdating');
                 },
                 _createRow: function(row) {
-                    const $row = this.callBase(row);
+                    const $row = this.callBase.apply(this, arguments);
 
                     if(row) {
                         const isRowRemoved = !!row.removed;

@@ -12,6 +12,10 @@ export class DataGridComponent extends DataGridBase {
     super(element, options);
   }
 
+  _setDeprecatedOptions(): void {
+    this._deprecatedOptions = {};
+  }
+
   _initTemplates(): void {}
 
   // prevent render

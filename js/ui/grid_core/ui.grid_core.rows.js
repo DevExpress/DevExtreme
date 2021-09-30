@@ -56,7 +56,7 @@ export const rowsModule = {
                 indicatorSrc: '',
                 showPane: true
             },
-            rowTemplate: null,
+            dataRowTemplate: null,
             columnAutoWidth: false,
             noDataText: messageLocalization.format('dxDataGrid-noDataText'),
             wordWrapEnabled: false,
@@ -152,7 +152,7 @@ export const rowsModule = {
                 },
 
                 _createRow: function(row) {
-                    const $row = this.callBase(row);
+                    const $row = this.callBase.apply(this, arguments);
 
                     if(row) {
                         const isGroup = row.rowType === 'group';
@@ -593,15 +593,31 @@ export const rowsModule = {
                     }
                 },
 
-                _renderRow: function($table, options) {
-                    const that = this;
+                _renderDataRowByTemplate($table, options, dataRowTemplate) {
                     const row = options.row;
-                    const rowTemplate = that.option('rowTemplate');
+                    const rowOptions = extend({ columns: options.columns }, row);
+                    const $tbody = this._createRow(row, 'tbody');
+                    $tbody.appendTo($table);
+                    const templateDeferred = this.renderTemplate($tbody, dataRowTemplate, rowOptions, true);
+                    this._rowPrepared($tbody, rowOptions, options.row);
+                    const change = options.change;
+                    if(change) {
+                        change.templateDeferreds = change.templateDeferreds || [];
+                        change.templateDeferreds.push(templateDeferred);
+                    }
+                },
 
-                    if((row.rowType === 'data' || row.rowType === 'group') && !isDefined(row.groupIndex) && rowTemplate) {
-                        that.renderTemplate($table, rowTemplate, extend({ columns: options.columns }, row), true);
+                _renderRow: function($table, options) {
+                    const row = options.row;
+                    const rowTemplate = this.option().rowTemplate;
+                    const dataRowTemplate = this.option('dataRowTemplate');
+
+                    if(row.rowType === 'data' && dataRowTemplate) {
+                        this._renderDataRowByTemplate($table, options, dataRowTemplate);
+                    } else if((row.rowType === 'data' || row.rowType === 'group') && !isDefined(row.groupIndex) && rowTemplate) {
+                        this.renderTemplate($table, rowTemplate, extend({ columns: options.columns }, row), true);
                     } else {
-                        that.callBase($table, options);
+                        this.callBase($table, options);
                     }
                 },
 
@@ -630,7 +646,7 @@ export const rowsModule = {
                 _createTable: function() {
                     const $table = this.callBase.apply(this, arguments);
 
-                    if(this.option('rowTemplate')) {
+                    if(this.option().rowTemplate && !this.option('dataRowTemplate')) {
                         $table.appendTo(this.component.$element());
                     }
 
@@ -1117,6 +1133,7 @@ export const rowsModule = {
                         case 'showRowLines':
                         case 'rowAlternationEnabled':
                         case 'rowTemplate':
+                        case 'dataRowTemplate':
                         case 'twoWayBindingEnabled':
                             that._invalidate(true, true);
                             args.handled = true;
