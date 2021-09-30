@@ -11,13 +11,18 @@ import {
   RefObject,
   Mutable,
 } from '@devextreme-generator/declarations';
+import { renderTemplate, hasTemplate } from '@devextreme/runtime/declarations';
 import type DomComponent from '../../../core/dom_component';
 import { ComponentClass } from '../../../core/dom_component'; // eslint-disable-line import/named
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { EventCallback } from './event_callback';
-import { renderTemplate } from '../../utils/render_template';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { getUpdatedOptions } from './utils/get_updated_options';
+
+export interface DomComponentWrapperMethods {
+  getTemplateNames: () => string[];
+}
+
 
 export const viewFunction = ({
   widgetRef,
@@ -38,6 +43,7 @@ export class DomComponentWrapperProps {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() componentType!: ComponentClass<Record<string, any>>;
+  @OneWay() templateNames: string[] = [];
 
   @OneWay() componentProps!: {
     className?: string;
@@ -107,7 +113,6 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
 
   get properties(): Record<string, unknown> {
     const {
-      itemTemplate,
       valueChange,
       ...restProps
     } = this.props.componentProps;
@@ -119,11 +124,14 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     if (valueChange) {
       properties.onValueChanged = ({ value }): void => valueChange(value);
     }
-    if (itemTemplate) {
-      properties.itemTemplate = (item, index, container): void => {
-        renderTemplate(itemTemplate, { item, index, container }, container);
-      };
-    }
+
+    this.props.templateNames.forEach((name) => {
+      if (hasTemplate(name, properties, this)) {
+        properties[name] = (item, index, container): void => {
+          renderTemplate(this.props.componentProps[name], { item, index, container }, this);
+        };
+      }
+    });
     return properties;
   }
 }

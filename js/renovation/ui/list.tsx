@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Event,
+  Component, ComponentBindings, JSXComponent, OneWay, Event, Template,
 } from '@devextreme-generator/declarations';
 /* eslint-disable import/named */
 import DataSource, { DataSourceOptions } from '../../data/data_source';
@@ -9,7 +9,7 @@ import { DxElement } from '../../core/element';
 import { EventExtension, DxEvent } from '../../events/index';
 
 // import renderTemplate from '../utils/render_template';
-import { DomComponentWrapper } from './common/dom_component_wrapper';
+import { DomComponentWrapper, DomComponentWrapperMethods } from './common/dom_component_wrapper';
 import { BaseWidgetProps } from './common/base_props';
 
 export interface ItemClickInfo {
@@ -30,10 +30,12 @@ export type ItemClickEvent = ItemClickInfo & EventExtension;
 export const viewFunction = ({
   props,
   restAttributes,
+  getTemplateNames
 }: List): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyList}
     componentProps={props}
+    templateNames={getTemplateNames()}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
@@ -61,6 +63,8 @@ export class ListProps extends BaseWidgetProps {
   | DataSourceOptions;
 
   //   @OneWay() displayExpr?: string | ((item: any) => string);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Template() itemTemplate?: any;
 
   @OneWay() focusStateEnabled?: boolean;
 
@@ -173,9 +177,6 @@ export class ListProps extends BaseWidgetProps {
 
   // @OneWay()useNativeScrolling?: boolean;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @OneWay() itemTemplate?: any;
-
 //   @Event() onItemClick?: (e: any) => any = (() => {});
 }
 
@@ -183,4 +184,11 @@ export class ListProps extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class List extends JSXComponent<ListProps>() {}
+export class List extends JSXComponent<ListProps>() implements DomComponentWrapperMethods {
+  getTemplateNames() {
+    return [
+      'itemTemplate',
+      'groupTemplate'
+    ];
+  }
+}
