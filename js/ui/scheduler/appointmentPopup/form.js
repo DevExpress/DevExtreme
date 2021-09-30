@@ -7,7 +7,7 @@ import DataSource from '../../../data/data_source';
 import timeZoneDataUtils from '../timezones/utils.timezones_data';
 import { extend } from '../../../core/utils/extend';
 import dateUtils from '../../../core/utils/date';
-import Semaphore from '../semaphore';
+import { Semaphore } from '../../../renovation/ui/scheduler/semaphore';
 
 import '../recurrence_editor';
 import '../../text_area';
