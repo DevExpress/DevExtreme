@@ -11,9 +11,9 @@ import { compileGetter, compileSetter } from '../../../../../../core/utils/data'
 import {
   createFactoryInstances,
   generateKey,
-  getTimeZoneCalculator,
   getAppointmentDataProvider,
 } from '../../../../../../ui/scheduler/instanceFactory';
+import { createTimeZoneCalculator } from '../../../common';
 
 const defaultDataAccessors: DataAccessorType = {
   getter: {
@@ -97,7 +97,7 @@ const prepareInstances = (
 
   return {
     key,
-    timeZoneCalculator: getTimeZoneCalculator(key),
+    timeZoneCalculator: createTimeZoneCalculator(''),
     appointmentDataProvider: getAppointmentDataProvider(key),
     viewDataProvider,
     schedulerProps,

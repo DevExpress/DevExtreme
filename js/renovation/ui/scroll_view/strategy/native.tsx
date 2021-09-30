@@ -181,7 +181,11 @@ export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   view: viewFunction,
 })
 export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
-  @Ref() scrollableRef!: RefObject<HTMLDivElement>;
+  @ForwardRef() scrollableRef!: RefObject<HTMLDivElement>;
+
+  @ForwardRef() topPocketRef!: RefObject<HTMLDivElement>;
+
+  @ForwardRef() bottomPocketRef!: RefObject<HTMLDivElement>;
 
   @Ref() wrapperRef!: RefObject<HTMLDivElement>;
 
@@ -194,28 +198,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   @Ref() vScrollbarRef!: RefObject<Scrollbar>;
 
   @Ref() hScrollbarRef!: RefObject<Scrollbar>;
-
-  @ForwardRef() topPocketRef!: RefObject<HTMLDivElement>;
-
-  @ForwardRef() bottomPocketRef!: RefObject<HTMLDivElement>;
-
-  @Mutable() locked = false;
-
-  @Mutable() loadingIndicatorEnabled = true;
-
-  @Mutable() hideScrollbarTimer?: unknown;
-
-  @Mutable() releaseTimer?: unknown;
-
-  @Mutable() refreshTimer?: unknown;
-
-  @Mutable() eventForUserAction?: DxMouseEvent;
-
-  @Mutable() initPageY = 0;
-
-  @Mutable() deltaY = 0;
-
-  @Mutable() locationTop = 0;
 
   @InternalState() containerClientWidth = 0;
 
@@ -250,6 +232,24 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   @InternalState() vScrollLocation = 0;
 
   @InternalState() hScrollLocation = 0;
+
+  @Mutable() locked = false;
+
+  @Mutable() loadingIndicatorEnabled = true;
+
+  @Mutable() hideScrollbarTimer?: unknown;
+
+  @Mutable() releaseTimer?: unknown;
+
+  @Mutable() refreshTimer?: unknown;
+
+  @Mutable() eventForUserAction?: DxMouseEvent;
+
+  @Mutable() initPageY = 0;
+
+  @Mutable() deltaY = 0;
+
+  @Mutable() locationTop = 0;
 
   @Method()
   content(): HTMLDivElement {
@@ -614,8 +614,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     }
 
     if (this.props.forceGeneratePockets) {
-      this.topPocketHeight = this.topPocketRef.current!.clientHeight;
-      this.bottomPocketHeight = this.bottomPocketRef.current!.clientHeight;
+      /* istanbul ignore next */
+      this.topPocketHeight = this.topPocketRef?.current!.clientHeight; // ?. for angular
+      /* istanbul ignore next */
+      this.bottomPocketHeight = this.bottomPocketRef?.current!.clientHeight; // ?. for angular
     }
   }
 
@@ -627,14 +629,14 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   getInitEventData(): {
-    getDirection: () => string | undefined;
+    getDirection: () => ScrollableDirection | undefined;
     validate: (event: DxMouseEvent) => boolean;
     isNative: boolean;
     scrollTarget: HTMLDivElement | null;
   } {
     return {
-      getDirection: this.tryGetAllowedDirection,
-      validate: this.validate,
+      getDirection: (): ScrollableDirection | undefined => this.tryGetAllowedDirection(),
+      validate: (event: DxMouseEvent): boolean => this.validate(event),
       isNative: true,
       scrollTarget: this.containerRef.current,
     };

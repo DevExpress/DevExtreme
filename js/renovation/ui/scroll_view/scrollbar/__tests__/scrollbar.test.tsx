@@ -376,9 +376,11 @@ describe('Scrollbar', () => {
 
           expect(scrollLocationChange).toHaveBeenCalledTimes(1);
           expect(scrollLocationChange).toHaveBeenCalledWith(
-            viewModel.fullScrollProp,
-            -scrollLocation,
-            Math.abs(prevScrollLocation - scrollLocation) >= 1,
+            {
+              fullScrollProp: viewModel.fullScrollProp,
+              location: -scrollLocation,
+              needFireScroll: Math.abs(prevScrollLocation - scrollLocation) >= 1,
+            },
           );
         });
       });
