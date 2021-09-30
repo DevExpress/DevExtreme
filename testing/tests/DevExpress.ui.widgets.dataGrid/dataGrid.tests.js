@@ -4337,7 +4337,7 @@ QUnit.module('templates', baseModuleConfig, () => {
     });
 
     QUnit.test('deprecate warnings should be fired for rowTemplate', function(assert) {
-        const log = sinon.log(errors, 'log');
+        const log = sinon.spy(errors, 'log');
 
         createDataGrid({
             rowTemplate: function(rowElement) {
