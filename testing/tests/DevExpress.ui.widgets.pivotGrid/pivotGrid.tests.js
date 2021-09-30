@@ -2886,6 +2886,11 @@ QUnit.module('dxPivotGrid', {
 
             QUnit.module('T984139, T1010175', () => {
                 QUnit.test(`Render. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                    if(browser.msie) {
+                        assert.ok('skip because of hotfixes');
+                        return;
+                    }
+
                     const store = [];
                     for(let i = 0; i < 200; i++) {
                         store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
@@ -2911,6 +2916,11 @@ QUnit.module('dxPivotGrid', {
                 });
 
                 QUnit.test(`Render -> scrollTo(). UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                    if(browser.msie) {
+                        assert.ok('skip because of hotfixes');
+                        return;
+                    }
+
                     const store = [];
                     for(let i = 0; i < 200; i++) {
                         store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
@@ -2946,6 +2956,11 @@ QUnit.module('dxPivotGrid', {
                 });
 
                 QUnit.test(`Render -> scrollTo() -> expandHeader. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                    if(browser.msie) {
+                        assert.ok('skip because of hotfixes');
+                        return;
+                    }
+
                     const store = [];
                     for(let i = 0; i < 200; i++) {
                         store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
@@ -2989,6 +3004,11 @@ QUnit.module('dxPivotGrid', {
                 });
 
                 QUnit.test(`Render -> scrollTo() -> expandHeader -> collapseHeader. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                    if(browser.msie) {
+                        assert.ok('skip because of hotfixes');
+                        return;
+                    }
+
                     const store = [];
                     for(let i = 0; i < 200; i++) {
                         store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
@@ -3035,6 +3055,11 @@ QUnit.module('dxPivotGrid', {
                 });
 
                 QUnit.test(`Render -> scrollTo() -> subField.visible=false. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                    if(browser.msie) {
+                        assert.ok('skip because of hotfixes');
+                        return;
+                    }
+
                     const store = [];
                     for(let i = 0; i < 200; i++) {
                         store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
@@ -3077,6 +3102,11 @@ QUnit.module('dxPivotGrid', {
                 });
 
                 QUnit.test(`Render -> scrollTo() -> subField.visible=false -> subField.visible=true. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                    if(browser.msie) {
+                        assert.ok('skip because of hotfixes');
+                        return;
+                    }
+
                     const store = [];
                     for(let i = 0; i < 200; i++) {
                         store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
@@ -3123,6 +3153,11 @@ QUnit.module('dxPivotGrid', {
                 });
 
                 QUnit.test(`Render -> scrollTo() -> filter. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                    if(browser.msie) {
+                        assert.ok('skip because of hotfixes');
+                        return;
+                    }
+
                     const store = [];
                     for(let i = 0; i < 200; i++) {
                         store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
@@ -3158,6 +3193,11 @@ QUnit.module('dxPivotGrid', {
                 });
 
                 QUnit.test(`Render -> scrollTo() -> filter -> clearFilter. UseNative: ${useNative}, expandDimension: ${area}`, function(assert) {
+                    if(browser.msie) {
+                        assert.ok('skip because of hotfixes');
+                        return;
+                    }
+
                     const store = [];
                     for(let i = 0; i < 200; i++) {
                         store.push({ row: i + 1, column: i + 1, subField: 1, data: 1 });
