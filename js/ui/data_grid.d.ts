@@ -537,7 +537,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @default null
      * @public
      */
-    dataSource?: string | Array<TRowData> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<TRowData> | Store<TRowData, string | Array<string>, TKey> | DataSource<TRowData, string | Array<string>, TKey> | DataSourceOptions<TRowData, TRowData, TRowData, string | Array<string>, TKey>;
     /**
      * @docid
      * @public
@@ -2110,7 +2110,7 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @public
      */
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DataSource;
+    getDataSource(): DataSource<TRowData, string | Array<string>, TKey>;
     /**
      * @docid
      * @publicName getKeyByRowIndex(rowIndex)
@@ -4416,7 +4416,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DataSource;
+    getDataSource(): DataSource<TRowData, string | Array<string>, TKey>;
     getKeyByRowIndex(rowIndex: number): TKey;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
