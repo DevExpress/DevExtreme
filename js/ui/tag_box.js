@@ -25,6 +25,7 @@ import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { allowScroll } from './text_box/utils.scroll';
 import errors from './widget/ui.errors';
+import { renderLabel } from './text_box/ui.text_editor.label';
 
 // STYLE tagBox
 
@@ -222,6 +223,15 @@ const TagBox = SelectBox.inherit({
         }
 
         return this.callBase();
+    },
+
+    _renderLabel: function() {
+        const options = {
+            editor: this,
+            container: this._$tagsContainer
+        };
+
+        renderLabel(options);
     },
 
     _scrollContainer: function(direction) {

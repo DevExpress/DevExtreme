@@ -1,4 +1,3 @@
-import { getWidth, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -7,6 +6,7 @@ import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import TextEditor from './ui.text_editor';
 import { normalizeKeyName } from '../../events/utils/index';
+import { renderLabel } from './ui.text_editor.label';
 
 // STYLE textBox
 
@@ -97,16 +97,13 @@ const TextBox = TextEditor.inherit({
 
 
     _renderLabel: function() {
-        this.callBase();
+        const options = {
+            editor: this,
+            container: this._input(),
+            icon: this._$searchIcon
+        };
 
-        if(this._$searchIcon && this._$label) {
-            const labelBeforeElement = this._$label.find('.dx-label-before');
-            const labelBeforeWidth = getWidth(labelBeforeElement) + getOuterWidth(this._$searchIcon);
-
-            labelBeforeElement.css('width', labelBeforeWidth);
-
-            this._$label.find('.dx-label').css('max-width', getWidth(this._input().parent()) - labelBeforeWidth);
-        }
+        renderLabel(options);
     },
 
     _optionChanged: function(args) {

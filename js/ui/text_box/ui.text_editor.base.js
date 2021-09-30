@@ -1,4 +1,3 @@
-import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
@@ -18,16 +17,14 @@ import config from '../../core/config';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
+import { renderLabel } from './ui.text_editor.label';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
-const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
-const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXTEDITOR_INPUT_SELECTOR = '.' + TEXTEDITOR_INPUT_CLASS;
 const TEXTEDITOR_CONTAINER_CLASS = 'dx-texteditor-container';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
-const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXTEDITOR_PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 
@@ -443,43 +440,12 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderLabel: function() {
-        const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
-        const labelElement = this.$element().find('.' + TEXTEDITOR_LABEL_CLASS);
+        const options = {
+            editor: this,
+            container: this._input()
+        };
 
-        if(!this.label && labelElement.length === 1 || labelElement.length === 2) {
-            labelElement.first().remove();
-        }
-
-        if(this._$label) {
-            this._$label.remove();
-            this._$label = null;
-        }
-
-        this.$element()
-            .removeClass(TEXTEDITOR_WITH_LABEL_CLASS)
-            .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
-            .removeClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
-
-        if(!this.option('label') || this.option('labelMode') === 'hidden') return;
-
-        this.$element().addClass(this.option('labelMode') === 'floating' ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS : TEXTEDITOR_WITH_LABEL_CLASS);
-
-        const labelText = this.option('label');
-        const labelMark = this.option('labelMark');
-        const $label = this._$label = $('<div>')
-            .addClass(TEXTEDITOR_LABEL_CLASS)
-            .html(`<div class="dx-label-before"></div><div class="dx-label"><span data-mark="${labelMark}">${labelText}</span></div><div class="dx-label-after"></div>`);
-
-        $label.appendTo(this.$element());
-
-        if(this._$beforeButtonsContainer) {
-            this.$element().addClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
-            this._$label.find('.dx-label-before').css('width', getWidth(this._$beforeButtonsContainer));
-        }
-
-        const labelWidth = this._$field ? getWidth(this._$field) : (this._$tagsContainer ? getWidth(this._$tagsContainer) : getWidth(this._input()));
-
-        this._$label.find('.dx-label').css('maxWidth', labelWidth);
+        renderLabel(options);
     },
 
     _renderPlaceholder: function() {

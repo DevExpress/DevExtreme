@@ -22,6 +22,7 @@ import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 import { locate, move, resetPosition } from '../animation/translator';
 import { isDefined } from '../core/utils/type';
 import { getElementWidth } from './drop_down_editor/utils';
+import { renderLabel } from './text_box/ui.text_editor.label';
 
 // STYLE lookup
 
@@ -411,6 +412,15 @@ const Lookup = DropDownList.inherit({
         const displayValue = this.option('displayValue');
         this._updateField(isDefined(displayValue) && String(displayValue) || this.option('placeholder'));
         this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option('selectedItem'));
+    },
+
+    _renderLabel: function() {
+        const options = {
+            editor: this,
+            container: this._$field
+        };
+
+        renderLabel(options);
     },
 
     _renderDisplayText: function(text) {
