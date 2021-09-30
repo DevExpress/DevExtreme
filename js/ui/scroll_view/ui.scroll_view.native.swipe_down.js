@@ -71,7 +71,8 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this.callBase();
         this._topPocketSize = this._$topPocket.height();
         this._bottomPocketSize = this._$bottomPocket.height();
-        this._scrollOffset = this._$container.height() - this._$content.height();
+
+        this._scrollOffsetTopMax = this._getMaxOffset().top - this._bottomPocketSize;
     },
 
     _allowedDirections: function() {
@@ -176,7 +177,7 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && this._location <= this._scrollOffset + this._bottomPocketSize;
+        return this._reachBottomEnabled && Math.round(this._location + this._scrollOffsetTopMax) <= 1;
     },
 
     _reachBottom: function() {

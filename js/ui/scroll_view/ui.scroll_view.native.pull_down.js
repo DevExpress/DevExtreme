@@ -4,7 +4,6 @@ import { move } from '../../animation/translator';
 import NativeStrategy from './ui.scrollable.native';
 import LoadIndicator from '../load_indicator';
 import { each } from '../../core/utils/iterator';
-import browser from '../../core/utils/browser';
 import { Deferred } from '../../core/utils/deferred';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
@@ -96,11 +95,7 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this._topPocketSize = this._$topPocket.height();
         this._bottomPocketSize = this._$bottomPocket.height();
 
-        if(browser.msie) {
-            this._scrollOffset = Math.round((this._$container.height() - this._$content.height()) * 100) / 100;
-        } else {
-            this._scrollOffset = this._$container.height() - this._$content.height();
-        }
+        this._scrollOffsetTopMax = this._getMaxOffset().top - this._bottomPocketSize;
     },
 
     _allowedDirections: function() {
@@ -167,7 +162,7 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && this._location - (this._scrollOffset + this._bottomPocketSize) <= 0.5; // T858013
+        return this._reachBottomEnabled && Math.round(this._location + this._scrollOffsetTopMax) <= 1;
     },
 
     _reachBottom: function() {
