@@ -47,3 +47,27 @@ test('Scrollable synchronization should work after changing current date (T10272
     height: 600,
   }, true);
 });
+
+test('Scrollable should be prepared correctly after change visibility (T1032171)', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await scheduler.option('visible', true);
+  await scheduler.scrollTo(new Date(2021, 1, 12));
+
+  await t.expect(
+    await compareScreenshot(t, 'cross-scrolling-sync-visibility.png', scheduler.workSpace),
+  ).ok();
+}).before(async () => {
+  await createWidget('dxScheduler', {
+    dataSource: [],
+    views: ['timelineMonth'],
+    currentView: 'timelineMonth',
+    currentDate: new Date(2021, 1, 2),
+    firstDayOfWeek: 0,
+    startDayHour: 8,
+    endDayHour: 20,
+    cellDuration: 60,
+    visible: false,
+    height: 400,
+  }, true);
+});

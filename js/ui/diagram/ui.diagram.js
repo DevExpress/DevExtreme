@@ -147,6 +147,7 @@ class Diagram extends Widget {
                 .addClass(DIAGRAM_SCROLL_VIEW_CLASS)
                 .appendTo(this._$content);
             this._createComponent($scrollViewWrapper, DiagramScrollView, {
+                useNativeScrolling: this.option('useNativeScrolling'),
                 onCreateDiagram: (e) => {
                     this._diagramInstance.createDocument(e.$parent[0], e.scrollView);
                 }
@@ -2081,6 +2082,9 @@ class Diagram extends Widget {
                 break;
             case 'simpleView':
                 this._updateSimpleViewState();
+                break;
+            case 'useNativeScrolling':
+                this._invalidate();
                 break;
             case 'fullScreen':
                 this._updateFullscreenState();
