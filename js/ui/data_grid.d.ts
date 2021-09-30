@@ -86,11 +86,11 @@ export interface DataErrorOccurredInfo {
   readonly error?: Error;
 }
 
-export interface DataChangeInfo<TRowData, TKey> {
+export interface DataChangeInfo<TRowData = any, TKey = any> {
   readonly changes: Array<DataChange<TRowData, TKey>>;
 }
 
-export interface NewRowInfo<TRowData> {
+export interface NewRowInfo<TRowData = any> {
   data: TRowData;
   promise?: PromiseLike<void>;
 }
@@ -99,47 +99,47 @@ export interface KeyDownInfo {
   handled: boolean;
 }
 
-export interface RowKeyInfo<TKey> {
+export interface RowKeyInfo<TKey = any> {
   readonly key: TKey;
 }
 
-export interface RowInsertedInfo<TRowData, TKey> {
+export interface RowInsertedInfo<TRowData = any, TKey = any> {
   readonly data: TRowData;
   readonly key: TKey;
   readonly error: Error;
 }
 
-export interface RowInsertingInfo<TRowData> {
+export interface RowInsertingInfo<TRowData = any> {
   data: TRowData;
   cancel: boolean | PromiseLike<void>;
 }
 
-export interface RowRemovedInfo<TRowData, TKey> {
+export interface RowRemovedInfo<TRowData = any, TKey = any> {
   readonly data: TRowData;
   readonly key: TKey;
   readonly error: Error;
 }
 
-export interface RowRemovingInfo<TRowData, TKey> {
+export interface RowRemovingInfo<TRowData = any, TKey = any> {
   readonly data: TRowData;
   readonly key: TKey;
   cancel: boolean | PromiseLike<void>;
 }
 
-export interface RowUpdatedInfo<TRowData, TKey> {
+export interface RowUpdatedInfo<TRowData = any, TKey = any> {
   readonly data: TRowData;
   readonly key: TKey;
   readonly error: Error;
 }
 
-export interface RowUpdatingInfo<TRowData, TKey> {
+export interface RowUpdatingInfo<TRowData = any, TKey = any> {
   readonly oldData: TRowData;
   newData: TRowData;
   readonly key: TKey;
   cancel: boolean | PromiseLike<void>;
 }
 
-export interface RowValidatingInfo<TRowData, TKey> {
+export interface RowValidatingInfo<TRowData = any, TKey = any> {
   readonly brokenRules: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
   isValid: boolean;
   readonly key: TKey;
@@ -149,13 +149,13 @@ export interface RowValidatingInfo<TRowData, TKey> {
   promise?: PromiseLike<void>;
 }
 
-export interface SavingInfo<TRowData, TKey> {
+export interface SavingInfo<TRowData = any, TKey = any> {
   changes: Array<DataChange<TRowData, TKey>>;
   promise?: PromiseLike<void>;
   cancel: boolean;
 }
 
-export interface SelectionChangedInfo<TRowData, TKey> {
+export interface SelectionChangedInfo<TRowData = any, TKey = any> {
   readonly currentSelectedRowKeys: Array<TKey>;
   readonly currentDeselectedRowKeys: Array<TKey>;
   readonly selectedRowKeys: Array<TKey>;
@@ -166,7 +166,7 @@ export interface ToolbarPreparingInfo {
   toolbarOptions: dxToolbarOptions;
 }
 
-export interface RowDraggingEventInfo<T extends GridBase<TRowData, TKey>, TRowData, TKey> {
+export interface RowDraggingEventInfo<T extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> {
   readonly component: T;
   readonly event: DxEvent;
   readonly itemData?: TRowData;
@@ -179,7 +179,7 @@ export interface RowDraggingEventInfo<T extends GridBase<TRowData, TKey>, TRowDa
   readonly toData?: any;
 }
 
-export interface DragStartEventInfo<T extends GridBase<TRowData, TKey>, TRowData, TKey> {
+export interface DragStartEventInfo<T extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> {
   readonly component: T;
   readonly event: DxEvent;
   itemData?: TRowData;
@@ -197,7 +197,7 @@ export interface DragReorderInfo {
   promise?: PromiseLike<void>;
 }
 
-export interface RowDraggingTemplateDataModel<TRowData> {
+export interface RowDraggingTemplateDataModel<TRowData = any> {
   readonly itemData: TRowData;
   readonly itemElement: DxElement;
 }
@@ -208,7 +208,7 @@ export interface FilterPanelCustomizeTextArg<T> {
   readonly text: string;
 }
 
-export interface FilterPanel<T extends GridBase<TRowData, TKey>, TRowData, TKey> {
+export interface FilterPanel<T extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> {
   /**
    * @docid GridBaseOptions.filterPanel.customizeText
    * @type_function_param1 e:object
@@ -236,7 +236,7 @@ export interface FilterPanel<T extends GridBase<TRowData, TKey>, TRowData, TKey>
   visible?: boolean;
 }
 
-export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData, TKey> {
+export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> {
     /**
      * @docid GridBaseOptions.rowDragging.allowDropInsideItem
      * @default false
@@ -449,7 +449,7 @@ export interface RowDragging<T extends GridBase<TRowData, TKey>, TRowData, TKey>
 /**
  * @namespace DevExpress.ui
  */
-export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData, TKey> extends WidgetOptions<TComponent> {
+export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> extends WidgetOptions<TComponent> {
     /**
      * @docid
      * @default false
@@ -1532,8 +1532,8 @@ export interface StateStoring {
  * @namespace DevExpress.ui
  * @deprecated
  */
-export type GridBaseEditing<TRowData, TKey> = EditingBase<TRowData, TKey>;
-export interface EditingBase<TRowData, TKey> {
+export type GridBaseEditing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey>;
+export interface EditingBase<TRowData = any, TKey = any> {
     /**
      * @docid GridBaseOptions.editing.confirmDelete
      * @default true
@@ -1625,7 +1625,7 @@ export interface EditingBase<TRowData, TKey> {
  * @docid
  * @namespace DevExpress.ui
  */
-export interface DataChange<TRowData, TKey> {
+export interface DataChange<TRowData = any, TKey = any> {
     /**
      * @docid
      */
@@ -1854,7 +1854,7 @@ export interface SelectionBase {
  * @hidden
  * @namespace DevExpress.ui
  */
-export interface GridBase<TRowData, TKey> {
+export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName beginCustomLoading(messageText)
@@ -3695,7 +3695,7 @@ export interface dxDataGridOptions<TRowData, TKey> extends GridBaseOptions<dxDat
     toolbar?: dxDataGridToolbar;
 }
 
-export interface ExcelCellInfo<TRowData, TKey> {
+export interface ExcelCellInfo<TRowData = any, TKey = any> {
   readonly component: dxDataGrid<TRowData, TKey>;
   horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right';
   verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
@@ -3709,7 +3709,7 @@ export interface ExcelCellInfo<TRowData, TKey> {
   gridCell?: ExcelCell;
 }
 
-export interface Export<TRowData, TKey> {
+export interface Export<TRowData = any, TKey = any> {
   /**
    * @docid dxDataGridOptions.export.allowExportSelectedData
    * @default false
@@ -3869,7 +3869,7 @@ export interface GroupingTexts {
   ungroupAll?: string;
 }
 
-export interface MasterDetail<TRowData, TKey> {
+export interface MasterDetail<TRowData = any, TKey = any> {
   /**
    * @docid dxDataGridOptions.masterDetail.autoExpandAll
    * @default false
@@ -3910,7 +3910,7 @@ export interface dxDataGridSortByGroupSummaryInfoItem {
     summaryItem?: string | number;
 }
 
-export interface CustomSummaryInfo<TRowData, TKey> {
+export interface CustomSummaryInfo<TRowData = any, TKey = any> {
   readonly component: dxDataGrid<TRowData, TKey>;
   readonly name?: string;
   readonly summaryProcess: string;
@@ -3920,7 +3920,7 @@ export interface CustomSummaryInfo<TRowData, TKey> {
 }
 
 /** @public */
-export interface Summary<TRowData, TKey> {
+export interface Summary<TRowData = any, TKey = any> {
   /**
    * @docid dxDataGridOptions.summary.calculateCustomSummary
    * @type_function_param1 options:object
@@ -4174,9 +4174,9 @@ export interface dxDataGridToolbar {
  * @namespace DevExpress.ui
  * @deprecated
  */
-export type dxDataGridEditing<TRowData, TKey> = Editing<TRowData, TKey>;
+export type dxDataGridEditing<TRowData = any, TKey = any> = Editing<TRowData, TKey>;
 
-export interface Editing<TRowData, TKey> extends EditingBase<TRowData, TKey> {
+export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowData, TKey> {
     /**
      * @docid dxDataGridOptions.editing.allowAdding
      * @default false
@@ -4262,7 +4262,7 @@ export interface Selection extends SelectionBase {
  * @namespace DevExpress.ui
  * @public
  */
-declare class dxDataGrid<TRowData, TKey> extends Widget<dxDataGridOptions<TRowData, TKey>> implements GridBase<TRowData, TKey> {
+declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOptions<TRowData, TKey>> implements GridBase<TRowData, TKey> {
     /**
      * @docid
      * @publicName addColumn(columnOptions)
@@ -4451,13 +4451,13 @@ declare class dxDataGrid<TRowData, TKey> extends Widget<dxDataGridOptions<TRowDa
 /**
  * @public
  */
-export type Column<TRowData, TKey> = dxDataGridColumn<TRowData, TKey>;
+export type Column<TRowData = any, TKey = any> = dxDataGridColumn<TRowData, TKey>;
 
 /**
  * @namespace DevExpress.ui
  * @deprecated Use the Column type instead
  */
-export interface dxDataGridColumn<TRowData, TKey> extends ColumnBase<TRowData> {
+export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase<TRowData> {
     /**
      * @docid dxDataGridColumn.allowExporting
      * @default true
@@ -4583,12 +4583,12 @@ export interface dxDataGridColumn<TRowData, TKey> extends ColumnBase<TRowData> {
 /**
  * @public
  */
-export type ColumnButton<TRowData, TKey> = dxDataGridColumnButton<TRowData, TKey>;
+export type ColumnButton<TRowData = any, TKey = any> = dxDataGridColumnButton<TRowData, TKey>;
 /**
  * @namespace DevExpress.ui
  * @deprecated Use the DataGrid's ColumnButton type instead
  */
-export interface dxDataGridColumnButton<TRowData, TKey> extends ColumnButtonBase {
+export interface dxDataGridColumnButton<TRowData = any, TKey = any> extends ColumnButtonBase {
     /**
      * @docid dxDataGridColumnButton.name
      * @type Enums.GridColumnButtonName|string
@@ -4651,13 +4651,13 @@ export interface dxDataGridColumnButton<TRowData, TKey> extends ColumnButtonBase
  * @namespace DevExpress.ui
  * @deprecated
  */
-export type dxDataGridRowObject<TRowData, TKey> = RowObject<TRowData, TKey>;
+export type dxDataGridRowObject<TRowData = any, TKey = any> = RowObject<TRowData, TKey>;
 
 /**
  * @docid dxDataGridRowObject
  * @type object
  */
-export interface RowObject<TRowData, TKey> {
+export interface RowObject<TRowData = any, TKey = any> {
     /**
      * @docid dxDataGridRowObject.data
      * @public
@@ -4711,12 +4711,12 @@ export interface RowObject<TRowData, TKey> {
 }
 
 /** @public */
-export type Properties<TRowData, TKey> = dxDataGridOptions<TRowData, TKey>;
+export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options<TRowData, TKey> = dxDataGridOptions<TRowData, TKey>;
+export type Options<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;
 
 /** @deprecated use Properties instead */
-export type IOptions<TRowData, TKey> = dxDataGridOptions<TRowData, TKey>;
+export type IOptions<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;
 
 export default dxDataGrid;
