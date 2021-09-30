@@ -327,7 +327,7 @@ export class SchedulerProps extends BaseWidgetProps {
 
   /* Events */
 
-  @Event()
+  @OneWay()
   customizeDateNavigatorText?: ((info: DateNavigatorTextInfo) => string);
 
   @Event()
