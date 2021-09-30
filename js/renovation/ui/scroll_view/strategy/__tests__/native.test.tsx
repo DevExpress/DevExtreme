@@ -693,31 +693,6 @@ describe('Native > Effects', () => {
       }
     });
   });
-
-  it('initEventData()', () => {
-    const containerRef = {
-      current: {
-        clientWidth: 10,
-        clientHeight: 20,
-      },
-    } as RefObject;
-
-    const viewModel = new Scrollable({});
-    viewModel.containerRef = containerRef;
-
-    const validateMock = jest.fn();
-    const tryGetAllowedDirectionMock = jest.fn();
-
-    viewModel.tryGetAllowedDirection = tryGetAllowedDirectionMock;
-    viewModel.validate = validateMock;
-
-    expect(viewModel.getInitEventData()).toEqual({
-      getDirection: tryGetAllowedDirectionMock,
-      validate: validateMock,
-      isNative: true,
-      scrollTarget: containerRef.current,
-    });
-  });
 });
 
 describe('Getters', () => {

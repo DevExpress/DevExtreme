@@ -64,6 +64,10 @@ export type ScrollbarPropsType = ScrollbarProps
 })
 
 export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
+  @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
+
+  @Ref() scrollRef!: RefObject<HTMLDivElement>;
+
   @Mutable() rightScrollLocation = 0;
 
   @Mutable() prevScrollLocation = 0;
@@ -73,8 +77,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @InternalState() hovered = false;
 
   @InternalState() expanded = false;
-
-  @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
   @Ref() thumbRef!: RefObject<HTMLDivElement>;
 
@@ -184,7 +186,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.prevScrollLocation = location;
     this.rightScrollLocation = this.props.maxOffset - location;
 
-    this.props.scrollLocationChange?.(this.fullScrollProp, -location, scrollDelta >= 1);
+    this.props.scrollLocationChange?.({
+      fullScrollProp: this.fullScrollProp,
+      location: -location,
+      needFireScroll: scrollDelta >= 1,
+    });
   }
 
   @Effect()
