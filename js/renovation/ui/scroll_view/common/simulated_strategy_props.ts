@@ -6,7 +6,7 @@ import {
   BaseScrollableProps,
 } from './base_scrollable_props';
 import {
-  ScrollEventArgs, ScrollableShowScrollbar, RefreshStrategy,
+  ScrollEventArgs, ScrollableShowScrollbar, RefreshStrategy, ScrollLocationChangeArgs,
 } from './types.d';
 import { isDesktop } from '../utils/get_default_option_value';
 
@@ -22,7 +22,7 @@ export class ScrollableSimulatedProps extends BaseScrollableProps {
 
   @OneWay() refreshStrategy: RefreshStrategy = 'simulated';
 
-  @Event() onVisibilityChange?: (args: boolean) => void;
+  @Event() onVisibilityChange?: (visible: boolean) => void;
 
   @Event() onStart?: EventCallback<ScrollEventArgs>;
 
@@ -30,6 +30,6 @@ export class ScrollableSimulatedProps extends BaseScrollableProps {
 
   @Event() onBounce?: EventCallback<ScrollEventArgs>;
 
-  @Event()
-  scrollLocationChange?: (fullScrollProp: 'scrollLeft' | 'scrollTop', location: number, needFireScroll: boolean) => void;
+  // https://trello.com/c/0Wi4K1lv/2876-angular-event-with-multiple-arguments
+  @Event() scrollLocationChange?: EventCallback<ScrollLocationChangeArgs>;
 }

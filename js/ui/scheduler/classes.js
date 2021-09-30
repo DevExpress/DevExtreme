@@ -46,8 +46,3 @@ export const VERTICAL_GROUP_COUNT_CLASSES = [
     'dx-scheduler-group-column-count-two',
     'dx-scheduler-group-column-count-three',
 ];
-export const HORIZONTAL_GROUP_COUNT_CLASSES = [
-    'dx-scheduler-group-row-count-one',
-    'dx-scheduler-group-row-count-two',
-    'dx-scheduler-group-row-count-three',
-];

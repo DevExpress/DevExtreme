@@ -543,6 +543,18 @@ QUnit.module('Layout manager', () => {
         assert.ok(!$testContainer.find('.' + FIELD_ITEM_LABEL_CLASS).length);
     });
 
+    test('Label is not rendered when labelMode option is not "default"', function(assert) {
+        const $testContainer = $('#container').dxLayoutManager({
+            labelMode: 'static',
+            items: [{
+                label: { text: 'Label text' },
+                editorType: 'dxTextBox'
+            }]
+        });
+
+        assert.notOk($testContainer.find('.' + FIELD_ITEM_LABEL_CLASS).length);
+    });
+
     test('If item is not visible we will not render them', function(assert) {
         const $testContainer = $('#container').dxLayoutManager({
             items: [{
