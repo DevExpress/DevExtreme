@@ -54,6 +54,7 @@ export default class Editor extends Component {
 
   _init(): void {
     super._init();
+
     data(this.$element()[0], VALIDATION_TARGET, this);
     this.validationRequest = Callbacks();
     this.showValidationMessageTimeout = undefined;
