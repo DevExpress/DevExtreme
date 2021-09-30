@@ -1,7 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import createWidget from '../../../helpers/createWidget';
 import { changeTheme } from '../../../helpers/changeTheme';
+
+const waitFont = ClientFunction(() => (window as any).DevExpress.ui.themes.waitWebFont('Item123somevalu*op ', 400));
 
 fixture`Form`
   .page(url(__dirname, '../../container.html'));
@@ -15,6 +18,7 @@ fixture`Form`
           test(testName, async (t) => {
             const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
             await changeTheme(theme);
+            await waitFont();
 
             await t
               .expect(await takeScreenshot(`${testName}.png`, '#container'))
