@@ -296,11 +296,73 @@ module('Table resizing integration', {
     });
 
     module('Custom context menu', {}, () => {
-        'empty items array';
+        test('empty items array', function(assert) {
+            this.createWidget({ tableContextMenu: {
+                enabled: true,
+                items: []
+            }
+            });
 
-        'array of objects';
+            const $submenuItems = this.getSubmenuItems(1);
 
-        'array of custom objects';
+            assert.strictEqual($submenuItems.length, 0, 'No items in menu');
+        });
+
+        test('array of custom objects', function(assert) {
+            this.createWidget({ tableContextMenu: {
+                enabled: true,
+                items: [{
+                    text: 'test item 1',
+                }, {
+                    text: 'test item 2',
+                }]
+            } });
+
+            const $submenuItems = this.getSubmenuItems(1);
+
+            assert.strictEqual($submenuItems.length, 2, 'all items are rendered');
+            assert.strictEqual($submenuItems.eq(0).text(), 'test item 1', 'first item is correct');
+            assert.strictEqual($submenuItems.eq(1).text(), 'test item 2', 'second item is correct');
+        });
+
+        test('custom items handler', function(assert) {
+            assert.expect(1);
+            this.createWidget({ tableContextMenu: {
+                enabled: true,
+                items: [{
+                    text: 'test item 1',
+                }, {
+                    text: 'test item 2',
+                    onClick: () => {
+                        assert.ok(true, 'click handler is applied');
+                    }
+                }]
+            } });
+
+            const $submenuItems = this.getSubmenuItems(1);
+
+            $submenuItems.eq(0).trigger('dxclick');
+        });
+
+        test('array of predefined strings', function(assert) {
+            assert.expect(1);
+            this.createWidget({ tableContextMenu: {
+                enabled: true,
+                items: [{
+                    text: 'test item 1',
+                }, {
+                    text: 'test item 2',
+                    onClick: () => {
+                        assert.ok(true, 'click handler is applied');
+                    }
+                }]
+            } });
+
+            const $submenuItems = this.getSubmenuItems(1);
+
+            $submenuItems.eq(0).trigger('dxclick');
+        });
+
 
         'array of predefined strings and custom objects';
 
