@@ -93,7 +93,7 @@ const ACTION_OPTION_NAMES = {
 const BUTTON_NAMES = ['edit', 'save', 'cancel', 'delete', 'undelete'];
 
 const EDITING_CHANGES_OPTION_NAME = 'editing.changes';
-const NEW_SCROLLING_MODE = 'scrolling.newMode';
+const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
 const createFailureHandler = function(deferred) {
     return function(arg) {
@@ -606,7 +606,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         const topItemIndex = dataController.topItemIndex?.();
                         const bottomItemIndex = dataController.bottomItemIndex?.();
 
-                        if(this.option(NEW_SCROLLING_MODE) && isDefined(topItemIndex)) {
+                        if(this.option(LEGACY_SCROLLING_MODE) === false && isDefined(topItemIndex)) {
                             return change.index >= topItemIndex && change.index <= bottomItemIndex || needInsertOnLastPosition;
                         }
 

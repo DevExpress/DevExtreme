@@ -34,21 +34,27 @@ function getLineHeightShift(doc) {
     return (doc.getLineHeightFactor() - DEFAULT_LINE_HEIGHT) * doc.getFontSize();
 }
 
-function drawTextInRect(doc, text, rect, verticalAlign, wordWrapEnabled, jsPdfTextOptions) {
+function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWrapEnabled, jsPdfTextOptions) {
     const textArray = getTextLines(doc, text, doc.getFont(), { wordWrapEnabled, targetRectWidth: rect.w });
     const linesCount = textArray.length;
 
     const heightOfOneLine = calculateTextHeight(doc, textArray[0], doc.getFont(), { wordWrapEnabled: false });
 
     const vAlign = verticalAlign ?? 'middle';
+    const hAlign = horizontalAlign ?? 'left';
     const verticalAlignCoefficientsMap = { top: 0, middle: 0.5, bottom: 1 };
+    const horizontalAlignMap = { left: 0, center: 0.5, right: 1 };
+
     const y = rect.y
         + (rect.h * verticalAlignCoefficientsMap[vAlign])
         - heightOfOneLine * (linesCount - 1) * verticalAlignCoefficientsMap[vAlign]
         + getLineHeightShift(doc);
 
-    const textOptions = extend({ baseline: vAlign }, jsPdfTextOptions);
-    doc.text(textArray.join('\n'), round(rect.x), round(y), textOptions);
+    const x = rect.x
+        + (rect.w * horizontalAlignMap[hAlign]);
+
+    const textOptions = extend({ baseline: vAlign, align: hAlign }, jsPdfTextOptions);
+    doc.text(textArray.join('\n'), round(x), round(y), textOptions);
 }
 
 function drawCellBackground(doc, cell) {
@@ -68,7 +74,7 @@ function drawCellText(doc, cell, docStyles) {
             w: _rect.w - (padding.left + padding.right),
             h: _rect.h - (padding.top + padding.bottom)
         };
-        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.wordWrapEnabled, cell.jsPdfTextOptions);
+        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign, cell.wordWrapEnabled, cell.jsPdfTextOptions);
     }
 }
 

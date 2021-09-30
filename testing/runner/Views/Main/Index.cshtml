@@ -43,11 +43,6 @@
         </div>
         <div>
             <label>
-                IE mode: <select data-bind="options: IE_MODES, value: ieMode"></select>
-            </label>
-        </div>
-        <div>
-            <label>
                 Check for globals: <input type="checkbox" data-bind="checked: noGlobals" />
             </label>
         </div>
@@ -162,8 +157,6 @@
             this.cats = ko.observableArray();
             this.chosenCat = ko.observable();
             this.suites = ko.observableArray();
-            this.IE_MODES = ["edge", "10", "9"];
-            this.ieMode = ko.observable(this.IE_MODES[0]);
             this.noTryCatch = ko.observable(false);
             this.noGlobals = ko.observable(false);
             this.noTimers = ko.observable(true);
@@ -226,8 +219,6 @@
 
             _runUrlExtraParams: function() {
                 var result = {};
-                if(this.ieMode() !== "edge")
-                    result.ieMode = this.ieMode();
                 if(this.noGlobals())
                     result.noglobals = "true";
                 if(this.noTryCatch())
