@@ -22,11 +22,11 @@ import {
 
 import {
     VizTheme,
-    WordWrapType,
-    VizTextOverflowType,
+    VizWordWrap,
+    VizTextOverflow,
     HorizontalAlignment,
     VerticalEdge,
-    DashStyleType,
+    DashStyle,
     AnnotationType,
     ExportFormat,
 } from '../../docEnums';
@@ -401,12 +401,12 @@ export interface BaseWidgetTitle {
        * @docid BaseWidgetOptions.title.subtitle.textOverflow
        * @default "ellipsis"
        */
-      textOverflow?: VizTextOverflowType;
+      textOverflow?: VizTextOverflow;
       /**
        * @docid BaseWidgetOptions.title.subtitle.wordWrap
        * @default "normal"
        */
-      wordWrap?: WordWrapType;
+      wordWrap?: VizWordWrap;
     } | string;
     /**
      * @docid BaseWidgetOptions.title.text
@@ -419,7 +419,7 @@ export interface BaseWidgetTitle {
      * @default "ellipsis"
      * @public
      */
-    textOverflow?: VizTextOverflowType;
+    textOverflow?: VizTextOverflow;
     /**
      * @docid BaseWidgetOptions.title.verticalAlignment
      * @default 'top'
@@ -431,7 +431,7 @@ export interface BaseWidgetTitle {
      * @default "normal"
      * @public
      */
-    wordWrap?: WordWrapType;
+    wordWrap?: VizWordWrap;
 }
 /** @namespace DevExpress.viz */
 export interface BaseWidgetTooltip {
@@ -455,7 +455,7 @@ export interface BaseWidgetTooltip {
        * @docid BaseWidgetOptions.tooltip.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * @docid BaseWidgetOptions.tooltip.border.opacity
        * @default undefined
@@ -709,7 +709,7 @@ export interface BaseWidgetAnnotationConfig {
        * @docid
        * @default 'solid'
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * @docid
        * @default undefined
@@ -848,7 +848,7 @@ export interface BaseWidgetAnnotationConfig {
      * @default "ellipsis"
      * @public
      */
-    textOverflow?: VizTextOverflowType;
+    textOverflow?: VizTextOverflow;
     /**
      * @docid
      * @default true
@@ -872,7 +872,7 @@ export interface BaseWidgetAnnotationConfig {
      * @default "normal"
      * @public
      */
-    wordWrap?: WordWrapType;
+    wordWrap?: VizWordWrap;
     /**
      * @docid
      * @default undefined

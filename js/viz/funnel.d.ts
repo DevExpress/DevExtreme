@@ -39,16 +39,16 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-    PaletteType,
-    WordWrapType,
-    VizTextOverflowType,
-    PaletteExtensionModeType,
-    DashStyleType,
+    VizPalette,
+    VizWordWrap,
+    VizTextOverflow,
+    VizPaletteExtensionMode,
+    DashStyle,
     FunnelResolveLabelOverlapping,
     HorizontalEdge,
     SelectionMode,
     FunnelAlgorithm,
-    HatchingDirectionType,
+    HatchingDirection,
     FunnelLabelPosition,
 } from '../docEnums';
 
@@ -230,7 +230,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
            * @docid
            * @default 'right'
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * @docid
            * @default 0.75
@@ -280,7 +280,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
            * @docid
            * @default "right"
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * @docid
            * @default 0.5
@@ -321,7 +321,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
          * @docid
          * @default 'solid'
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DashStyle;
         /**
          * @docid
          * @default false
@@ -400,7 +400,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
        * @docid
        * @default 'ellipsis'
        */
-      textOverflow?: VizTextOverflowType;
+      textOverflow?: VizTextOverflow;
       /**
        * @docid
        * @default true
@@ -410,7 +410,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
        * @docid
        * @default 'normal'
        */
-      wordWrap?: WordWrapType;
+      wordWrap?: VizWordWrap;
     };
     /**
      * @docid
@@ -490,13 +490,13 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * @docid
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: VizPaletteExtensionMode;
     /**
      * @docid
      * @default "shift"

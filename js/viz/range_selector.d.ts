@@ -36,8 +36,8 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-  PaletteType,
-  PaletteExtensionModeType,
+  VizPalette,
+  VizPaletteExtensionMode,
   ScaleLabelOverlappingBehavior,
   ScaleBreakLineStyle,
   VisualRangeUpdateMode,
@@ -223,12 +223,12 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
        * @docid
        * @default "Material"
        */
-      palette?: Array<string> | PaletteType;
+      palette?: Array<string> | VizPalette;
       /**
        * @docid
        * @default 'blend'
        */
-      paletteExtensionMode?: PaletteExtensionModeType;
+      paletteExtensionMode?: VizPaletteExtensionMode;
       /**
        * @docid
        * @default undefined
@@ -359,6 +359,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       aggregationGroupWidth?: number;
       /**
        * @docid
+       * @type number|object|Enums.TimeIntervalType
        * @inherits VizTimeInterval
        */
       aggregationInterval?: VizTimeInterval;
@@ -509,11 +510,13 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       };
       /**
        * @docid
+       * @type number|object|Enums.TimeIntervalType
        * @inherits VizTimeInterval
        */
       maxRange?: VizTimeInterval;
       /**
        * @docid
+       * @type number|object|Enums.TimeIntervalType
        * @inherits VizTimeInterval
        */
       minRange?: VizTimeInterval;
@@ -549,6 +552,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       minorTickCount?: number;
       /**
        * @docid
+       * @type number|object|Enums.TimeIntervalType
        * @inherits VizTimeInterval
        */
       minorTickInterval?: VizTimeInterval;
@@ -595,6 +599,7 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       };
       /**
        * @docid
+       * @type number|object|Enums.TimeIntervalType
        * @inherits VizTimeInterval
        */
       tickInterval?: VizTimeInterval;

@@ -10,8 +10,8 @@ import {
     Orientation,
     HorizontalAlignment,
     VerticalEdge,
-    DashStyleType,
-    ChartSeriesType,
+    DashStyle,
+    SeriesType,
     Position,
     TimeIntervalType,
     LegendMarkerState,
@@ -74,7 +74,7 @@ export interface BaseLegend {
        * @docid
        * @default 'solid'
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * @docid
        * @default undefined
@@ -350,7 +350,7 @@ export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
      * @default 'line'
      * @public
      */
-    type?: ChartSeriesType;
+    type?: SeriesType;
 }
 
 /**
@@ -391,6 +391,7 @@ export interface VizRange {
     /**
      * @docid
      * @inherits VizTimeInterval
+     * @type number|object|Enums.TimeIntervalType
      * @default undefined
      * @public
      */

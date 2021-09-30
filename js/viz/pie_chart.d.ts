@@ -45,17 +45,17 @@ import {
 } from './core/base_widget';
 
 import {
-    PaletteType,
-    WordWrapType,
-    VizTextOverflowType,
-    DashStyleType,
+    VizPalette,
+    VizWordWrap,
+    VizTextOverflow,
+    DashStyle,
     ChartDataType,
     PieChartLegendHoverMode,
     PieChartResolveLabelOverlapping,
-    PieSeriesType,
-    SegmentsDirectionType,
+    PieChartType,
+    PieChartSegmentsDirection,
     PieChartAnnotationLocation,
-    HatchingDirectionType,
+    HatchingDirection,
     SmallValuesGroupingMode,
     PieChartSeriesInteractionMode,
     PieChartLabelPosition,
@@ -234,7 +234,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * @docid
      * @default "none"
@@ -246,7 +246,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @default 'clockwise'
      * @public
      */
-    segmentsDirection?: SegmentsDirectionType;
+    segmentsDirection?: PieChartSegmentsDirection;
     /**
      * @docid
      * @default undefined
@@ -289,7 +289,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
      * @default 'pie'
      * @public
      */
-    type?: PieSeriesType;
+    type?: PieChartType;
     /**
      * @docid
      * @inherits dxPieChartOptions.commonAnnotationSettings
@@ -488,7 +488,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.dashStyle
        * @default undefined
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border.visible
        * @default false
@@ -530,7 +530,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.dashStyle
            * @default undefined
            */
-          dashStyle?: DashStyleType;
+          dashStyle?: DashStyle;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.visible
            * @default false
@@ -555,7 +555,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.direction
            * @default 'right'
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.opacity
            * @default 0.75
@@ -601,7 +601,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.dashStyle
            * @default 'solid'
            */
-          dashStyle?: DashStyleType;
+          dashStyle?: DashStyle;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.border.visible
            * @default false
@@ -669,7 +669,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.textOverflow
        * @default 'ellipsis'
        */
-      textOverflow?: VizTextOverflowType;
+      textOverflow?: VizTextOverflow;
       /**
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.visible
        * @default false
@@ -679,7 +679,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
        * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap
        * @default 'normal'
        */
-      wordWrap?: WordWrapType;
+      wordWrap?: VizWordWrap;
     };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount
@@ -717,7 +717,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.dashStyle
            * @default undefined
            */
-          dashStyle?: DashStyleType;
+          dashStyle?: DashStyle;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.visible
            * @default false
@@ -742,7 +742,7 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.direction
            * @default 'right'
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.opacity
            * @default 0.5

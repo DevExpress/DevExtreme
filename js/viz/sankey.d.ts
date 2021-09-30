@@ -30,10 +30,10 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-  PaletteType,
-  PaletteExtensionModeType,
+  VizPalette,
+  VizPaletteExtensionMode,
   VerticalAlignment,
-  HatchingDirectionType,
+  HatchingDirection,
   SankeyLabelOverlappingBehavior,
   SankeyColorMode,
 } from '../docEnums';
@@ -287,7 +287,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
            * @docid
            * @default 'right'
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * @docid
            * @default 0.75
@@ -383,7 +383,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
            * @docid
            * @default 'right'
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * @docid
            * @default 0.75
@@ -481,13 +481,13 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * @docid
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: VizPaletteExtensionMode;
     /**
      * @docid
      * @default undefined

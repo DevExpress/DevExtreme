@@ -24,8 +24,8 @@ import BaseWidget, {
 
 import {
     ScaleLabelOverlappingBehavior,
-    PaletteType,
-    PaletteExtensionModeType,
+    VizPalette,
+    VizPaletteExtensionMode,
     VerticalEdge,
     HorizontalEdge,
     VizAnimationEasing,
@@ -164,13 +164,13 @@ export interface BaseGaugeRangeContainer {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * @docid BaseGaugeOptions.rangeContainer.paletteExtensionMode
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: VizPaletteExtensionMode;
     /**
      * @docid BaseGaugeOptions.rangeContainer.ranges
      * @default []
@@ -489,7 +489,7 @@ export interface CommonIndicator {
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * @docid
      * @default '#E18E92'

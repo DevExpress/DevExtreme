@@ -5703,7 +5703,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.filterOperations]
        */
-      filterOperations?: Array<GridFilterOperations>;
+      filterOperations?: Array<GridFilterOperations | string>;
       /**
        * [descr:GridBaseColumn.filterType]
        */
@@ -7931,7 +7931,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridToolbar.items]
      */
-    items?: Array<dxDataGridDefaultToolbarItemName | dxDataGridToolbarItem>;
+    items?: Array<DataGridToolbarItem | dxDataGridToolbarItem>;
     /**
      * [descr:dxDataGridToolbar.visible]
      */
@@ -7949,7 +7949,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridToolbarItem.name]
      */
-    name?: dxDataGridDefaultToolbarItemName | string;
+    name?: DataGridToolbarItem | string;
   }
   /**
    * [descr:dxDateBox]
@@ -12787,7 +12787,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttSorting.mode]
      */
-    mode?: GanttSortingMode;
+    mode?: GanttSortingMode | string;
     /**
      * [descr:dxGanttSorting.showSortIndexes]
      */
@@ -19771,7 +19771,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListToolbar.items]
      */
-    items?: Array<dxTreeListDefaultToolbarItemName | dxTreeListToolbarItem>;
+    items?: Array<TreeListToolbarItem | dxTreeListToolbarItem>;
   }
   /**
    * [descr:dxTreeListToolbarItem]
@@ -19781,7 +19781,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListToolbarItem.name]
      */
-    name?: dxTreeListDefaultToolbarItemName | string;
+    name?: TreeListToolbarItem | string;
     /**
      * [descr:dxTreeListToolbarItem.visible]
      */
@@ -21892,11 +21892,11 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * [descr:BaseChartOptions.paletteExtensionMode]
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: VizPaletteExtensionMode;
     /**
      * [descr:BaseChartOptions.pointSelectionMode]
      */
@@ -22077,11 +22077,11 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.rangeContainer.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * [descr:BaseGaugeOptions.rangeContainer.paletteExtensionMode]
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: VizPaletteExtensionMode;
     /**
      * [descr:BaseGaugeOptions.rangeContainer.ranges]
      */
@@ -22302,7 +22302,7 @@ declare module DevExpress.viz {
       /**
        * [descr:BaseLegend.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * [descr:BaseLegend.border.opacity]
        */
@@ -22826,7 +22826,7 @@ declare module DevExpress.viz {
       /**
        * [descr:BaseWidgetAnnotationConfig.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * [descr:BaseWidgetAnnotationConfig.border.opacity]
        */
@@ -22931,7 +22931,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.textOverflow]
      */
-    textOverflow?: VizTextOverflowType;
+    textOverflow?: VizTextOverflow;
     /**
      * [descr:BaseWidgetAnnotationConfig.tooltipEnabled]
      */
@@ -22947,7 +22947,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.wordWrap]
      */
-    wordWrap?: WordWrapType;
+    wordWrap?: VizWordWrap;
     /**
      * [descr:BaseWidgetAnnotationConfig.x]
      */
@@ -23202,11 +23202,11 @@ declare module DevExpress.viz {
           /**
            * [descr:BaseWidgetOptions.title.subtitle.textOverflow]
            */
-          textOverflow?: VizTextOverflowType;
+          textOverflow?: VizTextOverflow;
           /**
            * [descr:BaseWidgetOptions.title.subtitle.wordWrap]
            */
-          wordWrap?: WordWrapType;
+          wordWrap?: VizWordWrap;
         }
       | string;
     /**
@@ -23216,7 +23216,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.title.textOverflow]
      */
-    textOverflow?: VizTextOverflowType;
+    textOverflow?: VizTextOverflow;
     /**
      * [descr:BaseWidgetOptions.title.verticalAlignment]
      */
@@ -23224,7 +23224,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.title.wordWrap]
      */
-    wordWrap?: WordWrapType;
+    wordWrap?: VizWordWrap;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -23245,7 +23245,7 @@ declare module DevExpress.viz {
       /**
        * [descr:BaseWidgetOptions.tooltip.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * [descr:BaseWidgetOptions.tooltip.border.opacity]
        */
@@ -23415,7 +23415,7 @@ declare module DevExpress.viz {
     /**
      * [descr:ChartSeries.type]
      */
-    type?: ChartSeriesType;
+    type?: SeriesType;
   }
   /**
    * [descr:chartSeriesObject]
@@ -23491,7 +23491,7 @@ declare module DevExpress.viz {
     /**
      * [descr:CommonIndicator.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * [descr:CommonIndicator.secondColor]
      */
@@ -23744,11 +23744,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * [descr:dxBarGaugeOptions.paletteExtensionMode]
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: VizPaletteExtensionMode;
     /**
      * [descr:dxBarGaugeOptions.relativeInnerRadius]
      */
@@ -24459,7 +24459,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.label]
      */
@@ -24542,7 +24542,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.textOverflow]
      */
-    textOverflow?: VizTextOverflowType;
+    textOverflow?: VizTextOverflow;
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.visible]
      */
@@ -24550,7 +24550,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.wordWrap]
      */
-    wordWrap?: WordWrapType;
+    wordWrap?: VizWordWrap;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -24605,11 +24605,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.title.textOverflow]
      */
-    textOverflow?: VizTextOverflowType;
+    textOverflow?: VizTextOverflow;
     /**
      * [descr:dxChartOptions.commonAxisSettings.title.wordWrap]
      */
-    wordWrap?: WordWrapType;
+    wordWrap?: VizWordWrap;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -24634,7 +24634,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.commonPaneSettings.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * [descr:dxChartOptions.commonPaneSettings.border.left]
        */
@@ -24761,7 +24761,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonSeriesSettings.type]
      */
-    type?: ChartSeriesType;
+    type?: SeriesType;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -24852,7 +24852,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.crosshair.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * [descr:dxChartOptions.crosshair.enabled]
        */
@@ -24869,7 +24869,7 @@ declare module DevExpress.viz {
             /**
              * [descr:dxChartOptions.crosshair.horizontalLine.dashStyle]
              */
-            dashStyle?: DashStyleType;
+            dashStyle?: DashStyle;
             /**
              * [descr:dxChartOptions.crosshair.horizontalLine.label]
              */
@@ -24958,7 +24958,7 @@ declare module DevExpress.viz {
             /**
              * [descr:dxChartOptions.crosshair.verticalLine.dashStyle]
              */
-            dashStyle?: DashStyleType;
+            dashStyle?: DashStyle;
             /**
              * [descr:dxChartOptions.crosshair.verticalLine.label]
              */
@@ -25542,7 +25542,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching.direction]
      */
-    direction?: HatchingDirectionType;
+    direction?: HatchingDirection;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25572,7 +25572,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching.direction]
      */
-    direction?: HatchingDirectionType;
+    direction?: HatchingDirection;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -25621,7 +25621,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.highValueField]
      */
@@ -25804,7 +25804,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.border.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.border.visible]
      */
@@ -25829,7 +25829,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching]
      */
@@ -25850,7 +25850,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible]
      */
@@ -25867,7 +25867,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.direction]
      */
-    direction?: HatchingDirectionType;
+    direction?: HatchingDirection;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.opacity]
      */
@@ -25908,7 +25908,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.label.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.label.border.visible]
        */
@@ -26145,7 +26145,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching]
      */
@@ -26166,7 +26166,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible]
      */
@@ -26183,7 +26183,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.direction]
      */
-    direction?: HatchingDirectionType;
+    direction?: HatchingDirection;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.opacity]
      */
@@ -27775,7 +27775,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxFunnelOptions.item.hoverStyle.hatching.direction]
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * [descr:dxFunnelOptions.item.hoverStyle.hatching.opacity]
            */
@@ -27818,7 +27818,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxFunnelOptions.item.selectionStyle.hatching.direction]
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * [descr:dxFunnelOptions.item.selectionStyle.hatching.opacity]
            */
@@ -27853,7 +27853,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxFunnelOptions.label.border.dashStyle]
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DashStyle;
         /**
          * [descr:dxFunnelOptions.label.border.visible]
          */
@@ -27921,7 +27921,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxFunnelOptions.label.textOverflow]
        */
-      textOverflow?: VizTextOverflowType;
+      textOverflow?: VizTextOverflow;
       /**
        * [descr:dxFunnelOptions.label.visible]
        */
@@ -27929,7 +27929,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxFunnelOptions.label.wordWrap]
        */
-      wordWrap?: WordWrapType;
+      wordWrap?: VizWordWrap;
     };
     /**
      * [descr:dxFunnelOptions.legend]
@@ -27968,11 +27968,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * [descr:dxFunnelOptions.paletteExtensionMode]
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: VizPaletteExtensionMode;
     /**
      * [descr:dxFunnelOptions.resolveLabelOverlapping]
      */
@@ -28334,7 +28334,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * [descr:dxPieChartOptions.resolveLabelOverlapping]
      */
@@ -28342,7 +28342,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.segmentsDirection]
      */
-    segmentsDirection?: SegmentsDirectionType;
+    segmentsDirection?: PieChartSegmentsDirection;
     /**
      * [descr:dxPieChartOptions.series]
      */
@@ -28371,7 +28371,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.type]
      */
-    type?: PieSeriesType;
+    type?: PieChartType;
     /**
      * [descr:dxPieChartOptions.annotations]
      */
@@ -28428,7 +28428,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.border.visible]
        */
@@ -28461,7 +28461,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.dashStyle]
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DashStyle;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.visible]
          */
@@ -28482,7 +28482,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.direction]
          */
-        direction?: HatchingDirectionType;
+        direction?: HatchingDirection;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.opacity]
          */
@@ -28520,7 +28520,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.border.dashStyle]
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DashStyle;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.border.visible]
          */
@@ -28574,7 +28574,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.textOverflow]
        */
-      textOverflow?: VizTextOverflowType;
+      textOverflow?: VizTextOverflow;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.visible]
        */
@@ -28582,7 +28582,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap]
        */
-      wordWrap?: WordWrapType;
+      wordWrap?: VizWordWrap;
     };
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount]
@@ -28611,7 +28611,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.dashStyle]
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DashStyle;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.visible]
          */
@@ -28632,7 +28632,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.direction]
          */
-        direction?: HatchingDirectionType;
+        direction?: HatchingDirection;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.opacity]
          */
@@ -29119,7 +29119,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.label]
      */
@@ -29548,7 +29548,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.border.visible]
        */
@@ -29569,7 +29569,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverMode]
      */
@@ -29589,7 +29589,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.dashStyle]
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DashStyle;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.visible]
          */
@@ -29606,7 +29606,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching]
        */
@@ -29614,7 +29614,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.direction]
          */
-        direction?: HatchingDirectionType;
+        direction?: HatchingDirection;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.opacity]
          */
@@ -29676,7 +29676,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle]
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DashStyle;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.visible]
          */
@@ -29693,7 +29693,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching]
        */
@@ -29701,7 +29701,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.direction]
          */
-        direction?: HatchingDirectionType;
+        direction?: HatchingDirection;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.opacity]
          */
@@ -29809,7 +29809,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.visible]
        */
@@ -30397,11 +30397,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.chart.palette]
        */
-      palette?: Array<string> | PaletteType;
+      palette?: Array<string> | VizPalette;
       /**
        * [descr:dxRangeSelectorOptions.chart.paletteExtensionMode]
        */
-      paletteExtensionMode?: PaletteExtensionModeType;
+      paletteExtensionMode?: VizPaletteExtensionMode;
       /**
        * [descr:dxRangeSelectorOptions.chart.series]
        */
@@ -31113,7 +31113,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxSankeyOptions.link.hoverStyle.hatching.direction]
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * [descr:dxSankeyOptions.link.hoverStyle.hatching.opacity]
            */
@@ -31194,7 +31194,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxSankeyOptions.node.hoverStyle.hatching.direction]
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * [descr:dxSankeyOptions.node.hoverStyle.hatching.opacity]
            */
@@ -31249,11 +31249,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSankeyOptions.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * [descr:dxSankeyOptions.paletteExtensionMode]
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: VizPaletteExtensionMode;
     /**
      * [descr:dxSankeyOptions.sortData]
      */
@@ -31627,11 +31627,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxTreeMapOptions.colorizer.palette]
        */
-      palette?: Array<string> | PaletteType;
+      palette?: Array<string> | VizPalette;
       /**
        * [descr:dxTreeMapOptions.colorizer.paletteExtensionMode]
        */
-      paletteExtensionMode?: PaletteExtensionModeType;
+      paletteExtensionMode?: VizPaletteExtensionMode;
       /**
        * [descr:dxTreeMapOptions.colorizer.range]
        */
@@ -31716,7 +31716,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.group.label.textOverflow]
          */
-        textOverflow?: VizTextOverflowType;
+        textOverflow?: VizTextOverflow;
         /**
          * [descr:dxTreeMapOptions.group.label.visible]
          */
@@ -31875,7 +31875,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.tile.label.textOverflow]
          */
-        textOverflow?: VizTextOverflowType;
+        textOverflow?: VizTextOverflow;
         /**
          * [descr:dxTreeMapOptions.tile.label.visible]
          */
@@ -31883,7 +31883,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.tile.label.wordWrap]
          */
-        wordWrap?: WordWrapType;
+        wordWrap?: VizWordWrap;
       };
       /**
        * [descr:dxTreeMapOptions.tile.selectionStyle]
@@ -32309,7 +32309,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.palette]
            */
-          palette?: Array<string> | PaletteType;
+          palette?: Array<string> | VizPalette;
           /**
            * [descr:dxVectorMapOptions.layers.paletteSize]
            */
@@ -32375,7 +32375,7 @@ declare module DevExpress.viz {
           minSize?: number;
           name?: string;
           opacity?: number;
-          palette?: Array<string> | PaletteType;
+          palette?: Array<string> | VizPalette;
           paletteSize?: number;
           selectedBorderColor?: string;
           selectedBorderWidth?: number;
@@ -32590,10 +32590,10 @@ declare module DevExpress.viz {
    * [descr:viz.generateColors(palette, count, options)]
    */
   export function generateColors(
-    palette: PaletteType | Array<string>,
+    palette: VizPalette | Array<string>,
     count: number,
     options: {
-      paletteExtensionMode?: PaletteExtensionModeType;
+      paletteExtensionMode?: VizPaletteExtensionMode;
       baseColorSet?: VizPaletteColorSet;
     }
   ): Array<string>;

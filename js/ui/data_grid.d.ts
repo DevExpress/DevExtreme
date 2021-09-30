@@ -118,7 +118,7 @@ import {
   GridPagerDisplayMode,
   GridPagerPageSize,
   GridDataChangeType,
-  dxDataGridDefaultToolbarItemName,
+  DataGridToolbarItem,
   GridNewRowPosition,
 } from '../docEnums';
 
@@ -2511,7 +2511,7 @@ export interface ColumnBase {
      * @default undefined
      * @public
      */
-    filterOperations?: Array<GridFilterOperations>;
+    filterOperations?: Array<GridFilterOperations | string>;
     /**
      * @docid GridBaseColumn.filterType
      * @default "include"
@@ -4137,7 +4137,7 @@ export interface dxDataGridToolbarItem extends dxToolbarItem {
    * @docid
    * @public
    */
-  name?: dxDataGridDefaultToolbarItemName | string;
+  name?: DataGridToolbarItem | string;
 }
 
 /**
@@ -4150,7 +4150,7 @@ export interface dxDataGridToolbar {
    * @docid
    * @public
    */
-  items?: Array<dxDataGridDefaultToolbarItemName | dxDataGridToolbarItem>;
+  items?: Array<DataGridToolbarItem | dxDataGridToolbarItem>;
   /**
    * @docid
    * @type boolean

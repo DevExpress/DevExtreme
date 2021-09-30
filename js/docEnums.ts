@@ -14,7 +14,7 @@ export type ValidationMessageMode = 'always' | 'auto';
 
 export type VizAnimationEasing = 'easeOutCubic' | 'linear';
 
-// Format
+// Format. Must rename - part of a class Format in localization.d.ts
 /**
  * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
  */
@@ -22,17 +22,17 @@ export type PredefinedFormat = 'billions' | 'currency' | 'day' | 'decimal' | 'ex
 
 export type VizTheme = 'generic.dark' | 'generic.light' | 'generic.contrast' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
 
-// VizPalette
-export type PaletteType = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+// PaletteType
+export type VizPalette = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
 
-// VizWordWrap
-export type WordWrapType = 'normal' | 'breakWord' | 'none';
+// WordWrapType
+export type VizWordWrap = 'normal' | 'breakWord' | 'none';
 
-// VizTextOverflow
-export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
+// VizTextOverflowType
+export type VizTextOverflow = 'ellipsis' | 'hide' | 'none';
 
-// VizPaletteExtensionMode
-export type PaletteExtensionModeType = 'alternate' | 'blend' | 'extrapolate';
+// PaletteExtensionModeType
+export type VizPaletteExtensionMode = 'alternate' | 'blend' | 'extrapolate';
 
 export type VizPaletteColorSet = 'simpleSet' | 'indicatingSet' | 'gradientSet';
 
@@ -58,8 +58,8 @@ export type HorizontalAlignment = 'center' | 'left' | 'right';
 
 export type VerticalEdge = 'bottom' | 'top';
 
-// DashStyle
-export type DashStyleType = 'dash' | 'dot' | 'longDash' | 'solid';
+// DashStyleType
+export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
 
 export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
 
@@ -86,8 +86,8 @@ export type FunnelResolveLabelOverlapping = 'hide' | 'none' | 'shift';
 
 export type ChartElementSelectionMode = 'multiple' | 'single';
 
-// SeriesType
-export type ChartSeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
+// ChartSeriesType
+export type SeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
 
 export type AnnotationType = 'text' | 'image' | 'custom';
 
@@ -127,11 +127,11 @@ export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
 
 export type PieChartResolveLabelOverlapping = 'hide' | 'none' | 'shift';
 
-// PieChartType
-export type PieSeriesType = 'donut' | 'doughnut' | 'pie';
+// PieSeriesType
+export type PieChartType = 'donut' | 'doughnut' | 'pie';
 
-// PieChartSegmentsDirection
-export type SegmentsDirectionType = 'anticlockwise' | 'clockwise';
+// SegmentsDirectionType
+export type PieChartSegmentsDirection = 'anticlockwise' | 'clockwise';
 
 export type PieChartAnnotationLocation = 'center' | 'edge';
 
@@ -213,8 +213,8 @@ export type FormItemType = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
 
 export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
 
-// HatchingDirection
-export type HatchingDirectionType = 'left' | 'none' | 'right';
+// HatchingDirectionType
+export type HatchingDirection = 'left' | 'none' | 'right';
 
 export type FunnelLabelPosition = 'columns' | 'inside' | 'outside';
 
@@ -423,8 +423,7 @@ export type EditorLabelMode = 'static' | 'floating' | 'hidden';
 
 export type GridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 
-// has additional member | 'drag' - but ts has no such member
-export type TreeListCommandColumnType = 'adaptive' | 'buttons';
+export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
 
 export type GridColumnButtonName = 'cancel' | 'delete' | 'edit' | 'save' | 'undelete';
 
@@ -444,8 +443,7 @@ export type FileManagerItemViewMode = 'details' | 'thumbnails';
 
 export type FileManagerViewArea = 'navPane' | 'itemView';
 
-// has additional member | 'auto' - but ts has no such member
-export type DiagramDataLayoutType = 'off' | 'tree' | 'layered';
+export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
 
 export type DiagramDataLayoutOrientation = 'vertical' | 'horizontal';
 
@@ -463,7 +461,7 @@ export type DiagramConnectorLineEnd = 'none' | 'arrow' | 'outlinedTriangle' | 'f
 
 export type DiagramToolboxDisplayMode = 'icons' | 'texts';
 
-export type DiagramCommand = 'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor|simpleView|toolbox';
+export type DiagramCommand = 'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox';
 
 export type DiagramPanelVisibility = 'auto' | 'visible' | 'collapsed' | 'disabled';
 
@@ -473,8 +471,6 @@ export type DiagramItemType = 'shape' | 'connector';
 
 export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
 
-// ts-type doesn't has members: 'beforeChangeShapeText' 'changeShapeText'
-// 'beforeChangeConnectorText' 'changeConnectorText' 'resizeShape' 'moveShape'
 export type DiagramModelOperation = 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints';
 
 export type DiagramRequestEditOperationReason = 'checkUIElementAvailability' | 'modelModification';
@@ -507,13 +503,11 @@ export type GridDataChangeType = 'insert' | 'update' | 'remove';
 
 export type GridNewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop';
 
-// was DataGridToolbarItem
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export type dxDataGridDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+// dxDataGridDefaultToolbarItemName
+export type DataGridToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 
-// was TreeListToolbarItem
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export type dxTreeListDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+// dxTreeListDefaultToolbarItemName
+export type TreeListToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
 

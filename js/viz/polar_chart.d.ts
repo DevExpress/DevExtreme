@@ -51,7 +51,7 @@ import {
 
 import {
     PolarChartOverlappingBehavior,
-    DashStyleType,
+    DashStyle,
     VizPointSymbol,
     ChartElementSelectionMode,
     ChartLegendHoverMode,
@@ -64,7 +64,7 @@ import {
     ArgumentAxisHoverMode,
     PolarChartResolveLabelOverlapping,
     PolarChartSeriesType,
-    HatchingDirectionType,
+    HatchingDirection,
     ChartSeriesHoverMode,
     ChartSeriesSelectionMode,
     ChartPointInteractionMode,
@@ -538,6 +538,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     /**
      * @docid dxPolarChartOptions.argumentAxis.minorTickInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.TimeIntervalType
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -576,6 +577,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     /**
      * @docid dxPolarChartOptions.argumentAxis.tickInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.TimeIntervalType
      * @public
      */
     tickInterval?: VizTimeInterval;
@@ -844,7 +846,7 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
      * @default 'solid'
      * @public
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label
      * @type object
@@ -1109,6 +1111,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
+     * @type number|object|Enums.TimeIntervalType
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -1123,6 +1126,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.TimeIntervalType
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -1149,6 +1153,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.tickInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.TimeIntervalType
      * @public
      */
     tickInterval?: VizTimeInterval;
@@ -1465,7 +1470,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @default undefined
        * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.border.visible
        * @default false
@@ -1498,7 +1503,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries
      * @public
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverMode
      * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.linepolarseries
@@ -1525,7 +1530,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.dashStyle
          * @default 'solid'
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DashStyle;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.visible
          * @default false
@@ -1547,7 +1552,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @default 'solid'
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching
        * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -1557,7 +1562,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.direction
          * @default 'none'
          */
-        direction?: HatchingDirectionType;
+        direction?: HatchingDirection;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.opacity
          * @default 0.75
@@ -1646,7 +1651,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle
          * @default 'solid'
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DashStyle;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.visible
          * @default false
@@ -1668,7 +1673,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
        * @default 'solid'
        * @propertyOf dxPolarChartSeriesTypes.linepolarseries
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching
        * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
@@ -1678,7 +1683,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.direction
          * @default 'none'
          */
-        direction?: HatchingDirectionType;
+        direction?: HatchingDirection;
         /**
          * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.opacity
          * @default 0.5
@@ -1823,7 +1828,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.visible
        * @default false

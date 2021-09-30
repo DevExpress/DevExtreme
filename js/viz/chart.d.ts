@@ -45,15 +45,15 @@ import {
 
 import {
     EventKeyModifier,
-    WordWrapType,
-    VizTextOverflowType,
+    VizWordWrap,
+    VizTextOverflow,
     OverlappingBehavior,
     VerticalAlignment,
     HorizontalAlignment,
-    DashStyleType,
+    DashStyle,
     ChartResolveLabelOverlapping,
     ChartElementSelectionMode,
-    ChartSeriesType,
+    SeriesType,
     Position,
     ChartZoomAndPanMode,
     ChartLegendHoverMode,
@@ -67,7 +67,7 @@ import {
     ChartDataType,
     ArgumentAxisHoverMode,
     ChartTooltipLocation,
-    HatchingDirectionType,
+    HatchingDirection,
     FinancialChartReductionLevel,
     ChartSeriesHoverMode,
     ChartSeriesSelectionMode,
@@ -693,7 +693,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
        * @docid
        * @default 'solid'
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * @docid
        * @default false
@@ -712,7 +712,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
          * @docid
          * @default 'solid'
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DashStyle;
         /**
          * @docid
          */
@@ -809,7 +809,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
          * @docid
          * @default 'solid'
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DashStyle;
         /**
          * @docid
          */
@@ -1222,6 +1222,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     aggregationGroupWidth?: number;
     /**
      * @docid dxChartOptions.argumentAxis.aggregationInterval
+     * @type number|object|Enums.TimeIntervalType
      * @inherits VizTimeInterval
      * @public
      */
@@ -1304,6 +1305,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.minVisualRangeLength
      * @inherits VizTimeInterval
+     * @type number|object|Enums.TimeIntervalType
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -1318,6 +1320,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.minorTickInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.TimeIntervalType
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -1362,6 +1365,7 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.argumentAxis.tickInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.TimeIntervalType
      * @public
      */
     tickInterval?: VizTimeInterval;
@@ -1805,7 +1809,7 @@ export interface dxChartCommonAxisSettingsConstantLineStyle {
      * @default 'solid'
      * @public
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * @docid dxChartOptions.commonAxisSettings.constantLineStyle.label
      * @type object
@@ -1916,7 +1920,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @default "none"
      * @public
      */
-    textOverflow?: VizTextOverflowType;
+    textOverflow?: VizTextOverflow;
     /**
      * @docid dxChartOptions.commonAxisSettings.label.visible
      * @default true
@@ -1928,7 +1932,7 @@ export interface dxChartCommonAxisSettingsLabel {
      * @default "normal"
      * @public
      */
-    wordWrap?: WordWrapType;
+    wordWrap?: VizWordWrap;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartCommonAxisSettingsStripStyle {
@@ -1998,13 +2002,13 @@ export interface dxChartCommonAxisSettingsTitle {
      * @default "ellipsis"
      * @public
      */
-    textOverflow?: VizTextOverflowType;
+    textOverflow?: VizTextOverflow;
     /**
      * @docid dxChartOptions.commonAxisSettings.title.wordWrap
      * @default "normal"
      * @public
      */
-    wordWrap?: WordWrapType;
+    wordWrap?: VizWordWrap;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartCommonPaneSettings {
@@ -2033,7 +2037,7 @@ export interface dxChartCommonPaneSettings {
        * @docid dxChartOptions.commonPaneSettings.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * @docid dxChartOptions.commonPaneSettings.border.left
        * @default true
@@ -2188,7 +2192,7 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
      * @default 'line'
      * @public
      */
-    type?: ChartSeriesType;
+    type?: SeriesType;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartLegend extends BaseChartLegend {
@@ -2317,6 +2321,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
+     * @type number|object|Enums.TimeIntervalType
      * @default undefined
      * @notUsedInTheme
      * @public
@@ -2331,6 +2336,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.minorTickInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.TimeIntervalType
      * @public
      */
     minorTickInterval?: VizTimeInterval;
@@ -2394,6 +2400,7 @@ export interface dxChartValueAxis extends dxChartCommonAxisSettings {
     /**
      * @docid dxChartOptions.valueAxis.tickInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.TimeIntervalType
      * @public
      */
     tickInterval?: VizTimeInterval;
@@ -3072,7 +3079,7 @@ export interface dxChartSeriesTypesCandleStickSeriesHoverStyleHatching extends d
      * @default 'none'
      * @public
      */
-    direction?: HatchingDirectionType;
+    direction?: HatchingDirection;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCandleStickSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -3100,7 +3107,7 @@ export interface dxChartSeriesTypesCandleStickSeriesSelectionStyleHatching exten
      * @default 'none'
      * @public
      */
-    direction?: HatchingDirectionType;
+    direction?: HatchingDirection;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesCommonSeries {
@@ -3178,7 +3185,7 @@ export interface dxChartSeriesTypesCommonSeries {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
      * @public
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.highValueField
      * @default 'high'
@@ -3449,7 +3456,7 @@ export interface dxChartSeriesTypesCommonSeriesBorder {
      * @propertyOf dxChartSeriesTypes.AreaSeries,dxChartSeriesTypes.StackedAreaSeries,dxChartSeriesTypes.FullStackedAreaSeries,dxChartSeriesTypes.StackedSplineAreaSeries,dxChartSeriesTypes.FullStackedSplineAreaSeries,dxChartSeriesTypes.SplineAreaSeries,dxChartSeriesTypes.StepAreaSeries,dxChartSeriesTypes.RangeAreaSeries,dxChartSeriesTypes.BarSeries,dxChartSeriesTypes.StackedBarSeries,dxChartSeriesTypes.FullStackedBarSeries,dxChartSeriesTypes.RangeBarSeries,dxChartSeriesTypes.BubbleSeries
      * @public
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.border.visible
      * @default false
@@ -3486,7 +3493,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyle {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
      * @public
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.hatching
      * @type object
@@ -3515,7 +3522,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
      * @default 'solid'
      * @public
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible
      * @default false
@@ -3536,7 +3543,7 @@ export interface dxChartSeriesTypesCommonSeriesHoverStyleHatching {
      * @default 'right'
      * @public
      */
-    direction?: HatchingDirectionType;
+    direction?: HatchingDirection;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.opacity
      * @default 0.75
@@ -3590,7 +3597,7 @@ export interface dxChartSeriesTypesCommonSeriesLabel {
        * @docid dxChartSeriesTypes.CommonSeries.label.border.dashStyle
        * @default 'solid'
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DashStyle;
       /**
        * @docid dxChartSeriesTypes.CommonSeries.label.border.visible
        * @default false
@@ -3928,7 +3935,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyle {
      * @propertyOf dxChartSeriesTypes.LineSeries,dxChartSeriesTypes.StackedLineSeries,dxChartSeriesTypes.FullStackedLineSeries,dxChartSeriesTypes.StackedSplineSeries,dxChartSeriesTypes.FullStackedSplineSeries,dxChartSeriesTypes.SplineSeries,dxChartSeriesTypes.StepLineSeries
      * @public
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.hatching
      * @type object
@@ -3957,7 +3964,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
      * @default 'solid'
      * @public
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DashStyle;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible
      * @default false
@@ -3978,7 +3985,7 @@ export interface dxChartSeriesTypesCommonSeriesSelectionStyleHatching {
      * @default 'right'
      * @public
      */
-    direction?: HatchingDirectionType;
+    direction?: HatchingDirection;
     /**
      * @docid dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.opacity
      * @default 0.5

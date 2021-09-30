@@ -31,10 +31,10 @@ import BaseWidget, {
 } from './core/base_widget';
 
 import {
-    WordWrapType,
-    VizTextOverflowType,
-    PaletteType,
-    PaletteExtensionModeType,
+    VizWordWrap,
+    VizTextOverflow,
+    VizPalette,
+    VizPaletteExtensionMode,
     SelectionMode,
     TreeMapLayoutAlgorithm,
     TreeMapLayoutDirection,
@@ -131,12 +131,12 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
        * @docid
        * @default "Material"
        */
-      palette?: Array<string> | PaletteType;
+      palette?: Array<string> | VizPalette;
       /**
        * @docid
        * @default 'blend'
        */
-      paletteExtensionMode?: PaletteExtensionModeType;
+      paletteExtensionMode?: VizPaletteExtensionMode;
       /**
        * @docid
        * @default undefined
@@ -233,7 +233,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "ellipsis"
          */
-        textOverflow?: VizTextOverflowType;
+        textOverflow?: VizTextOverflow;
         /**
          * @docid
          * @default true
@@ -474,7 +474,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "ellipsis"
          */
-        textOverflow?: VizTextOverflowType;
+        textOverflow?: VizTextOverflow;
         /**
          * @docid
          * @defaultValue true
@@ -484,7 +484,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
          * @docid
          * @default "normal"
          */
-        wordWrap?: WordWrapType;
+        wordWrap?: VizWordWrap;
       };
       /**
        * @docid

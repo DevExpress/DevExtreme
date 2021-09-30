@@ -44,8 +44,8 @@ import BaseWidget, {
 
 import {
     VizAnimationEasing,
-    PaletteType,
-    PaletteExtensionModeType,
+    VizPalette,
+    VizPaletteExtensionMode,
     ChartElementSelectionMode,
 } from '../../docEnums';
 
@@ -197,13 +197,13 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @default "Material"
      * @public
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * @docid
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: VizPaletteExtensionMode;
     /**
      * @docid
      * @default 'single'

@@ -68,7 +68,7 @@ import {
     TreeListColumnButtonName,
     TreeListFilterMode,
     TreeListCommandColumnType,
-    dxTreeListDefaultToolbarItemName,
+    TreeListToolbarItem,
 } from '../docEnums';
 
 interface CellInfo {
@@ -1182,7 +1182,7 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
      * @docid
      * @public
      */
-    name?: dxTreeListDefaultToolbarItemName | string;
+    name?: TreeListToolbarItem | string;
     /**
      * @docid
      * @type boolean
@@ -1209,7 +1209,7 @@ export interface dxTreeListToolbar {
      * @docid
      * @public
      */
-    items?: Array<dxTreeListDefaultToolbarItemName | dxTreeListToolbarItem>;
+    items?: Array<TreeListToolbarItem | dxTreeListToolbarItem>;
 }
 
 /**
