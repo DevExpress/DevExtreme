@@ -2290,7 +2290,7 @@ export interface GridBase<TRowData, TKey> {
      * @return Promise<any>
      * @public
      */
-    selectRows(keys: Array<TKey>, preserve: boolean): DxPromise<TRowData>;
+    selectRows(keys: Array<TKey>, preserve: boolean): DxPromise<Array<TRowData>>;
     /**
      * @docid
      * @publicName selectRowsByIndexes(indexes)
@@ -2298,7 +2298,7 @@ export interface GridBase<TRowData, TKey> {
      * @return Promise<any>
      * @public
      */
-    selectRowsByIndexes(indexes: Array<number>): DxPromise<TRowData>;
+    selectRowsByIndexes(indexes: Array<number>): DxPromise<Array<TRowData>>;
     /**
      * @docid
      * @publicName showColumnChooser()
@@ -2419,13 +2419,13 @@ export interface ColumnBase<TRowData> {
      * @type_function_param1 rowData:object
      * @public
      */
-    calculateCellValue?: ((rowData: any) => any);
+    calculateCellValue?: ((rowData: TRowData) => any);
     /**
      * @docid GridBaseColumn.calculateDisplayValue
      * @type_function_param1 rowData:object
      * @public
      */
-    calculateDisplayValue?: string | ((rowData: any) => any);
+    calculateDisplayValue?: string | ((rowData: TRowData) => any);
     /**
      * @docid GridBaseColumn.calculateFilterExpression
      * @type_function_return Filter expression
@@ -2981,7 +2981,7 @@ export type RowClickEvent<TRowData, TKey> = NativeEventInfo<dxDataGrid<TRowData,
   readonly data: TRowData;
   readonly key: TKey;
   readonly values: Array<any>;
-  readonly columns: Array<any>;
+  readonly columns: Array<Column<TRowData, TKey>>;
   readonly rowIndex: number;
   readonly rowType: string;
   readonly isSelected?: boolean;
@@ -4292,7 +4292,7 @@ declare class dxDataGrid<TRowData, TKey> extends Widget<dxDataGridOptions<TRowDa
      * @return Promise<void>
      * @public
      */
-    collapseRow(key: any): DxPromise<void>;
+    collapseRow(key: TKey): DxPromise<void>;
     /**
      * @docid
      * @publicName expandAll(groupIndex)
@@ -4306,7 +4306,7 @@ declare class dxDataGrid<TRowData, TKey> extends Widget<dxDataGridOptions<TRowDa
      * @return Promise<void>
      * @public
      */
-    expandRow(key: any): DxPromise<void>;
+    expandRow(key: TKey): DxPromise<void>;
     /**
      * @docid
      * @publicName exportToExcel(selectionOnly)
@@ -4320,14 +4320,14 @@ declare class dxDataGrid<TRowData, TKey> extends Widget<dxDataGridOptions<TRowDa
      * @return Array<any> | Promise<any>
      * @public
      */
-    getSelectedRowKeys(): Array<any> & DxPromise<any>;
+    getSelectedRowKeys(): Array<TKey> | DxPromise<Array<TKey>>;
     /**
      * @docid
      * @publicName getSelectedRowsData()
      * @return Array<any> | Promise<any>
      * @public
      */
-    getSelectedRowsData(): Array<any> & DxPromise<any>;
+    getSelectedRowsData(): Array<TRowData> | DxPromise<Array<TRowData>>;
     /**
      * @docid
      * @publicName getTotalSummaryValue(summaryItemName)
@@ -4361,14 +4361,14 @@ declare class dxDataGrid<TRowData, TKey> extends Widget<dxDataGridOptions<TRowDa
      * @publicName isRowExpanded(key)
      * @public
      */
-    isRowExpanded(key: any): boolean;
+    isRowExpanded(key: TKey): boolean;
     /**
      * @docid
      * @publicName isRowSelected(data)
      * @public
      */
-    isRowSelected(data: any): boolean;
-    isRowSelected(key: any): boolean;
+    isRowSelected(data: TRowData): boolean;
+    isRowSelected(key: TKey): boolean;
     /**
      * @docid
      * @publicName totalCount()
@@ -4378,7 +4378,7 @@ declare class dxDataGrid<TRowData, TKey> extends Widget<dxDataGridOptions<TRowDa
     totalCount(): number;
 
     beginCustomLoading(messageText: string): void;
-    byKey(key: any | string | number): DxPromise<any>;
+    byKey(key: TKey): DxPromise<TRowData>;
     cancelEditData(): void;
     cellValue(rowIndex: number, dataField: string): any;
     cellValue(rowIndex: number, dataField: string, value: any): void;
@@ -4398,12 +4398,12 @@ declare class dxDataGrid<TRowData, TKey> extends Widget<dxDataGridOptions<TRowDa
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
     deselectAll(): DxPromise<void>;
-    deselectRows(keys: Array<any>): DxPromise<any>;
+    deselectRows(keys: Array<TKey>): DxPromise<Array<TRowData>>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
     endCustomLoading(): void;
-    expandAdaptiveDetailRow(key: any): void;
+    expandAdaptiveDetailRow(key: TKey): void;
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
@@ -4413,17 +4413,17 @@ declare class dxDataGrid<TRowData, TKey> extends Widget<dxDataGridOptions<TRowDa
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource;
-    getKeyByRowIndex(rowIndex: number): any;
+    getKeyByRowIndex(rowIndex: number): TKey;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
-    getRowIndexByKey(key: any | string | number): number;
+    getRowIndexByKey(key: TKey): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
-    isAdaptiveDetailRowExpanded(key: any): boolean;
-    isRowFocused(key: any): boolean;
-    keyOf(obj: any): any;
-    navigateToRow(key: any): DxPromise<void>;
+    isAdaptiveDetailRowExpanded(key: TKey): boolean;
+    isRowFocused(key: TKey): boolean;
+    keyOf(obj: TRowData): TKey;
+    navigateToRow(key: TKey): DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DxPromise<void>;
@@ -4435,8 +4435,8 @@ declare class dxDataGrid<TRowData, TKey> extends Widget<dxDataGridOptions<TRowDa
     saveEditData(): DxPromise<void>;
     searchByText(text: string): void;
     selectAll(): DxPromise<void>;
-    selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
-    selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
+    selectRows(keys: Array<TKey>, preserve: boolean): DxPromise<Array<TRowData>>;
+    selectRowsByIndexes(indexes: Array<number>): DxPromise<Array<TRowData>>;
     showColumnChooser(): void;
     state(): any;
     state(state: any): void;
@@ -4483,7 +4483,7 @@ export interface dxDataGridColumn<TRowData, TKey> extends ColumnBase<TRowData> {
      * @type_function_param1 rowData:object
      * @public
      */
-    calculateGroupValue?: string | ((rowData: any) => any);
+    calculateGroupValue?: string | ((rowData: TRowData) => any);
     /**
      * @docid dxDataGridColumn.cellTemplate
      * @type_function_param2 cellInfo:object
