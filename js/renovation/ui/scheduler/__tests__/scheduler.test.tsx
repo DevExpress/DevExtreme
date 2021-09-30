@@ -1,14 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { SchedulerProps } from '../props';
+import { SchedulerProps, ScrollingProps } from '../props';
 import { Scheduler, viewFunction as ViewFunction } from '../scheduler';
 import { Widget, WidgetProps } from '../../common/widget';
 import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { WorkSpace } from '../workspaces/base/work_space';
-import { getAppointmentDataProvider, getTimeZoneCalculator } from '../../../../ui/scheduler/instanceFactory';
 import { SchedulerToolbar } from '../header/header';
+import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
+import { Group } from '../workspaces/types';
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -32,7 +33,6 @@ describe('Scheduler', () => {
       shadeUntilCurrentTime: false,
       crossScrollingEnabled: false,
       hoursInterval: 0.5,
-      groups: [],
 
       indicatorTime: undefined,
       allowMultipleCellSelection: true,
@@ -160,17 +160,6 @@ describe('Scheduler', () => {
         });
     });
 
-    it('should correctly create factory instances', () => {
-      const scheduler = new Scheduler(new SchedulerProps());
-
-      scheduler.initialization();
-
-      expect(getAppointmentDataProvider(scheduler.key))
-        .toBeDefined();
-      expect(getTimeZoneCalculator(scheduler.key))
-        .toBeDefined();
-    });
-
     it('should not render toolbar if toolbar prop is an empty array', () => {
       const tree = renderComponent({ props: { toolbar: [] } });
       const schedulerToolbar = tree.find(SchedulerToolbar);
@@ -180,6 +169,68 @@ describe('Scheduler', () => {
   });
 
   describe('Behaviour', () => {
+    describe('Effects', () => {
+      it('loadResources should be call with valid arguments', () => {
+        const loadResources = jest.spyOn(resourceUtils, 'loadResources');
+
+        const groupsValue = ['priorityId'];
+        const resourcesValue = [{
+          fieldExpr: 'priorityId',
+          dataSource: [{
+            text: 'Low Priority',
+            id: 1,
+            color: '#1e90ff',
+          }, {
+            text: 'High Priority',
+            id: 2,
+            color: '#ff9747',
+          }],
+          label: 'Priority',
+        }];
+
+        const scheduler = new Scheduler({
+          groups: groupsValue,
+          resources: resourcesValue,
+        });
+
+        scheduler.loadGroupResources();
+
+        expect(loadResources)
+          .toBeCalledWith(groupsValue, resourcesValue, scheduler.resourcePromisesMap);
+
+        expect(scheduler.loadedResources)
+          .toEqual([
+            {
+              name: 'priorityId',
+              items: [
+                {
+                  id: 1,
+                  text: 'Low Priority',
+                  color: '#1e90ff',
+                },
+                {
+                  id: 2,
+                  text: 'High Priority',
+                  color: '#ff9747',
+                },
+              ],
+              data: [
+                {
+                  text: 'Low Priority',
+                  id: 1,
+                  color: '#1e90ff',
+                },
+                {
+                  text: 'High Priority',
+                  id: 2,
+                  color: '#ff9747',
+                },
+              ],
+            } as Group,
+          ]);
+      });
+    });
+
     describe('Methods', () => {
       it('dispose should pass call to instance', () => {
         const scheduler = new Scheduler(new SchedulerProps());
@@ -317,13 +368,6 @@ describe('Scheduler', () => {
 
         scheduler.scrollToTime(12, 12);
         expect(scrollToTime).toHaveBeenCalled();
-      });
-
-      it('should initialize key', () => {
-        const scheduler = new Scheduler(new SchedulerProps());
-
-        expect(scheduler.key)
-          .toBeGreaterThan(-1);
       });
 
       it('dataAccessors should be correctly created', () => {
@@ -486,26 +530,36 @@ describe('Scheduler', () => {
         [
           {
             scrollingMode: 'standard',
-            viewScrollingMode: 'virtual',
+            viewScrolling: { mode: 'virtual' },
             expected: true,
           },
           {
             scrollingMode: 'virtual',
-            viewScrollingMode: 'virtual',
+            viewScrolling: { mode: 'virtual' },
             expected: true,
           },
           {
             scrollingMode: 'standard',
-            viewScrollingMode: 'standard',
+            viewScrolling: { mode: 'standard' },
             expected: false,
           },
           {
             scrollingMode: 'virtual',
-            viewScrollingMode: 'standard',
+            viewScrolling: { mode: 'standard' },
             expected: true,
           },
-        ].forEach(({ scrollingMode, viewScrollingMode, expected }) => {
-          it(`should has correct value if scheduler scrolling.mode is ${scrollingMode} and view scrolling.mode is ${viewScrollingMode}`, () => {
+          {
+            scrollingMode: 'virtual',
+            viewScrolling: undefined,
+            expected: true,
+          },
+          {
+            scrollingMode: 'standard',
+            viewScrolling: undefined,
+            expected: false,
+          },
+        ].forEach(({ scrollingMode, viewScrolling, expected }) => {
+          it(`should has correct value if scheduler scrolling.mode is ${scrollingMode} and view scrolling.mode is ${viewScrolling?.mode}`, () => {
             const scheduler = new Scheduler({
               ...new SchedulerProps(),
               scrolling: {
@@ -513,15 +567,28 @@ describe('Scheduler', () => {
               },
               views: [{
                 type: 'day',
-                scrolling: {
-                  mode: viewScrollingMode as any,
-                },
+                scrolling: viewScrolling as ScrollingProps,
               }],
             });
 
             expect(scheduler.isVirtualScrolling)
               .toBe(expected);
           });
+        });
+      });
+
+      describe('timeZoneCalculator', () => {
+        it('should be created correctly', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            timeZone: 'America/Los_Angeles',
+          });
+
+          expect(scheduler.timeZoneCalculator.getOffsets(new Date(2021, 8, 19), 'Europe/Moscow'))
+            .toMatchObject({
+              common: -7,
+              appointment: 3,
+            });
         });
       });
     });

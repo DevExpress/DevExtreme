@@ -123,7 +123,7 @@ export interface DataSourceOptions
      * @type Select expression
      * @public
      */
-    select?: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
+    select?: SelectDescriptor<TValue>;
     /**
      * @docid
      * @type Sort expression
@@ -379,14 +379,14 @@ export default class DataSource
      * @return any
      * @public
      */
-    select(): SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>;
+    select(): SelectDescriptor<TValue>;
     /**
      * @docid
      * @publicName select(expr)
      * @param1 expr:any
      * @public
      */
-    select(expr: SelectDescriptor<TValue> | Array<SelectDescriptor<TValue>>): void;
+    select(expr: SelectDescriptor<TValue>): void;
     /**
      * @docid
      * @publicName sort()

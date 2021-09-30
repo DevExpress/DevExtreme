@@ -143,7 +143,7 @@ module('Table properties forms', {
             assert.strictEqual($tableElement.css('textAlign'), 'right', 'text align is applied');
         });
 
-        test('Check table width and height editor min options', function(assert) {
+        test('Check table width and height editor options', function(assert) {
             this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -155,8 +155,10 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             const heightEditor = formInstance.getEditor('height');
 
-            assert.strictEqual(widthEditor.option('min'), 0);
-            assert.strictEqual(heightEditor.option('min'), 0);
+            assert.strictEqual(widthEditor.option('min'), 0, 'placeholder is applied');
+            assert.strictEqual(heightEditor.option('min'), 0, 'placeholder is applied');
+            assert.ok(widthEditor.option('placeholder').length > 1, 'placeholder is applied');
+            assert.ok(heightEditor.option('placeholder').length > 1, 'placeholder is applied');
         });
 
         test('Check base dimensions edititng at the table Form', function(assert) {
@@ -243,7 +245,7 @@ module('Table properties forms', {
             assert.strictEqual($targetCell.css('verticalAlign'), 'bottom', 'vertical align is applied');
         });
 
-        test('Check cell width and height editor min options', function(assert) {
+        test('Check cell width and height editor options', function(assert) {
             this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -256,8 +258,10 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             const heightEditor = formInstance.getEditor('height');
 
-            assert.strictEqual(widthEditor.option('min'), 0);
-            assert.strictEqual(heightEditor.option('min'), 0);
+            assert.strictEqual(widthEditor.option('min'), 0, 'min is applied');
+            assert.strictEqual(heightEditor.option('min'), 0, 'placeholder is applied');
+            assert.ok(widthEditor.option('placeholder').length > 1, 'placeholder is applied');
+            assert.ok(heightEditor.option('placeholder').length > 1, 'placeholder is applied');
         });
 
         test('Check base cell dimensions edititng', function(assert) {
@@ -661,7 +665,7 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
             const $verticalCells = $tableElement.find('td:nth-child(1)');
 
-            assert.roughEqual($tableElement.outerHeight(), 150, 2, 'table height is changed as expected');
+            assert.roughEqual($tableElement.outerHeight(), 150, 2.01, 'table height is changed as expected');
             assert.roughEqual($verticalCells.eq(0).outerHeight(), 50, 2, 'first row cell height is applied');
             assert.roughEqual(parseInt($verticalCells.eq(0).attr('height')), 50, 2, 'first row cell height attr is applied');
             assert.roughEqual(parseInt($verticalCells.eq(1).outerHeight()), 99, 3, 'second row cell height attr is applied');

@@ -69,6 +69,7 @@ import {
   DxMouseEvent,
   DxMouseWheelEvent,
   DxKeyboardEvent,
+  ScrollLocationChangeArgs,
 } from '../common/types';
 
 import { getElementOffset } from '../../../utils/get_element_offset';
@@ -182,8 +183,9 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
               onEnd={onEnd}
-              rtlEnabled={rtlEnabled}
               containerHasSizes={containerHasSizes}
+
+              rtlEnabled={rtlEnabled}
             />
           )}
           {needRenderScrollbars && direction.isVertical && (
@@ -237,23 +239,11 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
 })
 
 export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>() {
-  @Mutable() validateWheelTimer?: unknown;
+  @ForwardRef() scrollableRef!: RefObject<HTMLDivElement>;
 
-  @Mutable() locked = false;
+  @ForwardRef() topPocketRef!: RefObject<HTMLDivElement>;
 
-  @Mutable() loadingIndicatorEnabled = true;
-
-  @Mutable() eventForUserAction?: DxMouseEvent;
-
-  @Mutable() validDirections: { horizontal?: boolean; vertical?: boolean } = {};
-
-  @Mutable()
-  endActionDirections:
-  { horizontal: boolean; vertical: boolean } = { horizontal: false, vertical: false };
-
-  @Mutable() savedScrollOffset?: { scrollTop: number; scrollLeft: number };
-
-  @Ref() scrollableRef!: RefObject<HTMLDivElement>;
+  @ForwardRef() bottomPocketRef!: RefObject<HTMLDivElement>;
 
   @Ref() wrapperRef!: RefObject<HTMLDivElement>;
 
@@ -266,10 +256,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   @Ref() vScrollbarRef!: RefObject<AnimatedScrollbar>;
 
   @Ref() hScrollbarRef!: RefObject<AnimatedScrollbar>;
-
-  @ForwardRef() topPocketRef!: RefObject<HTMLDivElement>;
-
-  @ForwardRef() bottomPocketRef!: RefObject<HTMLDivElement>;
 
   @InternalState() hovered = false;
 
@@ -310,6 +296,22 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   @InternalState() containerHeightChanged = false;
 
   @InternalState() containerWidthChanged = false;
+
+  @Mutable() validateWheelTimer?: unknown;
+
+  @Mutable() locked = false;
+
+  @Mutable() loadingIndicatorEnabled = true;
+
+  @Mutable() eventForUserAction?: DxMouseEvent;
+
+  @Mutable() validDirections: { horizontal?: boolean; vertical?: boolean } = {};
+
+  @Mutable()
+  endActionDirections:
+  { horizontal: boolean; vertical: boolean } = { horizontal: false, vertical: false };
+
+  @Mutable() savedScrollOffset?: { scrollTop: number; scrollLeft: number };
 
   @Method()
   content(): HTMLDivElement {
@@ -401,6 +403,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   @Effect()
+  startEffect(): EffectReturn {
+    return subscribeToDXScrollStartEvent(
+      this.wrapperRef.current,
+      (event: DxMouseEvent) => {
+        this.handleStart(event);
+      },
+    );
+  }
+
+  @Effect()
   initEffect(): EffectReturn {
     return subscribeToScrollInitEvent(
       this.wrapperRef.current,
@@ -408,16 +420,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
         this.handleInit(event);
       },
       this.getInitEventData(),
-    );
-  }
-
-  @Effect()
-  startEffect(): EffectReturn {
-    return subscribeToDXScrollStartEvent(
-      this.wrapperRef.current,
-      (event: DxMouseEvent) => {
-        this.handleStart(event);
-      },
     );
   }
 
@@ -545,7 +547,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
     const inactiveScrollProp = !this.direction.isVertical ? 'scrollTop' : 'scrollLeft';
 
-    this.scrollLocationChange(inactiveScrollProp, 0, true);
+    this.scrollLocationChange({
+      fullScrollProp: inactiveScrollProp,
+      location: 0,
+      needFireScroll: true,
+    });
   }
 
   @Effect()
@@ -568,7 +574,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   /* istanbul ignore next */
   subscribeTopPocketToResize(): EffectReturn {
     return subscribeToResize(
-      this.topPocketRef.current,
+      this.topPocketRef?.current, // ?. for angular
       (element: HTMLDivElement) => { this.setTopPocketDimensions(element); },
     );
   }
@@ -577,7 +583,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   /* istanbul ignore next */
   subscribeBottomPocketToResize(): EffectReturn {
     return subscribeToResize(
-      this.bottomPocketRef.current,
+      this.bottomPocketRef?.current, // ?. for angular
       (element: HTMLDivElement) => { this.setBottomPocketDimensions(element); },
     );
   }
@@ -676,14 +682,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   getInitEventData(): {
-    getDirection: (event: DxMouseWheelEvent) => string | undefined;
+    getDirection: (event: DxMouseWheelEvent) => ScrollableDirection | undefined;
     validate: (event: DxMouseEvent) => boolean;
     isNative: boolean;
     scrollTarget: HTMLDivElement | null;
   } {
     return {
-      getDirection: this.tryGetAllowedDirection,
-      validate: this.validate,
+      getDirection: (
+        event: DxMouseWheelEvent,
+      ): ScrollableDirection | undefined => this.tryGetAllowedDirection(event),
+      validate: (event: DxMouseEvent): boolean => this.validate(event),
       isNative: false,
       scrollTarget: this.containerRef.current,
     };
@@ -742,22 +750,24 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.props.onReachBottom?.({});
   }
 
-  scrollLocationChange(scrollProp: 'scrollLeft' | 'scrollTop', scrollValue: number, needFireScroll: boolean): void {
+  scrollLocationChange(eventData: ScrollLocationChangeArgs): void {
+    const { fullScrollProp, location, needFireScroll } = eventData;
+
     const containerEl = this.containerRef.current!;
 
-    // TODO: value not change if is out of bound
-    const prevScrollValue = containerEl[scrollProp];
+    // TODO: value not change if scrollbar is out of bound
+    const prevScrollValue = containerEl[fullScrollProp];
 
-    containerEl[scrollProp] = scrollValue;
+    containerEl[fullScrollProp] = location;
 
-    if (scrollProp === 'scrollLeft') {
-      this.hScrollLocation = -scrollValue;
+    if (fullScrollProp === 'scrollLeft') {
+      this.hScrollLocation = -location;
     } else {
-      this.vScrollLocation = -scrollValue;
+      this.vScrollLocation = -location;
     }
 
     // TODO: or 1px instead of 0px?
-    if (needFireScroll && Math.abs(prevScrollValue - scrollValue) > 0) {
+    if (needFireScroll && Math.abs(prevScrollValue - location) > 0) {
       this.onScroll();
     }
   }
@@ -1105,8 +1115,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       if (this.savedScrollOffset) {
         const { scrollTop, scrollLeft } = this.savedScrollOffset;
 
-        this.scrollLocationChange('scrollTop', scrollTop, false);
-        this.scrollLocationChange('scrollLeft', scrollLeft, false);
+        this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: scrollTop, needFireScroll: false });
+        this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: scrollLeft, needFireScroll: false });
       }
 
       this.savedScrollOffset = undefined;

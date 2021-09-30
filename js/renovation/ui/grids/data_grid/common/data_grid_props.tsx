@@ -597,10 +597,19 @@ export class DataGridScrolling {
   columnRenderingThreshold?: number;
 
   @OneWay()
-  newMode?: boolean;
+  prerenderedRowChunkSize?: number;
 
   @OneWay()
-  minGap?: number;
+  legacyMode?: boolean;
+
+  @OneWay()
+  prerenderedRowCount?: number;
+
+  @OneWay()
+  preloadedRowCount?: number;
+
+  @OneWay()
+  renderAsync?: boolean;
 }
 
 @ComponentBindings()
@@ -1280,8 +1289,9 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
     columnPageSize: 5,
     columnRenderingThreshold: 300,
     useNative: 'auto',
-    newMode: true,
-    minGap: 1,
+    prerenderedRowChunkSize: 1,
+    legacyMode: false,
+    prerenderedRowCount: 1,
   };
 
   @Nested() selection?: DataGridSelection = {

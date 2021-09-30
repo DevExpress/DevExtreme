@@ -877,6 +877,13 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid
      * @default true
+     * @default false &for(desktop except Mac)
+     * @public
+     */
+     useNativeScrolling?: boolean;
+    /**
+     * @docid
+     * @default true
      * @public
      */
     snapToGrid?: boolean;
@@ -1113,6 +1120,18 @@ export default class dxDiagram extends Widget<dxDiagramOptions> {
      * @public
      */
     updateToolbox(): void;
+    /**
+     * @docid
+     * @publicName fitToContent()
+     * @public
+     */
+     fitToContent(): void;
+    /**
+     * @docid
+     * @publicName fitToWidth()
+     * @public
+     */
+     fitToWidth(): void;
 }
 
 /**

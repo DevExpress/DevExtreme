@@ -28,6 +28,7 @@ export const viewFunction = ({
   </div>
 );
 
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 type GridBaseViewPropsType = Pick<DataGridProps, 'showBorders'> & GridBaseViewProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })

@@ -53,7 +53,9 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 };
 
 export type ScrollbarPropsType = ScrollbarProps
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<BaseWidgetProps, 'rtlEnabled'>
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'showScrollbar' | 'scrollByThumb' | 'scrollLocationChange'>;
 
 @Component({
@@ -62,6 +64,10 @@ export type ScrollbarPropsType = ScrollbarProps
 })
 
 export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
+  @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
+
+  @Ref() scrollRef!: RefObject<HTMLDivElement>;
+
   @Mutable() rightScrollLocation = 0;
 
   @Mutable() prevScrollLocation = 0;
@@ -71,8 +77,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @InternalState() hovered = false;
 
   @InternalState() expanded = false;
-
-  @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
   @Ref() thumbRef!: RefObject<HTMLDivElement>;
 
@@ -182,7 +186,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.prevScrollLocation = location;
     this.rightScrollLocation = this.props.maxOffset - location;
 
-    this.props.scrollLocationChange?.(this.fullScrollProp, -location, scrollDelta >= 1);
+    this.props.scrollLocationChange?.({
+      fullScrollProp: this.fullScrollProp,
+      location: -location,
+      needFireScroll: scrollDelta >= 1,
+    });
   }
 
   @Effect()

@@ -28,10 +28,12 @@
   color: $form-field-item-color;
 }
 
-.dx-field-item-required-mark {
-  color: $form-field-required-color;
-}
-
+.dx-field-item-optional .dx-label > span::after,
 .dx-field-item-optional-mark {
   color: $form-field-mark-color;
+}
+
+.dx-field-item-required .dx-label > span::after,
+.dx-field-item-required-mark {
+  color: $form-field-required-color;
 }

@@ -8,10 +8,11 @@ import Class from '../../core/class';
 import { Deferred } from '../../core/utils/deferred';
 import Callbacks from '../../core/utils/callbacks';
 import { VirtualDataLoader } from './ui.grid.core.virtual_data_loader';
+import { isDefined } from '../../core/utils/type';
 
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
-const NEW_SCROLLING_MODE = 'scrolling.newMode';
+const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
 const isVirtualMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
 const isAppendMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
@@ -122,7 +123,7 @@ export const VirtualScrollController = Class.inherit((function() {
         ctor: function(component, dataOptions, isVirtual) {
             this._dataOptions = dataOptions;
             this.component = component;
-            this._viewportSize = component.option(NEW_SCROLLING_MODE) ? 15 : 0;
+            this._viewportSize = component.option(LEGACY_SCROLLING_MODE) === false ? 15 : 0;
             this._viewportItemSize = 20;
             this._viewportItemIndex = 0;
             this._position = 0;
@@ -150,7 +151,7 @@ export const VirtualScrollController = Class.inherit((function() {
             if(isVirtualMode(this)) {
                 const dataOptions = this._dataOptions;
                 const totalItemsCount = dataOptions.totalItemsCount();
-                if(this.option(NEW_SCROLLING_MODE) && totalItemsCount !== -1) {
+                if(this.option(LEGACY_SCROLLING_MODE) === false && totalItemsCount !== -1) {
                     const viewportParams = this.getViewportParams();
                     const loadedOffset = dataOptions.loadedOffset();
                     const loadedItemCount = dataOptions.loadedItemCount();
@@ -168,14 +169,25 @@ export const VirtualScrollController = Class.inherit((function() {
                 return this._dataLoader.virtualItemsCount.apply(this._dataLoader, arguments);
             }
         },
+        getScrollingTimeout: function() {
+            const renderAsync = this.option('scrolling.renderAsync');
+            let scrollingTimeout = 0;
 
+            if(!isDefined(renderAsync)) {
+                scrollingTimeout = Math.min(this.option('scrolling.timeout') || 0, this._dataOptions.changingDuration());
+
+                if(scrollingTimeout < this.option('scrolling.renderingThreshold')) {
+                    scrollingTimeout = this.option('scrolling.minTimeout') || 0;
+                }
+            } else if(renderAsync) {
+                scrollingTimeout = this.option('scrolling.timeout') ?? 0;
+            }
+
+            return scrollingTimeout;
+        },
         setViewportPosition: function(position) {
             const result = new Deferred();
-            let scrollingTimeout = Math.min(this.option('scrolling.timeout') || 0, this._dataOptions.changingDuration());
-
-            if(scrollingTimeout < this.option('scrolling.renderingThreshold')) {
-                scrollingTimeout = this.option('scrolling.minTimeout') || 0;
-            }
+            const scrollingTimeout = this.getScrollingTimeout();
 
             clearTimeout(this._scrollTimeoutID);
             if(scrollingTimeout > 0) {
@@ -292,7 +304,7 @@ export const VirtualScrollController = Class.inherit((function() {
         },
         setViewportItemIndex: function(itemIndex) {
             this._viewportItemIndex = itemIndex;
-            if(this.option(NEW_SCROLLING_MODE)) {
+            if(this.option(LEGACY_SCROLLING_MODE) === false) {
                 return;
             }
 
@@ -359,7 +371,7 @@ export const VirtualScrollController = Class.inherit((function() {
             const bottomIndex = this._viewportSize + topIndex;
             const maxGap = this.option('scrolling.prerenderedRowChunkSize') || 1;
             const isScrollingBack = this.isScrollingBack();
-            const minGap = this.option('scrolling.minGap');
+            const minGap = this.option('scrolling.prerenderedRowCount');
             const topMinGap = isScrollingBack ? minGap : 0;
             const bottomMinGap = isScrollingBack ? 0 : minGap;
             const skip = Math.floor(Math.max(0, topIndex - topMinGap) / maxGap) * maxGap;

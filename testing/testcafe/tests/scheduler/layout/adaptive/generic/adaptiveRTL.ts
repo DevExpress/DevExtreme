@@ -36,7 +36,7 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-rtl.png`),
+        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-rtl.png`, scheduler.workSpace),
       ).ok();
     }
 
@@ -63,7 +63,7 @@ const createScheduler = async (
       await scheduler.option('currentView', view);
 
       await t.expect(
-        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`),
+        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`, scheduler.workSpace),
       ).ok();
     }
 
@@ -92,7 +92,7 @@ const createScheduler = async (
       await scheduler.option('currentView', view.type);
 
       await t.expect(
-        await takeScreenshot(`generic-view=${view.type}-crossScrolling=${!!crossScrollingEnabled}-vertical-rtl.png`),
+        await takeScreenshot(`generic-view=${view.type}-crossScrolling=${!!crossScrollingEnabled}-vertical-rtl.png`, scheduler.workSpace),
       ).ok();
     }
 
