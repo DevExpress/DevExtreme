@@ -18,6 +18,7 @@ import config from '../../core/config';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
+import resizeObserverSingleton from '../../core/resize_observer';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
@@ -442,6 +443,21 @@ const TextEditorBase = Editor.inherit({
         this._input().prop('spellcheck', this.option('spellcheck'));
     },
 
+    _setLabelWidth: function() {
+        const elementForWidthCalculation = this._$field ? this._$field : this._$tagsContainer ? this._$tagsContainer : this._input();
+
+        const setWidth = () => {
+            const labelWidth = getWidth(elementForWidthCalculation);
+            this._$label.find('.dx-label').css('maxWidth', labelWidth);
+        };
+
+        setWidth();
+
+        const observeContainer = $(elementForWidthCalculation).get(0);
+        resizeObserverSingleton.unobserve(observeContainer);
+        resizeObserverSingleton.observe(observeContainer, setWidth);
+    },
+
     _renderLabel: function() {
         const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
         const labelElement = this.$element().find('.' + TEXTEDITOR_LABEL_CLASS);
@@ -477,9 +493,7 @@ const TextEditorBase = Editor.inherit({
             this._$label.find('.dx-label-before').css('width', getWidth(this._$beforeButtonsContainer));
         }
 
-        const labelWidth = this._$field ? getWidth(this._$field) : (this._$tagsContainer ? getWidth(this._$tagsContainer) : getWidth(this._input()));
-
-        this._$label.find('.dx-label').css('maxWidth', labelWidth);
+        this._setLabelWidth();
     },
 
     _renderPlaceholder: function() {

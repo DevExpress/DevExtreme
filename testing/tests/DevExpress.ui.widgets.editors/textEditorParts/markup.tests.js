@@ -137,6 +137,26 @@ module('Basic markup', () => {
         const mark = $editor.find('.dx-label > span').attr('data-mark');
         assert.equal(mark, 'Mark text');
     });
+
+    test('label max-width should be changed with editor size (without option change)', function(assert) {
+        const done = assert.async();
+        const $editor = $('#texteditor').dxTextEditor({
+            label: 'Label text',
+            labelMode: 'static',
+            width: 200
+        });
+
+        const labelMaxWidth = $editor.find('.dx-label').css('maxWidth');
+        assert.equal(labelMaxWidth, '182px');
+
+        $('#texteditor').css('width', 400);
+
+        setTimeout(() => {
+            const nextLabelMaxWidth = $editor.find('.dx-label').css('maxWidth');
+            assert.equal(nextLabelMaxWidth, '382px');
+            done();
+        }, 1000);
+    });
 });
 
 module('the \'name\' option', () => {
