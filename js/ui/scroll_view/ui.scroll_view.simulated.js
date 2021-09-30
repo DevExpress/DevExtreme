@@ -1,4 +1,4 @@
-import { getHeight, getWidth } from '../../core/utils/size';
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import { each } from '../../core/utils/iterator';
@@ -7,6 +7,7 @@ import { extend } from '../../core/utils/extend';
 const math = Math;
 import { Scroller, SimulatedStrategy } from './ui.scrollable.simulated';
 import LoadIndicator from '../load_indicator';
+import { getScrollTopMax } from '../../renovation/ui/scroll_view/utils/get_scroll_top_max';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
 const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';
@@ -25,6 +26,7 @@ const ScrollViewScroller = Scroller.inherit({
 
     ctor: function() {
         this._topPocketSize = 0;
+        this._bottomPocketSize = 0;
         this.callBase.apply(this, arguments);
         this._initCallbacks();
         this._releaseState();
@@ -63,12 +65,14 @@ const ScrollViewScroller = Scroller.inherit({
     _updateBounds: function() {
         const considerPockets = this._direction !== 'horizontal';
 
-        const dimensionGetter = this._dimension === 'width' ? getWidth : getHeight;
-        this._topPocketSize = considerPockets ? Math.round(dimensionGetter(this._$topPocket)) : 0;
-        this._bottomPocketSize = considerPockets ? Math.round(dimensionGetter(this._$bottomPocket)) : 0;
+        if(considerPockets) {
+            this._topPocketSize = this._$topPocket.get(0).clientHeight;
+            this._bottomPocketSize = this._$bottomPocket.get(0).clientHeight;
+
+            this._scrollOffsetTopMax = getScrollTopMax(this._$container.get(0)) - this._topPocketSize - this._bottomPocketSize;
+        }
 
         this.callBase();
-        this._bottomBound = this._minOffset + this._bottomPocketSize;
     },
 
     _updateScrollbar: function() {
@@ -100,7 +104,7 @@ const ScrollViewScroller = Scroller.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && (this._location - this._bottomBound <= 0.5); // T858013
+        return this._reachBottomEnabled && Math.round(this._location + this._scrollOffsetTopMax) <= 1;
     },
 
     _scrollComplete: function() {
