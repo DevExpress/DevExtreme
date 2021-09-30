@@ -8,10 +8,10 @@ function round(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
 
-function drawCellsContent(doc, cellsArray, docStyles) {
+function drawCellsContent(doc, cellsArray, docStyles, rtlEnabled) {
     cellsArray.forEach(cell => {
         drawCellBackground(doc, cell);
-        drawCellText(doc, cell, docStyles);
+        drawCellText(doc, cell, docStyles, rtlEnabled);
     });
 }
 
@@ -34,7 +34,7 @@ function getLineHeightShift(doc) {
     return (doc.getLineHeightFactor() - DEFAULT_LINE_HEIGHT) * doc.getFontSize();
 }
 
-function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWrapEnabled, jsPdfTextOptions) {
+function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWrapEnabled, jsPdfTextOptions, rtlEnabled) {
     const textArray = getTextLines(doc, text, doc.getFont(), { wordWrapEnabled, targetRectWidth: rect.w });
     const linesCount = textArray.length;
 
@@ -54,6 +54,15 @@ function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWra
         + (rect.w * horizontalAlignMap[hAlign]);
 
     const textOptions = extend({ baseline: vAlign, align: hAlign }, jsPdfTextOptions);
+
+    // https://github.com/parallax/jsPDF/pull/3171
+    if(rtlEnabled) {
+        textOptions.isInputVisual = false;
+        textOptions.isOutputVisual = true;
+        textOptions.isInputRtl = true;
+        textOptions.isOutputRtl = false;
+    }
+
     doc.text(textArray.join('\n'), round(x), round(y), textOptions);
 }
 
@@ -64,7 +73,7 @@ function drawCellBackground(doc, cell) {
     }
 }
 
-function drawCellText(doc, cell, docStyles) {
+function drawCellText(doc, cell, docStyles, rtlEnabled) {
     if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
         const { textColor, font, _rect, padding } = cell;
         setTextStyles(doc, { textColor, font }, docStyles);
@@ -74,7 +83,7 @@ function drawCellText(doc, cell, docStyles) {
             w: _rect.w - (padding.left + padding.right),
             h: _rect.h - (padding.top + padding.bottom)
         };
-        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign, cell.wordWrapEnabled, cell.jsPdfTextOptions);
+        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign, cell.wordWrapEnabled, cell.jsPdfTextOptions, rtlEnabled);
     }
 }
 
