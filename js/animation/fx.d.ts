@@ -5,7 +5,7 @@ import { PositionConfig } from './position';
 import {
     AnimationType,
     Direction,
-} from '../docEnums';
+} from '../enums/enums';
 
 /**
  * @docid
@@ -53,7 +53,6 @@ export type AnimationState = string | number | {
 export type AnimationConfig = {
     /**
      * @docid
-     * @type_function_param2 config:object
      * @public
      */
     complete?: (($element: DxElement, config: AnimationConfig) => void);

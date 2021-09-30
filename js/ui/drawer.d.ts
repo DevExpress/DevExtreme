@@ -26,7 +26,7 @@ import {
     DrawerOpenedStateMode,
     DrawerPosition,
     DrawerRevealMode,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxDrawer>;

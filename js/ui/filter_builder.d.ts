@@ -32,7 +32,7 @@ import {
     FilterBuilderFieldFilterOperations,
     FilterBuilderGroupOperations,
     FilterBuilderFieldDataType,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxFilterBuilder>;

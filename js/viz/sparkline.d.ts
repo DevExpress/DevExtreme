@@ -23,7 +23,7 @@ import BaseSparkline, {
 import {
     SparklineType,
     VizPointSymbol,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxSparkline>;

@@ -416,6 +416,8 @@ export type EditorStylingMode = 'outlined' | 'underlined' | 'filled';
 
 export type EditorLabelMode = 'static' | 'floating' | 'hidden';
 
+export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'default';
+
 export type GridCommandColumnType = 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 
 export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';

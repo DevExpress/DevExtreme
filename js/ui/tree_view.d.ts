@@ -37,7 +37,7 @@ import {
     TreeViewDataStructure,
     TreeViewCheckBoxMode,
     TreeViewExpandEvent,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxTreeView>;

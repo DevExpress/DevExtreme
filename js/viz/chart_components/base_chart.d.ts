@@ -47,7 +47,7 @@ import {
     VizPalette,
     VizPaletteExtensionMode,
     ChartElementSelectionMode,
-} from '../../docEnums';
+} from '../../enums/enums';
 
 export interface PointInteractionInfo {
     readonly target: basePointObject;

@@ -29,7 +29,7 @@ import {
     VerticalEdge,
     HorizontalEdge,
     VizAnimationEasing,
-} from '../../docEnums';
+} from '../../enums/enums';
 
 export interface TooltipInfo {
     target: any;

@@ -50,7 +50,7 @@ import {
     FunnelAlgorithm,
     HatchingDirection,
     FunnelLabelPosition,
-} from '../docEnums';
+} from '../enums/enums';
 
 /**
  * @public

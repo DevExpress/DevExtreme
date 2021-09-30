@@ -17,7 +17,7 @@ import {
 
 import {
     ScrollDirection,
-} from '../../docEnums';
+} from '../../enums/enums';
 
 export interface ScrollEventInfo<T> extends NativeEventInfo<T> {
     readonly scrollOffset?: any;

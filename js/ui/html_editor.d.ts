@@ -35,7 +35,7 @@ import {
     HtmlEditorToolbarItem,
     HtmlEditorFormat,
     EditorStylingMode,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxHtmlEditor>;

@@ -20,7 +20,7 @@ import CollectionWidget, {
 
 import {
     NavSelectionMode,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxTabs>;

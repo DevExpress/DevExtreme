@@ -17,7 +17,7 @@ import {
   GeoMapType,
   GeoMapProvider,
   GeoMapRouteMode,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxMap>;

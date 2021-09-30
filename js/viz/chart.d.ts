@@ -80,7 +80,7 @@ import {
     ChartFinancialSeriesAggregationMethod,
     ChartRangeSeriesAggregationMethod,
     ChartBubbleSeriesAggregationMethod,
-} from '../docEnums';
+} from '../enums/enums';
 
 interface SeriesInteractionInfo {
     target: chartSeriesObject;

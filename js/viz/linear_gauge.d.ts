@@ -24,7 +24,7 @@ import {
     Orientation,
     VerticalAlignment,
     HorizontalAlignment,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxLinearGauge>;

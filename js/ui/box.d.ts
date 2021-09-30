@@ -22,7 +22,7 @@ import {
     BoxDirection,
     BoxCrossAlign,
     Mode,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxBox>;

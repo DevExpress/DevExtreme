@@ -20,7 +20,7 @@ import {
 import {
     VerticalEdge,
     SliderTooltipShowMode,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxSlider>;

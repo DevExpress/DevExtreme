@@ -4,7 +4,7 @@ import {
 
 import {
     CollectionSearchMode,
-} from '../../docEnums';
+} from '../../enums/enums';
 
 /** @namespace DevExpress.ui */
 export interface SearchBoxMixinOptions {

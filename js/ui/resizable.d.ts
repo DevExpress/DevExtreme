@@ -11,7 +11,7 @@ import {
 
 import {
     ResizeHandle,
-} from '../docEnums';
+} from '../enums/enums';
 
 export interface ResizeInfo {
     readonly width: number;

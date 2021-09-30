@@ -21,7 +21,7 @@ import Widget, {
 import {
     ButtonType,
     ButtonStylingMode,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ClickEvent = NativeEventInfo<dxButton> & {

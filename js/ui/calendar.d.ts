@@ -20,7 +20,7 @@ import Editor, {
 import {
     FirstDayOfWeek,
     CalendarZoomLevel,
-} from '../docEnums';
+} from '../enums/enums';
 
 export interface ComponentDisabledDate<T> {
     component: T;

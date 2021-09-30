@@ -31,7 +31,7 @@ import {
 import {
     EditorApplyValueMode,
     DropDownEditorButtonName,
-} from '../../docEnums';
+} from '../../enums/enums';
 
 export interface DropDownButtonTemplateDataModel {
     readonly text?: string;

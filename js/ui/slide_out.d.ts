@@ -33,7 +33,7 @@ import CollectionWidget, {
 
 import {
     SlideOutMenuPosition,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxSlideOut>;

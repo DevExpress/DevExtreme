@@ -1,6 +1,6 @@
 import {
     VectorMapProjection,
-} from '../../docEnums';
+} from '../../enums/enums';
 
 /**
  * @docid

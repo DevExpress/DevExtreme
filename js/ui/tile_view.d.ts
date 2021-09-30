@@ -17,7 +17,7 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-import { Orientation } from '../docEnums';
+import { Orientation } from '../enums/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxTileView>;

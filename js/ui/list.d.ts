@@ -46,7 +46,7 @@ import {
     ListPageLoadMode,
     ListMenuMode,
     ListItemDeleteMode,
-} from '../docEnums';
+} from '../enums/enums';
 
 interface ListItemInfo {
     readonly itemData?: any;

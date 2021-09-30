@@ -8,7 +8,7 @@ import {
   PositionAlignment,
   PositionResolveCollisionXY,
   PositionResolveCollision,
-} from '../docEnums';
+} from '../enums/enums';
 
 /**
  * @docid

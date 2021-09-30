@@ -26,7 +26,7 @@ import dxDraggable, {
 import {
     Orientation,
     DropFeedbackMode,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export interface AddEvent {

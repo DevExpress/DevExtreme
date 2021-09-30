@@ -29,7 +29,7 @@ import {
 
 import {
     EditorApplyValueMode,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxColorBox>;

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { jsPDF } from 'jspdf';
 
-import { isFunction, isObject } from 'core/utils/type';
+import { isFunction, isObject, isDefined } from 'core/utils/type';
 
 import 'ui/data_grid';
 import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
@@ -15,6 +15,7 @@ import { JSPdfBandsTests } from './jspdf_v3.dataGrid.bands.tests.js';
 import { JSPdfGroupingTests } from './jspdf_v3.dataGrid.grouping.tests.js';
 import { JSPdfSummariesTests } from './jspdf_v3.dataGrid.summaries.tests.js';
 import { JSPdfVerticalAlignTests } from './jspdf_v3.dataGrid.verticalAlign.tests.js';
+import { JSPdfHorizontalAlignTests } from './jspdf_v3.dataGrid.horizontalAlign.tests.js';
 import { JSPdfPageMarginsTests } from './jspdf_v3.dataGrid.pageMargin.tests.js';
 import { JSPdfColumnWidthsTests } from './jspdf_v3.dataGrid.columnAutoWidth.tests.js';
 
@@ -58,6 +59,8 @@ function createMockPdfDoc() {
     const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
     const result = _jsPDF({ unit: 'pt' });
     result.__log = [];
+
+    result.__logOptions = { textOptions: {} };
 
     result.__setDrawColor = result.setDrawColor;
     result.setDrawColor = function() {
@@ -117,6 +120,9 @@ function createMockPdfDoc() {
     result.text = function() {
         if(arguments.length >= 3 && arguments[3].baseline === 'alphabetic') {
             arguments[3] = undefined;
+        }
+        if(this.__logOptions.textOptions.hAlign !== true && arguments.length >= 3 && isDefined(arguments[3]) && arguments[3].align === 'left') {
+            delete arguments[3].align;
         }
         this.__log.push('text,' + argumentsToString.apply(null, arguments));
         this.__text.apply(this, arguments);
@@ -1259,5 +1265,6 @@ JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfGroupingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfSummariesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfVerticalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfHorizontalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfColumnWidthsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfPageMarginsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

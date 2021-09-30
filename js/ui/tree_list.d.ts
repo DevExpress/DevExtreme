@@ -69,7 +69,7 @@ import {
     TreeListFilterMode,
     TreeListCommandColumnType,
     TreeListToolbarItem,
-} from '../docEnums';
+} from '../enums/enums';
 
 interface CellInfo {
     readonly data: any;

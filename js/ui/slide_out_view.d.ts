@@ -22,7 +22,7 @@ import Widget, {
 
 import {
     SlideOutMenuPosition,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxSlideOutView>;

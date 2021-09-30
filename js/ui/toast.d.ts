@@ -21,7 +21,7 @@ import dxOverlay, {
 
 import {
     ToastType,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxToast>;

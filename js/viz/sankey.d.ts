@@ -36,7 +36,7 @@ import {
   HatchingDirection,
   SankeyLabelOverlappingBehavior,
   SankeyColorMode,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxSankey>;

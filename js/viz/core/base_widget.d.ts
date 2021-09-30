@@ -29,7 +29,7 @@ import {
     DashStyle,
     AnnotationType,
     ExportFormat,
-} from '../../docEnums';
+} from '../../enums/enums';
 
 export interface ExportInfo {
   readonly fileName: string;

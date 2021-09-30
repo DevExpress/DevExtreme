@@ -37,7 +37,7 @@ import {
     ToolbarItemWidget,
     ToolbarItemLocation,
     PositionAlignment,
-} from '../docEnums';
+} from '../enums/enums';
 
 export interface TitleRenderedInfo {
     readonly titleElement: DxElement;

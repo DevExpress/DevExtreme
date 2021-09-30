@@ -21,7 +21,7 @@ import {
 import {
     NumberBoxMode,
     NumberBoxButtonName,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxNumberBox>;

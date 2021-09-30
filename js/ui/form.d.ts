@@ -54,7 +54,8 @@ import {
     FormLabelLocation,
     FormItemEditorType,
     FormItemType,
-} from '../docEnums';
+    FormLabelMode,
+} from '../enums/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxForm>;
@@ -152,6 +153,12 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @public
      */
     labelLocation?: FormLabelLocation;
+    /**
+     * @docid
+     * @default "default"
+     * @public
+     */
+     labelMode?: FormLabelMode;
     /**
      * @docid
      * @default 200

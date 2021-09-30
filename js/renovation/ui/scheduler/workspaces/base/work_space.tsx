@@ -27,7 +27,7 @@ import { getViewRenderConfigByType } from './work_space_config';
 import { HeaderPanelLayoutProps } from './header_panel/layout';
 import { DateTableLayoutProps } from './date_table/layout';
 import { TimePanelLayoutProps } from './time_panel/layout';
-import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
+import { isVerticalGroupingApplied } from '../utils';
 import { CrossScrollingLayout } from './cross_scrolling_layout';
 import { MainLayoutProps } from './main_layout_props';
 
@@ -330,12 +330,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       'dx-scheduler-work-space-group-by-date': groupByDate,
       'dx-scheduler-work-space-grouped': groups.length > 0,
       'dx-scheduler-work-space-vertical-grouped': isVerticalGroupingApplied(groups, groupOrientation),
-      'dx-scheduler-group-row-count-one': isHorizontalGroupingApplied(groups, groupOrientation)
-        && groups.length === 1,
-      'dx-scheduler-group-row-count-two': isHorizontalGroupingApplied(groups, groupOrientation)
-        && groups.length === 2,
-      'dx-scheduler-group-row-count-three': isHorizontalGroupingApplied(groups, groupOrientation)
-        && groups.length === 3,
       'dx-scheduler-group-column-count-one': isVerticalGroupingApplied(groups, groupOrientation)
         && groups.length === 1,
       'dx-scheduler-group-column-count-two': isVerticalGroupingApplied(groups, groupOrientation)

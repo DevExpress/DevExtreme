@@ -39,7 +39,7 @@ import {
     TreeMapLayoutAlgorithm,
     TreeMapLayoutDirection,
     TreeMapColorizerType,
-} from '../docEnums';
+} from '../enums/enums';
 
 export interface InteractionInfo {
   readonly node: dxTreeMapNode;

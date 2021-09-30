@@ -70,7 +70,7 @@ import {
     ChartPointInteractionMode,
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
-} from '../docEnums';
+} from '../enums/enums';
 
 interface SeriesInteractionInfo {
     target: polarChartSeriesObject;

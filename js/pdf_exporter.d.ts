@@ -2,7 +2,7 @@ import { DxPromise } from './core/utils/deferred';
 import dxDataGrid, { Column } from './ui/data_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 import dxGantt from './ui/gantt';
-import { GanttPdfExportMode, GanttPdfExportDateRange } from './docEnums';
+import { GanttPdfExportMode, GanttPdfExportDateRange } from './enums/enums';
 
 /**
  * @docid

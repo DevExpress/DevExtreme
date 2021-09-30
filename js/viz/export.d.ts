@@ -4,7 +4,7 @@ import {
     VerticalAlignment,
     HorizontalAlignment,
     ExportFormat,
-} from '../docEnums';
+} from '../enums/enums';
 
 /**
  * @docid viz.exportFromMarkup

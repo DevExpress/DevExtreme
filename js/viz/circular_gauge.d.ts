@@ -23,7 +23,7 @@ import {
 import {
     CircularGaugeElementOrientation,
     GaugeOverlappingBehavior,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxCircularGauge>;

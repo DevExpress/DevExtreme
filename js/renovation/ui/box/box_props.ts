@@ -1,5 +1,5 @@
 import { ComponentBindings, OneWay } from '@devextreme-generator/declarations';
-import { BoxAlign, BoxDirection, BoxCrossAlign } from '../../../docEnums';
+import { BoxAlign, BoxDirection, BoxCrossAlign } from '../../../enums/enums';
 
 @ComponentBindings()
 export class BoxProps {

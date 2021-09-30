@@ -31,7 +31,7 @@ import {
     ToolbarItemLocation,
     ToolbarItemLocateInMenuMode,
     ToolbarItemShowTextMode,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxToolbar>;

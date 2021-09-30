@@ -120,7 +120,7 @@ import {
   GridDataChangeType,
   DataGridToolbarItem,
   GridNewRowPosition,
-} from '../docEnums';
+} from '../enums/enums';
 
 export interface AdaptiveDetailRowPreparingInfo {
   readonly formOptions: any;

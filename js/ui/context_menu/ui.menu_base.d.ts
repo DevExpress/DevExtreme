@@ -19,7 +19,7 @@ import {
 import {
   ShowSubmenuMode,
   MenuSelectionMode,
-} from '../../docEnums';
+} from '../../enums/enums';
 
 /** @namespace DevExpress.ui */
 export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWidgetOptions<TComponent> {

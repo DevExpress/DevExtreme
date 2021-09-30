@@ -59,7 +59,7 @@ import {
     SmallValuesGroupingMode,
     PieChartSeriesInteractionMode,
     PieChartLabelPosition,
-} from '../docEnums';
+} from '../enums/enums';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxPieChart>;
