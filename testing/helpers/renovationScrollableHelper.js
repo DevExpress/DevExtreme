@@ -87,4 +87,3 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollable {
         reRender();
     }
 };
-

@@ -5,9 +5,7 @@ import type { ScrollView } from '../../ui/scroll_view/scroll_view';
 
 export class ScrollViewWrapper extends Component {
   update(): unknown {
-    console.log('ScrollViewWrapper##############Start');
     (this.viewRef as ScrollView)?.updateHandler();
-    console.log('ScrollViewWrapper##############End');
     return Deferred().resolve();
   }
 

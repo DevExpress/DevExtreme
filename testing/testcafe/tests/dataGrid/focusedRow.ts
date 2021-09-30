@@ -103,73 +103,73 @@ test('Form - Focused row should not be reset after editing a row (T851400)', asy
   },
 }));
 
-// test('Popup - Focused row should not be reset after editing a row (T879627)', async (t) => {
-//   const dataGrid = new DataGrid('#container');
-//   const dataRow0 = dataGrid.getDataRow(0);
-//   const dataRow1 = dataGrid.getDataRow(1);
-//   const popupEditForm = dataGrid.getPopupEditForm();
-//   const editor = popupEditForm.getItem('c0');
+test('Popup - Focused row should not be reset after editing a row (T879627)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const dataRow0 = dataGrid.getDataRow(0);
+  const dataRow1 = dataGrid.getDataRow(1);
+  const popupEditForm = dataGrid.getPopupEditForm();
+  const editor = popupEditForm.getItem('c0');
 
-//   await t
-//     .expect(dataRow1.isFocusedRow).ok()
-//     .expect(dataGrid.option('focusedRowKey')).eql(6)
-//     .click(dataRow1.getCommandCell(2).getButton(0))
-//     .expect(popupEditForm.element.visible)
-//     .ok()
-//     .click(popupEditForm.cancelButton)
-//     .expect(dataRow1.isFocusedRow)
-//     .ok()
-//     .expect(dataGrid.option('focusedRowKey'))
-//     .eql(6);
+  await t
+    .expect(dataRow1.isFocusedRow).ok()
+    .expect(dataGrid.option('focusedRowKey')).eql(6)
+    .click(dataRow1.getCommandCell(2).getButton(0))
+    .expect(popupEditForm.element.visible)
+    .ok()
+    .click(popupEditForm.cancelButton)
+    .expect(dataRow1.isFocusedRow)
+    .ok()
+    .expect(dataGrid.option('focusedRowKey'))
+    .eql(6);
 
-//   await t
-//     .click(dataRow1.getCommandCell(2).getButton(0))
-//     .expect(popupEditForm.element.visible).ok()
-//     .click(editor)
-//     .typeText(editor, 'test')
-//     .click(popupEditForm.saveButton)
-//     .expect(dataRow1.isFocusedRow)
-//     .ok()
-//     .expect(dataGrid.option('focusedRowKey'))
-//     .eql(6);
+  await t
+    .click(dataRow1.getCommandCell(2).getButton(0))
+    .expect(popupEditForm.element.visible).ok()
+    .click(editor)
+    .typeText(editor, 'test')
+    .click(popupEditForm.saveButton)
+    .expect(dataRow1.isFocusedRow)
+    .ok()
+    .expect(dataGrid.option('focusedRowKey'))
+    .eql(6);
 
-//   await t
-//     .click(dataRow0.getCommandCell(2).getButton(0))
-//     .expect(popupEditForm.element.visible).ok()
-//     .expect(dataGrid.option('focusedRowKey'))
-//     .eql(5)
-//     .click(popupEditForm.cancelButton)
-//     .expect(dataRow0.isFocusedRow)
-//     .ok()
-//     .expect(dataGrid.option('focusedRowKey'))
-//     .eql(5);
+  await t
+    .click(dataRow0.getCommandCell(2).getButton(0))
+    .expect(popupEditForm.element.visible).ok()
+    .expect(dataGrid.option('focusedRowKey'))
+    .eql(5)
+    .click(popupEditForm.cancelButton)
+    .expect(dataRow0.isFocusedRow)
+    .ok()
+    .expect(dataGrid.option('focusedRowKey'))
+    .eql(5);
 
-//   await t
-//     .click(dataRow0.getCommandCell(2).getButton(0))
-//     .expect(popupEditForm.element.visible).ok()
-//     .click(editor)
-//     .typeText(editor, 'test')
-//     .click(popupEditForm.saveButton)
-//     .expect(dataRow0.isFocusedRow)
-//     .ok()
-//     .expect(dataGrid.option('focusedRowKey'))
-//     .eql(5);
-// }).before(async () => createWidget('dxDataGrid', {
-//   dataSource: [
-//     { id: 5, c0: 'c0_0' },
-//     { id: 6, c0: 'c0_1' },
-//   ],
-//   keyExpr: 'id',
-//   focusedRowEnabled: true,
-//   focusedRowKey: 6,
-//   editing: {
-//     mode: 'popup',
-//     allowUpdating: true,
-//     popup: {
-//       animation: null,
-//     },
-//   },
-// }));
+  await t
+    .click(dataRow0.getCommandCell(2).getButton(0))
+    .expect(popupEditForm.element.visible).ok()
+    .click(editor)
+    .typeText(editor, 'test')
+    .click(popupEditForm.saveButton)
+    .expect(dataRow0.isFocusedRow)
+    .ok()
+    .expect(dataGrid.option('focusedRowKey'))
+    .eql(5);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 5, c0: 'c0_0' },
+    { id: 6, c0: 'c0_1' },
+  ],
+  keyExpr: 'id',
+  focusedRowEnabled: true,
+  focusedRowKey: 6,
+  editing: {
+    mode: 'popup',
+    allowUpdating: true,
+    popup: {
+      animation: null,
+    },
+  },
+}));
 
 ['Form', 'Popup'].forEach((mode) => {
   test(`${mode} - Focused row should not be reset after editing a row by API (T879627)`, async (t) => {
