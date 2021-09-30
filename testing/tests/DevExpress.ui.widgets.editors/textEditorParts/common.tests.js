@@ -9,6 +9,7 @@ import themes from 'ui/themes';
 import config from 'core/config';
 import consoleUtils from 'core/utils/console';
 import { normalizeKeyName } from 'events/utils/index';
+import resizeObserverSingleton from 'core/resize_observer';
 
 import 'ui/text_box/ui.text_editor';
 
@@ -461,6 +462,30 @@ QUnit.module('general', {}, () => {
         assert.ok($textEditor.hasClass('dx-editor-filled'));
 
         themes.isMaterial = realIsMaterial;
+    });
+
+    QUnit.test('label max-width should be changed with editor size (without option change)', function(assert) {
+        const done = assert.async();
+        const originObserve = resizeObserverSingleton.observe;
+
+        resizeObserverSingleton.observe = (element, callback) => {
+            assert.ok(true, 'Editor subscribed');
+            assert.equal($('#texteditor').find('.dx-label').css('maxWidth'), '182px', 'label max-width before size changed');
+
+            setTimeout(() => {
+                $('#texteditor').css('width', 400);
+                callback();
+                assert.equal($('#texteditor').find('.dx-label').css('maxWidth'), '382px', 'label max-width after size changed');
+                resizeObserverSingleton.observe = originObserve;
+                done();
+            }, 100);
+        };
+
+        $('#texteditor').dxTextEditor({
+            label: 'Label text',
+            labelMode: 'static',
+            width: 200
+        });
     });
 });
 

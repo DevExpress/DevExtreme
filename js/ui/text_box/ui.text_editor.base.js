@@ -75,6 +75,7 @@ const TextEditorBase = Editor.inherit({
 
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
+        this._$labelObservableTarget = null;
 
         this.callBase.apply(this, arguments);
     },
@@ -291,6 +292,8 @@ const TextEditorBase = Editor.inherit({
     _clean() {
         this._buttonCollection.clean();
         this._disposePendingIndicator();
+        this._cleanLabelObservable();
+        this._$labelObservableTarget = null;
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
         this._$textEditorContainer = null;
@@ -443,19 +446,24 @@ const TextEditorBase = Editor.inherit({
         this._input().prop('spellcheck', this.option('spellcheck'));
     },
 
+    _cleanLabelObservable: function() {
+        if(this._$labelObservableTarget) {
+            resizeObserverSingleton.unobserve(this._$labelObservableTarget);
+        }
+    },
+
     _setLabelWidth: function() {
-        const elementForWidthCalculation = this._$field ? this._$field : this._$tagsContainer ? this._$tagsContainer : this._input();
+        this._$labelObservableTarget = $(this._$field ? this._$field : this._$tagsContainer ? this._$tagsContainer : this._input()).get(0);
 
         const setWidth = () => {
-            const labelWidth = getWidth(elementForWidthCalculation);
+            const labelWidth = getWidth(this._$labelObservableTarget);
             this._$label.find('.dx-label').css('maxWidth', labelWidth);
         };
 
         setWidth();
 
-        const observeContainer = $(elementForWidthCalculation).get(0);
-        resizeObserverSingleton.unobserve(observeContainer);
-        resizeObserverSingleton.observe(observeContainer, setWidth);
+        this._cleanLabelObservable();
+        resizeObserverSingleton.observe(this._$labelObservableTarget, setWidth);
     },
 
     _renderLabel: function() {
@@ -465,6 +473,8 @@ const TextEditorBase = Editor.inherit({
         if(!this.label && labelElement.length === 1 || labelElement.length === 2) {
             labelElement.first().remove();
         }
+
+        this._cleanLabelObservable();
 
         if(this._$label) {
             this._$label.remove();
