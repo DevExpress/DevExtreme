@@ -8067,8 +8067,18 @@ declare module DevExpress.ui {
       | 'auto';
     /**
      * [descr:dxDataGridOptions.rowTemplate]
+     * @deprecated [depNote:dxDataGridOptions.rowTemplate]
      */
     rowTemplate?:
+      | DevExpress.core.template
+      | ((
+          rowElement: DevExpress.core.DxElement,
+          rowInfo: DevExpress.ui.dxDataGrid.RowTemplateData
+        ) => any);
+    /**
+     * [descr:dxDataGridOptions.dataRowTemplate]
+     */
+    dataRowTemplate?:
       | DevExpress.core.template
       | ((
           rowElement: DevExpress.core.DxElement,
