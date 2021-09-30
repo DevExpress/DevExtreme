@@ -20,7 +20,8 @@ import { titleize, camelize } from '../../../core/utils/inflector';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
-import { getTableFormats, TABLE_OPERATIONS, getFormatHandlers } from '../utils/table_helper';
+import { getTableFormats, TABLE_OPERATIONS } from '../utils/table_helper';
+import { FormatHelper } from '../utils/toolbar_helper';
 
 let ToolbarModule = BaseModule;
 
@@ -76,7 +77,8 @@ if(Quill) {
             super(quill, options);
 
             this._toolbarWidgets = new WidgetCollector();
-            this._formatHandlers = getFormatHandlers.bind(this)();
+            // this._formatHandlers = getFormatHandlers.bind(this)();
+            this._formatHandlers = new FormatHelper(this);
             this._tableFormats = getTableFormats(quill);
 
             if(isDefined(options.items)) {
