@@ -536,6 +536,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @docid
      * @default null
      * @public
+     * @type string | Array<any> | Store | DataSource | DataSourceOptions
      */
     dataSource?: string | Array<TRowData> | Store<TRowData, string | Array<string>, TKey> | DataSource<TRowData, string | Array<string>, TKey> | DataSourceOptions<TRowData, TRowData, TRowData, string | Array<string>, TKey>;
     /**
@@ -1495,6 +1496,7 @@ export interface Sorting {
 export interface StateStoring {
     /**
      * @docid GridBaseOptions.stateStoring.customLoad
+     * @type Function
      * @type_function_return Promise<Object>
      */
     customLoad?: (() => PromiseLike<any>);
@@ -1545,6 +1547,7 @@ export interface EditingBase<TRowData = any, TKey = any> {
      * @default []
      * @fires GridBaseOptions.onOptionChanged
      * @public
+     * @type Array<DataChange>
      */
     changes?: Array<DataChange<TRowData, TKey>>;
     /**
