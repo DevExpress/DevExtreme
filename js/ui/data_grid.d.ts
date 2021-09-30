@@ -2354,7 +2354,7 @@ export type GridBaseColumn<TRowData = any> = ColumnBase<TRowData>;
  * @docid GridBaseColumn
  * @type object
  */
-export interface ColumnBase<TRowData> {
+export interface ColumnBase<TRowData = any> {
     /**
      * @docid GridBaseColumn.alignment
      * @type Enums.HorizontalAlignment

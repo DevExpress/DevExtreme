@@ -5727,7 +5727,7 @@ declare module DevExpress.ui {
      * [descr:GridBaseColumn]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export interface ColumnBase<TRowData> {
+    export interface ColumnBase<TRowData = any> {
       /**
        * [descr:GridBaseColumn.alignment]
        */
