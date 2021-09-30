@@ -4186,6 +4186,8 @@ export interface Editing<TRowData, TKey> extends EditingBase<TRowData, TKey> {
     /**
      * @docid dxDataGridOptions.editing.allowDeleting
      * @default false
+     * @type boolean|function
+     * @type_function_param1_field1 component:dxDataGrid
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_return Boolean
      * @public
@@ -4194,6 +4196,8 @@ export interface Editing<TRowData, TKey> extends EditingBase<TRowData, TKey> {
     /**
      * @docid dxDataGridOptions.editing.allowUpdating
      * @default false
+     * @type boolean|function
+     * @type_function_param1_field1 component:dxDataGrid
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_return Boolean
      * @public
@@ -4621,6 +4625,8 @@ export interface dxDataGridColumnButton<TRowData, TKey> extends ColumnButtonBase
     /**
      * @docid dxDataGridColumnButton.visible
      * @default true
+     * @type boolean | function
+     * @type_function_param1_field1 component:dxDataGrid
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_param1_field3 column:dxDataGridColumn
      * @type_function_return Boolean
@@ -4630,6 +4636,8 @@ export interface dxDataGridColumnButton<TRowData, TKey> extends ColumnButtonBase
     /**
      * @docid dxDataGridColumnButton.disabled
      * @default false
+     * @type boolean | function
+     * @type_function_param1_field1 component:dxDataGrid
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_param1_field3 column:dxDataGridColumn
      * @type_function_return Boolean
