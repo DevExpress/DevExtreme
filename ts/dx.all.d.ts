@@ -5595,7 +5595,11 @@ declare module DevExpress.ui {
     ): DevExpress.core.DxElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DevExpress.data.DataSource;
+    getDataSource(): DevExpress.data.DataSource<
+      TRowData,
+      string | Array<string>,
+      TKey
+    >;
     getKeyByRowIndex(rowIndex: number): TKey;
     getRowElement(
       rowIndex: number
@@ -22073,7 +22077,11 @@ declare module DevExpress.ui {
      * [descr:GridBase.getCombinedFilter(returnDataField)]
      */
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DevExpress.data.DataSource;
+    getDataSource(): DevExpress.data.DataSource<
+      TRowData,
+      string | Array<string>,
+      TKey
+    >;
     /**
      * [descr:GridBase.getKeyByRowIndex(rowIndex)]
      */
@@ -22288,9 +22296,15 @@ declare module DevExpress.ui {
     dataSource?:
       | string
       | Array<TRowData>
-      | DevExpress.data.Store
-      | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | DevExpress.data.Store<TRowData, string | Array<string>, TKey>
+      | DevExpress.data.DataSource<TRowData, string | Array<string>, TKey>
+      | DevExpress.data.DataSourceOptions<
+          TRowData,
+          TRowData,
+          TRowData,
+          string | Array<string>,
+          TKey
+        >;
     /**
      * [descr:GridBaseOptions.dateSerializationFormat]
      */
