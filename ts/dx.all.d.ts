@@ -12314,6 +12314,10 @@ declare module DevExpress.ui {
      */
     labelLocation?: 'left' | 'right' | 'top';
     /**
+     * [descr:dxFormOptions.labelMode]
+     */
+    labelMode?: 'default' | 'floating' | 'static' | 'hidden';
+    /**
      * [descr:dxFormOptions.minColWidth]
      */
     minColWidth?: number;
