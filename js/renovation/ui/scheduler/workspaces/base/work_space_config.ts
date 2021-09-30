@@ -51,7 +51,7 @@ const timelineViewConfig: ViewRenderConfig = {
   isCreateCrossScrolling: true,
 };
 
-const getVerticalViewConfig: GetRenderConfig = (crossScrollingEnabled) => ({
+const getVerticalViewConfig = (crossScrollingEnabled: boolean): ViewRenderConfig => ({
   ...verticalViewConfig,
   isCreateCrossScrolling: crossScrollingEnabled,
 });
@@ -59,36 +59,25 @@ const getVerticalViewConfig: GetRenderConfig = (crossScrollingEnabled) => ({
 const getDayViewConfig: GetRenderConfig = (
   crossScrollingEnabled,
   intervalCount,
-  isVerticalGrouping,
 ) => ({
   ...getVerticalViewConfig(
     crossScrollingEnabled,
-    intervalCount,
-    isVerticalGrouping,
   ),
   isRenderDateHeader: intervalCount > 1,
 });
 const getWeekViewConfig: GetRenderConfig = (
   crossScrollingEnabled,
-  intervalCount,
-  isVerticalGrouping,
 ) => ({
   ...getVerticalViewConfig(
     crossScrollingEnabled,
-    intervalCount,
-    isVerticalGrouping,
   ),
   className: 'dx-scheduler-work-space-week',
 });
 const getWorkWeekViewConfig: GetRenderConfig = (
   crossScrollingEnabled,
-  intervalCount,
-  isVerticalGrouping,
 ) => ({
   ...getVerticalViewConfig(
     crossScrollingEnabled,
-    intervalCount,
-    isVerticalGrouping,
   ),
   className: 'dx-scheduler-work-space-work-week',
 });
