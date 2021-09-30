@@ -40,16 +40,21 @@ function getTableFormats(quill) {
     return tableModule?.tableFormats ? tableModule.tableFormats() : TABLE_FORMATS;
 }
 
-function prepareLinkHandler() {
-    return () => {
-        this.quill.focus();
+function applyFormat(formatArgs, event, quill, editorInstance) {
+    editorInstance.saveValueChangeEvent(event);
+    quill.format(...formatArgs);
+}
 
-        const selection = this.quill.getSelection();
+function prepareLinkHandler(quill) {
+    return () => {
+        quill.focus();
+
+        const selection = quill.getSelection();
         const hasEmbedContent = this._hasEmbedContent(selection);
-        const formats = selection ? this.quill.getFormat() : {};
+        const formats = selection ? quill.getFormat() : {};
         const formData = {
             href: formats.link || '',
-            text: selection && !hasEmbedContent ? this.quill.getText(selection) : '',
+            text: selection && !hasEmbedContent ? quill.getText(selection) : '',
             target: Object.prototype.hasOwnProperty.call(formats, 'target') ? !!formats.target : true
         };
         this.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_LINK_CAPTION));
@@ -68,16 +73,16 @@ function prepareLinkHandler() {
                 this.saveValueChangeEvent(event);
 
                 length && this.quill.deleteText(index, length, SILENT_ACTION);
-                this.quill.insertText(index, text, 'link', formData, USER_ACTION);
-                this.quill.setSelection(index + text.length, 0, USER_ACTION);
+                quill.insertText(index, text, 'link', formData, USER_ACTION);
+                quill.setSelection(index + text.length, 0, USER_ACTION);
             } else {
                 formData.text = !selection && !formData.text ? formData.href : formData.text;
-                this._applyFormat(['link', formData, USER_ACTION], event);
+                applyFormat(['link', formData, USER_ACTION], event, quill, this.editorInstance);
             }
         });
 
         promise.fail(() => {
-            this.quill.focus();
+            quill.focus();
         });
     };
 }
@@ -128,9 +133,9 @@ function prepareImageHandler() {
     };
 }
 
-function prepareColorClickHandler(name) {
+function prepareColorClickHandler(name, quill) {
     return () => {
-        const formData = this.quill.getFormat();
+        const formData = quill.getFormat();
         const caption = name === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
         this.editorInstance.formDialogOption('title', localizationMessage.format(caption));
         const promise = this.editorInstance.showFormDialog({
@@ -146,46 +151,46 @@ function prepareColorClickHandler(name) {
         });
 
         promise.done((formData, event) => {
-            this._applyFormat([name, formData[name], USER_ACTION], event);
+            applyFormat([name, formData[name], USER_ACTION], event, quill, this.editorInstance);
         });
         promise.fail(() => {
-            this.quill.focus();
+            quill.focus();
         });
     };
 }
 
-function prepareShortcutHandler(name, shortcutValue) {
+function prepareShortcutHandler(name, shortcutValue, quill) {
     return ({ event }) => {
-        const formats = this.quill.getFormat();
+        const formats = quill.getFormat();
         const value = formats[name] === shortcutValue ? false : shortcutValue;
 
-        this._applyFormat([name, value, USER_ACTION], event);
+        applyFormat([name, value, USER_ACTION], event, quill, this.editorInstance);
         this.updateFormatWidgets(true);
     };
 }
 
-function getDefaultClickHandler(name) {
+function getDefaultClickHandler(name, quill) {
     return ({ event }) => {
-        const formats = this.quill.getFormat();
+        const formats = quill.getFormat();
         const value = formats[name];
         const newValue = !(isBoolean(value) ? value : isDefined(value));
 
-        this._applyFormat([name, newValue, USER_ACTION], event);
+        applyFormat([name, newValue, USER_ACTION], event, quill, this.editorInstance);
 
         this._updateFormatWidget(name, newValue, formats);
     };
 }
 
-function prepareInsertTableHandler() {
+function prepareInsertTableHandler(quill) {
     return () => {
-        const formats = this.quill.getFormat();
+        const formats = quill.getFormat();
         const isTableFocused = this._tableFormats.some(
             format => Object.prototype.hasOwnProperty.call(formats, format)
         );
         const formData = { rows: 1, columns: 1 };
 
         if(isTableFocused) {
-            this.quill.focus();
+            quill.focus();
             return;
         }
 
@@ -198,9 +203,9 @@ function prepareInsertTableHandler() {
 
         promise
             .done((formData, event) => {
-                this.quill.focus();
+                quill.focus();
 
-                const table = this.quill.getModule('table');
+                const table = quill.getModule('table');
                 if(table) {
                     this.saveValueChangeEvent(event);
 
@@ -209,7 +214,7 @@ function prepareInsertTableHandler() {
                 }
             })
             .always(() => {
-                this.quill.focus();
+                quill.focus();
             });
     };
 }
@@ -224,17 +229,17 @@ function getFormatHandlers() {
                 this.updateFormatWidgets();
             }
         },
-        link: prepareLinkHandler(),
-        image: prepareImageHandler(),
-        color: prepareColorClickHandler('color'),
-        background: prepareColorClickHandler('background'),
-        orderedList: prepareShortcutHandler('list', 'ordered'),
-        bulletList: prepareShortcutHandler('list', 'bullet'),
-        alignLeft: prepareShortcutHandler('align', 'left'),
-        alignCenter: prepareShortcutHandler('align', 'center'),
-        alignRight: prepareShortcutHandler('align', 'right'),
-        alignJustify: prepareShortcutHandler('align', 'justify'),
-        codeBlock: getDefaultClickHandler('code-block'),
+        link: prepareLinkHandler(this.quill).bind(this),
+        image: prepareImageHandler(this.quill).bind(this),
+        color: prepareColorClickHandler('color', this.quill).bind(this),
+        background: prepareColorClickHandler('background', this.quill).bind(this),
+        orderedList: prepareShortcutHandler('list', 'ordered', this.quill),
+        bulletList: prepareShortcutHandler('list', 'bullet', this.quill).bind(this),
+        alignLeft: prepareShortcutHandler('align', 'left', this.quill).bind(this),
+        alignCenter: prepareShortcutHandler('align', 'center', this.quill).bind(this),
+        alignRight: prepareShortcutHandler('align', 'right', this.quill).bind(this),
+        alignJustify: prepareShortcutHandler('align', 'justify', this.quill).bind(this),
+        codeBlock: getDefaultClickHandler('code-block', this.quill).bind(this),
         undo: ({ event }) => {
             this.saveValueChangeEvent(event);
             this.quill.history.undo();
@@ -249,9 +254,9 @@ function getFormatHandlers() {
         decreaseIndent: ({ event }) => {
             this._applyFormat(['indent', '-1', USER_ACTION], event);
         },
-        superscript: prepareShortcutHandler('script', 'super'),
-        subscript: prepareShortcutHandler('script', 'sub'),
-        insertTable: prepareInsertTableHandler(),
+        superscript: prepareShortcutHandler('script', 'super', this.quill).bind(this),
+        subscript: prepareShortcutHandler('script', 'sub', this.quill).bind(this),
+        insertTable: prepareInsertTableHandler(this.quill, this.quill).bind(this),
         insertHeaderRow: getTableOperationHandler(this.quill, 'insertHeaderRow'),
         insertRowAbove: getTableOperationHandler(this.quill, 'insertRowAbove'),
         insertRowBelow: getTableOperationHandler(this.quill, 'insertRowBelow'),
