@@ -49,6 +49,7 @@ function generateRowsInfo(dataProvider, wordWrapEnabled, rtlEnabled, headerBackg
                 dataProvider,
                 rowIndex,
                 wordWrapEnabled,
+                rtlEnabled,
                 columns,
                 rowType,
                 colCount: columns.length,
@@ -62,7 +63,7 @@ function generateRowsInfo(dataProvider, wordWrapEnabled, rtlEnabled, headerBackg
     return result;
 }
 
-function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, rowType, backgroundColor, horizontalAlign }) {
+function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, rowType, backgroundColor, horizontalAlign, rtlEnabled }) {
     const result = [];
     for(let cellIndex = 0; cellIndex < colCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
@@ -88,15 +89,21 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
                 cellInfo.colSpan = cellMerging.colspan;
             }
         } else if(rowType === 'group') {
-            cellInfo.pdfCell.drawLeftBorder = cellIndex === 0;
-            cellInfo.pdfCell.drawRightBorder = cellIndex === colCount - 1;
+            const drawLeftBorder = cellIndex === 0;
+            const drawRightBorder = cellIndex === colCount - 1;
+            cellInfo.pdfCell.drawLeftBorder = rtlEnabled ? drawRightBorder : drawLeftBorder;
+            cellInfo.pdfCell.drawRightBorder = rtlEnabled ? drawLeftBorder : drawRightBorder;
 
             if(cellIndex > 0) {
                 const isEmptyCellsExceptFirst = result.slice(1).reduce(
                     (accumulate, cellInfo) => { return accumulate && !isDefined(cellInfo.pdfCell.text); },
                     true);
                 if(!isDefined(cellInfo.pdfCell.text) && isEmptyCellsExceptFirst) {
-                    result[0].pdfCell.drawRightBorder = true;
+                    if(rtlEnabled) {
+                        result[0].pdfCell.drawLeftBorder = true;
+                    } else {
+                        result[0].pdfCell.drawRightBorder = true;
+                    }
                     for(let i = 0; i < result.length; i++) {
                         result[i].colSpan = result.length;
                     }
