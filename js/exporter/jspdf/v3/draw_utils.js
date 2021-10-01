@@ -34,7 +34,7 @@ function getLineHeightShift(doc) {
     return (doc.getLineHeightFactor() - DEFAULT_LINE_HEIGHT) * doc.getFontSize();
 }
 
-function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWrapEnabled, jsPdfTextOptions, rtlEnabled) {
+function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWrapEnabled, jsPdfTextOptions) {
     const textArray = getTextLines(doc, text, doc.getFont(), { wordWrapEnabled, targetRectWidth: rect.w });
     const linesCount = textArray.length;
 
