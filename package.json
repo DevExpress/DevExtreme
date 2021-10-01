@@ -31,7 +31,7 @@
     "@vue/test-utils": "2.0.0-beta.7",
     "del": "^3.0.0",
     "devextreme": "~21.1.4",
-    "devextreme-vue-generator": "^1.2.0",
+    "devextreme-vue-generator": "^1.3.0",
     "devextreme-vue2-strategy": "~21.1.4",
     "gulp": "^4.0.0",
     "gulp-header": "^2.0.5",
