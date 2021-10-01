@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Drag-n-drop from another draggable area`
-  .page(url(__dirname, '.././pages/containerWithDnD.html'));
+  .page(url(__dirname, './pages/containerWithDnD.html'));
 
 test('Drag-n-drop an appointment when "cellDuration" changes dynamically', async (t) => {
   const scheduler = new Scheduler('#container');
