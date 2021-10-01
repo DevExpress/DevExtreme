@@ -1644,6 +1644,7 @@ export interface DataChange<TRowData = any, TKey = any> {
     type: 'insert' | 'update' | 'remove';
     /**
      * @docid
+     * @type any
      */
     data: DeepPartial<TRowData>;
     /**
