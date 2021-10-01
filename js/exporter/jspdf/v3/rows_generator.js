@@ -89,21 +89,18 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
                 cellInfo.colSpan = cellMerging.colspan;
             }
         } else if(rowType === 'group') {
-            const drawLeftBorder = cellIndex === 0;
-            const drawRightBorder = cellIndex === colCount - 1;
-            cellInfo.pdfCell.drawLeftBorder = rtlEnabled ? drawRightBorder : drawLeftBorder;
-            cellInfo.pdfCell.drawRightBorder = rtlEnabled ? drawLeftBorder : drawRightBorder;
+            const drawLeftBorderField = rtlEnabled ? 'drawRightBorder' : 'drawLeftBorder';
+            const drawRightBorderField = rtlEnabled ? 'drawLeftBorder' : 'drawRightBorder';
+            cellInfo.pdfCell[drawLeftBorderField] = cellIndex === 0;
+            cellInfo.pdfCell[drawRightBorderField] = cellIndex === colCount - 1;
 
             if(cellIndex > 0) {
                 const isEmptyCellsExceptFirst = result.slice(1).reduce(
                     (accumulate, cellInfo) => { return accumulate && !isDefined(cellInfo.pdfCell.text); },
                     true);
                 if(!isDefined(cellInfo.pdfCell.text) && isEmptyCellsExceptFirst) {
-                    if(rtlEnabled) {
-                        result[0].pdfCell.drawLeftBorder = true;
-                    } else {
-                        result[0].pdfCell.drawRightBorder = true;
-                    }
+                    result[0].pdfCell[drawRightBorderField] = true;
+
                     for(let i = 0; i < result.length; i++) {
                         result[i].colSpan = result.length;
                     }
