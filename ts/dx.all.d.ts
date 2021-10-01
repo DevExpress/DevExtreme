@@ -754,10 +754,10 @@ declare module DevExpress {
     version?: Array<number>;
   }
   /**
-   * [descr:devices]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export const devices: DevicesObject;
+    * [descr:devices]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+    */
+   export const devices: DevicesObject;
   /**
    * [descr:DevicesObject]
    */
@@ -1786,9 +1786,7 @@ declare module DevExpress.data {
      * [descr:DataSource.on(events)]
      */
     on(
-      events: {
-        [key in DevExpress.data.DataSource.EventName]?: Function;
-      }
+      events: { [key in DevExpress.data.DataSource.EventName]?: Function }
     ): this;
     /**
      * [descr:DataSource.pageIndex()]
@@ -8005,7 +8003,7 @@ declare module DevExpress.ui {
         }) => boolean);
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridEditing<TRowData, TKey = any> =
     DevExpress.ui.dxDataGrid.Editing<TRowData, TKey>;
@@ -8234,16 +8232,16 @@ declare module DevExpress.ui {
     toolbar?: dxDataGridToolbar;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridRowObject<TRowData = any, TKey = any> =
     DevExpress.ui.dxDataGrid.RowObject<TRowData, TKey>;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridScrolling = DevExpress.ui.dxDataGrid.Scrolling;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxDataGridSelection = DevExpress.ui.dxDataGrid.Selection;
   /**
@@ -20872,15 +20870,15 @@ declare module DevExpress.ui {
         }) => boolean);
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListEditing = DevExpress.ui.dxTreeList.Editing;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListEditingTexts = DevExpress.ui.dxTreeList.EditingTexts;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListNode = DevExpress.ui.dxTreeList.Node;
   /**
@@ -21061,7 +21059,7 @@ declare module DevExpress.ui {
     toolbar?: dxTreeListToolbar;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
   /**
@@ -21069,11 +21067,11 @@ declare module DevExpress.ui {
    */
   export type dxTreeListRowObject = DevExpress.ui.dxTreeList.RowObject;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListScrolling = DevExpress.ui.dxTreeList.Scrolling;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListSelection = DevExpress.ui.dxTreeList.Selection;
   /**
@@ -22105,21 +22103,21 @@ declare module DevExpress.ui {
     updateDimensions(): void;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseColumn<TRowData = any> =
     DevExpress.ui.dxDataGrid.ColumnBase<TRowData>;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseColumnButton = DevExpress.ui.dxDataGrid.ColumnButtonBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseEditing<TRowData = any, TKey = any> =
     DevExpress.ui.dxDataGrid.EditingBase<TRowData, TKey>;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseEditingTexts = DevExpress.ui.dxDataGrid.EditingTextsBase;
   /**
@@ -22501,15 +22499,15 @@ declare module DevExpress.ui {
     wordWrapEnabled?: boolean;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBasePaging = DevExpress.ui.dxDataGrid.PagingBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseScrolling = DevExpress.ui.dxDataGrid.ScrollingBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
   /**
