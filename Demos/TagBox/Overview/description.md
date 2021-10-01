@@ -35,3 +35,5 @@ The [TagBox](/Documentation/ApiReference/UI_Components/dxTagBox/) allows users t
 
 - [itemTemplate](/Documentation/ApiReference/UI_Components/dxTagBox/Configuration/#itemTemplate)  
   Allows you to customize the drop-down list items.
+
+To get started with the DevExtreme TagBox component, refer to the following tutorial for step-by-step instructions: [Getting Started with TagBox](/Documentation/Guide/UI_Components/TagBox/Getting_Started_with_TagBox/).

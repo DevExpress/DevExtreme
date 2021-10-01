@@ -23,3 +23,5 @@ Dates that are not available for selection.
 
 - [applyValueMode](/Documentation/ApiReference/UI_Components/dxDateBox/Configuration/#applyValueMode)     
 Defines whether the selected value applies instantly or after a user clicks the **Apply** button.
+
+To get started with the DevExtreme DateBox component, refer to the following tutorial for step-by-step instructions: [Getting Started with DateBox](/Documentation/Guide/UI_Components/DateBox/Getting_Started_with_DateBox/).

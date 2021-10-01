@@ -1,3 +1,5 @@
 The <b>Drawer</b> is&nbsp;a&nbsp;dismissible or&nbsp;permanently visible panel used for navigation in&nbsp;responsive web applications. On&nbsp;opening, the <b>Drawer</b> can interact with the view in&nbsp;several modes: <i>"shrink"</i>, <i>"push"</i>, and <i>"overlap"</i>. The view's content (an&nbsp;HTML string in&nbsp;this demo) is&nbsp;part of&nbsp;the <b>Drawer</b>'s markup. The <b>Drawer</b>'s content is&nbsp;defined using a&nbsp;<a href="/Documentation/ApiReference/UI_Components/dxDrawer/Configuration/#template">template</a>. Note that the <b>Drawer</b> does not interact with the toolbar because the latter is&nbsp;not defined in&nbsp;the <b>Drawer</b>'s markup.
  
 In&nbsp;this demo, you can use radio buttons under the <b>Drawer</b> to&nbsp;change its position and behavior.
+
+To get started with the DevExtreme Drawer component, refer to the following tutorial for step-by-step instructions: [Getting Started with Navigation Drawer](/Documentation/Guide/UI_Components/Drawer/Getting_Started_with_Navigation_Drawer/).

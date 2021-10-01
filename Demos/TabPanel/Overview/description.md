@@ -26,3 +26,5 @@ Specifies whether to loop views.
 Specifies whether to animate transition between views.
 
 You can switch the checkboxes below the TabPanel to change the **loop**, **animationEnabled**, and **swipeEnabled** property values.
+
+To get started with the DevExtreme TabPanel component, refer to the following tutorial for step-by-step instructions: [Getting Started with TabPanel](/Documentation/Guide/UI_Components/TabPanel/Getting_Started_with_TabPanel/).

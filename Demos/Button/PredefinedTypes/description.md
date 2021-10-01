@@ -11,4 +11,5 @@ To further customize the Button, use the [stylingMode](/Documentation/ApiReferen
 - *"contained"*    
 - *"outlined"*    
 - *"text"*    
- 
+
+To get started with the DevExtreme Button component, refer to the following tutorial for step-by-step instructions: [Getting Started with Button](/Documentation/Guide/UI_Components/Button/Getting_Started_with_Button/).

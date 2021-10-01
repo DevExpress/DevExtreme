@@ -8,6 +8,8 @@ Two to five SpeedDialActions are collected in the FAB's speed dial. The actions 
 
 FAB parameters are configured in the [floatingActionButtonConfig][5] object. Use it to change the FAB's [position][6], [maximum number of actions][7], icons in the [open][8] and [close][9] states, and other parameters. In this demo, the drop-down menu under the grid allows you to select the [direction][10] in which the speed dial should be opened. The [repaintFloatingActionButton()][11] method is called to apply the new configuration.
 
+To get started with DevExtreme Floating Action Button, refer to the following tutorial for step-by-step instructions: [Getting Started with Floating Action Button](/Documentation/Guide/UI_Components/Floating_Action_Button/Getting_Started_with_Floating_Action_Button/).
+
 [0]: /Documentation/ApiReference/UI_Components/dxSpeedDialAction/
 [1]: /Documentation/ApiReference/UI_Components/dxSpeedDialAction/Configuration/#onClick
 [2]: /Documentation/ApiReference/UI_Components/dxSpeedDialAction/Configuration/#icon

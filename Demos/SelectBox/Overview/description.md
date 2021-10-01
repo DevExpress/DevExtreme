@@ -14,3 +14,5 @@ Binds the SelectBox to data. Unlike the **items** property, **dataSource** accep
 Allow you to customize the text field and drop-down list items.
 - [onValueChanged](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#onValueChanged) event handler      
 Use this function to perform an action when a user chooses a new value. In this demo, this function is used to display the selected value.
+
+To get started with the DevExtreme SelectBox component, refer to the following tutorial for step-by-step instructions: [Getting Started with SelectBox](/Documentation/Guide/UI_Components/SelectBox/Getting_Started_with_SelectBox/).

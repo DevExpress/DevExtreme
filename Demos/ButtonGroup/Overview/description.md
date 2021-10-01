@@ -1,1 +1,3 @@
 ButtonGroup is a UI component that displays a set of toggleable buttons and allows a user to select one or several of them. This demo illustrates how to configure the ButtonGroup to enable single and multiple selection.
+
+To get started with the DevExtreme ButtonGroup component, refer to the following tutorial for step-by-step instructions: [Getting Started with ButtonGroup](/Documentation/Guide/UI_Components/ButtonGroup/Getting_Started_with_ButtonGroup/).

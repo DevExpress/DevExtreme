@@ -5,3 +5,5 @@ Users can edit and customize content using the [toolbar](/Documentation/ApiRefer
 You can use the **toolbar**.[multiline](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/toolbar/#multiline) property to arrange the toolbar controls into multiple rows.
 
 Users can resize media files when the [mediaResizing](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/mediaResizing/) is enabled. Currently, only images are supported.
+
+To get started with the DevExtreme HtmlEditor component, refer to the following tutorial for step-by-step instructions: [Getting Started with HtmlEditor](/Documentation/Guide/UI_Components/HtmlEditor/Getting_Started_with_HtmlEditor/).

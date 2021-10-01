@@ -18,3 +18,5 @@ Makes the Form editors read-only.
 
 - [showColonAfterLabel](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#showColonAfterLabel)    
 Specifies whether the Form displays a colon after a label. 
+
+To get started with the DevExtreme Form component, refer to the following tutorial for step-by-step instructions: [Getting Started with Form](/Documentation/Guide/UI_Components/Form/Getting_Started_with_Form/).

@@ -21,3 +21,5 @@ Slide list items left. The content of the list item shifts to make space for the
 
 - *"context"*    
 Right-click or touch and hold the list item to call a context menu that contains the Delete option.    
+
+To get started with the DevExtreme List component, refer to the following tutorial for step-by-step instructions: [Getting Started with List](/Documentation/Guide/UI_Components/List/Getting_Started_with_List/).
