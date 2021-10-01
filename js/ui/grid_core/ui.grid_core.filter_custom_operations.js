@@ -60,9 +60,10 @@ function baseOperation(grid) {
                 const dataSource = new DataSource(dataSourceOptions);
                 const key = dataSource.store().key();
 
-                if(key && options.values) {
-                    if(options.values && options.values.length > 1) {
-                        const filter = options.values.reduce((result, value) => {
+                if(key) {
+                    const { values } = options;
+                    if(values && values.length > 1) {
+                        const filter = values.reduce((result, value) => {
                             if(result.length) {
                                 result.push('or');
                             }
