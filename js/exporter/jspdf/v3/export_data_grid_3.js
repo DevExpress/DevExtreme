@@ -22,7 +22,6 @@ function exportDataGrid(doc, dataGrid, options) {
     options = extend({}, _getFullOptions(options));
 
     const dataProvider = dataGrid.getDataProvider();
-    const rtlEnabled = !!dataGrid.option('rtlEnabled');
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
             // TODO: pass rowOptions: { headerStyles: { backgroundColor }, groupStyles: {...}, totalStyles: {...} }
@@ -66,7 +65,7 @@ function exportDataGrid(doc, dataGrid, options) {
             updateRowsAndCellsHeights(doc, rowsInfo);
 
             // when we known all sizes we can calculate all coordinates
-            calculateCoordinates(doc, rowsInfo, options, rtlEnabled); // set/init/update 'pdfCell.top/left'
+            calculateCoordinates(doc, rowsInfo, options, !!dataGrid.option('rtlEnabled'));
 
             // recalculate for grouped rows
             // TODO: applyGroupIndents()
@@ -88,7 +87,7 @@ function exportDataGrid(doc, dataGrid, options) {
             );
 
             const docStyles = getDocumentStyles(doc);
-            drawCellsContent(doc, pdfCellsInfo, docStyles, rtlEnabled);
+            drawCellsContent(doc, pdfCellsInfo, docStyles);
             drawCellsLines(doc, pdfCellsInfo, docStyles);
 
             const isDrawTableBorderSpecified = options.drawTableBorder === true;
