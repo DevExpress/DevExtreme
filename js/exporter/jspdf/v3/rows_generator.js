@@ -16,6 +16,7 @@ import { isDefined } from '../../../core/utils/type';
 //              textColor: '#0000ff', // TODO: specify color format for docs
 //              backgroundColor: '#0000ff', // TODO: specify color format for docs
 //              verticalAlign: 'top' | 'bottom' | 'middle | undefined. Default value is middle
+//              horizontalAlign: 'left' | 'right' | 'center' | undefined. Default value is left
 //              wordWrapEnabled, // true | false. Default value is inherited from grid props,
 //              drawRightBorder,
 //              drawLeftBorder
@@ -70,6 +71,7 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
             pdfCell: {
                 text: cellData.value,
                 verticalAlign: 'middle',
+                horizontalAlign: 'left',
                 wordWrapEnabled,
                 backgroundColor,
                 padding: 0,

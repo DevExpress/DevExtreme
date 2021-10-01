@@ -3,12 +3,14 @@ import React from 'react';
 import { Scrollable } from '../../../../scroll_view/scrollable';
 import { Widget } from '../../../../common/widget';
 import {
+  CrossScrollingLayout,
   viewFunction as LayoutView,
 } from '../cross_scrolling_layout';
 import { GroupPanel } from '../group_panel/group_panel';
 import { AllDayPanelLayout, AllDayPanelLayoutProps } from '../date_table/all_day_panel/layout';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { HeaderPanelEmptyCell } from '../header_panel_empty_cell';
+import { Semaphore } from '../../../semaphore';
 
 describe('OrdinaryLayout', () => {
   const viewData = {
@@ -158,7 +160,8 @@ describe('OrdinaryLayout', () => {
     });
 
     it('should render header scrollable and pass correct props to it', () => {
-      const layout = render({});
+      const onHeaderScroll = jest.fn();
+      const layout = render({ onHeaderScroll });
 
       const headerScrollable = layout.find(Scrollable).at(0);
 
@@ -171,6 +174,7 @@ describe('OrdinaryLayout', () => {
           useNative: false,
           bounceEnabled: false,
           children: expect.anything(),
+          onScroll: onHeaderScroll,
         });
     });
 
@@ -210,8 +214,11 @@ describe('OrdinaryLayout', () => {
     });
 
     it('should render date-table scrollable and pass correct props to it', () => {
+      const onDateTableScroll = jest.fn();
       const layout = render({
         props: { scrollingDirection: 'vertical' },
+        onDateTableScroll,
+
       });
 
       const scrollable = layout.find(Scrollable).at(2);
@@ -222,7 +229,8 @@ describe('OrdinaryLayout', () => {
           bounceEnabled: false,
           className: 'dx-scheduler-date-table-scrollable',
           children: expect.anything(),
-          direction: 'vertical',
+          direction: 'both',
+          onScroll: onDateTableScroll,
         });
     });
 
@@ -262,7 +270,10 @@ describe('OrdinaryLayout', () => {
     });
 
     it('should render side-bar scrollable', () => {
-      const layout = render({});
+      const onSideBarScroll = jest.fn();
+      const layout = render({
+        onSideBarScroll,
+      });
 
       const scrollable = layout.find(Scrollable).at(1);
 
@@ -275,6 +286,7 @@ describe('OrdinaryLayout', () => {
           useNative: false,
           bounceEnabled: false,
           children: expect.anything(),
+          onScroll: onSideBarScroll,
         });
     });
 
@@ -432,6 +444,107 @@ describe('OrdinaryLayout', () => {
         .toBe(true);
       expect(container.childAt(1).hasClass('dx-scheduler-date-table-scrollable'))
         .toBe(true);
+    });
+  });
+
+  describe('Behaviour', () => {
+    describe('Methods', () => {
+      describe('onDateTableScroll', () => {
+        it('should call scrollTo of header and side-bar scrollables', () => {
+          const layout = new CrossScrollingLayout({} as any);
+
+          const sideBarScrollTo = jest.fn();
+          const headerScrollTo = jest.fn();
+
+          const sideBarScrollable = {
+            current: {
+              scrollTo: sideBarScrollTo,
+            },
+          };
+          const headerScrollable = {
+            current: {
+              scrollTo: headerScrollTo,
+            },
+          };
+
+          layout.sideBarScrollableRef = sideBarScrollable as any;
+          layout.headerScrollableRef = headerScrollable as any;
+
+          layout.onDateTableScroll({ scrollOffset: { left: 50, top: 100 } });
+
+          expect(sideBarScrollTo)
+            .toBeCalledWith({
+              top: 100,
+            });
+          expect(headerScrollTo)
+            .toBeCalledWith({
+              left: 50,
+            });
+        });
+      });
+
+      describe('onHeaderScroll', () => {
+        it('should call scrollTo of date-table scrollable', () => {
+          const layout = new CrossScrollingLayout({} as any);
+
+          const dateTableScrollTo = jest.fn();
+
+          const dateTableScrollable = {
+            current: {
+              scrollTo: dateTableScrollTo,
+            },
+          };
+
+          layout.dateTableScrollableRef = dateTableScrollable as any;
+
+          layout.onHeaderScroll({ scrollOffset: { left: 50, top: 0 } });
+
+          expect(dateTableScrollTo)
+            .toBeCalledWith({
+              left: 50,
+            });
+        });
+      });
+
+      describe('onSideBarScroll', () => {
+        it('should call scrollTo of dateTable scrollable', () => {
+          const layout = new CrossScrollingLayout({} as any);
+
+          const dateTableScrollTo = jest.fn();
+
+          const dateTableScrollable = {
+            current: {
+              scrollTo: dateTableScrollTo,
+            },
+          };
+
+          layout.dateTableScrollableRef = dateTableScrollable as any;
+
+          layout.onSideBarScroll({ scrollOffset: { left: 50, top: 100 } });
+
+          expect(dateTableScrollTo)
+            .toBeCalledWith({
+              top: 100,
+            });
+        });
+      });
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('Semaphores', () => {
+        it('should initialize semaphores correctly', () => {
+          const layout = new CrossScrollingLayout({} as any);
+
+          expect(layout.dateTableSemaphore instanceof Semaphore)
+            .toBe(true);
+          expect(layout.sideBarSemaphore instanceof Semaphore)
+            .toBe(true);
+          expect(layout.headerSemaphore instanceof Semaphore)
+            .toBe(true);
+        });
+      });
     });
   });
 });

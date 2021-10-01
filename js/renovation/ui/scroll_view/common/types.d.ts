@@ -10,6 +10,12 @@ export interface ScrollEventArgs extends Partial<ScrollableBoundary> {
   scrollOffset: ScrollOffset;
 }
 
+export interface ScrollLocationChangeArgs {
+  fullScrollProp: 'scrollLeft' | 'scrollTop';
+  location: number;
+  needFireScroll: boolean;
+}
+
 export type ScrollableShowScrollbar = 'onScroll' | 'onHover' | 'always' | 'never';
 
 export type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
