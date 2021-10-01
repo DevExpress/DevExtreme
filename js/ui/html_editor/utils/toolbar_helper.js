@@ -24,10 +24,14 @@ const DIALOG_IMAGE_FIELD_ALT = 'dxHtmlEditor-dialogImageAltField';
 const DIALOG_IMAGE_FIELD_WIDTH = 'dxHtmlEditor-dialogImageWidthField';
 const DIALOG_IMAGE_FIELD_HEIGHT = 'dxHtmlEditor-dialogImageHeightField';
 
+
+const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
+const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
+
 function getFormatHandlers(module) {
     return {
         clear: ({ event }) => {
-            const range = this.quill.getSelection();
+            const range = module.quill.getSelection();
             if(range) {
                 module.saveValueChangeEvent(event);
                 module.quill.removeFormat(range);
@@ -71,11 +75,11 @@ function getFormatHandlers(module) {
         deleteRow: getTableOperationHandler(module.quill, 'deleteRow'),
         deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
         cellProperties: () => {
-            const domNode = getTargetTableNode(module.quill, 'cell');
+            const domNode = getTargetTableNode(module, 'cell');
             showCellPropertiesForm(module.editorInstance, $(domNode));
         },
         tableProperties: () => {
-            const domNode = getTargetTableNode(module.quill, 'table');
+            const domNode = getTargetTableNode(module, 'table');
             showTablePropertiesForm(module.editorInstance, $(domNode));
         }
     };
@@ -86,7 +90,7 @@ function applyFormat(formatArgs, event, module) {
     module.quill.format(...formatArgs);
 }
 
-function getTargetTableNode(partName, module) {
+function getTargetTableNode(module, partName) {
     const currentSelectionParts = module.quill.getModule('table').getTable();
     return partName === 'table' ? currentSelectionParts[0].domNode : currentSelectionParts[2].domNode;
 }
@@ -97,22 +101,22 @@ function prepareLinkHandler(module) {
         module.quill.focus();
 
         const selection = module.quill.getSelection();
-        const hasEmbedContent = hasEmbedContent(selection, module);
+        const selectionHasEmbedContent = hasEmbedContent(selection, module);
         const formats = selection ? module.quill.getFormat() : {};
         const formData = {
             href: formats.link || '',
-            text: selection && !hasEmbedContent ? module.quill.getText(selection) : '',
+            text: selection && !selectionHasEmbedContent ? module.quill.getText(selection) : '',
             target: Object.prototype.hasOwnProperty.call(formats, 'target') ? !!formats.target : true
         };
         module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_LINK_CAPTION));
 
         const promise = module.editorInstance.showFormDialog({
             formData: formData,
-            items: getLinkFormItems(selection)
+            items: getLinkFormItems(selection, module)
         });
 
         promise.done((formData, event) => {
-            if(selection && !hasEmbedContent) {
+            if(selection && !selectionHasEmbedContent) {
                 const text = formData.text || formData.href;
                 const { index, length } = selection;
 
@@ -124,7 +128,7 @@ function prepareLinkHandler(module) {
                 module.quill.setSelection(index + text.length, 0, USER_ACTION);
             } else {
                 formData.text = !selection && !formData.text ? formData.href : formData.text;
-                module.applyFormat(['link', formData, USER_ACTION], event, this.quill);
+                applyFormat(['link', formData, USER_ACTION], event, module);
             }
         });
 
@@ -136,12 +140,12 @@ function prepareLinkHandler(module) {
 
 function prepareImageHandler(module) {
     return () => {
-        const formData = this.quill.getFormat();
+        const formData = module.quill.getFormat();
         const isUpdateDialog = Object.prototype.hasOwnProperty.call(formData, 'imageSrc');
-        const defaultIndex = defaultPasteIndex();
+        const defaultIndex = defaultPasteIndex(module);
 
         if(isUpdateDialog) {
-            const { imageSrc } = this.quill.getFormat(defaultIndex - 1, 1);
+            const { imageSrc } = module.quill.getFormat(defaultIndex - 1, 1);
 
             formData.src = formData.imageSrc;
             delete formData.imageSrc;
@@ -151,7 +155,7 @@ function prepareImageHandler(module) {
             }
         }
 
-        const formatIndex = embedFormatIndex();
+        const formatIndex = embedFormatIndex(module);
 
         module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
 
@@ -180,13 +184,13 @@ function prepareImageHandler(module) {
     };
 }
 
-function getLinkFormItems(selection) {
+function getLinkFormItems(selection, module) {
     return [
         { dataField: 'href', label: { text: localizationMessage.format(DIALOG_LINK_FIELD_URL) } },
         {
             dataField: 'text',
             label: { text: localizationMessage.format(DIALOG_LINK_FIELD_TEXT) },
-            visible: !hasEmbedContent(selection)
+            visible: !hasEmbedContent(selection, module)
         },
         {
             dataField: 'target',
@@ -200,8 +204,8 @@ function getLinkFormItems(selection) {
     ];
 }
 
-function embedFormatIndex() {
-    const selection = this.quill.getSelection();
+function embedFormatIndex(module) {
+    const selection = module.quill.getSelection();
 
     if(selection) {
         if(selection.length) {
@@ -210,13 +214,13 @@ function embedFormatIndex() {
             return selection.index - 1;
         }
     } else {
-        return this.quill.getLength();
+        return module.quill.getLength();
     }
 }
 
-function defaultPasteIndex() {
-    const selection = this.quill.getSelection();
-    return selection?.index ?? this.quill.getLength();
+function defaultPasteIndex(module) {
+    const selection = module.quill.getSelection();
+    return selection?.index ?? module.quill.getLength();
 }
 
 function imageFormItems() {
@@ -228,12 +232,12 @@ function imageFormItems() {
     ];
 }
 
-function prepareColorClickHandler(name, quill, editorInstance) {
+function prepareColorClickHandler(name, module) {
     return () => {
-        const formData = quill.getFormat();
+        const formData = module.quill.getFormat();
         const caption = name === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
-        editorInstance.formDialogOption('title', localizationMessage.format(caption));
-        const promise = editorInstance.showFormDialog({
+        module.editorInstance.formDialogOption('title', localizationMessage.format(caption));
+        const promise = module.editorInstance.showFormDialog({
             formData: formData,
             items: [{
                 dataField: name,
@@ -246,61 +250,82 @@ function prepareColorClickHandler(name, quill, editorInstance) {
         });
 
         promise.done((formData, event) => {
-            this.applyFormat([name, formData[name], USER_ACTION], event, quill);
+            applyFormat([name, formData[name], USER_ACTION], event, module);
         });
         promise.fail(() => {
-            quill.focus();
+            module.quill.focus();
         });
     };
 }
 
-function prepareShortcutHandler(name, shortcutValue, quill, editorInstance) {
+function prepareShortcutHandler(name, shortcutValue, module) {
     return ({ event }) => {
-        const formats = quill.getFormat();
+        const formats = module.quill.getFormat();
         const value = formats[name] === shortcutValue ? false : shortcutValue;
 
-        this.applyFormat.bind(this)([name, value, USER_ACTION], event, quill, editorInstance);
-        this.updateFormatWidgets(true);
+        applyFormat([name, value, USER_ACTION], event, module);
+        module.updateFormatWidgets(true);
     };
 }
 
-function getDefaultClickHandler(name, quill, editorInstance) {
+function getDefaultClickHandler(name, module) {
     return ({ event }) => {
-        const formats = quill.getFormat();
+        const formats = module.quill.getFormat();
         const value = formats[name];
         const newValue = !(isBoolean(value) ? value : isDefined(value));
 
-        this.applyFormat.bind(this)([name, newValue, USER_ACTION], event, quill, editorInstance);
+        applyFormat([name, newValue, USER_ACTION], event, module);
 
-        this._updateFormatWidget(name, newValue, formats);
+        module._updateFormatWidget(name, newValue, formats);
     };
 }
 
-function prepareInsertTableHandler(quill) {
+function insertTableFormItems() {
+    return [
+        {
+            dataField: 'columns',
+            editorType: 'dxNumberBox',
+            editorOptions: {
+                min: 1
+            },
+            label: { text: localizationMessage.format(DIALOG_TABLE_FIELD_COLUMNS) }
+        },
+        {
+            dataField: 'rows',
+            editorType: 'dxNumberBox',
+            editorOptions: {
+                min: 1
+            },
+            label: { text: localizationMessage.format(DIALOG_TABLE_FIELD_ROWS) }
+        }
+    ];
+}
+
+function prepareInsertTableHandler(module) {
     return () => {
-        const formats = quill.getFormat();
-        const isTableFocused = this._tableFormats.some(
+        const formats = module.quill.getFormat();
+        const isTableFocused = module._tableFormats.some(
             format => Object.prototype.hasOwnProperty.call(formats, format)
         );
         const formData = { rows: 1, columns: 1 };
 
         if(isTableFocused) {
-            quill.focus();
+            module.quill.focus();
             return;
         }
 
-        this.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_TABLE_CAPTION));
+        module.editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_TABLE_CAPTION));
 
-        const promise = this.editorInstance.showFormDialog({
+        const promise = module.editorInstance.showFormDialog({
             formData,
-            items: this._insertTableFormItems
+            items: insertTableFormItems()
         });
 
         promise
             .done((formData, event) => {
-                quill.focus();
+                module.quill.focus();
 
-                const table = quill.getModule('table');
+                const table = module.quill.getModule('table');
                 if(table) {
                     this.saveValueChangeEvent(event);
 
@@ -309,10 +334,14 @@ function prepareInsertTableHandler(quill) {
                 }
             })
             .always(() => {
-                quill.focus();
+                module.quill.focus();
             });
     };
 }
+
+///
+
+///
 
 export {
     getFormatHandlers
