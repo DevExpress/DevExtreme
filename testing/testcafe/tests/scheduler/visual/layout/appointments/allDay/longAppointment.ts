@@ -4,7 +4,7 @@ import createWidget from '../../../../../../helpers/createWidget';
 import url from '../../../../../../helpers/getPageUrl';
 
 fixture`Layout:Appointments:AllDay`
-  .page(url(__dirname, '../../../../container.html'));
+  .page(url(__dirname, '../../../../../container.html'));
 
 test('Long all day appointment should be render, if him ended on next view day in currentView: \'day\'(T1021963)', async (t) => {
   const { workSpace, toolbar } = new Scheduler('#container');

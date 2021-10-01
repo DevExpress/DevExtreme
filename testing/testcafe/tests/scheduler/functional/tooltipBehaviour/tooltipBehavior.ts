@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('The tooltip of collector should not scroll page and immediately hide', async (t) => {
   const scheduler = new Scheduler('#container');

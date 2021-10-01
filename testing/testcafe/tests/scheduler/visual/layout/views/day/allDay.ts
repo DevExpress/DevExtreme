@@ -5,7 +5,7 @@ import createWidget from '../../../../../../helpers/createWidget';
 import url from '../../../../../../helpers/getPageUrl';
 
 fixture.skip`Layout:Views:Day:AllDay`
-  .page(url(__dirname, '../../../../container.html'));
+  .page(url(__dirname, '../../../../../container.html'));
 
 const enableNativeScroll = ClientFunction(() => {
   ($('#container') as any).dxScheduler('instance').getWorkSpaceScrollable().option('useNative', true);

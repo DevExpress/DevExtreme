@@ -5,7 +5,7 @@ import url from '../../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../../model/scheduler';
 
 fixture`Outlook dragging, for case scheduler in container`
-  .page(url(__dirname, '../../../../container.html'));
+  .page(url(__dirname, '../../../../../container.html'));
 
 test('Dragging should be work right in case dxScheduler placed in dxTabPanel', async (t) => {
   const scheduler = new Scheduler('.dx-scheduler');

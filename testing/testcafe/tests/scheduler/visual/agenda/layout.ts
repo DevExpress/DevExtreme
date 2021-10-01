@@ -4,7 +4,7 @@ import Scheduler from '../../../../model/scheduler';
 import url from '../../../../helpers/getPageUrl';
 
 fixture`Agenda:layout`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const data = [{
   text: 'Website Re-Design Plan',

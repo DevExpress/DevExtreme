@@ -3,7 +3,7 @@ import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
 fixture`Agenda:adaptive`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const createScheduler = async (groups: undefined | string[], rtlEnabled: boolean):
 Promise<void> => {

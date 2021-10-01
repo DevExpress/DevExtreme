@@ -5,7 +5,7 @@ import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
 fixture`Layout:Templates:appointmentTemplate`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 ['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'agenda'].forEach((currentView) => {
   test(`appointmentTemplate layout should be rendered right in '${currentView}'`, async (t) => {

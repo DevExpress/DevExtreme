@@ -4,7 +4,7 @@ import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
 fixture`Layout:Appointments:disable`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 test('Appointment popup should be readOnly if appointment is disabled', async (t) => {
   const scheduler = new Scheduler('#container');

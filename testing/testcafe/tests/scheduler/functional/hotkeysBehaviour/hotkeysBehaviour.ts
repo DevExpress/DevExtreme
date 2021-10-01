@@ -5,7 +5,7 @@ import Scheduler from '../../../../model/scheduler';
 import FocusableElement from '../../../../model/internal/focusable';
 
 fixture`Hotkeys for appointments update and navigation`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 ['week', 'month'].forEach((view) => {
   test(`Navigate between appointments in the "${view}" view (Tab/Shift+Tab)`, async (t) => {

@@ -4,7 +4,7 @@ import url from '../../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../../model/scheduler';
 
 fixture`Scheduler: Material theme without all-day panel`
-  .page(url(__dirname, '../../../../containerMaterial.html'));
+  .page(url(__dirname, '../../../../../containerMaterial.html'));
 
 test('Week view without all-day panel should be rendered correctly', async (t) => {
   const scheduler = new Scheduler('#container');

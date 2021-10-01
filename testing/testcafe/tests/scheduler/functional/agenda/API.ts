@@ -3,7 +3,7 @@ import Scheduler from '../../../../model/scheduler';
 import url from '../../../../helpers/getPageUrl';
 
 fixture`Agenda:API`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Html elements should be absent in Agenda view', async (t) => {
   const scheduler = new Scheduler('#container');

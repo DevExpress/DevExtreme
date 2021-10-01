@@ -3,7 +3,7 @@ import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Appointment popup form:date editors`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Form\'s date editors should be pass numeric chars according by date mask', async (t) => {
   const scheduler = new Scheduler('#container');

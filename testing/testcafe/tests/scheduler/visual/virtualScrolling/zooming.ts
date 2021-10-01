@@ -12,7 +12,7 @@ import {
 } from './utils';
 
 fixture`Scheduler: Virtual Scrolling with Zooming`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,

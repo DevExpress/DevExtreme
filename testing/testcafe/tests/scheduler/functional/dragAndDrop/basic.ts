@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Drag-and-drop appointments in the Scheduler basic views`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 ['day', 'week', 'workWeek'].forEach((view) => test(`Drag-n-drop in the "${view}" view`, async (t) => {
   const scheduler = new Scheduler('#container');

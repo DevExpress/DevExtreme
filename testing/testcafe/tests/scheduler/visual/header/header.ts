@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Scheduler: Adaptive material theme layout`
-  .page(url(__dirname, '../../containerMaterial.html'));
+  .page(url(__dirname, '../../../containerMaterial.html'));
 
 test('The toolbar should not display if the config is empty', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

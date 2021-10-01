@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
 fixture`Delete appointments`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const scheduler = new Scheduler('#container');
 

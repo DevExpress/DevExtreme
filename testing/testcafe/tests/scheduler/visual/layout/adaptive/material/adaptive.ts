@@ -12,7 +12,7 @@ import {
 import { restoreBrowserSize } from '../../../../../../helpers/restoreBrowserSize';
 
 fixture`Scheduler: Adaptive material theme layout`
-  .page(url(__dirname, '../../../../containerMaterial.html'));
+  .page(url(__dirname, '../../../../../containerMaterial.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,

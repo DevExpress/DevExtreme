@@ -4,7 +4,7 @@ import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
 fixture`Layout:AppointmentForm:AllDay`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 test('Start and end dates should be reflect the current day(appointment is already available case)', async (t) => {
   const scheduler = new Scheduler('#container');

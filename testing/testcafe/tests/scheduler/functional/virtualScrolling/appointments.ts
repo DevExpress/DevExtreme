@@ -5,7 +5,7 @@ import Scheduler from '../../../../model/scheduler';
 import { scrollTo } from './utils';
 
 fixture`Scheduler: Virtual Scrolling`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Appointment should not repaint after scrolling if present on viewport', async (t) => {
   const scheduler = new Scheduler('#container');

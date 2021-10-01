@@ -4,7 +4,7 @@ import createWidget from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 
 fixture`Layout:Appointments:two-schedulers`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../../container.html'));
 
 test('Appointment\'s dragging should be work properly, if on page placed two dxSchedulers(T1020820)', async (t) => {
   const scheduler = new Scheduler('#container');

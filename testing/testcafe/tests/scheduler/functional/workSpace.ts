@@ -5,7 +5,7 @@ import { extend } from '../../../../../js/core/utils/extend';
 import url from '../../../helpers/getPageUrl';
 
 fixture`Scheduler: Workspace`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const disableAnimation = ClientFunction(() => {
   (window as any).DevExpress.fx.off = true;

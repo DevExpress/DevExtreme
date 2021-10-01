@@ -4,7 +4,7 @@ import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Hotkeys for appointments update and navigation`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('dateNavigator buttons should not be selected after clicking', async (t) => {
   const { toolbar } = new Scheduler('#container');
@@ -45,7 +45,7 @@ test('dateNavigator buttons should have "contained" styling mode with generic th
 }));
 
 fixture`Scheduler: Adaptive material theme layout`
-  .page(url(__dirname, '../../containerMaterial.html'));
+  .page(url(__dirname, '../../../containerMaterial.html'));
 
 test('dateNavigator buttons should have "text" styling mode with material theme', async (t) => {
   const { toolbar } = new Scheduler('#container');

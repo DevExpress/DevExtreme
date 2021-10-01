@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
 fixture`Week view in adaptive mode`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const scheduler = new Scheduler('#container');
 

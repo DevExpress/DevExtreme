@@ -4,7 +4,7 @@ import createWidget from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
 fixture`Timeline Appointments`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const showAppointmentPopup = ClientFunction(() => {
   const instance = ($('#container') as any).dxScheduler('instance');

@@ -3,7 +3,7 @@ import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Appointment tooltip with recurrence appointment and custom time zone`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Time in appointment tooltip should has valid value in case with recurrence appointment and custom time zone(T848058)', async (t) => {
   const scheduler = new Scheduler('#container');

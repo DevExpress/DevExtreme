@@ -3,7 +3,7 @@ import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
 fixture`Rendering of the recurrence appointments in  Scheduler `
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 test('Appointments in DST should not have offset when '
   + 'recurring appointment timezoine not equal to scheduler timezone', async (t) => {
