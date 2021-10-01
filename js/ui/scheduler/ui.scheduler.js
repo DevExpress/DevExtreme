@@ -78,6 +78,7 @@ import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
 import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
+import { getAppointmentTakesAllDay } from './appointments/DataProvider/utils';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -1488,6 +1489,7 @@ class Scheduler extends Widget {
         const result = extend({
             resources: this.option('resources'),
             loadedResources: this.option('loadedResources'),
+            getFilteredItems: () => this.option('filteredItems'),
             getResourceDataAccessors: this.getResourceDataAccessors.bind(this),
 
             key: this.key,
@@ -1981,15 +1983,10 @@ class Scheduler extends Widget {
     }
 
     appointmentTakesAllDay(rawAppointment) {
-        // const adapter = createAppointmentAdapter(this.key, rawAppointment);
-        // return getAppointmentTakesAllDay(
-        //     adapter,
-        //     this._getCurrentViewOption('startDayHour'),
-        //     this._getCurrentViewOption('endDayHour')
-        // );
+        const adapter = createAppointmentAdapter(this.key, rawAppointment);
 
-        return getAppointmentDataProvider(this.key).appointmentTakesAllDay(
-            rawAppointment,
+        return getAppointmentTakesAllDay(
+            adapter,
             this._getCurrentViewOption('startDayHour'),
             this._getCurrentViewOption('endDayHour')
         );
