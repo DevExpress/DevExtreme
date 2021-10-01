@@ -26,6 +26,9 @@ function getTableFormats(quill) {
     return tableModule?.tableFormats ? tableModule.tableFormats() : TABLE_FORMATS;
 }
 
+function hasEmbedContent(selection, module) {
+    return !!selection && module.quill.getText(selection).trim().length < selection.length;
+}
 
 function unfixTableWidth($table) {
     $table.css('width', 'initial');
@@ -85,5 +88,6 @@ export {
     getAutoSizedElements,
     setLineElementsAttrValue,
     getLineElements,
-    getRowElements
+    getRowElements,
+    hasEmbedContent
 };
