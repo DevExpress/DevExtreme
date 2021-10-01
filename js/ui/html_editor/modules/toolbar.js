@@ -21,7 +21,7 @@ import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/table_helper';
-import { FormatHelper } from '../utils/toolbar_helper';
+import { getFormatHandlers } from '../utils/toolbar_helper';
 
 let ToolbarModule = BaseModule;
 
@@ -37,16 +37,6 @@ if(Quill) {
 
     const SELECTION_CHANGE_EVENT = 'selection-change';
 
-
-    const DIALOG_LINK_FIELD_URL = 'dxHtmlEditor-dialogLinkUrlField';
-    const DIALOG_LINK_FIELD_TEXT = 'dxHtmlEditor-dialogLinkTextField';
-    const DIALOG_LINK_FIELD_TARGET = 'dxHtmlEditor-dialogLinkTargetField';
-    const DIALOG_LINK_FIELD_TARGET_CLASS = 'dx-formdialog-field-target';
-
-    const DIALOG_IMAGE_FIELD_URL = 'dxHtmlEditor-dialogImageUrlField';
-    const DIALOG_IMAGE_FIELD_ALT = 'dxHtmlEditor-dialogImageAltField';
-    const DIALOG_IMAGE_FIELD_WIDTH = 'dxHtmlEditor-dialogImageWidthField';
-    const DIALOG_IMAGE_FIELD_HEIGHT = 'dxHtmlEditor-dialogImageHeightField';
     const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
     const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
 
@@ -77,8 +67,8 @@ if(Quill) {
             super(quill, options);
 
             this._toolbarWidgets = new WidgetCollector();
-            // this._formatHandlers = getFormatHandlers.bind(this)();
-            this._formatHandlers = new FormatHelper(this);
+            this._formatHandlers = getFormatHandlers(this);
+            // this._formatHandlers = new FormatHelper(this);
             this._tableFormats = getTableFormats(quill);
 
             if(isDefined(options.items)) {
@@ -140,30 +130,6 @@ if(Quill) {
             this._toggleClearFormatting(isApplied || !isEmptyObject(formats));
         }
 
-        _hasEmbedContent(selection) {
-            return !!selection && this.quill.getText(selection).trim().length < selection.length;
-        }
-
-        _getLinkFormItems(selection) {
-            return [
-                { dataField: 'href', label: { text: localizationMessage.format(DIALOG_LINK_FIELD_URL) } },
-                {
-                    dataField: 'text',
-                    label: { text: localizationMessage.format(DIALOG_LINK_FIELD_TEXT) },
-                    visible: !this._hasEmbedContent(selection)
-                },
-                {
-                    dataField: 'target',
-                    editorType: 'dxCheckBox',
-                    editorOptions: {
-                        text: localizationMessage.format(DIALOG_LINK_FIELD_TARGET)
-                    },
-                    cssClass: DIALOG_LINK_FIELD_TARGET_CLASS,
-                    label: { visible: false }
-                }
-            ];
-        }
-
         get _insertTableFormItems() {
             return [
                 {
@@ -182,34 +148,6 @@ if(Quill) {
                     },
                     label: { text: localizationMessage.format(DIALOG_TABLE_FIELD_ROWS) }
                 }
-            ];
-        }
-
-        get _embedFormatIndex() {
-            const selection = this.quill.getSelection();
-
-            if(selection) {
-                if(selection.length) {
-                    return selection.index;
-                } else {
-                    return selection.index - 1;
-                }
-            } else {
-                return this.quill.getLength();
-            }
-        }
-
-        get _defaultPasteIndex() {
-            const selection = this.quill.getSelection();
-            return selection?.index ?? this.quill.getLength();
-        }
-
-        get _imageFormItems() {
-            return [
-                { dataField: 'src', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
-                { dataField: 'width', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) } },
-                { dataField: 'height', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) } },
-                { dataField: 'alt', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
             ];
         }
 
