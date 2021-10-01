@@ -18,7 +18,6 @@ export const utils = {
         },
 
         create: (
-            instance,
             fields,
             currentDataAccessors,
             forceIsoDateParsing,
@@ -45,11 +44,11 @@ export const utils = {
 
                     if(isDateField(name)) {
                         dateGetter = function() {
-                            let value = getter.apply(instance, arguments);
+                            let value = getter(...arguments);
                             if(forceIsoDateParsing) {
                                 if(!getDateSerializationFormat()) {
                                     const format = dateSerialization.getDateSerializationFormat(value);
-                                    if(format) {
+                                    if(format && setDateSerializationFormat) {
                                         setDateSerializationFormat(format);
                                     }
                                 }
@@ -79,7 +78,9 @@ export const utils = {
     },
     DOM: {
         getHeaderHeight: (header) => {
-            return header._$element && parseInt(getOuterHeight(header._$element), 10);
+            return header
+                ? header._$element && parseInt(getOuterHeight(header._$element), 10)
+                : 0;
         },
     },
     renovation: {

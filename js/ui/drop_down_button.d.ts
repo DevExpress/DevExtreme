@@ -18,7 +18,6 @@ import DataSource, {
 import Store from '../data/abstract_store';
 
 import {
-    DxEvent,
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
@@ -306,11 +305,16 @@ export interface dxDropDownButtonItem extends dxListItem {
     /**
      * @docid
      * @default null
-     * @type_function_param1_field3 model:object
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDropDownButton
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 itemData:object
+     * @type_function_param1_field6 itemElement:DxElement
      * @public
      */
-    onClick?: ((e: { component?: dxDropDownButton; element?: DxElement; model?: any; event?: DxEvent }) => void) | string;
+     onClick?: ((e: ItemClickEvent) => void) | string;
 }
 
 /** @public */

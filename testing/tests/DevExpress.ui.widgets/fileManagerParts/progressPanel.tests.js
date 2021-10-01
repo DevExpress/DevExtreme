@@ -674,4 +674,46 @@ QUnit.module('Progress panel integration tests', integrationModuleConfig, () => 
         assert.equal(this.progressPanelWrapper.getInfos().length, 0, 'there is still no operations');
     });
 
+    test('the progress panel does not hides when window changes its width', function(assert) {
+        const originalFunc = implementationsMap.getWidth;
+        implementationsMap.getWidth = () => 1200;
+        resizeCallbacks.fire();
+        this.fileManager.option({
+            notifications: {
+                showPanel: true
+            },
+            width: '1200px'
+        });
+        this.clock.tick(400);
+
+        let $rows = this.wrapper.getRowsInDetailsView();
+        const initialCount = $rows.length;
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Delete').trigger('dxclick');
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarRefreshButton(true).trigger('dxclick');
+        this.clock.tick(400);
+
+        $rows = this.wrapper.getRowsInDetailsView();
+        assert.equal($rows.length, initialCount - 1, 'files count decreased');
+
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', '');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '340px', 'progress panel is shown');
+
+        implementationsMap.getWidth = () => 1205;
+        resizeCallbacks.fire();
+        this.fileManager.option('width', '1205px');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('margin-right'), '0px', '');
+        assert.strictEqual(this.wrapper.getProgressPaneDrawerPanelContent().css('width'), '340px', 'progress panel is shown');
+        assert.strictEqual(this.progressPanelWrapper.getInfosContainer().length, 1, 'progress panel content is still here');
+        implementationsMap.getWidth = originalFunc;
+    });
+
 });

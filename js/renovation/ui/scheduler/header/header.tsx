@@ -89,10 +89,11 @@ export class SchedulerToolbarBaseProps {
 }
 
 export type SchedulerToolbarProps = SchedulerToolbarBaseProps
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<SchedulerProps, 'currentView' | 'min' | 'max' | 'useDropDownViewSwitcher'>;
 
 @Component({ view: viewFunction })
-export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'currentDate' | 'onCurrentDateUpdate' | 'startViewDate'>() {
+export class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'currentDate' | 'onCurrentDateUpdate' | 'startViewDate'>() {
   @InternalState() calendarVisible = false;
 
   get step(): string {
@@ -115,7 +116,7 @@ export default class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps
       intervalCount: this.props.intervalCount,
       firstDayOfWeek: this.props.firstDayOfWeek,
       agendaDuration: this.props.agendaDuration,
-      date: this.displayedDate,
+      date: trimTime(this.displayedDate),
     };
 
     return getCaption(

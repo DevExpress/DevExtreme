@@ -32,6 +32,17 @@ import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './simulat
 import { ScrollableTestHelper as ScrollableNativeTestHelper } from './native_test_helper';
 
 import { getTranslateValues } from '../../utils/get_translate_values';
+import {
+  getElementOverflowX,
+  getElementOverflowY,
+} from '../../utils/get_element_style';
+import { DxMouseEvent, ScrollableDirection } from '../../common/types';
+
+jest.mock('../../utils/get_element_style', () => ({
+  ...jest.requireActual('../../utils/get_element_style'),
+  getElementOverflowX: jest.fn(() => 'visible'),
+  getElementOverflowY: jest.fn(() => 'visible'),
+}));
 
 jest.mock('../../utils/get_translate_values', () => ({
   ...jest.requireActual('../../utils/get_translate_values'),
@@ -482,6 +493,31 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
     });
 
     describe('Methods', () => {
+      it('initEventData()', () => {
+        const containerRef = {
+          current: {
+            clientWidth: 10,
+            clientHeight: 20,
+          },
+        } as RefObject;
+
+        const viewModel = new Scrollable({});
+        viewModel.containerRef = containerRef;
+
+        const validateMock = () => true;
+        const tryGetAllowedDirectionMock = () => 'horizontal' as ScrollableDirection;
+
+        viewModel.tryGetAllowedDirection = tryGetAllowedDirectionMock;
+        viewModel.validate = validateMock;
+
+        const initEventData = viewModel.getInitEventData();
+
+        expect(initEventData.getDirection({} as any)).toEqual('horizontal');
+        expect(initEventData.validate({} as DxMouseEvent)).toEqual(true);
+        expect(initEventData.isNative).toEqual(Scrollable === ScrollableNative);
+        expect(initEventData.scrollTarget).toEqual(containerRef.current);
+      });
+
       it('validate(event), locked: false, disabled: true', () => {
         const event = { ...defaultEvent } as any;
         const viewModel = new Scrollable({ disabled: true });
@@ -490,8 +526,7 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
         viewModel.updateHandler = jest.fn();
 
         expect(viewModel.validate(event)).toEqual(false);
-        expect(viewModel.updateHandler)
-          .toHaveBeenCalledTimes(Scrollable === ScrollableNative ? 0 : 1);
+        expect(viewModel.updateHandler).toHaveBeenCalledTimes(1);
       });
 
       it('validate(event), locked: true, disabled: false', () => {
@@ -507,6 +542,30 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
     });
 
     describe('Getters', () => {
+      each(['visible', 'scroll', 'hidden', 'auto']).describe('overflow: %o,', (overflow) => {
+        it('contentWidth()', () => {
+          (getElementOverflowX as jest.Mock).mockReturnValue(overflow);
+          const viewModel = new Scrollable({});
+
+          viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+          viewModel.contentClientWidth = 200;
+          viewModel.contentScrollWidth = 700;
+
+          expect(viewModel.contentWidth).toEqual(overflow === 'hidden' ? 200 : 700);
+        });
+
+        it('contentHeight()', () => {
+          (getElementOverflowY as jest.Mock).mockReturnValue(overflow);
+          const viewModel = new Scrollable({});
+
+          viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
+          viewModel.contentClientHeight = 200;
+          viewModel.contentScrollHeight = 700;
+
+          expect(viewModel.contentHeight).toEqual(overflow === 'hidden' ? 200 : 700);
+        });
+      });
+
       describe('cssClasses', () => {
         each(optionValues.direction).describe('Direction: %o', (direction) => {
           each(['onScroll', 'onHover', 'always', 'never']).describe('showScrollbar: %o', (showScrollbar) => {

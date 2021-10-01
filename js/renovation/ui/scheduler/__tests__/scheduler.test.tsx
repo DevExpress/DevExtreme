@@ -1,13 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { SchedulerProps } from '../props';
+import { SchedulerProps, ScrollingProps } from '../props';
 import { Scheduler, viewFunction as ViewFunction } from '../scheduler';
 import { Widget, WidgetProps } from '../../common/widget';
 import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { WorkSpace } from '../workspaces/base/work_space';
-import SchedulerToolbar from '../header/header';
+import { SchedulerToolbar } from '../header/header';
+import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
+import { Group } from '../workspaces/types';
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -31,7 +33,6 @@ describe('Scheduler', () => {
       shadeUntilCurrentTime: false,
       crossScrollingEnabled: false,
       hoursInterval: 0.5,
-      groups: [],
 
       indicatorTime: undefined,
       allowMultipleCellSelection: true,
@@ -158,9 +159,78 @@ describe('Scheduler', () => {
           startViewDate,
         });
     });
+
+    it('should not render toolbar if toolbar prop is an empty array', () => {
+      const tree = renderComponent({ props: { toolbar: [] } });
+      const schedulerToolbar = tree.find(SchedulerToolbar);
+
+      expect(schedulerToolbar.exists()).toBe(false);
+    });
   });
 
   describe('Behaviour', () => {
+    describe('Effects', () => {
+      it('loadResources should be call with valid arguments', () => {
+        const loadResources = jest.spyOn(resourceUtils, 'loadResources');
+
+        const groupsValue = ['priorityId'];
+        const resourcesValue = [{
+          fieldExpr: 'priorityId',
+          dataSource: [{
+            text: 'Low Priority',
+            id: 1,
+            color: '#1e90ff',
+          }, {
+            text: 'High Priority',
+            id: 2,
+            color: '#ff9747',
+          }],
+          label: 'Priority',
+        }];
+
+        const scheduler = new Scheduler({
+          groups: groupsValue,
+          resources: resourcesValue,
+        });
+
+        scheduler.loadGroupResources();
+
+        expect(loadResources)
+          .toBeCalledWith(groupsValue, resourcesValue, scheduler.resourcePromisesMap);
+
+        expect(scheduler.loadedResources)
+          .toEqual([
+            {
+              name: 'priorityId',
+              items: [
+                {
+                  id: 1,
+                  text: 'Low Priority',
+                  color: '#1e90ff',
+                },
+                {
+                  id: 2,
+                  text: 'High Priority',
+                  color: '#ff9747',
+                },
+              ],
+              data: [
+                {
+                  text: 'Low Priority',
+                  id: 1,
+                  color: '#1e90ff',
+                },
+                {
+                  text: 'High Priority',
+                  id: 2,
+                  color: '#ff9747',
+                },
+              ],
+            } as Group,
+          ]);
+      });
+    });
+
     describe('Methods', () => {
       it('dispose should pass call to instance', () => {
         const scheduler = new Scheduler(new SchedulerProps());
@@ -300,29 +370,52 @@ describe('Scheduler', () => {
         expect(scrollToTime).toHaveBeenCalled();
       });
 
-      it('onViewRendered should save viewDataProvider and cells meta data to the state', () => {
-        const scheduler = new Scheduler({});
-
-        expect(scheduler.viewDataProvider)
-          .toBe(undefined);
-        expect(scheduler.cellsMetaData)
-          .toBe(undefined);
-
-        const viewDataProvider = new ViewDataProvider('week') as any;
-        const cellsMetaData = {
-          dateTableCellsMeta: [],
-          allDayPanelCellsMeta: [],
-        };
-
-        scheduler.onViewRendered({
-          viewDataProvider,
-          cellsMetaData,
+      it('dataAccessors should be correctly created', () => {
+        const scheduler = new Scheduler({
+          ...new SchedulerProps(),
+          startDateExpr: 'testStartDate',
+          endDateExpr: 'testEndDate',
         });
 
-        expect(scheduler.viewDataProvider)
-          .toBe(viewDataProvider);
-        expect(scheduler.cellsMetaData)
-          .toBe(cellsMetaData);
+        expect(scheduler.dataAccessors.expr)
+          .toEqual({
+            startDateExpr: 'testStartDate',
+            endDateExpr: 'testEndDate',
+            startDateTimeZoneExpr: 'startDateTimeZone',
+            endDateTimeZoneExpr: 'endDateTimeZone',
+            allDayExpr: 'allDay',
+            textExpr: 'text',
+            descriptionExpr: 'description',
+            recurrenceRuleExpr: 'recurrenceRule',
+            recurrenceExceptionExpr: 'recurrenceException',
+          });
+      });
+
+      describe('onViewRendered', () => {
+        it('should save viewDataProvider and cells meta data to the state', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          expect(scheduler.viewDataProvider)
+            .toBe(undefined);
+          expect(scheduler.cellsMetaData)
+            .toBe(undefined);
+
+          const viewDataProvider = new ViewDataProvider('week') as any;
+          const cellsMetaData = {
+            dateTableCellsMeta: [],
+            allDayPanelCellsMeta: [],
+          };
+
+          scheduler.onViewRendered({
+            viewDataProvider,
+            cellsMetaData,
+          });
+
+          expect(scheduler.viewDataProvider)
+            .toBe(viewDataProvider);
+          expect(scheduler.cellsMetaData)
+            .toBe(cellsMetaData);
+        });
       });
 
       describe('setCurrentView', () => {
@@ -411,6 +504,91 @@ describe('Scheduler', () => {
 
           expect(scheduler.startViewDate.getTime())
             .toBe(new Date(2021, 7, 15).getTime());
+        });
+      });
+
+      describe('dataAccessors', () => {
+        it('should be correctly generated', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          expect(scheduler.dataAccessors.expr)
+            .toEqual({
+              allDayExpr: 'allDay',
+              descriptionExpr: 'description',
+              endDateExpr: 'endDate',
+              endDateTimeZoneExpr: 'endDateTimeZone',
+              recurrenceExceptionExpr: 'recurrenceException',
+              recurrenceRuleExpr: 'recurrenceRule',
+              startDateExpr: 'startDate',
+              startDateTimeZoneExpr: 'startDateTimeZone',
+              textExpr: 'text',
+            });
+        });
+      });
+
+      describe('isVirtualScrolling', () => {
+        [
+          {
+            scrollingMode: 'standard',
+            viewScrolling: { mode: 'virtual' },
+            expected: true,
+          },
+          {
+            scrollingMode: 'virtual',
+            viewScrolling: { mode: 'virtual' },
+            expected: true,
+          },
+          {
+            scrollingMode: 'standard',
+            viewScrolling: { mode: 'standard' },
+            expected: false,
+          },
+          {
+            scrollingMode: 'virtual',
+            viewScrolling: { mode: 'standard' },
+            expected: true,
+          },
+          {
+            scrollingMode: 'virtual',
+            viewScrolling: undefined,
+            expected: true,
+          },
+          {
+            scrollingMode: 'standard',
+            viewScrolling: undefined,
+            expected: false,
+          },
+        ].forEach(({ scrollingMode, viewScrolling, expected }) => {
+          it(`should has correct value if scheduler scrolling.mode is ${scrollingMode} and view scrolling.mode is ${viewScrolling?.mode}`, () => {
+            const scheduler = new Scheduler({
+              ...new SchedulerProps(),
+              scrolling: {
+                mode: scrollingMode as any,
+              },
+              views: [{
+                type: 'day',
+                scrolling: viewScrolling as ScrollingProps,
+              }],
+            });
+
+            expect(scheduler.isVirtualScrolling)
+              .toBe(expected);
+          });
+        });
+      });
+
+      describe('timeZoneCalculator', () => {
+        it('should be created correctly', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            timeZone: 'America/Los_Angeles',
+          });
+
+          expect(scheduler.timeZoneCalculator.getOffsets(new Date(2021, 8, 19), 'Europe/Moscow'))
+            .toMatchObject({
+              common: -7,
+              appointment: 3,
+            });
         });
       });
     });

@@ -7,6 +7,7 @@ import devices from '../../../core/devices';
 import Widget from '../../widget/ui.widget';
 import Toolbar from '../../toolbar';
 import SchedulerCalendar from './calendar';
+import dateUtils from '../../../core/utils/date';
 
 import {
     getViewSwitcher,
@@ -232,6 +233,7 @@ export class SchedulerHeader extends Widget {
             date = this._getDisplayedDate();
         }
 
+        date = dateUtils.trimTime(date);
         const options = { ...this.intervalOptions, date };
         const customizationFunction = this.option('customizeDateNavigatorText');
         const useShortDateFormat = this.option('_useShortDateFormat');

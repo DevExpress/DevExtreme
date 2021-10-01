@@ -599,15 +599,10 @@ QUnit.module('Appointments', moduleOptions, () => {
 
         const strategy = new VerticalAppointmentsStrategy({
             key,
-            instance: {
-                notifyObserver: commonUtils.noop,
-                invoke: commonUtils.noop,
-                fire: commonUtils.noop,
-                appointmentTakesAllDay: commonUtils.noop,
-                getAppointmentDurationInMinutes: function() {
-                    return 30;
-                }
+            appointmentDataProvider: {
+                appointmentTakesAllDay: commonUtils.noop
             },
+            cellDurationInMinutes: 30,
             cellHeight: 50
         });
         const deltaTime = strategy.getDeltaTime({ height: 50 }, { height: 100 }, { allDay: false });

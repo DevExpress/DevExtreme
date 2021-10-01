@@ -9,8 +9,6 @@ import { VIEWS } from '../constants';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline-month';
 
-const toMs = dateUtils.dateToMilliseconds;
-
 class SchedulerTimelineMonth extends SchedulerTimeline {
     get type() { return VIEWS.TIMELINE_MONTH; }
 
@@ -34,10 +32,6 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
 
     _calculateDurationInCells(timeDiff) {
         return timeDiff / this.getCellDuration();
-    }
-
-    getCellDuration() {
-        return toMs('day');
     }
 
     isIndicatorVisible() {
