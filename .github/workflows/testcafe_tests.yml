@@ -13,6 +13,7 @@ jobs:
   testcafe:
     name: ${{ matrix.ARGS.componentFolder }}
     strategy:
+      fail-fast: false
       matrix:
         ARGS: [ 
           { componentFolder: "dataGrid", quarantineMode: true }, 
