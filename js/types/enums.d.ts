@@ -18,16 +18,12 @@ export type Format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential'
 
 export type VizTheme = 'generic.dark' | 'generic.light' | 'generic.contrast' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
 
-// PaletteType
 export type VizPalette = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
 
-// WordWrapType
 export type VizWordWrap = 'normal' | 'breakWord' | 'none';
 
-// VizTextOverflowType
 export type VizTextOverflow = 'ellipsis' | 'hide' | 'none';
 
-// PaletteExtensionModeType
 export type VizPaletteExtensionMode = 'alternate' | 'blend' | 'extrapolate';
 
 export type VizPaletteColorSet = 'simpleSet' | 'indicatingSet' | 'gradientSet';
@@ -54,7 +50,6 @@ export type HorizontalAlignment = 'center' | 'left' | 'right';
 
 export type VerticalEdge = 'bottom' | 'top';
 
-// DashStyleType
 export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
 
 export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
@@ -82,7 +77,6 @@ export type FunnelResolveLabelOverlapping = 'hide' | 'none' | 'shift';
 
 export type ChartElementSelectionMode = 'multiple' | 'single';
 
-// ChartSeriesType
 export type SeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
 
 export type AnnotationType = 'text' | 'image' | 'custom';
@@ -101,7 +95,6 @@ export type ScaleBreakLineStyle = 'straight' | 'waved';
 
 export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
 
-// TimeIntervalType
 export type VizTimeInterval = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
 
 export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
@@ -122,10 +115,8 @@ export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
 
 export type PieChartResolveLabelOverlapping = 'hide' | 'none' | 'shift';
 
-// PieSeriesType
 export type PieChartType = 'donut' | 'doughnut' | 'pie';
 
-// SegmentsDirectionType
 export type PieChartSegmentsDirection = 'anticlockwise' | 'clockwise';
 
 export type PieChartAnnotationLocation = 'center' | 'edge';
@@ -208,7 +199,6 @@ export type FormItemType = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
 
 export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
 
-// HatchingDirectionType
 export type HatchingDirection = 'left' | 'none' | 'right';
 
 export type FunnelLabelPosition = 'columns' | 'inside' | 'outside';
@@ -382,7 +372,6 @@ export type PositionResolveCollision = 'fit' | 'flip' | 'flipfit' | 'none';
 
 export type ChartSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'ohlc' | 'range' | 'sum' | 'custom';
 
-// ChartSingleValueSeriesAggregationMethod
 export type ChartSingleValueSeriesAggregationMethodType = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
 
 export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
@@ -391,7 +380,6 @@ export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
 
 export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
 
-// only in js ???
 export type DataSourceStoreType = 'array' | 'local' | 'odata';
 
 export type PivotGridStoreType = 'array' | 'local' | 'odata' | 'xmla';
@@ -468,7 +456,7 @@ export type DiagramItemType = 'shape' | 'connector';
 
 export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
 
-export type DiagramModelOperation = 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints';
+export type DiagramModelOperation = 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape' | 'moveShape';
 
 export type DiagramRequestEditOperationReason = 'checkUIElementAvailability' | 'modelModification';
 
@@ -500,10 +488,8 @@ export type GridDataChangeType = 'insert' | 'update' | 'remove';
 
 export type GridNewRowPosition = 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop';
 
-// dxDataGridDefaultToolbarItemName
 export type DataGridToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 
-// dxTreeListDefaultToolbarItemName
 export type TreeListToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';

@@ -40,7 +40,7 @@ import {
 
 import {
     ContextMenuSubmenuDirection,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxContextMenu>;

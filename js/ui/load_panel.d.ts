@@ -24,7 +24,7 @@ import dxOverlay, {
 
 import {
     PositionAlignment,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxLoadPanel>;

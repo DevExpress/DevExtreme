@@ -10,7 +10,7 @@ import {
     ValidationMessageMode,
     EditorStylingMode,
     ValidationStatus,
-} from '../../enums/enums';
+} from '../../types/enums';
 
 export interface ValueChangedInfo {
     readonly previousValue?: any;

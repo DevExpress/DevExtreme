@@ -55,7 +55,7 @@ import {
     FormItemEditorType,
     FormItemType,
     FormLabelMode,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxForm>;

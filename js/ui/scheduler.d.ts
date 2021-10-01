@@ -46,7 +46,7 @@ import {
   MaxAppointmentsPerCell,
   SchedulerRecurrenceEditMode,
   SchedulerScrollingMode,
-} from '../enums/enums';
+} from '../types/enums';
 
 interface AppointmentDraggingEvent {
   readonly component: dxScheduler;

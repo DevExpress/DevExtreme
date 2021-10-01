@@ -16,7 +16,7 @@ import Widget, {
 import {
   PivotGridFieldChooserLayout,
   ApplyChangesMode,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxPivotGridFieldChooser>;

@@ -19,7 +19,7 @@ import CollectionWidget, {
 
 import {
   Mode,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxResponsiveBox>;

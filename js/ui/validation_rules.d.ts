@@ -1,6 +1,6 @@
 import {
     ComparisonOperator,
-} from '../enums/enums';
+} from '../types/enums';
 
 /**
  * @public

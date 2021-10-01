@@ -1,4 +1,4 @@
-import { Format as PredefinedFormat } from './enums/enums';
+import { Format as PredefinedFormat } from './types/enums';
 
 /**
  * @docid localization.formatDate

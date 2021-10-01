@@ -69,7 +69,7 @@ import {
     TreeListFilterMode,
     TreeListCommandColumnType,
     TreeListToolbarItem,
-} from '../enums/enums';
+} from '../types/enums';
 
 interface CellInfo {
     readonly data: any;
@@ -1207,6 +1207,7 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
 export interface dxTreeListToolbar {
     /**
      * @docid
+     * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItem>
      * @public
      */
     items?: Array<TreeListToolbarItem | dxTreeListToolbarItem>;

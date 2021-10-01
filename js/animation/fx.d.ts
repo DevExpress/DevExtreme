@@ -5,7 +5,7 @@ import { PositionConfig } from './position';
 import {
     AnimationType,
     Direction,
-} from '../enums/enums';
+} from '../types/enums';
 
 /**
  * @docid

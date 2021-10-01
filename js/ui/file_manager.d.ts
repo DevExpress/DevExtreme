@@ -43,7 +43,7 @@ import {
     FileManagerContextMenuItem,
     FileManagerItemViewMode,
     FileManagerViewArea,
-} from '../enums/enums';
+} from '../types/enums';
 
 interface ActionEventInfo {
     errorCode?: number;

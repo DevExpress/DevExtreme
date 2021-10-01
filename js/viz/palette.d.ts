@@ -2,7 +2,7 @@ import {
     VizPalette,
     VizPaletteExtensionMode,
     VizPaletteColorSet,
-} from '../enums/enums';
+} from '../types/enums';
 
 /**
  * @docid viz.currentPalette

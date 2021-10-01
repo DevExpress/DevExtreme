@@ -30,7 +30,7 @@ import {
 import {
     DateBoxType,
     DateBoxPickerType,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxDateBox>;

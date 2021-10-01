@@ -16,7 +16,7 @@ import {
     TextBoxButtonName,
     EditorStylingMode,
     EditorLabelMode,
-} from '../../enums/enums';
+} from '../../types/enums';
 
 /** @namespace DevExpress.ui */
 export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponent> {

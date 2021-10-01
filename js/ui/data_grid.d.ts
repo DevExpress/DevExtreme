@@ -120,7 +120,7 @@ import {
   GridDataChangeType,
   DataGridToolbarItem,
   GridNewRowPosition,
-} from '../enums/enums';
+} from '../types/enums';
 
 export interface AdaptiveDetailRowPreparingInfo {
   readonly formOptions: any;
@@ -4148,6 +4148,7 @@ export interface dxDataGridToolbarItem extends dxToolbarItem {
 export interface dxDataGridToolbar {
   /**
    * @docid
+   * @type Array<dxDataGridToolbarItem,Enums.DataGridToolbarItem>
    * @public
    */
   items?: Array<DataGridToolbarItem | dxDataGridToolbarItem>;

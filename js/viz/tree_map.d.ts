@@ -39,7 +39,7 @@ import {
     TreeMapLayoutAlgorithm,
     TreeMapLayoutDirection,
     TreeMapColorizerType,
-} from '../enums/enums';
+} from '../types/enums';
 
 export interface InteractionInfo {
   readonly node: dxTreeMapNode;
@@ -292,6 +292,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     labelField?: string;
     /**
      * @docid
+     * @type Enums.TreeMapLayoutAlgorithm | function
      * @type_function_param1 e:object
      * @type_function_param1_field1 rect:Array<number>
      * @type_function_param1_field2 sum:number

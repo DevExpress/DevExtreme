@@ -1,6 +1,6 @@
 import {
     ButtonStylingMode,
-} from '../enums/enums';
+} from '../types/enums';
 
 import {
     UserDefinedElement,

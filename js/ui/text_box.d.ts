@@ -15,7 +15,7 @@ import dxTextEditor, {
 
 import {
     TextBoxMode,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxTextBox>;

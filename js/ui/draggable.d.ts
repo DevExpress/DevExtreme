@@ -23,7 +23,7 @@ import dxSortable from './sortable';
 
 import {
     DragDirection,
-} from '../enums/enums';
+} from '../types/enums';
 
 /**
  * @namespace DevExpress.ui

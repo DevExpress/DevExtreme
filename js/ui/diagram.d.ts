@@ -40,7 +40,7 @@ import {
   DiagramModelOperation,
   DiagramRequestEditOperationReason,
   DiagramConnectorPosition,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxDiagram>;

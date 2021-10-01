@@ -27,7 +27,7 @@ import {
     PivotGridSummaryDisplayMode,
     PivotGridRunningTotalMode,
     PivotGridStoreType,
-} from '../../enums/enums';
+} from '../../types/enums';
 
 /**
  * @docid

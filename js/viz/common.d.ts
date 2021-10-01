@@ -15,7 +15,7 @@ import {
     Position,
     VizTimeInterval as TimeIntervalType,
     LegendMarkerState,
-} from '../enums/enums';
+} from '../types/enums';
 
 /**
  * @docid

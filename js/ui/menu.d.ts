@@ -30,7 +30,7 @@ import {
     Orientation,
     ShowSubmenuMode,
     SubmenuDirection,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxMenu>;

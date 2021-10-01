@@ -36,7 +36,7 @@ import dxSelectBox, {
 import {
     EditorApplyValueMode,
     SelectAllMode,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxTagBox>;

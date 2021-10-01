@@ -36,7 +36,7 @@ import {
     VizPalette,
     VizPaletteExtensionMode,
     BarGaugeResolveLabelOverlapping,
-} from '../enums/enums';
+} from '../types/enums';
 
 /**
  * @docid

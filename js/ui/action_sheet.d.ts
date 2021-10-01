@@ -31,7 +31,7 @@ import CollectionWidget, {
 import {
     ButtonType,
     ButtonStylingMode,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type CancelClickEvent = Cancelable & EventInfo<dxActionSheet>;

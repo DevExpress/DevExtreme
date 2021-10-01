@@ -27,7 +27,7 @@ import dxDropDownEditor, {
     dxDropDownEditorOptions,
 } from './ui.drop_down_editor';
 
-import { DropDownSearchMode } from '../../enums/enums';
+import { DropDownSearchMode } from '../../types/enums';
 
 export interface SelectionChangedInfo<T = any> {
     readonly selectedItem: T;

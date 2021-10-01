@@ -46,7 +46,7 @@ import {
   ValueChangedCallMode,
   BackgroundImageLocation,
   RangeSelectorChartAxisScaleType,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxRangeSelector>;

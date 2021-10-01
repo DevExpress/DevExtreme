@@ -6,7 +6,7 @@ import {
   PositionAlignment,
   EditorStylingMode,
   floatingActionButtonDirection,
-} from '../enums/enums';
+} from '../types/enums';
 
 /**
  * @docid

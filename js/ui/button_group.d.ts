@@ -28,7 +28,7 @@ import {
     ButtonType,
     ButtonStylingMode,
     ButtonGroupSelectionMode,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxButtonGroup>;

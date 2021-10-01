@@ -31,7 +31,7 @@ import {
   PivotGridTotalsDisplayMode,
   PivotGridRowHeadersLayout,
   ApplyChangesMode,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid> & {

@@ -42,7 +42,7 @@ import {
 import {
     EditorApplyValueMode,
     ListPageLoadMode,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ClosedEvent = EventInfo<dxLookup>;

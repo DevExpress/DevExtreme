@@ -1,6 +1,6 @@
 import {
     ExcelFontUnderlineType,
-} from '../../enums/enums';
+} from '../../types/enums';
 
 /**
  * @docid

@@ -19,7 +19,7 @@ import UploadInfo from '../file_management/upload_info';
 import {
     FileUploadMode,
     UploadHttpMethod,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type BeforeSendEvent = EventInfo<dxFileUploader> & {

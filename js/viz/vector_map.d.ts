@@ -53,7 +53,7 @@ import {
     VectorMapMarkerType,
     VectorMapMarkerShape,
     VectorMapProjection,
-} from '../enums/enums';
+} from '../types/enums';
 
 export interface TooltipInfo {
     target?: MapLayerElement | dxVectorMapAnnotationConfig;

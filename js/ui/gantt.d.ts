@@ -50,7 +50,7 @@ import {
     GanttContextMenuItem,
     GanttScaleType,
     GanttSortingMode,
-} from '../enums/enums';
+} from '../types/enums';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxGantt>;
