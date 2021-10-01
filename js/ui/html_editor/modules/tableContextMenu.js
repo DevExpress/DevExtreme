@@ -6,7 +6,8 @@ import { addNamespace } from '../../../events/utils/index';
 import ContextMenu from '../../context_menu';
 import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableForms';
 import localizationMessage from '../../../localization/message';
-import { getTableOperationHandler, getFormatHandlers } from '../utils/table_helper';
+import { getTableOperationHandler } from '../utils/table_helper';
+import { getFormatHandlers } from '../utils/toolbar_helper';
 import { each } from '../../../core/utils/iterator';
 import { isString, isObject } from '../../../core/utils/type';
 import { titleize, camelize } from '../../../core/utils/inflector';
@@ -34,7 +35,7 @@ if(Quill) {
             this.enabled = !!options.enabled;
             this._quillContainer = this.editorInstance._getQuillContainer();
             this.addCleanCallback(this.prepareCleanCallback());
-            this._formatHandlers = getFormatHandlers.bind(this)();
+            this._formatHandlers = getFormatHandlers(this);
 
             if(this.enabled) {
                 this._enableContextMenu(options.items);

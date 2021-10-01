@@ -37,10 +37,6 @@ if(Quill) {
 
     const SELECTION_CHANGE_EVENT = 'selection-change';
 
-    const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
-    const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
-
-
     const USER_ACTION = 'user';
 
 
@@ -128,27 +124,6 @@ if(Quill) {
             }
 
             this._toggleClearFormatting(isApplied || !isEmptyObject(formats));
-        }
-
-        get _insertTableFormItems() {
-            return [
-                {
-                    dataField: 'columns',
-                    editorType: 'dxNumberBox',
-                    editorOptions: {
-                        min: 1
-                    },
-                    label: { text: localizationMessage.format(DIALOG_TABLE_FIELD_COLUMNS) }
-                },
-                {
-                    dataField: 'rows',
-                    editorType: 'dxNumberBox',
-                    editorOptions: {
-                        min: 1
-                    },
-                    label: { text: localizationMessage.format(DIALOG_TABLE_FIELD_ROWS) }
-                }
-            ];
         }
 
         _renderToolbar() {

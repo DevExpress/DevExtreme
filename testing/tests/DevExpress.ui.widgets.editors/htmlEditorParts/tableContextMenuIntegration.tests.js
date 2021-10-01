@@ -33,7 +33,7 @@ const ITEM_HAS_TEXT_CLASS = 'dx-menu-item-has-text';
 const SUBMENU_CLASS = 'dx-submenu';
 const SUBMENU_ITEMS_SELECTOR = `.${SUBMENU_CLASS} .${SUBMENU_CLASS} .${ITEM_HAS_TEXT_CLASS}`;
 
-module('Table resizing integration', {
+module('Table context menu integration', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
@@ -305,10 +305,11 @@ module('Table resizing integration', {
 
             const $submenuItems = this.getSubmenuItems(1);
 
-            assert.strictEqual($submenuItems.length, 0, 'No items in menu');
+            assert.strictEqual($submenuItems.length, 3, 'default items is used');
         });
 
         test('array of custom objects', function(assert) {
+            // debugger;
             this.createWidget({ tableContextMenu: {
                 enabled: true,
                 items: [{
