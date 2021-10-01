@@ -3,14 +3,20 @@ import {
 } from '../core/utils/deferred';
 
 import Store, {
-    StoreOptions,
+    Options as StoreOptions,
 } from './abstract_store';
 
 import {
-    CustomStoreOptions,
+    Options as CustomStoreOptions,
 } from './custom_store';
 
-/** @namespace DevExpress.data */
+/** @public */
+export type Options = DataSourceOptions;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ */
 export interface DataSourceOptions {
     /**
      * @docid
@@ -137,7 +143,7 @@ export interface DataSourceOptions {
  */
 export default class DataSource {
     constructor(data: Array<any>);
-    constructor(options: CustomStoreOptions | DataSourceOptions);
+    constructor(options: CustomStoreOptions | Options);
     constructor(store: Store);
     constructor(url: string);
     /**
