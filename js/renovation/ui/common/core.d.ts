@@ -16,6 +16,7 @@ declare module '../../../core/component' {
     );
     _dispose(): void;
     _getDefaultOptions(): Record<string, unknown>;
+    _initOptions(options: Record<string, unknown>): void;
     _init(): void;
     _initializeComponent(): void;
     _optionChanging(name: string, value: unknown, prevValue: unknown): void;
