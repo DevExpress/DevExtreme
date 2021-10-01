@@ -993,12 +993,8 @@ class Scheduler extends Widget {
     _dataSourceChangedHandler(result) {
         if(this._readyToRenderAppointments) {
             this._workSpaceRecalculation.done((function() {
-
                 this._renderAppointments();
-
-                const { filteredItems } = getAppointmentDataProvider(this.key);
-
-                this.getWorkSpace().onDataSourceChanged(filteredItems);
+                this.getWorkSpace().onDataSourceChanged(this.option('filteredItems'));
 
             }).bind(this));
         }
@@ -1024,14 +1020,11 @@ class Scheduler extends Widget {
 
     _renderAppointments() {
         const workspace = this.getWorkSpace();
-
         this._filterAppointments();
-
-        const { filteredItems } = getAppointmentDataProvider(this.key);
 
         workspace.option(
             'allDayExpanded',
-            this._isAllDayExpanded(filteredItems)
+            this._isAllDayExpanded(this.option('filteredItems'))
         );
 
         let viewModel = [];
@@ -1053,10 +1046,9 @@ class Scheduler extends Widget {
     }
 
     _getAppointmentsToRepaint() {
-        const { filteredItems } = getAppointmentDataProvider(this.key);
         const layoutManager = this.getLayoutManager();
 
-        const appointmentsMap = layoutManager.createAppointmentsMap(filteredItems);
+        const appointmentsMap = layoutManager.createAppointmentsMap(this.option('filteredItems'));
         if(this.modelProvider.isRenovatedAppointments) {
             const appointmentTemplate = this.option('appointmentTemplate') !== DEFAULT_APPOINTMENT_TEMPLATE_NAME
                 ? this.option('appointmentTemplate')
@@ -1988,9 +1980,16 @@ class Scheduler extends Widget {
         return this._actions;
     }
 
-    appointmentTakesAllDay(appointment) {
+    appointmentTakesAllDay(rawAppointment) {
+        // const adapter = createAppointmentAdapter(this.key, rawAppointment);
+        // return getAppointmentTakesAllDay(
+        //     adapter,
+        //     this._getCurrentViewOption('startDayHour'),
+        //     this._getCurrentViewOption('endDayHour')
+        // );
+
         return getAppointmentDataProvider(this.key).appointmentTakesAllDay(
-            appointment,
+            rawAppointment,
             this._getCurrentViewOption('startDayHour'),
             this._getCurrentViewOption('endDayHour')
         );
