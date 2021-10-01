@@ -13,6 +13,7 @@ jobs:
   testcafe:
     name: ${{ matrix.ARGS.componentFolder }}
     strategy:
+      fail-fast: false
       matrix:
         ARGS: [ 
           { componentFolder: "dataGrid", quarantineMode: true }, 
@@ -22,7 +23,7 @@ jobs:
           { componentFolder: "renovation", quarantineMode: false } 
         ] 
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
 
     steps:
     - name: Get sources
