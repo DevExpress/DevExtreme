@@ -12,6 +12,10 @@ import {
     template,
 } from '../core/templates/template';
 
+import {
+    DeepPartial,
+} from '../core/index';
+
 import Store from '../data/abstract_store';
 
 import DataSource, {
@@ -134,7 +138,7 @@ export interface RowUpdatedInfo<TRowData = any, TKey = any> {
 
 export interface RowUpdatingInfo<TRowData = any, TKey = any> {
   readonly oldData: TRowData;
-  newData: TRowData;
+  newData: DeepPartial<TRowData>;
   readonly key: TKey;
   cancel: boolean | PromiseLike<void>;
 }
@@ -143,7 +147,7 @@ export interface RowValidatingInfo<TRowData = any, TKey = any> {
   readonly brokenRules: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
   isValid: boolean;
   readonly key: TKey;
-  readonly newData: TRowData;
+  readonly newData: DeepPartial<TRowData>;
   readonly oldData: TRowData;
   errorText: string;
   promise?: PromiseLike<void>;
@@ -1641,7 +1645,7 @@ export interface DataChange<TRowData = any, TKey = any> {
     /**
      * @docid
      */
-    data: TRowData;
+    data: DeepPartial<TRowData>;
     /**
      * @docid
      */
@@ -2121,7 +2125,7 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @return any
      * @public
      */
-    getKeyByRowIndex(rowIndex: number): TKey;
+    getKeyByRowIndex(rowIndex: number): TKey | undefined;
     /**
      * @docid
      * @publicName getRowElement(rowIndex)
@@ -2610,7 +2614,7 @@ export interface ColumnBase<TRowData = any> {
      * @type_function_return void|Promise<void>
      * @public
      */
-    setCellValue?: ((newData: TRowData, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
+    setCellValue?: ((newData: DeepPartial<TRowData>, value: any, currentRowData: TRowData) => void | PromiseLike<void>);
     /**
      * @docid GridBaseColumn.showEditorAlways
      * @default false
@@ -4420,7 +4424,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource<TRowData, string | Array<string>, TKey>;
-    getKeyByRowIndex(rowIndex: number): TKey;
+    getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
     getScrollable(): dxScrollable;
