@@ -28,11 +28,10 @@ import { isDefined } from '../../../core/utils/type';
 //    }
 // ]
 
-function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
+function generateRowsInfo(dataProvider, wordWrapEnabled, rtlEnabled, headerBackgroundColor) {
     const result = [];
 
     const rowsCount = dataProvider.getRowsCount();
-    const wordWrapEnabled = !!dataGrid.option('wordWrapEnabled');
     const columns = dataProvider.getColumns();
 
     for(let rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
@@ -53,7 +52,8 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
                 columns,
                 rowType,
                 colCount: columns.length,
-                backgroundColor: (rowType === 'header') ? headerBackgroundColor : undefined
+                backgroundColor: (rowType === 'header') ? headerBackgroundColor : undefined,
+                horizontalAlign: rtlEnabled ? 'right' : 'left'
             }),
             rowIndex,
         });
@@ -62,7 +62,7 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
     return result;
 }
 
-function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, columns, colCount, rowType, backgroundColor }) {
+function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, rowType, backgroundColor, horizontalAlign }) {
     const result = [];
     for(let cellIndex = 0; cellIndex < colCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
@@ -71,7 +71,7 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, columns, co
             pdfCell: {
                 text: cellData.value,
                 verticalAlign: 'middle',
-                horizontalAlign: columns[cellIndex].alignment ?? 'left',
+                horizontalAlign,
                 wordWrapEnabled,
                 backgroundColor,
                 padding: 0,

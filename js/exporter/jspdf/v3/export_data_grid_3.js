@@ -22,10 +22,12 @@ function exportDataGrid(doc, dataGrid, options) {
     options = extend({}, _getFullOptions(options));
 
     const dataProvider = dataGrid.getDataProvider();
+    const wordWrapEnabled = !!dataGrid.option('wordWrapEnabled');
+    const rtlEnabled = !!dataGrid.option('rtlEnabled');
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
             // TODO: pass rowOptions: { headerStyles: { backgroundColor }, groupStyles: {...}, totalStyles: {...} }
-            const rowsInfo = generateRowsInfo(dataProvider, dataGrid, options.rowOptions?.headerStyles?.backgroundColor);
+            const rowsInfo = generateRowsInfo(dataProvider, wordWrapEnabled, rtlEnabled, options.rowOptions?.headerStyles?.backgroundColor);
 
             if(options.customizeCell) {
                 rowsInfo.forEach(rowInfo => rowInfo.cells.forEach(cellInfo =>
@@ -65,7 +67,7 @@ function exportDataGrid(doc, dataGrid, options) {
             updateRowsAndCellsHeights(doc, rowsInfo);
 
             // when we known all sizes we can calculate all coordinates
-            calculateCoordinates(doc, rowsInfo, options, !!dataGrid.option('rtlEnabled'));
+            calculateCoordinates(doc, rowsInfo, options, rtlEnabled);
 
             // recalculate for grouped rows
             // TODO: applyGroupIndents()
