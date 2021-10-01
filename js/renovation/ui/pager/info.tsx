@@ -16,6 +16,7 @@ export const viewFunction = ({ text, props: { rootElementRef } }: InfoText): JSX
 export class InfoTextProps {
   @ForwardRef() rootElementRef?: RefObject<HTMLDivElement>;
 }
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 type InfoTextPropsType = InfoTextProps & Pick<InternalPagerProps, 'infoText' | 'pageCount' | 'pageIndex' | 'totalCount'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })

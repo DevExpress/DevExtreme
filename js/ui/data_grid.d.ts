@@ -1815,6 +1815,13 @@ export interface ScrollingBase {
      * @public
      */
     useNative?: boolean | 'auto';
+    /**
+     * @docid GridBaseOptions.scrolling.renderAsync
+     * @type boolean
+     * @default undefined
+     * @public
+     */
+    renderAsync?: boolean;
 }
 
 /**

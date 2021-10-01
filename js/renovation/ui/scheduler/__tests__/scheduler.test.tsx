@@ -1,13 +1,12 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { SchedulerProps } from '../props';
+import { SchedulerProps, ScrollingProps } from '../props';
 import { Scheduler, viewFunction as ViewFunction } from '../scheduler';
 import { Widget, WidgetProps } from '../../common/widget';
 import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { WorkSpace } from '../workspaces/base/work_space';
-import { getAppointmentDataProvider, getTimeZoneCalculator } from '../../../../ui/scheduler/instanceFactory';
 import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
 import { Group } from '../workspaces/types';
@@ -159,17 +158,6 @@ describe('Scheduler', () => {
           onCurrentDateUpdate: setCurrentDate,
           startViewDate,
         });
-    });
-
-    it('should correctly create factory instances', () => {
-      const scheduler = new Scheduler(new SchedulerProps());
-
-      scheduler.initialization();
-
-      expect(getAppointmentDataProvider(scheduler.key))
-        .toBeDefined();
-      expect(getTimeZoneCalculator(scheduler.key))
-        .toBeDefined();
     });
 
     it('should not render toolbar if toolbar prop is an empty array', () => {
@@ -382,13 +370,6 @@ describe('Scheduler', () => {
         expect(scrollToTime).toHaveBeenCalled();
       });
 
-      it('should initialize key', () => {
-        const scheduler = new Scheduler(new SchedulerProps());
-
-        expect(scheduler.key)
-          .toBeGreaterThan(-1);
-      });
-
       it('dataAccessors should be correctly created', () => {
         const scheduler = new Scheduler({
           ...new SchedulerProps(),
@@ -549,26 +530,36 @@ describe('Scheduler', () => {
         [
           {
             scrollingMode: 'standard',
-            viewScrollingMode: 'virtual',
+            viewScrolling: { mode: 'virtual' },
             expected: true,
           },
           {
             scrollingMode: 'virtual',
-            viewScrollingMode: 'virtual',
+            viewScrolling: { mode: 'virtual' },
             expected: true,
           },
           {
             scrollingMode: 'standard',
-            viewScrollingMode: 'standard',
+            viewScrolling: { mode: 'standard' },
             expected: false,
           },
           {
             scrollingMode: 'virtual',
-            viewScrollingMode: 'standard',
+            viewScrolling: { mode: 'standard' },
             expected: true,
           },
-        ].forEach(({ scrollingMode, viewScrollingMode, expected }) => {
-          it(`should has correct value if scheduler scrolling.mode is ${scrollingMode} and view scrolling.mode is ${viewScrollingMode}`, () => {
+          {
+            scrollingMode: 'virtual',
+            viewScrolling: undefined,
+            expected: true,
+          },
+          {
+            scrollingMode: 'standard',
+            viewScrolling: undefined,
+            expected: false,
+          },
+        ].forEach(({ scrollingMode, viewScrolling, expected }) => {
+          it(`should has correct value if scheduler scrolling.mode is ${scrollingMode} and view scrolling.mode is ${viewScrolling?.mode}`, () => {
             const scheduler = new Scheduler({
               ...new SchedulerProps(),
               scrolling: {
@@ -576,15 +567,28 @@ describe('Scheduler', () => {
               },
               views: [{
                 type: 'day',
-                scrolling: {
-                  mode: viewScrollingMode as any,
-                },
+                scrolling: viewScrolling as ScrollingProps,
               }],
             });
 
             expect(scheduler.isVirtualScrolling)
               .toBe(expected);
           });
+        });
+      });
+
+      describe('timeZoneCalculator', () => {
+        it('should be created correctly', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            timeZone: 'America/Los_Angeles',
+          });
+
+          expect(scheduler.timeZoneCalculator.getOffsets(new Date(2021, 8, 19), 'Europe/Moscow'))
+            .toMatchObject({
+              common: -7,
+              appointment: 3,
+            });
         });
       });
     });

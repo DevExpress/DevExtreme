@@ -4,6 +4,7 @@ import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 import dateUtils from '../../../core/utils/date';
 import { getBoundingRect } from '../../../core/utils/position';
 import { utils } from '../utils';
+import { hasWindow } from '../../../core/utils/window';
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
 import {
     getViewStartByOptions,
@@ -55,7 +56,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
             let averageWidth = 0;
             const cells = this._getCells().slice(0, DAYS_IN_WEEK);
             cells.each((index, element) => {
-                averageWidth += getBoundingRect(element).width;
+                averageWidth += hasWindow() ? getBoundingRect(element).width : 0;
             });
 
             return cells.length === 0 ? undefined : averageWidth / DAYS_IN_WEEK;

@@ -4218,7 +4218,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             scrolling: {
                 mode: 'infinite',
                 useNative: false,
-                preloadCount: 0,
+                preloadedRowCount: 0,
                 prerenderedRowChunkSize: 5
             },
             editing: {
@@ -5795,7 +5795,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                         scrolling: {
                             mode: 'virtual',
                             useNative: false,
-                            minGap: 0
+                            prerenderedRowCount: 0
                         }
                     }).dxDataGrid('instance');
 

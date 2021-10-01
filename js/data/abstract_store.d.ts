@@ -14,6 +14,7 @@ export interface StoreOptions
     errorHandler?: Function;
     /**
      * @docid
+     * @type string | Array<string>
      * @public
      */
     key?: TKeyExpr;
@@ -129,6 +130,7 @@ export default class Store
     /**
      * @docid
      * @publicName key()
+     * @return string | Array<string>
      * @public
      */
     key(): TKeyExpr;

@@ -147,6 +147,13 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     labelLocation?: 'left' | 'right' | 'top';
     /**
      * @docid
+     * @type Enums.FormLabelMode
+     * @default "default"
+     * @public
+     */
+     labelMode?: 'default' | 'floating' | 'static' | 'hidden';
+    /**
+     * @docid
      * @default 200
      * @public
      */

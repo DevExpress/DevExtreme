@@ -38,11 +38,9 @@ const createInstance = (options, clock) => {
 module('Integration: Appointment templates', {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 }, () => {
     let eventCallCount = 0;

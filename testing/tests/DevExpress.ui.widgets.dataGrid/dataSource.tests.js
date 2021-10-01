@@ -6416,7 +6416,7 @@ QUnit.module('Cache', {
                 sorting: true
             },
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 mode: 'virtual',
                 rowRenderingMode: 'virtual'
             }
@@ -6477,7 +6477,7 @@ QUnit.module('Cache', {
             requireGroupCount: true,
             group: ['group1', 'group2'],
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 mode: 'virtual',
                 rowRenderingMode: 'virtual'
             }
@@ -6544,7 +6544,7 @@ QUnit.module('Cache', {
                 sorting: true
             },
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 mode: 'virtual',
                 rowRenderingMode: 'virtual'
             }
@@ -6585,7 +6585,7 @@ QUnit.module('Cache', {
                 sorting: true
             },
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 mode: 'virtual',
                 rowRenderingMode: 'virtual'
             },
@@ -7174,7 +7174,7 @@ QUnit.module('New virtual scrolling mode', {
                 store: TEN_NUMBERS,
                 paginate: true,
                 scrolling: {
-                    newMode: true,
+                    legacyMode: false,
                     mode: 'virtual',
                     rowRenderingMode: 'virtual'
                 },
@@ -7227,7 +7227,7 @@ QUnit.module('New virtual scrolling mode', {
         }
     });
 
-    // TODO the following tests can be removed when newMode is enabled by default
+    // TODO the following tests can be removed when legacyMode is disabled by default
     QUnit.test('startLoadTime was not initialized when loadingChanged is raised', function(assert) {
         // arrange
         const dataSource = this.createDataSource({
@@ -7358,7 +7358,7 @@ QUnit.module('New virtual scrolling mode', {
                 }
             }),
             scrolling: {
-                newMode: true,
+                legacyMode: false,
                 mode: 'virtual',
                 rowRenderingMode: 'virtual'
             },
@@ -7382,7 +7382,7 @@ QUnit.module('New virtual scrolling mode', {
         const dataSource = createDataSource({
             store: [{ id: 1 }],
             scrolling: {
-                newMode: true
+                legacyMode: false
             }
         });
 
