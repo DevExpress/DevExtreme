@@ -14181,6 +14181,7 @@ declare module DevExpress.ui {
       | 'redo'
       | 'clear'
       | 'insertTable'
+      | 'insertHeaderRow'
       | 'insertRowAbove'
       | 'insertRowBelow'
       | 'insertColumnLeft'
@@ -14188,6 +14189,8 @@ declare module DevExpress.ui {
       | 'deleteColumn'
       | 'deleteRow'
       | 'deleteTable'
+      | 'cellProperties'
+      | 'tableProperties'
     >;
     /**
      * [descr:dxHtmlEditorToolbar.multiline]
@@ -14233,6 +14236,7 @@ declare module DevExpress.ui {
       | 'redo'
       | 'clear'
       | 'insertTable'
+      | 'insertHeaderRow'
       | 'insertRowAbove'
       | 'insertRowBelow'
       | 'insertColumnLeft'
@@ -14240,6 +14244,8 @@ declare module DevExpress.ui {
       | 'deleteColumn'
       | 'deleteRow'
       | 'deleteTable'
+      | 'cellProperties'
+      | 'tableProperties'
       | string;
     /**
      * [descr:dxHtmlEditorToolbarItem.formatName]
@@ -14275,6 +14281,7 @@ declare module DevExpress.ui {
       | 'redo'
       | 'clear'
       | 'insertTable'
+      | 'insertHeaderRow'
       | 'insertRowAbove'
       | 'insertRowBelow'
       | 'insertColumnLeft'
@@ -14282,6 +14289,8 @@ declare module DevExpress.ui {
       | 'deleteColumn'
       | 'deleteRow'
       | 'deleteTable'
+      | 'cellProperties'
+      | 'tableProperties'
       | string;
     /**
      * [descr:dxHtmlEditorToolbarItem.acceptedValues]
