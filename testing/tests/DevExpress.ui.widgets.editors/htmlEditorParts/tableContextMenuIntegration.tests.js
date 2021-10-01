@@ -445,6 +445,21 @@ module('Table context menu integration', {
             assert.strictEqual($submenuItems.eq(1).text(), 'test item 1', 'second item is correct');
         });
 
+        test('array of predefined strings and custom objects with submenus', function(assert) {
+            this.createWidget({ tableContextMenu: {
+                enabled: true,
+                items: ['insertTable', 'deleteColumn', 'cellProperties', 'undo', 'bold',
+                    'alignLeft', 'link', 'color', 'image'
+                ]
+            } });
+
+            const $submenuItems = this.getSubmenuItems(0);
+
+            assert.strictEqual($submenuItems.length, 2, 'all items are rendered');
+            assert.strictEqual($submenuItems.eq(0).text(), 'Insert Table', 'first item is correct');
+            assert.strictEqual($submenuItems.eq(1).text(), 'test item 1', 'second item is correct');
+        });
+
         // 'check all available item types in context menu'
     });
 });
