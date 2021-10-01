@@ -16,7 +16,6 @@ export class AppointmentDataProvider {
         this.scheduler = this.options.scheduler;
         this.dataSource = this.options.dataSource;
         this.dataAccessors = this.options.getDataAccessors(this.key);
-        this.filteredItems = [];
 
         this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
 
@@ -78,7 +77,7 @@ export class AppointmentDataProvider {
 
     // Filter mapping
     filter() {
-        this.filteredItems = this.getFilterStrategy().filter();
+        return this.getFilterStrategy().filter();
     }
 
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {

@@ -302,6 +302,7 @@ class Scheduler extends Widget {
             },
 
             renovateRender: true,
+            filteredItems: [],
 
             _draggingMode: 'outlook',
 
@@ -690,6 +691,7 @@ class Scheduler extends Widget {
                 break;
             case 'loadedResources':
             case 'resourceLoaderMap':
+            case 'filteredItems':
                 break;
             default:
                 super._optionChanged(args);
@@ -827,7 +829,7 @@ class Scheduler extends Widget {
     }
 
     _dimensionChanged() {
-        const { filteredItems } = getAppointmentDataProvider(this.key);
+        const filteredItems = this.option('filteredItems');
 
         this._toggleSmallClass();
 
@@ -1017,7 +1019,7 @@ class Scheduler extends Widget {
     }
 
     _filterAppointments() {
-        getAppointmentDataProvider(this.key).filter();
+        this.option('filteredItems', getAppointmentDataProvider(this.key).filter());
     }
 
     _renderAppointments() {
@@ -1393,7 +1395,7 @@ class Scheduler extends Widget {
             isRenovatedAppointments: this.option('isRenovatedAppointments'),
             getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
             onContentReady: () => {
-                const filteredItems = getAppointmentDataProvider(this.key).filteredItems;
+                const filteredItems = this.option('filteredItems');
                 this._workSpace?.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
             }
         };
@@ -1545,7 +1547,7 @@ class Scheduler extends Widget {
         result.onCellContextMenu = this._createActionByOption('onCellContextMenu');
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
         result.hoursInterval = result.cellDuration / 60;
-        result.allDayExpanded = this._isAllDayExpanded(getAppointmentDataProvider(this.key).filteredItems);
+        result.allDayExpanded = this._isAllDayExpanded(this.option('filteredItems'));
         result.dataCellTemplate = result.dataCellTemplate ? this._getTemplate(result.dataCellTemplate) : null;
         result.timeCellTemplate = result.timeCellTemplate ? this._getTemplate(result.timeCellTemplate) : null;
         result.resourceCellTemplate = result.resourceCellTemplate ? this._getTemplate(result.resourceCellTemplate) : null;
@@ -1946,7 +1948,7 @@ class Scheduler extends Widget {
     }
 
     _expandAllDayPanel(appointment) {
-        if(!this._isAllDayExpanded(getAppointmentDataProvider(this.key).filteredItems) && this.appointmentTakesAllDay(appointment)) {
+        if(!this._isAllDayExpanded(this.option('filteredItems')) && this.appointmentTakesAllDay(appointment)) {
             this._workSpace.option('allDayExpanded', true);
         }
     }
