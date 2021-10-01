@@ -4386,7 +4386,7 @@ declare module DevExpress.ui {
     /**
      * [descr:DataChange.data]
      */
-    data: TRowData;
+    data: DevExpress.core.DeepPartial<TRowData>;
     /**
      * [descr:DataChange.index]
      */
@@ -5600,7 +5600,7 @@ declare module DevExpress.ui {
       string | Array<string>,
       TKey
     >;
-    getKeyByRowIndex(rowIndex: number): TKey;
+    getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(
       rowIndex: number
     ): DevExpress.core.UserDefinedElementsArray | undefined;
@@ -5915,7 +5915,7 @@ declare module DevExpress.ui {
        * [descr:GridBaseColumn.setCellValue]
        */
       setCellValue?: (
-        newData: TRowData,
+        newData: DevExpress.core.DeepPartial<TRowData>,
         value: any,
         currentRowData: TRowData
       ) => void | PromiseLike<void>;
@@ -7456,7 +7456,7 @@ declare module DevExpress.ui {
      */
     export interface RowUpdatingInfo<TRowData = any, TKey = any> {
       readonly oldData: TRowData;
-      newData: TRowData;
+      newData: DevExpress.core.DeepPartial<TRowData>;
       readonly key: TKey;
       cancel: boolean | PromiseLike<void>;
     }
@@ -7480,7 +7480,7 @@ declare module DevExpress.ui {
       >;
       isValid: boolean;
       readonly key: TKey;
-      readonly newData: TRowData;
+      readonly newData: DevExpress.core.DeepPartial<TRowData>;
       readonly oldData: TRowData;
       errorText: string;
       promise?: PromiseLike<void>;
@@ -21977,7 +21977,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBase.getKeyByRowIndex(rowIndex)]
      */
-    getKeyByRowIndex(rowIndex: number): TKey;
+    getKeyByRowIndex(rowIndex: number): TKey | undefined;
     /**
      * [descr:GridBase.getRowElement(rowIndex)]
      */
