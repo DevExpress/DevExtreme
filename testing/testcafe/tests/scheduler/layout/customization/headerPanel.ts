@@ -15,7 +15,17 @@ const createScheduler = async (
     width: 700,
     startDayHour: 9,
     showAllDayPanel: false,
-    dataSource: [],
+    dataSource: [{
+      text: 'Create Report on Customer Feedback',
+      startDate: new Date(2021, 4, 11, 14),
+      endDate: new Date(2021, 4, 11, 15),
+      priorityId: 0,
+    }, {
+      text: 'Review Customer Feedback Report',
+      startDate: new Date(2021, 4, 9, 9, 30),
+      endDate: new Date(2021, 4, 9, 11),
+      priorityId: 0,
+    }],
     groups: ['priorityId'],
     resources: [{
       fieldExpr: 'priorityId',
