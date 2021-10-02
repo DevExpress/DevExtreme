@@ -303,7 +303,6 @@ class Scheduler extends Widget {
             },
 
             renovateRender: true,
-            filteredItems: [],
 
             _draggingMode: 'outlook',
 
