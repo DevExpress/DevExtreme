@@ -15,6 +15,10 @@ testStart(function() {
 });
 
 const createInstance = () => {
+    const dataAccessorsMock = {
+        getter: {},
+        setter: {}
+    };
     const observer = {
         fire: (command) => {
             switch(command) {
@@ -34,16 +38,13 @@ const createInstance = () => {
 
     const key = createFactoryInstances({
         getIsVirtualScrolling: () => false,
-        getDataAccessors: () => ({
-            getter: {},
-            setter: {}
-        }),
+        getDataAccessors: () => dataAccessorsMock,
     });
 
     return $('#scheduler-appointment').dxSchedulerAppointment({
-        key,
         observer,
-        getAppointmentColor: () => new Deferred()
+        getAppointmentColor: () => new Deferred(),
+        dataAccessors: dataAccessorsMock
     }).dxSchedulerAppointment('instance');
 };
 

@@ -1241,6 +1241,7 @@ class Scheduler extends Widget {
 
             getEditingConfig: () => this._editing,
 
+            getTimeZoneCalculator: () => getTimeZoneCalculator(this.key),
             getDataAccessors: () => this._dataAccessors,
             getAppointmentFormOpening: () => this._actions['onAppointmentFormOpening'],
             processActionResult: (arg, canceled) => this._processActionResult(arg, canceled),
@@ -1269,12 +1270,20 @@ class Scheduler extends Widget {
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
 
             createFormattedDateText: (appointment, targetedAppointment, format) => this.fire('getTextAndFormatDate', appointment, targetedAppointment, format),
-            getAppointmentDisabled: (appointment) => createAppointmentAdapter(this.key, appointment).disabled
+            getAppointmentDisabled: (appointment) => createAppointmentAdapter(
+                appointment,
+                this._dataAccessors,
+                getTimeZoneCalculator(this.key)
+            ).disabled
         };
     }
 
     checkAndDeleteAppointment(appointment, targetedAppointment) {
-        const targetedAdapter = createAppointmentAdapter(this.key, targetedAppointment);
+        const targetedAdapter = createAppointmentAdapter(
+            targetedAppointment,
+            this._dataAccessors,
+            getTimeZoneCalculator(this.key)
+        );
 
         this._checkRecurringAppointment(appointment, targetedAppointment, targetedAdapter.startDate, () => {
             this.deleteAppointment(appointment);
@@ -1374,6 +1383,7 @@ class Scheduler extends Widget {
             getAppointmentColor: this.createGetAppointmentColor(),
 
             key: this.key,
+            dataAccessors: this._dataAccessors,
             observer: this,
             onItemRendered: this._getAppointmentRenderedAction(),
             onItemClick: this._createActionByOption('onAppointmentClick'),
@@ -1639,7 +1649,7 @@ class Scheduler extends Widget {
     }
 
     _checkRecurringAppointment(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing, dragEvent) {
-        const recurrenceRule = ExpressionUtils.getField(this.key, 'recurrenceRule', targetAppointment);
+        const recurrenceRule = ExpressionUtils.getField(this._dataAccessors, 'recurrenceRule', targetAppointment);
 
         if(!getRecurrenceProcessor().evalRecurrenceRule(recurrenceRule).isValid || !this._editing.allowUpdating) {
             callback();
@@ -1672,7 +1682,11 @@ class Scheduler extends Widget {
     }
 
     _excludeAppointmentFromSeries(rawAppointment, newRawAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
-        const appointment = createAppointmentAdapter(this.key, { ...rawAppointment });
+        const appointment = createAppointmentAdapter(
+            { ...rawAppointment },
+            this._dataAccessors,
+            getTimeZoneCalculator(this.key)
+        );
         appointment.recurrenceException = this._createRecurrenceException(appointment, exceptionDate);
 
         const singleRawAppointment = { ...newRawAppointment };
@@ -1758,7 +1772,11 @@ class Scheduler extends Widget {
         const isValidDate = date => !isNaN(new Date(date).getTime());
 
         const targetCell = this.getTargetCellData();
-        const appointment = createAppointmentAdapter(this.key, rawAppointment);
+        const appointment = createAppointmentAdapter(
+            rawAppointment,
+            this._dataAccessors,
+            getTimeZoneCalculator(this.key)
+        );
 
         const cellStartDate = getConvertedFromGrid(targetCell.startDate);
         const cellEndDate = getConvertedFromGrid(targetCell.endDate);
@@ -1791,7 +1809,12 @@ class Scheduler extends Widget {
             resultedStartDate = timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
         }
 
-        const result = createAppointmentAdapter(this.key, {});
+        const result = createAppointmentAdapter(
+            {},
+            this._dataAccessors,
+            getTimeZoneCalculator(this.key)
+        );
+
         if(targetCell.allDay !== undefined) {
             result.allDay = targetCell.allDay;
         }
@@ -1830,7 +1853,12 @@ class Scheduler extends Widget {
 
         const appointmentIndex = $(element).data(this._appointments._itemIndexKey());
 
-        const adapter = createAppointmentAdapter(this.key, appointment);
+        const adapter = createAppointmentAdapter(
+            appointment,
+            this._dataAccessors,
+            getTimeZoneCalculator(this.key)
+        );
+
         const targetedAdapter = adapter.clone();
 
         if(this._isAgenda() && adapter.isRecurrent) {
@@ -1999,7 +2027,11 @@ class Scheduler extends Widget {
             return getTimeZoneCalculator(this.key).createDate(date, { path: 'toGrid' });
         };
 
-        const appointment = createAppointmentAdapter(this.key, rawAppointment);
+        const appointment = createAppointmentAdapter(
+            rawAppointment,
+            this._dataAccessors,
+            getTimeZoneCalculator(this.key)
+        );
 
         let startDate = new Date(appointment.startDate);
         let endDate = new Date(appointment.endDate);
@@ -2074,7 +2106,11 @@ class Scheduler extends Widget {
     }
 
     showAddAppointmentPopup(cellData, cellGroups) {
-        const appointmentAdapter = createAppointmentAdapter(this.key, {});
+        const appointmentAdapter = createAppointmentAdapter(
+            {},
+            this._dataAccessors,
+            getTimeZoneCalculator(this.key)
+        );
         const timeZoneCalculator = getTimeZoneCalculator(this.key);
 
         appointmentAdapter.allDay = cellData.allDay;
@@ -2086,8 +2122,11 @@ class Scheduler extends Widget {
     }
 
     showAppointmentPopup(rawAppointment, createNewAppointment, rawTargetedAppointment) {
-
-        const appointment = createAppointmentAdapter(this.key, (rawTargetedAppointment || rawAppointment));
+        const appointment = createAppointmentAdapter(
+            (rawTargetedAppointment || rawAppointment),
+            this._dataAccessors,
+            getTimeZoneCalculator(this.key)
+        );
         const newTargetedAppointment = extend({}, rawAppointment, rawTargetedAppointment);
 
         const isCreateAppointment = createNewAppointment ?? isEmptyObject(rawAppointment);
@@ -2121,8 +2160,8 @@ class Scheduler extends Widget {
         const startDate = new Date(this.option('currentDate'));
         const endDate = new Date(startDate.getTime() + this.option('cellDuration') * toMs('minute'));
 
-        ExpressionUtils.setField(this.key, 'startDate', result, startDate);
-        ExpressionUtils.setField(this.key, 'endDate', result, endDate);
+        ExpressionUtils.setField(this._dataAccessors, 'startDate', result, startDate);
+        ExpressionUtils.setField(this._dataAccessors, 'endDate', result, endDate);
 
         return result;
     }
@@ -2198,7 +2237,11 @@ class Scheduler extends Widget {
     }
 
     addAppointment(rawAppointment) {
-        const appointment = createAppointmentAdapter(this.key, rawAppointment);
+        const appointment = createAppointmentAdapter(
+            rawAppointment,
+            this._dataAccessors,
+            getTimeZoneCalculator(this.key)
+        );
         appointment.text = appointment.text || '';
 
         const serializedAppointment = appointment.source(true);

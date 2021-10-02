@@ -385,10 +385,10 @@ module('Subscribes', {
         config().forceIsoDateParsing = true;
         try {
             this.createInstance();
-            const startDate = ExpressionUtils.getField(this.instance.key, 'startDate', { startDate: '2017-02-08' });
+            const startDate = ExpressionUtils.getField(this.instance._dataAccessors, 'startDate', { startDate: '2017-02-08' });
             assert.deepEqual(startDate, new Date(2017, 1, 8), 'the "getField" method works fine');
 
-            const endDate = ExpressionUtils.getField(this.instance.key, 'endDate', { endDate: '2017-02-09' });
+            const endDate = ExpressionUtils.getField(this.instance._dataAccessors, 'endDate', { endDate: '2017-02-09' });
             assert.deepEqual(endDate, new Date(2017, 1, 9), 'the "getField" method works fine');
         } finally {
             config().forceIsoDateParsing = defaultForceIsoDateParsing;
@@ -402,12 +402,12 @@ module('Subscribes', {
             this.createInstance();
             const obj = { startDate: '2017-02-07', endDate: '2017-02-08' };
 
-            ExpressionUtils.getField(this.instance.key, 'startDate', obj);
+            ExpressionUtils.getField(this.instance._dataAccessors, 'startDate', obj);
 
-            ExpressionUtils.setField(this.instance.key, 'startDate', obj, new Date(2017, 1, 8));
+            ExpressionUtils.setField(this.instance._dataAccessors, 'startDate', obj, new Date(2017, 1, 8));
             assert.equal(obj.startDate, '2017-02-08', 'the "setField" method works fine');
 
-            ExpressionUtils.setField(this.instance.key, 'endDate', obj, new Date(2017, 1, 10));
+            ExpressionUtils.setField(this.instance._dataAccessors, 'endDate', obj, new Date(2017, 1, 10));
             assert.equal(obj.endDate, '2017-02-10', 'the "setField" method works fine');
         } finally {
             config().forceIsoDateParsing = defaultForceIsoDateParsing;
@@ -422,7 +422,7 @@ module('Subscribes', {
             const obj = { startDate: new Date(2017, 2, 7) };
 
             assert.strictEqual(this.instance.option('dateSerializationFormat'), undefined);
-            ExpressionUtils.getField(this.instance.key, 'startDate', obj);
+            ExpressionUtils.getField(this.instance._dataAccessors, 'startDate', obj);
 
             assert.strictEqual(this.instance.option('dateSerializationFormat'), undefined);
         } finally {
@@ -436,16 +436,16 @@ module('Subscribes', {
         });
         const obj = { startDate: '2017-02-07', endDate: '2017-02-08' };
 
-        ExpressionUtils.setField(this.instance.key, 'startDate', obj, new Date(Date.UTC(2017, 1, 8, 1)));
+        ExpressionUtils.setField(this.instance._dataAccessors, 'startDate', obj, new Date(Date.UTC(2017, 1, 8, 1)));
         assert.equal(obj.startDate, '2017-02-08T01:00:00Z', 'the \'setField\' method works fine');
 
-        ExpressionUtils.setField(this.instance.key, 'endDate', obj, new Date(Date.UTC(2017, 1, 10, 1)));
+        ExpressionUtils.setField(this.instance._dataAccessors, 'endDate', obj, new Date(Date.UTC(2017, 1, 10, 1)));
         assert.equal(obj.endDate, '2017-02-10T01:00:00Z', 'the \'setField\' method works fine');
     });
 
     test('check the "getField" method', function(assert) {
         this.createInstance();
-        const text = ExpressionUtils.getField(this.instance.key, 'text', { text: 1 });
+        const text = ExpressionUtils.getField(this.instance._dataAccessors, 'text', { text: 1 });
         assert.equal(text, 1, 'the "getField" method works fine');
     });
 
@@ -454,7 +454,7 @@ module('Subscribes', {
             recurrenceRuleExpr: null
         });
 
-        const recurrenceRule = ExpressionUtils.getField(this.instance.key, 'recurrenceRule', { recurrenceRule: 'FREQ=daily' });
+        const recurrenceRule = ExpressionUtils.getField(this.instance._dataAccessors, 'recurrenceRule', { recurrenceRule: 'FREQ=daily' });
         assert.strictEqual(recurrenceRule, undefined, 'the "getField" method works fine');
     });
 
@@ -465,7 +465,7 @@ module('Subscribes', {
             recurrenceRuleExpr: null
         });
 
-        const recurrenceRule = ExpressionUtils.getField(this.instance.key, 'recurrenceRule', { recurrenceRule: 'FREQ=daily' });
+        const recurrenceRule = ExpressionUtils.getField(this.instance._dataAccessors, 'recurrenceRule', { recurrenceRule: 'FREQ=daily' });
         assert.strictEqual(recurrenceRule, undefined, 'the "getField" method works fine');
     });
 
@@ -478,7 +478,7 @@ module('Subscribes', {
             recurrenceRuleExpr: 'recurrenceRule'
         });
 
-        const recurrenceRule = ExpressionUtils.getField(this.instance.key, 'recurrenceRule', { recurrenceRule: 'FREQ=daily' });
+        const recurrenceRule = ExpressionUtils.getField(this.instance._dataAccessors, 'recurrenceRule', { recurrenceRule: 'FREQ=daily' });
         assert.equal(recurrenceRule, 'FREQ=daily', 'the "getField" method works fine');
     });
 
@@ -486,14 +486,14 @@ module('Subscribes', {
         this.createInstance();
         const obj = { text: 1 };
 
-        ExpressionUtils.setField(this.instance.key, 'text', obj, 2);
+        ExpressionUtils.setField(this.instance._dataAccessors, 'text', obj, 2);
         assert.equal(obj.text, 2, 'the \'setField\' method works fine');
     });
 
     test('check the \'setField\' method with multi-dotted string', function(assert) {
         this.createInstance({ textExpr: 'a.b.text' });
-        const obj = ExpressionUtils.setField(this.instance.key, 'text', {}, 2);
-        const obj1 = ExpressionUtils.setField(this.instance.key, 'text', { c: 'just field' }, 2);
+        const obj = ExpressionUtils.setField(this.instance._dataAccessors, 'text', {}, 2);
+        const obj1 = ExpressionUtils.setField(this.instance._dataAccessors, 'text', { c: 'just field' }, 2);
 
         assert.deepEqual(obj, { a: { b: { text: 2 } } }, 'the \'setField\' method works fine');
         assert.deepEqual(obj1, { c: 'just field', a: { b: { text: 2 } } }, 'the \'setField\' method works fine');
@@ -506,7 +506,7 @@ module('Subscribes', {
 
         const obj = { recurrenceRule: 'FREQ=DAILY' };
 
-        ExpressionUtils.setField(this.instance.key, 'recurrenceRule', obj, 'FREQ=WEEKLY');
+        ExpressionUtils.setField(this.instance._dataAccessors, 'recurrenceRule', obj, 'FREQ=WEEKLY');
         assert.equal(obj.recurrenceRule, 'FREQ=DAILY', 'the \'setField\' method works fine');
     });
 
@@ -519,7 +519,7 @@ module('Subscribes', {
 
         const obj = { recurrenceRule: 'FREQ=DAILY' };
 
-        ExpressionUtils.setField(this.instance.key, 'recurrenceRule', obj, 'FREQ=WEEKLY');
+        ExpressionUtils.setField(this.instance._dataAccessors, 'recurrenceRule', obj, 'FREQ=WEEKLY');
         assert.equal(obj.recurrenceRule, 'FREQ=DAILY', 'the \'setField\' method works fine');
     });
 
@@ -534,7 +534,7 @@ module('Subscribes', {
 
         const obj = { recurrenceRule: 'FREQ=DAILY' };
 
-        ExpressionUtils.setField(this.instance.key, 'recurrenceRule', obj, 'FREQ=WEEKLY');
+        ExpressionUtils.setField(this.instance._dataAccessors, 'recurrenceRule', obj, 'FREQ=WEEKLY');
         assert.equal(obj.recurrenceRule, 'FREQ=WEEKLY', 'the \'setField\' method works fine');
     });
 

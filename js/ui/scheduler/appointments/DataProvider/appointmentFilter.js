@@ -503,7 +503,7 @@ export class AppointmentFilterBaseStrategy {
 
             this.replaceWrongEndDate(rawAppointment, startDate, endDate);
 
-            const adapter = createAppointmentAdapter(this.key, rawAppointment);
+            const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
 
             const comparableStartDate = adapter.startDate && adapter.calculateStartDate('toGrid');
             const comparableEndDate = adapter.endDate && adapter.calculateEndDate('toGrid') || comparableStartDate;

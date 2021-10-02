@@ -16,6 +16,7 @@ export class AppointmentDataProvider {
         this.scheduler = this.options.scheduler;
         this.dataSource = this.options.dataSource;
         this.dataAccessors = this.options.getDataAccessors(this.key);
+        this.timeZoneCalculator = this.options.timeZoneCalculator;
 
         this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
 
@@ -84,8 +85,9 @@ export class AppointmentDataProvider {
         this.getFilterStrategy().filterByDate(min, max, remoteFiltering, dateSerializationFormat);
     }
 
+
     hasAllDayAppointments(rawAppointments) {
-        const adapters = rawAppointments.map((item) => createAppointmentAdapter(this.key, item));
+        const adapters = rawAppointments.map((item) => createAppointmentAdapter(item, this.dataAccessors, this.timeZoneCalculator));
         return this.getFilterStrategy().hasAllDayAppointments(adapters);
     }
 
@@ -95,7 +97,7 @@ export class AppointmentDataProvider {
 
     // From subscribe
     replaceWrongEndDate(rawAppointment, startDate, endDate) {
-        const adapter = createAppointmentAdapter(this.key, rawAppointment);
+        const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
         this.getFilterStrategy().replaceWrongEndDate(adapter, startDate, endDate);
     }
 
@@ -104,14 +106,14 @@ export class AppointmentDataProvider {
     }
 
     appointmentTakesSeveralDays(rawAppointment) {
-        const adapter = createAppointmentAdapter(this.key, rawAppointment);
+        const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
         return getAppointmentTakesSeveralDays(adapter);
     }
 
     sortAppointmentsByStartDate(appointments) {
         appointments.sort((a, b) => {
-            const firstDate = new Date(ExpressionUtils.getField(this.key, 'startDate', a.settings || a));
-            const secondDate = new Date(ExpressionUtils.getField(this.key, 'startDate', b.settings || b));
+            const firstDate = new Date(ExpressionUtils.getField(this.dataAccessors, 'startDate', a.settings || a));
+            const secondDate = new Date(ExpressionUtils.getField(this.dataAccessors, 'startDate', b.settings || b));
 
             return Math.sign(firstDate.getTime() - secondDate.getTime());
         });

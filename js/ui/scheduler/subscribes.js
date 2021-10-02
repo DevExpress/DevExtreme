@@ -82,8 +82,12 @@ const subscribes = {
     updateAppointmentAfterDrag: function({ event, element, rawAppointment, coordinates }) {
         const info = utils.dataAccessors.getAppointmentInfo(element);
 
-        const appointment = createAppointmentAdapter(this.key, rawAppointment);
-        const targetedAppointment = createAppointmentAdapter(this.key, extend({}, rawAppointment, this._getUpdatedData(rawAppointment)));
+        const appointment = createAppointmentAdapter(rawAppointment, this._dataAccessors, getTimeZoneCalculator(this.key));
+        const targetedAppointment = createAppointmentAdapter(
+            extend({}, rawAppointment, this._getUpdatedData(rawAppointment)),
+            this._dataAccessors,
+            getTimeZoneCalculator(this.key)
+        );
         const targetedRawAppointment = targetedAppointment.source();
 
         const newCellIndex = this._workSpace.getDroppableCellIndex();
@@ -115,8 +119,12 @@ const subscribes = {
     },
 
     getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
-        const appointmentAdapter = createAppointmentAdapter(this.key, appointmentRaw);
-        const targetedAdapter = createAppointmentAdapter(this.key, (targetedAppointmentRaw || appointmentRaw));
+        const appointmentAdapter = createAppointmentAdapter(appointmentRaw, this._dataAccessors, getTimeZoneCalculator(this.key));
+        const targetedAdapter = createAppointmentAdapter(
+            (targetedAppointmentRaw || appointmentRaw),
+            this._dataAccessors,
+            getTimeZoneCalculator(this.key)
+        );
         const timeZoneCalculator = getTimeZoneCalculator(this.key);
 
         // TODO pull out time zone converting from appointment adapter for knockout(T947938)

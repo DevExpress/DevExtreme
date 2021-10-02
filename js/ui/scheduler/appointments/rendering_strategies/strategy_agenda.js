@@ -29,7 +29,7 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
         const config = {
             loadedResources: this.options.loadedResources,
             resources: this.options.resources,
-            dataAccessors: this.options.dataAccessors.resources
+            dataAccessors: this.dataAccessors.resources
         };
 
         return groupAppointmentsByResources(
@@ -198,10 +198,10 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
             }
 
             each(currentAppointments, function(index, appointment) {
-                const startDate = ExpressionUtils.getField(this.key, 'startDate', appointment);
-                const endDate = ExpressionUtils.getField(this.key, 'endDate', appointment);
+                const startDate = ExpressionUtils.getField(this.dataAccessors, 'startDate', appointment);
+                const endDate = ExpressionUtils.getField(this.dataAccessors, 'endDate', appointment);
 
-                this.instance.fire('getAppointmentDataProvider').replaceWrongEndDate(appointment, startDate, endDate);
+                this.appointmentDataProvider.replaceWrongEndDate(appointment, startDate, endDate);
 
                 needClearSettings && delete appointment.settings;
 
@@ -225,8 +225,8 @@ class AgendaRenderingStrategy extends BaseRenderingStrategy {
 
                 for(let j = 0; j < appointmentCount; j++) {
                     const appointmentData = currentAppointments[j].settings || currentAppointments[j];
-                    const appointmentIsLong = this.instance.fire('getAppointmentDataProvider').appointmentTakesSeveralDays(currentAppointments[j]);
-                    const appointmentIsRecurrence = ExpressionUtils.getField(this.key, 'recurrenceRule', currentAppointments[j]);
+                    const appointmentIsLong = this.appointmentDataProvider.appointmentTakesSeveralDays(currentAppointments[j]);
+                    const appointmentIsRecurrence = ExpressionUtils.getField(this.dataAccessors, 'recurrenceRule', currentAppointments[j]);
 
                     if(this.instance.fire('dayHasAppointment', day, appointmentData, true) || (!appointmentIsRecurrence && appointmentIsLong && this.instance.fire('dayHasAppointment', day, currentAppointments[j], true))) {
                         groupResult[i] += 1;

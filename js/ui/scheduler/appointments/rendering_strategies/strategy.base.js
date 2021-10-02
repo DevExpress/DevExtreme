@@ -56,6 +56,8 @@ class BaseRenderingStrategy {
     get allowAllDayResizing() { return this.options.allowAllDayResizing; }
     get viewDataProvider() { return this.options.viewDataProvider; }
     get appointmentDataProvider() { return this.options.appointmentDataProvider; }
+    get dataAccessors() { return this.options.dataAccessors; }
+    get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
