@@ -1438,6 +1438,7 @@ declare module DevExpress.core {
     ): (...args: any[]) => any;
     _dispose(): void;
     _getDefaultOptions(): Record<string, unknown>;
+    _initOptions(options: Record<string, unknown>): void;
     _init(): void;
     _initializeComponent(): void;
     _optionChanging(name: string, value: unknown, prevValue: unknown): void;
@@ -14180,6 +14181,7 @@ declare module DevExpress.ui {
       | 'redo'
       | 'clear'
       | 'insertTable'
+      | 'insertHeaderRow'
       | 'insertRowAbove'
       | 'insertRowBelow'
       | 'insertColumnLeft'
@@ -14187,6 +14189,8 @@ declare module DevExpress.ui {
       | 'deleteColumn'
       | 'deleteRow'
       | 'deleteTable'
+      | 'cellProperties'
+      | 'tableProperties'
     >;
     /**
      * [descr:dxHtmlEditorToolbar.multiline]
@@ -14232,6 +14236,7 @@ declare module DevExpress.ui {
       | 'redo'
       | 'clear'
       | 'insertTable'
+      | 'insertHeaderRow'
       | 'insertRowAbove'
       | 'insertRowBelow'
       | 'insertColumnLeft'
@@ -14239,6 +14244,8 @@ declare module DevExpress.ui {
       | 'deleteColumn'
       | 'deleteRow'
       | 'deleteTable'
+      | 'cellProperties'
+      | 'tableProperties'
       | string;
     /**
      * [descr:dxHtmlEditorToolbarItem.formatName]
@@ -14274,6 +14281,7 @@ declare module DevExpress.ui {
       | 'redo'
       | 'clear'
       | 'insertTable'
+      | 'insertHeaderRow'
       | 'insertRowAbove'
       | 'insertRowBelow'
       | 'insertColumnLeft'
@@ -14281,6 +14289,8 @@ declare module DevExpress.ui {
       | 'deleteColumn'
       | 'deleteRow'
       | 'deleteTable'
+      | 'cellProperties'
+      | 'tableProperties'
       | string;
     /**
      * [descr:dxHtmlEditorToolbarItem.acceptedValues]
