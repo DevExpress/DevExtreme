@@ -7,7 +7,7 @@ import ContextMenu from '../../context_menu';
 import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableForms';
 import localizationMessage from '../../../localization/message';
 import { getTableOperationHandler, getTableFormats } from '../utils/table_helper';
-import { getFormatHandlers } from '../utils/toolbar_helper';
+import { getFormatHandlers, getDefaultClickHandler } from '../utils/toolbar_helper';
 import { each } from '../../../core/utils/iterator';
 import { isString, isObject } from '../../../core/utils/type';
 import { titleize, camelize } from '../../../core/utils/inflector';
@@ -105,9 +105,11 @@ if(Quill) {
             return {
                 text: localize(buttonText),
                 icon: iconName.toLowerCase(),
-                onClick: this._formatHandlers[name] || this._getDefaultClickHandler(name)
+                onClick: this._formatHandlers[name] || getDefaultClickHandler(name, this)
             };
         }
+
+        _updateFormatWidget(name, isApplied, formats) {}
 
         _getToolbarItem(item) {
             return item;
