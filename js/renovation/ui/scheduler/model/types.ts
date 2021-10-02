@@ -4,7 +4,6 @@ import { DataAccessorType, GroupOrientation } from '../types';
 import { CellsMetaData, Group } from '../workspaces/types';
 
 export interface AppointmentsConfigType {
-  key: number;
   adaptivityEnabled: boolean;
   rtlEnabled?: boolean;
   startDayHour: number;

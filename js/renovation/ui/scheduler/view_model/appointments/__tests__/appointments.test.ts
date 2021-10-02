@@ -21,8 +21,8 @@ const defaultDataAccessors: DataAccessorType = {
     endDate: compileGetter('endDate') as any,
   },
   setter: {
-    startDate: compileSetter('startDate'),
-    endDate: compileSetter('endDate'),
+    startDate: compileSetter('startDate') as any,
+    endDate: compileSetter('endDate') as any,
   },
   expr: {
     startDateExpr: 'startDate',
@@ -116,7 +116,6 @@ describe('Appointments view model', () => {
   );
 
   const appointmentsModel = getAppointmentsModel(
-    instances.key,
     instances.schedulerProps,
     instances.workspaceProps,
     instances.viewDataProvider,

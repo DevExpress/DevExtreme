@@ -18,7 +18,6 @@ const prepareInstances = (
   currentDate: Date,
   intervalCount: number,
 ): {
-  key: number;
   timeZoneCalculator: any; // TODO add TimeZoneCalculator to the renovation
   appointmentDataProvider: any; // TODO add AppointmentDataProvider to the renovation
   schedulerProps: SchedulerProps;
@@ -57,7 +56,6 @@ const prepareInstances = (
   });
 
   return {
-    key,
     timeZoneCalculator: createTimeZoneCalculator('America/Los_Angeles'),
     appointmentDataProvider: getAppointmentDataProvider(key),
     viewDataProvider,
@@ -75,7 +73,6 @@ describe('Appointments model', () => {
   );
 
   const appointmentsModel = getAppointmentsModel(
-    instances.key,
     instances.schedulerProps,
     instances.workspaceProps,
     instances.viewDataProvider,
@@ -89,7 +86,6 @@ describe('Appointments model', () => {
     it('should contains correct appointment config', () => {
       expect(appointmentsModel)
         .toMatchObject({
-          key: 0,
           adaptivityEnabled: false,
           rtlEnabled: false,
           startDayHour: 0,
