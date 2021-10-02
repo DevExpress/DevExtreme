@@ -445,7 +445,7 @@ module('Table context menu integration', {
             assert.strictEqual($submenuItems.eq(1).text(), 'test item 1', 'second item is correct');
         });
 
-        test('array of predefined strings and custom objects with submenus', function(assert) {
+        test('array with all types of predefined strings', function(assert) {
             this.createWidget({ tableContextMenu: {
                 enabled: true,
                 items: ['insertTable', 'deleteColumn', 'cellProperties', 'undo', 'bold',

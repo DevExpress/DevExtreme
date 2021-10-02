@@ -339,10 +339,8 @@ function prepareInsertTableHandler(module) {
     };
 }
 
-///
-
-///
 
 export {
-    getFormatHandlers
+    getFormatHandlers,
+    getDefaultClickHandler
 };
