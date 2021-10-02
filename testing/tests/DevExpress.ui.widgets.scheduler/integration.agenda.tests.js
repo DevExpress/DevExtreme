@@ -1544,7 +1544,7 @@ module('Integration: Agenda', moduleConfig, () => {
             dataSource: data
         });
 
-        const filteredItems = instance.option('filteredItems');
+        const filteredItems = instance.filteredItems;
 
         assert.equal(filteredItems.length, 1, 'Filtered items amount is correct');
         assert.deepEqual(filteredItems[0], data[2], 'Filtered item is correct');

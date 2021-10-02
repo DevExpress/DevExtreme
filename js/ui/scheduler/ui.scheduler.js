@@ -344,6 +344,17 @@ class Scheduler extends Widget {
         });
     }
 
+    get filteredItems() {
+        if(!this._filteredItems) {
+            this._filteredItems = [];
+        }
+        return this._filteredItems;
+    }
+
+    set filteredItems(value) {
+        this._filteredItems = value;
+    }
+
     _defaultOptionsRules() {
         return super._defaultOptionsRules().concat([
             {
@@ -871,8 +882,6 @@ class Scheduler extends Widget {
     }
 
     _init() {
-        this.filteredItems = [];
-
         this._initExpressions({
             startDate: this.option('startDateExpr'),
             endDate: this.option('endDateExpr'),
