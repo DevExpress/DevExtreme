@@ -839,15 +839,13 @@ class Scheduler extends Widget {
     }
 
     _dimensionChanged() {
-        const filteredItems = this.filteredItems;
-
         this._toggleSmallClass();
 
-        if(!this._isAgenda() && filteredItems && this._isVisible()) {
-            this._workSpace.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
+        if(!this._isAgenda() && this.filteredItems && this._isVisible()) {
+            this._workSpace.option('allDayExpanded', this._isAllDayExpanded(this.filteredItems));
             this._workSpace._dimensionChanged();
 
-            const appointments = this.getLayoutManager().createAppointmentsMap(filteredItems);
+            const appointments = this.getLayoutManager().createAppointmentsMap(this.filteredItems);
 
             this._appointments.option('items', appointments);
         }
@@ -1394,8 +1392,7 @@ class Scheduler extends Widget {
             isRenovatedAppointments: this.option('isRenovatedAppointments'),
             getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
             onContentReady: () => {
-                const filteredItems = this.filteredItems;
-                this._workSpace?.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
+                this._workSpace?.option('allDayExpanded', this._isAllDayExpanded(this.filteredItems));
             }
         };
 
