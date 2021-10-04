@@ -3,6 +3,9 @@
 const path = require('path');
 const resolve = require('resolve');
 
+const full = { functions: 100, statements: 100, lines: 100, branches: 100 };
+const nearlyFull = { functions: 96, statements: 98, lines: 98, branches: 92 };
+
 module.exports = {
     'globals': {
         'ts-jest': {
@@ -12,57 +15,32 @@ module.exports = {
         }
     },
     collectCoverageFrom: [
-        './js/renovation/**/*.ts?(x)',
+        './js/renovation/(ui|utils|viz|common)/**/*.ts?(x)',
+        './js/renovation/component_wrapper/common/component.ts',
+        './js/renovation/component_wrapper/common/template_wrapper.ts',
         '!**/*.j.tsx',
-        '!**/test_utils/**/*',
         '!**/__tests__/**/*',
-        '!./js/renovation/ui/scheduler/view_model/to_test/**/*', // TODO: this is temporary
     ],
     coveragePathIgnorePatterns: [
-        './js/renovation/component_wrapper/editors/editor.ts',
-        './js/renovation/component_wrapper/utils/utils.ts',
-        './js/renovation/component_wrapper/button.ts',
-        './js/renovation/component_wrapper/editors/check_box.ts',
-        './js/renovation/component_wrapper/grid_pager.ts',
-        './js/renovation/component_wrapper/scheduler_header_panel.ts',
-        './js/renovation/component_wrapper/navigation/scroll_view.ts',
-        './js/renovation/component_wrapper/navigation/scrollable.ts',
-        './js/renovation/ui/grids/data_grid/datagrid_component.ts',
+        './js/renovation/ui/common/event_callback.ts', // NOTE: this is temporary file for Vue2
+        './js/renovation/ui/scheduler/header/props.ts',
+        './js/renovation/ui/scheduler/view_model/to_test/', // TODO: this is temporary
         './js/renovation/ui/scheduler/workspaces/utils.ts',
         './js/renovation/utils/get_computed_style.ts',
-        './js/renovation/utils/noop.ts',
-        './js/renovation/utils/render_template.ts',
+        './js/renovation/utils/render_template.ts', // TODO: this is temporary file
+        './js/renovation/viz/common/renderers/utils.ts',
         './js/renovation/viz/common/tooltip_utils.ts',
         './js/renovation/viz/common/utils.ts',
-        './js/renovation/viz/common/renderers/utils.ts',
         './js/renovation/viz/sparklines/utils.ts',
     ],
     coverageDirectory: './js/renovation/code_coverage',
     coverageThreshold: {
-        './js/renovation/**/*.tsx': {
-            functions: 100, // Should set code coverage to 100%
-            statements: 100, // (after start testing declarations)
-            lines: 100,
-            branches: 100
-        },
-        './js/renovation/component_wrapper/*.ts': {
-            functions: 100,
-            statements: 100,
-            lines: 100,
-            branches: 100
-        },
-        './js/renovation/component_wrapper/common/component.ts': {
-            functions: 95,
-            statements: 97,
-            lines: 97,
-            branches: 90
-        },
-        './js/renovation/component_wrapper/common/template_wrapper.ts': {
-            functions: 100,
-            statements: 96,
-            lines: 96,
-            branches: 88
-        }
+        './js/renovation/ui/**/*.ts?(x)': full,
+        './js/renovation/viz/**/*.ts?(x)': full,
+        './js/renovation/utils/**/*.ts?(x)': full,
+        './js/renovation/common/**/*.ts?(x)': full,
+        './js/renovation/component_wrapper/common/template_wrapper.ts': full,
+        './js/renovation/component_wrapper/common/component.ts': nearlyFull,
     },
     roots: ['<rootDir>/js/renovation'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
