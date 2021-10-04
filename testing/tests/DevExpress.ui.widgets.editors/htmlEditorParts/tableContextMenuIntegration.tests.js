@@ -453,7 +453,7 @@ module('Table context menu integration', {
             this.createWidget({ tableContextMenu: {
                 enabled: true,
                 items: ['insertTable', 'deleteColumn', 'cellProperties', 'undo', 'bold',
-                    'alignLeft', 'link', 'color', 'image', 'codeBlock'
+                    'alignLeft', 'link', 'color', 'image', 'codeBlock', 'clear'
                 ]
             } });
 
@@ -466,7 +466,7 @@ module('Table context menu integration', {
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
             const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
 
-            assert.strictEqual($menuItems.length, 10, 'all items are rendered');
+            assert.strictEqual($menuItems.length, 11, 'all items are rendered');
             assert.strictEqual($menuItems.eq(0).text(), 'Insert Table', 'Insert Table is correct');
             assert.strictEqual($menuItems.eq(1).text(), 'Delete Column', 'Delete Column is correct');
             assert.strictEqual($menuItems.eq(2).text(), 'Cell Properties', 'Cell Properties is correct');
@@ -477,8 +477,36 @@ module('Table context menu integration', {
             assert.strictEqual($menuItems.eq(7).text(), 'Font Color', 'color is correct');
             assert.strictEqual($menuItems.eq(8).text(), 'Add Image', 'image is correct');
             assert.strictEqual($menuItems.eq(9).text(), 'Code Block', 'codeBlock is correct');
+            assert.strictEqual($menuItems.eq(10).text(), 'Clear Formatting', 'Clear is correct');
         });
 
-        // 'check the toolbar update after a format changes'
+        test('check the toolbar item update after a format changes', function(assert) {
+            this.createWidget({
+                tableContextMenu: {
+                    enabled: true,
+                    items: [
+                        'alignLeft', 'alignRight'
+                    ]
+                },
+                toolbar: {
+                    items: ['alignLeft', 'alignRight']
+                }
+            });
+
+            this.quillInstance.setSelection(50, 1);
+            const $tableElement = this.$element.find('td').eq(5);
+            $tableElement.trigger('dxcontextmenu');
+            this.clock.tick();
+
+            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+            const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
+
+            $menuItems.eq(1).trigger('dxclick');
+            this.clock.tick();
+
+            const $toolbarFormatRight = this.$element.find('.dx-alignright-format');
+
+            assert.ok($toolbarFormatRight.hasClass('dx-format-active'), 'toolbar item has the active state');
+        });
     });
 });
