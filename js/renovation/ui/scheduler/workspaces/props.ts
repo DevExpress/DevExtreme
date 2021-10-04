@@ -144,4 +144,5 @@ export interface ViewRenderConfig {
   isRenderDateHeader: boolean;
   isGenerateWeekDaysHeaderData: boolean;
   scrollingDirection: ScrollableDirection;
+  isCreateCrossScrolling: boolean;
 }

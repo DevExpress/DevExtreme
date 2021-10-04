@@ -361,10 +361,10 @@ QUnit.module('Options', {
         assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setType, undefined);
         assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getText, undefined);
         assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setText, undefined);
-        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getChildren, undefined);
-        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setChildren, undefined);
-        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getContainerKey, undefined);
-        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setContainerKey, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getChildren, undefined);
+        assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setChildren, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.getContainerKey, undefined);
+        assert.notEqual(this.instance._diagramInstance.documentDataSource.nodeDataImporter.setContainerKey, undefined);
 
         assert.notEqual(this.instance._diagramInstance.documentDataSource.edgeDataImporter.getKey, undefined);
         assert.notEqual(this.instance._diagramInstance.documentDataSource.edgeDataImporter.setKey, undefined);
