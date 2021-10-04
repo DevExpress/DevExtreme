@@ -35,7 +35,7 @@ function getFormatHandlers(module) {
             if(range) {
                 module.saveValueChangeEvent(event);
                 module.quill.removeFormat(range);
-                module.updateFormatWidgets();
+                getToolbarModule(module)?.updateFormatWidgets();
             }
         },
         link: prepareLinkHandler(module),
@@ -264,8 +264,13 @@ function prepareShortcutHandler(name, shortcutValue, module) {
         const value = formats[name] === shortcutValue ? false : shortcutValue;
 
         applyFormat([name, value, USER_ACTION], event, module);
-        module.updateFormatWidgets(true);
+
+        getToolbarModule(module)?.updateFormatWidgets(true);
     };
+}
+
+function getToolbarModule(module) {
+    return module._updateFormatWidget ? module : module.quill.getModule('toolbar');
 }
 
 function getDefaultClickHandler(name, module) {
@@ -276,7 +281,7 @@ function getDefaultClickHandler(name, module) {
 
         applyFormat([name, newValue, USER_ACTION], event, module);
 
-        module._updateFormatWidget(name, newValue, formats);
+        getToolbarModule(module)?._updateFormatWidget(name, newValue, formats);
     };
 }
 
