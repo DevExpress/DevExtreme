@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "Name": "Data Grid",
     "Equivalents": "dxDataGrid, dx-data-grid",
@@ -363,6 +363,17 @@
               "/Controllers/ApiControllers/DataGridWebApiController.cs",
               "/Models/Northwind/InMemoryNorthwindContext.cs"
             ]
+          },
+          {
+            "Title": "Custom New Record Position",
+            "Name": "CustomNewRecordPosition",
+            "DocUrl": "",
+            "Widget": "DataGrid",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "",
+            "Badge": "New"
           }
         ]
       },
@@ -480,7 +491,7 @@
             "BackendFiles": [
               "DataGridRowReorderingController.cs",
               "InMemoryRowReorderingTasksDataContext.cs"
-            ]  
+            ]
           },
           {
             "Title": "Drag & Drop Between Two Grids",
