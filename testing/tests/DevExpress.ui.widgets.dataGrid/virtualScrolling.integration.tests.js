@@ -259,6 +259,28 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal($(dataGrid.$element()).find('.dx-datagrid-bottom-load-panel').length, 0);
     });
 
+    QUnit.test('scrolling mode change from virtual to standart', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            height: 50,
+            paging: { pageSize: 2 },
+            scrolling: { mode: 'virtual' },
+            columns: ['test'],
+            dataSource: [{}, {}, {}, {}, {}, {}]
+        });
+
+        this.clock.tick(300);
+
+        assert.strictEqual($(dataGrid.$element()).find('.dx-virtual-row').length, 1);
+
+        // act
+        dataGrid.option('scrolling.mode', 'standart');
+        this.clock.tick(300);
+
+        // assert
+        assert.strictEqual($(dataGrid.$element()).find('.dx-virtual-row').length, 0);
+    });
+
     QUnit.test('Expand/Collapse adaptive detail row after scrolling if scrolling mode and rowRendering are virtual and paging.enabled is false (T815886)', function(assert) {
         const array = [];
         let visibleRows;
