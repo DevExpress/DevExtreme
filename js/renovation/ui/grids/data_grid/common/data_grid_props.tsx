@@ -1456,6 +1456,8 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Template() rowTemplate?: template | ((rowElement: DxElement, rowInfo: any) => any);
 
+  @Template() dataRowTemplate?: template | ((rowElement: DxElement, rowInfo: any) => any);
+
   @OneWay() customizeColumns?: (columns: Column[]) => any;
 
   @OneWay() customizeExportData?: (

@@ -75,7 +75,8 @@ const DataGrid = Widget.inherit({
         this.callBase();
 
         extend(this._deprecatedOptions, {
-            'useKeyboard': { since: '19.2', alias: 'keyboardNavigation.enabled' }
+            'useKeyboard': { since: '19.2', alias: 'keyboardNavigation.enabled' },
+            'rowTemplate': { since: '21.2', message: 'Use the "dataRowTemplate" option instead' },
         });
     },
 

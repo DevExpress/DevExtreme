@@ -317,7 +317,7 @@ export const searchModule = {
                     this.callBase.apply(this, arguments);
 
                     // T103538
-                    if(this.option('rowTemplate')) {
+                    if(this.option().rowTemplate || this.option('dataRowTemplate')) {
                         if(this.option('templatesRenderAsynchronously')) {
                             clearTimeout(this._highlightTimer);
 

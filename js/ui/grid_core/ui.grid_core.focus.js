@@ -759,7 +759,7 @@ export const focusModule = {
         views: {
             rowsView: {
                 _createRow: function(row) {
-                    const $row = this.callBase(row);
+                    const $row = this.callBase.apply(this, arguments);
 
                     if(this.option('focusedRowEnabled') && row) {
                         if(this.getController('focus').isRowFocused(row.key)) {

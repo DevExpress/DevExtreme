@@ -3640,6 +3640,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     } | 'auto';
     /**
      * @docid
+     * @deprecated
      * @type_function_param2 rowInfo:object
      * @type_function_param2_field1 key:any
      * @type_function_param2_field2 data:any
@@ -3654,6 +3655,22 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @public
      */
     rowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData) => any);
+        /**
+     * @docid
+     * @type_function_param2 rowInfo:object
+     * @type_function_param2_field1 key:any
+     * @type_function_param2_field2 data:any
+     * @type_function_param2_field3 component:dxDataGrid
+     * @type_function_param2_field4 values:Array<any>
+     * @type_function_param2_field5 rowIndex:number
+     * @type_function_param2_field6 columns:Array<dxDataGridColumn>
+     * @type_function_param2_field7 isSelected:boolean
+     * @type_function_param2_field8 rowType:string
+     * @type_function_param2_field9 groupIndex:number
+     * @type_function_param2_field10 isExpanded:boolean
+     * @public
+     */
+    dataRowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData) => any);
     /**
      * @docid
      * @public
