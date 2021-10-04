@@ -95,6 +95,7 @@ const UTC_FULL_DATE_FORMAT = FULL_DATE_FORMAT + 'Z';
 const DEFAULT_AGENDA_DURATION = 7;
 const DEFAULT_APPOINTMENT_TEMPLATE_NAME = 'item';
 const DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME = 'appointmentCollector';
+const DEFAULT_DROP_DOWN_APPOINTMENT_TEMPLATE_NAME = 'dropDownAppointment';
 
 const VIEWS_CONFIG = {
     day: {
@@ -175,6 +176,8 @@ class Scheduler extends Widget {
             customizeDateNavigatorText: undefined,
 
             appointmentTemplate: DEFAULT_APPOINTMENT_TEMPLATE_NAME,
+
+            dropDownAppointmentTemplate: DEFAULT_DROP_DOWN_APPOINTMENT_TEMPLATE_NAME,
 
             appointmentCollectorTemplate: DEFAULT_APPOINTMENT_COLLECTOR_TEMPLATE_NAME,
 
@@ -352,6 +355,14 @@ class Scheduler extends Widget {
 
     set filteredItems(value) {
         this._filteredItems = value;
+    }
+
+    _setDeprecatedOptions() {
+        super._setDeprecatedOptions();
+
+        extend(this._deprecatedOptions, {
+            dropDownAppointmentTemplate: { since: '19.2', message: 'appointmentTooltipTemplate' },
+        });
     }
 
     _defaultOptionsRules() {
@@ -650,6 +661,7 @@ class Scheduler extends Widget {
                 this.updateFactoryInstances();
                 this.repaint();
                 break;
+            case 'dropDownAppointmentTemplate':
             case 'appointmentCollectorTemplate':
             case '_appointmentTooltipOffset':
             case '_appointmentTooltipButtonsPosition':
