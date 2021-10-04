@@ -40,7 +40,7 @@ if(Quill) {
     const USER_ACTION = 'user';
 
 
-    const ICON_MAP = {
+    const ICON_MAP = { // todo
         insertHeaderRow: 'header',
         clear: 'clearformat'
     };

@@ -84,11 +84,7 @@ if(Quill) {
         }
 
         _handleObjectItem(item) {
-            if(item.name && item.acceptedValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
-                const selectItemConfig = this._prepareSelectItemConfig(item);
-
-                return this._getMenuItem(selectItemConfig);
-            } else if(item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
+            if(item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
                 const defaultButtonItemConfig = this._prepareButtonItemConfig(item.name);
                 const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
