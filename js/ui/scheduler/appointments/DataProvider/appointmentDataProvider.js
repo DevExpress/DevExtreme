@@ -2,7 +2,7 @@ import { AppointmentDataSource } from './appointmentDataSource';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
 import { ExpressionUtils } from '../../expressionUtils';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
-import { getAppointmentTakesAllDay, getAppointmentTakesSeveralDays } from './utils';
+import { getAppointmentTakesSeveralDays } from './utils';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -16,7 +16,6 @@ export class AppointmentDataProvider {
         this.scheduler = this.options.scheduler;
         this.dataSource = this.options.dataSource;
         this.dataAccessors = this.options.getDataAccessors(this.key);
-        this.filteredItems = [];
 
         this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
 
@@ -78,16 +77,11 @@ export class AppointmentDataProvider {
 
     // Filter mapping
     filter() {
-        this.filteredItems = this.getFilterStrategy().filter();
+        return this.getFilterStrategy().filter();
     }
 
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
         this.getFilterStrategy().filterByDate(min, max, remoteFiltering, dateSerializationFormat);
-    }
-
-    appointmentTakesAllDay(rawAppointment, startDayHour, endDayHour) {
-        const adapter = createAppointmentAdapter(this.key, rawAppointment);
-        return getAppointmentTakesAllDay(adapter, startDayHour, endDayHour);
     }
 
     hasAllDayAppointments(rawAppointments) {

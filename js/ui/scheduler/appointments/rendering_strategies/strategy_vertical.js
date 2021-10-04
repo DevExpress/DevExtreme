@@ -5,6 +5,7 @@ import dateUtils from '../../../../core/utils/date';
 import timeZoneUtils from '../../utils.timeZone';
 import { ExpressionUtils } from '../../expressionUtils';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
+import { getAppointmentTakesAllDay } from '../DataProvider/utils';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -291,11 +292,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             return true;
         }
 
-        return this.appointmentDataProvider.appointmentTakesAllDay(
-            appointmentData,
-            this.startDayHour,
-            this.endDayHour
-        );
+        const adapter = createAppointmentAdapter(this.key, appointmentData);
+        return getAppointmentTakesAllDay(adapter, this.startDayHour, this.endDayHour);
     }
 
     _getAppointmentMaxWidth() {
