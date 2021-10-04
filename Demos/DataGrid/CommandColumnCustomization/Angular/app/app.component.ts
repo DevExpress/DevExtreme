@@ -48,7 +48,11 @@ export class AppComponent {
     }
 
     isCloneIconVisible(e) {
-        return !e.row.isEditing && !AppComponent.isChief(e.row.data.Position);
+        return !e.row.isEditing;
+    }
+
+    isCloneIconDisabled(e) {
+        return AppComponent.isChief(e.row.data.Position);
     }
 
     cloneIconClick(e) {

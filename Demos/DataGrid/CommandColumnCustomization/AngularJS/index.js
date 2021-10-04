@@ -42,7 +42,10 @@ DemoApp.controller('DemoController', ($scope) => {
           hint: 'Clone',
           icon: 'repeat',
           visible(e) {
-            return !e.row.isEditing && !isChief(e.row.data.Position);
+            return !e.row.isEditing;
+          },
+          disabled(e) {
+            return isChief(e.row.data.Position);
           },
           onClick(e) {
             const clonedItem = angular.copy(e.row.data);

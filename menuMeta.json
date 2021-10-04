@@ -603,6 +603,7 @@
             "Name": "CommandColumnCustomization",
             "Widget": "DataGrid",
             "Equivalents": "button column",
+            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Scripts/data/employeeData.js"
             ],

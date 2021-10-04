@@ -27,6 +27,7 @@
           hint="Clone"
           icon="repeat"
           :visible="isCloneIconVisible"
+          :disabled="isCloneIconDisabled"
           @click="cloneIconClick"
         />
       </DxColumn>
@@ -91,7 +92,10 @@ export default {
       return position && ['CEO', 'CMO'].indexOf(position.trim().toUpperCase()) >= 0;
     },
     isCloneIconVisible(e) {
-      return !e.row.isEditing && !this.isChief(e.row.data.Position);
+      return !e.row.isEditing;
+    },
+    isCloneIconDisabled(e) {
+      return this.isChief(e.row.data.Position);
     },
     cloneIconClick(e) {
       const employees = [...this.employees];

@@ -14,6 +14,7 @@ class App extends React.Component {
     this.onRowValidating = this.onRowValidating.bind(this);
     this.onEditorPreparing = this.onEditorPreparing.bind(this);
     this.isCloneIconVisible = this.isCloneIconVisible.bind(this);
+    this.isCloneIconDisabled = this.isCloneIconDisabled.bind(this);
     this.cloneIconClick = this.cloneIconClick.bind(this);
   }
 
@@ -41,7 +42,11 @@ class App extends React.Component {
   }
 
   isCloneIconVisible(e) {
-    return !e.row.isEditing && !this.isChief(e.row.data.Position);
+    return !e.row.isEditing;
+  }
+
+  isCloneIconDisabled(e) {
+    return this.isChief(e.row.data.Position);
   }
 
   cloneIconClick(e) {
@@ -70,7 +75,7 @@ class App extends React.Component {
         <Column type="buttons" width={110}>
           <Button name="edit" />
           <Button name="delete" />
-          <Button hint="Clone" icon="repeat" visible={this.isCloneIconVisible} onClick={this.cloneIconClick} />
+          <Button hint="Clone" icon="repeat" visible={this.isCloneIconVisible} disabled={this.isCloneIconDisabled} onClick={this.cloneIconClick} />
         </Column>
         <Column dataField="Prefix" caption="Title" />
         <Column dataField="FirstName" />
