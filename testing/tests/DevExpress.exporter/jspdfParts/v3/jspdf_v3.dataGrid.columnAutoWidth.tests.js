@@ -356,6 +356,41 @@ const JSPdfColumnWidthsTests = {
                 });
             });
 
+            QUnit.test('[band1-[f1]], rtleEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        {
+                            caption: 'Band1 line1 line 2',
+                            columns: [ 'f1', ]
+                        }
+                    ],
+                    dataSource: [{ f1: 'f1_1 long line very long line' }],
+                });
+
+                const expectedLog = [
+                    'text,Band1 line1 line 2,0,24.2,{baseline:middle}',
+                    'text,F1,0,42.6,{baseline:middle}',
+                    'text,f1_1 long line very long line,0,61,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,15,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,0,51.8,595.28,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('[band1-[f1, f2]]', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -752,6 +787,66 @@ const JSPdfColumnWidthsTests = {
                 });
             });
 
+            QUnit.test('1 level - 1 group - [{f1, groupIndex: 0}, f2, f3], word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        {
+                            f1: 'f1 line line',
+                            f2: 'f1_2 line long line',
+                            f3: 'f1_3 line long line long line'
+                        },
+                        {
+                            f1: 'f1 long line long line long line',
+                            f2: 'f2_2 line',
+                            f3: 'f2_3 line long line line'
+                        },
+                    ],
+                });
+
+                const expectedLog = [
+                    'text,F2,595.28,24.2,{baseline:middle,align:right}',
+                    'text,F3,297.64,24.2,{baseline:middle,align:right}',
+                    'text,F1: f1 line line,595.28,42.6,{baseline:middle,align:right}',
+                    'text,f1_2 line long line,585.28,61,{baseline:middle,align:right}',
+                    'text,f1_3 line long line long line,297.64,61,{baseline:middle,align:right}',
+                    'text,F1: f1 long line long line long line,595.28,79.4,{baseline:middle,align:right}',
+                    'text,f2_2 line,585.28,97.8,{baseline:middle,align:right}',
+                    'text,f2_3 line long line line,297.64,97.8,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,297.64,15,297.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,15,297.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,297.64,51.8,287.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,51.8,297.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,70.2,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,297.64,88.6,287.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,88.6,297.64,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('1 level - 2 group - [{f1, groupIndex: 0}, f2, f3], word wrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -802,6 +897,66 @@ const JSPdfColumnWidthsTests = {
                     'rect,10,88.6,287.64,18.4',
                     'setLineWidth,1',
                     'rect,297.64,88.6,297.64,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 level - 2 group - [{f1, groupIndex: 0}, f2, f3], word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [
+                        {
+                            f1: 'f1_1 long line',
+                            f2: 'f1_2 long line long line long line',
+                            f3: 'f1_3 line'
+                        },
+                        {
+                            f1: 'f2_1 long line long line long line',
+                            f2: 'f2_2 line long line',
+                            f3: 'f2_3'
+                        },
+                    ],
+                });
+
+                const expectedLog = [
+                    'text,F2,595.28,24.2,{baseline:middle,align:right}',
+                    'text,F3,297.64,24.2,{baseline:middle,align:right}',
+                    'text,F1: f1_1 long line,595.28,42.6,{baseline:middle,align:right}',
+                    'text,f1_2 long line long line long line,585.28,61,{baseline:middle,align:right}',
+                    'text,f1_3 line,297.64,61,{baseline:middle,align:right}',
+                    'text,F1: f2_1 long line long line long line,595.28,79.4,{baseline:middle,align:right}',
+                    'text,f2_2 line long line,585.28,97.8,{baseline:middle,align:right}',
+                    'text,f2_3,297.64,97.8,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,297.64,15,297.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,15,297.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,297.64,51.8,287.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,51.8,297.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,70.2,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,297.64,88.6,287.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,88.6,297.64,18.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
@@ -878,6 +1033,75 @@ const JSPdfColumnWidthsTests = {
                     done();
                 });
             });
+
+            QUnit.test('2 level - 2 groups - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' },
+                    ],
+                    dataSource: [
+                        {
+                            f1: 'f1 long line long line long line',
+                            f2: 'f1_2 long line',
+                            f3: 'f1_3 line',
+                            f4: 'f1_4'
+                        },
+                        {
+                            f1: 'f1 long line',
+                            f2: 'f2_2 long line long line long line long line',
+                            f3: 'f2_3 long line long line',
+                            f4: 'f2_4'
+                        },
+                    ],
+                });
+
+                const expectedLog = [
+                    'text,F3,595.28,24.2,{baseline:middle,align:right}',
+                    'text,F4,297.64,24.2,{baseline:middle,align:right}',
+                    'text,F1: f1 long line,595.28,42.6,{baseline:middle,align:right}',
+                    'text,F2: f2_2 long line long line long line long line,585.28,61,{baseline:middle,align:right}',
+                    'text,f2_3 long line long line,575.28,79.4,{baseline:middle,align:right}',
+                    'text,f2_4,297.64,79.4,{baseline:middle,align:right}',
+                    'text,F1: f1 long line long line long line,595.28,97.8,{baseline:middle,align:right}',
+                    'text,F2: f1_2 long line,585.28,116.2,{baseline:middle,align:right}',
+                    'text,f1_3 line,575.28,134.6,{baseline:middle,align:right}',
+                    'text,f1_4,297.64,134.6,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,297.64,15,297.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,15,297.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,0,51.8,585.28,18.4',
+                    'setLineWidth,1',
+                    'rect,297.64,70.2,277.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,70.2,297.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,88.6,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,0,107,585.28,18.4',
+                    'setLineWidth,1',
+                    'rect,297.64,125.4,277.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,125.4,297.64,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
         });
 
         QUnit.module('column auto width with wordWrap, summaries and totals', moduleConfig, () => {
@@ -922,6 +1146,57 @@ const JSPdfColumnWidthsTests = {
                     'rect,190,51.8,190,36.8',
                     'setLineWidth,1',
                     'rect,380,51.8,190,36.8'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, groupIndex: 0}, f2, f3, f4], groupItems: [f1], word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    width: 600,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [ { column: 'f1', summaryType: 'max' } ]
+                    },
+                    dataSource: [{ f1: 'f1 line long line', f2: 'f2 line', f3: 'f3 long line long line long line', f4: 'f4 long line' }]
+                });
+
+                const expectedLog = [
+                    'text,F2,595.28,24.2,{baseline:middle,align:right}',
+                    'text,F3,405.28,24.2,{baseline:middle,align:right}',
+                    'text,F4,215.28,24.2,{baseline:middle,align:right}',
+                    'text,F1: f1 line long line (Max: f1 line long line),595.28,42.6,{baseline:middle,align:right}',
+                    'text,f2 line,585.28,70.2,{baseline:middle,align:right}',
+                    'text,f3 long line long line long\nline,405.28,61,{baseline:middle,align:right}',
+                    'text,f4 long line,215.28,70.2,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,405.28,15,190,18.4',
+                    'setLineWidth,1',
+                    'rect,215.28,15,190,18.4',
+                    'setLineWidth,1',
+                    'rect,25.28,15,190,18.4',
+                    'setLineWidth,1',
+                    'rect,25.28,33.4,570,18.4',
+                    'setLineWidth,1',
+                    'rect,405.28,51.8,180,36.8',
+                    'setLineWidth,1',
+                    'rect,215.28,51.8,190,36.8',
+                    'setLineWidth,1',
+                    'rect,25.28,51.8,190,36.8'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
@@ -994,6 +1269,70 @@ const JSPdfColumnWidthsTests = {
                 });
             });
 
+            QUnit.test('[{f1, groupIndex: 0}, {f2, groupIndex: 1, f3, f4], groupItems: [f1, {f4, alignByColumn}], word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 0 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'f1', summaryType: 'max' },
+                            { column: 'f4', summaryType: 'max', alignByColumn: true }
+                        ]
+                    },
+                    dataSource: [{ f1: 'f1 long line long line long line', f2: 'f2 long line', f3: 'f3 line', f4: 'f4 long line long line' }]
+                });
+
+                const expectedLog = [
+                    'text,F3,595.28,24.2,{baseline:middle,align:right}',
+                    'text,F4,297.64,24.2,{baseline:middle,align:right}',
+                    'text,F1: f1 long line long line long line (Max: f1\nlong line long line long line),595.28,42.6,{baseline:middle,align:right}',
+                    'text,Max: f4 long line long line,297.64,51.8,{baseline:middle,align:right}',
+                    'text,F2: f2 long line (Max of F1 is f1 long line\nlong line long line),585.28,79.4,{baseline:middle,align:right}',
+                    'text,Max: f4 long line long line,297.64,88.6,{baseline:middle,align:right}',
+                    'text,f3 line,575.28,116.2,{baseline:middle,align:right}',
+                    'text,f4 long line long line,297.64,116.2,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,297.64,15,297.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,15,297.64,18.4',
+                    'setLineWidth,1',
+                    'line,297.64,33.4,595.28,33.4',
+                    'line,595.28,33.4,595.28,70.2',
+                    'line,297.64,70.2,595.28,70.2',
+                    'setLineWidth,1',
+                    'line,0,33.4,297.64,33.4',
+                    'line,0,33.4,0,70.2',
+                    'line,0,70.2,297.64,70.2',
+                    'setLineWidth,1',
+                    'line,297.64,70.2,585.28,70.2',
+                    'line,585.28,70.2,585.28,107',
+                    'line,297.64,107,585.28,107',
+                    'setLineWidth,1',
+                    'line,0,70.2,297.64,70.2',
+                    'line,0,70.2,0,107',
+                    'line,0,107,297.64,107',
+                    'setLineWidth,1',
+                    'rect,297.64,107,277.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,107,297.64,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('[{f1, groupIndex: 0}, f2, f3, f4], groupItems: [f1, { f3, alignByColumn, showInGroupFooter }], word wrap enabled', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -1045,6 +1384,67 @@ const JSPdfColumnWidthsTests = {
                     'rect,190,88.6,190,18.4',
                     'setLineWidth,1',
                     'rect,380,88.6,190,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[{f1, groupIndex: 0}, f2, f3, f4], groupItems: [f1, { f3, alignByColumn, showInGroupFooter }], word wrap enabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    width: 600,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'f1', summaryType: 'max' },
+                            { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ]
+                    },
+                    dataSource: [{ f1: 'f1 long line', f2: 'f2 very long line very long line', f3: 'f3 line', f4: 'f4 long line' }]
+                });
+
+                const expectedLog = [
+                    'text,F2,595.28,24.2,{baseline:middle,align:right}',
+                    'text,F3,405.28,24.2,{baseline:middle,align:right}',
+                    'text,F4,215.28,24.2,{baseline:middle,align:right}',
+                    'text,F1: f1 long line (Max: f1 long line),595.28,42.6,{baseline:middle,align:right}',
+                    'text,f2 very long line very\nlong line,585.28,61,{baseline:middle,align:right}',
+                    'text,f3 line,405.28,70.2,{baseline:middle,align:right}',
+                    'text,f4 long line,215.28,70.2,{baseline:middle,align:right}',
+                    'text,Max: f3 line,405.28,97.8,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,405.28,15,190,18.4',
+                    'setLineWidth,1',
+                    'rect,215.28,15,190,18.4',
+                    'setLineWidth,1',
+                    'rect,25.28,15,190,18.4',
+                    'setLineWidth,1',
+                    'rect,25.28,33.4,570,18.4',
+                    'setLineWidth,1',
+                    'rect,405.28,51.8,180,36.8',
+                    'setLineWidth,1',
+                    'rect,215.28,51.8,190,36.8',
+                    'setLineWidth,1',
+                    'rect,25.28,51.8,190,36.8',
+                    'setLineWidth,1',
+                    'rect,405.28,88.6,180,18.4',
+                    'setLineWidth,1',
+                    'rect,215.28,88.6,190,18.4',
+                    'setLineWidth,1',
+                    'rect,25.28,88.6,190,18.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
@@ -1144,6 +1544,98 @@ const JSPdfColumnWidthsTests = {
                     done();
                 });
             });
+
+            QUnit.test('[{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], groupItems: [{f3, alignByColumn, showInGroupFooter}], totalItems: [f3], 2 groups, wordWrapEnabled, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        { dataField: 'f2', groupIndex: 1 },
+                        { dataField: 'f3' },
+                        { dataField: 'f4' }
+                    ],
+                    summary: {
+                        groupItems: [
+                            { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                        ],
+                        totalItems: [
+                            { column: 'f3', summaryType: 'max' }
+                        ]
+                    },
+                    dataSource: [
+                        { f1: 'f1 very ling line very long line very long line', f2: 'f2_1 line', f3: 'f3line1\nline2\nline3\nline4', f4: 'f4' },
+                        { f1: 'f1 very long line very long line', f2: 'f2_2very long line very long line', f3: 'f3very long line very long line', f4: 'f4' }
+                    ]
+                });
+
+                const expectedLog = [
+                    'text,F3,585.28,24.2,{baseline:middle,align:right}',
+                    'text,F4,292.64,24.2,{baseline:middle,align:right}',
+                    'text,F1: f1 very ling line very long line very long line,585.28,42.6,{baseline:middle,align:right}',
+                    'text,F2: f2_1 line,575.28,61,{baseline:middle,align:right}',
+                    'text,f3line1\nline2\nline3\nline4,565.28,79.4,{baseline:middle,align:right}',
+                    'text,f4,292.64,107,{baseline:middle,align:right}',
+                    'text,Max: f3line1\nline2\nline3\nline4,565.28,153,{baseline:middle,align:right}',
+                    'text,Max: f3line1\nline2\nline3\nline4,575.28,226.6,{baseline:middle,align:right}',
+                    'text,F1: f1 very long line very long line,585.28,300.2,{baseline:middle,align:right}',
+                    'text,F2: f2_2very long line very long line,575.28,318.6,{baseline:middle,align:right}',
+                    'text,f3very long line very long line,565.28,337,{baseline:middle,align:right}',
+                    'text,f4,292.64,337,{baseline:middle,align:right}',
+                    'text,Max: f3very long line very long line,565.28,355.4,{baseline:middle,align:right}',
+                    'text,Max: f3very long line very long line,575.28,373.8,{baseline:middle,align:right}',
+                    'text,Max: f3very long line very long line,585.28,392.2,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,292.64,15,292.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,15,292.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,585.28,18.4',
+                    'setLineWidth,1',
+                    'rect,0,51.8,575.28,18.4',
+                    'setLineWidth,1',
+                    'rect,292.64,70.2,272.64,73.6',
+                    'setLineWidth,1',
+                    'rect,0,70.2,292.64,73.6',
+                    'setLineWidth,1',
+                    'rect,292.64,143.8,272.64,73.6',
+                    'setLineWidth,1',
+                    'rect,0,143.8,292.64,73.6',
+                    'setLineWidth,1',
+                    'rect,292.64,217.4,282.64,73.6',
+                    'setLineWidth,1',
+                    'rect,0,217.4,292.64,73.6',
+                    'setLineWidth,1',
+                    'rect,0,291,585.28,18.4',
+                    'setLineWidth,1',
+                    'rect,0,309.4,575.28,18.4',
+                    'setLineWidth,1',
+                    'rect,292.64,327.8,272.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,327.8,292.64,18.4',
+                    'setLineWidth,1',
+                    'rect,292.64,346.2,272.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,346.2,292.64,18.4',
+                    'setLineWidth,1',
+                    'rect,292.64,364.6,282.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,364.6,292.64,18.4',
+                    'setLineWidth,1',
+                    'rect,292.64,383,292.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,383,292.64,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
         });
 
         QUnit.module('column auto width with wordWrap, summaries, totals and bands', moduleConfig, () => {
@@ -1175,6 +1667,44 @@ const JSPdfColumnWidthsTests = {
                     'rect,10,51.8,585.28,18.4',
                     'setLineWidth,1',
                     'rect,20,70.2,575.28,0'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[f1, f2]], f1.groupIndex=0,f2.groupIndex=1, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'Band1 long line 1 ling line 2', columns: [
+                            { dataField: 'f1', groupIndex: 0 },
+                            { dataField: 'f2', groupIndex: 1 }
+                        ] }
+                    ],
+                    dataSource: [
+                        { f1: 'f1_1 line', f2: 'f2_1 line long line long line' }],
+                });
+
+                const expectedLog = [
+                    'text,Band1 long line 1 ling line 2,595.28,24.2,{baseline:middle,align:right}',
+                    'text,F1: f1_1 line,595.28,42.6,{baseline:middle,align:right}',
+                    'text,F2: f2_1 line long line long line,585.28,61,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,0,15,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,0,51.8,585.28,18.4',
+                    'setLineWidth,1',
+                    'rect,0,70.2,575.28,0'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
@@ -1222,6 +1752,54 @@ const JSPdfColumnWidthsTests = {
                     'rect,20,70.2,277.64,18.4',
                     'setLineWidth,1',
                     'rect,297.64,70.2,297.64,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[band1-[f1, f2], f3], f1.groupIndex=0,f2.groupIndex=1, summary: groupItems:f1, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { caption: 'Band1 long line 1 ling line 2', columns: [
+                            { dataField: 'f1', groupIndex: 0 },
+                            { dataField: 'f2', groupIndex: 1 }
+                        ] },
+                        { dataField: 'f3', caption: 'f3 line' }
+                    ],
+                    summary: {
+                        groupItems: [ { column: 'f1', summaryType: 'max' } ]
+                    },
+                    dataSource: [
+                        { f1: 'f1_1 line', f2: 'f2_1 line long line long line', f3: 'long line very long line' }],
+                });
+
+                const expectedLog = [
+                    'text,Band1 long line 1 ling line 2,595.28,24.2,{baseline:middle,align:right}',
+                    'text,f3 line,297.64,24.2,{baseline:middle,align:right}',
+                    'text,F1: f1_1 line (Max: f1_1 line),595.28,42.6,{baseline:middle,align:right}',
+                    'text,F2: f2_1 line long line long line (Max of F1 is f1_1 line),585.28,61,{baseline:middle,align:right}',
+                    'text,long line very long line,297.64,79.4,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,297.64,15,297.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,15,297.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,0,51.8,585.28,18.4',
+                    'setLineWidth,1',
+                    'rect,297.64,70.2,277.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,70.2,297.64,18.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
@@ -1315,6 +1893,102 @@ const JSPdfColumnWidthsTests = {
                     'rect,357.168,180.6,119.056,73.6',
                     'setLineWidth,1',
                     'rect,476.224,180.6,119.056,73.6'
+                ];
+
+                exportDataGrid(doc, dataGrid, {
+                    topLeft: { x: 0, y: 15 },
+                }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('[f1, band1-[f2, band1_1-[f3,f4], band2_2-[f5,f6],f7]], f1.groupIndex:0, f2.groupIndex 1 - height auto, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    wordWrapEnabled: true,
+                    columns: [
+                        { dataField: 'f1', groupIndex: 0 },
+                        {
+                            caption: 'Band1 line',
+                            columns: [
+                                { dataField: 'f2', groupIndex: 1 },
+                                {
+                                    caption: 'Band1_1 long line very long line',
+                                    columns: [
+                                        { dataField: 'f3', caption: 'f3  long line' },
+                                        { dataField: 'f4', caption: 'f4  long line very long line' }
+                                    ]
+                                },
+                                {
+                                    caption: 'Band1_2',
+                                    columns: [{ dataField: 'f5', caption: 'f5 long line very long line' }, 'f6']
+                                },
+                                {
+                                    caption: 'f7 long line very long linelong line very long linelong line very long linelong line very long line',
+                                    dataField: 'f7'
+                                }
+                            ]
+                        }
+                    ],
+                    dataSource: [{
+                        f1: 'f1_1 line',
+                        f2: 'f2_1 long line very long line',
+                        f3: 'f3_1',
+                        f4: 'f4_1 very long line very long line very long line',
+                        f5: 'f5_1 long line', f6: 'f6_1', f7: 'f7_1 line'
+                    }],
+                });
+
+                const expectedLog = [
+                    'text,Band1 line,595.28,24.2,{baseline:middle,align:right}',
+                    'text,Band1_1 long line very long line,595.28,56.4,{baseline:middle,align:right}',
+                    'text,Band1_2,357.168,56.4,{baseline:middle,align:right}',
+                    'text,f7 long line very\nlong linelong line\nvery long\nlinelong line very\nlong linelong line\nvery long line,119.056,42.6,{baseline:middle,align:right}',
+                    'text,f3  long line,595.28,111.6,{baseline:middle,align:right}',
+                    'text,f4  long line very\nlong line,476.224,102.4,{baseline:middle,align:right}',
+                    'text,f5 long line very\nlong line,357.168,102.4,{baseline:middle,align:right}',
+                    'text,F6,238.112,111.6,{baseline:middle,align:right}',
+                    'text,F1: f1_1 line,595.28,153,{baseline:middle,align:right}',
+                    'text,F2: f2_1 long line very long line,585.28,171.4,{baseline:middle,align:right}',
+                    'text,f3_1,575.28,217.4,{baseline:middle,align:right}',
+                    'text,f4_1 very long\nline very long\nline very long\nline,476.224,189.8,{baseline:middle,align:right}',
+                    'text,f5_1 long line,357.168,217.4,{baseline:middle,align:right}',
+                    'text,f6_1,238.112,217.4,{baseline:middle,align:right}',
+                    'text,f7_1 line,119.056,217.4,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,0,15,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,357.168,33.4,238.112,46',
+                    'setLineWidth,1',
+                    'rect,119.056,33.4,238.112,46',
+                    'setLineWidth,1',
+                    'rect,0,33.4,119.056,110.4',
+                    'setLineWidth,1',
+                    'rect,476.224,79.4,119.056,64.4',
+                    'setLineWidth,1',
+                    'rect,357.168,79.4,119.056,64.4',
+                    'setLineWidth,1',
+                    'rect,238.112,79.4,119.056,64.4',
+                    'setLineWidth,1',
+                    'rect,119.056,79.4,119.056,64.4',
+                    'setLineWidth,1',
+                    'rect,0,143.8,595.28,18.4',
+                    'setLineWidth,1',
+                    'rect,0,162.2,585.28,18.4',
+                    'setLineWidth,1',
+                    'rect,476.224,180.6,99.056,73.6',
+                    'setLineWidth,1',
+                    'rect,357.168,180.6,119.056,73.6',
+                    'setLineWidth,1',
+                    'rect,238.112,180.6,119.056,73.6',
+                    'setLineWidth,1',
+                    'rect,119.056,180.6,119.056,73.6',
+                    'setLineWidth,1',
+                    'rect,0,180.6,119.056,73.6'
                 ];
 
                 exportDataGrid(doc, dataGrid, {
