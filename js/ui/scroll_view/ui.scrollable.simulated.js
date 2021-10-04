@@ -196,7 +196,7 @@ export const Scroller = Class.inherit({
     },
 
     _getRealDimension: function(element, dimension) {
-        return getBoundingRect(element)[dimension];
+        return Math.round(getBoundingRect(element)[dimension]);
     },
 
     _getBaseDimension: function(element, dimension) {
