@@ -6,7 +6,7 @@
       key-expr="ID"
       :column-auto-width="true"
       :show-borders="true"
-      row-template="dataRowTemplate"
+      row-template="rowTemplate"
     >
       <DxColumn
         :width="100"
@@ -30,7 +30,7 @@
         data-field="HireDate"
         data-type="date"
       />
-      <template #dataRowTemplate="{ data: rowInfo }">
+      <template #rowTemplate="{ data: rowInfo }">
         <tbody
           :class="{'dx-row-alt': rowInfo.rowIndex % 2}"
           class="employee dx-row"
