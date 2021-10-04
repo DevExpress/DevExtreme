@@ -1075,8 +1075,7 @@ class Scheduler extends Widget {
             fields,
             this._dataAccessors,
             config().forceIsoDateParsing,
-            () => this.option('dateSerializationFormat'),
-            (value) => this.option('dateSerializationFormat', value)
+            this.option('dateSerializationFormat')
         );
 
         this._dataAccessors.resources = createExpressions(this.option('resources'));
