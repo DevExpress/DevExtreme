@@ -1786,9 +1786,9 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.on(events)]
      */
-    on(
-      events: { [key in DevExpress.data.DataSource.EventName]?: Function }
-    ): this;
+    on(events: {
+      [key in DevExpress.data.DataSource.EventName]?: Function;
+    }): this;
     /**
      * [descr:DataSource.pageIndex()]
      */
@@ -2465,11 +2465,9 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSource.on(events)]
      */
-    on(
-      events: {
-        [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
-      }
-    ): this;
+    on(events: {
+      [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
+    }): this;
     /**
      * [descr:PivotGridDataSource.reload()]
      */
@@ -17741,6 +17739,17 @@ declare module DevExpress.ui {
      */
     descriptionExpr?: string;
     /**
+     * [descr:dxSchedulerOptions.dropDownAppointmentTemplate]
+     * @deprecated [depNote:dxSchedulerOptions.dropDownAppointmentTemplate]
+     */
+    dropDownAppointmentTemplate?:
+      | DevExpress.core.template
+      | ((
+          model: DevExpress.ui.dxScheduler.AppointmentTemplateData,
+          itemIndex: number,
+          contentElement: DevExpress.core.DxElement
+        ) => string | DevExpress.core.UserDefinedElement);
+    /**
      * [descr:dxSchedulerOptions.editing]
      */
     editing?:
@@ -18063,6 +18072,17 @@ declare module DevExpress.ui {
             | DevExpress.core.template
             | ((
                 model: DevExpress.ui.dxScheduler.AppointmentTooltipTemplateData,
+                itemIndex: number,
+                contentElement: DevExpress.core.DxElement
+              ) => string | DevExpress.core.UserDefinedElement);
+          /**
+           * [descr:dxSchedulerOptions.views.dropDownAppointmentTemplate]
+           * @deprecated [depNote:dxSchedulerOptions.views.dropDownAppointmentTemplate]
+           */
+          dropDownAppointmentTemplate?:
+            | DevExpress.core.template
+            | ((
+                model: DevExpress.ui.dxScheduler.AppointmentTemplateData,
                 itemIndex: number,
                 contentElement: DevExpress.core.DxElement
               ) => string | DevExpress.core.UserDefinedElement);
