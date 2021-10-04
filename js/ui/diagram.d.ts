@@ -611,15 +611,15 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       autoSizeEnabled?: boolean;
       /**
        * @docid
-       * @default "children"
+       * @default "containerKey"
        */
-      containerChildrenExpr?: string | ((data: any, value?: any) => any);
+      containerKeyExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @default undefined
        */
-      containerKeyExpr?: string | ((data: any, value?: any) => any);
-      /**
+       containerChildrenExpr?: string | ((data: any, value?: any) => any);
+       /**
        * @docid
        * @default undefined
        */
