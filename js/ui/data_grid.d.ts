@@ -3640,7 +3640,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     } | 'auto';
     /**
      * @docid
-     * @deprecated Use dataRowTemplate instead
+     * @deprecated
      * @type_function_param2 rowInfo:object
      * @type_function_param2_field1 key:any
      * @type_function_param2_field2 data:any
