@@ -143,6 +143,17 @@ function test_3Columns_4Items_NotAlignedLabels(wrapper) {
                 }
             });
 
+            QUnit.test('1 column-> [group[text], group[longText.label.visible: false]]', function(assert) {
+                const wrapper = new FormLayoutTestWrapper(1, { alignItemLabels, alignItemLabelsInAllGroups }, [
+                    { itemType: 'group', items: ['text'] },
+                    { itemType: 'group', items: [{ dataField: 'longText', label: { visible: false } }] }]);
+                wrapper.checkFormSize(1000, 82);
+                wrapper.checkElementPosition(wrapper.$form.find('[for$="text"]'), 8, 0, 40, 19);
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="text"]'), 1, 41, 958, 34);
+                assert.strictEqual(wrapper.$form.find('[for$="longText"]').length, 0, 'find([for$="longText"]).length');
+                wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 47, 1, 998, 34);
+            });
+
             QUnit.test('1 column-> [group.alignItemLabels: false [text, longText]]', function() {
                 const wrapper = new FormLayoutTestWrapper(1, { alignItemLabels, alignItemLabelsInAllGroups }, [
                     { itemType: 'group', alignItemLabels: false, items: ['text', 'longText'] }]);
