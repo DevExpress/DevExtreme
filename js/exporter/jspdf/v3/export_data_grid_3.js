@@ -1,5 +1,6 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
+import { normalizeRowsInfo } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
@@ -23,6 +24,7 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
+
             // TODO: pass rowOptions: { headerStyles: { backgroundColor }, groupStyles: {...}, totalStyles: {...} }
             const rowsInfo = generateRowsInfo(dataProvider, dataGrid, options.rowOptions?.headerStyles?.backgroundColor);
 
@@ -43,6 +45,8 @@ function exportDataGrid(doc, dataGrid, options) {
                 ));
             }
 
+            normalizeRowsInfo(rowsInfo);
+
             // computes withs of the cells depending of the options
             initializeCellsWidth(doc, dataProvider, rowsInfo, options);
 
@@ -52,7 +56,7 @@ function exportDataGrid(doc, dataGrid, options) {
             // apply colSpans + recalculate cellsWidth
             applyColSpans(rowsInfo);
 
-            // set/update/initCellHeight - autocalculate by text+width+wordWrapEnabled or use value from customizeCell
+            // set/update/initCellHeight - autocalculate by text+width+wordWrapEnabled+padding or use value from customizeCell
             calculateHeights(doc, rowsInfo, options);
 
             // apply rowSpans + recalculate cells height

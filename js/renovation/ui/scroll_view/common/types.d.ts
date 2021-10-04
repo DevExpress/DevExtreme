@@ -10,6 +10,12 @@ export interface ScrollEventArgs extends Partial<ScrollableBoundary> {
   scrollOffset: ScrollOffset;
 }
 
+export interface ScrollLocationChangeArgs {
+  fullScrollProp: 'scrollLeft' | 'scrollTop';
+  location: number;
+  needFireScroll: boolean;
+}
+
 export type ScrollableShowScrollbar = 'onScroll' | 'onHover' | 'always' | 'never';
 
 export type ScrollableDirection = 'both' | 'horizontal' | 'vertical';
@@ -35,4 +41,20 @@ export interface DxMouseWheelEvent extends MouseEvent {
 
 export interface DxKeyboardEvent extends KeyboardEvent {
   originalEvent: DxKeyboardEvent;
+}
+
+export interface DomRect {
+  width: number;
+  height: number;
+  bottom: number;
+  top: number;
+  left: number;
+  right: number;
+}
+
+export interface ElementOffset {
+  bottom?: number;
+  top?: number;
+  left?: number;
+  right?: number;
 }

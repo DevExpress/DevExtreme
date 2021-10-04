@@ -18,12 +18,10 @@ export const utils = {
         },
 
         create: (
-            instance,
             fields,
             currentDataAccessors,
             forceIsoDateParsing,
-            getDateSerializationFormat,
-            setDateSerializationFormat
+            dateSerializationFormat
         ) => {
             const isDateField = (field) => field === 'startDate' || field === 'endDate';
             const defaultDataAccessors = {
@@ -42,26 +40,31 @@ export const utils = {
 
                     let dateGetter;
                     let dateSetter;
+                    let serializationFormat;
 
                     if(isDateField(name)) {
-                        dateGetter = function() {
-                            let value = getter.apply(instance, arguments);
+                        dateGetter = (object) => {
+                            let value = getter(object);
                             if(forceIsoDateParsing) {
-                                if(!getDateSerializationFormat()) {
-                                    const format = dateSerialization.getDateSerializationFormat(value);
-                                    if(format) {
-                                        setDateSerializationFormat(format);
-                                    }
-                                }
                                 value = dateSerialization.deserializeDate(value);
                             }
                             return value;
                         };
-                        dateSetter = function(object, value) {
-                            if(forceIsoDateParsing || getDateSerializationFormat()) {
-                                value = dateSerialization.serializeDate(value, getDateSerializationFormat());
+                        dateSetter = (object, value) => {
+                            if(dateSerializationFormat) {
+                                serializationFormat = dateSerializationFormat;
+                            } else if(forceIsoDateParsing && !serializationFormat) {
+                                const oldValue = getter(object);
+
+                                serializationFormat = dateSerialization.getDateSerializationFormat(oldValue);
                             }
-                            setter.call(this, object, value);
+
+                            const newValue = dateSerialization.serializeDate(
+                                value,
+                                serializationFormat
+                            );
+
+                            setter(object, newValue);
                         };
                     }
                     dataAccessors.getter[name] = dateGetter || getter;
@@ -79,7 +82,9 @@ export const utils = {
     },
     DOM: {
         getHeaderHeight: (header) => {
-            return header._$element && parseInt(getOuterHeight(header._$element), 10);
+            return header
+                ? header._$element && parseInt(getOuterHeight(header._$element), 10)
+                : 0;
         },
     },
     renovation: {

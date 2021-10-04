@@ -111,6 +111,7 @@ export class CheckBoxProps extends EditorProps {
 }
 
 export type CheckBoxPropsType = CheckBoxProps
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<WidgetProps, 'aria'>;
 
 export const defaultOptionRules = createDefaultOptionRules<CheckBoxPropsType>([{

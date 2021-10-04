@@ -7,6 +7,7 @@ import {
 import { AppointmentViewModel } from './appointments/viewModelGenerator';
 import { getGroupCount } from './resources/utils';
 import { getCellWidth, getCellHeight, getAllDayHeight } from './workspaces/helpers/positionHelper';
+import { getCellDuration } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
 class AppointmentLayoutManager {
     constructor(instance) {
@@ -42,15 +43,25 @@ class AppointmentLayoutManager {
             workspace._isVerticalGroupedWorkSpace(),
             DOMMetaData
         );
-        const { positionHelper } = workspace;
+        const rowCount = workspace._getRowCount();
+        const { positionHelper, viewDataProvider } = workspace;
+        const visibleDayDuration = viewDataProvider.getVisibleDayDuration(
+            workspace.option('startDayHour'),
+            workspace.option('endDayHour'),
+            workspace.option('hoursInterval')
+        );
 
+        const cellDuration = getCellDuration(
+            workspace.type,
+            workspace.option('startDayHour'),
+            workspace.option('endDayHour'),
+            workspace.option('hoursInterval')
+        );
         return {
             resources: this.instance.option('resources'),
             loadedResources: this.instance.option('loadedResources'),
             getAppointmentColor: this.instance.createGetAppointmentColor(),
             dataAccessors: this.instance._dataAccessors,
-
-            instance: this.instance,
             key,
             isRenovatedAppointments: this.modelProvider.isRenovatedAppointments,
             appointmentRenderingStrategyName: this.appointmentRenderingStrategyName,
@@ -59,7 +70,6 @@ class AppointmentLayoutManager {
             startDayHour: this.modelProvider.startDayHour,
             endDayHour: this.modelProvider.endDayHour,
             maxAppointmentsPerCell: this.modelProvider.maxAppointmentsPerCell,
-            agendaDuration: workspace.option('agendaDuration'),
             currentDate: this.modelProvider.currentDate,
             isVirtualScrolling: this.instance.isVirtualScrolling(),
             leftVirtualCellCount: cellCountInsideLeftVirtualCell,
@@ -70,14 +80,18 @@ class AppointmentLayoutManager {
             isGroupedAllDayPanel: workspace.isGroupedAllDayPanel(),
             modelGroups: this.modelProvider.getCurrentViewOption('groups'),
             groupCount,
+            rowCount,
+            appointmentCountPerCell: this.instance.option('_appointmentCountPerCell'),
+            appointmentOffset: this.instance.option('_appointmentOffset'),
+            allowResizing: this.instance._allowResizing(),
+            allowAllDayResizing: this.instance._allowAllDayResizing(),
             startViewDate: workspace.getStartViewDate(),
             groupOrientation: workspace._getRealGroupOrientation(),
-            getIsGroupedByDate: () => workspace.isGroupedByDate(),
             cellWidth: getCellWidth(DOMMetaData),
             cellHeight: getCellHeight(DOMMetaData),
             allDayHeight: allDayHeight,
             resizableStep: positionHelper.getResizableStep(),
-            getVisibleDayDuration: () => workspace.getVisibleDayDuration(),
+            visibleDayDuration,
             // appointment settings
             timeZoneCalculator: getTimeZoneCalculator(key),
             appointmentDataProvider: getAppointmentDataProvider(key),
@@ -89,14 +103,18 @@ class AppointmentLayoutManager {
             endViewDate: workspace.getEndViewDate(),
             positionHelper,
             isGroupedByDate: workspace.isGroupedByDate(),
-            cellDuration: workspace.getCellDuration(),
+            cellDuration,
+            cellDurationInMinutes: workspace.option('cellDuration'),
             viewDataProvider: workspace.viewDataProvider,
             supportAllDayRow: workspace.supportAllDayRow(),
             dateRange: workspace.getDateRange(),
             intervalDuration: workspace.getIntervalDuration(),
-            isVerticalOrientation: workspace.isVerticalOrientation(),
             allDayIntervalDuration: workspace.getIntervalDuration(true),
+            isVerticalOrientation: workspace.isVerticalOrientation(),
             DOMMetaData,
+            // agenda only
+            instance: this.instance,
+            agendaDuration: workspace.option('agendaDuration'),
         };
     }
 
@@ -106,10 +124,7 @@ class AppointmentLayoutManager {
         const {
             viewModel,
             positionMap
-        } = this.appointmentViewModel.generate({
-            filteredItems: items,
-            ...renderingStrategyOptions,
-        });
+        } = this.appointmentViewModel.generate(items, renderingStrategyOptions);
 
         this._positionMap = positionMap; // TODO get rid of this after remove old render
 

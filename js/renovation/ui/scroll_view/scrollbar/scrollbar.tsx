@@ -53,7 +53,9 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 };
 
 export type ScrollbarPropsType = ScrollbarProps
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<BaseWidgetProps, 'rtlEnabled'>
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'showScrollbar' | 'scrollByThumb' | 'scrollLocationChange'>;
 
 @Component({
@@ -62,34 +64,38 @@ export type ScrollbarPropsType = ScrollbarProps
 })
 
 export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
+  @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
+
+  @Ref() scrollRef!: RefObject<HTMLDivElement>;
+
   @Mutable() rightScrollLocation = 0;
 
   @Mutable() prevScrollLocation = 0;
+
+  @InternalState() pendingPointerUp = false;
 
   @InternalState() hovered = false;
 
   @InternalState() expanded = false;
 
-  @InternalState() visibility = false;
-
-  @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
-
   @Ref() thumbRef!: RefObject<HTMLDivElement>;
 
-  @Effect()
+  @Effect({ run: 'once' })
   pointerDownEffect(): EffectReturn {
     return subscribeToDXPointerDownEvent(
       this.thumbRef.current, () => {
+        this.pendingPointerUp = true;
         this.expanded = true;
       },
     );
   }
 
-  @Effect()
+  @Effect({ run: 'once' })
   pointerUpEffect(): EffectReturn {
     return subscribeToDXPointerUpEvent(
       domAdapter.getDocument(), () => {
         this.expanded = false;
+        this.pendingPointerUp = false;
       },
     );
   }
@@ -180,25 +186,29 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.prevScrollLocation = location;
     this.rightScrollLocation = this.props.maxOffset - location;
 
-    this.props.scrollLocationChange?.(this.fullScrollProp, -location, scrollDelta >= 1);
+    this.props.scrollLocationChange?.({
+      fullScrollProp: this.fullScrollProp,
+      location: -location,
+      needFireScroll: scrollDelta >= 1,
+    });
   }
 
   @Effect()
-  /* istanbul ignore next */
   syncScrollLocation(): void {
     if (this.props.containerHasSizes) {
       let newScrollLocation = this.props.scrollLocation;
 
       if (this.isHorizontal && this.props.rtlEnabled) {
-        newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
-
-        if (newScrollLocation >= 0) {
-          newScrollLocation = 0;
+        if (this.props.maxOffset === 0) {
           this.rightScrollLocation = 0;
         }
+
+        newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
       }
 
-      this.moveTo(newScrollLocation);
+      if (this.prevScrollLocation !== newScrollLocation) {
+        this.moveTo(newScrollLocation);
+      }
     }
   }
 
@@ -221,8 +231,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   moveToMouseLocation(event: DxMouseEvent, offset: number): void {
     const mouseLocation = event[`page${this.axis.toUpperCase()}`] - offset;
     const delta = mouseLocation / this.containerToContentRatio - this.props.containerSize / 2;
-
-    this.visibility = true;
 
     this.moveTo(Math.round(-delta));
   }
@@ -254,6 +262,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       [SCROLLABLE_SCROLLBAR_ACTIVE_CLASS]: this.expanded,
       [HOVER_ENABLED_STATE]: this.isExpandable,
       'dx-state-invisible': this.hidden,
+      'dx-state-hover': this.isExpandable && this.hovered,
     };
     return combineClasses(classesMap);
   }
@@ -291,13 +300,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       return false;
     }
     if (this.isHoverMode) {
-      return this.props.visible || this.visibility || this.hovered;
+      return this.props.visible || this.hovered || this.pendingPointerUp;
     }
     if (this.isAlwaysMode) {
       return true;
     }
 
-    return this.props.visible || this.visibility;
+    return this.props.visible;
   }
 
   get isExpandable(): boolean {

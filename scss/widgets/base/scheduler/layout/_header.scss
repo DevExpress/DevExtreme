@@ -39,11 +39,11 @@ $arrow-down: "\f016";
 
     .dx-scheduler-navigator {
       .dx-scheduler-navigator-caption {
-        width: 180px;
+        min-width: 180px;
 
         .dx-device-mobile &,
         .dx-scheduler-adaptive & {
-          width: 140px;
+          min-width: 140px;
         }
       }
     }

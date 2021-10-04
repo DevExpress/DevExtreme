@@ -30,7 +30,7 @@ import '../check_box';
 import '../date_box';
 import '../button';
 
-import { getLabelWidthByText } from './components/label';
+import { getLabelWidthByInnerHTML } from './components/label';
 import { renderFieldItem } from './components/field_item.js';
 import { renderButtonItem } from './components/button_item.js';
 import { renderEmptyItem } from './components/empty_item.js';
@@ -63,6 +63,7 @@ const LayoutManager = Widget.inherit({
             screenByWidth: null,
             showOptionalMark: false,
             requiredMark: '*',
+            labelMode: 'default',
             optionalMark: messageLocalization.format('dxForm-optionalMark'),
             requiredMessage: messageLocalization.getFormatter('dxForm-requiredMessage')
         });
@@ -568,6 +569,7 @@ const LayoutManager = Widget.inherit({
             template: item.template ? this._getTemplate(item.template) : null,
             itemId: this.option('form') && this.option('form').getItemID(name),
             managerMarkOptions: this._getMarkOptions(),
+            labelMode: this.option('labelMode'),
         }));
 
         if(widgetInstance && item.dataField) {
@@ -582,9 +584,9 @@ const LayoutManager = Widget.inherit({
         });
     },
 
-    _getLabelWidthByText: function({ text, location }) {
-        return getLabelWidthByText({
-            text, location, markOptions: convertToLabelMarkOptions(this._getMarkOptions())
+    _getLabelWidthByInnerHTML: function({ innerHTML, location }) {
+        return getLabelWidthByInnerHTML({
+            innerHTML, location, markOptions: convertToLabelMarkOptions(this._getMarkOptions())
         });
     },
 
@@ -753,6 +755,7 @@ const LayoutManager = Widget.inherit({
                 break;
             case 'alignItemLabels':
             case 'labelLocation':
+            case 'labelMode':
             case 'requiredMessage':
                 this._invalidate();
                 break;

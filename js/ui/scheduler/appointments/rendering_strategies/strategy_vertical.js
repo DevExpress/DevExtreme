@@ -5,6 +5,7 @@ import dateUtils from '../../../../core/utils/date';
 import timeZoneUtils from '../../utils.timeZone';
 import { ExpressionUtils } from '../../expressionUtils';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
+import { getAppointmentTakesAllDay } from '../DataProvider/utils';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -19,7 +20,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             deltaTime = this._getDeltaWidth(args, initialSize) * toMs('day');
         } else {
             const deltaHeight = args.height - initialSize.height;
-            deltaTime = toMs('minute') * Math.round(deltaHeight / this.cellHeight * this.instance.getAppointmentDurationInMinutes());
+            deltaTime = toMs('minute') * Math.round(deltaHeight / this.cellHeight * this.cellDurationInMinutes);
         }
         return deltaTime;
     }
@@ -138,9 +139,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getGroupHeight() {
-        const workspace = this.instance.getWorkSpace();
-
-        return workspace.getCellHeight() * workspace._getRowCount();
+        return this.cellHeight * this.rowCount;
     }
 
     _getGroupTopOffset(appointmentSettings) {
@@ -184,7 +183,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             isGroupedAllDayPanel: this.isGroupedAllDayPanel
         }));
         const cellsDiff = this.isGroupedByDate
-            ? this.instance.fire('getGroupCount')
+            ? this.groupCount
             : 1;
         const offset = this.cellWidth * cellsDiff;
         const left = appointmentSettings.left + offset;
@@ -219,7 +218,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getMinuteHeight() {
-        return this.cellHeight / this.instance.getAppointmentDurationInMinutes();
+        return this.cellHeight / this.cellDurationInMinutes;
     }
 
     _getCompactLeftCoordinate(itemLeft, index) {
@@ -293,7 +292,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             return true;
         }
 
-        return this.instance.appointmentTakesAllDay(appointmentData);
+        const adapter = createAppointmentAdapter(this.key, appointmentData);
+        return getAppointmentTakesAllDay(adapter, this.startDayHour, this.endDayHour);
     }
 
     _getAppointmentMaxWidth() {
@@ -355,7 +355,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _calculateGeometryConfig(coordinates) {
-        if(!this.instance._allowResizing() || !this.instance._allowAllDayResizing()) {
+        if(!this.allowResizing || !this.allowAllDayResizing) {
             coordinates.skipResizing = true;
         }
 
@@ -373,7 +373,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     _getDefaultRatio(coordinates, appointmentCountPerCell) {
-        return coordinates.count > this.instance.option('_appointmentCountPerCell') ? 0.65 : 1;
+        return coordinates.count > this.appointmentCountPerCell ? 0.65 : 1;
     }
 
     _getOffsets() {

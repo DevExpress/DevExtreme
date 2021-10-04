@@ -8,91 +8,30 @@ import { extend } from '../../../../core/utils/extend';
 import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
-import timeZoneUtils from '../../utils.timeZone';
+
 import { createAppointmentAdapter } from '../../appointmentAdapter';
 import { isDateAndTimeView as calculateIsDateAndTimeView } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { getResourcesDataByGroups } from '../../resources/utils';
+import {
+    compareDateWithStartDayHour,
+    compareDateWithEndDayHour,
+    getTrimDates,
+    _isEndDateWrong,
+    getAppointmentTakesSeveralDays,
+    _appointmentPartInInterval,
+    getRecurrenceException,
+    getAppointmentTakesAllDay
+} from './utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
 const USER_FILTER_POSITION = 1;
-const FULL_DATE_FORMAT = 'yyyyMMddTHHmmss';
 const RECURRENCE_FREQ = 'freq';
 
 const FilterStrategies = {
     virtual: 'virtual',
     standard: 'standard'
 };
-
-const getTrimDates = (min, max) => {
-    const newMin = dateUtils.trimTime(min);
-    const newMax = dateUtils.trimTime(max);
-
-    newMax.setDate(newMax.getDate() + 1);
-
-    return [newMin, newMax];
-};
-
-class AppointmentFilterHelper {
-    compareDateWithStartDayHour(startDate, endDate, startDayHour, allDay, severalDays) {
-        const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
-
-        const result = (startDate.getHours() >= startTime.hours && startDate.getMinutes() >= startTime.minutes) ||
-                    (endDate.getHours() === startTime.hours && endDate.getMinutes() > startTime.minutes) ||
-                    (endDate.getHours() > startTime.hours) ||
-                    severalDays ||
-                    allDay;
-
-        return result;
-    }
-
-    compareDateWithEndDayHour(options) {
-        const {
-            startDate,
-            endDate,
-            startDayHour,
-            endDayHour,
-            viewStartDayHour,
-            viewEndDayHour,
-            allDay,
-            severalDays,
-            min,
-            max,
-            checkIntersectViewport
-        } = options;
-
-        const hiddenInterval = (24 - viewEndDayHour + viewStartDayHour) * toMs('hour');
-        const apptDuration = endDate.getTime() - startDate.getTime();
-        const delta = (hiddenInterval - apptDuration) / toMs('hour');
-        const apptStartHour = startDate.getHours();
-        const apptStartMinutes = startDate.getMinutes();
-        let result;
-
-        const endTime = dateUtils.dateTimeFromDecimal(endDayHour);
-        const startTime = dateUtils.dateTimeFromDecimal(startDayHour);
-        const apptIntersectViewport = startDate < max && endDate > min;
-
-        result =
-            (checkIntersectViewport &&
-                apptIntersectViewport) ||
-            (apptStartHour < endTime.hours) ||
-            (apptStartHour === endTime.hours && apptStartMinutes < endTime.minutes) ||
-            (allDay &&
-                startDate <= max) ||
-            (severalDays &&
-                apptIntersectViewport &&
-                    (apptStartHour < endTime.hours || (endDate.getHours() * 60 + endDate.getMinutes()) > startTime.hours * 60)
-            );
-
-        if(apptDuration < hiddenInterval) {
-            if((apptStartHour > endTime.hours && apptStartMinutes > endTime.minutes) && (delta <= apptStartHour - endDayHour)) {
-                result = false;
-            }
-        }
-
-        return result;
-    }
-}
 
 class FilterMaker {
     constructor(dataAccessors) {
@@ -168,8 +107,6 @@ export class AppointmentFilterBaseStrategy {
         this.dataAccessors = this.options.dataAccessors;
         this.preparedItems = [];
 
-        this.filterHelper = new AppointmentFilterHelper();
-
         this._init();
     }
 
@@ -217,45 +154,6 @@ export class AppointmentFilterBaseStrategy {
         });
     }
 
-    getRecurrenceException(appointmentAdapter) {
-        const recurrenceException = appointmentAdapter.recurrenceException;
-
-        if(recurrenceException) {
-            const exceptions = recurrenceException.split(',');
-
-            for(let i = 0; i < exceptions.length; i++) {
-                exceptions[i] = this._convertRecurrenceException(exceptions[i], appointmentAdapter.startDate);
-            }
-
-            return exceptions.join();
-        }
-
-        return recurrenceException;
-    }
-    _convertRecurrenceException(exceptionString, startDate) {
-        exceptionString = exceptionString.replace(/\s/g, '');
-
-        const getConvertedToTimeZone = date => {
-            return this.timeZoneCalculator.createDate(date, {
-                path: 'toGrid'
-            });
-        };
-
-        const exceptionDate = dateSerialization.deserializeDate(exceptionString);
-        const convertedStartDate = getConvertedToTimeZone(startDate);
-        let convertedExceptionDate = getConvertedToTimeZone(exceptionDate);
-
-        convertedExceptionDate = timeZoneUtils.correctRecurrenceExceptionByTimezone(
-            convertedExceptionDate,
-            convertedStartDate,
-            this.timeZone
-        );
-
-        exceptionString = dateSerialization.serializeDate(convertedExceptionDate, FULL_DATE_FORMAT);
-
-        return exceptionString;
-    }
-
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
         if(!this.dataSource) {
             return;
@@ -283,7 +181,7 @@ export class AppointmentFilterBaseStrategy {
 
         if(appointments) {
             each(appointments, (_, item) => {
-                if(this.appointmentTakesAllDay(item, this.viewStartDayHour, this.viewEndDayHour)) {
+                if(getAppointmentTakesAllDay(item, this.viewStartDayHour, this.viewEndDayHour)) {
                     result = true;
                     return false;
                 }
@@ -324,35 +222,6 @@ export class AppointmentFilterBaseStrategy {
         }
     }
 
-    _getAppointmentDurationInHours(startDate, endDate) {
-        return (endDate.getTime() - startDate.getTime()) / toMs('hour');
-    }
-
-    appointmentTakesSeveralDays(adapter) {
-        return !dateUtils.sameDate(adapter.startDate, adapter.endDate);
-    }
-
-    _appointmentHasShortDayDuration(startDate, endDate, startDayHour, endDayHour) {
-        const appointmentDurationInHours = this._getAppointmentDurationInHours(startDate, endDate);
-        const shortDayDurationInHours = endDayHour - startDayHour;
-
-        return (appointmentDurationInHours >= shortDayDurationInHours && startDate.getHours() === startDayHour && endDate.getHours() === endDayHour);
-    }
-
-    _appointmentHasAllDayDuration(startDate, endDate, startDayHour, endDayHour) {
-        startDate = new Date(startDate);
-        endDate = new Date(endDate);
-
-        const dayDuration = 24;
-        const appointmentDurationInHours = this._getAppointmentDurationInHours(startDate, endDate);
-
-        return (appointmentDurationInHours >= dayDuration) || this._appointmentHasShortDayDuration(startDate, endDate, startDayHour, endDayHour);
-    }
-
-    _isEndDateWrong(startDate, endDate) {
-        return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
-    }
-
     calculateAppointmentEndDate(isAllDay, startDate) {
         if(isAllDay) {
             return dateUtils.setToDayEnd(new Date(startDate));
@@ -362,14 +231,10 @@ export class AppointmentFilterBaseStrategy {
     }
 
     replaceWrongEndDate(appointment, startDate, endDate) {
-        if(this._isEndDateWrong(startDate, endDate)) {
+        if(_isEndDateWrong(startDate, endDate)) {
             const calculatedEndDate = this.calculateAppointmentEndDate(appointment.allDay, startDate);
             this.dataAccessors.setter.endDate(appointment, calculatedEndDate);
         }
-    }
-
-    appointmentTakesAllDay(appointment, startDayHour, endDayHour) {
-        return appointment.allDay || this._appointmentHasAllDayDuration(appointment.startDate, appointment.endDate, startDayHour, endDayHour);
     }
 
     _createAllDayAppointmentFilter(filterOptions) {
@@ -377,10 +242,9 @@ export class AppointmentFilterBaseStrategy {
             viewStartDayHour,
             viewEndDayHour
         } = filterOptions;
-        const that = this;
 
         return [[
-            (appointment) => that.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour)
+            (appointment) => getAppointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour)
         ]];
     }
 
@@ -428,8 +292,8 @@ export class AppointmentFilterBaseStrategy {
                 recurrenceRule = appointment.recurrenceRule;
             }
 
-            const appointmentTakesAllDay = this.appointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);
-            const appointmentTakesSeveralDays = this.appointmentTakesSeveralDays(appointment);
+            const appointmentTakesAllDay = getAppointmentTakesAllDay(appointment, viewStartDayHour, viewEndDayHour);
+            const appointmentTakesSeveralDays = getAppointmentTakesSeveralDays(appointment);
             const isAllDay = appointment.allDay;
             const isLongAppointment = appointmentTakesSeveralDays || appointmentTakesAllDay;
 
@@ -442,7 +306,8 @@ export class AppointmentFilterBaseStrategy {
             }
 
             if(hasRecurrenceRule) {
-                const recurrenceException = this.getRecurrenceException(appointment);
+                const recurrenceException = getRecurrenceException(appointment, this.timeZoneCalculator, this.timezone);
+
                 if(!this._filterAppointmentByRRule({
                     startDate,
                     endDate,
@@ -460,13 +325,13 @@ export class AppointmentFilterBaseStrategy {
             }
 
             if(isDefined(startDayHour) && (!useRecurrence || !filterOptions.isVirtualScrolling)) {
-                if(!this.filterHelper.compareDateWithStartDayHour(startDate, endDate, startDayHour, appointmentTakesAllDay, appointmentTakesSeveralDays)) {
+                if(!compareDateWithStartDayHour(startDate, endDate, startDayHour, appointmentTakesAllDay, appointmentTakesSeveralDays)) {
                     return false;
                 }
             }
 
             if(isDefined(endDayHour)) {
-                if(!this.filterHelper.compareDateWithEndDayHour({
+                if(!compareDateWithEndDayHour({
                     startDate: startDate,
                     endDate: endDate,
                     startDayHour,
@@ -595,14 +460,6 @@ export class AppointmentFilterBaseStrategy {
         return result;
     }
 
-    _appointmentPartInInterval(startDate, endDate, startDayHour, endDayHour) {
-        const apptStartDayHour = startDate.getHours();
-        const apptEndDayHour = endDate.getHours();
-
-        return (apptStartDayHour <= startDayHour && apptEndDayHour <= endDayHour && apptEndDayHour >= startDayHour) ||
-            (apptEndDayHour >= endDayHour && apptStartDayHour <= endDayHour && apptStartDayHour >= startDayHour);
-    }
-
     _filterAppointmentByRRule(appointment, min, max, startDayHour, endDayHour, firstDayOfWeek) {
         const recurrenceRule = appointment.recurrenceRule;
         const recurrenceException = appointment.recurrenceException;
@@ -612,7 +469,7 @@ export class AppointmentFilterBaseStrategy {
         const appointmentEndDate = appointment.endDate;
         const recurrenceProcessor = getRecurrenceProcessor();
 
-        if(allDay || this._appointmentPartInInterval(appointmentStartDate, appointmentEndDate, startDayHour, endDayHour)) {
+        if(allDay || _appointmentPartInInterval(appointmentStartDate, appointmentEndDate, startDayHour, endDayHour)) {
             const [trimMin, trimMax] = getTrimDates(min, max);
 
             min = trimMin;

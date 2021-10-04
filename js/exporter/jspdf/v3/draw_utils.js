@@ -1,8 +1,12 @@
-import { isDefined } from '../../../core/utils/type';
-import { drawTextInRect, drawLine, drawRect } from './pdf_utils_v3';
+import { isDefined, isObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
+import { calculateTextHeight, getTextLines } from './pdf_utils_v3';
 
 const defaultBorderLineWidth = 1;
+
+function round(value) {
+    return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
+}
 
 function drawCellsContent(doc, cellsArray, docStyles) {
     cellsArray.forEach(cell => {
@@ -11,18 +15,68 @@ function drawCellsContent(doc, cellsArray, docStyles) {
     });
 }
 
+function drawLine(doc, startX, startY, endX, endY) {
+    doc.line(round(startX), round(startY), round(endX), round(endY));
+}
+
+function drawRect(doc, x, y, width, height, style) {
+    if(isDefined(style)) {
+        doc.rect(round(x), round(y), round(width), round(height), style);
+    } else {
+        doc.rect(round(x), round(y), round(width), round(height));
+    }
+}
+
+function getLineHeightShift(doc) {
+    const DEFAULT_LINE_HEIGHT = 1.15;
+
+    // TODO: check lineHeightFactor from text options. Currently supports only doc options - https://github.com/MrRio/jsPDF/issues/3234
+    return (doc.getLineHeightFactor() - DEFAULT_LINE_HEIGHT) * doc.getFontSize();
+}
+
+function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWrapEnabled, jsPdfTextOptions) {
+    const textArray = getTextLines(doc, text, doc.getFont(), { wordWrapEnabled, targetRectWidth: rect.w });
+    const linesCount = textArray.length;
+
+    const heightOfOneLine = calculateTextHeight(doc, textArray[0], doc.getFont(), { wordWrapEnabled: false });
+
+    const vAlign = verticalAlign ?? 'middle';
+    const hAlign = horizontalAlign ?? 'left';
+    const verticalAlignCoefficientsMap = { top: 0, middle: 0.5, bottom: 1 };
+    const horizontalAlignMap = { left: 0, center: 0.5, right: 1 };
+
+    const y = rect.y
+        + (rect.h * verticalAlignCoefficientsMap[vAlign])
+        - heightOfOneLine * (linesCount - 1) * verticalAlignCoefficientsMap[vAlign]
+        + getLineHeightShift(doc);
+
+    const x = rect.x
+        + (rect.w * horizontalAlignMap[hAlign]);
+
+    const textOptions = extend({ baseline: vAlign, align: hAlign }, jsPdfTextOptions);
+    doc.text(textArray.join('\n'), round(x), round(y), textOptions);
+}
+
 function drawCellBackground(doc, cell) {
     if(isDefined(cell.backgroundColor)) {
-        doc.setFillColor(cell.backgroundColor);
+        if(cell.backgroundColor !== doc.getFillColor()) {
+            callMethodWithColorParameter(doc, 'setFillColor', cell.backgroundColor);
+        }
         drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h, 'F');
     }
 }
 
 function drawCellText(doc, cell, docStyles) {
     if(isDefined(cell.text) && cell.text !== '') { // TODO: use cell.text.trim() ?
-        const { textColor, font } = cell;
+        const { textColor, font, _rect, padding } = cell;
         setTextStyles(doc, { textColor, font }, docStyles);
-        drawTextInRect(doc, cell.text, cell._rect, cell.verticalAlign, cell.wordWrapEnabled, cell.jsPdfTextOptions);
+        const textRect = {
+            x: _rect.x + padding.left,
+            y: _rect.y + padding.top,
+            w: _rect.w - (padding.left + padding.right),
+            h: _rect.h - (padding.top + padding.bottom)
+        };
+        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign, cell.wordWrapEnabled, cell.jsPdfTextOptions);
     }
 }
 
@@ -78,7 +132,7 @@ function drawBorders(doc, rect, { borderColor, drawLeftBorder = true, drawRightB
 function setTextStyles(doc, { textColor, font }, docStyles) {
     const currentTextColor = isDefined(textColor) ? textColor : docStyles.textColor;
     if(currentTextColor !== doc.getTextColor()) {
-        doc.setTextColor(currentTextColor);
+        callMethodWithColorParameter(doc, 'setTextColor', currentTextColor);
     }
 
     const currentFont = isDefined(font) ? extend({}, docStyles.font, font) : docStyles.font;
@@ -99,7 +153,22 @@ function setLinesStyles(doc, { borderColor }, docStyles) {
     doc.setLineWidth(defaultBorderLineWidth);
     const currentBorderColor = isDefined(borderColor) ? borderColor : docStyles.borderColor;
     if(currentBorderColor !== doc.getDrawColor()) {
-        doc.setDrawColor(currentBorderColor);
+        callMethodWithColorParameter(doc, 'setDrawColor', currentBorderColor);
+    }
+}
+
+function callMethodWithColorParameter(doc, method, color) {
+    if(!isObject(color)) {
+        doc[method](color);
+    } else {
+        const argsCount = Object.keys(color).length;
+        if(argsCount === 3) {
+            doc[method](color.ch1, color.ch2, color.ch3);
+        } else if(argsCount === 4) {
+            doc[method](color.ch1, color.ch2, color.ch3, color.ch4);
+        } else {
+            throw Error(`An incorrect color object was passed: 3 or 4 members are expected while the passed object has ${argsCount} members`);
+        }
     }
 }
 
@@ -145,5 +214,4 @@ function setDocumentStyles(doc, styles) {
     }
 }
 
-export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles };
-
+export { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles, drawTextInRect, drawRect, drawLine };

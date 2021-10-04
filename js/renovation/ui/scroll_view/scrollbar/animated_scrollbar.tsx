@@ -68,7 +68,9 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
 };
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<BaseWidgetProps, 'rtlEnabled'>
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<ScrollableSimulatedProps, 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'
 | 'inertiaEnabled' | 'showScrollbar' | 'scrollByThumb' | 'bounceEnabled' | 'scrollLocationChange'>;
 
@@ -99,8 +101,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   @Mutable() loading = false;
 
   @InternalState() forceAnimationToBottomBound = false;
-
-  @InternalState() forceMoveToBound = false;
 
   @InternalState() pendingRefreshing = false;
 
@@ -195,8 +195,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       this.forceAnimationToBottomBound = true;
     }
 
-    this.props.onRelease?.();
-
     this.wasRelease = true;
     this.needRiseEnd = true;
 
@@ -281,7 +279,6 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
       && !(this.pendingRefreshing || this.pendingLoading)
       && -this.props.maxOffset > 0
     ) {
-      this.forceMoveToBound = false;
       this.start('bounce');
     }
   }

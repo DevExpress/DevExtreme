@@ -55,7 +55,7 @@ const VALIDATION_STATUS = {
 const EDIT_DATA_INSERT_TYPE = 'insert';
 const EDIT_DATA_REMOVE_TYPE = 'remove';
 const VALIDATION_CANCELLED = 'cancel';
-const NEW_SCROLLING_MODE = 'scrolling.newMode';
+const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
 const validationResultIsValid = function(result) {
     return isDefined(result) && result !== VALIDATION_CANCELLED;
@@ -585,15 +585,14 @@ export const validatingModule = {
         controllers: {
             editing: {
                 _addChange: function(options, row) {
-                    const index = this.callBase(options, row);
+                    const change = this.callBase(options, row);
                     const validatingController = this.getController('validating');
 
-                    if(index >= 0 && options.type !== EDIT_DATA_REMOVE_TYPE) {
-                        const change = this.getChanges()[index];
-                        change && validatingController.updateValidationState(change);
+                    if(change && options.type !== EDIT_DATA_REMOVE_TYPE) {
+                        validatingController.updateValidationState(change);
                     }
 
-                    return index;
+                    return change;
                 },
 
                 _handleChangesChange: function(args) {
@@ -652,8 +651,9 @@ export const validatingModule = {
                     const scrollingMode = this.option('scrolling.mode');
                     const virtualMode = scrollingMode === 'virtual';
                     const appendMode = scrollingMode === 'infinite';
+                    const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
 
-                    if(result && !validationData?.isValid && !virtualMode && !(appendMode && this.option(NEW_SCROLLING_MODE))) {
+                    if(result && !validationData?.isValid && !virtualMode && !(appendMode && newMode)) {
                         result = pageIndex === this._pageIndex;
                     }
 

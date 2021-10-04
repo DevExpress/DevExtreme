@@ -13,7 +13,11 @@ import { getDateForHeaderText } from './utils';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 
-type GetRenderConfig = (intervalCount: number) => ViewRenderConfig;
+type GetRenderConfig = (
+  crossScrollingEnabled: boolean,
+  intervalCount: number,
+  isVerticalGrouping: boolean,
+) => ViewRenderConfig;
 
 const verticalViewConfig: ViewRenderConfig = {
   headerPanelTemplate: HeaderPanelLayout,
@@ -28,6 +32,8 @@ const verticalViewConfig: ViewRenderConfig = {
   isRenderDateHeader: true,
   isGenerateWeekDaysHeaderData: false,
   scrollingDirection: 'vertical',
+  className: 'dx-scheduler-work-space-day',
+  isCreateCrossScrolling: false,
 };
 const timelineViewConfig: ViewRenderConfig = {
   headerPanelTemplate: TimelineHeaderPanelLayout,
@@ -41,23 +47,46 @@ const timelineViewConfig: ViewRenderConfig = {
   isRenderDateHeader: true,
   isGenerateWeekDaysHeaderData: true,
   scrollingDirection: 'horizontal',
+  className: `dx-scheduler-timeline-day ${TIMELINE_CLASS}`,
+  isCreateCrossScrolling: true,
 };
 
-const getDayViewConfig: GetRenderConfig = (intervalCount) => ({
+const getVerticalViewConfig = (crossScrollingEnabled: boolean): ViewRenderConfig => ({
   ...verticalViewConfig,
-  className: 'dx-scheduler-work-space-day',
+  isCreateCrossScrolling: crossScrollingEnabled,
+});
+
+const getDayViewConfig: GetRenderConfig = (
+  crossScrollingEnabled,
+  intervalCount,
+) => ({
+  ...getVerticalViewConfig(
+    crossScrollingEnabled,
+  ),
   isRenderDateHeader: intervalCount > 1,
 });
-const getWeekViewConfig: GetRenderConfig = () => ({
-  ...verticalViewConfig,
+const getWeekViewConfig: GetRenderConfig = (
+  crossScrollingEnabled,
+) => ({
+  ...getVerticalViewConfig(
+    crossScrollingEnabled,
+  ),
   className: 'dx-scheduler-work-space-week',
 });
-const getWorkWeekViewConfig: GetRenderConfig = () => ({
-  ...verticalViewConfig,
+const getWorkWeekViewConfig: GetRenderConfig = (
+  crossScrollingEnabled,
+) => ({
+  ...getVerticalViewConfig(
+    crossScrollingEnabled,
+  ),
   className: 'dx-scheduler-work-space-work-week',
 });
 
-const getMonthViewConfig: GetRenderConfig = () => ({
+const getMonthViewConfig: GetRenderConfig = (
+  crossScrollingEnabled,
+  _,
+  isVerticalGrouping,
+) => ({
   headerPanelTemplate: HeaderPanelLayout,
   dateTableTemplate: MonthDateTableLayout,
   isAllDayPanelSupported: false,
@@ -70,11 +99,11 @@ const getMonthViewConfig: GetRenderConfig = () => ({
   isGenerateWeekDaysHeaderData: false,
   className: 'dx-scheduler-work-space-month',
   scrollingDirection: 'vertical',
+  isCreateCrossScrolling: crossScrollingEnabled || isVerticalGrouping,
 });
 
-const getTimelineDayViewConfig: GetRenderConfig = (intervalCount) => ({
+const getTimelineDayViewConfig: GetRenderConfig = (_, intervalCount) => ({
   ...timelineViewConfig,
-  className: `dx-scheduler-timeline-day ${TIMELINE_CLASS}`,
   isGenerateWeekDaysHeaderData: intervalCount > 1,
 });
 const getTimelineWeekViewConfig: GetRenderConfig = () => ({
@@ -107,5 +136,9 @@ const VIEW_CONFIG_GETTERS: Record<ViewType, GetRenderConfig> = {
 
 export const getViewRenderConfigByType = (
   viewType: ViewType,
+  crossScrollingEnabled: boolean,
   intervalCount: number,
-): ViewRenderConfig => VIEW_CONFIG_GETTERS[viewType](intervalCount);
+  isVerticalGrouping: boolean,
+): ViewRenderConfig => VIEW_CONFIG_GETTERS[viewType](
+  crossScrollingEnabled, intervalCount, isVerticalGrouping,
+);

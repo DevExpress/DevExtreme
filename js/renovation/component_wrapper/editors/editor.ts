@@ -64,6 +64,13 @@ export default class Editor extends Component {
     });
   }
 
+  _initOptions(options: Record<string, unknown>): void {
+    super._initOptions(options);
+
+    this.option((ValidationEngine as unknown as ({ initValidationOptions }))
+      .initValidationOptions(options));
+  }
+
   _getDefaultOptions(): Record<string, unknown> {
     return extend(
       super._getDefaultOptions(),

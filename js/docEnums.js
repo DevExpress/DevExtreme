@@ -1011,7 +1011,7 @@
 
 /**
  * @typedef {string} Enums.HtmlEditorToolbarItem
- * @enum {'background'|'bold'|'color'|'font'|'italic'|'link'|'image'|'size'|'strike'|'subscript'|'superscript'|'underline'|'blockquote'|'header'|'increaseIndent'|'decreaseIndent'|'orderedList'|'bulletList'|'alignLeft'|'alignCenter'|'alignRight'|'alignJustify'|'codeBlock'|'variable'|'separator'|'undo'|'redo'|'clear'|'insertTable'|'insertRowAbove'|'insertRowBelow'|'insertColumnLeft'|'insertColumnRight'|'deleteColumn'|'deleteRow'|'deleteTable'}
+ * @enum {'background'|'bold'|'color'|'font'|'italic'|'link'|'image'|'size'|'strike'|'subscript'|'superscript'|'underline'|'blockquote'|'header'|'increaseIndent'|'decreaseIndent'|'orderedList'|'bulletList'|'alignLeft'|'alignCenter'|'alignRight'|'alignJustify'|'codeBlock'|'variable'|'separator'|'undo'|'redo'|'clear'|'cellProperties'|'tableProperties'|'insertTable'|'insertHeaderRow'|'insertRowAbove'|'insertRowBelow'|'insertColumnLeft'|'insertColumnRight'|'deleteColumn'|'deleteRow'|'deleteTable'}
  */
 
 /**
@@ -1022,6 +1022,16 @@
 /**
  * @typedef {string} Enums.EditorStylingMode
  * @enum {'outlined'|'underlined'|'filled'}
+ */
+
+/**
+ * @typedef {string} Enums.EditorLabelMode
+ * @enum {'static'|'floating'|'hidden'}
+ */
+
+/**
+ * @typedef {string} Enums.FormLabelMode
+ * @enum {'static'|'floating'|'hidden'|'default'}
  */
 
 /**
@@ -1226,6 +1236,11 @@
 /**
  * @typedef {string} Enums.GridDataChangeType
  * @enum {'insert' | 'update' | 'remove'}
+ */
+
+/**
+ * @typedef {string} Enums.GridNewRowPosition
+ * @enum {'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop'}
  */
 
 /**

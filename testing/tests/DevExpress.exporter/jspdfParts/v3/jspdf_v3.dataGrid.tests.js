@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { jsPDF } from 'jspdf';
 
-import { isFunction, isObject } from 'core/utils/type';
+import { isFunction, isObject, isDefined } from 'core/utils/type';
 
 import 'ui/data_grid';
 import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
@@ -15,6 +15,8 @@ import { JSPdfBandsTests } from './jspdf_v3.dataGrid.bands.tests.js';
 import { JSPdfGroupingTests } from './jspdf_v3.dataGrid.grouping.tests.js';
 import { JSPdfSummariesTests } from './jspdf_v3.dataGrid.summaries.tests.js';
 import { JSPdfVerticalAlignTests } from './jspdf_v3.dataGrid.verticalAlign.tests.js';
+import { JSPdfHorizontalAlignTests } from './jspdf_v3.dataGrid.horizontalAlign.tests.js';
+import { JSPdfPageMarginsTests } from './jspdf_v3.dataGrid.pageMargin.tests.js';
 import { JSPdfColumnWidthsTests } from './jspdf_v3.dataGrid.columnAutoWidth.tests.js';
 
 import 'generic_light.css!';
@@ -57,6 +59,8 @@ function createMockPdfDoc() {
     const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
     const result = _jsPDF({ unit: 'pt' });
     result.__log = [];
+
+    result.__logOptions = { textOptions: {} };
 
     result.__setDrawColor = result.setDrawColor;
     result.setDrawColor = function() {
@@ -116,6 +120,9 @@ function createMockPdfDoc() {
     result.text = function() {
         if(arguments.length >= 3 && arguments[3].baseline === 'alphabetic') {
             arguments[3] = undefined;
+        }
+        if(this.__logOptions.textOptions.hAlign !== true && arguments.length >= 3 && isDefined(arguments[3]) && arguments[3].align === 'left') {
+            delete arguments[3].align;
         }
         this.__log.push('text,' + argumentsToString.apply(null, arguments));
         this.__text.apply(this, arguments);
@@ -189,6 +196,141 @@ QUnit.module('Table', moduleConfig, () => {
         });
     });
 
+    QUnit.test('1 col - padding', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'f1' }]
+        });
+
+        const onRowExporting = (e) => {
+            e.rowHeight = 20;
+        };
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.padding = 5;
+        };
+
+        const expectedLog = [
+            'text,f1,15,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - padding.left', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'f1' }]
+        });
+
+        const onRowExporting = (e) => {
+            e.rowHeight = 20;
+        };
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.padding = { left: 5 };
+        };
+
+        const expectedLog = [
+            'text,f1,15,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - padding.top', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'f1' }]
+        });
+
+        const onRowExporting = (e) => {
+            e.rowHeight = 20;
+        };
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.padding = { top: 5 };
+        };
+
+        const expectedLog = [
+            'text,f1,10,27.5,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - padding.right', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'f1' }]
+        });
+
+        const onRowExporting = (e) => {
+            e.rowHeight = 20;
+        };
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.padding = { right: 5 };
+        };
+
+        const expectedLog = [
+            'text,f1,10,25,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - padding.bottom', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'f1' }]
+        });
+
+        const onRowExporting = (e) => {
+            e.rowHeight = 20;
+        };
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.padding = { bottom: 5 };
+        };
+
+        const expectedLog = [
+            'text,f1,10,22.5,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,20'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting, customizeCell }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('1 col - height auto', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
@@ -202,6 +344,121 @@ QUnit.module('Table', moduleConfig, () => {
         ];
 
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - height auto, padding', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'f1' }]
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.padding = 5;
+        };
+
+        const expectedLog = [
+            'text,f1,15,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,28.4'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - height auto, padding.left', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'f1' }]
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.padding = { left: 5 };
+        };
+
+        const expectedLog = [
+            'text,f1,15,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,18.4'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - height auto, padding.top', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'f1' }]
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.padding = { top: 5 };
+        };
+
+        const expectedLog = [
+            'text,f1,10,29.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,23.4'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - height auto, padding.right', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'f1' }]
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.padding = { right: 5 };
+        };
+
+        const expectedLog = [
+            'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,18.4',
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('1 col - height auto, padding.bottom', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'f1' }]
+        });
+
+        const customizeCell = ({ pdfCell }) => {
+            pdfCell.padding = { bottom: 5 };
+        };
+
+        const expectedLog = [
+            'text,f1,10,24.2,{baseline:middle}', 'setLineWidth,1', 'rect,10,15,100,23.4'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -289,6 +546,32 @@ QUnit.module('Table', moduleConfig, () => {
         });
     });
 
+    QUnit.test('1 col - 1 row - height auto, padding', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ f1: 'v1' }],
+        });
+
+        const customizeCell = ({ gridCell, pdfCell }) => {
+            pdfCell.padding = 5;
+        };
+
+        const expectedLog = [
+            'text,F1,15,29.2,{baseline:middle}',
+            'text,v1,15,57.6,{baseline:middle}',
+            'setLineWidth,1', 'rect,10,15,100,28.4',
+            'setLineWidth,1', 'rect,10,43.4,100,28.4'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('1 col - 2 rows', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
@@ -347,6 +630,34 @@ QUnit.module('Table', moduleConfig, () => {
         });
     });
 
+    QUnit.test('1 col - 2 rows - height auto, padding', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ f1: 'v1_1' }, { f1: 'v1_2' }]
+        });
+
+        const customizeCell = ({ gridCell, pdfCell }) => {
+            pdfCell.padding = 5;
+        };
+
+        const expectedLog = [
+            'text,F1,15,29.2,{baseline:middle}',
+            'text,v1_1,15,57.6,{baseline:middle}',
+            'text,v1_2,15,86,{baseline:middle}',
+            'setLineWidth,1', 'rect,10,15,100,28.4',
+            'setLineWidth,1', 'rect,10,43.4,100,28.4',
+            'setLineWidth,1', 'rect,10,71.8,100,28.4'
+        ];
+
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 100 ], customizeCell }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
     QUnit.test('2 cols', function(assert) {
         const done = assert.async();
         const doc = createMockPdfDoc();
@@ -387,6 +698,32 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,1', 'rect,50,15,60,18.4'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('2 cols - height auto, columns with different paddings', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            columns: [{ caption: 'f1' }, { caption: 'f2' }]
+        });
+
+        const paddingMap = [ 5, 10 ];
+        const customizeCell = ({ gridCell, pdfCell }) => {
+            pdfCell.padding = paddingMap[gridCell.column.index];
+        };
+
+        const expectedLog = [
+            'text,f1,15,34.2,{baseline:middle}',
+            'text,f2,60,34.2,{baseline:middle}',
+            'setLineWidth,1', 'rect,10,15,40,38.4',
+            'setLineWidth,1', 'rect,50,15,60,38.4'
+        ];
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], customizeCell }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -445,6 +782,36 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,1', 'rect,50,33.4,60,18.4'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('2 cols - 1 row - height auto, columns with different paddings', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ f1: 'v1', f2: 'v2' }]
+        });
+
+        const paddingMap = [ 5, 10 ];
+        const customizeCell = ({ gridCell, pdfCell }) => {
+            pdfCell.padding = paddingMap[gridCell.column.index];
+        };
+
+        const expectedLog = [
+            'text,F1,15,34.2,{baseline:middle}',
+            'text,F2,60,34.2,{baseline:middle}',
+            'text,v1,15,72.6,{baseline:middle}',
+            'text,v2,60,72.6,{baseline:middle}',
+            'setLineWidth,1', 'rect,10,15,40,38.4',
+            'setLineWidth,1', 'rect,50,15,60,38.4',
+            'setLineWidth,1', 'rect,10,53.4,40,38.4',
+            'setLineWidth,1', 'rect,50,53.4,60,38.4'
+        ];
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], customizeCell }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -513,6 +880,40 @@ QUnit.module('Table', moduleConfig, () => {
             'setLineWidth,1', 'rect,50,51.8,60,18.4'
         ];
         exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], onRowExporting: () => {} }).then(() => {
+            // doc.save();
+            assert.deepEqual(doc.__log, expectedLog);
+            done();
+        });
+    });
+
+    QUnit.test('2 cols - 2 rows - height auto, columns with different paddings', function(assert) {
+        const done = assert.async();
+        const doc = createMockPdfDoc();
+
+        const dataGrid = createDataGrid({
+            dataSource: [{ f1: 'v1_1', f2: 'v2_1' }, { f1: 'v1_2', f2: 'v2_2' }]
+        });
+
+        const paddingMap = [ 5, 10 ];
+        const customizeCell = ({ gridCell, pdfCell }) => {
+            pdfCell.padding = paddingMap[gridCell.column.index];
+        };
+
+        const expectedLog = [
+            'text,F1,15,34.2,{baseline:middle}',
+            'text,F2,60,34.2,{baseline:middle}',
+            'text,v1_1,15,72.6,{baseline:middle}',
+            'text,v2_1,60,72.6,{baseline:middle}',
+            'text,v1_2,15,111,{baseline:middle}',
+            'text,v2_2,60,111,{baseline:middle}',
+            'setLineWidth,1', 'rect,10,15,40,38.4',
+            'setLineWidth,1', 'rect,50,15,60,38.4',
+            'setLineWidth,1', 'rect,10,53.4,40,38.4',
+            'setLineWidth,1', 'rect,50,53.4,60,38.4',
+            'setLineWidth,1', 'rect,10,91.8,40,38.4',
+            'setLineWidth,1', 'rect,50,91.8,60,38.4'
+        ];
+        exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 40, 60 ], customizeCell }).then(() => {
             // doc.save();
             assert.deepEqual(doc.__log, expectedLog);
             done();
@@ -864,4 +1265,6 @@ JSPdfBandsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfGroupingTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfSummariesTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfVerticalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfHorizontalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfColumnWidthsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfPageMarginsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
