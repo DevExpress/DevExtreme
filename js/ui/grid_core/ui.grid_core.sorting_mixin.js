@@ -26,7 +26,7 @@ export default {
 
             const isSortingAllowed = (sortingMode === 'single' || sortingMode === 'multiple') && column.allowSorting;
 
-            if(!isDefined(column.groupIndex) && (isSortingAllowed || isDefined(column.sortOrder))) {
+            if(!isDefined(column.groupIndex) && isSortingAllowed) {
                 ariaSortState = column.sortOrder === 'asc' ? 'ascending' : 'descending';
                 $sortIndicator = that.callBase(options)
                     .toggleClass(SORTUP_CLASS, column.sortOrder === 'asc')
