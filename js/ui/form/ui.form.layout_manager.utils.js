@@ -28,7 +28,8 @@ export function convertToRenderFieldItemOptions({
     showColonAfterLabel,
     managerLabelLocation,
     itemId,
-    managerMarkOptions
+    managerMarkOptions,
+    labelMode
 }) {
     const isRequired = isDefined(item.isRequired) ? item.isRequired : !!_hasRequiredRuleInSet(item.validationRules);
     const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
@@ -42,7 +43,8 @@ export function convertToRenderFieldItemOptions({
     });
 
 
-    const needRenderLabel = labelOptions.visible && labelOptions.text;
+    const isDefaultLabelMode = labelMode === 'default';
+    const needRenderLabel = labelOptions.visible && labelOptions.text && isDefaultLabelMode;
     const { location: labelLocation, labelID } = labelOptions;
     const labelNeedBaselineAlign =
         labelLocation !== 'top'
@@ -73,8 +75,19 @@ export function convertToRenderFieldItemOptions({
             editorInputId: itemId,
             editorValidationBoundary,
             editorStylingMode,
+            labelMode: isDefaultLabelMode ? 'hidden' : labelMode,
+            labelText: isDefaultLabelMode ? undefined : labelOptions.text,
+            labelMark: getLabelMarkText(labelOptions.markOptions),
         })
     };
+}
+
+export function getLabelMarkText({ isRequiredMark, requiredMark, isOptionalMark, optionalMark }) {
+    if(!isRequiredMark && !isOptionalMark) {
+        return '';
+    }
+
+    return String.fromCharCode(160) + (isRequiredMark ? requiredMark : optionalMark);
 }
 
 export function convertToLabelMarkOptions({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }, isRequired) {
@@ -87,7 +100,17 @@ export function convertToLabelMarkOptions({ showRequiredMark, requiredMark, show
 }
 
 function _convertToEditorOptions({
-    editorType, defaultEditorName, editorValue, canAssignUndefinedValueToEditor, externalEditorOptions, editorInputId, editorValidationBoundary, editorStylingMode
+    editorType,
+    defaultEditorName,
+    editorValue,
+    canAssignUndefinedValueToEditor,
+    externalEditorOptions,
+    editorInputId,
+    editorValidationBoundary,
+    editorStylingMode,
+    labelMode,
+    labelText,
+    labelMark,
 }) {
     const editorOptionsWithValue = {};
     if(editorValue !== undefined || canAssignUndefinedValueToEditor) {
@@ -102,7 +125,10 @@ function _convertToEditorOptions({
         {
             inputAttr: { id: editorInputId },
             validationBoundary: editorValidationBoundary,
-            stylingMode: editorStylingMode
+            stylingMode: editorStylingMode,
+            label: labelText,
+            labelMode: labelMode,
+            labelMark,
         },
     );
 

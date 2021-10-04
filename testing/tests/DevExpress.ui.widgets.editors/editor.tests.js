@@ -258,6 +258,58 @@ QUnit.module('validation', {
         assert.ok(this.editor.$element().hasClass(INVALID_VALIDATION_CLASS), 'editor is invalid');
     });
 
+    QUnit.test('should change "isValid" option if "validationStatus" option is defined on init', function(assert) {
+        this.reinitEditor({ validationStatus: 'invalid' });
+
+        assert.strictEqual(this.editor.option('isValid'), false, 'isValid option is changed');
+    });
+
+    QUnit.test('should change "validationStatus" option if "isValid" option is defined on init', function(assert) {
+        this.reinitEditor({ isValid: false });
+
+        assert.strictEqual(this.editor.option('validationStatus'), 'invalid', 'validationStatus option is changed');
+    });
+
+    QUnit.test('should change "isValid" option if "validationStatus" option is changed on runtime', function(assert) {
+        this.reinitEditor({});
+        this.editor.option({ validationStatus: 'invalid' });
+
+        assert.strictEqual(this.editor.option('isValid'), false, 'isValid option is changed');
+    });
+
+    QUnit.test('should change "validationStatus" option if "isValid" option is changed on runtime', function(assert) {
+        this.reinitEditor({});
+        this.editor.option({ isValid: false });
+
+        assert.strictEqual(this.editor.option('validationStatus'), 'invalid', 'validationStatus option is changed');
+    });
+
+    QUnit.test('should change "validationErrors" option if "validationError" option is defined on init', function(assert) {
+        this.reinitEditor({ validationError: { message: 'error' } });
+
+        assert.strictEqual(this.editor.option('validationErrors')[0].message, 'error', 'validationErrors option is changed');
+    });
+
+    QUnit.test('should change "validationError" option if "validationErrors" option is defined on init', function(assert) {
+        this.reinitEditor({ validationErrors: [{ message: 'error' }] });
+
+        assert.strictEqual(this.editor.option('validationError').message, 'error', 'validationError option is changed');
+    });
+
+    QUnit.test('should change "validationErrors" option if "validationError" option is changed on runtime', function(assert) {
+        this.reinitEditor({});
+        this.editor.option({ validationError: { message: 'error' } });
+
+        assert.strictEqual(this.editor.option('validationErrors')[0].message, 'error', 'validationErrors option is changed');
+    });
+
+    QUnit.test('should change "validationError" option if "validationErrors" option is changed on runtime', function(assert) {
+        this.reinitEditor({});
+        this.editor.option({ validationErrors: [{ message: 'error' }] });
+
+        assert.strictEqual(this.editor.option('validationError').message, 'error', 'validationError option is changed');
+    });
+
     QUnit.test('validator integration', function(assert) {
         this.reinitEditor({ value: '1' });
         new Validator(this.editor.$element(), {

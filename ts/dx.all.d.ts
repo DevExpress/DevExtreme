@@ -1438,6 +1438,7 @@ declare module DevExpress.core {
     ): (...args: any[]) => any;
     _dispose(): void;
     _getDefaultOptions(): Record<string, unknown>;
+    _initOptions(options: Record<string, unknown>): void;
     _init(): void;
     _initializeComponent(): void;
     _optionChanging(name: string, value: unknown, prevValue: unknown): void;
@@ -8377,6 +8378,14 @@ declare module DevExpress.ui {
      * [descr:dxDiagram.updateToolbox()]
      */
     updateToolbox(): void;
+    /**
+     * [descr:dxDiagram.fitToContent()]
+     */
+    fitToContent(): void;
+    /**
+     * [descr:dxDiagram.fitToWidth()]
+     */
+    fitToWidth(): void;
   }
   module dxDiagram {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxDiagram>;
@@ -12314,6 +12323,10 @@ declare module DevExpress.ui {
      */
     labelLocation?: 'left' | 'right' | 'top';
     /**
+     * [descr:dxFormOptions.labelMode]
+     */
+    labelMode?: 'default' | 'floating' | 'static' | 'hidden';
+    /**
      * [descr:dxFormOptions.minColWidth]
      */
     minColWidth?: number;
@@ -14168,6 +14181,7 @@ declare module DevExpress.ui {
       | 'redo'
       | 'clear'
       | 'insertTable'
+      | 'insertHeaderRow'
       | 'insertRowAbove'
       | 'insertRowBelow'
       | 'insertColumnLeft'
@@ -14175,6 +14189,8 @@ declare module DevExpress.ui {
       | 'deleteColumn'
       | 'deleteRow'
       | 'deleteTable'
+      | 'cellProperties'
+      | 'tableProperties'
     >;
     /**
      * [descr:dxHtmlEditorToolbar.multiline]
@@ -14220,6 +14236,7 @@ declare module DevExpress.ui {
       | 'redo'
       | 'clear'
       | 'insertTable'
+      | 'insertHeaderRow'
       | 'insertRowAbove'
       | 'insertRowBelow'
       | 'insertColumnLeft'
@@ -14227,6 +14244,8 @@ declare module DevExpress.ui {
       | 'deleteColumn'
       | 'deleteRow'
       | 'deleteTable'
+      | 'cellProperties'
+      | 'tableProperties'
       | string;
     /**
      * [descr:dxHtmlEditorToolbarItem.formatName]
@@ -14262,6 +14281,7 @@ declare module DevExpress.ui {
       | 'redo'
       | 'clear'
       | 'insertTable'
+      | 'insertHeaderRow'
       | 'insertRowAbove'
       | 'insertRowBelow'
       | 'insertColumnLeft'
@@ -14269,6 +14289,8 @@ declare module DevExpress.ui {
       | 'deleteColumn'
       | 'deleteRow'
       | 'deleteTable'
+      | 'cellProperties'
+      | 'tableProperties'
       | string;
     /**
      * [descr:dxHtmlEditorToolbarItem.acceptedValues]
@@ -20941,6 +20963,14 @@ declare module DevExpress.ui {
       | DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName
       | dxTreeListToolbarItem
     )[];
+    /**
+     * [descr:dxTreeListToolbar.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxTreeListToolbar.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxTreeListToolbarItem]
@@ -20951,14 +20981,6 @@ declare module DevExpress.ui {
      * [descr:dxTreeListToolbarItem.name]
      */
     name?: DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName | string;
-    /**
-     * [descr:dxTreeListToolbarItem.visible]
-     */
-    visible?: boolean;
-    /**
-     * [descr:dxTreeListToolbarItem.disabled]
-     */
-    disabled?: boolean;
   }
   /**
    * [descr:dxTreeView]
