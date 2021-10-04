@@ -5,20 +5,13 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './classes';
 import { utils } from './utils';
-import {
-    getAppointmentDataProvider,
-    getTimeZoneCalculator
-} from './instanceFactory';
+import { getTimeZoneCalculator } from './instanceFactory';
 import { createAppointmentAdapter } from './appointmentAdapter';
 import { getFormatType, formatDates } from './appointments/textUtils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
 const subscribes = {
-    getAppointmentDataProvider: function() {
-        return getAppointmentDataProvider(this.key);
-    },
-
     isCurrentViewAgenda: function() {
         return this.option('currentView') === 'agenda';
     },
