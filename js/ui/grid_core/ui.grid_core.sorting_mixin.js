@@ -26,7 +26,7 @@ export default {
 
             const isSortingAllowed = (sortingMode === 'single' || sortingMode === 'multiple') && column.allowSorting;
 
-            if(!isDefined(column.groupIndex) && isSortingAllowed) {
+            if(!isDefined(column.groupIndex) && (isSortingAllowed || isDefined(column.sortOrder))) {
                 ariaSortState = column.sortOrder === 'asc' ? 'ascending' : 'descending';
                 $sortIndicator = that.callBase(options)
                     .toggleClass(SORTUP_CLASS, column.sortOrder === 'asc')
@@ -41,7 +41,9 @@ export default {
                     $sortIndicator.addClass(SORT_INDEX_CLASS);
                 }
 
-                options.rootElement.addClass(that.addWidgetPrefix(HEADERS_ACTION_CLASS));
+                if(isSortingAllowed) {
+                    options.rootElement.addClass(that.addWidgetPrefix(HEADERS_ACTION_CLASS));
+                }
             }
 
             if(!isDefined(column.sortOrder)) {
