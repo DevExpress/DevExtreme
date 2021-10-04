@@ -23,7 +23,6 @@ export interface DomComponentWrapperMethods {
   getTemplateNames: () => string[];
 }
 
-
 export const viewFunction = ({
   widgetRef,
   props: { componentProps: { className } },
@@ -43,7 +42,8 @@ export class DomComponentWrapperProps {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @OneWay() componentType!: ComponentClass<Record<string, any>>;
-  @OneWay() templateNames: string[] = [];
+
+  @OneWay() templateNames!: string[];
 
   @OneWay() componentProps!: {
     className?: string;
@@ -57,7 +57,7 @@ export class DomComponentWrapperProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 'componentType' | 'componentProps'>() {
+export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 'componentType' | 'templateNames' | 'componentProps'>() {
   @Ref()
   widgetRef!: RefObject<HTMLDivElement>;
 
@@ -124,14 +124,18 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     if (valueChange) {
       properties.onValueChanged = ({ value }): void => valueChange(value);
     }
-
-    this.props.templateNames.forEach((name) => {
-      if (hasTemplate(name, properties, this)) {
-        properties[name] = (item, index, container): void => {
-          renderTemplate(this.props.componentProps[name], { item, index, container }, this);
-        };
-      }
-    });
+    const templates = this.props.templateNames;
+    if (!templates) {
+      throw new Error('The list of templates was not passed to the DomComponentWrapper. Please implement the DomComponentWrapperMethods interface in a wrapper component.');
+    } else {
+      templates.forEach((name) => {
+        if (hasTemplate(name, properties, this)) {
+          properties[name] = (item, index, container): void => {
+            renderTemplate(this.props.componentProps[name], { item, index, container }, this);
+          };
+        }
+      });
+    }
     return properties;
   }
 }
