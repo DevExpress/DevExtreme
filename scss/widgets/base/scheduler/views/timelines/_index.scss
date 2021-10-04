@@ -107,7 +107,7 @@ $scheduler-timeline-min-height: 100px;
     .dx-scheduler-date-table-row {
       @include flex-container(row, nowrap);
 
-      flex: 1;
+      // flex: 1;
     }
 
     .dx-scheduler-date-table-cell {
@@ -162,10 +162,16 @@ $scheduler-timeline-min-height: 100px;
   }
 
   &.dx-scheduler-work-space-both-scrollbar {
+    .dx-scheduler-date-table-cell {
+      height: 100%;
+      // flex-grow: 1;
+    }
+
     .dx-scheduler-date-table-scrollable .dx-scrollable-content,
     .dx-scheduler-sidebar-scrollable .dx-scrollable-content,
     .dx-scheduler-group-table {
       height: auto;
+      min-height: 100%;
     }
 
     .dx-scheduler-date-table .dx-scheduler-date-table-row:first-child {

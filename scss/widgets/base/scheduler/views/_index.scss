@@ -168,7 +168,7 @@ $scheduler-month-date-text-padding: 6px;
   border-top: none;
 
   // T656716
-  float: left;
+  // float: left;
 
   &.dx-scheduler-timeline-month:not(.dx-scheduler-agenda) {
     .dx-scheduler-all-day-title {
@@ -258,7 +258,7 @@ $scheduler-month-date-text-padding: 6px;
 
 .dx-scheduler-date-table-scrollable-content {
   position: relative;
-  float: left;
+  // float: left;
 }
 
 .dx-scheduler-date-table-cell {
@@ -787,7 +787,7 @@ $scheduler-month-date-text-padding: 6px;
 
   .dx-scheduler-work-space-vertical-group-table,
   .dx-scheduler-time-panel {
-    float: right;
+    // float: right;
   }
 
   .dx-scheduler-time-panel-cell {
@@ -830,7 +830,7 @@ $scheduler-month-date-text-padding: 6px;
   .dx-scheduler-timeline {
     &.dx-scheduler-work-space-grouped {
       .dx-scheduler-sidebar-scrollable {
-        float: right;
+        // float: right;
       }
 
       .dx-scheduler-group-header {
@@ -880,5 +880,30 @@ $scheduler-month-date-text-padding: 6px;
     &.dx-scheduler-group-column-count-three .dx-scheduler-header-panel-empty-cell {
       width: (2 + $scheduler-small-size-factor) * $scheduler-left-column-width;
     }
+  }
+}
+
+.dx-scheduler-timeline.dx-scheduler-work-space-both-scrollbar {
+  .dx-scheduler-date-table-scrollable .dx-scrollable-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dx-scheduler-date-table-scrollable-content,
+  .dx-scheduler-date-table-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .dx-scheduler-date-table,
+  .dx-scheduler-date-table > tbody {
+    flex-grow: 1;
+  }
+
+  .dx-scheduler-date-table-row {
+    height: 100px;
+    flex-shrink: 0;
+    flex-grow: 1;
   }
 }

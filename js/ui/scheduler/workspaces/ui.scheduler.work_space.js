@@ -1154,6 +1154,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _setHorizontalGroupHeaderCellsHeight() {
         const height = getBoundingRect(this._$dateTable.get(0)).height;
+        debugger;
         setOuterHeight(this._$groupTable, height);
     }
 
@@ -1702,7 +1703,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return ({
             viewData: this.viewDataProvider.viewData,
             dataCellTemplate: this.option('dataCellTemplate'),
-            addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
+            addDateTableClass: true,
             groupOrientation: this.option('groupOrientation'),
         });
     }

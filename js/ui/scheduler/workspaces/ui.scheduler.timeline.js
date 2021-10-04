@@ -18,6 +18,7 @@ import { getDateForHeaderText } from '../../../renovation/ui/scheduler/view_mode
 
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
 import { formatWeekdayAndDay } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { hasWindow } from '../../../core/utils/window';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
@@ -158,14 +159,14 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _setTableSizes() {
-        const minHeight = this._getWorkSpaceMinHeight();
+    //     const minHeight = this._getWorkSpaceMinHeight();
 
-        setHeight(this._$sidebarTable, minHeight);
-        setHeight(this._$dateTable, minHeight);
+        //     setHeight(this._$sidebarTable, minHeight);
+        //     setHeight(this._$dateTable, minHeight);
 
         super._setTableSizes();
 
-        this.virtualScrollingDispatcher.updateDimensions();
+    //     this.virtualScrollingDispatcher.updateDimensions();
     }
 
     _getWorkSpaceMinHeight() {
@@ -346,6 +347,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
         if(this.isRenovatedRender() && this._isVerticalGroupedWorkSpace()) {
             this.renderRGroupPanel();
+        }
+
+        if(this._isVerticalGroupedWorkSpace() && hasWindow()) {
+            setHeight(this._$sidebarTable, this._$dateTable.get(0).getBoundingClientRect().height);
         }
 
         this.updateHeaderEmptyCellWidth();
