@@ -6,7 +6,6 @@ import { extend } from '../../core/utils/extend';
 const math = Math;
 import { Scroller, SimulatedStrategy } from './ui.scrollable.simulated';
 import LoadIndicator from '../load_indicator';
-import { getScrollTopMax } from '../../renovation/ui/scroll_view/utils/get_scroll_top_max';
 
 const SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = 'dx-scrollview-pull-down-loading';
 const SCROLLVIEW_PULLDOWN_READY_CLASS = 'dx-scrollview-pull-down-ready';
@@ -68,7 +67,9 @@ const ScrollViewScroller = Scroller.inherit({
             this._topPocketSize = this._$topPocket.get(0).clientHeight;
             this._bottomPocketSize = this._$bottomPocket.get(0).clientHeight;
 
-            this._scrollOffsetTopMax = getScrollTopMax(this._$container.get(0)) - this._topPocketSize - this._bottomPocketSize;
+            const containerEl = this._$container.get(0);
+            const scrollTopMax = containerEl.scrollHeight - containerEl.clientHeight;
+            this._scrollOffsetTopMax = scrollTopMax - this._topPocketSize - this._bottomPocketSize;
         }
 
         this.callBase();
