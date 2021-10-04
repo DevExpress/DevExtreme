@@ -21,6 +21,26 @@ const JSPdfColumnWidthsTests = {
                 });
             });
 
+            QUnit.test('Empty, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                });
+
+                const expectedLog = [
+                    'setLineWidth,1',
+                    'rect,10,15,0,0'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('1 col. options.topLeft = 0', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -31,6 +51,28 @@ const JSPdfColumnWidthsTests = {
 
                 const expectedLog = [
                     'text,f1,0,24.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,15,595.28,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 col. options.topLeft = 0, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [{ caption: 'f1' }]
+                });
+
+                const expectedLog = [
+                    'text,f1,595.28,24.2,{baseline:middle,align:right}',
                     'setLineWidth,1',
                     'rect,0,15,595.28,18.4'
                 ];
@@ -63,6 +105,28 @@ const JSPdfColumnWidthsTests = {
                 });
             });
 
+            QUnit.test('1 col - 1 row. options.topLeft = 10, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [{ caption: 'f1' }]
+                });
+
+                const expectedLog = [
+                    'text,f1,585.28,24.2,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,0,15,585.28,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('1 col - 1 row. options.topLeft = 10. col1.width = 100', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -75,6 +139,28 @@ const JSPdfColumnWidthsTests = {
                     'text,f1,10,24.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,15,100,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('1 col - 1 row. options.topLeft = 10. col1.width = 100, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [{ caption: 'f1', width: 100 }]
+                });
+
+                const expectedLog = [
+                    'text,f1,585.28,24.2,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,485.78,15,99.5,18.4'
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
@@ -123,6 +209,46 @@ const JSPdfColumnWidthsTests = {
                 });
             });
 
+            QUnit.test('2 cols - 2 rows, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        { dataField: 'f1' },
+                        { dataField: 'f2' },
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v2_1' }, { f1: 'v1_2', f2: 'v2_2' }]
+                });
+
+                const expectedLog = [
+                    'text,F1,585.28,24.2,{baseline:middle,align:right}',
+                    'text,F2,292.64,24.2,{baseline:middle,align:right}',
+                    'text,v1_1,585.28,42.6,{baseline:middle,align:right}',
+                    'text,v2_1,292.64,42.6,{baseline:middle,align:right}',
+                    'text,v1_2,585.28,61,{baseline:middle,align:right}',
+                    'text,v2_2,292.64,61,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,292.64,15,292.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,15,292.64,18.4',
+                    'setLineWidth,1',
+                    'rect,292.64,33.4,292.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,292.64,18.4',
+                    'setLineWidth,1',
+                    'rect,292.64,51.8,292.64,18.4',
+                    'setLineWidth,1',
+                    'rect,0,51.8,292.64,18.4'
+                ];
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('2 cols - 2 rows, col1.width = 100, col2.width = 200', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -154,6 +280,46 @@ const JSPdfColumnWidthsTests = {
                     'rect,10,51.8,100,18.4',
                     'setLineWidth,1',
                     'rect,110,51.8,200,18.4'
+                ];
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 cols - 2 rows, col1.width = 100, col2.width = 200, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        { dataField: 'f1', width: 100 },
+                        { dataField: 'f2', width: 200 },
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v2_1' }, { f1: 'v1_2', f2: 'v2_2' }]
+                });
+
+                const expectedLog = [
+                    'text,F1,585.28,24.2,{baseline:middle,align:right}',
+                    'text,F2,485.28,24.2,{baseline:middle,align:right}',
+                    'text,v1_1,585.28,42.6,{baseline:middle,align:right}',
+                    'text,v2_1,485.28,42.6,{baseline:middle,align:right}',
+                    'text,v1_2,585.28,61,{baseline:middle,align:right}',
+                    'text,v2_2,485.28,61,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,485.28,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,285.28,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,485.28,33.4,100,18.4',
+                    'setLineWidth,1',
+                    'rect,285.28,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,485.28,51.8,100,18.4',
+                    'setLineWidth,1',
+                    'rect,285.28,51.8,200,18.4'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -201,6 +367,46 @@ const JSPdfColumnWidthsTests = {
                 });
             });
 
+            QUnit.test('2 cols - 2 rows, col1.width = 100, col2.width = undefined, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        { dataField: 'f1', width: 100 },
+                        { dataField: 'f2' },
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v2_1' }, { f1: 'v1_2', f2: 'v2_2' }]
+                });
+
+                const expectedLog = [
+                    'text,F1,585.28,24.2,{baseline:middle,align:right}',
+                    'text,F2,526.752,24.2,{baseline:middle,align:right}',
+                    'text,v1_1,585.28,42.6,{baseline:middle,align:right}',
+                    'text,v2_1,526.752,42.6,{baseline:middle,align:right}',
+                    'text,v1_2,585.28,61,{baseline:middle,align:right}',
+                    'text,v2_2,526.752,61,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,526.752,15,58.528,18.4',
+                    'setLineWidth,1',
+                    'rect,0,15,526.752,18.4',
+                    'setLineWidth,1',
+                    'rect,526.752,33.4,58.528,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,526.752,18.4',
+                    'setLineWidth,1',
+                    'rect,526.752,51.8,58.528,18.4',
+                    'setLineWidth,1',
+                    'rect,0,51.8,526.752,18.4'
+                ];
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('2 cols - 2 rows, col1.width = undefined, col2.width = 200', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -232,6 +438,46 @@ const JSPdfColumnWidthsTests = {
                     'rect,10,51.8,468.224,18.4',
                     'setLineWidth,1',
                     'rect,478.224,51.8,117.056,18.4'
+                ];
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 cols - 2 rows, col1.width = undefined, col2.width = 200, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    columns: [
+                        { dataField: 'f1' },
+                        { dataField: 'f2', width: 200 },
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v2_1' }, { f1: 'v1_2', f2: 'v2_2' }]
+                });
+
+                const expectedLog = [
+                    'text,F1,585.28,24.2,{baseline:middle,align:right}',
+                    'text,F2,117.056,24.2,{baseline:middle,align:right}',
+                    'text,v1_1,585.28,42.6,{baseline:middle,align:right}',
+                    'text,v2_1,117.056,42.6,{baseline:middle,align:right}',
+                    'text,v1_2,585.28,61,{baseline:middle,align:right}',
+                    'text,v2_2,117.056,61,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,117.056,15,468.224,18.4',
+                    'setLineWidth,1',
+                    'rect,0,15,117.056,18.4',
+                    'setLineWidth,1',
+                    'rect,117.056,33.4,468.224,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,117.056,18.4',
+                    'setLineWidth,1',
+                    'rect,117.056,51.8,468.224,18.4',
+                    'setLineWidth,1',
+                    'rect,0,51.8,117.056,18.4'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
@@ -280,6 +526,47 @@ const JSPdfColumnWidthsTests = {
                 });
             });
 
+            QUnit.test('2 cols - 2 rows, col1.width = undefined, col2.width = 200, grid,width=300, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    width: 300,
+                    columns: [
+                        { dataField: 'f1' },
+                        { dataField: 'f2', width: 200 },
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v2_1' }, { f1: 'v1_2', f2: 'v2_2' }]
+                });
+
+                const expectedLog = [
+                    'text,F1,585.28,24.2,{baseline:middle,align:right}',
+                    'text,F2,485.28,24.2,{baseline:middle,align:right}',
+                    'text,v1_1,585.28,42.6,{baseline:middle,align:right}',
+                    'text,v2_1,485.28,42.6,{baseline:middle,align:right}',
+                    'text,v1_2,585.28,61,{baseline:middle,align:right}',
+                    'text,v2_2,485.28,61,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,485.28,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,285.28,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,485.28,33.4,100,18.4',
+                    'setLineWidth,1',
+                    'rect,285.28,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,485.28,51.8,100,18.4',
+                    'setLineWidth,1',
+                    'rect,285.28,51.8,200,18.4'
+                ];
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
             QUnit.test('2 cols - 2 rows, col1.width = undefined, col2.width = 200, grid,width=1000', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
@@ -312,6 +599,47 @@ const JSPdfColumnWidthsTests = {
                     'rect,10,51.8,468.224,18.4',
                     'setLineWidth,1',
                     'rect,478.224,51.8,117.056,18.4'
+                ];
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 cols - 2 rows, col1.width = undefined, col2.width = 200, grid,width=1000, rtlEnabled', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    rtlEnabled: true,
+                    width: 1000,
+                    columns: [
+                        { dataField: 'f1' },
+                        { dataField: 'f2', width: 200 },
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v2_1' }, { f1: 'v1_2', f2: 'v2_2' }]
+                });
+
+                const expectedLog = [
+                    'text,F1,585.28,24.2,{baseline:middle,align:right}',
+                    'text,F2,117.056,24.2,{baseline:middle,align:right}',
+                    'text,v1_1,585.28,42.6,{baseline:middle,align:right}',
+                    'text,v2_1,117.056,42.6,{baseline:middle,align:right}',
+                    'text,v1_2,585.28,61,{baseline:middle,align:right}',
+                    'text,v2_2,117.056,61,{baseline:middle,align:right}',
+                    'setLineWidth,1',
+                    'rect,117.056,15,468.224,18.4',
+                    'setLineWidth,1',
+                    'rect,0,15,117.056,18.4',
+                    'setLineWidth,1',
+                    'rect,117.056,33.4,468.224,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,117.056,18.4',
+                    'setLineWidth,1',
+                    'rect,117.056,51.8,468.224,18.4',
+                    'setLineWidth,1',
+                    'rect,0,51.8,117.056,18.4'
                 ];
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
