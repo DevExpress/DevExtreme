@@ -12,10 +12,8 @@ const FilterStrategies = {
 export class AppointmentDataProvider {
     constructor(options) {
         this.options = options;
-        this.key = this.options.key;
-        this.scheduler = this.options.scheduler;
         this.dataSource = this.options.dataSource;
-        this.dataAccessors = this.options.getDataAccessors(this.key);
+        this.dataAccessors = this.options.dataAccessors;
         this.timeZoneCalculator = this.options.timeZoneCalculator;
 
         this.appointmentDataSource = new AppointmentDataSource(this.dataSource);
@@ -31,10 +29,6 @@ export class AppointmentDataProvider {
             : FilterStrategies.standard;
     }
 
-    getDataAccessors() {
-        return this.dataAccessors;
-    }
-
     getFilterStrategy() {
         if(!this.filterStrategy || this.filterStrategy.strategyName !== this.filterStrategyName) {
             this.initFilterStrategy();
@@ -45,12 +39,7 @@ export class AppointmentDataProvider {
 
     initFilterStrategy() {
         const filterOptions = {
-            key: this.key,
-
             resources: this.options.resources,
-            getLoadedResources: this.options.getLoadedResources,
-
-            scheduler: this.scheduler,
             dataSource: this.dataSource,
             dataAccessors: this.dataAccessors,
             startDayHour: this.options.startDayHour,
@@ -58,6 +47,13 @@ export class AppointmentDataProvider {
             appointmentDuration: this.options.appointmentDuration,
             showAllDayPanel: this.options.showAllDayPanel,
             timeZoneCalculator: this.options.timeZoneCalculator,
+            getLoadedResources: this.options.getLoadedResources,
+            getSupportAllDayRow: this.options.getSupportAllDayRow,
+            getViewType: this.options.getViewType,
+            getViewDirection: this.options.getViewDirection,
+            getDateRange: this.options.getDateRange,
+            getGroupCount: this.options.getGroupCount,
+            getViewDataProvider: this.options.getViewDataProvider
         };
 
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual

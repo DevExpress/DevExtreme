@@ -5,7 +5,6 @@ import {
     DateGeneratorBaseStrategy,
     DateGeneratorVirtualStrategy
 } from 'ui/scheduler/appointments/settingsGenerator';
-import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 import $ from 'jquery';
 import fx from 'animation/fx';
@@ -70,7 +69,7 @@ module('Subscribes', {
                 expectedEndDate: new Date(2019, 4, 3, 23, 59)
             }
         ].forEach(testCase => {
-            getAppointmentDataProvider(this.instance.key).replaceWrongEndDate(testCase.data, new Date(2019, 4, 3, 12), testCase.data.endDate);
+            this.instance.appointmentDataProvider.replaceWrongEndDate(testCase.data, new Date(2019, 4, 3, 12), testCase.data.endDate);
             assert.equal(testCase.data.endDate.getHours(), testCase.expectedEndDate.getHours(), 'replaced endDate is ok');
             assert.equal(testCase.data.endDate.getMinutes(), testCase.expectedEndDate.getMinutes(), 'replaced endDate is ok');
         });
@@ -323,7 +322,7 @@ module('Subscribes', {
         assert.equal(_positionMap[0][0].left, expectedLeftCoordinate, 'left coordinate is OK');
     });
 
-    test('\'updateAppointmentStartDate\' should work correct with custom data fields', function(assert) {
+    test('"updateAppointmentStartDate" should work correct with custom data fields', function(assert) {
         this.createInstance({
             startDateExpr: 'Start'
         });
@@ -333,7 +332,7 @@ module('Subscribes', {
         }));
     });
 
-    test('\'mapAppointmentFields\' should call getTargetedAppointment', function(assert) {
+    test('"mapAppointmentFields" should call getTargetedAppointment', function(assert) {
         this.createInstance();
 
         const stub = sinon.stub(this.instance, 'getTargetedAppointment');
@@ -355,7 +354,7 @@ module('Subscribes', {
         }, 'Appointment data is OK');
     });
 
-    test('\'showAddAppointmentPopup\' should update appointment data if there is some custom data fields', function(assert) {
+    test('"showAddAppointmentPopup" should update appointment data if there is some custom data fields', function(assert) {
         this.createInstance();
         const stub = sinon.stub(this.instance, 'showAppointmentPopup');
 
@@ -594,8 +593,8 @@ module('Subscribes', {
             }
         ];
 
-        assert.ok(getAppointmentDataProvider(this.instance.key).appointmentTakesSeveralDays(appointments[0]), 'appointmentTakesSeveralDays works correctly');
-        assert.notOk(getAppointmentDataProvider(this.instance.key).appointmentTakesSeveralDays(appointments[1]), 'appointmentTakesSeveralDays works correctly');
+        assert.ok(this.instance.appointmentDataProvider.appointmentTakesSeveralDays(appointments[0]), 'appointmentTakesSeveralDays works correctly');
+        assert.notOk(this.instance.appointmentDataProvider.appointmentTakesSeveralDays(appointments[1]), 'appointmentTakesSeveralDays works correctly');
     });
 
     test('UpdateAppointmentStartDate should return corrected startDate for long appointments', function(assert) {

@@ -1,8 +1,7 @@
 import { equalByValue } from '../../core/utils/common';
 import {
     getModelProvider,
-    getTimeZoneCalculator,
-    getAppointmentDataProvider
+    getTimeZoneCalculator
 } from './instanceFactory';
 import { AppointmentViewModel } from './appointments/viewModelGenerator';
 import { getGroupCount } from './resources/utils';
@@ -94,7 +93,7 @@ class AppointmentLayoutManager {
             visibleDayDuration,
             // appointment settings
             timeZoneCalculator: getTimeZoneCalculator(key),
-            appointmentDataProvider: getAppointmentDataProvider(key),
+            appointmentDataProvider: this.instance.appointmentDataProvider,
             timeZone: this.modelProvider.timeZone,
             firstDayOfWeek: this.instance.getFirstDayOfWeek(),
             viewStartDayHour: this.modelProvider.getCurrentViewOption('startDayHour'),
@@ -132,7 +131,7 @@ class AppointmentLayoutManager {
     }
 
     _isDataChanged(data) {
-        const appointmentDataProvider = this.instance.fire('getAppointmentDataProvider');
+        const appointmentDataProvider = this.instance.appointmentDataProvider;
 
         const updatedData = appointmentDataProvider.getUpdatedAppointment();
         return updatedData === data || appointmentDataProvider.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);

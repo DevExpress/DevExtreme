@@ -112,12 +112,6 @@ export class AppointmentFilterBaseStrategy {
 
     get strategyName() { return FilterStrategies.standard; }
 
-    get key() { return this.options.key; }
-
-    // TODO - Use DI to get appropriate services
-    get scheduler() { return this.options.scheduler; } // TODO get rid
-    get workspace() { return this.scheduler.getWorkSpace(); } // TODO get rid
-    get viewDataProvider() { return this.workspace.viewDataProvider; }
     get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
     get viewStartDayHour() { return this.options.startDayHour; }
@@ -127,17 +121,25 @@ export class AppointmentFilterBaseStrategy {
     get firstDayOfWeek() { return this.options.firstDayOfWeek; }
     get showAllDayPanel() { return this.options.showAllDayPanel; }
 
+    get loadedResources() { return this.options.getLoadedResources(); }
+    get supportAllDayRow() { return this.options.getSupportAllDayRow(); }
+    get viewType() { return this.options.getViewType(); }
+    get viewDirection() { return this.options.getViewDirection(); }
+    get dateRange() { return this.options.getDateRange(); }
+    get groupCount() { return this.options.getGroupCount(); }
+    get viewDataProvider() { return this.options.getViewDataProvider(); }
+
     _init() {
         this.setDataAccessors(this.dataAccessors);
         this.setDataSource(this.dataSource);
     }
 
     filter() {
-        const dateRange = this.workspace.getDateRange();
+        const dateRange = this.dateRange;
 
         let allDay;
 
-        if(!this.showAllDayPanel && this.workspace.supportAllDayRow()) {
+        if(!this.showAllDayPanel && this.supportAllDayRow) {
             allDay = false;
         }
 
@@ -148,7 +150,7 @@ export class AppointmentFilterBaseStrategy {
             viewEndDayHour: this.viewEndDayHour,
             min: dateRange[0],
             max: dateRange[1],
-            resources: this.options.getLoadedResources(),
+            resources: this.loadedResources,
             allDay: allDay,
             firstDayOfWeek: this.firstDayOfWeek,
         });
@@ -553,13 +555,14 @@ export class AppointmentFilterBaseStrategy {
 
 export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
     get strategyName() { return FilterStrategies.virtual; }
+    get resources() { return this.options.resources; }
 
     filter() {
         const hourMs = toMs('hour');
-        const isCalculateStartAndEndDayHour = calculateIsDateAndTimeView(this.workspace.type);
-        const checkIntersectViewport = isCalculateStartAndEndDayHour && this.workspace.viewDirection === 'horizontal';
+        const isCalculateStartAndEndDayHour = calculateIsDateAndTimeView(this.viewType);
+        const checkIntersectViewport = isCalculateStartAndEndDayHour && this.viewDirection === 'horizontal';
 
-        const isAllDayWorkspace = !this.workspace.supportAllDayRow();
+        const isAllDayWorkspace = !this.supportAllDayRow;
         const showAllDayAppointments = this.showAllDayPanel || isAllDayWorkspace;
 
         const endViewDate = this.viewDataProvider.getLastViewDateByEndDayHour(this.viewEndDayHour);
@@ -581,7 +584,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
             const resources = this._getPrerenderFilterResources(groupIndex);
 
             const allDayPanel = this.viewDataProvider.getAllDayPanel(groupIndex);
-            // TODO split by workspace strategies
+
             const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && allDayPanel?.length > 0);
 
             filterOptions.push({
@@ -601,7 +604,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
 
         return this.filterLoadedAppointments({
             filterOptions,
-            groupCount: this.workspace._getGroupCount()
+            groupCount: this.groupCount
         });
     }
 
@@ -645,8 +648,8 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         const cellGroup = this.viewDataProvider.getCellsGroup(groupIndex);
 
         return getResourcesDataByGroups(
-            this.options.getLoadedResources(),
-            this.options.resources,
+            this.loadedResources,
+            this.resources,
             [cellGroup]
         );
     }

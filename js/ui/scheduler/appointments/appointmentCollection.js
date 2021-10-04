@@ -22,7 +22,7 @@ import timeZoneUtils from '../utils.timeZone.js';
 import { APPOINTMENT_SETTINGS_KEY } from '../constants';
 import { APPOINTMENT_ITEM_CLASS, APPOINTMENT_DRAG_SOURCE_CLASS } from '../classes';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './appointmentLayout';
-import { getAppointmentDataProvider, getTimeZoneCalculator } from '../instanceFactory';
+import { getTimeZoneCalculator } from '../instanceFactory';
 import { ExpressionUtils } from '../expressionUtils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { getResourcesFromItem } from '../resources/utils';
@@ -40,6 +40,10 @@ class SchedulerAppointments extends CollectionWidget {
 
     get isVirtualScrolling() {
         return this.invoke('isVirtualScrolling');
+    }
+
+    get appointmentDataProvider() {
+        return this.option('getAppointmentDataProvider')();
     }
 
     constructor(element, options) {
@@ -827,7 +831,7 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _sortAppointmentsByStartDate(appointments) {
-        getAppointmentDataProvider(this.option('key')).sortAppointmentsByStartDate(appointments);
+        this.appointmentDataProvider.sortAppointmentsByStartDate(appointments);
     }
 
     _processRecurrenceAppointment(appointment, index, skipLongAppointments) {
@@ -978,7 +982,7 @@ class SchedulerAppointments extends CollectionWidget {
         const maxAllowedDate = this.invoke('getEndViewDate');
         const startDayHour = this.invoke('getStartDayHour');
         const endDayHour = this.invoke('getEndDayHour');
-        const appointmentIsLong = this.invoke('getAppointmentDataProvider').appointmentTakesSeveralDays(appointment);
+        const appointmentIsLong = this.appointmentDataProvider.appointmentTakesSeveralDays(appointment);
         const result = [];
 
         const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));

@@ -241,7 +241,7 @@ class BaseRenderingStrategy {
     }
 
     isAppointmentTakesAllDay(rawAppointment) {
-        const adapter = createAppointmentAdapter(this.key, rawAppointment);
+        const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
         return getAppointmentTakesAllDay(adapter, this.viewStartDayHour, this.viewEndDayHour);
     }
 

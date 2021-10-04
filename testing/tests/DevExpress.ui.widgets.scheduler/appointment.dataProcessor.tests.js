@@ -1,7 +1,7 @@
 import { compileGetter, compileSetter } from 'core/utils/data';
 import config from 'core/config';
 import { DataSource } from 'data/data_source/data_source';
-import { createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
+import { AppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
 
 const {
     module,
@@ -24,14 +24,13 @@ const defaultDataAccessors = {
 };
 
 const createAppointmentDataProvider = (options) => {
-    const key = createFactoryInstances({
+    return new AppointmentDataProvider({
         timeZoneCalculator: ({
             createDate: date => date
         }),
+        getIsVirtualScrolling: () => false,
         ...options
     });
-
-    return getAppointmentDataProvider(key);
 };
 
 module('Server side filtering', () => {
@@ -54,8 +53,8 @@ module('Server side filtering', () => {
         });
         const appointmentDataProvider = createAppointmentDataProvider({
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => defaultDataAccessors,
+            isVirtualScrolling: false,
+            dataAccessors: defaultDataAccessors,
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true);
@@ -85,8 +84,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => defaultDataAccessors
+            isVirtualScrolling: false,
+            dataAccessors: defaultDataAccessors
         });
         const dateFilter = [
             [
@@ -135,8 +134,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -160,7 +159,7 @@ module('Server side filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
@@ -200,8 +199,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => defaultDataAccessors
+            isVirtualScrolling: false,
+            dataAccessors: defaultDataAccessors
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
@@ -238,13 +237,13 @@ module('Server side filtering', () => {
             const appointmentDataProvider = createAppointmentDataProvider({
                 key: 0,
                 dataSource,
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => ({
+                isVirtualScrolling: false,
+                dataAccessors: {
                     expr: {
                         startDateExpr: 'startDate',
                         endDateExpr: 'endDate'
                     }
-                })
+                }
             });
 
             appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
@@ -288,13 +287,13 @@ module('Server side filtering', () => {
             const appointmentDataProvider = createAppointmentDataProvider({
                 key: 0,
                 dataSource,
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => ({
+                isVirtualScrolling: false,
+                dataAccessors: {
                     expr: {
                         startDateExpr: 'startDate',
                         endDateExpr: 'endDate'
                     }
-                })
+                }
             });
 
             appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 10), new Date(2015, 1, 10, 13), true, 'yyyy-MM-ddTHH:mm:ss');
@@ -336,8 +335,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => defaultDataAccessors
+            isVirtualScrolling: false,
+            dataAccessors: defaultDataAccessors
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 11, 5), new Date(2015, 1, 10, 11, 45), true);
@@ -358,8 +357,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('Start'),
                     endDate: compileGetter('End'),
@@ -372,7 +371,7 @@ module('Server side filtering', () => {
                     startDateExpr: 'Start',
                     endDateExpr: 'End'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 9), new Date(2015, 1, 20));
@@ -396,8 +395,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('startDate'),
                     endDate: compileGetter('endDate'),
@@ -413,7 +412,7 @@ module('Server side filtering', () => {
                     endDateExpr: 'endDate',
                     allDayExpr: 'AllDay'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10, 12), new Date(2015, 1, 11), true);
@@ -436,8 +435,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('startDate'),
                     endDate: compileGetter('endDate'),
@@ -453,7 +452,7 @@ module('Server side filtering', () => {
                     endDateExpr: 'endDate',
                     allDayExpr: 'AllDay'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 11), new Date(2015, 1, 11, 11), true);
@@ -483,8 +482,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('startDate'),
                     endDate: compileGetter('endDate'),
@@ -503,7 +502,7 @@ module('Server side filtering', () => {
                     allDayExpr: 'AllDay',
                     recurrenceRuleExpr: '_recurrenceRule'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
@@ -532,8 +531,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('startDate'),
                     endDate: compileGetter('endDate'),
@@ -550,7 +549,7 @@ module('Server side filtering', () => {
                     allDayExpr: 'allDay',
                     recurrenceRuleExpr: null
                 }
-            })
+            }
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
@@ -580,8 +579,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('startDate'),
                     endDate: compileGetter('endDate'),
@@ -598,7 +597,7 @@ module('Server side filtering', () => {
                     allDayExpr: 'allDay',
                     recurrenceRuleExpr: ''
                 }
-            })
+            }
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 10), new Date(2015, 1, 10, 13), true);
@@ -621,8 +620,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('startDate'),
                     endDate: compileGetter('endDate'),
@@ -639,7 +638,7 @@ module('Server side filtering', () => {
                     allDayExpr: 'allDay',
                     recurrenceRuleExpr: ''
                 }
-            })
+            }
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 9, 23, 59));
@@ -662,8 +661,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -687,7 +686,7 @@ module('Server side filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3));
@@ -720,8 +719,8 @@ module('Server side filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -736,7 +735,7 @@ module('Server side filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3), true);
@@ -761,8 +760,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -783,7 +782,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
@@ -805,8 +804,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -827,7 +826,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 3).toString() });
@@ -848,8 +847,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -870,7 +869,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 3).toString(), EndDate: new Date(2015, 0, 1, 3, 10).toString() });
@@ -892,8 +891,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -914,7 +913,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecRule',
                     recurrenceExceptionExpr: 'RecException'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
@@ -941,8 +940,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -963,7 +962,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecRule',
                     recurrenceExceptionExpr: 'RecException'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
@@ -987,8 +986,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1009,7 +1008,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecRule',
                     recurrenceExceptionExpr: 'RecException'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 5, 2, 0).toString(), EndDate: new Date(2015, 0, 5, 4, 0).toString(), RecRule: 'FREQ=WEEKLY;BYDAY=MO' });
@@ -1033,8 +1032,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1052,7 +1051,7 @@ module('Client side after filtering', () => {
                     allDayExpr: 'AllDay',
                     recurrenceRuleExpr: null
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
@@ -1080,8 +1079,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1099,7 +1098,7 @@ module('Client side after filtering', () => {
                     allDayExpr: 'AllDay',
                     recurrenceRuleExpr: ''
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 1).toString(), EndDate: new Date(2015, 0, 1, 2).toString() });
@@ -1127,8 +1126,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1151,7 +1150,7 @@ module('Client side after filtering', () => {
                         roomId: compileGetter('roomId')
                     }
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 2, 16, 2), EndDate: new Date(2015, 2, 16, 2, 30), ownerId: [1, 2] });
@@ -1187,8 +1186,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1205,7 +1204,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1, 4).toString(), EndDate: new Date(2015, 0, 1, 6).toString(), AllDay: true });
@@ -1229,8 +1228,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1251,7 +1250,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({ text: 'a', StartDate: new Date(2015, 0, 1).toString(), EndDate: new Date(2015, 0, 2).toString(), AllDay: true, RecurrenceRule: 'FREQ=DAILY' });
@@ -1276,8 +1275,8 @@ module('Client side after filtering', () => {
             const dataSource = new DataSource({ store: [] });
             const appointmentDataProvider = createAppointmentDataProvider({
                 dataSource,
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => ({
+                isVirtualScrolling: false,
+                dataAccessors: {
                     getter: {
                         startDate: compileGetter('StartDate'),
                         endDate: compileGetter('EndDate'),
@@ -1298,7 +1297,7 @@ module('Client side after filtering', () => {
                         recurrenceRuleExpr: 'RecurrenceRule',
                         recurrenceExceptionExpr: 'Exception'
                     }
-                })
+                }
             });
 
             appointmentDataProvider.add({
@@ -1326,8 +1325,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => defaultDataAccessors
+            isVirtualScrolling: false,
+            dataAccessors: defaultDataAccessors
         });
 
         appointmentDataProvider.add({
@@ -1351,8 +1350,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1369,7 +1368,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({
@@ -1393,8 +1392,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1411,7 +1410,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({
@@ -1435,8 +1434,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1453,7 +1452,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.add({
@@ -1477,8 +1476,8 @@ module('Client side after filtering', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1499,7 +1498,7 @@ module('Client side after filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }),
+            },
             appointmentDuration: 60
         });
 
@@ -1551,8 +1550,8 @@ module('API', () => {
             const appointmentDataProvider = createAppointmentDataProvider({
                 key: 0,
                 dataSource,
-                getIsVirtualScrolling: () => false,
-                getDataAccessors: () => ({
+                isVirtualScrolling: false,
+                dataAccessors: {
                     getter: {
                         startDate: compileGetter('StartDate'),
                         endDate: compileGetter('EndDate'),
@@ -1567,7 +1566,7 @@ module('API', () => {
                         endDateExpr: 'EndDate',
                         allDayExpr: 'AllDay123',
                     }
-                }),
+                },
                 appointmentDuration: 60
             });
 
@@ -1597,8 +1596,8 @@ module('Virtual Scrolling', () => {
         const appointmentDataProvider = createAppointmentDataProvider({
             key: 0,
             dataSource,
-            getIsVirtualScrolling: () => false,
-            getDataAccessors: () => ({
+            isVirtualScrolling: false,
+            dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
                     endDate: compileGetter('EndDate'),
@@ -1622,7 +1621,7 @@ module('Virtual Scrolling', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            })
+            }
         });
 
         appointmentDataProvider.filterByDate(new Date(2021, 8, 6, 9), new Date(2021, 8, 6, 12));

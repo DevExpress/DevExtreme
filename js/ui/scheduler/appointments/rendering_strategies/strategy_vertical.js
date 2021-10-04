@@ -292,7 +292,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
             return true;
         }
 
-        const adapter = createAppointmentAdapter(this.key, appointmentData);
+        const adapter = createAppointmentAdapter(appointmentData, this.dataAccessors, this.timeZoneCalculator);
         return getAppointmentTakesAllDay(adapter, this.startDayHour, this.endDayHour);
     }
 
