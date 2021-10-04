@@ -17745,7 +17745,7 @@ declare module DevExpress.ui {
     dropDownAppointmentTemplate?:
       | DevExpress.core.template
       | ((
-          model: DevExpress.ui.dxScheduler.AppointmentTemplateData,
+          itemData: any,
           itemIndex: number,
           contentElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
@@ -18082,7 +18082,7 @@ declare module DevExpress.ui {
           dropDownAppointmentTemplate?:
             | DevExpress.core.template
             | ((
-                model: DevExpress.ui.dxScheduler.AppointmentTemplateData,
+                itemData: any,
                 itemIndex: number,
                 contentElement: DevExpress.core.DxElement
               ) => string | DevExpress.core.UserDefinedElement);

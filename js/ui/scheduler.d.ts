@@ -398,14 +398,14 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
       * @docid
       * @default "dropDownAppointment"
-      * @type_function_param1 model:object
+      * @type_function_param1 itemData:object
       * @type_function_param2 itemIndex:number
       * @type_function_param3 contentElement:DxElement
       * @type_function_return string|Element|jQuery
       * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
       * @public
       */
-    dropDownAppointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+    dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -895,13 +895,13 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
       * @docid
       * @default "dropDownAppointment"
-      * @type_function_param1 model:object
+      * @type_function_param1 itemData:object
       * @type_function_param2 itemIndex:number
       * @type_function_param3 contentElement:DxElement
       * @type_function_return string|Element|jQuery
       * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
       */
-      dropDownAppointmentTemplate?: template | ((model: AppointmentTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+      dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
        * @docid
        * @default 30
