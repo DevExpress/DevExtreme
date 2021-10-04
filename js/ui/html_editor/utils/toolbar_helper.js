@@ -327,7 +327,7 @@ function prepareInsertTableHandler(module) {
 
                 const table = module.quill.getModule('table');
                 if(table) {
-                    this.saveValueChangeEvent(event);
+                    module.saveValueChangeEvent(event);
 
                     const { columns, rows } = formData;
                     table.insertTable(columns, rows);
