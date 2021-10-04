@@ -30,7 +30,7 @@ export type ItemClickEvent = ItemClickInfo & EventExtension;
 export const viewFunction = ({
   props,
   restAttributes,
-  getTemplateNames
+  getTemplateNames,
 }: List): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyList}
@@ -185,10 +185,8 @@ export class ListProps extends BaseWidgetProps {
   view: viewFunction,
 })
 export class List extends JSXComponent<ListProps>() implements DomComponentWrapperMethods {
-  getTemplateNames() {
-    return [
-      'itemTemplate',
-      'groupTemplate'
-    ];
-  }
+  getTemplateNames = (): string[] => [
+    'itemTemplate',
+    'groupTemplate',
+  ];
 }
