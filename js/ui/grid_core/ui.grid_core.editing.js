@@ -962,8 +962,11 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(this.needChangePageIndexToInsertRow()) {
                 this._dataController.pageIndex(change.pageIndex).done(() => {
-                    rowIndex = this._dataController.getRowIndexByKey(key);
-                    d.resolve();
+                    const focusController = this.getController('focus');
+                    when(focusController?.navigateToRow(change.key)).done(() => {
+                        rowIndex = this._dataController.getRowIndexByKey(key);
+                        d.resolve();
+                    });
                 }).fail(d.reject);
             } else {
                 this._dataController.updateItems({
