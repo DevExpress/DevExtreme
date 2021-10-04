@@ -93,6 +93,9 @@ if(Quill) {
                 const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
                 return this._getToolbarItem(buttonItemConfig);
+            } else if(item.items) {
+                item.items = this._prepareMenuItems(item.items);
+                return this._getToolbarItem(item);
             } else {
                 return this._getToolbarItem(item);
             }

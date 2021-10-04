@@ -440,8 +440,12 @@ module('Table context menu integration', {
 
             const $submenuItems = this.getSubmenuItems(0);
 
-            assert.strictEqual($submenuItems.length, 2, 'all items are rendered');
-            assert.strictEqual($submenuItems.eq(0).text(), 'Insert Table', 'first item is correct');
+            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+            const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
+
+            assert.strictEqual($menuItems.length, 4, 'all menu and submenu items are rendered');
+            assert.strictEqual($submenuItems.length, 2, 'count of submenu items is correct');
+            assert.strictEqual($submenuItems.eq(0).text(), 'Delete Column', 'first item is correct');
             assert.strictEqual($submenuItems.eq(1).text(), 'test item 1', 'second item is correct');
         });
 
@@ -449,17 +453,32 @@ module('Table context menu integration', {
             this.createWidget({ tableContextMenu: {
                 enabled: true,
                 items: ['insertTable', 'deleteColumn', 'cellProperties', 'undo', 'bold',
-                    'alignLeft', 'link', 'color', 'image'
+                    'alignLeft', 'link', 'color', 'image', 'codeBlock'
                 ]
             } });
 
-            const $submenuItems = this.getSubmenuItems(0);
 
-            assert.strictEqual($submenuItems.length, 2, 'all items are rendered');
-            assert.strictEqual($submenuItems.eq(0).text(), 'Insert Table', 'first item is correct');
-            assert.strictEqual($submenuItems.eq(1).text(), 'test item 1', 'second item is correct');
+            this.quillInstance.setSelection(50, 1);
+            const $tableElement = this.$element.find('td').eq(5);
+            $tableElement.trigger('dxcontextmenu');
+            this.clock.tick();
+
+            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+            const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
+
+            assert.strictEqual($menuItems.length, 10, 'all items are rendered');
+            assert.strictEqual($menuItems.eq(0).text(), 'Insert Table', 'Insert Table is correct');
+            assert.strictEqual($menuItems.eq(1).text(), 'Delete Column', 'Delete Column is correct');
+            assert.strictEqual($menuItems.eq(2).text(), 'Cell Properties', 'Cell Properties is correct');
+            assert.strictEqual($menuItems.eq(3).text(), 'Undo', 'undo is correct');
+            assert.strictEqual($menuItems.eq(4).text(), 'Bold', 'bold is correct');
+            assert.strictEqual($menuItems.eq(5).text(), 'Align Left', 'alignLeft is correct');
+            assert.strictEqual($menuItems.eq(6).text(), 'Add Link', 'link is correct');
+            assert.strictEqual($menuItems.eq(7).text(), 'Font Color', 'color is correct');
+            assert.strictEqual($menuItems.eq(8).text(), 'Add Image', 'image is correct');
+            assert.strictEqual($menuItems.eq(9).text(), 'Code Block', 'codeBlock is correct');
         });
 
-        // 'check all available item types in context menu'
+        // 'check the toolbar update after a format changes'
     });
 });
