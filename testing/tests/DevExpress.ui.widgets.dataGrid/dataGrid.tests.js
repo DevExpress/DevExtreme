@@ -4348,7 +4348,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
         this.clock.tick();
 
-        assert.strictEqual(log.callCount, 1, 'error.log is not called');
+        assert.strictEqual(log.callCount, 1, 'error.log is called once');
         assert.deepEqual(log.getCall(0).args, [
             'W0001',
             'dxDataGrid',
