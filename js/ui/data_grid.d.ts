@@ -3196,6 +3196,7 @@ export type RowTemplateData<TRowData = any, TKey = any> = {
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
 export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseOptions<dxDataGrid<TRowData, TKey>, TRowData, TKey> {
     /**
