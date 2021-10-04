@@ -87,17 +87,17 @@ if(Quill) {
             if(item.name && item.acceptedValues && this._isAcceptableItem(item.widget, 'dxSelectBox')) {
                 const selectItemConfig = this._prepareSelectItemConfig(item);
 
-                return this._getToolbarItem(selectItemConfig);
+                return this._getMenuItem(selectItemConfig);
             } else if(item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
                 const defaultButtonItemConfig = this._prepareButtonItemConfig(item.name);
                 const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
-                return this._getToolbarItem(buttonItemConfig);
+                return this._getMenuItem(buttonItemConfig);
             } else if(item.items) {
                 item.items = this._prepareMenuItems(item.items);
-                return this._getToolbarItem(item);
+                return this._getMenuItem(item);
             } else {
-                return this._getToolbarItem(item);
+                return this._getMenuItem(item);
             }
         }
 
@@ -112,9 +112,9 @@ if(Quill) {
             };
         }
 
-        _updateFormatWidget(name, isApplied, formats) {}
+        // _updateFormatWidget(name, isApplied, formats) {}
 
-        _getToolbarItem(item) {
+        _getMenuItem(item) {
             return item;
         }
 
@@ -126,8 +126,8 @@ if(Quill) {
                     newItem = this._handleObjectItem(item);
                 } else if(isString(item)) {
                     const buttonItemConfig = this._prepareButtonItemConfig(item);
-                    // newItem = this._getToolbarItem(buttonItemConfig);
-                    newItem = buttonItemConfig;
+                    newItem = this._getMenuItem(buttonItemConfig);
+                    // newItem = buttonItemConfig;
                 }
                 if(newItem) {
                     resultItems.push(newItem);
@@ -209,7 +209,8 @@ if(Quill) {
         }
 
         _isTableTarget(targetElement) {
-            return ['TD', 'TH'].indexOf(targetElement.tagName) !== -1;
+            return !!$(targetElement).closest('.dx-htmleditor-content td, .dx-htmleditor-content th').length;
+            // return ['TD', 'TH'].indexOf(targetElement.tagName) !== -1;
         }
 
         option(option, value) {
