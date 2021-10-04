@@ -41,7 +41,9 @@ export default {
                     $sortIndicator.addClass(SORT_INDEX_CLASS);
                 }
 
-                options.rootElement.addClass(that.addWidgetPrefix(HEADERS_ACTION_CLASS));
+                if(isSortingAllowed) {
+                    options.rootElement.addClass(that.addWidgetPrefix(HEADERS_ACTION_CLASS));
+                }
             }
 
             if(!isDefined(column.sortOrder)) {
