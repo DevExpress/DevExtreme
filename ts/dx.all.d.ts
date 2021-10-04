@@ -20963,6 +20963,14 @@ declare module DevExpress.ui {
       | DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName
       | dxTreeListToolbarItem
     )[];
+    /**
+     * [descr:dxTreeListToolbar.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxTreeListToolbar.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxTreeListToolbarItem]
@@ -20973,14 +20981,6 @@ declare module DevExpress.ui {
      * [descr:dxTreeListToolbarItem.name]
      */
     name?: DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName | string;
-    /**
-     * [descr:dxTreeListToolbarItem.visible]
-     */
-    visible?: boolean;
-    /**
-     * [descr:dxTreeListToolbarItem.disabled]
-     */
-    disabled?: boolean;
   }
   /**
    * [descr:dxTreeView]
