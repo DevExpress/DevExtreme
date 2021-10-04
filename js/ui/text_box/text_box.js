@@ -6,7 +6,6 @@ import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import TextEditor from './ui.text_editor';
 import { normalizeKeyName } from '../../events/utils/index';
-import { renderLabel } from './ui.text_editor.label';
 
 // STYLE textBox
 
@@ -95,15 +94,12 @@ const TextBox = TextEditor.inherit({
         this._$searchIcon = $searchIcon;
     },
 
-
-    _renderLabel: function() {
-        const options = {
+    _getLabelOptions: function() {
+        return {
             editor: this,
             container: this._input(),
             icon: this._$searchIcon
         };
-
-        renderLabel(options);
     },
 
     _optionChanged: function(args) {

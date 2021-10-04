@@ -439,13 +439,15 @@ const TextEditorBase = Editor.inherit({
         this._input().prop('spellcheck', this.option('spellcheck'));
     },
 
-    _renderLabel: function() {
-        const options = {
+    _getLabelOptions: function() {
+        return {
             editor: this,
             container: this._input()
         };
+    },
 
-        renderLabel(options);
+    _renderLabel: function() {
+        renderLabel(this._getLabelOptions());
     },
 
     _renderPlaceholder: function() {
