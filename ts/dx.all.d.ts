@@ -13509,9 +13509,9 @@ declare module DevExpress.ui {
      */
     scaleTypeRange?: {
       /**
-       * [descr:dxGanttOptions.scaleTypeRange.start]
+       * [descr:dxGanttOptions.scaleTypeRange.min]
        */
-      start?:
+      min?:
         | 'minutes'
         | 'hours'
         | 'days'
@@ -13520,9 +13520,9 @@ declare module DevExpress.ui {
         | 'quarters'
         | 'years';
       /**
-       * [descr:dxGanttOptions.scaleTypeRange.end]
+       * [descr:dxGanttOptions.scaleTypeRange.max]
        */
-      end?:
+      max?:
         | 'minutes'
         | 'hours'
         | 'days'
