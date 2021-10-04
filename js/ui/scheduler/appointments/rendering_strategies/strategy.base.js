@@ -7,6 +7,8 @@ import { current as currentTheme } from '../../../themes';
 import { AppointmentSettingsGenerator } from '../settingsGenerator';
 
 import timeZoneUtils from '../../utils.timeZone';
+import { createAppointmentAdapter } from '../../appointmentAdapter';
+import { getAppointmentTakesAllDay } from '../DataProvider/utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -237,11 +239,8 @@ class BaseRenderingStrategy {
     }
 
     isAppointmentTakesAllDay(rawAppointment) {
-        return this.appointmentDataProvider.appointmentTakesAllDay(
-            rawAppointment,
-            this.viewStartDayHour,
-            this.viewEndDayHour
-        );
+        const adapter = createAppointmentAdapter(this.key, rawAppointment);
+        return getAppointmentTakesAllDay(adapter, this.viewStartDayHour, this.viewEndDayHour);
     }
 
     _getAppointmentParts() {

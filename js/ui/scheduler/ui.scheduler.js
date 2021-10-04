@@ -78,6 +78,7 @@ import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
 import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
+import { getAppointmentTakesAllDay } from './appointments/DataProvider/utils';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -340,6 +341,17 @@ class Scheduler extends Widget {
                 useDeferUpdateForTemplates: false
             }
         });
+    }
+
+    get filteredItems() {
+        if(!this._filteredItems) {
+            this._filteredItems = [];
+        }
+        return this._filteredItems;
+    }
+
+    set filteredItems(value) {
+        this._filteredItems = value;
     }
 
     _defaultOptionsRules() {
@@ -827,15 +839,13 @@ class Scheduler extends Widget {
     }
 
     _dimensionChanged() {
-        const { filteredItems } = getAppointmentDataProvider(this.key);
-
         this._toggleSmallClass();
 
-        if(!this._isAgenda() && filteredItems && this._isVisible()) {
-            this._workSpace.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
+        if(!this._isAgenda() && this.filteredItems && this._isVisible()) {
+            this._workSpace.option('allDayExpanded', this._isAllDayExpanded(this.filteredItems));
             this._workSpace._dimensionChanged();
 
-            const appointments = this.getLayoutManager().createAppointmentsMap(filteredItems);
+            const appointments = this.getLayoutManager().createAppointmentsMap(this.filteredItems);
 
             this._appointments.option('items', appointments);
         }
@@ -991,12 +1001,8 @@ class Scheduler extends Widget {
     _dataSourceChangedHandler(result) {
         if(this._readyToRenderAppointments) {
             this._workSpaceRecalculation.done((function() {
-
                 this._renderAppointments();
-
-                const { filteredItems } = getAppointmentDataProvider(this.key);
-
-                this.getWorkSpace().onDataSourceChanged(filteredItems);
+                this.getWorkSpace().onDataSourceChanged(this.filteredItems);
 
             }).bind(this));
         }
@@ -1017,20 +1023,14 @@ class Scheduler extends Widget {
     }
 
     _filterAppointments() {
-        getAppointmentDataProvider(this.key).filter();
+        this.filteredItems = getAppointmentDataProvider(this.key).filter();
     }
 
     _renderAppointments() {
         const workspace = this.getWorkSpace();
-
         this._filterAppointments();
 
-        const { filteredItems } = getAppointmentDataProvider(this.key);
-
-        workspace.option(
-            'allDayExpanded',
-            this._isAllDayExpanded(filteredItems)
-        );
+        workspace.option('allDayExpanded', this._isAllDayExpanded(this.filteredItems));
 
         let viewModel = [];
         if(this._isVisible()) {
@@ -1051,10 +1051,9 @@ class Scheduler extends Widget {
     }
 
     _getAppointmentsToRepaint() {
-        const { filteredItems } = getAppointmentDataProvider(this.key);
         const layoutManager = this.getLayoutManager();
 
-        const appointmentsMap = layoutManager.createAppointmentsMap(filteredItems);
+        const appointmentsMap = layoutManager.createAppointmentsMap(this.filteredItems);
         if(this.modelProvider.isRenovatedAppointments) {
             const appointmentTemplate = this.option('appointmentTemplate') !== DEFAULT_APPOINTMENT_TEMPLATE_NAME
                 ? this.option('appointmentTemplate')
@@ -1393,8 +1392,7 @@ class Scheduler extends Widget {
             isRenovatedAppointments: this.option('isRenovatedAppointments'),
             getResizableStep: () => this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0,
             onContentReady: () => {
-                const filteredItems = getAppointmentDataProvider(this.key).filteredItems;
-                this._workSpace?.option('allDayExpanded', this._isAllDayExpanded(filteredItems));
+                this._workSpace?.option('allDayExpanded', this._isAllDayExpanded(this.filteredItems));
             }
         };
 
@@ -1494,6 +1492,7 @@ class Scheduler extends Widget {
         const result = extend({
             resources: this.option('resources'),
             loadedResources: this.option('loadedResources'),
+            getFilteredItems: () => this.filteredItems,
             getResourceDataAccessors: this.getResourceDataAccessors.bind(this),
 
             key: this.key,
@@ -1545,7 +1544,7 @@ class Scheduler extends Widget {
         result.onCellContextMenu = this._createActionByOption('onCellContextMenu');
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
         result.hoursInterval = result.cellDuration / 60;
-        result.allDayExpanded = this._isAllDayExpanded(getAppointmentDataProvider(this.key).filteredItems);
+        result.allDayExpanded = this._isAllDayExpanded(this.filteredItems);
         result.dataCellTemplate = result.dataCellTemplate ? this._getTemplate(result.dataCellTemplate) : null;
         result.timeCellTemplate = result.timeCellTemplate ? this._getTemplate(result.timeCellTemplate) : null;
         result.resourceCellTemplate = result.resourceCellTemplate ? this._getTemplate(result.resourceCellTemplate) : null;
@@ -1946,7 +1945,7 @@ class Scheduler extends Widget {
     }
 
     _expandAllDayPanel(appointment) {
-        if(!this._isAllDayExpanded(getAppointmentDataProvider(this.key).filteredItems) && this.appointmentTakesAllDay(appointment)) {
+        if(!this._isAllDayExpanded(this.filteredItems) && this.appointmentTakesAllDay(appointment)) {
             this._workSpace.option('allDayExpanded', true);
         }
     }
@@ -1986,9 +1985,11 @@ class Scheduler extends Widget {
         return this._actions;
     }
 
-    appointmentTakesAllDay(appointment) {
-        return getAppointmentDataProvider(this.key).appointmentTakesAllDay(
-            appointment,
+    appointmentTakesAllDay(rawAppointment) {
+        const adapter = createAppointmentAdapter(this.key, rawAppointment);
+
+        return getAppointmentTakesAllDay(
+            adapter,
             this._getCurrentViewOption('startDayHour'),
             this._getCurrentViewOption('endDayHour')
         );
