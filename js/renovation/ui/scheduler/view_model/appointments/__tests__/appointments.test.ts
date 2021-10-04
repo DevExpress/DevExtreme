@@ -8,12 +8,7 @@ import { CellsMetaData, ViewDataProviderType } from '../../../workspaces/types';
 import { getAppointmentsViewModel } from '../appointments';
 import { getAppointmentsModel } from '../../../model/appointments';
 import { compileGetter, compileSetter } from '../../../../../../core/utils/data';
-import {
-  createFactoryInstances,
-  generateKey,
-  getAppointmentDataProvider,
-} from '../../../../../../ui/scheduler/instanceFactory';
-import { createTimeZoneCalculator } from '../../../common';
+import { createAppointmentDataProvider, createDataAccessors, createTimeZoneCalculator } from '../../../common';
 
 const defaultDataAccessors: DataAccessorType = {
   getter: {
@@ -35,7 +30,6 @@ const prepareInstances = (
   currentDate: Date,
   intervalCount: number,
 ): {
-  key: number;
   timeZoneCalculator: any; // TODO add TimeZoneCalculator to the renovation
   appointmentDataProvider: any; // TODO add AppointmentDataProvider to the renovation
   schedulerProps: SchedulerProps;
@@ -55,9 +49,9 @@ const prepareInstances = (
   const viewDataProvider = (new ViewDataProvider('week') as unknown) as ViewDataProviderType;
   const viewRenderConfig = getViewRenderConfigByType(
     workspaceProps.type,
-    false,
+    workspaceProps.crossScrollingEnabled,
     workspaceProps.intervalCount,
-    false,
+    workspaceProps.groupOrientation === 'vertical',
   );
   const generationOptions = prepareGenerationOptions(
     workspaceProps,
@@ -90,17 +84,21 @@ const prepareInstances = (
     ],
   };
 
-  const key = generateKey();
-  createFactoryInstances({
-    key,
-    getIsVirtualScrolling: () => false,
-    getDataAccessors: () => defaultDataAccessors,
-  });
+  const timeZoneCalculator = createTimeZoneCalculator('');
+
+  const appointmentDataProvider = createAppointmentDataProvider(
+    schedulerProps,
+    workspaceProps,
+    false,
+    [],
+    createDataAccessors(schedulerProps),
+    timeZoneCalculator,
+    viewDataProvider,
+  );
 
   return {
-    key,
-    timeZoneCalculator: createTimeZoneCalculator(''),
-    appointmentDataProvider: getAppointmentDataProvider(key),
+    timeZoneCalculator,
+    appointmentDataProvider,
     viewDataProvider,
     schedulerProps,
     workspaceProps,
