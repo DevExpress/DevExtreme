@@ -518,16 +518,10 @@ export default {
                 },
 
                 _beforeEndSaving: function(changes) {
-                    if(this.isCellEditMode()) {
-                        if(changes[0]?.type !== 'update') {
-                            this.callBase.apply(this, arguments);
-                        }
-                    } else {
-                        if(this.isBatchEditMode()) {
-                            this._resetModifiedClassCells(changes);
-                        }
-                        this.callBase.apply(this, arguments);
+                    if(this.isBatchEditMode()) {
+                        this._resetModifiedClassCells(changes);
                     }
+                    this.callBase.apply(this, arguments);
                 },
 
                 prepareEditButtons: function(headerPanel) {
