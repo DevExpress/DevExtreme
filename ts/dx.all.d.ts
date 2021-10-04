@@ -9250,6 +9250,10 @@ declare module DevExpress.ui {
      */
     simpleView?: boolean;
     /**
+     * [descr:dxDiagramOptions.useNativeScrolling]
+     */
+    useNativeScrolling?: boolean;
+    /**
      * [descr:dxDiagramOptions.snapToGrid]
      */
     snapToGrid?: boolean;

@@ -294,6 +294,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @docid
      * @type Enums.TreeMapLayoutAlgorithm | function
      * @default 'squarified'
+     * @type_function_return void
      * @public
      */
     layoutAlgorithm?: 'sliceanddice' | 'squarified' | 'strip' | ((e: { rect?: Array<number>; sum?: number; items?: Array<any> }) => any);

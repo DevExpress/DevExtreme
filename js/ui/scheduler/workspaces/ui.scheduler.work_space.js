@@ -1136,6 +1136,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this.headerPanelOffsetRecalculate();
 
+        this._updateScrollable();
+
         this.cache.clear();
         this._cleanAllowedPositions();
     }
