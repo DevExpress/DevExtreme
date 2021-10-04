@@ -17,15 +17,12 @@ function normalizeBoundaryValue(value) {
     };
 }
 
-function normalizeOptions(rows) {
-    rows.forEach(row => {
+function normalizeRowsInfo(rowsInfo) {
+    rowsInfo.forEach(row => {
         row.cells.forEach(({ pdfCell }) => {
             pdfCell.padding = normalizeBoundaryValue(pdfCell.padding);
-            // TODO: normalizeTextColor()
-            // TODO: normalizeBackgroundColor()
-            // TODO: ...
         });
     });
 }
 
-export { normalizeOptions, normalizeBoundaryValue };
+export { normalizeRowsInfo, normalizeBoundaryValue };
