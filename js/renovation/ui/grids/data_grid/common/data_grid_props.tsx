@@ -13,7 +13,7 @@ import type { dxLoadPanelAnimation } from '../../../../../ui/load_panel';
 import DxDataGrid from '../../../../../ui/data_grid';
 import type {
   Column,
-  RowObject,
+  Row,
   ColumnButtonClickEvent,
   ColumnButtonTemplateData,
   ColumnCustomizeTextArg,
@@ -125,7 +125,7 @@ export class DataGridColumnButton {
   | boolean
   | ((options: {
     component?: DxDataGrid;
-    row?: RowObject;
+    row?: Row;
     column?: Column;
   }) => boolean);
 
@@ -134,7 +134,7 @@ export class DataGridColumnButton {
   | boolean
   | ((options: {
     component?: DxDataGrid;
-    row?: RowObject;
+    row?: Row;
     column?: Column;
   }) => boolean);
 }
@@ -482,12 +482,12 @@ export class DataGridEditing {
   @OneWay()
   allowDeleting?:
   | boolean
-  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean) = false;
+  | ((options: { component?: DxDataGrid; row?: Row }) => boolean) = false;
 
   @OneWay()
   allowUpdating?:
   | boolean
-  | ((options: { component?: DxDataGrid; row?: RowObject }) => boolean) = false;
+  | ((options: { component?: DxDataGrid; row?: Row }) => boolean) = false;
 
   @OneWay()
   confirmDelete? = true;
@@ -1460,7 +1460,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() customizeExportData?: (
     columns: Column[],
-    rows: RowObject[],
+    rows: Row[],
   ) => any;
 
   @OneWay() keyExpr?: string | string[];

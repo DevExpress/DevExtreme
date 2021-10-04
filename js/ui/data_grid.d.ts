@@ -2791,7 +2791,7 @@ export type CellClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly rowIndex: number;
   readonly rowType: string;
   readonly cellElement: DxElement;
-  readonly row: RowObject;
+  readonly row: Row;
 };
 
 /** @public */
@@ -2806,7 +2806,7 @@ export type CellDblClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly rowIndex: number;
   readonly rowType: string;
   readonly cellElement: DxElement;
-  readonly row: RowObject;
+  readonly row: Row;
 };
 
 /** @public */
@@ -2822,7 +2822,7 @@ export type CellHoverChangedEvent = EventInfo<dxDataGrid> & {
   readonly column: Column;
   readonly rowType: string;
   readonly cellElement: DxElement;
-  readonly row: RowObject;
+  readonly row: Row;
 };
 
 /** @public */
@@ -2836,7 +2836,7 @@ export type CellPreparedEvent = EventInfo<dxDataGrid> & {
   readonly column: Column;
   readonly rowIndex: number;
   readonly rowType: string;
-  readonly row: RowObject;
+  readonly row: Row;
   readonly isSelected?: boolean;
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
@@ -2856,7 +2856,7 @@ export type ContextMenuPreparingEvent = EventInfo<dxDataGrid> & {
   readonly columnIndex: number;
   readonly column?: Column;
   readonly rowIndex: number;
-  readonly row?: RowObject;
+  readonly row?: Row;
 };
 
 /** @public */
@@ -2890,7 +2890,7 @@ export type EditorPreparedEvent = EventInfo<dxDataGrid> & {
   readonly editorElement: DxElement;
   readonly readOnly: boolean;
   readonly dataField?: string;
-  readonly row?: RowObject;
+  readonly row?: Row;
 };
 
 /** @public */
@@ -2908,7 +2908,7 @@ export type EditorPreparingEvent = EventInfo<dxDataGrid> & {
   editorName: string;
   editorOptions: any;
   readonly dataField?: string;
-  readonly row?: RowObject;
+  readonly row?: Row;
 };
 
 /** @public */
@@ -2933,7 +2933,7 @@ export type FocusedCellChangedEvent = EventInfo<dxDataGrid> & {
   readonly cellElement: DxElement;
   readonly columnIndex: number;
   readonly rowIndex: number;
-  readonly row?: RowObject;
+  readonly row?: Row;
   readonly column?: Column;
 };
 
@@ -2944,7 +2944,7 @@ export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> 
   readonly prevRowIndex: number;
   newColumnIndex: number;
   newRowIndex: number;
-  readonly rows: Array<RowObject>;
+  readonly rows: Array<Row>;
   readonly columns: Array<Column>;
   isHighlighted: boolean;
 };
@@ -2953,7 +2953,7 @@ export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> 
 export type FocusedRowChangedEvent = EventInfo<dxDataGrid> & {
   readonly rowElement: DxElement;
   readonly rowIndex: number;
-  readonly row?: RowObject;
+  readonly row?: Row;
 };
 
 /** @public */
@@ -2961,7 +2961,7 @@ export type FocusedRowChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> &
   readonly rowElement: DxElement;
   readonly prevRowIndex: number;
   newRowIndex: number;
-  readonly rows: Array<RowObject>;
+  readonly rows: Array<Row>;
 };
 
 /** @public */
@@ -3090,7 +3090,7 @@ export type RowDraggingReorderEvent = RowDraggingEventInfo<dxDataGrid> & DragReo
 
 /** @public */
 export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
-  row?: RowObject;
+  row?: Row;
   column?: Column;
 };
 
@@ -3103,7 +3103,7 @@ export type ColumnButtonTemplateData = {
   readonly column: Column;
   readonly rowIndex: number;
   readonly rowType: string;
-  readonly row: RowObject;
+  readonly row: Row;
 };
 
 /** @public */
@@ -3117,7 +3117,7 @@ export type ColumnCellTemplateData = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column;
-  readonly row: RowObject;
+  readonly row: Row;
   readonly rowType: string;
   readonly watch?: Function;
 };
@@ -3133,7 +3133,7 @@ export type ColumnEditCellTemplateData = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column;
-  readonly row: RowObject;
+  readonly row: Row;
   readonly rowType: string;
   readonly watch?: Function;
 };
@@ -3148,7 +3148,7 @@ export type ColumnGroupCellTemplateData = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column;
-  readonly row: RowObject;
+  readonly row: Row;
   readonly summaryItems: Array<any>;
   readonly groupContinuesMessage?: string;
   readonly groupContinuedMessage?: string;
@@ -3210,7 +3210,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param2 rows:Array<dxDataGridRowObject>
      * @public
      */
-    customizeExportData?: ((columns: Array<Column>, rows: Array<RowObject>) => void);
+    customizeExportData?: ((columns: Array<Column>, rows: Array<Row>) => void);
     /**
      * @docid
      * @public
@@ -3709,6 +3709,7 @@ export interface ExcelCellInfo {
   gridCell?: ExcelCell;
 }
 
+/** @public */
 export interface Export {
   /**
    * @docid dxDataGridOptions.export.allowExportSelectedData
@@ -4172,10 +4173,11 @@ export interface dxDataGridToolbar {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Editing instead
  */
 export type dxDataGridEditing = Editing;
 
+/** @public */
 export interface Editing extends EditingBase {
     /**
      * @docid dxDataGridOptions.editing.allowAdding
@@ -4190,7 +4192,7 @@ export interface Editing extends EditingBase {
      * @type_function_return Boolean
      * @public
      */
-    allowDeleting?: boolean | ((options: { component?: dxDataGrid; row?: RowObject }) => boolean);
+    allowDeleting?: boolean | ((options: { component?: dxDataGrid; row?: Row }) => boolean);
     /**
      * @docid dxDataGridOptions.editing.allowUpdating
      * @default false
@@ -4198,7 +4200,7 @@ export interface Editing extends EditingBase {
      * @type_function_return Boolean
      * @public
      */
-    allowUpdating?: boolean | ((options: { component?: dxDataGrid; row?: RowObject }) => boolean);
+    allowUpdating?: boolean | ((options: { component?: dxDataGrid; row?: Row }) => boolean);
     /**
      * @docid dxDataGridOptions.editing.texts
      * @public
@@ -4209,10 +4211,11 @@ export interface Editing extends EditingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Scrolling instead
  */
 export type dxDataGridScrolling = Scrolling;
 
+/** @public */
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxDataGridOptions.scrolling.mode
@@ -4226,10 +4229,11 @@ export interface Scrolling extends ScrollingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Selection instead
  */
 export type dxDataGridSelection = Selection;
 
+/** @public */
 export interface Selection extends SelectionBase {
     /**
      * @docid dxDataGridOptions.selection.deferred
@@ -4355,7 +4359,7 @@ declare class dxDataGrid extends Widget<dxDataGridOptions> implements GridBase {
      * @return Array<dxDataGridRowObject>
      * @public
      */
-    getVisibleRows(): Array<RowObject>;
+    getVisibleRows(): Array<Row>;
     /**
      * @docid
      * @publicName isRowExpanded(key)
@@ -4573,7 +4577,7 @@ export interface dxDataGridColumn extends ColumnBase {
      * @type Enums.GridCommandColumnType
      * @public
      */
-    type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
+    type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 }
 
 /**
@@ -4626,7 +4630,7 @@ export interface dxDataGridColumnButton extends ColumnButtonBase {
      * @type_function_return Boolean
      * @public
      */
-    visible?: boolean | ((options: { component?: dxDataGrid; row?: RowObject; column?: Column }) => boolean);
+    visible?: boolean | ((options: { component?: dxDataGrid; row?: Row; column?: Column }) => boolean);
     /**
      * @docid dxDataGridColumnButton.disabled
      * @default false
@@ -4635,21 +4639,21 @@ export interface dxDataGridColumnButton extends ColumnButtonBase {
      * @type_function_return Boolean
      * @public
      */
-    disabled?: boolean | ((options: { component?: dxDataGrid; row?: RowObject; column?: Column }) => boolean);
+    disabled?: boolean | ((options: { component?: dxDataGrid; row?: Row; column?: Column }) => boolean);
 }
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Row instead
  */
-export type dxDataGridRowObject = RowObject;
+export type dxDataGridRowObject = Row;
 
 /**
+ * @public
  * @docid dxDataGridRowObject
  * @type object
  */
-export interface RowObject {
+export interface Row {
     /**
      * @docid dxDataGridRowObject.data
      * @public
