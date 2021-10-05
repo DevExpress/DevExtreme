@@ -627,7 +627,7 @@ export default {
                     return $table;
                 },
                 _createRow: function(row) {
-                    const $row = this.callBase(row);
+                    const $row = this.callBase.apply(this, arguments);
 
                     if(row) {
                         const editingController = this._editingController;

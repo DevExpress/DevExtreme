@@ -55,7 +55,9 @@ const prepareInstances = (
   const viewDataProvider = (new ViewDataProvider('week') as unknown) as ViewDataProviderType;
   const viewRenderConfig = getViewRenderConfigByType(
     workspaceProps.type,
+    false,
     workspaceProps.intervalCount,
+    false,
   );
   const generationOptions = prepareGenerationOptions(
     workspaceProps,

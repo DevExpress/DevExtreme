@@ -19,7 +19,7 @@ import {
 import Store from '../data/abstract_store';
 
 import DataSource, {
-    DataSourceOptions,
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import {
@@ -2799,7 +2799,7 @@ export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataG
   readonly rowIndex: number;
   readonly rowType: string;
   readonly cellElement: DxElement;
-  readonly row: RowObject<TRowData, TKey>;
+  readonly row: Row<TRowData, TKey>;
 };
 
 /** @public */
@@ -2814,7 +2814,7 @@ export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDa
   readonly rowIndex: number;
   readonly rowType: string;
   readonly cellElement: DxElement;
-  readonly row: RowObject<TRowData, TKey>;
+  readonly row: Row<TRowData, TKey>;
 };
 
 /** @public */
@@ -2830,7 +2830,7 @@ export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxData
   readonly column: Column<TRowData, TKey>;
   readonly rowType: string;
   readonly cellElement: DxElement;
-  readonly row: RowObject<TRowData, TKey>;
+  readonly row: Row<TRowData, TKey>;
 };
 
 /** @public */
@@ -2844,7 +2844,7 @@ export type CellPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid
   readonly column: Column<TRowData, TKey>;
   readonly rowIndex: number;
   readonly rowType: string;
-  readonly row: RowObject<TRowData, TKey>;
+  readonly row: Row<TRowData, TKey>;
   readonly isSelected?: boolean;
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
@@ -2864,7 +2864,7 @@ export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dx
   readonly columnIndex: number;
   readonly column?: Column<TRowData, TKey>;
   readonly rowIndex: number;
-  readonly row?: RowObject<TRowData, TKey>;
+  readonly row?: Row<TRowData, TKey>;
 };
 
 /** @public */
@@ -2898,7 +2898,7 @@ export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGr
   readonly editorElement: DxElement;
   readonly readOnly: boolean;
   readonly dataField?: string;
-  readonly row?: RowObject<TRowData, TKey>;
+  readonly row?: Row<TRowData, TKey>;
 };
 
 /** @public */
@@ -2916,7 +2916,7 @@ export type EditorPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataG
   editorName: string;
   editorOptions: any;
   readonly dataField?: string;
-  readonly row?: RowObject<TRowData, TKey>;
+  readonly row?: Row<TRowData, TKey>;
 };
 
 /** @public */
@@ -2941,7 +2941,7 @@ export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDa
   readonly cellElement: DxElement;
   readonly columnIndex: number;
   readonly rowIndex: number;
-  readonly row?: RowObject<TRowData, TKey>;
+  readonly row?: Row<TRowData, TKey>;
   readonly column?: Column<TRowData, TKey>;
 };
 
@@ -2952,7 +2952,7 @@ export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & 
   readonly prevRowIndex: number;
   newColumnIndex: number;
   newRowIndex: number;
-  readonly rows: Array<RowObject<TRowData, TKey>>;
+  readonly rows: Array<Row<TRowData, TKey>>;
   readonly columns: Array<Column<TRowData, TKey>>;
   isHighlighted: boolean;
 };
@@ -2961,7 +2961,7 @@ export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & 
 export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
   readonly rowElement: DxElement;
   readonly rowIndex: number;
-  readonly row?: RowObject<TRowData, TKey>;
+  readonly row?: Row<TRowData, TKey>;
 };
 
 /** @public */
@@ -2969,7 +2969,7 @@ export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & N
   readonly rowElement: DxElement;
   readonly prevRowIndex: number;
   newRowIndex: number;
-  readonly rows: Array<RowObject<TRowData, TKey>>;
+  readonly rows: Array<Row<TRowData, TKey>>;
 };
 
 /** @public */
@@ -3098,7 +3098,7 @@ export type RowDraggingReorderEvent<TRowData = any, TKey = any> = RowDraggingEve
 
 /** @public */
 export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-  row?: RowObject<TRowData, TKey>;
+  row?: Row<TRowData, TKey>;
   column?: Column<TRowData, TKey>;
 };
 
@@ -3111,7 +3111,7 @@ export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
   readonly column: Column<TRowData, TKey>;
   readonly rowIndex: number;
   readonly rowType: string;
-  readonly row: RowObject<TRowData, TKey>;
+  readonly row: Row<TRowData, TKey>;
 };
 
 /** @public */
@@ -3125,7 +3125,7 @@ export type ColumnCellTemplateData<TRowData = any, TKey = any> = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column<TRowData, TKey>;
-  readonly row: RowObject<TRowData, TKey>;
+  readonly row: Row<TRowData, TKey>;
   readonly rowType: string;
   readonly watch?: Function;
 };
@@ -3141,7 +3141,7 @@ export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column<TRowData, TKey>;
-  readonly row: RowObject<TRowData, TKey>;
+  readonly row: Row<TRowData, TKey>;
   readonly rowType: string;
   readonly watch?: Function;
 };
@@ -3156,7 +3156,7 @@ export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column<TRowData, TKey>;
-  readonly row: RowObject<TRowData, TKey>;
+  readonly row: Row<TRowData, TKey>;
   readonly summaryItems: Array<any>;
   readonly groupContinuesMessage?: string;
   readonly groupContinuedMessage?: string;
@@ -3219,7 +3219,7 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type_function_param2 rows:Array<dxDataGridRowObject>
      * @public
      */
-    customizeExportData?: ((columns: Array<Column<TRowData, TKey>>, rows: Array<RowObject<TRowData, TKey>>) => void);
+    customizeExportData?: ((columns: Array<Column<TRowData, TKey>>, rows: Array<Row<TRowData, TKey>>) => void);
     /**
      * @docid
      * @public
@@ -3649,6 +3649,7 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     } | 'auto';
     /**
      * @docid
+     * @deprecated
      * @type_function_param2 rowInfo:object
      * @type_function_param2_field1 key:any
      * @type_function_param2_field2 data:any
@@ -3663,6 +3664,22 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @public
      */
     rowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData<TRowData, TKey>) => any);
+        /**
+     * @docid
+     * @type_function_param2 rowInfo:object
+     * @type_function_param2_field1 key:any
+     * @type_function_param2_field2 data:any
+     * @type_function_param2_field3 component:dxDataGrid
+     * @type_function_param2_field4 values:Array<any>
+     * @type_function_param2_field5 rowIndex:number
+     * @type_function_param2_field6 columns:Array<dxDataGridColumn>
+     * @type_function_param2_field7 isSelected:boolean
+     * @type_function_param2_field8 rowType:string
+     * @type_function_param2_field9 groupIndex:number
+     * @type_function_param2_field10 isExpanded:boolean
+     * @public
+     */
+    dataRowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData<TRowData, TKey>) => any);
     /**
      * @docid
      * @public
@@ -3718,6 +3735,7 @@ export interface ExcelCellInfo<TRowData = any, TKey = any> {
   gridCell?: ExcelCell;
 }
 
+/** @public */
 export interface Export<TRowData = any, TKey = any> {
   /**
    * @docid dxDataGridOptions.export.allowExportSelectedData
@@ -4181,10 +4199,11 @@ export interface dxDataGridToolbar {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Editing instead
  */
 export type dxDataGridEditing<TRowData, TKey = any> = Editing<TRowData, TKey>;
 
+/** @public */
 export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowData, TKey> {
     /**
      * @docid dxDataGridOptions.editing.allowAdding
@@ -4201,7 +4220,7 @@ export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowDat
      * @type_function_return Boolean
      * @public
      */
-    allowDeleting?: boolean | ((options: { component?: dxDataGrid<TRowData, TKey>; row?: RowObject<TRowData, TKey> }) => boolean);
+    allowDeleting?: boolean | ((options: { component?: dxDataGrid<TRowData, TKey>; row?: Row<TRowData, TKey> }) => boolean);
     /**
      * @docid dxDataGridOptions.editing.allowUpdating
      * @default false
@@ -4211,7 +4230,7 @@ export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowDat
      * @type_function_return Boolean
      * @public
      */
-    allowUpdating?: boolean | ((options: { component?: dxDataGrid<TRowData, TKey>; row?: RowObject<TRowData, TKey> }) => boolean);
+    allowUpdating?: boolean | ((options: { component?: dxDataGrid<TRowData, TKey>; row?: Row<TRowData, TKey> }) => boolean);
     /**
      * @docid dxDataGridOptions.editing.texts
      * @public
@@ -4222,10 +4241,11 @@ export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowDat
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Scrolling instead
  */
 export type dxDataGridScrolling = Scrolling;
 
+/** @public */
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxDataGridOptions.scrolling.mode
@@ -4239,10 +4259,11 @@ export interface Scrolling extends ScrollingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Selection instead
  */
 export type dxDataGridSelection = Selection;
 
+/** @public */
 export interface Selection extends SelectionBase {
     /**
      * @docid dxDataGridOptions.selection.deferred
@@ -4368,7 +4389,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
      * @return Array<dxDataGridRowObject>
      * @public
      */
-    getVisibleRows(): Array<RowObject<TRowData, TKey>>;
+    getVisibleRows(): Array<Row<TRowData, TKey>>;
     /**
      * @docid
      * @publicName isRowExpanded(key)
@@ -4586,7 +4607,7 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
      * @type Enums.GridCommandColumnType
      * @public
      */
-    type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
+    type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 }
 
 /**
@@ -4641,7 +4662,7 @@ export interface dxDataGridColumnButton<TRowData = any, TKey = any> extends Colu
      * @type_function_return Boolean
      * @public
      */
-    visible?: boolean | ((options: { component?: dxDataGrid<TRowData, TKey>; row?: RowObject<TRowData, TKey>; column?: Column<TRowData, TKey> }) => boolean);
+    visible?: boolean | ((options: { component?: dxDataGrid<TRowData, TKey>; row?: Row<TRowData, TKey>; column?: Column<TRowData, TKey> }) => boolean);
     /**
      * @docid dxDataGridColumnButton.disabled
      * @default false
@@ -4652,21 +4673,21 @@ export interface dxDataGridColumnButton<TRowData = any, TKey = any> extends Colu
      * @type_function_return Boolean
      * @public
      */
-    disabled?: boolean | ((options: { component?: dxDataGrid<TRowData, TKey>; row?: RowObject<TRowData, TKey>; column?: Column<TRowData, TKey> }) => boolean);
+    disabled?: boolean | ((options: { component?: dxDataGrid<TRowData, TKey>; row?: Row<TRowData, TKey>; column?: Column<TRowData, TKey> }) => boolean);
 }
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Row instead
  */
-export type dxDataGridRowObject<TRowData = any, TKey = any> = RowObject<TRowData, TKey>;
+export type dxDataGridRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey>;
 
 /**
+ * @public
  * @docid dxDataGridRowObject
  * @type object
  */
-export interface RowObject<TRowData = any, TKey = any> {
+export interface Row<TRowData = any, TKey = any> {
     /**
      * @docid dxDataGridRowObject.data
      * @public

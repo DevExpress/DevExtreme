@@ -962,8 +962,11 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(this.needChangePageIndexToInsertRow()) {
                 this._dataController.pageIndex(change.pageIndex).done(() => {
-                    rowIndex = this._dataController.getRowIndexByKey(key);
-                    d.resolve();
+                    const focusController = this.getController('focus');
+                    when(focusController?.navigateToRow(change.key)).done(() => {
+                        rowIndex = this._dataController.getRowIndexByKey(key);
+                        d.resolve();
+                    });
                 }).fail(d.reject);
             } else {
                 this._dataController.updateItems({
@@ -2327,7 +2330,7 @@ export const editingModule = {
                     return (devices.real().ios || devices.real().android) && this.option('editing.allowUpdating');
                 },
                 _createRow: function(row) {
-                    const $row = this.callBase(row);
+                    const $row = this.callBase.apply(this, arguments);
 
                     if(row) {
                         const isRowRemoved = !!row.removed;
