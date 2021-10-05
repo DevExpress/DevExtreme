@@ -1,4 +1,5 @@
 import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import browser from 'core/utils/browser';
 
 const JSPdfColumnWidthsTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -154,13 +155,13 @@ const JSPdfColumnWidthsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    columns: [{ caption: 'f1', width: 100 }]
+                    columns: [{ caption: 'f1', width: 100, }]
                 });
 
                 const expectedLog = [
                     'text,f1,585.28,24.2,{baseline:middle,align:right}',
                     'setLineWidth,1',
-                    'rect,485.78,15,99.5,18.4'
+                    `rect,${browser.mozilla ? 486.28 : 485.78},15,${browser.mozilla ? 99 : 99.5},18.4`
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 } }).then(() => {
@@ -851,28 +852,31 @@ const JSPdfColumnWidthsTests = {
                     dataSource: [{ f1: 'f1_1 line', f2: 'f2_1 line long line long line', f3: 'f3' }],
                 });
 
+                const f2ColumnWidth = browser.mozilla ? 396.853 : 396.859;
+                const f3ColumnWidth = browser.mozilla ? 198.427 : 198.437;
+                const restWidth = browser.mozilla ? 198.427 : 198.421;
                 const expectedLog = [
                     'text,Band1 long line 1 ling line 2,595.28,24.2,{baseline:middle,align:right}',
                     'text,F1,595.28,42.6,{baseline:middle,align:right}',
-                    'text,F2,396.859,42.6,{baseline:middle,align:right}',
-                    'text,F3,198.437,42.6,{baseline:middle,align:right}',
+                    `text,F2,${f2ColumnWidth},42.6,{baseline:middle,align:right}`,
+                    `text,F3,${f3ColumnWidth},42.6,{baseline:middle,align:right}`,
                     'text,f1_1 line,595.28,61,{baseline:middle,align:right}',
-                    'text,f2_1 line long line long line,396.859,61,{baseline:middle,align:right}',
-                    'text,f3,198.437,61,{baseline:middle,align:right}',
+                    `text,f2_1 line long line long line,${f2ColumnWidth},61,{baseline:middle,align:right}`,
+                    `text,f3,${f3ColumnWidth},61,{baseline:middle,align:right}`,
                     'setLineWidth,1',
                     'rect,0,15,595.28,18.4',
                     'setLineWidth,1',
-                    'rect,396.859,33.4,198.421,18.4',
+                    `rect,${f2ColumnWidth},33.4,${restWidth},18.4`,
                     'setLineWidth,1',
-                    'rect,198.437,33.4,198.421,18.4',
+                    `rect,${f3ColumnWidth},33.4,${restWidth},18.4`,
                     'setLineWidth,1',
-                    'rect,0,33.4,198.437,18.4',
+                    `rect,0,33.4,${f3ColumnWidth},18.4`,
                     'setLineWidth,1',
-                    'rect,396.859,51.8,198.421,18.4',
+                    `rect,${f2ColumnWidth},51.8,${restWidth},18.4`,
                     'setLineWidth,1',
-                    'rect,198.437,51.8,198.421,18.4',
+                    `rect,${f3ColumnWidth},51.8,${restWidth},18.4`,
                     'setLineWidth,1',
-                    'rect,0,51.8,198.437,18.4'
+                    `rect,0,51.8,${f3ColumnWidth},18.4`
                 ];
 
                 exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 } }).then(() => {

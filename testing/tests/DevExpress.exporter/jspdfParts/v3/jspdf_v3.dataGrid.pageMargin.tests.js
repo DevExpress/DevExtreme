@@ -1,4 +1,5 @@
 import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
+import browser from 'core/utils/browser';
 
 const JSPdfPageMarginsTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
@@ -843,10 +844,9 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
-
                 const expectedLog = [
                     'text,f1,595.28,9.2,{baseline:middle,align:right}',
                     'setLineWidth,1',
@@ -888,7 +888,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -933,7 +933,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -978,7 +978,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1023,7 +1023,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1068,7 +1068,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1115,7 +1115,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1160,7 +1160,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1205,7 +1205,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1250,7 +1250,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1295,7 +1295,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1340,7 +1340,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1385,7 +1385,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1430,7 +1430,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1475,7 +1475,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1520,7 +1520,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1565,7 +1565,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
@@ -1610,7 +1610,7 @@ const JSPdfPageMarginsTests = {
 
                 const dataGrid = createDataGrid({
                     rtlEnabled: true,
-                    width: 100,
+                    width: browser.mozilla ? 100.5 : 100,
                     columns: [{ caption: 'f1' }]
                 });
 
