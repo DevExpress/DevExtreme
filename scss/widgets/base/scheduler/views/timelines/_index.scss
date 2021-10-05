@@ -91,6 +91,10 @@ $scheduler-timeline-min-height: 100px;
     display: none;
   }
 
+  &:not(.dx-scheduler-work-space-both-scrollbar) .dx-scheduler-date-table .dx-scheduler-date-table-row {
+    flex: 1;
+  }
+
   .dx-scheduler-date-table {
     border-spacing: 0;
     border-collapse: separate;
@@ -106,10 +110,6 @@ $scheduler-timeline-min-height: 100px;
 
     .dx-scheduler-date-table-row {
       @include flex-container(row, nowrap);
-    }
-
-    &:not(.dx-scheduler-work-space-both-scrollbar) .dx-scheduler-date-table-row {
-      flex: 1;
     }
 
     .dx-scheduler-date-table-cell {
