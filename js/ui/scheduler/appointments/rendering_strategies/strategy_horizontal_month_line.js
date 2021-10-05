@@ -1,6 +1,7 @@
 import HorizontalAppointmentsStrategy from './strategy_horizontal';
 import dateUtils from '../../../../core/utils/date';
 import query from '../../../../data/query';
+import { sortAppointmentsByStartDate } from '../DataProvider/utils';
 
 const HOURS_IN_DAY = 24;
 const MINUTES_IN_HOUR = 60;
@@ -45,7 +46,7 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
 
     createTaskPositionMap(items, skipSorting) {
         if(!skipSorting) {
-            this.appointmentDataProvider.sortAppointmentsByStartDate(items);
+            sortAppointmentsByStartDate(items, this.dataAccessors);
         }
 
         return super.createTaskPositionMap(items);

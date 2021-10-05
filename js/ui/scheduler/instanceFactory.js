@@ -1,5 +1,4 @@
 import { isDefined } from '../../core/utils/type';
-import { AppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
 import { ModelProvider } from './modelProvider';
 import { TimeZoneCalculator } from '../../renovation/ui/scheduler/timeZoneCalculator/utils';
 import timeZoneUtils from './utils.timeZone';
@@ -24,11 +23,8 @@ export const createFactoryInstances = (options) => {
     const key = generateKey(options.key);
 
     createModelProvider(key, options.model);
-    const timeZoneCalculator = createTimeZoneCalculator(key, options.timeZone);
-    createAppointmentDataProvider(key, {
-        ...options,
-        timeZoneCalculator,
-    });
+
+    createTimeZoneCalculator(key, options.timeZone);
 
     return key;
 };
@@ -55,15 +51,6 @@ const removeInstance = (name, key) => {
     if(getInstance(name, key)) {
         factoryInstances[name] = null;
     }
-};
-
-const createAppointmentDataProvider = (key, options) => {
-    return createInstance(Names.appointmentDataProvider, key, () => {
-        return new AppointmentDataProvider({
-            ...options,
-            key
-        });
-    });
 };
 
 const createTimeZoneCalculator = (key, currentTimeZone) => {
@@ -96,6 +83,5 @@ export const disposeFactoryInstances = (key) => {
     });
 };
 
-export const getAppointmentDataProvider = (key = 0) => getInstance(Names.appointmentDataProvider, key);
 export const getTimeZoneCalculator = (key) => getInstance(Names.timeZoneCalculator, key);
 export const getModelProvider = (key) => getInstance(Names.modelProvider, key);

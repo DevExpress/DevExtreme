@@ -2,8 +2,7 @@ import fx from 'animation/fx';
 import dxScheduler from 'ui/scheduler/ui.scheduler';
 import { DataSource } from 'data/data_source/data_source';
 import dateUtils from 'core/utils/date';
-import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
-import { AppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { AppointmentDataProvider } from 'ui/scheduler/appointments/dataProvider/appointmentDataProvider';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
 QUnit.testStart(() => {
@@ -67,8 +66,8 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        assert.ok(getAppointmentDataProvider(instance.key) instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
-        assert.ok(getAppointmentDataProvider(instance.key).dataSource instanceof DataSource, 'Task model has data source instance');
+        assert.ok(instance.appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
+        assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
     QUnit.test('Scheduler should not fail when dataSource is set, timelineView', function(assert) {
@@ -83,8 +82,8 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        assert.ok(getAppointmentDataProvider(instance.key) instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
-        assert.ok(getAppointmentDataProvider(instance.key).dataSource instanceof DataSource, 'Task model has data source instance');
+        assert.ok(instance.appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
+        assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
     QUnit.test('Scheduler should not fail when dataSource is set, timelineWeek', function(assert) {
@@ -99,8 +98,8 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        assert.ok(getAppointmentDataProvider(instance.key) instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
-        assert.ok(getAppointmentDataProvider(instance.key).dataSource instanceof DataSource, 'Task model has data source instance');
+        assert.ok(instance.appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
+        assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
     QUnit.test('Scheduler should not fail when dataSource is set, agenda', function(assert) {
@@ -115,8 +114,8 @@ QUnit.module('Scheduler markup', moduleConfig, () => {
             currentDate: new Date(2015, 1, 9)
         });
 
-        assert.ok(getAppointmentDataProvider(instance.key) instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
-        assert.ok(getAppointmentDataProvider(instance.key).dataSource instanceof DataSource, 'Task model has data source instance');
+        assert.ok(instance.appointmentDataProvider instanceof AppointmentDataProvider, 'Task model is initialized on scheduler init');
+        assert.ok(instance.appointmentDataProvider.dataSource instanceof DataSource, 'Task model has data source instance');
     });
 
     QUnit.test('Header & work space currentDate should not contain information about hours, minutes, seconds', function(assert) {
