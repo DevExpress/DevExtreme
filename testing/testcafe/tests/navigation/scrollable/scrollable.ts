@@ -263,14 +263,11 @@ fixture`Scrollable_ScrollToElement`
           height: '250px',
           border: '1px solid #0b837a',
           backgroundColor: 'lightskyblue',
-        });
-
-        await appendElementTo('#scrollableContent', 'div', 'content', {
           transform: 'scale(1.5)',
           transformOrigin: '0 0',
         });
 
-        await appendElementTo('#content', 'div', 'element', {
+        await appendElementTo('#scrollableContent', 'div', 'element', {
           position: 'absolute',
           boxSizing: 'border-box',
           left: '20px',
