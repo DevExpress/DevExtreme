@@ -64,14 +64,20 @@ const ValidationMessage = Overlay.inherit({
 
     _renderInnerHtml(element) {
         const $element = element && $(element);
-        const validationErrors = this.option('validationErrors') || [];
+        const textMarkup = this._getTextMarkup();
+
+        $element?.html(textMarkup);
+    },
+
+    _getTextMarkup() {
+        const validationErrors = this.option('validationErrors') ?? [];
         let validationErrorMessage = '';
         validationErrors.forEach((err) => {
             const separator = validationErrorMessage ? '<br />' : '';
-            validationErrorMessage += separator + encodeHtml(err?.message || '');
+            validationErrorMessage += separator + encodeHtml(err?.message ?? '');
         });
 
-        $element?.html(validationErrorMessage);
+        return validationErrorMessage;
     },
 
     _toggleModeClass() {
