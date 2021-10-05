@@ -230,8 +230,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             loadingTimeout: null,
             columns: [
                 { dataField: 'field1', allowSorting: false },
-                { dataField: 'field2', allowSorting: false, sortOrder: 'asd' }, // T1032991
-                { dataField: 'field3' }],
+                { dataField: 'field2', allowSorting: false, sortOrder: 'asc' }, // T1032991
+                { dataField: 'field3' }
+            ],
             dataSource: []
         });
 
