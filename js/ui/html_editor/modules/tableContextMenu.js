@@ -7,7 +7,7 @@ import ContextMenu from '../../context_menu';
 import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableForms';
 import localizationMessage from '../../../localization/message';
 import { getTableOperationHandler, getTableFormats } from '../utils/table_helper';
-import { getFormatHandlers, getDefaultClickHandler } from '../utils/toolbar_helper';
+import { getFormatHandlers, getDefaultClickHandler, ICON_MAP } from '../utils/toolbar_helper';
 import { each } from '../../../core/utils/iterator';
 import { isString, isObject } from '../../../core/utils/type';
 import { titleize, camelize } from '../../../core/utils/inflector';
@@ -16,11 +16,6 @@ import { extend } from '../../../core/utils/extend';
 const MODULE_NAMESPACE = 'dxHtmlTableContextMenu';
 
 const CONTEXT_MENU_EVENT = addNamespace('dxcontextmenu', MODULE_NAMESPACE);
-
-const ICON_MAP = {
-    insertHeaderRow: 'header',
-    clear: 'clearformat'
-};
 
 let TableContextMenuModule = BaseModule;
 
@@ -88,12 +83,12 @@ if(Quill) {
                 const defaultButtonItemConfig = this._prepareButtonItemConfig(item.name);
                 const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
-                return this._getMenuItem(buttonItemConfig);
+                return buttonItemConfig;
             } else if(item.items) {
                 item.items = this._prepareMenuItems(item.items);
-                return this._getMenuItem(item);
+                return item;
             } else {
-                return this._getMenuItem(item);
+                return item;
             }
         }
 
@@ -108,10 +103,6 @@ if(Quill) {
             };
         }
 
-        _getMenuItem(item) {
-            return item;
-        }
-
         _prepareMenuItems(items) {
             const resultItems = [];
             each(items, (_, item) => {
@@ -120,8 +111,7 @@ if(Quill) {
                     newItem = this._handleObjectItem(item);
                 } else if(isString(item)) {
                     const buttonItemConfig = this._prepareButtonItemConfig(item);
-                    newItem = this._getMenuItem(buttonItemConfig);
-                    // newItem = buttonItemConfig;
+                    newItem = buttonItemConfig;
                 }
                 if(newItem) {
                     resultItems.push(newItem);
