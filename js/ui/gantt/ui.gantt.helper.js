@@ -174,8 +174,8 @@ export const GanttHelper = {
             stripLines: undefined,
             scaleType: 'auto',
             scaleTypeRange: {
-                start: 'minutes',
-                end: 'years'
+                min: 'minutes',
+                max: 'years'
             },
             editing: {
                 enabled: false,

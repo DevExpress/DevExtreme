@@ -6,6 +6,7 @@ import {
   JSXComponent,
   Method,
 } from '@devextreme-generator/declarations';
+import { TimeZoneCalculator } from './timeZoneCalculator/utils';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 // eslint-disable-next-line import/named
 import dxScheduler, { Appointment } from '../../../ui/scheduler';
@@ -22,9 +23,8 @@ import {
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import { createFactoryInstances, generateKey } from '../../../ui/scheduler/instanceFactory';
 import { DataAccessorType } from './types';
-import { createDataAccessors } from './common';
+import { createDataAccessors, createTimeZoneCalculator } from './common';
 import { loadResources } from '../../../ui/scheduler/resources/utils';
 
 export const viewFunction = ({
@@ -160,8 +160,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() cellsMetaData!: CellsMetaData;
 
-  @InternalState() key = generateKey();
-
   @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
 
   @InternalState() loadedResources: Group[] = [];
@@ -208,6 +206,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   get isVirtualScrolling(): boolean {
     return this.props.scrolling.mode === 'virtual'
       || this.currentViewProps.scrolling?.mode === 'virtual';
+  }
+
+  get timeZoneCalculator(): TimeZoneCalculator {
+    return createTimeZoneCalculator(this.props.timeZone);
   }
 
   @Method()
@@ -282,23 +284,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   @Effect({ run: 'once' })
   dispose(): DisposeEffectReturn {
     return () => { this.instance.dispose(); };
-  }
-
-  @Effect({ run: 'once' })
-  initialization(): void {
-    createFactoryInstances({
-      key: this.key,
-      resources: this.props.resources,
-      dataSource: this.props.dataSource,
-      startDayHour: this.currentViewConfig.startDayHour,
-      endDayHour: this.currentViewConfig.endDayHour,
-      appointmentDuration: this.currentViewConfig.cellDuration,
-      firstDayOfWeek: this.currentViewConfig.firstDayOfWeek,
-      showAllDayPanel: this.props.showAllDayPanel,
-      timeZone: this.props.timeZone,
-      getIsVirtualScrolling: () => this.isVirtualScrolling,
-      getDataAccessors: (): DataAccessorType => this.dataAccessors,
-    });
   }
 
   @Effect()

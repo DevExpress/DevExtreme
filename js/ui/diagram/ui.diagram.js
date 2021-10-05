@@ -1536,6 +1536,14 @@ class Diagram extends Widget {
     }
 
 
+    fitToContent() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.FitToScreen);
+    }
+    fitToWidth() {
+        const { DiagramCommand } = getDiagram();
+        this._executeDiagramCommand(DiagramCommand.FitToWidth);
+    }
     focus() {
         this._captureFocus();
     }
@@ -1597,8 +1605,8 @@ class Diagram extends Widget {
                 topExpr: undefined,
                 widthExpr: undefined,
                 heightExpr: undefined,
-                containerKeyExpr: undefined,
-                containerChildrenExpr: 'children',
+                containerKeyExpr: 'containerKey',
+                containerChildrenExpr: undefined,
                 autoLayout: 'auto',
                 autoSizeEnabled: true,
             },

@@ -22,7 +22,7 @@ import type {
   AppointmentDraggingRemoveEvent,
   DateNavigatorTextInfo,
   AppointmentTemplateData,
-  dxSchedulerAppointment,
+  Appointment,
   AppointmentAddingEvent,
   AppointmentClickEvent,
   AppointmentContextMenuEvent,
@@ -235,7 +235,7 @@ export class SchedulerProps extends BaseWidgetProps {
   currentView: string | 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' = 'day';
 
   @OneWay()
-  dataSource?: string | dxSchedulerAppointment[] | DataSource | DataSourceOptions;
+  dataSource?: string | Appointment[] | DataSource | DataSourceOptions;
 
   @OneWay()
   dateSerializationFormat?: string;

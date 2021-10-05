@@ -57,14 +57,19 @@ export default class dxValidationGroup extends DOMComponent<dxValidationGroupOpt
      * @docid
      * @publicName validate()
      * @public
+     * @return dxValidationGroupResult
      */
-    validate(): dxValidationGroupResult;
+    validate(): ValidationResult;
 }
+
+/** @public */
+export type ValidationResult = dxValidationGroupResult;
 
 /**
  * @docid
  * @type object
  * @namespace DevExpress.ui
+ * @deprecated {ui/validation_group.ValidationResult}
  */
 export interface dxValidationGroupResult {
     /**

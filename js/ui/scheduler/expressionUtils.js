@@ -1,40 +1,21 @@
 import { isDefined } from '../../core/utils/type';
-import { getAppointmentDataProvider, getModelProvider } from './instanceFactory';
+import { getAppointmentDataProvider } from './instanceFactory';
 
 export const ExpressionUtils = {
     getField: (key, field, obj) => {
         const dataAccessors = getAppointmentDataProvider(key).getDataAccessors();
 
-        if(isDefined(dataAccessors.getter[field])) {
-            return dataAccessors.getter[field](obj);
-        }
-    },
-    setField: (key, field, obj, value) => {
-        const { dataAccessors } = getAppointmentDataProvider(key);
-        const { model } = getModelProvider(key);
-
-        if(!isDefined(dataAccessors.setter[field])) {
+        if(!isDefined(dataAccessors.getter[field])) {
             return;
         }
 
-        const fieldExpression = model[`${field}Expr`];
-        const splitExprStr = fieldExpression.split('.');
-        const rootField = splitExprStr[0];
+        return dataAccessors.getter[field](obj);
+    },
+    setField: (key, field, obj, value) => {
+        const { dataAccessors } = getAppointmentDataProvider(key);
 
-        if(obj[rootField] === undefined && splitExprStr.length > 1) {
-            const emptyChain = (function(arr) {
-                const result = {};
-                let tmp = result;
-                const arrLength = arr.length - 1;
-
-                for(let i = 1; i < arrLength; i++) {
-                    tmp = tmp[arr[i]] = {};
-                }
-
-                return result;
-            })(splitExprStr);
-
-            obj[rootField] = emptyChain;
+        if(!isDefined(dataAccessors.setter[field])) {
+            return;
         }
 
         dataAccessors.setter[field](obj, value);

@@ -7,10 +7,14 @@ const DATA_GRID_NAME = 'dxDataGrid';
 export class DataGridComponent extends DataGridBase {
   NAME = DATA_GRID_NAME;
 
+  _deprecatedOptions = {};
+
   // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor(element: unknown, options: unknown) {
     super(element, options);
   }
+
+  _setDeprecatedOptions(): void {}
 
   _initTemplates(): void {}
 

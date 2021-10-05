@@ -645,7 +645,11 @@ export const dataControllerModule = {
                     }
                 },
                 _partialUpdateRow: function(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
-                    const changedColumnIndices = this._getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+                    let changedColumnIndices = this._getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
+
+                    if(changedColumnIndices?.length && this.option('dataRowTemplate')) {
+                        changedColumnIndices = undefined;
+                    }
 
                     if(changedColumnIndices) {
                         oldItem.cells && oldItem.cells.forEach(function(cell, columnIndex) {

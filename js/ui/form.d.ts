@@ -40,7 +40,7 @@ import {
 } from './validation_rules';
 
 import {
-    dxValidationGroupResult,
+    ValidationResult,
 } from './validation_group';
 
 import Widget, {
@@ -145,6 +145,13 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @public
      */
     labelLocation?: 'left' | 'right' | 'top';
+    /**
+     * @docid
+     * @type Enums.FormLabelMode
+     * @default "default"
+     * @public
+     */
+     labelMode?: 'default' | 'floating' | 'static' | 'hidden';
     /**
      * @docid
      * @default 200
@@ -315,8 +322,9 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @docid
      * @publicName validate()
      * @public
+     * @return dxValidationGroupResult
      */
-    validate(): dxValidationGroupResult;
+    validate(): ValidationResult;
 }
 
 /**

@@ -241,12 +241,10 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _makeGroupRows() {
-        const { filteredItems } = this.invoke('getAppointmentDataProvider'); // TODO refactoring
-
         const tree = createReducedResourcesTree(
             this.option('loadedResources'),
             (field, action) => getDataAccessors(this.option('getResourceDataAccessors')(), field, action),
-            filteredItems
+            this.option('getFilteredItems')()
         );
 
         const cellTemplate = this.option('resourceCellTemplate');
