@@ -1,7 +1,7 @@
 import { compileGetter, compileSetter } from 'core/utils/data';
 import config from 'core/config';
 import { DataSource } from 'data/data_source/data_source';
-import { AppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider';
+import { AppointmentDataProvider } from 'ui/scheduler/appointments/dataProvider/appointmentDataProvider';
 
 const {
     module,

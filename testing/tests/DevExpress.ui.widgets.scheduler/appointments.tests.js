@@ -23,7 +23,7 @@ import { DataSource } from 'data/data_source/data_source';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 import { Deferred } from 'core/utils/deferred';
 import { createExpressions } from 'ui/scheduler/resources/utils';
-import { AppointmentDataProvider } from 'ui/scheduler/appointments/DataProvider/appointmentDataProvider.js';
+import { AppointmentDataProvider } from 'ui/scheduler/appointments/dataProvider/appointmentDataProvider.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`

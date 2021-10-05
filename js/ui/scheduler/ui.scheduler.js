@@ -77,8 +77,8 @@ import { ExpressionUtils } from './expressionUtils';
 import { validateDayHours } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { renderAppointments } from './appointments/render';
 import { AgendaResourceProcessor } from './resources/agendaResourceProcessor';
-import { AppointmentDataProvider } from './appointments/DataProvider/appointmentDataProvider';
-import { getAppointmentTakesAllDay } from './appointments/DataProvider/utils';
+import { AppointmentDataProvider } from './appointments/dsataProvider/appointmentDataProvider';
+import { getAppointmentTakesAllDay } from './appointments/dataProvider/utils';
 
 
 // STYLE scheduler
