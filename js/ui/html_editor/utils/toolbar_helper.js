@@ -90,57 +90,18 @@ function getFormatHandlers(module) {
         deleteColumn: getTableOperationHandler(module.quill, 'deleteColumn'),
         deleteRow: getTableOperationHandler(module.quill, 'deleteRow'),
         deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
-        cellProperties: prepareShowCellProperties(module),
-        tableProperties: prepareShowTableProperties(module)
+        cellProperties: prepareShowFormProperties(module, 'cell'),
+        tableProperties: prepareShowFormProperties(module, 'table')
     };
 }
 
-function prepareShowCellProperties(module) {
-    return ($cell) => {
-        if(!$cell?.length) {
-            $cell = $(getTargetTableNode(module, 'cell'));
+function prepareShowFormProperties(module, type) {
+    return ($element) => {
+        if(!$element?.length) {
+            $element = $(getTargetTableNode(module, type));
         }
 
-        const cellPropertiesFormConfig = getCellPropertiesFormConfig(module.editorInstance, $cell);
-
-        let formInstance;
-
-        module.editorInstance.formDialogOption({
-            contentTemplate: (container) => {
-                const $content = $('<div>').appendTo(container);
-                const $form = $('<div>').appendTo($content);
-                module.editorInstance._createComponent($form, Form, cellPropertiesFormConfig.formOptions);
-                module.editorInstance._createComponent($content, ScrollView, {});
-                formInstance = $form.dxForm('instance');
-
-                return $content;
-            },
-            title: localizationMessage.format('dxHtmlEditor-cellProperties'),
-            minHeight: MIN_HEIGHT
-        });
-
-        const promise = module.editorInstance.showFormDialog();
-
-        promise.done((formData, event) => {
-            module.saveValueChangeEvent(event);
-            cellPropertiesFormConfig.applyHandler(formInstance);
-            formInstance.dispose();
-        });
-
-        promise.fail(() => {
-            module.quill.focus();
-            formInstance.dispose();
-        });
-    };
-}
-
-function prepareShowTableProperties(module) {
-    return ($table) => {
-        if(!$table?.length) {
-            $table = $(getTargetTableNode(module, 'table'));
-        }
-
-        const tablePropertiesFormConfig = getTablePropertiesFormConfig(module.editorInstance, $table);
+        const tablePropertiesFormConfig = getFormConfigConstructor(type)(module.editorInstance, $element);
 
         let formInstance;
 
@@ -154,7 +115,7 @@ function prepareShowTableProperties(module) {
 
                 return $content;
             },
-            title: localizationMessage.format('dxHtmlEditor-tableProperties'),
+            title: localizationMessage.format(`dxHtmlEditor-${type}Properties`),
             minHeight: MIN_HEIGHT
         });
 
@@ -473,7 +434,7 @@ function getTablePropertiesFormConfig(editorInstance, $table) {
                     dataField: 'borderWidth',
                     label: { text: localizationMessage.format('dxHtmlEditor-borderWidth') },
                     editorOptions: {
-                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                        placeholder: localizationMessage.format('dxHtmlEditor-pixels')
                     }
                 },
                 {
@@ -507,7 +468,7 @@ function getTablePropertiesFormConfig(editorInstance, $table) {
                     label: { text: localizationMessage.format('dxHtmlEditor-width') },
                     editorOptions: {
                         min: 0,
-                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                        placeholder: localizationMessage.format('dxHtmlEditor-pixels')
                     }
                 },
                 {
@@ -515,7 +476,7 @@ function getTablePropertiesFormConfig(editorInstance, $table) {
                     label: { text: localizationMessage.format('dxHtmlEditor-height') },
                     editorOptions: {
                         min: 0,
-                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                        placeholder: localizationMessage.format('dxHtmlEditor-pixels')
                     }
                 }
             ]
@@ -629,7 +590,7 @@ function getCellPropertiesFormConfig(editorInstance, $cell) {
                     dataField: 'borderWidth',
                     label: { text: localizationMessage.format('dxHtmlEditor-borderWidth') },
                     editorOptions: {
-                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                        placeholder: localizationMessage.format('dxHtmlEditor-pixels')
                     }
                 },
                 {
@@ -663,7 +624,7 @@ function getCellPropertiesFormConfig(editorInstance, $cell) {
                     label: { text: localizationMessage.format('dxHtmlEditor-width') },
                     editorOptions: {
                         min: 0,
-                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                        placeholder: localizationMessage.format('dxHtmlEditor-pixels')
                     }
                 },
                 {
@@ -671,21 +632,21 @@ function getCellPropertiesFormConfig(editorInstance, $cell) {
                     label: { text: localizationMessage.format('dxHtmlEditor-height') },
                     editorOptions: {
                         min: 0,
-                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                        placeholder: localizationMessage.format('dxHtmlEditor-pixels')
                     }
                 },
                 {
                     dataField: 'verticalPadding',
                     label: { text: localizationMessage.format('dxHtmlEditor-paddingVertical') },
                     editorOptions: {
-                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                        placeholder: localizationMessage.format('dxHtmlEditor-pixels')
                     }
                 },
                 {
                     label: { text: localizationMessage.format('dxHtmlEditor-paddingHorizontal') },
                     dataField: 'horizontalPadding',
                     editorOptions: {
-                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                        placeholder: localizationMessage.format('dxHtmlEditor-pixels')
                     }
                 }
             ]
@@ -777,7 +738,11 @@ function getCellPropertiesFormConfig(editorInstance, $cell) {
     };
 }
 
-const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
+function getFormConfigConstructor(type) {
+    return type === 'cell' ? getCellPropertiesFormConfig : getTablePropertiesFormConfig;
+}
+
+function applyTableDimensionChanges($table, newHeight, newWidth) {
     if(isDefined(newWidth)) {
         const autoWidthColumns = getAutoSizedElements($table);
 
@@ -817,7 +782,7 @@ const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
             setLineElementsAttrValue($lineElements, 'height', newElementHeight);
         });
     }
-};
+}
 
 function applyCellDimensionChanges($target, newHeight, newWidth) {
     const $table = $($target.closest('table'));

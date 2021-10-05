@@ -352,6 +352,14 @@ $transparent-border: 1px solid transparent;
   min-width: 360px;
 }
 
+.dx-overlay-content {
+  &.dx-popup-fullscreen {
+    .dx-formdialog-form {
+      min-width: 240px;
+    }
+  }
+}
+
 .dx-formdialog-field-target .dx-field-item-content {
   text-align: right;
 
