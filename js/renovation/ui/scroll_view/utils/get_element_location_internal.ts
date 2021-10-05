@@ -1,4 +1,5 @@
 import {
+  ElementOffset,
   ScrollableDirection, ScrollOffset,
 } from '../types.d';
 
@@ -15,7 +16,7 @@ export function getElementLocationInternal(
   direction: ScrollableDirection,
   containerElement: HTMLDivElement,
   scrollOffset: ScrollOffset,
-  offset?: { top?: number; left?: number; right?: number; bottom?: number },
+  offset?: ElementOffset,
 ): number {
   const additionalOffset = {
     top: 0,
@@ -46,6 +47,7 @@ export function getElementLocationInternal(
     + containerSize
     - additionalOffset[inverseProp];
 
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   if (relativeStartOffset <= 0 && relativeEndOffset >= 0) {
     return containerScrollOffset;
   }

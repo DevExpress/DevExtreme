@@ -5,7 +5,7 @@ export function getRelativeOffset(
 
   let currentElement = sourceElement;
 
-  while (currentElement && !currentElement.classList.contains(targetElementClass)) {
+  while (currentElement?.offsetParent && !currentElement.classList.contains(targetElementClass)) {
     offset.left += currentElement.offsetLeft;
     offset.top += currentElement.offsetTop;
     currentElement = currentElement.offsetParent as HTMLElement;
