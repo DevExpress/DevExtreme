@@ -1,5 +1,5 @@
 import { DIRECTION_BOTH, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../common/consts';
-import { ScrollableDirection } from '../common/types';
+import { ScrollableDirection } from '../common/types.d';
 import { ScrollDirection } from './scroll_direction';
 
 export function allowedDirection(

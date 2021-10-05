@@ -42,6 +42,8 @@ class SchedulerAgenda extends WorkSpace {
 
     get renderingStrategy() { return this.invoke('getLayoutManager').getRenderingStrategyInstance(); }
 
+    get appointmentDataProvider() { return this.option('getAppointmentDataProvider')(); }
+
     getStartViewDate() {
         return this._startViewDate;
     }
