@@ -1,3 +1,4 @@
+import { titleize } from '../../../../core/utils/inflector';
 import {
   ElementOffset,
   ScrollableDirection, ScrollOffset,
@@ -31,14 +32,14 @@ export function getElementLocationInternal(
   const prop = isVertical ? 'top' : 'left';
   const inverseProp = isVertical ? 'bottom' : 'right';
 
-  const dimension = isVertical ? 'Height' : 'Width';
+  const dimension = isVertical ? 'height' : 'width';
 
   // T162489
   const relativeElementOffset = getRelativeOffset(SCROLLABLE_CONTENT_CLASS, targetElement)[prop];
   const containerScrollOffset = scrollOffset[prop];
 
-  const containerSize: number = containerElement[`client${dimension}`];
-  const elementSize = targetElement[`offset${dimension}`];
+  const containerSize: number = containerElement[`client${titleize(dimension)}`];
+  const elementSize = targetElement.getBoundingClientRect()[dimension];
 
   const relativeStartOffset = containerScrollOffset - relativeElementOffset
     + additionalOffset[prop];
