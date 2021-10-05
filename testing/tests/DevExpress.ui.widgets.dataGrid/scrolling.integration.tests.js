@@ -1167,4 +1167,72 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         // assert
         assert.strictEqual(parseFloat($(dataGrid.getView('columnHeadersView').element()).css('paddingRight')), dataGrid.getView('rowsView').getScrollbarWidth(), 'padding-right');
     });
+
+    QUnit.test('New mode. Rows should be scrolled properly when rowRenderingMode is virtual', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 40; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            showBorders: true,
+            scrolling: {
+                rowRenderingMode: 'virtual',
+                useNative: false
+            },
+            paging: {
+                pageSize: 20,
+            },
+            height: 400,
+            pager: {
+                visible: true
+            },
+        });
+
+        this.clock.tick();
+        let visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 16, 'visible row count on the first page');
+        assert.equal(visibleRows[0].key, 1, 'first visible row key on the first page');
+        assert.equal(visibleRows[15].key, 16, 'last visible row key on the first page');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 375 });
+        this.clock.tick();
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 10, 'visible row count on the first page after srolling');
+        assert.equal(visibleRows[0].key, 11, 'first visible row key on the first page after srolling');
+        assert.equal(visibleRows[9].key, 20, 'last visible row key on the first page after srolling');
+
+        // act
+        $(dataGrid.element()).find('.dx-pager .dx-page:eq(1)').trigger('dxclick');
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 10, 'visible row count on the second page');
+        assert.equal(visibleRows[0].key, 21, 'first visible row key on the second page');
+        assert.equal(visibleRows[9].key, 30, 'last visible row key on the second page');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 375 });
+        this.clock.tick();
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 10, 'visible row count on the second page after srolling');
+        assert.equal(visibleRows[0].key, 31, 'first visible row key on the second page after srolling');
+        assert.equal(visibleRows[9].key, 40, 'last visible row key on the second page after srolling');
+    });
 });
