@@ -104,7 +104,7 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
      * @default null
-     * @type Array<string, Enums.TextBoxButtonName, dxHtmlEditorTableContextMenuItem>
+     * @type Array<string, Enums.HtmlEditorContextMenuItem, dxHtmlEditorTableContextMenuItem>
      * @public
      */
     tableContextMenu?: dxHtmlEditorTableContextMenu;
@@ -410,21 +410,25 @@ export interface dxHtmlEditorTableContextMenu {
      * @type Array<dxHtmlEditorToolbarItem,Enums.HtmlEditorToolbarItem>
      * @public
      */
-     items?: Array<dxHtmlEditorTableContextMenuItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
+    items?: Array<dxHtmlEditorTableContextMenuItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
   }
-
-  /**
- * @docid
- * @type object
+/**
+ * @public
  * @namespace DevExpress.ui
  */
- export interface dxHtmlEditorTableContextMenuItem extends dxContextMenuItem {
+   export interface dxHtmlEditorTableContextMenuItem extends dxContextMenuItem {
     /**
      * @docid
-     * @hidden false
+     * @default undefined
      * @public
      */
      name?: string;
+    /**
+     * @docid
+     * @public
+     * @type Array<dxHtmlEditorTableContextMenuItem>
+     */
+    items?: Array<dxHtmlEditorTableContextMenuItem>;
  }
 
 /**
