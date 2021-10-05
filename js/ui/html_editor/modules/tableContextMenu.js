@@ -108,8 +108,6 @@ if(Quill) {
             };
         }
 
-        // _updateFormatWidget(name, isApplied, formats) {}
-
         _getMenuItem(item) {
             return item;
         }
