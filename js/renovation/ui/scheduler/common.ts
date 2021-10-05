@@ -6,23 +6,23 @@ import timeZoneUtils from '../../../ui/scheduler/utils.timeZone';
 
 export const createDataAccessors = (
   props: SchedulerProps,
-): DataAccessorType => {
-  const result = utils.dataAccessors.create(
-    {
-      startDate: props.startDateExpr,
-      endDate: props.endDateExpr,
-      startDateTimeZone: props.startDateTimeZoneExpr,
-      endDateTimeZone: props.endDateTimeZoneExpr,
-      allDay: props.allDayExpr,
-      text: props.textExpr,
-      description: props.descriptionExpr,
-      recurrenceRule: props.recurrenceRuleExpr,
-      recurrenceException: props.recurrenceExceptionExpr,
-    },
-  );
-
-  return result as DataAccessorType;
-};
+  forceIsoDateParsing = false,
+): DataAccessorType => utils.dataAccessors.create(
+  {
+    startDate: props.startDateExpr,
+    endDate: props.endDateExpr,
+    startDateTimeZone: props.startDateTimeZoneExpr,
+    endDateTimeZone: props.endDateTimeZoneExpr,
+    allDay: props.allDayExpr,
+    text: props.textExpr,
+    description: props.descriptionExpr,
+    recurrenceRule: props.recurrenceRuleExpr,
+    recurrenceException: props.recurrenceExceptionExpr,
+  },
+  null,
+  forceIsoDateParsing,
+  props.dateSerializationFormat,
+) as DataAccessorType;
 
 export const createTimeZoneCalculator = (
   currentTimeZone: string,

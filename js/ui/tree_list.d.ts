@@ -72,7 +72,7 @@ interface CellInfo {
     readonly rowIndex: number;
     readonly rowType: string;
     readonly cellElement: DxElement;
-    readonly row: RowObject;
+    readonly row: Row;
 }
 
 /** @public */
@@ -109,7 +109,7 @@ export type ContextMenuPreparingEvent = EventInfo<dxTreeList> & {
     readonly columnIndex: number;
     readonly column?: Column;
     readonly rowIndex: number;
-    readonly row?: RowObject;
+    readonly row?: Row;
 };
 
 /** @public */
@@ -143,7 +143,7 @@ export type EditorPreparedEvent = EventInfo<dxTreeList> & {
     readonly editorElement: DxElement;
     readonly readOnly: boolean;
     readonly dataField?: string;
-    readonly row?: RowObject;
+    readonly row?: Row;
 };
 
 /** @public */
@@ -160,7 +160,7 @@ export type EditorPreparingEvent = Cancelable & EventInfo<dxTreeList> & {
     editorName: string;
     editorOptions: any;
     readonly dataField?: string;
-    readonly row?: RowObject;
+    readonly row?: Row;
 };
 
 /** @public */
@@ -168,7 +168,7 @@ export type FocusedCellChangedEvent = EventInfo<dxTreeList> & {
     readonly cellElement: DxElement;
     readonly columnIndex: number;
     readonly rowIndex: number;
-    readonly row: RowObject;
+    readonly row: Row;
     readonly column: Column;
 };
 
@@ -179,7 +179,7 @@ export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxTreeList> 
     readonly prevRowIndex: number;
     newColumnIndex: number;
     newRowIndex: number;
-    readonly rows: Array<RowObject>;
+    readonly rows: Array<Row>;
     readonly columns: Array<Column>;
     isHighlighted: boolean;
 };
@@ -188,7 +188,7 @@ export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxTreeList> 
 export type FocusedRowChangedEvent = EventInfo<dxTreeList> & {
     readonly rowElement: DxElement;
     readonly rowIndex: number;
-    readonly row: RowObject;
+    readonly row: Row;
 };
 
 /** @public */
@@ -196,7 +196,7 @@ export type FocusedRowChangingEvent = NativeEventInfo<dxTreeList> & {
     readonly rowElement: DxElement;
     readonly prevRowIndex: number;
     newRowIndex: number;
-    readonly rows: Array<RowObject>;
+    readonly rows: Array<Row>;
 };
 
 /** @public */
@@ -331,7 +331,7 @@ export type RowDraggingReorderEvent = RowDraggingEventInfo<dxTreeList> & DragReo
 
 /** @public */
 export type ColumnButtonClickEvent = NativeEventInfo<dxTreeList> & {
-    row?: RowObject;
+    row?: Row;
     column?: Column;
 };
 
@@ -344,7 +344,7 @@ export type ColumnButtonTemplateData = {
     readonly column: Column;
     readonly rowIndex: number;
     readonly rowType: string;
-    readonly row: RowObject;
+    readonly row: Row;
 };
 
 /** @public */
@@ -358,7 +358,7 @@ export type ColumnCellTemplateData = {
     readonly columnIndex: number;
     readonly rowIndex: number;
     readonly column: Column;
-    readonly row: RowObject;
+    readonly row: Row;
     readonly rowType: string;
     readonly watch?: Function;
 };
@@ -374,7 +374,7 @@ export type ColumnEditCellTemplateData = {
     readonly columnIndex: number;
     readonly rowIndex: number;
     readonly column: Column;
-    readonly row: RowObject;
+    readonly row: Row;
     readonly rowType: string;
     readonly watch?: Function;
 };
@@ -852,10 +852,11 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Editing instead
  */
 export type dxTreeListEditing = Editing;
 
+/** @public */
 export interface Editing extends EditingBase {
     /**
      * @docid dxTreeListOptions.editing.allowAdding
@@ -864,7 +865,7 @@ export interface Editing extends EditingBase {
      * @type_function_return Boolean
      * @public
      */
-    allowAdding?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject }) => boolean);
+    allowAdding?: boolean | ((options: { readonly component: dxTreeList; readonly row?: Row }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.allowDeleting
      * @default false
@@ -872,7 +873,7 @@ export interface Editing extends EditingBase {
      * @type_function_return Boolean
      * @public
      */
-    allowDeleting?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject }) => boolean);
+    allowDeleting?: boolean | ((options: { readonly component: dxTreeList; readonly row?: Row }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.allowUpdating
      * @default false
@@ -880,7 +881,7 @@ export interface Editing extends EditingBase {
      * @type_function_return Boolean
      * @public
      */
-    allowUpdating?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject }) => boolean);
+    allowUpdating?: boolean | ((options: { readonly component: dxTreeList; readonly row?: Row }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.texts
      * @type object
@@ -924,10 +925,11 @@ export interface Paging extends PagingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Scrolling instead
  */
 export type dxTreeListScrolling = Scrolling;
 
+/** @public */
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxTreeListOptions.scrolling.mode
@@ -941,10 +943,11 @@ export interface Scrolling extends ScrollingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Selection instead
  */
 export type dxTreeListSelection = Selection;
 
+/** @public */
 export interface Selection extends SelectionBase {
     /**
      * @docid dxTreeListOptions.selection.recursive
@@ -1069,7 +1072,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Array<dxTreeListRowObject>
      * @public
      */
-    getVisibleRows(): Array<RowObject>;
+    getVisibleRows(): Array<Row>;
     /**
      * @docid
      * @publicName isRowExpanded(key)
@@ -1284,7 +1287,7 @@ export interface dxTreeListColumn extends ColumnBase {
      * @type Enums.TreeListCommandColumnType
      * @public
      */
-    type?: 'adaptive' | 'buttons';
+    type?: 'adaptive' | 'buttons' | 'drag';
 }
 
 /**
@@ -1338,7 +1341,7 @@ export interface dxTreeListColumnButton extends ColumnButtonBase {
      * @type_function_return Boolean
      * @public
      */
-    visible?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject; readonly column: Column }) => boolean);
+    visible?: boolean | ((options: { readonly component: dxTreeList; readonly row?: Row; readonly column: Column }) => boolean);
     /**
      * @docid dxTreeListColumnButton.disabled
      * @default false
@@ -1347,17 +1350,17 @@ export interface dxTreeListColumnButton extends ColumnButtonBase {
      * @type_function_return Boolean
      * @public
      */
-    disabled?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject; readonly column: Column }) => boolean);
+    disabled?: boolean | ((options: { readonly component: dxTreeList; readonly row?: Row; readonly column: Column }) => boolean);
 }
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Node instead
  */
 export type dxTreeListNode = Node;
 
 /**
+ * @public
  * @docid dxTreeListNode
  * @type object
  */
@@ -1402,17 +1405,17 @@ export interface Node {
 }
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated Use RowObject instead
+ * @deprecated Use Row instead
  */
-export type dxTreeListRowObject = RowObject;
+export type dxTreeListRowObject = Row;
 
 /**
+ * @public
  * @docid dxTreeListRowObject
  * @type object
  */
-export interface RowObject {
+export interface Row {
     /**
      * @docid dxTreeListRowObject.isEditing
      * @public

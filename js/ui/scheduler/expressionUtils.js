@@ -1,19 +1,14 @@
 import { isDefined } from '../../core/utils/type';
-import { getAppointmentDataProvider } from './instanceFactory';
 
 export const ExpressionUtils = {
-    getField: (key, field, obj) => {
-        const dataAccessors = getAppointmentDataProvider(key).getDataAccessors();
-
+    getField: (dataAccessors, field, obj) => {
         if(!isDefined(dataAccessors.getter[field])) {
             return;
         }
 
         return dataAccessors.getter[field](obj);
     },
-    setField: (key, field, obj, value) => {
-        const { dataAccessors } = getAppointmentDataProvider(key);
-
+    setField: (dataAccessors, field, obj, value) => {
         if(!isDefined(dataAccessors.setter[field])) {
             return;
         }

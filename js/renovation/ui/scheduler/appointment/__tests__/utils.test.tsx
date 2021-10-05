@@ -61,6 +61,40 @@ describe('Appointment utils', () => {
           width: 10,
         });
     });
+
+    it('should return default height if it is not provided', () => {
+      expect(getAppointmentStyles({
+        ...testViewModel,
+        geometry: {
+          ...testViewModel.geometry,
+          height: 0,
+        },
+      }))
+        .toEqual({
+          backgroundColor: '#1A2BC',
+          height: 50,
+          left: 1,
+          top: 2,
+          width: 10,
+        });
+    });
+
+    it('should return default width if it is not provided', () => {
+      expect(getAppointmentStyles({
+        ...testViewModel,
+        geometry: {
+          ...testViewModel.geometry,
+          width: 0,
+        },
+      }))
+        .toEqual({
+          backgroundColor: '#1A2BC',
+          height: 20,
+          left: 1,
+          top: 2,
+          width: 50,
+        });
+    });
   });
 
   it('getAppointmentKey', () => {

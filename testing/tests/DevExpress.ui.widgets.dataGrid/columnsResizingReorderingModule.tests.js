@@ -87,6 +87,7 @@ QUnit.module('ColumnsSeparator', () => {
     function createColumnsSeparator2(userOptions, columnsCommonSettings) {
         return new columnsResizingReordering.ColumnsSeparatorView({
             option: function(name) {
+                if(!name) return userOptions;
                 return userOptions[name];
             },
             _controllers: {
@@ -902,6 +903,7 @@ QUnit.module('Columns resizing', {
             },
 
             option: function(name) {
+                if(!name) return that.options;
                 return that.options[name];
             },
 
@@ -3252,6 +3254,7 @@ QUnit.module('Headers reordering', {
             },
 
             option: function(value) {
+                if(!value) return that.options;
                 return that.options[value];
             },
 

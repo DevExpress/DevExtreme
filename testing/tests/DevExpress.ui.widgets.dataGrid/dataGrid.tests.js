@@ -42,8 +42,10 @@ import $ from 'jquery';
 import Class from 'core/class';
 import { logger } from 'core/utils/console';
 import typeUtils from 'core/utils/type';
+import { deferUpdate } from 'core/utils/common';
 import devices from 'core/devices';
 import { version } from 'core/version';
+import errors from 'core/errors';
 import gridCore from 'ui/data_grid/ui.data_grid.core';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
@@ -4168,6 +4170,24 @@ QUnit.module('templates', baseModuleConfig, () => {
         assert.strictEqual($(dataGrid.$element()).find('[data-options]').length, 0, 'no elements with data-options attribute');
     });
 
+    // T312012
+    QUnit.test('Setting dataRowTemplate via dxTemplate', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataRowTemplate: 'testRow',
+            dataSource: [{ column1: 'test1', column2: 'test2' }],
+            columns: [{ dataField: 'column1' }, { dataField: 'column2' }]
+        });
+
+        // assert
+        const $rowElements = $($(dataGrid.$element()).find('.dx-datagrid-rowsview').find('table > tbody').find('tr.test'));
+        assert.strictEqual($rowElements.length, 1, 'row element count');
+        assert.strictEqual($rowElements.eq(0).text(), 'Row Content', 'row element content');
+        assert.strictEqual($(dataGrid.$element()).find('table').length, 2, 'table count');
+        assert.strictEqual($(dataGrid.$element()).find('[data-options]').length, 0, 'no elements with data-options attribute');
+    });
+
     // T952701
     QUnit.test('Add row when DataGrid is empty and rowTemplate is used', function(assert) {
         const dataGrid = createDataGrid({
@@ -4186,6 +4206,37 @@ QUnit.module('templates', baseModuleConfig, () => {
                             <td>new</td>
                         </tr>
                     </tbody>`
+                );
+            }
+        });
+
+        // act
+        dataGrid.addRow();
+
+        // assert
+        const $row = $(dataGrid.getRowElement(0));
+        const $cells = $row.find('td');
+        assert.equal(getOuterWidth($cells.eq(0)), 900, 'first cell width');
+        assert.equal(getOuterWidth($cells.eq(1)), 100, 'second cell width');
+        assert.equal(getOuterWidth(dataGrid.$element()), 1000, 'dataGrid width');
+    });
+
+    // T952701
+    QUnit.test('Add row when DataGrid is empty and dataRowTemplate is used', function(assert) {
+        const dataGrid = createDataGrid({
+            width: 1000,
+            dataSource: [],
+            loadingTimeout: null,
+            columns: ['field1', {
+                dataField: 'field2',
+                width: 100
+            }],
+            dataRowTemplate: (container, options) => {
+                $(container).append(
+                    `<tr>
+                        <td>new</td>
+                        <td>new</td>
+                    </tr>`
                 );
             }
         });
@@ -4254,6 +4305,158 @@ QUnit.module('templates', baseModuleConfig, () => {
             dataSource: [{ column1: 'test1', column2: 'test2' }],
             columns: [{ dataField: 'column1' }, { dataField: 'column2' }]
         });
+    });
+
+    QUnit.test('rowElement argument of dataRowTemplate option is correct', function(assert) {
+        // arrange, act
+        createDataGrid({
+            dataRowTemplate: function(rowElement) {
+                assert.equal(typeUtils.isRenderer(rowElement), !!config().useJQuery, 'rowElement is correct');
+                assert.equal($(rowElement)[0].tagName.toLowerCase(), 'tbody', 'rowElement tagName is tbody');
+            },
+            dataSource: [{ column1: 'test1', column2: 'test2' }],
+            columns: [{ dataField: 'column1' }, { dataField: 'column2' }]
+        });
+    });
+
+    QUnit.test('deprecate warnings should not be fired for dataRowTemplate', function(assert) {
+        const log = sinon.spy(errors, 'log');
+
+        createDataGrid({
+            dataRowTemplate: function(rowElement) {
+                rowElement.append('<tr>');
+            },
+            dataSource: [{ id: 1 }],
+        });
+
+        this.clock.tick();
+
+        assert.strictEqual(log.callCount, 0, 'error.log is not called');
+
+        log.restore();
+    });
+
+    QUnit.test('deprecate warnings should be fired for rowTemplate', function(assert) {
+        const log = sinon.spy(errors, 'log');
+
+        createDataGrid({
+            rowTemplate: function(rowElement) {
+                rowElement.append('<tr>');
+            },
+            dataSource: [{ id: 1 }],
+        });
+
+        this.clock.tick();
+
+        assert.strictEqual(log.callCount, 1, 'error.log is called once');
+        assert.deepEqual(log.getCall(0).args, [
+            'W0001',
+            'dxDataGrid',
+            'rowTemplate',
+            '21.2',
+            'Use the "dataRowTemplate" option instead'
+        ], 'error.log args');
+
+        log.restore();
+    });
+
+    ['deferUpdate', 'setTimeout'].forEach(asyncMethod => {
+        QUnit.test(`freespace row should be rendered correctly on last page if async dataRowTemplate is defined with ${asyncMethod} in react (T1031218)`, function(assert) {
+            // arrange, act
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1, text: 'text 1' },
+                    { id: 2, text: 'text 2' },
+                    { id: 3, text: 'text 3' },
+                ],
+                paging: {
+                    pageSize: 2
+                },
+                columns: ['text'],
+                dataRowTemplate: 'rowTemplate',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        rowTemplate: {
+                            render({ container, model, onRendered }) {
+                                const data = model.data;
+                                const markup = '<tr class="my-row">' +
+                                        '<td>' + data.text + '</td>' +
+                                        '</tr>';
+
+                                (asyncMethod === 'deferUpdate' ? deferUpdate : setTimeout)(function() {
+                                    container.append(markup);
+                                    onRendered();
+                                });
+
+                                return container;
+                            }
+                        }
+                    }
+                },
+            });
+
+            this.clock.tick();
+
+            // act
+            dataGrid.pageIndex(1);
+            this.clock.tick();
+
+            const $rows = $(dataGrid.element()).find('.dx-row');
+            assert.equal($rows.length, 4, 'row count');
+            assert.ok($rows.eq(0).hasClass('dx-header-row'), 'first row is header');
+            assert.ok($rows.eq(1).hasClass('dx-data-row'), 'second row is data');
+            assert.ok($rows.eq(1).find('.my-row').length, 'second row is rendered from template');
+            assert.ok($rows.eq(2).hasClass('dx-freespace-row'), 'third row is freespace');
+            assert.ok($rows.eq(2).height() > 10, 'freespace row has height');
+        });
+    });
+
+    QUnit.test('row should be updated on using push API if repaintChangesOnly is enabled and dataRowTemplate is defined in react (T859033)', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, text: 'text 1' },
+                { id: 2, text: 'text 2' },
+            ],
+            keyExpr: 'id',
+            repaintChangesOnly: true,
+            dataRowTemplate: 'rowTemplate',
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    rowTemplate: {
+                        render({ container, model, onRendered }) {
+                            const data = model.data;
+                            const markup = '<tr>' +
+                                    '<td class="my-cell">' + data.text + '</td>' +
+                                    '</tr>';
+
+                            deferUpdate(function() {
+                                container.append(markup);
+                                onRendered();
+                            });
+                            return container;
+                        }
+                    }
+                }
+            },
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.getDataSource().store().push([{
+            type: 'update',
+            key: 1,
+            data: {
+                text: 'updated'
+            }
+        }]);
+        this.clock.tick();
+
+        const $firstRow = $(dataGrid.getRowElement(0));
+        assert.equal($firstRow.find('.my-cell').text(), 'updated', 'cell is updated');
     });
 
     // T120698
