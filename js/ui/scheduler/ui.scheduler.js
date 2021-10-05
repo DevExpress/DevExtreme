@@ -1915,6 +1915,11 @@ class Scheduler extends Widget {
             this.setTargetedAppointmentResources(rawTargetedAppointment, element, appointmentIndex);
         }
 
+        if(info) {
+            rawTargetedAppointment.displayStartDate = new Date(info.appointment.startDate);
+            rawTargetedAppointment.displayEndDate = new Date(info.appointment.endDate);
+        }
+
         return rawTargetedAppointment;
     }
 
