@@ -6,7 +6,7 @@ import { addNamespace } from '../../../events/utils/index';
 import ContextMenu from '../../context_menu';
 import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableForms';
 import localizationMessage from '../../../localization/message';
-import { getTableOperationHandler, getTableFormats } from '../utils/table_helper';
+import { getTableFormats } from '../utils/table_helper';
 import { getFormatHandlers, getDefaultClickHandler, ICON_MAP } from '../utils/toolbar_helper';
 import { each } from '../../../core/utils/iterator';
 import { isString, isObject } from '../../../core/utils/type';
@@ -80,7 +80,7 @@ if(Quill) {
 
         _handleObjectItem(item) {
             if(item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
-                const defaultButtonItemConfig = this._prepareButtonItemConfig(item.name);
+                const defaultButtonItemConfig = this._prepareMenuItemConfig(item.name);
                 const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
 
                 return buttonItemConfig;
@@ -92,7 +92,7 @@ if(Quill) {
             }
         }
 
-        _prepareButtonItemConfig(name) {
+        _prepareMenuItemConfig(name) {
             const iconName = ICON_MAP[name] ?? name;
             const buttonText = titleize(name);
 
@@ -110,8 +110,7 @@ if(Quill) {
                 if(isObject(item)) {
                     newItem = this._handleObjectItem(item);
                 } else if(isString(item)) {
-                    const buttonItemConfig = this._prepareButtonItemConfig(item);
-                    newItem = buttonItemConfig;
+                    newItem = this._prepareMenuItemConfig(item);
                 }
                 if(newItem) {
                     resultItems.push(newItem);
@@ -122,50 +121,32 @@ if(Quill) {
         }
 
         _getMenuConfig(items) {
-            const defaultConfig = [
+            const defaultItems = [
                 { text: 'Insert', items: [
-                    { text: localizationMessage.format('dxHtmlEditor-insertHeaderRow'), icon: 'header', onClick: getTableOperationHandler(this.quill, 'insertHeaderRow') },
-                    { text: localizationMessage.format('dxHtmlEditor-insertRowAbove'), icon: 'insertrowabove', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
-                    { text: localizationMessage.format('dxHtmlEditor-insertRowBelow'), icon: 'insertrowbelow', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
-                    { text: localizationMessage.format('dxHtmlEditor-insertColumnLeft'), icon: 'insertcolumnleft', beginGroup: true, onClick: getTableOperationHandler(this.quill, 'insertColumnLeft') },
-                    { text: localizationMessage.format('dxHtmlEditor-insertColumnRight'), icon: 'insertcolumnright', onClick: getTableOperationHandler(this.quill, 'insertColumnRight') },
+                    'insertHeaderRow',
+                    'insertRowAbove',
+                    'insertRowBelow',
+                    extend(this._prepareMenuItemConfig('insertColumnLeft'), { beginGroup: true }),
+                    'insertColumnRight'
                 ] },
                 {
                     text: 'Delete',
                     items: [
-                        { text: localizationMessage.format('dxHtmlEditor-deleteColumn'), icon: 'deletecolumn', onClick: getTableOperationHandler(this.quill, 'deleteColumn') },
-                        { text: localizationMessage.format('dxHtmlEditor-deleteRow'), icon: 'deleterow', onClick: getTableOperationHandler(this.quill, 'deleteRow') },
-                        { text: localizationMessage.format('dxHtmlEditor-deleteTable'), icon: 'deletetable', onClick: getTableOperationHandler(this.quill, 'deleteTable') }
+                        'deleteColumn',
+                        'deleteRow',
+                        'deleteTable'
                     ]
                 },
-                { text: localizationMessage.format('dxHtmlEditor-cellProperties'), icon: 'cellproperties', onClick: (e) => { this.showCellProperties(e); } },
-                { text: localizationMessage.format('dxHtmlEditor-tableProperties'), icon: 'tableproperties', onClick: (e) => { this.showTableProperties(e); } }
+                extend(this._prepareMenuItemConfig('cellProperties'), { onClick: (e) => { this.showCellProperties(e); } }),
+                extend(this._prepareMenuItemConfig('tableProperties'), { onClick: (e) => { this.showTableProperties(e); } })
             ];
 
-            let customItems;
-
-            if(items && items.length) {
-                customItems = this._prepareMenuItems(items);
-            }
-
-            // console.log(customItems);
+            const customItems = this._prepareMenuItems(items?.length ? items : defaultItems);
 
             return {
                 target: this._quillContainer,
                 showEvent: null,
-                items: customItems || defaultConfig
-            };
-        }
-
-        _getTableOperationHandler(operationName, ...rest) {
-            return () => {
-                const table = this.quill.getModule('table');
-
-                if(!table) {
-                    return;
-                }
-                this.quill.focus();
-                return table[operationName](...rest);
+                items: customItems
             };
         }
 
@@ -194,7 +175,6 @@ if(Quill) {
 
         _isTableTarget(targetElement) {
             return !!$(targetElement).closest('.dx-htmleditor-content td, .dx-htmleditor-content th').length;
-            // return ['TD', 'TH'].indexOf(targetElement.tagName) !== -1;
         }
 
         option(option, value) {
