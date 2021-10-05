@@ -1,8 +1,6 @@
 import { AppointmentDataSource } from './appointmentDataSource';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
-import { ExpressionUtils } from '../../expressionUtils';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
-import { getAppointmentTakesSeveralDays } from './utils';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -91,28 +89,8 @@ export class AppointmentDataProvider {
         return this.getFilterStrategy().filterLoadedAppointments(filterOption, timeZoneCalculator);
     }
 
-    // From subscribe
-    replaceWrongEndDate(rawAppointment, startDate, endDate) {
-        const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
-        this.getFilterStrategy().replaceWrongEndDate(adapter, startDate, endDate);
-    }
-
     calculateAppointmentEndDate(isAllDay, startDate) {
         return this.getFilterStrategy().calculateAppointmentEndDate(isAllDay, startDate);
-    }
-
-    appointmentTakesSeveralDays(rawAppointment) {
-        const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
-        return getAppointmentTakesSeveralDays(adapter);
-    }
-
-    sortAppointmentsByStartDate(appointments) {
-        appointments.sort((a, b) => {
-            const firstDate = new Date(ExpressionUtils.getField(this.dataAccessors, 'startDate', a.settings || a));
-            const secondDate = new Date(ExpressionUtils.getField(this.dataAccessors, 'startDate', b.settings || b));
-
-            return Math.sign(firstDate.getTime() - secondDate.getTime());
-        });
     }
 
     // Appointment data source mappings

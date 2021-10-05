@@ -26,6 +26,7 @@ import { getTimeZoneCalculator } from '../instanceFactory';
 import { ExpressionUtils } from '../expressionUtils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { getResourcesFromItem } from '../resources/utils';
+import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './DataProvider/utils';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
@@ -831,7 +832,7 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _sortAppointmentsByStartDate(appointments) {
-        this.appointmentDataProvider.sortAppointmentsByStartDate(appointments);
+        return sortAppointmentsByStartDate(appointments, this.option('dataAccessors'));
     }
 
     _processRecurrenceAppointment(appointment, index, skipLongAppointments) {
@@ -975,17 +976,22 @@ class SchedulerAppointments extends CollectionWidget {
 
     splitAppointmentByDay(appointment) {
         const dates = appointment.settings || appointment;
-
-        const originalStartDate = new Date(ExpressionUtils.getField(this.option('dataAccessors'), 'startDate', dates));
+        const dataAccessors = this.option('dataAccessors');
+        const originalStartDate = new Date(ExpressionUtils.getField(dataAccessors, 'startDate', dates));
         let startDate = dateUtils.makeDate(originalStartDate);
-        let endDate = dateUtils.makeDate(ExpressionUtils.getField(this.option('dataAccessors'), 'endDate', dates));
+        let endDate = dateUtils.makeDate(ExpressionUtils.getField(dataAccessors, 'endDate', dates));
         const maxAllowedDate = this.invoke('getEndViewDate');
         const startDayHour = this.invoke('getStartDayHour');
         const endDayHour = this.invoke('getEndDayHour');
-        const appointmentIsLong = this.appointmentDataProvider.appointmentTakesSeveralDays(appointment);
-        const result = [];
-
         const timeZoneCalculator = getTimeZoneCalculator(this.option('key'));
+
+        const adapter = createAppointmentAdapter(
+            appointment,
+            dataAccessors,
+            timeZoneCalculator
+        );
+        const appointmentIsLong = getAppointmentTakesSeveralDays(adapter);
+        const result = [];
 
         startDate = timeZoneCalculator.createDate(startDate, { path: 'toGrid' });
         endDate = timeZoneCalculator.createDate(endDate, { path: 'toGrid' });

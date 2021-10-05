@@ -659,9 +659,7 @@ module('Server side filtering', () => {
         });
 
         const appointmentDataProvider = createAppointmentDataProvider({
-            key: 0,
             dataSource,
-            isVirtualScrolling: false,
             dataAccessors: {
                 getter: {
                     startDate: compileGetter('StartDate'),
@@ -686,7 +684,8 @@ module('Server side filtering', () => {
                     recurrenceRuleExpr: 'RecurrenceRule',
                     recurrenceExceptionExpr: 'Exception'
                 }
-            }
+            },
+            getIsVirtualScrolling: () => false,
         });
 
         appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 0), new Date(2015, 0, 3));

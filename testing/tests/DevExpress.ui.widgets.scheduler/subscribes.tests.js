@@ -15,6 +15,8 @@ import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 import { createWrapper } from '../../helpers/scheduler/helpers.js';
 
 import { getAppointmentColor, createExpressions } from 'ui/scheduler/resources/utils';
+import { getTimeZoneCalculator } from 'ui/scheduler/instanceFactory.js';
+import { getAppointmentTakesSeveralDays } from 'ui/scheduler/appointments/dataProvider/utils';
 
 const {
     module,
@@ -40,41 +42,6 @@ module('Subscribes', {
         this.clock.restore();
     }
 }, function() {
-    test('"replaceWrongEndDate" should process endDate correctly', function(assert) {
-        this.createInstance({
-            currentView: 'week'
-        });
-
-        [
-            {
-                data: {
-                    startDate: new Date(2019, 4, 3, 12),
-                    allDay: false
-                },
-                expectedEndDate: new Date(2019, 4, 3, 12, 30)
-            },
-            {
-                data: {
-                    startDate: new Date(2019, 4, 3, 12),
-                    allDay: false,
-                    endDate: new Date('string')
-                },
-                expectedEndDate: new Date(2019, 4, 3, 12, 30)
-            },
-            {
-                data: {
-                    startDate: new Date(2019, 4, 3, 12),
-                    allDay: true
-                },
-                expectedEndDate: new Date(2019, 4, 3, 23, 59)
-            }
-        ].forEach(testCase => {
-            this.instance.appointmentDataProvider.replaceWrongEndDate(testCase.data, new Date(2019, 4, 3, 12), testCase.data.endDate);
-            assert.equal(testCase.data.endDate.getHours(), testCase.expectedEndDate.getHours(), 'replaced endDate is ok');
-            assert.equal(testCase.data.endDate.getMinutes(), testCase.expectedEndDate.getMinutes(), 'replaced endDate is ok');
-        });
-    });
-
     test('"getTargetedAppointmentData" should return correct data for recurrence appointments (T660901)', function(assert) {
         const appointmentData = {
             startDate: new Date(2015, 1, 1, 5, 11),
@@ -593,8 +560,16 @@ module('Subscribes', {
             }
         ];
 
-        assert.ok(this.instance.appointmentDataProvider.appointmentTakesSeveralDays(appointments[0]), 'appointmentTakesSeveralDays works correctly');
-        assert.notOk(this.instance.appointmentDataProvider.appointmentTakesSeveralDays(appointments[1]), 'appointmentTakesSeveralDays works correctly');
+        assert.ok(getAppointmentTakesSeveralDays(
+            appointments[0],
+            this.instance._dataAccessors,
+            getTimeZoneCalculator(this.instance.key)
+        ), 'appointmentTakesSeveralDays works correctly');
+        assert.notOk(getAppointmentTakesSeveralDays(
+            appointments[1],
+            this.instance._dataAccessors,
+            getTimeZoneCalculator(this.instance.key)
+        ), 'appointmentTakesSeveralDays works correctly');
     });
 
     test('UpdateAppointmentStartDate should return corrected startDate for long appointments', function(assert) {

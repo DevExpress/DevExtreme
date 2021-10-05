@@ -8,7 +8,7 @@ import { CellsMetaData, ViewDataProviderType } from '../../../workspaces/types';
 import { getAppointmentsViewModel } from '../appointments';
 import { getAppointmentsModel } from '../../../model/appointments';
 import { compileGetter, compileSetter } from '../../../../../../core/utils/data';
-import { createAppointmentDataProvider, createDataAccessors, createTimeZoneCalculator } from '../../../common';
+import { createTimeZoneCalculator } from '../../../common';
 
 const defaultDataAccessors: DataAccessorType = {
   getter: {
@@ -31,7 +31,6 @@ const prepareInstances = (
   intervalCount: number,
 ): {
   timeZoneCalculator: any; // TODO add TimeZoneCalculator to the renovation
-  appointmentDataProvider: any; // TODO add AppointmentDataProvider to the renovation
   schedulerProps: SchedulerProps;
   workspaceProps: WorkSpaceProps;
   viewDataProvider: ViewDataProviderType;
@@ -86,19 +85,8 @@ const prepareInstances = (
 
   const timeZoneCalculator = createTimeZoneCalculator('');
 
-  const appointmentDataProvider = createAppointmentDataProvider(
-    schedulerProps,
-    workspaceProps,
-    false,
-    [],
-    createDataAccessors(schedulerProps),
-    timeZoneCalculator,
-    viewDataProvider,
-  );
-
   return {
     timeZoneCalculator,
-    appointmentDataProvider,
     viewDataProvider,
     schedulerProps,
     workspaceProps,
@@ -118,7 +106,6 @@ describe('Appointments view model', () => {
     instances.workspaceProps,
     instances.viewDataProvider,
     instances.timeZoneCalculator,
-    instances.appointmentDataProvider,
     defaultDataAccessors,
     instances.DOMMetaData,
   );

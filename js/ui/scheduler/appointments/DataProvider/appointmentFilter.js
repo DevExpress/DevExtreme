@@ -16,7 +16,7 @@ import {
     compareDateWithStartDayHour,
     compareDateWithEndDayHour,
     getTrimDates,
-    _isEndDateWrong,
+    replaceWrongEndDate,
     getAppointmentTakesSeveralDays,
     _appointmentPartInInterval,
     getRecurrenceException,
@@ -221,21 +221,6 @@ export class AppointmentFilterBaseStrategy {
             if(this.dataSource.isLoaded()) {
                 updateItems(this.dataSource.items());
             }
-        }
-    }
-
-    calculateAppointmentEndDate(isAllDay, startDate) {
-        if(isAllDay) {
-            return dateUtils.setToDayEnd(new Date(startDate));
-        }
-
-        return new Date(startDate.getTime() + this.appointmentDuration * toMs('minute'));
-    }
-
-    replaceWrongEndDate(appointment, startDate, endDate) {
-        if(_isEndDateWrong(startDate, endDate)) {
-            const calculatedEndDate = this.calculateAppointmentEndDate(appointment.allDay, startDate);
-            this.dataAccessors.setter.endDate(appointment, calculatedEndDate);
         }
     }
 
@@ -503,7 +488,7 @@ export class AppointmentFilterBaseStrategy {
             const startDate = new Date(this.dataAccessors.getter.startDate(rawAppointment));
             const endDate = new Date(this.dataAccessors.getter.endDate(rawAppointment));
 
-            this.replaceWrongEndDate(rawAppointment, startDate, endDate);
+            replaceWrongEndDate(rawAppointment, startDate, endDate, this.appointmentDuration, this.dataAccessors);
 
             const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
 

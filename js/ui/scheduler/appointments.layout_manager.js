@@ -93,7 +93,6 @@ class AppointmentLayoutManager {
             visibleDayDuration,
             // appointment settings
             timeZoneCalculator: getTimeZoneCalculator(key),
-            appointmentDataProvider: this.instance.appointmentDataProvider,
             timeZone: this.modelProvider.timeZone,
             firstDayOfWeek: this.instance.getFirstDayOfWeek(),
             viewStartDayHour: this.modelProvider.getCurrentViewOption('startDayHour'),

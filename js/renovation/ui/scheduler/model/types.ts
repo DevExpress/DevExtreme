@@ -38,7 +38,6 @@ export interface AppointmentsModelType extends AppointmentsConfigType {
   loadedResources: [];
   dataAccessors: DataAccessorType;
   timeZoneCalculator: unknown;
-  appointmentDataProvider: unknown;
   viewDataProvider: unknown;
   positionHelper: unknown;
   resizableStep: number; // positionHelper.getResizableStep()

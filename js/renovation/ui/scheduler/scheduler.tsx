@@ -24,7 +24,7 @@ import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
 import { DataAccessorType } from './types';
-import { createAppointmentDataProvider, createDataAccessors, createTimeZoneCalculator } from './common';
+import { createDataAccessors, createTimeZoneCalculator } from './common';
 import { loadResources } from '../../../ui/scheduler/resources/utils';
 
 export const viewFunction = ({
@@ -177,18 +177,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   get dataAccessors(): DataAccessorType {
     return createDataAccessors(this.props);
-  }
-
-  get appointmentDataProvider(): unknown {
-    return createAppointmentDataProvider(
-      this.props,
-      this.currentViewConfig,
-      this.isVirtualScrolling,
-      this.loadedResources,
-      this.dataAccessors,
-      this.timeZoneCalculator,
-      this.viewDataProvider,
-    );
   }
 
   get startViewDate(): Date {

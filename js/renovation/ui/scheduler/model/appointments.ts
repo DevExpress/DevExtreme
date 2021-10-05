@@ -93,7 +93,6 @@ export const getAppointmentsModel = (
   viewConfig: CurrentViewConfigType,
   viewDataProvider: ViewDataProviderType,
   timeZoneCalculator: unknown,
-  appointmentDataProvider: unknown,
   dataAccessors: DataAccessorType,
   cellsMetaData: CellsMetaData,
 ): AppointmentsModelType => {
@@ -174,7 +173,6 @@ export const getAppointmentsModel = (
     loadedResources: [],
     dataAccessors,
     timeZoneCalculator,
-    appointmentDataProvider,
     viewDataProvider,
     positionHelper,
     isGroupedAllDayPanel,

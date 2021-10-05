@@ -74,7 +74,6 @@ describe('Appointments model', () => {
     instances.workspaceProps,
     instances.viewDataProvider,
     instances.timeZoneCalculator,
-    null,
     { } as any,
     instances.DOMMetaData,
   );

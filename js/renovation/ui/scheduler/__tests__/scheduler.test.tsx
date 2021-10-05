@@ -591,17 +591,6 @@ describe('Scheduler', () => {
             });
         });
       });
-
-      describe('appointmentDataProvider', () => {
-        it('should be created correctly', () => {
-          const scheduler = new Scheduler(
-            new SchedulerProps(),
-          );
-
-          expect(!!scheduler.appointmentDataProvider)
-            .toBe(true);
-        });
-      });
     });
   });
 });
