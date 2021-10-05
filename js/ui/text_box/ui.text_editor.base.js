@@ -469,6 +469,9 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderLabel: function() {
+        // TODO: Let's get rid of `init` producing method.
+        // We can create TextEditorLabel instance only once on the initMatkup end
+        // and modifu its state using new public api which we need to implement
         if(this._label) {
             this._label.init(this._getLabelConfig());
         } else {
