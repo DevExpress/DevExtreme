@@ -2215,10 +2215,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._toggleWorkSpaceCountClass();
         this._toggleGroupByDateClass();
         this._toggleWorkSpaceWithOddCells();
+        this._toggleVirtualScrollingClass();
 
         this.$element()
             .addClass(COMPONENT_CLASS)
             .addClass(this._getElementClass());
+    }
+
+    _toggleVirtualScrollingClass() {
+        this.$element().toggleClass('dx-scheduler-work-space-virtual', this.isVirtualScrolling());
     }
 
     _initPositionHelper() {

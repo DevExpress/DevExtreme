@@ -916,4 +916,10 @@ $scheduler-month-date-text-padding: 6px;
   .dx-scheduler-date-table-cell {
     height: auto;
   }
+
+  &.dx-scheduler-work-space-virtual {
+    .dx-scheduler-date-table-row {
+      height: 50px;
+    }
+  }
 }

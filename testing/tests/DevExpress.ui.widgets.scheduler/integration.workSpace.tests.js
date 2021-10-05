@@ -16,7 +16,7 @@ import { implementationsMap, getOuterHeight, getInnerHeight, getOuterWidth } fro
 const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
 const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
 
-const { testStart, module, test } = QUnit;
+const { testStart, module, test, skip } = QUnit;
 
 testStart(() => initTestMarkup());
 
@@ -762,7 +762,7 @@ module('Integration: Work space', { ...moduleConfig }, () => {
         assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * 2, 'indicator has correct position');
     });
 
-    test('Tables should take css class after width calculation(T491453)', function(assert) {
+    skip('Tables should take css class after width calculation(T491453)', function(assert) {
         assert.expect(1);
 
         let counter = 0;
