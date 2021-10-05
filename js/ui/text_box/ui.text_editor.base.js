@@ -17,7 +17,8 @@ import config from '../../core/config';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
-import { renderLabel } from './ui.text_editor.label';
+import { TextEditorLabel } from './ui.text_editor.label';
+import { getWidth } from '../../core/utils/size';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
@@ -439,15 +440,40 @@ const TextEditorBase = Editor.inherit({
         this._input().prop('spellcheck', this.option('spellcheck'));
     },
 
-    _getLabelOptions: function() {
+    _getLabelConfig: function() {
+        const { label, labelMode, labelMark } = this.option();
+
         return {
-            editor: this,
-            container: this._input()
+            $editor: this.$element(),
+            text: label,
+            mode: labelMode,
+            mark: labelMark,
+            containsButtonsBefore: !!this._$beforeButtonsContainer,
+            containerWidth: this._getLabelContainerWidth(),
+            beforeWidth: this._getLabelBeforeWidth()
         };
     },
 
+    _getLabelContainer: function() {
+        return this._input();
+    },
+
+    _getLabelContainerWidth: function() {
+        return getWidth(this._getLabelContainer());
+    },
+
+    _getLabelBeforeWidth: function() {
+        const buttonsBeforeWidth = this._$beforeButtonsContainer && getWidth(this._$beforeButtonsContainer);
+
+        return buttonsBeforeWidth ?? 0;
+    },
+
     _renderLabel: function() {
-        renderLabel(this._getLabelOptions());
+        if(this._label) {
+            this._label.init(this._getLabelConfig());
+        } else {
+            this._label = new TextEditorLabel(this._getLabelConfig());
+        }
     },
 
     _renderPlaceholder: function() {

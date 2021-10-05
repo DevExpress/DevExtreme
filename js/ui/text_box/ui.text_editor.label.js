@@ -1,61 +1,78 @@
-import { getWidth, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 
 const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
 const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
 const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
-const TEXTEDITOR_LABEL_SELECTOR = '.' + TEXTEDITOR_LABEL_CLASS;
 const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
 
-export function renderLabel({ editor, container, icon = null }) {
-    const labelElement = editor.$element().find(TEXTEDITOR_LABEL_SELECTOR);
-    const labelText = editor.option('label');
-    const labelMark = editor.option('labelMark');
-    const labelMode = editor.option('labelMode');
-
-    if(!editor.label && labelElement.length === 1 || labelElement.length === 2) {
-        labelElement.first().remove();
+class TextEditorLabel {
+    constructor(...args) {
+        this.init(...args);
     }
 
-    if(editor._$label) {
-        editor._$label.remove();
-        editor._$label = null;
+    init({
+        $editor,
+        text, mode, mark,
+        containerWidth,
+        beforeWidth,
+        containsButtonsBefore
+    }) {
+        this._props = {
+            $editor,
+            text, mode, mark,
+            containerWidth,
+            beforeWidth,
+            containsButtonsBefore
+        };
+
+        this._isVisible = text && mode !== 'hidden';
+
+        if(this._isVisible) {
+            this._renderEditorClasses();
+            this._render();
+            this._updateWidth();
+        }
     }
 
-    editor.$element()
-        .removeClass(TEXTEDITOR_WITH_LABEL_CLASS)
-        .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
-        .removeClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
+    $element() {
+        return this._$root;
+    }
 
-    if(!labelText || labelMode === 'hidden') return;
+    _renderEditorClasses() {
+        const labelClass = this._props.mode === 'floating' ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS : TEXTEDITOR_WITH_LABEL_CLASS;
+        const beforeButtonsClass = this._props.containsButtonsBefore ? TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS : '';
 
-    editor.$element().addClass(labelMode === 'floating' ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS : TEXTEDITOR_WITH_LABEL_CLASS);
+        this._props.$editor
+            .addClass(labelClass)
+            .addClass(beforeButtonsClass);
+    }
 
-    const $label = editor._$label = $('<div>')
-        .addClass(TEXTEDITOR_LABEL_CLASS)
-        .html(`<div class="dx-label-before"></div><div class="dx-label"><span data-mark="${labelMark}">${labelText}</span></div><div class="dx-label-after"></div>`);
+    _render() {
+        this._$before = $('<div>').addClass('dx-label-before');
+        this._$label = $('<div>')
+            .addClass('dx-label')
+            .html(`
+                <span data-mark="${this._props.mark}">
+                    ${this._props.text}
+                </span>
+            `);
+        this._$after = $('<div>').addClass('dx-label-after');
 
-    $label.appendTo(editor.$element());
+        this._$root = $('<div>')
+            .addClass(TEXTEDITOR_LABEL_CLASS)
+            .append(this._$before)
+            .append(this._$label)
+            .append(this._$after);
 
-    setLabelWidth({ editor, container, icon });
+        this._$root.appendTo(this._props.$editor);
+    }
+
+    _updateWidth() {
+        this._$before.css({ width: this._props.beforeWidth });
+        this._$label.css({ maxWidth: this._props.containerWidth });
+    }
 }
 
-
-function setLabelWidth({ editor, container, icon = null }) {
-    const labelBeforeElement = editor._$label.find('.dx-label-before');
-
-    if(editor._$beforeButtonsContainer) {
-        editor.$element().addClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
-        labelBeforeElement.css('width', getWidth(editor._$beforeButtonsContainer));
-    }
-
-    if(icon) {
-        const labelBeforeWidth = getWidth(labelBeforeElement) + getOuterWidth(icon);
-
-        labelBeforeElement.css('width', labelBeforeWidth);
-
-        editor._$label.find('.dx-label').css('maxWidth', getWidth(container.parent()) - labelBeforeWidth);
-    } else {
-        editor._$label.find('.dx-label').css('maxWidth', getWidth(container));
-    }
-}
+export {
+    TextEditorLabel
+};
