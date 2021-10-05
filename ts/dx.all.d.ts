@@ -753,10 +753,10 @@ declare module DevExpress {
     version?: Array<number>;
   };
   /**
-   * [descr:devices]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export const devices: DevicesObject;
+    * [descr:devices]
+    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+    */
+   export const devices: DevicesObject;
   /**
    * [descr:DevicesObject]
    */
@@ -20924,7 +20924,7 @@ declare module DevExpress.ui {
    */
   export type dxTreeListEditing = DevExpress.ui.dxTreeList.Editing;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListEditingTexts = DevExpress.ui.dxTreeList.EditingTexts;
   /**
@@ -21110,7 +21110,7 @@ declare module DevExpress.ui {
     toolbar?: dxTreeListToolbar;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
   /**
@@ -22156,21 +22156,21 @@ declare module DevExpress.ui {
     updateDimensions(): void;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseColumn<TRowData = any> =
     DevExpress.ui.dxDataGrid.ColumnBase<TRowData>;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseColumnButton = DevExpress.ui.dxDataGrid.ColumnButtonBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseEditing<TRowData = any, TKey = any> =
     DevExpress.ui.dxDataGrid.EditingBase<TRowData, TKey>;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseEditingTexts = DevExpress.ui.dxDataGrid.EditingTextsBase;
   /**
@@ -22552,15 +22552,15 @@ declare module DevExpress.ui {
     wordWrapEnabled?: boolean;
   }
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBasePaging = DevExpress.ui.dxDataGrid.PagingBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseScrolling = DevExpress.ui.dxDataGrid.ScrollingBase;
   /**
-   * @deprecated
+   * @deprecated 
    */
   export type GridBaseSelection = DevExpress.ui.dxDataGrid.SelectionBase;
   /**
