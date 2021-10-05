@@ -3,18 +3,18 @@ export function getRelativeOffset(
 ): { top: number; left: number } {
   const offset = { left: 0, top: 0 };
 
-  let currentElement = sourceElement;
+  let element = sourceElement;
 
-  while (currentElement?.offsetParent && !currentElement.classList.contains(targetElementClass)) {
-    const parentOffsetElement = currentElement.offsetParent as HTMLElement;
+  while (element?.offsetParent && !element.classList.contains(targetElementClass)) {
+    const parentElement = element.offsetParent as HTMLElement;
 
-    const currentElementRect = currentElement.getBoundingClientRect();
-    const parentOffsetElementRect = parentOffsetElement.getBoundingClientRect();
+    const elementRect = element.getBoundingClientRect();
+    const parentElementRect = parentElement.getBoundingClientRect();
 
-    offset.left += currentElementRect.left - parentOffsetElementRect.left;
-    offset.top += currentElementRect.top - parentOffsetElementRect.top;
+    offset.left += elementRect.left - parentElementRect.left;
+    offset.top += elementRect.top - parentElementRect.top;
 
-    currentElement = currentElement.offsetParent as HTMLElement;
+    element = element.offsetParent as HTMLElement;
   }
 
   return offset;
