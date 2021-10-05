@@ -95,7 +95,7 @@ describe('DateTableBody', () => {
       rows.forEach((row) => {
         expect(row.props())
           .toMatchObject({
-            className: 'dx-scheduler-date-table-row',
+            className: 'dx-scheduler-date-table-row dx-scheduler-cell-sizes-vertical',
             leftVirtualCellWidth: 100,
             rightVirtualCellWidth: 200,
             leftVirtualCellCount: 2,
