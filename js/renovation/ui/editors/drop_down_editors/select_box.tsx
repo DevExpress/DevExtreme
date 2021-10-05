@@ -3,7 +3,7 @@ import {
 } from '@devextreme-generator/declarations';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable-next-line import/named */
-import DataSource, { DataSourceOptions } from '../../../../data/data_source';
+import DataSource, { Options as DataSourceOptions } from '../../../../data/data_source';
 import Store from '../../../../data/abstract_store';
 /* eslint-disable-next-line import/named */
 import LegacySelectBox from '../../../../ui/select_box';

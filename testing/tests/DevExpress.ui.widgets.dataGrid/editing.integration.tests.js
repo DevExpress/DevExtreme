@@ -6074,3 +6074,42 @@ QUnit.module('Editing state', baseModuleConfig, () => {
         assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled call count');
     });
 });
+
+QUnit.module('newRowPosition', baseModuleConfig, () => {
+    ['first', 'last'].forEach(newRowPosition => {
+        QUnit.test(`added row should be visible if newRowPosition is ${newRowPosition} and scrolling.mode is virtual`, function(assert) {
+            const isFirstNewRowPosition = newRowPosition === 'first';
+            const data = [];
+            for(let i = 0; i < 100; i++) {
+                data.push({ id: i + 1 });
+            }
+            // arrange
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                height: 200,
+                dataSource: data,
+                scrolling: {
+                    mode: 'virtual',
+                    useNative: false
+                },
+                editing: {
+                    newRowPosition
+                },
+                paging: {
+                    pageIndex: isFirstNewRowPosition ? 2 : 0
+                }
+            }).dxDataGrid('instance');
+
+            this.clock.tick(300);
+
+            // act
+            dataGrid.addRow();
+
+            // assert
+            const visibleRows = dataGrid.getVisibleRows();
+            assert.ok(visibleRows[isFirstNewRowPosition ? 0 : visibleRows.length - 1].isNewRow, 'last row is new');
+            assert.ok(dataGridWrapper.rowsView.isRowVisible(isFirstNewRowPosition ? 0 : visibleRows.length), 'new row is visible');
+            assert.equal(dataGrid.pageIndex(), isFirstNewRowPosition ? 0 : 4, 'pageIndex');
+            assert.ok($('#dataGrid').find('.dx-virtual-row').length, 'one virtual row is rendered');
+        });
+    });
+});

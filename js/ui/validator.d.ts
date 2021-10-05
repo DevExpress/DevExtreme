@@ -128,14 +128,19 @@ export default class dxValidator extends DOMComponent<dxValidatorOptions> {
      * @docid
      * @publicName validate()
      * @public
+     * @return dxValidatorResult
      */
-    validate(): dxValidatorResult;
+    validate(): ValidationResult;
 }
+
+/** @public */
+export type ValidationResult = dxValidatorResult;
 
 /**
  * @docid
  * @type object
  * @namespace DevExpress.ui
+ * @deprecated {ui/validator.ValidationResult}
  */
 export interface dxValidatorResult {
     /**

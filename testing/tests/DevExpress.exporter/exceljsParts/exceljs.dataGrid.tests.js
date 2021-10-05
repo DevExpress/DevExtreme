@@ -971,12 +971,12 @@ const moduleConfig = {
             });
         });
 
-        QUnit.test('Data - 2 column & 2 rows, grid.rowTemplate: () => {}', function(assert) {
+        QUnit.test('Data - 2 column & 2 rows, grid.dataRowTemplate: () => {}', function(assert) {
             const done = assert.async();
             const ds = [{ f1: 'f1_1', f2: 'f1_2' }];
             const dataGrid = $('#dataGrid').dxDataGrid({
                 dataSource: ds,
-                rowTemplate: (container) => { $(container).append('<tbody class=\'dx-row\'><tr><td>row</td><td>template</td></tr></tbody>'); },
+                dataRowTemplate: (container) => { $(container).append('<tr><td>row</td><td>template</td></tr>'); },
                 loadingTimeout: null
             }).dxDataGrid('instance');
 
