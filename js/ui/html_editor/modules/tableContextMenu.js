@@ -59,17 +59,10 @@ if(Quill) {
             return this.editorInstance._createComponent($container, ContextMenu, menuConfig);
         }
 
-        showTableProperties(e) {
-            const $table = $(this._targetElement).closest('table');
+        showPropertiesForm(type = 'cell') {
+            const $element = $(this._targetElement).closest(type === 'cell' ? 'th, td' : 'table');
             this._contextMenu.hide();
-            this._formatHandlers['tableProperties']($table);
-            this._targetElement = null;
-        }
-
-        showCellProperties(e) {
-            const $cell = $(this._targetElement).closest('th, td');
-            this._contextMenu.hide();
-            this._formatHandlers['cellProperties']($cell);
+            this._formatHandlers[`${type}Properties`]($element);
             this._targetElement = null;
         }
 
@@ -136,8 +129,8 @@ if(Quill) {
                         'deleteTable'
                     ]
                 },
-                extend(this._prepareMenuItemConfig('cellProperties'), { onClick: (e) => { this.showCellProperties(e); } }),
-                extend(this._prepareMenuItemConfig('tableProperties'), { onClick: (e) => { this.showTableProperties(e); } })
+                extend(this._prepareMenuItemConfig('cellProperties'), { onClick: (e) => { this.showPropertiesForm('cell'); } }),
+                extend(this._prepareMenuItemConfig('tableProperties'), { onClick: (e) => { this.showPropertiesForm('table'); } })
             ];
 
             const customItems = this._prepareMenuItems(items?.length ? items : defaultItems);
