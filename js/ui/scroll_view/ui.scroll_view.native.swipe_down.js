@@ -175,7 +175,7 @@ const SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && Math.round(this._scrollOffsetTopMax - Math.floor(this._location)) <= 1;
+        return this._reachBottomEnabled && Math.round(this._scrollOffsetTopMax + Math.floor(this._location)) <= 1;
     },
 
     _reachBottom: function() {
