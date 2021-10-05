@@ -168,7 +168,7 @@ $scheduler-month-date-text-padding: 6px;
   border-top: none;
 
   // T656716
-  // float: left;
+  float: left;
 
   &.dx-scheduler-timeline-month:not(.dx-scheduler-agenda) {
     .dx-scheduler-all-day-title {
@@ -258,7 +258,7 @@ $scheduler-month-date-text-padding: 6px;
 
 .dx-scheduler-date-table-scrollable-content {
   position: relative;
-  // float: left;
+  float: left;
 }
 
 .dx-scheduler-date-table-cell {
@@ -787,7 +787,7 @@ $scheduler-month-date-text-padding: 6px;
 
   .dx-scheduler-work-space-vertical-group-table,
   .dx-scheduler-time-panel {
-    // float: right;
+    float: right;
   }
 
   .dx-scheduler-time-panel-cell {
@@ -830,7 +830,7 @@ $scheduler-month-date-text-padding: 6px;
   .dx-scheduler-timeline {
     &.dx-scheduler-work-space-grouped {
       .dx-scheduler-sidebar-scrollable {
-        // float: right;
+        float: right;
       }
 
       .dx-scheduler-group-header {
