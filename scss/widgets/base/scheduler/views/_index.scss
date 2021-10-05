@@ -20,6 +20,7 @@ $scheduler-focused-cell-shadow: null !default;
 $scheduler-droppable-cell-background-color: null !default;
 
 $scheduler-left-column-width: null !default;
+$scheduler-timeline-cell-height: null !default;
 
 $scheduler-other-month-cell-opacity: null !default;
 $scheduler-workspace-month-text-color: null !default;
@@ -908,7 +909,7 @@ $scheduler-month-date-text-padding: 6px;
   }
 
   .dx-scheduler-date-table-row {
-    height: 78px;
+    height: $scheduler-timeline-cell-height;
     flex-shrink: 0;
     flex-grow: 1;
   }
