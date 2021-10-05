@@ -4,7 +4,7 @@ import BaseModule from './base';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 import ContextMenu from '../../context_menu';
-import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableForms';
+import { showTablePropertiesForm } from '../ui/tableForms';
 import localizationMessage from '../../../localization/message';
 import { getTableFormats } from '../utils/table_helper';
 import { getFormatHandlers, getDefaultClickHandler, ICON_MAP } from '../utils/toolbar_helper';
@@ -70,7 +70,7 @@ if(Quill) {
         showCellProperties(e) {
             const $cell = $(this._targetElement).closest('th, td');
             this._contextMenu.hide();
-            this._popupForm = showCellPropertiesForm(this.editorInstance, $cell);
+            this._formatHandlers['cellProperties']($cell);
             this._targetElement = null;
         }
 
@@ -187,7 +187,7 @@ if(Quill) {
         prepareCleanCallback() {
             return () => {
                 this._detachEvents();
-                this._popupForm?.dispose();
+                // this._popupForm?.dispose();
             };
         }
     };

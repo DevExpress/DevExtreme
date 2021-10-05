@@ -1,9 +1,21 @@
 import $ from '../../../core/renderer';
 import localizationMessage from '../../../localization/message';
-import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableForms';
-import { getTableOperationHandler, hasEmbedContent } from './table_helper';
+import { showTablePropertiesForm } from '../ui/tableForms';
+import { getTableOperationHandler, hasEmbedContent, unfixTableWidth, getAutoSizedElements, setLineElementsAttrValue, getLineElements } from './table_helper';
+// import { getTableOperationHandler, hasEmbedContent, unfixTableWidth, getColumnElements, getAutoSizedElements, setLineElementsAttrValue, getLineElements, getRowElements } from './table_helper';
 import { isDefined, isBoolean } from '../../../core/utils/type';
 
+import Form from '../../form';
+import ButtonGroup from '../../button_group';
+import ColorBox from '../../color_box';
+import ScrollView from '../../scroll_view';
+
+import { getOuterHeight, getOuterWidth } from '../../../core/utils/size';
+
+import { getWindow } from '../../../core/utils/window';
+
+const MIN_HEIGHT = 400;
+const BORDER_STYLES = ['none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset'];
 
 const USER_ACTION = 'user';
 const SILENT_ACTION = 'silent';
@@ -79,14 +91,49 @@ function getFormatHandlers(module) {
         deleteColumn: getTableOperationHandler(module.quill, 'deleteColumn'),
         deleteRow: getTableOperationHandler(module.quill, 'deleteRow'),
         deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
-        cellProperties: () => {
-            const domNode = getTargetTableNode(module, 'cell');
-            showCellPropertiesForm(module.editorInstance, $(domNode));
-        },
+        cellProperties: prepareShowCellProperties(module),
+        // tableProperties: prepareShowTableProperties(module),
         tableProperties: () => {
             const domNode = getTargetTableNode(module, 'table');
             showTablePropertiesForm(module.editorInstance, $(domNode));
         }
+    };
+}
+
+function prepareShowCellProperties(module) {
+    return ($cell) => {
+        if(!$cell?.length) {
+            $cell = $(getTargetTableNode(module, 'cell'));
+        }
+
+        const cellPropertiesFormConfig = getCellPropertiesFormConfig(module.editorInstance, $cell);
+
+        let formInstance;
+
+        module.editorInstance.formDialogOption({
+            contentTemplate: (container) => {
+                const $content = $('<div>').appendTo(container);
+                const $form = $('<div>').appendTo($content);
+                module.editorInstance._createComponent($form, Form, cellPropertiesFormConfig.formOptions);
+                module.editorInstance._createComponent($content, ScrollView, {});
+                formInstance = $form.dxForm('instance');
+
+                return $content;
+            },
+            title: localizationMessage.format('dxHtmlEditor-cellProperties'),
+            minHeight: MIN_HEIGHT
+        });
+
+        const promise = module.editorInstance.showFormDialog();
+
+        promise.done((formData, event) => {
+            module.saveValueChangeEvent(event);
+            cellPropertiesFormConfig.applyHandler(formInstance);
+        });
+
+        promise.fail(() => {
+            module.quill.focus();
+        });
     };
 }
 
@@ -347,6 +394,287 @@ function prepareInsertTableHandler(module) {
                 module.quill.focus();
             });
     };
+}
+
+function getCellPropertiesFormConfig(editorInstance, $cell) {
+    const window = getWindow();
+    let alignmentEditorInstance;
+    let verticalAlignmentEditorInstance;
+    let borderColorEditorInstance;
+    let backgroundColorEditorInstance;
+
+    const startCellWidth = getOuterWidth($cell);
+    const cellStyles = window.getComputedStyle($cell.get(0));
+    const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
+
+    const formOptions = {
+        colCount: 2,
+        formData: {
+            width: startCellWidth,
+            height: getOuterHeight($cell),
+            backgroundColor: cellStyles.backgroundColor,
+            borderStyle: cellStyles.borderStyle,
+            borderColor: cellStyles.borderColor,
+            borderWidth: parseInt(cellStyles.borderWidth),
+            alignment: startTextAlign,
+            verticalAlignment: cellStyles.verticalAlign,
+            verticalPadding: parseInt(cellStyles.paddingTop),
+            horizontalPadding: parseInt(cellStyles.paddingLeft),
+        },
+        items: [{
+            itemType: 'group',
+            caption: localizationMessage.format('dxHtmlEditor-border'),
+            colCountByScreen: {
+                xs: 2
+            },
+            colCount: 2,
+            items: [
+                {
+                    dataField: 'borderStyle',
+                    label: { text: localizationMessage.format('dxHtmlEditor-style') },
+                    editorType: 'dxSelectBox',
+                    editorOptions: {
+                        items: BORDER_STYLES
+                    }
+                },
+                {
+                    dataField: 'borderWidth',
+                    label: { text: localizationMessage.format('dxHtmlEditor-borderWidth') },
+                    editorOptions: {
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                    }
+                },
+                {
+                    itemType: 'simple',
+                    dataField: 'borderColor',
+                    colSpan: 2,
+                    label: { text: localizationMessage.format('dxHtmlEditor-borderColor') },
+                    template: (e) => {
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ColorBox, {
+                            editAlphaChannel: true,
+                            value: e.component.option('formData').borderColor,
+                            onInitialized: (e) => {
+                                borderColorEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
+                    }
+                }
+            ]
+        }, {
+            itemType: 'group',
+            caption: localizationMessage.format('dxHtmlEditor-dimensions'),
+            colCount: 2,
+            colCountByScreen: {
+                xs: 2
+            },
+            items: [
+                {
+                    dataField: 'width',
+                    label: { text: localizationMessage.format('dxHtmlEditor-width') },
+                    editorOptions: {
+                        min: 0,
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                    }
+                },
+                {
+                    dataField: 'height',
+                    label: { text: localizationMessage.format('dxHtmlEditor-height') },
+                    editorOptions: {
+                        min: 0,
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                    }
+                },
+                {
+                    dataField: 'verticalPadding',
+                    label: { text: localizationMessage.format('dxHtmlEditor-paddingVertical') },
+                    editorOptions: {
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                    }
+                },
+                {
+                    label: { text: localizationMessage.format('dxHtmlEditor-paddingHorizontal') },
+                    dataField: 'horizontalPadding',
+                    editorOptions: {
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                    }
+                }
+            ]
+        }, {
+            itemType: 'group',
+            caption: localizationMessage.format('dxHtmlEditor-tableBackground'),
+            items: [
+                {
+                    itemType: 'simple',
+                    dataField: 'backgroundColor',
+                    label: { text: localizationMessage.format('dxHtmlEditor-borderColor') },
+                    template: (e) => {
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ColorBox, {
+                            editAlphaChannel: true,
+                            value: e.component.option('formData').backgroundColor,
+                            onInitialized: (e) => {
+                                backgroundColorEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
+                    }
+                }
+            ]
+        }, {
+            itemType: 'group',
+            caption: localizationMessage.format('dxHtmlEditor-alignment'),
+            colCount: 2,
+            items: [
+                {
+                    itemType: 'simple',
+                    label: { text: localizationMessage.format('dxHtmlEditor-horizontal') },
+                    template: () => {
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ButtonGroup, {
+                            items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }, { value: 'justify', icon: 'alignjustify' }],
+                            keyExpr: 'value',
+                            selectedItemKeys: [startTextAlign],
+                            onInitialized: (e) => {
+                                alignmentEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
+                    }
+                }, {
+                    itemType: 'simple',
+                    label: { text: localizationMessage.format('dxHtmlEditor-vertical') },
+                    template: () => {
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ButtonGroup, {
+                            items: [{ value: 'top', icon: 'verticalaligntop' }, { value: 'middle', icon: 'verticalaligncenter' }, { value: 'bottom', icon: 'verticalalignbottom' }],
+                            keyExpr: 'value',
+                            selectedItemKeys: [cellStyles.verticalAlign],
+                            onInitialized: (e) => {
+                                verticalAlignmentEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
+                    }
+                }
+            ]
+        }],
+        showColonAfterLabel: true,
+        labelLocation: 'top',
+        minColWidth: 300
+    };
+
+    const applyHandler = (formInstance) => {
+        const formData = formInstance.option('formData');
+        const widthArg = formData.width === startCellWidth ? undefined : formData.width;
+        applyCellDimensionChanges($cell, formData.height, widthArg);
+        $cell.css({
+            'backgroundColor': backgroundColorEditorInstance.option('value'),
+            'borderStyle': formData.borderStyle,
+            'borderColor': borderColorEditorInstance.option('value'),
+            'borderWidth': formData.borderWidth + 'px',
+            'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0],
+            'verticalAlign': verticalAlignmentEditorInstance.option('selectedItemKeys')[0],
+            'paddingLeft': formData.horizontalPadding + 'px',
+            'paddingRight': formData.horizontalPadding + 'px',
+            'paddingTop': formData.verticalPadding + 'px',
+            'paddingBottom': formData.verticalPadding + 'px'
+        });
+    };
+
+    return {
+        formOptions,
+        applyHandler
+    };
+}
+
+// const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
+//     if(isDefined(newWidth)) {
+//         const autoWidthColumns = getAutoSizedElements($table);
+
+//         if(autoWidthColumns.length > 0) {
+//             $table.css('width', newWidth);
+//         } else {
+//             const $columns = getColumnElements($table);
+//             const oldTableWidth = getOuterWidth($table);
+
+//             unfixTableWidth($table);
+
+//             each($columns, (i, element) => {
+//                 const $element = $(element);
+//                 const newElementWidth = newWidth / oldTableWidth * getOuterWidth($element);
+//                 $element.attr('width', newElementWidth);
+
+//                 const $lineElements = getLineElements($table, $element.index(), 'horizontal');
+
+//                 setLineElementsAttrValue($lineElements, 'width', newElementWidth);
+//             });
+//         }
+//     }
+
+//     const autoHeightRows = getAutoSizedElements($table, 'vertical');
+
+//     if(autoHeightRows?.length > 0) {
+//         $table.css('height', newHeight);
+//     } else {
+//         const $rows = getRowElements($table);
+//         const oldTableHeight = getOuterHeight($table);
+
+//         each($rows, (i, element) => {
+//             const $element = $(element);
+//             const newElementHeight = newHeight / oldTableHeight * getOuterHeight($element);
+//             const $lineElements = getLineElements($table, i, 'vertical');
+
+//             setLineElementsAttrValue($lineElements, 'height', newElementHeight);
+//         });
+//     }
+// };
+
+function applyCellDimensionChanges($target, newHeight, newWidth) {
+    const $table = $($target.closest('table'));
+    if(isDefined(newWidth)) {
+        const index = $($target).index();
+        let $verticalCells = getLineElements($table, index);
+
+
+        const widthDiff = newWidth - getOuterWidth($target);
+        const tableWidth = getOuterWidth($table);
+
+        if(newWidth > tableWidth) {
+            unfixTableWidth($table);
+        }
+
+        setLineElementsAttrValue($verticalCells, 'width', newWidth);
+
+        const $nextColumnCell = $target.next();
+        const shouldUpdateNearestColumnWidth = getAutoSizedElements($table).length === 0;
+
+        if(shouldUpdateNearestColumnWidth) {
+            unfixTableWidth($table);
+            if($nextColumnCell.length === 1) {
+                $verticalCells = getLineElements($table, index + 1);
+                const nextColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
+                setLineElementsAttrValue($verticalCells, 'width', Math.max(nextColumnWidth, 0));
+            } else {
+                const $prevColumnCell = $target.prev();
+                if($prevColumnCell.length === 1) {
+                    $verticalCells = getLineElements($table, index - 1);
+                    const prevColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
+                    setLineElementsAttrValue($verticalCells, 'width', Math.max(prevColumnWidth, 0));
+                }
+            }
+        }
+    }
+
+    const $horizontalCells = $target.closest('tr').find('td');
+
+    setLineElementsAttrValue($horizontalCells, 'height', newHeight);
+    const autoHeightRows = getAutoSizedElements($table, 'vertical');
+
+    if(autoHeightRows.length === 0) {
+        $table.css('height', 'auto');
+    }
 }
 
 

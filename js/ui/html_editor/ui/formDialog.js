@@ -133,6 +133,10 @@ class FormDialog {
         return this.deferred.promise();
     }
 
+    getFormInstance() {
+        return this._form;
+    }
+
     hide(formData, event) {
         this.deferred.resolve(formData, event);
         this._popup.hide();
