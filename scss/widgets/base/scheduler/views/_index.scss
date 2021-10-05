@@ -883,7 +883,13 @@ $scheduler-month-date-text-padding: 6px;
   }
 }
 
-.dx-scheduler-timeline.dx-scheduler-work-space-both-scrollbar {
+.dx-scheduler .dx-scheduler-timeline.dx-scheduler-work-space-both-scrollbar {
+  .dx-scheduler-date-table-scrollable .dx-scrollable-content,
+  .dx-scheduler-sidebar-scrollable .dx-scrollable-content,
+  .dx-scheduler-group-table {
+    min-height: 100%;
+  }
+
   .dx-scheduler-date-table-scrollable .dx-scrollable-content {
     display: flex;
     flex-direction: column;
@@ -905,5 +911,9 @@ $scheduler-month-date-text-padding: 6px;
     height: 78px;
     flex-shrink: 0;
     flex-grow: 1;
+  }
+
+  .dx-scheduler-date-table-cell {
+    height: auto;
   }
 }
