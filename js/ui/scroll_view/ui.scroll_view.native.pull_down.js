@@ -1,4 +1,3 @@
-import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import { move } from '../../animation/translator';
@@ -26,7 +25,6 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
         this.callBase(scrollView);
         this._$topPocket = scrollView._$topPocket;
         this._$pullDown = scrollView._$pullDown;
-        this._$bottomPocket = scrollView._$bottomPocket;
         this._$refreshingText = scrollView._$refreshingText;
         this._$scrollViewContent = $(scrollView.content());
 
@@ -93,10 +91,9 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
     _updateDimensions: function() {
         this.callBase();
-        this._topPocketSize = getHeight(this._$topPocket);
-        this._bottomPocketSize = getHeight(this._$bottomPocket);
+        this._topPocketSize = this._$topPocket.get(0).clientHeight;
 
-        this._scrollOffsetTopMax = this._getMaxOffset().top - this._bottomPocketSize;
+        this._scrollOffsetTopMax = Math.max(this._$scrollViewContent.get(0).clientHeight - this._$container.get(0).clientHeight, 0);
     },
 
     _allowedDirections: function() {
@@ -163,7 +160,7 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && Math.round(this._location + this._scrollOffsetTopMax) <= 1;
+        return this._reachBottomEnabled && Math.round(this._scrollOffsetTopMax + Math.floor(this._location)) <= 1;
     },
 
     _reachBottom: function() {
