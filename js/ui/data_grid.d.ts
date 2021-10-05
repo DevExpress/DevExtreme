@@ -3649,7 +3649,7 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     } | 'auto';
     /**
      * @docid
-     * @deprecated
+     * @deprecated dxDataGridOptions.dataRowTemplate
      * @type_function_param2 rowInfo:object
      * @type_function_param2_field1 key:any
      * @type_function_param2_field2 data:any
