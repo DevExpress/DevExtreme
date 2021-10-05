@@ -4,7 +4,6 @@ import BaseModule from './base';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 import ContextMenu from '../../context_menu';
-import { showTablePropertiesForm } from '../ui/tableForms';
 import localizationMessage from '../../../localization/message';
 import { getTableFormats } from '../utils/table_helper';
 import { getFormatHandlers, getDefaultClickHandler, ICON_MAP } from '../utils/toolbar_helper';
@@ -63,7 +62,7 @@ if(Quill) {
         showTableProperties(e) {
             const $table = $(this._targetElement).closest('table');
             this._contextMenu.hide();
-            this._popupForm = showTablePropertiesForm(this.editorInstance, $table);
+            this._formatHandlers['tableProperties']($table);
             this._targetElement = null;
         }
 

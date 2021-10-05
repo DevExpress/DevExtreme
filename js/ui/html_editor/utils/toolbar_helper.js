@@ -1,9 +1,8 @@
 import $ from '../../../core/renderer';
 import localizationMessage from '../../../localization/message';
-import { showTablePropertiesForm } from '../ui/tableForms';
-import { getTableOperationHandler, hasEmbedContent, unfixTableWidth, getAutoSizedElements, setLineElementsAttrValue, getLineElements } from './table_helper';
-// import { getTableOperationHandler, hasEmbedContent, unfixTableWidth, getColumnElements, getAutoSizedElements, setLineElementsAttrValue, getLineElements, getRowElements } from './table_helper';
+import { getTableOperationHandler, hasEmbedContent, unfixTableWidth, getColumnElements, getAutoSizedElements, setLineElementsAttrValue, getLineElements, getRowElements } from './table_helper';
 import { isDefined, isBoolean } from '../../../core/utils/type';
+import { each } from '../../../core/utils/iterator';
 
 import Form from '../../form';
 import ButtonGroup from '../../button_group';
@@ -92,11 +91,7 @@ function getFormatHandlers(module) {
         deleteRow: getTableOperationHandler(module.quill, 'deleteRow'),
         deleteTable: getTableOperationHandler(module.quill, 'deleteTable'),
         cellProperties: prepareShowCellProperties(module),
-        // tableProperties: prepareShowTableProperties(module),
-        tableProperties: () => {
-            const domNode = getTargetTableNode(module, 'table');
-            showTablePropertiesForm(module.editorInstance, $(domNode));
-        }
+        tableProperties: prepareShowTableProperties(module)
     };
 }
 
@@ -129,10 +124,51 @@ function prepareShowCellProperties(module) {
         promise.done((formData, event) => {
             module.saveValueChangeEvent(event);
             cellPropertiesFormConfig.applyHandler(formInstance);
+            formInstance.dispose();
         });
 
         promise.fail(() => {
             module.quill.focus();
+            formInstance.dispose();
+        });
+    };
+}
+
+function prepareShowTableProperties(module) {
+    return ($table) => {
+        if(!$table?.length) {
+            $table = $(getTargetTableNode(module, 'table'));
+        }
+
+        const tablePropertiesFormConfig = getTablePropertiesFormConfig(module.editorInstance, $table);
+
+        let formInstance;
+
+        module.editorInstance.formDialogOption({
+            'contentTemplate': (container) => {
+                const $content = $('<div>').appendTo(container);
+                const $form = $('<div>').appendTo($content);
+                module.editorInstance._createComponent($form, Form, tablePropertiesFormConfig.formOptions);
+                module.editorInstance._createComponent($content, ScrollView, {});
+                formInstance = $form.dxForm('instance');
+
+                return $content;
+            },
+            title: localizationMessage.format('dxHtmlEditor-tableProperties'),
+            minHeight: MIN_HEIGHT
+        });
+
+        const promise = module.editorInstance.showFormDialog();
+
+        promise.done((formData, event) => {
+            module.saveValueChangeEvent(event);
+            tablePropertiesFormConfig.applyHandler(formInstance);
+            formInstance.dispose();
+        });
+
+        promise.fail(() => {
+            module.quill.focus();
+            formInstance.dispose();
         });
     };
 }
@@ -396,6 +432,158 @@ function prepareInsertTableHandler(module) {
     };
 }
 
+function getTablePropertiesFormConfig(editorInstance, $table) {
+    const window = getWindow();
+    let alignmentEditorInstance;
+    let borderColorEditorInstance;
+    let backgroundColorEditorInstance;
+    const startTableWidth = getOuterWidth($table);
+    const tableStyles = window.getComputedStyle($table.get(0));
+    const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
+
+    const formOptions = {
+        colCount: 2,
+        formData: {
+            width: startTableWidth,
+            height: getOuterHeight($table),
+            backgroundColor: tableStyles.backgroundColor,
+            borderStyle: tableStyles.borderStyle,
+            borderColor: tableStyles.borderColor,
+            borderWidth: parseInt(tableStyles.borderWidth),
+            alignment: startTextAlign
+        },
+        items: [{
+            itemType: 'group',
+            caption: localizationMessage.format('dxHtmlEditor-border'),
+            colCountByScreen: {
+                xs: 2
+            },
+            colCount: 2,
+            items: [
+                {
+                    dataField: 'borderStyle',
+                    label: { text: localizationMessage.format('dxHtmlEditor-style') },
+                    editorType: 'dxSelectBox',
+                    editorOptions: {
+                        items: BORDER_STYLES,
+                        placeholder: 'Select style'
+                    }
+                },
+                {
+                    dataField: 'borderWidth',
+                    label: { text: localizationMessage.format('dxHtmlEditor-borderWidth') },
+                    editorOptions: {
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                    }
+                },
+                {
+                    itemType: 'simple',
+                    dataField: 'borderColor',
+                    label: { text: localizationMessage.format('dxHtmlEditor-borderColor') },
+                    colSpan: 2,
+                    template: (e) => {
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ColorBox, {
+                            editAlphaChannel: true,
+                            value: e.component.option('formData').borderColor,
+                            onInitialized: (e) => {
+                                borderColorEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
+                    }
+                }
+            ]
+        }, {
+            itemType: 'group',
+            caption: localizationMessage.format('dxHtmlEditor-dimensions'),
+            colCountByScreen: {
+                xs: 2
+            },
+            colCount: 2,
+            items: [
+                {
+                    dataField: 'width',
+                    label: { text: localizationMessage.format('dxHtmlEditor-width') },
+                    editorOptions: {
+                        min: 0,
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                    }
+                },
+                {
+                    dataField: 'height',
+                    label: { text: localizationMessage.format('dxHtmlEditor-height') },
+                    editorOptions: {
+                        min: 0,
+                        placeholder: localizationMessage.format('dxHtmlEditor-dxHtmlEditor-pixels')
+                    }
+                }
+            ]
+        }, {
+            itemType: 'group',
+            caption: localizationMessage.format('dxHtmlEditor-tableBackground'),
+            items: [
+                {
+                    itemType: 'simple',
+                    dataField: 'backgroundColor',
+                    label: { text: localizationMessage.format('dxHtmlEditor-borderColor') },
+                    template: (e) => {
+                        const $content = $('<div>');
+                        editorInstance._createComponent($content, ColorBox, {
+                            editAlphaChannel: true,
+                            value: e.component.option('formData').backgroundColor,
+                            onInitialized: (e) => {
+                                backgroundColorEditorInstance = e.component;
+                            }
+                        });
+                        return $content;
+                    }
+                }
+            ]
+        }, {
+            itemType: 'group',
+            caption: localizationMessage.format('dxHtmlEditor-alignment'),
+            items: [{
+                itemType: 'simple',
+                label: { text: localizationMessage.format('dxHtmlEditor-horizontal') },
+                template: () => {
+                    const $content = $('<div>');
+                    editorInstance._createComponent($content, ButtonGroup, {
+                        items: [{ value: 'left', icon: 'alignleft' }, { value: 'center', icon: 'aligncenter' }, { value: 'right', icon: 'alignright' }, { value: 'justify', icon: 'alignjustify' }],
+                        keyExpr: 'value',
+                        selectedItemKeys: [startTextAlign],
+                        onInitialized: (e) => {
+                            alignmentEditorInstance = e.component;
+                        }
+                    });
+                    return $content;
+                }
+            }]
+        }],
+        showColonAfterLabel: true,
+        labelLocation: 'top',
+        minColWidth: 300
+    };
+
+    const applyHandler = (formInstance) => {
+        const formData = formInstance.option('formData');
+        const widthArg = formData.width === startTableWidth ? undefined : formData.width;
+        applyTableDimensionChanges($table, formData.height, widthArg);
+        $table.css({
+            'backgroundColor': backgroundColorEditorInstance.option('value'),
+            'borderStyle': formData.borderStyle,
+            'borderColor': borderColorEditorInstance.option('value'),
+            'borderWidth': formData.borderWidth,
+            'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0]
+        });
+    };
+
+    return {
+        formOptions,
+        applyHandler
+    };
+}
+
 function getCellPropertiesFormConfig(editorInstance, $cell) {
     const window = getWindow();
     let alignmentEditorInstance;
@@ -589,47 +777,47 @@ function getCellPropertiesFormConfig(editorInstance, $cell) {
     };
 }
 
-// const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
-//     if(isDefined(newWidth)) {
-//         const autoWidthColumns = getAutoSizedElements($table);
+const applyTableDimensionChanges = ($table, newHeight, newWidth) => {
+    if(isDefined(newWidth)) {
+        const autoWidthColumns = getAutoSizedElements($table);
 
-//         if(autoWidthColumns.length > 0) {
-//             $table.css('width', newWidth);
-//         } else {
-//             const $columns = getColumnElements($table);
-//             const oldTableWidth = getOuterWidth($table);
+        if(autoWidthColumns.length > 0) {
+            $table.css('width', newWidth);
+        } else {
+            const $columns = getColumnElements($table);
+            const oldTableWidth = getOuterWidth($table);
 
-//             unfixTableWidth($table);
+            unfixTableWidth($table);
 
-//             each($columns, (i, element) => {
-//                 const $element = $(element);
-//                 const newElementWidth = newWidth / oldTableWidth * getOuterWidth($element);
-//                 $element.attr('width', newElementWidth);
+            each($columns, (i, element) => {
+                const $element = $(element);
+                const newElementWidth = newWidth / oldTableWidth * getOuterWidth($element);
+                $element.attr('width', newElementWidth);
 
-//                 const $lineElements = getLineElements($table, $element.index(), 'horizontal');
+                const $lineElements = getLineElements($table, $element.index(), 'horizontal');
 
-//                 setLineElementsAttrValue($lineElements, 'width', newElementWidth);
-//             });
-//         }
-//     }
+                setLineElementsAttrValue($lineElements, 'width', newElementWidth);
+            });
+        }
+    }
 
-//     const autoHeightRows = getAutoSizedElements($table, 'vertical');
+    const autoHeightRows = getAutoSizedElements($table, 'vertical');
 
-//     if(autoHeightRows?.length > 0) {
-//         $table.css('height', newHeight);
-//     } else {
-//         const $rows = getRowElements($table);
-//         const oldTableHeight = getOuterHeight($table);
+    if(autoHeightRows?.length > 0) {
+        $table.css('height', newHeight);
+    } else {
+        const $rows = getRowElements($table);
+        const oldTableHeight = getOuterHeight($table);
 
-//         each($rows, (i, element) => {
-//             const $element = $(element);
-//             const newElementHeight = newHeight / oldTableHeight * getOuterHeight($element);
-//             const $lineElements = getLineElements($table, i, 'vertical');
+        each($rows, (i, element) => {
+            const $element = $(element);
+            const newElementHeight = newHeight / oldTableHeight * getOuterHeight($element);
+            const $lineElements = getLineElements($table, i, 'vertical');
 
-//             setLineElementsAttrValue($lineElements, 'height', newElementHeight);
-//         });
-//     }
-// };
+            setLineElementsAttrValue($lineElements, 'height', newElementHeight);
+        });
+    }
+};
 
 function applyCellDimensionChanges($target, newHeight, newWidth) {
     const $table = $($target.closest('table'));
