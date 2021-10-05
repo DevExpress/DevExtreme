@@ -12,7 +12,7 @@ import errors from '../../widget/ui.errors';
 
 import WidgetCollector from './widget_collector';
 import { each } from '../../../core/utils/iterator';
-import { isString, isObject, isDefined, isEmptyObject, isBoolean } from '../../../core/utils/type';
+import { isString, isObject, isDefined, isEmptyObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import localizationMessage from '../../../localization/message';
 import { titleize, camelize } from '../../../core/utils/inflector';
@@ -21,7 +21,7 @@ import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/table_helper';
-import { getFormatHandlers } from '../utils/toolbar_helper';
+import { getFormatHandlers, getDefaultClickHandler, ICON_MAP } from '../utils/toolbar_helper';
 
 let ToolbarModule = BaseModule;
 
@@ -38,12 +38,6 @@ if(Quill) {
     const SELECTION_CHANGE_EVENT = 'selection-change';
 
     const USER_ACTION = 'user';
-
-
-    const ICON_MAP = { // todo
-        insertHeaderRow: 'header',
-        clear: 'clearformat'
-    };
 
     const localize = (name) => {
         return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
@@ -93,18 +87,6 @@ if(Quill) {
             this.updateFormatWidgets(isSelectionChanged);
             this.updateHistoryWidgets();
             this.updateTableWidgets();
-        }
-
-        _getDefaultClickHandler(name) {
-            return ({ event }) => {
-                const formats = this.quill.getFormat();
-                const value = formats[name];
-                const newValue = !(isBoolean(value) ? value : isDefined(value));
-
-                this._applyFormat([name, newValue, USER_ACTION], event);
-
-                this._updateFormatWidget(name, newValue, formats);
-            };
         }
 
         _updateFormatWidget(name, isApplied, formats) {
@@ -254,7 +236,7 @@ if(Quill) {
                     hint: localize(buttonText),
                     text: localize(buttonText),
                     icon: iconName.toLowerCase(),
-                    onClick: this._formatHandlers[name] || this._getDefaultClickHandler(name),
+                    onClick: this._formatHandlers[name] || getDefaultClickHandler(name, this),
                     stylingMode: 'text'
                 },
                 showText: 'inMenu'

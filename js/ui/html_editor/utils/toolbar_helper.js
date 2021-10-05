@@ -28,6 +28,11 @@ const DIALOG_IMAGE_FIELD_HEIGHT = 'dxHtmlEditor-dialogImageHeightField';
 const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
 const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
 
+const ICON_MAP = {
+    insertHeaderRow: 'header',
+    clear: 'clearformat'
+};
+
 function getFormatHandlers(module) {
     return {
         clear: ({ event }) => {
@@ -347,5 +352,6 @@ function prepareInsertTableHandler(module) {
 
 export {
     getFormatHandlers,
-    getDefaultClickHandler
+    getDefaultClickHandler,
+    ICON_MAP
 };

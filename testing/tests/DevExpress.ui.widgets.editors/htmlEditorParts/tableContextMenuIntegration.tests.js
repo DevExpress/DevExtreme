@@ -52,13 +52,18 @@ module('Table context menu integration', {
             this.quillInstance = this.instance.getQuillInstance();
         };
 
-        this.getSubmenuItems = (firstMenuItemIndex) => {
+        this.getContextMenu = () => {
             this.quillInstance.setSelection(50, 1);
             const $tableElement = this.$element.find('td').eq(5);
             $tableElement.trigger('dxcontextmenu');
             this.clock.tick();
 
-            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+            return $(CONTEXT_MENU_OVERLAY_SELECTOR);
+        };
+
+        this.getSubmenuItems = (firstMenuItemIndex) => {
+            const $contextMenu = this.getContextMenu();
+
             const $ItemsHasSubmenu = $contextMenu.find(`.${ITEM_HAS_SUBMENU_CLASS}`);
             $ItemsHasSubmenu.eq(firstMenuItemIndex).trigger('dxclick');
             this.clock.tick();
@@ -297,39 +302,32 @@ module('Table context menu integration', {
 
     module('Custom context menu', {}, () => {
         test('empty items array', function(assert) {
-            this.createWidget({ tableContextMenu: {
-                enabled: true,
-                items: []
-            }
+            this.createWidget({
+                tableContextMenu: {
+                    enabled: true,
+                    items: []
+                }
             });
 
-            this.quillInstance.setSelection(50, 1);
-            const $tableElement = this.$element.find('td').eq(5);
-            $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
-
-            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+            const $contextMenu = this.getContextMenu();
             const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
 
             assert.strictEqual($menuItems.length, 4, 'default items is used');
         });
 
         test('array of custom objects', function(assert) {
-            this.createWidget({ tableContextMenu: {
-                enabled: true,
-                items: [{
-                    text: 'test item 1'
-                }, {
-                    text: 'test item 2'
-                }]
-            } });
+            this.createWidget({
+                tableContextMenu: {
+                    enabled: true,
+                    items: [{
+                        text: 'test item 1'
+                    }, {
+                        text: 'test item 2'
+                    }]
+                }
+            });
 
-            this.quillInstance.setSelection(50, 1);
-            const $tableElement = this.$element.find('td').eq(5);
-            $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
-
-            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+            const $contextMenu = this.getContextMenu();
             const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
 
             assert.strictEqual($menuItems.length, 2, 'all items are rendered');
@@ -339,41 +337,35 @@ module('Table context menu integration', {
 
         test('custom items handler', function(assert) {
             assert.expect(1);
-            this.createWidget({ tableContextMenu: {
-                enabled: true,
-                items: [{
-                    text: 'test item 1'
-                }, {
-                    text: 'test item 2',
-                    onClick: () => {
-                        assert.ok(true, 'click handler is applied');
-                    }
-                }]
-            } });
+            this.createWidget({
+                tableContextMenu: {
+                    enabled: true,
+                    items: [{
+                        text: 'test item 1'
+                    }, {
+                        text: 'test item 2',
+                        onClick: () => {
+                            assert.ok(true, 'click handler is applied');
+                        }
+                    }]
+                }
+            });
 
-            this.quillInstance.setSelection(50, 1);
-            const $tableElement = this.$element.find('td').eq(5);
-            $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
-
-            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+            const $contextMenu = this.getContextMenu();
             const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
 
             $menuItems.eq(1).trigger('dxclick');
         });
 
         test('array of predefined strings is rendered', function(assert) {
-            this.createWidget({ tableContextMenu: {
-                enabled: true,
-                items: ['insertTable', 'tableProperties']
-            } });
+            this.createWidget({
+                tableContextMenu: {
+                    enabled: true,
+                    items: ['insertTable', 'tableProperties']
+                }
+            });
 
-            this.quillInstance.setSelection(50, 1);
-            const $tableElement = this.$element.find('td').eq(5);
-            $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
-
-            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+            const $contextMenu = this.getContextMenu();
             const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
 
             assert.strictEqual($menuItems.length, 2, 'all items are rendered');
@@ -382,17 +374,14 @@ module('Table context menu integration', {
         });
 
         test('array of predefined strings is usable', function(assert) {
-            this.createWidget({ tableContextMenu: {
-                enabled: true,
-                items: ['insertHeaderRow', 'tableProperties']
-            } });
+            this.createWidget({
+                tableContextMenu: {
+                    enabled: true,
+                    items: ['insertHeaderRow', 'tableProperties']
+                }
+            });
 
-            this.quillInstance.setSelection(50, 1);
-            const $tableElement = this.$element.find('td').eq(5);
-            $tableElement.trigger('dxcontextmenu');
-            this.clock.tick();
-
-            const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
+            const $contextMenu = this.getContextMenu();
             const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
 
             $menuItems.eq(0).trigger('dxclick');
@@ -404,12 +393,14 @@ module('Table context menu integration', {
         });
 
         test('array of predefined strings and custom objects', function(assert) {
-            this.createWidget({ tableContextMenu: {
-                enabled: true,
-                items: ['insertTable', {
-                    text: 'test item 1'
-                }]
-            } });
+            this.createWidget({
+                tableContextMenu: {
+                    enabled: true,
+                    items: ['insertTable', {
+                        text: 'test item 1'
+                    }]
+                }
+            });
 
             this.quillInstance.setSelection(50, 1);
             const $tableElement = this.$element.find('td').eq(5);
@@ -426,17 +417,19 @@ module('Table context menu integration', {
 
 
         test('array of predefined strings and custom objects with submenus', function(assert) {
-            this.createWidget({ tableContextMenu: {
-                enabled: true,
-                items: ['tableProperties', {
-                    text: 'Custom group',
-                    items: [
-                        'deleteColumn', {
-                            text: 'test item 1'
-                        }
-                    ]
-                }]
-            } });
+            this.createWidget({
+                tableContextMenu: {
+                    enabled: true,
+                    items: ['tableProperties', {
+                        text: 'Custom group',
+                        items: [
+                            'deleteColumn', {
+                                text: 'test item 1'
+                            }
+                        ]
+                    }]
+                }
+            });
 
             const $submenuItems = this.getSubmenuItems(0);
 
@@ -450,13 +443,14 @@ module('Table context menu integration', {
         });
 
         test('array with all types of predefined strings', function(assert) {
-            this.createWidget({ tableContextMenu: {
-                enabled: true,
-                items: ['insertTable', 'deleteColumn', 'cellProperties', 'undo', 'bold',
-                    'alignLeft', 'link', 'color', 'image', 'codeBlock', 'clear'
-                ]
-            } });
-
+            this.createWidget({
+                tableContextMenu: {
+                    enabled: true,
+                    items: ['insertTable', 'deleteColumn', 'cellProperties', 'undo', 'bold',
+                        'alignLeft', 'link', 'color', 'image', 'codeBlock', 'clear'
+                    ]
+                }
+            });
 
             this.quillInstance.setSelection(50, 1);
             const $tableElement = this.$element.find('td').eq(5);
