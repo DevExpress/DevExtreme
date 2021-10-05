@@ -34,13 +34,11 @@ export function getElementLocationInternal(
   const dimension = isVertical ? 'Height' : 'Width';
 
   // T162489
-  const relativeElementOffset = getRelativeOffset(targetElement.closest(`.${SCROLLABLE_CONTENT_CLASS}`), targetElement)[prop];
+  const relativeElementOffset = getRelativeOffset(SCROLLABLE_CONTENT_CLASS, targetElement)[prop];
   const containerScrollOffset = scrollOffset[prop];
 
   const containerSize: number = containerElement[`client${dimension}`];
-
-  const targetElementRect = targetElement.getBoundingClientRect();
-  const elementSize = targetElementRect[inverseProp] - targetElementRect[prop];
+  const elementSize = targetElement[`offset${dimension}`];
 
   const relativeStartOffset = containerScrollOffset - relativeElementOffset
     + additionalOffset[prop];
