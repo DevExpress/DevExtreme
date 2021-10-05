@@ -1786,9 +1786,9 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.on(events)]
      */
-    on(events: {
-      [key in DevExpress.data.DataSource.EventName]?: Function;
-    }): this;
+    on(
+      events: { [key in DevExpress.data.DataSource.EventName]?: Function }
+    ): this;
     /**
      * [descr:DataSource.pageIndex()]
      */
@@ -2465,9 +2465,11 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSource.on(events)]
      */
-    on(events: {
-      [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
-    }): this;
+    on(
+      events: {
+        [key in DevExpress.data.PivotGridDataSource.EventName]?: Function;
+      }
+    ): this;
     /**
      * [descr:PivotGridDataSource.reload()]
      */
