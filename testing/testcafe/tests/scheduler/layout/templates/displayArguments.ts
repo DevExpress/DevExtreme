@@ -31,7 +31,12 @@ testCases.forEach(({ timeZone, dataSource }) => {
       .ok();
 
     await t
-      .click(scheduler.getAppointmentByIndex(0).element);
+      .expect(await takeScreenshot(`template-display-arguments=${timeZone}.png`, scheduler.workSpace))
+      .ok();
+
+    await t
+      .click(scheduler.getAppointmentByIndex(0).element, { speed: 0.1 });
+
     await t
       .expect(await takeScreenshot(`on-appointment-click-display-arguments=${timeZone}.png`, scheduler.workSpace))
       .ok();
@@ -64,6 +69,6 @@ testCases.forEach(({ timeZone, dataSource }) => {
 
         return result;
       },
-    });
+    }, true);
   });
 });
