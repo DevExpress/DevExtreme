@@ -1,0 +1,69 @@
+name: TS Declarations
+
+concurrency:
+  group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches: [21_2]
+
+jobs:
+  integrity-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm install --no-audit --no-fund
+
+    - name: Validate declarations
+      run: |
+        target=./ts/dx.all.d.ts
+        cp $target $target.current
+
+        npm ls devextreme-internal-tools || :
+        
+        npm run validate-declarations
+        npm run update-ts
+        
+        if ! diff $target.current $target -U 5 > $target.diff; then
+            echo "FAIL: $target is outdated:"
+            cat $target.diff | sed "1,2d"
+            exit 1
+        else
+            echo "TS is up-to-date"
+        fi
+        
+        npm run validate-ts
+
+  notify:
+    runs-on: ubuntu-latest
+    name: Send notifications
+    needs: [integrity-check]
+    if: always() && contains(needs.*.result, 'failure')
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/send-teams-notification
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          run_id: ${{github.run_id}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
+          specific_branch: 21_2
