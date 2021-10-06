@@ -231,19 +231,24 @@ QUnit.module('onReachBottom', () => {
             { useNative: true, refreshStrategy: 'pullDown' },
             { useNative: true, refreshStrategy: 'swipeDown' },
         ].forEach(({ useNative, refreshStrategy }) => {
+            const cssStyles = {
+                transform: `scale(${browserZoom})`,
+                transformOrigin: '0 0',
+            };
             // T1032842
-            QUnit.test(`Start loading when reaching bottom boundary with zoom - ${browserZoom * 100}%: useNative - ${useNative}, refreshStrategy: ${refreshStrategy}`, function(assert) {
+            QUnit.test(`Start loading when reaching bottom boundary with wrapperStyles: ${JSON.stringify(cssStyles)}, useNative: ${useNative}, refreshStrategy: ${refreshStrategy}`, function(assert) {
                 assert.expect(1);
                 const done = assert.async();
 
                 const $scrollView = $('<div>');
                 const $scrollViewWrapper = $scrollView.wrap('<div>').parent();
+                const $contentWrapper = $('<div>').appendTo($scrollView);
                 for(let i = 0; i < 30; i++) {
-                    $scrollView.append($('<div>').addClass('item').text(`item${i}`).css({ height: 33, width: '100%' }));
+                    $contentWrapper.append($('<div>').addClass('item').text(`item${i}`).css({ height: 33, width: '100%' }));
                 }
-                $scrollViewWrapper.appendTo('#qunit-fixture');
 
-                $scrollViewWrapper.get(0).style.zoom = browserZoom;
+                $scrollViewWrapper.appendTo('#qunit-fixture');
+                $scrollViewWrapper.css(cssStyles);
 
                 const scrollView = $scrollView.dxScrollView({
                     useNative,
