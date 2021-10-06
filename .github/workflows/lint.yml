@@ -71,7 +71,6 @@ jobs:
         target=./ts/dx.all.d.ts
         cp $target $target.current
 
-        npm update devextreme-internal-tools
         npm ls devextreme-internal-tools || :
         
         npm run validate-declarations
