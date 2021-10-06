@@ -196,6 +196,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok(rowsViewWrapper.getDataRow(4).isFocusedRow(), 'Focused row');
+        if(devices.real().android) {
+            assert.ok(true, 'It\'s a bug under Android only');
+            return;
+        }
         assert.ok(rowsViewWrapper.isRowVisible(4, 1), 'Navigation row is visible');
     });
 
@@ -3471,15 +3475,42 @@ QUnit.module('View\'s focus', {
         const $inputElement = $(this.dataGrid.element()).find('input');
 
         // act
+        $inputElement.trigger('dxpointerdown');
+        this.clock.tick();
         $inputElement.focus();
         this.clock.tick();
-        $inputElement.trigger('dxpointerdown').trigger('dxclick');
+        $inputElement.trigger('dxclick');
         this.clock.tick();
 
         // assert
-        assert.ok($inputElement.closest('td').hasClass('dx-focused'), 'cell is marked as focused');
         assert.ok($inputElement.is(':focus'), 'input is focused');
     });
+
+    QUnit.testInActiveWindow('Cell with checkbox should be focused with other row (T1016005)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [{ id: 1 }],
+            keyExpr: 'id',
+            columns: ['id'],
+            selection: {
+                mode: 'multiple'
+            },
+            focusedRowEnabled: true,
+        });
+        this.clock.tick();
+
+        const $checkbox = $(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox');
+
+        // act
+        $checkbox.trigger('dxpointerdown').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok($checkbox.parents('tr').hasClass('dx-row-focused'), 'row is focused');
+        assert.ok(!$checkbox.parent('td').hasClass('dx-focused'), 'cell is not focused');
+        assert.ok($checkbox.parent('td').hasClass('dx-cell-focus-disabled'), 'cell focus is disabled');
+    });
+
 
     QUnit.testInActiveWindow('The expand button of the master cell should not lose its tabindex when a row in a detail grid is switched to editing mode (T969832)', function(assert) {
         // arrange
@@ -3634,7 +3665,9 @@ QUnit.module('View\'s focus', {
         for(let i = 0; i < 2; i++) {
             for(let j = 0; j < 2; j++) {
                 // act
-                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown').trigger('dxclick');
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown');
+                this.clock.tick();
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxclick');
                 this.clock.tick();
 
                 if(i === 0 && j === 0) {
@@ -3694,7 +3727,9 @@ QUnit.module('View\'s focus', {
                 }
 
                 // act
-                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown').trigger('dxclick');
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown');
+                this.clock.tick();
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxclick');
                 this.clock.tick();
 
                 // assert

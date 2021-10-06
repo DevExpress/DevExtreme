@@ -59,6 +59,14 @@ export { getRealElementWidth };
 ///#ENDDEBUG
 
 export const AreaItem = Class.inherit({
+    ctor: function(component) {
+        this.component = component;
+    },
+
+    option: function() {
+        return this.component.option.apply(this.component, arguments);
+    },
+
     _getRowElement: function(index) {
         const that = this;
         if(that._tableElement && that._tableElement.length > 0) {
@@ -289,14 +297,6 @@ export const AreaItem = Class.inherit({
         }
     },
 
-    ctor: function(component) {
-        this.component = component;
-    },
-
-    option: function() {
-        return this.component.option.apply(this.component, arguments);
-    },
-
     getRowsLength: function() {
         const that = this;
         if(that._tableElement && that._tableElement.length > 0) {
@@ -327,6 +327,7 @@ export const AreaItem = Class.inherit({
             totalHeight += values[i];
             that._setRowHeight(i, values[i]);
         }
+
         this._tableHeight = totalHeight;
         this._tableElement[0].style.height = totalHeight + 'px';
     },
@@ -400,30 +401,30 @@ export const AreaItem = Class.inherit({
         });
     },
 
-    groupWidth: function(value) {
-        if(value === undefined) {
-            return this._groupElement.width();
-        } else if(value >= 0) {
-            this._groupWidth = value;
-            return (this._groupElement[0].style.width = value + 'px');
-        } else {
-            return (this._groupElement[0].style.width = value);
-        }
+    setGroupWidth: function(value) {
+        this._getScrollable().option('width', value);
     },
 
-    groupHeight: function(value) {
-        if(value === undefined) {
-            return this._groupElement.height();
+    setGroupHeight: function(value) {
+        this._getScrollable().option('height', value);
+    },
+
+    getGroupHeight: function() {
+        return this._getGroupElementSize('height');
+    },
+
+    getGroupWidth: function() {
+        return this._getGroupElementSize('width');
+    },
+
+    _getGroupElementSize(dimension) {
+        const size = this.groupElement()[0].style[dimension];
+
+        if(size.indexOf('px') > 0) {
+            return parseFloat(size);
         }
 
-        this._groupHeight = null;
-
-        if(value >= 0) {
-            this._groupHeight = value;
-            this._groupElement[0].style.height = value + 'px';
-        } else {
-            this._groupElement[0].style.height = value;
-        }
+        return null;
     },
 
     groupElement: function() {
@@ -479,8 +480,8 @@ export const AreaItem = Class.inherit({
         that._fakeTable = null;
 
         that.disableVirtualMode();
-        that.groupWidth('100%');
-        that.groupHeight('auto');
+        that.setGroupWidth('100%');
+        that.setGroupHeight('auto');
 
         that.resetColumnsWidth();
 
@@ -511,7 +512,7 @@ export const AreaItem = Class.inherit({
         const rtlEnabled = that.option('rtlEnabled');
         const offsetStyleName = rtlEnabled ? 'right' : 'left';
         const tableElementOffset = parseFloat(that.tableElement()[0].style[offsetStyleName]);
-        const offset = getFakeTableOffset(scrollPos, tableElementOffset, that._tableWidth, that._groupWidth);
+        const offset = getFakeTableOffset(scrollPos, tableElementOffset, that._tableWidth, that.getGroupWidth());
         if(parseFloat(that._fakeTable[0].style[offsetStyleName]) !== offset) {
             that._fakeTable[0].style[offsetStyleName] = offset + 'px';
         }
@@ -520,7 +521,7 @@ export const AreaItem = Class.inherit({
     _moveFakeTableTop: function(scrollPos) {
         const that = this;
         const tableElementOffsetTop = parseFloat(that.tableElement()[0].style.top);
-        const offsetTop = getFakeTableOffset(scrollPos, tableElementOffsetTop, that._tableHeight, that._groupHeight);
+        const offsetTop = getFakeTableOffset(scrollPos, tableElementOffsetTop, that._tableHeight, that.getGroupHeight());
 
         if(parseFloat(that._fakeTable[0].style.top) !== offsetTop) {
             that._fakeTable[0].style.top = offsetTop + 'px';

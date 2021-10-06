@@ -2505,6 +2505,39 @@ QUnit.module('keyboard navigation', {
         const $applyButton = this.instance._popup.$wrapper().find('.dx-button.dx-popup-done');
         assert.ok($applyButton.hasClass('dx-state-focused'), 'the apply button is focused');
     });
+
+    QUnit.test('keyboard event handlers passed from a config', function(assert) {
+        const keyDownStub = sinon.stub();
+        const keyUpStub = sinon.stub();
+
+        this.instance.dispose();
+        this.reinit({
+            onKeyDown: keyDownStub,
+            onKeyUp: keyUpStub
+        });
+
+        this.keyboard
+            .focus()
+            .type('a');
+
+        assert.ok(keyDownStub.calledOnce, 'keydown handled');
+        assert.ok(keyUpStub.calledOnce, 'keyup handled');
+    });
+
+    QUnit.test('keyboard event handlers added dynamically', function(assert) {
+        const keyDownStub = sinon.stub();
+        const keyUpStub = sinon.stub();
+
+        this.instance.on('keyDown', keyDownStub);
+        this.instance.on('keyUp', keyUpStub);
+
+        this.keyboard
+            .focus()
+            .type('a');
+
+        assert.ok(keyDownStub.calledOnce, 'keydown handled');
+        assert.ok(keyUpStub.calledOnce, 'keyup handled');
+    });
 });
 
 QUnit.module('keyboard navigation through tags', {
@@ -4956,17 +4989,21 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
 QUnit.module('options changing', moduleSetup, () => {
     ['readOnly', 'disabled'].forEach((optionName) => {
         QUnit.test(`Typing events should be rerendered after ${optionName} option enabled (T986220)`, function(assert) {
-            const tagBox = $('#tagBox').dxTagBox({
+            const $element = $('#tagBox');
+            const tagBox = $element.dxTagBox({
                 items: [1, 2],
                 value: [1],
                 searchEnabled: true
             }).dxTagBox('instance');
-            const typingEventsRenderSpy = sinon.spy(tagBox, '_renderTypingEvent');
 
             tagBox.option(optionName, true);
             tagBox.option(optionName, false);
 
-            assert.strictEqual(typingEventsRenderSpy.callCount, 1);
+            keyboardMock($element.find(`.${TEXTBOX_CLASS}`))
+                .focus()
+                .keyDown('backspace');
+
+            assert.deepEqual(tagBox.option('value'), []);
         });
     });
 });

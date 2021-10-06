@@ -1307,7 +1307,7 @@ export default {
             })(),
             data: {
                 _isCellChanged: function(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
-                    const cell = oldRow.cells[columnIndex];
+                    const cell = oldRow.cells?.[columnIndex];
                     const oldValidationStatus = cell && cell.validationStatus;
                     const validatingController = this.getController('validating');
                     const validationResult = validatingController.getCellValidationResult({
@@ -1318,8 +1318,12 @@ export default {
                     const newValidationStatus = validationResultIsValid(validationResult) ? validationResult.status : validationResult;
                     const rowIsModified = JSON.stringify(newRow.modifiedValues) !== JSON.stringify(oldRow.modifiedValues);
                     const cellIsMarkedAsInvalid = $(cell?.cellElement).hasClass(this.addWidgetPrefix(INVALIDATE_CLASS));
+                    const editingChanged = oldRow.isEditing !== newRow.isEditing;
+                    const hasValidationRules = cell?.column.validationRules?.length;
 
-                    if((oldValidationStatus !== newValidationStatus && rowIsModified) || (validationData.isValid && cellIsMarkedAsInvalid)) {
+                    if((editingChanged && hasValidationRules) ||
+                        (oldValidationStatus !== newValidationStatus && rowIsModified) ||
+                        (validationData.isValid && cellIsMarkedAsInvalid)) {
                         return true;
                     }
 

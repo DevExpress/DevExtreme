@@ -33,7 +33,6 @@ import {
     isExpectedItem,
     isFullPathContainsTabs,
     getItemPath,
-    getLabelWidthByText
 } from './ui.form.utils';
 
 import '../validation_summary';
@@ -268,7 +267,7 @@ const Form = Widget.inherit({
         return '.' + fieldItemClass + cssExcludeTabbedSelector + childLabelContentSelector;
     },
 
-    _getLabelText: function(labelText) {
+    _getLabelInnerHTML: function(labelText) {
         const length = labelText.children.length;
         let child;
         let result = '';
@@ -276,6 +275,8 @@ const Form = Widget.inherit({
 
         for(i = 0; i < length; i++) {
             child = labelText.children[i];
+            // Was introduced in https://hg/mobile/rev/1f81a5afaab3 , "dxForm: fix test cafe tests":
+            // It's not clear why "$labelTexts[i].children[0].innerHTML" doesn't meet the needs.
             result = result + (!isEmpty(child.innerText) ? child.innerText : child.innerHTML);
         }
 
@@ -290,12 +291,12 @@ const Form = Widget.inherit({
         let maxWidth = 0;
 
         for(i = 0; i < $labelTextsLength; i++) {
-            labelWidth = getLabelWidthByText(
-                layoutManager._getRenderLabelOptions({
-                    text: this._getLabelText($labelTexts[i]),
-                    location: this._labelLocation(),
-                })
-            );
+            labelWidth = layoutManager._getLabelWidthByInnerHTML({
+                // _hiddenLabelText was introduced in https://hg/mobile/rev/27b4f57f10bb , "dxForm: add alignItemLabelsInAllGroups and fix type script"
+                // It's not clear why $labelTexts.offsetWidth doesn't meet the needs
+                innerHTML: this._getLabelInnerHTML($labelTexts[i]),
+                location: this._labelLocation(),
+            });
             if(labelWidth > maxWidth) {
                 maxWidth = labelWidth;
             }
@@ -813,9 +814,10 @@ const Form = Widget.inherit({
                     this._resetValues();
                 }
                 break;
+            case 'onFieldDataChanged':
+                break;
             case 'items':
             case 'colCount':
-            case 'onFieldDataChanged':
             case 'onEditorEnterKey':
             case 'labelLocation':
             case 'alignItemLabels':
