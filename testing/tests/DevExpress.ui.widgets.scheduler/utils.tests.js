@@ -2,6 +2,8 @@
 
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
 import timeZoneDataUtils from 'ui/scheduler/timezones/utils.timezones_data';
+import { utils } from 'ui/scheduler/utils';
+import { replaceWrongEndDate } from 'ui/scheduler/appointments/dataProvider/utils';
 
 const { test, module } = QUnit;
 
@@ -71,5 +73,55 @@ module('Time zone utils', {}, () => {
         const result = timeZoneUtils.isEqualLocalTimeZoneByDeclaration('Brazil/Acre', new Date(2021, 6, 6));
 
         assert.notOk(result, 'local time zone shouldn\'t equal to \'Brazil/Acre\'');
+    });
+});
+
+module('Date utils', () => {
+    test('"replaceWrongEndDate" should process endDate correctly', function(assert) {
+        [
+            {
+                data: {
+                    startDate: new Date(2019, 4, 3, 12),
+                    allDay: false
+                },
+                expectedEndDate: new Date(2019, 4, 3, 12, 30)
+            },
+            {
+                data: {
+                    startDate: new Date(2019, 4, 3, 12),
+                    allDay: false,
+                    endDate: new Date('string')
+                },
+                expectedEndDate: new Date(2019, 4, 3, 12, 30)
+            },
+            {
+                data: {
+                    startDate: new Date(2019, 4, 3, 12),
+                    allDay: true
+                },
+                expectedEndDate: new Date(2019, 4, 3, 23, 59)
+            }
+        ].forEach(testCase => {
+            const dataAccessors = utils.dataAccessors.create(
+                {
+                    startDate: 'startDate',
+                    endDate: 'endDate',
+                    allDay: 'allDay',
+                },
+                undefined,
+                true
+            );
+
+            replaceWrongEndDate(
+                testCase.data,
+                new Date(2019, 4, 3, 12),
+                testCase.data.endDate,
+                30,
+                dataAccessors
+            );
+
+            assert.equal(testCase.data.endDate.getHours(), testCase.expectedEndDate.getHours(), 'replaced endDate is ok');
+            assert.equal(testCase.data.endDate.getMinutes(), testCase.expectedEndDate.getMinutes(), 'replaced endDate is ok');
+        });
     });
 });
