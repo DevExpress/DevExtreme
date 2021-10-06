@@ -5,7 +5,7 @@ import BaseRenderingStrategy from './strategy.base';
 import { ExpressionUtils } from '../../expressionUtils';
 import { groupAppointmentsByResources } from '../../resources/utils';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
-import { replaceWrongEndDate, getAppointmentTakesSeveralDays } from '../DataProvider/utils';
+import { replaceWrongEndDate, getAppointmentTakesSeveralDays } from '../dataProvider/utils';
 
 class AgendaRenderingStrategy extends BaseRenderingStrategy {
     get instance() { return this.options.instance; }
