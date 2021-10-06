@@ -26,14 +26,15 @@ testCases.forEach(({ timeZone, dataSource }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(await takeScreenshot(`template-display-arguments=${timeZone}.png`, scheduler.workSpace))
-      .ok();
+    // await t
+    // eslint-disable-next-line max-len
+    //   .expect(await takeScreenshot(`template-display-arguments=${timeZone}.png`, scheduler.workSpace))
+    //   .ok();
 
     await t
       .click(scheduler.getAppointmentByIndex(0).element);
     await t
-      .expect(await takeScreenshot(`on-appointment-click-display-arguments=${timeZone}.png`, scheduler.workSpace))
+      .expect(await takeScreenshot(`on-appointment-click-display-arguments=${timeZone}.png`))
       .ok();
 
     await t.expect(compareResults.isValid())
@@ -56,6 +57,14 @@ testCases.forEach(({ timeZone, dataSource }) => {
 
         $('.container').prepend(result);
       }),
+      appointmentTooltipTemplate: (model) => {
+        const data = model.targetedAppointmentData;
+
+        const result = $('<b />');
+        result.append(`${data.displayStartDate} ${data.displayEndDate}`);
+
+        return result;
+      },
       appointmentTemplate: (model) => {
         const data = model.targetedAppointmentData;
 
