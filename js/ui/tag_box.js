@@ -224,11 +224,8 @@ const TagBox = SelectBox.inherit({
         return this.callBase();
     },
 
-    _getLabelOptions: function() {
-        return {
-            editor: this,
-            container: this._$tagsContainer
-        };
+    _getLabelContainer: function() {
+        return this._$tagsContainer;
     },
 
     _scrollContainer: function(direction) {
