@@ -923,4 +923,29 @@ $scheduler-month-date-text-padding: 6px;
       height: 50px;
     }
   }
+
+
+  ////////
+
+  .dx-scheduler-header-tables-container,
+  .dx-scheduler-header-scrollable,
+  .dx-scheduler-date-table-scrollable,
+  .dx-scheduler-date-table-container {
+    width: 100%;
+  }
+
+  .dx-scheduler-header-tables-container,
+  .dx-scheduler-date-table-scrollable {
+    flex-shrink: 1;
+  }
+
+  .dx-scheduler-header-scrollable .dx-scrollable-content,
+  .dx-scheduler-date-table-scrollable .dx-scrollable-content {
+    min-width: 100%;
+  }
+
+  .dx-scheduler-date-table-cell,
+  .dx-scheduler-header-panel-cell {
+    flex-shrink: 0;
+  }
 }
