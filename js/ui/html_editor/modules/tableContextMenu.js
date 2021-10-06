@@ -138,6 +138,7 @@ if(Quill) {
             return {
                 target: this._quillContainer,
                 showEvent: null,
+                hideOnParentScroll: false,
                 items: customItems
             };
         }
