@@ -1,7 +1,7 @@
 import HorizontalAppointmentsStrategy from './strategy_horizontal';
 import dateUtils from '../../../../core/utils/date';
 import query from '../../../../data/query';
-import { sortAppointmentsByStartDate } from '../DataProvider/utils';
+import { sortAppointmentsByStartDate } from '../dataProvider/utils';
 
 const HOURS_IN_DAY = 24;
 const MINUTES_IN_HOUR = 60;
