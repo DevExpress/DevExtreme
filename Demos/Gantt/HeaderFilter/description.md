@@ -1,13 +1,12 @@
-A header filter allows users to select values from a predefined set and filter rows by these values. The values are listed in a pop-up menu. To open this menu, users can click header filter icons in column headers.
+The DevExtreme JavaScript **Gantt** component allows users to filter a particular column by values listed in a pop-up menu. To open this menu, click the filter icon in the column header.
+## Display Header Filter Icons
 
-### Display Header Filter Icons
+Set the **headerFilter**.[visible](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/headerFilter/#visible) property to **true** to display filter icons for all columns. To hide the filter icon for a specific column, disable that column’s [allowHeaderFilter](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/#allowHeaderFiltering) property.
 
-Enable the **headerFilter**.[visible](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/headerFilter/#visible) property to display header filter icons for all columns. If you want to hide the icon for a specific column, disable the column's [allowHeaderFiltering](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/#allowHeaderFiltering) property.
+## Enable Search in Header Filters
 
-### Enable Search Within Header Filters
+Users can search for values in a header filter. To display the search bar, set the [allowSearch](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/headerFilter/#allowSearch) property to **true** in the global [headerFilter](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/headerFilter/) object or in a column’s [headerFilter](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/headerFilter/) object. At the column level, use the [SearchMode](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/headerFilter/#searchMode) property to specify the comparison type.
 
-Users can search values within header filters. To display the search bar, assign **true** to the [allowSearch](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/headerFilter/#allowSearch) property in the global [headerFilter](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/headerFilter/) object.
+## Change Available Filter Values
 
-### Change Available Filter Values
-
-Filter values are generated automatically based on column values.
+A header filter consists of unique values in its column. To change the filter values, group them with the [groupInterval](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/headerFilter/#groupInterval) property or bind the [data source](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/headerFilter/#dataSource) to this header filter.
