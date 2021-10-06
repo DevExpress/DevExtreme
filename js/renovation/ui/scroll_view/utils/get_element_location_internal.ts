@@ -34,6 +34,7 @@ export function getElementLocationInternal(
   const dimension = isVertical ? 'height' : 'width';
 
   const containerOffsetSize: number = containerElement[`offset${titleize(dimension)}`];
+  const containerClientSize: number = containerElement[`client${titleize(dimension)}`];
   const containerSize = containerElement.getBoundingClientRect()[dimension];
   const elementSize = targetElement.getBoundingClientRect()[dimension];
 
@@ -58,7 +59,7 @@ export function getElementLocationInternal(
     + additionalOffset[prop];
   const relativeEndOffset = containerScrollOffset - relativeElementOffset
     - elementSize / scale
-    + containerOffsetSize
+    + containerClientSize
     - additionalOffset[inverseProp];
 
   if (relativeStartOffset <= 0 && relativeEndOffset >= 0) {
