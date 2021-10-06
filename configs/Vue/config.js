@@ -2,29 +2,29 @@ window.config = {
   transpiler: 'plugin-babel',
   meta: {
     '*.vue': {
-      loader: 'vue-loader'
+      loader: 'vue-loader',
     },
     'devextreme/localization.js': {
-      "esModule": true
+      'esModule': true,
     },
     /** devextreme-aspnet-data-nojquery */
     'devextreme-aspnet-data-nojquery': {
-      'esModule': true
+      'esModule': true,
     },
     /**/
     /** vectormap */
     'devextreme/dist/js/vectormap-data/*': {
-      'esModule': true
+      'esModule': true,
     },
     /**/
     /** exceljs&file-saver */
     'exceljs': {
-      "esModule": true
+      'esModule': true,
     },
     /**/
   },
   paths: {
-    'npm:': '../../../../../node_modules/'
+    'npm:': '../../../../../node_modules/',
   },
   map: {
     'vue': 'npm:vue/dist/vue.esm-browser.js',
@@ -113,57 +113,57 @@ window.config = {
     'inferno-extras': 'npm:inferno-extras/dist/inferno-extras.min.js',
 
     'plugin-babel': 'npm:systemjs-plugin-babel/plugin-babel.js',
-    'systemjs-babel-build': 'npm:systemjs-plugin-babel/systemjs-babel-browser.js'
+    'systemjs-babel-build': 'npm:systemjs-plugin-babel/systemjs-babel-browser.js',
   },
   packages: {
     'devextreme-vue': {
-      main: 'index.js'
+      main: 'index.js',
     },
     'devextreme': {
-      defaultExtension: 'js'
+      defaultExtension: 'js',
     },
     '@devextreme/vdom': {
-      defaultExtension: 'js'
+      defaultExtension: 'js',
     },
     'devextreme/events/utils': {
-      main: 'index'
+      main: 'index',
     },
     'devextreme/events': {
-      main: 'index'
+      main: 'index',
     }/** globalize--vue&react */,
     'globalize': {
       main: '../globalize.js',
-      defaultExtension: 'js'
+      defaultExtension: 'js',
     },
     'cldr': {
       main: '../cldr.js',
-      defaultExtension: 'js'
+      defaultExtension: 'js',
     }/**//** globalize */,
     'globalize': {
       main: '../globalize.js',
-      defaultExtension: 'js'
+      defaultExtension: 'js',
     },
     'cldr': {
       main: '../cldr.js',
-      defaultExtension: 'js'
-    }/**//**signalr */,
+      defaultExtension: 'js',
+    }/**//** signalr */,
     '@aspnet/signalr': {
       main: 'index.js',
-      defaultExtension: 'js'
+      defaultExtension: 'js',
     }/**/,
     'es6-object-assign': {
       main: './index.js',
-      defaultExtension: 'js'
-    }
+      defaultExtension: 'js',
+    },
   },
   packageConfigPaths: [
-    "npm:@devextreme/*/package.json",
-    "npm:@devextreme/runtime/inferno/package.json"
+    'npm:@devextreme/*/package.json',
+    'npm:@devextreme/runtime/inferno/package.json',
   ],
   babelOptions: {
     sourceMaps: false,
-    stage0: true
-  }
+    stage0: true,
+  },
 };
 
 System.config(window.config);
