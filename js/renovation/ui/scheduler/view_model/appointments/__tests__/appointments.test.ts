@@ -8,11 +8,6 @@ import { CellsMetaData, ViewDataProviderType } from '../../../workspaces/types';
 import { getAppointmentsViewModel } from '../appointments';
 import { getAppointmentsModel } from '../../../model/appointments';
 import { compileGetter, compileSetter } from '../../../../../../core/utils/data';
-import {
-  createFactoryInstances,
-  generateKey,
-  getAppointmentDataProvider,
-} from '../../../../../../ui/scheduler/instanceFactory';
 import { createTimeZoneCalculator } from '../../../common';
 
 const defaultDataAccessors: DataAccessorType = {
@@ -21,8 +16,8 @@ const defaultDataAccessors: DataAccessorType = {
     endDate: compileGetter('endDate') as any,
   },
   setter: {
-    startDate: compileSetter('startDate'),
-    endDate: compileSetter('endDate'),
+    startDate: compileSetter('startDate') as any,
+    endDate: compileSetter('endDate') as any,
   },
   expr: {
     startDateExpr: 'startDate',
@@ -35,9 +30,7 @@ const prepareInstances = (
   currentDate: Date,
   intervalCount: number,
 ): {
-  key: number;
   timeZoneCalculator: any; // TODO add TimeZoneCalculator to the renovation
-  appointmentDataProvider: any; // TODO add AppointmentDataProvider to the renovation
   schedulerProps: SchedulerProps;
   workspaceProps: WorkSpaceProps;
   viewDataProvider: ViewDataProviderType;
@@ -55,9 +48,9 @@ const prepareInstances = (
   const viewDataProvider = (new ViewDataProvider('week') as unknown) as ViewDataProviderType;
   const viewRenderConfig = getViewRenderConfigByType(
     workspaceProps.type,
-    false,
+    workspaceProps.crossScrollingEnabled,
     workspaceProps.intervalCount,
-    false,
+    workspaceProps.groupOrientation === 'vertical',
   );
   const generationOptions = prepareGenerationOptions(
     workspaceProps,
@@ -90,17 +83,10 @@ const prepareInstances = (
     ],
   };
 
-  const key = generateKey();
-  createFactoryInstances({
-    key,
-    getIsVirtualScrolling: () => false,
-    getDataAccessors: () => defaultDataAccessors,
-  });
+  const timeZoneCalculator = createTimeZoneCalculator('');
 
   return {
-    key,
-    timeZoneCalculator: createTimeZoneCalculator(''),
-    appointmentDataProvider: getAppointmentDataProvider(key),
+    timeZoneCalculator,
     viewDataProvider,
     schedulerProps,
     workspaceProps,
@@ -116,12 +102,10 @@ describe('Appointments view model', () => {
   );
 
   const appointmentsModel = getAppointmentsModel(
-    instances.key,
     instances.schedulerProps,
     instances.workspaceProps,
     instances.viewDataProvider,
     instances.timeZoneCalculator,
-    instances.appointmentDataProvider,
     defaultDataAccessors,
     instances.DOMMetaData,
   );

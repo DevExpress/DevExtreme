@@ -15,7 +15,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
 
     calculateAppointmentWidth(appointment, position) {
         const cellWidth = this.cellWidth || this.getAppointmentMinSize();
-        const allDay = ExpressionUtils.getField(this.key, 'allDay', appointment);
+        const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointment);
         const startDate = position.info.appointment.startDate;
         const { normalizedEndDate } = position.info.appointment;
 
@@ -97,7 +97,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     isAllDay(appointmentData) {
-        return ExpressionUtils.getField(this.key, 'allDay', appointmentData);
+        return ExpressionUtils.getField(this.dataAccessors, 'allDay', appointmentData);
     }
 
     _isItemsCross(firstItem, secondItem) {

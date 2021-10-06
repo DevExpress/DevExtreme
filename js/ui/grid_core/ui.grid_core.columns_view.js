@@ -194,8 +194,9 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $cell;
     },
 
-    _createRow: function(rowObject) {
-        const $element = $('<tr>').addClass(ROW_CLASS);
+    _createRow: function(rowObject, tagName) {
+        tagName = tagName || 'tr';
+        const $element = $(`<${tagName}>`).addClass(ROW_CLASS);
         this.setAria('role', 'row', $element);
         return $element;
     },
@@ -480,7 +481,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _wrapRowIfNeed: function($table, $row) {
-        const $tBodies = this.option('rowTemplate') && this._getBodies(this._tableElement || $table);
+        const hasDataRowTemplate = this.option().rowTemplate || this.option('dataRowTemplate');
+        const $tBodies = hasDataRowTemplate && this._getBodies(this._tableElement || $table);
 
         if($tBodies && $tBodies.filter('.' + ROW_CLASS).length) {
             const $tbody = $('<tbody>').addClass($row.attr('class'));
@@ -1069,7 +1071,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         tableElement = tableElement || this.getTableElement();
 
         if(tableElement) {
-            const tBodies = this.option('rowTemplate') && tableElement.find('> tbody.' + ROW_CLASS);
+            const hasRowTemplate = this.option().rowTemplate || this.option('dataRowTemplate');
+            const tBodies = hasRowTemplate && tableElement.find('> tbody.' + ROW_CLASS);
 
             return tBodies && tBodies.length ? tBodies : tableElement.find('> tbody > ' + '.' + ROW_CLASS + ', > .' + ROW_CLASS);
         }

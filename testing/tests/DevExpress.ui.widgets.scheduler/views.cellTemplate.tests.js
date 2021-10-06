@@ -24,7 +24,6 @@ const moduleConfig = {
     }
 };
 
-
 module('CellTemplate tests', moduleConfig, () => {
     const dataCells = [{
         data: {
@@ -401,7 +400,7 @@ module('CellTemplate tests', moduleConfig, () => {
                     }, 'Resources option is ok');
                 });
 
-                test('dataCellTemplate should take cellElement with correct geometry(T453520)', function(assert) {
+                test('dataCellTemplate should take cellElement with correct geometry (T453520)', function(assert) {
                     assert.expect(4);
                     createWrapper({
                         currentView: 'week',
