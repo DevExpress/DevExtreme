@@ -5,7 +5,6 @@ import typeUtils from 'core/utils/type';
 import { Deferred } from 'core/utils/deferred';
 import fx from 'animation/fx';
 import 'ui/scheduler/ui.scheduler';
-import { createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 import { createExpressions } from 'ui/scheduler/resources/utils';
 
@@ -50,11 +49,6 @@ ExpressionUtils.setField = (_, field, obj, value) => {
 };
 
 const createInstance = (options = {}) => {
-    const key = createFactoryInstances({
-        getIsVirtualScrolling: () => false,
-        getDataAccessors: () => {}
-    });
-
     const createObserver = (renderingStrategy) => ({
         fire: (command, field, obj, value) => {
             switch(command) {
@@ -78,8 +72,6 @@ const createInstance = (options = {}) => {
                         top: field.top || 0,
                         empty: field.empty || false
                     };
-                case 'getAppointmentDataProvider':
-                    return getAppointmentDataProvider(key);
                 default:
                     break;
             }
@@ -87,7 +79,6 @@ const createInstance = (options = {}) => {
     });
 
     return $('#scheduler-appointments').dxSchedulerAppointments({
-        key,
         observer: createObserver(options.renderingStrategy),
         ...options,
         getResources: () => [],

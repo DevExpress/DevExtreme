@@ -799,7 +799,7 @@ export const selectionModule = {
                 },
 
                 _createRow: function(row) {
-                    const $row = this.callBase(row);
+                    const $row = this.callBase.apply(this, arguments);
 
                     if(row) {
                         const isSelected = !!row.isSelected;

@@ -1,42 +1,23 @@
 import ViewDataProvider from '../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { SchedulerProps } from '../../props';
-import { DataAccessorType, ViewType } from '../../types';
+import { ViewType } from '../../types';
 import { prepareGenerationOptions } from '../../workspaces/base/work_space';
 import { getViewRenderConfigByType } from '../../workspaces/base/work_space_config';
 import { WorkSpaceProps } from '../../workspaces/props';
 import { CellsMetaData, ViewDataProviderType } from '../../workspaces/types';
 import { getAppointmentsModel } from '../appointments';
-import { compileGetter, compileSetter } from '../../../../../core/utils/data';
 import {
   createFactoryInstances,
   generateKey,
-  getTimeZoneCalculator,
-  getAppointmentDataProvider,
 } from '../../../../../ui/scheduler/instanceFactory';
-
-const defaultDataAccessors: DataAccessorType = {
-  getter: {
-    startDate: compileGetter('startDate') as any,
-    endDate: compileGetter('endDate') as any,
-  },
-  setter: {
-    startDate: compileSetter('startDate'),
-    endDate: compileSetter('endDate'),
-  },
-  expr: {
-    startDateExpr: 'startDate',
-    endDateExpr: 'endDate',
-  },
-};
+import { createTimeZoneCalculator } from '../../common';
 
 const prepareInstances = (
   viewType: ViewType,
   currentDate: Date,
   intervalCount: number,
 ): {
-  key: number;
-  timeZoneCalculator: any; // TODO add TimeZoneCalculator to the renovation
-  appointmentDataProvider: any; // TODO add AppointmentDataProvider to the renovation
+  timeZoneCalculator: any;
   schedulerProps: SchedulerProps;
   workspaceProps: WorkSpaceProps;
   viewDataProvider: ViewDataProviderType;
@@ -54,7 +35,9 @@ const prepareInstances = (
   const viewDataProvider = (new ViewDataProvider('week') as unknown) as ViewDataProviderType;
   const viewRenderConfig = getViewRenderConfigByType(
     workspaceProps.type,
+    false,
     workspaceProps.intervalCount,
+    false,
   );
   const generationOptions = prepareGenerationOptions(
     workspaceProps,
@@ -62,46 +45,20 @@ const prepareInstances = (
     false,
   );
   viewDataProvider.update(generationOptions, true);
-  const DOMMetaData = {
-    allDayPanelCellsMeta: [],
-    dateTableCellsMeta: [
-      [],
-      [{
-        left: 0, top: 0, width: 100, height: 200,
-      }],
-      [], [], [], [], [], [], [], [], [],
-      [], [], [], [], [], [], [], [], [],
-      [ // Row #20
-        { }, { }, { }, { },
-        { // Cell #4
-          left: 100, top: 200, width: 50, height: 60,
-        },
-      ],
-      [],
-      [ // Row #22
-        { }, { }, { }, { }, { },
-        { // Cell #5
-          left: 100, top: 300, width: 50, height: 60,
-        },
-      ],
-    ],
-  };
 
   const key = generateKey();
   createFactoryInstances({
     key,
     getIsVirtualScrolling: () => false,
-    getDataAccessors: () => defaultDataAccessors,
+    getDataAccessors: () => ({ }),
   });
 
   return {
-    key,
-    timeZoneCalculator: getTimeZoneCalculator(key),
-    appointmentDataProvider: getAppointmentDataProvider(key),
+    timeZoneCalculator: createTimeZoneCalculator('America/Los_Angeles'),
     viewDataProvider,
     schedulerProps,
     workspaceProps,
-    DOMMetaData: DOMMetaData as any,
+    DOMMetaData: [] as any,
   };
 };
 
@@ -113,13 +70,11 @@ describe('Appointments model', () => {
   );
 
   const appointmentsModel = getAppointmentsModel(
-    instances.key,
     instances.schedulerProps,
     instances.workspaceProps,
     instances.viewDataProvider,
     instances.timeZoneCalculator,
-    instances.appointmentDataProvider,
-    defaultDataAccessors,
+    { } as any,
     instances.DOMMetaData,
   );
 
@@ -127,7 +82,6 @@ describe('Appointments model', () => {
     it('should contains correct appointment config', () => {
       expect(appointmentsModel)
         .toMatchObject({
-          key: 0,
           adaptivityEnabled: false,
           rtlEnabled: false,
           startDayHour: 0,
@@ -164,9 +118,6 @@ describe('Appointments model', () => {
     it('should contains correct instances', () => {
       expect(appointmentsModel.timeZoneCalculator)
         .toEqual(instances.timeZoneCalculator);
-
-      expect(appointmentsModel.appointmentDataProvider)
-        .toEqual(instances.appointmentDataProvider);
 
       expect(appointmentsModel.viewDataProvider)
         .toEqual(instances.viewDataProvider);

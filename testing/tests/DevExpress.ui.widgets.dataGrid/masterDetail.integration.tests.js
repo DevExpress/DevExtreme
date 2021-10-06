@@ -13,6 +13,7 @@ QUnit.testStart(function() {
             <div id="dataGrid">
                 <div data-options="dxTemplate: { name: 'testDetail' }"><p>Test Details</p></div>
                 <table data-options="dxTemplate: { name: 'testRowWithExpand' }"><tr class="dx-row"><td colspan="2">Row Content <em class="dx-command-expand dx-datagrid-expand">More info</em></td></tr></table>
+                <table data-options="dxTemplate: { name: 'testDataRowWithExpand' }"><tr><td colspan="2">Row Content <em class="dx-command-expand dx-datagrid-expand">More info</em></td></tr></table>
             </div>
         </div>
     `;
@@ -822,6 +823,99 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
         assert.strictEqual($rowElements.eq(1).children().first().text(), 'Test Details', 'row 1 content');
         assert.strictEqual($rowElements.eq(2).text(), 'Row Content More info', 'row 2 content');
         assert.strictEqual($rowElements.eq(3).text(), 'Row Content More info', 'row 3 content');
+    });
+
+    // T484419
+    QUnit.test('dataRowTemplate via dxTemplate should works with masterDetail template', function(assert) {
+    // arrange, act
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            dataSource: [
+                { name: 'First Grid Item' },
+                { name: 'Second Grid Item' },
+                { name: 'Third Grid Item' }
+            ],
+            columns: ['name'],
+            masterDetail: {
+                enabled: true,
+                template: 'testDetail'
+            },
+            dataRowTemplate: 'testDataRowWithExpand'
+        });
+
+
+        // act
+        $($(dataGrid.$element()).find('.dx-datagrid-expand').eq(0)).trigger('dxclick');
+
+        // assert
+        const $rowElements = $($(dataGrid.$element()).find('.dx-datagrid-rowsview').find('table > tbody.dx-row').find('tr'));
+        assert.strictEqual($rowElements.length, 5, 'row element count');
+        assert.strictEqual($rowElements.eq(0).text(), 'Row Content More info', 'row 0 content');
+        assert.strictEqual($rowElements.eq(1).children().first().text(), 'Test Details', 'row 1 content');
+        assert.strictEqual($rowElements.eq(2).text(), 'Row Content More info', 'row 2 content');
+        assert.strictEqual($rowElements.eq(3).text(), 'Row Content More info', 'row 3 content');
+    });
+
+    QUnit.test('master derail row should be rendered correctly if async dataRowTemplate is defined in react (T901222)', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, text: 'text 1' },
+                { id: 2, text: 'text 2' }
+            ],
+            keyExpr: 'id',
+            columns: ['text'],
+            dataRowTemplate: 'rowTemplate',
+            masterDetail: {
+                enabled: true,
+                template: 'masterDetail'
+            },
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    rowTemplate: {
+                        render({ container, model, onRendered }) {
+                            const data = model.data;
+                            const markup = '<tr class="my-row">' +
+                                    '<td>' + data.text + '</td>' +
+                                    '</tr>';
+
+                            commonUtils.deferUpdate(function() {
+                                container.append(markup);
+                                onRendered();
+                            });
+
+                            return container;
+                        }
+                    },
+                    masterDetail: {
+                        render({ container, model, onRendered }) {
+                            const markup = '<div class="my-detail">' + model.data.text + '<div>';
+
+                            commonUtils.deferUpdate(function() {
+                                container.append(markup);
+                                onRendered();
+                            });
+
+                            return container;
+                        }
+                    },
+                }
+            },
+        });
+
+        this.clock.tick();
+
+        // act
+        dataGrid.expandRow(1);
+        this.clock.tick();
+
+        const $rows = $(dataGrid.element()).find('tbody.dx-row');
+        assert.equal($rows.length, 3, 'row count');
+        assert.ok($rows.eq(0).hasClass('dx-data-row'), 'row 0 is data');
+        assert.equal($rows.eq(0).find('.my-row').text(), 'text 1', 'row 0 is rendered from dataRowTemplate');
+        assert.ok($rows.eq(1).hasClass('dx-master-detail-row'), 'row 1 is detail');
+        assert.equal($rows.eq(1).find('.my-detail').text(), 'text 1', 'row 1 is rendered from dataRowTemplate');
     });
 
     // T587150

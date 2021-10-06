@@ -1,9 +1,15 @@
 import { DxPromise } from '../core/utils/deferred';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 
+export type Options<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> = StoreOptions<TValue, TKeyExpr, TKey>;
+
 /** @namespace DevExpress.data */
-export interface StoreOptions
-<TValue = any,
+export interface StoreOptions<
+    TValue = any,
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
 > {
@@ -109,7 +115,7 @@ export default class Store
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
 > {
-    constructor(options?: StoreOptions<TValue, TKeyExpr, TKey>)
+    constructor(options?: Options<TValue, TKeyExpr, TKey>)
     /**
      * @docid
      * @publicName byKey(key)
