@@ -1010,7 +1010,6 @@ export const virtualScrollingModule = {
                         if(viewportParams && !isVirtualPaging(this) && pageSize > 0) {
                             const pageOffset = this.pageIndex() * pageSize;
                             viewportParams.skip += pageOffset;
-                            viewportParams.take = Math.min(viewportParams.take, pageSize);
                         }
                         this._loadViewportParams = viewportParams;
                     },
