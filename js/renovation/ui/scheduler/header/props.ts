@@ -12,7 +12,7 @@ import {
 } from '../../toolbar/toolbar_props';
 
 @ComponentBindings()
-class SchedulerToolbarItemProps extends ToolbarItem {
+export class SchedulerToolbarItemProps extends ToolbarItem {
   @OneWay()
   defaultElement?: 'dateNavigator' | 'viewSwitcher';
 

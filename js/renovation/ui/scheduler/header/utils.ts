@@ -53,7 +53,7 @@ export const formToolbarItem = (
           isNextButtonDisabled,
         );
       default:
-        throw new Error('Unknown default item in the shceduler\'s toolbar');
+        throw new Error('Unknown default item in the scheduler\'s toolbar'); // TODO: rework with a public api
     }
   }
 
