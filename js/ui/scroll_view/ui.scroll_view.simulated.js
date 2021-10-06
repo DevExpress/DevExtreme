@@ -71,7 +71,8 @@ const ScrollViewScroller = Scroller.inherit({
             const containerEl = this._$container.get(0);
             const contentEl = this._$content.get(0);
             const scrollTopMax = Math.max(contentEl.clientHeight - containerEl.clientHeight, 0);
-            this._scrollOffsetTopMax = scrollTopMax - this._topPocketSize - this._bottomPocketSize;
+
+            this._bottomBoundary = scrollTopMax - this._topPocketSize - this._bottomPocketSize;
         }
 
         this.callBase();
@@ -81,7 +82,7 @@ const ScrollViewScroller = Scroller.inherit({
         this._scrollbar.option({
             containerSize: this._containerSize(),
             contentSize: this._contentSize() - this._topPocketSize - this._bottomPocketSize,
-            // scaleRatio: this._getScaleRatio()
+            scaleRatio: this._getScaleRatio()
         });
     },
 
@@ -106,7 +107,9 @@ const ScrollViewScroller = Scroller.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && Math.round(this._scrollOffsetTopMax + Math.floor(this._location)) <= 1;
+        const containerEl = this._$container.get(0);
+
+        return this._reachBottomEnabled && Math.round(this._bottomBoundary - Math.ceil(containerEl.scrollTop)) <= 1;
     },
 
     _scrollComplete: function() {
