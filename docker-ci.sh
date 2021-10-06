@@ -15,7 +15,7 @@ function run_lint {
 function run_ts {
     echo 'Skipped'
     # This function is a stub for a Drone; it is a subject to remove in future
-    # Current implementation located in .github/workflows/lint.yml
+    # Current implementation located in .github/workflows/ts_declarations.yml
 }
 
 function run_test {
