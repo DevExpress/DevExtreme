@@ -1283,11 +1283,6 @@ class Diagram extends Widget {
     }
     _onShowContextToolbox(x, y, side, category, callback) {
         if(this._contextToolbox) {
-            const rect = this._diagramInstance.getBoundingClientRectangle();
-            if(rect) {
-                x -= rect.x;
-                y -= rect.y;
-            }
             this._contextToolbox._show(x, y, side, category, callback);
         }
     }
