@@ -47,10 +47,26 @@ const ValidationMessage = Overlay.inherit({
     _initMarkup() {
         this.callBase();
 
-        this.$element().addClass(INVALID_MESSAGE);
-        this.$wrapper().addClass(INVALID_MESSAGE);
+        this._ensureMessageNotEmpty();
         this._toggleModeClass();
         this._updateContentId();
+    },
+
+    _ensureMessageNotEmpty: function() {
+        this._textMarkup = this._getTextMarkup();
+
+        const shouldShowMessage = this.option('visible') && this._textMarkup;
+        this._toggleVisibilityClasses(shouldShowMessage);
+    },
+
+    _toggleVisibilityClasses: function(visible) {
+        if(visible) {
+            this.$element().addClass(INVALID_MESSAGE);
+            this.$wrapper().addClass(INVALID_MESSAGE);
+        } else {
+            this.$element().removeClass(INVALID_MESSAGE);
+            this.$wrapper().removeClass(INVALID_MESSAGE);
+        }
     },
 
     _updateContentId() {
@@ -64,9 +80,8 @@ const ValidationMessage = Overlay.inherit({
 
     _renderInnerHtml(element) {
         const $element = element && $(element);
-        const textMarkup = this._getTextMarkup();
 
-        $element?.html(textMarkup);
+        $element?.html(this._textMarkup);
     },
 
     _getTextMarkup() {
@@ -146,6 +161,7 @@ const ValidationMessage = Overlay.inherit({
                 this._updateContentId();
                 break;
             case 'validationErrors':
+                this._ensureMessageNotEmpty();
                 this._renderInnerHtml(this.$content());
                 break;
             default:
