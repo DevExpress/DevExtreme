@@ -1005,10 +1005,12 @@ export const virtualScrollingModule = {
                     },
                     _updateLoadViewportParams: function() {
                         const viewportParams = this._rowsScrollController.getViewportParams();
+                        const pageSize = this.pageSize();
 
-                        if(viewportParams && !isVirtualPaging(this)) {
-                            const pageOffset = this.pageIndex() * this.pageSize();
+                        if(viewportParams && !isVirtualPaging(this) && pageSize > 0) {
+                            const pageOffset = this.pageIndex() * pageSize;
                             viewportParams.skip += pageOffset;
+                            viewportParams.take = Math.min(viewportParams.take, pageSize);
                         }
                         this._loadViewportParams = viewportParams;
                     },
