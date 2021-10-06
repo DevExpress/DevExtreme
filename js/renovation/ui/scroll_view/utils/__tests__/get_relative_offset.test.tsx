@@ -1,12 +1,14 @@
 import { getRelativeOffset } from '../get_relative_offset';
 
-describe('getRelativeOffset(targetElement, sourceElement)', () => {
+describe('getRelativeOffset(targetElementClass, sourceElement)', () => {
   it('should return correct relative offset', () => {
+    const targetElementClass = 'dx-scrollable-content';
     const targetElement = {
       getBoundingClientRect: () => ({
         left: -70,
         top: 20,
       }),
+      classList: { contains: (elementClass) => elementClass === targetElementClass },
     } as any;
 
     const sourceEl = {
@@ -15,6 +17,7 @@ describe('getRelativeOffset(targetElement, sourceElement)', () => {
         top: 125,
       }),
       offsetParent: targetElement,
+      classList: { contains: () => false },
     } as any;
 
     expect(getRelativeOffset(targetElement, sourceEl)).toEqual({ left: 105, top: 105 });
@@ -26,10 +29,11 @@ describe('getRelativeOffset(targetElement, sourceElement)', () => {
         left: 35,
         top: 125,
       }),
-    } as HTMLDivElement;
+      classList: { contains: () => false },
+    } as any;
 
     expect(getRelativeOffset.bind([({} as HTMLElement, sourceEl)])).not.toThrow();
-    expect(getRelativeOffset({} as HTMLElement, sourceEl)).toEqual({
+    expect(getRelativeOffset('', sourceEl)).toEqual({
       top: 0,
       left: 0,
     });
@@ -42,6 +46,7 @@ describe('getRelativeOffset(targetElement, sourceElement)', () => {
         left: 8,
         top: 326,
       }),
+      classList: { contains: () => true },
     } as any;
 
     const intermediateElement = {
@@ -50,6 +55,7 @@ describe('getRelativeOffset(targetElement, sourceElement)', () => {
         top: 376,
       }),
       offsetParent: targetElement,
+      classList: { contains: () => false },
     } as any;
 
     const sourceEl = {
@@ -58,6 +64,7 @@ describe('getRelativeOffset(targetElement, sourceElement)', () => {
         top: 376,
       }),
       offsetParent: intermediateElement,
+      classList: { contains: () => false },
     } as any;
 
     expect(getRelativeOffset(targetElement, sourceEl)).toEqual({ left: 0, top: 50 });
