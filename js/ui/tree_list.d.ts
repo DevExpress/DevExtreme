@@ -61,7 +61,7 @@ import dxScrollable from './scroll_view/ui.scrollable';
 
 import Widget from './widget/ui.widget';
 
-interface CellInfo<TRowData, TKey> {
+interface CellInfo<TRowData = any, TKey = any> {
     readonly data: TRowData;
     readonly key: TKey;
     readonly value?: any;
@@ -76,21 +76,21 @@ interface CellInfo<TRowData, TKey> {
 }
 
 /** @public */
-export type AdaptiveDetailRowPreparingEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;
+export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent<TRowData, TKey> = NativeEventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey>;
+export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey>;
 
 /** @public */
-export type CellDblClickEvent<TRowData, TKey> = NativeEventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey>;
+export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey>;
 
 /** @public */
-export type CellHoverChangedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey> & {
+export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey> & {
     readonly eventType: string;
 };
 
 /** @public */
-export type CellPreparedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey> & {
+export type CellPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey> & {
     readonly isSelected?: boolean;
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
@@ -99,10 +99,10 @@ export type CellPreparedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, T
 };
 
 /** @public */
-export type ContentReadyEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>>;
+export type ContentReadyEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>>;
 
 /** @public */
-export type ContextMenuPreparingEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & {
+export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     items?: Array<any>;
     readonly target: string;
     readonly targetElement: DxElement;
@@ -113,26 +113,26 @@ export type ContextMenuPreparingEvent<TRowData, TKey> = EventInfo<dxTreeList<TRo
 };
 
 /** @public */
-export type DataErrorOccurredEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & DataErrorOccurredInfo;
+export type DataErrorOccurredEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & DataErrorOccurredInfo;
 
 /** @public */
-export type DisposingEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>>;
+export type DisposingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>>;
 
 /** @public */
-export type EditCanceledEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
+export type EditCanceledEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
 
 /** @public */
-export type EditCancelingEvent<TRowData, TKey> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
+export type EditCancelingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
 
 /** @public */
-export type EditingStartEvent<TRowData, TKey> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & {
+export type EditingStartEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & {
     readonly data: TRowData;
     readonly key: TKey;
     readonly column: Column<TRowData, TKey>;
 };
 
 /** @public */
-export type EditorPreparedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & {
+export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     readonly parentType: string;
     readonly value?: any;
     readonly setValue?: any;
@@ -147,7 +147,7 @@ export type EditorPreparedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData,
 };
 
 /** @public */
-export type EditorPreparingEvent<TRowData, TKey> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & {
+export type EditorPreparingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & {
     readonly parentType: string;
     readonly value?: any;
     readonly setValue?: any;
@@ -164,7 +164,7 @@ export type EditorPreparingEvent<TRowData, TKey> = Cancelable & EventInfo<dxTree
 };
 
 /** @public */
-export type FocusedCellChangedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & {
+export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     readonly cellElement: DxElement;
     readonly columnIndex: number;
     readonly rowIndex: number;
@@ -173,7 +173,7 @@ export type FocusedCellChangedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowD
 };
 
 /** @public */
-export type FocusedCellChangingEvent<TRowData, TKey> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>> & {
     readonly cellElement: DxElement;
     readonly prevColumnIndex: number;
     readonly prevRowIndex: number;
@@ -185,14 +185,14 @@ export type FocusedCellChangingEvent<TRowData, TKey> = Cancelable & NativeEventI
 };
 
 /** @public */
-export type FocusedRowChangedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & {
+export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     readonly rowElement: DxElement;
     readonly rowIndex: number;
     readonly row: Row<TRowData, TKey>;
 };
 
 /** @public */
-export type FocusedRowChangingEvent<TRowData, TKey> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
     readonly rowElement: DxElement;
     readonly prevRowIndex: number;
     newRowIndex: number;
@@ -200,24 +200,24 @@ export type FocusedRowChangingEvent<TRowData, TKey> = NativeEventInfo<dxTreeList
 };
 
 /** @public */
-export type InitializedEvent<TRowData, TKey> = InitializedEventInfo<dxTreeList<TRowData, TKey>>;
+export type InitializedEvent<TRowData = any, TKey = any> = InitializedEventInfo<dxTreeList<TRowData, TKey>>;
 
 /** @public */
-export type InitNewRowEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & NewRowInfo<TRowData>;
+export type InitNewRowEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & NewRowInfo<TRowData>;
 
 /** @public */
-export type KeyDownEvent<TRowData, TKey> = NativeEventInfo<dxTreeList<TRowData, TKey>> & KeyDownInfo;
+export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & KeyDownInfo;
 
 /** @public */
-export type NodesInitializedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & {
+export type NodesInitializedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     readonly root: Node<TRowData, TKey>;
 };
 
 /** @public */
-export type OptionChangedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent<TRowData, TKey> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
     readonly data: TRowData;
     readonly key: TKey;
     readonly values: Array<any>;
@@ -234,13 +234,13 @@ export type RowClickEvent<TRowData, TKey> = NativeEventInfo<dxTreeList<TRowData,
 };
 
 /** @public */
-export type RowCollapsedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
+export type RowCollapsedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowCollapsingEvent<TRowData, TKey> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
+export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowDblClickEvent<TRowData, TKey> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
     readonly data: TRowData;
     readonly key: TKey;
     readonly values: Array<any>;
@@ -254,19 +254,19 @@ export type RowDblClickEvent<TRowData, TKey> = NativeEventInfo<dxTreeList<TRowDa
 };
 
 /** @public */
-export type RowExpandedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
+export type RowExpandedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowExpandingEvent<TRowData, TKey> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
+export type RowExpandingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowInsertedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & RowInsertedInfo<TRowData, TKey>;
+export type RowInsertedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowInsertedInfo<TRowData, TKey>;
 
 /** @public */
-export type RowInsertingEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & RowInsertingInfo<TRowData>;
+export type RowInsertingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowInsertingInfo<TRowData>;
 
 /** @public */
-export type RowPreparedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & {
+export type RowPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     readonly data: TRowData;
     readonly key: TKey;
     readonly values: Array<any>;
@@ -282,61 +282,61 @@ export type RowPreparedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TK
 };
 
 /** @public */
-export type RowRemovedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & RowRemovedInfo<TRowData, TKey>;
+export type RowRemovedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowRemovedInfo<TRowData, TKey>;
 
 /** @public */
-export type RowRemovingEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & RowRemovingInfo<TRowData, TKey>;
+export type RowRemovingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowRemovingInfo<TRowData, TKey>;
 
 /** @public */
-export type RowUpdatedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & RowUpdatedInfo<TRowData, TKey>;
+export type RowUpdatedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowUpdatedInfo<TRowData, TKey>;
 
 /** @public */
-export type RowUpdatingEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & RowUpdatingInfo<TRowData, TKey>;
+export type RowUpdatingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowUpdatingInfo<TRowData, TKey>;
 
 /** @public */
-export type RowValidatingEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & RowValidatingInfo<TRowData, TKey>;
+export type RowValidatingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowValidatingInfo<TRowData, TKey>;
 
 /** @public */
-export type SavedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
+export type SavedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
 
 /** @public */
-export type SavingEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & SavingInfo<TRowData, TKey>;
+export type SavingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & SavingInfo<TRowData, TKey>;
 
 /** @public */
-export type SelectionChangedEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & SelectionChangedInfo<TRowData, TKey>;
+export type SelectionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & SelectionChangedInfo<TRowData, TKey>;
 
 /** @public */
-export type ToolbarPreparingEvent<TRowData, TKey> = EventInfo<dxTreeList<TRowData, TKey>> & ToolbarPreparingInfo;
+export type ToolbarPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & ToolbarPreparingInfo;
 
 /** @public */
-export type RowDraggingAddEvent<TRowData, TKey> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
+export type RowDraggingAddEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
 
 /** @public */
-export type RowDraggingChangeEvent<TRowData, TKey> = Cancelable & RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
+export type RowDraggingChangeEvent<TRowData = any, TKey = any> = Cancelable & RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
 
 /** @public */
-export type RowDraggingEndEvent<TRowData, TKey> = Cancelable & RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
+export type RowDraggingEndEvent<TRowData = any, TKey = any> = Cancelable & RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
 
 /** @public */
-export type RowDraggingMoveEvent<TRowData, TKey> = Cancelable & RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
+export type RowDraggingMoveEvent<TRowData = any, TKey = any> = Cancelable & RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
 
 /** @public */
-export type RowDraggingStartEvent<TRowData, TKey> = Cancelable & DragStartEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey>;
+export type RowDraggingStartEvent<TRowData = any, TKey = any> = Cancelable & DragStartEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey>;
 
 /** @public */
-export type RowDraggingRemoveEvent<TRowData, TKey> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey>;
+export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey>;
 
 /** @public */
-export type RowDraggingReorderEvent<TRowData, TKey> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragReorderInfo;
+export type RowDraggingReorderEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragReorderInfo;
 
 /** @public */
-export type ColumnButtonClickEvent<TRowData, TKey> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
     row?: Row<TRowData, TKey>;
     column?: Column<TRowData, TKey>;
 };
 
 /** @public */
-export type ColumnButtonTemplateData<TRowData, TKey> = {
+export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
     readonly component: dxTreeList<TRowData, TKey>;
     readonly data: TRowData;
     readonly key: TKey;
@@ -348,7 +348,7 @@ export type ColumnButtonTemplateData<TRowData, TKey> = {
 };
 
 /** @public */
-export type ColumnCellTemplateData<TRowData, TKey> = {
+export type ColumnCellTemplateData<TRowData = any, TKey = any> = {
     readonly data: TRowData;
     readonly component: dxTreeList<TRowData, TKey>;
     readonly value?: any;
@@ -364,7 +364,7 @@ export type ColumnCellTemplateData<TRowData, TKey> = {
 };
 
 /** @public */
-export type ColumnEditCellTemplateData<TRowData, TKey> = {
+export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
     readonly setValue?: any;
     readonly data: TRowData;
     readonly component: dxTreeList<TRowData, TKey>;
@@ -379,20 +379,20 @@ export type ColumnEditCellTemplateData<TRowData, TKey> = {
     readonly watch?: Function;
 };
 
-export type ColumnHeaderCellTemplateData<TRowData, TKey> = {
+export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
     readonly component: dxTreeList<TRowData, TKey>;
     readonly columnIndex: number;
     readonly column: Column<TRowData, TKey>;
 };
 
 /** @public */
-export type RowDraggingTemplateData<TRowData> = RowDraggingTemplateDataModel<TRowData>;
+export type RowDraggingTemplateData<TRowData = any> = RowDraggingTemplateDataModel<TRowData>;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxTreeListOptions<TRowData, TKey> extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
+export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
     /**
      * @docid
      * @default false
@@ -854,10 +854,10 @@ export interface dxTreeListOptions<TRowData, TKey> extends GridBaseOptions<dxTre
  * @namespace DevExpress.ui
  * @deprecated Use Editing instead
  */
-export type dxTreeListEditing<TRowData, TKey> = Editing<TRowData, TKey>;
+export type dxTreeListEditing<TRowData = any, TKey = any> = Editing<TRowData, TKey>;
 
 /** @public */
-export interface Editing<TRowData, TKey> extends EditingBase<TRowData, TKey> {
+export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowData, TKey> {
     /**
      * @docid dxTreeListOptions.editing.allowAdding
      * @default false
@@ -962,7 +962,7 @@ export interface Selection extends SelectionBase {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTreeList<TRowData, TKey> extends Widget<dxTreeListOptions<TRowData, TKey>> implements GridBase<TRowData, TKey> {
+export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTreeListOptions<TRowData, TKey>> implements GridBase<TRowData, TKey> {
     /**
      * @docid
      * @publicName addColumn(columnOptions)
@@ -1216,13 +1216,13 @@ export interface dxTreeListToolbar {
 /**
  * @public
  */
-export type Column<TRowData, TKey> = dxTreeListColumn<TRowData, TKey>;
+export type Column<TRowData = any, TKey = any> = dxTreeListColumn<TRowData, TKey>;
 
 /**
  * @namespace DevExpress.ui
  * @deprecated Use the Column type instead
  */
-export interface dxTreeListColumn<TRowData, TKey> extends ColumnBase<TRowData> {
+export interface dxTreeListColumn<TRowData = any, TKey = any> extends ColumnBase<TRowData> {
     /**
      * @docid dxTreeListColumn.buttons
      * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
@@ -1293,13 +1293,13 @@ export interface dxTreeListColumn<TRowData, TKey> extends ColumnBase<TRowData> {
 /**
  * @public
  */
-export type ColumnButton<TRowData, TKey> = dxTreeListColumnButton<TRowData, TKey>;
+export type ColumnButton<TRowData = any, TKey = any> = dxTreeListColumnButton<TRowData, TKey>;
 
 /**
  * @namespace DevExpress.ui
  * @deprecated Use the TreeList's ColumnButton type instead
  */
-export interface dxTreeListColumnButton<TRowData, TKey> extends ColumnButtonBase {
+export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends ColumnButtonBase {
     /**
      * @docid dxTreeListColumnButton.name
      * @type Enums.TreeListColumnButtonName|string
@@ -1357,14 +1357,14 @@ export interface dxTreeListColumnButton<TRowData, TKey> extends ColumnButtonBase
  * @namespace DevExpress.ui
  * @deprecated Use Node instead
  */
-export type dxTreeListNode<TRowData, TKey> = Node<TRowData, TKey>;
+export type dxTreeListNode<TRowData = any, TKey = any> = Node<TRowData, TKey>;
 
 /**
  * @public
  * @docid dxTreeListNode
  * @type object
  */
-export interface Node<TRowData, TKey> {
+export interface Node<TRowData = any, TKey = any> {
     /**
      * @docid dxTreeListNode.children
      * @type  Array<dxTreeListNode>
@@ -1408,14 +1408,14 @@ export interface Node<TRowData, TKey> {
  * @namespace DevExpress.ui
  * @deprecated Use Row instead
  */
-export type dxTreeListRowObject<TRowData, TKey> = Row<TRowData, TKey>;
+export type dxTreeListRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey>;
 
 /**
  * @public
  * @docid dxTreeListRowObject
  * @type object
  */
-export interface Row<TRowData, TKey> {
+export interface Row<TRowData = any, TKey = any> {
     /**
      * @docid dxTreeListRowObject.isEditing
      * @public
@@ -1475,10 +1475,10 @@ export interface Row<TRowData, TKey> {
 }
 
 /** @public */
-export type Properties<TRowData, TKey> = dxTreeListOptions<TRowData, TKey>;
+export type Properties<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options<TRowData, TKey> = dxTreeListOptions<TRowData, TKey>;
+export type Options<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
 
 /** @deprecated use Properties instead */
-export type IOptions<TRowData, TKey> = dxTreeListOptions<TRowData, TKey>;
+export type IOptions<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
