@@ -26,7 +26,7 @@ import { getTimeZoneCalculator } from '../instanceFactory';
 import { ExpressionUtils } from '../expressionUtils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { getResourcesFromItem } from '../resources/utils';
-import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './DataProvider/utils';
+import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './dataProvider/utils';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
 
