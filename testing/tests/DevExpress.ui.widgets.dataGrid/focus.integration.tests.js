@@ -3777,7 +3777,7 @@ QUnit.module('View\'s focus', {
             // act
             let keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)));
             keyboard.keyDown('a');
-            this.clock.tick();
+            this.clock.tick(25);
             const $firstCellInput = $(this.dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input');
 
             // assert
@@ -3787,7 +3787,7 @@ QUnit.module('View\'s focus', {
             // act
             keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)));
             keyboard.keyDown('tab');
-            this.clock.tick();
+            this.clock.tick(25);
             const $secondCellInput = $(this.dataGrid.getCellElement(0, 1)).find('.dx-texteditor-input');
 
             // assert
