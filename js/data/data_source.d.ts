@@ -3,14 +3,27 @@ import {
 } from './index';
 import { DxPromise } from '../core/utils/deferred';
 import Store from './abstract_store';
-import { CustomStoreOptions } from './custom_store';
-import { ArrayStoreOptions } from './array_store';
+import { Options as CustomStoreOptions } from './custom_store';
+import { Options as ArrayStoreOptions } from './array_store';
 import { LocalStoreOptions } from './local_store';
 import { ODataStoreOptions } from './odata/store';
 
-/** @namespace DevExpress.data */
-export interface DataSourceOptions
-<TSourceValue = any, TValue = TSourceValue, TMappedValue = TValue,
+/** @public */
+export type Options<
+    TSourceValue = any,
+    TValue = TSourceValue,
+    TMappedValue = TValue,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> = DataSourceOptions<TSourceValue, TValue, TMappedValue, TKeyExpr, TKey>;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ */
+export interface DataSourceOptions<
+    TSourceValue = any, TValue = TSourceValue,
+    TMappedValue = TValue,
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
 > {
@@ -152,7 +165,7 @@ export default class DataSource
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
 > {
     constructor(data: Array<TValue>);
-    constructor(options: CustomStoreOptions<TValue, TKeyExpr, TKey> | DataSourceOptions<any, TValue, any, TKeyExpr, TKey>);
+    constructor(options: CustomStoreOptions<TValue, TKeyExpr, TKey> | Options<any, TValue, any, TKeyExpr, TKey>);
     constructor(store: Store<TValue, TKeyExpr, TKey>);
     constructor(url: string);
     /**

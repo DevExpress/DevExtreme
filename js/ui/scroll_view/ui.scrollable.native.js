@@ -125,8 +125,8 @@ const NativeStrategy = Class.inherit({
             scrollOffset: this._getScrollOffset(),
             reachedLeft: this._isScrollInverted() ? this._isReachedRight(-left) : this._isReachedLeft(left),
             reachedRight: this._isScrollInverted() ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
-            reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= this._getMaxOffset().top : undefined
+            reachedTop: this._isDirection(VERTICAL) ? Math.round(top) >= 0 : undefined,
+            reachedBottom: this._isDirection(VERTICAL) ? Math.round(Math.abs(top) - this._getMaxOffset().top) >= 0 : undefined
         };
     },
 
@@ -153,11 +153,11 @@ const NativeStrategy = Class.inherit({
     },
 
     _isReachedLeft: function(left) {
-        return this._isDirection(HORIZONTAL) ? left >= 0 : undefined;
+        return this._isDirection(HORIZONTAL) ? Math.round(left) >= 0 : undefined;
     },
 
     _isReachedRight: function(left) {
-        return this._isDirection(HORIZONTAL) ? Math.abs(left) >= this._getMaxOffset().left : undefined;
+        return this._isDirection(HORIZONTAL) ? Math.round(Math.abs(left) - this._getMaxOffset().left) >= 0 : undefined;
     },
 
     _isScrollbarVisible: function() {

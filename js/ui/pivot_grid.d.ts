@@ -12,7 +12,7 @@ import {
 
 import PivotGridDataSource, {
     Field,
-    PivotGridDataSourceOptions,
+    Options as PivotGridDataSourceOptions,
     dxPivotGridSummaryCell as SummaryCell,
 } from './pivot_grid/data_source';
 

@@ -798,6 +798,7 @@ export const virtualScrollingModule = {
                         const virtualRowsRendering = gridCoreUtils.isVirtualRowRendering(this);
 
                         this._allItems = null;
+                        this._loadViewportParams = null;
 
                         if(this.option('scrolling.mode') !== 'virtual' && virtualRowsRendering !== true || virtualRowsRendering === false || !this.option('scrolling.rowPageSize')) {
                             this._visibleItems = null;

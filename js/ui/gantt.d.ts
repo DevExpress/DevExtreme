@@ -800,13 +800,13 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
          * @type Enums.GanttScaleType
          * @default "minutes"
          */
-        start?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        min?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
         /**
          * @docid
          * @type Enums.GanttScaleType
          * @default "years"
          */
-        end?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        max?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
     };
     /**
      * @docid

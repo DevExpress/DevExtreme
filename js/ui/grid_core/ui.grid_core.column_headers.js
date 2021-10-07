@@ -165,7 +165,9 @@ export const columnHeadersModule = {
                 },
 
                 _createRow: function(row) {
-                    const $row = this.callBase(row).toggleClass(COLUMN_LINES_CLASS, this.option('showColumnLines'));
+                    const $row = this.callBase.apply(this, arguments);
+
+                    $row.toggleClass(COLUMN_LINES_CLASS, this.option('showColumnLines'));
 
                     if(row.rowType === 'header') {
                         $row.addClass(HEADER_ROW_CLASS);

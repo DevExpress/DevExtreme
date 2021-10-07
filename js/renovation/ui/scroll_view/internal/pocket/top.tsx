@@ -25,7 +25,7 @@ import {
 } from '../../common/consts';
 import {
   RefreshStrategy,
-} from '../../common/types';
+} from '../../common/types.d';
 import { current, isMaterial } from '../../../../../ui/themes';
 
 export const viewFunction = (viewModel: TopPocket): JSX.Element => {

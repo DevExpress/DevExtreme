@@ -801,7 +801,7 @@ export default function() {
 
         test('Add a table via dialog', function(assert) {
             const done = assert.async();
-            const expectedValue = '<table><tbody><tr><td>t</td></tr><tr><td><br></td></tr></tbody></table><p>est</p>';
+            const expectedValue = '<table><tbody><tr><td><p>t</p></td></tr><tr><td><p><br></p></td></tr></tbody></table><p>est</p>';
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: '<p>test</p>',
                 toolbar: { items: ['insertTable'] },

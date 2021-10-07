@@ -29,7 +29,7 @@ const MD_TABLE_WITH_HEADER_MARKUP = `| Header1  | Header2 |
 | ---------| --------|
 |Data1    | Data2   |`;
 
-const EXPECTED_TABLE_MARKUP = '<table><thead><tr><th>Header1</th><th>Header2</th></tr></thead><tbody><tr><td>Data1</td><td>Data2</td></tr></tbody></table>';
+const EXPECTED_TABLE_MARKUP = '<table><thead><tr><th><p>Header1</p></th><th><p>Header2</p></th></tr></thead><tbody><tr><td><p>Data1</p></td><td><p>Data2</p></td></tr></tbody></table>';
 
 function getSelector(className) {
     return `.${className}`;
@@ -83,15 +83,81 @@ export default function() {
             assert.strictEqual(markup, '<h1>Hi!</h1><p>Test</p>');
         });
 
-        test('render table with header', function(assert) {
+        test('render table with header without paragraph', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: TABLE_WITH_HEADER_MARKUP
             }).dxHtmlEditor('instance');
             const $element = instance.$element();
             const markup = prepareTableValue($element.find(getSelector(CONTENT_CLASS)).html());
+            const expectedValue = '<table>' +
+                '<thead>' +
+                    '<tr>' +
+                        '<th><p>Header1</p></th>' +
+                        '<th><p>Header2</p></th>' +
+                    '</tr>' +
+                '</thead>' +
+                '<tbody>' +
+                    '<tr>' +
+                        '<td><p>Data1</p></td>' +
+                        '<td><p>Data2</p></td>' +
+                    '</tr>' +
+                '</tbody>' +
+            '</table>';
 
             assert.strictEqual(instance.option('value'), TABLE_WITH_HEADER_MARKUP);
-            assert.strictEqual(markup, EXPECTED_TABLE_MARKUP);
+            assert.strictEqual(markup, expectedValue);
+        });
+
+        test('render table with header and multiple paragraphs', function(assert) {
+            const value = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            <p>Header1</p>
+                            <p>Subheader1</p>
+                            </th>
+                        <th>Header2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <p>Data1</p>
+                            <p>Data1_1</p>
+                            <p>Data1_2</p>
+                        </td>
+                        <td>Data2</td>
+                    </tr>
+                </tbody>
+            </table>`;
+            const instance = $('#htmlEditor').dxHtmlEditor({ value }).dxHtmlEditor('instance');
+            const $element = instance.$element();
+            const markup = prepareTableValue($element.find(getSelector(CONTENT_CLASS)).html());
+            const expectedValue = '<table>' +
+                '<thead>' +
+                    '<tr>' +
+                        '<th>' +
+                            '<p>Header1</p>' +
+                            '<p>Subheader1</p>' +
+                        '</th>' +
+                        '<th><p>Header2</p></th>' +
+                    '</tr>' +
+                '</thead>' +
+                '<tbody>' +
+                    '<tr>' +
+                        '<td>' +
+                            '<p>Data1</p>' +
+                            '<p>Data1_1</p>' +
+                            '<p>Data1_2</p>' +
+                        '</td>' +
+                        '<td><p>Data2</p></td>' +
+                    '</tr>' +
+                '</tbody>' +
+            '</table>';
+
+            assert.strictEqual(instance.option('value'), value);
+            assert.strictEqual(markup, expectedValue);
         });
 
         test('render transclude content', function(assert) {
@@ -455,7 +521,7 @@ export default function() {
 
         test('apply value with table after change valueType', function(assert) {
             const done = assert.async(2);
-            const tableMarkup = '<table><tbody><tr><td>Data1</td><td>Data2</td></tr></tbody></table>';
+            const tableMarkup = '<table><tbody><tr><td><p>Data1</p></td><td><p>Data2</p></td></tr></tbody></table>';
             const value = `<p><strong>bold</strong></p>${tableMarkup}`;
             const expectedMd = `**bold**\n\n${tableMarkup}`;
             const instance = $('#htmlEditor')
@@ -557,92 +623,27 @@ export default function() {
         });
     });
 
-    testModule('Table with paragraph support', {
+    testModule('Table without paragraph support', {
         ...moduleConfig,
         before: function() {
             this.originalTableModule = Quill.import('modules/table');
-            const TableModule = Quill.import('tableModules/main');
+            const TableModule = Quill.import('tableModules/lite');
             Quill.register('modules/table', TableModule, true);
         },
         after: function() {
             Quill.register('modules/table', this.originalTableModule, true);
         }
     }, () => {
-        test('render table with header without paragraph', function(assert) {
+        test('render table with header', function(assert) {
+            const expectedMarkup = '<table><thead><tr><th>Header1</th><th>Header2</th></tr></thead><tbody><tr><td>Data1</td><td>Data2</td></tr></tbody></table>';
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: TABLE_WITH_HEADER_MARKUP
             }).dxHtmlEditor('instance');
             const $element = instance.$element();
             const markup = prepareTableValue($element.find(getSelector(CONTENT_CLASS)).html());
-            const expectedValue = '<table>' +
-                '<thead>' +
-                    '<tr>' +
-                        '<th class="ql-table-header-cell"><p class="ql-table-header-cell-line">Header1</p></th>' +
-                        '<th class="ql-table-header-cell"><p class="ql-table-header-cell-line">Header2</p></th>' +
-                    '</tr>' +
-                '</thead>' +
-                '<tbody>' +
-                    '<tr>' +
-                        '<td class="ql-table-data-cell"><p class="ql-table-cell-line">Data1</p></td>' +
-                        '<td class="ql-table-data-cell"><p class="ql-table-cell-line">Data2</p></td>' +
-                    '</tr>' +
-                '</tbody>' +
-            '</table>';
 
             assert.strictEqual(instance.option('value'), TABLE_WITH_HEADER_MARKUP);
-            assert.strictEqual(markup, expectedValue);
-        });
-
-        test('render table with header and multiple paragraphs', function(assert) {
-            const value = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>
-                            <p>Header1</p>
-                            <p>Subheader1</p>
-                            </th>
-                        <th>Header2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <p>Data1</p>
-                            <p>Data1_1</p>
-                            <p>Data1_2</p>
-                        </td>
-                        <td>Data2</td>
-                    </tr>
-                </tbody>
-            </table>`;
-            const instance = $('#htmlEditor').dxHtmlEditor({ value }).dxHtmlEditor('instance');
-            const $element = instance.$element();
-            const markup = prepareTableValue($element.find(getSelector(CONTENT_CLASS)).html());
-            const expectedValue = '<table>' +
-                '<thead>' +
-                    '<tr>' +
-                        '<th class="ql-table-header-cell">' +
-                            '<p class="ql-table-header-cell-line">Header1</p>' +
-                            '<p class="ql-table-header-cell-line">Subheader1</p>' +
-                        '</th>' +
-                        '<th class="ql-table-header-cell"><p class="ql-table-header-cell-line">Header2</p></th>' +
-                    '</tr>' +
-                '</thead>' +
-                '<tbody>' +
-                    '<tr>' +
-                        '<td class="ql-table-data-cell">' +
-                            '<p class="ql-table-cell-line">Data1</p>' +
-                            '<p class="ql-table-cell-line">Data1_1</p>' +
-                            '<p class="ql-table-cell-line">Data1_2</p>' +
-                        '</td>' +
-                        '<td class="ql-table-data-cell"><p class="ql-table-cell-line">Data2</p></td>' +
-                    '</tr>' +
-                '</tbody>' +
-            '</table>';
-
-            assert.strictEqual(instance.option('value'), value);
-            assert.strictEqual(markup, expectedValue);
+            assert.strictEqual(markup, expectedMarkup);
         });
     });
 }
