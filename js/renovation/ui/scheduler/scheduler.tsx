@@ -29,7 +29,10 @@ import {
   createDataAccessors, createTimeZoneCalculator, filterAppointments,
 } from './common';
 import { loadResources } from '../../../ui/scheduler/resources/utils';
-import { getAppointmentsConfig } from './model/appointments';
+import { getAppointmentsViewModel } from './view_model/appointments/appointments';
+import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
+import { AppointmentViewModel } from './appointment/types';
+import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 
 export const viewFunction = ({
@@ -40,6 +43,7 @@ export const viewFunction = ({
   setCurrentDate,
   setCurrentView,
   startViewDate,
+  appointmentsViewModel,
   props: {
     accessKey,
     activeStateEnabled,
@@ -148,8 +152,10 @@ export const viewFunction = ({
           onViewRendered={onViewRendered}
 
           appointments={(
-            <div className="appointments" />
-        )}
+            <AppointmentLayout
+              appointments={appointmentsViewModel}
+            />
+          )}
           allDayAppointments={<div className="all-day-appointments" />}
         />
       </div>
@@ -249,6 +255,25 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.timeZoneCalculator,
       this.loadedResources,
       this.viewDataProvider,
+    );
+  }
+
+  get appointmentsViewModel(): AppointmentViewModel[] {
+    if (!this.appointmentsConfig) {
+      return [];
+    }
+
+    const model = getAppointmentsModel(
+      this.appointmentsConfig,
+      this.viewDataProvider,
+      this.timeZoneCalculator,
+      this.dataAccessors,
+      this.cellsMetaData,
+    );
+
+    return getAppointmentsViewModel(
+      model,
+      this.filteredItems,
     );
   }
 

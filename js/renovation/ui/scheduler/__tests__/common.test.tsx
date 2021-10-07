@@ -191,10 +191,6 @@ describe('Scheduler common', () => {
       };
     };
 
-    // [true, false].forEach((isVirtualScrolling) => {
-
-    // });
-
     it('should filtered appointments correctly', () => {
       const instances = prepareInstances(
         'day',
