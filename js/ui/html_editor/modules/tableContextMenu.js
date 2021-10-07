@@ -91,7 +91,7 @@ if(Quill) {
             return {
                 text: localize(buttonText),
                 icon: iconName.toLowerCase(),
-                onClick: this._formatHandlers[name] || getDefaultClickHandler(name, this)
+                onClick: this._formatHandlers[name] ?? getDefaultClickHandler(this, name)
             };
         }
 
@@ -114,7 +114,7 @@ if(Quill) {
 
         _getMenuConfig(items) {
             const defaultItems = [
-                { text: 'Insert', items: [
+                { text: localize('insert'), items: [
                     'insertHeaderRow',
                     'insertRowAbove',
                     'insertRowBelow',
@@ -122,7 +122,7 @@ if(Quill) {
                     'insertColumnRight'
                 ] },
                 {
-                    text: 'Delete',
+                    text: localize('delete'),
                     items: [
                         'deleteColumn',
                         'deleteRow',

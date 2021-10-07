@@ -26,7 +26,7 @@ function getTableFormats(quill) {
     return tableModule?.tableFormats ? tableModule.tableFormats() : TABLE_FORMATS;
 }
 
-function hasEmbedContent(selection, module) {
+function hasEmbedContent(module, selection) {
     return !!selection && module.quill.getText(selection).trim().length < selection.length;
 }
 

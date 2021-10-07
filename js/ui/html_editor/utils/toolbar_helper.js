@@ -56,15 +56,15 @@ function getFormatHandlers(module) {
         },
         link: prepareLinkHandler(module),
         image: prepareImageHandler(module),
-        color: prepareColorClickHandler('color', module),
-        background: prepareColorClickHandler('background', module),
-        orderedList: prepareShortcutHandler('list', 'ordered', module),
-        bulletList: prepareShortcutHandler('list', 'bullet', module),
-        alignLeft: prepareShortcutHandler('align', 'left', module),
-        alignCenter: prepareShortcutHandler('align', 'center', module),
-        alignRight: prepareShortcutHandler('align', 'right', module),
-        alignJustify: prepareShortcutHandler('align', 'justify', module),
-        codeBlock: getDefaultClickHandler('code-block', module),
+        color: prepareColorClickHandler(module, 'color'),
+        background: prepareColorClickHandler(module, 'background'),
+        orderedList: prepareShortcutHandler(module, 'list', 'ordered'),
+        bulletList: prepareShortcutHandler(module, 'list', 'bullet'),
+        alignLeft: prepareShortcutHandler(module, 'align', 'left'),
+        alignCenter: prepareShortcutHandler(module, 'align', 'center'),
+        alignRight: prepareShortcutHandler(module, 'align', 'right'),
+        alignJustify: prepareShortcutHandler(module, 'align', 'justify'),
+        codeBlock: getDefaultClickHandler(module, 'code-block'),
         undo: ({ event }) => {
             module.saveValueChangeEvent(event);
             module.quill.history.undo();
@@ -74,13 +74,13 @@ function getFormatHandlers(module) {
             module.quill.history.redo();
         },
         increaseIndent: ({ event }) => {
-            applyFormat(['indent', '+1', USER_ACTION], event, module);
+            applyFormat(module, ['indent', '+1', USER_ACTION], event);
         },
         decreaseIndent: ({ event }) => {
-            applyFormat(['indent', '-1', USER_ACTION], event, module);
+            applyFormat(module, ['indent', '-1', USER_ACTION], event);
         },
-        superscript: prepareShortcutHandler('script', 'super', module),
-        subscript: prepareShortcutHandler('script', 'sub', module),
+        superscript: prepareShortcutHandler(module, 'script', 'super'),
+        subscript: prepareShortcutHandler(module, 'script', 'sub'),
         insertTable: prepareInsertTableHandler(module),
         insertHeaderRow: getTableOperationHandler(module.quill, 'insertHeaderRow'),
         insertRowAbove: getTableOperationHandler(module.quill, 'insertRowAbove'),
@@ -134,7 +134,7 @@ function prepareShowFormProperties(module, type) {
     };
 }
 
-function applyFormat(formatArgs, event, module) {
+function applyFormat(module, formatArgs, event) {
     module.editorInstance._saveValueChangeEvent(event);
     module.quill.format(...formatArgs);
 }
@@ -150,7 +150,7 @@ function prepareLinkHandler(module) {
         module.quill.focus();
 
         const selection = module.quill.getSelection();
-        const selectionHasEmbedContent = hasEmbedContent(selection, module);
+        const selectionHasEmbedContent = hasEmbedContent(module, selection);
         const formats = selection ? module.quill.getFormat() : {};
         const formData = {
             href: formats.link || '',
@@ -161,7 +161,7 @@ function prepareLinkHandler(module) {
 
         const promise = module.editorInstance.showFormDialog({
             formData: formData,
-            items: getLinkFormItems(selection, module)
+            items: getLinkFormItems(module, selection)
         });
 
         promise.done((formData, event) => {
@@ -177,7 +177,7 @@ function prepareLinkHandler(module) {
                 module.quill.setSelection(index + text.length, 0, USER_ACTION);
             } else {
                 formData.text = !selection && !formData.text ? formData.href : formData.text;
-                applyFormat(['link', formData, USER_ACTION], event, module);
+                applyFormat(module, ['link', formData, USER_ACTION], event);
             }
         });
 
@@ -233,13 +233,13 @@ function prepareImageHandler(module) {
     };
 }
 
-function getLinkFormItems(selection, module) {
+function getLinkFormItems(module, selection) {
     return [
         { dataField: 'href', label: { text: localizationMessage.format(DIALOG_LINK_FIELD_URL) } },
         {
             dataField: 'text',
             label: { text: localizationMessage.format(DIALOG_LINK_FIELD_TEXT) },
-            visible: !hasEmbedContent(selection, module)
+            visible: !hasEmbedContent(module, selection)
         },
         {
             dataField: 'target',
@@ -281,7 +281,7 @@ function imageFormItems() {
     ];
 }
 
-function prepareColorClickHandler(name, module) {
+function prepareColorClickHandler(module, name) {
     return () => {
         const formData = module.quill.getFormat();
         const caption = name === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
@@ -299,7 +299,7 @@ function prepareColorClickHandler(name, module) {
         });
 
         promise.done((formData, event) => {
-            applyFormat([name, formData[name], USER_ACTION], event, module);
+            applyFormat(module, [name, formData[name], USER_ACTION], event);
         });
         promise.fail(() => {
             module.quill.focus();
@@ -307,12 +307,12 @@ function prepareColorClickHandler(name, module) {
     };
 }
 
-function prepareShortcutHandler(name, shortcutValue, module) {
+function prepareShortcutHandler(module, name, shortcutValue) {
     return ({ event }) => {
         const formats = module.quill.getFormat();
         const value = formats[name] === shortcutValue ? false : shortcutValue;
 
-        applyFormat([name, value, USER_ACTION], event, module);
+        applyFormat(module, [name, value, USER_ACTION], event);
 
         getToolbarModule(module)?.updateFormatWidgets(true);
     };
@@ -322,13 +322,13 @@ function getToolbarModule(module) {
     return module._updateFormatWidget ? module : module.quill.getModule('toolbar');
 }
 
-function getDefaultClickHandler(name, module) {
+function getDefaultClickHandler(module, name) {
     return ({ event }) => {
         const formats = module.quill.getFormat();
         const value = formats[name];
         const newValue = !(isBoolean(value) ? value : isDefined(value));
 
-        applyFormat([name, newValue, USER_ACTION], event, module);
+        applyFormat(module, [name, newValue, USER_ACTION], event);
 
         getToolbarModule(module)?._updateFormatWidget(name, newValue, formats);
     };
@@ -834,5 +834,6 @@ function applyCellDimensionChanges($target, newHeight, newWidth) {
 export {
     getFormatHandlers,
     getDefaultClickHandler,
-    ICON_MAP
+    ICON_MAP,
+    applyFormat
 };

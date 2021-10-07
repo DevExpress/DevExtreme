@@ -21,7 +21,7 @@ import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/table_helper';
-import { getFormatHandlers, getDefaultClickHandler, ICON_MAP } from '../utils/toolbar_helper';
+import { getFormatHandlers, getDefaultClickHandler, ICON_MAP, applyFormat } from '../utils/toolbar_helper';
 
 let ToolbarModule = BaseModule;
 
@@ -71,11 +71,6 @@ if(Quill) {
                     this._updateToolbar(isSelectionChanged);
                 });
             }
-        }
-
-        _applyFormat(formatArgs, event) {
-            this.saveValueChangeEvent(event);
-            this.quill.format(...formatArgs);
         }
 
         _addCallbacks() {
@@ -236,7 +231,7 @@ if(Quill) {
                     hint: localize(buttonText),
                     text: localize(buttonText),
                     icon: iconName.toLowerCase(),
-                    onClick: this._formatHandlers[name] || getDefaultClickHandler(name, this),
+                    onClick: this._formatHandlers[name] || getDefaultClickHandler(this, name),
                     stylingMode: 'text'
                 },
                 showText: 'inMenu'
@@ -259,7 +254,7 @@ if(Quill) {
                     onValueChanged: (e) => {
                         if(!this._isReset) {
                             this._hideAdaptiveMenu();
-                            this._applyFormat([name, e.value, USER_ACTION], e.event);
+                            applyFormat(this, [name, e.value, USER_ACTION], e.event);
                             this._setValueSilent(e.component, e.value);
                         }
                     }
