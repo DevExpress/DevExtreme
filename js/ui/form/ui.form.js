@@ -109,7 +109,7 @@ const Form = Widget.inherit({
             scrollingEnabled: false,
             validationGroup: undefined,
             stylingMode: config().editorStylingMode,
-            labelMode: 'default'
+            labelMode: 'outside'
         });
     },
 

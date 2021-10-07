@@ -11,7 +11,7 @@ fixture`Form`
 
 ['generic.light', 'material.blue.light'].forEach((theme) => {
   [false, true].forEach((rtlEnabled) => {
-    ['default', 'static', 'floating'].forEach((labelMode) => {
+    ['outside', 'static', 'floating'].forEach((labelMode) => {
       [true, false].forEach((showOptionalMark) => {
         [true, false].forEach((showColonAfterLabel) => {
           const testName = `SimpleItem,rtl_${rtlEnabled},optMark_${showOptionalMark},labelMode_${labelMode},colon_${showColonAfterLabel},${theme}`;

@@ -12509,7 +12509,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.labelMode]
      */
-    labelMode?: 'default' | 'floating' | 'static' | 'hidden';
+    labelMode?: 'outside' | 'floating' | 'static' | 'hidden';
     /**
      * [descr:dxFormOptions.minColWidth]
      */
