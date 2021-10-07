@@ -5698,77 +5698,87 @@ declare module DevExpress.ui {
     updateDimensions(): void;
   }
   module dxDataGrid {
-    export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        AdaptiveDetailRowPreparingInfo;
+    export type AdaptiveDetailRowPreparingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      AdaptiveDetailRowPreparingInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export interface AdaptiveDetailRowPreparingInfo {
       readonly formOptions: any;
     }
-    export type CellClickEvent<TRowData = any, TKey = any> =
-      DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-        readonly data: TRowData;
-        readonly key: TKey;
-        readonly value?: any;
-        readonly displayValue?: any;
-        readonly text: string;
-        readonly columnIndex: number;
-        readonly column: Column<TRowData, TKey>;
-        readonly rowIndex: number;
-        readonly rowType: string;
-        readonly cellElement: DevExpress.core.DxElement;
-        readonly row: Row<TRowData, TKey>;
-      };
-    export type CellDblClickEvent<TRowData = any, TKey = any> =
-      DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-        readonly data: TRowData;
-        readonly key: TKey;
-        readonly value?: any;
-        readonly displayValue?: any;
-        readonly text: string;
-        readonly columnIndex: number;
-        readonly column: Column<TRowData, TKey>;
-        readonly rowIndex: number;
-        readonly rowType: string;
-        readonly cellElement: DevExpress.core.DxElement;
-        readonly row: Row<TRowData, TKey>;
-      };
-    export type CellHoverChangedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
-        readonly eventType: string;
-        readonly data: TRowData;
-        readonly key: TKey;
-        readonly value?: any;
-        readonly text: string;
-        readonly displayValue?: any;
-        readonly columnIndex: number;
-        readonly rowIndex: number;
-        readonly column: Column<TRowData, TKey>;
-        readonly rowType: string;
-        readonly cellElement: DevExpress.core.DxElement;
-        readonly row: Row<TRowData, TKey>;
-      };
-    export type CellPreparedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
-        readonly data: TRowData;
-        readonly key: TKey;
-        readonly value?: any;
-        readonly displayValue?: any;
-        readonly text: string;
-        readonly columnIndex: number;
-        readonly column: Column<TRowData, TKey>;
-        readonly rowIndex: number;
-        readonly rowType: string;
-        readonly row: Row<TRowData, TKey>;
-        readonly isSelected?: boolean;
-        readonly isExpanded?: boolean;
-        readonly isNewRow?: boolean;
-        readonly cellElement: DevExpress.core.DxElement;
-        readonly watch?: Function;
-        readonly oldValue?: any;
-      };
+    export type CellClickEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+      readonly data: TRowData;
+      readonly key: TKey;
+      readonly value?: any;
+      readonly displayValue?: any;
+      readonly text: string;
+      readonly columnIndex: number;
+      readonly column: Column<TRowData, TKey>;
+      readonly rowIndex: number;
+      readonly rowType: string;
+      readonly cellElement: DevExpress.core.DxElement;
+      readonly row: Row<TRowData, TKey>;
+    };
+    export type CellDblClickEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+      readonly data: TRowData;
+      readonly key: TKey;
+      readonly value?: any;
+      readonly displayValue?: any;
+      readonly text: string;
+      readonly columnIndex: number;
+      readonly column: Column<TRowData, TKey>;
+      readonly rowIndex: number;
+      readonly rowType: string;
+      readonly cellElement: DevExpress.core.DxElement;
+      readonly row: Row<TRowData, TKey>;
+    };
+    export type CellHoverChangedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+      readonly eventType: string;
+      readonly data: TRowData;
+      readonly key: TKey;
+      readonly value?: any;
+      readonly text: string;
+      readonly displayValue?: any;
+      readonly columnIndex: number;
+      readonly rowIndex: number;
+      readonly column: Column<TRowData, TKey>;
+      readonly rowType: string;
+      readonly cellElement: DevExpress.core.DxElement;
+      readonly row: Row<TRowData, TKey>;
+    };
+    export type CellPreparedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+      readonly data: TRowData;
+      readonly key: TKey;
+      readonly value?: any;
+      readonly displayValue?: any;
+      readonly text: string;
+      readonly columnIndex: number;
+      readonly column: Column<TRowData, TKey>;
+      readonly rowIndex: number;
+      readonly rowType: string;
+      readonly row: Row<TRowData, TKey>;
+      readonly isSelected?: boolean;
+      readonly isExpanded?: boolean;
+      readonly isNewRow?: boolean;
+      readonly cellElement: DevExpress.core.DxElement;
+      readonly watch?: Function;
+      readonly oldValue?: any;
+    };
     export type Column<TRowData = any, TKey = any> = dxDataGridColumn<
       TRowData,
       TKey
@@ -6030,8 +6040,10 @@ declare module DevExpress.ui {
        */
       width?: number | string;
     }
-    export type ColumnButton<TRowData = any, TKey = any> =
-      dxDataGridColumnButton<TRowData, TKey>;
+    export type ColumnButton<
+      TRowData = any,
+      TKey = any
+    > = dxDataGridColumnButton<TRowData, TKey>;
     /**
      * [descr:GridBaseColumnButton]
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -6054,11 +6066,13 @@ declare module DevExpress.ui {
        */
       text?: string;
     }
-    export type ColumnButtonClickEvent<TRowData = any, TKey = any> =
-      DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-        row?: Row<TRowData, TKey>;
-        column?: Column<TRowData, TKey>;
-      };
+    export type ColumnButtonClickEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+      row?: Row<TRowData, TKey>;
+      column?: Column<TRowData, TKey>;
+    };
     export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
       readonly component: dxDataGrid<TRowData, TKey>;
       readonly data?: TRowData;
@@ -6279,18 +6293,22 @@ declare module DevExpress.ui {
        */
       calculateCellValue?: (rowData: any) => any;
     }
-    export type ContentReadyEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>>;
-    export type ContextMenuPreparingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
-        items?: Array<any>;
-        readonly target: string;
-        readonly targetElement: DevExpress.core.DxElement;
-        readonly columnIndex: number;
-        readonly column?: Column<TRowData, TKey>;
-        readonly rowIndex: number;
-        readonly row?: Row<TRowData, TKey>;
-      };
+    export type ContentReadyEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>>;
+    export type ContextMenuPreparingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+      items?: Array<any>;
+      readonly target: string;
+      readonly targetElement: DevExpress.core.DxElement;
+      readonly columnIndex: number;
+      readonly column?: Column<TRowData, TKey>;
+      readonly rowIndex: number;
+      readonly row?: Row<TRowData, TKey>;
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6308,17 +6326,21 @@ declare module DevExpress.ui {
     export interface DataChangeInfo<TRowData = any, TKey = any> {
       readonly changes: Array<DataChange<TRowData, TKey>>;
     }
-    export type DataErrorOccurredEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        DataErrorOccurredInfo;
+    export type DataErrorOccurredEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DataErrorOccurredInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export interface DataErrorOccurredInfo {
       readonly error?: Error;
     }
-    export type DisposingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>>;
+    export type DisposingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6376,15 +6398,21 @@ declare module DevExpress.ui {
        */
       summaryItem?: string | number;
     }
-    export type EditCanceledEvent<TRowData = any, TKey = any> =
+    export type EditCanceledEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DataChangeInfo<TRowData, TKey>;
+    export type EditCancelingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        DataChangeInfo<TRowData, TKey>;
-    export type EditCancelingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.Cancelable &
-        DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        DataChangeInfo<TRowData, TKey>;
-    export interface Editing<TRowData = any, TKey = any>
-      extends EditingBase<TRowData, TKey> {
+      DataChangeInfo<TRowData, TKey>;
+    export type Editing<TRowData = any, TKey = any> = EditingBase<
+      TRowData,
+      TKey
+    > & {
       /**
        * [descr:dxDataGridOptions.editing.allowAdding]
        */
@@ -6411,7 +6439,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.editing.texts]
        */
       texts?: any;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6475,13 +6503,15 @@ declare module DevExpress.ui {
        */
       useIcons?: boolean;
     }
-    export type EditingStartEvent<TRowData = any, TKey = any> =
-      DevExpress.events.Cancelable &
-        DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
-          readonly data: TRowData;
-          readonly key: TKey;
-          readonly column?: Column<TRowData, TKey>;
-        };
+    export type EditingStartEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+        readonly data: TRowData;
+        readonly key: TKey;
+        readonly column?: Column<TRowData, TKey>;
+      };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6531,37 +6561,41 @@ declare module DevExpress.ui {
        */
       validationCancelChanges?: string;
     }
-    export type EditorPreparedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
-        readonly parentType: string;
-        readonly value?: any;
-        readonly setValue?: any;
-        readonly updateValueTimeout?: number;
-        readonly width?: number;
-        readonly disabled: boolean;
-        readonly rtlEnabled: boolean;
-        readonly editorElement: DevExpress.core.DxElement;
-        readonly readOnly: boolean;
-        readonly dataField?: string;
-        readonly row?: Row<TRowData, TKey>;
-      };
-    export type EditorPreparingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
-        readonly parentType: string;
-        readonly value?: any;
-        readonly setValue?: any;
-        readonly updateValueTimeout?: number;
-        readonly width?: number;
-        readonly disabled: boolean;
-        readonly rtlEnabled: boolean;
-        cancel: boolean;
-        readonly editorElement: DevExpress.core.DxElement;
-        readonly readOnly: boolean;
-        editorName: string;
-        editorOptions: any;
-        readonly dataField?: string;
-        readonly row?: Row<TRowData, TKey>;
-      };
+    export type EditorPreparedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+      readonly parentType: string;
+      readonly value?: any;
+      readonly setValue?: any;
+      readonly updateValueTimeout?: number;
+      readonly width?: number;
+      readonly disabled: boolean;
+      readonly rtlEnabled: boolean;
+      readonly editorElement: DevExpress.core.DxElement;
+      readonly readOnly: boolean;
+      readonly dataField?: string;
+      readonly row?: Row<TRowData, TKey>;
+    };
+    export type EditorPreparingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+      readonly parentType: string;
+      readonly value?: any;
+      readonly setValue?: any;
+      readonly updateValueTimeout?: number;
+      readonly width?: number;
+      readonly disabled: boolean;
+      readonly rtlEnabled: boolean;
+      cancel: boolean;
+      readonly editorElement: DevExpress.core.DxElement;
+      readonly readOnly: boolean;
+      editorName: string;
+      editorOptions: any;
+      readonly dataField?: string;
+      readonly row?: Row<TRowData, TKey>;
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6610,7 +6644,83 @@ declare module DevExpress.ui {
       numberFormat?: string;
       gridCell?: DevExpress.excelExporter.DataGridCell;
     }
-    export interface Export<TRowData = any, TKey = any> {
+    export type ExplicitTypes<TRowData, TKey> = {
+      AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<
+        TRowData,
+        TKey
+      >;
+      CellClickEvent: CellClickEvent<TRowData, TKey>;
+      CellDblClickEvent: CellDblClickEvent<TRowData, TKey>;
+      CellHoverChangedEvent: CellHoverChangedEvent<TRowData, TKey>;
+      CellPreparedEvent: CellPreparedEvent<TRowData, TKey>;
+      Column: Column<TRowData, TKey>;
+      ColumnButton: ColumnButton<TRowData, TKey>;
+      ColumnButtonClickEvent: ColumnButtonClickEvent<TRowData, TKey>;
+      ColumnButtonTemplateData: ColumnButtonTemplateData<TRowData, TKey>;
+      ColumnCellTemplateData: ColumnCellTemplateData<TRowData, TKey>;
+      ColumnEditCellTemplateData: ColumnEditCellTemplateData<TRowData, TKey>;
+      ColumnGroupCellTemplateData: ColumnGroupCellTemplateData<TRowData, TKey>;
+      ColumnHeaderCellTemplateData: ColumnHeaderCellTemplateData<
+        TRowData,
+        TKey
+      >;
+      ContentReadyEvent: ContentReadyEvent<TRowData, TKey>;
+      ContextMenuPreparingEvent: ContextMenuPreparingEvent<TRowData, TKey>;
+      DataErrorOccurredEvent: DataErrorOccurredEvent<TRowData, TKey>;
+      DisposingEvent: DisposingEvent<TRowData, TKey>;
+      EditCanceledEvent: EditCanceledEvent<TRowData, TKey>;
+      EditCancelingEvent: EditCancelingEvent<TRowData, TKey>;
+      Editing: Editing<TRowData, TKey>;
+      EditingStartEvent: EditingStartEvent<TRowData, TKey>;
+      EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
+      EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
+      Export: Export<TRowData, TKey>;
+      ExportedEvent: ExportedEvent<TRowData, TKey>;
+      ExportingEvent: ExportingEvent<TRowData, TKey>;
+      FileSavingEvent: FileSavingEvent<TRowData, TKey>;
+      FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
+      FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
+      FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;
+      FocusedRowChangingEvent: FocusedRowChangingEvent<TRowData, TKey>;
+      InitializedEvent: InitializedEvent<TRowData, TKey>;
+      InitNewRowEvent: InitNewRowEvent<TRowData, TKey>;
+      KeyDownEvent: KeyDownEvent<TRowData, TKey>;
+      MasterDetailTemplateData: MasterDetailTemplateData<TRowData, TKey>;
+      OptionChangedEvent: OptionChangedEvent<TRowData, TKey>;
+      Properties: Properties<TRowData, TKey>;
+      Row: Row<TRowData, TKey>;
+      RowClickEvent: RowClickEvent<TRowData, TKey>;
+      RowCollapsedEvent: RowCollapsedEvent<TRowData, TKey>;
+      RowCollapsingEvent: RowCollapsingEvent<TRowData, TKey>;
+      RowDblClickEvent: RowDblClickEvent<TRowData, TKey>;
+      RowDraggingAddEvent: RowDraggingAddEvent<TRowData, TKey>;
+      RowDraggingChangeEvent: RowDraggingChangeEvent<TRowData, TKey>;
+      RowDraggingEndEvent: RowDraggingEndEvent<TRowData, TKey>;
+      RowDraggingMoveEvent: RowDraggingMoveEvent<TRowData, TKey>;
+      RowDraggingRemoveEvent: RowDraggingRemoveEvent<TRowData, TKey>;
+      RowDraggingReorderEvent: RowDraggingReorderEvent<TRowData, TKey>;
+      RowDraggingStartEvent: RowDraggingStartEvent<TRowData, TKey>;
+      RowDraggingTemplateData: RowDraggingTemplateData<TRowData>;
+      RowExpandedEvent: RowExpandedEvent<TRowData, TKey>;
+      RowExpandingEvent: RowExpandingEvent<TRowData, TKey>;
+      RowInsertedEvent: RowInsertedEvent<TRowData, TKey>;
+      RowInsertingEvent: RowInsertingEvent<TRowData, TKey>;
+      RowPreparedEvent: RowPreparedEvent<TRowData, TKey>;
+      RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
+      RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
+      RowTemplateData: RowTemplateData<TRowData, TKey>;
+      RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
+      RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
+      RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
+      SavedEvent: SavedEvent<TRowData, TKey>;
+      SavingEvent: SavingEvent<TRowData, TKey>;
+      Scrolling: Scrolling;
+      Selection: Selection;
+      SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
+      Summary: Summary<TRowData, TKey>;
+      ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
+    };
+    export type Export<TRowData = any, TKey = any> = {
       /**
        * [descr:dxDataGridOptions.export.allowExportSelectedData]
        */
@@ -6653,14 +6763,18 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.export.texts]
        */
       texts?: ExportTexts;
-    }
-    export type ExportedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>>;
-    export type ExportingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.Cancelable &
-        DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
-          fileName?: string;
-        };
+    };
+    export type ExportedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>>;
+    export type ExportingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+        fileName?: string;
+      };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6678,14 +6792,16 @@ declare module DevExpress.ui {
        */
       exportTo?: string;
     }
-    export type FileSavingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.Cancelable & {
-        readonly component: dxDataGrid<TRowData, TKey>;
-        readonly element: DevExpress.core.DxElement;
-        fileName?: string;
-        format?: string;
-        readonly data: Blob;
-      };
+    export type FileSavingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable & {
+      readonly component: dxDataGrid<TRowData, TKey>;
+      readonly element: DevExpress.core.DxElement;
+      fileName?: string;
+      format?: string;
+      readonly data: Blob;
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6826,40 +6942,48 @@ declare module DevExpress.ui {
        */
       startsWith?: string;
     }
-    export type FocusedCellChangedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+    export type FocusedCellChangedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+      readonly cellElement: DevExpress.core.DxElement;
+      readonly columnIndex: number;
+      readonly rowIndex: number;
+      readonly row?: Row<TRowData, TKey>;
+      readonly column?: Column<TRowData, TKey>;
+    };
+    export type FocusedCellChangingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
         readonly cellElement: DevExpress.core.DxElement;
-        readonly columnIndex: number;
-        readonly rowIndex: number;
-        readonly row?: Row<TRowData, TKey>;
-        readonly column?: Column<TRowData, TKey>;
+        readonly prevColumnIndex: number;
+        readonly prevRowIndex: number;
+        newColumnIndex: number;
+        newRowIndex: number;
+        readonly rows: Array<Row<TRowData, TKey>>;
+        readonly columns: Array<Column<TRowData, TKey>>;
+        isHighlighted: boolean;
       };
-    export type FocusedCellChangingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.Cancelable &
-        DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-          readonly cellElement: DevExpress.core.DxElement;
-          readonly prevColumnIndex: number;
-          readonly prevRowIndex: number;
-          newColumnIndex: number;
-          newRowIndex: number;
-          readonly rows: Array<Row<TRowData, TKey>>;
-          readonly columns: Array<Column<TRowData, TKey>>;
-          isHighlighted: boolean;
-        };
-    export type FocusedRowChangedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+    export type FocusedRowChangedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+      readonly rowElement: DevExpress.core.DxElement;
+      readonly rowIndex: number;
+      readonly row?: Row<TRowData, TKey>;
+    };
+    export type FocusedRowChangingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
         readonly rowElement: DevExpress.core.DxElement;
-        readonly rowIndex: number;
-        readonly row?: Row<TRowData, TKey>;
+        readonly prevRowIndex: number;
+        newRowIndex: number;
+        readonly rows: Array<Row<TRowData, TKey>>;
       };
-    export type FocusedRowChangingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.Cancelable &
-        DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-          readonly rowElement: DevExpress.core.DxElement;
-          readonly prevRowIndex: number;
-          newRowIndex: number;
-          readonly rows: Array<Row<TRowData, TKey>>;
-        };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6973,11 +7097,15 @@ declare module DevExpress.ui {
        */
       ok?: string;
     }
-    export type InitializedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.InitializedEventInfo<dxDataGrid<TRowData, TKey>>;
-    export type InitNewRowEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        NewRowInfo<TRowData>;
+    export type InitializedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.InitializedEventInfo<dxDataGrid<TRowData, TKey>>;
+    export type InitNewRowEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      NewRowInfo<TRowData>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6999,9 +7127,11 @@ declare module DevExpress.ui {
        */
       enterKeyDirection?: 'none' | 'column' | 'row';
     }
-    export type KeyDownEvent<TRowData = any, TKey = any> =
-      DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> &
-        KeyDownInfo;
+    export type KeyDownEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> &
+      KeyDownInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7083,9 +7213,11 @@ declare module DevExpress.ui {
       data: TRowData;
       promise?: PromiseLike<void>;
     }
-    export type OptionChangedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        DevExpress.events.ChangedOptionInfo;
+    export type OptionChangedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DevExpress.events.ChangedOptionInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7185,42 +7317,50 @@ declare module DevExpress.ui {
        */
       readonly values: Array<any>;
     }
-    export type RowClickEvent<TRowData = any, TKey = any> =
-      DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-        readonly data: TRowData;
-        readonly key: TKey;
-        readonly values: Array<any>;
-        readonly columns: Array<Column<TRowData, TKey>>;
-        readonly rowIndex: number;
-        readonly rowType: string;
-        readonly isSelected?: boolean;
-        readonly isExpanded?: boolean;
-        readonly isNewRow?: boolean;
-        readonly groupIndex?: number;
-        readonly rowElement: DevExpress.core.DxElement;
-        readonly handled: boolean;
-      };
-    export type RowCollapsedEvent<TRowData = any, TKey = any> =
+    export type RowClickEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+      readonly data: TRowData;
+      readonly key: TKey;
+      readonly values: Array<any>;
+      readonly columns: Array<Column<TRowData, TKey>>;
+      readonly rowIndex: number;
+      readonly rowType: string;
+      readonly isSelected?: boolean;
+      readonly isExpanded?: boolean;
+      readonly isNewRow?: boolean;
+      readonly groupIndex?: number;
+      readonly rowElement: DevExpress.core.DxElement;
+      readonly handled: boolean;
+    };
+    export type RowCollapsedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      RowKeyInfo<TKey>;
+    export type RowCollapsingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        RowKeyInfo<TKey>;
-    export type RowCollapsingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.Cancelable &
-        DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        RowKeyInfo<TKey>;
-    export type RowDblClickEvent<TRowData = any, TKey = any> =
-      DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-        readonly data: TRowData;
-        readonly key: TKey;
-        readonly values: Array<any>;
-        readonly columns: Array<Column<TRowData, TKey>>;
-        readonly rowIndex: number;
-        readonly rowType: string;
-        readonly isSelected?: boolean;
-        readonly isExpanded?: boolean;
-        readonly isNewRow?: boolean;
-        readonly groupIndex?: number;
-        readonly rowElement: DevExpress.core.DxElement;
-      };
+      RowKeyInfo<TKey>;
+    export type RowDblClickEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+      readonly data: TRowData;
+      readonly key: TKey;
+      readonly values: Array<any>;
+      readonly columns: Array<Column<TRowData, TKey>>;
+      readonly rowIndex: number;
+      readonly rowType: string;
+      readonly isSelected?: boolean;
+      readonly isExpanded?: boolean;
+      readonly isNewRow?: boolean;
+      readonly groupIndex?: number;
+      readonly rowElement: DevExpress.core.DxElement;
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7357,17 +7497,23 @@ declare module DevExpress.ui {
        */
       showDragIcons?: boolean;
     }
-    export type RowDraggingAddEvent<TRowData = any, TKey = any> =
+    export type RowDraggingAddEvent<
+      TRowData = any,
+      TKey = any
+    > = RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
+      DragDropInfo;
+    export type RowDraggingChangeEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
       RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
-        DragDropInfo;
-    export type RowDraggingChangeEvent<TRowData = any, TKey = any> =
-      DevExpress.events.Cancelable &
-        RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
-        DragDropInfo;
-    export type RowDraggingEndEvent<TRowData = any, TKey = any> =
-      DevExpress.events.Cancelable &
-        RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
-        DragDropInfo;
+      DragDropInfo;
+    export type RowDraggingEndEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
+      DragDropInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7387,18 +7533,26 @@ declare module DevExpress.ui {
       readonly fromData?: any;
       readonly toData?: any;
     }
-    export type RowDraggingMoveEvent<TRowData = any, TKey = any> =
-      DevExpress.events.Cancelable &
-        RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
-        DragDropInfo;
-    export type RowDraggingRemoveEvent<TRowData = any, TKey = any> =
-      RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey>;
-    export type RowDraggingReorderEvent<TRowData = any, TKey = any> =
+    export type RowDraggingMoveEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
       RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
-        DragReorderInfo;
-    export type RowDraggingStartEvent<TRowData = any, TKey = any> =
-      DevExpress.events.Cancelable &
-        DragStartEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey>;
+      DragDropInfo;
+    export type RowDraggingRemoveEvent<
+      TRowData = any,
+      TKey = any
+    > = RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey>;
+    export type RowDraggingReorderEvent<
+      TRowData = any,
+      TKey = any
+    > = RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> &
+      DragReorderInfo;
+    export type RowDraggingStartEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DragStartEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey>;
     export type RowDraggingTemplateData<TRowData = any> =
       RowDraggingTemplateDataModel<TRowData>;
     /**
@@ -7408,16 +7562,22 @@ declare module DevExpress.ui {
       readonly itemData: TRowData;
       readonly itemElement: DevExpress.core.DxElement;
     }
-    export type RowExpandedEvent<TRowData = any, TKey = any> =
+    export type RowExpandedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      RowKeyInfo<TKey>;
+    export type RowExpandingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        RowKeyInfo<TKey>;
-    export type RowExpandingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.Cancelable &
-        DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        RowKeyInfo<TKey>;
-    export type RowInsertedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        RowInsertedInfo<TRowData, TKey>;
+      RowKeyInfo<TKey>;
+    export type RowInsertedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      RowInsertedInfo<TRowData, TKey>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7426,9 +7586,11 @@ declare module DevExpress.ui {
       readonly key: TKey;
       readonly error: Error;
     }
-    export type RowInsertingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        RowInsertingInfo<TRowData>;
+    export type RowInsertingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      RowInsertingInfo<TRowData>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7442,23 +7604,27 @@ declare module DevExpress.ui {
     export interface RowKeyInfo<TKey = any> {
       readonly key: TKey;
     }
-    export type RowPreparedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
-        readonly data: TRowData;
-        readonly key: TKey;
-        readonly values: Array<any>;
-        readonly columns: Array<Column<TRowData, TKey>>;
-        readonly rowIndex: number;
-        readonly rowType: string;
-        readonly groupIndex?: number;
-        readonly isSelected?: boolean;
-        readonly isExpanded?: boolean;
-        readonly isNewRow?: boolean;
-        readonly rowElement: DevExpress.core.DxElement;
-      };
-    export type RowRemovedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        RowRemovedInfo<TRowData, TKey>;
+    export type RowPreparedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
+      readonly data: TRowData;
+      readonly key: TKey;
+      readonly values: Array<any>;
+      readonly columns: Array<Column<TRowData, TKey>>;
+      readonly rowIndex: number;
+      readonly rowType: string;
+      readonly groupIndex?: number;
+      readonly isSelected?: boolean;
+      readonly isExpanded?: boolean;
+      readonly isNewRow?: boolean;
+      readonly rowElement: DevExpress.core.DxElement;
+    };
+    export type RowRemovedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      RowRemovedInfo<TRowData, TKey>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7467,9 +7633,11 @@ declare module DevExpress.ui {
       readonly key: TKey;
       readonly error: Error;
     }
-    export type RowRemovingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        RowRemovingInfo<TRowData, TKey>;
+    export type RowRemovingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      RowRemovingInfo<TRowData, TKey>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7490,9 +7658,11 @@ declare module DevExpress.ui {
       readonly groupIndex?: number;
       readonly isExpanded?: boolean;
     };
-    export type RowUpdatedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        RowUpdatedInfo<TRowData, TKey>;
+    export type RowUpdatedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      RowUpdatedInfo<TRowData, TKey>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7501,9 +7671,11 @@ declare module DevExpress.ui {
       readonly key: TKey;
       readonly error: Error;
     }
-    export type RowUpdatingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        RowUpdatingInfo<TRowData, TKey>;
+    export type RowUpdatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      RowUpdatingInfo<TRowData, TKey>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7513,9 +7685,11 @@ declare module DevExpress.ui {
       readonly key: TKey;
       cancel: boolean | PromiseLike<void>;
     }
-    export type RowValidatingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        RowValidatingInfo<TRowData, TKey>;
+    export type RowValidatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      RowValidatingInfo<TRowData, TKey>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7538,12 +7712,16 @@ declare module DevExpress.ui {
       errorText: string;
       promise?: PromiseLike<void>;
     }
-    export type SavedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        DataChangeInfo<TRowData, TKey>;
-    export type SavingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        SavingInfo<TRowData, TKey>;
+    export type SavedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      DataChangeInfo<TRowData, TKey>;
+    export type SavingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      SavingInfo<TRowData, TKey>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7552,12 +7730,12 @@ declare module DevExpress.ui {
       promise?: PromiseLike<void>;
       cancel: boolean;
     }
-    export interface Scrolling extends ScrollingBase {
+    export type Scrolling = ScrollingBase & {
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
        */
       mode?: 'infinite' | 'standard' | 'virtual';
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7628,7 +7806,7 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
-    export interface Selection extends SelectionBase {
+    export type Selection = SelectionBase & {
       /**
        * [descr:dxDataGridOptions.selection.deferred]
        */
@@ -7641,7 +7819,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.selection.showCheckBoxesMode]
        */
       showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7655,9 +7833,11 @@ declare module DevExpress.ui {
        */
       mode?: 'multiple' | 'none' | 'single';
     }
-    export type SelectionChangedEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        SelectionChangedInfo<TRowData, TKey>;
+    export type SelectionChangedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      SelectionChangedInfo<TRowData, TKey>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7887,9 +8067,11 @@ declare module DevExpress.ui {
        */
       valueFormat?: Format;
     }
-    export type ToolbarPreparingEvent<TRowData = any, TKey = any> =
-      DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-        ToolbarPreparingInfo;
+    export type ToolbarPreparingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
+      ToolbarPreparingInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -8053,8 +8235,10 @@ declare module DevExpress.ui {
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Editing instead
    */
-  export type dxDataGridEditing<TRowData, TKey = any> =
-    DevExpress.ui.dxDataGrid.Editing<TRowData, TKey>;
+  export type dxDataGridEditing<
+    TRowData,
+    TKey = any
+  > = DevExpress.ui.dxDataGrid.Editing<TRowData, TKey>;
   /**
    * @deprecated use Properties instead
    */
@@ -12509,7 +12693,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.labelMode]
      */
-    labelMode?: 'default' | 'floating' | 'static' | 'hidden';
+    labelMode?: 'outside' | 'floating' | 'static' | 'hidden';
     /**
      * [descr:dxFormOptions.minColWidth]
      */
@@ -22246,8 +22430,10 @@ declare module DevExpress.ui {
   /**
    * @deprecated 
    */
-  export type GridBaseEditing<TRowData = any, TKey = any> =
-    DevExpress.ui.dxDataGrid.EditingBase<TRowData, TKey>;
+  export type GridBaseEditing<
+    TRowData = any,
+    TKey = any
+  > = DevExpress.ui.dxDataGrid.EditingBase<TRowData, TKey>;
   /**
    * @deprecated 
    */

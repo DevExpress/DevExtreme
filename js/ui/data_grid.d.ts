@@ -3736,7 +3736,7 @@ export interface ExcelCellInfo<TRowData = any, TKey = any> {
 }
 
 /** @public */
-export interface Export<TRowData = any, TKey = any> {
+export type Export<TRowData = any, TKey = any> = {
   /**
    * @docid dxDataGridOptions.export.allowExportSelectedData
    * @default false
@@ -3799,7 +3799,7 @@ export interface Export<TRowData = any, TKey = any> {
    * @type object
    */
   texts?: ExportTexts;
-}
+};
 
 export interface ExportTexts {
   /**
@@ -4204,7 +4204,7 @@ export interface dxDataGridToolbar {
 export type dxDataGridEditing<TRowData, TKey = any> = Editing<TRowData, TKey>;
 
 /** @public */
-export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowData, TKey> {
+export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & {
     /**
      * @docid dxDataGridOptions.editing.allowAdding
      * @default false
@@ -4236,7 +4236,7 @@ export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowDat
      * @public
      */
     texts?: any;
-}
+};
 
 /**
  * @public
@@ -4246,7 +4246,7 @@ export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowDat
 export type dxDataGridScrolling = Scrolling;
 
 /** @public */
-export interface Scrolling extends ScrollingBase {
+export type Scrolling = ScrollingBase & {
     /**
      * @docid dxDataGridOptions.scrolling.mode
      * @type Enums.GridScrollingMode
@@ -4254,7 +4254,7 @@ export interface Scrolling extends ScrollingBase {
      * @public
      */
     mode?: 'infinite' | 'standard' | 'virtual';
-}
+};
 
 /**
  * @public
@@ -4264,7 +4264,7 @@ export interface Scrolling extends ScrollingBase {
 export type dxDataGridSelection = Selection;
 
 /** @public */
-export interface Selection extends SelectionBase {
+export type Selection = SelectionBase & {
     /**
      * @docid dxDataGridOptions.selection.deferred
      * @default false
@@ -4285,7 +4285,7 @@ export interface Selection extends SelectionBase {
      * @public
      */
     showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';
-}
+};
 /**
  * @docid
  * @inherits GridBase
@@ -4739,6 +4739,78 @@ export interface Row<TRowData = any, TKey = any> {
      */
     readonly values: Array<any>;
 }
+
+/** @public */
+export type ExplicitTypes<TRowData, TKey> = {
+  AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<TRowData, TKey>;
+  CellClickEvent: CellClickEvent<TRowData, TKey>;
+  CellDblClickEvent: CellDblClickEvent<TRowData, TKey>;
+  CellHoverChangedEvent: CellHoverChangedEvent<TRowData, TKey>;
+  CellPreparedEvent: CellPreparedEvent<TRowData, TKey>;
+  Column: Column<TRowData, TKey>;
+  ColumnButton: ColumnButton<TRowData, TKey>;
+  ColumnButtonClickEvent: ColumnButtonClickEvent<TRowData, TKey>;
+  ColumnButtonTemplateData: ColumnButtonTemplateData<TRowData, TKey>;
+  ColumnCellTemplateData: ColumnCellTemplateData<TRowData, TKey>;
+  ColumnEditCellTemplateData: ColumnEditCellTemplateData<TRowData, TKey>;
+  ColumnGroupCellTemplateData: ColumnGroupCellTemplateData<TRowData, TKey>;
+  ColumnHeaderCellTemplateData: ColumnHeaderCellTemplateData<TRowData, TKey>;
+  ContentReadyEvent: ContentReadyEvent<TRowData, TKey>;
+  ContextMenuPreparingEvent: ContextMenuPreparingEvent<TRowData, TKey>;
+  DataErrorOccurredEvent: DataErrorOccurredEvent<TRowData, TKey>;
+  DisposingEvent: DisposingEvent<TRowData, TKey>;
+  EditCanceledEvent: EditCanceledEvent<TRowData, TKey>;
+  EditCancelingEvent: EditCancelingEvent<TRowData, TKey>;
+  Editing: Editing<TRowData, TKey>;
+  EditingStartEvent: EditingStartEvent<TRowData, TKey>;
+  EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
+  EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
+  Export: Export<TRowData, TKey>;
+  ExportedEvent: ExportedEvent<TRowData, TKey>;
+  ExportingEvent: ExportingEvent<TRowData, TKey>;
+  FileSavingEvent: FileSavingEvent<TRowData, TKey>;
+  FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
+  FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
+  FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;
+  FocusedRowChangingEvent: FocusedRowChangingEvent<TRowData, TKey>;
+  InitializedEvent: InitializedEvent<TRowData, TKey>;
+  InitNewRowEvent: InitNewRowEvent<TRowData, TKey>;
+  KeyDownEvent: KeyDownEvent<TRowData, TKey>;
+  MasterDetailTemplateData: MasterDetailTemplateData<TRowData, TKey>;
+  OptionChangedEvent: OptionChangedEvent<TRowData, TKey>;
+  Properties: Properties<TRowData, TKey>;
+  Row: Row<TRowData, TKey>;
+  RowClickEvent: RowClickEvent<TRowData, TKey>;
+  RowCollapsedEvent: RowCollapsedEvent<TRowData, TKey>;
+  RowCollapsingEvent: RowCollapsingEvent<TRowData, TKey>;
+  RowDblClickEvent: RowDblClickEvent<TRowData, TKey>;
+  RowDraggingAddEvent: RowDraggingAddEvent<TRowData, TKey>;
+  RowDraggingChangeEvent: RowDraggingChangeEvent<TRowData, TKey>;
+  RowDraggingEndEvent: RowDraggingEndEvent<TRowData, TKey>;
+  RowDraggingMoveEvent: RowDraggingMoveEvent<TRowData, TKey>;
+  RowDraggingRemoveEvent: RowDraggingRemoveEvent<TRowData, TKey>;
+  RowDraggingReorderEvent: RowDraggingReorderEvent<TRowData, TKey>;
+  RowDraggingStartEvent: RowDraggingStartEvent<TRowData, TKey>;
+  RowDraggingTemplateData: RowDraggingTemplateData<TRowData>;
+  RowExpandedEvent: RowExpandedEvent<TRowData, TKey>;
+  RowExpandingEvent: RowExpandingEvent<TRowData, TKey>;
+  RowInsertedEvent: RowInsertedEvent<TRowData, TKey>;
+  RowInsertingEvent: RowInsertingEvent<TRowData, TKey>;
+  RowPreparedEvent: RowPreparedEvent<TRowData, TKey>;
+  RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
+  RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
+  RowTemplateData: RowTemplateData<TRowData, TKey>;
+  RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
+  RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
+  RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
+  SavedEvent: SavedEvent<TRowData, TKey>;
+  SavingEvent: SavingEvent<TRowData, TKey>;
+  Scrolling: Scrolling;
+  Selection: Selection;
+  SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
+  Summary: Summary<TRowData, TKey>;
+  ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
+};
 
 /** @public */
 export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;

@@ -55,7 +55,7 @@ export default function() {
             });
 
             test('editor should preserve table cell breaks', function(assert) {
-                const value = '<table><tbody><tr><td>plain text</td><td>multi<br>line<br>text</td></tr><tr><td>multi<br>line<br>text</td><td>plain text</td></tr></tbody></table>';
+                const value = '<table><tbody><tr><td><p>plain text</p></td><td><p>multi<br>line<br>text</p></td></tr><tr><td><p>multi<br>line<br>text</p></td><td><p>plain text</p></td></tr></tbody></table>';
                 const $element = $('#htmlEditor');
                 const instance = $element.dxHtmlEditor({
                     value
@@ -82,7 +82,7 @@ export default function() {
                 {
                     name: 'break table cell',
                     value: '<table><tr><td>cell 1</td><td>cell 2</td></tr></table>',
-                    expected: '<table><tbody><tr><td>ce<br>ll 1</td><td>cell 2</td></tr></tbody></table>'
+                    expected: '<table><tbody><tr><td><p>ce<br>ll 1</p></td><td><p>cell 2</p></td></tr></tbody></table>'
                 }
             ].forEach(({ name, value, expected }) => {
                 test(name, function(assert) {

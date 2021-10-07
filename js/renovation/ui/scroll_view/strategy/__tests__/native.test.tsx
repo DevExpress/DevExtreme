@@ -676,21 +676,12 @@ describe('Native > Effects', () => {
 
       viewModel.updateDimensions();
 
-      if (useSimulatedScrollbar) {
-        expect(viewModel.containerClientWidth).toEqual(10);
-        expect(viewModel.containerClientHeight).toEqual(20);
-        expect(viewModel.contentClientWidth).toEqual(30);
-        expect(viewModel.contentClientHeight).toEqual(40);
-        expect(viewModel.contentScrollWidth).toEqual(50);
-        expect(viewModel.contentScrollHeight).toEqual(60);
-      } else {
-        expect(viewModel.containerClientWidth).toEqual(1);
-        expect(viewModel.containerClientHeight).toEqual(2);
-        expect(viewModel.contentClientWidth).toEqual(3);
-        expect(viewModel.contentClientHeight).toEqual(4);
-        expect(viewModel.contentScrollWidth).toEqual(5);
-        expect(viewModel.contentScrollHeight).toEqual(6);
-      }
+      expect(viewModel.containerClientWidth).toEqual(10);
+      expect(viewModel.containerClientHeight).toEqual(20);
+      expect(viewModel.contentClientWidth).toEqual(30);
+      expect(viewModel.contentClientHeight).toEqual(40);
+      expect(viewModel.contentScrollWidth).toEqual(50);
+      expect(viewModel.contentScrollHeight).toEqual(60);
     });
   });
 });
@@ -722,28 +713,27 @@ describe('Getters', () => {
 
   test.each(getPermutations([
     optionValues.reachBottomEnabled,
-    [{ top: 500, left: 500 }, { top: 499.5, left: 499.5 }, { top: 499.4, left: 499.4 },
-      { top: 499.6, left: 499.6 }, { top: 550, left: 550 },
-      { top: 549.4, left: 549.4 }, { top: 549.5, left: 549.5 }, { top: 549.6, left: 549.6 }],
+    [
+      550, 549.6, 549.5, 549.4, 500, 499.6, 499.5, 499.4, 499.01,
+      498.99, 498.51, 498.50, 498.49,
+    ],
   ]))('isReachBottom(), direction: vertical, reachBottomEnabled: %o, scrollLocation: %o',
-    (reachBottomEnabled, scrollLocation) => {
-      const viewModel = new Scrollable({
+    (reachBottomEnabled, scrollTop) => {
+      const helper = new ScrollableTestHelper({
         direction: 'vertical',
         reachBottomEnabled,
       });
 
-      viewModel.bottomPocketHeight = reachBottomEnabled ? 50 : 0;
-      viewModel.containerRef = {
-        current: {
-          scrollTop: scrollLocation.top,
-          scrollLeft: scrollLocation.left,
-          scrollHeight: 750,
-          clientHeight: 200,
-        },
-      } as RefObject;
+      helper.viewModel.bottomPocketHeight = reachBottomEnabled ? 50 : 0;
 
-      expect(viewModel.isReachBottom())
-        .toEqual(reachBottomEnabled && scrollLocation.top >= 499.5);
+      const maxOffset = -500;
+      Object.defineProperties(helper.viewModel, {
+        vScrollOffsetMax: { get() { return maxOffset; } },
+      });
+      helper.viewModel.containerRef = { current: { scrollTop } } as RefObject;
+
+      expect(helper.viewModel.isReachBottom())
+        .toEqual(reachBottomEnabled && scrollTop > 498.50);
     });
 
   test.each(getPermutations([
@@ -1128,7 +1118,7 @@ describe('Scrollbar integration', () => {
       const commonOptions = {
         containerSize: 0,
         contentSize: 0,
-        maxOffset: -0,
+        maxOffset: 0,
         scrollLocation: 0,
         visible: false,
         showScrollbar: 'onScroll',
