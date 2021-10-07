@@ -45,13 +45,14 @@ export class AppointmentDataProvider {
             appointmentDuration: this.options.appointmentDuration,
             showAllDayPanel: this.options.showAllDayPanel,
             timeZoneCalculator: this.options.timeZoneCalculator,
-            getLoadedResources: this.options.getLoadedResources,
-            getSupportAllDayRow: this.options.getSupportAllDayRow,
-            getViewType: this.options.getViewType,
-            getViewDirection: this.options.getViewDirection,
-            getDateRange: this.options.getDateRange,
-            getGroupCount: this.options.getGroupCount,
-            getViewDataProvider: this.options.getViewDataProvider
+            //
+            loadedResources: this.options.getLoadedResources,
+            supportAllDayRow: this.options.getSupportAllDayRow,
+            viewType: this.options.getViewType,
+            viewDirection: this.options.getViewDirection,
+            dateRange: this.options.getDateRange,
+            groupCount: this.options.getGroupCount,
+            viewDataProvider: this.options.getViewDataProvider
         };
 
         this.filterStrategy = this.filterStrategyName === FilterStrategies.virtual
@@ -85,8 +86,8 @@ export class AppointmentDataProvider {
         return this.getFilterStrategy().hasAllDayAppointments(adapters);
     }
 
-    filterLoadedAppointments(filterOption, timeZoneCalculator) {
-        return this.getFilterStrategy().filterLoadedAppointments(filterOption, timeZoneCalculator);
+    filterLoadedAppointments(filterOption, preparedItems) {
+        return this.getFilterStrategy().filterLoadedAppointments(filterOption, preparedItems);
     }
 
     calculateAppointmentEndDate(isAllDay, startDate) {
