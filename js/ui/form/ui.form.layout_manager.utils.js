@@ -43,8 +43,8 @@ export function convertToRenderFieldItemOptions({
     });
 
 
-    const isDefaultLabelMode = labelMode === 'default';
-    const needRenderLabel = labelOptions.visible && labelOptions.text && isDefaultLabelMode;
+    const isOutsideLabelMode = labelMode === 'outside';
+    const needRenderLabel = labelOptions.visible && labelOptions.text && isOutsideLabelMode;
     const { location: labelLocation, labelID } = labelOptions;
     const labelNeedBaselineAlign =
         labelLocation !== 'top'
@@ -75,8 +75,8 @@ export function convertToRenderFieldItemOptions({
             editorInputId: itemId,
             editorValidationBoundary,
             editorStylingMode,
-            labelMode: isDefaultLabelMode ? 'hidden' : labelMode,
-            labelText: isDefaultLabelMode ? undefined : labelOptions.text,
+            labelMode: isOutsideLabelMode ? 'hidden' : labelMode,
+            labelText: isOutsideLabelMode ? undefined : labelOptions.text,
             labelMark: getLabelMarkText(labelOptions.markOptions),
         })
     };
