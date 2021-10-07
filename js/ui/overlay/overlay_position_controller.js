@@ -47,11 +47,13 @@ class OverlayPositionController {
         this._$content = $content;
         this._$wrapper = $wrapper;
 
+        this._$markupContainer = undefined;
+        this._$wrapperCoveredElement = undefined;
+
         this._shouldRenderContentInitialPosition = true;
         this._visualPosition = undefined;
         this._initialPosition = undefined;
         this._previousVisualPosition = undefined;
-        this._$wrapperCoveredElement = undefined;
         this._$dragResizeContainer = undefined;
         this._outsideDragFactor = undefined;
 
@@ -59,6 +61,10 @@ class OverlayPositionController {
         this.updatePosition(position, target);
         this._updateDragResizeContainer();
         this._updateOutsideDragFactor();
+    }
+
+    get $container() {
+        return this._$markupContainer;
     }
 
     get $dragResizeContainer() {
@@ -141,7 +147,7 @@ class OverlayPositionController {
             $container = $(container).first();
         }
 
-        this._$container = $container.length ? $container : this._$root.parent();
+        this._$markupContainer = $container.length ? $container : this._$root.parent();
 
         this._updateWrapperCoveredElement();
         this._updateDragResizeContainer();
@@ -237,7 +243,7 @@ class OverlayPositionController {
 
         const isContainerDefined = originalViewPort().get(0) || this._props.container;
 
-        return isContainerDefined ? this._$container : $(window);
+        return isContainerDefined ? this._$markupContainer : $(window);
     }
 
     _updateWrapperCoveredElement() {
