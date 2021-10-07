@@ -4157,7 +4157,12 @@
             "Title": "Overview",
             "Name": "Overview",
             "DocUrl": "Guide/UI_Components/CheckBox/Overview/",
-            "Widget": "CheckBox"
+            "Widget": "CheckBox",
+            "Badge": "Updated",
+            "MvcAdditionalFiles": [
+              "/Controllers/CheckBoxController.cs",
+              "/Views/CheckBox/Overview.cshtml"
+            ]
           }
         ]
       },
