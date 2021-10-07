@@ -5,21 +5,22 @@ import { prepareGenerationOptions } from '../../workspaces/base/work_space';
 import { getViewRenderConfigByType } from '../../workspaces/base/work_space_config';
 import { WorkSpaceProps } from '../../workspaces/props';
 import { CellsMetaData, ViewDataProviderType } from '../../workspaces/types';
-import { getAppointmentsModel } from '../appointments';
+import { getAppointmentsConfig, getAppointmentsModel } from '../appointments';
 import {
   createFactoryInstances,
   generateKey,
 } from '../../../../../ui/scheduler/instanceFactory';
 import { createTimeZoneCalculator } from '../../common';
+import { AppointmentsConfigType } from '../types';
+import { TimeZoneCalculator } from '../../timeZoneCalculator/utils';
 
 const prepareInstances = (
   viewType: ViewType,
   currentDate: Date,
   intervalCount: number,
 ): {
-  timeZoneCalculator: any;
-  schedulerProps: SchedulerProps;
-  workspaceProps: WorkSpaceProps;
+  appointmentsConfig: AppointmentsConfigType;
+  timeZoneCalculator: TimeZoneCalculator;
   viewDataProvider: ViewDataProviderType;
   DOMMetaData: CellsMetaData;
 } => {
@@ -53,11 +54,17 @@ const prepareInstances = (
     getDataAccessors: () => ({ }),
   });
 
-  return {
-    timeZoneCalculator: createTimeZoneCalculator('America/Los_Angeles'),
-    viewDataProvider,
+  const appointmentsConfig = getAppointmentsConfig(
     schedulerProps,
     workspaceProps,
+    [],
+    viewDataProvider,
+  );
+
+  return {
+    appointmentsConfig,
+    timeZoneCalculator: createTimeZoneCalculator('America/Los_Angeles'),
+    viewDataProvider,
     DOMMetaData: [] as any,
   };
 };
@@ -70,8 +77,7 @@ describe('Appointments model', () => {
   );
 
   const appointmentsModel = getAppointmentsModel(
-    instances.schedulerProps,
-    instances.workspaceProps,
+    instances.appointmentsConfig,
     instances.viewDataProvider,
     instances.timeZoneCalculator,
     { } as any,
@@ -79,7 +85,7 @@ describe('Appointments model', () => {
   );
 
   describe('getAppointmentsModel', () => {
-    it('should contains correct appointment config', () => {
+    it('should be creared correctly', () => {
       expect(appointmentsModel)
         .toMatchObject({
           adaptivityEnabled: false,
@@ -102,7 +108,7 @@ describe('Appointments model', () => {
           allowAllDayResizing: false, // TODO resizing
           dateTableOffset: 0,
           groupOrientation: 'horizontal',
-          startViewDate: new Date('2021-09-22T00:00:00'),
+          startViewDate: new Date(2021, 8, 19),
           timeZone: '',
           firstDayOfWeek: 0,
           viewType: 'week',
