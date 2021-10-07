@@ -208,8 +208,14 @@ const Form = Widget.inherit({
     },
 
     _applyLabelsWidthWithGroups: function($container, colCount, excludeTabbed, layoutManager) {
-        if(this.option('alignRootItemLabels') === true) {
-            this._alignRootSimpleItems($container, colCount, excludeTabbed, layoutManager);
+        if(this.option('alignRootItemLabels') === true) { // TODO: private option
+            const $rootSimpleItems = $container.find(`.${ROOT_SIMPLE_ITEM_CLASS}`);
+            for(let colIndex = 0; colIndex < colCount; colIndex++) {
+                // TODO: root items are aligned with root items only
+                // this code doesn't align root items with grouped items in the same column
+                // (see T942517)
+                this._applyLabelsWidthByCol($rootSimpleItems, colIndex, excludeTabbed, layoutManager);
+            }
         }
 
         const alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
@@ -221,13 +227,6 @@ const Form = Widget.inherit({
             for(i = 0; i < $groups.length; i++) {
                 this._applyLabelsWidth($groups.eq(i), excludeTabbed, undefined, undefined, layoutManager);
             }
-        }
-    },
-
-    _alignRootSimpleItems: function($container, colCount, excludeTabbed, layoutManager) {
-        const $rootSimpleItems = $container.find(`.${ROOT_SIMPLE_ITEM_CLASS}`);
-        for(let colIndex = 0; colIndex < colCount; colIndex++) {
-            this._applyLabelsWidthByCol($rootSimpleItems, colIndex, excludeTabbed, layoutManager);
         }
     },
 
@@ -259,6 +258,8 @@ const Form = Widget.inherit({
 
     _alignLabelsInColumn: function({ layoutManager, inOneColumn, $container, excludeTabbed, items }) {
         if(!hasWindow() || this._labelLocation() === 'top') {
+            // TODO: label location can be changed to 'left/right' for some labels
+            // but this condition disables alignment for such items
             return;
         }
 
