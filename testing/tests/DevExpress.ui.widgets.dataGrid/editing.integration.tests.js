@@ -934,7 +934,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.getScrollable().scrollTo({ y: 0 });
             dataGrid.addRow();
             dataGrid.saveEditData();
-            for(let i = 0; i < 20; i++) {
+            for(let i = 0; i < 25; i++) {
                 dataGrid.getScrollable().scrollTo({ y: 10000 });
                 this.clock.tick();
             }
