@@ -32,7 +32,7 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
-    - name: Validate declarations
+    - name: Check dx.all.d.ts is up-to-date
       run: |
         target=./ts/dx.all.d.ts
         cp $target $target.current
