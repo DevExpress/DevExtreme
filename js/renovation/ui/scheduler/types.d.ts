@@ -3,7 +3,7 @@ export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMon
 
 export interface DataAccessorType {
   getter: Record<string, (data: unknown) => Date | string>;
-  setter: unknown;
+  setter: Record<string, (object: unknown, data: unknown) => Date | string>;
   expr: unknown;
 }
 

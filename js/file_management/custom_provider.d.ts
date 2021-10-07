@@ -5,7 +5,13 @@ import FileSystemProviderBase, {
 import FileSystemItem from './file_system_item';
 import UploadInfo from './upload_info';
 
-/** @namespace DevExpress.fileManagement */
+/** @public */
+export type Options = CustomFileSystemProviderOptions;
+
+/**
+ * @deprecated Use Options instead
+ * @namespace DevExpress.fileManagement
+ */
 export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
     /**
      * @docid
@@ -90,5 +96,5 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
  * @public
  */
 export default class CustomFileSystemProvider extends FileSystemProviderBase {
-    constructor(options?: CustomFileSystemProviderOptions)
+    constructor(options?: Options)
 }

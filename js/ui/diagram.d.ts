@@ -611,15 +611,15 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       autoSizeEnabled?: boolean;
       /**
        * @docid
-       * @default "children"
+       * @default "containerKey"
        */
-      containerChildrenExpr?: string | ((data: any, value?: any) => any);
+      containerKeyExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @default undefined
        */
-      containerKeyExpr?: string | ((data: any, value?: any) => any);
-      /**
+       containerChildrenExpr?: string | ((data: any, value?: any) => any);
+       /**
        * @docid
        * @default undefined
        */
@@ -1120,6 +1120,18 @@ export default class dxDiagram extends Widget<dxDiagramOptions> {
      * @public
      */
     updateToolbox(): void;
+    /**
+     * @docid
+     * @publicName fitToContent()
+     * @public
+     */
+     fitToContent(): void;
+    /**
+     * @docid
+     * @publicName fitToWidth()
+     * @public
+     */
+     fitToWidth(): void;
 }
 
 /**

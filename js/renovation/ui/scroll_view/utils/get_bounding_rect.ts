@@ -1,4 +1,4 @@
-import { DomRect } from '../common/types';
+import { DomRect } from '../common/types.d';
 
 export function getBoundingRect(
   el: Element | undefined | null,

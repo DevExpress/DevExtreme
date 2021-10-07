@@ -223,6 +223,28 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         assert.ok($draggableElement.find('.dx-data-row').hasClass('my-row'), 'custom row');
     });
 
+    QUnit.test('Dragging row when dataRowTemplate is specified', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        $.extend(this.options, {
+            dataRowTemplate: function() {
+                return $('<tr class=\'my-row\'><td>Test</td></tr>');
+            }
+        });
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+
+        // act
+        pointerMock(rowsView.getRowElement(0)).start().down().move(0, 70);
+
+        // assert
+        const $draggableElement = $('body').children('.dx-sortable-dragging');
+        assert.strictEqual($draggableElement.find('.dx-data-row').length, 1, 'data row count');
+        assert.ok($draggableElement.find('.dx-data-row').children().hasClass('my-row'), 'custom row');
+    });
+
     QUnit.test('Dragging row when there is group column', function(assert) {
     // arrange
         const $testElement = $('#container');

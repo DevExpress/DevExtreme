@@ -835,7 +835,7 @@ gridCore.registerModule('summary', {
             rowsView: (function() {
                 return {
                     _createRow: function(row) {
-                        const $row = this.callBase(row);
+                        const $row = this.callBase.apply(this, arguments);
 
                         row && $row.addClass(row.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE ? DATAGRID_GROUP_FOOTER_CLASS : '');
                         return $row;

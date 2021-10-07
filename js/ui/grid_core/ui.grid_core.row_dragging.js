@@ -55,12 +55,15 @@ const RowDraggingExtender = {
             // T929503
             this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
         };
+        const filter = this.option('dataRowTemplate')
+            ? '> table > tbody.dx-row:not(.dx-freespace-row):not(.dx-virtual-row)'
+            : '> table > tbody > .dx-row:not(.dx-freespace-row):not(.dx-virtual-row)';
 
         if((allowReordering || this[currentSortableName]) && $content.length) {
             this[currentSortableName] = this._createComponent($content, Sortable, extend({
                 component: this.component,
                 contentTemplate: null,
-                filter: '> table > tbody > .dx-row:not(.dx-freespace-row):not(.dx-virtual-row)',
+                filter,
                 dragTemplate: this._getDraggableRowTemplate(),
                 handle: rowDragging.showDragIcons && `.${COMMAND_HANDLE_CLASS}`,
                 dropFeedbackMode: 'indicate'

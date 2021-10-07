@@ -146,6 +146,10 @@ jest.mock('../common/component', () => class {
     this._deprecatedOptions.baseDeprecatedOption = true;
   }
 
+  _getDefaultOptions(): Record<string, unknown> {
+    return { baseOption: true, rowTemplate: null };
+  }
+
   _getAdditionalProps(): string[] {
     return ['baseAdditionalProp'];
   }
@@ -189,6 +193,7 @@ describe('DataGrid Wrapper', () => {
     expect(component._deprecatedOptions).toEqual({
       baseDeprecatedOption: true,
       useKeyboard: { since: '19.2', alias: 'keyboardNavigation.enabled' },
+      rowTemplate: { since: '21.2', message: 'Use the "dataRowTemplate" option instead' },
     });
   });
 
@@ -573,6 +578,15 @@ describe('DataGrid Wrapper', () => {
 
       expect(stateResult).toBe(undefined);
       expect(mockInternalComponent.state).toBeCalledWith(state);
+    });
+
+    it('default options should not contain rowTemplate because it is deprecated', () => {
+      const dataGrid = createDataGrid({});
+
+      const defaultOptions = dataGrid._getDefaultOptions();
+
+      expect('rowTemplate' in defaultOptions).toBe(false);
+      expect(defaultOptions.baseOption).toBe(true);
     });
 
     test.each`
