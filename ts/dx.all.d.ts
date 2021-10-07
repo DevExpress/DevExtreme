@@ -14316,7 +14316,6 @@ declare module DevExpress.ui {
       | 'italic'
       | 'link'
       | 'image'
-      | 'size'
       | 'strike'
       | 'subscript'
       | 'superscript'
