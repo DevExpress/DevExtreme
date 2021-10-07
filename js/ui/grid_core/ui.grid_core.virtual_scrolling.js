@@ -636,10 +636,7 @@ const VirtualScrollingRowsViewExtender = (function() {
 
         _needUpdateRowHeight: function(itemsCount) {
             return this.callBase.apply(this, arguments) || (itemsCount > 0 &&
-                (
-                    (isAppendMode(this) && !gridCoreUtils.isVirtualRowRendering(this))
-                    || (this.option(LEGACY_SCROLLING_MODE) === false && (isAppendMode(this) || isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)))
-                )
+                (isAppendMode(this) && !gridCoreUtils.isVirtualRowRendering(this))
             );
         },
 
@@ -652,11 +649,12 @@ const VirtualScrollingRowsViewExtender = (function() {
 
                 const viewportHeight = this._hasHeight ? getOuterHeight(this.element()) : getOuterHeight(getWindow());
                 const dataController = this._dataController;
-                dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
 
                 if(this.option(LEGACY_SCROLLING_MODE) === false) {
-                    // dataController.viewportHeight(viewportHeight);
+                    dataController.viewportHeight(viewportHeight);
                     dataController.updateViewport();
+                } else {
+                    dataController.viewportSize(Math.ceil(viewportHeight / this._rowHeight));
                 }
             }
         },

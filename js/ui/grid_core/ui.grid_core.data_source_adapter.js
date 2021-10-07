@@ -537,13 +537,6 @@ export default gridCore.Controller.inherit((function() {
                 return;
             }
 
-            if(options.lastLoadOptions) {
-                this._lastLoadOptions = options.lastLoadOptions;
-                Object.keys(options.operationTypes).forEach(operationType => {
-                    this._lastOperationTypes[operationType] = this._lastOperationTypes[operationType] || options.operationTypes[operationType];
-                });
-            }
-
             if(localPaging) {
                 options.skip = loadOptions.skip;
                 options.take = loadOptions.take;
@@ -606,6 +599,15 @@ export default gridCore.Controller.inherit((function() {
                     });
                 }
             }
+
+            when(options.data).done(() => {
+                if(options.lastLoadOptions) {
+                    this._lastLoadOptions = options.lastLoadOptions;
+                    Object.keys(options.operationTypes).forEach(operationType => {
+                        this._lastOperationTypes[operationType] = this._lastOperationTypes[operationType] || options.operationTypes[operationType];
+                    });
+                }
+            });
             options.storeLoadOptions = options.originalStoreLoadOptions;
         },
         _handleDataLoadedCore: function(options) {
