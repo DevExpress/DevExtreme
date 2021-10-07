@@ -18,6 +18,7 @@ type IComponent = {
   independentEvents?: IIndependentEvents[],
   templates?: string[];
   propTypings?: IPropTyping[];
+  optionsTypeParams?: string[];
 } & {
   nestedComponents?: INestedComponent[];
   configComponentPath?: string;
@@ -202,10 +203,15 @@ const renderImports: (model: {
   optionsAliasName?: string;
   hasExtraOptions: boolean;
   hasPropTypings: boolean;
+  hasExplicitTypes: boolean;
   configComponentPath?: string;
 }) => string = createTempate(
-  'import <#= it.widgetName #>, {\n'
-+ '    IOptions<#? it.optionsAliasName #> as <#= it.optionsAliasName #><#?#>\n'
+  '<#? it.hasExplicitTypes #>'
+    + 'export { ExplicitTypes } from "<#= it.dxExportPath #>";\n'
++ '<#?#>'
+
++ 'import <#= it.widgetName #>, {\n'
++ '    Properties<#? it.optionsAliasName #> as <#= it.optionsAliasName #><#?#>\n'
 + '} from "<#= it.dxExportPath #>";\n\n'
 
 + '<#? it.hasPropTypings #>'
@@ -283,8 +289,18 @@ const renderNestedComponent: (model: {
 + '\n}',
 );
 
+const TYPE_PARAMS = '<#? it.typeParams #>'
+    + '<<#= it.typeParams.join(", ") #>>'
++ '<#?#>';
+
+const TYPE_PARAMS_WITH_DEFAULTS = '<#? it.typeParams #>'
+    // eslint-disable-next-line no-template-curly-in-string
+    + '<<#= it.typeParams.map(p => `${p} = any`).join(", ") #>>'
++ '<#?#>';
+
 const renderOptionsInterface: (model: {
   optionsName: string;
+  typeParams: string[] | undefined;
   templates: Array<{
     render: string;
     component: string;
@@ -298,7 +314,11 @@ const renderOptionsInterface: (model: {
     type: string;
   }>;
 }) => string = createTempate(
-  'interface <#= it.optionsName #> extends IOptions, IHtmlOptions {\n'
+  `interface <#= it.optionsName #>${TYPE_PARAMS_WITH_DEFAULTS} extends Properties${TYPE_PARAMS}, IHtmlOptions {\n`
+
++ '<#? it.typeParams #>'
+    + `  dataSource?: Properties${TYPE_PARAMS}["dataSource"];\n`
++ '<#?#>'
 
 + '<#~ it.templates :template #>'
     + `  <#= template.render #>?: ${TYPE_RENDER};\n`
@@ -329,8 +349,9 @@ const renderComponent: (model: {
   renderedPropTypings?: string[];
   isPortalComponent?: boolean;
   useRequestAnimationFrameFlag?: boolean;
+  typeParams: string[] | undefined;
 }) => string = createTempate(
-  `class <#= it.className #> extends BaseComponent<<#= it.optionsName #>> {
+  `class <#= it.className #>${TYPE_PARAMS} extends BaseComponent<<#= it.optionsName #>${TYPE_PARAMS}> {
 
   public get instance(): <#= it.widgetName #> {
     return this._instance;
@@ -537,6 +558,7 @@ function generate(component: IComponent): string {
       optionsAliasName: hasExtraOptions ? undefined : optionsName,
       hasExtraOptions,
       hasPropTypings: isNotEmptyArray(renderedPropTypings),
+      hasExplicitTypes: !!component.optionsTypeParams?.length,
       configComponentPath: isNotEmptyArray(nestedComponents)
         ? component.configComponentPath
         : undefined,
@@ -547,6 +569,7 @@ function generate(component: IComponent): string {
       defaultProps: defaultProps || [],
       onChangeEvents: onChangeEvents || [],
       templates: templates || [],
+      typeParams: component.optionsTypeParams?.length ? component.optionsTypeParams : undefined,
     }),
 
     renderedComponent: renderComponent({
@@ -565,6 +588,7 @@ function generate(component: IComponent): string {
       expectedChildren: component.expectedChildren,
       useRequestAnimationFrameFlag: USE_REQUEST_ANIMATION_FRAME.has(widgetName),
       isPortalComponent: PORTAL_COMPONENTS.has(widgetName),
+      typeParams: component.optionsTypeParams?.length ? component.optionsTypeParams : undefined,
     }),
 
     renderedNestedComponents: nestedComponents && nestedComponents.map(renderNestedComponent),

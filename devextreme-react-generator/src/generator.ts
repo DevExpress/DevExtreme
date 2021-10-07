@@ -228,6 +228,7 @@ export function mapWidget(
       nestedComponents: nestedOptions && nestedOptions.length > 0 ? nestedOptions : undefined,
       expectedChildren: raw.nesteds,
       propTypings: propTypings.length > 0 ? propTypings : undefined,
+      optionsTypeParams: raw.optionsTypeParams,
     },
   };
 }

@@ -571,6 +571,7 @@ describe('mapWidget', () => {
     nesteds: [],
     options: [],
     templates: [],
+    optionsTypeParams: [],
   };
 
   it('should rename widget', () => {
