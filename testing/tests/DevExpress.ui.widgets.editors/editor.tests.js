@@ -351,7 +351,7 @@ QUnit.module('validation', {
             this.reinitEditor({
                 isValid: true,
                 validationError: {
-                    message: ''
+                    message: 'some'
                 },
                 validationStatus: 'pending'
             });
@@ -373,7 +373,7 @@ QUnit.module('validation', {
                     validationMessageMode: 'always',
                     isValid: false,
                     validationError: {
-                        message: ''
+                        message: 'some'
                     }
                 });
                 const validationMessage = this.getValidationMessage();
