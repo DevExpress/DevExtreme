@@ -6409,8 +6409,10 @@ declare module DevExpress.ui {
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
       DataChangeInfo<TRowData, TKey>;
-    export interface Editing<TRowData = any, TKey = any>
-      extends EditingBase<TRowData, TKey> {
+    export type Editing<TRowData = any, TKey = any> = EditingBase<
+      TRowData,
+      TKey
+    > & {
       /**
        * [descr:dxDataGridOptions.editing.allowAdding]
        */
@@ -6437,7 +6439,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.editing.texts]
        */
       texts?: any;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6642,7 +6644,7 @@ declare module DevExpress.ui {
       numberFormat?: string;
       gridCell?: DevExpress.excelExporter.DataGridCell;
     }
-    export interface Export<TRowData = any, TKey = any> {
+    export type Export<TRowData = any, TKey = any> = {
       /**
        * [descr:dxDataGridOptions.export.allowExportSelectedData]
        */
@@ -6685,7 +6687,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.export.texts]
        */
       texts?: ExportTexts;
-    }
+    };
     export type ExportedEvent<
       TRowData = any,
       TKey = any
@@ -7652,12 +7654,12 @@ declare module DevExpress.ui {
       promise?: PromiseLike<void>;
       cancel: boolean;
     }
-    export interface Scrolling extends ScrollingBase {
+    export type Scrolling = ScrollingBase & {
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
        */
       mode?: 'infinite' | 'standard' | 'virtual';
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7728,7 +7730,7 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
-    export interface Selection extends SelectionBase {
+    export type Selection = SelectionBase & {
       /**
        * [descr:dxDataGridOptions.selection.deferred]
        */
@@ -7741,7 +7743,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.selection.showCheckBoxesMode]
        */
       showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
