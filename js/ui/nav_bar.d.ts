@@ -10,43 +10,49 @@ import {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-import dxTabs, {
+import {
     Item as dxTabsItem,
-    dxTabsOptions,
 } from './tabs';
 
-/** @public */
-export type ContentReadyEvent = EventInfo<dxNavBar>;
+import dxTabsBase, {
+    dxTabsBaseOptions,
+} from './tabs_base';
 
 /** @public */
-export type DisposingEvent = EventInfo<dxNavBar>;
+export type ContentReadyEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxNavBar<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxNavBar>;
+export type DisposingEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxNavBar<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+export type InitializedEvent<TItem extends string | Item<any> | any = any, TKey = any> = InitializedEventInfo<dxNavBar<TItem, TKey>>;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+export type ItemClickEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxNavBar<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+export type ItemContextMenuEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxNavBar<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+export type ItemHoldEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxNavBar<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxNavBar> & ChangedOptionInfo;
+export type ItemRenderedEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxNavBar<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type SelectionChangedEvent = EventInfo<dxNavBar> & SelectionChangedInfo;
+export type OptionChangedEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxNavBar<TItem, TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxNavBar<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
+export interface dxNavBarOptions<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> extends dxTabsBaseOptions<dxNavBar<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @public
@@ -60,19 +66,22 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
  * @deprecated dxTabs
  * @public
  */
-export default class dxNavBar extends dxTabs<dxNavBarOptions> { }
+export default class dxNavBar<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> extends dxTabsBase<dxNavBarOptions<TItem, TKey>, TItem, TKey> { }
 
 /**
  * @public
  * @namespace DevExpress.ui.dxNavBar
  */
-export type Item = dxNavBarItem;
+export type Item<TItem extends Item<any> | any = any> = dxNavBarItem<TItem>;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxNavBarItem extends dxTabsItem {
+export interface dxNavBarItem<TItem extends dxNavBarItem<any> | any = any> extends dxTabsItem<TItem> {
     /**
      * @docid
      * @public
@@ -81,10 +90,36 @@ export interface dxNavBarItem extends dxTabsItem {
 }
 
 /** @public */
-export type Properties = dxNavBarOptions;
+export type ExplicitTypes<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+};
+
+/** @public */
+export type Properties<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = dxNavBarOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = dxNavBarOptions;
+export type Options<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type IOptions = dxNavBarOptions;
+export type IOptions<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = Properties<TItem, TKey>;

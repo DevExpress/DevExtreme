@@ -27,48 +27,51 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = EventInfo<dxToolbar>;
+export type ContentReadyEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent = EventInfo<dxToolbar>;
+export type DisposingEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxToolbar>;
+export type InitializedEvent<TItem extends string | Item<any> | any = any, TKey = any> = InitializedEventInfo<dxToolbar<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxToolbar> & ItemInfo;
+export type ItemClickEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxToolbar<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxToolbar> & ItemInfo;
+export type ItemContextMenuEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxToolbar<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxToolbar> & ItemInfo;
+export type ItemHoldEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxToolbar<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxToolbar> & ItemInfo;
+export type ItemRenderedEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxToolbar<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxToolbar> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
+export interface dxToolbarOptions<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> extends CollectionWidgetOptions<dxToolbar<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @type string | Array<string | dxToolbarItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
     /**
      * @docid
      * @type Array<string | dxToolbarItem | any>
      * @fires dxToolbarOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | Item | any>;
+    items?: Array<TItem>;
     /**
      * @docid
      * @default "menuItem"
@@ -76,7 +79,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    menuItemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    menuItemTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @deprecated
@@ -91,19 +94,22 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxToolbar extends CollectionWidget<dxToolbarOptions> { }
+export default class dxToolbar<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> extends CollectionWidget<dxToolbarOptions<TItem, TKey>, TItem, TKey> { }
 
 /**
  * @public
  * @namespace DevExpress.ui.dxToolbar
  * */
-export type Item = dxToolbarItem;
+export type Item<TItem extends Item<any> | any = any> = dxToolbarItem<TItem>;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxToolbarItem extends CollectionWidgetItem {
+export interface dxToolbarItem<TItem extends dxToolbarItem<any> | any = any> extends CollectionWidgetItem<TItem> {
     /**
      * @docid
      * @default undefined
@@ -151,10 +157,35 @@ export interface dxToolbarItem extends CollectionWidgetItem {
 }
 
 /** @public */
-export type Properties = dxToolbarOptions;
+export type ExplicitTypes<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+};
+
+/** @public */
+export type Properties<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = dxToolbarOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = dxToolbarOptions;
+export type Options<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type IOptions = dxToolbarOptions;
+export type IOptions<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = Properties<TItem, TKey>;

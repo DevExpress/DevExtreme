@@ -18,34 +18,37 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = EventInfo<dxBox>;
+export type ContentReadyEvent<TItem extends string | Item<any, TKey> | any = any, TKey = any> = EventInfo<dxBox<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent = EventInfo<dxBox>;
+export type DisposingEvent<TItem extends string | Item<any, TKey> | any = any, TKey = any> = EventInfo<dxBox<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxBox>;
+export type InitializedEvent<TItem extends string | Item<any, TKey> | any = any, TKey = any> = InitializedEventInfo<dxBox<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxBox> & ItemInfo;
+export type ItemClickEvent<TItem extends string | Item<any, TKey> | any = any, TKey = any> = NativeEventInfo<dxBox<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxBox> & ItemInfo;
+export type ItemContextMenuEvent<TItem extends string | Item<any, TKey> | any = any, TKey = any> = NativeEventInfo<dxBox<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxBox> & ItemInfo;
+export type ItemHoldEvent<TItem extends string | Item<any, TKey> | any = any, TKey = any> = NativeEventInfo<dxBox<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxBox> & ItemInfo;
+export type ItemRenderedEvent<TItem extends string | Item<any, TKey> | any = any, TKey = any> = NativeEventInfo<dxBox<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxBox> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends string | Item<any, TKey> | any = any, TKey = any> = EventInfo<dxBox<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
+export interface dxBoxOptions<
+    TItem extends string | Item<any, TKey> | any = any,
+    TKey = any,
+> extends CollectionWidgetOptions<dxBox<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @type Enums.BoxAlign
@@ -66,7 +69,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
     /**
      * @docid
      * @type Enums.BoxDirection
@@ -80,7 +83,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      * @fires dxBoxOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | Item | any>;
+    items?: Array<TItem>;
 }
 /**
  * @docid
@@ -88,19 +91,22 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxBox extends CollectionWidget<dxBoxOptions> { }
+export default class dxBox<
+    TItem extends string | dxBoxItem<any, TKey> | any = any,
+    TKey = any,
+> extends CollectionWidget<dxBoxOptions<TItem, TKey>, TItem, TKey> { }
 
 /**
  * @public
  * @namespace DevExpress.ui.dxBox
  */
-export type Item = dxBoxItem;
+export type Item<TItem extends Item<any, TKey> | any = any, TKey = any> = dxBoxItem<TItem, TKey>;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxBoxItem extends CollectionWidgetItem {
+export interface dxBoxItem<TItem extends Item<any, TKey> | any = any, TKey = any> extends CollectionWidgetItem<TItem> {
     /**
      * @docid
      * @type number | Enums.Mode
@@ -112,8 +118,9 @@ export interface dxBoxItem extends CollectionWidgetItem {
      * @docid
      * @default undefined
      * @public
+     * @type dxBoxOptions
      */
-    box?: dxBoxOptions;
+    box?: dxBoxOptions<TItem, TKey>;
     /**
      * @docid
      * @default 0
@@ -129,10 +136,35 @@ export interface dxBoxItem extends CollectionWidgetItem {
 }
 
 /** @public */
-export type Properties = dxBoxOptions;
+export type ExplicitTypes<
+    TItem extends string | Item<any, TKey> | any,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+};
+
+/** @public */
+export type Properties<
+    TItem extends string | Item<any, TKey> | any = any,
+    TKey = any,
+> = dxBoxOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = dxBoxOptions;
+export type Options<
+    TItem extends string | Item<any, TKey> | any = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type IOptions = dxBoxOptions;
+export type IOptions<
+    TItem extends string | Item<any, TKey> | any = any,
+    TKey = any,
+> = Properties<TItem, TKey>;

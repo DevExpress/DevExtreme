@@ -18,34 +18,37 @@ import CollectionWidget, {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent = EventInfo<dxTileView>;
+export type ContentReadyEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxTileView<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent = EventInfo<dxTileView>;
+export type DisposingEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxTileView<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxTileView>;
+export type InitializedEvent<TItem extends string | Item<any> | any = any, TKey = any> = InitializedEventInfo<dxTileView<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxTileView> & ItemInfo;
+export type ItemClickEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxTileView<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxTileView> & ItemInfo;
+export type ItemContextMenuEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxTileView<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxTileView> & ItemInfo;
+export type ItemHoldEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxTileView<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxTileView> & ItemInfo;
+export type ItemRenderedEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxTileView<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxTileView> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxTileView<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
+export interface dxTileViewOptions<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> extends CollectionWidgetOptions<dxTileView<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @default true
@@ -70,7 +73,7 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
     /**
      * @docid
      * @type Enums.Orientation
@@ -108,7 +111,7 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
      * @fires dxTileViewOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | Item | any>;
+    items?: Array<TItem>;
     /**
      * @docid
      * @default false
@@ -122,7 +125,10 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTileView extends CollectionWidget<dxTileViewOptions> {
+export default class dxTileView<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> extends CollectionWidget<dxTileViewOptions<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @publicName scrollPosition()
@@ -136,13 +142,13 @@ export default class dxTileView extends CollectionWidget<dxTileViewOptions> {
  * @public
  * @namespace DevExpress.ui.dxTileView
  */
-export type Item = dxTileViewItem;
+export type Item<TItem extends Item<any> | any = any> = dxTileViewItem<TItem>;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxTileViewItem extends CollectionWidgetItem {
+export interface dxTileViewItem<TItem extends dxTileViewItem<any> | any = any> extends CollectionWidgetItem<TItem> {
     /**
      * @docid
      * @default 1
@@ -158,10 +164,35 @@ export interface dxTileViewItem extends CollectionWidgetItem {
 }
 
 /** @public */
-export type Properties = dxTileViewOptions;
+export type ExplicitTypes<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+};
+
+/** @public */
+export type Properties<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = dxTileViewOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = dxTileViewOptions;
+export type Options<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type IOptions = dxTileViewOptions;
+export type IOptions<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = Properties<TItem, TKey>;

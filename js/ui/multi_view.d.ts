@@ -1,9 +1,3 @@
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
-
 import {
     EventInfo,
     NativeEventInfo,
@@ -12,123 +6,105 @@ import {
     ItemInfo,
 } from '../events/index';
 
-import CollectionWidget, {
+import {
     CollectionWidgetItem,
-    CollectionWidgetOptions,
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-/** @public */
-export type ContentReadyEvent = EventInfo<dxMultiView>;
+import dxMultiViewBase, {
+    dxMultiViewBaseOptions,
+} from './multi_view_base';
 
 /** @public */
-export type DisposingEvent = EventInfo<dxMultiView>;
+export type ContentReadyEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxMultiView<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxMultiView>;
+export type DisposingEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxMultiView<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+export type InitializedEvent<TItem extends string | Item<any> | any = any, TKey = any> = InitializedEventInfo<dxMultiView<TItem, TKey>>;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+export type ItemClickEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxMultiView<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+export type ItemContextMenuEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxMultiView<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+export type ItemHoldEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxMultiView<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxMultiView> & ChangedOptionInfo;
+export type ItemRenderedEvent<TItem extends string | Item<any> | any = any, TKey = any> = NativeEventInfo<dxMultiView<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type SelectionChangedEvent = EventInfo<dxMultiView> & SelectionChangedInfo;
+export type OptionChangedEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxMultiView<TItem, TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent<TItem extends string | Item<any> | any = any, TKey = any> = EventInfo<dxMultiView<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxMultiViewOptions<TComponent> extends CollectionWidgetOptions<TComponent> {
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    animationEnabled?: boolean;
-    /**
-     * @docid
-     * @type string | Array<string | dxMultiViewItem | any> | Store | DataSource | DataSourceOptions
-     * @default null
-     * @public
-     */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    deferRendering?: boolean;
-    /**
-     * @docid
-     * @default true &for(desktop)
-     * @public
-     */
-    focusStateEnabled?: boolean;
-    /**
-     * @docid
-     * @type Array<string | dxMultiViewItem | any>
-     * @fires dxMultiViewOptions.onOptionChanged
-     * @public
-     */
-    items?: Array<string | Item | any>;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    loop?: boolean;
-    /**
-     * @docid
-     * @default 0
-     * @public
-     */
-    selectedIndex?: number;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    swipeEnabled?: boolean;
-}
+export interface dxMultiViewOptions<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> extends dxMultiViewBaseOptions<dxMultiView<TItem, TKey>, TItem, TKey> { }
+
 /**
  * @docid
  * @inherits CollectionWidget
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxMultiView<TProperties = Properties> extends CollectionWidget<TProperties> { }
+export default class dxMultiView<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> extends dxMultiViewBase<dxMultiViewOptions<TItem, TKey>, TItem, TKey> { }
 
 /**
  * @public
  * @namespace DevExpress.ui.dxMultiView
  */
-export type Item = dxMultiViewItem;
+export type Item<TItem extends Item<any> | any = any> = dxMultiViewItem<TItem>;
 
-/**
- * @deprecated Use Item instead
- * @namespace DevExpress.ui
- */
-export interface dxMultiViewItem extends CollectionWidgetItem {
-}
-
-interface MultiViewInstance extends dxMultiView<Properties> { }
+ /**
+  * @deprecated Use Item instead
+  * @namespace DevExpress.ui
+  */
+export interface dxMultiViewItem<TItem extends dxMultiViewItem<any> | any = any> extends CollectionWidgetItem<TItem> {}
 
 /** @public */
-export type Properties = dxMultiViewOptions<MultiViewInstance>;
+export type ExplicitTypes<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+};
+
+/** @public */
+export type Properties<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = dxMultiViewOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = Properties;
+export type Options<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type IOptions = Properties;
+export type IOptions<
+    TItem extends string | Item<any> | any = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
