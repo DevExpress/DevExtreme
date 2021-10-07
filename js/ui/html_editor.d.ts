@@ -394,12 +394,6 @@ export interface dxHtmlEditorMediaResizing {
 }
 
 /**
- * @public
- * @namespace DevExpress.ui
- */
- export type Item = dxHtmlEditorTableContextMenuItem;
-
-/**
  * @docid
  * @type object
  * @namespace DevExpress.ui
@@ -419,8 +413,8 @@ export interface dxHtmlEditorTableContextMenu {
     items?: Array<dxHtmlEditorTableContextMenuItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
   }
 /**
+ * @public
  * @namespace DevExpress.ui
- * @deprecated Use Item instead
  */
    export interface dxHtmlEditorTableContextMenuItem extends dxContextMenuItem {
     /**
@@ -432,9 +426,9 @@ export interface dxHtmlEditorTableContextMenu {
     /**
      * @docid
      * @public
-     * @type Array<Item>
+     * @type Array<dxHtmlEditorTableContextMenuItem>
      */
-    items?: Array<Item>;
+    items?: Array<dxHtmlEditorTableContextMenuItem>;
  }
 
 /**
