@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { SchedulerToolbar, viewFunction as ViewFunction, SchedulerToolbarBaseProps } from '../header';
 import { Toolbar } from '../../../toolbar/toolbar';
 import { ToolbarButtonGroupProps } from '../../../toolbar/toolbar_props';
+import * as themes from '../../../../../ui/themes';
 
 const HEADER_CLASS = 'dx-scheduler-header';
 const DATE_NAVIGATOR_CLASS = 'dx-scheduler-navigator';
@@ -166,6 +167,23 @@ describe('Scheduler Toolbar', () => {
           expect(toolbar.calendarVisible).toBe(false);
         });
       });
+
+      describe('Date Navigator', () => {
+        describe('Button styling mode', () => {
+          it('should use "text" styling mode in material theme', () => {
+            const spy = jest.spyOn(themes, 'isMaterial').mockReturnValue(true);
+
+            const toolbar = createToolbar();
+
+            const dateNavigator = toolbar.items[0];
+            const options = dateNavigator.options as ToolbarButtonGroupProps;
+
+            expect(options.stylingMode).toBe('text');
+
+            spy.mockRestore();
+          });
+        });
+      });
     });
 
     describe('Events', () => {
@@ -173,6 +191,22 @@ describe('Scheduler Toolbar', () => {
         it('should call onCurrentViewUpdate', () => {
           const mockCallback = jest.fn();
           const toolbar = createToolbar({ onCurrentViewUpdate: mockCallback });
+
+          const viewSwitcher = toolbar.items[1];
+          const options = viewSwitcher.options as ToolbarButtonGroupProps;
+          const view = { name: 'week' };
+          options.onItemClick!({ itemData: view } as any);
+
+          expect(mockCallback).toBeCalledTimes(1);
+          expect(mockCallback).toHaveBeenCalledWith(view.name);
+        });
+
+        it('should call onCurrentViewUpdate if useDropDownViewSwitcher=true', () => {
+          const mockCallback = jest.fn();
+          const toolbar = createToolbar({
+            onCurrentViewUpdate: mockCallback,
+            useDropDownViewSwitcher: true,
+          });
 
           const viewSwitcher = toolbar.items[1];
           const options = viewSwitcher.options as ToolbarButtonGroupProps;
@@ -217,6 +251,16 @@ describe('Scheduler Toolbar', () => {
           options.onItemClick!({ itemIndex: 1 } as any);
 
           expect(toolbar.calendarVisible).toBe(true);
+        });
+
+        it('should not throw an error after unknown button click', () => {
+          const toolbar = createToolbar();
+
+          const dateNavigator = toolbar.items[0];
+          const options = dateNavigator.options as ToolbarButtonGroupProps;
+          options.onItemClick!({ itemIndex: -1 } as any);
+
+          expect(() => toolbar.items).not.toThrow();
         });
       });
     });
@@ -472,6 +516,16 @@ describe('Scheduler Toolbar', () => {
           const toolbar = createToolbar({ items });
 
           expect(toolbar.items).toEqual(items);
+        });
+
+        it('schould throw an error if defualtElement is unknown', () => {
+          const items = [{
+            defaultElement: 'unknownElement',
+          }];
+
+          const toolbar = createToolbar({ items });
+
+          expect(() => toolbar.items).toThrow();
         });
       });
     });

@@ -12,7 +12,6 @@ import {
     asyncScrollTest,
     asyncWrapper,
 } from '../../helpers/scheduler/helpers.js';
-import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
@@ -1423,9 +1422,7 @@ module('Virtual scrolling integration', () => {
                             assert,
                             promise,
                             () => {
-                                const { filteredItems } = getAppointmentDataProvider(instance.key);
-
-                                filteredItems.forEach((dataItem, index) => {
+                                instance.filteredItems.forEach((dataItem, index) => {
                                     const layoutManager = instance.getLayoutManager();
                                     const appointmentRenderingStrategy = layoutManager.getRenderingStrategyInstance();
                                     const settings = appointmentRenderingStrategy.generateAppointmentSettings(dataItem);
@@ -2039,7 +2036,7 @@ module('Virtual scrolling integration', () => {
                         height: 400
                     });
 
-                    const { filteredItems } = getAppointmentDataProvider(instance.key);
+                    const filteredItems = instance.filteredItems;
 
                     assert.equal(filteredItems.length, 3, 'Filtered items length is correct');
                     assert.deepEqual(filteredItems[0], data[0], 'Filtered item 0 is correct');
@@ -2103,7 +2100,7 @@ module('Virtual scrolling integration', () => {
                         height: 400
                     });
 
-                    const { filteredItems } = getAppointmentDataProvider(instance.key);
+                    const filteredItems = instance.filteredItems;
 
                     assert.equal(filteredItems.length, 3, 'Filtered items length is correct');
                     assert.deepEqual(filteredItems[0], data[0], 'Filtered item 0 is correct');
@@ -2170,7 +2167,7 @@ module('Virtual scrolling integration', () => {
                     width: 800
                 });
 
-                const { filteredItems } = getAppointmentDataProvider(instance.key);
+                const filteredItems = instance.filteredItems;
 
                 assert.equal(filteredItems.length, 2, 'Filtered items length is correct');
                 assert.deepEqual(filteredItems[0], data[0], 'Filtered item 0 is correct');
@@ -2235,7 +2232,7 @@ module('Virtual scrolling integration', () => {
                     width: 800
                 });
 
-                const { filteredItems } = getAppointmentDataProvider(instance.key);
+                const filteredItems = instance.filteredItems;
 
                 assert.equal(filteredItems.length, 3, 'Filtered items length is correct');
                 assert.deepEqual(filteredItems[0], data[0], 'Filtered item 0 is correct');
@@ -2298,7 +2295,7 @@ module('Virtual scrolling integration', () => {
                             assert,
                             promise,
                             () => {
-                                const { filteredItems } = getAppointmentDataProvider(instance.key);
+                                const filteredItems = instance.filteredItems;
 
                                 const { expectedDataIndices } = option;
                                 assert.equal(filteredItems.length, expectedDataIndices.length, 'Filtered items length is correct');
@@ -2405,7 +2402,7 @@ module('Virtual scrolling integration', () => {
                                 assert,
                                 promise,
                                 () => {
-                                    const { filteredItems } = getAppointmentDataProvider(this.instance.key);
+                                    const filteredItems = this.instance.filteredItems;
 
                                     assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
 
@@ -2443,7 +2440,7 @@ module('Virtual scrolling integration', () => {
                                 assert,
                                 promise,
                                 () => {
-                                    const { filteredItems } = getAppointmentDataProvider(this.instance.key);
+                                    const filteredItems = this.instance.filteredItems;
 
                                     assert.equal(filteredItems.length, expectedIndices.length, `Filtered items length is correct if scrollOffset: ${option.y}`);
 
@@ -2496,7 +2493,7 @@ module('Virtual scrolling integration', () => {
                                 assert,
                                 promise,
                                 () => {
-                                    const { filteredItems } = getAppointmentDataProvider(this.instance.key);
+                                    const filteredItems = this.instance.filteredItems;
 
                                     assert.equal(filteredItems.length, expectedIndices.length, `ScrollY: ${option.y}. Filtered items length is correct`);
 
@@ -2548,7 +2545,7 @@ module('Virtual scrolling integration', () => {
                                 assert,
                                 promise,
                                 () => {
-                                    const { filteredItems } = getAppointmentDataProvider(this.instance.key);
+                                    const filteredItems = this.instance.filteredItems;
 
                                     assert.equal(
                                         filteredItems.length,
@@ -2600,7 +2597,7 @@ module('Virtual scrolling integration', () => {
                             assert,
                             promise,
                             () => {
-                                const { filteredItems } = getAppointmentDataProvider(this.instance.key);
+                                const filteredItems = this.instance.filteredItems;
 
                                 assert.equal(filteredItems.length, 1, 'Filtered items length is correct');
                                 assert.deepEqual(filteredItems[0], data[0], 'Filtered item is correct');
@@ -2800,7 +2797,7 @@ module('Virtual scrolling integration', () => {
 
                                         assert.ok(true, `Scroll to x: ${offset.x}, y: ${offset.y}`);
 
-                                        const { filteredItems } = getAppointmentDataProvider(this.instance.key);
+                                        const filteredItems = this.instance.filteredItems;
 
                                         assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
 

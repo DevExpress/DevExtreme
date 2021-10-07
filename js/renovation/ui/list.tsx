@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from '@devextreme-generator/declarations';
 /* eslint-disable import/named */
-import DataSource, { DataSourceOptions } from '../../data/data_source';
+import DataSource, { Options as DataSourceOptions } from '../../data/data_source';
 import Store from '../../data/abstract_store';
 import LegacyList, { dxListItem } from '../../ui/list';
 import { DxElement } from '../../core/element';

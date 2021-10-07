@@ -1,6 +1,7 @@
 import dateUtils from '../../../../core/utils/date';
 import timeZoneUtils from '../../utils.timeZone';
 import dateSerialization from '../../../../core/utils/date_serialization';
+import { ExpressionUtils } from '../../expressionUtils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -158,4 +159,28 @@ export const _convertRecurrenceException = (exceptionString, startDate, timeZone
 
 export const getAppointmentTakesAllDay = (appointment, startDayHour, endDayHour) => {
     return appointment.allDay || _appointmentHasAllDayDuration(appointment.startDate, appointment.endDate, startDayHour, endDayHour);
+};
+
+export const replaceWrongEndDate = (appointment, startDate, endDate, appointmentDuration, dataAccessors) => {
+    const calculateAppointmentEndDate = (isAllDay, startDate) => {
+        if(isAllDay) {
+            return dateUtils.setToDayEnd(new Date(startDate));
+        }
+
+        return new Date(startDate.getTime() + appointmentDuration * toMs('minute'));
+    };
+
+    if(_isEndDateWrong(startDate, endDate)) {
+        const calculatedEndDate = calculateAppointmentEndDate(appointment.allDay, startDate);
+        dataAccessors.setter.endDate(appointment, calculatedEndDate);
+    }
+};
+
+export const sortAppointmentsByStartDate = (appointments, dataAccessors) => {
+    appointments.sort((a, b) => {
+        const firstDate = new Date(ExpressionUtils.getField(dataAccessors, 'startDate', a.settings || a));
+        const secondDate = new Date(ExpressionUtils.getField(dataAccessors, 'startDate', b.settings || b));
+
+        return Math.sign(firstDate.getTime() - secondDate.getTime());
+    });
 };
