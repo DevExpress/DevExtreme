@@ -60,6 +60,8 @@ import {
     ROOT_SIMPLE_ITEM_CLASS,
     FORM_UNDERLINED_CLASS } from './constants';
 
+import { FIELD_ITEM_LABEL_LOCATION_CLASS } from './components/label';
+
 import { TOOLBAR_CLASS } from '../toolbar/constants';
 
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
@@ -138,16 +140,6 @@ const Form = Widget.inherit({
         return parseInt($element.attr(GROUP_COL_COUNT_ATTR));
     },
 
-    _getLabelsSelectorByCol: function(index, options) {
-        options = options || {};
-
-        const fieldItemClass = options.inOneColumn ? FIELD_ITEM_CLASS : FORM_FIELD_ITEM_COL_CLASS + index;
-        const cssExcludeTabbedSelector = options.excludeTabbed ? ':not(.' + FIELD_ITEM_TAB_CLASS + ')' : '';
-        const childLabelContentSelector = '> .' + FIELD_ITEM_LABEL_CLASS + ' > .' + FIELD_ITEM_LABEL_CONTENT_CLASS;
-
-        return '.' + fieldItemClass + cssExcludeTabbedSelector + childLabelContentSelector;
-    },
-
     _getLabelInnerHTML: function(labelText) {
         const length = labelText.children.length;
         let child;
@@ -165,7 +157,15 @@ const Form = Widget.inherit({
     },
 
     _applyLabelsWidthByCol: function($container, index, options, layoutManager) {
-        const $labelTexts = $container.find(this._getLabelsSelectorByCol(index, options));
+        options = options || {};
+
+        const fieldItemClass = options.inOneColumn ? FIELD_ITEM_CLASS : FORM_FIELD_ITEM_COL_CLASS + index;
+        const cssExcludeTabbedSelector = options.excludeTabbed ? `:not(.${FIELD_ITEM_TAB_CLASS})` : '';
+
+        const labelTextsSelector = `.${fieldItemClass}${cssExcludeTabbedSelector}
+            > .${FIELD_ITEM_LABEL_CLASS}:not(.${FIELD_ITEM_LABEL_LOCATION_CLASS}top) > .${FIELD_ITEM_LABEL_CONTENT_CLASS}`;
+
+        const $labelTexts = $container.find(labelTextsSelector);
         const $labelTextsLength = $labelTexts.length;
         let labelWidth;
         let i;
