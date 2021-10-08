@@ -8,6 +8,7 @@ import $ from 'jquery';
 import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
 import 'ui/slider';
 import SliderTooltip from 'ui/slider/ui.slider_tooltip';
+import SliderHandle from 'ui/slider/ui.slider_handle';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { normalizeKeyName } from 'events/utils/index';
@@ -1157,6 +1158,7 @@ module('tooltip integration', {
         this.init = (options) => {
             this.slider = this.$slider.dxSlider(options).dxSlider('instance');
             this.$handle = this.$slider.find(`.${SLIDER_HANDLE_CLASS}`);
+            this.handle = SliderHandle.getInstance(this.$handle);
             this.$tooltip = this.$handle.find(`.${TOOLTIP_CLASS}`);
             this.getTooltip = () => this.$handle.find(`.${TOOLTIP_CLASS}`);
             this.getTooltipContent = () => this.getTooltip().find(`.${TOOLTIP_CONTENT_CLASS}`);
@@ -1185,6 +1187,37 @@ module('tooltip integration', {
         this.$slider.remove();
     }
 }, () => {
+
+    [{
+        name: 'tooltip',
+        initValue: { enabled: true, format: value => `(${value})`, position: 'top', showMode: 'onHover' },
+        changeValue: { enabled: false, showMode: 'onHover', position: 'bottom', format: () => {} }
+    }, {
+        name: 'tooltip.enabled',
+        initValue: true,
+        changeValue: false
+    }, {
+        name: 'tooltip.format',
+        initValue: value => `(${value})`,
+        changeValue: (value) => `[${value}]`
+    }, {
+        name: 'tooltip.showMode',
+        initValue: 'always',
+        changeValue: 'onHover'
+    }, {
+        name: 'tooltip.position',
+        initValue: 'bottom',
+        changeValue: 'top'
+    }].forEach(({ name, initValue, changeValue }) => {
+        QUnit.test(`slider should pass ${name} options value to SliderHandle`, function(assert) {
+            this.init({ [name]: initValue });
+            assert.deepEqual(this.handle.option(name), initValue, 'option value is passed on init');
+
+            this.slider.option({ [name]: changeValue });
+            assert.deepEqual(this.handle.option(name), changeValue, 'option value is passed on runtime change');
+        });
+    });
+
     test('tooltip default rendering', function(assert) {
         this.init({
             tooltip: {

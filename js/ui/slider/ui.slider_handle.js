@@ -1,7 +1,7 @@
-import $ from '../../core/renderer';
-import Widget from '../widget/ui.widget';
-import SliderTooltip from './ui.slider_tooltip';
-import { extend } from '../../core/utils/extend';
+import $ from 'core/renderer';
+import Widget from 'ui/widget/ui.widget';
+import SliderTooltip from 'ui/slider/ui.slider_tooltip';
+import { extend } from 'core/utils/extend';
 
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
 
