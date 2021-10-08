@@ -9,7 +9,7 @@ import { DxElement } from '../../core/element';
 import { EventExtension, DxEvent } from '../../events/index';
 
 // import renderTemplate from '../utils/render_template';
-import { DomComponentWrapper, DomComponentWrapperMethods } from './common/dom_component_wrapper';
+import { DomComponentWrapper } from './common/dom_component_wrapper';
 import { BaseWidgetProps } from './common/base_props';
 
 export interface ItemClickInfo {
@@ -30,12 +30,11 @@ export type ItemClickEvent = ItemClickInfo & EventExtension;
 export const viewFunction = ({
   props,
   restAttributes,
-  getTemplateNames,
 }: List): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyList}
     componentProps={props}
-    templateNames={getTemplateNames()}
+    templateNames={['itemTemplate']}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
@@ -184,9 +183,4 @@ export class ListProps extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class List extends JSXComponent<ListProps>() implements DomComponentWrapperMethods {
-  getTemplateNames = (): string[] => [
-    'itemTemplate',
-    'groupTemplate',
-  ];
-}
+export class List extends JSXComponent<ListProps>() {}

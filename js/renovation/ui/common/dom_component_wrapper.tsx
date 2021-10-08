@@ -19,10 +19,6 @@ import { EventCallback } from './event_callback';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 import { getUpdatedOptions } from './utils/get_updated_options';
 
-export interface DomComponentWrapperMethods {
-  getTemplateNames: () => string[];
-}
-
 export const viewFunction = ({
   widgetRef,
   props: { componentProps: { className } },
@@ -47,7 +43,7 @@ export class DomComponentWrapperProps {
 
   @OneWay() componentProps!: {
     className?: string;
-    itemTemplate?: string;
+    itemTemplate?: string | (() => string | HTMLElement);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     valueChange?: EventCallback<any>;
   };
@@ -125,17 +121,13 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
       properties.onValueChanged = ({ value }): void => valueChange(value);
     }
     const templates = this.props.templateNames;
-    if (!templates) {
-      throw new Error('The list of templates was not passed to the DomComponentWrapper. Please implement the DomComponentWrapperMethods interface in a wrapper component.');
-    } else {
-      templates.forEach((name) => {
-        if (hasTemplate(name, properties, this)) {
-          properties[name] = (item, index, container): void => {
-            renderTemplate(this.props.componentProps[name], { item, index, container }, this);
-          };
-        }
-      });
-    }
+    templates.forEach((name) => {
+      if (hasTemplate(name, properties, this)) {
+        properties[name] = (item, index, container): void => {
+          renderTemplate(this.props.componentProps[name], { item, index, container }, this);
+        };
+      }
+    });
     return properties;
   }
 }
