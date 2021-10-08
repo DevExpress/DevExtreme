@@ -409,26 +409,33 @@ export interface dxHtmlEditorTableContextMenu {
      * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorContextMenuItem>
      * @public
      */
-    items?: Array<dxHtmlEditorTableContextMenuItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
-  }
+    items?: Array<ContextMenuItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
+}
+
 /**
  * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
+
+/**
+ * @deprecated Use ContextMenuItem instead
  * @namespace DevExpress.ui
  */
-   export interface dxHtmlEditorTableContextMenuItem extends dxContextMenuItem {
+export interface dxHtmlEditorTableContextMenuItem extends dxContextMenuItem {
     /**
      * @docid
      * @default undefined
      * @public
      */
-     name?: string;
+    name?: string;
     /**
      * @docid
      * @public
      * @type Array<dxHtmlEditorTableContextMenuItem>
      */
-    items?: Array<dxHtmlEditorTableContextMenuItem>;
- }
+    items?: Array<ContextMenuItem>;
+}
 
 /**
  * @docid
