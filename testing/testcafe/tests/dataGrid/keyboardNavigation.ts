@@ -2674,3 +2674,91 @@ test('All rows should be focused on arrow-up/down when virtual scrolling enabled
     groupIndex: 0,
   }],
 }));
+
+test('Cells should be focused after saving data when filter is applied and cell mode is used (T1029906)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 0).getEditor().element.exists)
+    .ok();
+
+  // act
+  await t
+    .pressKey('esc');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 0).getEditor().element.exists)
+    .notOk();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('d')
+    .pressKey('enter');
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows.length)
+    .eql(4)
+    .expect(dataGrid.getDataCell(2, 0).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(3, 0).isFocused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, name: 'aaa' },
+    { id: 2, name: 'aba' },
+    { id: 3, name: 'baa' },
+    { id: 4, name: 'bca' },
+    { id: 5, name: 'acd' },
+  ],
+  keyExpr: 'id',
+  columns: [{
+    dataField: 'name',
+    filterValue: 'a',
+  }],
+  filterRow: {
+    visible: true,
+    applyFilter: 'auto',
+  },
+  keyboardNavigation: {
+    enterKeyAction: 'moveFocus',
+    enterKeyDirection: 'column',
+    editOnKeyPress: true,
+  },
+
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+  },
+  onFocusedCellChanging(e) {
+    e.isHighlighted = true;
+  },
+}));
