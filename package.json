@@ -10,7 +10,7 @@
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
   "dependencies": {
-    "devextreme": "~21.1.4",
+    "devextreme": "21.2-next",
     "devextreme-vue": "~21.1.4"
   },
   "devDependencies": {
