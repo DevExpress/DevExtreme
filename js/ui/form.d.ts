@@ -151,7 +151,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
      * @default "default"
      * @public
      */
-     labelMode?: 'default' | 'floating' | 'static' | 'hidden';
+     labelMode?: 'outside' | 'floating' | 'static' | 'hidden';
     /**
      * @docid
      * @default 200

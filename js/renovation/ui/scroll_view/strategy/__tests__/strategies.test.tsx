@@ -13,6 +13,8 @@ import {
 } from '../../__tests__/utils';
 
 import {
+  DIRECTION_HORIZONTAL,
+  DIRECTION_VERTICAL,
   SCROLLABLE_DISABLED_CLASS, SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
 } from '../../common/consts';
 
@@ -284,7 +286,11 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
             each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
               each([true, false]).describe('PullDownEnabled: %o', (pullDownEnabled) => {
                 each([true, false]).describe('ReachBottomEnabled: %o', (reachBottomEnabled) => {
-                  each([{ decreasing: true, positive: false }, { decreasing: true, positive: true }, { decreasing: false, positive: true }]).describe('rtlBehavior: %o', (rtlBehavior) => {
+                  each([
+                    { decreasing: true, positive: false },
+                    { decreasing: true, positive: true },
+                    { decreasing: false, positive: true },
+                  ]).describe('rtlBehavior: %o', (rtlBehavior) => {
                     const isNativeINChrome86 = Scrollable === ScrollableNative && rtlEnabled
                       && rtlBehavior.decreasing && !rtlBehavior.positive;
                     const isNativeINIE11 = Scrollable === ScrollableNative && rtlEnabled
@@ -563,6 +569,36 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
           viewModel.contentScrollHeight = 700;
 
           expect(viewModel.contentHeight).toEqual(overflow === 'hidden' ? 200 : 700);
+        });
+      });
+
+      each([
+        { expected: -100 },
+        { contentSize: 190, containerSize: 200, expected: 0 },
+        { contentSize: 200, containerSize: 200, expected: 0 },
+        { contentSize: 200.49, containerSize: 200, expected: 0 },
+        { contentSize: 200.50, containerSize: 200, expected: 0 },
+        { contentSize: 200.52, containerSize: 200, expected: -0.5200000000000102 },
+        { contentSize: 400, containerSize: 125, expected: -275 },
+      ]).describe('Dimensions: %o', ({ contentSize, containerSize, expected }) => {
+        it('vScrollOffsetMax()', () => {
+          const helper = new ScrollableTestHelper({
+            direction: DIRECTION_VERTICAL,
+            contentSize,
+            containerSize,
+          });
+
+          expect(helper.viewModel.vScrollOffsetMax).toEqual(expected);
+        });
+
+        it('hScrollOffsetMax()', () => {
+          const helper = new ScrollableTestHelper({
+            direction: DIRECTION_HORIZONTAL,
+            contentSize,
+            containerSize,
+          });
+
+          expect(helper.viewModel.hScrollOffsetMax).toEqual(expected);
         });
       });
 
