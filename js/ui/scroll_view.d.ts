@@ -118,6 +118,3 @@ export type Properties = dxScrollViewOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxScrollViewOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxScrollViewOptions;

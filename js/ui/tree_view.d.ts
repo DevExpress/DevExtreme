@@ -652,6 +652,3 @@ export type Properties = dxTreeViewOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTreeViewOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxTreeViewOptions;

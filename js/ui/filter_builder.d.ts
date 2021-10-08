@@ -490,6 +490,3 @@ export type Properties = dxFilterBuilderOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxFilterBuilderOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxFilterBuilderOptions;

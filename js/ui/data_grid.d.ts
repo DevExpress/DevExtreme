@@ -4817,7 +4817,4 @@ export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<TRowData,
 /** @deprecated use Properties instead */
 export type Options<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;
 
-/** @deprecated use Properties instead */
-export type IOptions<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;
-
 export default dxDataGrid;
