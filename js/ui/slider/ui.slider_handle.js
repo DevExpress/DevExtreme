@@ -83,7 +83,7 @@ const SliderHandle = Widget.inherit({
     },
 
     repaint: function() {
-        this._sliderTooltip.repaint();
+        this._sliderTooltip?.repaint();
     }
 });
 
