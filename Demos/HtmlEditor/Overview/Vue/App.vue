@@ -1,6 +1,9 @@
 <template>
   <div>
-    <DxHtmlEditor height="725px">
+    <DxHtmlEditor
+      :value="markup"
+      height="725px"
+    >
       <DxMediaResizing :enabled="true"/>
       <DxToolbar :multiline="isMultiline">
         <DxItem name="undo"/>
@@ -52,8 +55,6 @@
         <DxItem name="insertColumnRight"/>
         <DxItem name="deleteColumn"/>
       </DxToolbar>
-
-      <div v-html="markup"/>
     </DxHtmlEditor>
     <div class="options">
       <div class="caption">Options</div>

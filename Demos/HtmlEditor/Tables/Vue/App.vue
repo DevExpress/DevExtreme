@@ -1,6 +1,9 @@
 <template>
   <div>
-    <DxHtmlEditor height="350px">
+    <DxHtmlEditor
+      :value="markup"
+      height="350px"
+    >
       <DxToolbar>
         <DxItem
           :accepted-values="headerValues"
@@ -23,8 +26,6 @@
         <DxItem name="insertColumnRight"/>
         <DxItem name="deleteColumn"/>
       </DxToolbar>
-
-      <div v-html="markup"/>
     </DxHtmlEditor>
   </div>
 </template>
