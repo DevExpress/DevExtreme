@@ -35,6 +35,12 @@ import {
     getItemPath,
 } from './ui.form.utils';
 
+import { convertToLabelMarkOptions } from './ui.form.layout_manager.utils.js'; // TODO: remove reference to 'ui.form.layout_manager.utils.js'
+import {
+    getLabelWidthByInnerHTML,
+    FIELD_ITEM_LABEL_LOCATION_CLASS
+} from './components/label';
+
 import '../validation_summary';
 import '../validation_group';
 
@@ -59,8 +65,6 @@ import {
     FORM_VALIDATION_SUMMARY,
     ROOT_SIMPLE_ITEM_CLASS,
     FORM_UNDERLINED_CLASS } from './constants';
-
-import { FIELD_ITEM_LABEL_LOCATION_CLASS } from './components/label';
 
 import { TOOLBAR_CLASS } from '../toolbar/constants';
 
@@ -172,11 +176,12 @@ const Form = Widget.inherit({
         let maxWidth = 0;
 
         for(i = 0; i < $labelTextsLength; i++) {
-            labelWidth = layoutManager._getLabelWidthByInnerHTML({
+            labelWidth = getLabelWidthByInnerHTML({
                 // _hiddenLabelText was introduced in https://hg/mobile/rev/27b4f57f10bb , "dxForm: add alignItemLabelsInAllGroups and fix type script"
                 // It's not clear why $labelTexts.offsetWidth doesn't meet the needs
                 innerHTML: this._getLabelInnerHTML($labelTexts[i]),
                 location: this._labelLocation(),
+                markOptions: convertToLabelMarkOptions(layoutManager._getMarkOptions())
             });
             if(labelWidth > maxWidth) {
                 maxWidth = labelWidth;
