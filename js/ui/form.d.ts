@@ -800,6 +800,3 @@ export type Properties = dxFormOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxFormOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxFormOptions;

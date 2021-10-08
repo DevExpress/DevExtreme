@@ -191,6 +191,3 @@ export type Properties = dxSelectBoxOptions<SelectBoxInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;
-
-/** @deprecated use Properties instead */
-export type IOptions = Properties;

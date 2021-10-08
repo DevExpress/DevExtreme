@@ -776,6 +776,3 @@ export type Options<
     TItem extends string | Item<any> | any = any,
     TKey = any,
 > = Properties<TItem, TKey>;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxListOptions;

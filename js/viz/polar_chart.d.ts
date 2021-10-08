@@ -2231,6 +2231,3 @@ export type Properties = dxPolarChartOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxPolarChartOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxPolarChartOptions;

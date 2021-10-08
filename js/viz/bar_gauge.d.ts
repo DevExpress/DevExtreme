@@ -395,6 +395,3 @@ export type Properties = dxBarGaugeOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxBarGaugeOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxBarGaugeOptions;

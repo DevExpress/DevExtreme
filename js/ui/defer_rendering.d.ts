@@ -92,6 +92,3 @@ export type Properties = dxDeferRenderingOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxDeferRenderingOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxDeferRenderingOptions;
