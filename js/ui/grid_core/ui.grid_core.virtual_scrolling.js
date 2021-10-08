@@ -1004,7 +1004,14 @@ export const virtualScrollingModule = {
                         }
                     },
                     _updateLoadViewportParams: function() {
-                        this._loadViewportParams = this._rowsScrollController.getViewportParams();
+                        const viewportParams = this._rowsScrollController.getViewportParams();
+                        const pageSize = this.pageSize();
+
+                        if(viewportParams && !isVirtualPaging(this) && pageSize > 0) {
+                            const pageOffset = this.pageIndex() * pageSize;
+                            viewportParams.skip += pageOffset;
+                        }
+                        this._loadViewportParams = viewportParams;
                     },
                     _processItems: function(items) {
                         const newItems = this.callBase.apply(this, arguments);
