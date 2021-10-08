@@ -66,7 +66,7 @@ const SliderHandle = Widget.inherit({
         const { name, value } = args;
         switch(name) {
             case 'value': {
-                this._sliderTooltip.option('value', value);
+                this._sliderTooltip?.option('value', value);
                 this.setAria('valuenow', value);
                 break;
             }
@@ -79,7 +79,7 @@ const SliderHandle = Widget.inherit({
     },
 
     updateTooltipPosition: function() {
-        this._sliderTooltip.updatePosition();
+        this._sliderTooltip?.updatePosition();
     },
 
     repaint: function() {

@@ -9,7 +9,7 @@ const SLIDER_TOOLTIP_ON_HOVER_CLASS = 'dx-slider-tooltip-on-hover';
 const SliderTooltip = Tooltip.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            visible: false,
+            visible: true,
             position: 'top',
             closeOnOutsideClick: false,
             hideTopOverlayHandler: null,
@@ -57,7 +57,7 @@ const SliderTooltip = Tooltip.inherit({
         const { showMode, enabled } = this.option();
 
         if(showMode === 'always' && enabled) {
-            this._show();
+            this.show();
         }
     },
 
