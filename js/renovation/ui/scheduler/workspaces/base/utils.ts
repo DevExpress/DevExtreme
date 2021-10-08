@@ -54,12 +54,23 @@ export const getHiddenInterval = (
 };
 
 export const createCellElementMetaData = (
-  tableRect: ClientRect,
-  cellRect: ClientRect,
-): ClientRect => ({
-  ...cellRect,
-  left: cellRect.left - tableRect.left,
-  top: cellRect.top - tableRect.top,
-});
+  tableRect: DOMRect,
+  cellRect: DOMRect,
+): DOMRect => {
+  const {
+    top, right, bottom, left, width, height, x, y,
+  } = cellRect;
+
+  return {
+    right,
+    bottom,
+    left: left - tableRect.left,
+    top: top - tableRect.top,
+    width,
+    height,
+    x,
+    y,
+  } as DOMRect;
+};
 
 export const getDateForHeaderText: GetDateForHeaderText = (_, date) => date;
