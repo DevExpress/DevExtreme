@@ -104,7 +104,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid
      * @default null
-     * @type Array<string, Enums.HtmlEditorContextMenuItem, dxHtmlEditorTableContextMenuItem>
      * @public
      */
     tableContextMenu?: dxHtmlEditorTableContextMenu;
