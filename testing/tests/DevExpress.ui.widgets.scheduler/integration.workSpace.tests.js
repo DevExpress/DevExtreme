@@ -11,7 +11,7 @@ import CustomStore from 'data/custom_store';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import translator from 'animation/translator';
-import { implementationsMap, getOuterHeight, getInnerHeight, getOuterWidth } from 'core/utils/size';
+import { getOuterHeight, getInnerHeight, getOuterWidth } from 'core/utils/size';
 
 const SELECTED_CELL_CLASS = CLASSES.selectedCell.slice(1);
 const FOCUSED_CELL_CLASS = CLASSES.focusedCell.slice(1);
@@ -761,36 +761,6 @@ module('Integration: Work space', { ...moduleConfig }, () => {
 
         assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * 2, 'indicator has correct position');
     });
-
-    test('Tables should take css class after width calculation(T491453)', function(assert) {
-        assert.expect(1);
-
-        let counter = 0;
-        const originalWidthFn = implementationsMap.setWidth;
-
-        sinon.stub(implementationsMap, 'setWidth', function(source, value) {
-            if(value === 999 && !counter) {
-                const $headerTable = $('#scheduler').find('table').first();
-                assert.notOk($headerTable.attr('class'), 'Header table doesn\'t have any css classes yet');
-                counter++;
-            } else {
-                return originalWidthFn.apply(this, arguments);
-            }
-        });
-
-        try {
-            createWrapper({
-                dataSource: [],
-                views: ['month'],
-                currentView: 'month',
-                crossScrollingEnabled: true,
-                width: 999
-            });
-        } finally {
-            implementationsMap.setWidth.restore();
-        }
-    });
-
 
     if(isDesktopEnvironment()) {
         test('ScrollTo of dateTable scrollable shouldn\'t be called when dateTable scrollable scroll in timeLine view', function(assert) {

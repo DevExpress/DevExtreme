@@ -12,7 +12,7 @@ import {
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions,
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -738,6 +738,3 @@ export type Properties = dxListOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxListOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxListOptions;

@@ -97,6 +97,3 @@ export type Properties = dxSpeedDialActionOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxSpeedDialActionOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxSpeedDialActionOptions;

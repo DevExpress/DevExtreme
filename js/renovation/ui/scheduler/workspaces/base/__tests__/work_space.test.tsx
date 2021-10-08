@@ -779,6 +779,9 @@ describe('WorkSpace', () => {
         it('should call "getViewRenderConfigByType" and pass correct props to it', () => {
           const workSpace = new WorkSpace({
             type: 'week',
+            crossScrollingEnabled: true,
+            groups,
+            groupOrientation: 'vertical',
             intervalCount: 3,
           } as any);
 
@@ -797,10 +800,11 @@ describe('WorkSpace', () => {
               isGenerateWeekDaysHeaderData: false,
               className: 'dx-scheduler-work-space-week',
               scrollingDirection: 'vertical',
+              isCreateCrossScrolling: true,
             });
 
           expect(getViewRenderConfigByType)
-            .toBeCalledWith('week', 3);
+            .toBeCalledWith('week', true, 3, true);
         });
       });
 
@@ -840,14 +844,14 @@ describe('WorkSpace', () => {
         });
       });
 
-      describe('isRenderGroupPanel', () => {
+      describe('isVerticalGrouping', () => {
         it('should call isVerticalGroupingApplied', () => {
           const workSpace = new WorkSpace({
             groups,
             groupOrientation: 'vertical',
           } as any);
 
-          const result = workSpace.isRenderGroupPanel;
+          const result = workSpace.isVerticalGrouping;
 
           expect(result)
             .toBe(true);

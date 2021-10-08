@@ -703,6 +703,3 @@ export type Properties = dxFunnelOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxFunnelOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxFunnelOptions;

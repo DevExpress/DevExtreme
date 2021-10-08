@@ -880,6 +880,3 @@ export type Properties = dxPieChartOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxPieChartOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxPieChartOptions;

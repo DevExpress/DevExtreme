@@ -1,5 +1,5 @@
 import {
-    dxValidationGroupResult,
+    ValidationResult,
 } from './validation_group';
 
 /**
@@ -68,8 +68,9 @@ export default class validationEngine {
      * @publicName validateGroup()
      * @static
      * @public
+     * @return dxValidationGroupResult
      */
-    static validateGroup(): dxValidationGroupResult;
+    static validateGroup(): ValidationResult;
     /**
      * @docid
      * @section Core
@@ -77,8 +78,9 @@ export default class validationEngine {
      * @param1 group:string|object
      * @static
      * @public
+     * @return dxValidationGroupResult
      */
-    static validateGroup(group: string | any): dxValidationGroupResult;
+    static validateGroup(group: string | any): ValidationResult;
     /**
      * @docid
      * @publicName validateModel(model)

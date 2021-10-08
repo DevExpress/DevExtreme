@@ -9,14 +9,14 @@ import {
   InternalState,
 } from '@devextreme-generator/declarations';
 
-import { DisposeEffectReturn } from '../../../utils/effect_return';
+import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import { BaseWidgetProps } from '../../common/base_props';
 
 import { Scrollbar } from './scrollbar';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../../../animation/frame';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
 import { inRange } from '../../../../core/utils/math';
-import { DxMouseEvent } from '../common/types';
+import { DxMouseEvent } from '../common/types.d';
 import { clampIntoRange } from '../utils/clamp_into_range';
 import { AnimatedScrollbarProps } from '../common/animated_scrollbar_props';
 import { isDxMouseWheelEvent } from '../../../../events/utils/index';
@@ -310,11 +310,11 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   get isReachBottom(): boolean {
-    // TODO: adapt this method for 4k monitor
+    // T1032842
     // when sizes is decimal and a rounding error of about 1px
     // scrollLocation = 72.3422123432px | maxOffset = 73px
     return this.props.reachBottomEnabled
-      && (this.props.scrollLocation - this.props.maxOffset <= 0);
+      && Math.round(this.props.scrollLocation - this.props.maxOffset) <= 1;
   }
 
   start(animatorName: 'inertia' | 'bounce', receivedVelocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean): void {

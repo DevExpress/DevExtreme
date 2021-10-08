@@ -40,7 +40,7 @@ import {
 import { ScrollableTestHelper } from './simulated_test_helper';
 import {
   DxKeyboardEvent, DxMouseEvent, DxMouseWheelEvent, ScrollEventArgs,
-} from '../../common/types';
+} from '../../common/types.d';
 import { AnimatedScrollbar } from '../../scrollbar/animated_scrollbar';
 import { getElementOffset } from '../../../../utils/get_element_offset';
 import { permissibleWheelDirection } from '../../utils/get_permissible_wheel_direction';
@@ -497,30 +497,6 @@ describe('Simulated > Behavior', () => {
           .toEqual(pocketState !== TopPocketState.STATE_RELEASED ? 80 : 0);
       });
     });
-
-    // each(['visible', 'scroll', 'hidden', 'auto']).describe('overflow: %o,', (overflow) => {
-    //   it('contentWidth()', () => {
-    //     (getElementOverflowX as jest.Mock).mockReturnValue(overflow);
-    //     const viewModel = new Scrollable({});
-
-    //     viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-    //     viewModel.contentClientWidth = 200;
-    //     viewModel.contentScrollWidth = 700;
-
-    //     expect(viewModel.contentWidth).toEqual(overflow === 'hidden' ? 200 : 700);
-    //   });
-
-    //   it('contentHeight()', () => {
-    //     (getElementOverflowY as jest.Mock).mockReturnValue(overflow);
-    //     const viewModel = new Scrollable({});
-
-    //     viewModel.contentRef = { current: {} } as RefObject<HTMLDivElement>;
-    //     viewModel.contentClientHeight = 200;
-    //     viewModel.contentScrollHeight = 700;
-
-    //     expect(viewModel.contentHeight).toEqual(overflow === 'hidden' ? 200 : 700);
-    //   });
-    // });
 
     each([true, false]).describe('forceGeneratePockets: %o,', (forceGeneratePockets) => {
       it('Should assign swipeDown, pullDown strategy', () => {

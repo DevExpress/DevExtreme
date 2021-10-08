@@ -211,6 +211,3 @@ export type Properties = dxGalleryOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxGalleryOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxGalleryOptions;

@@ -194,6 +194,3 @@ export type Properties = dxResponsiveBoxOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxResponsiveBoxOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxResponsiveBoxOptions;

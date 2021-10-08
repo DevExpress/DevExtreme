@@ -1,4 +1,4 @@
-import { getHeight, getWidth } from '../../core/utils/size';
+import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
 import { each } from '../../core/utils/iterator';
@@ -25,6 +25,7 @@ const ScrollViewScroller = Scroller.inherit({
 
     ctor: function() {
         this._topPocketSize = 0;
+        this._bottomPocketSize = 0;
         this.callBase.apply(this, arguments);
         this._initCallbacks();
         this._releaseState();
@@ -63,12 +64,18 @@ const ScrollViewScroller = Scroller.inherit({
     _updateBounds: function() {
         const considerPockets = this._direction !== 'horizontal';
 
-        const dimensionGetter = this._dimension === 'width' ? getWidth : getHeight;
-        this._topPocketSize = considerPockets ? Math.round(dimensionGetter(this._$topPocket)) : 0;
-        this._bottomPocketSize = considerPockets ? Math.round(dimensionGetter(this._$bottomPocket)) : 0;
+        if(considerPockets) {
+            this._topPocketSize = this._$topPocket.get(0).clientHeight;
+            this._bottomPocketSize = this._$bottomPocket.get(0).clientHeight;
+
+            const containerEl = this._$container.get(0);
+            const contentEl = this._$content.get(0);
+            const scrollTopMax = Math.max(contentEl.clientHeight - containerEl.clientHeight, 0);
+
+            this._bottomBoundary = scrollTopMax - this._topPocketSize - this._bottomPocketSize;
+        }
 
         this.callBase();
-        this._bottomBound = this._minOffset + this._bottomPocketSize;
     },
 
     _updateScrollbar: function() {
@@ -100,7 +107,9 @@ const ScrollViewScroller = Scroller.inherit({
     },
 
     _isReachBottom: function() {
-        return this._reachBottomEnabled && (this._location - this._bottomBound <= 0.5); // T858013
+        const containerEl = this._$container.get(0);
+
+        return this._reachBottomEnabled && Math.round(this._bottomBoundary - Math.ceil(containerEl.scrollTop)) <= 1;
     },
 
     _scrollComplete: function() {

@@ -474,7 +474,7 @@ testModule('Private API', moduleConfig, () => {
 
 testModule('Table API', moduleConfigWithTable, function() {
     test('insertTable', function(assert) {
-        const expectedValue = '<table><tbody><tr><td><br></td><td><br></td></tr></tbody></table><p><br></p>';
+        const expectedValue = '<table><tbody><tr><td><p><br></p></td><td><p><br></p></td></tr></tbody></table><p><br></p>';
         this.options.value = '';
         this.createEditor();
         this.instance.focus();
@@ -485,7 +485,7 @@ testModule('Table API', moduleConfigWithTable, function() {
     });
 
     test('insertRowBelow', function(assert) {
-        const expectedValue = '<table><tbody><tr><td>1</td><td>2</td></tr><tr><td><br></td><td><br></td></tr><tr><td>3</td><td>4</td></tr></tbody></table>';
+        const expectedValue = '<table><tbody><tr><td><p>1</p></td><td><p>2</p></td></tr><tr><td><p><br></p></td><td><p><br></p></td></tr><tr><td><p>3</p></td><td><p>4</p></td></tr></tbody></table>';
         this.createEditor();
         this.instance.setSelection(1, 0);
 
@@ -495,7 +495,7 @@ testModule('Table API', moduleConfigWithTable, function() {
     });
 
     test('insertRowAbove', function(assert) {
-        const expectedValue = '<table><tbody><tr><td><br></td><td><br></td></tr><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></tbody></table>';
+        const expectedValue = '<table><tbody><tr><td><p><br></p></td><td><p><br></p></td></tr><tr><td><p>1</p></td><td><p>2</p></td></tr><tr><td><p>3</p></td><td><p>4</p></td></tr></tbody></table>';
         this.createEditor();
         this.instance.setSelection(1, 0);
 
@@ -505,7 +505,7 @@ testModule('Table API', moduleConfigWithTable, function() {
     });
 
     test('insertColumnLeft', function(assert) {
-        const expectedValue = '<table><tbody><tr><td><br></td><td>1</td><td>2</td></tr><tr><td><br></td><td>3</td><td>4</td></tr></tbody></table>';
+        const expectedValue = '<table><tbody><tr><td><p><br></p></td><td><p>1</p></td><td><p>2</p></td></tr><tr><td><p><br></p></td><td><p>3</p></td><td><p>4</p></td></tr></tbody></table>';
         this.createEditor();
         this.instance.setSelection(1, 0);
 
@@ -515,7 +515,7 @@ testModule('Table API', moduleConfigWithTable, function() {
     });
 
     test('insertColumnRight', function(assert) {
-        const expectedValue = '<table><tbody><tr><td>1</td><td><br></td><td>2</td></tr><tr><td>3</td><td><br></td><td>4</td></tr></tbody></table>';
+        const expectedValue = '<table><tbody><tr><td><p>1</p></td><td><p><br></p></td><td><p>2</p></td></tr><tr><td><p>3</p></td><td><p><br></p></td><td><p>4</p></td></tr></tbody></table>';
         this.createEditor();
         this.instance.setSelection(1, 0);
 
@@ -525,7 +525,7 @@ testModule('Table API', moduleConfigWithTable, function() {
     });
 
     test('deleteColumn', function(assert) {
-        const expectedValue = '<table><tbody><tr><td>2</td></tr><tr><td>4</td></tr></tbody></table>';
+        const expectedValue = '<table><tbody><tr><td><p>2</p></td></tr><tr><td><p>4</p></td></tr></tbody></table>';
         this.createEditor();
         this.instance.setSelection(1, 0);
 
@@ -535,7 +535,7 @@ testModule('Table API', moduleConfigWithTable, function() {
     });
 
     test('deleteRow', function(assert) {
-        const expectedValue = '<table><tbody><tr><td>3</td><td>4</td></tr></tbody></table>';
+        const expectedValue = '<table><tbody><tr><td><p>3</p></td><td><p>4</p></td></tr></tbody></table>';
         this.createEditor();
         this.instance.setSelection(1, 0);
 

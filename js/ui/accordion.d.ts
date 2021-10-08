@@ -227,6 +227,3 @@ export type Properties = dxAccordionOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxAccordionOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxAccordionOptions;
