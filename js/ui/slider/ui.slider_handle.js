@@ -59,7 +59,7 @@ const SliderHandle = Widget.inherit({
         const tooltipOptions = Widget.getOptionsFromContainer(args);
 
         this._setWidgetOption('_sliderTooltip', [tooltipOptions]);
-        this._sliderTooltip.option('visible', tooltipOptions.enabled);
+        this._sliderTooltip?.option('visible', tooltipOptions.enabled);
     },
 
     _optionChanged: function(args) {
