@@ -4,7 +4,8 @@ export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMon
 export interface DataAccessorType {
   getter: Record<string, (data: unknown) => Date | string>;
   setter: Record<string, (object: unknown, data: unknown) => Date | string>;
-  expr: unknown;
+  expr: Record<string, string>;
+  resources?: DataAccessorType;
 }
 
 export interface BaseTemplateProps {
