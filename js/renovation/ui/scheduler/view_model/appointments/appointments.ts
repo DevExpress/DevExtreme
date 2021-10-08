@@ -11,7 +11,13 @@ export const getAppointmentsViewModel = (
   const appointmentViewModel = new AppointmentViewModelGenerator();
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const result = appointmentViewModel.generate(filteredItems, model) as AppointmentViewModelType;
+  const result = appointmentViewModel.generate(
+    filteredItems,
+    {
+      ...model,
+      isRenovatedAppointments: true,
+    },
+  ) as AppointmentViewModelType;
 
   return result
     ? result.viewModel
