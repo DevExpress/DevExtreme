@@ -658,9 +658,10 @@ describe('Scheduler', () => {
       });
 
       describe('appointmentsConfig', () => {
-        it('should be created correctly if viewDataProvider exists', () => {
+        it('should be created correctly if viewDataProvider and cellsMetaData exists', () => {
           const scheduler = new Scheduler(new SchedulerProps());
 
+          scheduler.cellsMetaData = { } as any;
           scheduler.viewDataProvider = new ViewDataProvider('day') as any;
 
           expect(scheduler.appointmentsConfig)
@@ -670,8 +671,20 @@ describe('Scheduler', () => {
             .toHaveBeenCalledTimes(1);
         });
 
-        it('should be created correctly if viewDataProvider is not exists', () => {
+        it('should not been created if viewDataProvider is not exists', () => {
           const scheduler = new Scheduler(new SchedulerProps());
+
+          expect(scheduler.appointmentsConfig)
+            .toBe(undefined);
+
+          expect(getAppointmentsConfig)
+            .toHaveBeenCalledTimes(0);
+        });
+
+        it('should not been created if cellsMetaData is not exists', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          scheduler.viewDataProvider = new ViewDataProvider('day') as any;
 
           expect(scheduler.appointmentsConfig)
             .toBe(undefined);
@@ -734,7 +747,7 @@ describe('Scheduler', () => {
             .toBe('Test_getAppointmentsViewModel');
 
           expect(filterAppointments)
-            .toHaveBeenCalledTimes(1);
+            .toHaveBeenCalledTimes(2);
 
           expect(getAppointmentsModel)
             .toHaveBeenCalledTimes(1);
@@ -755,6 +768,26 @@ describe('Scheduler', () => {
 
           jest.spyOn(scheduler, 'appointmentsConfig', 'get')
             .mockReturnValue(undefined);
+
+          expect(scheduler.appointmentsViewModel)
+            .toHaveLength(0);
+
+          expect(filterAppointments)
+            .toHaveBeenCalledTimes(0);
+
+          expect(getAppointmentsModel)
+            .toHaveBeenCalledTimes(0);
+
+          expect(getAppointmentsViewModel)
+            .toHaveBeenCalledTimes(0);
+        });
+
+        it('should return empty array if filteredItems is empty', () => {
+          const schedulerProps = new SchedulerProps();
+          const scheduler = new Scheduler(schedulerProps);
+
+          jest.spyOn(scheduler, 'filteredItems', 'get')
+            .mockReturnValue([]);
 
           expect(scheduler.appointmentsViewModel)
             .toHaveLength(0);

@@ -24,7 +24,7 @@ import {
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import { DataAccessorType } from './types';
+import { DataAccessorType, DataSourcePromise } from './types';
 import {
   createDataAccessors, createTimeZoneCalculator, filterAppointments,
 } from './common';
@@ -235,7 +235,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get appointmentsConfig(): AppointmentsConfigType | undefined {
-    if (!this.viewDataProvider) {
+    if (!this.viewDataProvider || !this.cellsMetaData) {
       return undefined;
     }
 
@@ -259,7 +259,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get appointmentsViewModel(): AppointmentViewModel[] {
-    if (!this.appointmentsConfig) {
+    if (!this.appointmentsConfig || this.filteredItems.length === 0) {
       return [];
     }
 
@@ -364,10 +364,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadDataSource(): void {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.internalDataSource
-      .load()
-      .then((items) => {
+    (this.internalDataSource.load() as DataSourcePromise)
+      .done((items: Appointment[]) => {
         this.dataItems = items;
       });
   }

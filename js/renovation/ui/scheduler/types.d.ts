@@ -1,3 +1,5 @@
+import type { DxPromise } from '../../../core/utils/deferred';
+
 export type GroupOrientation = 'vertical' | 'horizontal';
 export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 
@@ -10,4 +12,8 @@ export interface DataAccessorType {
 
 export interface BaseTemplateProps {
   index: number;
+}
+
+export interface DataSourcePromise extends DxPromise {
+  done: (items: unknown) => void;
 }
