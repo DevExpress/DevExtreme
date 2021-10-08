@@ -637,7 +637,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
         const scrollable = this.getScrollable();
 
-        if(scrollable._disposed) {
+        if(scrollable?._disposed) {
             return;
         }
 
