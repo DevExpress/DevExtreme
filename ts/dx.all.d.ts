@@ -4448,14 +4448,6 @@ declare module DevExpress.ui {
      */
     data: DevExpress.core.DeepPartial<TRowData>;
     /**
-     * [descr:DataChange.index]
-     */
-    index?: number;
-    /**
-     * [descr:DataChange.pageIndex]
-     */
-    pageIndex?: number;
-    /**
      * [descr:DataChange.insertAfterKey]
      */
     insertAfterKey?: TKey;
@@ -6439,6 +6431,16 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.editing.texts]
        */
       texts?: any;
+      /**
+       * [descr:dxDataGridOptions.editing.newRowPosition]
+       */
+      newRowPosition?:
+        | 'first'
+        | 'last'
+        | 'pageBottom'
+        | 'pageTop'
+        | 'viewportBottom'
+        | 'viewportTop';
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -6468,16 +6470,6 @@ declare module DevExpress.ui {
        * [descr:GridBaseOptions.editing.mode]
        */
       mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
-      /**
-       * [descr:GridBaseOptions.editing.newRowPosition]
-       */
-      newRowPosition?:
-        | 'first'
-        | 'last'
-        | 'pageBottom'
-        | 'pageTop'
-        | 'viewportBottom'
-        | 'viewportTop';
       /**
        * [descr:GridBaseOptions.editing.popup]
        */
