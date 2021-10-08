@@ -2117,18 +2117,20 @@ const EditingController = modules.ViewController.inherit((function() {
                     });
                     return promise;
                 }
-            } else if(oldEditRowIndex >= 0) {
-                const rowIndices = [oldEditRowIndex];
-
+            } else {
                 this._resetEditRowKey();
                 this._resetEditColumnName();
 
-                this._beforeCloseEditCellInBatchMode(rowIndices);
-                if(!isError) {
-                    dataController.updateItems({
-                        changeType: 'update',
-                        rowIndices: rowIndices
-                    });
+                if(oldEditRowIndex >= 0) {
+                    const rowIndices = [oldEditRowIndex];
+
+                    this._beforeCloseEditCellInBatchMode(rowIndices);
+                    if(!isError) {
+                        dataController.updateItems({
+                            changeType: 'update',
+                            rowIndices: rowIndices
+                        });
+                    }
                 }
             }
 
