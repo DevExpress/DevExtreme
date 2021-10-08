@@ -355,6 +355,3 @@ export type Properties = dxMapOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxMapOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxMapOptions;

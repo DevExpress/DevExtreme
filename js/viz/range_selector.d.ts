@@ -780,6 +780,3 @@ export type Properties = dxRangeSelectorOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxRangeSelectorOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxRangeSelectorOptions;

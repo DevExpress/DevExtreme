@@ -87,6 +87,3 @@ export type Properties = dxSwitchOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxSwitchOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxSwitchOptions;
