@@ -6113,7 +6113,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
         });
     });
 
-    QUnit.test('Virtual row should not be rendered after the last inserted row', function(assert) {
+    QUnit.test('Virtual row should not be rendered after the last inserted row with certain height and row count', function(assert) {
         // arrange
         const getData = function() {
             const items = [];
