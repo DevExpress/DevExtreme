@@ -1,9 +1,19 @@
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
-import Store, { StoreOptions } from './abstract_store';
+import Store, { Options as StoreOptions } from './abstract_store';
 
-/** @namespace DevExpress.data */
-export interface CustomStoreOptions
-<TValue = any,
+/** @public */
+export type Options<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> = CustomStoreOptions<TValue, TKeyExpr, TKey>;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ */
+export interface CustomStoreOptions<
+    TValue = any,
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
 > extends StoreOptions<TValue, TKeyExpr, TKey> {
@@ -75,12 +85,12 @@ export interface CustomStoreOptions
  * @inherits Store
  * @public
  */
-export default class CustomStore
-<TValue = any,
+export default class CustomStore<
+    TValue = any,
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
 > extends Store<TValue, TKeyExpr, TKey> {
-    constructor(options?: CustomStoreOptions<TValue, TKeyExpr, TKey>)
+    constructor(options?: Options<TValue, TKeyExpr, TKey>)
     /**
      * @docid
      * @publicName clearRawDataCache()

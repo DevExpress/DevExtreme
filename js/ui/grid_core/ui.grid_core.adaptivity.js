@@ -759,7 +759,7 @@ export const adaptivityModule = {
                 },
 
                 _createRow: function(row) {
-                    const $row = this.callBase(row);
+                    const $row = this.callBase.apply(this, arguments);
 
                     if(row && row.rowType === ADAPTIVE_ROW_TYPE && row.key === this._dataController.adaptiveExpandedKey()) {
                         $row.addClass(ADAPTIVE_DETAIL_ROW_CLASS);

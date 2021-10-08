@@ -56,11 +56,9 @@ const getAppointmentRenderingStrategyName = (viewType: ViewType): string => {
 };
 
 const getAppointmentConfig = (
-  key: number,
   schedulerConfig: SchedulerProps,
   viewConfig: CurrentViewConfigType,
 ): AppointmentsConfigType => ({
-  key,
   adaptivityEnabled: schedulerConfig.adaptivityEnabled,
   rtlEnabled: schedulerConfig.rtlEnabled,
   startDayHour: viewConfig.startDayHour,
@@ -91,17 +89,14 @@ const getAppointmentConfig = (
 });
 
 export const getAppointmentsModel = (
-  key: number,
   schedulerConfig: SchedulerProps,
   viewConfig: CurrentViewConfigType,
   viewDataProvider: ViewDataProviderType,
   timeZoneCalculator: unknown,
-  appointmentDataProvider: unknown,
   dataAccessors: DataAccessorType,
   cellsMetaData: CellsMetaData,
 ): AppointmentsModelType => {
   const appointmentConfig = getAppointmentConfig(
-    key,
     schedulerConfig,
     viewConfig,
   );
@@ -178,7 +173,6 @@ export const getAppointmentsModel = (
     loadedResources: [],
     dataAccessors,
     timeZoneCalculator,
-    appointmentDataProvider,
     viewDataProvider,
     positionHelper,
     isGroupedAllDayPanel,

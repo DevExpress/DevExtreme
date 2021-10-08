@@ -779,6 +779,9 @@ describe('WorkSpace', () => {
         it('should call "getViewRenderConfigByType" and pass correct props to it', () => {
           const workSpace = new WorkSpace({
             type: 'week',
+            crossScrollingEnabled: true,
+            groups,
+            groupOrientation: 'vertical',
             intervalCount: 3,
           } as any);
 
@@ -797,10 +800,11 @@ describe('WorkSpace', () => {
               isGenerateWeekDaysHeaderData: false,
               className: 'dx-scheduler-work-space-week',
               scrollingDirection: 'vertical',
+              isCreateCrossScrolling: true,
             });
 
           expect(getViewRenderConfigByType)
-            .toBeCalledWith('week', 3);
+            .toBeCalledWith('week', true, 3, true);
         });
       });
 
@@ -840,14 +844,14 @@ describe('WorkSpace', () => {
         });
       });
 
-      describe('isRenderGroupPanel', () => {
+      describe('isVerticalGrouping', () => {
         it('should call isVerticalGroupingApplied', () => {
           const workSpace = new WorkSpace({
             groups,
             groupOrientation: 'vertical',
           } as any);
 
-          const result = workSpace.isRenderGroupPanel;
+          const result = workSpace.isVerticalGrouping;
 
           expect(result)
             .toBe(true);
@@ -918,9 +922,6 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': true,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
-            'dx-scheduler-group-row-count-one': false,
-            'dx-scheduler-group-row-count-two': false,
-            'dx-scheduler-group-row-count-three': false,
             'dx-scheduler-group-column-count-one': true,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -952,9 +953,6 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': true,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
-            'dx-scheduler-group-row-count-one': false,
-            'dx-scheduler-group-row-count-two': false,
-            'dx-scheduler-group-row-count-three': false,
             'dx-scheduler-group-column-count-one': true,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -985,9 +983,6 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': true,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
-            'dx-scheduler-group-row-count-one': false,
-            'dx-scheduler-group-row-count-two': false,
-            'dx-scheduler-group-row-count-three': false,
             'dx-scheduler-group-column-count-one': true,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -1018,9 +1013,6 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': false,
             'dx-scheduler-work-space-vertical-grouped': false,
-            'dx-scheduler-group-row-count-one': false,
-            'dx-scheduler-group-row-count-two': false,
-            'dx-scheduler-group-row-count-three': false,
             'dx-scheduler-group-column-count-one': false,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -1051,9 +1043,6 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': false,
             'dx-scheduler-work-space-vertical-grouped': false,
-            'dx-scheduler-group-row-count-one': false,
-            'dx-scheduler-group-row-count-two': false,
-            'dx-scheduler-group-row-count-three': false,
             'dx-scheduler-group-column-count-one': false,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -1097,42 +1086,6 @@ describe('WorkSpace', () => {
         }],
         groupOrientation: 'vertical',
         className: 'dx-scheduler-group-column-count-three',
-      }, {
-        groups: [{
-          items: [],
-          data: [],
-          name: 'group 1',
-        }],
-        groupOrientation: 'horizontal',
-        className: 'dx-scheduler-group-row-count-one',
-      }, {
-        groups: [{
-          items: [],
-          data: [],
-          name: 'group 1',
-        }, {
-          items: [],
-          data: [],
-          name: 'group 2',
-        }],
-        groupOrientation: 'horizontal',
-        className: 'dx-scheduler-group-row-count-two',
-      }, {
-        groups: [{
-          items: [],
-          data: [],
-          name: 'group 1',
-        }, {
-          items: [],
-          data: [],
-          name: 'group 2',
-        }, {
-          items: [],
-          data: [],
-          name: 'group 3',
-        }],
-        groupOrientation: 'horizontal',
-        className: 'dx-scheduler-group-row-count-three',
       }].forEach(({ groups: currentGroups, groupOrientation, className }) => {
         it(`should call combineClasses with correct parameters when groups count is ${currentGroups.length} and groupOrientation is ${groupOrientation}`, () => {
           const workSpace = new WorkSpace({
@@ -1156,9 +1109,6 @@ describe('WorkSpace', () => {
               'dx-scheduler-work-space-group-by-date': false,
               'dx-scheduler-work-space-grouped': true,
               'dx-scheduler-work-space-vertical-grouped': groupOrientation === 'vertical',
-              'dx-scheduler-group-row-count-one': false,
-              'dx-scheduler-group-row-count-two': false,
-              'dx-scheduler-group-row-count-three': false,
               'dx-scheduler-group-column-count-one': false,
               'dx-scheduler-group-column-count-two': false,
               'dx-scheduler-group-column-count-three': false,
@@ -1189,9 +1139,6 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': false,
             'dx-scheduler-work-space-vertical-grouped': false,
-            'dx-scheduler-group-row-count-one': false,
-            'dx-scheduler-group-row-count-two': false,
-            'dx-scheduler-group-row-count-three': false,
             'dx-scheduler-group-column-count-one': false,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,

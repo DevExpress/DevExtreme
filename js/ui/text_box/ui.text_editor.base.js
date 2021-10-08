@@ -133,7 +133,9 @@ const TextEditorBase = Editor.inherit({
 
             label: '',
 
-            labelMode: 'static'
+            labelMode: 'static',
+
+            labelMark: ''
         });
     },
 
@@ -463,9 +465,10 @@ const TextEditorBase = Editor.inherit({
         this.$element().addClass(this.option('labelMode') === 'floating' ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS : TEXTEDITOR_WITH_LABEL_CLASS);
 
         const labelText = this.option('label');
+        const labelMark = this.option('labelMark');
         const $label = this._$label = $('<div>')
             .addClass(TEXTEDITOR_LABEL_CLASS)
-            .html(`<div class="dx-label-before"></div><div class="dx-label"><span>${labelText}</span></div><div class="dx-label-after"></div>`);
+            .html(`<div class="dx-label-before"></div><div class="dx-label"><span data-mark="${labelMark}">${labelText}</span></div><div class="dx-label-after"></div>`);
 
         $label.appendTo(this.$element());
 
@@ -476,7 +479,7 @@ const TextEditorBase = Editor.inherit({
 
         const labelWidth = this._$field ? getWidth(this._$field) : (this._$tagsContainer ? getWidth(this._$tagsContainer) : getWidth(this._input()));
 
-        this._$label.find('.dx-label').css('max-width', labelWidth);
+        this._$label.find('.dx-label').css('maxWidth', labelWidth);
     },
 
     _renderPlaceholder: function() {
@@ -747,6 +750,7 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'label':
             case 'labelMode':
+            case 'labelMark':
                 this._renderLabel();
                 break;
             case 'width':

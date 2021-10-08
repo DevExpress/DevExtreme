@@ -7,7 +7,6 @@ import { DataSource } from 'data/data_source/data_source';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
-import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 import errors from 'ui/widget/ui.errors';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -107,7 +106,7 @@ QUnit.module('Options', {
         const repaintStub = sinon.stub(instance, 'repaint');
 
         try {
-            const appointmentDataProvider = getAppointmentDataProvider(instance.key);
+            const { appointmentDataProvider } = instance;
 
             instance.option({
                 'startDateExpr': '_startDate',

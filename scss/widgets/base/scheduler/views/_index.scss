@@ -215,6 +215,9 @@ $scheduler-month-date-text-padding: 6px;
 
 .dx-scheduler-header-panel-container {
   display: flex;
+
+  // Header collapses in Safari without it
+  flex-shrink: 0;
 }
 
 .dx-scheduler-header-panel-empty-cell {

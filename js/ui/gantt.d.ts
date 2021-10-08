@@ -800,13 +800,13 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
          * @type Enums.GanttScaleType
          * @default "minutes"
          */
-        start?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        min?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
         /**
          * @docid
          * @type Enums.GanttScaleType
          * @default "years"
          */
-        end?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        max?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
     };
     /**
      * @docid
@@ -1382,7 +1382,6 @@ export interface dxGanttFilterRow {
     betweenStartText?: string;
     /**
      * @docid
-     * @type object
      */
     operationDescriptions?: dxGanttFilterRowOperationDescriptions;
     /**
@@ -1494,7 +1493,6 @@ export interface dxGanttHeaderFilter {
     searchTimeout?: number;
     /**
      * @docid
-     * @type object
      */
     texts?: dxGanttHeaderFilterTexts;
     /**

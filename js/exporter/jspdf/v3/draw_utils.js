@@ -1,4 +1,4 @@
-import { isDefined } from '../../../core/utils/type';
+import { isDefined, isObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { calculateTextHeight, getTextLines } from './pdf_utils_v3';
 
@@ -59,7 +59,9 @@ function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWra
 
 function drawCellBackground(doc, cell) {
     if(isDefined(cell.backgroundColor)) {
-        doc.setFillColor(cell.backgroundColor);
+        if(cell.backgroundColor !== doc.getFillColor()) {
+            callMethodWithColorParameter(doc, 'setFillColor', cell.backgroundColor);
+        }
         drawRect(doc, cell._rect.x, cell._rect.y, cell._rect.w, cell._rect.h, 'F');
     }
 }
@@ -130,7 +132,7 @@ function drawBorders(doc, rect, { borderColor, drawLeftBorder = true, drawRightB
 function setTextStyles(doc, { textColor, font }, docStyles) {
     const currentTextColor = isDefined(textColor) ? textColor : docStyles.textColor;
     if(currentTextColor !== doc.getTextColor()) {
-        doc.setTextColor(currentTextColor);
+        callMethodWithColorParameter(doc, 'setTextColor', currentTextColor);
     }
 
     const currentFont = isDefined(font) ? extend({}, docStyles.font, font) : docStyles.font;
@@ -151,7 +153,22 @@ function setLinesStyles(doc, { borderColor }, docStyles) {
     doc.setLineWidth(defaultBorderLineWidth);
     const currentBorderColor = isDefined(borderColor) ? borderColor : docStyles.borderColor;
     if(currentBorderColor !== doc.getDrawColor()) {
-        doc.setDrawColor(currentBorderColor);
+        callMethodWithColorParameter(doc, 'setDrawColor', currentBorderColor);
+    }
+}
+
+function callMethodWithColorParameter(doc, method, color) {
+    if(!isObject(color)) {
+        doc[method](color);
+    } else {
+        const argsCount = Object.keys(color).length;
+        if(argsCount === 3) {
+            doc[method](color.ch1, color.ch2, color.ch3);
+        } else if(argsCount === 4) {
+            doc[method](color.ch1, color.ch2, color.ch3, color.ch4);
+        } else {
+            throw Error(`An incorrect color object was passed: 3 or 4 members are expected while the passed object has ${argsCount} members`);
+        }
     }
 }
 

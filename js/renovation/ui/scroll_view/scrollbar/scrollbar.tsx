@@ -10,7 +10,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import { combineClasses } from '../../../utils/combine_classes';
-import { EffectReturn } from '../../../utils/effect_return';
+import { EffectReturn } from '../../../utils/effect_return.d';
 import domAdapter from '../../../../core/dom_adapter';
 import {
   DIRECTION_HORIZONTAL, SCROLLABLE_SCROLLBAR_CLASS,
@@ -30,7 +30,7 @@ import {
 
 import { BaseWidgetProps } from '../../common/base_props';
 import { inRange } from '../../../../core/utils/math';
-import { DxMouseEvent } from '../common/types';
+import { DxMouseEvent } from '../common/types.d';
 import { clampIntoRange } from '../utils/clamp_into_range';
 import { ScrollbarProps } from '../common/scrollbar_props';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
@@ -64,6 +64,10 @@ export type ScrollbarPropsType = ScrollbarProps
 })
 
 export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
+  @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
+
+  @Ref() scrollRef!: RefObject<HTMLDivElement>;
+
   @Mutable() rightScrollLocation = 0;
 
   @Mutable() prevScrollLocation = 0;
@@ -73,8 +77,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   @InternalState() hovered = false;
 
   @InternalState() expanded = false;
-
-  @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
   @Ref() thumbRef!: RefObject<HTMLDivElement>;
 
@@ -184,7 +186,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.prevScrollLocation = location;
     this.rightScrollLocation = this.props.maxOffset - location;
 
-    this.props.scrollLocationChange?.(this.fullScrollProp, -location, scrollDelta >= 1);
+    this.props.scrollLocationChange?.({
+      fullScrollProp: this.fullScrollProp,
+      location: -location,
+      needFireScroll: scrollDelta >= 1,
+    });
   }
 
   @Effect()

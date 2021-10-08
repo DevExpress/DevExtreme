@@ -4,7 +4,6 @@ import { DataAccessorType, GroupOrientation } from '../types';
 import { CellsMetaData, Group } from '../workspaces/types';
 
 export interface AppointmentsConfigType {
-  key: number;
   adaptivityEnabled: boolean;
   rtlEnabled?: boolean;
   startDayHour: number;
@@ -39,7 +38,6 @@ export interface AppointmentsModelType extends AppointmentsConfigType {
   loadedResources: [];
   dataAccessors: DataAccessorType;
   timeZoneCalculator: unknown;
-  appointmentDataProvider: unknown;
   viewDataProvider: unknown;
   positionHelper: unknown;
   resizableStep: number; // positionHelper.getResizableStep()

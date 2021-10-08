@@ -13,25 +13,9 @@ function run_lint {
 }
 
 function run_ts {
-    target=./ts/dx.all.d.ts
-    cp $target $target.current
-
-    npm i
-    npm update devextreme-internal-tools
-    npm ls devextreme-internal-tools || :
-
-    npm run validate-declarations
-    npm run update-ts
-
-    if ! diff $target.current $target -U 5 > $target.diff; then
-        echo "FAIL: $target is outdated:"
-        cat $target.diff | sed "1,2d"
-        exit 1
-    else
-        echo "TS is up-to-date"
-    fi
-
-    npm run validate-ts
+    echo 'Skipped'
+    # This function is a stub for a Drone; it is a subject to remove in future
+    # Current implementation located in .github/workflows/ts_declarations.yml
 }
 
 function run_test {

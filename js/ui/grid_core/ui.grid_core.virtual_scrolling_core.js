@@ -159,7 +159,7 @@ export const VirtualScrollController = Class.inherit((function() {
                     const skip = Math.max(viewportParams.skip, loadedOffset);
                     const take = Math.min(viewportParams.take, loadedItemCount);
 
-                    const endItemsCount = totalItemsCount - (skip + take);
+                    const endItemsCount = Math.max(totalItemsCount - (skip + take), 0);
                     return {
                         begin: skip,
                         end: endItemsCount

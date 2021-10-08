@@ -4223,6 +4223,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const changedArgs = [];
 
         this.options.loadingTimeout = 0;
+        this.options.scrolling.renderAsync = true;
         this.setupDataSource({
             pageSize: 2
         });
@@ -4307,6 +4308,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const virtualItems = [];
 
         this.options.loadingTimeout = 0;
+        this.options.scrolling.renderAsync = true;
         this.setupDataSource({
             pageSize: 2
         });
