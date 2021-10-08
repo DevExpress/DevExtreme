@@ -401,6 +401,7 @@ export interface dxHtmlEditorTableContextMenu {
     /**
      * @docid
      * @default false
+     * @public
      */
     enabled?: boolean;
     /**
