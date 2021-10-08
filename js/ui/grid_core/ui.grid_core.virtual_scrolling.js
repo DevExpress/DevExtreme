@@ -177,8 +177,13 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         },
         _customizeRemoteOperations: function(options, operationTypes) {
             const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
+            let renderAsync = this.option('scrolling.renderAsync');
 
-            if((isVirtualMode(this) || (isAppendMode(this) && newMode)) && !operationTypes.reload && (operationTypes.skip || newMode) && this._renderTime < this.option('scrolling.renderingThreshold')) {
+            if(!isDefined(renderAsync)) {
+                renderAsync = this._renderTime >= this.option('scrolling.renderingThreshold');
+            }
+
+            if((isVirtualMode(this) || (isAppendMode(this) && newMode)) && !operationTypes.reload && (operationTypes.skip || newMode) && !renderAsync) {
                 options.delay = undefined;
             }
 
