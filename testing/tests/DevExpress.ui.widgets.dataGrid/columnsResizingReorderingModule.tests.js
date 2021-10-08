@@ -2713,7 +2713,7 @@ QUnit.module('Columns resizing', {
 
         // assert
         assert.ok(controller._trackerView);
-        assert.roughEqual(testElement.find('.dx-datagrid-tracker').height(), resultHeight, 0.1);
+        assert.roughEqual(testElement.find('.dx-datagrid-tracker').height(), resultHeight, 0.6);
     });
 
     QUnit.test('TrackerView. Position and height are not changed when tracker ccs class is not applied', function(assert) {
