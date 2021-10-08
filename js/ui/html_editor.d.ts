@@ -411,16 +411,10 @@ export interface dxHtmlEditorTableContextMenu {
      */
     items?: Array<dxHtmlEditorTableContextMenuItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
   }
- /**
+/**
  * @public
- * @namespace DevExpress.ui.dxHtmlEditor
+ * @namespace DevExpress.ui
  */
-  export type TableContextMenuItem = dxHtmlEditorTableContextMenuItem;
-
-  /**
-   * @deprecated Use TableContextMenuItem instead
-   * @namespace DevExpress.ui
-   */
    export interface dxHtmlEditorTableContextMenuItem extends dxContextMenuItem {
     /**
      * @docid
@@ -433,7 +427,7 @@ export interface dxHtmlEditorTableContextMenu {
      * @public
      * @type Array<dxHtmlEditorTableContextMenuItem>
      */
-    items?: Array<TableContextMenuItem>;
+    items?: Array<dxHtmlEditorTableContextMenuItem>;
  }
 
 /**
