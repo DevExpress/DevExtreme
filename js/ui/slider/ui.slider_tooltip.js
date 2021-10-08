@@ -4,12 +4,13 @@ import { extend } from '../../core/utils/extend';
 import { SliderTooltipPositionController } from './slider_tooltip_position_controller';
 import numberLocalization from '../../localization/number';
 
-const SLIDER_TOOLTIP_ON_HOVER_CLASS = 'dx-slider-tooltip-on-hover';
+// NOTE: Visibility is contolled by the 'visible' option and 'dx-slider-tooltip-visible-on-hover' class.
+const SLIDER_TOOLTIP_VISIBILITY_CLASS = 'dx-slider-tooltip-visible-on-hover';
 
 const SliderTooltip = Tooltip.inherit({
     _getDefaultOptions() {
         return extend(this.callBase(), {
-            visible: true,
+            visible: false,
             position: 'top',
             closeOnOutsideClick: false,
             hideTopOverlayHandler: null,
@@ -20,7 +21,6 @@ const SliderTooltip = Tooltip.inherit({
             _fixWrapperPosition: false,
             useResizeObserver: false,
 
-            enabled: false,
             showMode: 'onHover',
             format: (value) => value,
             value: 0
@@ -30,8 +30,12 @@ const SliderTooltip = Tooltip.inherit({
     _initMarkup() {
         this.callBase();
 
-        this._toggle(this.option('enabled'));
-        this._updateShowMode();
+        this._attachToMarkup(this.option('visible'));
+        this._toggleShowModeClass();
+    },
+
+    _renderContent() {
+        this.callBase();
         this._renderContentText();
     },
 
@@ -41,30 +45,13 @@ const SliderTooltip = Tooltip.inherit({
         const formattedText = numberLocalization.format(value ?? 0, format);
         this.$content().text(formattedText);
 
-        this._updatePosition();
-    },
-
-    _updatePosition() {
         this._renderPosition();
     },
 
-    _updateShowMode() {
-        this._showIfNeeded();
-        this._toggleContainerHoverClass();
-    },
-
-    _showIfNeeded() {
-        const { showMode, enabled } = this.option();
-
-        if(showMode === 'always' && enabled) {
-            this.show();
-        }
-    },
-
-    _toggleContainerHoverClass() {
+    _toggleShowModeClass() {
         const isHoverMode = this.option('showMode') === 'onHover';
 
-        this._positionController.$container.toggleClass(SLIDER_TOOLTIP_ON_HOVER_CLASS, isHoverMode);
+        this._positionController.$container.toggleClass(SLIDER_TOOLTIP_VISIBILITY_CLASS, isHoverMode);
     },
 
     _initPositionController() {
@@ -73,7 +60,7 @@ const SliderTooltip = Tooltip.inherit({
         );
     },
 
-    _toggle(enabled) {
+    _attachToMarkup(enabled) {
         enabled
             ? this.$element().appendTo(this._positionController.$container)
             : this.$element().detach();
@@ -82,12 +69,12 @@ const SliderTooltip = Tooltip.inherit({
     _optionChanged(args) {
         const { name, value } = args;
         switch(name) {
-            case 'enabled':
-                this._toggle(value);
-                this._showIfNeeded();
+            case 'visible':
+                this._attachToMarkup(value);
+                this.callBase(args);
                 break;
             case 'showMode':
-                this._updateShowMode();
+                this._toggleShowModeClass();
                 break;
             case 'format':
             case 'value':
@@ -100,7 +87,7 @@ const SliderTooltip = Tooltip.inherit({
     },
 
     updatePosition() {
-        this._updatePosition();
+        this._renderPosition();
     }
 });
 

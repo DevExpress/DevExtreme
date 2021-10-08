@@ -34,6 +34,7 @@ const SLIDER_HANDLE_CLASS = SLIDER_CLASS + '-handle';
 const SLIDER_LABEL_CLASS = SLIDER_CLASS + '-label';
 
 const ACTIVE_STATE_CLASS = 'dx-state-active';
+const HOVER_STATE_CLASS = 'dx-state-hover';
 const FEEDBACK_SHOW_TIMEOUT = 30;
 const FEEDBACK_HIDE_TIMEOUT = 400;
 const SLIDER_HANDLE_WIDTH = 14;
@@ -44,6 +45,7 @@ const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_CONTENT_CLASS = 'dx-overlay-content';
 
 const INVALID_MESSAGE_VISIBLE_CLASS = 'dx-invalid-message-visible';
+const SLIDER_TOOLTIP_VISIBILITY_CLASS = 'dx-slider-tooltip-visible-on-hover';
 
 const moduleOptions = {
     beforeEach: function() {
@@ -1172,6 +1174,12 @@ module('tooltip integration', {
                 || this.$slider.hasClass('dx-slider-tooltip-position-bottom')
             );
         };
+        this.checkTooltipVisible = (visible, assert) => {
+            const check = visible ? assert.notEqual.bind(assert) : assert.strictEqual.bind(assert);
+
+            this.checkTooltipExists(true, assert);
+            check(this.getTooltipContent().css('visibility'), 'hidden');
+        };
     },
     afterEach: function() {
         this.$slider.remove();
@@ -1477,7 +1485,7 @@ module('tooltip integration', {
         });
 
 
-        test('"tooltip.enabled" option renders or remove tooltip', function(assert) {
+        test('renders or remove tooltip', function(assert) {
             this.init({
                 tooltip: {
                     enabled: false,
@@ -1493,6 +1501,57 @@ module('tooltip integration', {
             this.slider.option('tooltip.enabled', false);
             this.checkTooltipExists(false, assert);
         });
+
+        test('and showMode="always" should show tooltip on init', function(assert) {
+            this.init({
+                tooltip: {
+                    enabled: true,
+                    showMode: 'always'
+                }
+            });
+
+            this.checkTooltipVisible(true, assert);
+        });
+
+        test('and showMode="onHover" on init', function(assert) {
+            this.init({
+                tooltip: {
+                    enabled: true,
+                    showMode: 'onHover'
+                }
+            });
+
+            this.checkTooltipVisible(false, assert);
+
+            this.$handle.addClass(HOVER_STATE_CLASS);
+            this.checkTooltipVisible(true, assert);
+        });
+
+        test('runtime change to true shows tooltip if showMode="always"', function(assert) {
+            this.init({
+                tooltip: {
+                    showMode: 'always'
+                }
+            });
+
+            this.slider.option('tooltip.enabled', true);
+
+            this.checkTooltipVisible(true, assert);
+        });
+
+        test('runtime change to true if showMode="onHover"', function(assert) {
+            this.init({
+                tooltip: {
+                    showMode: 'onHover'
+                }
+            });
+
+            this.slider.option('tooltip.enabled', true);
+            this.checkTooltipVisible(false, assert);
+
+            this.$handle.addClass(HOVER_STATE_CLASS);
+            this.checkTooltipVisible(true, assert);
+        });
     });
 
     module('tooltip.showMode', () => {
@@ -1507,10 +1566,10 @@ module('tooltip integration', {
                 }
             });
 
-            assert.ok(this.$handle.hasClass('dx-slider-tooltip-on-hover'));
+            assert.ok(this.$handle.hasClass(SLIDER_TOOLTIP_VISIBILITY_CLASS));
 
             this.slider.option('tooltip.showMode', 'always');
-            assert.ok(!this.$handle.hasClass('dx-slider-tooltip-on-hover'));
+            assert.ok(!this.$handle.hasClass(SLIDER_TOOLTIP_VISIBILITY_CLASS));
         });
     });
 

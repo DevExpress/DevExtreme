@@ -30,9 +30,8 @@ const SliderHandle = Widget.inherit({
     },
 
     _render: function() {
-        this._renderTooltip();
-
         this.callBase();
+        this._renderTooltip();
     },
 
     _renderTooltip: function() {
@@ -43,8 +42,8 @@ const SliderHandle = Widget.inherit({
             target: this.$element(),
             container: this.$element(),
             position,
+            visible: enabled,
 
-            enabled,
             showMode,
             format,
             value
@@ -60,6 +59,7 @@ const SliderHandle = Widget.inherit({
         const tooltipOptions = Widget.getOptionsFromContainer(args);
 
         this._setWidgetOption('_sliderTooltip', [tooltipOptions]);
+        this._sliderTooltip.option('visible', tooltipOptions.enabled);
     },
 
     _optionChanged: function(args) {
