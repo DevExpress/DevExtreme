@@ -847,6 +847,10 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @public
      */
     toolbar?: dxTreeListToolbar;
+    /**
+     * @docid dxTreeListOptions.onToolbarPreparing
+     * @deprecated dxTreeListOptions.toolbar
+     */
 }
 
 /**

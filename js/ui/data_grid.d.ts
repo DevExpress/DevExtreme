@@ -928,7 +928,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
     onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo<TRowData, TKey>) => void);
     /**
      * @docid
-     * @deprecated GridBaseOptions.toolbar
+     * @deprecated
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement
@@ -3719,6 +3719,10 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @public
      */
     toolbar?: dxDataGridToolbar;
+    /**
+     * @docid dxDataGridOptions.onToolbarPreparing
+     * @deprecated dxDataGridOptions.toolbar
+     */
 }
 
 export interface ExcelCellInfo<TRowData = any, TKey = any> {

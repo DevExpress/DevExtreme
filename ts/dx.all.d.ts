@@ -8470,6 +8470,10 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.toolbar]
      */
     toolbar?: dxDataGridToolbar;
+    /**
+     * @docid dxDataGridOptions.onToolbarPreparing
+     * @deprecated dxDataGridOptions.toolbar
+     */
   }
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead
@@ -21313,6 +21317,10 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.toolbar]
      */
     toolbar?: dxTreeListToolbar;
+    /**
+     * @docid dxTreeListOptions.onToolbarPreparing
+     * @deprecated dxTreeListOptions.toolbar
+     */
   }
   /**
    * @deprecated 
@@ -22676,7 +22684,6 @@ declare module DevExpress.ui {
     ) => void;
     /**
      * [descr:GridBaseOptions.onToolbarPreparing]
-     * @deprecated [depNote:GridBaseOptions.onToolbarPreparing]
      */
     onToolbarPreparing?: (
       e: DevExpress.events.EventInfo<TComponent> &
