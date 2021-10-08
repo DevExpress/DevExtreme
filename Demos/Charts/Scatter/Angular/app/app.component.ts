@@ -4,31 +4,31 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChartModule } from 'devextreme-angular';
 import { ScatterData, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    dataSource: ScatterData[];
+  dataSource: ScatterData[];
 
-    constructor(service: Service) {
-        this.dataSource = service.generateDataSource();
-    }
+  constructor(service: Service) {
+    this.dataSource = service.generateDataSource();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

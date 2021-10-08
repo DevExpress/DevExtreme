@@ -1,20 +1,22 @@
 import { Injectable } from '@angular/core';
 
 export class List {
-    id: number;
-    text: string;
-    icon: string;
+  id: number;
+
+  text: string;
+
+  icon: string;
 }
 
-let navigation: List[] = [
-    { id: 1, text: "Products", icon: "product" },
-    { id: 2, text: "Sales", icon: "money" },
-    { id: 3, text: "Customers", icon: "group" },
-    { id: 4, text: "Employees", icon: "card" },
-    { id: 5, text: "Reports", icon: "chart" }
+const navigation: List[] = [
+  { id: 1, text: 'Products', icon: 'product' },
+  { id: 2, text: 'Sales', icon: 'money' },
+  { id: 3, text: 'Customers', icon: 'group' },
+  { id: 4, text: 'Employees', icon: 'card' },
+  { id: 5, text: 'Reports', icon: 'chart' },
 ];
 
-let text: string = `
+const text = `
 <h2>
     <b>Drawer Demo</b>
 </h2>
@@ -25,11 +27,11 @@ let text: string = `
 
 @Injectable()
 export class Service {
-    getNavigationList(): List[] {
-        return navigation;
-    }
+  getNavigationList(): List[] {
+    return navigation;
+  }
 
-    getContent(): string {
-        return text;
-    }
+  getContent(): string {
+    return text;
+  }
 }

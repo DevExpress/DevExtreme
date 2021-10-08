@@ -1,65 +1,69 @@
-import { NgModule, Component, ViewChild, AfterViewInit, enableProdMode } from '@angular/core';
+import {
+  NgModule, Component, ViewChild, AfterViewInit, enableProdMode,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { Service } from './app.service';
 import { DxScrollViewModule, DxSortableModule } from 'devextreme-angular';
+import { Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    lists: any[] = [];
-    statuses: string[] = ["Not Started", "Need Assistance", "In Progress", "Deferred", "Completed"];
-    employees: Object = {};
+  lists: any[] = [];
 
-    constructor (service: Service) {
-        const tasks = service.getTasks();
+  statuses: string[] = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
 
-        service.getEmployees().forEach(employee => {
-            this.employees[employee.ID] = employee.Name;
-        })
+  employees: Object = {};
 
-        this.statuses.forEach(status => {
-            this.lists.push(tasks.filter(task => task.Task_Status === status));
-        });
-    }
+  constructor(service: Service) {
+    const tasks = service.getTasks();
 
-    onListReorder(e) {
-        const list = this.lists.splice(e.fromIndex, 1)[0];
-        this.lists.splice(e.toIndex, 0, list);
+    service.getEmployees().forEach((employee) => {
+      this.employees[employee.ID] = employee.Name;
+    });
 
-        const status = this.statuses.splice(e.fromIndex, 1)[0];
-        this.statuses.splice(e.toIndex, 0, status);
-    }
+    this.statuses.forEach((status) => {
+      this.lists.push(tasks.filter((task) => task.Task_Status === status));
+    });
+  }
 
-    onTaskDragStart(e) {
-        e.itemData = e.fromData[e.fromIndex];
-    }
+  onListReorder(e) {
+    const list = this.lists.splice(e.fromIndex, 1)[0];
+    this.lists.splice(e.toIndex, 0, list);
 
-    onTaskDrop(e) {
-        e.fromData.splice(e.fromIndex, 1);
-        e.toData.splice(e.toIndex, 0, e.itemData);
-    }
+    const status = this.statuses.splice(e.fromIndex, 1)[0];
+    this.statuses.splice(e.toIndex, 0, status);
+  }
+
+  onTaskDragStart(e) {
+    e.itemData = e.fromData[e.fromIndex];
+  }
+
+  onTaskDrop(e) {
+    e.fromData.splice(e.fromIndex, 1);
+    e.toData.splice(e.toIndex, 0, e.itemData);
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxScrollViewModule,
-        DxSortableModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxScrollViewModule,
+    DxSortableModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic().bootstrapModule(AppModule);

@@ -5,40 +5,40 @@ import { DxLookupModule, DxTemplateModule } from 'devextreme-angular';
 
 import { Service, Employee } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    employees: Employee[];
+  employees: Employee[];
 
-    constructor(service: Service) {
-        this.employees = service.getEmployees();
+  constructor(service: Service) {
+    this.employees = service.getEmployees();
+  }
+
+  getDisplayExpr(item) {
+    if (!item) {
+      return '';
     }
 
-    getDisplayExpr(item) {
-        if(!item) {
-            return "";
-        }
-
-        return item.FirstName + " " + item.LastName;
-    }
+    return `${item.FirstName} ${item.LastName}`;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxLookupModule,
-        DxTemplateModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxLookupModule,
+    DxTemplateModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

@@ -3,26 +3,26 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxCheckBoxModule } from 'devextreme-angular';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    checkBoxValue: boolean | null = null;
+  checkBoxValue: boolean | null = null;
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxCheckBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxCheckBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

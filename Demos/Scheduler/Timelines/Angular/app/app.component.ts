@@ -1,40 +1,45 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import {Priority, Resource, Appointment, Service} from './app.service';
-import {DxSchedulerModule} from 'devextreme-angular';
+import { DxSchedulerModule } from 'devextreme-angular';
+import {
+  Priority, Resource, Appointment, Service,
+} from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  providers: [Service],
 })
 export class AppComponent {
-    appointmentsData: Appointment[];
-    resourcesData: Resource[];
-    prioritiesData: Priority[];
-    currentDate: Date = new Date(2021, 1, 2);
+  appointmentsData: Appointment[];
 
-    constructor(service: Service) {
-        this.appointmentsData = service.getAppointments();
-        this.resourcesData = service.getResources();
-        this.prioritiesData = service.getPriorities();
-    }
+  resourcesData: Resource[];
+
+  prioritiesData: Priority[];
+
+  currentDate: Date = new Date(2021, 1, 2);
+
+  constructor(service: Service) {
+    this.appointmentsData = service.getAppointments();
+    this.resourcesData = service.getResources();
+    this.prioritiesData = service.getPriorities();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxSchedulerModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxSchedulerModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic().bootstrapModule(AppModule);

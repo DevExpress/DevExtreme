@@ -7,33 +7,34 @@ import { DxGanttModule } from 'devextreme-angular';
 import { Service, Task } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    tasks: Task[];
-    currentTime: Date;
+  tasks: Task[];
 
-    constructor(service: Service) {
-        this.tasks = service.getTasks();
-        this.currentTime = new Date();
-    }
+  currentTime: Date;
+
+  constructor(service: Service) {
+    this.tasks = service.getTasks();
+    this.currentTime = new Date();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxGanttModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxGanttModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

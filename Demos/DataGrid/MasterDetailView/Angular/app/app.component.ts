@@ -6,32 +6,32 @@ import { Employee, Service } from './app.service';
 
 import { DetailGridComponent } from './detail-grid/detail-grid.component';
 
-
 if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    employees: Employee[];
-    constructor(private service: Service) {
-        this.employees = service.getEmployees();  
-    }
+  employees: Employee[];
+
+  constructor(private service: Service) {
+    this.employees = service.getEmployees();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxDataGridModule,
-        DxTemplateModule
-    ],
-    declarations: [AppComponent, DetailGridComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+    DxTemplateModule,
+  ],
+  declarations: [AppComponent, DetailGridComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

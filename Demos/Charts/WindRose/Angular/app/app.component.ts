@@ -6,43 +6,44 @@ import { DxPolarChartModule, DxSelectBoxModule } from 'devextreme-angular';
 
 import { WindRose, WindDescription, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    windRoseData: WindRose[];
-    windSources: WindDescription[];
-    
-    constructor(service: Service) {
-        this.windRoseData = service.getWindRoseData();
-        this.windSources = service.getWindSources();
-    }
+  windRoseData: WindRose[];
 
-    onLegendClick(e: any) {
-        var series = e.target;
-        if (series.isVisible()) {
-            series.hide();
-        } else {
-            series.show();
-        }
+  windSources: WindDescription[];
+
+  constructor(service: Service) {
+    this.windRoseData = service.getWindRoseData();
+    this.windSources = service.getWindSources();
+  }
+
+  onLegendClick(e: any) {
+    const series = e.target;
+    if (series.isVisible()) {
+      series.hide();
+    } else {
+      series.show();
     }
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxPolarChartModule,
-        DxSelectBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxPolarChartModule,
+    DxSelectBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

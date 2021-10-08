@@ -1,81 +1,83 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 
-import {DxSchedulerModule} from 'devextreme-angular';
+import { DxSchedulerModule } from 'devextreme-angular';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
+  enableProdMode();
 }
 
 const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore/';
-const url = BASE_PATH + 'api/SchedulerSignalR';
+const url = `${BASE_PATH}api/SchedulerSignalR`;
 const createStore = () => AspNetData.createStore({
-    key: 'AppointmentId',
-    loadUrl: url,
-    insertUrl: url,
-    updateUrl: url,
-    deleteUrl: url,
-    onBeforeSend: function(method, ajaxOptions) {
-        ajaxOptions.xhrFields = { withCredentials: true };
-    }
+  key: 'AppointmentId',
+  loadUrl: url,
+  insertUrl: url,
+  updateUrl: url,
+  deleteUrl: url,
+  onBeforeSend(method, ajaxOptions) {
+    ajaxOptions.xhrFields = { withCredentials: true };
+  },
 });
 
 const store1 = createStore();
 const store2 = createStore();
 
 const connection = new HubConnectionBuilder()
-    .withUrl(BASE_PATH + 'schedulerSignalRHub', {
-        skipNegotiation: true,
-        transport: HttpTransportType.WebSockets
-    })
-    .build();
+  .withUrl(`${BASE_PATH}schedulerSignalRHub`, {
+    skipNegotiation: true,
+    transport: HttpTransportType.WebSockets,
+  })
+  .build();
 
 connection
-    .start()
-    .then(() => {
-        connection.on('update', (key, data) => {
-            store1.push([{ type: 'update', key: key, data: data }]);
-            store2.push([{ type: 'update', key: key, data: data }]);
-        });
+  .start()
+  .then(() => {
+    connection.on('update', (key, data) => {
+      store1.push([{ type: 'update', key, data }]);
+      store2.push([{ type: 'update', key, data }]);
+    });
 
-        connection.on('insert', (data) => {
-            store1.push([{ type: 'insert', data: data }]);
-            store2.push([{ type: 'insert', data: data }]);
-        });
+    connection.on('insert', (data) => {
+      store1.push([{ type: 'insert', data }]);
+      store2.push([{ type: 'insert', data }]);
+    });
 
-        connection.on('remove', (key) => {
-            store1.push([{ type: 'remove', key: key }]);
-            store2.push([{ type: 'remove', key: key }]);
-        });
-});
+    connection.on('remove', (key) => {
+      store1.push([{ type: 'remove', key }]);
+      store2.push([{ type: 'remove', key }]);
+    });
+  });
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    store1: any;
-    store2: any;
-    currentDate: Date = new Date(2021, 3, 27);
+  store1: any;
 
-    constructor() {
-        this.store1 = store1;
-        this.store2 = store2;
-    }
+  store2: any;
+
+  currentDate: Date = new Date(2021, 3, 27);
+
+  constructor() {
+    this.store1 = store1;
+    this.store2 = store2;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxSchedulerModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxSchedulerModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic().bootstrapModule(AppModule);

@@ -4,29 +4,29 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxBarGaugeModule } from 'devextreme-angular';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 
 export class AppComponent {
-    customizeText(arg) {
-        return arg.valueText + ' %';
-    }
+  customizeText(arg) {
+    return `${arg.valueText} %`;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxBarGaugeModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxBarGaugeModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

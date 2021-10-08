@@ -5,37 +5,37 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxActionSheetModule, DxButtonModule, DxSwitchModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    commands: any[] = [ 
-        { text: 'Call' },
-        { text: 'Send message' },
-        { text: 'Edit' },
-        { text: 'Delete' }
-    ];
+  commands: any[] = [
+    { text: 'Call' },
+    { text: 'Send message' },
+    { text: 'Edit' },
+    { text: 'Delete' },
+  ];
 
-    showNotify(value) {
-        notify('The "' + value + '" button is clicked.');
-    }
+  showNotify(value) {
+    notify(`The "${value}" button is clicked.`);
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxActionSheetModule,
-        DxButtonModule,
-        DxSwitchModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxActionSheetModule,
+    DxButtonModule,
+    DxSwitchModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

@@ -6,37 +6,38 @@ import { DxChartModule } from 'devextreme-angular';
 
 import { Service, State } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    populationData: State[];
-    pipe: any = new DecimalPipe("en-US");
+  populationData: State[];
 
-    constructor(service: Service) {
-        this.populationData = service.getPopulationData();
-    }
+  pipe: any = new DecimalPipe('en-US');
 
-    getImagePath(annotation) { 
-        const name = annotation.argument.replace(/\s/, "");
-        return `../../../../images/flags/${name}.svg`;
-    }
+  constructor(service: Service) {
+    this.populationData = service.getPopulationData();
+  }
+
+  getImagePath(annotation) {
+    const name = annotation.argument.replace(/\s/, '');
+    return `../../../../images/flags/${name}.svg`;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

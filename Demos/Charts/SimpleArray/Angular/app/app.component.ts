@@ -6,31 +6,31 @@ import { DxChartModule } from 'devextreme-angular';
 
 import { Population, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    populationData: Population[];
+  populationData: Population[];
 
-    constructor(service: Service) {
-        this.populationData = service.getPopulationData();
-    }
+  constructor(service: Service) {
+    this.populationData = service.getPopulationData();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

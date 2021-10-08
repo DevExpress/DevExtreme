@@ -5,36 +5,36 @@ import { DxChartModule } from 'devextreme-angular';
 
 import { Service, Production } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    productionData: Production[];
+  productionData: Production[];
 
-    constructor(service: Service) {
-        this.productionData = service.getProductionData();
-    }
+  constructor(service: Service) {
+    this.productionData = service.getProductionData();
+  }
 
-    customizeSeries(valueFromNameField: number) {
-        return valueFromNameField === 2009 ? 
-            { type: "line", label: { visible: true }, color: "#ff3f7a" } : {};
-    }
+  customizeSeries(valueFromNameField: number) {
+    return valueFromNameField === 2009
+      ? { type: 'line', label: { visible: true }, color: '#ff3f7a' } : {};
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

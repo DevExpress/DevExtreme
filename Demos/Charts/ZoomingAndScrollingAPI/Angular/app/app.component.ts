@@ -1,36 +1,39 @@
-import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  NgModule, Component, ViewChild, enableProdMode,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChartModule, DxRangeSelectorModule } from 'devextreme-angular';
 
 import { Service, ZoomingData } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html'
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
-    zoomingData: ZoomingData[];
-    visualRange: any = {};
+  zoomingData: ZoomingData[];
 
-    constructor(service: Service) {
-        this.zoomingData = service.getZoomingData();
-    }
+  visualRange: any = {};
+
+  constructor(service: Service) {
+    this.zoomingData = service.getZoomingData();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule,
-        DxRangeSelectorModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+    DxRangeSelectorModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

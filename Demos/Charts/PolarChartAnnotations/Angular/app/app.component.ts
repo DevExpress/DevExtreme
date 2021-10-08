@@ -6,39 +6,37 @@ import { DxPolarChartModule } from 'devextreme-angular';
 
 import { Temperature, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    temperaturesData: Temperature[];
-    maxDay: any;
-    minNight: any;
+  temperaturesData: Temperature[];
 
-    constructor(service: Service) {
-        this.temperaturesData = service.getTemperaturesData();
-        this.maxDay = this.temperaturesData.reduce((prev, current) =>
-            prev.day >= current.day ? prev : current
-        );
-        this.minNight = this.temperaturesData.reduce((prev, current) =>
-            prev.night <= current.night ? prev : current
-        );
-    }
+  maxDay: any;
+
+  minNight: any;
+
+  constructor(service: Service) {
+    this.temperaturesData = service.getTemperaturesData();
+    this.maxDay = this.temperaturesData.reduce((prev, current) => (prev.day >= current.day ? prev : current));
+    this.minNight = this.temperaturesData.reduce((prev, current) => (prev.night <= current.night ? prev : current));
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxPolarChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxPolarChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

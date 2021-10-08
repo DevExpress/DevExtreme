@@ -2,12 +2,11 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPivotGridModule, DxCheckBoxModule } from 'devextreme-angular';
+import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Service } from './app.service';
 
-import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
@@ -15,50 +14,53 @@ if(!/localhost/.test(document.location.host)) {
   templateUrl: 'app/app.component.html',
   styleUrls: ['app/app.component.css'],
   providers: [Service],
-  preserveWhitespaces: true
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    pivotGridDataSource: any;
-    showTotalsPrior = false;
-    rowsDataFieldArea = false;
-    treeHeaderLayout = true;
+  pivotGridDataSource: any;
+
+  showTotalsPrior = false;
+
+  rowsDataFieldArea = false;
+
+  treeHeaderLayout = true;
 
   constructor(service: Service) {
     this.pivotGridDataSource = {
       fields: [{
-        caption: "Region",
-        dataField: "region",
+        caption: 'Region',
+        dataField: 'region',
         expanded: true,
-        area: "row"
+        area: 'row',
       }, {
-        caption: "Country",
-        dataField: "country",
+        caption: 'Country',
+        dataField: 'country',
         expanded: true,
-        area: "row"
+        area: 'row',
       }, {
-        caption: "City",
-        dataField: "city",
-        area: "row"
+        caption: 'City',
+        dataField: 'city',
+        area: 'row',
       }, {
-        dataField: "date",
-        dataType: "date",
-        area: "column"
+        dataField: 'date',
+        dataType: 'date',
+        area: 'column',
       }, {
-        caption: "Sales",
-        dataField: "amount",
-        dataType: "number",
-        summaryType: "sum",
-        format: "currency",
-        area: "data"
+        caption: 'Sales',
+        dataField: 'amount',
+        dataType: 'number',
+        summaryType: 'sum',
+        format: 'currency',
+        area: 'data',
       }, {
-        caption: "Percent",
-        dataField: "amount",
-        dataType: "number",
-        summaryType: "sum",
-        summaryDisplayMode: "percentOfRowGrandTotal",
-        area: "data"
+        caption: 'Percent',
+        dataField: 'amount',
+        dataType: 'number',
+        summaryType: 'sum',
+        summaryDisplayMode: 'percentOfRowGrandTotal',
+        area: 'data',
       }],
-      store: service.getSales()
+      store: service.getSales(),
     };
   }
 }
@@ -67,10 +69,10 @@ export class AppComponent {
   imports: [
     BrowserModule,
     DxPivotGridModule,
-    DxCheckBoxModule
+    DxCheckBoxModule,
   ],
   declarations: [AppComponent],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

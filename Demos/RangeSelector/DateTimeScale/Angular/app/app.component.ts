@@ -5,31 +5,31 @@ import { DxRangeSelectorModule } from 'devextreme-angular';
 
 import { Service, MonthPeriod } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    dataSource: MonthPeriod[];
+  dataSource: MonthPeriod[];
 
-    constructor(service: Service) {
-        this.dataSource = service.getPeriods();
-    }
+  constructor(service: Service) {
+    this.dataSource = service.getPeriods();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxRangeSelectorModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxRangeSelectorModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

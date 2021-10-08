@@ -5,33 +5,34 @@ import { DxChartModule } from 'devextreme-angular';
 
 import { Service, CountryInfo, EnergyDescription } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    countriesInfo: CountryInfo[];
-    energySources: EnergyDescription[];
+  countriesInfo: CountryInfo[];
 
-    constructor(service: Service) {
-        this.countriesInfo = service.getCountriesInfo();
-        this.energySources = service.getEnergySources();
-    }
+  energySources: EnergyDescription[];
+
+  constructor(service: Service) {
+    this.countriesInfo = service.getCountriesInfo();
+    this.energySources = service.getEnergySources();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

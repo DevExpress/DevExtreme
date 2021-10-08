@@ -1,78 +1,86 @@
-import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  NgModule, Component, ViewChild, enableProdMode,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import config from 'devextreme/core/config';
 import repaintFloatingActionButton from 'devextreme/ui/speed_dial_action/repaint_floating_action_button';
-import { 
-    DxDataGridModule,
-    DxDataGridComponent,
-    DxSpeedDialActionModule,
-    DxSelectBoxModule
+import {
+  DxDataGridModule,
+  DxDataGridComponent,
+  DxSpeedDialActionModule,
+  DxSelectBoxModule,
 } from 'devextreme-angular';
 
-import { Service, Employee, State, directions } from './app.service';
+import {
+  Service, Employee, State, directions,
+} from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    @ViewChild(DxDataGridComponent, { static: false }) grid: DxDataGridComponent;
-    employees: Employee[];
-    states: State[];
-    directions: any;
-    selectedRowIndex = -1;
+  @ViewChild(DxDataGridComponent, { static: false }) grid: DxDataGridComponent;
 
-    constructor(private service: Service) {
-        this.employees = service.getEmployees();
-        this.states = service.getStates();
-        this.directions = directions;
-    }
+  employees: Employee[];
 
-    editRow() {
-        this.grid.instance.editRow(this.selectedRowIndex);
-        this.grid.instance.deselectAll();
-    }
+  states: State[];
 
-    deleteRow() {
-        this.grid.instance.deleteRow(this.selectedRowIndex);
-        this.grid.instance.deselectAll();
-    }
+  directions: any;
 
-    addRow() {
-        this.grid.instance.addRow();
-        this.grid.instance.deselectAll();
-    }
+  selectedRowIndex = -1;
 
-    selectedChanged(e) {
-        this.selectedRowIndex = e.component.getRowIndexByKey(e.selectedRowKeys[0]);
-    }
+  constructor(private service: Service) {
+    this.employees = service.getEmployees();
+    this.states = service.getStates();
+    this.directions = directions;
+  }
 
-    directionChanged(e) {
-        config({
-            floatingActionButtonConfig: this.directions[e.selectedItem]
-        });
+  editRow() {
+    this.grid.instance.editRow(this.selectedRowIndex);
+    this.grid.instance.deselectAll();
+  }
 
-        repaintFloatingActionButton();
-    }
+  deleteRow() {
+    this.grid.instance.deleteRow(this.selectedRowIndex);
+    this.grid.instance.deselectAll();
+  }
+
+  addRow() {
+    this.grid.instance.addRow();
+    this.grid.instance.deselectAll();
+  }
+
+  selectedChanged(e) {
+    this.selectedRowIndex = e.component.getRowIndexByKey(e.selectedRowKeys[0]);
+  }
+
+  directionChanged(e) {
+    config({
+      floatingActionButtonConfig: this.directions[e.selectedItem],
+    });
+
+    repaintFloatingActionButton();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxDataGridModule,
-        DxSpeedDialActionModule,
-        DxSelectBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+    DxSpeedDialActionModule,
+    DxSelectBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

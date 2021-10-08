@@ -6,31 +6,31 @@ import { DxDataGridModule } from 'devextreme-angular';
 
 import { Service, Order } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    orders: Order[];
+  orders: Order[];
 
-    constructor(service: Service) {
-        this.orders = service.getOrders();
-    }
+  constructor(service: Service) {
+    this.orders = service.getOrders();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxDataGridModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

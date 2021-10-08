@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-let markup: string = `
+const markup = `
     <h2>
         <img src="../../../../images/widgets/HtmlEditor.svg" alt="HtmlEditor">
         Formatted Text Editor (HTML Editor)
@@ -34,10 +34,9 @@ let markup: string = `
     </ul>
 `;
 
-
 @Injectable()
 export class Service {
-    getMarkup(): string {
-        return markup;
-    }
+  getMarkup(): string {
+    return markup;
+  }
 }

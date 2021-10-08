@@ -2,18 +2,17 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPivotGridModule } from 'devextreme-angular';
+import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Service } from './app.service';
 
-import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
   selector: 'demo-app',
   templateUrl: 'app/app.component.html',
-  providers: [Service]
+  providers: [Service],
 })
 export class AppComponent {
   pivotGridDataSource: any;
@@ -21,38 +20,38 @@ export class AppComponent {
   constructor(service: Service) {
     this.pivotGridDataSource = {
       fields: [{
-        caption: "Region",
+        caption: 'Region',
         width: 120,
-        dataField: "region",
-        area: "row",
-        expanded: true
+        dataField: 'region',
+        area: 'row',
+        expanded: true,
       }, {
-        caption: "City",
-        dataField: "city",
+        caption: 'City',
+        dataField: 'city',
         width: 150,
-        area: "row"
+        area: 'row',
       }, {
-        dataField: "date",
-        dataType: "date",
-        area: "column"
+        dataField: 'date',
+        dataType: 'date',
+        area: 'column',
       }, {
-        groupName: "date",
-        groupInterval: "year",
-        expanded: true
+        groupName: 'date',
+        groupInterval: 'year',
+        expanded: true,
       }, {
-        groupName: "date",
-        groupInterval: "quarter",
-        expanded: true
+        groupName: 'date',
+        groupInterval: 'quarter',
+        expanded: true,
       }, {
-        caption: "Total",
-        dataField: "amount",
-        dataType: "number",
-        summaryType: "sum",
-        format: "currency",
-        area: "data"
+        caption: 'Total',
+        dataField: 'amount',
+        dataType: 'number',
+        summaryType: 'sum',
+        format: 'currency',
+        area: 'data',
       }],
-      store: service.getSales()
-    }
+      store: service.getSales(),
+    };
   }
 }
 
@@ -62,7 +61,7 @@ export class AppComponent {
     DxPivotGridModule,
   ],
   declarations: [AppComponent],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

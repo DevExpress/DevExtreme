@@ -8,50 +8,52 @@ import DataSource from 'devextreme/data/data_source';
 import CustomStore from 'devextreme/data/custom_store';
 import query from 'devextreme/data/query';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    source: any;
-    filters: number[] = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-    years: Array<number>;
+  source: any;
 
-    constructor(http: HttpClient) {
-        this.source = new DataSource({
-            store: new CustomStore({
-                load: () => http.get('../../../../data/resourceData.json')
-                    .toPromise()
-                    .catch(error => { throw 'Data Loading Error' }),
-                loadMode: 'raw'
-            }),
-            filter: ["month", "<=", "12"],
-            paginate: false
-        });
-        this.years = [2010, 2011, 2012];
-    }
+  filters: number[] = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 
-    onValueChanged(e) {
-        let count = e.value;
-        this.source.filter(["month", "<=", count]);
-        this.source.load();
-    }
+  years: Array<number>;
+
+  constructor(http: HttpClient) {
+    this.source = new DataSource({
+      store: new CustomStore({
+        load: () => http.get('../../../../data/resourceData.json')
+          .toPromise()
+          .catch((error) => { throw 'Data Loading Error'; }),
+        loadMode: 'raw',
+      }),
+      filter: ['month', '<=', '12'],
+      paginate: false,
+    });
+    this.years = [2010, 2011, 2012];
+  }
+
+  onValueChanged(e) {
+    const count = e.value;
+    this.source.filter(['month', '<=', count]);
+    this.source.load();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        DxSparklineModule,
-        DxSelectBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    DxSparklineModule,
+    DxSelectBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

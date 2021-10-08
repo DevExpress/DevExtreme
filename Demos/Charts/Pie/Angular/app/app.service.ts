@@ -1,41 +1,42 @@
 import {
-    Injectable
+  Injectable,
 } from '@angular/core';
 
 export class Area {
-    country: string;
-    area: number;
+  country: string;
+
+  area: number;
 }
 
-let areas: Area[] = [{
-    country: "Russia",
-    area: 12
+const areas: Area[] = [{
+  country: 'Russia',
+  area: 12,
 }, {
-    country: "Canada",
-    area: 7
+  country: 'Canada',
+  area: 7,
 }, {
-    country: "USA",
-    area: 7
+  country: 'USA',
+  area: 7,
 }, {
-    country: "China",
-    area: 7
+  country: 'China',
+  area: 7,
 }, {
-    country: "Brazil",
-    area: 6
+  country: 'Brazil',
+  area: 6,
 }, {
-    country: "Australia",
-    area: 5
+  country: 'Australia',
+  area: 5,
 }, {
-    country: "India",
-    area: 2
+  country: 'India',
+  area: 2,
 }, {
-    country: "Others",
-    area: 55
+  country: 'Others',
+  area: 55,
 }];
 
 @Injectable()
 export class Service {
-    getAreas(): Area[] {
-        return areas;
-    }
+  getAreas(): Area[] {
+    return areas;
+  }
 }

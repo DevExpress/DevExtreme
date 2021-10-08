@@ -4,34 +4,35 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPieChartModule } from 'devextreme-angular';
 import { MedalistData, AnnotationInfo, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 
 export class AppComponent {
-    champions: MedalistData[];
-    annotations: AnnotationInfo[];
+  champions: MedalistData[];
 
-    constructor(service: Service) {
-        this.champions = service.getChampionsData();
-        this.annotations = service.getAnnotationSources();
-    }
+  annotations: AnnotationInfo[];
+
+  constructor(service: Service) {
+    this.champions = service.getChampionsData();
+    this.annotations = service.getAnnotationSources();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxPieChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxPieChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

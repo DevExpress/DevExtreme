@@ -5,31 +5,31 @@ import { DxListModule } from 'devextreme-angular';
 
 import { Product, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [ Service ],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    products: Product[];
+  products: Product[];
 
-    constructor(service: Service) {
-        this.products = service.getProducts();
-    }
+  constructor(service: Service) {
+    this.products = service.getProducts();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxListModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxListModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

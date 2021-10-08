@@ -6,40 +6,42 @@ import { DxTreeListModule } from 'devextreme-angular';
 
 import { Task, Employee, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  providers: [Service],
 })
 export class AppComponent {
-    tasksData: Task[];
-    statusesData: string[];
-    employeesData: Employee[];
+  tasksData: Task[];
 
-    constructor(service: Service) {
-        this.tasksData = service.getTasksData();
-        this.employeesData = service.getEmployeesData();
-        this.statusesData = [
-            "Not Started",
-            "Need Assistance",
-            "In Progress",
-            "Deferred",
-            "Completed"
-        ];
-    }
+  statusesData: string[];
+
+  employeesData: Employee[];
+
+  constructor(service: Service) {
+    this.tasksData = service.getTasksData();
+    this.employeesData = service.getEmployeesData();
+    this.statusesData = [
+      'Not Started',
+      'Need Assistance',
+      'In Progress',
+      'Deferred',
+      'Completed',
+    ];
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTreeListModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTreeListModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

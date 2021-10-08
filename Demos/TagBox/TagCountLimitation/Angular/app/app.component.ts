@@ -1,50 +1,51 @@
 import { Component, NgModule, enableProdMode } from '@angular/core';
-import { BrowserModule } from "@angular/platform-browser";
-import { platformBrowserDynamic } from "@angular/platform-browser-dynamic";
-import { DxTagBoxModule } from "devextreme-angular";
-import DataSource from "devextreme/data/data_source";
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { DxTagBoxModule } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
 
 import { Product, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 
 export class AppComponent {
-    products: Product[];
-    slicedProducts: Product[];
+  products: Product[];
 
-    constructor(service: Service) {
-        this.products = service.getProducts();
-        this.slicedProducts = this.products.slice(0, 5);
+  slicedProducts: Product[];
+
+  constructor(service: Service) {
+    this.products = service.getProducts();
+    this.slicedProducts = this.products.slice(0, 5);
+  }
+
+  onMultiTagPreparing(args) {
+    const selectedItemsLength = args.selectedItems.length;
+    const totalCount = 5;
+
+    if (selectedItemsLength < totalCount) {
+      args.cancel = true;
+    } else {
+      args.text = `All selected (${selectedItemsLength})`;
     }
-
-    onMultiTagPreparing(args){
-        var selectedItemsLength = args.selectedItems.length,
-            totalCount = 5;
-
-        if (selectedItemsLength < totalCount) {
-            args.cancel = true;
-        } else {
-            args.text = "All selected (" + selectedItemsLength + ")";
-        }
-    }
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTagBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTagBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 
 export class AppModule { }

@@ -1,40 +1,51 @@
 import { Injectable } from '@angular/core';
 
-export class ChemicalComposition  {
-    arg: string;
-    Si?: number;
-    Fe?: number;
-    Ni?: number;
-    S?: number;
-    O?: number;
-    Mg?: number;
-    Al?: number;
-    Ca?: number;
-    Na?: number;
-    K?: number;
+export class ChemicalComposition {
+  arg: string;
+
+  Si?: number;
+
+  Fe?: number;
+
+  Ni?: number;
+
+  S?: number;
+
+  O?: number;
+
+  Mg?: number;
+
+  Al?: number;
+
+  Ca?: number;
+
+  Na?: number;
+
+  K?: number;
 }
 
-export class SerieDescription  {
-    name: string;
-    valueField: string;
+export class SerieDescription {
+  name: string;
+
+  valueField: string;
 }
 
-let chemicalComposition: ChemicalComposition[] = [{
-  arg: "Inner Core",
+const chemicalComposition: ChemicalComposition[] = [{
+  arg: 'Inner Core',
   Si: 7.35,
   Fe: 79.39,
   Ni: 5.2,
   S: 2.3,
-  O: 4.1
+  O: 4.1,
 }, {
-  arg: "Outer Core",
+  arg: 'Outer Core',
   Si: 7.33,
   Fe: 78.56,
   Ni: 5.2,
   S: 2.7,
-  O: 4.2
+  O: 4.2,
 }, {
-  arg: "Lower Mantle",
+  arg: 'Lower Mantle',
   Si: 21.5,
   Fe: 5.8,
   O: 44.8,
@@ -42,18 +53,18 @@ let chemicalComposition: ChemicalComposition[] = [{
   Al: 2.2,
   Ca: 2.3,
   Na: 0.3,
-  K: 0.03
+  K: 0.03,
 }, {
-  arg: "Upper Mantle",
+  arg: 'Upper Mantle',
   Si: 28.1,
   Mg: 23.2,
   Fe: 4.3,
   Al: 1.2,
   Ca: 2.2,
   O: 40.3,
-  Na: 0.2
+  Na: 0.2,
 }, {
-  arg: "Lower Crust",
+  arg: 'Lower Crust',
   O: 46.6,
   Si: 27.7,
   Al: 8.1,
@@ -61,9 +72,9 @@ let chemicalComposition: ChemicalComposition[] = [{
   Ca: 3.6,
   Na: 2.8,
   K: 2.6,
-  Mg: 1.5
+  Mg: 1.5,
 }, {
-  arg: "Upper Crust",
+  arg: 'Upper Crust',
   O: 47,
   Si: 29.5,
   Al: 8.05,
@@ -71,44 +82,45 @@ let chemicalComposition: ChemicalComposition[] = [{
   Ca: 2.96,
   Na: 2.5,
   K: 2.5,
-  Mg: 1.87
+  Mg: 1.87,
 }];
 
-let seriesSource: SerieDescription[] = [{
-  name: "Si",
-  valueField: "Si"
+const seriesSource: SerieDescription[] = [{
+  name: 'Si',
+  valueField: 'Si',
 }, {
-  name: "Fe",
-  valueField: "Fe"
+  name: 'Fe',
+  valueField: 'Fe',
 }, {
-  name: "Ni",
-  valueField: "Ni"
+  name: 'Ni',
+  valueField: 'Ni',
 }, {
-  name: "S",
-  valueField: "S"
+  name: 'S',
+  valueField: 'S',
 }, {
-  name: "O",
-  valueField: "O"
+  name: 'O',
+  valueField: 'O',
 }, {
-  name: "Mg",
-  valueField: "Mg"
+  name: 'Mg',
+  valueField: 'Mg',
 }, {
-  name: "Al",
-  valueField: "Al"
+  name: 'Al',
+  valueField: 'Al',
 }, {
-  name: "K",
-  valueField: "K"
+  name: 'K',
+  valueField: 'K',
 }, {
-  name: "Na",
-  valueField: "Na"
+  name: 'Na',
+  valueField: 'Na',
 }];
 
 @Injectable()
 export class Service {
-    getChemicalComposition(): ChemicalComposition[] {
-        return chemicalComposition;
-    }
-    getSeries(): SerieDescription[] {
-        return seriesSource;
-    }
+  getChemicalComposition(): ChemicalComposition[] {
+    return chemicalComposition;
+  }
+
+  getSeries(): SerieDescription[] {
+    return seriesSource;
+  }
 }

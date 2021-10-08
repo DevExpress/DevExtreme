@@ -1,33 +1,34 @@
 import { Injectable } from '@angular/core';
 
 export class Population {
-    region: string;
-    val: number;
+  region: string;
+
+  val: number;
 }
 
-let populationData: Population[] = [{
-    region: "Asia",
-    val: 4119626293
+const populationData: Population[] = [{
+  region: 'Asia',
+  val: 4119626293,
 }, {
-    region: "Africa",
-    val: 1012956064
+  region: 'Africa',
+  val: 1012956064,
 }, {
-    region: "Northern America",
-    val: 344124520
+  region: 'Northern America',
+  val: 344124520,
 }, {
-    region: "Latin America and the Caribbean",
-    val: 590946440
+  region: 'Latin America and the Caribbean',
+  val: 590946440,
 }, {
-    region: "Europe",
-    val: 727082222
+  region: 'Europe',
+  val: 727082222,
 }, {
-    region: "Oceania",
-    val: 35104756
+  region: 'Oceania',
+  val: 35104756,
 }];
 
 @Injectable()
 export class Service {
-    getPopulationData(): Population[] {
-        return populationData;
-    }
+  getPopulationData(): Population[] {
+    return populationData;
+  }
 }

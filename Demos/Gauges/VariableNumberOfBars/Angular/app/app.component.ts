@@ -6,47 +6,48 @@ import { DxBarGaugeModule, DxCheckBoxModule } from 'devextreme-angular';
 
 import { Product, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 
 export class AppComponent {
-    products: Product[];
-    values: Product[];
+  products: Product[];
 
-    constructor(service: Service) {
-        this.products = service.getProducts();
-        this.productsToValues();
-    }
+  values: Product[];
 
-    productsToValues() {
-        let values = [];
+  constructor(service: Service) {
+    this.products = service.getProducts();
+    this.productsToValues();
+  }
 
-        this.products.forEach(function (product) {
-            if (product.active) {
-                values.push(product.count);
-            }
-        })
+  productsToValues() {
+    const values = [];
 
-        this.values = values;
-    }
+    this.products.forEach((product) => {
+      if (product.active) {
+        values.push(product.count);
+      }
+    });
+
+    this.values = values;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxBarGaugeModule,
-        DxCheckBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxBarGaugeModule,
+    DxCheckBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

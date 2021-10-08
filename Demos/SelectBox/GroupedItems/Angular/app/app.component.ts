@@ -1,59 +1,60 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
 
 import {
-    DxSelectBoxModule
+  DxSelectBoxModule,
 } from 'devextreme-angular';
 
-import {Product, Service} from './app.service';
+import { Product, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    fromUngroupedData: DataSource;
-    fromPregroupedData: DataSource;
+  fromUngroupedData: DataSource;
 
-    constructor(service: Service) {
-        this.fromUngroupedData = new DataSource({
-            store: new ArrayStore({
-                data: service.getUngroupedData(),
-                key: "id"
-            }),
-            group: "Category"
-        });
+  fromPregroupedData: DataSource;
 
-        this.fromPregroupedData = new DataSource({
-            store: new ArrayStore({
-                data: service.getPregroupedData(),
-                key: "id"
-            }),
-            map: function(item) {
-                item.key = item.Category;
-                item.items = item.Products;
-                return item;
-            }
-        });
-    }
+  constructor(service: Service) {
+    this.fromUngroupedData = new DataSource({
+      store: new ArrayStore({
+        data: service.getUngroupedData(),
+        key: 'id',
+      }),
+      group: 'Category',
+    });
+
+    this.fromPregroupedData = new DataSource({
+      store: new ArrayStore({
+        data: service.getPregroupedData(),
+        key: 'id',
+      }),
+      map(item) {
+        item.key = item.Category;
+        item.items = item.Products;
+        return item;
+      },
+    });
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxSelectBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxSelectBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule {
 }

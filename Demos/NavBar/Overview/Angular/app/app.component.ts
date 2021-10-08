@@ -7,61 +7,64 @@ import DataSource from 'devextreme/data/data_source';
 
 import { Category, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    navBarData: Category[];
-    listData: any[];
-    currentData: any;
+  navBarData: Category[];
 
-    constructor(service: Service) { 
-        let contacts = service.getContacts();
-        this.navBarData = service.getCategories();
+  listData: any[];
 
-        this.listData = [
-            {
-                data: new DataSource({
-                    store: contacts,
-                    sort: "name"
-                })
-            }, {
-                data: new DataSource({
-                    store: contacts,
-                    sort: "name",
-                    filter: ["category", "=", "Missed"]
-                })
-            }, {
-                data: new DataSource({
-                    store: contacts,
-                    sort: "name",
-                    filter: ["category", "=", "Favorites"]
-                })
-            }
-        ];
-        this.currentData = this.listData[0].data;
-    }
-    selectionChanged(e) {
-        this.currentData = this.listData[e.itemIndex].data;
-    }
+  currentData: any;
+
+  constructor(service: Service) {
+    const contacts = service.getContacts();
+    this.navBarData = service.getCategories();
+
+    this.listData = [
+      {
+        data: new DataSource({
+          store: contacts,
+          sort: 'name',
+        }),
+      }, {
+        data: new DataSource({
+          store: contacts,
+          sort: 'name',
+          filter: ['category', '=', 'Missed'],
+        }),
+      }, {
+        data: new DataSource({
+          store: contacts,
+          sort: 'name',
+          filter: ['category', '=', 'Favorites'],
+        }),
+      },
+    ];
+    this.currentData = this.listData[0].data;
+  }
+
+  selectionChanged(e) {
+    this.currentData = this.listData[e.itemIndex].data;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxListModule,
-        DxNavBarModule,
-        DxTemplateModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxListModule,
+    DxNavBarModule,
+    DxTemplateModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

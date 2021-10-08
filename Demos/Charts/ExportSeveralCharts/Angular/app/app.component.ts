@@ -1,53 +1,61 @@
-import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  NgModule, Component, ViewChild, enableProdMode,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxChartModule, DxPieChartModule, DxChartComponent, DxPieChartComponent, DxButtonModule } from 'devextreme-angular';
+import {
+  DxChartModule, DxPieChartModule, DxChartComponent, DxPieChartComponent, DxButtonModule,
+} from 'devextreme-angular';
 
-import { Service, Medals } from './app.service';
 import { exportWidgets } from 'devextreme/viz/export';
+import { Service, Medals } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
-    @ViewChild(DxPieChartComponent, { static: false }) pieChart: DxPieChartComponent;
-    title: string = "Total Olympic Medals\n in 2008";
-    allMedals: Medals[];
-    goldMedals: Medals[];
+  @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
 
-    constructor(service: Service) {
-        this.allMedals = service.getAllMedals();
-        this.goldMedals = service.getGoldMedals();
-    }
+  @ViewChild(DxPieChartComponent, { static: false }) pieChart: DxPieChartComponent;
 
-    export() {
-        var chartInstance = this.chart.instance,
-            pieChartInstance = this.pieChart.instance;
+  title = 'Total Olympic Medals\n in 2008';
 
-        exportWidgets([[chartInstance, pieChartInstance]], {
-            fileName: "chart",
-            format: 'PNG'
-        });
-    }
+  allMedals: Medals[];
+
+  goldMedals: Medals[];
+
+  constructor(service: Service) {
+    this.allMedals = service.getAllMedals();
+    this.goldMedals = service.getGoldMedals();
+  }
+
+  export() {
+    const chartInstance = this.chart.instance;
+    const pieChartInstance = this.pieChart.instance;
+
+    exportWidgets([[chartInstance, pieChartInstance]], {
+      fileName: 'chart',
+      format: 'PNG',
+    });
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule,
-        DxPieChartModule,
-        DxButtonModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+    DxPieChartModule,
+    DxButtonModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

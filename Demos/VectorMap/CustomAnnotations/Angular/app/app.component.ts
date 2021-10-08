@@ -6,19 +6,20 @@ import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme/dist/js/vectormap-data/usa.js';
 import { StatesCollection, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [ Service ],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 
 export class AppComponent {
   usaMap: any = mapsData.usa;
+
   states: StatesCollection[];
 
   constructor(service: Service) {
@@ -26,15 +27,15 @@ export class AppComponent {
   }
 
   getImagePath = (annotation) => {
-    const name = annotation.data.name.replace(/\s/, "");
-        return `../../../../images/flags/${name}.svg`;
+    const name = annotation.data.name.replace(/\s/, '');
+    return `../../../../images/flags/${name}.svg`;
   };
 }
 
 @NgModule({
   imports: [BrowserModule, DxVectorMapModule],
   declarations: [AppComponent],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
 

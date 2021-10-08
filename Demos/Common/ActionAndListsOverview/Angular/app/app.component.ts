@@ -6,40 +6,41 @@ import DataSource from 'devextreme/data/data_source';
 
 import { Service, Hotel } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    dataSource: DataSource;
-    currentHotel: Hotel;
+  dataSource: DataSource;
 
-    listSelectionChanged = (e) => {
-        this.currentHotel = e.addedItems[0];
-    };
+  currentHotel: Hotel;
 
-    constructor(service: Service) {
-        this.dataSource = service.getDataSource();
-        this.currentHotel = service.getFirstHotel();
-    }
+  listSelectionChanged = (e) => {
+    this.currentHotel = e.addedItems[0];
+  };
+
+  constructor(service: Service) {
+    this.dataSource = service.getDataSource();
+    this.currentHotel = service.getFirstHotel();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTileViewModule,
-        DxButtonModule,
-        DxListModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTileViewModule,
+    DxButtonModule,
+    DxListModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

@@ -2,69 +2,70 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule, DxTemplateModule } from 'devextreme-angular';
+import DataSource from 'devextreme/data/data_source';
 import { Service, Employee } from './app.service';
 
-import DataSource from 'devextreme/data/data_source';
-
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    dataSource: any;
-    currentDate: Date = new Date(2021, 5, 2, 11, 30);
-    resourcesDataSource: Employee[];
+  dataSource: any;
 
-    constructor(service: Service) {
-        this.dataSource = new DataSource({
-            store: service.getData()
-        });
+  currentDate: Date = new Date(2021, 5, 2, 11, 30);
 
-        this.resourcesDataSource = service.getEmployees();
+  resourcesDataSource: Employee[];
+
+  constructor(service: Service) {
+    this.dataSource = new DataSource({
+      store: service.getData(),
+    });
+
+    this.resourcesDataSource = service.getEmployees();
+  }
+
+  markWeekEnd(cellData) {
+    function isWeekEnd(date) {
+      const day = date.getDay();
+      return day === 0 || day === 6;
     }
+    const classObject = {};
+    classObject[`employee-${cellData.groups.employeeID}`] = true;
+    classObject[`employee-weekend-${cellData.groups.employeeID}`] = isWeekEnd(cellData.startDate);
+    return classObject;
+  }
 
-    markWeekEnd(cellData) {
-        function isWeekEnd(date) {
-            var day = date.getDay();
-            return day === 0 || day === 6;
-        }
-        var classObject = {};
-        classObject["employee-" + cellData.groups.employeeID] = true;
-        classObject['employee-weekend-' + cellData.groups.employeeID] = isWeekEnd(cellData.startDate)
-        return classObject;
-    }
+  markTraining(cellData) {
+    const classObject = {
+      'day-cell': true,
+    };
 
-    markTraining(cellData) {
-        var classObject = {
-            "day-cell": true
-        }
+    classObject[AppComponent.getCurrentTraining(cellData.startDate.getDate(), cellData.groups.employeeID)] = true;
+    return classObject;
+  }
 
-        classObject[AppComponent.getCurrentTraining(cellData.startDate.getDate(), cellData.groups.employeeID)] = true;
-        return classObject;
-    }
+  static getCurrentTraining(date, employeeID) {
+    const result = (date + employeeID) % 3;
+    const currentTraining = `training-background-${result}`;
 
-    static getCurrentTraining(date, employeeID) {
-        var result = (date + employeeID) % 3,
-            currentTraining = "training-background-" + result;
-
-        return currentTraining;
-    }
+    return currentTraining;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxSchedulerModule,
-        DxTemplateModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxSchedulerModule,
+    DxTemplateModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

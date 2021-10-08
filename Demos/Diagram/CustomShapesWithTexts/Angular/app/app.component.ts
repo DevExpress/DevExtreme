@@ -1,6 +1,6 @@
-
-
-import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  NgModule, Component, ViewChild, enableProdMode,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -8,40 +8,41 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { DxDiagramModule, DxDiagramComponent } from 'devextreme-angular';
 import { Service, Employee } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    employees: Employee[];
-    @ViewChild(DxDiagramComponent, { static: false }) diagram: DxDiagramComponent;
+  employees: Employee[];
 
-    constructor(service: Service, http: HttpClient) {
-        this.employees = service.getEmployees();
+  @ViewChild(DxDiagramComponent, { static: false }) diagram: DxDiagramComponent;
 
-        http.get('../../../../data/diagram-employees.json').subscribe(data => {
-            this.diagram.instance.import(JSON.stringify(data));
-        }, err => {
-            throw 'Data Loading Error'
-        });
-    }
+  constructor(service: Service, http: HttpClient) {
+    this.employees = service.getEmployees();
+
+    http.get('../../../../data/diagram-employees.json').subscribe((data) => {
+      this.diagram.instance.import(JSON.stringify(data));
+    }, (err) => {
+      throw 'Data Loading Error';
+    });
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        HttpClientModule,
-        DxDiagramModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    HttpClientModule,
+    DxDiagramModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

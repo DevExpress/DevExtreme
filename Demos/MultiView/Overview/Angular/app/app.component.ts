@@ -1,5 +1,3 @@
-
-
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -8,19 +6,20 @@ import { DxMultiViewModule, DxCheckBoxModule, DxTemplateModule } from 'devextrem
 
 import { Company, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
   companies: Company[];
+
   itemCount: number;
 
   constructor(service: Service) {
@@ -30,14 +29,14 @@ export class AppComponent {
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxMultiViewModule,
-        DxCheckBoxModule,
-        DxTemplateModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxMultiViewModule,
+    DxCheckBoxModule,
+    DxTemplateModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

@@ -4,30 +4,30 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTreeListModule } from 'devextreme-angular';
 import { Service, Employee } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  providers: [Service],
 })
 export class AppComponent {
-    employees: Employee[];
+  employees: Employee[];
 
-    constructor(service: Service) {
-        this.employees =  service.getEmployees();
-    }
+  constructor(service: Service) {
+    this.employees = service.getEmployees();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTreeListModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTreeListModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

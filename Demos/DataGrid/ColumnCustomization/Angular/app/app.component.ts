@@ -6,34 +6,35 @@ import { DxDataGridModule } from 'devextreme-angular';
 
 import { Service, Employee } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    employees: Employee[];
+  employees: Employee[];
 
-    constructor(service: Service) {
-        this.employees = service.getEmployees();
-    }
-    calculateCellValue(data) {
-        return [data.Title, data.FirstName, data.LastName].join(" ");
-    }
+  constructor(service: Service) {
+    this.employees = service.getEmployees();
+  }
+
+  calculateCellValue(data) {
+    return [data.Title, data.FirstName, data.LastName].join(' ');
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxDataGridModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

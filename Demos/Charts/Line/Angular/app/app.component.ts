@@ -4,36 +4,38 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChartModule, DxSelectBoxModule } from 'devextreme-angular';
 import { CountryInfo, EnergyDescription, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    types: string[] = ["line", "stackedline", "fullstackedline"];
-    countriesInfo: CountryInfo[];
-    energySources: EnergyDescription[];
+  types: string[] = ['line', 'stackedline', 'fullstackedline'];
 
-    constructor(service: Service) {
-        this.countriesInfo = service.getCountriesInfo();
-        this.energySources = service.getEnergySources();
-    }
+  countriesInfo: CountryInfo[];
+
+  energySources: EnergyDescription[];
+
+  constructor(service: Service) {
+    this.countriesInfo = service.getCountriesInfo();
+    this.energySources = service.getEnergySources();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule,
-        DxSelectBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+    DxSelectBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

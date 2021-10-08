@@ -3,39 +3,40 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxButtonModule, DxLoadIndicatorModule, DxTemplateModule } from 'devextreme-angular';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    loadIndicatorVisible = false;
-    buttonText = "Send";
+  loadIndicatorVisible = false;
 
-    onClick(data) {
-        this.buttonText = "Sending";
-        this.loadIndicatorVisible = true;
+  buttonText = 'Send';
 
-        setTimeout(() => {
-            this.buttonText = "Send";
-            this.loadIndicatorVisible = false;
-        }, 2000);
-    }
+  onClick(data) {
+    this.buttonText = 'Sending';
+    this.loadIndicatorVisible = true;
+
+    setTimeout(() => {
+      this.buttonText = 'Send';
+      this.loadIndicatorVisible = false;
+    }, 2000);
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxButtonModule,
-        DxLoadIndicatorModule,
-        DxTemplateModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxButtonModule,
+    DxLoadIndicatorModule,
+    DxTemplateModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

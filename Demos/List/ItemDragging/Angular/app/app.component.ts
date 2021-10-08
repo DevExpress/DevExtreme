@@ -5,46 +5,47 @@ import { DxListModule } from 'devextreme-angular';
 
 import { Task, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [ Service ],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    doingTasks: Task[];
-    plannedTasks: Task[];
+  doingTasks: Task[];
 
-    constructor(service: Service) {
-        this.doingTasks = service.getDoingTasks();
-        this.plannedTasks = service.getPlannedTasks();
-    }
+  plannedTasks: Task[];
 
-    onDragStart(e) {
-        e.itemData = e.fromData[e.fromIndex];
-    }
+  constructor(service: Service) {
+    this.doingTasks = service.getDoingTasks();
+    this.plannedTasks = service.getPlannedTasks();
+  }
 
-    onAdd(e) {
-        e.toData.splice(e.toIndex, 0, e.itemData);
-    }
+  onDragStart(e) {
+    e.itemData = e.fromData[e.fromIndex];
+  }
 
-    onRemove(e) {
-        e.fromData.splice(e.fromIndex, 1);
-    }    
+  onAdd(e) {
+    e.toData.splice(e.toIndex, 0, e.itemData);
+  }
+
+  onRemove(e) {
+    e.fromData.splice(e.fromIndex, 1);
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxListModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxListModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

@@ -6,33 +6,34 @@ import { DxTreeListModule } from 'devextreme-angular';
 
 import { Employee, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    employees: Employee[];
-    showHeaderFilter: boolean;
+  employees: Employee[];
 
-    constructor(service: Service) {
-        this.employees = service.getEmployees();
-        this.showHeaderFilter = true;
-    }
+  showHeaderFilter: boolean;
+
+  constructor(service: Service) {
+    this.employees = service.getEmployees();
+    this.showHeaderFilter = true;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTreeListModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTreeListModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

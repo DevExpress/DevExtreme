@@ -1,65 +1,72 @@
-import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  NgModule, Component, ViewChild, enableProdMode,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxDataGridModule,
-         DxDataGridComponent,
-         DxButtonModule } from 'devextreme-angular';
+import {
+  DxDataGridModule,
+  DxDataGridComponent,
+  DxButtonModule,
+} from 'devextreme-angular';
+import ArrayStore from 'devextreme/data/array_store';
 import { Service, Employee, State } from './app.service';
-import ArrayStore from 'devextreme/data/array_store'
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
-    dataSource: ArrayStore;
-    states: State[];
-    selectedItemKeys: any[] = [];
+  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
 
-    constructor(service: Service) {
-        this.dataSource = new ArrayStore({
-            key: "ID",
-            data: service.getEmployees()
-        });
-        this.states = service.getStates();
-    }
+  dataSource: ArrayStore;
 
-    selectionChanged(data: any) {
-        this.selectedItemKeys = data.selectedRowKeys;
-    }
+  states: State[];
 
-    deleteRecords() {
-        this.selectedItemKeys.forEach((key) => {
-            this.dataSource.remove(key);
-        });
-        this.dataGrid.instance.refresh();
-    }
+  selectedItemKeys: any[] = [];
 
-    onToolbarPreparing(e) {
-        e.toolbarOptions.items[0].showText = 'always';
+  constructor(service: Service) {
+    this.dataSource = new ArrayStore({
+      key: 'ID',
+      data: service.getEmployees(),
+    });
+    this.states = service.getStates();
+  }
 
-        e.toolbarOptions.items.push({
-            location: "after",
-            template: "deleteButton"
-        });
-    }
+  selectionChanged(data: any) {
+    this.selectedItemKeys = data.selectedRowKeys;
+  }
+
+  deleteRecords() {
+    this.selectedItemKeys.forEach((key) => {
+      this.dataSource.remove(key);
+    });
+    this.dataGrid.instance.refresh();
+  }
+
+  onToolbarPreparing(e) {
+    e.toolbarOptions.items[0].showText = 'always';
+
+    e.toolbarOptions.items.push({
+      location: 'after',
+      template: 'deleteButton',
+    });
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxDataGridModule,
-        DxButtonModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+    DxButtonModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

@@ -4,39 +4,40 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPieChartModule, DxSelectBoxModule } from 'devextreme-angular';
 import { MedalsInfo, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 
 export class AppComponent {
-    olympicMedals: MedalsInfo[];
-    resolveOverlappingTypes = ["shift", "hide", "none"];
+  olympicMedals: MedalsInfo[];
 
-    constructor(service: Service) {
-        this.olympicMedals = service.getMedalsData();
-    }
+  resolveOverlappingTypes = ['shift', 'hide', 'none'];
 
-    customizeLabel(arg) {
-        return arg.argumentText + " (" + arg.percentText + ")";
-    }
+  constructor(service: Service) {
+    this.olympicMedals = service.getMedalsData();
+  }
+
+  customizeLabel(arg) {
+    return `${arg.argumentText} (${arg.percentText})`;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxPieChartModule,
-        DxSelectBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxPieChartModule,
+    DxSelectBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

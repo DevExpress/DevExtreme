@@ -3,39 +3,39 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChartModule } from 'devextreme-angular';
 
-import { Service, Weather} from './app.service';
+import { Service, Weather } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    weatherData: Weather[];
+  weatherData: Weather[];
 
-    constructor(service: Service) {
-        this.weatherData = service.getWeatherData();
-    }
+  constructor(service: Service) {
+    this.weatherData = service.getWeatherData();
+  }
 
-    customizeTooltip(arg: any) {
-        return {
-            text: arg.seriesName + ": " + arg.value + " ( range: " + arg.lowErrorValue  + " - "  + arg.highErrorValue + ")"
-        };
-    }
+  customizeTooltip(arg: any) {
+    return {
+      text: `${arg.seriesName}: ${arg.value} ( range: ${arg.lowErrorValue} - ${arg.highErrorValue})`,
+    };
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

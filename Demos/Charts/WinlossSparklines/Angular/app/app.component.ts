@@ -4,37 +4,40 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSparklineModule } from 'devextreme-angular';
 import { CostInfo, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    aluminumCosts: CostInfo[];
-    nickelCosts: CostInfo[];
-    cooperCosts: CostInfo[];
-    years: Array<number>;
+  aluminumCosts: CostInfo[];
 
-    constructor(service: Service) {
-        this.aluminumCosts = service.getAluminumCosts();
-        this.nickelCosts = service.getNickelCosts();
-        this.cooperCosts = service.getCooperCosts();
-        this.years = [2010, 2011, 2012];
-    }
+  nickelCosts: CostInfo[];
+
+  cooperCosts: CostInfo[];
+
+  years: Array<number>;
+
+  constructor(service: Service) {
+    this.aluminumCosts = service.getAluminumCosts();
+    this.nickelCosts = service.getNickelCosts();
+    this.cooperCosts = service.getCooperCosts();
+    this.years = [2010, 2011, 2012];
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxSparklineModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxSparklineModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

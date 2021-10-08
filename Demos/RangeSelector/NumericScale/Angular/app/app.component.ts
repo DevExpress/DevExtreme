@@ -5,31 +5,31 @@ import { DxRangeSelectorModule } from 'devextreme-angular';
 
 import { Service, Product } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    dataSource: Product[];
+  dataSource: Product[];
 
-    constructor(service: Service) {
-        this.dataSource = service.getProducts();
-    }
+  constructor(service: Service) {
+    this.dataSource = service.getProducts();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxRangeSelectorModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxRangeSelectorModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

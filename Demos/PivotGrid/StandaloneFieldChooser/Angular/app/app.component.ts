@@ -1,98 +1,104 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxPivotGridModule,
-         DxPivotGridFieldChooserModule,
-         DxRadioGroupModule,
-         DxButtonModule,
-         DxSelectBoxModule } from 'devextreme-angular';
+import {
+  DxPivotGridModule,
+  DxPivotGridFieldChooserModule,
+  DxRadioGroupModule,
+  DxButtonModule,
+  DxSelectBoxModule,
+} from 'devextreme-angular';
+import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
 import { Service, Layout, Sale } from './app.service';
 
-import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
-
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    pivotGridDataSource: any;
-    layouts: Layout[];
-    layout = 0;
-    applyChangesModes: any;
-    applyChangesMode: any;
-    state: any;
+  pivotGridDataSource: any;
 
-    constructor(service: Service) {
-        this.pivotGridDataSource = new PivotGridDataSource({
-            fields: [{
-                caption: "Region",
-                width: 120,
-                dataField: "region",
-                area: "row",
-                headerFilter: {
-                    allowSearch: true
-                }
-            }, {
-                caption: "City",
-                dataField: "city",
-                width: 150,
-                area: "row",
-                headerFilter: {
-                    allowSearch: true
-                },
-                selector: function(data: Sale) {
-                    return data.city + " (" + data.country + ")";
-                }
-            }, {
-                dataField: "date",
-                dataType: "date",
-                area: "column"
-            }, {
-                caption: "Sales",
-                dataField: "amount",
-                dataType: "number",
-                summaryType: "sum",
-                format: "currency",
-                area: "data"
-            }],
-            store: service.getSales()
-        });
+  layouts: Layout[];
 
-        this.state = this.pivotGridDataSource.state();
+  layout = 0;
 
-        this.layouts = service.getLayouts();
+  applyChangesModes: any;
 
-        this.applyChangesModes = ["instantly", "onDemand"];
-        this.applyChangesMode = this.applyChangesModes[0];
-    }
+  applyChangesMode: any;
 
-    applyClick(data) {
-        this.pivotGridDataSource.state(this.state);
-    }
+  state: any;
 
-    cancelClick(data) {
-        this.state = this.pivotGridDataSource.state();
-    }
+  constructor(service: Service) {
+    this.pivotGridDataSource = new PivotGridDataSource({
+      fields: [{
+        caption: 'Region',
+        width: 120,
+        dataField: 'region',
+        area: 'row',
+        headerFilter: {
+          allowSearch: true,
+        },
+      }, {
+        caption: 'City',
+        dataField: 'city',
+        width: 150,
+        area: 'row',
+        headerFilter: {
+          allowSearch: true,
+        },
+        selector(data: Sale) {
+          return `${data.city} (${data.country})`;
+        },
+      }, {
+        dataField: 'date',
+        dataType: 'date',
+        area: 'column',
+      }, {
+        caption: 'Sales',
+        dataField: 'amount',
+        dataType: 'number',
+        summaryType: 'sum',
+        format: 'currency',
+        area: 'data',
+      }],
+      store: service.getSales(),
+    });
+
+    this.state = this.pivotGridDataSource.state();
+
+    this.layouts = service.getLayouts();
+
+    this.applyChangesModes = ['instantly', 'onDemand'];
+    this.applyChangesMode = this.applyChangesModes[0];
+  }
+
+  applyClick(data) {
+    this.pivotGridDataSource.state(this.state);
+  }
+
+  cancelClick(data) {
+    this.state = this.pivotGridDataSource.state();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxPivotGridModule,
-        DxRadioGroupModule,
-        DxPivotGridFieldChooserModule,
-        DxSelectBoxModule,
-        DxButtonModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxPivotGridModule,
+    DxRadioGroupModule,
+    DxPivotGridFieldChooserModule,
+    DxSelectBoxModule,
+    DxButtonModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

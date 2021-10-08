@@ -5,32 +5,33 @@ import { DxTreeViewModule } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html'
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
-    dataSource: any;
-    constructor() {
-        this.dataSource = new DataSource({
-            store: new ODataStore({
-                url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems'
-            })
-        });
-    }
+  dataSource: any;
+
+  constructor() {
+    this.dataSource = new DataSource({
+      store: new ODataStore({
+        url: 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems',
+      }),
+    });
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTreeViewModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTreeViewModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

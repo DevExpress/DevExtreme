@@ -4,23 +4,28 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxTreeListModule } from 'devextreme-angular';
 
-import { Service, Task, Employee, Priority } from './app.service';
+import {
+  Service, Task, Employee, Priority,
+} from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
-	enableProdMode();
+  enableProdMode();
 }
 
 @Component({
-	selector: 'demo-app',
-	templateUrl: 'app/app.component.html',
-	styleUrls: ['app/app.component.css'],
-	providers: [Service],
-  preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
   tasks: Task[];
+
   employees: Employee[];
+
   priorities: Priority[];
+
   statuses: string[];
 
   constructor(service: Service) {
@@ -29,26 +34,26 @@ export class AppComponent {
     this.priorities = service.getPriorities();
 
     this.statuses = [
-      "Not Started",
-      "Need Assistance",
-      "In Progress",
-      "Deferred",
-      "Completed"
+      'Not Started',
+      'Need Assistance',
+      'In Progress',
+      'Deferred',
+      'Completed',
     ];
   }
 
   getCompletionText(cellInfo) {
-    return cellInfo.valueText + "%";
+    return `${cellInfo.valueText}%`;
   }
 }
 
 @NgModule({
   imports: [
     BrowserModule,
-    DxTreeListModule
-	],
+    DxTreeListModule,
+  ],
   declarations: [AppComponent],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

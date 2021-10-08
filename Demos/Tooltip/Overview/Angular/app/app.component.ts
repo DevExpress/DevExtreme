@@ -3,44 +3,46 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTooltipModule, DxTemplateModule } from 'devextreme-angular';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 
 export class AppComponent {
-    defaultVisible = false;
-    withTemplateVisible = false;
-    withAnimationVisible = false;
+  defaultVisible = false;
 
-    constructor() {}
+  withTemplateVisible = false;
 
-    toggleDefault() {
-        this.defaultVisible = !this.defaultVisible;
-    }
+  withAnimationVisible = false;
 
-    toggleWithTemplate() {
-        this.withTemplateVisible = !this.withTemplateVisible;
-    }
+  constructor() {}
 
-    toggleWithAnimation() {
-        this.withAnimationVisible = !this.withAnimationVisible;
-    }
+  toggleDefault() {
+    this.defaultVisible = !this.defaultVisible;
+  }
+
+  toggleWithTemplate() {
+    this.withTemplateVisible = !this.withTemplateVisible;
+  }
+
+  toggleWithAnimation() {
+    this.withAnimationVisible = !this.withAnimationVisible;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTooltipModule,
-        DxTemplateModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTooltipModule,
+    DxTemplateModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

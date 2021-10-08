@@ -4,37 +4,37 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule } from 'devextreme-angular';
 import { Service, Employee } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    dataSource: any;
+  dataSource: any;
 
-    constructor(service: Service) {
-        this.dataSource = {
-            store: service.generateData(100000)
-        };
-    }
+  constructor(service: Service) {
+    this.dataSource = {
+      store: service.generateData(100000),
+    };
+  }
 
-    customizeColumns(columns) {
-        columns[0].width = 70;
-    }
+  customizeColumns(columns) {
+    columns[0].width = 70;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxDataGridModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

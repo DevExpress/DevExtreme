@@ -1,4 +1,6 @@
-import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  NgModule, Component, ViewChild, enableProdMode,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChartModule, DxChartComponent, DxButtonModule } from 'devextreme-angular';
@@ -6,43 +8,44 @@ import { DxChartModule, DxChartComponent, DxButtonModule } from 'devextreme-angu
 import { Service, BirthLife } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    @ViewChild(DxChartComponent, { static: false }) component: DxChartComponent;
-    data: BirthLife[];
+  @ViewChild(DxChartComponent, { static: false }) component: DxChartComponent;
 
-    constructor(service: Service) {
-        this.data = service.getData();
-    }
+  data: BirthLife[];
 
-    resetZoom() {
-        this.component.instance.resetVisualRange()
-    }
+  constructor(service: Service) {
+    this.data = service.getData();
+  }
 
-    customizeTooltip(arg) {
-        const data = arg.point.data;
-        return {
-            text: `${data.country} ${data.year}`
-        };
-    }
+  resetZoom() {
+    this.component.instance.resetVisualRange();
+  }
+
+  customizeTooltip(arg) {
+    const data = arg.point.data;
+    return {
+      text: `${data.country} ${data.year}`,
+    };
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule,
-        DxButtonModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+    DxButtonModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

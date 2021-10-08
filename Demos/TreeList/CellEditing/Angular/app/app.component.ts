@@ -6,47 +6,49 @@ import { DxTreeListModule } from 'devextreme-angular';
 
 import { Task, Employee, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    tasksData: Task[];
-    statusesData: string[];
-    employeesData: Employee[];
+  tasksData: Task[];
 
-    constructor(service: Service) {
-        this.tasksData = service.getTasksData();
-        this.employeesData = service.getEmployeesData();
-        this.statusesData = [
-            "Not Started",
-            "Need Assistance",
-            "In Progress",
-            "Deferred",
-            "Completed"
-        ];
-    }
+  statusesData: string[];
 
-    initNewRow(e) {
-        e.data.Task_Status = "Not Started";
-        e.data.Task_Start_Date = new Date();
-        e.data.Task_Due_Date = new Date();
-    }
+  employeesData: Employee[];
+
+  constructor(service: Service) {
+    this.tasksData = service.getTasksData();
+    this.employeesData = service.getEmployeesData();
+    this.statusesData = [
+      'Not Started',
+      'Need Assistance',
+      'In Progress',
+      'Deferred',
+      'Completed',
+    ];
+  }
+
+  initNewRow(e) {
+    e.data.Task_Status = 'Not Started';
+    e.data.Task_Start_Date = new Date();
+    e.data.Task_Due_Date = new Date();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTreeListModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTreeListModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

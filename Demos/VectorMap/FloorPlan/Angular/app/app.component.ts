@@ -5,50 +5,53 @@ import { DxVectorMapModule } from 'devextreme-angular';
 
 import { FeatureCollection, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [ Service ],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 
 export class AppComponent {
-    projection: any;
-    roomsData: FeatureCollection;
-    buildingData: FeatureCollection;
-    
-    constructor(service: Service) {
-        this.roomsData = service.getRoomsData();
-        this.buildingData = service.getBuildingData();
-        this.projection = {
-            to(coordinates) {
-                return [coordinates[0] / 100, coordinates[1] / 100];
-            },
-            from(coordinates) {
-                return [coordinates[0] * 100, coordinates[1] * 100];
-            }
-        };
-    }
+  projection: any;
 
-    customizeTooltip(arg) {
-        if(arg.layer.name === "rooms")
-            return {
-                text: "Square: " + arg.attribute("square") + " ft&#178"
-            };
+  roomsData: FeatureCollection;
+
+  buildingData: FeatureCollection;
+
+  constructor(service: Service) {
+    this.roomsData = service.getRoomsData();
+    this.buildingData = service.getBuildingData();
+    this.projection = {
+      to(coordinates) {
+        return [coordinates[0] / 100, coordinates[1] / 100];
+      },
+      from(coordinates) {
+        return [coordinates[0] * 100, coordinates[1] * 100];
+      },
+    };
+  }
+
+  customizeTooltip(arg) {
+    if (arg.layer.name === 'rooms') {
+      return {
+        text: `Square: ${arg.attribute('square')} ft&#178`,
+      };
     }
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxVectorMapModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxVectorMapModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

@@ -1,49 +1,52 @@
-import { NgModule, ViewChild, Component, enableProdMode } from '@angular/core';
+import {
+  NgModule, ViewChild, Component, enableProdMode,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
-    DxHtmlEditorComponent,
-    DxHtmlEditorModule,
-    DxPopupComponent,
-    DxPopupModule
+  DxHtmlEditorComponent,
+  DxHtmlEditorModule,
+  DxPopupComponent,
+  DxPopupModule,
 } from 'devextreme-angular';
 
 import { Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 
 export class AppComponent {
-    editorValue: string;
-    popupVisible: boolean;
+  editorValue: string;
 
-    toolbarButtonOptions :any = {
-        text: 'Show markup',
-        stylingMode: 'text',
-        onClick: () => this.popupVisible = true
-    };
+  popupVisible: boolean;
 
-    constructor(service: Service) {
-        this.editorValue = service.getMarkup();
-    }
+  toolbarButtonOptions :any = {
+    text: 'Show markup',
+    stylingMode: 'text',
+    onClick: () => this.popupVisible = true,
+  };
+
+  constructor(service: Service) {
+    this.editorValue = service.getMarkup();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxHtmlEditorModule,
-        DxPopupModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxHtmlEditorModule,
+    DxPopupModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 
 export class AppModule { }

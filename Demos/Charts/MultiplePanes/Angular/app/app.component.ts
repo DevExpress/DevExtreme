@@ -5,40 +5,41 @@ import { DxChartModule } from 'devextreme-angular';
 
 import { Service, Weather } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    weatherData: Weather[];
-    valueText: string;
+  weatherData: Weather[];
 
-    constructor(service: Service) {
-        this.weatherData = service.getWeatherData();
-    }
+  valueText: string;
 
-    temperatureCustomizeText() {
-        return this.valueText + " °C";
-    }
+  constructor(service: Service) {
+    this.weatherData = service.getWeatherData();
+  }
 
-    precipitationCustomizeText() {
-        return this.valueText  + " mm";
-    }
+  temperatureCustomizeText() {
+    return `${this.valueText} °C`;
+  }
+
+  precipitationCustomizeText() {
+    return `${this.valueText} mm`;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

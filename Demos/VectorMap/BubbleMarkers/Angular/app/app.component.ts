@@ -6,49 +6,50 @@ import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
 import { FeatureCollection, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [ Service ],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 
 export class AppComponent {
-    worldMap: any = mapsData.world;
-    markers: FeatureCollection;
+  worldMap: any = mapsData.world;
 
-    constructor(service: Service) {
-        this.markers = service.getMarkers();
-    }
+  markers: FeatureCollection;
 
-    customizeText(arg) {
-        return ["< 8000K", "8000K to 10000K", "> 10000K"][arg.index];
-    }
+  constructor(service: Service) {
+    this.markers = service.getMarkers();
+  }
 
-    customizeItems(items) {
-        return items.reverse();
-    }
+  customizeText(arg) {
+    return ['< 8000K', '8000K to 10000K', '> 10000K'][arg.index];
+  }
 
-    customizeTooltip(arg) {
-        if(arg.layer.type === "marker") {
-            return {
-                text: arg.attribute("tooltip")
-            };
-        }
+  customizeItems(items) {
+    return items.reverse();
+  }
+
+  customizeTooltip(arg) {
+    if (arg.layer.type === 'marker') {
+      return {
+        text: arg.attribute('tooltip'),
+      };
     }
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxVectorMapModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxVectorMapModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

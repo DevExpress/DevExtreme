@@ -6,31 +6,31 @@ import { DxPolarChartModule } from 'devextreme-angular';
 
 import { Production, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    productionData: Production[];
+  productionData: Production[];
 
-    constructor(service: Service) {
-        this.productionData = service.getProductionData();
-    }
+  constructor(service: Service) {
+    this.productionData = service.getProductionData();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxPolarChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxPolarChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

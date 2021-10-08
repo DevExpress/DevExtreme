@@ -6,44 +6,46 @@ import { DxTreeListModule, DxSelectBoxModule, DxCheckBoxModule } from 'devextrem
 
 import { Employee, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    employees: Employee[];
-    allowSearch: boolean;
-    columnChooserModes: any;
+  employees: Employee[];
 
-    constructor(service: Service) {
-        this.employees = service.getEmployees();
-        this.allowSearch = true;
-        this.columnChooserModes = [{
-            key: "dragAndDrop",
-            name: "Drag and drop"
-        }, {
-            key: "select",
-            name: "Select"
-        }];
-    }
+  allowSearch: boolean;
+
+  columnChooserModes: any;
+
+  constructor(service: Service) {
+    this.employees = service.getEmployees();
+    this.allowSearch = true;
+    this.columnChooserModes = [{
+      key: 'dragAndDrop',
+      name: 'Drag and drop',
+    }, {
+      key: 'select',
+      name: 'Select',
+    }];
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTreeListModule,
-        DxSelectBoxModule,
-        DxCheckBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTreeListModule,
+    DxSelectBoxModule,
+    DxCheckBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

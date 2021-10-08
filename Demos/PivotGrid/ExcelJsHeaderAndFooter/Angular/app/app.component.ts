@@ -2,13 +2,13 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPivotGridModule } from 'devextreme-angular';
-import { Service, Sale } from './app.service';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportPivotGrid } from 'devextreme/excel_exporter';
+import { Service, Sale } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
+if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
@@ -16,12 +16,13 @@ if(!/localhost/.test(document.location.host)) {
   selector: 'demo-app',
   templateUrl: 'app/app.component.html',
   styleUrls: ['app/app.component.css'],
-  providers: [Service]
+  providers: [Service],
 })
 export class AppComponent {
   sales: Sale[];
+
   dataSource: any;
-  
+
   constructor(service: Service) {
     this.dataSource = {
       fields: [{
@@ -29,12 +30,12 @@ export class AppComponent {
         width: 120,
         dataField: 'region',
         area: 'row',
-        expanded: true
+        expanded: true,
       }, {
         caption: 'City',
         dataField: 'city',
         width: 150,
-        area: 'row'
+        area: 'row',
       }, {
         dataField: 'date',
         dataType: 'date',
@@ -47,34 +48,34 @@ export class AppComponent {
         dataType: 'number',
         summaryType: 'sum',
         format: 'currency',
-        area: 'data'
+        area: 'data',
       }],
-      store: service.getSales()
-    }
+      store: service.getSales(),
+    };
   }
-  
+
   onExporting(e) {
     const workbook = new Workbook();
     const worksheet = workbook.addWorksheet('Sales');
-    
+
     worksheet.columns = [
-      { width: 30 }, { width: 20 }, { width: 30 }, { width: 30 }, { width: 30 }, { width: 30 }
+      { width: 30 }, { width: 20 }, { width: 30 }, { width: 30 }, { width: 30 }, { width: 30 },
     ];
-    
+
     exportPivotGrid({
       component: e.component,
-      worksheet: worksheet,
+      worksheet,
       topLeftCell: { row: 4, column: 1 },
-      keepColumnWidths: false
+      keepColumnWidths: false,
     }).then((cellRange) => {
       // Header
       const headerRow = worksheet.getRow(2);
-      headerRow.height = 30; 
-      
+      headerRow.height = 30;
+
       const columnFromIndex = worksheet.views[0].xSplit + 1;
       const columnToIndex = columnFromIndex + 3;
       worksheet.mergeCells(2, columnFromIndex, 2, columnToIndex);
-      
+
       const headerCell = headerRow.getCell(columnFromIndex);
       headerCell.value = 'Sales Amount by Region';
       headerCell.font = { name: 'Segoe UI Light', size: 22, bold: true };
@@ -98,10 +99,10 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    DxPivotGridModule
+    DxPivotGridModule,
   ],
   declarations: [AppComponent],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

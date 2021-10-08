@@ -5,36 +5,38 @@ import { DxSelectBoxModule, DxCheckBoxModule, DxListModule } from 'devextreme-an
 
 import { Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [ Service ],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    allowDeletion: boolean = false;
-    itemDeleteMode: string = "toggle";
-    tasks: string[];
+  allowDeletion = false;
 
-    constructor(service: Service) {
-        this.tasks = service.getTasks();
-    }
+  itemDeleteMode = 'toggle';
+
+  tasks: string[];
+
+  constructor(service: Service) {
+    this.tasks = service.getTasks();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxSelectBoxModule,
-        DxCheckBoxModule,
-        DxListModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxSelectBoxModule,
+    DxCheckBoxModule,
+    DxListModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

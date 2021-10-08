@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-let markup: string = `
+const markup = `
     <h2>
         Hardware Upgrade
     </h2>
@@ -29,10 +29,9 @@ let markup: string = `
     </table>
 `;
 
-
 @Injectable()
 export class Service {
-    getMarkup(): string {
-        return markup;
-    }
+  getMarkup(): string {
+    return markup;
+  }
 }

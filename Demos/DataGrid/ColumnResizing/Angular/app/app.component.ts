@@ -6,40 +6,42 @@ import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
 
 import { Customer, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    customers: Customer[];
-    resizingModes: string[] = ["nextColumn", "widget"];
-    columnResizingMode: string;
+  customers: Customer[];
 
-    constructor(service: Service) {
-        this.customers =  service.getCustomers();
-        this.columnResizingMode = this.resizingModes[0];
-    }
+  resizingModes: string[] = ['nextColumn', 'widget'];
 
-    selectResizing(data) {
-        this.columnResizingMode = data.value;
-    }
+  columnResizingMode: string;
+
+  constructor(service: Service) {
+    this.customers = service.getCustomers();
+    this.columnResizingMode = this.resizingModes[0];
+  }
+
+  selectResizing(data) {
+    this.columnResizingMode = data.value;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxDataGridModule,
-        DxSelectBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+    DxSelectBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

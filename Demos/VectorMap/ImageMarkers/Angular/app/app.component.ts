@@ -6,33 +6,34 @@ import { DxVectorMapModule } from 'devextreme-angular';
 import * as mapsData from 'devextreme/dist/js/vectormap-data/usa.js';
 import { FeatureCollection, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [ Service ],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 
 export class AppComponent {
-    usaMap: any = mapsData.usa;
-    weather: FeatureCollection;
+  usaMap: any = mapsData.usa;
 
-    constructor(service: Service) {
-        this.weather = service.getWeatherData();
-    }
+  weather: FeatureCollection;
+
+  constructor(service: Service) {
+    this.weather = service.getWeatherData();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxVectorMapModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxVectorMapModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

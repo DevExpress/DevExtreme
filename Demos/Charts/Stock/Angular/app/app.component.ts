@@ -6,39 +6,40 @@ import { DxChartModule } from 'devextreme-angular';
 
 import { StockPrice, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    stockPrices: StockPrice[];
+  stockPrices: StockPrice[];
 
-    constructor(service: Service) {
-        this.stockPrices = service.getStockPrices();
-    }
-    customizeTooltip(arg) {
-        return {
-            text: "Open: $" + arg.openValue + "<br/>" +
-                "Close: $" + arg.closeValue + "<br/>" +
-                "High: $" + arg.highValue + "<br/>" +
-                "Low: $" + arg.lowValue + "<br/>"
-        };
-    }
+  constructor(service: Service) {
+    this.stockPrices = service.getStockPrices();
+  }
+
+  customizeTooltip(arg) {
+    return {
+      text: `Open: $${arg.openValue}<br/>`
+                + `Close: $${arg.closeValue}<br/>`
+                + `High: $${arg.highValue}<br/>`
+                + `Low: $${arg.lowValue}<br/>`,
+    };
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

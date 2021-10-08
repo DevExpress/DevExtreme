@@ -7,38 +7,40 @@ import ArrayStore from 'devextreme/data/array_store';
 
 import { Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    employees: string[];
-    dataSource: any;
-    constructor(service: Service) {
-       this.dataSource = new DataSource({ 
-            store: new ArrayStore({
-                data: service.getTasks(), 
-                key: "Id", 
-            }),
-           group: "Assigned"
-        });
-        this.employees = service.getEmployees();
-    }
+  employees: string[];
+
+  dataSource: any;
+
+  constructor(service: Service) {
+    this.dataSource = new DataSource({
+      store: new ArrayStore({
+        data: service.getTasks(),
+        key: 'Id',
+      }),
+      group: 'Assigned',
+    });
+    this.employees = service.getEmployees();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxLookupModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxLookupModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

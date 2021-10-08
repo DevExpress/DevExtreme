@@ -6,36 +6,38 @@ import { DxTreeViewModule } from 'devextreme-angular';
 
 import { Product, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    products: Product[];
-    currentItem: Product;
+  products: Product[];
 
-    constructor(service: Service) {
-        this.products = service.getProducts();
-        this.currentItem = this.products[0];
-    }
-    selectItem(e) {
-        this.currentItem = e.itemData;
-    }
+  currentItem: Product;
+
+  constructor(service: Service) {
+    this.products = service.getProducts();
+    this.currentItem = this.products[0];
+  }
+
+  selectItem(e) {
+    this.currentItem = e.itemData;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTreeViewModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTreeViewModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

@@ -8,61 +8,63 @@ const BASE_PATH = 'https://js.devexpress.com/Demos/NetCore/';
 
 @Injectable()
 export class CollaborativeEditingService {
-    private storeChanged = new Subject<Array<Object>>();
-    private groupId: string = new Guid().toJSON();
-    private connection: Object;
+  private storeChanged = new Subject<Array<Object>>();
 
-    getStoreChangedObservable() {
-        this.connection || this.initHubConnection();
-        return this.storeChanged.asObservable();
-    }
+  private groupId: string = new Guid().toJSON();
 
-    createStatesStore() {
-        return AspNetData.createStore({
-            key: 'ID',
-            loadUrl: BASE_PATH + 'api/DataGridStatesLookup'
-        })
-    }
+  private connection: Object;
 
-    createStore() {
-        const url = BASE_PATH + 'api/DataGridCollaborativeEditing';
-        return AspNetData.createStore({
-            key: 'ID',
-            loadUrl: url,
-            insertUrl: url,
-            updateUrl: url,
-            deleteUrl: url,
-            onBeforeSend: (operation, ajaxSettings) => {
-                ajaxSettings.data.groupId = this.groupId;
-            }
-        })
-    }
+  getStoreChangedObservable() {
+    this.connection || this.initHubConnection();
+    return this.storeChanged.asObservable();
+  }
 
-    private initHubConnection() {
-        const connection = this.createConnection();
-        connection.start()
-            .then(() => {
-                connection.on('update', (key, data) => {
-                    this.storeChanged.next([{ type: 'update', key: key, data: data }]);
-                });
+  createStatesStore() {
+    return AspNetData.createStore({
+      key: 'ID',
+      loadUrl: `${BASE_PATH}api/DataGridStatesLookup`,
+    });
+  }
 
-                connection.on('insert', data => {
-                    this.storeChanged.next([{ type: 'insert', data: data }]);
-                });
+  createStore() {
+    const url = `${BASE_PATH}api/DataGridCollaborativeEditing`;
+    return AspNetData.createStore({
+      key: 'ID',
+      loadUrl: url,
+      insertUrl: url,
+      updateUrl: url,
+      deleteUrl: url,
+      onBeforeSend: (operation, ajaxSettings) => {
+        ajaxSettings.data.groupId = this.groupId;
+      },
+    });
+  }
 
-                connection.on('remove', key => {
-                    this.storeChanged.next([{ type: 'remove', key: key }]);
-                });
-            });
-    }
+  private initHubConnection() {
+    const connection = this.createConnection();
+    connection.start()
+      .then(() => {
+        connection.on('update', (key, data) => {
+          this.storeChanged.next([{ type: 'update', key, data }]);
+        });
 
-    private createConnection() {
-        const hubUrl = `${BASE_PATH}dataGridCollaborativeEditingHub?GroupId=${this.groupId}`;
-        return new HubConnectionBuilder()
-            .withUrl(hubUrl, {
-                skipNegotiation: true,
-                transport: HttpTransportType.WebSockets
-            })
-            .build();
-    }
+        connection.on('insert', (data) => {
+          this.storeChanged.next([{ type: 'insert', data }]);
+        });
+
+        connection.on('remove', (key) => {
+          this.storeChanged.next([{ type: 'remove', key }]);
+        });
+      });
+  }
+
+  private createConnection() {
+    const hubUrl = `${BASE_PATH}dataGridCollaborativeEditingHub?GroupId=${this.groupId}`;
+    return new HubConnectionBuilder()
+      .withUrl(hubUrl, {
+        skipNegotiation: true,
+        transport: HttpTransportType.WebSockets,
+      })
+      .build();
+  }
 }

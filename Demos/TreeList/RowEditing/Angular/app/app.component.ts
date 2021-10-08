@@ -6,47 +6,48 @@ import { DxTreeListModule } from 'devextreme-angular';
 
 import { Employee, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    employees: Employee[];
-    lookupData: any;
+  employees: Employee[];
 
-    constructor(service: Service) {
-        this.employees = service.getEmployees();
+  lookupData: any;
 
-        this.lookupData = {
-            store: this.employees,
-            sort: "Full_Name"
-        };
+  constructor(service: Service) {
+    this.employees = service.getEmployees();
+
+    this.lookupData = {
+      store: this.employees,
+      sort: 'Full_Name',
+    };
+  }
+
+  editorPreparing(e) {
+    if (e.dataField === 'Head_ID' && e.row.data.ID === 1) {
+      e.cancel = true;
     }
+  }
 
-    editorPreparing(e) {
-        if(e.dataField === "Head_ID" && e.row.data.ID === 1) {
-            e.cancel = true;
-        }
-    }
-
-    initNewRow(e) {
-        e.data.Head_ID = 1;
-    }
+  initNewRow(e) {
+    e.data.Head_ID = 1;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTreeListModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTreeListModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

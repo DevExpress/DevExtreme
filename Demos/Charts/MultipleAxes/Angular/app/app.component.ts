@@ -5,48 +5,48 @@ import { DxChartModule } from 'devextreme-angular';
 
 import { Service, Population } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    populationData: Population[];
+  populationData: Population[];
 
-    constructor(service: Service) {
-        this.populationData = service.getPopulationData();
-    }
+  constructor(service: Service) {
+    this.populationData = service.getPopulationData();
+  }
 
-    customizeTooltip(arg: any) {
-        var items = arg.valueText.split("\n"),
-            color = arg.point.getColor();
-        items.forEach(function(item, index) {
-            if(item.indexOf(arg.seriesName) === 0) {
-                var element = document.createElement("span");
+  customizeTooltip(arg: any) {
+    const items = arg.valueText.split('\n');
+    const color = arg.point.getColor();
+    items.forEach((item, index) => {
+      if (item.indexOf(arg.seriesName) === 0) {
+        const element = document.createElement('span');
 
-                element.textContent = item;
-                element.style.color = color;
-                element.className = "active";
+        element.textContent = item;
+        element.style.color = color;
+        element.className = 'active';
 
-                items[index] = element.outerHTML;
-            }
-        });
-        return { text: items.join("\n") };
-    }
+        items[index] = element.outerHTML;
+      }
+    });
+    return { text: items.join('\n') };
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

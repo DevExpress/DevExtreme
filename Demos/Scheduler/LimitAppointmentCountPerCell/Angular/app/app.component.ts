@@ -1,42 +1,48 @@
-import { NgModule, ViewChild, Component, enableProdMode } from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {
+  NgModule, ViewChild, Component, enableProdMode,
+} from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import {Appointment, Resource, Service} from './app.service';
-import {DxSchedulerModule,
-        DxSchedulerComponent} from 'devextreme-angular';
+import {
+  DxSchedulerModule,
+  DxSchedulerComponent,
+} from 'devextreme-angular';
 import Query from 'devextreme/data/query';
+import { Appointment, Resource, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  providers: [Service],
 })
 export class AppComponent {
-    @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
+  @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
 
-    appointmentsData: Appointment[];
-    currentDate: Date = new Date(2021, 2, 25);
-    resourcesData: Resource[];
+  appointmentsData: Appointment[];
 
-    constructor(service: Service) {
-        this.appointmentsData = service.getAppointments();
-        this.resourcesData = service.getResources();
-    }
+  currentDate: Date = new Date(2021, 2, 25);
+
+  resourcesData: Resource[];
+
+  constructor(service: Service) {
+    this.appointmentsData = service.getAppointments();
+    this.resourcesData = service.getResources();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxSchedulerModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxSchedulerModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic().bootstrapModule(AppModule);

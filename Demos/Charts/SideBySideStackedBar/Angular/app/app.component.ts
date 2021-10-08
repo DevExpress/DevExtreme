@@ -6,41 +6,41 @@ import { DxChartModule } from 'devextreme-angular';
 
 import { Population, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    populationData: Population[];
+  populationData: Population[];
 
-    constructor(service: Service) {
-        this.populationData = service.getPopulationData();
-    }
+  constructor(service: Service) {
+    this.populationData = service.getPopulationData();
+  }
 
-    customizeItems(items) {
-        var sortedItems = [];
+  customizeItems(items) {
+    const sortedItems = [];
 
-        items.forEach(function(item) {
-            var startIndex = item.series.stack === "male" ? 0 : 3;
-            sortedItems.splice(startIndex, 0, item);
-        });
-        return sortedItems;
-    }
+    items.forEach((item) => {
+      const startIndex = item.series.stack === 'male' ? 0 : 3;
+      sortedItems.splice(startIndex, 0, item);
+    });
+    return sortedItems;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

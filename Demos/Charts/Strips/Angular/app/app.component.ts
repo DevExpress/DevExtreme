@@ -5,68 +5,72 @@ import { DxChartModule } from 'devextreme-angular';
 
 import { Service, Temperature } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    highAverageColor = "#ff9b52";
-    lowAverageColor = "#6199e6";
-    highAverage: number;
-    lowAverage: number;
-    temperaturesData: Temperature[];
+  highAverageColor = '#ff9b52';
 
-    constructor(service: Service) {
-        this.temperaturesData = service.getTemperaturesData();
-        const { highAverage, lowAverage } = service.getRangeOfAverageTemperature();
-        this.highAverage = highAverage;
-        this.lowAverage = lowAverage;
+  lowAverageColor = '#6199e6';
+
+  highAverage: number;
+
+  lowAverage: number;
+
+  temperaturesData: Temperature[];
+
+  constructor(service: Service) {
+    this.temperaturesData = service.getTemperaturesData();
+    const { highAverage, lowAverage } = service.getRangeOfAverageTemperature();
+    this.highAverage = highAverage;
+    this.lowAverage = lowAverage;
+  }
+
+  customizePoint = (arg: any) => {
+    if (arg.value > this.highAverage) {
+      return { color: this.highAverageColor };
+    } if (arg.value < this.lowAverage) {
+      return { color: this.lowAverageColor };
     }
+  };
 
-    customizePoint = (arg: any) => {
-        if (arg.value > this.highAverage) {
-            return { color: this.highAverageColor };
-        } else if (arg.value < this.lowAverage) {
-            return { color: this.lowAverageColor };
-        }
+  customizeLabel = (arg: any) => {
+    if (arg.value > this.highAverage) {
+      return getLabelsSettings(this.highAverageColor);
+    } if (arg.value < this.lowAverage) {
+      return getLabelsSettings(this.lowAverageColor);
     }
+  };
 
-    customizeLabel = (arg: any) => {
-        if (arg.value > this.highAverage) {
-            return getLabelsSettings(this.highAverageColor);
-        } else if (arg.value < this.lowAverage) {
-            return getLabelsSettings(this.lowAverageColor);
-        }
-    }
-
-    customizeText = customizeText
+  customizeText = customizeText;
 }
 
 function getLabelsSettings(backgroundColor: any) {
-    return {
-        visible: true,
-        backgroundColor: backgroundColor,
-        customizeText: customizeText
-    };
+  return {
+    visible: true,
+    backgroundColor,
+    customizeText,
+  };
 }
 
 function customizeText(arg: any) {
-    return arg.valueText + "&#176F";
+  return `${arg.valueText}&#176F`;
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

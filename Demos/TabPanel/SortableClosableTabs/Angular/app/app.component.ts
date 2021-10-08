@@ -1,13 +1,13 @@
-
-
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { DxButtonModule, DxSortableModule, DxTabPanelModule, DxListModule, DxTemplateModule } from 'devextreme-angular';
+import {
+  DxButtonModule, DxSortableModule, DxTabPanelModule, DxListModule, DxTemplateModule,
+} from 'devextreme-angular';
 import { Employee, Service, Task } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
+if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
@@ -16,14 +16,18 @@ if(!/localhost/.test(document.location.host)) {
   templateUrl: 'app/app.component.html',
   styleUrls: ['app/app.component.css'],
   providers: [Service],
-  preserveWhitespaces: true
+  preserveWhitespaces: true,
 })
 
 export class AppComponent {
   allEmployees: Employee[];
+
   employees: Employee[];
+
   selectedIndex: number;
+
   tasks: Task[];
+
   tasksDataSourceStorage: any;
 
   constructor(private service: Service) {
@@ -44,7 +48,7 @@ export class AppComponent {
   }
 
   addButtonHandler() {
-    const newItem = this.allEmployees.filter(employee => this.employees.indexOf(employee) === -1)[0];
+    const newItem = this.allEmployees.filter((employee) => this.employees.indexOf(employee) === -1)[0];
 
     this.selectedIndex = this.employees.length;
     this.employees.push(newItem);
@@ -54,7 +58,7 @@ export class AppComponent {
     const index = this.employees.indexOf(itemData);
 
     this.employees.splice(index, 1);
-    if(index >= this.employees.length && index > 0) this.selectedIndex = index - 1;
+    if (index >= this.employees.length && index > 0) this.selectedIndex = index - 1;
   }
 
   showCloseButton() {
@@ -66,20 +70,20 @@ export class AppComponent {
   }
 
   getTasks(id) {
-    let item = this.tasksDataSourceStorage.find(i => i.key === id);
+    let item = this.tasksDataSourceStorage.find((i) => i.key === id);
     if (!item) {
       item = {
         key: id,
-        dataSourceInstance: this.tasks.filter(task => task.EmployeeID === id)
+        dataSourceInstance: this.tasks.filter((task) => task.EmployeeID === id),
       };
-      this.tasksDataSourceStorage.push(item)
+      this.tasksDataSourceStorage.push(item);
     }
 
     return item.dataSourceInstance;
   }
 
   getCompletedTasks(id) {
-    return this.tasks.filter(task => task.EmployeeID === id).filter(task => task.Status === 'Completed');
+    return this.tasks.filter((task) => task.EmployeeID === id).filter((task) => task.Status === 'Completed');
   }
 }
 
@@ -90,10 +94,10 @@ export class AppComponent {
     DxSortableModule,
     DxTabPanelModule,
     DxListModule,
-    DxTemplateModule
+    DxTemplateModule,
   ],
   declarations: [AppComponent],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

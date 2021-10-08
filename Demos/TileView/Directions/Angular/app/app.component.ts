@@ -5,33 +5,33 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTileViewModule, DxSelectBoxModule } from 'devextreme-angular';
 import { Home, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    homes: Home[];
+  homes: Home[];
 
-    constructor(service: Service) {
-        this.homes = service.getHomes();
-    }
+  constructor(service: Service) {
+    this.homes = service.getHomes();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTileViewModule,
-        DxSelectBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTileViewModule,
+    DxSelectBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

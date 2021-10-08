@@ -6,39 +6,40 @@ import { DxCircularGaugeModule, DxSelectBoxModule } from 'devextreme-angular';
 
 import { Data, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 
 export class AppComponent {
-    dataSource: Data[];
-    value: Data;
+  dataSource: Data[];
 
-    constructor(service: Service) {
-        this.dataSource = service.getData();
-        this.value = this.dataSource[0];
-    }
+  value: Data;
 
-    customizeText(arg) {
-        return arg.valueText + ' °C';
-    }
+  constructor(service: Service) {
+    this.dataSource = service.getData();
+    this.value = this.dataSource[0];
+  }
+
+  customizeText(arg) {
+    return `${arg.valueText} °C`;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxCircularGaugeModule,
-        DxSelectBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxCircularGaugeModule,
+    DxSelectBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

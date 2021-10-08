@@ -6,34 +6,34 @@ import { DxFileManagerModule } from 'devextreme-angular';
 import RemoteFileSystemProvider from 'devextreme/file_management/remote_provider';
 
 if (!/localhost/.test(document.location.host)) {
-    enableProdMode();
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    allowedFileExtensions: string[];
-    remoteProvider: RemoteFileSystemProvider;
+  allowedFileExtensions: string[];
 
-    constructor() {
-        this.allowedFileExtensions = [];
-        this.remoteProvider = new RemoteFileSystemProvider({
-            endpointUrl: "https://js.devexpress.com/Demos/Mvc/api/file-manager-db"
-        });
-    }
+  remoteProvider: RemoteFileSystemProvider;
 
+  constructor() {
+    this.allowedFileExtensions = [];
+    this.remoteProvider = new RemoteFileSystemProvider({
+      endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-db',
+    });
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxFileManagerModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxFileManagerModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

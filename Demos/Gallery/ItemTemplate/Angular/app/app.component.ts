@@ -5,32 +5,32 @@ import { DxTemplateModule, DxGalleryModule } from 'devextreme-angular';
 
 import { Service, House } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    dataSource: House[];
+  dataSource: House[];
 
-    constructor(service: Service) {
-        this.dataSource = service.getHouses();
-    }
+  constructor(service: Service) {
+    this.dataSource = service.getHouses();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxTemplateModule,
-        DxGalleryModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxTemplateModule,
+    DxGalleryModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

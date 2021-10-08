@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
 
 export class List {
-    id: number;
-    text: string;
+  id: number;
+
+  text: string;
 }
 
-let navigation: List[] = [
-    { id: 1, text: "Products" },
-    { id: 2, text: "Sales" },
-    { id: 3, text: "Customers" },
-    { id: 4, text: "Employees" },
-    { id: 5, text: "Reports" }
+const navigation: List[] = [
+  { id: 1, text: 'Products' },
+  { id: 2, text: 'Sales' },
+  { id: 3, text: 'Customers' },
+  { id: 4, text: 'Employees' },
+  { id: 5, text: 'Reports' },
 ];
 
-let text: string = `
+const text = `
 <h2>
     <b>Drawer Demo</b>
 </h2>
@@ -24,11 +25,11 @@ let text: string = `
 
 @Injectable()
 export class Service {
-    getNavigationList(): List[] {
-        return navigation;
-    }
+  getNavigationList(): List[] {
+    return navigation;
+  }
 
-    getContent(): string {
-        return text;
-    }
+  getContent(): string {
+    return text;
+  }
 }

@@ -5,44 +5,44 @@ import { DxChartModule } from 'devextreme-angular';
 
 import { Service, ExportData } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    exportData: ExportData[];
+  exportData: ExportData[];
 
-    constructor(service: Service) {
-        this.exportData = service.getExportData();
-    }
+  constructor(service: Service) {
+    this.exportData = service.getExportData();
+  }
 
-    pointClick(e: any) {
-        e.target.select();
-    }
+  pointClick(e: any) {
+    e.target.select();
+  }
 
-    legendClick(e: any) {
-        var series = e.target;
-        if(series.isVisible()) { 
-            series.hide();
-        } else {
-            series.show();
-        }
+  legendClick(e: any) {
+    const series = e.target;
+    if (series.isVisible()) {
+      series.hide();
+    } else {
+      series.show();
     }
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

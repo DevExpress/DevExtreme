@@ -6,37 +6,39 @@ import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
 
 import { Service, Sale } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    sales: Sale[];
-    allMode: string;
-    checkBoxesMode: string;
+  sales: Sale[];
 
-    constructor(service: Service) {
-        this.sales = service.getSales();
-        this.allMode = 'allPages';
-        this.checkBoxesMode = 'onClick'
-    }
+  allMode: string;
+
+  checkBoxesMode: string;
+
+  constructor(service: Service) {
+    this.sales = service.getSales();
+    this.allMode = 'allPages';
+    this.checkBoxesMode = 'onClick';
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxDataGridModule,
-        DxSelectBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+    DxSelectBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

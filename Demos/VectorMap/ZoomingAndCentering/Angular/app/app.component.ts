@@ -1,4 +1,6 @@
-import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  NgModule, Component, ViewChild, enableProdMode,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxVectorMapComponent, DxVectorMapModule, DxButtonModule } from 'devextreme-angular';
@@ -6,54 +8,56 @@ import { DxVectorMapComponent, DxVectorMapModule, DxButtonModule } from 'devextr
 import * as mapsData from 'devextreme/dist/js/vectormap-data/world.js';
 import { Marker, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [ Service ],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 
 export class AppComponent {
-    @ViewChild(DxVectorMapComponent, { static: false }) vectorMap: DxVectorMapComponent
-    worldMap: any = mapsData.world;
-    markers: Marker[];
+  @ViewChild(DxVectorMapComponent, { static: false }) vectorMap: DxVectorMapComponent;
 
-    constructor(service: Service) {
-        this.markers = service.getMarkers();
-    }
+  worldMap: any = mapsData.world;
 
-    customizeTooltip(arg) {
-        if(arg.layer.type === "marker") {
-            return {
-                text: arg.attribute("name")
-            };
-        }
-    }
+  markers: Marker[];
 
-    markerClick(e) {
-        if(e.target && e.target.layer.type === "marker") {
-            e.component.center(e.target.coordinates()).zoomFactor(10);
-        }
-    }
+  constructor(service: Service) {
+    this.markers = service.getMarkers();
+  }
 
-    resetClick() {
-        this.vectorMap.instance.center(null);
-        this.vectorMap.instance.zoomFactor(null);
+  customizeTooltip(arg) {
+    if (arg.layer.type === 'marker') {
+      return {
+        text: arg.attribute('name'),
+      };
     }
+  }
+
+  markerClick(e) {
+    if (e.target && e.target.layer.type === 'marker') {
+      e.component.center(e.target.coordinates()).zoomFactor(10);
+    }
+  }
+
+  resetClick() {
+    this.vectorMap.instance.center(null);
+    this.vectorMap.instance.zoomFactor(null);
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxVectorMapModule,
-        DxButtonModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxVectorMapModule,
+    DxButtonModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

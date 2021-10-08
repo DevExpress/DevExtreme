@@ -1,45 +1,49 @@
-import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  NgModule, Component, ViewChild, enableProdMode,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridComponent, DxDataGridModule, DxCheckBoxModule } from 'devextreme-angular';
 
 import { Employee, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [ Service ],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 
 export class AppComponent {
-    @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
-    employees: Employee[];
-    positionDisableSorting = false;
+  @ViewChild(DxDataGridComponent, { static: false }) dataGrid: DxDataGridComponent;
 
-    constructor(service: Service) {
-        this.employees = service.getEmployees();
-    }
+  employees: Employee[];
 
-    onValueChange(e){
-        if(e.value) {
-            this.dataGrid.instance.columnOption(5, "sortOrder", undefined);
-        }
+  positionDisableSorting = false;
+
+  constructor(service: Service) {
+    this.employees = service.getEmployees();
+  }
+
+  onValueChange(e) {
+    if (e.value) {
+      this.dataGrid.instance.columnOption(5, 'sortOrder', undefined);
     }
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxDataGridModule,
-        DxCheckBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+    DxCheckBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

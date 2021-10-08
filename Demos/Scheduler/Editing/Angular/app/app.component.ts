@@ -1,56 +1,57 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import {Appointment, Service} from './app.service';
 import { DxSchedulerModule, DxCheckBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
+import { Appointment, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    appointmentsData: Appointment[];
-    currentDate: Date = new Date(2021, 3, 29);
+  appointmentsData: Appointment[];
 
-    constructor(service: Service) {
-        this.appointmentsData = service.getAppointments();
-    }
+  currentDate: Date = new Date(2021, 3, 29);
 
-    showToast(event, value, type) {
-        notify(event + " \"" + value + "\"" + " task", type, 800);
-    }
+  constructor(service: Service) {
+    this.appointmentsData = service.getAppointments();
+  }
 
-    onAppointmentAdded(e) {
-        this.showToast("Added", e.appointmentData.text, "success");
-    }
+  showToast(event, value, type) {
+    notify(`${event} "${value}"` + ' task', type, 800);
+  }
 
-    onAppointmentUpdated(e) {
-        this.showToast("Updated", e.appointmentData.text, "info");
-    }
+  onAppointmentAdded(e) {
+    this.showToast('Added', e.appointmentData.text, 'success');
+  }
 
-    onAppointmentDeleted(e) {
-        this.showToast("Deleted", e.appointmentData.text, "warning");
-    }
+  onAppointmentUpdated(e) {
+    this.showToast('Updated', e.appointmentData.text, 'info');
+  }
+
+  onAppointmentDeleted(e) {
+    this.showToast('Deleted', e.appointmentData.text, 'warning');
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxSchedulerModule,
-        DxCheckBoxModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxSchedulerModule,
+    DxCheckBoxModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+platformBrowserDynamic().bootstrapModule(AppModule);

@@ -4,43 +4,45 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxButtonModule } from 'devextreme-angular';
 import { Service, Employee, State } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    dataSource: Employee[];
-    states: State[];
-    events: Array<string> = [];
+  dataSource: Employee[];
 
-    constructor(service: Service) {
-        this.dataSource = service.getEmployees();
-        this.states = service.getStates();
-    }
-    
-    logEvent(eventName) {
-        this.events.unshift(eventName);
-    }
-  
-    clearEvents() {
-        this.events = [];
-    }
+  states: State[];
+
+  events: Array<string> = [];
+
+  constructor(service: Service) {
+    this.dataSource = service.getEmployees();
+    this.states = service.getStates();
+  }
+
+  logEvent(eventName) {
+    this.events.unshift(eventName);
+  }
+
+  clearEvents() {
+    this.events = [];
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxDataGridModule,
-        DxButtonModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxDataGridModule,
+    DxButtonModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

@@ -6,34 +6,35 @@ import { DxPolarChartModule, DxRangeSelectorModule } from 'devextreme-angular';
 
 import { DataFrame, Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  providers: [Service],
 })
 export class AppComponent {
-    dataSource: DataFrame[];
-    visualRange: any = {};
+  dataSource: DataFrame[];
 
-    constructor(service: Service) {
-        this.visualRange = { startValue: 0, endValue: 8 };
-        this.dataSource = service.getDataSource();
-    }
+  visualRange: any = {};
+
+  constructor(service: Service) {
+    this.visualRange = { startValue: 0, endValue: 8 };
+    this.dataSource = service.getDataSource();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxPolarChartModule,
-        DxRangeSelectorModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxPolarChartModule,
+    DxRangeSelectorModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

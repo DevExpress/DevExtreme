@@ -1,58 +1,61 @@
 import { Component, Input, AfterViewInit } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
-import * as AspNetData from "devextreme-aspnet-data-nojquery";
-
+import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
 @Component({
-    selector: 'detail-view',
-    templateUrl: 'app/detail-view/detail-view.component.html',
-    styleUrls: ['app/detail-view/detail-view.component.css'],
-    providers: []
+  selector: 'detail-view',
+  templateUrl: 'app/detail-view/detail-view.component.html',
+  styleUrls: ['app/detail-view/detail-view.component.css'],
+  providers: [],
 })
 export class DetailViewComponent implements AfterViewInit {
+  @Input() key: number;
 
-    @Input() key: number;
-    @Input() rowData: object;
-    url: string;
-    productIdBySupplier: number;
-    productsData: DataSource;
-    orderHistoryData: DataSource;
+  @Input() rowData: object;
 
-    constructor() {
-        this.url = "https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView";
-    }
+  url: string;
 
-    ngAfterViewInit() {
-        this.productsData = new DataSource({
-            store: AspNetData.createStore({
-                key: "ProductID",
-                loadParams: { SupplierID: this.key },
-                loadUrl: this.url + "/GetProductsBySupplier",
-                onLoaded: items => this.setDefaultProduct(items)
-            })
-        })
-    }
-    setDefaultProduct(items) {
-        let firstItem = items[0];
+  productIdBySupplier: number;
 
-        if(firstItem && this.productIdBySupplier === undefined) {
-            this.productIdBySupplier = firstItem.ProductID;
-        }
+  productsData: DataSource;
+
+  orderHistoryData: DataSource;
+
+  constructor() {
+    this.url = 'https://js.devexpress.com/Demos/Mvc/api/DataGridAdvancedMasterDetailView';
+  }
+
+  ngAfterViewInit() {
+    this.productsData = new DataSource({
+      store: AspNetData.createStore({
+        key: 'ProductID',
+        loadParams: { SupplierID: this.key },
+        loadUrl: `${this.url}/GetProductsBySupplier`,
+        onLoaded: (items) => this.setDefaultProduct(items),
+      }),
+    });
+  }
+
+  setDefaultProduct(items) {
+    const firstItem = items[0];
+
+    if (firstItem && this.productIdBySupplier === undefined) {
+      this.productIdBySupplier = firstItem.ProductID;
     }
-    handleValueChange(e: any) {
-        this.productIdBySupplier = e.value;
-        this.orderHistoryData = new DataSource({
-            store: AspNetData.createStore({
-                key: "OrderID",
-                loadParams: { ProductID: e.value },
-                loadUrl: this.url + "/GetOrdersByProduct"
-            })
-        });
-    }
-    customizeItemTemplate(item: any) {
-        item.template = "formItem";
-    }
- 
+  }
+
+  handleValueChange(e: any) {
+    this.productIdBySupplier = e.value;
+    this.orderHistoryData = new DataSource({
+      store: AspNetData.createStore({
+        key: 'OrderID',
+        loadParams: { ProductID: e.value },
+        loadUrl: `${this.url}/GetOrdersByProduct`,
+      }),
+    });
+  }
+
+  customizeItemTemplate(item: any) {
+    item.template = 'formItem';
+  }
 }
-
-

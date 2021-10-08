@@ -5,40 +5,40 @@ import { DxChartModule } from 'devextreme-angular';
 
 import { Service, MedalsInfo } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    medalsInfo: MedalsInfo[];
+  medalsInfo: MedalsInfo[];
 
-    constructor(service: Service) {
-        this.medalsInfo = service.getMedalsInfo();
-    }
+  constructor(service: Service) {
+    this.medalsInfo = service.getMedalsInfo();
+  }
 
-    pointClick(e: any) {
-        var point = e.target;
-        if(point.isSelected()) {
-            point.clearSelection();
-        } else { 
-            point.select();
-        }
+  pointClick(e: any) {
+    const point = e.target;
+    if (point.isSelected()) {
+      point.clearSelection();
+    } else {
+      point.select();
     }
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

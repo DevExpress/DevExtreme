@@ -1,42 +1,45 @@
-import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  NgModule, Component, ViewChild, enableProdMode,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChartModule, DxRangeSelectorModule } from 'devextreme-angular';
 
 import { Service, ChemicalComposition, SerieDescription } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css']
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
-    chemicalComposition: ChemicalComposition[];
-    seriesSource: SerieDescription[];
+  chemicalComposition: ChemicalComposition[];
 
-    constructor(service: Service) {
-        this.chemicalComposition = service.getChemicalComposition();
-        this.seriesSource = service.getSeries();
-    }
+  seriesSource: SerieDescription[];
 
-    customizeText(arg: any) {
-        return arg.valueText + "%"; 
-    }
+  constructor(service: Service) {
+    this.chemicalComposition = service.getChemicalComposition();
+    this.seriesSource = service.getSeries();
+  }
+
+  customizeText(arg: any) {
+    return `${arg.valueText}%`;
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule,
-        DxRangeSelectorModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+    DxRangeSelectorModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 

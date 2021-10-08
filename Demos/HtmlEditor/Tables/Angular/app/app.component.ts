@@ -5,31 +5,31 @@ import { DxHtmlEditorModule } from 'devextreme-angular';
 
 import { Service } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    templateUrl: 'app/app.component.html',
-    providers: [Service]
+  selector: 'demo-app',
+  templateUrl: 'app/app.component.html',
+  providers: [Service],
 })
 
-export class AppComponent { 
-    valueContent: string;
+export class AppComponent {
+  valueContent: string;
 
-    constructor(service: Service) {
-        this.valueContent = service.getMarkup();
-    }
+  constructor(service: Service) {
+    this.valueContent = service.getMarkup();
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxHtmlEditorModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxHtmlEditorModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 
 export class AppModule { }

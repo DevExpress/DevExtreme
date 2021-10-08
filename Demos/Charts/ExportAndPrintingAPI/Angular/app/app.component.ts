@@ -1,58 +1,61 @@
-import { NgModule, Component, ViewChild, enableProdMode } from '@angular/core';
+import {
+  NgModule, Component, ViewChild, enableProdMode,
+} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChartModule, DxChartComponent, DxButtonModule } from 'devextreme-angular';
 
-import { Service, Mountain} from './app.service';
+import { Service, Mountain } from './app.service';
 
-if(!/localhost/.test(document.location.host)) {
-    enableProdMode();
+if (!/localhost/.test(document.location.host)) {
+  enableProdMode();
 }
 
 @Component({
-    selector: 'demo-app',
-    providers: [Service],
-    templateUrl: 'app/app.component.html',
-    styleUrls: ['app/app.component.css'],
-    preserveWhitespaces: true
+  selector: 'demo-app',
+  providers: [Service],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
+  preserveWhitespaces: true,
 })
 export class AppComponent {
-    @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
-    mountains: Mountain[];
+  @ViewChild(DxChartComponent, { static: false }) chart: DxChartComponent;
 
-    constructor(service: Service) {
-        this.mountains = service.getMountains();
-    }
+  mountains: Mountain[];
 
-    customizeTooltip(arg: any) {
-        return {
-            text: "<span class='title'>" + arg.argumentText + "</span><br />&nbsp;<br />" +
-                "System: " + arg.point.data.system + "<br />" + "Height: " +
-                arg.valueText + " m"
-        };
-    }
+  constructor(service: Service) {
+    this.mountains = service.getMountains();
+  }
 
-    customizeLabel(arg: any) {
-        return arg.value + " m";
-    }
+  customizeTooltip(arg: any) {
+    return {
+      text: `<span class='title'>${arg.argumentText}</span><br />&nbsp;<br />`
+                + `System: ${arg.point.data.system}<br />` + `Height: ${
+        arg.valueText} m`,
+    };
+  }
 
-    print() {
-        this.chart.instance.print();
-    }
+  customizeLabel(arg: any) {
+    return `${arg.value} m`;
+  }
 
-    export() {
-        this.chart.instance.exportTo("Example", "png");
-    }
+  print() {
+    this.chart.instance.print();
+  }
+
+  export() {
+    this.chart.instance.exportTo('Example', 'png');
+  }
 }
 
 @NgModule({
-    imports: [
-        BrowserModule,
-        DxChartModule,
-        DxButtonModule
-    ],
-    declarations: [AppComponent],
-    bootstrap: [AppComponent]
+  imports: [
+    BrowserModule,
+    DxChartModule,
+    DxButtonModule,
+  ],
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
 
