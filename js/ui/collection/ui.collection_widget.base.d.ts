@@ -30,14 +30,15 @@ export interface SelectionChangedInfo<TItem extends string | CollectionWidgetIte
 
 /** @namespace DevExpress.ui */
 export interface CollectionWidgetOptions<
-    TComponent extends CollectionWidget<any, TItem, TKey>,
-    TItem extends string | CollectionWidgetItem<any> | any,
+    TComponent extends CollectionWidget<any, TItem, TKey> | any,
+    TItem extends string | CollectionWidgetItem<any> | any = any,
     TKey = any,
 > extends WidgetOptions<TComponent> {
     /**
      * @docid
      * @default null
      * @public
+     * @type string | Array<string | CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions
      */
     dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
     /**
@@ -181,7 +182,7 @@ export interface CollectionWidgetOptions<
  */
 export default class CollectionWidget<
     TProperties extends CollectionWidgetOptions<any, TItem, TKey>,
-    TItem extends string | CollectionWidgetItem<any> | any,
+    TItem extends string | CollectionWidgetItem<any> | any = any,
     TKey = any,
 > extends Widget<TProperties> {
     getDataSource(): DataSource<TItem, string | Array<string>, TKey>;
