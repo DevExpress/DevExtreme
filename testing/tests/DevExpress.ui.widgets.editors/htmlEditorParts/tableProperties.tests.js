@@ -128,6 +128,8 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
+            this.quillInstance.setSelection(50, 1);
+
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
 

@@ -101,7 +101,7 @@ function prepareShowFormProperties(module, type) {
             $element = $(getTargetTableNode(module, type));
         }
 
-        const tablePropertiesFormConfig = getFormConfigConstructor(type)(module.editorInstance, $element);
+        const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, $element);
 
         let formInstance;
 
@@ -393,14 +393,17 @@ function prepareInsertTableHandler(module) {
     };
 }
 
-function getTablePropertiesFormConfig(editorInstance, $table) {
+function getTablePropertiesFormConfig(module, $table) {
     const window = getWindow();
     let alignmentEditorInstance;
     let borderColorEditorInstance;
     let backgroundColorEditorInstance;
+    const editorInstance = module.editorInstance;
     const startTableWidth = getOuterWidth($table);
     const tableStyles = window.getComputedStyle($table.get(0));
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
+
+    // const tableFormats = module.quill.getFormat('tableBorderWidth');
 
     const formOptions = {
         colCount: 2,
@@ -530,13 +533,12 @@ function getTablePropertiesFormConfig(editorInstance, $table) {
         const formData = formInstance.option('formData');
         const widthArg = formData.width === startTableWidth ? undefined : formData.width;
         applyTableDimensionChanges($table, formData.height, widthArg);
-        $table.css({
-            'backgroundColor': backgroundColorEditorInstance.option('value'),
-            'borderStyle': formData.borderStyle,
-            'borderColor': borderColorEditorInstance.option('value'),
-            'borderWidth': formData.borderWidth,
-            'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0]
-        });
+
+        module.editorInstance.format('tableBorderStyle', formData.borderStyle);
+        module.editorInstance.format('tableBorderWidth', formData.borderWidth + 'px');
+        module.editorInstance.format('tableBorderColor', borderColorEditorInstance.option('value'));
+        module.editorInstance.format('tableBackgroundColor', backgroundColorEditorInstance.option('value'));
+        module.editorInstance.format('tableTextAlign', alignmentEditorInstance.option('selectedItemKeys')[0]);
     };
 
     return {
@@ -545,7 +547,7 @@ function getTablePropertiesFormConfig(editorInstance, $table) {
     };
 }
 
-function getCellPropertiesFormConfig(editorInstance, $cell) {
+function getCellPropertiesFormConfig(module, $cell) {
     const window = getWindow();
     let alignmentEditorInstance;
     let verticalAlignmentEditorInstance;
@@ -553,6 +555,7 @@ function getCellPropertiesFormConfig(editorInstance, $cell) {
     let backgroundColorEditorInstance;
 
     const startCellWidth = getOuterWidth($cell);
+    const editorInstance = module.editorInstance;
     const cellStyles = window.getComputedStyle($cell.get(0));
     const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
 
@@ -730,6 +733,12 @@ function getCellPropertiesFormConfig(editorInstance, $cell) {
             'paddingTop': formData.verticalPadding + 'px',
             'paddingBottom': formData.verticalPadding + 'px'
         });
+
+        // module.editorInstance.format('tableBorderWidth', formData.borderWidth + 'px');
+        // module.editorInstance.format('tableBorderColor', borderColorEditorInstance.option('value'));
+        // module.editorInstance.format('tableBorderColor', formData.borderStyle);
+        // module.editorInstance.format('tableBackgroundColor', backgroundColorEditorInstance.option('value'));
+        // module.editorInstance.format('tableTextAlign', alignmentEditorInstance.option('selectedItemKeys')[0]);
     };
 
     return {
