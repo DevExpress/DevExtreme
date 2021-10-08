@@ -40,7 +40,7 @@ function _renderLabelMark(markOptions) {
     }
 
     return $('<span>')
-        .addClass(markOptions.isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS)
+        .addClass(markOptions.showRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS)
         .text(markText);
 }
 
