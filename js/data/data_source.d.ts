@@ -1,16 +1,22 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import Store, {
-    StoreOptions
+    Options as StoreOptions,
 } from './abstract_store';
 
 import {
-    CustomStoreOptions
+    Options as CustomStoreOptions,
 } from './custom_store';
 
-/** @namespace DevExpress.data */
+/** @public */
+export type Options = DataSourceOptions;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ */
 export interface DataSourceOptions {
     /**
      * @docid
@@ -44,7 +50,6 @@ export interface DataSourceOptions {
     /**
      * @docid
      * @type_function_param1 e:Object
-     * @type_function_param1_field1 changes:Array<any>
      * @action
      * @public
      */
@@ -52,14 +57,12 @@ export interface DataSourceOptions {
     /**
      * @docid
      * @type_function_param1 error:Object
-     * @type_function_param1_field1 message:string
      * @action
      * @public
      */
     onLoadError?: ((error: { message?: string }) => void);
     /**
      * @docid
-     * @type_function_param1 isLoading:boolean
      * @action
      * @public
      */
@@ -78,8 +81,6 @@ export interface DataSourceOptions {
     paginate?: boolean;
     /**
      * @docid
-     * @type_function_param1 data:Array<any>
-     * @type_function_return Array<any>
      * @public
      */
     postProcess?: ((data: Array<any>) => Array<any>);
@@ -138,19 +139,16 @@ export interface DataSourceOptions {
 }
 /**
  * @docid
- * @module data/data_source
- * @export default
  * @public
  */
 export default class DataSource {
     constructor(data: Array<any>);
-    constructor(options: CustomStoreOptions | DataSourceOptions);
+    constructor(options: CustomStoreOptions | Options);
     constructor(store: Store);
     constructor(url: string);
     /**
      * @docid
      * @publicName cancel(operationId)
-     * @return boolean
      * @public
      */
     cancel(): boolean;
@@ -191,28 +189,24 @@ export default class DataSource {
     /**
      * @docid
      * @publicName isLastPage()
-     * @return boolean
      * @public
      */
     isLastPage(): boolean;
     /**
      * @docid
      * @publicName isLoaded()
-     * @return boolean
      * @public
      */
     isLoaded(): boolean;
     /**
      * @docid
      * @publicName isLoading()
-     * @return boolean
      * @public
      */
     isLoading(): boolean;
     /**
      * @docid
      * @publicName items()
-     * @return Array<any>
      * @public
      */
     items(): Array<any>;
@@ -240,7 +234,6 @@ export default class DataSource {
     /**
      * @docid
      * @publicName off(eventName)
-     * @param1 eventName:string
      * @return this
      * @public
      */
@@ -248,7 +241,6 @@ export default class DataSource {
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
      * @param2 eventHandler:function
      * @return this
      * @public
@@ -257,7 +249,6 @@ export default class DataSource {
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
      * @param2 eventHandler:function
      * @return this
      * @public
@@ -323,14 +314,12 @@ export default class DataSource {
     /**
      * @docid
      * @publicName requireTotalCount()
-     * @return boolean
      * @public
      */
     requireTotalCount(): boolean;
     /**
      * @docid
      * @publicName requireTotalCount(value)
-     * @param1 value:boolean
      * @public
      */
     requireTotalCount(value: boolean): void;
@@ -351,56 +340,48 @@ export default class DataSource {
     /**
      * @docid
      * @publicName searchOperation()
-     * @return string
      * @public
      */
     searchOperation(): string;
     /**
      * @docid
      * @publicName searchOperation(op)
-     * @param1 op:string
      * @public
      */
     searchOperation(op: string): void;
     /**
      * @docid
      * @publicName searchValue()
-     * @return any
      * @public
      */
     searchValue(): any;
     /**
      * @docid
      * @publicName searchValue(value)
-     * @param1 value:any
      * @public
      */
     searchValue(value: any): void;
     /**
      * @docid
      * @publicName select()
-     * @return any
      * @public
      */
     select(): any;
     /**
      * @docid
      * @publicName select(expr)
-     * @param1 expr:any
      * @public
      */
     select(expr: any): void;
     /**
      * @docid
      * @publicName sort()
-     * @return any
      * @public
      */
     sort(): any;
     /**
      * @docid
      * @publicName sort(sortExpr)
-     * @param1 sortExpr:any
      * @public
      */
     sort(sortExpr: any): void;

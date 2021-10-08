@@ -571,6 +571,13 @@
         "dxGantt-zoomIn": "TODO",
         "dxGantt-zoomOut": "TODO",
         "dxGantt-fullScreen": "TODO",
-        "dxGantt-quarter": "TODO"
+        "dxGantt-quarter": "TODO",
+        "dxGantt-sortingAscendingText": "Orden Ascendente",
+        "dxGantt-sortingDescendingText": "Orden Descendente",
+        "dxGantt-sortingClearText": "Limpiar Ordenamiento",
+        "dxGantt-showResources": "Mostrar Recursos",
+        "dxGantt-showDependencies": "Mostrar Dependencias",
+        "dxGantt-dialogStartDateValidation": "La fecha de inicio debe ser anterior {0}",
+        "dxGantt-dialogEndDateValidation": "La fecha de finalización debe ser posterior {0}"
     }
 }

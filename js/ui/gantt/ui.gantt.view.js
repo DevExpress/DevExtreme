@@ -168,7 +168,7 @@ export class GanttView extends Widget {
             case 'dependencies':
             case 'resources':
             case 'resourceAssignments':
-                this._update();
+                this._update(true);
                 break;
             case 'showResources':
                 this._ganttViewCore.setShowResources(args.value);

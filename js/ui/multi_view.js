@@ -434,3 +434,9 @@ const MultiView = CollectionWidget.inherit({
 registerComponent('dxMultiView', MultiView);
 
 export default MultiView;
+
+/**
+ * @name dxMultiViewItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

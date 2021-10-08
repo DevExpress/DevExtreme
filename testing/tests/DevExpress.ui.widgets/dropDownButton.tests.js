@@ -652,6 +652,17 @@ QUnit.module('list integration', {}, () => {
         assert.strictEqual($listItemText, '', 'item text is empty');
     });
 
+    QUnit.test('default list item template should correctly render item text', function(assert) {
+        const dropDownButton = new DropDownButton('#dropDownButton', {
+            items: [{ text: 'Item 1' }],
+            deferRendering: false
+        });
+        const list = getList(dropDownButton);
+        const $listItem = list.itemElements();
+
+        assert.strictEqual($listItem.text(), 'Item 1', 'displayExpr works');
+    });
+
     QUnit.test('list should be displayed correctly without data expressions', function(assert) {
         const dropDownButton = new DropDownButton('#dropDownButton', {
             items: ['Item 1'],

@@ -1,19 +1,19 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../core/dom_component';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
@@ -25,7 +25,7 @@ import {
     PatternRule,
     RangeRule,
     RequiredRule,
-    StringLengthRule
+    StringLengthRule,
 } from './validation_rules';
 
 /** @public */
@@ -47,8 +47,6 @@ export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidati
  * @docid
  * @inherits DOMComponent
  * @hasTranscludedContent
- * @module ui/validation_group
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -63,16 +61,20 @@ export default class dxValidationGroup extends DOMComponent {
     /**
      * @docid
      * @publicName validate()
-     * @return dxValidationGroupResult
      * @public
+     * @return dxValidationGroupResult
      */
-    validate(): dxValidationGroupResult;
+    validate(): ValidationResult;
 }
+
+/** @public */
+export type ValidationResult = dxValidationGroupResult;
 
 /**
  * @docid
  * @type object
  * @namespace DevExpress.ui
+ * @deprecated {ui/validation_group.ValidationResult}
  */
 export interface dxValidationGroupResult {
     /**

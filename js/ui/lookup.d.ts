@@ -1,18 +1,18 @@
 import {
-    animationConfig
+    animationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    positionConfig,
 } from '../animation/position';
 
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -21,23 +21,23 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import dxDropDownList, {
-    dxDropDownListOptions
+    dxDropDownListOptions,
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
-    ScrollInfo
+    ScrollInfo,
 } from './list';
 
 import {
@@ -45,7 +45,7 @@ import {
 } from './popover';
 
 import {
-    TitleRenderedInfo
+    TitleRenderedInfo,
 } from './popup';
 
 /** @public */
@@ -103,12 +103,12 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
        * @docid
        * @default undefined
        */
-      hide?: animationConfig,
+      hide?: animationConfig;
       /**
        * @docid
        * @default undefined
        */
-      show?: animationConfig
+      show?: animationConfig;
     };
     /**
      * @docid
@@ -147,7 +147,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1 event:event
      * @type_function_return Boolean
      * @publicName closeOnOutsideClick
-     * @default true [for](Material)
+     * @default true &for(Material)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -156,7 +156,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 selectedItem:object
-     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -164,14 +163,14 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default false
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default false
-     * @default true [for](iPhone)
+     * @default true &for(iPhone)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -180,8 +179,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default "group"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -286,8 +283,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default function() { return $(window).height() * 0.8 }
-     * @type_function_return number|string
-     * @default 'auto' [for](desktop|iPad)
+     * @default 'auto' &for(desktop|iPad)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -295,8 +291,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default function() {return $(window).width() * 0.8 }
-     * @type_function_return number|string
-     * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } [for](iPad)
+     * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } &for(iPad)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -305,7 +300,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default undefined
      * @publicName position
-     * @default { my: 'left top', at: 'left top', of: lookupContainer } [for](Material)
+     * @default { my: 'left top', at: 'left top', of: lookupContainer } &for(Material)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -338,7 +333,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default true
      * @publicName searchEnabled
-     * @default false [for](Material)
+     * @default false &for(Material)
      * @public
      */
     searchEnabled?: boolean;
@@ -359,7 +354,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default true
      * @publicName showCancelButton
-     * @default false [for](Material)
+     * @default false &for(Material)
      * @public
      */
     showCancelButton?: boolean;
@@ -373,7 +368,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default true
      * @publicName showPopupTitle
-     * @default false [for](Material)
+     * @default false &for(Material)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
@@ -388,7 +383,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default "title"
-     * @type_function_param1 titleElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
@@ -397,23 +391,23 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default true
-     * @default false [for](desktop except Mac)
+     * @default false &for(desktop except Mac)
      * @public
      */
     useNativeScrolling?: boolean;
     /**
      * @docid
      * @default false
-     * @default true [for](desktop|iOS)
+     * @default true &for(desktop|iOS)
      * @publicName usePopover
-     * @default false [for](Material)
+     * @default false &for(Material)
      * @public
      */
     usePopover?: boolean;
     /**
      * @docid
      * @default false
-     * @default true [for](Material)
+     * @default true &for(Material)
      * @public
      */
     dropDownCentered?: boolean;
@@ -427,8 +421,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
  * @docid
  * @isEditor
  * @inherits dxDropDownList
- * @module ui/lookup
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

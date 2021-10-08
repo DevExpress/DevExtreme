@@ -1,24 +1,24 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import DOMComponent, {
-    DOMComponentOptions
+    DOMComponentOptions,
 } from '../core/dom_component';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     AsyncRule,
-    ValidationRule
+    ValidationRule,
 } from './validation_rules';
 
 /** @public */
@@ -38,8 +38,8 @@ export type ValidatedEvent = {
     validationRules?: Array<ValidationRule>;
     brokenRule?: ValidationRule;
     brokenRules?: ValidationRule;
-    status?: 'valid' | 'invalid' | 'pending'
-}
+    status?: 'valid' | 'invalid' | 'pending';
+};
 
 /**
  * @deprecated use Properties instead
@@ -54,27 +54,27 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
       /**
        * @docid
        */
-      applyValidationResults?: Function,
+      applyValidationResults?: Function;
       /**
        * @docid
        */
-      bypass?: Function,
+      bypass?: Function;
       /**
        * @docid
        */
-      focus?: Function,
+      focus?: Function;
       /**
        * @docid
        */
-      getValue?: Function,
+      getValue?: Function;
       /**
        * @docid
        */
-      reset?: Function,
+      reset?: Function;
       /**
        * @docid
        */
-      validationRequestsCallbacks?: Array<Function>
+      validationRequestsCallbacks?: Array<Function>;
     };
     /**
      * @docid
@@ -112,8 +112,6 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
  * @docid
  * @inherits DOMComponent
  * @extension
- * @module ui/validator
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -134,16 +132,20 @@ export default class dxValidator extends DOMComponent {
     /**
      * @docid
      * @publicName validate()
-     * @return dxValidatorResult
      * @public
+     * @return dxValidatorResult
      */
-    validate(): dxValidatorResult;
+    validate(): ValidationResult;
 }
+
+/** @public */
+export type ValidationResult = dxValidatorResult;
 
 /**
  * @docid
  * @type object
  * @namespace DevExpress.ui
+ * @deprecated {ui/validator.ValidationResult}
  */
 export interface dxValidatorResult {
     /**

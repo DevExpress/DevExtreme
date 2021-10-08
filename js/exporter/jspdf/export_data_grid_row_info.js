@@ -37,7 +37,7 @@ function createPdfCell(cellInfo) {
 function _createCellInfo({ rowInfo, rowOptions, dataProvider, cellIndex }) {
     const cellData = dataProvider.getCellData(rowInfo.rowIndex, cellIndex, true);
     const cellInfo = {
-        value: cellData.value,
+        gridCell: cellData.cellSourceData,
         text: cellData.value
     };
 

@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import {
-    EventInfo
+    EventInfo,
 } from '../../events/index';
 
 import BaseWidget, {
@@ -16,7 +16,7 @@ import BaseWidget, {
     BaseWidgetLoadingIndicator,
     BaseWidgetOptions,
     BaseWidgetTitle,
-    BaseWidgetTooltip
+    BaseWidgetTooltip,
 } from '../core/base_widget';
 
 /** @namespace DevExpress.viz */
@@ -80,7 +80,6 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseSparklineOptions.tooltip.contentTemplate
      * @type_function_param1 pointsInfo:object
-     * @type_function_param2 element:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public

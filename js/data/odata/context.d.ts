@@ -1,22 +1,17 @@
 import {
-    DxPromise
+    DxPromise,
 } from '../../core/utils/deferred';
 
 /** @namespace DevExpress.data */
 export interface ODataContextOptions {
     /**
      * @docid
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 url:string
-     * @type_function_param1_field2 async:boolean
-     * @type_function_param1_field3 method:string
-     * @type_function_param1_field4 timeout:number
      * @type_function_param1_field5 params:object
      * @type_function_param1_field6 payload:object
      * @type_function_param1_field7 headers:object
      * @public
      */
-    beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => void);
+    beforeSend?: ((options: { url?: string; async?: boolean; method?: string; timeout?: number; params?: any; payload?: any; headers?: any }) => void);
     /**
      * @docid
      * @public
@@ -30,12 +25,11 @@ export interface ODataContextOptions {
     /**
      * @docid
      * @type_function_param1 e:Error
-     * @type_function_param1_field1 httpStatus:number
      * @type_function_param1_field2 errorDetails:object
      * @type_function_param1_field3 requestOptions:object
      * @public
      */
-    errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => void);
+    errorHandler?: ((e: { httpStatus?: number; errorDetails?: any; requestOptions?: any }) => void);
     /**
      * @docid
      * @public
@@ -68,8 +62,6 @@ export interface ODataContextOptions {
 }
 /**
  * @docid
- * @module data/odata/context
- * @export default
  * @public
  */
 export default class ODataContext {
@@ -77,7 +69,6 @@ export default class ODataContext {
     /**
      * @docid
      * @publicName get(operationName, params)
-     * @param1 operationName:string
      * @param2 params:object
      * @return Promise<any>
      * @public
@@ -86,7 +77,6 @@ export default class ODataContext {
     /**
      * @docid
      * @publicName invoke(operationName, params, httpMethod)
-     * @param1 operationName:string
      * @param2 params:object
      * @param3 httpMethod:object
      * @return Promise<void>
@@ -96,7 +86,6 @@ export default class ODataContext {
     /**
      * @docid
      * @publicName objectLink(entityAlias, key)
-     * @param1 entityAlias:string
      * @param2 key:object|string|number
      * @return object
      * @public

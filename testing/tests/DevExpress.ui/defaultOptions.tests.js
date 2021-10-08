@@ -271,7 +271,7 @@ testComponentDefaults(DropDownButton, {}, {
     deferRendering: true,
     text: '',
     keyExpr: 'this',
-    displayExpr: 'this',
+    displayExpr: undefined,
     useSelectMode: false,
     wrapItemText: false,
     useItemTextAsTitle: true,
@@ -301,6 +301,18 @@ testComponentDefaults(DropDownList,
 );
 
 testComponentDefaults(List,
+    {},
+    { useNativeScrolling: false },
+    function() {
+        this._supportNativeScrolling = support.nativeScrolling;
+        support.nativeScrolling = false;
+    },
+    function() {
+        support.nativeScrolling = this._supportNativeScrolling;
+    }
+);
+
+testComponentDefaults(TreeView,
     {},
     { useNativeScrolling: false },
     function() {

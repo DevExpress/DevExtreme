@@ -247,7 +247,7 @@ const ColumnsSeparatorView = SeparatorView.inherit({
     moveByX: function(outerX) {
         const $element = this.element();
         if($element) {
-            $element.css('left', outerX - this._parentElement().offset().left);
+            $element.css('left', outerX === null ? 0 : outerX - this._parentElement().offset().left);
             ///#DEBUG
             this._testPosX = outerX;
             ///#ENDDEBUG
@@ -663,11 +663,13 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
                     e.preventDefault();
                 } else {
                     that._columnsSeparatorView.changeCursor();
+                    that._columnsSeparatorView.moveByX(null);
                 }
             } else {
                 that.pointsByColumns(null);
                 that._isReadyResizing = false;
                 that._columnsSeparatorView.changeCursor();
+                that._columnsSeparatorView.moveByX(null);
             }
         }
     },
@@ -744,7 +746,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
             const scrollable = that.component.getScrollable();
 
             if(scrollable && that._isRtlParentStyle()) {
-                that._scrollRight = scrollable.$content().width() - scrollable._container().width() - scrollable.scrollLeft();
+                that._scrollRight = scrollable.$content().width() - $(scrollable.container()).width() - scrollable.scrollLeft();
             }
 
             e.preventDefault();
@@ -899,7 +901,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
 
                 const scrollable = this.component.getScrollable();
                 if(scrollable && isRtlParentStyle) {
-                    const left = scrollable.$content().width() - scrollable._container().width() - this._scrollRight;
+                    const left = scrollable.$content().width() - $(scrollable.container()).width() - this._scrollRight;
                     scrollable.scrollTo({ left: left });
                 }
             }

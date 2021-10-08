@@ -1,15 +1,15 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -39,8 +39,6 @@ export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/load_indicator
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

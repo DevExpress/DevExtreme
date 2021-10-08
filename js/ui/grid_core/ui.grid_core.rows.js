@@ -289,7 +289,7 @@ export const rowsModule = {
                     dxScrollableOptions.onScroll = scrollHandler;
 
                     that._scrollable = that._createComponent($element, Scrollable, dxScrollableOptions);
-                    that._scrollableContainer = that._scrollable && that._scrollable._$container;
+                    that._scrollableContainer = that._scrollable && $(that._scrollable.container());
                 },
 
                 _renderLoadPanel: gridCoreUtils.renderLoadPanel,

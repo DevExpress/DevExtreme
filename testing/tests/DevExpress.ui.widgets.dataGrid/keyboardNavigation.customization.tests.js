@@ -2522,6 +2522,8 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(getTextSelection(input), '', 'Selection');
 
         // act
+        $($('.dx-texteditor-input').get(0)).focus();
+        $($('.dx-texteditor-input').get(1)).blur();
         this.triggerKeyDown('Tab', false, false, $(input).parent());
         input = $('.dx-texteditor-input').get(1);
         this.getController('editing')._focusEditingCell(null, $(input).parent());
@@ -2658,6 +2660,8 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(getTextSelection(input), '', 'Selection');
 
         // act
+        $($('.dx-texteditor-input').get(0)).focus();
+        $($('.dx-texteditor-input').get(1)).blur();
         this.triggerKeyDown('Tab', false, false, $(input).parent());
         input = $('.dx-texteditor-input').get(1);
         this.getController('editing')._focusEditingCell(null, $(input).parent());

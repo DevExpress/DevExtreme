@@ -1,20 +1,20 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     EventInfo,
-    NativeEventInfo
+    NativeEventInfo,
 } from '../events/index';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import Editor, {
     ValueChangedInfo,
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 export interface ComponentDisabledDate<T> {
@@ -31,10 +31,10 @@ export type ValueChangedEvent = NativeEventInfo<dxCalendar> & ValueChangedInfo;
 
 /** @public */
 export type CellTemplateData = {
-    readonly date: Date,
-    readonly view: string,
-    readonly text?: string
-}
+    readonly date: Date;
+    readonly view: string;
+    readonly text?: string;
+};
 
 /** @public */
 export type DisabledDate = ComponentDisabledDate<dxCalendar>;
@@ -57,8 +57,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @type_function_param1_field1 date:Date
      * @type_function_param1_field2 view:string
      * @type_function_param1_field3 text:string
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -76,7 +74,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      * @type_function_param1_field1 component:object
      * @type_function_param1_field2 date:Date
      * @type_function_param1_field3 view:string
-     * @type_function_return boolean
      * @public
      */
     disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
@@ -89,7 +86,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -156,8 +153,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
  * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/calendar
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

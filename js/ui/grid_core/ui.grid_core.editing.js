@@ -2,12 +2,12 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
+import { resetActiveElement } from '../../core/utils/dom';
 import { isDefined, isObject, isFunction, isEmptyObject } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import modules from './ui.grid_core.modules';
 import { name as clickEventName } from '../../events/click';
-import { name as doubleClickEvent } from '../../events/double_click';
 import pointerEvents from '../../events/pointer';
 import gridCoreUtils from './ui.grid_core.utils';
 import { createObjectWithChanges } from '../../data/array_utils';
@@ -839,8 +839,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             when(this._initNewRow(param, parentKey)).done(() => {
                 if(this._allowRowAdding()) {
-                    this._addRowCore(param.data, parentKey, oldEditRowIndex);
-                    deferred.resolve();
+                    when(this._addRowCore(param.data, parentKey, oldEditRowIndex)).done(deferred.resolve).fail(deferred.reject);
                 } else {
                     deferred.reject('cancel');
                 }
@@ -876,11 +875,15 @@ const EditingController = modules.ViewController.inherit((function() {
             this._showAddedRow(rowIndex);
 
             this._afterInsertRow({ key, data });
+
+            return (new Deferred()).resolve();
         },
 
         _showAddedRow: function(rowIndex) {
             this._focusFirstEditableCellInRow(rowIndex);
         },
+
+        _beforeFocusElementInRow: noop,
 
         _focusFirstEditableCellInRow: function(rowIndex) {
             const $firstCell = this.getFirstEditableCellInRow(rowIndex);
@@ -889,11 +892,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             this._delayedInputFocus($firstCell, () => {
                 this._editCellInProgress = false;
-
-                const $cell = this.getFirstEditableCellInRow(rowIndex);
-                const eventToTrigger = this.option('editing.startEditAction') === 'dblClick' ? doubleClickEvent : clickEventName;
-
-                $cell && eventsEngine.trigger($cell, eventToTrigger);
+                this._beforeFocusElementInRow(rowIndex);
             });
         },
 
@@ -1165,7 +1164,10 @@ const EditingController = modules.ViewController.inherit((function() {
             const editColumnIndex = this._getVisibleEditColumnIndex();
 
             $editCell = $editCell || rowsView && rowsView._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex);
-            this._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
+
+            if($editCell) {
+                this._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
+            }
         },
 
         deleteRow: function(rowIndex) {
@@ -2133,7 +2135,7 @@ export const editingModule = {
                 },
                 _updateItemsCore: function(change) {
                     this.callBase(change);
-                    this._updateEditRow(this.items());
+                    this._updateEditRow(this.items(true));
                 },
                 _applyChangeUpdate: function(change) {
                     this._updateEditRow(change.items);
@@ -2263,6 +2265,9 @@ export const editingModule = {
                     const startEditAction = this.option('editing.startEditAction') || 'click';
 
                     if(eventName === 'down') {
+                        if((devices.real().ios || devices.real().android) && !isEditedCell) {
+                            resetActiveElement();
+                        }
                         return column && column.showEditorAlways && allowEditing && editingController.editCell(e.rowIndex, columnIndex);
                     }
 

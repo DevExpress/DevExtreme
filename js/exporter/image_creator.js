@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import Color from '../color';
 import { isFunction, isPromise, isDefined } from '../core/utils/type';
-import { getSvgElement } from '../core/utils/svg';
+import { getSvgElement, HIDDEN_FOR_EXPORT } from '../core/utils/svg';
 import { each as _each, map as _map } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import domAdapter from '../core/dom_adapter';
@@ -392,7 +392,7 @@ function drawElement(element, context, parentOptions, shared) {
     const isImage = tagName === 'image';
     const options = extend({}, parentOptions, getElementOptions(element, shared.rootAppended));
 
-    if(options.visibility === 'hidden' || options['hidden-for-export']) {
+    if(options.visibility === 'hidden' || options[HIDDEN_FOR_EXPORT]) {
         return;
     }
 
@@ -720,7 +720,7 @@ function convertSvgToCanvas(svg, canvas, rootAppended) {
     });
 }
 
-function getCanvasFromSvg(markup, width, height, backgroundColor, margin, pixelRatio, svgToCanvas = convertSvgToCanvas) {
+function getCanvasFromSvg(markup, { width, height, backgroundColor, margin, pixelRatio, svgToCanvas = convertSvgToCanvas }) {
     const canvas = createCanvas(width, height, margin);
     const context = canvas.getContext('2d');
     context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
@@ -751,17 +751,13 @@ function getCanvasFromSvg(markup, width, height, backgroundColor, margin, pixelR
 
 export const imageCreator = {
     getImageData: function(markup, options) {
-        const pixelRatio = window.devicePixelRatio || 1;
         const mimeType = 'image/' + options.format;
-        const width = options.width * pixelRatio;
-        const height = options.height * pixelRatio;
-        const backgroundColor = options.backgroundColor;
         // Injection for testing T403049
         if(isFunction(options.__parseAttributesFn)) {
             parseAttributes = options.__parseAttributesFn;
         }
 
-        return getCanvasFromSvg(markup, width, height, backgroundColor, options.margin, pixelRatio, options.svgToCanvas).then(canvas => getStringFromCanvas(canvas, mimeType));
+        return getCanvasFromSvg(markup, options).then(canvas => getStringFromCanvas(canvas, mimeType));
     },
 
     getData: function(markup, options) {

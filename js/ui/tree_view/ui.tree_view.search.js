@@ -24,6 +24,7 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
                 this._initDataAdapter();
                 this._updateSearch();
                 this._repaintContainer();
+                this.option('focusedElement', null);
                 break;
             case 'searchExpr':
                 this._initDataAdapter();
@@ -75,8 +76,8 @@ const TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     },
 
     _itemContainer: function(isSearchMode) {
-        if(this._scrollableContainer && isSearchMode) {
-            return $(this._scrollableContainer.content());
+        if(this._scrollable && isSearchMode) {
+            return $(this._scrollable.content());
         }
 
         return this.callBase();

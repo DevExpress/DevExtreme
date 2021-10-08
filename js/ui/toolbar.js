@@ -328,3 +328,9 @@ const Toolbar = ToolbarBase.inherit({
 registerComponent('dxToolbar', Toolbar);
 
 export default Toolbar;
+
+/**
+ * @name dxToolbarItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

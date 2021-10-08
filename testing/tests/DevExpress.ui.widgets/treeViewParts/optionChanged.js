@@ -33,7 +33,7 @@ QUnit.test('scrollDirection', function(assert) {
     }).dxTreeView('instance');
 
     treeView.option('scrollDirection', 'both');
-    assert.equal(treeView._scrollableContainer.option('direction'), 'both');
+    assert.equal(treeView.getScrollable().option('direction'), 'both');
 });
 
 QUnit.test('showCheckBoxes', function(assert) {

@@ -1,12 +1,11 @@
 import {
-  DxElement
+  DxElement,
 } from './element';
 
 /** @namespace DevExpress */
 export interface ComponentOptions<T = Component> {
   /**
    * @docid
-   * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
    * @default null
    * @action
@@ -15,25 +14,20 @@ export interface ComponentOptions<T = Component> {
   onDisposing?: ((e: { component: T }) => void);
   /**
    * @docid
-   * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
-   * @type_function_param1_field2 element:DxElement
-   * @default null
-   * @public
-   */
-  onInitialized?: ((e: { component?: T, element?: DxElement }) => void);
-  /**
-   * @docid
-   * @type_function_param1 e:object
-   * @type_function_param1_field1 component:this
-   * @type_function_param1_field2 name:string
-   * @type_function_param1_field3 fullName:string
-   * @type_function_param1_field4 value:any
    * @default null
    * @action
    * @public
    */
-  onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => void);
+  onInitialized?: ((e: { component?: T; element?: DxElement }) => void);
+  /**
+   * @docid
+   * @type_function_param1_field1 component:this
+   * @default null
+   * @action
+   * @public
+   */
+  onOptionChanged?: ((e: { component?: T; name?: string; fullName?: string; value?: any }) => void);
 }
 /**
  * @docid Component
@@ -67,7 +61,6 @@ export class Component {
   /**
    * @docid
    * @publicName off(eventName)
-   * @param1 eventName:string
    * @return this
    * @public
    */
@@ -75,7 +68,6 @@ export class Component {
   /**
    * @docid
    * @publicName off(eventName, eventHandler)
-   * @param1 eventName:string
    * @param2 eventHandler:function
    * @return this
    * @public
@@ -84,7 +76,6 @@ export class Component {
   /**
    * @docid
    * @publicName on(eventName, eventHandler)
-   * @param1 eventName:string
    * @param2 eventHandler:function
    * @return this
    * @public
@@ -108,16 +99,12 @@ export class Component {
   /**
    * @docid
    * @publicName option(optionName)
-   * @param1 optionName:string
-   * @return any
    * @public
    */
   option(optionName: string): any;
   /**
    * @docid
    * @publicName option(optionName, optionValue)
-   * @param1 optionName:string
-   * @param2 optionValue:any
    * @public
    */
   option(optionName: string, optionValue: any): void;
@@ -131,7 +118,6 @@ export class Component {
   /**
    * @docid
    * @publicName resetOption(optionName)
-   * @param1 optionName:string
    * @public
    */
   resetOption(optionName: string): void;

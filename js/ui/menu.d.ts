@@ -1,10 +1,10 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import DataSource, {
-    DataSourceOptions
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -15,16 +15,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
     CollectionWidgetItem,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import dxMenuBase, {
-    dxMenuBaseOptions
+    dxMenuBaseOptions,
 } from './context_menu/ui.menu_base';
 
 /** @public */
@@ -54,22 +54,22 @@ export type SelectionChangedEvent = EventInfo<dxMenu> & SelectionChangedInfo;
 /** @public */
 export type SubmenuHiddenEvent = EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
-}
+};
 
 /** @public */
 export type SubmenuHidingEvent = Cancelable & EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
-}
+};
 
 /** @public */
 export type SubmenuShowingEvent = EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
-}
+};
 
 /** @public */
 export type SubmenuShownEvent = EventInfo<dxMenu> & {
     readonly rootItem?: DxElement;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -84,10 +84,11 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     adaptivityEnabled?: boolean;
     /**
      * @docid
+     * @type string | Array<dxMenuItem> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<dxMenuItem> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<Item> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default false
@@ -96,9 +97,10 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     hideSubmenuOnMouseLeave?: boolean;
     /**
      * @docid
+     * @type Array<dxMenuItem>
      * @public
      */
-    items?: Array<dxMenuItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default null
@@ -171,19 +173,19 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
          * @docid
          * @default 300
          */
-        hide?: number,
+        hide?: number;
         /**
          * @docid
          * @default 50
          */
-        show?: number
-      } | number,
+        show?: number;
+      } | number;
       /**
        * @docid
        * @type Enums.ShowSubmenuMode
        * @default "onClick"
        */
-      name?: 'onClick' | 'onHover'
+      name?: 'onClick' | 'onHover';
     } | 'onClick' | 'onHover';
     /**
      * @docid
@@ -196,8 +198,6 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
 /**
  * @docid
  * @inherits dxMenuBase
- * @module ui/menu
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -265,17 +265,22 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
 }
 
 /**
- * @docid
- * @inherits dxMenuBaseItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxMenu
+ */
+export type Item = dxMenuItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxMenuItem extends dxMenuBaseItem {
     /**
      * @docid
      * @public
+     * @type Array<dxMenuItem>
      */
-    items?: Array<dxMenuItem>;
+    items?: Array<Item>;
 }
 
 /** @public */

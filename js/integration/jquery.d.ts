@@ -101,9 +101,13 @@ declare module '../events/index' {
 }
 
 declare global {
+    /* eslint-disable @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars */
     interface JQueryPromise<T> { }
     interface JQueryEventObject { }
     interface JQuery<TElement = HTMLElement> { }
+    /* eslint-enable @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars */
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface JQuery<TElement = HTMLElement> {
 
         dxAccordion(): JQuery;
@@ -594,4 +598,5 @@ declare global {
     }
 }
 
+// eslint-disable-next-line no-empty-pattern
 export const { };

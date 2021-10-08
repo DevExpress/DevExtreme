@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -18,16 +18,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import dxMultiView, {
-    dxMultiViewItem,
-    dxMultiViewOptions
+    Item as dxMultiViewItem,
+    dxMultiViewOptions,
 } from './multi_view';
 
 /** @public */
@@ -61,19 +61,19 @@ export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo
 export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-}
+};
 
 /** @public */
 export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-}
+};
 
 /** @public */
 export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-}
+};
 
 /**
  * @deprecated use Properties instead
@@ -83,16 +83,17 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     /**
      * @docid
      * @default false
-     * @default true [for](Android|iOS)
+     * @default true &for(Android|iOS)
      * @public
      */
     animationEnabled?: boolean;
     /**
      * @docid
+     * @type string | Array<string | dxTabPanelItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxTabPanelItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true
@@ -103,18 +104,17 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @docid
      * @default "title"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
     itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
+     * @type Array<string | dxTabPanelItem | any>
      * @fires dxTabPanelOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxTabPanelItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default null
@@ -182,7 +182,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     showNavButtons?: boolean;
     /**
      * @docid
-     * @default false [for](non-touch_devices)
+     * @default false &for(non-touch_devices)
      * @public
      */
     swipeEnabled?: boolean;
@@ -190,8 +190,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
 /**
  * @docid
  * @inherits dxMultiView
- * @module ui/tab_panel
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -200,9 +198,13 @@ export default class dxTabPanel extends dxMultiView {
 }
 
 /**
- * @docid
- * @inherits dxMultiViewItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxTabPanel
+ */
+export type Item = dxTabPanelItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxTabPanelItem extends dxMultiViewItem {

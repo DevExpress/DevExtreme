@@ -74,6 +74,7 @@ export class PageIndexSelectorProps {
   @OneWay() isLargeDisplayMode = true;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 type PageIndexSelectorPropsType = Pick<PagerProps,
 'hasKnownLastPage' | 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText' |
 'showNavigationButtons' | 'totalCount'> & PageIndexSelectorProps;

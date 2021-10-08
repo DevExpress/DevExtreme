@@ -1,9 +1,9 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../../core/element';
 
 import CollectionWidget, {
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from '../collection/ui.collection_widget.base';
 
 /** @namespace DevExpress.ui */
@@ -18,13 +18,12 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
      * @docid
      * @default 'text'
      * @type_function_param1 item:object
-     * @type_function_return string
      * @public
      */
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -56,8 +55,6 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/hierarchical_collection/ui.hierarchical_collection_widget
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */

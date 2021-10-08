@@ -33,7 +33,6 @@ import {
     isExpectedItem,
     isFullPathContainsTabs,
     getItemPath,
-    getLabelWidthByText
 } from './ui.form.utils';
 
 import '../validation_summary';
@@ -60,6 +59,8 @@ import {
     FORM_VALIDATION_SUMMARY,
     ROOT_SIMPLE_ITEM_CLASS } from './constants';
 
+import { FIELD_ITEM_LABEL_LOCATION_CLASS } from './components/label';
+
 import { TOOLBAR_CLASS } from '../toolbar/constants';
 
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
@@ -85,10 +86,6 @@ const Form = Widget.inherit({
 
             screenByWidth: defaultScreenFactorFunc,
 
-            /**
-            * @pseudo ColCountResponsibleType
-            * @type object
-            */
             colCountByScreen: undefined,
 
             labelLocation: 'left',
@@ -141,17 +138,7 @@ const Form = Widget.inherit({
         return parseInt($element.attr(GROUP_COL_COUNT_ATTR));
     },
 
-    _getLabelsSelectorByCol: function(index, options) {
-        options = options || {};
-
-        const fieldItemClass = options.inOneColumn ? FIELD_ITEM_CLASS : FORM_FIELD_ITEM_COL_CLASS + index;
-        const cssExcludeTabbedSelector = options.excludeTabbed ? ':not(.' + FIELD_ITEM_TAB_CLASS + ')' : '';
-        const childLabelContentSelector = '> .' + FIELD_ITEM_LABEL_CLASS + ' > .' + FIELD_ITEM_LABEL_CONTENT_CLASS;
-
-        return '.' + fieldItemClass + cssExcludeTabbedSelector + childLabelContentSelector;
-    },
-
-    _getLabelText: function(labelText) {
+    _getLabelInnerHTML: function(labelText) {
         const length = labelText.children.length;
         let child;
         let result = '';
@@ -159,6 +146,8 @@ const Form = Widget.inherit({
 
         for(i = 0; i < length; i++) {
             child = labelText.children[i];
+            // Was introduced in https://hg/mobile/rev/1f81a5afaab3 , "dxForm: fix test cafe tests":
+            // It's not clear why "$labelTexts[i].children[0].innerHTML" doesn't meet the needs.
             result = result + (!isEmpty(child.innerText) ? child.innerText : child.innerHTML);
         }
 
@@ -166,19 +155,27 @@ const Form = Widget.inherit({
     },
 
     _applyLabelsWidthByCol: function($container, index, options, layoutManager) {
-        const $labelTexts = $container.find(this._getLabelsSelectorByCol(index, options));
+        options = options || {};
+
+        const fieldItemClass = options.inOneColumn ? FIELD_ITEM_CLASS : FORM_FIELD_ITEM_COL_CLASS + index;
+        const cssExcludeTabbedSelector = options.excludeTabbed ? `:not(.${FIELD_ITEM_TAB_CLASS})` : '';
+
+        const labelTextsSelector = `.${fieldItemClass}${cssExcludeTabbedSelector}
+            > .${FIELD_ITEM_LABEL_CLASS}:not(.${FIELD_ITEM_LABEL_LOCATION_CLASS}top) > .${FIELD_ITEM_LABEL_CONTENT_CLASS}`;
+
+        const $labelTexts = $container.find(labelTextsSelector);
         const $labelTextsLength = $labelTexts.length;
         let labelWidth;
         let i;
         let maxWidth = 0;
 
         for(i = 0; i < $labelTextsLength; i++) {
-            labelWidth = getLabelWidthByText(
-                layoutManager._getRenderLabelOptions({
-                    text: this._getLabelText($labelTexts[i]),
-                    location: this._labelLocation(),
-                })
-            );
+            labelWidth = layoutManager._getLabelWidthByInnerHTML({
+                // _hiddenLabelText was introduced in https://hg/mobile/rev/27b4f57f10bb , "dxForm: add alignItemLabelsInAllGroups and fix type script"
+                // It's not clear why $labelTexts.offsetWidth doesn't meet the needs
+                innerHTML: this._getLabelInnerHTML($labelTexts[i]),
+                location: this._labelLocation(),
+            });
             if(labelWidth > maxWidth) {
                 maxWidth = labelWidth;
             }
@@ -696,9 +693,10 @@ const Form = Widget.inherit({
                     this._resetValues();
                 }
                 break;
+            case 'onFieldDataChanged':
+                break;
             case 'items':
             case 'colCount':
-            case 'onFieldDataChanged':
             case 'onEditorEnterKey':
             case 'labelLocation':
             case 'alignItemLabels':

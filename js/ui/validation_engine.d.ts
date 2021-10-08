@@ -1,15 +1,14 @@
 import {
-    dxValidationGroupResult
+    ValidationResult,
 } from './validation_group';
 
 /**
  * @docid
  * @section Core
  * @namespace DevExpress
- * @module ui/validation_engine
- * @export default
  * @public
  */
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class validationEngine {
     /**
      * @docid
@@ -67,21 +66,21 @@ export default class validationEngine {
      * @docid
      * @section Core
      * @publicName validateGroup()
-     * @return dxValidationGroupResult
      * @static
      * @public
+     * @return dxValidationGroupResult
      */
-    static validateGroup(): dxValidationGroupResult;
+    static validateGroup(): ValidationResult;
     /**
      * @docid
      * @section Core
      * @publicName validateGroup(group)
      * @param1 group:string|object
-     * @return dxValidationGroupResult
      * @static
      * @public
+     * @return dxValidationGroupResult
      */
-    static validateGroup(group: string | any): dxValidationGroupResult;
+    static validateGroup(group: string | any): ValidationResult;
     /**
      * @docid
      * @publicName validateModel(model)

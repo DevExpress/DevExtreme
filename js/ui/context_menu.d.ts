@@ -1,18 +1,17 @@
 import {
-    positionConfig
+    positionConfig,
 } from '../animation/position';
 
 import {
     UserDefinedElement,
-    DxElement
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -24,19 +23,19 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import dxMenuBase, {
-    dxMenuBaseOptions
+    dxMenuBaseOptions,
 } from './context_menu/ui.menu_base';
 
 import {
-    dxMenuBaseItem
+    dxMenuBaseItem,
 } from './menu';
 
 import {
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -69,7 +68,7 @@ export type OptionChangedEvent = EventInfo<dxContextMenu> & ChangedOptionInfo;
 /** @public */
 export type PositioningEvent = NativeEventInfo<dxContextMenu> & {
     readonly position: positionConfig;
-}
+};
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxContextMenu> & SelectionChangedInfo;
@@ -95,15 +94,17 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
     /**
      * @docid
+     * @type string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<Item> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
+     * @type Array<dxContextMenuItem>
      * @public
      */
-    items?: Array<dxContextMenuItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default null
@@ -180,12 +181,12 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid
@@ -212,8 +213,6 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
 /**
  * @docid
  * @inherits dxMenuBase
- * @module ui/context_menu
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -236,7 +235,6 @@ export default class dxContextMenu extends dxMenuBase {
     /**
      * @docid
      * @publicName toggle(showing)
-     * @param1 showing:boolean
      * @return Promise<void>
      * @public
      */
@@ -244,17 +242,22 @@ export default class dxContextMenu extends dxMenuBase {
 }
 
 /**
- * @docid
- * @inherits dxMenuBaseItem
+ * @public
+ * @namespace DevExpress.ui.dxContextMenu
+ */
+export type Item = dxContextMenuItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
- * @type object
  */
 export interface dxContextMenuItem extends dxMenuBaseItem {
     /**
      * @docid
      * @public
+     * @type Array<dxContextMenuItem>
      */
-    items?: Array<dxContextMenuItem>;
+    items?: Array<Item>;
 }
 
 /** @public */

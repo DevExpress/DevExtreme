@@ -1,18 +1,18 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -22,13 +22,13 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -78,28 +78,28 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     /**
      * @docid
      * @default "content"
-     * @type_function_param1 container:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
     contentTemplate?: template | ((container: DxElement) => string | UserDefinedElement);
     /**
      * @docid
+     * @type string | Array<string | dxSlideOutItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxSlideOutItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
+     * @type Array<string | dxSlideOutItem | any>
      * @fires dxSlideOutOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxSlideOutItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default "menuGroup"
      * @type_function_param1 groupData:object
-     * @type_function_param2 groupIndex:number
      * @type_function_param3 groupElement:object
      * @type_function_return string|Element|jQuery
      * @public
@@ -115,8 +115,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
      * @docid
      * @default "menuItem"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -172,8 +170,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/slide_out
- * @export default
  * @namespace DevExpress.ui
  * @deprecated dxDrawer
  * @public
@@ -205,9 +201,13 @@ export default class dxSlideOut extends CollectionWidget {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxSlideOut
+ */
+export type Item = dxSlideOutItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxSlideOutItem extends CollectionWidgetItem {

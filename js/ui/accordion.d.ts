@@ -1,18 +1,18 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -22,13 +22,13 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -61,7 +61,7 @@ export type OptionChangedEvent = EventInfo<dxAccordion> & ChangedOptionInfo;
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxAccordion> & SelectionChangedInfo;
 
-/** 
+/**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
@@ -69,7 +69,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     /**
      * @docid
      * @default 300
-     * @default 200 [for](Material)
+     * @default 200 &for(Material)
      * @public
      */
     animationDuration?: number;
@@ -81,10 +81,11 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     collapsible?: boolean;
     /**
      * @docid
+     * @type string | Array<string | dxAccordionItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxAccordionItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @default true
@@ -93,14 +94,13 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     deferRendering?: boolean;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default undefined
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -114,8 +114,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @docid
      * @default "item"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -124,18 +122,17 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @docid
      * @default "title"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
     itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
+     * @type Array<string | dxAccordionItem | any>
      * @fires dxAccordionOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxAccordionItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default false
@@ -173,8 +170,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/accordion
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -206,10 +201,14 @@ export default class dxAccordion extends CollectionWidget {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
+ * @public
+ * @namespace DevExpress.ui.dxAccordion
+ */
+export type Item = dxAccordionItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
- * @type object
  */
 export interface dxAccordionItem extends CollectionWidgetItem {
     /**

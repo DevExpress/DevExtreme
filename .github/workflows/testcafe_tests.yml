@@ -42,6 +42,7 @@ jobs:
         all_args="--concurrency 2 --browsers=chrome:headless ${ARGS}"
         echo "$all_args"
         npm run test-testcafe -- $all_args
+
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v2

@@ -2,6 +2,7 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { PdfGrid } from './pdf_grid';
 import { createRowInfo, createPdfCell } from './export_data_grid_row_info';
+import { calculateRowHeight } from './pdf_utils';
 
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
@@ -21,6 +22,7 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
+            const wordWrapEnabled = !!dataGrid.option('wordWrapEnabled');
             const pdfGrid = new PdfGrid(options.splitToTablesByColumns, options.columnWidths);
 
             pdfGrid.startNewTable(options.drawTableBorder, options.topLeft);
@@ -37,8 +39,9 @@ function exportDataGrid(doc, dataGrid, options) {
                 const currentRowPdfCells = [];
                 currentRowInfo.cellsInfo.forEach(cellInfo => {
                     const pdfCell = createPdfCell(cellInfo);
-                    if(options.onCellExporting) {
-                        options.onCellExporting({ gridCell: { value: cellInfo.value }, pdfCell });
+                    pdfCell.wordWrapEnabled = wordWrapEnabled;
+                    if(options.customizeCell) {
+                        options.customizeCell({ gridCell: cellInfo.gridCell, pdfCell });
                     }
                     currentRowPdfCells.push(pdfCell);
                 });
@@ -55,7 +58,9 @@ function exportDataGrid(doc, dataGrid, options) {
                     pdfGrid.startNewTable(options.drawTableBorder, tableTopLeft, null, null, firstColumnWidth);
                 }
 
-                let rowHeight = currentRowInfo.rowHeight; // TODO: Default Value
+                let rowHeight = isDefined(currentRowInfo.rowHeight)
+                    ? currentRowInfo.rowHeight
+                    : calculateRowHeight(doc, currentRowPdfCells, options.columnWidths);
                 if(options.onRowExporting) {
                     const args = { drawNewTableFromThisRow: {}, rowCells: currentRowPdfCells };
                     options.onRowExporting(args);

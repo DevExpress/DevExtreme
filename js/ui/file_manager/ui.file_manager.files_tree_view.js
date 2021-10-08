@@ -117,6 +117,7 @@ class FileManagerFilesTreeView extends Widget {
 
     _onFilesTreeViewItemContextMenu({ itemElement, event }) {
         event.preventDefault();
+        event.stopPropagation();
         const itemData = $(itemElement).data('item');
         this._contextMenu.showAt([ itemData ], itemElement, event, { itemData, itemElement });
     }
@@ -153,14 +154,14 @@ class FileManagerFilesTreeView extends Widget {
         if(!hasWindow()) {
             return;
         }
-        this._scrollTopPosition = this._filesTreeView._scrollableContainer.scrollTop();
+        this._scrollTopPosition = this._filesTreeView.getScrollable().scrollTop();
     }
 
     _restoreScrollTopPosition() {
         if(!hasWindow() || !isNumeric(this._scrollTopPosition)) {
             return;
         }
-        setTimeout(() => this._filesTreeView._scrollableContainer.scrollTo(this._scrollTopPosition));
+        setTimeout(() => this._filesTreeView.getScrollable().scrollTo(this._scrollTopPosition));
     }
 
     _updateFocusedElement() {

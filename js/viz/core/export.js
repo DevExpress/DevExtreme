@@ -1,6 +1,7 @@
 import { extend } from '../../core/utils/extend';
 import { getWindow } from '../../core/utils/window';
 import { patchFontOptions } from './utils';
+import { HIDDEN_FOR_EXPORT } from '../../core/utils/svg';
 import { export as _export, image as imageExporter, svg as svgExporter, pdf as pdfExporter } from '../../exporter';
 import messageLocalization from '../../localization/message';
 import { isDefined } from '../../core/utils/type';
@@ -332,7 +333,7 @@ export let ExportMenu = function(params) {
     this._shadow.attr({ opacity: 0.8 });
     this._group = renderer.g().attr({
         'class': EXPORT_CSS_CLASS,
-        'hidden-for-export': true
+        [HIDDEN_FOR_EXPORT]: true
     }).linkOn(renderer.root, { name: 'export-menu', after: 'peripheral' });
     this._buttonGroup = renderer.g().attr({ 'class': EXPORT_CSS_CLASS + '-button' }).append(this._group);
     this._listGroup = renderer.g().attr({ 'class': EXPORT_CSS_CLASS + '-list' }).append(this._group);
@@ -582,13 +583,17 @@ function getExportOptions(widget, exportOptions, fileName, format) {
     if(format || exportOptions.format) {
         format = validateFormat(format || exportOptions.format, widget._incidentOccurred);
     }
+    const { width, height } = widget.getSize();
+    const pixelRatio = getWindow().devicePixelRatio || 1;
+
     return {
         format: format || DEFAULT_EXPORT_FORMAT,
         fileName: fileName || exportOptions.fileName || 'file',
         proxyUrl: exportOptions.proxyUrl,
         backgroundColor: exportOptions.backgroundColor,
-        width: widget._canvas.width,
-        height: widget._canvas.height,
+        width: width * pixelRatio,
+        height: height * pixelRatio,
+        pixelRatio,
         margin: exportOptions.margin,
         svgToCanvas: exportOptions.svgToCanvas,
         forceProxy: exportOptions.forceProxy,

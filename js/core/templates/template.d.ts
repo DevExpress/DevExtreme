@@ -1,5 +1,5 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../element';
 
 export interface dxTemplateOptions {
@@ -16,6 +16,7 @@ export interface dxTemplateOptions {
  * @public
  */
 export type dxTemplate = Template;
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class Template {
     constructor(options?: dxTemplateOptions)
 }

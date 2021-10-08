@@ -1,9 +1,9 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -13,7 +13,7 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
@@ -70,10 +70,11 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     baseItemWidth?: number;
     /**
      * @docid
+     * @type string | Array<string | dxTileViewItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxTileViewItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type Enums.Orientation
@@ -83,14 +84,13 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     direction?: 'horizontal' | 'vertical';
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
      * @docid
      * @default 500
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -108,10 +108,11 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     itemMargin?: number;
     /**
      * @docid
+     * @type Array<string | dxTileViewItem | any>
      * @fires dxTileViewOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxTileViewItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default false
@@ -122,8 +123,6 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/tile_view
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -139,9 +138,13 @@ export default class dxTileView extends CollectionWidget {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxTileView
+ */
+export type Item = dxTileViewItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxTileViewItem extends CollectionWidgetItem {

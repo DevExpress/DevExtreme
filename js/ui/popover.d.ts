@@ -1,18 +1,17 @@
 import {
-    animationConfig
+    animationConfig,
 } from '../animation/fx';
 
 import {
-    positionConfig
+    positionConfig,
 } from '../animation/position';
 
 import {
     UserDefinedElement,
-    DxElement
 } from '../core/element';
 
 import {
-    DxPromise
+    DxPromise,
 } from '../core/utils/deferred';
 
 import {
@@ -20,13 +19,13 @@ import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxPopup, {
     dxPopupAnimation,
     dxPopupOptions,
-    TitleRenderedInfo
+    TitleRenderedInfo,
 } from './popup';
 
 /** @public */
@@ -79,7 +78,6 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**
      * @docid
      * @default "auto"
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -93,12 +91,12 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid
@@ -123,12 +121,12 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
        * @docid
        * @default undefined
        */
-      delay?: number,
+      delay?: number;
       /**
        * @docid
        * @default undefined
        */
-      name?: string
+      name?: string;
     } | string;
     /**
      * @docid
@@ -145,7 +143,6 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**
      * @docid
      * @default "auto"
-     * @type_function_return number|string
      * @public
      */
     width?: number | string | (() => number | string);
@@ -169,8 +166,6 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
  * @docid
  * @inherits dxPopup
  * @hasTranscludedContent
- * @module ui/popover
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

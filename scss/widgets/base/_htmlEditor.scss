@@ -261,6 +261,11 @@ $transparent-border: 1px solid transparent;
     font-family: monospace;
   }
 
+  code,
+  .ql-code-block-container {
+    background-color: rgba(191, 191, 191, 0.15);
+  }
+
   .ql-video {
     display: block;
     max-width: 100%;
@@ -306,11 +311,6 @@ $transparent-border: 1px solid transparent;
   }
 
   // stylelint-enable selector-class-pattern
-
-  pre {
-    white-space: pre-wrap;
-    background-color: rgba(191, 191, 191, 0.15);
-  }
 
   blockquote {
     padding-left: 12px;

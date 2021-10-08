@@ -672,7 +672,7 @@ QUnit.module('Keyboard keys', {
         this.focusFirstCell();
 
         const isPreventDefaultCalled = this.triggerKeyDown('pageDown').preventDefault;
-        $(this.rowsView.getScrollable()._container()).trigger('scroll');
+        $(this.rowsView.getScrollable().container()).trigger('scroll');
         this.clock.tick();
 
         // assert
@@ -3887,7 +3887,7 @@ QUnit.module('Keyboard keys', {
         this.rowsView.height(70);
         this.rowsView.resize();
         const scrollable = this.rowsView.getScrollable();
-        const $scrollContainer = $(scrollable._container());
+        const $scrollContainer = $(scrollable.container());
 
         this.focusFirstCell();
 
@@ -3983,7 +3983,7 @@ QUnit.module('Keyboard keys', {
 
         // act
         this.triggerKeyDown('upArrow');
-        $(that.rowsView.getScrollable()._container()).trigger('scroll');
+        $(that.rowsView.getScrollable().container()).trigger('scroll');
         that.clock.tick();
 
         // act
@@ -4014,7 +4014,7 @@ QUnit.module('Keyboard keys', {
         this.rowsView.height(70);
         this.rowsView.resize();
         const scrollable = this.rowsView.getScrollable();
-        const $scrollContainer = $(scrollable._container());
+        const $scrollContainer = $(scrollable.container());
 
         this.focusFirstCell();
         this.clock.tick();

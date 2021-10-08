@@ -1,9 +1,9 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import Editor, {
-    EditorOptions
+    EditorOptions,
 } from './editor/editor';
 
 /** @namespace DevExpress.ui */
@@ -20,8 +20,6 @@ export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEdi
  * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/recurrence_editor
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

@@ -222,7 +222,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             // act
             const scrollable = dataGrid.getScrollable();
             scrollable.scrollTo({ x: 900 });
-            $(scrollable._container()).trigger('scroll');
+            $(scrollable.container()).trigger('scroll');
             this.clock.tick();
 
             // assert
@@ -373,6 +373,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             { team: 'public', name: 'Zeb', age: 18 }
         ];
         const dataGrid = $('#dataGrid').dxDataGrid({
+            showRowLines: false,
             height: 80,
             dataSource: data,
             keyExpr: 'name',
@@ -572,7 +573,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         }
 
         const dataGrid = $('#dataGrid').dxDataGrid({
-            height: 400,
+            height: 150,
             dataSource: array,
             keyExpr: 'id',
             onRowPrepared: function(e) {
@@ -2152,7 +2153,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const isNativeScrolling = devices.real().deviceType !== 'desktop' || devices.real().mac;
 
         scrollable.scrollTo({ y: 1440 });
-        isNativeScrolling && $(scrollable._container()).trigger('scroll');
+        isNativeScrolling && $(scrollable.container()).trigger('scroll');
 
         // assert
         const rowHeight = rowsView._rowHeight;
@@ -2179,7 +2180,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 data: resizeController
             }
         });
-        isNativeScrolling && $(scrollable._container()).trigger('scroll');
+        isNativeScrolling && $(scrollable.container()).trigger('scroll');
 
         // assert
         assert.strictEqual(instance.pageIndex(), 20, 'current page index is changed'); // T881314
@@ -3063,7 +3064,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         this.clock.tick(1000);
-        $(dataGrid.getScrollable()._container()).trigger('scroll');
+        $(dataGrid.getScrollable().container()).trigger('scroll');
 
         assert.equal(dataGrid.getTopVisibleRowData().id, 6, 'data is scrolled');
 
@@ -3071,7 +3072,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         dataGrid.columnOption(0, 'filterValue', '1');
         dataGrid.columnOption(1, 'filterValue', '1');
         this.clock.tick(2000);
-        $(dataGrid.getScrollable()._container()).trigger('scroll');
+        $(dataGrid.getScrollable().container()).trigger('scroll');
 
         // assert
         assert.equal(dataGrid.getTopVisibleRowData().id, 1, 'scroll is reseted');
@@ -3618,7 +3619,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         scrollable.scrollTo({ left: 500 });
-        $(scrollable._container()).trigger('scroll');
+        $(scrollable.container()).trigger('scroll');
 
         this.clock.tick();
 
@@ -3628,7 +3629,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         scrollable.scrollTo({ top: 1000 });
-        $(scrollable._container()).trigger('scroll');
+        $(scrollable.container()).trigger('scroll');
         this.clock.tick();
 
         // assert
@@ -3884,6 +3885,48 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 20, 'visible rows');
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 6, 'top visible row');
+        assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'not bottom loading');
+    });
+
+    QUnit.test('Infinite scrolling should works correctly if row heights are different (T1013838)', function(assert) {
+        // arrange, act
+        const data = [];
+
+        for(let i = 0; i < 5; i++) {
+            data.push({ id: i + 1 });
+        }
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 200,
+            dataSource: data,
+            keyExpr: 'id',
+            loadingTimeout: null,
+            scrolling: {
+                updateTimeout: 0,
+                useNative: false,
+                mode: 'infinite',
+                rowRenderingMode: 'virtual'
+            },
+            paging: {
+                pageSize: 2
+            },
+            onRowPrepared: function(e) {
+                if(e.rowType === 'data' && e.key <= 2) {
+                    $(e.rowElement).css('height', 100);
+                }
+            }
+        }).dxDataGrid('instance');
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 2, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'top visible row');
+        assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 1, 'bottom loading exists');
+
+        // act
+        dataGrid.getScrollable().scrollTo(10000);
+
+        // assert
+        assert.equal(dataGrid.getVisibleRows().length, 5, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'not bottom loading');
     });
 

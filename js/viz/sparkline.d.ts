@@ -1,15 +1,15 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -17,11 +17,11 @@ import Store from '../data/abstract_store';
 import {
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import BaseSparkline, {
-    BaseSparklineOptions
+    BaseSparklineOptions,
 } from './sparklines/base_sparkline';
 
 /** @public */
@@ -79,7 +79,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     barPositiveColor?: string;
     /**
      * @docid
-     * @extends CommonVizDataSource
+     * @notUsedInTheme
      * @public
      */
     dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
@@ -197,8 +197,6 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
 /**
  * @docid
  * @inherits BaseSparkline, DataHelperMixin
- * @module viz/sparkline
- * @export default
  * @namespace DevExpress.viz
  * @public
  */

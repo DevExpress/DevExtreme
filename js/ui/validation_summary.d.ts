@@ -1,5 +1,5 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
@@ -7,11 +7,11 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -44,8 +44,6 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/validation_summary
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

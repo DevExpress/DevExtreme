@@ -415,8 +415,8 @@ export const Scroller = Class.inherit({
     },
 
     _updateBounds: function() {
-        this._maxOffset = Math.round(this._getMaxOffset());
-        this._minOffset = Math.round(this._getMinOffset());
+        this._maxOffset = this._getMaxOffset();
+        this._minOffset = this._getMinOffset();
     },
 
     _getMaxOffset: function() {
@@ -511,11 +511,11 @@ export const Scroller = Class.inherit({
     },
 
     _reachedMin: function() {
-        return this._location <= this._minOffset;
+        return Math.round(this._location - this._minOffset) <= 0;
     },
 
     _reachedMax: function() {
-        return this._location >= this._maxOffset;
+        return Math.round(this._location - this._maxOffset) >= 0;
     },
 
     _cursorEnterHandler: function() {
@@ -545,9 +545,9 @@ export const SimulatedStrategy = Class.inherit({
     _init: function(scrollable) {
         this._component = scrollable;
         this._$element = scrollable.$element();
-        this._$container = scrollable._$container;
+        this._$container = $(scrollable.container());
         this._$wrapper = scrollable._$wrapper;
-        this._$content = scrollable._$content;
+        this._$content = scrollable.$content();
         this.option = scrollable.option.bind(scrollable);
         this._createActionByOption = scrollable._createActionByOption.bind(scrollable);
         this._isLocked = scrollable._isLocked.bind(scrollable);

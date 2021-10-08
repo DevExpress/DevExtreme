@@ -406,3 +406,9 @@ const ActionSheet = CollectionWidget.inherit({
 registerComponent('dxActionSheet', ActionSheet);
 
 export default ActionSheet;
+
+/**
+ * @name dxActionSheetItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

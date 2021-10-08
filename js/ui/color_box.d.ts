@@ -1,26 +1,26 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import dxDropDownEditor, {
     dxDropDownEditorOptions,
-    DropDownButtonTemplateDataModel
+    DropDownButtonTemplateDataModel,
 } from './drop_down_editor/ui.drop_down_editor';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 /** @public */
@@ -110,8 +110,6 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**
      * @docid
      * @default null
-     * @type_function_param1 value:string
-     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -132,8 +130,6 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
  * @docid
  * @isEditor
  * @inherits dxDropDownEditor
- * @module ui/color_box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

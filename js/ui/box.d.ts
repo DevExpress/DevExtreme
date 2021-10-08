@@ -1,9 +1,9 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -13,12 +13,12 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
-    CollectionWidgetOptions
+    CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -66,10 +66,11 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     crossAlign?: 'center' | 'end' | 'start' | 'stretch';
     /**
      * @docid
+     * @type string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
      * @type Enums.BoxDirection
@@ -79,16 +80,15 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     direction?: 'col' | 'row';
     /**
      * @docid
+     * @type Array<string | dxBoxItem | any>
      * @fires dxBoxOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxBoxItem | any>;
+    items?: Array<string | Item | any>;
 }
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/box
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -97,10 +97,14 @@ export default class dxBox extends CollectionWidget {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
+ * @public
+ * @namespace DevExpress.ui.dxBox
+ */
+export type Item = dxBoxItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
- * @type object
  */
 export interface dxBoxItem extends CollectionWidgetItem {
     /**

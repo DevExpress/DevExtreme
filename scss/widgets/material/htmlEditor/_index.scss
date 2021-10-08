@@ -179,7 +179,8 @@
     color: $texteditor-placeholder-color;
   }
 
-  pre {
+  code,
+  .ql-code-block-container { // stylelint-disable-line selector-class-pattern
     color: color.change($base-text-color, $alpha: 0.8);
   }
 

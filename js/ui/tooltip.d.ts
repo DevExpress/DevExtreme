@@ -1,16 +1,16 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     Cancelable,
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import dxPopover, {
-    dxPopoverOptions
+    dxPopoverOptions,
 } from './popover';
 
 /** @public */
@@ -47,8 +47,6 @@ export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
  * @docid
  * @inherits dxPopover
  * @hasTranscludedContent
- * @module ui/tooltip
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

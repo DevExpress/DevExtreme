@@ -1,9 +1,9 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import DataSource, {
-    DataSourceOptions
+    DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -13,13 +13,13 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import CollectionWidget, {
     CollectionWidgetItem,
     CollectionWidgetOptions,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 /** @public */
@@ -56,13 +56,14 @@ export type SelectionChangedEvent = EventInfo<dxTabs> & SelectionChangedInfo;
 export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     /**
      * @docid
+     * @type string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
     /**
      * @docid
-     * @default true [for](desktop)
+     * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
@@ -74,10 +75,11 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     hoverStateEnabled?: boolean;
     /**
      * @docid
+     * @type Array<string | dxTabsItem | any>
      * @fires dxTabsOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | dxTabsItem | any>;
+    items?: Array<string | Item | any>;
     /**
      * @docid
      * @default false
@@ -87,7 +89,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     /**
      * @docid
      * @default true
-     * @default false [for](desktop)
+     * @default false &for(desktop)
      * @public
      */
     scrollByContent?: boolean;
@@ -112,7 +114,7 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     /**
      * @docid
      * @default true
-     * @default false [for](mobile_devices)
+     * @default false &for(mobile_devices)
      * @public
      */
     showNavButtons?: boolean;
@@ -120,8 +122,6 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/tabs
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -130,9 +130,13 @@ export default class dxTabs extends CollectionWidget {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
+ * @public
+ * @namespace DevExpress.ui.dxTabs
+ */
+export type Item = dxTabsItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
 export interface dxTabsItem extends CollectionWidgetItem {

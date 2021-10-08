@@ -1,14 +1,14 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../../core/element';
 
 import {
-    template
+    template,
 } from '../../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions
+    Options as DataSourceOptions,
 } from '../../data/data_source';
 
 import Store from '../../data/abstract_store';
@@ -16,11 +16,11 @@ import Store from '../../data/abstract_store';
 import {
     EventInfo,
     NativeEventInfo,
-    ItemInfo
+    ItemInfo,
 } from '../../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from '../widget/ui.widget';
 
 export interface SelectionChangedInfo<T = any> {
@@ -46,8 +46,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @docid
      * @default "item"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -173,8 +171,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
 /**
  * @docid
  * @inherits Widget, DataHelperMixin
- * @module ui/collection/ui.collection_widget.base
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */
@@ -182,7 +178,6 @@ export default class CollectionWidget extends Widget {
     constructor(element: UserDefinedElement, options?: CollectionWidgetOptions)
     getDataSource(): DataSource;
 }
-
 
 /**
  * @docid

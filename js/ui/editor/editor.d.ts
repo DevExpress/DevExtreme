@@ -1,13 +1,13 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../../core/element';
 
 import {
-    NativeEventInfo
+    NativeEventInfo,
 } from '../../events/index';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from '../widget/ui.widget';
 
 export interface ValueChangedInfo {
@@ -88,8 +88,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/editor/editor
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */

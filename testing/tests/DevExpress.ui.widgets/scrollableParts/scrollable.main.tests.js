@@ -47,7 +47,7 @@ const moduleConfig = {
 };
 
 const getScrollOffset = function($scrollable) {
-    const $content = $scrollable.find('.' + SCROLLABLE_CONTENT_CLASS);
+    const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
     const $container = $scrollable.find('.' + SCROLLABLE_CONTAINER_CLASS);
     const location = getTranslateValues($content.get(0));
 
@@ -69,6 +69,7 @@ QUnit.test('scrollable render', function(assert) {
     assert.ok($wrapper.hasClass(SCROLLABLE_WRAPPER_CLASS), 'dx-scrollable-wrapper class attached');
     assert.ok($container.hasClass(SCROLLABLE_CONTAINER_CLASS), 'dx-scrollable-container class attached');
     assert.ok($content.hasClass(SCROLLABLE_CONTENT_CLASS), 'dx-scrollable-content class attached');
+
     assert.equal($content.children().length, 2, 'content was moved');
     assert.ok($content.children().eq(0).hasClass('content1'));
     assert.ok($content.children().eq(1).hasClass('content2'));
@@ -491,18 +492,18 @@ QUnit.test('B250273 - dxList: showScrollbar option does not work on device.', fu
 
     $scrollable.dxScrollable({
         useNative: true,
-        showScrollbar: false,
+        showScrollbar: 'never',
         useSimulatedScrollbar: true
     });
 
     assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), true, 'scrollable has class scrollbars_disabled');
     assert.equal($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS).length, 0);
 
-    $scrollable.dxScrollable('option', 'showScrollbar', true);
+    $scrollable.dxScrollable('option', 'showScrollbar', 'onScroll');
     assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), false, 'scrollable has not class scrollbars_disabled');
     assert.equal($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS).length, 1);
 
-    $scrollable.dxScrollable('option', 'showScrollbar', false);
+    $scrollable.dxScrollable('option', 'showScrollbar', 'never');
     assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), true, 'scrollable has class scrollbars_disabled');
     assert.equal($scrollable.find('.' + SCROLLABLE_SCROLLBAR_CLASS).length, 0);
 });
@@ -534,15 +535,13 @@ QUnit.module('scrollers interaction', moduleConfig);
 QUnit.test('scrolling component with content size equal to container size nested in another component causes outer component scrolling', function(assert) {
     assert.expect(1);
 
-    const complete = $.Deferred();
+    const onScrollHandler = sinon.spy();
 
     $('#scrollable').dxScrollable({
         useNative: false,
         bounceEnabled: true,
         inertiaEnabled: false,
-        onScroll: function() {
-            complete.resolve();
-        }
+        onScroll: onScrollHandler
     });
 
     const $scrollableNested = $('.content1').dxScrollable({
@@ -552,36 +551,31 @@ QUnit.test('scrolling component with content size equal to container size nested
 
     pointerMock($scrollableNested).start()
         .down()
-        .move(0, -10);
+        .wheel(0, -1);
 
-    complete.done(function() {
-        assert.ok(true, 'scroll action fired for external dxScrollable');
-    });
+    assert.equal(onScrollHandler.callCount, 1, 'scroll action fired for external dxScrollable');
 });
 
 QUnit.test('disabled scrollable nested in another scrollable causes outer component scrolling (B238642)', function(assert) {
     assert.expect(1);
 
-    const complete = $.Deferred();
+    const onScrollHandler = sinon.spy();
 
     $('#scrollable').dxScrollable({
         useNative: false,
         bounceEnabled: true,
         inertiaEnabled: false,
-        onScroll: function() {
-            complete.resolve();
-        }
+        scrollByContent: true,
+        onScroll: onScrollHandler
     });
 
     const $scrollableNested = $('.content1').dxScrollable({ disabled: true });
 
     pointerMock($scrollableNested).start()
         .down()
-        .move(0, -10);
+        .wheel(0, -1);
 
-    complete.done(function() {
-        assert.ok(true, 'scroll action fired for external dxScrollable');
-    });
+    assert.equal(onScrollHandler.callCount, 1, 'scroll action fired for external dxScrollable');
 });
 
 QUnit.module('default value nativeScrollable', {

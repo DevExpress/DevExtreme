@@ -208,7 +208,7 @@ if(ko) {
                 createComponent();
 
                 return {
-                    controlsDescendantBindings: componentClass.subclassOf(Widget) || componentClass.subclassOf(Draggable)
+                    controlsDescendantBindings: componentClass.subclassOf(Widget) || component instanceof Draggable
                 };
             }
         };

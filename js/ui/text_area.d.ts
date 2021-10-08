@@ -1,20 +1,20 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     NativeEventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
-    ValueChangedInfo
+    ValueChangedInfo,
 } from './editor/editor';
 
 import dxTextBox, {
-    dxTextBoxOptions
+    dxTextBoxOptions,
 } from './text_box';
 
 /** @public */
@@ -99,8 +99,6 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
  * @docid
  * @isEditor
  * @inherits dxTextBox
- * @module ui/text_area
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

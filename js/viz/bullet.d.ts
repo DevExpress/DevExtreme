@@ -1,21 +1,21 @@
 import {
-    UserDefinedElement
+    UserDefinedElement,
 } from '../core/element';
 
 import {
     EventInfo,
     InitializedEventInfo,
-    ChangedOptionInfo
+    ChangedOptionInfo,
 } from '../events/index';
 
 import {
     FileSavingEventInfo,
     ExportInfo,
-    IncidentInfo
+    IncidentInfo,
 } from './core/base_widget';
 
 import BaseSparkline, {
-    BaseSparklineOptions
+    BaseSparklineOptions,
 } from './sparklines/base_sparkline';
 
 /** @public */
@@ -115,8 +115,6 @@ export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
 /**
  * @docid
  * @inherits BaseSparkline
- * @module viz/bullet
- * @export default
  * @namespace DevExpress.viz
  * @public
  */

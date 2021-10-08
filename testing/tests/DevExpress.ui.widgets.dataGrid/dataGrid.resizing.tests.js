@@ -499,7 +499,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.equal(Math.round($dataGrid.find('.dx-datagrid').height()), 400, 'height is equal max-height');
-        assert.ok(dataGrid.getScrollable().$content().height() > dataGrid.getScrollable()._container().height(), 'scroll is exists');
+        assert.ok(dataGrid.getScrollable().$content().height() > $(dataGrid.getScrollable().container()).height(), 'scroll is exists');
 
         // act
         dataGrid.searchByText('test');
@@ -521,7 +521,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         const scrollable = dataGrid.getScrollable();
         assert.ok(scrollable, 'scrollable is created');
-        assert.ok(scrollable.$content().height() > scrollable._container().height(), 'scroll is exists');
+        assert.ok(scrollable.$content().height() > $(scrollable.container()).height(), 'scroll is exists');
     });
 
     // T820186

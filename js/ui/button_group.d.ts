@@ -1,10 +1,10 @@
 import {
     UserDefinedElement,
-    DxElement
+    DxElement,
 } from '../core/element';
 
 import {
-    template
+    template,
 } from '../core/templates/template';
 
 import {
@@ -12,16 +12,16 @@ import {
     NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
-    ItemInfo
+    ItemInfo,
 } from '../events/index';
 
 import {
     CollectionWidgetItem,
-    SelectionChangedInfo
+    SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
 import Widget, {
-    WidgetOptions
+    WidgetOptions,
 } from './widget/ui.widget';
 
 /** @public */
@@ -51,7 +51,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @docid
      * @default "content"
      * @type_function_param1 buttonData:object
-     * @type_function_param2 buttonContent:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -70,9 +69,10 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     hoverStateEnabled?: boolean;
     /**
      * @docid
+     * @type Array<dxButtonGroupItem>
      * @public
      */
-    items?: Array<dxButtonGroupItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default 'text'
@@ -126,7 +126,7 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
      * @default 'single'
      * @public
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: 'multiple' | 'single' | 'none';
     /**
      * @docid
      * @type Enums.ButtonStylingMode
@@ -138,8 +138,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/button_group
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -148,10 +146,14 @@ export default class dxButtonGroup extends Widget {
 }
 
 /**
- * @docid
- * @inherits CollectionWidgetItem
+ * @public
+ * @namespace DevExpress.ui.dxButtonGroup
+ */
+export type Item = dxButtonGroupItem;
+
+/**
+ * @deprecated Use Item instead
  * @namespace DevExpress.ui
- * @type object
  */
 export interface dxButtonGroupItem extends CollectionWidgetItem {
     /**
@@ -171,6 +173,12 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
      * @public
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+
+    /**
+     * @docid
+     * @public
+     */
+    elementAttr?: { [key: string]: any };
 }
 
 /** @public */

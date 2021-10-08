@@ -45,7 +45,7 @@ import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/grou
 import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
 import VirtualSelectionState from './virtual_selection_state';
 
-import { cache } from './cache';
+import { Cache } from './cache';
 import { isDateInRange } from './utils/base';
 
 const abstract = WidgetObserver.abstract;
@@ -159,7 +159,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._viewDataProvider;
     }
 
-    get cache() { return cache; }
+    get cache() {
+        if(!this._cache) {
+            this._cache = new Cache();
+        }
+
+        return this._cache;
+    }
     get virtualSelectionState() {
         if(!this._virtualSelectionState) {
             this._virtualSelectionState = new VirtualSelectionState(this.viewDataProvider);
@@ -1019,7 +1025,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _headerScrollableConfig() {
         const config = {
             useKeyboard: false,
-            showScrollbar: false,
+            showScrollbar: 'never',
             direction: 'horizontal',
             useNative: false,
             updateManually: true,
@@ -1041,7 +1047,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         this._sidebarScrollable = this._createComponent($timePanelScrollable, Scrollable, {
             useKeyboard: false,
-            showScrollbar: false,
+            showScrollbar: 'never',
             direction: 'vertical',
             useNative: false,
             updateManually: true,
@@ -1115,6 +1121,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._attachHeaderTableClasses();
 
         this._updateGroupTableHeight();
+
+        this._updateScrollable();
     }
 
     getWorkSpaceMinWidth() {
@@ -1127,6 +1135,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this.headerPanelOffsetRecalculate();
+
+        this._updateScrollable();
 
         this.cache.clear();
         this._cleanAllowedPositions();
@@ -2401,7 +2411,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getScrollableContainer() {
-        return this._dateTableScrollable._container();
+        return $(this._dateTableScrollable.container());
     }
 
     getHeaderPanelHeight() {
@@ -2527,8 +2537,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             if(this._needCreateCrossScrolling()) {
                 return getBoundingRect(this._$dateTable.get(0)).width;
             }
+            const totalWidth = getBoundingRect(this.$element().get(0)).width;
+            const timePanelWidth = this.getTimePanelWidth();
+            const groupTableWidth = this.getGroupTableWidth();
 
-            return getBoundingRect(this.$element().get(0)).width - this.getTimePanelWidth();
+            return totalWidth - timePanelWidth - groupTableWidth;
         });
     }
 
@@ -3700,7 +3713,10 @@ const createDragBehaviorConfig = (
             getElementsFromPoint(newX, newY) :
             getElementsFromPoint(newX + appointmentWidth / 2, newY);
 
-        const droppableCell = elements.filter(el => el.className.indexOf(DATE_TABLE_CELL_CLASS) > -1 || el.className.indexOf(ALL_DAY_TABLE_CELL_CLASS) > -1)[0];
+        const droppableCell = elements.filter(el => {
+            const classList = el.classList;
+            return classList.contains(DATE_TABLE_CELL_CLASS) || classList.contains(ALL_DAY_TABLE_CELL_CLASS);
+        })[0];
 
         if(droppableCell) {
             const oldDroppableCell = getDroppableCell();

@@ -663,3 +663,9 @@ const ResponsiveBox = CollectionWidget.inherit({
 registerComponent('dxResponsiveBox', ResponsiveBox);
 
 export default ResponsiveBox;
+
+/**
+ * @name dxResponsiveBoxItem
+ * @inherits CollectionWidgetItem
+ * @type object
+ */

@@ -30,6 +30,7 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
+    // $('body').append(markup);
 });
 
 import $ from 'jquery';
@@ -37,7 +38,6 @@ import devices from 'core/devices';
 import fx from 'animation/fx';
 import pointerEvents from 'events/pointer';
 import themes from 'ui/themes';
-import browser from 'core/utils/browser';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import SelectBox from 'ui/select_box';
@@ -49,6 +49,7 @@ import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import 'ui/drop_down_box';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { generateItems } from '../../helpers/dataGridMocks.js';
 
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
@@ -280,11 +281,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         clock.tick();
 
         // assert
-        if(browser.mozilla) {
-            assert.ok(scrollable.scrollTop() <= 1, 'in mozilla first row is overlayed by parent container');
-        } else {
-            assert.ok(scrollable.scrollTop() <= 0.5, 'first row is not overlayed by parent container');
-        }
+        assert.ok(scrollable.scrollTop() <= 1, 'first row is not overlayed by parent container');
 
         clock.restore();
     });
@@ -314,11 +311,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         clock.tick();
 
         // assert
-        if(browser.mozilla) {
-            assert.ok(scrollable.scrollTop() <= 1, 'in mozilla first row is overlayed by parent container');
-        } else {
-            assert.ok(scrollable.scrollTop() <= 0.5, 'first row is not overlayed by parent container');
-        }
+        assert.ok(scrollable.scrollTop() <= 1, 'first row is not overlayed by parent container');
 
         clock.restore();
     });
@@ -793,7 +786,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         // assert
         const rows = dataGrid.getRowElement(0);
 
-        assert.equal(Math.floor($(rows[0]).find('td').eq(0).width()), Math.floor($(rows[1]).find('td').eq(0).width()), 'widths are equal');
+        assert.roughEqual(Math.floor($(rows[0]).find('td').eq(0).width()), Math.floor($(rows[1]).find('td').eq(0).width()), 1.01, 'widths are equal');
         assert.notOk($('.dx-command-edit').eq(1).hasClass('dx-hidden-cell'), 'cell does not have class dx-hidden-cell');
     });
 
@@ -1194,6 +1187,59 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing call count');
     });
 
+    QUnit.test('Edit form should be updated if change editing.form option inside setCellValue (T1026215)', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            keyExpr: 'id',
+            dataSource: [{ id: 1, field1: 1, field2: 2 }],
+            columns: [
+                { dataField: 'field1', setCellValue: function(data, value) {
+                    data.field1 = value;
+                    dataGrid.option('editing.form.items[1].visible', false);
+                } },
+                { dataField: 'field2' },
+            ],
+            editing: {
+                mode: 'form',
+                form: {
+                    items: [
+                        { dataField: 'field1' },
+                        { dataField: 'field2' },
+                    ]
+                }
+            }
+        });
+
+        dataGrid.editRow(0);
+        dataGrid.cellValue(0, 0, 2);
+
+        assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editing is not canceled');
+        assert.equal(dataGrid.$element().find('.dx-texteditor').length, 1, 'one editor is visible, second is hidden');
+    });
+
+    QUnit.test('Edit form should be updated if change editing.form option (T1026215)', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            keyExpr: 'id',
+            dataSource: [{ id: 1, field1: 1, field2: 2 }],
+            editing: {
+                mode: 'form',
+                form: {
+                    items: [
+                        { dataField: 'field1' },
+                        { dataField: 'field2' },
+                    ]
+                }
+            }
+        });
+
+        dataGrid.editRow(0);
+        dataGrid.option('editing.form.items[1].visible', false);
+
+        assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editing is not canceled');
+        assert.equal(dataGrid.$element().find('.dx-texteditor').length, 1, 'one editor is visible, second is hidden');
+    });
+
     // T558301
     QUnit.testInActiveWindow('Height virtual table should be updated to show validation message when there is a single row and virtual scrolling is enabled', function(assert) {
         // arrange
@@ -1459,6 +1505,33 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     assert.strictEqual(dataGrid.cellValue(1, i), `${i}`, `cell ${i} has modified value`);
                 }
             });
+        });
+    });
+
+    ['Row', 'Cell', 'Batch'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - cellClick should not be raised when a new row is added (T1027166)`, function(assert) {
+            // arrange
+            const cellClickSpy = sinon.spy(function() {});
+            const dataGrid = createDataGrid({
+                dataSource: [{ id: 1, field: 'test' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true
+                },
+                onCellClick: cellClickSpy
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick(300);
+            const $firstCell = $(dataGrid.getCellElement(0, 0));
+
+            // assert
+            assert.ok($firstCell.hasClass('dx-editor-cell'), 'cell has an editor');
+            assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
+            assert.notOk(cellClickSpy.called, 'onCellClick is not raised');
         });
     });
 });
@@ -2258,12 +2331,12 @@ QUnit.module('Editing', baseModuleConfig, () => {
             $(grid.$element()).find('input').val(123).trigger('change');
             action === 'close edit cell' ? grid.closeEditCell() : grid.cancelEditData();
             this.clock.tick();
-
             $(grid.getCellElement(0, 1)).trigger('dxclick');
             this.clock.tick();
+            const callCount = action === 'close edit cell' ? 3 : 4;
 
             // assert
-            assert.equal(validationCallback.callCount, 3, 'validation callback call count');
+            assert.equal(validationCallback.callCount, callCount, 'validation callback call count');
         });
     });
 
@@ -2771,6 +2844,124 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.strictEqual(insertSpy.callCount, 1, 'insert is called after the last click');
             assert.strictEqual(insertSpy.args[0][0].field2, true, 'insert is called with valid value');
         });
+    });
+
+    ['Batch', 'Cell'].forEach((editMode) => {
+        QUnit.testInActiveWindow(`${editMode} - Cell value should not be reset when a checkbox in a neigboring cell is clicked (T1023809)`, function(assert) {
+            if(devices.real().deviceType === 'desktop') {
+                assert.ok(true, 'test only for mobile devices');
+                return;
+            }
+            const data = [
+                { id: 1, field1: 'test', field2: true }
+            ];
+            const dataGrid = createDataGrid({
+                dataSource: data,
+                keyExpr: 'id',
+                columns: ['field1', 'field2'],
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true
+                }
+            });
+            this.clock.tick();
+            dataGrid.editCell(0, 0);
+            this.clock.tick();
+
+            // act
+            const $firstCell = $(dataGrid.getCellElement(0, 0));
+            const $firstInput = $firstCell.find('input.dx-texteditor-input');
+            $firstInput.focus();
+            this.clock.tick();
+
+            // assert
+            assert.ok($firstCell.hasClass('dx-focused'));
+            assert.ok($firstInput.is(':focus'), 'input is focused');
+
+            // act
+            // mock for real blur
+            $firstInput.on('blur', function(e) {
+                $(e.target).trigger('change');
+            });
+            $firstInput.val('123');
+            let $secondCell = $(dataGrid.getCellElement(0, 1));
+            $secondCell.find('.dx-checkbox').trigger(pointerEvents.down);
+            this.clock.tick();
+            $secondCell = $(dataGrid.getCellElement(0, 1));
+            $secondCell.find('.dx-checkbox').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.strictEqual(dataGrid.cellValue(0, 0), '123', 'first cell value');
+            assert.strictEqual(dataGrid.cellValue(0, 1), false, 'second cell value');
+        });
+    });
+
+    ['Cell', 'Batch'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - cell value should be validated when a value in a neighboring cell is modified (repaintChangesOnly enabled) (T1026857)`, function(assert) {
+            const data = [
+                { id: 1, field1: null, field2: 'test' }
+            ];
+            const dataGrid = createDataGrid({
+                dataSource: data,
+                keyExpr: 'id',
+                columns: [{
+                    dataField: 'field1',
+                    validationRules: [{
+                        type: 'required'
+                    }],
+                }, 'field2'],
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true
+                }
+            });
+            this.clock.tick();
+            dataGrid.editCell(0, 1);
+            this.clock.tick();
+
+            // act
+            const $input = $(dataGrid.getCellElement(0, 1)).find('input.dx-texteditor-input');
+            $input.val('123');
+            $input.trigger('change');
+            dataGrid.saveEditData();
+            this.clock.tick();
+
+            // assert
+            assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), 'unmodified cell is invalid');
+        });
+    });
+
+    QUnit.test('Editing cell editor\'s content should not be selected twice', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1', field2: 'test2' }],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+                selectTextOnEditStart: true
+            }
+        });
+
+        const onSelectedSpy = sinon.spy();
+
+        // act
+        this.clock.tick(100);
+        const $cell = $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
+        this.clock.tick(100);
+
+        // arrange
+        const $editor = $cell.find('.dx-texteditor-input');
+        $editor.on('select', onSelectedSpy);
+
+        // act
+        $editor.val('asd').trigger('change');
+        this.clock.tick(100);
+
+        // assert
+
+        assert.strictEqual(onSelectedSpy.callCount, 0, 'is not selected after change');
     });
 });
 
@@ -3299,6 +3490,51 @@ QUnit.module('Validation with virtual scrolling and rendering', {
         const $cellElement = $(dataGrid.getCellElement(0, 1));
         assert.ok($cellElement.hasClass('dx-editor-cell'), 'cell has editor');
         assert.ok($cellElement.find('.dx-texteditor-input').is(':focus'), 'cell editor is focused');
+    });
+
+    // T1016329
+    QUnit.testInActiveWindow('No exceptions on an attempt to add a change object for an invisible row to the editing.changes option', function(assert) {
+        // arrange
+        const changes = [];
+        const items = generateItems(100);
+        const dataGrid = createDataGrid({
+            dataSource: items,
+            keyExpr: 'id',
+            height: 100,
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            scrolling: {
+                rowRenderingMode: 'virtual'
+            },
+            paging: {
+                enabled: false
+            }
+        });
+
+        this.clock.tick(100);
+
+        items.forEach((item, index) => {
+            changes.push(
+                {
+                    key: item.id,
+                    type: 'update',
+                    data: { field1: 'changed' + index }
+                }
+            );
+        });
+
+        try {
+            // act
+            dataGrid.option('editing.changes', changes);
+
+            // assert
+            assert.ok(true, 'There are no exceptions');
+        } catch(err) {
+            // assert
+            assert.ok(false, 'exception was threw:' + err);
+        }
     });
 });
 
@@ -4791,6 +5027,48 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.strictEqual($validationMessage.offset().top - $cellElement.offset().top, validationMessageDiff.top, 'top validation message position relative to the cell is not changed');
         assert.strictEqual($validationMessage.offset().left - $cellElement.offset().left, validationMessageDiff.left, 'left validation message position relative to the cell is not changed');
     });
+
+    QUnit.test('validationCallback should accept correct data parameter (T1020702)', function(assert) {
+        const validationCallbackSpy = sinon.spy(function() {
+            return true;
+        });
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1, id1: 1, name: 'test1' },
+                { id: 2, id1: 1, Name: 'test2' }
+            ],
+            keyExpr: ['id', 'id1'],
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'name',
+                    validationRules: [{
+                        type: 'custom',
+                        validationCallback: validationCallbackSpy
+                    }]
+                }
+            ]
+        });
+
+        // act
+        this.clock.tick();
+        for(let i = 0; i < 5; i++) {
+            dataGrid.editRow(0);
+            this.clock.tick();
+
+            dataGrid.saveEditData();
+            this.clock.tick();
+        }
+
+        // assert
+        assert.equal(validationCallbackSpy.callCount, 5, 'call count');
+        for(let i = 0; i < validationCallbackSpy.callCount; i++) {
+            assert.deepEqual(validationCallbackSpy.args[i][0].data, { id: 1, id1: 1, name: 'test1' }, `data parameter for the ${i + 1} call`);
+        }
+    });
 });
 
 
@@ -5476,7 +5754,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
 
                     visibleRows = dataGrid.getVisibleRows();
-                    assert.equal(visibleRows.length, 2, 'two rows');
+                    assert.ok(visibleRows.length >= 2, 'two or more rows');
                     assert.notOk(visibleRows[1].isNewRow, 'not new row');
                     assert.equal(data.length, 3, 'row count in datasource');
                     assert.equal(data[2].field, 'test', 'field value was posted');
@@ -5546,7 +5824,7 @@ QUnit.module('Editing state', baseModuleConfig, () => {
                     assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
 
                     visibleRows = dataGrid.getVisibleRows();
-                    assert.equal(visibleRows.length, 2, 'two rows');
+                    assert.ok(visibleRows.length >= 2, 'two or more rows');
                     assert.notOk(visibleRows[0].isNewRow, 'not new row');
                     assert.equal(data.length, 3, 'row count in datasource');
                     assert.equal(data[2].field, 'test', 'field value was posted');
