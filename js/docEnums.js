@@ -1031,7 +1031,7 @@
 
 /**
  * @typedef {string} Enums.FormLabelMode
- * @enum {'static'|'floating'|'hidden'|'default'}
+ * @enum {'static'|'floating'|'hidden'|'outside'}
  */
 
 /**
