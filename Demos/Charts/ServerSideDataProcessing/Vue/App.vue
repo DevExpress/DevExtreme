@@ -136,10 +136,10 @@ export default {
 </script>
 <style>
 .action {
-    width: 270px;
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  width: 270px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

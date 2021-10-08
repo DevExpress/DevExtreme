@@ -42,6 +42,6 @@ export default {
 </script>
 <style>
 #gridContainer {
-    height: 440px;
+  height: 440px;
 }
 </style>

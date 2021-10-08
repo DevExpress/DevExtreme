@@ -99,20 +99,20 @@ export default {
     height: 50px;
   }
 
-    .delete-appointment .dx-button-content {
-      width: 50px;
-      height: 50px;
-      padding-left: 4px;
-    }
+  .delete-appointment .dx-button-content {
+    width: 50px;
+    height: 50px;
+    padding-left: 4px;
+  }
 
-    .delete-appointment.dx-state-hover,
-    .dx-list-item.dx-state-hover .dx-button {
-      box-shadow: none;
-      background-color: inherit;
-    }
+  .delete-appointment.dx-state-hover,
+  .dx-list-item.dx-state-hover .dx-button {
+    box-shadow: none;
+    background-color: inherit;
+  }
 
-    .delete-appointment .dx-icon-trash {
-      color: #337ab7 !important;
-      font-size: 23px !important;
-    }
+  .delete-appointment .dx-icon-trash {
+    color: #337ab7 !important;
+    font-size: 23px !important;
+  }
 </style>

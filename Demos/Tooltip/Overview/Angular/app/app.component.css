@@ -1,10 +1,12 @@
 ::ng-deep .form {
-    padding: 20px;
+  padding: 20px;
 }
+
 ::ng-deep .form img {
-    width: 100px;
-    margin: 10px 0 30px;
+  width: 100px;
+  margin: 10px 0 30px;
 }
+
 ::ng-deep .label {
-    font-size: 16px;
+  font-size: 16px;
 }

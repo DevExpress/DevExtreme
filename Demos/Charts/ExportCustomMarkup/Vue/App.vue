@@ -122,26 +122,26 @@ export default {
 </script>
 <style>
 #chart-demo {
-    height: 460px;
+  height: 460px;
 }
 
 #chart {
-    position: absolute;
-    top: 12px;
-    right: 35px;
-    width: 480px;
-    height: 347px;
+  position: absolute;
+  top: 12px;
+  right: 35px;
+  width: 480px;
+  height: 347px;
 }
 
 .chart_environment {
-    width: 820px;
-    position: relative;
-    margin: 0 auto;
+  width: 820px;
+  position: relative;
+  margin: 0 auto;
 }
 
 .controls-pane {
-    display: block;
-    text-align: center;
+  display: block;
+  text-align: center;
 }
 </style>
 

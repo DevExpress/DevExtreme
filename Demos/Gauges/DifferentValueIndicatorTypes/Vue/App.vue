@@ -149,41 +149,52 @@ export default {
 </script>
 <style scoped>
 #chart-demo {
-    width: 100%;
+  width: 100%;
 }
 
-#rectangleNeedle, #twoColorNeedle, #triangleNeedle, #rangebar, #textCloud, #triangleMarker {
-    display: inline-block;
+#rectangleNeedle,
+#twoColorNeedle,
+#triangleNeedle,
+#rangebar,
+#textCloud,
+#triangleMarker {
+  display: inline-block;
 }
 
-#rectangleNeedle, #twoColorNeedle, #rangebar, #textCloud {
-    margin-right: 4px;
+#rectangleNeedle,
+#twoColorNeedle,
+#rangebar,
+#textCloud {
+  margin-right: 4px;
 }
 
-#rectangleNeedle, #twoColorNeedle, #triangleNeedle {
-    width: 33%;
+#rectangleNeedle,
+#twoColorNeedle,
+#triangleNeedle {
+  width: 33%;
 }
 
-#rangebar, #triangleMarker {
-    width: 32%;
+#rangebar,
+#triangleMarker {
+  width: 32%;
 }
 
 #textCloud {
-    width: 35%;
-    vertical-align: bottom;
+  width: 35%;
+  vertical-align: bottom;
 }
 
 .long-title h3 {
-    font-family:
-      'Segoe UI Light',
-      'Helvetica Neue Light',
-      'Segoe UI',
-      'Helvetica Neue',
-      'Trebuchet MS',
-      Verdana;
-    font-weight: 200;
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 20px;
+  font-family:
+    'Segoe UI Light',
+    'Helvetica Neue Light',
+    'Segoe UI',
+    'Helvetica Neue',
+    'Trebuchet MS',
+    Verdana;
+  font-weight: 200;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>

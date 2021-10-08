@@ -119,48 +119,48 @@ export default {
 </script>
 <style scoped>
 .dx-dropdownlist-popup-wrapper .dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
-    padding-left: 7px;
-    padding-right: 7px;
+  padding-left: 7px;
+  padding-right: 7px;
 }
 
 .custom-item {
-    position: relative;
-    min-height: 30px;
+  position: relative;
+  min-height: 30px;
 }
 
 .dx-dropdowneditor-input-wrapper .custom-item > img {
-    padding-left: 8px;
+  padding-left: 8px;
 }
 
-.custom-item .product-name  {
-    display: inline-block;
-    padding-left: 50px;
-    text-indent: 0;
-    line-height: 30px;
-    font-size: 15px;
-    width: 100%;
+.custom-item .product-name {
+  display: inline-block;
+  padding-left: 50px;
+  text-indent: 0;
+  line-height: 30px;
+  font-size: 15px;
+  width: 100%;
 }
 
 .custom-item > img {
-    left: 1px;
-    position: absolute;
-    top: 50%;
-    margin-top: -15px;
+  left: 1px;
+  position: absolute;
+  top: 50%;
+  margin-top: -15px;
 }
 
 .dx-theme-material #custom-templates .dx-texteditor-buttons-container {
-    display: none;
+  display: none;
 }
 
 .current-value {
-    padding: 10px 0;
+  padding: 10px 0;
 }
 
 .current-value > span {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .dx-theme-material .dx-selectbox-container .product-name {
-    padding-left: 58px;
+  padding-left: 58px;
 }
 </style>

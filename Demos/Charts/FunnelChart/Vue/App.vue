@@ -66,9 +66,10 @@ export default {
 
 <style>
 #funnel {
-    height: 440px;
+  height: 440px;
 }
+
 #funnel .label {
-    font-size: 28px;
+  font-size: 28px;
 }
 </style>

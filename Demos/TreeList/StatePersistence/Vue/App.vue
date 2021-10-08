@@ -76,17 +76,17 @@ export default {
 </script>
 <style scoped>
 #employees {
-    height: 440px;
-    margin-top: 30px;
+  height: 440px;
+  margin-top: 30px;
 }
 
-#descContainer  a {
-    color: #f05b41;
-    text-decoration: underline;
-    cursor: pointer;
+#descContainer a {
+  color: #f05b41;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
-#descContainer  a:hover {
-    text-decoration: none;
+#descContainer a:hover {
+  text-decoration: none;
 }
 </style>

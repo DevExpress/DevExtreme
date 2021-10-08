@@ -75,9 +75,10 @@ export default {
 </script>
 <style>
 #vector-map {
-    height: 420px;
+  height: 420px;
 }
+
 #reset {
-    margin: 10px 2px;
+  margin: 10px 2px;
 }
 </style>

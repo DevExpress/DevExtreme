@@ -59,17 +59,20 @@ export default {
 </script>
 <style>
 .caption {
-  padding: 0px 0px 10px 30px;
+  padding: 0 0 10px 30px;
   font-size: 14px;
   font-weight: bold;
 }
+
 .task-list {
-  padding: 0px 20px;
+  padding: 0 20px;
 }
+
 .task-list .dx-state-disabled {
-    opacity: 1;
+  opacity: 1;
 }
+
 .task-list .dx-state-disabled .dx-list-item {
-    opacity: 1;
+  opacity: 1;
 }
 </style>

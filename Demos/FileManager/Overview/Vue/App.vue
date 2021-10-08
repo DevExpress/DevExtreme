@@ -69,10 +69,11 @@ export default {
 
 <style>
 .photo-popup-content {
-    text-align: center;
+  text-align: center;
 }
+
 .photo-popup-content .photo-popup-image {
-    height: 100%;
-    max-width: 100%;
+  height: 100%;
+  max-width: 100%;
 }
 </style>

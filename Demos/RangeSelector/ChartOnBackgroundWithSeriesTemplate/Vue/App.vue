@@ -61,6 +61,6 @@ export default {
 </script>
 <style scoped>
 #range-selector {
-    height: 310px;
+  height: 310px;
 }
 </style>

@@ -45,6 +45,6 @@ export default {
 </script>
 <style>
 .tooltip-template span {
-    font-weight: 500;
+  font-weight: 500;
 }
 </style>

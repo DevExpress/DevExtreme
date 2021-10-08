@@ -91,21 +91,21 @@ export default {
 </script>
 <style scoped>
 #gauge-demo {
-    height: 440px;
-    width: 100%;
+  height: 440px;
+  width: 100%;
 }
 
 #gauge {
-    width: 80%;
-    height: 100%;
-    float: left;
+  width: 80%;
+  height: 100%;
+  float: left;
 }
 
 #seasons {
-    width: 20%;
-    float: left;
-    text-align: left;
-    margin-top: 20px;
+  width: 20%;
+  float: left;
+  text-align: left;
+  margin-top: 20px;
 }
 
 </style>

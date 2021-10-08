@@ -64,40 +64,40 @@ export default {
 </script>
 <style scoped>
 .filter-container {
-    background-color: rgba(191, 191, 191, 0.15);
-    width: 55%;
-    float: left;
-    margin-bottom: 25px;
-    height: 430px;
+  background-color: rgba(191, 191, 191, 0.15);
+  width: 55%;
+  float: left;
+  margin-bottom: 25px;
+  height: 430px;
 }
 
 .dx-filterbuilder {
-    padding: 10px;
-    height: 360px;
-    margin: 5px;
-    overflow: auto;
+  padding: 10px;
+  height: 360px;
+  margin: 5px;
+  overflow: auto;
 }
 
 .dx-filterbuilder .dx-texteditor {
-    width: 135px;
+  width: 135px;
 }
 
 .dx-button {
-    margin: 10px 20px;
-    float: right;
+  margin: 10px 20px;
+  float: right;
 }
 
 .list-container {
-    float: right;
-    width: 45%;
+  float: right;
+  width: 45%;
 }
 
 .list-container .dx-scrollable-container {
-    max-height: 430px;
-    padding-left: 30px;
+  max-height: 430px;
+  padding-left: 30px;
 }
 
 .dx-filterbuilder .dx-numberbox {
-    width: 80px;
+  width: 80px;
 }
 </style>

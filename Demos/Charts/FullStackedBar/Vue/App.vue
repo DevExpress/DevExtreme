@@ -84,6 +84,6 @@ export default {
 </script>
 <style>
 #chart {
-    height: 440px;
+  height: 440px;
 }
 </style>

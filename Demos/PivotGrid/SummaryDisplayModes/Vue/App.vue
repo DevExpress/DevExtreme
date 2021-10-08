@@ -113,6 +113,6 @@ export default {
 </script>
 <style scoped>
 .desc-container {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 </style>

@@ -1,23 +1,28 @@
 ::ng-deep #vector-map {
-    height: 420px;
+  height: 420px;
 }
+
 ::ng-deep .options {
-    padding: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
-    margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
 }
+
 ::ng-deep .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
+
 ::ng-deep .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
+
 ::ng-deep .option > span {
-    width: 140px;
-    display: inline-block;
+  width: 140px;
+  display: inline-block;
 }
+
 ::ng-deep .option > .dx-widget {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }

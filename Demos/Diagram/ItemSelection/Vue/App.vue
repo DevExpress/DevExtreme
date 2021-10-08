@@ -72,17 +72,17 @@ export default {
 </script>
 <style scoped>
     #diagram {
-        height: 600px;
+      height: 600px;
     }
 
     .selected-data {
-        margin-top: 20px;
-        padding: 20px;
-        background-color: rgba(191, 191, 191, 0.15);
+      margin-top: 20px;
+      padding: 20px;
+      background-color: rgba(191, 191, 191, 0.15);
     }
 
     .selected-data .caption {
-        font-weight: bold;
-        font-size: 115%;
+      font-weight: bold;
+      font-size: 115%;
     }
 </style>

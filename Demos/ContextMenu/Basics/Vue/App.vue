@@ -42,10 +42,10 @@ export default {
 </script>
 <style>
 #image {
-    height: 300px;
+  height: 300px;
 }
 
 .label {
-    color: #767676;
+  color: #767676;
 }
 </style>

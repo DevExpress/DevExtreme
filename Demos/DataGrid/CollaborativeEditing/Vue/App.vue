@@ -77,16 +77,16 @@ connection.start()
 
 <style scoped>
 .tables {
-    display: flex;
+  display: flex;
 }
 
 .column:first-child {
-    width: 50%;
-    padding-right: 15px;
+  width: 50%;
+  padding-right: 15px;
 }
 
 .column:last-child {
-    width: 50%;
-    padding-left: 15px;
+  width: 50%;
+  padding-left: 15px;
 }
 </style>

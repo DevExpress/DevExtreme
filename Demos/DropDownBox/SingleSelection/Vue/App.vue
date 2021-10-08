@@ -139,6 +139,6 @@ export default {
 </script>
 <style scoped>
 .dx-fieldset {
-    height: 500px;
+  height: 500px;
 }
 </style>

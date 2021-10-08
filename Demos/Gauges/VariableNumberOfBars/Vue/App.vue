@@ -66,33 +66,33 @@ export default {
 </script>
 <style scoped>
 #gauge-demo {
-    height: 440px;
-    width: 100%;
+  height: 440px;
+  width: 100%;
 }
 
 #gauge {
-    width: 80%;
-    height: 100%;
-    margin-top: 20px;
-    float: left;
+  width: 80%;
+  height: 100%;
+  margin-top: 20px;
+  float: left;
 }
 
 #panel {
-    width: 150px;
-    text-align: left;
-    margin-top: 20px;
-    float: left;
+  width: 150px;
+  text-align: left;
+  margin-top: 20px;
+  float: left;
 }
 
 .dx-checkbox {
-    margin-bottom: 10px;
-    display: block;
+  margin-bottom: 10px;
+  display: block;
 }
 
 .long-title h3 {
-    font-weight: 200;
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 20px;
+  font-weight: 200;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>

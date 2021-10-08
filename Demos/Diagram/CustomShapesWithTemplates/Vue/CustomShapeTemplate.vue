@@ -49,21 +49,21 @@ export default {
 
 <style>
     #diagram .template .template-name {
-        font-weight: bold;
-        text-decoration: underline;
+      font-weight: bold;
+      text-decoration: underline;
     }
 
     #diagram .template .template-title {
-        font-style: italic;
+      font-style: italic;
     }
 
     #diagram .template .template-button {
-        cursor: pointer;
-        font-size: 8pt;
-        fill: navy;
+      cursor: pointer;
+      font-size: 8pt;
+      fill: navy;
     }
 
     #diagram .template .template-button:hover {
-        text-decoration: underline;
+      text-decoration: underline;
     }
 </style>

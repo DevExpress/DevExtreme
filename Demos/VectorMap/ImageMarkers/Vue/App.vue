@@ -55,6 +55,6 @@ export default {
 </script>
 <style>
 #vector-map {
-    height: 440px;
+  height: 440px;
 }
 </style>

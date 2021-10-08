@@ -30,10 +30,10 @@ export default {
 </script>
 <style>
 .list-container {
-    min-height: 440px;
-    height: auto;
-    position: absolute;
-    top: 0;
-    bottom: 0;
+  min-height: 440px;
+  height: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
 }
 </style>

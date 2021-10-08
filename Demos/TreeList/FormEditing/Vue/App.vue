@@ -114,6 +114,6 @@ export default {
 </script>
 <style scoped>
 #tree-list-demo {
-    min-height: 700px;
+  min-height: 700px;
 }
 </style>

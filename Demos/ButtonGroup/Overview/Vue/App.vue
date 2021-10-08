@@ -76,6 +76,6 @@ export default {
   .multiple-selection-styling-mode {
     border-left-width: 1px;
     border-left-style: solid;
-    border-color: #dddddd;
+    border-color: #ddd;
   }
 </style>

@@ -1,54 +1,54 @@
-::ng-deep .form>h4 {
-    margin-bottom: 20px;
+::ng-deep .form > h4 {
+  margin-bottom: 20px;
 }
 
-::ng-deep .form>div,
+::ng-deep .form > div,
 ::ng-deep #treeview {
-    display: inline-block;
-    vertical-align: top;
+  display: inline-block;
+  vertical-align: top;
 }
 
 ::ng-deep .selected-container {
-    padding: 20px;
-    margin-left: 20px;    
-    background-color: rgba(191, 191, 191, 0.15);
-    font-size: 115%;
-    font-weight: bold;
+  padding: 20px;
+  margin-left: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  font-size: 115%;
+  font-weight: bold;
 }
 
 ::ng-deep #selected-employees {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 ::ng-deep .dx-list-item-content {
-    padding-left: 0;
+  padding-left: 0;
 }
 
 ::ng-deep .options {
-    padding: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
-    margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
 }
 
 ::ng-deep .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 ::ng-deep .option {
-    width: 24%;
-    margin-top: 10px;
-    margin-right: 9px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+  width: 24%;
+  margin-top: 10px;
+  margin-right: 9px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 ::ng-deep .options-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
 }
 
 ::ng-deep .editor-container {
@@ -57,10 +57,10 @@
   align-items: center;
 }
 
-::ng-deep .editor-container>*{
+::ng-deep .editor-container > * {
   width: 100%;
 }
 
 ::ng-deep .option:last-of-type {
-    margin-right: 0px;
+  margin-right: 0;
 }

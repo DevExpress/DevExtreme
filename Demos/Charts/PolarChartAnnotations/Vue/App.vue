@@ -130,6 +130,6 @@ export default {
 </script>
 <style>
 #radarChart {
-    height: 600px;
+  height: 600px;
 }
 </style>

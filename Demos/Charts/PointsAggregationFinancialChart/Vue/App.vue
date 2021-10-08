@@ -114,15 +114,15 @@ export default {
 </script>
 <style>
 #chart-demo {
-    height: 450px;
+  height: 450px;
 }
 
 #zoomedChart {
-    height: 315px;
-    margin: 0 0 15px;
+  height: 315px;
+  margin: 0 0 15px;
 }
 
 #chart-demo > div:not(#zoomedChart) {
-    height: 120px;
+  height: 120px;
 }
 </style>

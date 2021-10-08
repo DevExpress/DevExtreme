@@ -69,8 +69,9 @@ export default {
 </script>
 <style>
 .annotation {
-    font-size: 12px;
+  font-size: 12px;
 }
+
 .border {
   width: 60px;
   height: 40px;
@@ -78,14 +79,17 @@ export default {
   stroke-width: 1px;
   fill: transparent;
 }
+
 .state {
-    font-weight: 500;
-    font-size: 14px;
+  font-weight: 500;
+  font-size: 14px;
 }
+
 .caption {
-    font-weight: 500;
+  font-weight: 500;
 }
+
 .sup {
-    font-size: 0.8em;
+  font-size: 0.8em;
 }
 </style>

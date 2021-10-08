@@ -1,17 +1,17 @@
 .dx-scheduler-appointment {
-  color: #000000;
+  color: #000;
   font-weight: 500;
   background-color: #e4e4e4;
 }
 
 .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
-  padding: 5px 0px 5px 7px;
+  padding: 5px 0 5px 7px;
 }
 
 .options {
   background-color: rgba(191, 191, 191, 0.15);
   margin-top: 20px;
-  display: flex; 
+  display: flex;
   align-items: flex-start;
 }
 
@@ -25,11 +25,12 @@
 
 .option {
   padding: 5px 0;
-  display:flex;
+  display: flex;
   align-items: center;
 }
 
-.label, .value {
+.label,
+.value {
   display: inline-block;
   vertical-align: middle;
 }
@@ -51,6 +52,7 @@
   white-space: normal;
 }
 
-#allow-shading, #show-indicator {
+#allow-shading,
+#show-indicator {
   height: 36px;
 }

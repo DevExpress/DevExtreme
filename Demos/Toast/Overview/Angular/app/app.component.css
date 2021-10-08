@@ -1,20 +1,24 @@
 ::ng-deep #product-list {
-    padding: 10px;
+  padding: 10px;
 }
+
 ::ng-deep #product-list ul {
-    text-align: center;
-    list-style-type: none;
-    margin: 20px 0;
+  text-align: center;
+  list-style-type: none;
+  margin: 20px 0;
 }
+
 ::ng-deep #product-list ul li {
-    display: inline-block;
-    width: 160px;
-    margin: 10px;
+  display: inline-block;
+  width: 160px;
+  margin: 10px;
 }
+
 ::ng-deep #product-list ul li img {
-    width: 100px;
+  width: 100px;
 }
+
 ::ng-deep .dx-toast-content {
-    min-width: 300px;
-    max-width: 400px;
+  min-width: 300px;
+  max-width: 400px;
 }

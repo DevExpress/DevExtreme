@@ -74,8 +74,8 @@ export default {
 </script>
 <style>
 #chart {
-    height: 549px;
-    width: 820px;
-    margin: 0 auto;
+  height: 549px;
+  width: 820px;
+  margin: 0 auto;
 }
 </style>

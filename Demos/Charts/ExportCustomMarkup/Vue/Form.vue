@@ -27,7 +27,7 @@
       />
       <text
         transform="translate(30,89)"
-        style="fill: #FFFFFF; font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif; font-size: 36px; font-weight: bold;"
+        style="fill: #fff; font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif; font-size: 36px; font-weight: bold;"
       >
         <tspan
           x="0"
@@ -44,7 +44,7 @@
       </text>
       <text
         transform="translate(32,199)"
-        style="opacity: 0.8; fill: #FFFFFF;font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;font-size: 14px;"
+        style="opacity: 0.8; fill: #fff; font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif; font-size: 14px;"
       >
         <tspan
           x="0"
@@ -58,7 +58,7 @@
       <text
         x="650"
         y="385"
-        style="opacity: 0.8;fill: #FFFFFF;font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif;font-size: 12px;"
+        style="opacity: 0.8; fill: #fff; font-family: 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana, sans-serif; font-size: 12px;"
       >UNdata (www.data.un.org)</text>
       <path
         opacity="0.8"

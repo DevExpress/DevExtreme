@@ -118,38 +118,44 @@ export default {
 </script>
 <style scoped>
 #gauge-demo {
-    width: 100%;
-    text-align: center;
+  width: 100%;
+  text-align: center;
 }
 
-#triangleMarker, #rectangleNeedle, #triangleNeedle, #textCloud, #twoColorNeedle {
-    display: inline-block;
+#triangleMarker,
+#rectangleNeedle,
+#triangleNeedle,
+#textCloud,
+#twoColorNeedle {
+  display: inline-block;
 }
 
-#triangleMarker, #rectangleNeedle, #triangleNeedle {
-    width: 33%;
+#triangleMarker,
+#rectangleNeedle,
+#triangleNeedle {
+  width: 33%;
 }
 
 #twoColorNeedle {
-    width: 31%;
+  width: 31%;
 }
 
 #textCloud {
-    width: 37%;
-    vertical-align: bottom;
+  width: 37%;
+  vertical-align: bottom;
 }
 
 .long-title h3 {
-    font-family:
-      'Segoe UI Light',
-      'Helvetica Neue Light',
-      'Segoe UI',
-      'Helvetica Neue',
-      'Trebuchet MS',
-      Verdana;
-    font-weight: 200;
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 20px;
+  font-family:
+    'Segoe UI Light',
+    'Helvetica Neue Light',
+    'Segoe UI',
+    'Helvetica Neue',
+    'Trebuchet MS',
+    Verdana;
+  font-weight: 200;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>

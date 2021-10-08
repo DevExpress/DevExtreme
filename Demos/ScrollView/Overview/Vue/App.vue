@@ -166,7 +166,7 @@ export default {
 }
 
 .text-content {
-    white-space: pre-wrap;
+  white-space: pre-wrap;
 }
 
 .option > .dx-selectbox {

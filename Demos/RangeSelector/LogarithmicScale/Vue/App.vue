@@ -88,12 +88,12 @@ export default {
 };
 </script>
 <style scoped>
-#zoomed-chart{
-    height: 335px;
-    margin: 0 0 15px;
+#zoomed-chart {
+  height: 335px;
+  margin: 0 0 15px;
 }
 
 #range-selector {
-    height: 120px;
+  height: 120px;
 }
 </style>

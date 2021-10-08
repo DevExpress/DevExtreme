@@ -127,37 +127,37 @@ export default {
 
 <style>
 #employees {
-    max-height: 440px;
+  max-height: 440px;
 }
 
 .dx-sortable-dragging {
-    opacity: 0.9
+  opacity: 0.9;
 }
 
 .options {
-    margin-top: 20px;
-    padding: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
-    position: relative;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  position: relative;
 }
 
 .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option {
-   margin-top: 10px;
-   margin-right: 40px;
-   display: inline-block;
+  margin-top: 10px;
+  margin-right: 40px;
+  display: inline-block;
 }
 
 .option:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 .options-container {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 </style>

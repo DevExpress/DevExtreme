@@ -63,20 +63,20 @@ export default {
 </script>
 <style scoped>
 .pies-container {
-    margin: auto;
-    width: 800px;
+  margin: auto;
+  width: 800px;
 }
 
 .pies-container > div {
-    width: 400px;
-    float: left;
-    margin-top: -50px;
+  width: 400px;
+  float: left;
+  margin-top: -50px;
 }
 
 .long-title h3 {
-    font-weight: 200;
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 20px;
+  font-weight: 200;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>

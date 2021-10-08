@@ -23,7 +23,7 @@ export default {
 };
 </script>
 <style>
-   #grid{
-    height: 440px;
+#grid {
+  height: 440px;
 }
 </style>

@@ -104,36 +104,36 @@ export default {
   display: flex;
 }
 
-.form>div,
+.form > div,
 #treeview {
-    display: inline-block;
-    vertical-align: top;
+  display: inline-block;
+  vertical-align: top;
 }
 
 .log-container {
-    padding: 20px;
-    margin-left: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
-    font-size: 115%;
-    font-weight: bold;
-    position: relative;
-    height: 100%;
+  padding: 20px;
+  margin-left: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  font-size: 115%;
+  font-weight: bold;
+  position: relative;
+  height: 100%;
 }
 
 .log-container .dx-icon-clock {
-    position: relative;
-    top: 1px;
+  position: relative;
+  top: 1px;
 }
 
 #log {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 #log .dx-empty-message {
-    padding-left: 0px;
+  padding-left: 0;
 }
 
 .dx-list-item-content {
-    padding-left: 0;
+  padding-left: 0;
 }
 </style>

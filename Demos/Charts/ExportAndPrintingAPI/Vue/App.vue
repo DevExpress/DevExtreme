@@ -94,22 +94,22 @@ export default {
 </script>
 <style>
 #chart {
-    height: 440px;
-    margin-bottom:30px;
+  height: 440px;
+  margin-bottom: 30px;
 }
 
 #buttonGroup {
-    text-align: center;
-    margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 #buttonGroup > .dx-button {
-    margin: 0 22px;
+  margin: 0 22px;
 }
 
 .title {
-    font-size: 15px;
-    font-weight: 500;
+  font-size: 15px;
+  font-weight: 500;
 }
 </style>
 

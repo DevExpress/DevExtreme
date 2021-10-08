@@ -223,34 +223,34 @@ export default {
 </script>
 <style scoped>
 .form {
-    display: flex;
+  display: flex;
 }
 
-.form>div {
-    display: inline-block;
-    vertical-align: top;
+.form > div {
+  display: inline-block;
+  vertical-align: top;
 }
 
 #treeviewDriveC,
 #treeviewDriveD {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .drive-header {
-    min-height: auto;
-    padding: 0px;
-    cursor: default;
+  min-height: auto;
+  padding: 0;
+  cursor: default;
 }
 
 .drive-panel {
-    padding: 20px 30px;
-    font-size: 115%;
-    font-weight: bold;
-    border-right: 1px solid rgba(165, 165, 165, 0.4);
-    height: 100%;
+  padding: 20px 30px;
+  font-size: 115%;
+  font-weight: bold;
+  border-right: 1px solid rgba(165, 165, 165, 0.4);
+  height: 100%;
 }
 
 .drive-panel:last-of-type {
-    border-right: none;
+  border-right: none;
 }
 </style>

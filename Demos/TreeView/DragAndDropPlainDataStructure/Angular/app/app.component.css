@@ -1,31 +1,31 @@
 ::ng-deep .form {
-    display: flex;
+  display: flex;
 }
 
-::ng-deep .form>div {
-    display: inline-block;
-    vertical-align: top;
+::ng-deep .form > div {
+  display: inline-block;
+  vertical-align: top;
 }
 
 ::ng-deep #treeviewDriveC,
 ::ng-deep #treeviewDriveD {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 ::ng-deep .drive-header {
-    min-height: auto;
-    padding: 0px;
-    cursor: default;
+  min-height: auto;
+  padding: 0;
+  cursor: default;
 }
 
 ::ng-deep .drive-panel {
-    padding: 20px 30px;
-    font-size: 115%;
-    font-weight: bold;
-    border-right: 1px solid rgba(165, 165, 165, 0.4);
-    height: 100%;
+  padding: 20px 30px;
+  font-size: 115%;
+  font-weight: bold;
+  border-right: 1px solid rgba(165, 165, 165, 0.4);
+  height: 100%;
 }
 
 ::ng-deep .drive-panel:last-of-type {
-    border-right: none;
+  border-right: none;
 }

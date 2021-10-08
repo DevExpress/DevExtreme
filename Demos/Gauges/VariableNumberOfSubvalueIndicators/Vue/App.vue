@@ -84,11 +84,11 @@ export default {
 </script>
 <style scoped>
 #gauge-demo {
-    height: 440px;
-    width: 100%;
+  height: 440px;
+  width: 100%;
 }
 
 #gauge {
-    height: 400px;
+  height: 400px;
 }
 </style>

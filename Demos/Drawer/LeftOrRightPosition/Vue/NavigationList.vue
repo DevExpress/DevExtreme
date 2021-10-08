@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 200px">
+  <div style="width: 200px;">
     <DxList
       :data-source="navigation"
       :active-state-enabled="false"

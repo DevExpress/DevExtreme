@@ -93,36 +93,36 @@ export default {
 </script>
 <style scoped>
 #gridContainer {
-    height: 440px;
+  height: 440px;
 }
 
 #gridContainer sup {
-    font-size: 0.8em;
-    vertical-align: super;
-    line-height: 0;
+  font-size: 0.8em;
+  vertical-align: super;
+  line-height: 0;
 }
 
 .options {
-    padding: 20px;
-    margin-top: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .option > span {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .option > .dx-widget {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>

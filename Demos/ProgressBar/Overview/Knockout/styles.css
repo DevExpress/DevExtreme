@@ -1,16 +1,16 @@
 .form {
-    padding: 20% 0;
-    text-align: center;
+  padding: 20% 0;
+  text-align: center;
 }
 
-#progress-button{
-    margin-bottom: 20px;
+#progress-button {
+  margin-bottom: 20px;
 }
 
 #progressBarStatus {
-    display: inline-block;
+  display: inline-block;
 }
 
 .complete .dx-progressbar-range {
-    background-color: green;
+  background-color: green;
 }

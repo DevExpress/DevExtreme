@@ -110,29 +110,36 @@ export default {
   border-style: dashed;
   padding: 10px;
 }
+
 #dropzone-external > * {
   pointer-events: none;
 }
+
 #dropzone-external.dropzone-active {
   border-style: solid;
 }
+
 .widget-container > span {
   font-size: 22px;
   font-weight: bold;
   margin-bottom: 16px;
 }
+
 #dropzone-image {
   max-width: 100%;
   max-height: 100%;
 }
+
 #dropzone-text > span {
   font-weight: 100;
   opacity: 0.5;
 }
+
 #upload-progress {
   display: flex;
   margin-top: 10px;
 }
+
 .flex-box {
   display: flex;
   flex-direction: column;

@@ -128,10 +128,10 @@ export default {
 <style>
 .toolbar-label,
 .toolbar-label > b {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 #products {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 </style>

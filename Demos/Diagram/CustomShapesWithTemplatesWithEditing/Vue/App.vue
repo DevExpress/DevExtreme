@@ -265,19 +265,19 @@ export default {
 </script>
 <style scoped>
     #diagram {
-        height: 725px;
+      height: 725px;
     }
 
     .dx-popup-content {
-        padding: 0;
+      padding: 0;
     }
 
     .dx-popup-content .dx-fieldset.buttons {
-        display: flex;
-        justify-content: flex-end;
+      display: flex;
+      justify-content: flex-end;
     }
 
     .dx-popup-content .dx-fieldset.buttons > * {
-        margin-left: 8px;
+      margin-left: 8px;
     }
 </style>

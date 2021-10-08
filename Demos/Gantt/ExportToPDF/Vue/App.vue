@@ -276,6 +276,7 @@ export default {
   #gantt {
     height: 700px;
   }
+
   .options {
     background-color: rgba(191, 191, 191, 0.15);
     margin-top: 20px;
@@ -296,7 +297,8 @@ export default {
     align-items: center;
   }
 
-  .label, .value {
+  .label,
+  .value {
     display: inline-block;
     vertical-align: middle;
   }

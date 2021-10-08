@@ -78,16 +78,16 @@ export default {
 
 <style>
 #drill-down-title {
-    position: absolute;
-    top: 50px;
-    height: 36px;
-    width: 100%;
-    text-align: center;
+  position: absolute;
+  top: 50px;
+  height: 36px;
+  width: 100%;
+  text-align: center;
 }
 
 .link {
-    color: #337ab7;
-    text-decoration: underline;
-    cursor: pointer;
+  color: #337ab7;
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>

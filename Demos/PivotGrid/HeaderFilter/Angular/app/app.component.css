@@ -1,21 +1,25 @@
 ::ng-deep #sales {
-    max-height: 570px;
+  max-height: 570px;
 }
+
 ::ng-deep .options {
-    padding: 20px;
-    margin-top: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
 }
+
 ::ng-deep .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
+
 ::ng-deep .option {
-    width: 24%;
-    display: inline-block;
-    margin-top: 10px;
+  width: 24%;
+  display: inline-block;
+  margin-top: 10px;
 }
+
 ::ng-deep .options-container {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }

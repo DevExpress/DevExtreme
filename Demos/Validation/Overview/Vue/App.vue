@@ -256,12 +256,12 @@ export default {
 </script>
 <style scoped>
 #summary {
-    padding-left: 10px;
-    margin-top: 20px;
-    margin-bottom: 10px;
+  padding-left: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 #button {
-    display: block;
+  display: block;
 }
 </style>

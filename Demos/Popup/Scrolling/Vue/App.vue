@@ -54,6 +54,7 @@ export default {
   padding-right: 20px;
   line-height: 1.6em;
 }
+
 .center {
   display: block;
   margin-left: auto;

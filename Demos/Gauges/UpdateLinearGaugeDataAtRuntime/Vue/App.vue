@@ -163,34 +163,34 @@ export default {
 </script>
 <style scoped>
 #gauge-demo {
-    width: 90%;
-    margin: 0 auto
+  width: 90%;
+  margin: 0 auto;
 }
 
 #gauge-demo .gauge-element {
-    height: 400px;
-    width: 33%;
-    float: left;
+  height: 400px;
+  width: 33%;
+  float: left;
 }
 
 .dx-selectbox {
-    margin: 10px auto 0;
-    width: 200px;
+  margin: 10px auto 0;
+  width: 200px;
 }
 
-#gauge-demo::after{
-    content: ".";
-    display: block;
-    clear: both;
-    visibility: hidden;
-    line-height: 0;
-    height: 0;
+#gauge-demo::after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
 }
 
 .long-title h3 {
-    font-weight: 200;
-    font-size: 28px;
-    text-align: center;
-    margin-bottom: 20px;
+  font-weight: 200;
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 </style>

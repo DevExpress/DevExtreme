@@ -101,31 +101,31 @@ export default {
 }
 
 .options {
-    margin-top: 20px;
-    padding: 20px;
-    background: #f5f5f5;
+  margin-top: 20px;
+  padding: 20px;
+  background: #f5f5f5;
 }
 
 .options .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option {
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .option > span {
-    width: 120px;
-    display: inline-block;
+  width: 120px;
+  display: inline-block;
 }
 
 .option > .dx-widget {
-    display: inline-block;
-    vertical-align: middle;
-    width: 100%;
-    max-width: 350px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+  max-width: 350px;
 }
 </style>

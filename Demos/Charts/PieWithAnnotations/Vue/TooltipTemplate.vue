@@ -32,16 +32,16 @@ export default {
 </script>
 <style>
 .medal-tooltip {
-    font-size: 12px;
+  font-size: 12px;
 }
 
 .medal-tooltip .country-name {
-    font-size: 14px;
-    font-weight: 700;
-    margin: 5px 0px 10px 0px;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 5px 0 10px 0;
 }
 
 .medal-tooltip .caption {
-    font-weight: 600;
+  font-weight: 600;
 }
 </style>

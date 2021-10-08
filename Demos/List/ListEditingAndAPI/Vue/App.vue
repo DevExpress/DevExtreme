@@ -52,29 +52,29 @@ export default {
 </script>
 <style>
 .options {
-    margin-top: 20px;
-    padding: 20px;
-    background: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(191, 191, 191, 0.15);
 }
 
 .options .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .option > span {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .option > .dx-selectbox {
-    display: inline-block;
-    vertical-align: middle;
-    max-width: 350px;
-    width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 350px;
+  width: 100%;
 }
 
 </style>

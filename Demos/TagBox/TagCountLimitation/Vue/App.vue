@@ -79,6 +79,6 @@ export default {
 </script>
 <style scoped>
 .dx-field {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 }
 </style>

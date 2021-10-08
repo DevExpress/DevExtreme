@@ -63,30 +63,30 @@ export default {
 };
 </script>
 <style>
-.content{
-    text-align: justify;
-    margin-top: 25px;
+.content {
+  text-align: justify;
+  margin-top: 25px;
 }
 
-#longtabs{
-    margin-top: 20px;
+#longtabs {
+  margin-top: 20px;
 }
 
 #scrolledtabs {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 #tabs {
-    margin-top: 60px;
+  margin-top: 60px;
 }
 
-.caption{
-    font-size: 16px;
-    padding-bottom: 3px;
-    padding-left: 10px;
+.caption {
+  font-size: 16px;
+  padding-bottom: 3px;
+  padding-left: 10px;
 }
 
 .left-aligned {
-    text-align: left;
+  text-align: left;
 }
 </style>

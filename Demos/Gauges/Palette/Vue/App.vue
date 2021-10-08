@@ -48,7 +48,7 @@ export default {
 </script>
 <style scoped>
 #gauge {
-    height: 440px;
-    width: 100%;
+  height: 440px;
+  width: 100%;
 }
 </style>

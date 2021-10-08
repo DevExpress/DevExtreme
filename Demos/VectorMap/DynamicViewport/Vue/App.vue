@@ -85,32 +85,32 @@ export default {
 </script>
 <style>
 #vector-map {
-    height: 420px;
+  height: 420px;
 }
 
 .options {
-    padding: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
-    margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
 }
 
 .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option > span {
-    width: 144px;
-    display: inline-block;
+  width: 144px;
+  display: inline-block;
 }
 
 .option > .dx-widget {
-    display: inline-block;
-    vertical-align: middle;
-    width: 210px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 210px;
 }
 </style>

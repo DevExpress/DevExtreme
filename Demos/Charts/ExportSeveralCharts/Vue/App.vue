@@ -97,30 +97,31 @@ export default {
 </script>
 <style>
 #chart-demo {
-    height: 460px;
+  height: 460px;
 }
 
 .charts {
-    width: 820px;
-    margin: 0 auto;
-    height: 374px;
-    margin-bottom: 40px;
-    font-size: 0;
+  width: 820px;
+  margin: 0 auto;
+  height: 374px;
+  margin-bottom: 40px;
+  font-size: 0;
 }
 
-#chart, #pieChart{
-    width: 395px;
-    height: 100%;
-    display: inline-block;
-    vertical-align: top;
+#chart,
+#pieChart {
+  width: 395px;
+  height: 100%;
+  display: inline-block;
+  vertical-align: top;
 }
 
 #chart {
-    margin-right: 30px;
+  margin-right: 30px;
 }
 
 .controls-pane {
-    text-align: center;
+  text-align: center;
 }
 </style>
 

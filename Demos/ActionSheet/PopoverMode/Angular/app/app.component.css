@@ -1,3 +1,4 @@
-::ng-deep #list, .demo-container {
-    height: 100%;
+::ng-deep #list,
+.demo-container {
+  height: 100%;
 }

@@ -141,7 +141,7 @@ export default {
 </script>
 <style>
 .employees-data {
-    padding-top: 16px;
-    padding-bottom: 10px;
+  padding-top: 16px;
+  padding-bottom: 10px;
 }
 </style>

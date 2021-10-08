@@ -1,3 +1,4 @@
-#list, .demo-container {
-    height: 100%;
+#list,
+.demo-container {
+  height: 100%;
 }

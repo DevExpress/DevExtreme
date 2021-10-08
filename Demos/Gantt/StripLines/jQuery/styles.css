@@ -1,7 +1,7 @@
 #gantt {
-    height: 700px;
+  height: 700px;
 }
 
 #gantt .current-time {
-    border-left: 1px solid red;
+  border-left: 1px solid red;
 }

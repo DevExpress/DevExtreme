@@ -1,23 +1,23 @@
 ::ng-deep .dx-htmleditor-content img {
-    vertical-align: middle;
-    padding-right: 10px;
+  vertical-align: middle;
+  padding-right: 10px;
 }
 
 ::ng-deep .dx-htmleditor-content table {
-    width: 50%;
+  width: 50%;
 }
 
 ::ng-deep .options {
-    padding: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
-    margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
 }
 
 ::ng-deep .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 ::ng-deep .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }

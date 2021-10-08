@@ -78,22 +78,22 @@ export default {
 </script>
 <style>
 #wrapper #file-manager {
-    visibility: hidden;
+  visibility: hidden;
 }
 
 #wrapper #message-box {
-    display: none;
+  display: none;
 }
 
 #wrapper.show-widget #file-manager {
-    visibility: visible;
+  visibility: visible;
 }
 
 #wrapper.show-message #file-manager {
-    display: none;
+  display: none;
 }
 
 #wrapper.show-message #message-box {
-    display: block;
+  display: block;
 }
 </style>

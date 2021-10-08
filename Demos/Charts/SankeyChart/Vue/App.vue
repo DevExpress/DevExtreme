@@ -52,6 +52,6 @@ export default {
 </script>
 <style>
 #sankey {
-    height: 440px;
+  height: 440px;
 }
 </style>

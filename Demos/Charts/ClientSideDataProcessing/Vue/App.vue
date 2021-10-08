@@ -104,14 +104,14 @@ export default {
 </script>
 <style>
 .action {
-    width: 330px;
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  width: 330px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .action .dx-selectbox {
-    width: 90px;
+  width: 90px;
 }
 </style>

@@ -1,9 +1,9 @@
 ::ng-deep .pies-container {
-    margin: auto;
-    width: 800px;
+  margin: auto;
+  width: 800px;
 }
 
 ::ng-deep .pies-container > .pie {
-    width: 400px;
-    float: left;
+  width: 400px;
+  float: left;
 }

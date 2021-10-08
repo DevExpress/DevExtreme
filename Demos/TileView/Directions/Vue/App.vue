@@ -54,37 +54,37 @@ export default {
 </script>
 <style>
 .dx-selectbox {
-    max-width: 400px;
+  max-width: 400px;
 }
 
 .dx-tile-content {
-    height: 100%;
+  height: 100%;
 }
 
 .options {
-    padding: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
-    margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
 }
 
 .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .option > span {
-    width: 74px;
-    display: inline-block;
+  width: 74px;
+  display: inline-block;
 }
 
 .option > .dx-widget {
-    display: inline-block;
-    vertical-align: middle;
-    width: 100%;
-    max-width: 350px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+  max-width: 350px;
 }
 </style>

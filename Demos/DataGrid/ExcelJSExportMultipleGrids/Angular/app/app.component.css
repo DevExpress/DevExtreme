@@ -1,9 +1,11 @@
 ::ng-deep #exportContainer {
-    text-align: right;
+  text-align: right;
 }
+
 ::ng-deep #tabPanel {
-    padding-top: 10px;
+  padding-top: 10px;
 }
+
 ::ng-deep .data-grid {
-    padding: 10px;
+  padding: 10px;
 }

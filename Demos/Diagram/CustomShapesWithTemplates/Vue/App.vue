@@ -88,10 +88,10 @@ export default {
 </script>
 <style scoped>
     #diagram {
-        height: 725px;
+      height: 725px;
     }
 
     .dx-popup-content p {
-        margin: 0 0 10px;
+      margin: 0 0 10px;
     }
 </style>

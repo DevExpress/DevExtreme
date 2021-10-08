@@ -106,41 +106,41 @@ export default {
 </script>
 <style scoped>
 #employees {
-    max-height: 440px;
+  max-height: 440px;
 }
 
 .options {
-    padding: 20px;
-    margin-top: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .selected-data {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .selected-data .caption {
-    margin-right: 4px;
+  margin-right: 4px;
 }
 
 .option > span {
-    width: 120px;
-    display: inline-block;
+  width: 120px;
+  display: inline-block;
 }
 
 .option > .dx-widget {
-    display: inline-block;
-    vertical-align: middle;
-    width: 100%;
-    max-width: 350px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+  max-width: 350px;
 }
 </style>

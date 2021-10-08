@@ -67,6 +67,6 @@ export default {
 </script>
 <style scoped>
 #treelist {
-    max-height: 440px;
+  max-height: 440px;
 }
 </style>

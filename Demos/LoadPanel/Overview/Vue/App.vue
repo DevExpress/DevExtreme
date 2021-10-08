@@ -152,8 +152,8 @@ h1 {
 }
 
 .header-container {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 </style>
 

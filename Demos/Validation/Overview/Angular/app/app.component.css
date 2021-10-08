@@ -1,8 +1,9 @@
 ::ng-deep #summary {
-    padding-left: 10px;
-    margin-top: 20px;
-    margin-bottom: 10px;
+  padding-left: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
+
 ::ng-deep #button {
-    display: block;
+  display: block;
 }

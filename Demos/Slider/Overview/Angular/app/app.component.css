@@ -1,7 +1,7 @@
 ::ng-deep .custom-height-slider {
-    height: 75px;
+  height: 75px;
 }
 
-::ng-deep  .dx-field .dx-slider {
-    flex: 1;
+::ng-deep .dx-field .dx-slider {
+  flex: 1;
 }

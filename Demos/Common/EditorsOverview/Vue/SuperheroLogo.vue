@@ -202,46 +202,55 @@ export default {
 </script>
 <style>
 .picture-container {
-    text-align: center;
-    margin: 20px 2px 5px 2px;
-    padding-top: 20px;
-    overflow: hidden;
-    outline-width: 2px;
-    outline-style: none;
-    outline-color: #f05b41;
+  text-align: center;
+  margin: 20px 2px 5px 2px;
+  padding-top: 20px;
+  overflow: hidden;
+  outline-width: 2px;
+  outline-style: none;
+  outline-color: #f05b41;
 }
+
 .picture {
-    transition: transform ease-in-out 400ms;
-    display: inline-block;
-    padding: 10px;
+  transition: transform ease-in-out 400ms;
+  display: inline-block;
+  padding: 10px;
 }
+
 .color {
-    fill: #f05b41;
+  fill: #f05b41;
 }
+
 .text {
-    text-align: center;
-    color: #f05b41;
-    font-size: 30px;
-    padding: 30px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+  text-align: center;
+  color: #f05b41;
+  font-size: 30px;
+  padding: 30px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
+
 .dx-color-scheme-light .base-color,
 .dx-color-scheme-carmine .base-color,
 .dx-color-scheme-softblue .base-color {
-    fill: #333;
+  fill: #333;
 }
-.dx-color-scheme-contrast .base-color, .dx-color-scheme-darkmoon .base-color {
-    fill: #fff;
+
+.dx-color-scheme-contrast .base-color,
+.dx-color-scheme-darkmoon .base-color {
+  fill: #fff;
 }
+
 .dx-color-scheme-dark .base-color {
-    fill: #dedede;
+  fill: #dedede;
 }
+
 .dx-color-scheme-darkviolet .base-color {
-    fill: #f5f6f7;
+  fill: #f5f6f7;
 }
+
 .dx-color-scheme-greenmist .base-color {
-    fill: #28484f;
+  fill: #28484f;
 }
 </style>

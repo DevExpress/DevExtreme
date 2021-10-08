@@ -59,26 +59,27 @@ export default {
 </script>
 <style>
 .chunk-panel {
-    width: 505px;
-    height: 165px;
-    overflow-y: auto;
-    padding: 18px;
-    margin-top: 40px;
-    background-color: rgba(191, 191, 191, 0.15);
+  width: 505px;
+  height: 165px;
+  overflow-y: auto;
+  padding: 18px;
+  margin-top: 40px;
+  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .segment-size,
 .loaded-size {
-    margin-left: 3px;
+  margin-left: 3px;
 }
 
 .note {
-    display: block;
-    font-size: 10pt;
-    color: #484848;
-    margin-left: 9px;
+  display: block;
+  font-size: 10pt;
+  color: #484848;
+  margin-left: 9px;
 }
+
 .note > span {
-    font-weight: 700
+  font-weight: 700;
 }
 </style>

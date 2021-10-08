@@ -94,19 +94,19 @@ export default {
 </script>
 <style>
   .options {
-      padding: 20px;
-      background-color: rgba(191, 191, 191, 0.15);
-      margin-top: 20px;
+    padding: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+    margin-top: 20px;
   }
 
   .caption {
-      font-size: 18px;
-      font-weight: 500;
+    font-size: 18px;
+    font-weight: 500;
   }
 
   .option {
-      width: 24%;
-      display: inline-block;
-      margin-top: 10px;
+    width: 24%;
+    display: inline-block;
+    margin-top: 10px;
   }
 </style>

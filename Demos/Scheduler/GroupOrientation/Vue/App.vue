@@ -57,6 +57,6 @@ export default {
 
 <style scoped>
 .dx-scheduler-cell-sizes-horizontal {
-    width: 100px;
+  width: 100px;
 }
 </style>

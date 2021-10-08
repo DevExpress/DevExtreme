@@ -53,21 +53,21 @@ export default {
 </script>
 <style>
 .dx-menu-item-content span {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
 .dx-menu-item .dx-icon-spinright {
-    position: absolute;
-    top: 7px;
-    right: 2px;
+  position: absolute;
+  top: 7px;
+  right: 2px;
 }
 
-#image{
-    height: 300px;
+#image {
+  height: 300px;
 }
 
 .label {
-    color: #767676;
+  color: #767676;
 }
 
 </style>

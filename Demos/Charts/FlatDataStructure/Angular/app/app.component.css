@@ -1,6 +1,7 @@
 ::ng-deep #treemap {
-    height: 500px;
+  height: 500px;
 }
+
 ::ng-deep .city {
-    font-weight: 500;
+  font-weight: 500;
 }

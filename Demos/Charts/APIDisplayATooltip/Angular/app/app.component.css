@@ -1,7 +1,8 @@
 ::ng-deep .controls-pane {
-    margin-top: 20px;
-    text-align: center;
+  margin-top: 20px;
+  text-align: center;
 }
+
 ::ng-deep .dx-selectbox {
-    display: inline-block;
+  display: inline-block;
 }

@@ -61,14 +61,14 @@ export default {
 </script>
 <style scoped>
 .dx-fieldset:first-child > h4:first-child {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 #notes-container > .dx-field > .dx-field-label {
-    width: 20%;
+  width: 20%;
 }
 
 #notes-container > .dx-field > .dx-field-value {
-    width: 80%;
+  width: 80%;
 }
 </style>

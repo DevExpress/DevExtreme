@@ -142,9 +142,10 @@ export default {
 </script>
 <style>
 #tasks {
-    max-height: 540px;
+  max-height: 540px;
 }
+
 #tasks .dx-treelist-rowsview td {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 </style>

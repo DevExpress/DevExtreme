@@ -1,6 +1,7 @@
 ::ng-deep #image {
-    height: 300px;
+  height: 300px;
 }
+
 ::ng-deep .label {
-    color: #767676;
+  color: #767676;
 }

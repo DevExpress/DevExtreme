@@ -67,10 +67,10 @@ export default {
 </script>
 <style scoped>
 .demo-container {
-    height: 570px;
+  height: 570px;
 }
 
 #employees {
-    height: 440px;
+  height: 440px;
 }
 </style>

@@ -85,6 +85,6 @@ export default {
 </script>
 <style scoped>
 #gridContainer {
-    height: 440px;
+  height: 440px;
 }
 </style>

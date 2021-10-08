@@ -95,30 +95,34 @@ export default {
 </script>
 <style scoped>
 #treemap {
-    height: 460px;
+  height: 460px;
 }
 
 .country {
-    font-weight: 500;
+  font-weight: 500;
 }
 
 .options {
-    padding: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
-    margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
 }
+
 .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
+
 .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
+
 .option > span {
-    margin-right: 14px;
+  margin-right: 14px;
 }
+
 .option > .dx-widget {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>

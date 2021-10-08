@@ -81,22 +81,22 @@ export default {
 </script>
 <style>
 .rows-content td {
-    font-weight: 400;
-    width: 200px;
-    padding: 25px 10px 5px 10px;
-    border: 1px solid #c2c2c2;
+  font-weight: 400;
+  width: 200px;
+  padding: 25px 10px 5px 10px;
+  border: 1px solid #c2c2c2;
 }
 
 .rows-content tr:nth-child(2) td {
-    border-top: 1px solid #c2c2c2;
+  border-top: 1px solid #c2c2c2;
 }
 
 .rows-content td:first-of-type {
-    border-left: 1px solid #c2c2c2;
+  border-left: 1px solid #c2c2c2;
 }
 
 .rows-content .sparkline {
-    width: 200px;
-    height: 30px;
+  width: 200px;
+  height: 30px;
 }
 </style>

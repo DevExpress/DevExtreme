@@ -77,19 +77,19 @@ export default {
 </script>
 <style>
 #chart {
-    height: 440px;
-    width: 100%;
+  height: 440px;
+  width: 100%;
 }
 
 #chart.pointer-on-bars .dxc-series rect {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .button-container {
-    text-align: center;
-    height: 40px;
-    position: absolute;
-    top: 7px;
-    left: 0px;
+  text-align: center;
+  height: 40px;
+  position: absolute;
+  top: 7px;
+  left: 0;
 }
 </style>

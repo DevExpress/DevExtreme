@@ -1,21 +1,26 @@
-::ng-deep .content{
-    text-align: justify;
-    margin-top: 25px;
+::ng-deep .content {
+  text-align: justify;
+  margin-top: 25px;
 }
-::ng-deep #longtabs{
-    margin-top: 20px;
+
+::ng-deep #longtabs {
+  margin-top: 20px;
 }
+
 ::ng-deep #scrolledtabs {
-    margin-top: 20px;
+  margin-top: 20px;
 }
+
 ::ng-deep #tabs {
-    margin-top: 60px;
+  margin-top: 60px;
 }
-::ng-deep .caption{
-    font-size: 16px;
-    padding-bottom: 3px;
-    padding-left: 10px;
+
+::ng-deep .caption {
+  font-size: 16px;
+  padding-bottom: 3px;
+  padding-left: 10px;
 }
+
 ::ng-deep .left-aligned {
-    text-align: left;
+  text-align: left;
 }

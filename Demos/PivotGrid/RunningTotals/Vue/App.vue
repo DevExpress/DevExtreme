@@ -86,6 +86,6 @@ export default {
 </script>
 <style scoped>
 #sales {
-    margin: 20px 0;
+  margin: 20px 0;
 }
 </style>

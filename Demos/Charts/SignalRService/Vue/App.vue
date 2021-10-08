@@ -168,6 +168,6 @@ export default {
 
 <style>
 #chart {
-    height: 440px;
+  height: 440px;
 }
 </style>

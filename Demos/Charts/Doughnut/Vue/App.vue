@@ -71,6 +71,6 @@ export default {
 </script>
 <style>
 #pie {
-    height: 440px;
+  height: 440px;
 }
 </style>

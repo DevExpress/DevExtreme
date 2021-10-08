@@ -136,23 +136,23 @@ export default {
 
 <style>
 #grid-container {
-    height: 400px;
+  height: 400px;
 }
 
 .center {
-    text-align: center;
+  text-align: center;
 }
 
 .selection-summary {
-    border: 1px solid rgba(161, 161,161, 0.2);
-    padding: 25px;
+  border: 1px solid rgba(161, 161, 161, 0.2);
+  padding: 25px;
 }
 
 .column {
-    margin: 20px 30px 0 0;
-    display: inline-block;
-    white-space: nowrap;
-    text-align: right;
+  margin: 20px 30px 0 0;
+  display: inline-block;
+  white-space: nowrap;
+  text-align: right;
 }
 
 .column:nth-child(2) {
@@ -160,28 +160,28 @@ export default {
 }
 
 .value {
-    font-size: 40px;
-    display: inline-block;
-    vertical-align: middle;
+  font-size: 40px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .text {
-    text-align: left;
-    white-space: normal;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 4px;
+  text-align: left;
+  white-space: normal;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 4px;
 }
 
 .avg-duration {
-    width: 100px;
+  width: 100px;
 }
 
-.count{
-    width: 40px;
+.count {
+  width: 40px;
 }
 
 .people-count {
-    width: 65px;
+  width: 65px;
 }
 </style>

@@ -136,47 +136,47 @@ export default {
 <style scoped>
 
 .dx-datagrid-header-panel {
-    padding: 0;
-    background-color: rgba(85, 149, 222, 0.6);
+  padding: 0;
+  background-color: rgba(85, 149, 222, 0.6);
 }
 
 .dx-datagrid-header-panel .dx-toolbar {
-    margin: 0;
-    padding-right: 20px;
-    background-color: transparent;
+  margin: 0;
+  padding-right: 20px;
+  background-color: transparent;
 }
 
-.dx-datagrid-header-panel .dx-toolbar-items-container  {
-    height: 70px;
+.dx-datagrid-header-panel .dx-toolbar-items-container {
+  height: 70px;
 }
 
 .dx-datagrid-header-panel .dx-toolbar-before .dx-toolbar-item:not(:first-child) {
-    background-color: rgba(103, 171, 255, 0.6);
+  background-color: rgba(103, 171, 255, 0.6);
 }
 
 .dx-datagrid-header-panel .dx-toolbar-before .dx-toolbar-item:last-child {
-    padding-right: 10px;
+  padding-right: 10px;
 }
 
 .dx-datagrid-header-panel .dx-selectbox {
-    margin: auto 10px;
+  margin: auto 10px;
 }
 
 .dx-datagrid-header-panel .dx-button {
-     margin: auto 0;
+  margin: auto 0;
 }
 
 .informer {
-    height: 70px;
-    width: 130px;
-    text-align: center;
-    color: #fff;
+  height: 70px;
+  width: 130px;
+  text-align: center;
+  color: #fff;
 }
 
 .count {
-    padding-top: 15px;
-    line-height: 27px;
-    font-size: 28px;
-    margin: 0;
+  padding-top: 15px;
+  line-height: 27px;
+  font-size: 28px;
+  margin: 0;
 }
 </style>

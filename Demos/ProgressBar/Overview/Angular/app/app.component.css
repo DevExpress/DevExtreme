@@ -1,13 +1,16 @@
 ::ng-deep .form {
-    padding: 20% 0;
-    text-align: center;
+  padding: 20% 0;
+  text-align: center;
 }
+
 ::ng-deep #progress-button {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
+
 ::ng-deep #progress-bar-status {
-    display: inline-block;
+  display: inline-block;
 }
+
 ::ng-deep .complete .dx-progressbar-range {
-    background-color: green;
+  background-color: green;
 }

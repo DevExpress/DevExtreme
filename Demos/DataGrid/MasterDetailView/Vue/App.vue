@@ -63,6 +63,6 @@ export default {
 </script>
 <style>
 #grid-container {
-    height: 440px;
+  height: 440px;
 }
 </style>

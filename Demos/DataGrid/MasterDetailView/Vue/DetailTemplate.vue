@@ -67,7 +67,8 @@ export default {
 </script>
 <style>
 .master-detail-caption {
-    padding: 0 0 5px 10px;
-    font-size: 14px;
-    font-weight: bold;
-}</style>
+  padding: 0 0 5px 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+</style>

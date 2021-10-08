@@ -1,40 +1,42 @@
 #gantt {
-    height: 700px;
+  height: 700px;
 }
 
 ::ng-deep .options {
-    background-color: rgba(191, 191, 191, 0.15);
-    margin-top: 20px;
-    display: flex;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
+  display: flex;
 }
 
 ::ng-deep .column {
-    width: 40%;
-    display: flex;
-    flex-direction: column;
-    margin: 15px 3%;
-    text-align: left;
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  margin: 15px 3%;
+  text-align: left;
 }
 
 ::ng-deep .option {
-    padding: 5px 0;
-    display: flex;
-    align-items: center;
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
 }
 
-::ng-deep .label, .value {
-    display: inline-block;
-    vertical-align: middle;
+::ng-deep .label,
+.value {
+  display: inline-block;
+  vertical-align: middle;
 }
 
 ::ng-deep .label {
-    width: 180px;
+  width: 180px;
 }
 
 ::ng-deep .value {
-    width: 30%;
+  width: 30%;
 }
+
 ::ng-deep .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }

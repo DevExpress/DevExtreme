@@ -53,12 +53,13 @@ export default {
 </script>
 <style>
 h4 {
-    font-size: 14px;
-    margin-bottom: 5px;
+  font-size: 14px;
+  margin-bottom: 5px;
 }
+
 #gdp-sectors {
-    width: 400px;
-    height: 200px;
+  width: 400px;
+  height: 200px;
 }
 </style>
 

@@ -85,11 +85,11 @@ export default {
 </script>
 <style>
 #chart-demo {
-    height: 600px;
+  height: 600px;
 }
 
 #radarChart {
-    height: 500px;
+  height: 500px;
 }
 
 #chart-demo > .center {
@@ -97,7 +97,7 @@ export default {
 }
 
 #chart-demo > .center > .dx-widget {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>

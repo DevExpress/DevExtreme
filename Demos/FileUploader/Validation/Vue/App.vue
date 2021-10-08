@@ -14,7 +14,7 @@
     </div>
     <div
       class="file-uploader-block"
-      style="float: right"
+      style="float: right;"
     >
       <DxFileUploader
         :multiple="true"
@@ -40,22 +40,22 @@ export default {
 </script>
 <style>
 .file-uploader-block {
-    width: 350px;
-    float: left;
+  width: 350px;
+  float: left;
 }
 
 .note {
-    font-size: 10pt;
-    color: #484848;
-    margin-left: 9px;
+  font-size: 10pt;
+  color: #484848;
+  margin-left: 9px;
 }
 
 .note > span {
-    font-weight: 700
+  font-weight: 700;
 }
 
 .main-block {
-    max-width: 900px;
-    min-width: 700px;
+  max-width: 900px;
+  min-width: 700px;
 }
 </style>

@@ -98,30 +98,30 @@ export default {
 </script>
 <style scoped>
 #employees {
-    max-height: 440px;
+  max-height: 440px;
 }
 
 .options {
-    padding: 20px;
-    margin-top: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .option > span {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .option > .dx-selectbox {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>

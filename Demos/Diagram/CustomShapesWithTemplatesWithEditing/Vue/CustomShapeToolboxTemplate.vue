@@ -26,11 +26,11 @@ export default {
 
 <style>
     #diagram .template .template-name {
-        font-weight: bold;
-        text-decoration: underline;
+      font-weight: bold;
+      text-decoration: underline;
     }
 
     #diagram .template .template-title {
-        font-style: italic;
+      font-style: italic;
     }
 </style>

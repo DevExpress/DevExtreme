@@ -93,9 +93,10 @@ export default {
 </script>
 <style scoped>
 #chart {
-    height: 440px;
+  height: 440px;
 }
+
 .tooltip {
-    width: 300px;
+  width: 300px;
 }
 </style>

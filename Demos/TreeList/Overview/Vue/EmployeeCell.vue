@@ -25,18 +25,19 @@ export default {
 <style>
 .img,
 .name {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
+
 .img {
-    height: 50px;
-    width: 50px;
-    margin-right: 14px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    border-radius: 25px;
-    border: 1px solid lightgray;
-    background-color: #fff;
+  height: 50px;
+  width: 50px;
+  margin-right: 14px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border-radius: 25px;
+  border: 1px solid lightgray;
+  background-color: #fff;
 }
 </style>

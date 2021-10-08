@@ -43,9 +43,10 @@ export default {
 
 <style>
 #treemap {
-    height: 500px;
+  height: 500px;
 }
+
 .city {
-    font-weight: 500;
+  font-weight: 500;
 }
 </style>

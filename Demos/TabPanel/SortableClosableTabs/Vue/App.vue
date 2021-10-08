@@ -117,10 +117,12 @@ export default {
   justify-content: flex-end;
   padding-bottom: 10px;
 }
+
 .dx-tabs .dx-tabs-wrapper .dx-item.dx-tab {
   width: auto;
   padding-left: 20px;
 }
+
 .dx-tab-content .dx-icon.dx-icon-close {
   display: inline-block;
   opacity: 0.6;
@@ -128,33 +130,40 @@ export default {
   margin-left: 7px;
   font-size: 18px;
 }
+
 .dx-sortable-dragging .dx-tab {
   box-sizing: border-box;
   text-align: center;
 }
+
 .employeeInfo .employeePhoto {
   height: 100px;
   float: left;
   padding: 10px 20px 10px 20px;
 }
+
 .employeeInfo .employeeNotes {
   min-height: 100px;
   padding: 20px;
   text-align: justify;
   white-space: normal;
 }
+
 .dx-theme-generic .dx-tabs-wrapper .dx-item.dx-tab {
   padding-left: 14px;
   padding-right: 9px;
   line-height: 1.618;
 }
+
 .dx-theme-generic .dx-icon.dx-icon-close {
   font-size: 15px;
 }
+
 .dx-theme-material .dx-tab-content span {
   vertical-align: middle;
   line-height: initial;
 }
+
 .dx-theme-material .employeeNotes {
   margin: 0;
 }

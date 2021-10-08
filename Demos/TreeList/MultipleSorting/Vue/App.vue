@@ -78,6 +78,6 @@ export default {
 </script>
 <style scoped>
 #tasks {
-    max-height: 440px;
+  max-height: 440px;
 }
 </style>

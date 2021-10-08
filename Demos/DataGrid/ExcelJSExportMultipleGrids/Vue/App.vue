@@ -181,13 +181,16 @@ function setAlternatingRowsBackground(gridCell, excelCell) {
 </script>
 
 <style scoped>
-#priceDataGrid, #ratingDataGrid {
+#priceDataGrid,
+#ratingDataGrid {
   padding: 10px;
 }
+
 #exportContainer {
-    text-align: right;
+  text-align: right;
 }
+
 #tabPanel {
-    padding-top: 10px;
+  padding-top: 10px;
 }
 </style>

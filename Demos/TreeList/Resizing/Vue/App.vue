@@ -67,16 +67,16 @@ export default {
 </script>
 <style scoped>
 #employees {
-    max-height: 307px;
+  max-height: 307px;
 }
 
 .options {
-    padding: 20px;
-    margin-top: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
-    position: absolute;
-    bottom: 0px;
-    width: 100%;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 
 .caption {
@@ -85,19 +85,19 @@ export default {
 }
 
 .option {
-    margin-top: 10px;
+  margin-top: 10px;
   display: flex;
   align-items: center;
 }
 
 .option > span {
-    position: relative;
-    top: 2px;
-    margin-right: 10px;
+  position: relative;
+  top: 2px;
+  margin-right: 10px;
 }
 
 .option > .dx-widget {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>

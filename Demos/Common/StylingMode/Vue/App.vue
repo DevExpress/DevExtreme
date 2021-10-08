@@ -117,50 +117,53 @@ export default {
 </script>
 <style>
 .title {
-    padding: 20px 0 20px 0;
-    font-size: 18px;
-    font-weight: 500;
+  padding: 20px 0 20px 0;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .editors {
-    margin-right: 320px;
+  margin-right: 320px;
 }
 
-.editors .left, .editors .right {
-    display: inline-block;
-    width: 49%;
-    box-sizing: border-box;
+.editors .left,
+.editors .right {
+  display: inline-block;
+  width: 49%;
+  box-sizing: border-box;
 }
 
-.editors .left > *, .editors .right > *, .editors .center > * {
-    margin-bottom: 20px;
+.editors .left > *,
+.editors .right > *,
+.editors .center > * {
+  margin-bottom: 20px;
 }
 
 .editors .center {
-    padding: 20px 27px 0 0;
+  padding: 20px 27px 0 0;
 }
 
 .validate {
-    float: right;
+  float: right;
 }
 
 .options {
-    padding: 20px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 260px;
-    top: 0;
-    background-color: rgba(191, 191, 191, 0.15);
+  padding: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 260px;
+  top: 0;
+  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .editors-container {

@@ -94,7 +94,7 @@ export default {
 </script>
 <style scoped>
 #gridContainer {
-    height: 440px;
-    margin-bottom: 10px;
+  height: 440px;
+  margin-bottom: 10px;
 }
 </style>

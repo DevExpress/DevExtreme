@@ -55,13 +55,13 @@ export default {
 </script>
 <style scoped>
 #orders {
-    max-height: 310px;
+  max-height: 310px;
 }
 
 .options {
-    padding: 20px;
-    margin-top: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .caption {
@@ -70,17 +70,17 @@ export default {
 }
 
 .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .option > span {
-    position: relative;
-    top: 2px;
-    margin-right: 10px;
+  position: relative;
+  top: 2px;
+  margin-right: 10px;
 }
 
 .option > .dx-widget {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>

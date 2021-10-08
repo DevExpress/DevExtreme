@@ -60,7 +60,7 @@ export default {
 </script>
 <style>
 #chart {
-    height: 440px;
-    width: 100%;
+  height: 440px;
+  width: 100%;
 }
 </style>

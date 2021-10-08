@@ -1,16 +1,16 @@
 #chart-demo {
-    height: 600px;
+  height: 600px;
 }
 
 #radarChart {
-    height: 500px;
+  height: 500px;
 }
 
 #chart-demo > .center {
-	text-align: center;
+  text-align: center;
 }
 
 #chart-demo > .center > .dx-widget {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }

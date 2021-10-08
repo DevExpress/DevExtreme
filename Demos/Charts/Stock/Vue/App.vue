@@ -87,6 +87,6 @@ Low: $${pointInfo.lowValue}<br/>`,
 </script>
 <style>
 #chart {
-    height: 440px;
+  height: 440px;
 }
 </style>

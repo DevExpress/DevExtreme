@@ -127,50 +127,53 @@ export default {
 };
 </script>
 <style scoped>
-#back, #back-disabled {
- margin-left: 4px;
+#back,
+#back-disabled {
+  margin-left: 4px;
 }
+
 .dx-viewport:not(.dx-theme-ios7) .dx-fieldset {
-    width: 520px;
-    margin: 30px auto;
+  width: 520px;
+  margin: 30px auto;
 }
 
 .dx-viewport:not(.dx-theme-ios7) .dx-fieldset:first-child {
-    margin-top: 120px;
+  margin-top: 120px;
 }
 
 .dx-viewport:not(.dx-theme-ios7) .dx-fieldset-header {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .dx-viewport:not(.dx-theme-ios7) .dx-field {
-    display: inline-block;
-    margin-right: 20px;
+  display: inline-block;
+  margin-right: 20px;
 }
 
 .dx-viewport:not(.dx-theme-ios7) .dx-field-value:not(.dx-widget) > .dx-button {
-    float: none;
+  float: none;
 }
 
 .dx-viewport:not(.dx-theme-ios7) .dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button),
 .dx-viewport:not(.dx-theme-ios7) .dx-field-label {
-    float: none;
-    width: 100%;
+  float: none;
+  width: 100%;
 }
 
 .dx-viewport:not(.dx-theme-ios7) .dx-field-label {
-    padding-left: 0;
+  padding-left: 0;
 }
 
 .send .dx-button-content .dx-icon {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 .fields-container {
-    display: flex;
-    align-items: baseline;
+  display: flex;
+  align-items: baseline;
 }
+
 .dx-field-value {
-    display: flex;
+  display: flex;
 }
 </style>

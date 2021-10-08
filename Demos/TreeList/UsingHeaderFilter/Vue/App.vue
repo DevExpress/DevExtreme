@@ -59,6 +59,6 @@ export default {
 </script>
 <style scoped>
 #employees {
-    max-height: 440px;
+  max-height: 440px;
 }
 </style>

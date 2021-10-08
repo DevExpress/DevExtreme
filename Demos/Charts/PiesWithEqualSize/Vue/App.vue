@@ -63,12 +63,12 @@ export default {
 
 <style>
 .pies-container {
-    margin: auto;
-    width: 800px;
+  margin: auto;
+  width: 800px;
 }
 
 .pies-container > .pie {
-    width: 400px;
-    float: left;
+  width: 400px;
+  float: left;
 }
 </style>

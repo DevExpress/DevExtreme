@@ -84,41 +84,41 @@ export default {
 </script>
 <style>
 .widget-container {
-    margin-right: 320px;
+  margin-right: 320px;
 }
 
 .content h4 {
-    margin-bottom: 10px;
-    font-weight: 500;
-    font-size: 18px;
+  margin-bottom: 10px;
+  font-weight: 500;
+  font-size: 18px;
 }
 
 .content {
-    margin-top: 50px;
-    margin-left: 10px;
-    display: none;
+  margin-top: 50px;
+  margin-left: 10px;
+  display: none;
 }
 
 .selected-item {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .options {
-    padding: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 260px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 260px;
 }
 
 .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 </style>

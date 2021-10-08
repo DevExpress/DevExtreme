@@ -107,13 +107,13 @@ export default {
 </script>
 <style>
 #chart {
-    height: 440px;
-    width: 100%;
+  height: 440px;
+  width: 100%;
 }
 
 #reset-zoom {
-   position: absolute;
-   right: 10px;
-   top: 5px;
+  position: absolute;
+  right: 10px;
+  top: 5px;
 }
 </style>

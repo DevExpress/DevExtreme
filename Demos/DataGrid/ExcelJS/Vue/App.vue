@@ -243,17 +243,17 @@ export default {
 
 <style scoped>
 #gridContainer {
-    height: 425px;
+  height: 425px;
 }
 
 #header {
-    font-weight: bold;
-    font-size: 1.5em;
-    text-align: center;
+  font-weight: bold;
+  font-size: 1.5em;
+  text-align: center;
 }
 
 #footer {
-    text-align: right;
-    color: #bfbfbf;
+  text-align: right;
+  color: #bfbfbf;
 }
 </style>

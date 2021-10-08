@@ -106,33 +106,33 @@ export default {
 </script>
 <style scoped>
 #gridContainer {
-    height: 440px;
+  height: 440px;
 }
 
 .options {
-    padding: 20px;
-    margin-top: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .caption {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
   font-weight: 500;
   font-size: 18px;
 }
 
 .option {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .option > span {
-    position: relative;
-    margin-right: 14px;
+  position: relative;
+  margin-right: 14px;
 }
 
 .option > div {
-    display: inline-block;
-    font-weight: bold;
+  display: inline-block;
+  font-weight: bold;
 }
 </style>
 

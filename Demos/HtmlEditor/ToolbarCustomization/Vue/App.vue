@@ -74,7 +74,7 @@ export default {
 </script>
 <style>
 .dx-htmleditor-content img {
-    vertical-align: middle;
-    padding-right: 10px;
+  vertical-align: middle;
+  padding-right: 10px;
 }
 </style>

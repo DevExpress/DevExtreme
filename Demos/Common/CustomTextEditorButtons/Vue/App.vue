@@ -143,19 +143,19 @@ export default {
 </script>
 <style>
 .dx-fieldset {
-    min-height: 560px;
-    width: 560px;
-    margin: 0 auto;
+  min-height: 560px;
+  width: 560px;
+  margin: 0 auto;
 }
 
 .currency {
-    min-width: 32px;
+  min-width: 32px;
 }
 
 .dx-button.currency .dx-button-content {
-    font-size: 120%;
-    padding-left: 5px;
-    padding-right: 5px;
+  font-size: 120%;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 </style>

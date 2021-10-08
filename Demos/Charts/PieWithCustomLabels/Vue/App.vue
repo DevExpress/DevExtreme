@@ -70,6 +70,6 @@ export default {
 
 <style>
 #pie {
-    height: 440px;
+  height: 440px;
 }
 </style>

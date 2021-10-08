@@ -41,6 +41,6 @@ export default {
 </script>
 <style scoped>
     #diagram {
-        height: 600px;
+      height: 600px;
     }
 </style>

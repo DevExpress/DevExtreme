@@ -64,6 +64,6 @@ export default {
 
 <style>
 #pyramid {
-    height: 440px;
+  height: 440px;
 }
 </style>

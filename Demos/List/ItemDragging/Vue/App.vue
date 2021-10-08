@@ -68,17 +68,17 @@ export default {
 </script>
 <style>
 .widget-container {
-    display: flex;
+  display: flex;
 }
 
 .widget-container > * {
-    height: 400px;
-    width: 50%;
-    padding: 10px;
+  height: 400px;
+  width: 50%;
+  padding: 10px;
 }
 
 .dx-scrollview-content {
-    min-height: 380px;
+  min-height: 380px;
 }
 
 </style>

@@ -108,60 +108,62 @@ export default {
 </script>
 
 <style scoped>
-  .dx-scheduler-appointment {
-    color: #000000;
-    font-weight: 500;
-    background-color: #e4e4e4;
-  }
-
-  .dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
-    padding: 5px 0px 5px 7px;
-  }
-
-  .options {
-    background-color: rgba(191, 191, 191, 0.15);
-    margin-top: 20px;
-    display:flex;
-    align-items: flex-start;
-  }
-
-  .column {
-    width: 40%;
-    display: inline-block;
-    margin: 15px 3%;
-    text-align: left;
-    vertical-align: top;
-  }
-
-  .option {
-    padding: 5px 0;
-    display: flex;
-    align-items: center;
+.dx-scheduler-appointment {
+  color: #000;
+  font-weight: 500;
+  background-color: #e4e4e4;
 }
 
-  .label, .value {
-    display: inline-block;
-    vertical-align: middle;
-  }
+.dx-scheduler-appointment-recurrence .dx-scheduler-appointment-content {
+  padding: 5px 0 5px 7px;
+}
 
-  .label {
-    width: 180px;
-  }
+.options {
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
+  display: flex;
+  align-items: flex-start;
+}
 
-  .value {
-    width: 30%;
-  }
+.column {
+  width: 40%;
+  display: inline-block;
+  margin: 15px 3%;
+  text-align: left;
+  vertical-align: top;
+}
 
-  .movie img {
-    height: 70px;
-  }
+.option {
+  padding: 5px 0;
+  display: flex;
+  align-items: center;
+}
 
-  .movie-text {
-    font-size: 90%;
-    white-space: normal;
-  }
+.label,
+.value {
+  display: inline-block;
+  vertical-align: middle;
+}
 
-  #allow-shading, #show-indicator {
-    height: 36px;
-  }
+.label {
+  width: 180px;
+}
+
+.value {
+  width: 30%;
+}
+
+.movie img {
+  height: 70px;
+}
+
+.movie-text {
+  font-size: 90%;
+  white-space: normal;
+}
+
+#allow-shading,
+#show-indicator {
+  height: 36px;
+}
 </style>

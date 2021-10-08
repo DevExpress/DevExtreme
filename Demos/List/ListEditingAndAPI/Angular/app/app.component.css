@@ -1,25 +1,25 @@
 ::ng-deep .options {
-    margin-top: 20px;
-    padding: 20px;
-    background: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
+  padding: 20px;
+  background: rgba(191, 191, 191, 0.15);
 }
 
 ::ng-deep .options .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 ::ng-deep .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 ::ng-deep .option > span {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 ::ng-deep .option > .dx-selectbox {
-    display: inline-block;
-    vertical-align: middle;
-    max-width: 350px;
-    width: 100%;
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 350px;
+  width: 100%;
 }

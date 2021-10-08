@@ -64,11 +64,11 @@ export default {
 </script>
 <style scoped>
 #range-selector-demo {
-    text-align: center;
+  text-align: center;
 }
 
 #range-selector {
-    margin-bottom: 20px;
-    height: 200px;
+  margin-bottom: 20px;
+  height: 200px;
 }
 </style>

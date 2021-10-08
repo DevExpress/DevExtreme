@@ -43,6 +43,6 @@ export default {
 </script>
 <style scoped>
 #pie-chart {
-    height: 440px;
+  height: 440px;
 }
 </style>

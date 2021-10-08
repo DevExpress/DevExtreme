@@ -114,9 +114,10 @@ export default {
 </script>
 <style>
 #pivotgrid {
-    margin-top: 20px;
+  margin-top: 20px;
 }
+
 .currency {
-    text-align: center;
+  text-align: center;
 }
 </style>

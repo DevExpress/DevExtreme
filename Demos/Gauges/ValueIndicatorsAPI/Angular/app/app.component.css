@@ -1,25 +1,29 @@
 ::ng-deep .widget-container {
-    margin-right: 320px;
+  margin-right: 320px;
 }
+
 ::ng-deep .options {
-    padding: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 260px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 260px;
 }
+
 ::ng-deep .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
+
 ::ng-deep .option {
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+
 ::ng-deep .dx-button {
-    margin-left: auto;
+  margin-left: auto;
 }

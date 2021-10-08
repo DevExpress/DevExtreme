@@ -32,24 +32,24 @@ export default {
 </script>
 <style scoped>
 .product {
-    height: 65px;
+  height: 65px;
 }
 
 .product > img {
-    height: 100%;
-    float: left;
+  height: 100%;
+  float: left;
 }
 
 .product > div {
-    padding-left: 10px;
-    vertical-align: top;
-    line-height: 65px;
-    font-size: 15px;
-    float: left;
+  padding-left: 10px;
+  vertical-align: top;
+  line-height: 65px;
+  font-size: 15px;
+  float: left;
 }
 
 .product > div.price {
-    float: right;
-    font-size: 18px;
+  float: right;
+  font-size: 18px;
 }
 </style>

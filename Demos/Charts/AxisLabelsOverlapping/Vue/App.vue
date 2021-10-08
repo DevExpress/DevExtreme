@@ -61,34 +61,34 @@ export default {
 </script>
 <style>
 #chart {
-    height: 330px;
-    max-width: 900px;
-    margin: auto;
+  height: 330px;
+  max-width: 900px;
+  margin: auto;
 }
 
 .options {
-    padding: 20px;
-    margin-top: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
+  padding: 20px;
+  margin-top: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
 }
 
 .caption {
-    font-weight: 500;
-    font-size: 18px;
+  font-weight: 500;
+  font-size: 18px;
 }
 
 .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .option > span {
-    position: relative;
-    top: 2px;
-    margin-right: 14px;
+  position: relative;
+  top: 2px;
+  margin-right: 14px;
 }
 
 .option > .dx-widget {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 </style>

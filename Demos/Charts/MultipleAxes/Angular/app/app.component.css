@@ -1,7 +1,7 @@
 ::ng-deep #chart {
-    height: 440px;
+  height: 440px;
 }
 
 ::ng-deep .active {
-    font-weight: 500;
+  font-weight: 500;
 }

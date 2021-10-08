@@ -92,73 +92,74 @@ export default {
 </script>
 <style scoped>
     .dx-toolbar {
-        background-color: rgba(191, 191, 191, .15);
-        padding: 5px 10px;
+      background-color: rgba(191, 191, 191, 0.15);
+      padding: 5px 10px;
     }
 
-    .dx-list-item-icon-container, .dx-toolbar-before {
-        width: 36px;
-        padding-right: 0px !important;
-        text-align: center;
+    .dx-list-item-icon-container,
+    .dx-toolbar-before {
+      width: 36px;
+      padding-right: 0 !important;
+      text-align: center;
     }
 
     .dx-list-item-content {
-        padding-left: 10px !important;
+      padding-left: 10px !important;
     }
 
     .dx-button {
-        background-color: rgba(191, 191, 191, -0.15);
-        border: none;
+      background-color: rgba(191, 191, 191, -0.15);
+      border: none;
     }
 
     .panel-list {
-        height: 400px;
+      height: 400px;
     }
 
     .dx-drawer-expand.dx-drawer-right .panel-list {
-        float: right;
+      float: right;
     }
 
     .panel-list .dx-list-item {
-        color: #fff;
-        border-top: 1px solid rgba(221, 221, 221, .2);
+      color: #fff;
+      border-top: 1px solid rgba(221, 221, 221, 0.2);
     }
 
     .panel-list .dx-list-item .dx-icon {
-        color: #fff !important;
+      color: #fff !important;
     }
 
     .options {
-        padding: 20px;
-        background-color: rgba(191, 191, 191, .15);
+      padding: 20px;
+      background-color: rgba(191, 191, 191, 0.15);
     }
 
     .options-container {
-        display: flex;
-        align-items: center;
+      display: flex;
+      align-items: center;
     }
 
     .caption {
-        font-size: 18px;
-        font-weight: 500;
+      font-size: 18px;
+      font-weight: 500;
     }
 
     .option {
-        margin-top: 10px;
-        display: inline-block;
-        margin-right: 50px;
+      margin-top: 10px;
+      display: inline-block;
+      margin-right: 50px;
     }
 
     label {
-        font-weight: bold;
+      font-weight: bold;
     }
 
     #content {
-        height: 100%;
-        padding: 10px 20px;
+      height: 100%;
+      padding: 10px 20px;
     }
 
     #content h2 {
-        font-size: 26px;
+      font-size: 26px;
     }
 </style>

@@ -68,10 +68,10 @@ export default {
 
 <style>
 #pie {
-    height: 440px;
+  height: 440px;
 }
 
 #pie * {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 </style>

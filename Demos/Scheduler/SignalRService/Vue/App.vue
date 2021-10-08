@@ -101,18 +101,18 @@ export default {
 </script>
 <style scoped>
 .schedulers {
-    display: flex;
+  display: flex;
 }
 
 .column-1 {
-    padding-right: 5px;
+  padding-right: 5px;
 }
 
 .column-2 {
-    padding-left: 5px;
+  padding-left: 5px;
 }
 
 .dx-scheduler-small .dx-scheduler-view-switcher.dx-tabs {
-    display: table;
+  display: table;
 }
 </style>

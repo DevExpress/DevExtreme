@@ -87,46 +87,46 @@ export default {
 </script>
 <style>
 #multiview {
-    margin-top: 25px;
+  margin-top: 25px;
 }
 
 .multiview-item {
-    margin:25px;
-    user-select: none;
-    border-top: 1px solid lightgray;
-    border-bottom: 1px solid lightgray;
-    padding: 20px 0 30px;
+  margin: 25px;
+  user-select: none;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+  padding: 20px 0 30px;
 }
 
-.multiview-item  > div {
-    padding-top: 20px;
+.multiview-item > div {
+  padding-top: 20px;
 }
 
 #multiview > div:first-child {
-    padding-left: 25px;
+  padding-left: 25px;
 }
 
-#multiview  p,
-#multiview  h1  {
-    margin: 0;
+#multiview p,
+#multiview h1 {
+  margin: 0;
 }
 
-#multiview  h1 {
-    font-size: 34px;
+#multiview h1 {
+  font-size: 34px;
 }
 
 .options {
-    padding: 20px;
-    background-color: rgba(191, 191, 191, 0.15);
-    margin-top: 20px;
+  padding: 20px;
+  background-color: rgba(191, 191, 191, 0.15);
+  margin-top: 20px;
 }
 
 .caption {
-    font-size: 18px;
-    font-weight: 500;
+  font-size: 18px;
+  font-weight: 500;
 }
 
 .option {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 </style>
