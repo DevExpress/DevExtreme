@@ -509,6 +509,3 @@ export type Properties = dxFileUploaderOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxFileUploaderOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxFileUploaderOptions;

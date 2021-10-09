@@ -133,6 +133,3 @@ export type Properties = dxBoxOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxBoxOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxBoxOptions;

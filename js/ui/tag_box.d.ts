@@ -238,6 +238,3 @@ export type Properties = dxTagBoxOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTagBoxOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxTagBoxOptions;

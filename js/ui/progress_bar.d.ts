@@ -80,6 +80,3 @@ export type Properties = dxProgressBarOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxProgressBarOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxProgressBarOptions;

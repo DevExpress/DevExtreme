@@ -1535,6 +1535,3 @@ export type Properties = dxGanttOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxGanttOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxGanttOptions;

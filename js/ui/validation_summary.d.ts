@@ -50,6 +50,3 @@ export type Properties = dxValidationSummaryOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxValidationSummaryOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxValidationSummaryOptions;
