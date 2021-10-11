@@ -1,4 +1,4 @@
-import dateUtils from '../../../../core/utils/date';
+// import dateUtils from '../../../../core/utils/date';
 import { isObject, isString } from '../../../../core/utils/type';
 import { SchedulerProps, ViewProps } from '../props';
 import { ViewType } from '../types.d';
@@ -86,7 +86,8 @@ export const getCurrentViewConfig = (
     cellDuration: getViewConfigProp(schedulerProps.cellDuration, cellDuration),
     groupByDate: getViewConfigProp(schedulerProps.groupByDate, groupByDate),
     scrolling: getViewConfigProp(schedulerScrolling, scrolling),
-    currentDate: dateUtils.trimTime(new Date(schedulerProps.currentDate)),
+    // currentDate: dateUtils.trimTime(new Date(schedulerProps.currentDate)), // TODO
+    currentDate: schedulerProps.currentDate,
     intervalCount,
     groupOrientation,
     startDate,
@@ -103,7 +104,7 @@ export const getCurrentViewConfig = (
     accessKey: schedulerProps.accessKey,
     focusStateEnabled: schedulerProps.focusStateEnabled,
 
-    indicatorTime: new Date(), // TODO
+    // indicatorTime: new Date(), // TODO
     allowMultipleCellSelection: true, // TODO
     allDayPanelExpanded: false, // TODO
 
@@ -128,6 +129,6 @@ export const getCurrentViewConfig = (
   return {
     ...result,
     hoursInterval: result.cellDuration / 60,
-    selectedCellData: [], // TODO
+    // selectedCellData: [], // TODO
   } as CurrentViewConfigType;
 };
