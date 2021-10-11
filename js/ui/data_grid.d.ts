@@ -1581,13 +1581,6 @@ export interface EditingBase<TRowData = any, TKey = any> {
      */
     mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
     /**
-     * @docid GridBaseOptions.editing.newRowPosition
-     * @type Enums.GridNewRowPosition
-     * @default "viewportTop"
-     * @public
-     */
-    newRowPosition?: 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop';
-    /**
      * @docid GridBaseOptions.editing.popup
      * @public
      * @type dxPopupOptions
@@ -1647,14 +1640,6 @@ export interface DataChange<TRowData = any, TKey = any> {
      * @type any
      */
     data: DeepPartial<TRowData>;
-    /**
-     * @docid
-     */
-    index?: number;
-    /**
-     * @docid
-     */
-    pageIndex?: number;
     /**
      * @docid
      */
@@ -4235,6 +4220,13 @@ export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & 
      * @public
      */
     texts?: any;
+    /**
+     * @docid dxDataGridOptions.editing.newRowPosition
+     * @type Enums.GridNewRowPosition
+     * @default "viewportTop"
+     * @public
+     */
+    newRowPosition?: 'first' | 'last' | 'pageBottom' | 'pageTop' | 'viewportBottom' | 'viewportTop';
 };
 
 /**
