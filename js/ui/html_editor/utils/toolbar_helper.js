@@ -44,6 +44,15 @@ const ICON_MAP = {
     clear: 'clearformat'
 };
 
+function setLineElementsAttrValue2($lineElements, property, value, module) {
+    each($lineElements, (i, element) => {
+        const position = module.quill.getIndex(module.quill.scroll.find(element));
+        module.quill.setSelection(position, 0);
+        module.editorInstance.format(position, 'cellWidth', value + 'px');
+        // $(element).attr(property, value + 'px');
+    });
+}
+
 function getFormatHandlers(module) {
     return {
         clear: ({ event }) => {
@@ -104,6 +113,7 @@ function prepareShowFormProperties(module, type) {
 
         const formats = module.quill.getFormat(module.editorInstance.getSelection(true));
         // console.log(module.editorInstance.getSelection());
+        // console.log(formats);
 
         const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, $element, formats);
 
@@ -120,7 +130,8 @@ function prepareShowFormProperties(module, type) {
                 return $content;
             },
             title: localizationMessage.format(`dxHtmlEditor-${type}Properties`),
-            minHeight: MIN_HEIGHT
+            minHeight: MIN_HEIGHT,
+            minWidth: 800
         });
 
         const promise = module.editorInstance.showFormDialog();
@@ -537,7 +548,7 @@ function getTablePropertiesFormConfig(module, $table, formats) {
     const applyHandler = (formInstance) => {
         const formData = formInstance.option('formData');
         const widthArg = formData.width === startTableWidth ? undefined : formData.width;
-        applyTableDimensionChanges($table, formData.height, widthArg);
+        applyTableDimensionChanges(module, $table, formData.height, widthArg);
 
         module.editorInstance.format('tableBorderStyle', formData.borderStyle);
         module.editorInstance.format('tableBorderWidth', formData.borderWidth + 'px');
@@ -559,7 +570,7 @@ function getCellPropertiesFormConfig(module, $cell, formats) {
     let borderColorEditorInstance;
     let backgroundColorEditorInstance;
 
-    const startCellWidth = getOuterWidth($cell);
+    const startCellWidth = formats.cellWidth ?? getOuterWidth($cell);
     const editorInstance = module.editorInstance;
     const cellStyles = window.getComputedStyle($cell.get(0));
     const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
@@ -571,15 +582,15 @@ function getCellPropertiesFormConfig(module, $cell, formats) {
         colCount: 2,
         formData: {
             width: startCellWidth,
-            height: getOuterHeight($cell),
-            backgroundColor: cellStyles.backgroundColor,
-            borderStyle: cellStyles.borderStyle,
-            borderColor: cellStyles.borderColor,
-            borderWidth: parseInt(cellStyles.borderWidth),
-            alignment: startTextAlign,
-            verticalAlignment: cellStyles.verticalAlign,
-            verticalPadding: parseInt(cellStyles.paddingTop),
-            horizontalPadding: parseInt(cellStyles.paddingLeft),
+            height: formats.cellHeight ?? getOuterHeight($cell),
+            backgroundColor: formats.cellBackgroundColor ?? cellStyles.backgroundColor,
+            borderStyle: formats.cellBorderStyle ?? cellStyles.borderStyle,
+            borderColor: formats.cellBorderColor ?? cellStyles.borderColor,
+            borderWidth: formats.cellBorderWidth ?? parseInt(cellStyles.borderWidth),
+            alignment: formats.cellTextAlign ?? startTextAlign,
+            verticalAlignment: formats.cellVerticalAlign ?? cellStyles.verticalAlign,
+            verticalPadding: formats.cellPaddingTop ?? parseInt(cellStyles.paddingTop),
+            horizontalPadding: formats.cellPaddingLeft ?? parseInt(cellStyles.paddingLeft),
         },
         items: [{
             itemType: 'group',
@@ -727,21 +738,10 @@ function getCellPropertiesFormConfig(module, $cell, formats) {
 
     const applyHandler = (formInstance) => {
         const formData = formInstance.option('formData');
-        const widthArg = formData.width === startCellWidth ? undefined : formData.width;
+        const widthArg = formData.width === parseInt(startCellWidth) ? undefined : formData.width;
         applyCellDimensionChanges($cell, formData.height, widthArg);
-        $cell.css({
-            // 'backgroundColor': backgroundColorEditorInstance.option('value'),
-            // 'borderStyle': formData.borderStyle,
-            // 'borderColor': borderColorEditorInstance.option('value'),
-            // 'borderWidth': formData.borderWidth + 'px',
-            // 'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0],
-            // 'verticalAlign': verticalAlignmentEditorInstance.option('selectedItemKeys')[0],
-            // 'paddingLeft': formData.horizontalPadding + 'px',
-            // 'paddingRight': formData.horizontalPadding + 'px',
-            // 'paddingTop': formData.verticalPadding + 'px',
-            // 'paddingBottom': formData.verticalPadding + 'px'
-        });
 
+        module.editorInstance.format('cellBorderWidth', formData.borderWidth + 'px');
         module.editorInstance.format('cellBorderWidth', formData.borderWidth + 'px');
         module.editorInstance.format('cellBorderColor', borderColorEditorInstance.option('value'));
         module.editorInstance.format('cellBorderStyle', formData.borderStyle);
@@ -749,10 +749,10 @@ function getCellPropertiesFormConfig(module, $cell, formats) {
         module.editorInstance.format('cellTextAlign', alignmentEditorInstance.option('selectedItemKeys')[0]);
 
         module.editorInstance.format('cellVerticalAlign', verticalAlignmentEditorInstance.option('selectedItemKeys')[0]);
-        module.editorInstance.format('paddingLeft', formData.horizontalPadding + 'px');
-        module.editorInstance.format('paddingRight', formData.horizontalPadding + 'px');
-        module.editorInstance.format('paddingTop', formData.verticalPadding + 'px');
-        module.editorInstance.format('paddingBottom', formData.verticalPadding + 'px');
+        module.editorInstance.format('cellPaddingLeft', formData.horizontalPadding + 'px');
+        module.editorInstance.format('cellPaddingRight', formData.horizontalPadding + 'px');
+        module.editorInstance.format('cellPaddingTop', formData.verticalPadding + 'px');
+        module.editorInstance.format('cellPaddingBottom', formData.verticalPadding + 'px');
     };
 
     return {
@@ -765,12 +765,12 @@ function getFormConfigConstructor(type) {
     return type === 'cell' ? getCellPropertiesFormConfig : getTablePropertiesFormConfig;
 }
 
-function applyTableDimensionChanges($table, newHeight, newWidth) {
+function applyTableDimensionChanges(module, $table, newHeight, newWidth) {
     if(isDefined(newWidth)) {
         const autoWidthColumns = getAutoSizedElements($table);
 
         if(autoWidthColumns.length > 0) {
-            $table.css('width', newWidth);
+            module.editorInstance.format('tableWidth', newWidth + 'px');
         } else {
             const $columns = getColumnElements($table);
             const oldTableWidth = getOuterWidth($table);
@@ -780,11 +780,11 @@ function applyTableDimensionChanges($table, newHeight, newWidth) {
             each($columns, (i, element) => {
                 const $element = $(element);
                 const newElementWidth = newWidth / oldTableWidth * getOuterWidth($element);
-                $element.attr('width', newElementWidth);
+                // $element.attr('width', newElementWidth);
 
                 const $lineElements = getLineElements($table, $element.index(), 'horizontal');
 
-                setLineElementsAttrValue($lineElements, 'width', newElementWidth);
+                setLineElementsAttrValue2($lineElements, 'width', newElementWidth, module);
             });
         }
     }
