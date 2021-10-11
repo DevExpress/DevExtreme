@@ -63,7 +63,7 @@ const LayoutManager = Widget.inherit({
             screenByWidth: null,
             showOptionalMark: false,
             requiredMark: '*',
-            labelMode: 'default',
+            labelMode: 'outside',
             optionalMark: messageLocalization.format('dxForm-optionalMark'),
             requiredMessage: messageLocalization.getFormatter('dxForm-requiredMessage')
         });

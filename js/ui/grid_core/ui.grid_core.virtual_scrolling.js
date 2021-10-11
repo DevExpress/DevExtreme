@@ -177,8 +177,13 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         },
         _customizeRemoteOperations: function(options, operationTypes) {
             const newMode = this.option(LEGACY_SCROLLING_MODE) === false;
+            let renderAsync = this.option('scrolling.renderAsync');
 
-            if((isVirtualMode(this) || (isAppendMode(this) && newMode)) && !operationTypes.reload && (operationTypes.skip || newMode) && this._renderTime < this.option('scrolling.renderingThreshold')) {
+            if(!isDefined(renderAsync)) {
+                renderAsync = this._renderTime >= this.option('scrolling.renderingThreshold');
+            }
+
+            if((isVirtualMode(this) || (isAppendMode(this) && newMode)) && !operationTypes.reload && (operationTypes.skip || newMode) && !renderAsync) {
                 options.delay = undefined;
             }
 
@@ -1004,7 +1009,14 @@ export const virtualScrollingModule = {
                         }
                     },
                     _updateLoadViewportParams: function() {
-                        this._loadViewportParams = this._rowsScrollController.getViewportParams();
+                        const viewportParams = this._rowsScrollController.getViewportParams();
+                        const pageSize = this.pageSize();
+
+                        if(viewportParams && !isVirtualPaging(this) && pageSize > 0) {
+                            const pageOffset = this.pageIndex() * pageSize;
+                            viewportParams.skip += pageOffset;
+                        }
+                        this._loadViewportParams = viewportParams;
                     },
                     _processItems: function(items) {
                         const newItems = this.callBase.apply(this, arguments);

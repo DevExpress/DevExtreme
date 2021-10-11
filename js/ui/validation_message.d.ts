@@ -26,6 +26,3 @@ export type Properties = dxValidationMessageOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxValidationMessageOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxValidationMessageOptions;

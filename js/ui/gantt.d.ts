@@ -1382,7 +1382,6 @@ export interface dxGanttFilterRow {
     betweenStartText?: string;
     /**
      * @docid
-     * @type object
      */
     operationDescriptions?: dxGanttFilterRowOperationDescriptions;
     /**
@@ -1494,7 +1493,6 @@ export interface dxGanttHeaderFilter {
     searchTimeout?: number;
     /**
      * @docid
-     * @type object
      */
     texts?: dxGanttHeaderFilterTexts;
     /**
@@ -1537,6 +1535,3 @@ export type Properties = dxGanttOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxGanttOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxGanttOptions;

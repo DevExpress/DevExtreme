@@ -162,6 +162,3 @@ export type Properties = dxTileViewOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTileViewOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxTileViewOptions;

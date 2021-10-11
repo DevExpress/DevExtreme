@@ -2218,11 +2218,7 @@ export const columnsControllerModule = {
                     return result;
                 },
                 setName: function(column) {
-                    const dataField = column.dataField;
-
-                    if(!isDefined(column.name) && isDefined(dataField)) {
-                        column.name = dataField;
-                    }
+                    column.name = column.name || column.dataField || column.type;
                 },
                 setUserState: function(state) {
                     const that = this;

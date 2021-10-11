@@ -85,6 +85,3 @@ export type Properties = dxNavBarOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxNavBarOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxNavBarOptions;

@@ -22,7 +22,7 @@ import { fromPromise, Deferred, when } from '../../core/utils/deferred';
 import errors from '../widget/ui.errors';
 import { nativeScrolling } from '../../core/utils/support';
 import { getRelativeOffset } from '../../renovation/ui/scroll_view/utils/get_relative_offset';
-import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../../renovation/ui/scroll_view/common/consts';
+import { SCROLLABLE_CONTENT_CLASS, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../../renovation/ui/scroll_view/common/consts';
 
 const WIDGET_CLASS = 'dx-treeview';
 
@@ -1669,7 +1669,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const { scrollDirection, rtlEnabled } = this.option();
 
         const targetLocation = { top: 0, left: 0 };
-        const relativeOffset = getRelativeOffset($(scrollable.content()).get(0), targetElement);
+        const relativeOffset = getRelativeOffset(SCROLLABLE_CONTENT_CLASS, targetElement);
 
         if(scrollDirection !== DIRECTION_VERTICAL) {
             const containerElement = $(scrollable.container()).get(0);
