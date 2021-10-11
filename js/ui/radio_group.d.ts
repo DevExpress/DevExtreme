@@ -91,6 +91,3 @@ export type Properties = dxRadioGroupOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxRadioGroupOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxRadioGroupOptions;

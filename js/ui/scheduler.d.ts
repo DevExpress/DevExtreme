@@ -1182,6 +1182,3 @@ export interface dxSchedulerScrolling {
    */
   mode?: 'standard' | 'virtual';
 }
-
-/** @deprecated use Properties instead */
-export type IOptions = dxSchedulerOptions;

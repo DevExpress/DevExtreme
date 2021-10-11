@@ -97,6 +97,3 @@ export type Properties = dxRangeSliderOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxRangeSliderOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxRangeSliderOptions;

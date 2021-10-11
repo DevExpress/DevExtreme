@@ -1606,6 +1606,3 @@ export type Properties = dxDiagramOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxDiagramOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxDiagramOptions;

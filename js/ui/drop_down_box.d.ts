@@ -178,6 +178,3 @@ export type Properties = dxDropDownBoxOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxDropDownBoxOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxDropDownBoxOptions;

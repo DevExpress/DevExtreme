@@ -910,6 +910,3 @@ export type Properties = dxFileManagerOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxFileManagerOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxFileManagerOptions;
