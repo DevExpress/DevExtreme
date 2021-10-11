@@ -127,17 +127,18 @@ const REFRESH_ITEM_PROGRESS_MESSAGE_DELAY = 500;
 
 class FileManagerToolbar extends Widget {
 
-    _initMarkup() {
+    _init() {
+        super._init();
+        this._generalToolbarVisible = true;
         this._commandManager = this.option('commandManager');
         this._createItemClickedAction();
+    }
 
-        this._generalToolbarVisible = true;
-
+    _initMarkup() {
         this._$viewSwitcherPopup = $('<div>').addClass(FILE_MANAGER_VIEW_SWITCHER_POPUP_CLASS);
-        this._generalToolbar = this._createToolbar(this.option('generalItems'));
-        this._fileToolbar = this._createToolbar(this.option('fileItems'), true);
+        this._generalToolbar = this._createToolbar(this.option('generalItems'), !this._generalToolbarVisible);
+        this._fileToolbar = this._createToolbar(this.option('fileItems'), this._generalToolbarVisible);
         this._$viewSwitcherPopup.appendTo(this.$element());
-
         this.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS + ' ' + FILE_MANAGER_GENERAL_TOOLBAR_CLASS);
     }
 
@@ -145,6 +146,13 @@ class FileManagerToolbar extends Widget {
         super._render();
         const toolbar = this._getVisibleToolbar();
         this._checkCompactMode(toolbar);
+    }
+
+    _clean() {
+        delete this._$viewSwitcherPopup;
+        delete this._generalToolbar;
+        delete this._fileToolbar;
+        super._clean();
     }
 
     _dimensionChanged(dimension) {
