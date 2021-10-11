@@ -634,3 +634,76 @@ test.skip('New virtual mode. Virtual rows should not be in view port', async (t)
     },
   });
 });
+
+fixture`Remote Scrolling`
+  .page(url(__dirname, '../containerAspNetData.html'));
+
+test('Scroll to the bottom after expand several group', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  const scrollToBottom = async () => {
+    await dataGrid.scrollTo({ y: 100000 });
+    await t.expect(dataGrid.isReady()).ok();
+  };
+
+  // act
+  await t.expect(dataGrid.hasScrollable()).ok();
+  await scrollToBottom();
+  await scrollToBottom();
+  await scrollToBottom();
+  await dataGrid.apiExpandRow(['Contoso York Store']);
+  await dataGrid.apiExpandRow(['Contoso York Store', 'Audio']);
+  await scrollToBottom();
+  await scrollToBottom();
+  await dataGrid.scrollBy({ y: -1 });
+  await t.expect(dataGrid.isReady()).ok();
+
+  // assert
+  const topData = await dataGrid.apiGetTopVisibleRowData();
+  await t
+    .expect(topData.Id)
+    .eql(939302);
+})
+  .before(async () => createWidget('dxDataGrid', () => ({
+    width: 1000,
+    height: 440,
+    dataSource: (window as any).DevExpress.data.AspNet.createStore({
+      key: 'Id',
+      loadUrl: 'https://js.devexpress.com/Demos/WidgetsGalleryDataService/api/Sales',
+    }),
+    remoteOperations: { groupPaging: true },
+    scrolling: {
+      mode: 'virtual',
+      useNative: false,
+    },
+    grouping: {
+      autoExpandAll: false,
+    },
+    groupPanel: {
+      visible: true,
+    },
+    wordWrapEnabled: true,
+    showBorders: true,
+    columns: [{
+      dataField: 'Id',
+      dataType: 'number',
+      width: 75,
+    }, {
+      caption: 'Subcategory',
+      dataField: 'ProductSubcategoryName',
+      width: 150,
+    }, {
+      caption: 'Store',
+      dataField: 'StoreName',
+      groupIndex: 0,
+      width: 150,
+    }, {
+      caption: 'Category',
+      dataField: 'ProductCategoryName',
+      groupIndex: 1,
+      width: 120,
+    }, {
+      caption: 'Product',
+      dataField: 'ProductName',
+    }],
+  })));
