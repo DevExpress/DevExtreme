@@ -1078,7 +1078,7 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
      * @publicName isRowExpanded(key)
      * @public
      */
-    isRowExpanded(key: TRowData): boolean;
+    isRowExpanded(key: TKey): boolean;
     /**
      * @docid
      * @publicName loadDescendants()
