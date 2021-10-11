@@ -2,7 +2,9 @@ window.onload = function () {
   const viewModel = {
     dataGridOptions: {
       dataSource: employees,
-      rowTemplate: $('#gridRow'),
+      dataRowTemplate: $('#gridRow'),
+      rowAlternationEnabled: true,
+      hoverStateEnabled: true,
       columnAutoWidth: true,
       showBorders: true,
       columns: [{

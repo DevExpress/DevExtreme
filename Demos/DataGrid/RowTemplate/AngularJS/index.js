@@ -4,7 +4,9 @@ DemoApp.controller('DemoController', ($scope) => {
   $scope.dataGridOptions = {
     dataSource: employees,
     keyExpr: 'ID',
-    rowTemplate: $('#gridRow'),
+    dataRowTemplate: $('#gridRow'),
+    rowAlternationEnabled: true,
+    hoverStateEnabled: true,
     columnAutoWidth: true,
     showBorders: true,
     columns: [{

@@ -1,4 +1,4 @@
-<dx-data-grid id="gridContainer" [dataSource]="employees" keyExpr="ID" [columnAutoWidth]="true" [showBorders]="true" rowTemplate="rowTemplateName">
+<dx-data-grid id="gridContainer" [dataSource]="employees" keyExpr="ID" [columnAutoWidth]="true" [showBorders]="true" dataRowTemplate="dataRowTemplateName">
   <dxi-column caption="Photo" [width]="100" [allowFiltering]="false" [allowSorting]="false"></dxi-column>
   <dxi-column dataField="Prefix" [width]="70" caption="Title"></dxi-column>
   <dxi-column dataField="FirstName"></dxi-column>
@@ -7,7 +7,7 @@
   <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
   <dxi-column dataField="HireDate" dataType="date"></dxi-column>
 
-  <tbody class="employee dx-row" [ngClass]="{ 'dx-row-alt': employee.rowIndex % 2 }" *dxTemplate="let employee of 'rowTemplateName'">
+  <ng-container *dxTemplate="let employee of 'dataRowTemplateName'">
     <tr class="main-row">
       <td rowspan="2"><img [src]="employee.data.Picture" /></td>
       <td>{{ employee.data.Prefix }}</td>
@@ -22,5 +22,5 @@
         ><div>{{ employee.data.Notes }}</div></td
       >
     </tr>
-  </tbody>
+  </ng-container>
 </dx-data-grid>

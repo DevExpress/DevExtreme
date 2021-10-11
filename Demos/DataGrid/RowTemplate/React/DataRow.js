@@ -4,7 +4,7 @@ const formatDate = new Intl.DateTimeFormat('en-US').format;
 
 export default function DataRow(rowInfo) {
   return (
-    <tbody className={`employee dx-row ${rowInfo.rowIndex % 2 ? 'dx-row-alt' : ''}`}>
+    <React.Fragment>
       <tr className="main-row">
         <td rowSpan="2"><img src={rowInfo.data.Picture} /></td>
         <td>{rowInfo.data.Prefix}</td>
@@ -17,6 +17,6 @@ export default function DataRow(rowInfo) {
       <tr className="notes-row">
         <td colSpan="6"><div>{rowInfo.data.Notes}</div></td>
       </tr>
-    </tbody>
+    </React.Fragment>
   );
 }

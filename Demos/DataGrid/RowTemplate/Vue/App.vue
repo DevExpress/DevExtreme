@@ -6,7 +6,9 @@
       key-expr="ID"
       :column-auto-width="true"
       :show-borders="true"
-      row-template="rowTemplate"
+      :row-alternatin-enabled="true"
+      :hover-state-enabled="true"
+      data-row-template="dataRowTemplate"
     >
       <DxColumn
         :width="100"
@@ -30,24 +32,19 @@
         data-field="HireDate"
         data-type="date"
       />
-      <template #rowTemplate="{ data: rowInfo }">
-        <tbody
-          :class="{'dx-row-alt': rowInfo.rowIndex % 2}"
-          class="employee dx-row"
-        >
-          <tr class="main-row">
-            <td rowspan="2"><img :src="rowInfo.data.Picture"></td>
-            <td>{{ rowInfo.data.Prefix }}</td>
-            <td>{{ rowInfo.data.FirstName }}</td>
-            <td>{{ rowInfo.data.LastName }}</td>
-            <td>{{ rowInfo.data.Position }}</td>
-            <td>{{ formatDate(new Date(rowInfo.data.BirthDate)) }}</td>
-            <td>{{ formatDate(new Date(rowInfo.data.HireDate)) }}</td>
-          </tr>
-          <tr class="notes-row">
-            <td colspan="6"><div>{{ rowInfo.data.Notes }}</div></td>
-          </tr>
-        </tbody>
+      <template #dataRowTemplate="{ data: rowInfo }">
+        <tr class="main-row">
+          <td rowspan="2"><img :src="rowInfo.data.Picture"></td>
+          <td>{{ rowInfo.data.Prefix }}</td>
+          <td>{{ rowInfo.data.FirstName }}</td>
+          <td>{{ rowInfo.data.LastName }}</td>
+          <td>{{ rowInfo.data.Position }}</td>
+          <td>{{ formatDate(new Date(rowInfo.data.BirthDate)) }}</td>
+          <td>{{ formatDate(new Date(rowInfo.data.HireDate)) }}</td>
+        </tr>
+        <tr class="notes-row">
+          <td colspan="6"><div>{{ rowInfo.data.Notes }}</div></td>
+        </tr>
       </template>
     </DxDataGrid>
   </div>
@@ -102,23 +99,23 @@ export default {
   color: #777;
 }
 
-#gridContainer tbody.employee:hover {
+#gridContainer tbody.dx-state-hover {
   background-color: #ebebeb;
 }
 
-.dark #gridContainer tbody.employee:hover {
+.dark #gridContainer tbody.dx-state-hover {
   background-color: #484848;
 }
 
-#gridContainer tbody.employee:hover tr.main-row td {
+#gridContainer tbody.dx-state-hover tr.main-row td {
   color: #000;
 }
 
-.dark #gridContainer tbody.employee:hover tr.main-row td {
+.dark #gridContainer tbody.dx-state-hover tr.main-row td {
   color: #ccc;
 }
 
-#gridContainer tbody.employee:hover tr.notes-row td {
+#gridContainer tbody.dx-state-hover tr.notes-row td {
   color: #888;
 }
 </style>

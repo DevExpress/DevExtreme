@@ -4,25 +4,25 @@ $(() => {
   $('#gridContainer').dxDataGrid({
     dataSource: employees,
     keyExpr: 'ID',
-    rowTemplate(container, item) {
+    dataRowTemplate(container, item) {
       const { data } = item;
-      const markup = `<tbody class='employee dx-row ${(item.rowIndex % 2) ? 'dx-row-alt' : ''}'>`
-                    + '<tr class=\'main-row\'>'
-                    + `<td rowspan='2'><img src='${data.Picture}' /></td>`
-                    + `<td>${data.Prefix}</td>`
-                    + `<td>${data.FirstName}</td>`
-                    + `<td>${data.LastName}</td>`
-                    + `<td>${data.Position}</td>`
-                    + `<td>${formatDate(new Date(data.BirthDate))}</td>`
-                    + `<td>${formatDate(new Date(data.HireDate))}</td>`
-                + '</tr>'
-                + '<tr class=\'notes-row\'>'
-                    + `<td colspan='6'><div>${data.Notes}</div></td>`
-                + '</tr>'
-            + '</tbody>';
+      const markup = '<tr class=\'main-row\'>'
+          + `<td rowspan='2'><img src='${data.Picture}' /></td>`
+          + `<td>${data.Prefix}</td>`
+          + `<td>${data.FirstName}</td>`
+          + `<td>${data.LastName}</td>`
+          + `<td>${data.Position}</td>`
+          + `<td>${formatDate(new Date(data.BirthDate))}</td>`
+          + `<td>${formatDate(new Date(data.HireDate))}</td>`
+      + '</tr>'
+      + '<tr class=\'notes-row\'>'
+          + `<td colspan='6'><div>${data.Notes}</div></td>`
+      + '</tr>';
 
       container.append(markup);
     },
+    rowAlternationEnabled: true,
+    hoverStateEnabled: true,
     columnAutoWidth: true,
     showBorders: true,
     columns: [{

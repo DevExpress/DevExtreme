@@ -17,7 +17,9 @@ class App extends React.Component {
         keyExpr="ID"
         columnAutoWidth={true}
         showBorders={true}
-        rowRender={DataRow}>
+        rowAlternationEnabled={true}
+        hoverStateEnabled={true}
+        dataRowRender={DataRow}>
         <Column caption="Photo" width={100} allowFiltering={false} allowSorting={false} />
         <Column dataField="Prefix" width={70} caption="Title" />
         <Column dataField="FirstName" />

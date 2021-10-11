@@ -24,22 +24,22 @@
   color: #777;
 }
 
-::ng-deep #gridContainer tbody.employee:hover {
+::ng-deep #gridContainer tbody.dx-state-hover {
   background-color: #ebebeb;
 }
 
-::ng-deep .dark #gridContainer tbody.employee:hover {
+::ng-deep .dark #gridContainer tbody.dx-state-hover {
   background-color: #484848;
 }
 
-::ng-deep #gridContainer tbody.employee:hover tr.main-row td {
+::ng-deep #gridContainer tbody.dx-state-hover tr.main-row td {
   color: #000;
 }
 
-::ng-deep .dark #gridContainer tbody.employee:hover tr.main-row td {
+::ng-deep .dark #gridContainer tbody.dx-state-hover tr.main-row td {
   color: #ccc;
 }
 
-::ng-deep #gridContainer tbody.employee:hover tr.notes-row td {
+::ng-deep #gridContainer tbody.dx-state-hover tr.notes-row td {
   color: #888;
 }

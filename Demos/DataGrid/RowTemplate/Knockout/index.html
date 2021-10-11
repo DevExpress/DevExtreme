@@ -24,20 +24,18 @@
             <div id="gridContainer" data-bind="dxDataGrid: dataGridOptions"></div>
         </div>
         <script id="gridRow" type="text/html">
-            <tbody class="employee dx-row" data-bind="css: { 'dx-row-alt': (rowIndex % 2) }">
-                <tr class="main-row">
-                    <td rowspan="2"><img data-bind="attr: {src: data.Picture}"/></td>
-                    <td data-bind="text: data.Prefix"></td>
-                    <td data-bind="text: data.FirstName"></td>
-                    <td data-bind="text: data.LastName"></td>        
-                    <td data-bind="text: data.Position"></td>
-                    <td data-bind="text: formatDate(new Date(data.BirthDate))"></td>
-                    <td data-bind="text: formatDate(new Date(data.HireDate))"></td>
-                </tr>
-                <tr class="notes-row">
-                    <td colspan="6"><div data-bind="text: data.Notes"></div></td>
-                </tr>
-            </tbody>
+            <tr class="main-row">
+                <td rowspan="2"><img data-bind="attr: {src: data.Picture}"/></td>
+                <td data-bind="text: data.Prefix"></td>
+                <td data-bind="text: data.FirstName"></td>
+                <td data-bind="text: data.LastName"></td>        
+                <td data-bind="text: data.Position"></td>
+                <td data-bind="text: formatDate(new Date(data.BirthDate))"></td>
+                <td data-bind="text: formatDate(new Date(data.HireDate))"></td>
+            </tr>
+            <tr class="notes-row">
+                <td colspan="6"><div data-bind="text: data.Notes"></div></td>
+            </tr>
         </script>
 
     </div>
