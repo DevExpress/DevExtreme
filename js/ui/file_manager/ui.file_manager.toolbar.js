@@ -459,14 +459,14 @@ class FileManagerToolbar extends Widget {
         };
     }
 
-    _ensureAvailableCommandsVisible(toolbar, fileItems) {
+    _ensureAvailableCommandsVisible(toolbar) {
         let hasModifications = false;
         const items = toolbar.option('items');
 
         items.forEach(item => {
             if(item.name !== 'separator') {
                 const itemVisible = item._available;
-                this._setItemVisibleAvailable(item, fileItems);
+                this._setItemVisibleAvailable(item);
                 if(item._available !== itemVisible) {
                     hasModifications = true;
                 }
@@ -481,22 +481,22 @@ class FileManagerToolbar extends Widget {
         this._updateSeparatorsVisibility(items, toolbar);
     }
 
-    _setItemVisibleAvailable(item, fileItems) {
+    _setItemVisibleAvailable(item) {
         const originalVisible = item.originalItemData?.visible;
-        item._available = this._isToolbarItemAvailable(item, fileItems);
+        item._available = this._isToolbarItemAvailable(item);
         item.visible = isDefined(originalVisible) ? originalVisible : item._available;
     }
 
-    _fileToolbarHasEffectiveItems(fileItems) {
+    _fileToolbarHasEffectiveItems() {
         const items = this._fileToolbar.option('items');
-        return items.some(item => this._isFileToolbarItemAvailable(item, fileItems));
+        return items.some(item => this._isFileToolbarItemAvailable(item));
     }
 
     _executeCommand(command) {
         this._commandManager.executeCommand(command);
     }
 
-    _isToolbarItemAvailable(toolbarItem, fileItems) {
+    _isToolbarItemAvailable(toolbarItem) {
         if(!this._isDefaultItem(toolbarItem.name) || !toolbarItem._autoHide) {
             return ensureDefined(toolbarItem.visible, true);
         }
@@ -508,12 +508,16 @@ class FileManagerToolbar extends Widget {
             return true;
         }
 
-        return this._commandManager.isCommandAvailable(toolbarItem.name, fileItems);
+        return this._isCommandAvailable(toolbarItem.name);
     }
 
-    _isFileToolbarItemAvailable({ name, visible }, fileItems) {
+    _isFileToolbarItemAvailable({ name, visible }) {
         return !this._isDefaultItem(name) && ensureDefined(visible, true) ||
-            name !== 'clearSelection' && name !== 'refresh' && this._commandManager.isCommandAvailable(name, fileItems);
+            name !== 'clearSelection' && name !== 'refresh' && this._isCommandAvailable(name);
+    }
+
+    _isCommandAvailable(name) {
+        return this._commandManager.isCommandAvailable(name, this.option('selectedItems'));
     }
 
     _updateItemInToolbar(toolbar, commandName, options) {
@@ -546,6 +550,7 @@ class FileManagerToolbar extends Widget {
             commandManager: null,
             generalItems: [],
             fileItems: [],
+            selectedItems: [],
             itemViewMode: 'details',
             onItemClick: null
         });
@@ -560,6 +565,9 @@ class FileManagerToolbar extends Widget {
             case 'generalItems':
             case 'fileItems':
                 this.repaint();
+                break;
+            case 'selectedItems':
+                this._update();
                 break;
             case 'onItemClick':
                 this._itemClickedAction = this._createActionByOption(name);
@@ -627,10 +635,8 @@ class FileManagerToolbar extends Widget {
         this._updateItemInToolbar(this._fileToolbar, 'refresh', fileToolbarOptions);
     }
 
-    update(fileItems) {
-        fileItems = ensureDefined(fileItems, []);
-
-        const showGeneralToolbar = fileItems.length === 0 || !this._fileToolbarHasEffectiveItems(fileItems);
+    _update() {
+        const showGeneralToolbar = this.option('selectedItems').length === 0 || !this._fileToolbarHasEffectiveItems();
         if(this._generalToolbarVisible !== showGeneralToolbar) {
             this._generalToolbar.option('visible', showGeneralToolbar);
             this._fileToolbar.option('visible', !showGeneralToolbar);
@@ -641,7 +647,7 @@ class FileManagerToolbar extends Widget {
         }
 
         const toolbar = this._getVisibleToolbar();
-        this._ensureAvailableCommandsVisible(toolbar, fileItems);
+        this._ensureAvailableCommandsVisible(toolbar);
         this._checkCompactMode(toolbar);
     }
 
