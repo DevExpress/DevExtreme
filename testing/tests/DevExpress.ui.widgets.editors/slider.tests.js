@@ -7,7 +7,8 @@ import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
 import 'ui/slider';
-import Tooltip from 'ui/tooltip';
+import SliderTooltip from 'ui/slider/ui.slider_tooltip';
+import SliderHandle from 'ui/slider/ui.slider_handle';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { normalizeKeyName } from 'events/utils/index';
@@ -34,6 +35,7 @@ const SLIDER_HANDLE_CLASS = SLIDER_CLASS + '-handle';
 const SLIDER_LABEL_CLASS = SLIDER_CLASS + '-label';
 
 const ACTIVE_STATE_CLASS = 'dx-state-active';
+const HOVER_STATE_CLASS = 'dx-state-hover';
 const FEEDBACK_SHOW_TIMEOUT = 30;
 const FEEDBACK_HIDE_TIMEOUT = 400;
 const SLIDER_HANDLE_WIDTH = 14;
@@ -44,6 +46,7 @@ const TOOLTIP_CLASS = 'dx-tooltip';
 const TOOLTIP_CONTENT_CLASS = 'dx-overlay-content';
 
 const INVALID_MESSAGE_VISIBLE_CLASS = 'dx-invalid-message-visible';
+const SLIDER_TOOLTIP_VISIBILITY_CLASS = 'dx-slider-tooltip-visible-on-hover';
 
 const moduleOptions = {
     beforeEach: function() {
@@ -371,491 +374,6 @@ module('the \'name\' option', () => {
         const $input = $element.find('input');
 
         assert.equal($input.attr('name'), expectedName, 'the input \'name\' attribute has correct value');
-    });
-});
-
-module('slider with tooltip', () => {
-    test('tooltip default rendering', function(assert) {
-        const $slider = $('#slider').dxSlider({
-            tooltip: {
-                enabled: true,
-                showMode: 'always'
-            }
-        });
-
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-        const $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-
-        assert.ok($tooltip.length);
-        assert.ok(Tooltip.getInstance($tooltip));
-    });
-
-    test('\'tooltip.enabled\' option renders or remove tooltip', function(assert) {
-        const $slider = $('#slider').dxSlider({
-            tooltip: {
-                enabled: false,
-                showMode: 'always'
-            }
-        });
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-
-        let $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-
-        assert.ok(!$tooltip.length);
-        assert.ok(!$slider.hasClass('dx-slider-tooltip-position-top') && !$slider.hasClass('dx-slider-tooltip-position-bottom'));
-
-        $slider.dxSlider('option', 'tooltip.enabled', true);
-        $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-        assert.ok($tooltip.length);
-        assert.ok($slider.hasClass('dx-slider-tooltip-position-top') || $slider.hasClass('dx-slider-tooltip-position-bottom'));
-
-        $slider.dxSlider('option', 'tooltip.enabled', false);
-        $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-        assert.ok(!$tooltip.length);
-        assert.ok(!$slider.hasClass('dx-slider-tooltip-position-top') && !$slider.hasClass('dx-slider-tooltip-position-bottom'));
-    });
-
-    test('tooltip displays current value', function(assert) {
-        const $slider = $('#slider').dxSlider({
-            min: 0,
-            value: 50,
-            max: 100,
-            tooltip: {
-                enabled: true,
-                showMode: 'always'
-            }
-        });
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-        const $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-
-        assert.equal($.trim($tooltip.text()), '50');
-
-        $slider.dxSlider('option', 'value', 75);
-        assert.equal($.trim($tooltip.text()), 75);
-    });
-
-    test('\'tooltip.position\' option', function(assert) {
-        const $slider = $('#slider');
-
-        positionUtils.setup($slider, {
-            my: 'center',
-            at: 'center',
-            of: window
-        });
-
-        $slider.css('position', 'absolute');
-
-        $slider.dxSlider({
-            tooltip: {
-                enabled: true,
-                showMode: 'always',
-                position: 'top'
-            }
-        });
-
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-        const $sliderBar = $slider.find('.' + SLIDER_BAR_CLASS);
-
-        let $tooltipContent = $handle.find('.' + TOOLTIP_CONTENT_CLASS);
-
-        const tooltipBottom = $tooltipContent.offset().top + $tooltipContent.outerHeight();
-        const sliderTop = $sliderBar.offset().top;
-
-        assert.ok($slider.hasClass('dx-slider-tooltip-position-top'));
-        assert.ok(!$slider.hasClass('dx-slider-tooltip-position-bottom'));
-        assert.ok(tooltipBottom < sliderTop, 'tooltip bottom = ' + tooltipBottom + ', slider top = ' + sliderTop + ' - tooltip should be display on top');
-
-        $slider.dxSlider('option', 'tooltip.position', 'bottom');
-
-        $tooltipContent = $handle.find('.' + TOOLTIP_CONTENT_CLASS);
-
-        const tooltipTop = $tooltipContent.offset().top;
-        const sliderBottom = $sliderBar.offset().top + $sliderBar.outerHeight();
-
-        assert.ok(!$slider.hasClass('dx-slider-tooltip-position-top'));
-        assert.ok($slider.hasClass('dx-slider-tooltip-position-bottom'));
-        assert.ok(tooltipTop > sliderBottom, 'tooltip top = ' + tooltipTop + ', slider bottom = ' + sliderBottom + ' - tooltip should be display on bottom');
-    });
-
-    test('tooltip should be centered after render', function(assert) {
-        const $slider = $('#slider').dxSlider({
-            max: 100,
-            min: 0,
-            value: 50,
-            tooltip: { enabled: true, showMode: 'always', position: 'top' }
-        });
-
-        const $tooltip = $slider.find('.' + TOOLTIP_CONTENT_CLASS);
-        const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
-
-        const tooltipWidth = $tooltip.outerWidth();
-        const tooltipCenter = tooltipWidth / 2;
-        const tooltipOffsetAgainstHandle = Math.abs($tooltip.position().left) + $handle.width() / 2;
-
-        assert.equal(tooltipCenter, tooltipOffsetAgainstHandle, 'tooltip position is centered');
-    });
-
-    test('tooltip should be fitted into slide right and left bounds', function(assert) {
-        const $slider = $('#slider');
-
-        positionUtils.setup($slider, {
-            my: 'center',
-            at: 'center',
-            of: window
-        });
-
-        $slider.dxSlider({
-            value: 0,
-            min: 0,
-            max: 100,
-            tooltip: {
-                enabled: true,
-                showMode: 'always'
-            }
-        });
-
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-        const $tooltipContent = $handle.find('.' + TOOLTIP_CONTENT_CLASS);
-
-        const tooltipLeft = $tooltipContent.offset().left;
-        const sliderLeft = $slider.offset().left;
-
-        assert.ok(tooltipLeft >= sliderLeft, 'tooltip left = ' + tooltipLeft + ', slider left = ' + sliderLeft);
-
-        $slider.dxSlider('option', 'value', 100);
-
-        const tooltipRight = $tooltipContent.offset().left + $tooltipContent.outerWidth();
-        const sliderRight = $slider.offset().left + $slider.outerWidth();
-
-        assert.ok(tooltipRight <= sliderRight, 'tooltip right = ' + tooltipRight + ', slider right = ' + sliderRight);
-    });
-
-    test('\'tooltip.showMode\' option', function(assert) {
-        const $slider = $('#slider').dxSlider({
-            min: 0,
-            value: 50,
-            max: 100,
-            tooltip: {
-                enabled: true,
-                showMode: 'onhover'
-            }
-        });
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-
-        assert.ok($handle.hasClass('dx-slider-tooltip-on-hover'));
-
-        $slider.dxSlider('option', 'tooltip.showMode', 'always');
-        assert.ok(!$handle.hasClass('dx-slider-tooltip-on-hover'));
-    });
-
-    test('tooltip was not created before slider hanlde has focus', function(assert) {
-        const $slider = $('#slider').dxSlider({
-            min: 0,
-            value: 50,
-            max: 100,
-            tooltip: {
-                enabled: true,
-                showMode: 'onHover'
-            }
-        });
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-
-        let $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-
-        assert.ok(!$tooltip.length, 'tooltip was not created');
-
-        $slider.trigger($.Event('dxhoverstart', { target: $handle.get(0) }));
-
-        $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-
-        assert.ok(!!Tooltip.getInstance($tooltip), 'tooltip was created');
-    });
-
-    test('\'rtlEnabled\' changing should not leads to error', function(assert) {
-        assert.expect(0);
-
-        const $slider = $('#slider').dxSlider({
-            rtlEnabled: false,
-            tooltip: {
-                enabled: true,
-                showMode: 'onhover'
-            }
-        });
-
-        $slider.dxSlider({
-            rtlEnabled: true
-        });
-    });
-
-    test('tooltip option changing when slider \'visible\' = false', function(assert) {
-        const $slider = $('#slider');
-
-        positionUtils.setup($slider, {
-            my: 'center',
-            at: 'center',
-            of: window
-        });
-
-        $slider.css('position', 'absolute');
-
-        $slider.dxSlider({
-            visible: false
-        });
-        $slider.dxSlider({
-            tooltip: {
-                enabled: true,
-                position: 'top',
-                showMode: 'always'
-            }
-        });
-
-        $slider.dxSlider({ visible: true });
-
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-        const $tooltipContent = $handle.find('.' + TOOLTIP_CONTENT_CLASS);
-        const $sliderBar = $slider.find('.' + SLIDER_BAR_CLASS);
-
-        const tooltipBottom = $tooltipContent.offset().top + $tooltipContent.outerHeight();
-        const sliderTop = $sliderBar.offset().top;
-
-        assert.ok(tooltipBottom < sliderTop, 'tooltip bottom = ' + tooltipBottom + ', slider top = ' + sliderTop + ' - tooltip should be display on top');
-    });
-
-    test('slider tooltip should not add hideTopOverlayCallback (T104070)', function(assert) {
-        const $slider = $('#slider');
-
-        $slider.dxSlider({
-            tooltip: {
-                enabled: true,
-                showMode: 'always'
-            }
-        });
-
-        assert.ok(!hideTopOverlayCallback.hasCallback());
-    });
-
-    test('tooltip renders correct after value length changed', function(assert) {
-        const originalFX = fx.off;
-        try {
-            fx.off = true;
-            const $slider = $('#slider').dxSlider({
-                min: -1000000,
-                max: 1000000,
-                value: 0,
-                width: 2000,
-                tooltip: {
-                    enabled: true,
-                    position: 'top',
-                    showMode: 'always'
-                }
-            });
-
-            $slider.dxSlider('option', 'value', 500000);
-            const $sliderHandle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-            const $tooltipContent = $slider.find('.' + TOOLTIP_CONTENT_CLASS);
-            const $popupContent = $tooltipContent.find('.dx-popup-content');
-
-            const centerSlider = $sliderHandle.offset().left + $sliderHandle.outerWidth() / 2;
-            const centerTooltipContent = $tooltipContent.offset().left + $tooltipContent.outerWidth() / 2;
-            assert.roughEqual(Math.abs(centerSlider), Math.abs(centerTooltipContent), 0.1, 'center slider equals center tooltip');
-            assert.roughEqual($tooltipContent.width(), $popupContent.outerWidth(), 2.1, 'popupcontent is stretched');
-        } finally {
-            fx.off = originalFX;
-        }
-    });
-
-    test('tooltip should repaints when repaint function called (T260971)', function(assert) {
-        $('#slider').hide();
-
-        const $slider = $('#slider').dxSlider({
-            min: 0,
-            max: 100,
-            value: 50,
-            width: 2000,
-            tooltip: {
-                enabled: true,
-                position: 'top',
-                showMode: 'always'
-            }
-        });
-        const instance = $slider.dxSlider('instance');
-
-        $('#slider').show();
-
-        instance.repaint();
-        assert.ok($slider.find('.dx-tooltip .dx-overlay-content').length, 'tooltip is exist');
-    });
-
-    test('slider in scrollable should not show scroll in max position (T315618)', function(assert) {
-        const sliderWidth = 400;
-        const $slider = $('#slider').dxSlider({
-            min: 0,
-            max: 100,
-            value: 100,
-            width: sliderWidth,
-            tooltip: {
-                enabled: true,
-                position: 'bottom',
-                showMode: 'always'
-            }
-        });
-        const $tooltipContent = $slider.find('.' + TOOLTIP_CONTENT_CLASS);
-        const tooltipRightBorder = $tooltipContent.offset().left + $tooltipContent.outerWidth() - $slider.offset().left;
-        const boundaryOffset = sliderWidth - tooltipRightBorder;
-
-        assert.equal(boundaryOffset, 2, 'tooltip content should have correct boundary offset');
-    });
-
-    test('arrow should be centered after dimension was changed', function(assert) {
-        const $slider = $('#slider').dxSlider({
-            min: 0,
-            max: 100,
-            value: 50,
-            tooltip: {
-                enabled: true,
-                showMode: 'always'
-            }
-        });
-
-        resizeCallbacks.fire();
-
-        const $arrow = $slider.find('.dx-popover-arrow');
-        const $sliderHandle = $slider.find('.dx-slider-handle');
-
-        assert.equal($arrow.offset().left + $arrow.outerWidth() / 2, $sliderHandle.offset().left + $sliderHandle.outerWidth() / 2, 'arrow centered');
-    });
-
-    test('arrow should not go outside of the content overlay', function(assert) {
-        const $slider = $('#slider').dxSlider({
-            min: 0,
-            max: 100,
-            value: 0,
-            tooltip: {
-                enabled: true,
-                showMode: 'always'
-            }
-        });
-
-        const $arrow = $slider.find('.dx-popover-arrow');
-        const $handle = $slider.find('.dx-slider-handle');
-        const $content = $slider.find('.dx-overlay-content');
-
-        $handle.width(SLIDER_HANDLE_WIDTH);
-        resizeCallbacks.fire();
-
-        assert.equal($content.offset().left, $arrow.offset().left, 'arrow was fitted');
-    });
-});
-
-module('\'tooltip.format\' option', () => {
-    test('\'tooltip.format\' option as function', function(assert) {
-        const $slider = $('#slider').dxSlider({
-            min: 0,
-            value: 50,
-            max: 100,
-            tooltip: {
-                enabled: true,
-                showMode: 'always',
-                format: function(value) {
-                    return '$' + value;
-                }
-            }
-        });
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-        const $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-
-        assert.equal($.trim($tooltip.text()), '$50');
-
-        $slider.dxSlider('option', 'value', 75);
-        assert.equal($.trim($tooltip.text()), '$75');
-    });
-
-    test('\'tooltip.format\' option as FormatHelper format', function(assert) {
-        const $slider = $('#slider').dxSlider({
-            min: 0,
-            value: 0.12345,
-            max: 1,
-            tooltip: {
-                enabled: true,
-                showMode: 'always',
-                format: { type: 'fixedpoint', precision: 1 }
-            }
-        });
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-
-        let $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-
-        assert.equal($.trim($tooltip.text()), '0.1');
-        $slider.dxSlider('option', 'tooltip.format', { format: 'fixedpoint', precision: 2 });
-
-        $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-        assert.equal($.trim($tooltip.text()), '0.12');
-    });
-
-    test('\'tooltip.format\' changing should re-render tooltip content', function(assert) {
-        const $slider = $('#slider').dxSlider({
-            min: 0,
-            value: 1,
-            max: 1,
-            tooltip: {
-                enabled: true,
-                showMode: 'always',
-                format: function(value) {
-                    return '(' + value + ')';
-                }
-            }
-        });
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-
-        let $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-
-        assert.equal($.trim($tooltip.text()), '(1)');
-
-        $slider.dxSlider('option', 'tooltip.format', function(value) {
-            return '[' + value + ']';
-        });
-
-        $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-
-        assert.equal($.trim($tooltip.text()), '[1]');
-    });
-
-    test('\'tooltip.format\' as undefined (null, false) should render value as is', function(assert) {
-        const $slider = $('#slider').dxSlider({
-            min: 0,
-            value: 1,
-            max: 1,
-            tooltip: {
-                enabled: true,
-                showMode: 'always',
-                format: null
-            }
-        });
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-        const $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-
-        assert.equal($.trim($tooltip.text()), '1');
-    });
-
-    test('Update tooltip width when value is formatted', function(assert) {
-        const values = ['first', 'second value', 'third'];
-        const $slider = $('#slider').dxSlider({
-            min: 0,
-            value: 1,
-            max: 3,
-            tooltip: {
-                enabled: true,
-                showMode: 'always',
-                format: function(index) {
-                    return values[index - 1];
-                }
-            }
-        });
-        const $handle = $slider.find(`.${SLIDER_HANDLE_CLASS}`);
-        const $tooltip = $handle.find('.' + TOOLTIP_CLASS);
-
-        $slider.dxSlider('option', 'value', 2);
-        assert.ok($tooltip.find('.' + TOOLTIP_CONTENT_CLASS).width() >= $tooltip.find('.' + POPUP_CONTENT_CLASS).width());
     });
 });
 
@@ -1430,20 +948,6 @@ module('regression tests', moduleOptions, () => {
         assert.equal(slider.option('value'), 1.5, 'step depends min value');
     });
 
-    test('\'repaint\' method should not leads to error if \'tooltip.enabled\' is true', function(assert) {
-        assert.expect(0);
-
-        const $element = $('#slider');
-        const slider = $element.dxSlider({
-            tooltip: {
-                enabled: true,
-                showMode: 'always'
-            }
-        }).dxSlider('instance');
-
-        slider.repaint();
-    });
-
     test('The error should not be thrown if value is null', function(assert) {
         try {
             const slider = $('#slider').dxSlider({
@@ -1524,33 +1028,6 @@ module('RTL', moduleOptions, () => {
 
         pointerMock($element).start({ x: SLIDER_PADDING }).move(350 + $element.offset().left).down();
         assert.equal($range.width(), 150);
-    });
-});
-
-module('visibility change', () => {
-    test('tooltip should be centered after visibility changed', function(assert) {
-        const $slider = $('#slider');
-        const $parent = $slider.parent();
-
-        $parent.hide();
-        $slider.dxSlider({
-            max: 100,
-            min: 0,
-            value: 50,
-            tooltip: { enabled: true, showMode: 'always', position: 'top' }
-        });
-
-        $parent.show();
-        triggerShownEvent($parent);
-
-        const $tooltip = $slider.find('.' + TOOLTIP_CONTENT_CLASS);
-        const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
-
-        const tooltipWidth = $tooltip.outerWidth();
-        const tooltipCenter = tooltipWidth / 2;
-        const tooltipOffsetAgainstHandle = Math.abs($tooltip.position().left) + $handle.width() / 2;
-
-        assert.equal(tooltipCenter, tooltipOffsetAgainstHandle, 'tooltip position is centered');
     });
 });
 
@@ -1665,5 +1142,567 @@ module('small float step', () => {
             assert.roughEqual(slider.option('value'), currentValue, epsilon, 'value is correct');
             currentValue -= step;
         }
+    });
+});
+
+module('tooltip integration', {
+    beforeEach: function() {
+        this.$slider = $('<div>').appendTo('body');
+        positionUtils.setup(this.$slider, {
+            my: 'center',
+            at: 'center',
+            of: window
+        });
+        this.$slider.css('position', 'absolute');
+
+        this.init = (options) => {
+            this.slider = this.$slider.dxSlider(options).dxSlider('instance');
+            this.$handle = this.$slider.find(`.${SLIDER_HANDLE_CLASS}`);
+            this.handle = SliderHandle.getInstance(this.$handle);
+            this.$tooltip = this.$handle.find(`.${TOOLTIP_CLASS}`);
+            this.getTooltip = () => this.$handle.find(`.${TOOLTIP_CLASS}`);
+            this.getTooltipContent = () => this.getTooltip().find(`.${TOOLTIP_CONTENT_CLASS}`);
+            this.getTooltipText = () => $.trim(this.getTooltip().text());
+        };
+        this.reinit = (options) => {
+            this.slider.dispose();
+            this.init(options);
+        };
+        this.checkTooltipExists = (exists, assert) => {
+            const check = exists ? assert.ok.bind(assert) : assert.notOk.bind(assert);
+            check(!!this.getTooltip().length);
+            check(
+                this.$slider.hasClass('dx-slider-tooltip-position-top')
+                || this.$slider.hasClass('dx-slider-tooltip-position-bottom')
+            );
+        };
+        this.checkTooltipVisible = (visible, assert) => {
+            const check = visible ? assert.notEqual.bind(assert) : assert.strictEqual.bind(assert);
+
+            this.checkTooltipExists(true, assert);
+            check(this.getTooltipContent().css('visibility'), 'hidden');
+        };
+    },
+    afterEach: function() {
+        this.$slider.remove();
+    }
+}, () => {
+
+    [{
+        name: 'tooltip',
+        initValue: { enabled: true, format: value => `(${value})`, position: 'top', showMode: 'onHover' },
+        changeValue: { enabled: false, showMode: 'onHover', position: 'bottom', format: () => {} }
+    }, {
+        name: 'tooltip.enabled',
+        initValue: true,
+        changeValue: false
+    }, {
+        name: 'tooltip.format',
+        initValue: value => `(${value})`,
+        changeValue: (value) => `[${value}]`
+    }, {
+        name: 'tooltip.showMode',
+        initValue: 'always',
+        changeValue: 'onHover'
+    }, {
+        name: 'tooltip.position',
+        initValue: 'bottom',
+        changeValue: 'top'
+    }].forEach(({ name, initValue, changeValue }) => {
+        QUnit.test(`slider should pass ${name} options value to SliderHandle`, function(assert) {
+            this.init({ [name]: initValue });
+            assert.deepEqual(this.handle.option(name), initValue, 'option value is passed on init');
+
+            this.slider.option({ [name]: changeValue });
+            assert.deepEqual(this.handle.option(name), changeValue, 'option value is passed on runtime change');
+        });
+    });
+
+    test('tooltip default rendering', function(assert) {
+        this.init({
+            tooltip: {
+                enabled: true,
+                showMode: 'always'
+            }
+        });
+
+        assert.ok(this.$tooltip.length);
+        assert.ok(SliderTooltip.getInstance(this.$tooltip));
+    });
+
+    test('tooltip displays current value', function(assert) {
+        this.init({
+            min: 0,
+            value: 50,
+            max: 100,
+            tooltip: {
+                enabled: true,
+                showMode: 'always'
+            }
+        });
+
+        assert.strictEqual(this.getTooltipText(), '50');
+
+        this.slider.option('value', 75);
+        assert.strictEqual(this.getTooltipText(), '75');
+    });
+
+    test('"rtlEnabled" changing should not leads to error', function(assert) {
+        assert.expect(0);
+
+        this.init({
+            rtlEnabled: false,
+            tooltip: {
+                enabled: true,
+                showMode: 'onhover'
+            }
+        });
+
+        this.slider.option('rtlEnabled', true);
+    });
+
+    test('slider tooltip should not add hideTopOverlayCallback (T104070)', function(assert) {
+        this.init({
+            tooltip: {
+                enabled: true,
+                showMode: 'always'
+            }
+        });
+
+        assert.ok(!hideTopOverlayCallback.hasCallback());
+    });
+
+    test('tooltip option changing when slider "visible" = false', function(assert) {
+        this.init({
+            visible: false
+        });
+        this.slider.option({
+            tooltip: {
+                enabled: true,
+                position: 'top',
+                showMode: 'always'
+            }
+        });
+
+        this.slider.option({ visible: true });
+
+        const $tooltipContent = this.getTooltipContent();
+        const $sliderBar = this.$slider.find(`.${SLIDER_BAR_CLASS}`);
+
+        const tooltipBottom = $tooltipContent.offset().top + $tooltipContent.outerHeight();
+        const sliderTop = $sliderBar.offset().top;
+
+        assert.ok(tooltipBottom < sliderTop, `tooltip bottom = ${tooltipBottom}, slider top = ${sliderTop} - tooltip should be display on top`);
+    });
+
+    test('tooltip should repaints when repaint function called (T260971)', function(assert) {
+        this.$slider.hide();
+        this.init({
+            min: 0,
+            max: 100,
+            value: 50,
+            width: 2000,
+            tooltip: {
+                enabled: true,
+                position: 'top',
+                showMode: 'always'
+            }
+        });
+        this.$slider.show();
+
+        this.slider.repaint();
+        this.checkTooltipExists(true, assert);
+    });
+
+    module('tooltip position', () => {
+        test('tooltip should be centered after visibility changed', function(assert) {
+            const $parent = this.$slider.parent();
+
+            $parent.hide();
+            this.init({
+                max: 100,
+                min: 0,
+                value: 50,
+                tooltip: { enabled: true, showMode: 'always', position: 'top' }
+            });
+
+            $parent.show();
+            triggerShownEvent($parent);
+
+            const tooltipWidth = this.$tooltip.outerWidth();
+            const tooltipCenter = tooltipWidth / 2;
+            const tooltipOffsetAgainstHandle = Math.abs(this.$tooltip.position().left) + this.$handle.width() / 2;
+
+            assert.roughEqual(tooltipCenter, tooltipOffsetAgainstHandle, 0.4, 'tooltip position is centered');
+        });
+
+        test('tooltip should be centered after render', function(assert) {
+            this.init({
+                max: 100,
+                min: 0,
+                value: 50,
+                tooltip: { enabled: true, showMode: 'always', position: 'top' }
+            });
+
+            const tooltipWidth = this.$tooltip.outerWidth();
+            const tooltipCenter = tooltipWidth / 2;
+            const tooltipOffsetAgainstHandle = Math.abs(this.$tooltip.position().left) + this.$handle.width() / 2;
+
+            assert.roughEqual(tooltipCenter, tooltipOffsetAgainstHandle, 0.5, 'tooltip position is centered');
+        });
+
+        test('"tooltip.position" option', function(assert) {
+            this.init({
+                tooltip: {
+                    enabled: true,
+                    showMode: 'always',
+                    position: 'top'
+                }
+            });
+
+            const $sliderBar = this.$slider.find(`.${SLIDER_BAR_CLASS}`);
+
+            let $tooltipContent = this.$handle.find(`.${TOOLTIP_CONTENT_CLASS}`);
+
+            const tooltipBottom = $tooltipContent.offset().top + $tooltipContent.outerHeight();
+            const sliderTop = $sliderBar.offset().top;
+
+            assert.ok(this.$slider.hasClass('dx-slider-tooltip-position-top'));
+            assert.ok(!this.$slider.hasClass('dx-slider-tooltip-position-bottom'));
+            assert.ok(tooltipBottom < sliderTop, `tooltip bottom = '${tooltipBottom}', slider top = '${sliderTop}' - tooltip should be display on top`);
+
+            this.slider.option('tooltip.position', 'bottom');
+
+            $tooltipContent = this.$handle.find(`.${TOOLTIP_CONTENT_CLASS}`);
+
+            const tooltipTop = $tooltipContent.offset().top;
+            const sliderBottom = $sliderBar.offset().top + $sliderBar.outerHeight();
+
+            assert.ok(!this.$slider.hasClass('dx-slider-tooltip-position-top'));
+            assert.ok(this.$slider.hasClass('dx-slider-tooltip-position-bottom'));
+            assert.ok(tooltipTop > sliderBottom, `tooltip top = '${tooltipTop}', slider bottom = '${sliderBottom} - tooltip should be display on bottom`);
+        });
+
+        test('tooltip should be fitted into slide right and left bounds', function(assert) {
+            this.$slider.css('position', '');
+
+            this.init({
+                value: 0,
+                min: 0,
+                max: 100,
+                tooltip: {
+                    enabled: true,
+                    showMode: 'always'
+                }
+            });
+
+            const $tooltipContent = this.getTooltipContent();
+
+            const tooltipLeft = $tooltipContent.offset().left;
+            const sliderLeft = this.$slider.offset().left;
+
+            assert.ok(tooltipLeft >= sliderLeft, `tooltip left = '${tooltipLeft}', slider left = '${sliderLeft}'`);
+
+            this.slider.option('value', 100);
+
+            const tooltipRight = $tooltipContent.offset().left + $tooltipContent.outerWidth();
+            const sliderRight = this.$slider.offset().left + this.$slider.outerWidth();
+
+            assert.ok(tooltipRight <= sliderRight, `tooltip right = '${tooltipRight}', slider right = '${sliderRight}'`);
+        });
+
+        test('tooltip renders correct after value length changed', function(assert) {
+            const originalFX = fx.off;
+            try {
+                fx.off = true;
+                this.init({
+                    min: -1000000,
+                    max: 1000000,
+                    value: 0,
+                    width: 2000,
+                    tooltip: {
+                        enabled: true,
+                        position: 'top',
+                        showMode: 'always'
+                    }
+                });
+
+                this.slider.option('value', 500000);
+                const $tooltipContent = this.getTooltipContent();
+                const $popupContent = $tooltipContent.find('.dx-popup-content');
+
+                const centerSlider = this.$handle.offset().left + this.$handle.outerWidth() / 2;
+                const centerTooltipContent = $tooltipContent.offset().left + $tooltipContent.outerWidth() / 2;
+                assert.roughEqual(Math.abs(centerSlider), Math.abs(centerTooltipContent), 0.5, 'center slider equals center tooltip');
+                assert.roughEqual($tooltipContent.width(), $popupContent.outerWidth(), 2.1, 'popupcontent is stretched');
+            } finally {
+                fx.off = originalFX;
+            }
+        });
+
+        test('slider in scrollable should not show scroll in max position (T315618)', function(assert) {
+            const sliderWidth = 400;
+            this.init({
+                min: 0,
+                max: 100,
+                value: 100,
+                width: sliderWidth,
+                tooltip: {
+                    enabled: true,
+                    position: 'bottom',
+                    showMode: 'always'
+                }
+            });
+            const $tooltipContent = this.getTooltipContent();
+            const tooltipRightBorder = $tooltipContent.offset().left + $tooltipContent.outerWidth() - this.$slider.offset().left;
+            const boundaryOffset = sliderWidth - tooltipRightBorder;
+
+            assert.roughEqual(boundaryOffset, 2, 0.3, 'tooltip content should have correct boundary offset');
+        });
+
+        test('arrow should be centered after dimension was changed', function(assert) {
+            this.$slider.css('position', '');
+
+            this.init({
+                min: 0,
+                max: 100,
+                value: 50,
+                tooltip: {
+                    enabled: true,
+                    showMode: 'always'
+                },
+                useInkRipple: false
+            });
+
+            resizeCallbacks.fire();
+
+            const $arrow = this.$slider.find('.dx-popover-arrow');
+            const arrowCenter = $arrow.offset().left + $arrow.outerWidth() / 2;
+            const handleCenter = this.$handle.offset().left + this.$handle.outerWidth() / 2;
+
+            assert.roughEqual(arrowCenter, handleCenter, 0.1, 'arrow is centered');
+        });
+
+        test('arrow should not go outside of the content overlay', function(assert) {
+            this.init({
+                min: 0,
+                max: 100,
+                value: 0,
+                tooltip: {
+                    enabled: true,
+                    showMode: 'always'
+                }
+            });
+
+            const $arrow = this.$slider.find('.dx-popover-arrow');
+
+            this.$handle.width(SLIDER_HANDLE_WIDTH);
+            resizeCallbacks.fire();
+
+            assert.ok($arrow.offset().left >= this.getTooltipContent().offset().left, 'arrow was fitted');
+        });
+    });
+
+    module('tooltip.enabled', () => {
+        test('"repaint" method should not leads to error if "tooltip.enabled" is true', function(assert) {
+            assert.expect(0);
+
+            this.init({
+                tooltip: {
+                    enabled: true,
+                    showMode: 'always'
+                }
+            });
+
+            this.slider.repaint();
+        });
+
+
+        test('renders or remove tooltip', function(assert) {
+            this.init({
+                tooltip: {
+                    enabled: false,
+                    showMode: 'always'
+                }
+            });
+
+            this.checkTooltipExists(false, assert);
+
+            this.slider.option('tooltip.enabled', true);
+            this.checkTooltipExists(true, assert);
+
+            this.slider.option('tooltip.enabled', false);
+            this.checkTooltipExists(false, assert);
+        });
+
+        test('and showMode="always" should show tooltip on init', function(assert) {
+            this.init({
+                tooltip: {
+                    enabled: true,
+                    showMode: 'always'
+                }
+            });
+
+            this.checkTooltipVisible(true, assert);
+        });
+
+        test('and showMode="onHover" on init', function(assert) {
+            this.init({
+                tooltip: {
+                    enabled: true,
+                    showMode: 'onHover'
+                }
+            });
+
+            this.checkTooltipVisible(false, assert);
+
+            this.$handle.addClass(HOVER_STATE_CLASS);
+            this.checkTooltipVisible(true, assert);
+        });
+
+        test('runtime change to true shows tooltip if showMode="always"', function(assert) {
+            this.init({
+                tooltip: {
+                    showMode: 'always'
+                }
+            });
+
+            this.slider.option('tooltip.enabled', true);
+
+            this.checkTooltipVisible(true, assert);
+        });
+
+        test('runtime change to true if showMode="onHover"', function(assert) {
+            this.init({
+                tooltip: {
+                    showMode: 'onHover'
+                }
+            });
+
+            this.slider.option('tooltip.enabled', true);
+            this.checkTooltipVisible(false, assert);
+
+            this.$handle.addClass(HOVER_STATE_CLASS);
+            this.checkTooltipVisible(true, assert);
+        });
+    });
+
+    module('tooltip.showMode', () => {
+        test('appropriate class should be added to handle if showMode="onHover"', function(assert) {
+            this.init({
+                min: 0,
+                value: 50,
+                max: 100,
+                tooltip: {
+                    enabled: true,
+                    showMode: 'onHover'
+                }
+            });
+
+            assert.ok(this.$handle.hasClass(SLIDER_TOOLTIP_VISIBILITY_CLASS));
+
+            this.slider.option('tooltip.showMode', 'always');
+            assert.ok(!this.$handle.hasClass(SLIDER_TOOLTIP_VISIBILITY_CLASS));
+        });
+    });
+
+    module('"tooltip.format" option', () => {
+        test('as function', function(assert) {
+            this.init({
+                min: 0,
+                value: 50,
+                max: 100,
+                tooltip: {
+                    enabled: true,
+                    showMode: 'always',
+                    format: function(value) {
+                        return '$' + value;
+                    }
+                }
+            });
+
+            assert.strictEqual(this.getTooltipText(), '$50');
+
+            this.slider.option('value', 75);
+            assert.strictEqual(this.getTooltipText(), '$75');
+        });
+
+        test('as FormatHelper format', function(assert) {
+            this.init({
+                min: 0,
+                value: 0.12345,
+                max: 1,
+                tooltip: {
+                    enabled: true,
+                    showMode: 'always',
+                    format: { type: 'fixedpoint', precision: 1 }
+                }
+            });
+
+            assert.strictEqual(this.getTooltipText(), '0.1');
+            this.slider.option('tooltip.format', { format: 'fixedpoint', precision: 2 });
+
+            assert.strictEqual(this.getTooltipText(), '0.12');
+        });
+
+        test('changing should re-render tooltip content', function(assert) {
+            this.init({
+                min: 0,
+                value: 1,
+                max: 1,
+                tooltip: {
+                    enabled: true,
+                    showMode: 'always',
+                    format: function(value) {
+                        return '(' + value + ')';
+                    }
+                }
+            });
+
+            assert.strictEqual(this.getTooltipText(), '(1)');
+
+            this.slider.option('tooltip.format', function(value) {
+                return '[' + value + ']';
+            });
+
+            assert.strictEqual(this.getTooltipText(), '[1]');
+        });
+
+        test('as undefined (null, false) should render value as is', function(assert) {
+            this.init({
+                min: 0,
+                value: 1,
+                max: 1,
+                tooltip: {
+                    enabled: true,
+                    showMode: 'always',
+                    format: null
+                }
+            });
+
+            assert.strictEqual(this.getTooltipText(), '1');
+        });
+
+        test('tooltip width should be updated when value is formatted', function(assert) {
+            const values = ['first', 'second value', 'third'];
+            this.init({
+                min: 0,
+                value: 1,
+                max: 3,
+                tooltip: {
+                    enabled: true,
+                    showMode: 'always',
+                    format: function(index) {
+                        return values[index - 1];
+                    }
+                }
+            });
+
+            this.slider.option('value', 2);
+
+            const $tooltipContent = this.getTooltipContent();
+            const $popupContent = this.$tooltip.find(`.${POPUP_CONTENT_CLASS}`);
+            assert.ok($tooltipContent.width() >= $popupContent.width());
+        });
     });
 });
