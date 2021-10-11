@@ -1,5 +1,5 @@
 import { DxPromise } from '../core/utils/deferred';
-import { DeepPartial } from '../core';
+import { DeepPartial } from '../core/index';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 
 export type Options<
