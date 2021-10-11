@@ -1433,7 +1433,7 @@ module('tooltip integration', {
 
                 const centerSlider = this.$handle.offset().left + this.$handle.outerWidth() / 2;
                 const centerTooltipContent = $tooltipContent.offset().left + $tooltipContent.outerWidth() / 2;
-                assert.roughEqual(Math.abs(centerSlider), Math.abs(centerTooltipContent), 0.5, 'center slider equals center tooltip');
+                assert.roughEqual(Math.abs(centerSlider), Math.abs(centerTooltipContent), 1, 'center slider equals center tooltip');
                 assert.roughEqual($tooltipContent.width(), $popupContent.outerWidth(), 2.1, 'popupcontent is stretched');
             } finally {
                 fx.off = originalFX;
