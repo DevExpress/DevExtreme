@@ -101,7 +101,11 @@ function prepareShowFormProperties(module, type) {
             $element = $(getTargetTableNode(module, type));
         }
 
-        const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, $element);
+
+        const formats = module.quill.getFormat(module.editorInstance.getSelection(true));
+        // console.log(module.editorInstance.getSelection());
+
+        const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, $element, formats);
 
         let formInstance;
 
@@ -393,7 +397,7 @@ function prepareInsertTableHandler(module) {
     };
 }
 
-function getTablePropertiesFormConfig(module, $table) {
+function getTablePropertiesFormConfig(module, $table, formats) {
     const window = getWindow();
     let alignmentEditorInstance;
     let borderColorEditorInstance;
@@ -404,7 +408,7 @@ function getTablePropertiesFormConfig(module, $table) {
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
 
     // const tableFormats = module.quill.getFormat();
-    // console.log(tableFormats);
+    // console.log(formats);
 
     const formOptions = {
         colCount: 2,
@@ -548,7 +552,7 @@ function getTablePropertiesFormConfig(module, $table) {
     };
 }
 
-function getCellPropertiesFormConfig(module, $cell) {
+function getCellPropertiesFormConfig(module, $cell, formats) {
     const window = getWindow();
     let alignmentEditorInstance;
     let verticalAlignmentEditorInstance;
@@ -561,7 +565,7 @@ function getCellPropertiesFormConfig(module, $cell) {
     const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
 
     // const cellFormats = module.quill.getFormat();
-    // console.log(cellFormats);
+    // console.log(formats);
 
     const formOptions = {
         colCount: 2,
