@@ -193,7 +193,7 @@ export default class CollectionWidget<
  * @type object
  * @namespace DevExpress.ui
  */
-export interface CollectionWidgetItem<TItem extends CollectionWidgetItem | any = any> {
+export interface CollectionWidgetItem<TItem extends CollectionWidgetItem<any> | any = any> {
     /**
      * @docid
      * @default false
