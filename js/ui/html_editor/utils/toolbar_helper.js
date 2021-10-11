@@ -403,7 +403,8 @@ function getTablePropertiesFormConfig(module, $table) {
     const tableStyles = window.getComputedStyle($table.get(0));
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
 
-    // const tableFormats = module.quill.getFormat('tableBorderWidth');
+    // const tableFormats = module.quill.getFormat();
+    // console.log(tableFormats);
 
     const formOptions = {
         colCount: 2,
@@ -558,6 +559,9 @@ function getCellPropertiesFormConfig(module, $cell) {
     const editorInstance = module.editorInstance;
     const cellStyles = window.getComputedStyle($cell.get(0));
     const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
+
+    // const cellFormats = module.quill.getFormat();
+    // console.log(cellFormats);
 
     const formOptions = {
         colCount: 2,
@@ -722,23 +726,29 @@ function getCellPropertiesFormConfig(module, $cell) {
         const widthArg = formData.width === startCellWidth ? undefined : formData.width;
         applyCellDimensionChanges($cell, formData.height, widthArg);
         $cell.css({
-            'backgroundColor': backgroundColorEditorInstance.option('value'),
-            'borderStyle': formData.borderStyle,
-            'borderColor': borderColorEditorInstance.option('value'),
-            'borderWidth': formData.borderWidth + 'px',
-            'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0],
-            'verticalAlign': verticalAlignmentEditorInstance.option('selectedItemKeys')[0],
-            'paddingLeft': formData.horizontalPadding + 'px',
-            'paddingRight': formData.horizontalPadding + 'px',
-            'paddingTop': formData.verticalPadding + 'px',
-            'paddingBottom': formData.verticalPadding + 'px'
+            // 'backgroundColor': backgroundColorEditorInstance.option('value'),
+            // 'borderStyle': formData.borderStyle,
+            // 'borderColor': borderColorEditorInstance.option('value'),
+            // 'borderWidth': formData.borderWidth + 'px',
+            // 'textAlign': alignmentEditorInstance.option('selectedItemKeys')[0],
+            // 'verticalAlign': verticalAlignmentEditorInstance.option('selectedItemKeys')[0],
+            // 'paddingLeft': formData.horizontalPadding + 'px',
+            // 'paddingRight': formData.horizontalPadding + 'px',
+            // 'paddingTop': formData.verticalPadding + 'px',
+            // 'paddingBottom': formData.verticalPadding + 'px'
         });
 
-        // module.editorInstance.format('tableBorderWidth', formData.borderWidth + 'px');
-        // module.editorInstance.format('tableBorderColor', borderColorEditorInstance.option('value'));
-        // module.editorInstance.format('tableBorderColor', formData.borderStyle);
-        // module.editorInstance.format('tableBackgroundColor', backgroundColorEditorInstance.option('value'));
-        // module.editorInstance.format('tableTextAlign', alignmentEditorInstance.option('selectedItemKeys')[0]);
+        module.editorInstance.format('cellBorderWidth', formData.borderWidth + 'px');
+        module.editorInstance.format('cellBorderColor', borderColorEditorInstance.option('value'));
+        module.editorInstance.format('cellBorderStyle', formData.borderStyle);
+        module.editorInstance.format('cellBackgroundColor', backgroundColorEditorInstance.option('value'));
+        module.editorInstance.format('cellTextAlign', alignmentEditorInstance.option('selectedItemKeys')[0]);
+
+        module.editorInstance.format('cellVerticalAlign', verticalAlignmentEditorInstance.option('selectedItemKeys')[0]);
+        module.editorInstance.format('paddingLeft', formData.horizontalPadding + 'px');
+        module.editorInstance.format('paddingRight', formData.horizontalPadding + 'px');
+        module.editorInstance.format('paddingTop', formData.verticalPadding + 'px');
+        module.editorInstance.format('paddingBottom', formData.verticalPadding + 'px');
     };
 
     return {
