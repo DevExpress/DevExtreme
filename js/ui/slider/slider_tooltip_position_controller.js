@@ -14,11 +14,11 @@ const SLIDER_CLASS = 'dx-slider';
 
 class SliderTooltipPositionController extends PopoverPositionController {
     _normalizePosition(positionProp, $sliderHandle) {
-        const boundary = $sliderHandle?.closest(`.${SLIDER_CLASS}`)?.get(0);
+        const $slider = $sliderHandle?.closest(`.${SLIDER_CLASS}`);
         const defaultPositionConfig = {
             of: $sliderHandle,
             boundaryOffset: SLIDER_TOOLTIP_DEFAULT_BOUNDARY_OFFSET,
-            boundary
+            boundary: $slider?.get(0)
         };
 
         const resultPosition = extend(true, {}, defaultPositionConfig, this._positionToObject(positionProp));
