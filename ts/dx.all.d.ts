@@ -14313,15 +14313,6 @@ declare module DevExpress.ui {
   module dxHtmlEditor {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxHtmlEditor>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxHtmlEditor>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface dxHtmlEditorTableContextMenu {
-      /**
-       * [descr:dxHtmlEditorTableContextMenu.enabled]
-       */
-      enabled?: boolean;
-    }
     export type FocusInEvent = DevExpress.events.NativeEventInfo<dxHtmlEditor>;
     export type FocusOutEvent = DevExpress.events.NativeEventInfo<dxHtmlEditor>;
     export type InitializedEvent =
@@ -14441,7 +14432,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorOptions.tableContextMenu]
      */
-    tableContextMenu?: DevExpress.ui.dxHtmlEditor.dxHtmlEditorTableContextMenu;
+    tableContextMenu?: dxHtmlEditorTableContextMenu;
     /**
      * [descr:dxHtmlEditorOptions.name]
      */
@@ -14474,6 +14465,72 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditorOptions.stylingMode]
      */
     stylingMode?: 'outlined' | 'underlined' | 'filled';
+  }
+  /**
+   * [descr:dxHtmlEditorTableContextMenu]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxHtmlEditorTableContextMenu {
+    /**
+     * [descr:dxHtmlEditorTableContextMenu.enabled]
+     */
+    enabled?: boolean;
+    /**
+     * [descr:dxHtmlEditorTableContextMenu.items]
+     */
+    items?: Array<
+      | DevExpress.ui.dxHtmlEditor.ContextMenuItem
+      | 'background'
+      | 'bold'
+      | 'color'
+      | 'font'
+      | 'italic'
+      | 'link'
+      | 'image'
+      | 'strike'
+      | 'subscript'
+      | 'superscript'
+      | 'underline'
+      | 'blockquote'
+      | 'header'
+      | 'increaseIndent'
+      | 'decreaseIndent'
+      | 'orderedList'
+      | 'bulletList'
+      | 'alignLeft'
+      | 'alignCenter'
+      | 'alignRight'
+      | 'alignJustify'
+      | 'codeBlock'
+      | 'variable'
+      | 'separator'
+      | 'undo'
+      | 'redo'
+      | 'clear'
+      | 'insertTable'
+      | 'insertRowAbove'
+      | 'insertRowBelow'
+      | 'insertColumnLeft'
+      | 'insertColumnRight'
+      | 'deleteColumn'
+      | 'deleteRow'
+      | 'deleteTable'
+    >;
+  }
+  /**
+   * @deprecated Use DevExpress.ui.dxHtmlEditor.ContextMenuItem instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxHtmlEditorTableContextMenuItem
+    extends DevExpress.ui.dxContextMenu.Item {
+    /**
+     * [descr:dxHtmlEditorTableContextMenuItem.name]
+     */
+    name?: string;
+    /**
+     * [descr:dxHtmlEditorTableContextMenuItem.items]
+     */
+    items?: Array<DevExpress.ui.dxHtmlEditor.ContextMenuItem>;
   }
   /**
    * [descr:dxHtmlEditorTableResizing]
@@ -23166,6 +23223,7 @@ declare module DevExpress.ui.dxGantt {
   export type ToolbarItem = dxGanttToolbarItem;
 }
 declare module DevExpress.ui.dxHtmlEditor {
+  export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
   export type ToolbarItem = dxHtmlEditorToolbarItem;
 }
 declare module DevExpress.ui.dxList {
