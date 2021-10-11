@@ -59,6 +59,7 @@ export const viewFunction = ({
     customizeDateNavigatorText,
     min,
     max,
+    focusStateEnabled,
   },
 }: Scheduler): JSX.Element => {
   const {
@@ -90,7 +91,7 @@ export const viewFunction = ({
       accessKey={accessKey}
       activeStateEnabled={activeStateEnabled}
       disabled={disabled}
-      focusStateEnabled={false}// TODO: waiting for a toolbar wrapper rerender fix
+      focusStateEnabled={focusStateEnabled}
       height={height}
       hint={hint}
       hoverStateEnabled={hoverStateEnabled}
