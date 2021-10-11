@@ -7,6 +7,6 @@ You can set each annotation's [type](/Documentation/ApiReference/UI_Components/d
 You can place annotations at specific coordinates or anchor them to PolarChart elements. This demo illustrates the following annotation placement methods:  
 
 - [Angle](/Documentation/ApiReference/UI_Components/dxPolarChart/Configuration/annotations/#angle) and [radius](/Documentation/ApiReference/UI_Components/dxPolarChart/Configuration/annotations/#radius) properties specify the position of annotations with season names.
-- Annotations with temperatures are anchored to series, and the [offsetX](/Documentation/ApiReference/UI_Components/dxPolarChart/Configuration/annotations/#offsetX), [paddingTopBottom](/Documentation/ApiReference/UI_Components/dxPolarChart/Configuration/annotations/#paddingTopBottom), and [paddingLeftRight](/Documentation/ApiReference/UI_Components/dxPolarChart/Configuration/annotations/#paddingLeftRight) properties specify their position.
+- Annotations with temperatures are anchored to series points, and the [offsetX](/Documentation/ApiReference/UI_Components/dxPolarChart/Configuration/annotations/#offsetX), [paddingTopBottom](/Documentation/ApiReference/UI_Components/dxPolarChart/Configuration/annotations/#paddingTopBottom), and [paddingLeftRight](/Documentation/ApiReference/UI_Components/dxPolarChart/Configuration/annotations/#paddingLeftRight) properties specify their position.
 
 For more information on annotation settings, refer to the [annotations[]](/Documentation/ApiReference/UI_Components/dxPolarChart/Configuration/annotations/) help topic.
