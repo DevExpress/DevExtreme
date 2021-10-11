@@ -2970,7 +2970,7 @@ declare module DevExpress.data {
     push(
       changes: Array<{
         type: 'insert' | 'update' | 'remove';
-        data?: TValue;
+        data?: DevExpress.core.DeepPartial<TValue>;
         key?: TKey;
         index?: number;
       }>
@@ -2989,7 +2989,10 @@ declare module DevExpress.data {
     /**
      * [descr:Store.update(key, values)]
      */
-    update(key: TKey, values: TValue): DevExpress.core.utils.DxPromise<TValue>;
+    update(
+      key: TKey,
+      values: DevExpress.core.DeepPartial<TValue>
+    ): DevExpress.core.utils.DxPromise<TValue>;
   }
   module Store {
     /**
