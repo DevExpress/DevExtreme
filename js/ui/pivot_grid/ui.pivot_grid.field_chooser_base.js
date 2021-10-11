@@ -154,7 +154,8 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
                     rootElement: $fieldElement,
                     column: {
                         alignment: that.option('rtlEnabled') ? 'right' : 'left',
-                        sortOrder: field.sortOrder === 'desc' ? 'desc' : 'asc'
+                        sortOrder: field.sortOrder === 'desc' ? 'desc' : 'asc',
+                        allowSorting: field.allowSorting
                     },
                     showColumnLines: showColumnLines
                 });
@@ -166,7 +167,8 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
                 column: {
                     alignment: that.option('rtlEnabled') ? 'right' : 'left',
                     filterValues: mainGroupField.filterValues,
-                    allowFiltering: mainGroupField.allowFiltering && !field.groupIndex
+                    allowFiltering: mainGroupField.allowFiltering && !field.groupIndex,
+                    allowSorting: field.allowSorting
                 },
                 showColumnLines: showColumnLines
             });
