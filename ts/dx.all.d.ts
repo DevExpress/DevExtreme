@@ -8470,14 +8470,6 @@ declare module DevExpress.ui {
      * [descr:dxDataGridOptions.toolbar]
      */
     toolbar?: dxDataGridToolbar;
-    /**
-     * [descr:dxDataGridOptions.onToolbarPreparing]
-     * @deprecated [depNote:dxDataGridOptions.onToolbarPreparing]
-     */
-    onToolbarPreparing?: (
-      e: DevExpress.events.EventInfo<dxDataGrid> &
-        DevExpress.ui.dxDataGrid.ToolbarPreparingInfo
-    ) => void;
   }
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead
@@ -21321,14 +21313,6 @@ declare module DevExpress.ui {
      * [descr:dxTreeListOptions.toolbar]
      */
     toolbar?: dxTreeListToolbar;
-    /**
-     * [descr:dxTreeListOptions.onToolbarPreparing]
-     * @deprecated [depNote:dxTreeListOptions.onToolbarPreparing]
-     */
-    onToolbarPreparing?: (
-      e: DevExpress.events.EventInfo<dxTreeList> &
-        DevExpress.ui.dxDataGrid.ToolbarPreparingInfo
-    ) => void;
   }
   /**
    * @deprecated 
@@ -22689,6 +22673,14 @@ declare module DevExpress.ui {
     onSelectionChanged?: (
       e: DevExpress.events.EventInfo<TComponent> &
         DevExpress.ui.dxDataGrid.SelectionChangedInfo<TRowData, TKey>
+    ) => void;
+    /**
+     * [descr:GridBaseOptions.onToolbarPreparing]
+     * @deprecated [depNote:GridBaseOptions.onToolbarPreparing]
+     */
+    onToolbarPreparing?: (
+      e: DevExpress.events.EventInfo<TComponent> &
+        DevExpress.ui.dxDataGrid.ToolbarPreparingInfo
     ) => void;
     /**
      * [descr:GridBaseOptions.pager]

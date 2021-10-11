@@ -847,19 +847,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @public
      */
     toolbar?: dxTreeListToolbar;
-    /**
-     * @docid
-     * @deprecated dxTreeListOptions.toolbar
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:dxTreeList
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 toolbarOptions:dxToolbarOptions
-     * @default null
-     * @action
-     * @public
-     */
-     onToolbarPreparing?: ((e: EventInfo<dxTreeList> & ToolbarPreparingInfo) => void);
 }
 
 /**
