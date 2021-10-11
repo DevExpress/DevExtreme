@@ -415,9 +415,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $scrollContainer.trigger('scroll');
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, devices.real().ios ? 4 : 3, 'Visible row count');
+        assert.equal(dataGrid.getVisibleRows().length, 3, 'Visible row count');
         assert.equal(dataGrid.getTopVisibleRowData().id, 11, 'Focused row is visible');
-        assert.equal(dataGrid.pageIndex(), devices.real().ios ? 1 : 2, 'Page index');
+        assert.equal(dataGrid.pageIndex(), 2, 'Page index');
     });
 
     QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual ()', function(assert) {

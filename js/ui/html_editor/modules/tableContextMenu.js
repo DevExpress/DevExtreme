@@ -4,15 +4,23 @@ import BaseModule from './base';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 import ContextMenu from '../../context_menu';
-import { showCellPropertiesForm, showTablePropertiesForm } from '../ui/tableForms';
 import localizationMessage from '../../../localization/message';
-import { getTableOperationHandler } from '../utils/table_helper';
+import { getTableFormats } from '../utils/table_helper';
+import { getFormatHandlers, getDefaultClickHandler, ICON_MAP } from '../utils/toolbar_helper';
+import { each } from '../../../core/utils/iterator';
+import { isString, isObject } from '../../../core/utils/type';
+import { titleize, camelize } from '../../../core/utils/inflector';
+import { extend } from '../../../core/utils/extend';
 
 const MODULE_NAMESPACE = 'dxHtmlTableContextMenu';
 
 const CONTEXT_MENU_EVENT = addNamespace('dxcontextmenu', MODULE_NAMESPACE);
 
 let TableContextMenuModule = BaseModule;
+
+const localize = (name) => {
+    return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
+};
 
 if(Quill) {
     TableContextMenuModule = class TableContextMenuModule extends BaseModule {
@@ -21,15 +29,17 @@ if(Quill) {
             this.enabled = !!options.enabled;
             this._quillContainer = this.editorInstance._getQuillContainer();
             this.addCleanCallback(this.prepareCleanCallback());
+            this._formatHandlers = getFormatHandlers(this);
+            this._tableFormats = getTableFormats(quill);
 
             if(this.enabled) {
-                this._enableContextMenu();
+                this._enableContextMenu(options.items);
             }
         }
 
-        _enableContextMenu() {
+        _enableContextMenu(items) {
             if(!this._contextMenu) {
-                this._contextMenu = this._createContextMenu();
+                this._contextMenu = this._createContextMenu(items);
             }
             this._attachEvents();
         }
@@ -42,62 +52,94 @@ if(Quill) {
             eventsEngine.off(this.editorInstance._getContent(), MODULE_NAMESPACE);
         }
 
-        _createContextMenu() {
+        _createContextMenu(items) {
             const $container = $('<div>').appendTo(this.editorInstance.$element());
-            const menuConfig = this._getMenuConfig();
+            const menuConfig = this._getMenuConfig(items);
 
             return this.editorInstance._createComponent($container, ContextMenu, menuConfig);
         }
 
-        showTableProperties(e) {
-            const $table = $(this._targetElement).closest('table');
+        showPropertiesForm(type = 'cell') {
+            const $element = $(this._targetElement).closest(type === 'cell' ? 'th, td' : 'table');
             this._contextMenu.hide();
-            this._popupForm = showTablePropertiesForm(this.editorInstance, $table);
+            this._formatHandlers[`${type}Properties`]($element);
             this._targetElement = null;
         }
 
-        showCellProperties(e) {
-            const $cell = $(this._targetElement).closest('th, td');
-            this._contextMenu.hide();
-            this._popupForm = showCellPropertiesForm(this.editorInstance, $cell);
-            this._targetElement = null;
+        _isAcceptableItem(widget, acceptableWidgetName) {
+            return !widget || widget === acceptableWidgetName;
         }
 
-        _getMenuConfig(options) {
+        _handleObjectItem(item) {
+            if(item.name && this._isAcceptableItem(item.widget, 'dxButton')) {
+                const defaultButtonItemConfig = this._prepareMenuItemConfig(item.name);
+                const buttonItemConfig = extend(true, defaultButtonItemConfig, item);
+
+                return buttonItemConfig;
+            } else if(item.items) {
+                item.items = this._prepareMenuItems(item.items);
+                return item;
+            } else {
+                return item;
+            }
+        }
+
+        _prepareMenuItemConfig(name) {
+            const iconName = ICON_MAP[name] ?? name;
+            const buttonText = titleize(name);
+
             return {
-                target: this._quillContainer,
-                showEvent: null,
-                dataSource: [
-                    { text: 'Insert', items: [
-                        { text: localizationMessage.format('dxHtmlEditor-insertHeaderRow'), icon: 'header', onClick: getTableOperationHandler(this.quill, 'insertHeaderRow') },
-                        { text: localizationMessage.format('dxHtmlEditor-insertRowAbove'), icon: 'insertrowabove', onClick: getTableOperationHandler(this.quill, 'insertRowAbove') },
-                        { text: localizationMessage.format('dxHtmlEditor-insertRowBelow'), icon: 'insertrowbelow', onClick: getTableOperationHandler(this.quill, 'insertRowBelow') },
-                        { text: localizationMessage.format('dxHtmlEditor-insertColumnLeft'), icon: 'insertcolumnleft', beginGroup: true, onClick: getTableOperationHandler(this.quill, 'insertColumnLeft') },
-                        { text: localizationMessage.format('dxHtmlEditor-insertColumnRight'), icon: 'insertcolumnright', onClick: getTableOperationHandler(this.quill, 'insertColumnRight') },
-                    ] },
-                    {
-                        text: 'Delete',
-                        items: [
-                            { text: localizationMessage.format('dxHtmlEditor-deleteColumn'), icon: 'deletecolumn', onClick: getTableOperationHandler(this.quill, 'deleteColumn') },
-                            { text: localizationMessage.format('dxHtmlEditor-deleteRow'), icon: 'deleterow', onClick: getTableOperationHandler(this.quill, 'deleteRow') },
-                            { text: localizationMessage.format('dxHtmlEditor-deleteTable'), icon: 'deletetable', onClick: getTableOperationHandler(this.quill, 'deleteTable') }
-                        ]
-                    },
-                    { text: localizationMessage.format('dxHtmlEditor-cellProperties'), icon: 'cellproperties', onClick: (e) => { this.showCellProperties(e); } },
-                    { text: localizationMessage.format('dxHtmlEditor-tableProperties'), icon: 'tableproperties', onClick: (e) => { this.showTableProperties(e); } }
-                ]
+                text: localize(buttonText),
+                icon: iconName.toLowerCase(),
+                onClick: this._formatHandlers[name] ?? getDefaultClickHandler(this, name)
             };
         }
 
-        _getTableOperationHandler(operationName, ...rest) {
-            return () => {
-                const table = this.quill.getModule('table');
-
-                if(!table) {
-                    return;
+        _prepareMenuItems(items) {
+            const resultItems = [];
+            each(items, (_, item) => {
+                let newItem;
+                if(isObject(item)) {
+                    newItem = this._handleObjectItem(item);
+                } else if(isString(item)) {
+                    newItem = this._prepareMenuItemConfig(item);
                 }
-                this.quill.focus();
-                return table[operationName](...rest);
+                if(newItem) {
+                    resultItems.push(newItem);
+                }
+            });
+
+            return resultItems;
+        }
+
+        _getMenuConfig(items) {
+            const defaultItems = [
+                { text: localize('insert'), items: [
+                    'insertHeaderRow',
+                    'insertRowAbove',
+                    'insertRowBelow',
+                    extend(this._prepareMenuItemConfig('insertColumnLeft'), { beginGroup: true }),
+                    'insertColumnRight'
+                ] },
+                {
+                    text: localize('delete'),
+                    items: [
+                        'deleteColumn',
+                        'deleteRow',
+                        'deleteTable'
+                    ]
+                },
+                extend(this._prepareMenuItemConfig('cellProperties'), { onClick: (e) => { this.showPropertiesForm('cell'); } }),
+                extend(this._prepareMenuItemConfig('tableProperties'), { onClick: (e) => { this.showPropertiesForm('table'); } })
+            ];
+
+            const customItems = this._prepareMenuItems(items?.length ? items : defaultItems);
+
+            return {
+                target: this._quillContainer,
+                showEvent: null,
+                hideOnParentScroll: false,
+                items: customItems
             };
         }
 
@@ -125,7 +167,7 @@ if(Quill) {
         }
 
         _isTableTarget(targetElement) {
-            return ['TD', 'TH'].indexOf(targetElement.tagName) !== -1;
+            return !!$(targetElement).closest('.dx-htmleditor-content td, .dx-htmleditor-content th').length;
         }
 
         option(option, value) {
@@ -138,7 +180,7 @@ if(Quill) {
         prepareCleanCallback() {
             return () => {
                 this._detachEvents();
-                this._popupForm?.dispose();
+                // this._popupForm?.dispose();
             };
         }
     };

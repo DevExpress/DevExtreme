@@ -368,13 +368,14 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         // act
         dataController.toggleExpandAdaptiveDetailRow(1);
 
-        dataGrid.getScrollable().scrollTo({ y: 800 });
+        dataGrid.getScrollable().scrollTo({ y: 1000 });
 
         dataController.toggleExpandAdaptiveDetailRow(28);
 
         // arrange
         visibleRows = dataController.getVisibleRows();
         expandedRowVisibleIndex = dataController.getRowIndexByKey(28);
+
         // assert
         assert.equal(visibleRows[expandedRowVisibleIndex + 1].rowType, 'detailAdaptive', 'Adaptive row');
         assert.equal(visibleRows[expandedRowVisibleIndex + 1].key, 28, 'Check adaptive row key');

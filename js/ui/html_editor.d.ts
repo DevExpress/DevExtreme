@@ -26,6 +26,10 @@ import Editor, {
 } from './editor/editor';
 
 import {
+    Item as dxContextMenuItem,
+} from './context_menu';
+
+import {
     Item as dxToolbarItem,
 } from './toolbar';
 
@@ -388,6 +392,11 @@ export interface dxHtmlEditorMediaResizing {
   enabled?: boolean;
 }
 
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
 export interface dxHtmlEditorTableContextMenu {
     /**
      * @docid
@@ -395,7 +404,38 @@ export interface dxHtmlEditorTableContextMenu {
      * @public
      */
     enabled?: boolean;
-  }
+    /**
+     * @docid
+     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorContextMenuItem>
+     * @public
+     */
+    items?: Array<ContextMenuItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
+}
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
+
+/**
+ * @deprecated Use ContextMenuItem instead
+ * @namespace DevExpress.ui
+ */
+export interface dxHtmlEditorTableContextMenuItem extends dxContextMenuItem {
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    name?: string;
+    /**
+     * @docid
+     * @public
+     * @type Array<dxHtmlEditorTableContextMenuItem>
+     */
+    items?: Array<ContextMenuItem>;
+}
 
 /**
  * @docid
