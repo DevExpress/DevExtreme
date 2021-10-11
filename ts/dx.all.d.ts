@@ -4230,7 +4230,7 @@ declare module DevExpress.ui {
    */
   export class CollectionWidget<
     TProperties extends CollectionWidgetOptions<any, TItem, TKey>,
-    TItem extends string | CollectionWidgetItem<any> | any = any,
+    TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
     TKey = any
   > extends Widget<TProperties> {
     getDataSource(): DevExpress.data.DataSource<
@@ -4243,9 +4243,11 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export interface SelectionChangedInfo<
-      TItem extends string | CollectionWidgetItem<any> | any = any
-    > {
+    type ItemLike = string | CollectionWidgetItem<any> | any;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface SelectionChangedInfo<TItem extends ItemLike = any> {
       readonly addedItems: Array<TItem>;
       readonly removedItems: Array<TItem>;
     }
@@ -4289,7 +4291,7 @@ declare module DevExpress.ui {
    */
   export interface CollectionWidgetOptions<
     TComponent extends CollectionWidget<any, TItem, TKey> | any,
-    TItem extends string | CollectionWidgetItem<any> | any = any,
+    TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
     TKey = any
   > extends WidgetOptions<TComponent> {
     /**
@@ -14721,7 +14723,7 @@ declare module DevExpress.ui {
    * [descr:dxList]
    */
   export class dxList<
-    TItem extends string | DevExpress.ui.dxList.Item<any> | any = any,
+    TItem extends DevExpress.ui.dxList.ItemLike = any,
     TKey = any
   > extends CollectionWidget<dxListOptions<TItem, TKey>, TItem, TKey> {
     /**
@@ -14825,14 +14827,14 @@ declare module DevExpress.ui {
   }
   module dxList {
     export type ContentReadyEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>>;
     export type DisposingEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>>;
-    export type ExplicitTypes<TItem extends string | Item<any> | any, TKey> = {
+    export type ExplicitTypes<TItem extends ItemLike, TKey> = {
       Properties: Properties<TItem, TKey>;
       ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
       DisposingEvent: DisposingEvent<TItem, TKey>;
@@ -14854,7 +14856,7 @@ declare module DevExpress.ui {
       SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
     };
     export type GroupRenderedEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>> & {
       readonly groupData?: any;
@@ -14862,42 +14864,46 @@ declare module DevExpress.ui {
       readonly groupIndex?: number;
     };
     export type InitializedEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.InitializedEventInfo<dxList<TItem, TKey>>;
     export type ItemClickEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
       ListItemInfo<TItem>;
     export type ItemContextMenuEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
       ListItemInfo<TItem>;
     export type ItemDeletedEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
     export type ItemDeletingEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
       ListItemInfo<TItem> & {
         cancel?: boolean | PromiseLike<void>;
       };
     export type ItemHoldEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
       ListItemInfo<TItem>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type ItemLike = string | Item<any> | any;
     export type ItemRenderedEvent<
       TItem extends Item<any> | any = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemReorderedEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
       ListItemInfo<TItem> & {
@@ -14905,7 +14911,7 @@ declare module DevExpress.ui {
         readonly toIndex: number;
       };
     export type ItemSwipeEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
       ListItemInfo<TItem> & {
@@ -14914,30 +14920,30 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    interface ListItemInfo<TItem extends string | Item<any> | any> {
+    interface ListItemInfo<TItem extends ItemLike> {
       readonly itemData?: TItem;
       readonly itemElement: DevExpress.core.DxElement;
       readonly itemIndex: number | { group: number; item: number };
     }
     export type OptionChangedEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
       DevExpress.events.ChangedOptionInfo;
     export type PageLoadingEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>>;
     export type Properties<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = dxListOptions<TItem, TKey>;
     export type PullRefreshEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>>;
     export type ScrollEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> & ScrollInfo;
     /**
@@ -14951,13 +14957,13 @@ declare module DevExpress.ui {
       readonly reachedBottom: boolean;
     }
     export type SelectAllValueChangedEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>> & {
       readonly value: boolean;
     };
     export type SelectionChangedEvent<
-      TItem extends string | Item<any> | any = any,
+      TItem extends ItemLike = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
       DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>;
@@ -14990,7 +14996,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxListOptions<
-    TItem extends string | DevExpress.ui.dxList.Item<any> | any = any,
+    TItem extends DevExpress.ui.dxList.ItemLike = any,
     TKey = any
   > extends CollectionWidgetOptions<dxList<TItem, TKey>, TItem, TKey>,
       SearchBoxMixinOptions {

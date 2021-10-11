@@ -23,7 +23,9 @@ import Widget, {
     WidgetOptions,
 } from '../widget/ui.widget';
 
-export interface SelectionChangedInfo<TItem extends string | CollectionWidgetItem<any> | any = any> {
+type ItemLike = string | CollectionWidgetItem<any> | any;
+
+export interface SelectionChangedInfo<TItem extends ItemLike = any> {
     readonly addedItems: Array<TItem>;
     readonly removedItems: Array<TItem>;
 }
@@ -31,7 +33,7 @@ export interface SelectionChangedInfo<TItem extends string | CollectionWidgetIte
 /** @namespace DevExpress.ui */
 export interface CollectionWidgetOptions<
     TComponent extends CollectionWidget<any, TItem, TKey> | any,
-    TItem extends string | CollectionWidgetItem<any> | any = any,
+    TItem extends ItemLike = any,
     TKey = any,
 > extends WidgetOptions<TComponent> {
     /**
@@ -182,7 +184,7 @@ export interface CollectionWidgetOptions<
  */
 export default class CollectionWidget<
     TProperties extends CollectionWidgetOptions<any, TItem, TKey>,
-    TItem extends string | CollectionWidgetItem<any> | any = any,
+    TItem extends ItemLike = any,
     TKey = any,
 > extends Widget<TProperties> {
     getDataSource(): DataSource<TItem, string | Array<string>, TKey>;
