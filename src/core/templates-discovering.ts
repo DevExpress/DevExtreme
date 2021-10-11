@@ -107,13 +107,13 @@ function mountTemplate(
                 (this as any as ComponentPublicInstance).$forceUpdate();
             }
         },
-        render: (): VNode => {
+        render: (): VNode | VNode[] => {
             const content = clearConfiguration(getSlot()(data) as VNode[]);
             if (!content) {
                 return h("div");
             }
 
-            return content[0];
+            return content.length > 1 ? content : content[0];
         }
     }, parent, placeholder);
 }

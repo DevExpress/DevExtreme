@@ -78,7 +78,9 @@ class TemplatesManager {
 
                 const element = mountedTemplate.$el as HTMLElement;
                 container.removeChild(placeholder);
-                container.appendChild(element);
+                while (placeholder.firstChild) {
+                    container.appendChild(placeholder.firstChild);
+                }
                 domAdapter.setClass(element, DX_TEMPLATE_WRAPPER_CLASS, true);
 
                 if (element.nodeType === Node.TEXT_NODE) {

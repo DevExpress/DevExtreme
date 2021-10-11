@@ -1066,6 +1066,27 @@ describe("component rendering", () => {
             expect(renderedTemplate.innerHTML).toBe("Template");
         });
 
+        it("renders template with several children", () => {
+            const vm = defineComponent({
+                template: `<test-component>
+                                <template #item>
+                                    <div>child1</div>
+                                    <div>child2</div>
+                                </template>
+                            </test-component>`,
+                components: {
+                    TestComponent
+                }
+            });
+            mount(vm);
+            const container = document.createElement("div");
+            renderItemTemplate({}, container);
+
+            expect(container.innerHTML).toBe(
+                "<div>child1</div><div>child2</div><span style=\"display: none;\"></span>"
+            );
+        });
+
         it("template should have globalProperties of parent", () => {
             let  templateGlobalProperties;
             const CustomComponent = defineComponent({
