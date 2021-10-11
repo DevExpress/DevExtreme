@@ -3589,6 +3589,11 @@ const setupVirtualRenderingModule = function() {
     this.dataController.changed.add(function(e) {
         that.changedArgs.push(e);
     });
+
+    this._views.rowsView = {
+        getTopVisibleItemIndex: () => 0,
+        _getCellElement: () => {}
+    };
 };
 
 const teardownVirtualRenderingModule = function() {
@@ -4004,9 +4009,12 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
 
     QUnit.test('addRow > scroll to near > add row > scroll back', function(assert) {
         this.options.scrolling.prerenderedRowChunkSize = 5;
+
         // act
         this.addRow();
-        this.dataController.setViewportPosition(60);
+        this.dataController.setViewportPosition(70);
+        this._views.rowsView.getTopVisibleItemIndex = () => 1;
+
         this.addRow();
         this.dataController.setViewportPosition(0);
 
@@ -4018,13 +4026,11 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
 
     QUnit.test('addRow > scroll to little near > add row', function(assert) {
         this.options.scrolling.prerenderedRowChunkSize = 5;
+
         // act
         this.addRow();
         this.dataController.setViewportPosition(20);
-        this._views.rowsView = {
-            getTopVisibleItemIndex: () => 2,
-            _getCellElement: () => {}
-        };
+        this._views.rowsView.getTopVisibleItemIndex = () => 2;
         this.addRow();
 
         // assert
@@ -4047,9 +4053,10 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
 
     QUnit.test('add row > scroll to second page', function(assert) {
         this.options.scrolling.prerenderedRowCount = 1;
+
         // act
         this.addRow();
-        this.dataController.setViewportPosition(150);
+        this.dataController.setViewportPosition(160);
 
         // assert
         assert.strictEqual(this.dataController.items().length, 11, 'item count');
@@ -8471,7 +8478,13 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
     });
 });
 
-QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, () => {
+QUnit.module('Editing', { beforeEach: function() {
+    setupModule.apply(this, arguments);
+    this._views.rowsView = {
+        getTopVisibleItemIndex: () => 0,
+        _getCellElement: () => {}
+    };
+}, afterEach: teardownModule }, () => {
 
     QUnit.test('Inserting Row', function(assert) {
         const array = [
@@ -8572,7 +8585,6 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
         this.dataController.setDataSource(dataSource);
         dataSource.load();
-
         this.expandAll();
 
         // act
@@ -8604,7 +8616,6 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
 
         this.dataController.setDataSource(dataSource);
         dataSource.load();
-
         this.editingController.addRow();
         // act
         this.editingController.addRow();
@@ -11826,6 +11837,11 @@ QUnit.module('Summary with Editing', {
 
         this.setupDataGridModules = function(options) {
             setupDataGridModules(this, ['data', 'columns', 'filterRow', 'grouping', 'summary', 'editing', 'editingRowBased', 'editingCellBased'], options);
+
+            this._views.rowsView = {
+                getTopVisibleItemIndex: () => 0,
+                _getCellElement: () => {}
+            };
         };
 
         this.getTotalValues = function() {
@@ -11892,7 +11908,7 @@ QUnit.module('Summary with Editing', {
 
     // T697805
     QUnit.test('add row if data is grouped', function(assert) {
-    // act
+        // act
         this.setupDataGridModules();
         this.clock.tick();
         this.getDataSource().group('id');
@@ -12669,6 +12685,11 @@ QUnit.module('Partial update', {
         const that = this;
         that.setupModules = function() {
             setupModule.call(that);
+
+            this._views.rowsView = {
+                getTopVisibleItemIndex: () => 0,
+                _getCellElement: () => {}
+            };
 
             that.array = [
                 { name: 'Alex', age: 30 },

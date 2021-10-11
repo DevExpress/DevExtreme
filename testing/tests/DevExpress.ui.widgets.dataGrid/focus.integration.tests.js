@@ -1756,7 +1756,7 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
 
             const dataGrid = createDataGrid({
                 dataSource: getData(),
-                keyExpr: 'id',
+                keyExpr: 'ID',
                 remoteOperations: true,
                 height: 300,
                 scrolling: {

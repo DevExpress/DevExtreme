@@ -803,7 +803,7 @@ export const virtualScrollingModule = {
                         this._allItems = null;
                         this._loadViewportParams = null;
 
-                        if(this.option('scrolling.mode') !== 'virtual' && virtualRowsRendering !== true || virtualRowsRendering === false || !this.option('scrolling.rowPageSize')) {
+                        if(this.option('scrolling.mode') !== 'virtual' && virtualRowsRendering !== true || virtualRowsRendering === false || this.option(LEGACY_SCROLLING_MODE) !== false && !this.option('scrolling.rowPageSize')) {
                             this._visibleItems = null;
                             this._rowsScrollController = null;
                             return;

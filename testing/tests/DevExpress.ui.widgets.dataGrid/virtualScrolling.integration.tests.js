@@ -3302,19 +3302,19 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                         type: 'insert',
                         key: 101,
                         data: {},
-                        index: 0
+                        insertBeforeKey: 1
                     },
                     {
                         type: 'insert',
                         key: 102,
                         data: {},
-                        index: 50
+                        insertBeforeKey: 51
                     },
                     {
                         type: 'insert',
                         key: 103,
                         data: {},
-                        index: -1
+                        insertAfterKey: 100
                     }
                 ]
             }
@@ -3667,6 +3667,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 paging: true,
                 sorting: true
             },
+            editing: {
+                newRowPosition: 'last'
+            },
             scrolling: {
                 mode: 'virtual',
                 legacyMode: false
@@ -3718,9 +3721,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.option('editing.changes', [
-            { type: 'insert', index: 0 },
-            { type: 'insert', index: 4 },
-            { type: 'insert', index: -1 }
+            { type: 'insert', insertBeforeKey: ['Category 1'] },
+            { type: 'insert', insertBeforeKey: ['Category 2'] },
+            { type: 'insert' }
         ]);
         this.clock.tick();
         loadIndices = dataGrid.getVisibleRows().map(it => it.loadIndex);
@@ -5025,19 +5028,19 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
                         type: 'insert',
                         key: 101,
                         data: {},
-                        index: 0
+                        insertBeforeKey: 1
                     },
                     {
                         type: 'insert',
                         key: 102,
                         data: {},
-                        index: 50
+                        insertBeforeKey: 51
                     },
                     {
                         type: 'insert',
                         key: 103,
                         data: {},
-                        index: -1
+                        insertAfterKey: 100
                     }
                 ]
             }
