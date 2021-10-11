@@ -6086,6 +6086,7 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             }
             // arrange
             const dataGrid = $('#dataGrid').dxDataGrid({
+                showRowLines: false,
                 height: 200,
                 dataSource: data,
                 scrolling: {
