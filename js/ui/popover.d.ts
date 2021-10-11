@@ -194,6 +194,3 @@ export type Properties = dxPopoverOptions<PopoverInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;
-
-/** @deprecated use Properties instead */
-export type IOptions = Properties;

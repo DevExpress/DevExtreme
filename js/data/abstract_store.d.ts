@@ -1,4 +1,5 @@
 import { DxPromise } from '../core/utils/deferred';
+import { DeepPartial } from '../core/index';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 
 export type Options<
@@ -203,7 +204,7 @@ export default class Store
      * @param1 changes:Array<any>
      * @public
      */
-    push(changes: Array<{ type: 'insert' | 'update' | 'remove'; data?: TValue; key?: TKey; index?: number }>): void;
+    push(changes: Array<{ type: 'insert' | 'update' | 'remove'; data?: DeepPartial<TValue>; key?: TKey; index?: number }>): void;
     /**
      * @docid
      * @publicName remove(key)
@@ -229,5 +230,5 @@ export default class Store
      * @return Promise<any>
      * @public
      */
-    update(key: TKey, values: TValue): DxPromise<TValue>;
+    update(key: TKey, values: DeepPartial<TValue>): DxPromise<TValue>;
 }

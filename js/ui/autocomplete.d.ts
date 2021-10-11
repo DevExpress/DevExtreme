@@ -136,6 +136,3 @@ export type Properties = dxAutocompleteOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxAutocompleteOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxAutocompleteOptions;

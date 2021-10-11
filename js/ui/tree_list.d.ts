@@ -1474,6 +1474,3 @@ export type Properties = dxTreeListOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTreeListOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxTreeListOptions;

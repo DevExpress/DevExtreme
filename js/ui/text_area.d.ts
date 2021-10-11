@@ -105,6 +105,3 @@ export type Properties = dxTextAreaOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTextAreaOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxTextAreaOptions;
