@@ -4388,10 +4388,6 @@ declare module DevExpress.ui {
      */
     message?: string;
     /**
-     * [descr:CompareRule.reevaluate]
-     */
-    reevaluate?: boolean;
-    /**
      * [descr:CompareRule.type]
      */
     type: 'compare';
