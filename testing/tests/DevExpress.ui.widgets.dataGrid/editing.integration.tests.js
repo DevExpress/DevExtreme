@@ -71,6 +71,23 @@ if('chrome' in window && devices.real().deviceType !== 'desktop') {
     $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
 }
 
+function isChildInsideParentViewport(parentElement, childElement) {
+    const $parent = $(parentElement);
+    const $child = $(childElement);
+    const parentInfo = $parent.offset();
+    const childInfo = $child.offset();
+    let result = false;
+
+    parentInfo.bottom = parentInfo.top + $parent.outerHeight();
+    childInfo.bottom = childInfo.top + $child.outerHeight();
+
+    result = (childInfo.top > parentInfo.top && childInfo.top < parentInfo.bottom)
+            || (childInfo.bottom > parentInfo.top && childInfo.bottom < parentInfo.bottom)
+            || (childInfo.top < parentInfo.top && childInfo.bottom > parentInfo.bottom);
+
+    return result;
+}
+
 QUnit.module('Initialization', baseModuleConfig, () => {
     QUnit.test('Accessibility columns id should not set for columns editors (T710132)', function(assert) {
         // arrange, act
@@ -6152,5 +6169,102 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
         // assert
         assert.ok(visibleRows[visibleRows.length - 1].isNewRow, 'last new row is rendered');
         assert.strictEqual($virtualRowElement.length, 1, 'only one virtual row is rendered');
+    });
+
+    QUnit.test('Virtual row should not be rendered in the viewport when the edit form is inserted in the last position with certain height and row count', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 130; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            editing: {
+                mode: 'form',
+                allowAdding: true,
+                newRowPosition: 'last',
+            },
+            height: 440,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            }
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.addRow();
+        const $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
+        const $rowsViewElement = $(dataGrid.element()).find('.dx-datagrid-rowsview');
+        const visibleRows = dataGrid.getVisibleRows();
+        const lastRowIndex = visibleRows.length - 1;
+        const $lastRowElement = $(dataGrid.getRowElement(lastRowIndex));
+
+        // assert
+        assert.strictEqual($virtualRowElement.length, 1, 'only one virtual row is rendered');
+        assert.notOk(isChildInsideParentViewport($rowsViewElement, $virtualRowElement), 'virtual row is rendered outside viewport');
+        assert.ok(visibleRows[lastRowIndex].isNewRow, 'last new row is rendered');
+        assert.ok($lastRowElement.hasClass('dx-row-inserted'), 'last row is a new row');
+        assert.ok(isChildInsideParentViewport($rowsViewElement, $lastRowElement), 'new row is in viewport');
+    });
+
+    QUnit.test('Virtual row should not be rendered in the viewport when the edit form is inserted in the first position with certain height and row count', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 130; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            editing: {
+                mode: 'form',
+                allowAdding: true,
+                newRowPosition: 'first',
+            },
+            height: 440,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            }
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 4100 });
+        let visibleRows = dataGrid.getVisibleRows();
+        const lastRowIndex = visibleRows.length - 1;
+
+        // assert
+        assert.strictEqual(visibleRows[lastRowIndex].key, 130, 'last row is rendered');
+
+        // act
+        dataGrid.addRow();
+        const $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
+        const $rowsViewElement = $(dataGrid.element()).find('.dx-datagrid-rowsview');
+        visibleRows = dataGrid.getVisibleRows();
+        const $firstRowElement = $(dataGrid.getRowElement(0));
+
+        // assert
+        assert.strictEqual($virtualRowElement.length, 1, 'only one virtual row is rendered');
+        assert.notOk(isChildInsideParentViewport($rowsViewElement, $virtualRowElement), 'virtual row is rendered outside viewport');
+        assert.ok(visibleRows[0].isNewRow, 'first new row is rendered');
+        assert.ok($firstRowElement.hasClass('dx-row-inserted'), 'first row is a new row');
+        assert.ok(isChildInsideParentViewport($rowsViewElement, $firstRowElement), 'new row is in viewport');
     });
 });
