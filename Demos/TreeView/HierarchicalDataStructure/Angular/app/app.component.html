@@ -1,13 +1,8 @@
 <div class="form">
-    <dx-tree-view
-        id="simple-treeview"
-        [items]="products"
-        [width]="300"
-        (onItemClick)="selectItem($event)"
-    ></dx-tree-view>
-    <div id="product-details" *ngIf="currentItem.price">
-        <img [src]="currentItem.image" />
-        <div class="name">{{currentItem.text}}</div>
-        <div class="price">{{"$" + currentItem.price}}</div>
-    </div>
+  <dx-tree-view id="simple-treeview" [items]="products" [width]="300" (onItemClick)="selectItem($event)"></dx-tree-view>
+  <div id="product-details" *ngIf="currentItem.price">
+    <img [src]="currentItem.image" />
+    <div class="name">{{ currentItem.text }}</div>
+    <div class="price">{{ "$" + currentItem.price }}</div>
+  </div>
 </div>

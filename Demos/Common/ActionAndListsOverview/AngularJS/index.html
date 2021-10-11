@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" >
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
     <title>DevExtreme Demo</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -13,48 +13,54 @@
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
-</head>
-<body class="dx-viewport">
+  </head>
+  <body class="dx-viewport">
     <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
-        <div class="left">
-            <div class="list" dx-list="{
+      <div class="left">
+        <div
+          class="list"
+          dx-list="{
                 dataSource: dataSource,
                 grouped: true,
                 searchEnabled: true,
                 selectionMode: 'single',
                 selectedItemKeys: [currentHotel.Id],
                 onSelectionChanged: listSelectionChanged
-            }" dx-item-alias="data">
-                <div data-options="dxTemplate: { name: 'item' }">
-                    <div>
-                        <div class="hotel">
-                            <div class="name">{{data.Hotel_Name}}</div>
-                            <div class="address">{{data.Postal_Code + ', ' + data.Address}}</div>
-                            <div class="type" ng-class="data.Hotel_Class.toLowerCase()"></div>
-                        </div>
-                        <div class="price-container">
-                            <div class="price">{{data.Price | currency:"$":0}}</div>
-                            <div class="caption">per<br>night</div>
-                        </div>
-                    </div>
-                </div>
-                <div data-options="dxTemplate: { name: 'group' }">
-                    <div class="city">{{data.key}}</div>
-                </div>
+            }"
+          dx-item-alias="data"
+        >
+          <div data-options="dxTemplate: { name: 'item' }">
+            <div>
+              <div class="hotel">
+                <div class="name">{{data.Hotel_Name}}</div>
+                <div class="address">{{data.Postal_Code + ', ' + data.Address}}</div>
+                <div class="type" ng-class="data.Hotel_Class.toLowerCase()"></div>
+              </div>
+              <div class="price-container">
+                <div class="price">{{data.Price | currency:"$":0}}</div>
+                <div class="caption">per<br />night</div>
+              </div>
             </div>
+          </div>
+          <div data-options="dxTemplate: { name: 'group' }">
+            <div class="city">{{data.key}}</div>
+          </div>
         </div>
-        <div class="right">
-            <div class="header">
-                <div class="name-container">
-                    <div class="name">{{currentHotel.Hotel_Name}}</div>
-                    <div class="type" ng-class="currentHotel.Hotel_Class.toLowerCase()"></div>
-                </div>
-                <div class="price-container">
-                    <div class="price">{{currentHotel.Price | currency:"$":0}}</div>
-                    <div class="caption">per<br/>night</div>
-                </div>
-            </div>
-            <div class="tile" dx-tile-view="{
+      </div>
+      <div class="right">
+        <div class="header">
+          <div class="name-container">
+            <div class="name">{{currentHotel.Hotel_Name}}</div>
+            <div class="type" ng-class="currentHotel.Hotel_Class.toLowerCase()"></div>
+          </div>
+          <div class="price-container">
+            <div class="price">{{currentHotel.Price | currency:"$":0}}</div>
+            <div class="caption">per<br />night</div>
+          </div>
+        </div>
+        <div
+          class="tile"
+          dx-tile-view="{
                 noDataText: '',
                 height: 224,
                 baseItemHeight: 100,
@@ -63,14 +69,16 @@
                 bindingOptions: {
                     dataSource: 'currentHotel.Images'
                 }
-            }" dx-item-alias="data">
-                <div data-options="dxTemplate: { name: 'item' }">
-                    <div class="tile-image" ng-style="{ 'background-image': 'url(../../../../images/hotels/' + data.FileName + ')' }"></div>
-                </div>
-            </div>
-            <div class="address">{{currentHotel.Postal_Code}}, {{currentHotel.Address}}</div>
-            <div class="description">{{currentHotel.Description}}</div>
+            }"
+          dx-item-alias="data"
+        >
+          <div data-options="dxTemplate: { name: 'item' }">
+            <div class="tile-image" ng-style="{ 'background-image': 'url(../../../../images/hotels/' + data.FileName + ')' }"></div>
+          </div>
         </div>
+        <div class="address">{{currentHotel.Postal_Code}}, {{currentHotel.Address}}</div>
+        <div class="description">{{currentHotel.Description}}</div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" >
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
     <title>DevExtreme Demo</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -13,17 +13,17 @@
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
-</head>
-<body class="dx-viewport">
-    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">        
-        <div dx-list="listOptions" dx-item-alias="contact">
-            <div data-options="dxTemplate: { name: 'item' } ">
-                <div>{{contact.name}}</div>
-                <div>{{contact.phone}}</div>
-                <div>{{contact.email}}</div>
-            </div>
+  </head>
+  <body class="dx-viewport">
+    <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
+      <div dx-list="listOptions" dx-item-alias="contact">
+        <div data-options="dxTemplate: { name: 'item' } ">
+          <div>{{contact.name}}</div>
+          <div>{{contact.phone}}</div>
+          <div>{{contact.email}}</div>
         </div>
-        <div dx-action-sheet="actionSheetOptions"></div>
+      </div>
+      <div dx-action-sheet="actionSheetOptions"></div>
     </div>
-</body>
+  </body>
 </html>

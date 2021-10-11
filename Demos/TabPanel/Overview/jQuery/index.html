@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
+  <head>
     <title>DevExtreme Demo</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -13,67 +13,54 @@
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
-</head>
-<body class="dx-viewport">
+  </head>
+  <body class="dx-viewport">
     <div class="demo-container">
-        <div id="tabpanel">
-        
-            <div id="tabpanel-container">     
-            </div>
-        
-            <div class="item-box">
-                Item <span class="selected-index">1</span> 
-                of <span class="item-count"></span>
-            </div>
-        
-            <div class="options">
-                <div class="caption">Options</div>
-                <div class="option">
-                    <div id="loop-enabled"></div>
-                </div>
-                <div class="option">
-                    <div id="animation-enabled"></div>
-                </div>
-                <div class="option">
-                    <div id="swipe-enabled"></div>
-                </div>
-            </div>
-        
+      <div id="tabpanel">
+        <div id="tabpanel-container"> </div>
+
+        <div class="item-box"> Item <span class="selected-index">1</span> of <span class="item-count"></span> </div>
+
+        <div class="options">
+          <div class="caption">Options</div>
+          <div class="option">
+            <div id="loop-enabled"></div>
+          </div>
+          <div class="option">
+            <div id="animation-enabled"></div>
+          </div>
+          <div class="option">
+            <div id="swipe-enabled"></div>
+          </div>
         </div>
-        
-        <script type="text/html" id="title">
-            <span><%= CompanyName%></span>
-        </script>
-        
-        <script type="text/html" id="customer">
-            <div class="tabpanel-item">
-                <div>
-                    <p>
-                        <b><%= City%></b> 
-                        (<span><%= State%></span>)
-                    </p>
-                    <p>
-                        <span><%= Zipcode%></span> 
-                        <span><%= Address%></span>
-                    </p>
-                </div>
-                <div>
-                    <p>
-                        Phone: <b><%= Phone%></b>
-                    </p>
-                    <p>
-                        Fax: <b><%= Fax%></b>
-                    </p>
-                    <p>
-                        Website: 
-                        <a href="<%= Website%>" target="_blank">
-                            <%= Website%>
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </script>
-        
+      </div>
+
+      <script type="text/html" id="title">
+        <span><%= CompanyName%></span>
+      </script>
+
+      <script type="text/html" id="customer">
+        <div class="tabpanel-item">
+          <div>
+            <p>
+              <b><%= City%></b>
+              (<span><%= State%></span>)
+            </p>
+            <p>
+              <span><%= Zipcode%></span>
+              <span><%= Address%></span>
+            </p>
+          </div>
+          <div>
+            <p> Phone: <b><%= Phone%></b> </p>
+            <p> Fax: <b><%= Fax%></b> </p>
+            <p>
+              Website:
+              <a href="<%= Website%>" target="_blank"> <%= Website%> </a>
+            </p>
+          </div>
+        </div>
+      </script>
     </div>
-</body>
+  </body>
 </html>

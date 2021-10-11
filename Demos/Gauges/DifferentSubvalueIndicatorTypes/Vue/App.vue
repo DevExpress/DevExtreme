@@ -118,8 +118,9 @@ export default {
 </script>
 <style scoped>
 #gauge-demo {
-  width: 100%;
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 #triangleMarker,
@@ -128,21 +129,11 @@ export default {
 #textCloud,
 #twoColorNeedle {
   display: inline-block;
-}
-
-#triangleMarker,
-#rectangleNeedle,
-#triangleNeedle {
   width: 33%;
 }
 
-#twoColorNeedle {
-  width: 31%;
-}
-
 #textCloud {
-  width: 37%;
-  vertical-align: bottom;
+  width: 42%;
 }
 
 .long-title h3 {

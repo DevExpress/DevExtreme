@@ -5,9 +5,7 @@
     the web page and note that the PivotGrid&rsquo;s state is&nbsp;automatically persisted.
   </div>
 
-  <dx-button
-    text="Reset the PivotGrid's State"
-    (onClick)="onResetButtonClick()"></dx-button>
+  <dx-button text="Reset the PivotGrid's State" (onClick)="onResetButtonClick()"></dx-button>
 
   <dx-pivot-grid
     [allowSortingBySummary]="true"
@@ -17,15 +15,11 @@
     [showBorders]="true"
     [height]="570"
     [dataSource]="pivotGridDataSource"
-    (onContextMenuPreparing)="prepareContextMenu($event)">
-
+    (onContextMenuPreparing)="prepareContextMenu($event)"
+  >
     <dxo-field-panel [visible]="true"></dxo-field-panel>
     <dxo-field-chooser [enabled]="true"></dxo-field-chooser>
 
-    <dxo-state-storing
-      [enabled]="true"
-      type="localStorage"
-      storageKey="dx-widget-gallery-pivotgrid-storing">
-    </dxo-state-storing>
+    <dxo-state-storing [enabled]="true" type="localStorage" storageKey="dx-widget-gallery-pivotgrid-storing"> </dxo-state-storing>
   </dx-pivot-grid>
 </div>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" >
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
     <title>DevExtreme Demo</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -13,22 +13,20 @@
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
-</head>
-<body class="dx-viewport">
+  </head>
+  <body class="dx-viewport">
     <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
-        <div id="gridContainer" dx-data-grid="dataGridOptions"></div>
+      <div id="gridContainer" dx-data-grid="dataGridOptions"></div>
 
-        <div id="events">
-            <div>
-                <div class="caption">
-                    Fired events
-                </div>
-                <div id="clear" dx-button="buttonOptions"></div>
-            </div>
-            <ul>
-                <li ng-repeat="event in events track by $index">{{event}}</li>
-            </ul>
+      <div id="events">
+        <div>
+          <div class="caption"> Fired events </div>
+          <div id="clear" dx-button="buttonOptions"></div>
         </div>
+        <ul>
+          <li ng-repeat="event in events track by $index">{{event}}</li>
+        </ul>
+      </div>
     </div>
-</body>
+  </body>
 </html>

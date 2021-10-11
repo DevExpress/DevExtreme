@@ -1,9 +1,9 @@
 <dx-diagram #diagram id="diagram">
-    <dxo-nodes [dataSource]="flowNodesDataSource" keyExpr="id" textExpr="text" typeExpr="type">
-        <dxo-auto-layout type="layered"></dxo-auto-layout>
-    </dxo-nodes>
-    <dxo-edges [dataSource]="flowEdgesDataSource" keyExpr="id" fromExpr="fromId" toExpr="toId" textExpr="text"></dxo-edges>
-    <dxo-toolbox>
-        <dxi-group category="general" title="General"></dxi-group>
-    </dxo-toolbox>
+  <dxo-nodes [dataSource]="flowNodesDataSource" keyExpr="id" textExpr="text" typeExpr="type">
+    <dxo-auto-layout type="layered"></dxo-auto-layout>
+  </dxo-nodes>
+  <dxo-edges [dataSource]="flowEdgesDataSource" keyExpr="id" fromExpr="fromId" toExpr="toId" textExpr="text"></dxo-edges>
+  <dxo-toolbox>
+    <dxi-group category="general" title="General"></dxi-group>
+  </dxo-toolbox>
 </dx-diagram>

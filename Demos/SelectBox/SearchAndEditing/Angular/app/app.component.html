@@ -1,78 +1,68 @@
 <div id="selectbox-demo">
-    <div class="widget-container">
-        <div class="dx-fieldset">
-            <div class="dx-fieldset-header">SearchBox</div>
-            <div class="dx-field">
-                <div class="dx-field-label">Product</div>
-                <div class="dx-field-value">
-                    <dx-select-box [dataSource]="products"
-                        displayExpr="Name"
-                        valueExpr="ID"
-                        [searchMode]="searchModeOption"
-                        [searchExpr]="searchExprOption"
-                        [searchTimeout]="searchTimeoutOption"
-                        [minSearchLength]="minSearchLengthOption"
-                        [searchEnabled]="true"></dx-select-box>
-                </div>
-            </div>
+  <div class="widget-container">
+    <div class="dx-fieldset">
+      <div class="dx-fieldset-header">SearchBox</div>
+      <div class="dx-field">
+        <div class="dx-field-label">Product</div>
+        <div class="dx-field-value">
+          <dx-select-box
+            [dataSource]="products"
+            displayExpr="Name"
+            valueExpr="ID"
+            [searchMode]="searchModeOption"
+            [searchExpr]="searchExprOption"
+            [searchTimeout]="searchTimeoutOption"
+            [minSearchLength]="minSearchLengthOption"
+            [searchEnabled]="true"
+          ></dx-select-box>
         </div>
-        <div class="dx-fieldset">
-            <div class="dx-fieldset-header">EditBox</div>
-            <div class="dx-field">
-                <div class="dx-field-label">Product</div>
-                <div class="dx-field-value">
-                    <dx-select-box #selectBox
-                        [dataSource]="productsDataSource"
-                        [acceptCustomValue]="true"
-                        displayExpr="Name"       
-                        valueExpr="ID"
-                        [value]="product"
-                        (onCustomItemCreating)="addCustomItem($event)"></dx-select-box>
-                </div>
-            </div>
-            <div class="dx-field current-product">
-                Current product:
-                <span *ngIf="selectBox.selectedItem; else emptyValue" class="current-value">
-                    {{selectBox.selectedItem.Name}} (ID: {{selectBox.selectedItem.ID}})
-                </span>
-                <ng-template #emptyValue>
-                    <span class="current-value">Not selected</span>
-                </ng-template>
-            </div>
-        </div>
+      </div>
     </div>
-    <div class="options">
-        <div class="caption">SearchBox Options</div>
-        <div class="option">
-            <div>Search Mode</div>
-            <dx-select-box [items]="['contains', 'startswith']"
-                [value]="searchModeOption"></dx-select-box>
+    <div class="dx-fieldset">
+      <div class="dx-fieldset-header">EditBox</div>
+      <div class="dx-field">
+        <div class="dx-field-label">Product</div>
+        <div class="dx-field-value">
+          <dx-select-box
+            #selectBox
+            [dataSource]="productsDataSource"
+            [acceptCustomValue]="true"
+            displayExpr="Name"
+            valueExpr="ID"
+            [value]="product"
+            (onCustomItemCreating)="addCustomItem($event)"
+          ></dx-select-box>
         </div>
-        <div class="option">
-            <div>Search Expression</div>
-            <dx-select-box [items]="searchExprOptionItems"
-                displayExpr="name"
-                valueExpr="value"
-                [value]="searchExprOption"></dx-select-box>
-        </div>
-        <div class="option">
-            <div>Search Timeout</div>
-            <dx-number-box [min]="0"
-                [max]="5000"
-                [value]="searchTimeoutOption"
-                [showSpinButtons]="true"
-                [step]="100"></dx-number-box>
-        </div>
-        <div class="option">
-            <div>Minimum Search Length</div>
-            <dx-number-box [min]="0"
-                [max]="5"
-                [value]="minSearchLengthOption"
-                [showSpinButtons]="true"></dx-number-box>
-        </div>
-        <div class="option">
-            <dx-check-box [value]="showDataBeforeSearchOption"
-                text="Show Data Before Search"></dx-check-box>
-        </div>
+      </div>
+      <div class="dx-field current-product">
+        Current product:
+        <span *ngIf="selectBox.selectedItem; else emptyValue" class="current-value"> {{ selectBox.selectedItem.Name }} (ID: {{ selectBox.selectedItem.ID }}) </span>
+        <ng-template #emptyValue>
+          <span class="current-value">Not selected</span>
+        </ng-template>
+      </div>
     </div>
+  </div>
+  <div class="options">
+    <div class="caption">SearchBox Options</div>
+    <div class="option">
+      <div>Search Mode</div>
+      <dx-select-box [items]="['contains', 'startswith']" [value]="searchModeOption"></dx-select-box>
+    </div>
+    <div class="option">
+      <div>Search Expression</div>
+      <dx-select-box [items]="searchExprOptionItems" displayExpr="name" valueExpr="value" [value]="searchExprOption"></dx-select-box>
+    </div>
+    <div class="option">
+      <div>Search Timeout</div>
+      <dx-number-box [min]="0" [max]="5000" [value]="searchTimeoutOption" [showSpinButtons]="true" [step]="100"></dx-number-box>
+    </div>
+    <div class="option">
+      <div>Minimum Search Length</div>
+      <dx-number-box [min]="0" [max]="5" [value]="minSearchLengthOption" [showSpinButtons]="true"></dx-number-box>
+    </div>
+    <div class="option">
+      <dx-check-box [value]="showDataBeforeSearchOption" text="Show Data Before Search"></dx-check-box>
+    </div>
+  </div>
 </div>

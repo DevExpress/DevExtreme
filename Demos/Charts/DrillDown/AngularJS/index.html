@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" >
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
     <title>DevExtreme Demo</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -13,22 +13,21 @@
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
-</head>
-<body class="dx-viewport">
+  </head>
+  <body class="dx-viewport">
     <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
-        <div id="treemap" dx-tree-map="treeMapOptions"></div>
-        <div id="drill-down-title">
-            <span ng-repeat="label in markup" ng-click="onLinkClick()" >
-                <span ng-if="!$last">
-                    <span class='link'>{{ label.text }}</span>
-                    <span> > </span>
-                </span>
-                <span ng-if="$last">
-                    <span>{{ label.text }}
-                    </span>
-                </span>
-            </span>
-        </div>
+      <div id="treemap" dx-tree-map="treeMapOptions"></div>
+      <div id="drill-down-title">
+        <span ng-repeat="label in markup" ng-click="onLinkClick()">
+          <span ng-if="!$last">
+            <span class="link">{{ label.text }}</span>
+            <span> > </span>
+          </span>
+          <span ng-if="$last">
+            <span>{{ label.text }} </span>
+          </span>
+        </span>
+      </div>
     </div>
-</body>
+  </body>
 </html>

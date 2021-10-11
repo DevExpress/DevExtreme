@@ -1,4 +1,5 @@
-<dx-pivot-grid id="sales"
+<dx-pivot-grid
+  id="sales"
   [allowSortingBySummary]="true"
   [allowSorting]="true"
   [allowFiltering]="true"
@@ -6,6 +7,7 @@
   [showColumnTotals]="false"
   [showBorders]="true"
   showTotalsPrior="rows"
-  [dataSource]="pivotGridDataSource">
+  [dataSource]="pivotGridDataSource"
+>
   <dxo-field-chooser [enabled]="false"></dxo-field-chooser>
 </dx-pivot-grid>

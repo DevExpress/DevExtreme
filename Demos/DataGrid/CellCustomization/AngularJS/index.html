@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" >
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
     <title>DevExtreme Demo</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -17,13 +17,14 @@
     <script src="data.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
-</head>
-<body class="dx-viewport">
+  </head>
+  <body class="dx-viewport">
     <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
-        <div id="gridContainer" dx-data-grid="dataGridOptions" dx-item-alias="day"> 
-           <div data-options="dxTemplate:{ name:'cellTemplate' }">
-                <div class="chart-cell">
-                    <div dx-sparkline="{
+      <div id="gridContainer" dx-data-grid="dataGridOptions" dx-item-alias="day">
+        <div data-options="dxTemplate:{ name:'cellTemplate' }">
+          <div class="chart-cell">
+            <div
+              dx-sparkline="{
                         dataSource: day.data.dayClose,
                         argumentField: 'date',
                         valueField: 'close',
@@ -39,10 +40,11 @@
                         tooltip: {
                             enabled: false
                         }
-                    }"></div>
-                </div>
-            </div>
+                    }"
+            ></div>
+          </div>
         </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

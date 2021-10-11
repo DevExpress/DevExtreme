@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" >
-<head>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
     <title>DevExtreme Demo</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -12,14 +12,15 @@
     <script src="../../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="index.js"></script>
-</head>
-<body class="dx-viewport">
+  </head>
+  <body class="dx-viewport">
     <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
-        <div class="dx-fieldset">    
-                <div class="dx-field">
-                    <div class="dx-field-label">Password TextBox</div>
-                    <div class="dx-field-value">
-                        <div dx-text-box="{
+      <div class="dx-fieldset">
+        <div class="dx-field">
+          <div class="dx-field-label">Password TextBox</div>
+          <div class="dx-field-value">
+            <div
+              dx-text-box="{
                             placeholder: 'password',
                             mode: 'password',
                             value: 'password',
@@ -36,13 +37,15 @@
                                     onClick: changePasswordMode
                                 } 
                             }]
-                        }"></div>
-                    </div>
-                </div>
-                <div class="dx-field">
-                    <div class="dx-field-label">Multi-currency NumberBox</div>
-                    <div class="dx-field-value">
-                        <div dx-number-box="{
+                        }"
+            ></div>
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label">Multi-currency NumberBox</div>
+          <div class="dx-field-value">
+            <div
+              dx-number-box="{
                             bindingOptions: {
                                 format: 'format',
                                 value: 'priceValue'
@@ -63,13 +66,15 @@
                                     onClick: changeCurrency
                                 }
                             }, 'clear', 'spins']
-                        }"></div>
-                    </div>
-                </div>
-                <div class="dx-field">
-                    <div class="dx-field-label">Advanced DateBox</div>
-                    <div class="dx-field-value">
-                        <div dx-date-box="{
+                        }"
+            ></div>
+          </div>
+        </div>
+        <div class="dx-field">
+          <div class="dx-field-label">Advanced DateBox</div>
+          <div class="dx-field-value">
+            <div
+              dx-date-box="{
                             bindingOptions: {
                                 value: 'currentDate'
                             },
@@ -99,11 +104,11 @@
                                     onClick: nextDate
                                 }
                             }, 'dropDown']
-                        }"></div>
-                    </div>
-                </div>
-            </div>
+                        }"
+            ></div>
+          </div>
         </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

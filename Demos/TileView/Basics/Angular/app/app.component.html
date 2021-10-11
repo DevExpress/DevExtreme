@@ -1,8 +1,5 @@
 <dx-tile-view class="dx-tile-content">
-    <dxi-item
-        *ngFor="let home of homes"
-        [widthRatio]="home.widthRatio"
-        [heightRatio]="home.heightRatio">
-        <div class="image" [style.background-image]="'url(' + home.ImageSrc + ')'"></div>
-    </dxi-item>
+  <dxi-item *ngFor="let home of homes" [widthRatio]="home.widthRatio" [heightRatio]="home.heightRatio">
+    <div class="image" [style.background-image]="'url(' + home.ImageSrc + ')'"></div>
+  </dxi-item>
 </dx-tile-view>

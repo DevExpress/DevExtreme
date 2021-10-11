@@ -5,29 +5,20 @@
   [wordWrapEnabled]="false"
   [dataSource]="pivotGridDataSource"
   [showBorders]="true"
-  [height]="440">
-
-  <dxo-field-chooser 
-      [height]="500"
-  ></dxo-field-chooser>
-
+  [height]="440"
+>
+  <dxo-field-chooser [height]="500"></dxo-field-chooser>
 </dx-pivot-grid>
 
 <div class="options">
-    <div class="caption">Options</div>
-    <div class="option">
-        <dx-check-box
-          text="Show Totals Prior"
-          [(value)]="showTotalsPrior"></dx-check-box>
-    </div>
-    <div class="option">
-        <dx-check-box
-          text="Data Field Headers in Rows"
-          [(value)]="rowsDataFieldArea"></dx-check-box>
-    </div>
-    <div class="option">
-        <dx-check-box
-          text="Tree Row Header Layout"
-          [(value)]="treeHeaderLayout"></dx-check-box>
-    </div>
+  <div class="caption">Options</div>
+  <div class="option">
+    <dx-check-box text="Show Totals Prior" [(value)]="showTotalsPrior"></dx-check-box>
+  </div>
+  <div class="option">
+    <dx-check-box text="Data Field Headers in Rows" [(value)]="rowsDataFieldArea"></dx-check-box>
+  </div>
+  <div class="option">
+    <dx-check-box text="Tree Row Header Layout" [(value)]="treeHeaderLayout"></dx-check-box>
+  </div>
 </div>

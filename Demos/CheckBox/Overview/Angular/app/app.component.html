@@ -1,55 +1,46 @@
 <div class="form">
-    <div class="dx-fieldset">
-        <div class="dx-field">
-            <div class="dx-field-label">Checked</div>
-            <div class="dx-field-value">
-                <dx-check-box [value]="true"></dx-check-box>
-            </div>
-        </div>
-        <div class="dx-field">
-            <div class="dx-field-label">Unchecked</div>
-            <div class="dx-field-value">
-                <dx-check-box [value]="false"></dx-check-box>
-            </div>
-        </div>
-        <div class="dx-field">
-            <div class="dx-field-label">Indeterminate</div>
-            <div class="dx-field-value">
-                <dx-check-box [value]="null"></dx-check-box>
-            </div>
-        </div>
-        <div class="dx-field">
-            <div class="dx-field-label">Handle value change</div>
-            <div class="dx-field-value">
-                <dx-check-box [(value)]="checkBoxValue"></dx-check-box>
-            </div>
-        </div>
-        <div class="dx-field">
-            <div class="dx-field-label">Disabled</div>
-            <div class="dx-field-value">
-                <dx-check-box
-                    [disabled]="true"
-                    [value]="checkBoxValue"
-                ></dx-check-box>
-            </div>
-        </div>
-        <div class="dx-field">
-            <div class="dx-field-label">Custom size</div>
-            <div class="dx-field-value">
-                <dx-check-box
-                    [value]="null"
-                    [iconSize]="30"
-                ></dx-check-box>
-            </div>
-        </div>
-        <div class="dx-field">
-            <div class="dx-field-label">With label</div>
-            <div class="dx-field-value">
-                <dx-check-box
-                    [value]="true"
-                    text="Label"
-                ></dx-check-box>
-            </div>
-        </div>
+  <div class="dx-fieldset">
+    <div class="dx-field">
+      <div class="dx-field-label">Checked</div>
+      <div class="dx-field-value">
+        <dx-check-box [value]="true"></dx-check-box>
+      </div>
     </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Unchecked</div>
+      <div class="dx-field-value">
+        <dx-check-box [value]="false"></dx-check-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Indeterminate</div>
+      <div class="dx-field-value">
+        <dx-check-box [value]="null"></dx-check-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Handle value change</div>
+      <div class="dx-field-value">
+        <dx-check-box [(value)]="checkBoxValue"></dx-check-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Disabled</div>
+      <div class="dx-field-value">
+        <dx-check-box [disabled]="true" [value]="checkBoxValue"></dx-check-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">Custom size</div>
+      <div class="dx-field-value">
+        <dx-check-box [value]="null" [iconSize]="30"></dx-check-box>
+      </div>
+    </div>
+    <div class="dx-field">
+      <div class="dx-field-label">With label</div>
+      <div class="dx-field-value">
+        <dx-check-box [value]="true" text="Label"></dx-check-box>
+      </div>
+    </div>
+  </div>
 </div>
