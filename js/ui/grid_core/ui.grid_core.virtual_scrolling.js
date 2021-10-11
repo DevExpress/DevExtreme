@@ -851,7 +851,8 @@ export const virtualScrollingModule = {
                                 return isVirtualMode(that) && that._dataSource?.lastLoadOptions().skip || 0;
                             },
                             loadedItemCount: function() {
-                                return that._itemCount;
+                                const insertRowCount = that._allItems?.filter(it => it.isNewRow).length || 0;
+                                return that._itemCount + insertRowCount;
                             },
                             totalItemsCount: function() {
                                 if(isVirtualMode(that)) {

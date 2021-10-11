@@ -6114,4 +6114,43 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             assert.ok($('#dataGrid').find('.dx-virtual-row').length, 'one virtual row is rendered');
         });
     });
+
+    QUnit.test('Virtual row should not be rendered after the last inserted row with certain height and row count', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 50; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            editing: {
+                mode: 'row',
+                allowAdding: true,
+                newRowPosition: 'last',
+            },
+            height: 440,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            }
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.addRow();
+        const $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
+        const visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.ok(visibleRows[visibleRows.length - 1].isNewRow, 'last new row is rendered');
+        assert.strictEqual($virtualRowElement.length, 1, 'only one virtual row is rendered');
+    });
 });
