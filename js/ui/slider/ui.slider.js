@@ -298,21 +298,15 @@ const Slider = TrackBar.inherit({
 
     _renderHandleImpl: function(value, $element) {
         const $handle = $element || $('<div>').appendTo(this._$range);
-        const format = this.option('tooltip.format');
-        const tooltipEnabled = this.option('tooltip.enabled');
-        const tooltipPosition = this.option('tooltip.position');
+        const tooltip = this.option('tooltip');
 
         this.$element()
-            .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + 'bottom', tooltipEnabled && tooltipPosition === 'bottom')
-            .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + 'top', tooltipEnabled && tooltipPosition === 'top');
+            .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + 'bottom', tooltip.enabled && tooltip.position === 'bottom')
+            .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + 'top', tooltip.enabled && tooltip.position === 'top');
 
         this._createComponent($handle, SliderHandle, {
             value,
-            tooltipEnabled,
-            tooltipPosition,
-            tooltipFormat: format,
-            tooltipShowMode: this.option('tooltip.showMode'),
-            tooltipFitIn: this.$element()
+            tooltip
         });
 
         return $handle;
@@ -325,16 +319,8 @@ const Slider = TrackBar.inherit({
         }, this._$handle);
     },
 
-    _hoverStartHandler: function(e) {
-        SliderHandle.getInstance($(e.currentTarget)).updateTooltip();
-    },
-
     _toggleActiveState: function($element, value) {
         this.callBase($element, value);
-
-        if(value) {
-            SliderHandle.getInstance($element).updateTooltip();
-        }
 
         this._renderInkWave($element, null, !!value, 1);
     },
@@ -565,7 +551,7 @@ const Slider = TrackBar.inherit({
     },
 
     _fitTooltip: function() {
-        this._callHandlerMethod('fitTooltipPosition');
+        this._callHandlerMethod('updateTooltipPosition');
     },
 
     _optionChanged: function(args) {
