@@ -764,6 +764,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _clearValueHandler: function(e) {
+        this._preventFiltering = true;
         this.callBase(e);
 
         return false;
