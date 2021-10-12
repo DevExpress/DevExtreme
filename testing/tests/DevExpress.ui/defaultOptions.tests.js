@@ -644,29 +644,12 @@ testComponentDefaults(Gallery,
     }
 );
 
-if(!Scrollable.IS_RENOVATED_WIDGET) {
-    testComponentDefaults(Scrollable,
-        {},
-        {
-            useNative: false,
-            useSimulatedScrollbar: true
-        },
-        function() {
-            this._supportNativeScrolling = support.nativeScrolling;
-            support.nativeScrolling = false;
-        },
-        function() {
-            support.nativeScrolling = this._supportNativeScrolling;
-        }
-    );
-}
-
-
 testComponentDefaults(Scrollable,
     {},
     {
         useNative: false,
-        useSimulatedScrollbar: true
+        // NOTE: useSimulatedScrollbar setting value doesn't affect on simulated strategy
+        useSimulatedScrollbar: Scrollable.IS_RENOVATED_WIDGET ? false : true
     },
     function() {
         this._supportNativeScrolling = support.nativeScrolling;
