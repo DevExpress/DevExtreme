@@ -20533,7 +20533,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeList.isRowExpanded(key)]
      */
-    isRowExpanded(key: TRowData): boolean;
+    isRowExpanded(key: TKey): boolean;
     /**
      * [descr:dxTreeList.loadDescendants()]
      */
