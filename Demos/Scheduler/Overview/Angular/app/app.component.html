@@ -13,7 +13,13 @@
   resourceCellTemplate="resourceCellTemplate"
   dataCellTemplate="dataCellTemplate"
 >
-  <dxi-resource fieldExpr="employeeID" [allowMultiple]="false" [dataSource]="resourcesDataSource" label="Employee"> </dxi-resource>
+  <dxi-resource
+    fieldExpr="employeeID"
+    [allowMultiple]="false"
+    [dataSource]="resourcesDataSource"
+    label="Employee"
+  >
+  </dxi-resource>
 
   <div *dxTemplate="let employee of 'resourceCellTemplate'">
     <div class="name" [style.background]="employee.color">
@@ -29,7 +35,13 @@
     </div>
   </div>
 
-  <div *dxTemplate="let cellData of 'dataCellTemplate'" class="employee-weekend" [ngClass]="markWeekEnd(cellData)">
-    <div class="day-cell" [ngClass]="markTraining(cellData)">{{ cellData.text }}</div>
+  <div
+    *dxTemplate="let cellData of 'dataCellTemplate'"
+    class="employee-weekend"
+    [ngClass]="markWeekEnd(cellData)"
+  >
+    <div class="day-cell" [ngClass]="markTraining(cellData)">{{
+      cellData.text
+    }}</div>
   </div>
 </dx-scheduler>

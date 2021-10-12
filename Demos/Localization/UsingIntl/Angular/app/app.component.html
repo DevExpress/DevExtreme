@@ -1,8 +1,15 @@
 <div id="data-grid-demo">
   <dx-data-grid [dataSource]="payments">
-    <dxi-column dataField="PaymentId" [caption]="formatMessage('Number')" [allowEditing]="false" width="100"></dxi-column>
-    <dxi-column dataField="ContactName" [caption]="formatMessage('Contact')"> </dxi-column>
-    <dxi-column dataField="CompanyName" [caption]="formatMessage('Company')"> </dxi-column>
+    <dxi-column
+      dataField="PaymentId"
+      [caption]="formatMessage('Number')"
+      [allowEditing]="false"
+      width="100"
+    ></dxi-column>
+    <dxi-column dataField="ContactName" [caption]="formatMessage('Contact')">
+    </dxi-column>
+    <dxi-column dataField="CompanyName" [caption]="formatMessage('Company')">
+    </dxi-column>
     <dxi-column
       dataField="Amount"
       [caption]="formatMessage('Amount')"
@@ -14,7 +21,12 @@
       }"
     >
     </dxi-column>
-    <dxi-column dataField="PaymentDate" [caption]="formatMessage('PaymentDate')" dataType="date"> </dxi-column>
+    <dxi-column
+      dataField="PaymentDate"
+      [caption]="formatMessage('PaymentDate')"
+      dataType="date"
+    >
+    </dxi-column>
     <dxo-filter-row [visible]="true" [applyFilter]="auto"> </dxo-filter-row>
     <dxo-editing mode="popup" [allowUpdating]="true">
       <dxo-popup [width]="700" [height]="345"> </dxo-popup>
@@ -25,7 +37,15 @@
     <div class="caption">Options</div>
     <div class="option">
       <label for="selectInput">Language</label>
-      <dx-select-box id="selectBox" [dataSource]="locales" displayExpr="Name" valueExpr="Value" [value]="locale" (onValueChanged)="changeLocale($event)" [inputAttr]="{ id: 'selectInput' }">
+      <dx-select-box
+        id="selectBox"
+        [dataSource]="locales"
+        displayExpr="Name"
+        valueExpr="Value"
+        [value]="locale"
+        (onValueChanged)="changeLocale($event)"
+        [inputAttr]="{ id: 'selectInput' }"
+      >
       </dx-select-box>
     </div>
   </div>

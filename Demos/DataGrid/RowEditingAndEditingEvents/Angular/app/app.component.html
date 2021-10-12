@@ -18,14 +18,21 @@
   (onEditCanceled)="logEvent('EditCanceled')"
 >
   <dxo-paging [enabled]="true"></dxo-paging>
-  <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true"> </dxo-editing>
+  <dxo-editing
+    mode="row"
+    [allowUpdating]="true"
+    [allowDeleting]="true"
+    [allowAdding]="true"
+  >
+  </dxo-editing>
 
   <dxi-column dataField="Prefix" caption="Title"></dxi-column>
   <dxi-column dataField="FirstName"></dxi-column>
   <dxi-column dataField="LastName"></dxi-column>
   <dxi-column dataField="Position" [width]="130"></dxi-column>
   <dxi-column dataField="StateID" caption="State" [width]="125">
-    <dxo-lookup [dataSource]="states" displayExpr="Name" valueExpr="ID"> </dxo-lookup>
+    <dxo-lookup [dataSource]="states" displayExpr="Name" valueExpr="ID">
+    </dxo-lookup>
   </dxi-column>
   <dxi-column dataField="BirthDate" [width]="125" dataType="date"> </dxi-column>
 </dx-data-grid>

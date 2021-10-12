@@ -32,19 +32,27 @@
   <div class="dx-field">
     <div class="dx-field-label">Clear button</div>
     <div class="dx-field-value">
-      <dx-date-box [value]="dateClear" type="time" [showClearButton]="true"> </dx-date-box>
+      <dx-date-box [value]="dateClear" type="time" [showClearButton]="true">
+      </dx-date-box>
     </div>
   </div>
   <div class="dx-field">
     <div class="dx-field-label">Disabled</div>
     <div class="dx-field-value">
-      <dx-date-box [value]="now" type="datetime" [disabled]="true"> </dx-date-box>
+      <dx-date-box [value]="now" type="datetime" [disabled]="true">
+      </dx-date-box>
     </div>
   </div>
   <div class="dx-field">
     <div class="dx-field-label">Disable certain dates</div>
     <div class="dx-field-value">
-      <dx-date-box [value]="firstWorkDay2017" type="date" pickerType="calendar" [disabledDates]="disabledDates"> </dx-date-box>
+      <dx-date-box
+        [value]="firstWorkDay2017"
+        type="date"
+        pickerType="calendar"
+        [disabledDates]="disabledDates"
+      >
+      </dx-date-box>
     </div>
   </div>
 </div>
@@ -53,7 +61,13 @@
   <div class="dx-field">
     <div class="dx-field-label">Set Birthday</div>
     <div class="dx-field-value">
-      <dx-date-box applyValueMode="useButtons" [(value)]="value" [min]="min" [max]="now"> </dx-date-box>
+      <dx-date-box
+        applyValueMode="useButtons"
+        [(value)]="value"
+        [min]="min"
+        [max]="now"
+      >
+      </dx-date-box>
     </div>
   </div>
   <div class="dx-field">

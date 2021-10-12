@@ -12,6 +12,11 @@
   </dx-chart>
   <div class="action">
     <div class="label">Choose a temperature threshold, &deg;C: </div>
-    <dx-select-box id="choose-temperature" [dataSource]="temperature" [value]="2" (onValueChanged)="onValueChanged($event)"></dx-select-box>
+    <dx-select-box
+      id="choose-temperature"
+      [dataSource]="temperature"
+      [value]="2"
+      (onValueChanged)="onValueChanged($event)"
+    ></dx-select-box>
   </div>
 </div>

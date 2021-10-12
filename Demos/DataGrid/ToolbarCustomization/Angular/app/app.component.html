@@ -1,4 +1,9 @@
-<dx-data-grid id="gridContainer" [dataSource]="orders" keyExpr="ID" [showBorders]="true">
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="orders"
+  keyExpr="ID"
+  [showBorders]="true"
+>
   <dxo-grouping [autoExpandAll]="expanded"></dxo-grouping>
   <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
   <dxo-load-panel [enabled]="true"></dxo-load-panel>
@@ -7,8 +12,16 @@
   <dxi-column dataField="OrderDate"></dxi-column>
   <dxi-column dataField="Employee"></dxi-column>
   <dxi-column dataField="CustomerStoreCity" caption="City"></dxi-column>
-  <dxi-column dataField="CustomerStoreState" caption="State" [groupIndex]="0"></dxi-column>
-  <dxi-column dataField="SaleAmount" alignment="right" format="currency"></dxi-column>
+  <dxi-column
+    dataField="CustomerStoreState"
+    caption="State"
+    [groupIndex]="0"
+  ></dxi-column>
+  <dxi-column
+    dataField="SaleAmount"
+    alignment="right"
+    format="currency"
+  ></dxi-column>
 
   <dxo-toolbar>
     <dxi-item location="before">
@@ -18,13 +31,27 @@
       </div>
     </dxi-item>
     <dxi-item location="before">
-      <dx-select-box width="225" [items]="groupingValues" displayExpr="text" valueExpr="value" value="CustomerStoreState" (onValueChanged)="groupChanged($event)"> </dx-select-box>
+      <dx-select-box
+        width="225"
+        [items]="groupingValues"
+        displayExpr="text"
+        valueExpr="value"
+        value="CustomerStoreState"
+        (onValueChanged)="groupChanged($event)"
+      >
+      </dx-select-box>
     </dxi-item>
     <dxi-item location="before">
-      <dx-button text="Collapse All" width="136" (onClick)="collapseAllClick($event)"> </dx-button>
+      <dx-button
+        text="Collapse All"
+        width="136"
+        (onClick)="collapseAllClick($event)"
+      >
+      </dx-button>
     </dxi-item>
     <dxi-item location="after">
-      <dx-button icon="refresh" (onClick)="refreshDataGrid($event)"> </dx-button>
+      <dx-button icon="refresh" (onClick)="refreshDataGrid($event)">
+      </dx-button>
     </dxi-item>
     <dxi-item name="columnChooserButton"></dxi-item>
   </dxo-toolbar>

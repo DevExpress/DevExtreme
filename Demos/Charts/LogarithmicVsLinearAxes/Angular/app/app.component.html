@@ -4,7 +4,12 @@
   <dxi-series pane="top"></dxi-series>
   <dxi-series pane="bottom"></dxi-series>
   <dxo-common-axis-settings [endOnTick]="false"> </dxo-common-axis-settings>
-  <dxi-value-axis title="Logarithmic Axis" type="logarithmic" pane="top" [linearThreshold]="-3"></dxi-value-axis>
+  <dxi-value-axis
+    title="Logarithmic Axis"
+    type="logarithmic"
+    pane="top"
+    [linearThreshold]="-3"
+  ></dxi-value-axis>
   <dxi-value-axis title="Linear Axis" pane="bottom"></dxi-value-axis>
   <dxo-tooltip [enabled]="true" format="exponential"></dxo-tooltip>
   <dxo-crosshair [enabled]="true">

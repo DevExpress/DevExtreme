@@ -3,26 +3,44 @@
     <div class="dx-field">
       <div class="dx-field-label">Built-in icon</div>
       <div class="dx-field-value">
-        <dx-button icon="check" type="success" text="Done" (onClick)="doneClick()"> </dx-button>
+        <dx-button
+          icon="check"
+          type="success"
+          text="Done"
+          (onClick)="doneClick()"
+        >
+        </dx-button>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Image icon</div>
       <div class="dx-field-value">
-        <dx-button icon="../../../../images/icons/weather.png" text="Weather" (onClick)="weatherClick()"> </dx-button>
+        <dx-button
+          icon="../../../../images/icons/weather.png"
+          text="Weather"
+          (onClick)="weatherClick()"
+        >
+        </dx-button>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">External icon</div>
       <div class="dx-field-value">
-        <dx-button class="send" icon="fa fa-envelope-o" text="Send" (onClick)="sendClick()"> </dx-button>
+        <dx-button
+          class="send"
+          icon="fa fa-envelope-o"
+          text="Send"
+          (onClick)="sendClick()"
+        >
+        </dx-button>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Icon only</div>
       <div class="dx-field-value">
         <dx-button icon="plus" (onClick)="plusClick()"> </dx-button>
-        <dx-button icon="back" (onClick)="backClick()" id="icon-back"> </dx-button>
+        <dx-button icon="back" (onClick)="backClick()" id="icon-back">
+        </dx-button>
       </div>
     </div>
   </div>
@@ -32,23 +50,36 @@
   <div class="fields-container">
     <div class="dx-field">
       <div class="dx-field-value">
-        <dx-button icon="check" type="success" text="Done" [disabled]="true"> </dx-button>
+        <dx-button icon="check" type="success" text="Done" [disabled]="true">
+        </dx-button>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-value">
-        <dx-button icon="../../../../images/icons/weather.png" text="Weather" [disabled]="true"> </dx-button>
+        <dx-button
+          icon="../../../../images/icons/weather.png"
+          text="Weather"
+          [disabled]="true"
+        >
+        </dx-button>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-value">
-        <dx-button class="send" icon="fa fa-envelope-o" text="Send" [disabled]="true"> </dx-button>
+        <dx-button
+          class="send"
+          icon="fa fa-envelope-o"
+          text="Send"
+          [disabled]="true"
+        >
+        </dx-button>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-value">
         <dx-button icon="plus" [disabled]="true"> </dx-button>
-        <dx-button icon="back" [disabled]="true" id="icon-disabled-back"> </dx-button>
+        <dx-button icon="back" [disabled]="true" id="icon-disabled-back">
+        </dx-button>
       </div>
     </div>
   </div>

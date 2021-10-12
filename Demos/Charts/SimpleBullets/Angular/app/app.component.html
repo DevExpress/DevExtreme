@@ -10,7 +10,14 @@
     <tr *ngFor="let week of weeksData">
       <th>{{ week.weekCount }} week</th>
       <td *ngFor="let bullet of week.bulletsData">
-        <dx-bullet class="bullet" [startScaleValue]="0" [endScaleValue]="35" [value]="bullet.value" [target]="bullet.target" [color]="bullet.color">
+        <dx-bullet
+          class="bullet"
+          [startScaleValue]="0"
+          [endScaleValue]="35"
+          [value]="bullet.value"
+          [target]="bullet.target"
+          [color]="bullet.color"
+        >
           <dxo-tooltip [customizeTooltip]="customizeTooltip"></dxo-tooltip>
         </dx-bullet>
       </td>

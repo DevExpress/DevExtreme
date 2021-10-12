@@ -3,25 +3,40 @@
     <div class="dx-field">
       <div class="dx-field-label">Default mode</div>
       <div class="dx-field-value">
-        <dx-radio-group [items]="priorities" [value]="priorities[0]"> </dx-radio-group>
+        <dx-radio-group [items]="priorities" [value]="priorities[0]">
+        </dx-radio-group>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Disabled</div>
       <div class="dx-field-value">
-        <dx-radio-group [items]="priorities" [value]="priorities[1]" [disabled]="true"> </dx-radio-group>
+        <dx-radio-group
+          [items]="priorities"
+          [value]="priorities[1]"
+          [disabled]="true"
+        >
+        </dx-radio-group>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Horizontal layout</div>
       <div class="dx-field-value">
-        <dx-radio-group [items]="priorities" [value]="priorities[0]" layout="horizontal"> </dx-radio-group>
+        <dx-radio-group
+          [items]="priorities"
+          [value]="priorities[0]"
+          layout="horizontal"
+        >
+        </dx-radio-group>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Custom item template</div>
       <div class="dx-field-value">
-        <dx-radio-group [items]="priorities" [(value)]="colorPriority" [ngClass]="colorPriority.toLowerCase()">
+        <dx-radio-group
+          [items]="priorities"
+          [(value)]="colorPriority"
+          [ngClass]="colorPriority.toLowerCase()"
+        >
           <div *dxTemplate="let priority of 'item'">
             <div>{{ priority }}</div>
           </div>
@@ -31,7 +46,14 @@
     <div class="dx-field">
       <div class="dx-field-label">Event handling</div>
       <div class="dx-field-value">
-        <dx-radio-group id="radio-group-with-selection" [items]="priorityEntities" valueExpr="id" displayExpr="text" [(value)]="selectionPriorityId" (onValueChanged)="onValueChanged($event)">
+        <dx-radio-group
+          id="radio-group-with-selection"
+          [items]="priorityEntities"
+          valueExpr="id"
+          displayExpr="text"
+          [(value)]="selectionPriorityId"
+          (onValueChanged)="onValueChanged($event)"
+        >
         </dx-radio-group>
       </div>
     </div>

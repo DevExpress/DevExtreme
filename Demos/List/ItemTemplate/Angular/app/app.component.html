@@ -4,7 +4,9 @@
       <div class="product">
         <img src="{{ item.ImageSrc }}" />
         <div>{{ item.Name }}</div>
-        <div class="price">{{ item.Price | currency: "USD":"symbol":"1.0" }}</div>
+        <div class="price">{{
+          item.Price | currency: "USD":"symbol":"1.0"
+        }}</div>
       </div>
     </div>
   </dx-list>

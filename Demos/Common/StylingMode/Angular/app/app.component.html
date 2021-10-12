@@ -2,8 +2,18 @@
 <div class="editors">
   <div class="editors-container">
     <div class="left">
-      <dx-text-box value="Samantha Bright" width="100%" placeholder="Owner" [stylingMode]="stylingMode"></dx-text-box>
-      <dx-text-box value="" width="100%" placeholder="Subject" [stylingMode]="stylingMode">
+      <dx-text-box
+        value="Samantha Bright"
+        width="100%"
+        placeholder="Owner"
+        [stylingMode]="stylingMode"
+      ></dx-text-box>
+      <dx-text-box
+        value=""
+        width="100%"
+        placeholder="Subject"
+        [stylingMode]="stylingMode"
+      >
         <dx-validator
           [validationRules]="[
             {
@@ -14,13 +24,30 @@
       </dx-text-box>
     </div>
     <div class="right">
-      <dx-date-box [value]="date" width="100%" placeholder="Start Date" [stylingMode]="stylingMode"></dx-date-box>
-      <dx-select-box [items]="['High', 'Urgent', 'Normal', 'Low']" value="High" width="100%" placeholder="Priority" [stylingMode]="stylingMode"></dx-select-box>
+      <dx-date-box
+        [value]="date"
+        width="100%"
+        placeholder="Start Date"
+        [stylingMode]="stylingMode"
+      ></dx-date-box>
+      <dx-select-box
+        [items]="['High', 'Urgent', 'Normal', 'Low']"
+        value="High"
+        width="100%"
+        placeholder="Priority"
+        [stylingMode]="stylingMode"
+      ></dx-select-box>
     </div>
   </div>
   <div class="center">
     <dx-tag-box
-      [items]="['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed']"
+      [items]="[
+        'Not Started',
+        'Need Assistance',
+        'In Progress',
+        'Deferred',
+        'Completed'
+      ]"
       [value]="['Not Started']"
       [multiline]="false"
       width="100%"
@@ -35,12 +62,20 @@
     ></dx-text-area>
   </div>
   <div class="center">
-    <dx-button text="Save" type="default" (onClick)="validateClick($event)" class="validate"></dx-button>
+    <dx-button
+      text="Save"
+      type="default"
+      (onClick)="validateClick($event)"
+      class="validate"
+    ></dx-button>
   </div>
 </div>
 <div class="options">
   <div class="caption">Styling Mode</div>
   <div class="option">
-    <dx-select-box [items]="['outlined', 'filled', 'underlined']" [(value)]="stylingMode"></dx-select-box>
+    <dx-select-box
+      [items]="['outlined', 'filled', 'underlined']"
+      [(value)]="stylingMode"
+    ></dx-select-box>
   </div>
 </div>

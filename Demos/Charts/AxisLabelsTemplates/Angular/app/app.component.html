@@ -1,4 +1,8 @@
-<dx-chart id="chart" title="Ice Hockey World Championship Gold Medal Winners" [dataSource]="dataSource">
+<dx-chart
+  id="chart"
+  title="Ice Hockey World Championship Gold Medal Winners"
+  [dataSource]="dataSource"
+>
   <dxo-common-series-settings type="bar" argumentField="country">
     <dxo-label visible="true"></dxo-label>
   </dxo-common-series-settings>
@@ -9,7 +13,15 @@
     <dxo-label [visible]="true" template="labelTemplate"></dxo-label>
   </dxo-argument-axis>
   <svg overflow="visible" *dxTemplate="let data of 'labelTemplate'">
-    <image filter="url(#DevExpress_shadow_filter)" y="0" width="60" height="40" attr.href="{{ getFilePath(data.valueText) }}"></image>
-    <text class="template-text" x="30" y="59" text-anchor="middle">{{ data.valueText }}</text>
+    <image
+      filter="url(#DevExpress_shadow_filter)"
+      y="0"
+      width="60"
+      height="40"
+      attr.href="{{ getFilePath(data.valueText) }}"
+    ></image>
+    <text class="template-text" x="30" y="59" text-anchor="middle">
+      {{ data.valueText }}
+    </text>
   </svg>
 </dx-chart>

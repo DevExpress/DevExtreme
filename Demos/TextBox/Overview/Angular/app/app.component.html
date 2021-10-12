@@ -21,13 +21,19 @@
     <div class="dx-field">
       <div class="dx-field-label">Password mode</div>
       <div class="dx-field-value">
-        <dx-text-box mode="password" placeholder="Enter password" [showClearButton]="true" value="f5lzKs0T"></dx-text-box>
+        <dx-text-box
+          mode="password"
+          placeholder="Enter password"
+          [showClearButton]="true"
+          value="f5lzKs0T"
+        ></dx-text-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Text mask</div>
       <div class="dx-field-value">
-        <dx-text-box mask="+1 (X00) 000-0000" [maskRules]="rules"> </dx-text-box>
+        <dx-text-box mask="+1 (X00) 000-0000" [maskRules]="rules">
+        </dx-text-box>
       </div>
     </div>
     <div class="dx-field">
@@ -42,13 +48,23 @@
     <div class="dx-field">
       <div class="dx-field-label">Full Name</div>
       <div class="dx-field-value">
-        <dx-text-box value="Smith" [showClearButton]="true" placeholder="Enter full name" valueChangeEvent="keyup" (onValueChanged)="valueChanged($event)"></dx-text-box>
+        <dx-text-box
+          value="Smith"
+          [showClearButton]="true"
+          placeholder="Enter full name"
+          valueChangeEvent="keyup"
+          (onValueChanged)="valueChanged($event)"
+        ></dx-text-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Email (read only)</div>
       <div class="dx-field-value">
-        <dx-text-box [readOnly]="true" [hoverStateEnabled]="false" [(value)]="emailValue"></dx-text-box>
+        <dx-text-box
+          [readOnly]="true"
+          [hoverStateEnabled]="false"
+          [(value)]="emailValue"
+        ></dx-text-box>
       </div>
     </div>
   </div>

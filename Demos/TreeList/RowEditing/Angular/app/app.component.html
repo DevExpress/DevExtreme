@@ -11,13 +11,24 @@
     (onEditorPreparing)="editorPreparing($event)"
     (onInitNewRow)="initNewRow($event)"
   >
-    <dxo-editing mode="row" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true"> </dxo-editing>
+    <dxo-editing
+      mode="row"
+      [allowUpdating]="true"
+      [allowDeleting]="true"
+      [allowAdding]="true"
+    >
+    </dxo-editing>
 
     <dxi-column dataField="Full_Name">
       <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="Head_ID" caption="Head">
-      <dxo-lookup [dataSource]="lookupData" valueExpr="ID" displayExpr="Full_Name"> </dxo-lookup>
+      <dxo-lookup
+        [dataSource]="lookupData"
+        valueExpr="ID"
+        displayExpr="Full_Name"
+      >
+      </dxo-lookup>
       <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="Title" caption="Position">

@@ -1,17 +1,53 @@
-<dx-diagram id="diagram" customShapeTemplate="customShapeTemplate" [readOnly]="true">
-  <dxi-custom-shape *ngFor="let emp of employees" [type]="'employee' + emp.ID" baseType="rectangle" [defaultWidth]="1.5" [defaultHeight]="1" [allowEditText]="false" [allowResize]="false">
+<dx-diagram
+  id="diagram"
+  customShapeTemplate="customShapeTemplate"
+  [readOnly]="true"
+>
+  <dxi-custom-shape
+    *ngFor="let emp of employees"
+    [type]="'employee' + emp.ID"
+    baseType="rectangle"
+    [defaultWidth]="1.5"
+    [defaultHeight]="1"
+    [allowEditText]="false"
+    [allowResize]="false"
+  >
   </dxi-custom-shape>
   <svg *dxTemplate="let item of 'customShapeTemplate'" class="template">
-    <text class="template-name" x="50%" y="20%">{{ item.dataItem.Full_Name }}</text>
-    <text class="template-title" x="50%" y="45%">{{ item.dataItem.Title }}</text>
-    <text class="template-button" x="50%" y="85%" (click)="showInfo(item.dataItem)">Show Details</text>
+    <text class="template-name" x="50%" y="20%">
+      {{ item.dataItem.Full_Name }}
+    </text>
+    <text class="template-title" x="50%" y="45%">
+      {{ item.dataItem.Title }}
+    </text>
+    <text
+      class="template-button"
+      x="50%"
+      y="85%"
+      (click)="showInfo(item.dataItem)"
+    >
+      Show Details
+    </text>
   </svg>
-  <dxo-nodes [dataSource]="dataSource" keyExpr="ID" [typeExpr]="itemTypeExpr" parentKeyExpr="Head_ID">
+  <dxo-nodes
+    [dataSource]="dataSource"
+    keyExpr="ID"
+    [typeExpr]="itemTypeExpr"
+    parentKeyExpr="Head_ID"
+  >
     <dxo-auto-layout type="tree"></dxo-auto-layout>
   </dxo-nodes>
 </dx-diagram>
 
-<dx-popup [width]="300" [height]="280" [showTitle]="true" title="Information" [dragEnabled]="false" [closeOnOutsideClick]="true" [(visible)]="popupVisible">
+<dx-popup
+  [width]="300"
+  [height]="280"
+  [showTitle]="true"
+  title="Information"
+  [dragEnabled]="false"
+  [closeOnOutsideClick]="true"
+  [(visible)]="popupVisible"
+>
   <div *dxTemplate="let data of 'content'">
     <p
       >Full Name: <b>{{ currentEmployee.Full_Name }}</b></p

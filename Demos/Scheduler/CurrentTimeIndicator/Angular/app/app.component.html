@@ -19,7 +19,9 @@
   <div *dxTemplate="let model of 'appointment-template'">
     <div class="movie">
       <img [src]="getMovieById(model.appointmentData.movieId).image" />
-      <div class="movie-text">{{ getMovieById(model.appointmentData.movieId).text }}</div>
+      <div class="movie-text">{{
+        getMovieById(model.appointmentData.movieId).text
+      }}</div>
     </div>
   </div>
 </dx-scheduler>
@@ -29,13 +31,19 @@
     <div class="option">
       <div class="label">Current time indicator</div>
       <div class="value">
-        <dx-switch [(value)]="showCurrentTimeIndicator" id="show-indicator"></dx-switch>
+        <dx-switch
+          [(value)]="showCurrentTimeIndicator"
+          id="show-indicator"
+        ></dx-switch>
       </div>
     </div>
     <div class="option">
       <div class="label">Shading until current time</div>
       <div class="value">
-        <dx-switch [(value)]="shadeUntilCurrentTime" id="allow-shading"></dx-switch>
+        <dx-switch
+          [(value)]="shadeUntilCurrentTime"
+          id="allow-shading"
+        ></dx-switch>
       </div>
     </div>
   </div>

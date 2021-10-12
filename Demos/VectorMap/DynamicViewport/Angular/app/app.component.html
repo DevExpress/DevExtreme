@@ -1,4 +1,10 @@
-<dx-vector-map id="vector-map" #vectorMap [bounds]="[-180, 85, 180, -60]" (onZoomFactorChanged)="zoomChanged($event)" (onCenterChanged)="centerChanged($event)">
+<dx-vector-map
+  id="vector-map"
+  #vectorMap
+  [bounds]="[-180, 85, 180, -60]"
+  (onZoomFactorChanged)="zoomChanged($event)"
+  (onCenterChanged)="centerChanged($event)"
+>
   <dxi-layer [dataSource]="worldMap"></dxi-layer>
 </dx-vector-map>
 <div class="options">
@@ -16,10 +22,15 @@
   </div>
   <div class="option">
     <span>Zoom factor</span>
-    <dx-text-box [value]="zoomFactorValue" [readOnly]="true" [width]="210"> </dx-text-box>
+    <dx-text-box [value]="zoomFactorValue" [readOnly]="true" [width]="210">
+    </dx-text-box>
   </div>
   <div class="option">
     <span>Center</span>
-    <dx-text-box [value]="centerValue" [readOnly]="true" [width]="210"></dx-text-box>
+    <dx-text-box
+      [value]="centerValue"
+      [readOnly]="true"
+      [width]="210"
+    ></dx-text-box>
   </div>
 </div>

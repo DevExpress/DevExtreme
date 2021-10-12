@@ -9,6 +9,16 @@
   [startDayHour]="9"
   [height]="590"
 >
-  <dxi-resource fieldExpr="priorityId" label="Priority" [dataSource]="priorities"> </dxi-resource>
+  <dxi-resource
+    fieldExpr="priorityId"
+    label="Priority"
+    [dataSource]="priorities"
+  >
+  </dxi-resource>
 </dx-scheduler>
-<dx-speed-dial-action #speedDialAction icon="plus" (onClick)="showAppointmentPopup($event)"> </dx-speed-dial-action>
+<dx-speed-dial-action
+  #speedDialAction
+  icon="plus"
+  (onClick)="showAppointmentPopup($event)"
+>
+</dx-speed-dial-action>

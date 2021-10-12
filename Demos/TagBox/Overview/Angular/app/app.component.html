@@ -9,19 +9,26 @@
     <div class="dx-field">
       <div class="dx-field-label">Search mode</div>
       <div class="dx-field-value">
-        <dx-tag-box [items]="simpleProducts" [searchEnabled]="true"> </dx-tag-box>
+        <dx-tag-box [items]="simpleProducts" [searchEnabled]="true">
+        </dx-tag-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Batch selection</div>
       <div class="dx-field-value">
-        <dx-tag-box [items]="simpleProducts" [showSelectionControls]="true" applyValueMode="useButtons"> </dx-tag-box>
+        <dx-tag-box
+          [items]="simpleProducts"
+          [showSelectionControls]="true"
+          applyValueMode="useButtons"
+        >
+        </dx-tag-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Hide selected items</div>
       <div class="dx-field-value">
-        <dx-tag-box [items]="simpleProducts" [hideSelectedItems]="true"> </dx-tag-box>
+        <dx-tag-box [items]="simpleProducts" [hideSelectedItems]="true">
+        </dx-tag-box>
       </div>
     </div>
     <div class="dx-field">
@@ -33,31 +40,48 @@
     <div class="dx-field">
       <div class="dx-field-label">Add custom items</div>
       <div class="dx-field-value">
-        <dx-tag-box [items]="editableProducts" [acceptCustomValue]="true" (onCustomItemCreating)="onCustomItemCreating($event)"> </dx-tag-box>
+        <dx-tag-box
+          [items]="editableProducts"
+          [acceptCustomValue]="true"
+          (onCustomItemCreating)="onCustomItemCreating($event)"
+        >
+        </dx-tag-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">With custom placeholder</div>
       <div class="dx-field-value">
-        <dx-tag-box [items]="simpleProducts" placeholder="Choose Product..."> </dx-tag-box>
+        <dx-tag-box [items]="simpleProducts" placeholder="Choose Product...">
+        </dx-tag-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Disabled</div>
       <div class="dx-field-value">
-        <dx-tag-box [items]="simpleProducts" [value]="[simpleProducts[0]]" [disabled]="true"> </dx-tag-box>
+        <dx-tag-box
+          [items]="simpleProducts"
+          [value]="[simpleProducts[0]]"
+          [disabled]="true"
+        >
+        </dx-tag-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Data source</div>
       <div class="dx-field-value">
-        <dx-tag-box [dataSource]="dataSource" displayExpr="Name" valueExpr="Id"> </dx-tag-box>
+        <dx-tag-box [dataSource]="dataSource" displayExpr="Name" valueExpr="Id">
+        </dx-tag-box>
       </div>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Custom template</div>
       <div class="dx-field-value">
-        <dx-tag-box [dataSource]="dataSource" displayExpr="Name" valueExpr="Id" itemTemplate="customItem">
+        <dx-tag-box
+          [dataSource]="dataSource"
+          displayExpr="Name"
+          valueExpr="Id"
+          itemTemplate="customItem"
+        >
           <div *dxTemplate="let product of 'customItem'">
             <div class="custom-item">
               <img [src]="product.ImageSrc" />

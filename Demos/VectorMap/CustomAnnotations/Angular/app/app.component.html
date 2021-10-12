@@ -1,7 +1,15 @@
 <dx-vector-map id="vector-map" [bounds]="[-118, 55, -80, 23]">
   <dxi-layer [dataSource]="usaMap"></dxi-layer>
-  <dxo-common-annotation-settings type="custom" template="template"> </dxo-common-annotation-settings>
-  <dxi-annotation *ngFor="let data of states" [data]="data.data" [offsetX]="data.offsetX" [offsetY]="data.offsetY" [coordinates]="data.coordinates"> </dxi-annotation>
+  <dxo-common-annotation-settings type="custom" template="template">
+  </dxo-common-annotation-settings>
+  <dxi-annotation
+    *ngFor="let data of states"
+    [data]="data.data"
+    [offsetX]="data.offsetX"
+    [offsetY]="data.offsetY"
+    [coordinates]="data.coordinates"
+  >
+  </dxi-annotation>
   <svg *dxTemplate="let annotation of 'template'" class="annotation">
     <image attr.href="{{ getImagePath(annotation) }}" width="60" height="40" />
     <rect x="0" y="0" class="border" />
@@ -11,10 +19,16 @@
       <tspan class="capital" dx="5">{{ annotation.data.capital }}</tspan>
 
       <tspan dy="14" x="0" class="caption">Population:</tspan>
-      <tspan class="population" dx="5">{{ annotation.data.population | number: "3.0-0" }}</tspan>
+      <!-- display: inline -->
+      <tspan class="population" dx="5">{{
+        annotation.data.population | number: "3.0-0"
+      }}</tspan>
 
       <tspan dy="14" x="0" class="caption">Area:</tspan>
-      <tspan class="area" dx="5">{{ annotation.data.area | number: "3.0-0" }}</tspan>
+      <!-- display: inline -->
+      <tspan class="area" dx="5">{{
+        annotation.data.area | number: "3.0-0"
+      }}</tspan>
       <tspan dx="5">km</tspan>
       <tspan class="sup" dy="-2">2</tspan>
     </text>

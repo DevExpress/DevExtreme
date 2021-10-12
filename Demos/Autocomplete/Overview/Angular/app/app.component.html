@@ -4,7 +4,13 @@
     <div class="dx-field">
       <div class="dx-field-label">First Name</div>
       <div class="dx-field-value">
-        <dx-autocomplete placeholder="Type first name..." [(value)]="firstName" [dataSource]="names" (onValueChanged)="updateEmployeeInfo($event)"> </dx-autocomplete>
+        <dx-autocomplete
+          placeholder="Type first name..."
+          [(value)]="firstName"
+          [dataSource]="names"
+          (onValueChanged)="updateEmployeeInfo($event)"
+        >
+        </dx-autocomplete>
       </div>
     </div>
   </div>
@@ -13,7 +19,14 @@
     <div class="dx-field">
       <div class="dx-field-label">Last Name</div>
       <div class="dx-field-value">
-        <dx-autocomplete placeholder="Type last name..." [showClearButton]="true" [dataSource]="surnames" [(value)]="lastName" (onValueChanged)="updateEmployeeInfo($event)"> </dx-autocomplete>
+        <dx-autocomplete
+          placeholder="Type last name..."
+          [showClearButton]="true"
+          [dataSource]="surnames"
+          [(value)]="lastName"
+          (onValueChanged)="updateEmployeeInfo($event)"
+        >
+        </dx-autocomplete>
       </div>
     </div>
   </div>
@@ -22,7 +35,12 @@
     <div class="dx-field">
       <div class="dx-field-label">Position</div>
       <div class="dx-field-value">
-        <dx-autocomplete [disabled]="true" [value]="position" [dataSource]="positions"> </dx-autocomplete>
+        <dx-autocomplete
+          [disabled]="true"
+          [value]="position"
+          [dataSource]="positions"
+        >
+        </dx-autocomplete>
       </div>
     </div>
   </div>
@@ -45,11 +63,19 @@
     </div>
   </div>
   <div class="dx-fieldset">
-    <div class="dx-fieldset-header">Custom Item Template and Data Source Usage</div>
+    <div class="dx-fieldset-header"
+      >Custom Item Template and Data Source Usage</div
+    >
     <div class="dx-field">
       <div class="dx-field-label">State</div>
       <div class="dx-field-value">
-        <dx-autocomplete placeholder="Type state name..." valueExpr="State_Long" [dataSource]="states" [(value)]="state" (onValueChanged)="updateEmployeeInfo($event)">
+        <dx-autocomplete
+          placeholder="Type state name..."
+          valueExpr="State_Long"
+          [dataSource]="states"
+          [(value)]="state"
+          (onValueChanged)="updateEmployeeInfo($event)"
+        >
           <div *dxTemplate="let item of 'item'">
             <span>{{ item.State_Long }} ({{ item.State_Short }})</span>
           </div>

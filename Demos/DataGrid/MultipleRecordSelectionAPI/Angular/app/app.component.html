@@ -1,4 +1,12 @@
-<dx-data-grid #grid id="grid-container" [dataSource]="employees" keyExpr="ID" [(selectedRowKeys)]="selectedRows" (onSelectionChanged)="selectionChangedHandler()" [showBorders]="true">
+<dx-data-grid
+  #grid
+  id="grid-container"
+  [dataSource]="employees"
+  keyExpr="ID"
+  [(selectedRowKeys)]="selectedRows"
+  (onSelectionChanged)="selectionChangedHandler()"
+  [showBorders]="true"
+>
   <dxo-selection mode="multiple"> </dxo-selection>
 
   <dxi-column dataField="Prefix" caption="Title" [width]="70"></dxi-column>
@@ -9,16 +17,32 @@
   <dxi-column dataField="HireDate" dataType="date" [width]="125"></dxi-column>
   <dxo-toolbar>
     <dxi-item location="before">
-      <dx-select-box [dataSource]="prefixOptions" placeholder="Select title" [width]="150" [value]="prefix" (onValueChanged)="filterSelected($event)"> </dx-select-box>
+      <dx-select-box
+        [dataSource]="prefixOptions"
+        placeholder="Select title"
+        [width]="150"
+        [value]="prefix"
+        (onValueChanged)="filterSelected($event)"
+      >
+      </dx-select-box>
     </dxi-item>
     <dxi-item location="before">
-      <dx-button text="Clear Selection" [disabled]="!selectedRows?.length" (onClick)="grid.instance.clearSelection()"> </dx-button>
+      <dx-button
+        text="Clear Selection"
+        [disabled]="!selectedRows?.length"
+        (onClick)="grid.instance.clearSelection()"
+      >
+      </dx-button>
     </dxi-item>
   </dxo-toolbar>
 </dx-data-grid>
 <div class="selected-data">
   <span class="caption">Selected Records:</span>
   <span>
-    {{ grid.selectedRowKeys.length ? (grid.instance.getSelectedRowsData() | stringifyEmployees) : "Nobody has been selected" }}
+    {{
+      grid.selectedRowKeys.length
+        ? (grid.instance.getSelectedRowsData() | stringifyEmployees)
+        : "Nobody has been selected"
+    }}
   </span>
 </div>

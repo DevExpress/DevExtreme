@@ -33,7 +33,14 @@
   <div class="dx-field">
     <div class="dx-field-label">DropDownBox with embedded DataGrid</div>
     <div class="dx-field-value">
-      <dx-drop-down-box [(value)]="gridBoxValue" valueExpr="ID" displayExpr="CompanyName" placeholder="Select a value..." [showClearButton]="true" [dataSource]="gridDataSource">
+      <dx-drop-down-box
+        [(value)]="gridBoxValue"
+        valueExpr="ID"
+        displayExpr="CompanyName"
+        placeholder="Select a value..."
+        [showClearButton]="true"
+        [dataSource]="gridDataSource"
+      >
         <div *dxTemplate="let data of 'content'">
           <dx-data-grid
             [dataSource]="gridDataSource"

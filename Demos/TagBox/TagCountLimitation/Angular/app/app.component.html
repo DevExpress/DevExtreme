@@ -3,7 +3,15 @@
     <div class="dx-field">
       <div class="dx-field-label"> Multi-tag for several items </div>
       <div class="dx-field-value">
-        <dx-tag-box [items]="products" [value]="[1, 2, 3, 4]" displayExpr="Name" valueExpr="Id" [showSelectionControls]="true" selectAllMode="allPages" [maxDisplayedTags]="3"></dx-tag-box>
+        <dx-tag-box
+          [items]="products"
+          [value]="[1, 2, 3, 4]"
+          displayExpr="Name"
+          valueExpr="Id"
+          [showSelectionControls]="true"
+          selectAllMode="allPages"
+          [maxDisplayedTags]="3"
+        ></dx-tag-box>
       </div>
     </div>
 

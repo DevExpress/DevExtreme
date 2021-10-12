@@ -1,5 +1,17 @@
-<dx-data-grid id="gridContainer" [dataSource]="employees" keyExpr="ID" [columnAutoWidth]="true" [showBorders]="true" dataRowTemplate="dataRowTemplateName">
-  <dxi-column caption="Photo" [width]="100" [allowFiltering]="false" [allowSorting]="false"></dxi-column>
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="employees"
+  keyExpr="ID"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+  dataRowTemplate="dataRowTemplateName"
+>
+  <dxi-column
+    caption="Photo"
+    [width]="100"
+    [allowFiltering]="false"
+    [allowSorting]="false"
+  ></dxi-column>
   <dxi-column dataField="Prefix" [width]="70" caption="Title"></dxi-column>
   <dxi-column dataField="FirstName"></dxi-column>
   <dxi-column dataField="LastName"></dxi-column>

@@ -1,4 +1,6 @@
-<div class="long-title"><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div>
+<div class="long-title"
+  ><h3>Monthly Prices of Aluminium, Nickel and Copper</h3></div
+>
 <div id="chart-demo">
   <table class="demo-table">
     <tr>
@@ -10,7 +12,15 @@
     <tr *ngFor="let year of years">
       <th>{{ year }}</th>
       <td>
-        <dx-sparkline class="sparkline" [dataSource]="aluminumCosts" argumentField="month" valueField="{{ year }}" type="winloss" [showMinMax]="true" [winlossThreshold]="2100">
+        <dx-sparkline
+          class="sparkline"
+          [dataSource]="aluminumCosts"
+          argumentField="month"
+          valueField="{{ year }}"
+          type="winloss"
+          [showMinMax]="true"
+          [winlossThreshold]="2100"
+        >
           <dxo-tooltip format="currency"></dxo-tooltip>
         </dx-sparkline>
       </td>

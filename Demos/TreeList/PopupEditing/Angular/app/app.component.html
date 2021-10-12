@@ -11,8 +11,14 @@
     (onEditorPreparing)="editorPreparing($event)"
     (onInitNewRow)="initNewRow($event)"
   >
-    <dxo-editing mode="popup" [allowUpdating]="true" [allowDeleting]="true" [allowAdding]="true">
-      <dxo-popup title="Employee Info" [showTitle]="true" [width]="700"> </dxo-popup>
+    <dxo-editing
+      mode="popup"
+      [allowUpdating]="true"
+      [allowDeleting]="true"
+      [allowAdding]="true"
+    >
+      <dxo-popup title="Employee Info" [showTitle]="true" [width]="700">
+      </dxo-popup>
     </dxo-editing>
 
     <dxi-column dataField="Full_Name">
@@ -22,7 +28,12 @@
       <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="Head_ID" caption="Head" [visible]="false">
-      <dxo-lookup [dataSource]="lookupData" valueExpr="ID" displayExpr="Full_Name"> </dxo-lookup>
+      <dxo-lookup
+        [dataSource]="lookupData"
+        valueExpr="ID"
+        displayExpr="Full_Name"
+      >
+      </dxo-lookup>
       <dxi-validation-rule type="required"></dxi-validation-rule>
     </dxi-column>
     <dxi-column dataField="Title" caption="Position">

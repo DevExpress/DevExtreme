@@ -1,5 +1,17 @@
-<dx-data-grid id="gridContainer" [dataSource]="ordersStore" [showBorders]="true" [remoteOperations]="true" [repaintChangesOnly]="true" (onSaving)="onSaving($event)">
-  <dxo-editing mode="batch" [allowAdding]="true" [allowDeleting]="true" [allowUpdating]="true"></dxo-editing>
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="ordersStore"
+  [showBorders]="true"
+  [remoteOperations]="true"
+  [repaintChangesOnly]="true"
+  (onSaving)="onSaving($event)"
+>
+  <dxo-editing
+    mode="batch"
+    [allowAdding]="true"
+    [allowDeleting]="true"
+    [allowUpdating]="true"
+  ></dxo-editing>
 
   <dxi-column dataField="OrderID" [allowEditing]="false"></dxi-column>
   <dxi-column dataField="ShipName"></dxi-column>

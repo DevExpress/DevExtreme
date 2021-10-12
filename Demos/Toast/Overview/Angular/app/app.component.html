@@ -4,8 +4,13 @@
     <li *ngFor="let product of products">
       <img [src]="product.ImageSrc" />
       <div>{{ product.Name }}</div>
-      <dx-check-box text="Available" (onValueChanged)="checkAvailable($event, product)"> </dx-check-box>
+      <dx-check-box
+        text="Available"
+        (onValueChanged)="checkAvailable($event, product)"
+      >
+      </dx-check-box>
     </li>
   </ul>
-  <dx-toast [(visible)]="isVisible" [type]="type" [message]="message"> </dx-toast>
+  <dx-toast [(visible)]="isVisible" [type]="type" [message]="message">
+  </dx-toast>
 </div>

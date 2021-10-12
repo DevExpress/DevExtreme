@@ -5,8 +5,19 @@
   <dxi-value-axis position="right">
     <dxo-title text="millions"></dxo-title>
   </dxi-value-axis>
-  <dxo-common-series-settings argumentField="state" type="stackedBar"> </dxo-common-series-settings>
-  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center" itemTextPosition="top"> </dxo-legend>
+  <dxo-common-series-settings argumentField="state" type="stackedBar">
+  </dxo-common-series-settings>
+  <dxo-legend
+    verticalAlignment="bottom"
+    horizontalAlignment="center"
+    itemTextPosition="top"
+  >
+  </dxo-legend>
   <dxo-export [enabled]="true"></dxo-export>
-  <dxo-tooltip [enabled]="true" location="edge" [customizeTooltip]="customizeTooltip"> </dxo-tooltip>
+  <dxo-tooltip
+    [enabled]="true"
+    location="edge"
+    [customizeTooltip]="customizeTooltip"
+  >
+  </dxo-tooltip>
 </dx-chart>

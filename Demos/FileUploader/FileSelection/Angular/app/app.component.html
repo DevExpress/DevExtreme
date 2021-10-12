@@ -3,15 +3,35 @@
   <div class="dx-fieldset">
     <div class="dx-field">
       <div class="dx-field-label">First Name:</div>
-      <dx-text-box class="dx-field-value" name="FirstName" value="John"></dx-text-box>
+      <dx-text-box
+        class="dx-field-value"
+        name="FirstName"
+        value="John"
+      ></dx-text-box>
     </div>
     <div class="dx-field">
       <div class="dx-field-label">Last Name:</div>
-      <dx-text-box class="dx-field-value" name="LastName" value="Smith"></dx-text-box>
+      <dx-text-box
+        class="dx-field-value"
+        name="LastName"
+        value="Smith"
+      ></dx-text-box>
     </div>
   </div>
   <div id="fileuploader-container">
-    <dx-file-uploader selectButtonText="Select photo" labelText="" accept="image/*" uploadMode="useForm"> </dx-file-uploader>
+    <dx-file-uploader
+      selectButtonText="Select photo"
+      labelText=""
+      accept="image/*"
+      uploadMode="useForm"
+    >
+    </dx-file-uploader>
   </div>
-  <dx-button id="button" text="Update profile" type="success" (onClick)="updateClick()"> </dx-button>
+  <dx-button
+    id="button"
+    text="Update profile"
+    type="success"
+    (onClick)="updateClick()"
+  >
+  </dx-button>
 </form>

@@ -33,9 +33,30 @@
   <dxo-argument-axis>
     <dxo-label overlappingBehavior="stagger"></dxo-label>
   </dxo-argument-axis>
-  <dxo-tooltip [enabled]="true" [shared]="true" [customizeTooltip]="customizeTooltip"> </dxo-tooltip>
-  <dxo-common-series-settings argumentField="complaint"> </dxo-common-series-settings>
-  <dxi-series type="bar" valueField="count" axis="frequency" name="Complaint frequency" color="#fac29a"> </dxi-series>
-  <dxi-series type="spline" valueField="cumulativePercent" axis="percentage" name="Cumulative percentage" color="#6b71c3"> </dxi-series>
-  <dxo-legend verticalAlignment="top" horizontalAlignment="center"> </dxo-legend>
+  <dxo-tooltip
+    [enabled]="true"
+    [shared]="true"
+    [customizeTooltip]="customizeTooltip"
+  >
+  </dxo-tooltip>
+  <dxo-common-series-settings argumentField="complaint">
+  </dxo-common-series-settings>
+  <dxi-series
+    type="bar"
+    valueField="count"
+    axis="frequency"
+    name="Complaint frequency"
+    color="#fac29a"
+  >
+  </dxi-series>
+  <dxi-series
+    type="spline"
+    valueField="cumulativePercent"
+    axis="percentage"
+    name="Cumulative percentage"
+    color="#6b71c3"
+  >
+  </dxi-series>
+  <dxo-legend verticalAlignment="top" horizontalAlignment="center">
+  </dxo-legend>
 </dx-chart>

@@ -1,4 +1,9 @@
-<dx-range-selector id="range-selector" [value]="[0, 5]" title="Select a Range in the CPU Usage History" [dataSource]="dataSource">
+<dx-range-selector
+  id="range-selector"
+  [value]="[0, 5]"
+  title="Select a Range in the CPU Usage History"
+  [dataSource]="dataSource"
+>
   <dxo-margin [top]="50" [left]="15" [right]="15"></dxo-margin>
   <dxo-background color="#808080"></dxo-background>
   <dxo-scale [minorTickInterval]="0.5" [tickInterval]="1">
@@ -6,6 +11,13 @@
   </dxo-scale>
   <dxo-slider-marker [visible]="false"></dxo-slider-marker>
   <dxo-chart [topIndent]="0.05" [bottomIndent]="0.05">
-    <dxi-series color="#ffa500" [width]="3" type="line" argumentField="x" valueField="y"> </dxi-series>
+    <dxi-series
+      color="#ffa500"
+      [width]="3"
+      type="line"
+      argumentField="x"
+      valueField="y"
+    >
+    </dxi-series>
   </dxo-chart>
 </dx-range-selector>

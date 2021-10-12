@@ -1,4 +1,11 @@
-<dx-data-grid id="gridContainer" keyExpr="ID" [dataSource]="employees" (onSelectionChanged)="selectionChanged($event)" (onContentReady)="contentReady($event)" [showBorders]="true">
+<dx-data-grid
+  id="gridContainer"
+  keyExpr="ID"
+  [dataSource]="employees"
+  (onSelectionChanged)="selectionChanged($event)"
+  (onContentReady)="contentReady($event)"
+  [showBorders]="true"
+>
   <dxo-selection mode="single"></dxo-selection>
   <dxo-master-detail [enabled]="false" template="detail"></dxo-master-detail>
   <dxi-column dataField="Prefix" [width]="70" caption="Title"></dxi-column>

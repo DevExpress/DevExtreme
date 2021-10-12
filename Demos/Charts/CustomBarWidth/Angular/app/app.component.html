@@ -5,8 +5,14 @@
   <dxi-series valueField="year2000" name="2000"></dxi-series>
   <dxi-series valueField="year2008" name="2008"></dxi-series>
   <dxi-series valueField="year2009" name="2009"></dxi-series>
-  <dxo-common-series-settings argumentField="state" type="bar" [barPadding]="0.5"> </dxo-common-series-settings>
-  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center"> </dxo-legend>
+  <dxo-common-series-settings
+    argumentField="state"
+    type="bar"
+    [barPadding]="0.5"
+  >
+  </dxo-common-series-settings>
+  <dxo-legend verticalAlignment="bottom" horizontalAlignment="center">
+  </dxo-legend>
   <dxo-export [enabled]="true"></dxo-export>
   <dxo-title text="Oil Production">
     <dxo-subtitle text="(in millions tonnes)"></dxo-subtitle>

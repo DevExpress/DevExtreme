@@ -1,7 +1,12 @@
 <div id="form-demo">
   <div class="widget-container">
     <div>Select company:</div>
-    <dx-select-box #company displayExpr="Name" [(dataSource)]="companies" [value]="companies[0]"></dx-select-box>
+    <dx-select-box
+      #company
+      displayExpr="Name"
+      [(dataSource)]="companies"
+      [value]="companies[0]"
+    ></dx-select-box>
     <dx-form
       id="form"
       [(formData)]="company.value"
@@ -17,15 +22,24 @@
     <div class="caption">Options</div>
     <div class="option">
       <span>Label location:</span>
-      <dx-select-box [items]="['left', 'top']" [(value)]="labelLocation"></dx-select-box>
+      <dx-select-box
+        [items]="['left', 'top']"
+        [(value)]="labelLocation"
+      ></dx-select-box>
     </div>
     <div class="option">
       <span>Columns count:</span>
-      <dx-select-box [items]="['auto', 1, 2, 3]" [(value)]="colCount"></dx-select-box>
+      <dx-select-box
+        [items]="['auto', 1, 2, 3]"
+        [(value)]="colCount"
+      ></dx-select-box>
     </div>
     <div class="option">
       <span>Min column width:</span>
-      <dx-select-box [items]="[150, 200, 300]" [(value)]="minColWidth"></dx-select-box>
+      <dx-select-box
+        [items]="[150, 200, 300]"
+        [(value)]="minColWidth"
+      ></dx-select-box>
     </div>
     <div class="option">
       <span>Form width:</span>
@@ -35,7 +49,10 @@
       <dx-check-box text="readOnly" [(value)]="readOnly"></dx-check-box>
     </div>
     <div class="option">
-      <dx-check-box text="showColonAfterLabel" [(value)]="showColon"></dx-check-box>
+      <dx-check-box
+        text="showColonAfterLabel"
+        [(value)]="showColon"
+      ></dx-check-box>
     </div>
   </div>
 </div>

@@ -1,6 +1,13 @@
 <div class="option">
   <span>Office Time Zone</span>
-  <dx-select-box [items]="demoLocations" [width]="240" displayExpr="title" valueExpr="id" [(value)]="timezone"> </dx-select-box>
+  <dx-select-box
+    [items]="demoLocations"
+    [width]="240"
+    displayExpr="title"
+    valueExpr="id"
+    [(value)]="timezone"
+  >
+  </dx-select-box>
 </div>
 <dx-scheduler
   [dataSource]="dataSource"

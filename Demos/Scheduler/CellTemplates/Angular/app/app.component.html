@@ -24,11 +24,17 @@
   >
   </div>
 
-  <div *dxTemplate="let dateCell of 'dateCellTemplate'" [ngClass]="{ 'disable-date': isWeekend(dateCell.date) }">
+  <div
+    *dxTemplate="let dateCell of 'dateCellTemplate'"
+    [ngClass]="{ 'disable-date': isWeekend(dateCell.date) }"
+  >
     {{ dateCell.text }}
   </div>
 
-  <div *dxTemplate="let timeCell of 'timeCellTemplate'" [ngClass]="{ dinner: isDinner(timeCell.date) }">
+  <div
+    *dxTemplate="let timeCell of 'timeCellTemplate'"
+    [ngClass]="{ dinner: isDinner(timeCell.date) }"
+  >
     {{ timeCell.text }}
     <div *ngIf="hasCoffeeCupIcon(timeCell.date)" class="cafe"></div>
   </div>

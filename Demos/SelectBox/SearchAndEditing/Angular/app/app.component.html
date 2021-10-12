@@ -36,7 +36,13 @@
       </div>
       <div class="dx-field current-product">
         Current product:
-        <span *ngIf="selectBox.selectedItem; else emptyValue" class="current-value"> {{ selectBox.selectedItem.Name }} (ID: {{ selectBox.selectedItem.ID }}) </span>
+        <span
+          *ngIf="selectBox.selectedItem; else emptyValue"
+          class="current-value"
+        >
+          {{ selectBox.selectedItem.Name }} (ID:
+          {{ selectBox.selectedItem.ID }})
+        </span>
         <ng-template #emptyValue>
           <span class="current-value">Not selected</span>
         </ng-template>
@@ -47,22 +53,44 @@
     <div class="caption">SearchBox Options</div>
     <div class="option">
       <div>Search Mode</div>
-      <dx-select-box [items]="['contains', 'startswith']" [value]="searchModeOption"></dx-select-box>
+      <dx-select-box
+        [items]="['contains', 'startswith']"
+        [value]="searchModeOption"
+      ></dx-select-box>
     </div>
     <div class="option">
       <div>Search Expression</div>
-      <dx-select-box [items]="searchExprOptionItems" displayExpr="name" valueExpr="value" [value]="searchExprOption"></dx-select-box>
+      <dx-select-box
+        [items]="searchExprOptionItems"
+        displayExpr="name"
+        valueExpr="value"
+        [value]="searchExprOption"
+      ></dx-select-box>
     </div>
     <div class="option">
       <div>Search Timeout</div>
-      <dx-number-box [min]="0" [max]="5000" [value]="searchTimeoutOption" [showSpinButtons]="true" [step]="100"></dx-number-box>
+      <dx-number-box
+        [min]="0"
+        [max]="5000"
+        [value]="searchTimeoutOption"
+        [showSpinButtons]="true"
+        [step]="100"
+      ></dx-number-box>
     </div>
     <div class="option">
       <div>Minimum Search Length</div>
-      <dx-number-box [min]="0" [max]="5" [value]="minSearchLengthOption" [showSpinButtons]="true"></dx-number-box>
+      <dx-number-box
+        [min]="0"
+        [max]="5"
+        [value]="minSearchLengthOption"
+        [showSpinButtons]="true"
+      ></dx-number-box>
     </div>
     <div class="option">
-      <dx-check-box [value]="showDataBeforeSearchOption" text="Show Data Before Search"></dx-check-box>
+      <dx-check-box
+        [value]="showDataBeforeSearchOption"
+        text="Show Data Before Search"
+      ></dx-check-box>
     </div>
   </div>
 </div>

@@ -6,7 +6,14 @@
         <dxo-label text="Product"></dxo-label>
       </dxi-item>
       <div *dxTemplate="let selectBoxItem of 'productSelectBox'">
-        <dx-select-box [value]="productIdBySupplier" [dataSource]="productsData" [deferRendering]="false" valueExpr="ProductID" displayExpr="ProductName" (onValueChanged)="handleValueChange($event)">
+        <dx-select-box
+          [value]="productIdBySupplier"
+          [dataSource]="productsData"
+          [deferRendering]="false"
+          valueExpr="ProductID"
+          displayExpr="ProductName"
+          (onValueChanged)="handleValueChange($event)"
+        >
         </dx-select-box>
       </div>
 
@@ -27,9 +34,15 @@
 
           <dxo-summary>
             <dxi-total-item column="UnitPrice" summaryType="sum">
-              <dxo-value-format format="currency" [precision]="2"></dxo-value-format>
+              <dxo-value-format
+                format="currency"
+                [precision]="2"
+              ></dxo-value-format>
             </dxi-total-item>
-            <dxi-total-item column="Quantity" summaryType="count"></dxi-total-item>
+            <dxi-total-item
+              column="Quantity"
+              summaryType="count"
+            ></dxi-total-item>
           </dxo-summary>
         </dx-data-grid>
       </div>
@@ -37,7 +50,12 @@
   </div>
   <dxi-item title="Address" template="addressTab"></dxi-item>
   <div *dxTemplate="let addressTabItem of 'addressTab'">
-    <dx-form [formData]="rowData" [colCount]="2" [customizeItem]="customizeItemTemplate" class="address-form form-container">
+    <dx-form
+      [formData]="rowData"
+      [colCount]="2"
+      [customizeItem]="customizeItemTemplate"
+      class="address-form form-container"
+    >
       <dxi-item dataField="Address"></dxi-item>
       <dxi-item dataField="City"></dxi-item>
       <dxi-item dataField="Region"></dxi-item>

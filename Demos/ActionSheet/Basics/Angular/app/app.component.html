@@ -9,7 +9,11 @@
   (onItemClick)="showNotify($event.itemData.text)"
 >
 </dx-action-sheet>
-<dx-button class="button" text="Click to show Action Sheet" (onClick)="actionSheet.visible = true"></dx-button>
+<dx-button
+  class="button"
+  text="Click to show Action Sheet"
+  (onClick)="actionSheet.visible = true"
+></dx-button>
 <div class="options">
   <div class="caption">Options</div>
   <div class="option">

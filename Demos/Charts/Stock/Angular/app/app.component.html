@@ -1,8 +1,15 @@
 <dx-chart id="chart" title="Stock Price" [dataSource]="stockPrices">
-  <dxi-series name="DELL" openValueField="o" highValueField="h" lowValueField="l" closeValueField="c">
+  <dxi-series
+    name="DELL"
+    openValueField="o"
+    highValueField="h"
+    lowValueField="l"
+    closeValueField="c"
+  >
     <dxo-reduction color="red"></dxo-reduction>
   </dxi-series>
-  <dxo-common-series-settings argumentField="date" type="stock"> </dxo-common-series-settings>
+  <dxo-common-series-settings argumentField="date" type="stock">
+  </dxo-common-series-settings>
   <dxi-value-axis [tickInterval]="1">
     <dxo-title text="US dollars"></dxo-title>
     <dxo-label>
@@ -13,5 +20,10 @@
     <dxo-label format="shortDate"></dxo-label>
   </dxo-argument-axis>
   <dxo-export [enabled]="true"></dxo-export>
-  <dxo-tooltip [enabled]="true" location="edge" [customizeTooltip]="customizeTooltip"> </dxo-tooltip>
+  <dxo-tooltip
+    [enabled]="true"
+    location="edge"
+    [customizeTooltip]="customizeTooltip"
+  >
+  </dxo-tooltip>
 </dx-chart>

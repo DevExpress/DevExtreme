@@ -28,10 +28,21 @@
   <div class="options-container">
     <div class="option">
       <span>Focused Row Key</span>
-      <dx-number-box id="taskId" min="1" max="183" step="0" [(value)]="focusedRowKey"> </dx-number-box>
+      <dx-number-box
+        id="taskId"
+        min="1"
+        max="183"
+        step="0"
+        [(value)]="focusedRowKey"
+      >
+      </dx-number-box>
     </div>
     <div class="option">
-      <dx-check-box [text]="'Auto Navigate To Focused Row'" [(value)]="autoNavigateToFocusedRow"> </dx-check-box>
+      <dx-check-box
+        [text]="'Auto Navigate To Focused Row'"
+        [(value)]="autoNavigateToFocusedRow"
+      >
+      </dx-check-box>
     </div>
   </div>
 </div>

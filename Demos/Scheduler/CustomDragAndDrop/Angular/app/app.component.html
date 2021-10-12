@@ -1,5 +1,10 @@
 <dx-scroll-view id="scroll">
-  <dx-draggable id="list" data="dropArea" [group]="draggingGroupName" (onDragStart)="onListDragStart($event)">
+  <dx-draggable
+    id="list"
+    data="dropArea"
+    [group]="draggingGroupName"
+    (onDragStart)="onListDragStart($event)"
+  >
     <dx-draggable
       class="item dx-card dx-theme-text-color dx-theme-background-color"
       [clone]="true"
@@ -14,8 +19,21 @@
   </dx-draggable>
 </dx-scroll-view>
 
-<dx-scheduler timeZone="America/Los_Angeles" id="scheduler" [dataSource]="appointments" [currentDate]="currentDate" [startDayHour]="9" [height]="600" [editing]="true">
+<dx-scheduler
+  timeZone="America/Los_Angeles"
+  id="scheduler"
+  [dataSource]="appointments"
+  [currentDate]="currentDate"
+  [startDayHour]="9"
+  [height]="600"
+  [editing]="true"
+>
   <dxi-view type="day" [intervalCount]="3"> </dxi-view>
 
-  <dxo-appointment-dragging [group]="draggingGroupName" [onRemove]="onAppointmentRemove" [onAdd]="onAppointmentAdd"> </dxo-appointment-dragging>
+  <dxo-appointment-dragging
+    [group]="draggingGroupName"
+    [onRemove]="onAppointmentRemove"
+    [onAdd]="onAppointmentAdd"
+  >
+  </dxo-appointment-dragging>
 </dx-scheduler>

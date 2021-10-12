@@ -6,7 +6,14 @@
   (onInitialized)="updateTexts($event)"
   (onValueChanged)="updateTexts($event)"
 >
-  <dx-tag-box *dxTemplate="let condition of 'tagBoxTemplate'" [value]="condition.value" [items]="categories" (onValueChanged)="condition.setValue($event.value)" width="auto"> </dx-tag-box>
+  <dx-tag-box
+    *dxTemplate="let condition of 'tagBoxTemplate'"
+    [value]="condition.value"
+    [items]="categories"
+    (onValueChanged)="condition.setValue($event.value)"
+    width="auto"
+  >
+  </dx-tag-box>
 </dx-filter-builder>
 <div class="results">
   <div>

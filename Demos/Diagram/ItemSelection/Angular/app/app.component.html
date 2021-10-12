@@ -1,5 +1,15 @@
-<dx-diagram #diagram id="diagram" (onContentReady)="contentReadyHandler($event)" (onSelectionChanged)="selectionChangedHandler($event)">
-  <dxo-nodes [dataSource]="dataSource" keyExpr="ID" textExpr="Full_Name" parentKeyExpr="Head_ID">
+<dx-diagram
+  #diagram
+  id="diagram"
+  (onContentReady)="contentReadyHandler($event)"
+  (onSelectionChanged)="selectionChangedHandler($event)"
+>
+  <dxo-nodes
+    [dataSource]="dataSource"
+    keyExpr="ID"
+    textExpr="Full_Name"
+    parentKeyExpr="Head_ID"
+  >
     <dxo-auto-layout type="tree"></dxo-auto-layout>
   </dxo-nodes>
   <dxo-toolbox visibility="disabled"></dxo-toolbox>
@@ -8,6 +18,10 @@
 <div class="selected-data">
   <span class="caption">Selected Items:</span>
   <span>
-    {{ selectedItems && selectedItems.length ? (selectedItems | stringifyItems) : "Nobody has been selected" }}
+    {{
+      selectedItems && selectedItems.length
+        ? (selectedItems | stringifyItems)
+        : "Nobody has been selected"
+    }}
   </span>
 </div>

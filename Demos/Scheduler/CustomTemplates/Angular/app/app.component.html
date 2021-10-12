@@ -22,9 +22,15 @@
 >
   <dxo-editing [allowAdding]="false"></dxo-editing>
 
-  <dxi-resource fieldExpr="movieId" [useColorAsDefault]="true" [dataSource]="moviesData"> </dxi-resource>
+  <dxi-resource
+    fieldExpr="movieId"
+    [useColorAsDefault]="true"
+    [dataSource]="moviesData"
+  >
+  </dxi-resource>
 
-  <dxi-resource fieldExpr="theatreId" [dataSource]="theatreData"> </dxi-resource>
+  <dxi-resource fieldExpr="theatreId" [dataSource]="theatreData">
+  </dxi-resource>
 
   <div *dxTemplate="let model of 'appointment-template'">
     <div class="showtime-preview">
@@ -34,7 +40,11 @@
         <strong>{{ "$" + model.appointmentData.price }}</strong>
       </div>
       <div class="dropdown-appointment-dates">
-        {{ (model.appointmentData.startDate | date: "shortTime") + " - " + (model.appointmentData.endDate | date: "shortTime") }}
+        {{
+          (model.appointmentData.startDate | date: "shortTime") +
+            " - " +
+            (model.appointmentData.endDate | date: "shortTime")
+        }}
       </div>
     </div>
   </div>
@@ -44,13 +54,24 @@
       <img [src]="getMovieById(model.appointmentData.movieId).image" />
       <div class="movie-info">
         <div class="movie-title">
-          {{ getMovieById(model.appointmentData.movieId).text + " (" + getMovieById(model.appointmentData.movieId).year + ")" }}
+          {{
+            getMovieById(model.appointmentData.movieId).text +
+              " (" +
+              getMovieById(model.appointmentData.movieId).year +
+              ")"
+          }}
         </div>
         <div>
-          {{ "Director: " + getMovieById(model.appointmentData.movieId).director }}
+          {{
+            "Director: " + getMovieById(model.appointmentData.movieId).director
+          }}
         </div>
         <div>
-          {{ "Duration: " + getMovieById(model.appointmentData.movieId).duration + " minutes" }}
+          {{
+            "Duration: " +
+              getMovieById(model.appointmentData.movieId).duration +
+              " minutes"
+          }}
         </div>
       </div>
     </div>

@@ -6,6 +6,11 @@
     </dxo-label>
   </dx-bar-gauge>
   <div id="panel">
-    <dx-check-box *ngFor="let product of products" [text]="product.name" [(value)]="product.active" (onValueChanged)="productsToValues()"></dx-check-box>
+    <dx-check-box
+      *ngFor="let product of products"
+      [text]="product.name"
+      [(value)]="product.active"
+      (onValueChanged)="productsToValues()"
+    ></dx-check-box>
   </div>
 </div>

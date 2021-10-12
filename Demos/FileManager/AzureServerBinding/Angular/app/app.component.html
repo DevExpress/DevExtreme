@@ -1,6 +1,14 @@
 <div id="wrapper" [class]="wrapperClassName">
-  <dx-load-panel [position]="{ of: '#file-manager' }" [(visible)]="loadPanelVisible"> </dx-load-panel>
-  <dx-file-manager id="file-manager" [fileSystemProvider]="fileSystemProvider" [allowedFileExtensions]="allowedFileExtensions">
+  <dx-load-panel
+    [position]="{ of: '#file-manager' }"
+    [(visible)]="loadPanelVisible"
+  >
+  </dx-load-panel>
+  <dx-file-manager
+    id="file-manager"
+    [fileSystemProvider]="fileSystemProvider"
+    [allowedFileExtensions]="allowedFileExtensions"
+  >
     <!-- uncomment the code below to enable file/directory management -->
     <!-- <dxo-permissions 
             create="true"
@@ -13,8 +21,12 @@
         </dxo-permissions> -->
   </dx-file-manager>
   <div id="message-box">
-    To run the demo locally, specify your Azure storage account name, access key and container name in the web.config file. Refer to the
-    <a href="https://js.devexpress.com/Demos/WidgetsGallery/Demo/FileManager/AzureServerBinding/Angular/Light/" target="_blank">
+    To run the demo locally, specify your Azure storage account name, access key
+    and container name in the web.config file. Refer to the
+    <a
+      href="https://js.devexpress.com/Demos/WidgetsGallery/Demo/FileManager/AzureServerBinding/Angular/Light/"
+      target="_blank"
+    >
       https://js.devexpress.com/Demos/WidgetsGallery/Demo/FileManager/AzureServerBinding/Angular/Light/</a
     >
     to see the demo online.

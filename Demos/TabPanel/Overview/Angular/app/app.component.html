@@ -1,4 +1,12 @@
-<dx-tab-panel #tabPanel [height]="260" [dataSource]="companies" [selectedIndex]="0" [loop]="false" [animationEnabled]="true" [swipeEnabled]="true">
+<dx-tab-panel
+  #tabPanel
+  [height]="260"
+  [dataSource]="companies"
+  [selectedIndex]="0"
+  [loop]="false"
+  [animationEnabled]="true"
+  [swipeEnabled]="true"
+>
   <div *dxTemplate="let company of 'title'">
     <span>{{ company.CompanyName }}</span>
   </div>
@@ -33,7 +41,8 @@
   </div>
 </dx-tab-panel>
 <div class="item-box">
-  Item <span>{{ tabPanel.selectedIndex + 1 }}</span> of <span>{{ itemCount }}</span>
+  Item <span>{{ tabPanel.selectedIndex + 1 }}</span> of
+  <span>{{ itemCount }}</span>
 </div>
 <div class="options">
   <div class="caption">Options</div>
@@ -41,9 +50,15 @@
     <dx-check-box text="Loop enabled" [(value)]="tabPanel.loop"></dx-check-box>
   </div>
   <div class="option">
-    <dx-check-box text="Animation enabled" [(value)]="tabPanel.animationEnabled"></dx-check-box>
+    <dx-check-box
+      text="Animation enabled"
+      [(value)]="tabPanel.animationEnabled"
+    ></dx-check-box>
   </div>
   <div class="option">
-    <dx-check-box text="Swipe enabled" [(value)]="tabPanel.swipeEnabled"></dx-check-box>
+    <dx-check-box
+      text="Swipe enabled"
+      [(value)]="tabPanel.swipeEnabled"
+    ></dx-check-box>
   </div>
 </div>

@@ -1,4 +1,13 @@
-<dx-tree-list id="employees" [dataSource]="employees" keyExpr="ID" parentIdExpr="Head_ID" [showRowLines]="true" [showBorders]="true" [columnAutoWidth]="true" [expandedRowKeys]="[1, 2, 10]">
+<dx-tree-list
+  id="employees"
+  [dataSource]="employees"
+  keyExpr="ID"
+  parentIdExpr="Head_ID"
+  [showRowLines]="true"
+  [showBorders]="true"
+  [columnAutoWidth]="true"
+  [expandedRowKeys]="[1, 2, 10]"
+>
   <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
 
   <dxi-column dataField="Title" caption="Position"></dxi-column>

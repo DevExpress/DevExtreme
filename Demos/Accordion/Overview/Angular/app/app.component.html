@@ -1,5 +1,12 @@
 <div id="accordion">
-  <dx-accordion #accordion [dataSource]="companies" [collapsible]="false" [multiple]="false" [animationDuration]="300" [selectedItems]="[companies[0]]">
+  <dx-accordion
+    #accordion
+    [dataSource]="companies"
+    [collapsible]="false"
+    [multiple]="false"
+    [animationDuration]="300"
+    [selectedItems]="[companies[0]]"
+  >
     <div *dxTemplate="let company of 'title'">
       <h1>{{ company.CompanyName }}</h1>
     </div>
@@ -34,16 +41,27 @@
 
   <div class="selected-data">
     <span class="caption">Selected Items</span>
-    <dx-tag-box [dataSource]="companies" displayExpr="CompanyName" [(value)]="accordion.selectedItems" [disabled]="!accordion.multiple"></dx-tag-box>
+    <dx-tag-box
+      [dataSource]="companies"
+      displayExpr="CompanyName"
+      [(value)]="accordion.selectedItems"
+      [disabled]="!accordion.multiple"
+    ></dx-tag-box>
   </div>
 
   <div class="options">
     <div class="caption">Options</div>
     <div class="option">
-      <dx-check-box text="Multiple enabled" [(value)]="accordion.multiple"></dx-check-box>
+      <dx-check-box
+        text="Multiple enabled"
+        [(value)]="accordion.multiple"
+      ></dx-check-box>
     </div>
     <div class="option">
-      <dx-check-box text="Collapsible enabled" [(value)]="accordion.collapsible"></dx-check-box>
+      <dx-check-box
+        text="Collapsible enabled"
+        [(value)]="accordion.collapsible"
+      ></dx-check-box>
     </div>
     <div class="option">
       <span>Animation duration</span>

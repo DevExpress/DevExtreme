@@ -1,6 +1,11 @@
 <div class="container">
   <div class="left-content">
-    <dx-tree-view [dataSource]="continents" selectionMode="single" [selectByClick]="true" (onItemSelectionChanged)="changeSelection($event)"></dx-tree-view>
+    <dx-tree-view
+      [dataSource]="continents"
+      selectionMode="single"
+      [selectByClick]="true"
+      (onItemSelectionChanged)="changeSelection($event)"
+    ></dx-tree-view>
   </div>
   <div class="right-content">
     <div class="title-container">
@@ -27,7 +32,14 @@
     </div>
 
     <div class="sub-title">Largest cities</div>
-    <dx-tab-panel id="tabpanel" [(dataSource)]="citiesData" [animationEnabled]="true" [(selectedIndex)]="tabPanelIndex" itemTitleTemplate="title" itemTemplate="city-template">
+    <dx-tab-panel
+      id="tabpanel"
+      [(dataSource)]="citiesData"
+      [animationEnabled]="true"
+      [(selectedIndex)]="tabPanelIndex"
+      itemTitleTemplate="title"
+      itemTemplate="city-template"
+    >
       <div *dxTemplate="let item of 'title'">
         <span class="tab-panel-title">{{ item.text }}</span>
       </div>

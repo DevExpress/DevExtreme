@@ -1,4 +1,9 @@
-<dx-chart id="chart" title="Daily Sales" dataSource="../../../../data/simpleJSON.json" [rotated]="true">
+<dx-chart
+  id="chart"
+  title="Daily Sales"
+  dataSource="../../../../data/simpleJSON.json"
+  [rotated]="true"
+>
   <dxi-series color="#79cac4" type="bar" argumentField="day" valueField="sales">
     <dxo-label [visible]="true" backgroundColor="#c18e92"></dxo-label>
   </dxi-series>

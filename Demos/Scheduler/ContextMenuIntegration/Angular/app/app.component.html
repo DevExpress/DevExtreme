@@ -12,9 +12,20 @@
   [startDayHour]="9"
   [height]="600"
 >
-  <dxi-resource fieldExpr="roomId" label="room" [dataSource]="resourcesData"></dxi-resource>
+  <dxi-resource
+    fieldExpr="roomId"
+    label="room"
+    [dataSource]="resourcesData"
+  ></dxi-resource>
 </dx-scheduler>
-<dx-context-menu #contextMenu [items]="contextMenuItems" [disabled]="disabled" [target]="target" (onItemClick)="onContextMenuItemClick($event)" [width]="200">
+<dx-context-menu
+  #contextMenu
+  [items]="contextMenuItems"
+  [disabled]="disabled"
+  [target]="target"
+  (onItemClick)="onContextMenuItemClick($event)"
+  [width]="200"
+>
   <div *dxTemplate="let e of 'item'">
     <div *ngIf="e.color">
       <div class="item-badge" [ngStyle]="{ backgroundColor: e.color }"></div>

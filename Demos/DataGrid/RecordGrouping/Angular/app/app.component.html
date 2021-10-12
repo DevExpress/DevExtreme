@@ -1,4 +1,10 @@
-<dx-data-grid id="gridContainer" [dataSource]="customers" keyExpr="ID" [allowColumnReordering]="true" [showBorders]="true">
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="customers"
+  keyExpr="ID"
+  [allowColumnReordering]="true"
+  [showBorders]="true"
+>
   <dxi-column dataField="CompanyName"></dxi-column>
   <dxi-column dataField="Phone"></dxi-column>
   <dxi-column dataField="Fax"></dxi-column>
@@ -13,6 +19,7 @@
 <div class="options">
   <div class="caption">Options</div>
   <div class="option">
-    <dx-check-box [(value)]="expand.autoExpandAll" text="Expand All Groups"> </dx-check-box>
+    <dx-check-box [(value)]="expand.autoExpandAll" text="Expand All Groups">
+    </dx-check-box>
   </div>
 </div>

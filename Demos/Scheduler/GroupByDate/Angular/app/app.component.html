@@ -12,7 +12,12 @@
 >
   <dxi-view type="week" name="Week"> </dxi-view>
   <dxi-view type="month" name="Month"> </dxi-view>
-  <dxi-resource [dataSource]="prioritiesData" fieldExpr="priorityId" label="Priority" [allowMultiple]="false"></dxi-resource>
+  <dxi-resource
+    [dataSource]="prioritiesData"
+    fieldExpr="priorityId"
+    label="Priority"
+    [allowMultiple]="false"
+  ></dxi-resource>
 </dx-scheduler>
 
 <div class="options">

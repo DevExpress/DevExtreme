@@ -1,11 +1,47 @@
-<dx-diagram #diagram id="diagram" (onRequestEditOperation)="requestEditOperationHandler($event)" (onRequestLayoutUpdate)="requestLayoutUpdateHandler($event)">
-  <dxi-custom-shape category="items" [type]="'root'" baseType="octagon" [defaultText]="'Development'"> </dxi-custom-shape>
-  <dxi-custom-shape category="items" [type]="'team'" [title]="'Team'" baseType="ellipse" [defaultText]="'Team Name'"> </dxi-custom-shape>
-  <dxi-custom-shape category="items" [type]="'employee'" [title]="'Employee'" baseType="rectangle" [defaultText]="'Employee Name'"> </dxi-custom-shape>
-  <dxo-nodes [dataSource]="orgItemsDataSource" keyExpr="ID" typeExpr="Type" textExpr="Name" parentKeyExpr="ParentID" [styleExpr]="itemStyleExpr">
+<dx-diagram
+  #diagram
+  id="diagram"
+  (onRequestEditOperation)="requestEditOperationHandler($event)"
+  (onRequestLayoutUpdate)="requestLayoutUpdateHandler($event)"
+>
+  <dxi-custom-shape
+    category="items"
+    [type]="'root'"
+    baseType="octagon"
+    [defaultText]="'Development'"
+  >
+  </dxi-custom-shape>
+  <dxi-custom-shape
+    category="items"
+    [type]="'team'"
+    [title]="'Team'"
+    baseType="ellipse"
+    [defaultText]="'Team Name'"
+  >
+  </dxi-custom-shape>
+  <dxi-custom-shape
+    category="items"
+    [type]="'employee'"
+    [title]="'Employee'"
+    baseType="rectangle"
+    [defaultText]="'Employee Name'"
+  >
+  </dxi-custom-shape>
+  <dxo-nodes
+    [dataSource]="orgItemsDataSource"
+    keyExpr="ID"
+    typeExpr="Type"
+    textExpr="Name"
+    parentKeyExpr="ParentID"
+    [styleExpr]="itemStyleExpr"
+  >
     <dxo-auto-layout type="tree"></dxo-auto-layout>
   </dxo-nodes>
-  <dxo-context-toolbox [width]="100" [shapeIconsPerRow]="2" [shapes]="['team', 'employee']">
+  <dxo-context-toolbox
+    [width]="100"
+    [shapeIconsPerRow]="2"
+    [shapes]="['team', 'employee']"
+  >
     <dxi-group category="general" title="General"></dxi-group>
   </dxo-context-toolbox>
   <dxo-toolbox [shapeIconsPerRow]="2">

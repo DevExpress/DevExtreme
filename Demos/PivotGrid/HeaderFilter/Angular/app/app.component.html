@@ -1,5 +1,18 @@
-<dx-pivot-grid id="sales" [allowSortingBySummary]="true" [allowSorting]="true" [allowFiltering]="true" [showBorders]="true" [height]="570" [dataSource]="pivotGridDataSource">
-  <dxo-header-filter [allowSearch]="allowSearch" [showRelevantValues]="showRelevantValues" [width]="300" [height]="400"></dxo-header-filter>
+<dx-pivot-grid
+  id="sales"
+  [allowSortingBySummary]="true"
+  [allowSorting]="true"
+  [allowFiltering]="true"
+  [showBorders]="true"
+  [height]="570"
+  [dataSource]="pivotGridDataSource"
+>
+  <dxo-header-filter
+    [allowSearch]="allowSearch"
+    [showRelevantValues]="showRelevantValues"
+    [width]="300"
+    [height]="400"
+  ></dxo-header-filter>
 
   <dxo-field-chooser [allowSearch]="true"></dxo-field-chooser>
 
@@ -13,7 +26,10 @@
       <dx-check-box text="Allow Search" [(value)]="allowSearch"></dx-check-box>
     </div>
     <div class="option">
-      <dx-check-box text="Show Relevant Values" [(value)]="showRelevantValues"></dx-check-box>
+      <dx-check-box
+        text="Show Relevant Values"
+        [(value)]="showRelevantValues"
+      ></dx-check-box>
     </div>
   </div>
 </div>

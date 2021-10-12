@@ -1,7 +1,20 @@
-<dx-data-grid id="gridContainer" [dataSource]="employees" keyExpr="ID" [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true" [showBorders]="true">
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="employees"
+  keyExpr="ID"
+  [allowColumnReordering]="true"
+  [allowColumnResizing]="true"
+  [columnAutoWidth]="true"
+  [showBorders]="true"
+>
   <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
   <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
-  <dxi-column caption="Employee" [width]="230" [fixed]="true" [calculateCellValue]="calculateCellValue"></dxi-column>
+  <dxi-column
+    caption="Employee"
+    [width]="230"
+    [fixed]="true"
+    [calculateCellValue]="calculateCellValue"
+  ></dxi-column>
   <dxi-column dataField="BirthDate" dataType="date"></dxi-column>
   <dxi-column dataField="HireDate" dataType="date"></dxi-column>
   <dxi-column dataField="Position" alignment="right"></dxi-column>

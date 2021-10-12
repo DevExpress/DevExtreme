@@ -10,7 +10,14 @@
     <tr *ngFor="let year of years">
       <th>{{ year }}</th>
       <td>
-        <dx-sparkline class="sparkline" [dataSource]="oilCosts" argumentField="month" valueField="{{ year }}" type="line" [showMinMax]="true">
+        <dx-sparkline
+          class="sparkline"
+          [dataSource]="oilCosts"
+          argumentField="month"
+          valueField="{{ year }}"
+          type="line"
+          [showMinMax]="true"
+        >
           <dxo-tooltip format="currency"></dxo-tooltip>
         </dx-sparkline>
       </td>

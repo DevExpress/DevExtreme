@@ -3,8 +3,23 @@
     <dxi-item name="undo"></dxi-item>
     <dxi-item name="redo"></dxi-item>
     <dxi-item name="separator"></dxi-item>
-    <dxi-item name="size" [acceptedValues]="['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt']"></dxi-item>
-    <dxi-item name="font" [acceptedValues]="['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana']"></dxi-item>
+    <dxi-item
+      name="size"
+      [acceptedValues]="['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt']"
+    ></dxi-item>
+    <dxi-item
+      name="font"
+      [acceptedValues]="[
+        'Arial',
+        'Courier New',
+        'Georgia',
+        'Impact',
+        'Lucida Console',
+        'Tahoma',
+        'Times New Roman',
+        'Verdana'
+      ]"
+    ></dxi-item>
     <dxi-item name="separator"></dxi-item>
     <dxi-item name="bold"></dxi-item>
     <dxi-item name="italic"></dxi-item>
@@ -19,7 +34,10 @@
     <dxi-item name="orderedList"></dxi-item>
     <dxi-item name="bulletList"></dxi-item>
     <dxi-item name="separator"></dxi-item>
-    <dxi-item name="header" [acceptedValues]="[false, 1, 2, 3, 4, 5]"></dxi-item>
+    <dxi-item
+      name="header"
+      [acceptedValues]="[false, 1, 2, 3, 4, 5]"
+    ></dxi-item>
     <dxi-item name="separator"></dxi-item>
     <dxi-item name="color"></dxi-item>
     <dxi-item name="background"></dxi-item>
@@ -46,6 +64,9 @@
 <div class="options">
   <div class="caption">Options</div>
   <div class="option">
-    <dx-check-box text="Multiline toolbar" [(value)]="isMultiline"></dx-check-box>
+    <dx-check-box
+      text="Multiline toolbar"
+      [(value)]="isMultiline"
+    ></dx-check-box>
   </div>
 </div>

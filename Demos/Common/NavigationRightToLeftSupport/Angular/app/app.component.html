@@ -5,7 +5,11 @@
       <div class="dx-field">
         <div class="dx-field-label">Language</div>
         <div class="dx-field-value">
-          <dx-select-box [items]="languages" [value]="languages[1]" (onValueChanged)="selectLanguage($event)"></dx-select-box>
+          <dx-select-box
+            [items]="languages"
+            [value]="languages[1]"
+            (onValueChanged)="selectLanguage($event)"
+          ></dx-select-box>
         </div>
       </div>
     </div>
@@ -13,16 +17,30 @@
   <div>
     <div class="dx-fieldset">
       <div class="dx-fieldset-header">
-        <dx-menu [dataSource]="continents" [rtlEnabled]="rtlEnabled" [displayExpr]="rtlEnabled ? 'textAr' : 'text'"></dx-menu>
+        <dx-menu
+          [dataSource]="continents"
+          [rtlEnabled]="rtlEnabled"
+          [displayExpr]="rtlEnabled ? 'textAr' : 'text'"
+        ></dx-menu>
       </div>
     </div>
     <div class="dx-fieldset">
       <div class="dx-field">
         <div class="dx-field-label">
-          <dx-tree-view [width]="200" [dataSource]="continents" [displayExpr]="rtlEnabled ? 'textAr' : 'text'" [rtlEnabled]="rtlEnabled"></dx-tree-view>
+          <dx-tree-view
+            [width]="200"
+            [dataSource]="continents"
+            [displayExpr]="rtlEnabled ? 'textAr' : 'text'"
+            [rtlEnabled]="rtlEnabled"
+          ></dx-tree-view>
         </div>
         <div class="dx-field-value">
-          <dx-accordion [dataSource]="europeCountries" [rtlEnabled]="rtlEnabled" [itemTitleTemplate]="rtlEnabled ? 'arabicTitle' : 'englishTitle'" [itemTemplate]="rtlEnabled ? 'arabic' : 'english'">
+          <dx-accordion
+            [dataSource]="europeCountries"
+            [rtlEnabled]="rtlEnabled"
+            [itemTitleTemplate]="rtlEnabled ? 'arabicTitle' : 'englishTitle'"
+            [itemTemplate]="rtlEnabled ? 'arabic' : 'english'"
+          >
             <div *dxTemplate="let item of 'arabicTitle'">
               {{ item.nameAr }}
             </div>

@@ -1,5 +1,16 @@
-<dx-chart id="chart" [dataSource]="temperaturesData" title="Temperature in September" [customizePoint]="customizePoint" [customizeLabel]="customizeLabel">
-  <dxi-series argumentField="day" valueField="temperature" type="spline" color="#a3aaaa"></dxi-series>
+<dx-chart
+  id="chart"
+  [dataSource]="temperaturesData"
+  title="Temperature in September"
+  [customizePoint]="customizePoint"
+  [customizeLabel]="customizeLabel"
+>
+  <dxi-series
+    argumentField="day"
+    valueField="temperature"
+    type="spline"
+    color="#a3aaaa"
+  ></dxi-series>
   <dxi-value-axis>
     <dxo-label [customizeText]="customizeText"></dxo-label>
     <dxi-strip [startValue]="highAverage" color="rgba(255,155,85,0.15)">
