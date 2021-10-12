@@ -1,7 +1,7 @@
 import { noop } from 'core/utils/common';
 
 QUnit.module('sinon intergrations', () => {
-    QUnit.test('sinon is patched to return negative descending identifiers', function(assert) {
+    QUnit.skip('sinon is patched to return negative descending identifiers', function(assert) {
         const clock = sinon.useFakeTimers();
         const id = setTimeout(noop, 1);
         const id2 = setTimeout(noop, 2);
