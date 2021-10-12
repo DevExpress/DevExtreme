@@ -3242,8 +3242,8 @@ declare module DevExpress.events {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ItemInfo {
-    readonly itemData?: any;
+  export interface ItemInfo<TItemData = any> {
+    readonly itemData?: TItemData;
     readonly itemElement: DevExpress.core.DxElement;
     readonly itemIndex: number;
   }
@@ -4231,23 +4231,37 @@ declare module DevExpress.ui {
    * [descr:CollectionWidget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export class CollectionWidget<TProperties> extends Widget<TProperties> {
-    getDataSource(): DevExpress.data.DataSource;
+  export class CollectionWidget<
+    TProperties extends CollectionWidgetOptions<any, TItem, TKey>,
+    TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+    TKey = any
+  > extends Widget<TProperties> {
+    getDataSource(): DevExpress.data.DataSource<
+      TItem,
+      string | Array<string>,
+      TKey
+    >;
   }
   module CollectionWidget {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export interface SelectionChangedInfo<T = any> {
-      readonly addedItems: Array<T>;
-      readonly removedItems: Array<T>;
+    type ItemLike = string | CollectionWidgetItem<any> | any;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface SelectionChangedInfo<TItem extends ItemLike = any> {
+      readonly addedItems: Array<TItem>;
+      readonly removedItems: Array<TItem>;
     }
   }
   /**
    * [descr:CollectionWidgetItem]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface CollectionWidgetItem {
+  export interface CollectionWidgetItem<
+    TItem extends CollectionWidgetItem<any> | any = any
+  > {
     /**
      * [descr:CollectionWidgetItem.disabled]
      */
@@ -4262,7 +4276,7 @@ declare module DevExpress.ui {
     template?:
       | DevExpress.core.template
       | ((
-          itemData: any,
+          itemData: TItem,
           itemIndex: number,
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
@@ -4278,17 +4292,26 @@ declare module DevExpress.ui {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface CollectionWidgetOptions<TComponent>
-    extends WidgetOptions<TComponent> {
+  export interface CollectionWidgetOptions<
+    TComponent extends CollectionWidget<any, TItem, TKey> | any,
+    TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+    TKey = any
+  > extends WidgetOptions<TComponent> {
     /**
      * [descr:CollectionWidgetOptions.dataSource]
      */
     dataSource?:
       | string
-      | Array<string | CollectionWidgetItem>
-      | DevExpress.data.Store
-      | DevExpress.data.DataSource
-      | DevExpress.data.DataSource.Options;
+      | Array<TItem>
+      | DevExpress.data.Store<TItem, string | Array<string>, TKey>
+      | DevExpress.data.DataSource<TItem, string | Array<string>, TKey>
+      | DevExpress.data.DataSource.Options<
+          TItem,
+          TItem,
+          TItem,
+          string | Array<string>,
+          TKey
+        >;
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
      */
@@ -4299,14 +4322,14 @@ declare module DevExpress.ui {
     itemTemplate?:
       | DevExpress.core.template
       | ((
-          itemData: any,
+          itemData: TItem,
           itemIndex: number,
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:CollectionWidgetOptions.items]
      */
-    items?: Array<string | CollectionWidgetItem | any>;
+    items?: Array<TItem>;
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
      */
@@ -4321,7 +4344,7 @@ declare module DevExpress.ui {
     onItemClick?:
       | ((
           e: DevExpress.events.NativeEventInfo<TComponent> &
-            DevExpress.events.ItemInfo
+            DevExpress.events.ItemInfo<TItem>
         ) => void)
       | string;
     /**
@@ -4329,28 +4352,28 @@ declare module DevExpress.ui {
      */
     onItemContextMenu?: (
       e: DevExpress.events.NativeEventInfo<TComponent> &
-        DevExpress.events.ItemInfo
+        DevExpress.events.ItemInfo<TItem>
     ) => void;
     /**
      * [descr:CollectionWidgetOptions.onItemHold]
      */
     onItemHold?: (
       e: DevExpress.events.NativeEventInfo<TComponent> &
-        DevExpress.events.ItemInfo
+        DevExpress.events.ItemInfo<TItem>
     ) => void;
     /**
      * [descr:CollectionWidgetOptions.onItemRendered]
      */
     onItemRendered?: (
       e: DevExpress.events.NativeEventInfo<TComponent> &
-        DevExpress.events.ItemInfo
+        DevExpress.events.ItemInfo<TItem>
     ) => void;
     /**
      * [descr:CollectionWidgetOptions.onSelectionChanged]
      */
     onSelectionChanged?: (
       e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.CollectionWidget.SelectionChangedInfo
+        DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>
     ) => void;
     /**
      * [descr:CollectionWidgetOptions.selectedIndex]
@@ -4359,15 +4382,15 @@ declare module DevExpress.ui {
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
      */
-    selectedItem?: any;
+    selectedItem?: TItem;
     /**
      * [descr:CollectionWidgetOptions.selectedItemKeys]
      */
-    selectedItemKeys?: Array<any>;
+    selectedItemKeys?: Array<TKey>;
     /**
      * [descr:CollectionWidgetOptions.selectedItems]
      */
-    selectedItems?: Array<any>;
+    selectedItems?: Array<TItem>;
   }
   /**
    * [descr:CompareRule]
@@ -14747,7 +14770,10 @@ declare module DevExpress.ui {
   /**
    * [descr:dxList]
    */
-  export class dxList extends CollectionWidget<dxListOptions> {
+  export class dxList<
+    TItem extends DevExpress.ui.dxList.ItemLike = any,
+    TKey = any
+  > extends CollectionWidget<dxListOptions<TItem, TKey>, TItem, TKey> {
     /**
      * [descr:dxList.clientHeight()]
      */
@@ -14848,53 +14874,126 @@ declare module DevExpress.ui {
     updateDimensions(): DevExpress.core.utils.DxPromise<void>;
   }
   module dxList {
-    export type ContentReadyEvent = DevExpress.events.EventInfo<dxList>;
-    export type DisposingEvent = DevExpress.events.EventInfo<dxList>;
-    export type GroupRenderedEvent = DevExpress.events.EventInfo<dxList> & {
+    export type ContentReadyEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>>;
+    export type DisposingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>>;
+    export type ExplicitTypes<TItem extends ItemLike, TKey> = {
+      Properties: Properties<TItem, TKey>;
+      ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+      DisposingEvent: DisposingEvent<TItem, TKey>;
+      GroupRenderedEvent: GroupRenderedEvent<TItem, TKey>;
+      InitializedEvent: InitializedEvent<TItem, TKey>;
+      ItemClickEvent: ItemClickEvent<TItem, TKey>;
+      ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+      ItemDeletedEvent: ItemDeletedEvent<TItem, TKey>;
+      ItemDeletingEvent: ItemDeletingEvent<TItem, TKey>;
+      ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+      ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+      ItemReorderedEvent: ItemReorderedEvent<TItem, TKey>;
+      ItemSwipeEvent: ItemSwipeEvent<TItem, TKey>;
+      OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+      PageLoadingEvent: PageLoadingEvent<TItem, TKey>;
+      PullRefreshEvent: PullRefreshEvent<TItem, TKey>;
+      ScrollEvent: ScrollEvent<TItem, TKey>;
+      SelectAllValueChangedEvent: SelectAllValueChangedEvent<TItem, TKey>;
+      SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+    };
+    export type GroupRenderedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> & {
       readonly groupData?: any;
       readonly groupElement?: DevExpress.core.DxElement;
       readonly groupIndex?: number;
     };
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxList>;
-    export type ItemClickEvent = DevExpress.events.NativeEventInfo<dxList> &
-      ListItemInfo;
-    export type ItemContextMenuEvent =
-      DevExpress.events.NativeEventInfo<dxList> & ListItemInfo;
-    export type ItemDeletedEvent = DevExpress.events.EventInfo<dxList> &
-      ListItemInfo;
-    export type ItemDeletingEvent = DevExpress.events.EventInfo<dxList> &
-      ListItemInfo & {
+    export type InitializedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.InitializedEventInfo<dxList<TItem, TKey>>;
+    export type ItemClickEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
+      ListItemInfo<TItem>;
+    export type ItemContextMenuEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
+      ListItemInfo<TItem>;
+    export type ItemDeletedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
+    export type ItemDeletingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
+      ListItemInfo<TItem> & {
         cancel?: boolean | PromiseLike<void>;
       };
-    export type ItemHoldEvent = DevExpress.events.NativeEventInfo<dxList> &
-      ListItemInfo;
-    export type ItemRenderedEvent = DevExpress.events.NativeEventInfo<dxList> &
-      DevExpress.events.ItemInfo;
-    export type ItemReorderedEvent = DevExpress.events.EventInfo<dxList> &
-      ListItemInfo & {
+    export type ItemHoldEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
+      ListItemInfo<TItem>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type ItemLike = string | Item<any> | any;
+    export type ItemRenderedEvent<
+      TItem extends Item<any> | any = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    export type ItemReorderedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
+      ListItemInfo<TItem> & {
         readonly fromIndex: number;
         readonly toIndex: number;
       };
-    export type ItemSwipeEvent = DevExpress.events.NativeEventInfo<dxList> &
-      ListItemInfo & {
+    export type ItemSwipeEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
+      ListItemInfo<TItem> & {
         readonly direction: string;
       };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    interface ListItemInfo {
-      readonly itemData?: any;
+    interface ListItemInfo<TItem extends ItemLike> {
+      readonly itemData?: TItem;
       readonly itemElement: DevExpress.core.DxElement;
       readonly itemIndex: number | { group: number; item: number };
     }
-    export type OptionChangedEvent = DevExpress.events.EventInfo<dxList> &
+    export type OptionChangedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
       DevExpress.events.ChangedOptionInfo;
-    export type PageLoadingEvent = DevExpress.events.EventInfo<dxList>;
-    export type Properties = dxListOptions;
-    export type PullRefreshEvent = DevExpress.events.EventInfo<dxList>;
-    export type ScrollEvent = DevExpress.events.NativeEventInfo<dxList> &
-      ScrollInfo;
+    export type PageLoadingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>>;
+    export type Properties<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = dxListOptions<TItem, TKey>;
+    export type PullRefreshEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>>;
+    export type ScrollEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> & ScrollInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -14905,18 +15004,24 @@ declare module DevExpress.ui {
       readonly reachedTop: boolean;
       readonly reachedBottom: boolean;
     }
-    export type SelectAllValueChangedEvent =
-      DevExpress.events.EventInfo<dxList> & {
-        readonly value: boolean;
-      };
-    export type SelectionChangedEvent = DevExpress.events.EventInfo<dxList> &
-      DevExpress.ui.CollectionWidget.SelectionChangedInfo;
+    export type SelectAllValueChangedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> & {
+      readonly value: boolean;
+    };
+    export type SelectionChangedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
+      DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>;
   }
   /**
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxListItem extends CollectionWidgetItem {
+  export interface dxListItem<TItem extends dxListItem<any> | any = any>
+    extends CollectionWidgetItem<TItem> {
     /**
      * [descr:dxListItem.badge]
      */
@@ -14938,8 +15043,10 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxListOptions
-    extends CollectionWidgetOptions<dxList>,
+  export interface dxListOptions<
+    TItem extends DevExpress.ui.dxList.ItemLike = any,
+    TKey = any
+  > extends CollectionWidgetOptions<dxList<TItem, TKey>, TItem, TKey>,
       SearchBoxMixinOptions {
     /**
      * [descr:dxListOptions.activeStateEnabled]
@@ -14962,14 +15069,20 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | DevExpress.ui.dxList.Item | any>
-      | DevExpress.data.Store
-      | DevExpress.data.DataSource
-      | DevExpress.data.DataSource.Options;
+      | Array<TItem>
+      | DevExpress.data.Store<TItem, string | Array<string>, TKey>
+      | DevExpress.data.DataSource<TItem, string | Array<string>, TKey>
+      | DevExpress.data.DataSource.Options<
+          TItem,
+          TItem,
+          TItem,
+          string | Array<string>,
+          TKey
+        >;
     /**
      * [descr:dxListOptions.displayExpr]
      */
-    displayExpr?: string | ((item: any) => string);
+    displayExpr?: string | ((item: TItem) => string);
     /**
      * [descr:dxListOptions.focusStateEnabled]
      */
@@ -15013,7 +15126,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.items]
      */
-    items?: Array<string | DevExpress.ui.dxList.Item | any>;
+    items?: Array<TItem>;
     /**
      * [descr:dxListOptions.menuItems]
      */
@@ -15021,7 +15134,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxListOptions.menuItems.action]
        */
-      action?: (itemElement: DevExpress.core.DxElement, itemData: any) => any;
+      action?: (itemElement: DevExpress.core.DxElement, itemData: TItem) => any;
       /**
        * [descr:dxListOptions.menuItems.text]
        */
@@ -15038,52 +15151,68 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.onGroupRendered]
      */
-    onGroupRendered?: (e: DevExpress.ui.dxList.GroupRenderedEvent) => void;
+    onGroupRendered?: (
+      e: DevExpress.ui.dxList.GroupRenderedEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onItemClick]
      */
-    onItemClick?: ((e: DevExpress.ui.dxList.ItemClickEvent) => void) | string;
+    onItemClick?:
+      | ((e: DevExpress.ui.dxList.ItemClickEvent<TItem, TKey>) => void)
+      | string;
     /**
      * [descr:dxListOptions.onItemContextMenu]
      */
-    onItemContextMenu?: (e: DevExpress.ui.dxList.ItemContextMenuEvent) => void;
+    onItemContextMenu?: (
+      e: DevExpress.ui.dxList.ItemContextMenuEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onItemDeleted]
      */
-    onItemDeleted?: (e: DevExpress.ui.dxList.ItemDeletedEvent) => void;
+    onItemDeleted?: (
+      e: DevExpress.ui.dxList.ItemDeletedEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onItemDeleting]
      */
-    onItemDeleting?: (e: DevExpress.ui.dxList.ItemDeletingEvent) => void;
+    onItemDeleting?: (
+      e: DevExpress.ui.dxList.ItemDeletingEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onItemHold]
      */
-    onItemHold?: (e: DevExpress.ui.dxList.ItemHoldEvent) => void;
+    onItemHold?: (e: DevExpress.ui.dxList.ItemHoldEvent<TItem, TKey>) => void;
     /**
      * [descr:dxListOptions.onItemReordered]
      */
-    onItemReordered?: (e: DevExpress.ui.dxList.ItemReorderedEvent) => void;
+    onItemReordered?: (
+      e: DevExpress.ui.dxList.ItemReorderedEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onItemSwipe]
      */
-    onItemSwipe?: (e: DevExpress.ui.dxList.ItemSwipeEvent) => void;
+    onItemSwipe?: (e: DevExpress.ui.dxList.ItemSwipeEvent<TItem, TKey>) => void;
     /**
      * [descr:dxListOptions.onPageLoading]
      */
-    onPageLoading?: (e: DevExpress.ui.dxList.PageLoadingEvent) => void;
+    onPageLoading?: (
+      e: DevExpress.ui.dxList.PageLoadingEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onPullRefresh]
      */
-    onPullRefresh?: (e: DevExpress.ui.dxList.PullRefreshEvent) => void;
+    onPullRefresh?: (
+      e: DevExpress.ui.dxList.PullRefreshEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onScroll]
      */
-    onScroll?: (e: DevExpress.ui.dxList.ScrollEvent) => void;
+    onScroll?: (e: DevExpress.ui.dxList.ScrollEvent<TItem, TKey>) => void;
     /**
      * [descr:dxListOptions.onSelectAllValueChanged]
      */
     onSelectAllValueChanged?: (
-      e: DevExpress.ui.dxList.SelectAllValueChangedEvent
+      e: DevExpress.ui.dxList.SelectAllValueChangedEvent<TItem, TKey>
     ) => void;
     /**
      * [descr:dxListOptions.pageLoadMode]
@@ -23230,7 +23359,7 @@ declare module DevExpress.ui.dxHtmlEditor {
   export type ToolbarItem = dxHtmlEditorToolbarItem;
 }
 declare module DevExpress.ui.dxList {
-  export type Item = dxListItem;
+  export type Item<TItem extends Item<any> | any = any> = dxListItem<TItem>;
 }
 declare module DevExpress.ui.dxMenu {
   export type Item = dxMenuItem;
