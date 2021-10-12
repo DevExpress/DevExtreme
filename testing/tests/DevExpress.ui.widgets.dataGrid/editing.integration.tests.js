@@ -48,7 +48,7 @@ import commonUtils from 'core/utils/common';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import 'ui/drop_down_box';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { createDataGrid, baseModuleConfig, isChildInsideParentViewport } from '../../helpers/dataGridHelper.js';
 import { generateItems } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
 
@@ -69,23 +69,6 @@ if('chrome' in window && devices.real().deviceType !== 'desktop') {
     // Chrome DevTools device emulation
     // Erase differences in user agent stylesheet
     $('head').append($('<style>').text('input[type=date] { padding: 1px 0; }'));
-}
-
-function isChildInsideParentViewport(parentElement, childElement) {
-    const $parent = $(parentElement);
-    const $child = $(childElement);
-    const parentInfo = $parent.offset();
-    const childInfo = $child.offset();
-    let result = false;
-
-    parentInfo.bottom = parentInfo.top + $parent.outerHeight();
-    childInfo.bottom = childInfo.top + $child.outerHeight();
-
-    result = (childInfo.top > parentInfo.top && childInfo.top < parentInfo.bottom)
-            || (childInfo.bottom > parentInfo.top && childInfo.bottom < parentInfo.bottom)
-            || (childInfo.top < parentInfo.top && childInfo.bottom > parentInfo.bottom);
-
-    return result;
 }
 
 QUnit.module('Initialization', baseModuleConfig, () => {

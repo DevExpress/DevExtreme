@@ -26,3 +26,20 @@ export const createDataGrid = (options, $container) => {
     const dataGrid = dataGridElement.dxDataGrid('instance');
     return dataGrid;
 };
+
+export const isChildInsideParentViewport = (parentElement, childElement) => {
+    const $parent = $(parentElement);
+    const $child = $(childElement);
+    const parentInfo = $parent.offset();
+    const childInfo = $child.offset();
+    let result = false;
+
+    parentInfo.bottom = parentInfo.top + $parent.outerHeight();
+    childInfo.bottom = childInfo.top + $child.outerHeight();
+
+    result = (childInfo.top > parentInfo.top && childInfo.top < parentInfo.bottom)
+            || (childInfo.bottom > parentInfo.top && childInfo.bottom < parentInfo.bottom)
+            || (childInfo.top < parentInfo.top && childInfo.bottom > parentInfo.bottom);
+
+    return result;
+};

@@ -5,7 +5,7 @@ import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
-import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import { createDataGrid, baseModuleConfig, isChildInsideParentViewport } from '../../helpers/dataGridHelper.js';
 import $ from 'jquery';
 
 
@@ -4371,23 +4371,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         }, 300);
     });
-
-    function isChildInsideParentViewport(parentElement, childElement) {
-        const $parent = $(parentElement);
-        const $child = $(childElement);
-        const parentInfo = $parent.offset();
-        const childInfo = $child.offset();
-        let result = false;
-
-        parentInfo.bottom = parentInfo.top + $parent.outerHeight();
-        childInfo.bottom = childInfo.top + $child.outerHeight();
-
-        result = (childInfo.top > parentInfo.top && childInfo.top < parentInfo.bottom)
-                || (childInfo.bottom > parentInfo.top && childInfo.bottom < parentInfo.bottom)
-                || (childInfo.top < parentInfo.top && childInfo.bottom > parentInfo.bottom);
-
-        return result;
-    }
 
     QUnit.test('Rows should be rendered properly when renderAsync = true', function(assert) {
         // arrange
