@@ -339,7 +339,7 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(0);
             $tableElement.css('width', 'initial');
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -370,7 +370,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -393,7 +393,7 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(1);
             $tableElement.css('width', 'initial');
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -422,7 +422,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -453,7 +453,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(1);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -488,7 +488,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(1);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -523,7 +523,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -546,7 +546,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -568,7 +568,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             let formInstance = this.getFormInstance();
@@ -580,7 +580,7 @@ module('Table properties forms', {
 
             const $targetCell = $tableElement.find('td').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
 
@@ -645,7 +645,7 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(0);
             const initialCellHeight = $targetCell.outerHeight();
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -667,7 +667,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(2);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -691,7 +691,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -714,7 +714,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -740,7 +740,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -775,7 +775,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -799,7 +799,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -835,7 +835,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             let formInstance = this.getFormInstance();
@@ -845,7 +845,7 @@ module('Table properties forms', {
 
             this.applyFormChanges(formInstance);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             formInstance = this.getFormInstance();
@@ -868,7 +868,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             let formInstance = this.getFormInstance();
@@ -878,7 +878,7 @@ module('Table properties forms', {
 
             this.applyFormChanges(formInstance);
 
-            this.quillInstance.setSelection(50, 1);
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             formInstance = this.getFormInstance();

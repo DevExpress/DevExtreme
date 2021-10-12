@@ -32,7 +32,7 @@ function hasEmbedContent(module, selection) {
 
 function unfixTableWidth($table, tableData) {
     const unfixValue = 'initial';
-    if(tableData) {
+    if(tableData && tableData[0]) {
         tableData[0].format('tableWidth', unfixValue);
     } else {
         $table.css('width', unfixValue);

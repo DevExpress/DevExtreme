@@ -426,7 +426,7 @@ function getTablePropertiesFormConfig(module, $table, formats, tableData) {
             backgroundColor: formats.tableBackgroundColor ?? tableStyles.backgroundColor,
             borderStyle: formats.tableBorderStyle ?? tableStyles.borderTopStyle,
             borderColor: formats.tableBorderColor ?? tableStyles.borderTopColor,
-            borderWidth: formats.tableBorderWidth ?? parseInt(tableStyles.borderTopWidth),
+            borderWidth: parseInt(formats.tableBorderWidth ?? tableStyles.borderTopWidth),
             alignment: formats.tableAlign ?? startTextAlign
         },
         items: [{
@@ -548,7 +548,7 @@ function getTablePropertiesFormConfig(module, $table, formats, tableData) {
         applyTableDimensionChanges(module, $table, formData.height, widthArg, tableData);
 
         module.editorInstance.format('tableBorderStyle', formData.borderStyle);
-        module.editorInstance.format('tableBorderWidth', formData.borderWidth);
+        module.editorInstance.format('tableBorderWidth', formData.borderWidth + 'px');
         module.editorInstance.format('tableBorderColor', borderColorEditorInstance.option('value'));
         module.editorInstance.format('tableBackgroundColor', backgroundColorEditorInstance.option('value'));
         module.editorInstance.format('tableTextAlign', alignmentEditorInstance.option('selectedItemKeys')[0]);
@@ -583,7 +583,7 @@ function getCellPropertiesFormConfig(module, $cell, formats, tableData) {
             backgroundColor: formats.cellBackgroundColor ?? cellStyles.backgroundColor,
             borderStyle: formats.cellBorderStyle ?? cellStyles.borderTopStyle,
             borderColor: formats.cellBorderColor ?? cellStyles.borderTopColor,
-            borderWidth: formats.cellBorderWidth ?? parseInt(cellStyles.borderTopWidth),
+            borderWidth: parseInt(formats.cellBorderWidth ?? cellStyles.borderTopWidth),
             alignment: formats.cellTextAlign ?? startTextAlign,
             verticalAlignment: formats.cellVerticalAlign ?? cellStyles.verticalAlign,
             verticalPadding: formats.cellPaddingTop ?? parseInt(cellStyles.paddingTop),
@@ -738,7 +738,7 @@ function getCellPropertiesFormConfig(module, $cell, formats, tableData) {
         const widthArg = formData.width === parseInt(startCellWidth) ? undefined : formData.width;
         applyCellDimensionChanges(module, $cell, formData.height, widthArg, tableData);
 
-        module.editorInstance.format('cellBorderWidth', formData.borderWidth);
+        module.editorInstance.format('cellBorderWidth', formData.borderWidth + 'px');
         // module.editorInstance.format('cellBorderWidth', formData.borderWidth + 'px');
         module.editorInstance.format('cellBorderColor', borderColorEditorInstance.option('value'));
         module.editorInstance.format('cellBorderStyle', formData.borderStyle);
