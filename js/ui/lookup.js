@@ -711,6 +711,8 @@ const Lookup = DropDownList.inherit({
             title: this.option('dropDownOptions.title'),
             titleTemplate: this._getTemplateByOption('dropDownOptions.titleTemplate'),
             onTitleRendered: this.option('dropDownOptions.onTitleRendered'),
+            templatesRenderAsynchronously: false,
+            autoResizeEnabled: false,
         };
 
         if(this.option('_scrollToSelectedItemEnabled')) {

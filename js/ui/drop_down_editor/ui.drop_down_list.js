@@ -101,7 +101,8 @@ const DropDownList = DropDownEditor.inherit({
                     at: 'left bottom',
                     offset: { h: 0, v: 0 },
                     collision: 'flip'
-                }
+                },
+                showTitle: false
             },
 
             wrapItemText: false,
