@@ -14,7 +14,7 @@ export function isReachedRight(
   element: HTMLDivElement,
   scrollOffsetLeft: number,
 ): boolean {
-  return getScrollLeftMax(element) - scrollOffsetLeft < 0.5;
+  return Math.round(getScrollLeftMax(element) - scrollOffsetLeft) <= 0;
 }
 
 export function isReachedBottom(
@@ -22,7 +22,7 @@ export function isReachedBottom(
   scrollOffsetTop: number,
   pocketHeight: number,
 ): boolean {
-  return getScrollTopMax(element) - scrollOffsetTop - pocketHeight <= 0.5;
+  return Math.round(getScrollTopMax(element) - scrollOffsetTop - pocketHeight) <= 0;
 }
 
 export function getBoundaryProps(
@@ -36,11 +36,11 @@ export function getBoundaryProps(
   const { isHorizontal, isVertical } = new ScrollDirection(direction);
 
   if (isHorizontal) {
-    boundaryProps.reachedLeft = left <= 0;
+    boundaryProps.reachedLeft = Math.round(left) <= 0;
     boundaryProps.reachedRight = isReachedRight(element, left);
   }
   if (isVertical) {
-    boundaryProps.reachedTop = top <= 0;
+    boundaryProps.reachedTop = Math.round(top) <= 0;
     boundaryProps.reachedBottom = isReachedBottom(element, top, pocketHeight);
   }
   return boundaryProps;

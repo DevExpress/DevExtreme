@@ -934,8 +934,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataGrid.getScrollable().scrollTo({ y: 0 });
             dataGrid.addRow();
             dataGrid.saveEditData();
-            for(let i = 0; i < 20; i++) {
+            for(let i = 0; i < 25; i++) {
                 dataGrid.getScrollable().scrollTo({ y: 10000 });
+                this.clock.tick();
             }
 
             // assert
@@ -6072,5 +6073,84 @@ QUnit.module('Editing state', baseModuleConfig, () => {
         // assert
         assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling call count');
         assert.equal(onEditCanceled.callCount, 1, 'onEditCanceled call count');
+    });
+});
+
+QUnit.module('newRowPosition', baseModuleConfig, () => {
+    ['first', 'last'].forEach(newRowPosition => {
+        QUnit.test(`added row should be visible if newRowPosition is ${newRowPosition} and scrolling.mode is virtual`, function(assert) {
+            const isFirstNewRowPosition = newRowPosition === 'first';
+            const data = [];
+            for(let i = 0; i < 100; i++) {
+                data.push({ id: i + 1 });
+            }
+            // arrange
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                showRowLines: false,
+                height: 200,
+                dataSource: data,
+                scrolling: {
+                    mode: 'virtual',
+                    useNative: false
+                },
+                editing: {
+                    newRowPosition
+                },
+                paging: {
+                    pageIndex: isFirstNewRowPosition ? 2 : 0
+                }
+            }).dxDataGrid('instance');
+
+            this.clock.tick(300);
+
+            // act
+            dataGrid.addRow();
+
+            // assert
+            const visibleRows = dataGrid.getVisibleRows();
+            assert.ok(visibleRows[isFirstNewRowPosition ? 0 : visibleRows.length - 1].isNewRow, 'last row is new');
+            assert.ok(dataGridWrapper.rowsView.isRowVisible(isFirstNewRowPosition ? 0 : visibleRows.length), 'new row is visible');
+            assert.equal(dataGrid.pageIndex(), isFirstNewRowPosition ? 0 : 4, 'pageIndex');
+            assert.ok($('#dataGrid').find('.dx-virtual-row').length, 'one virtual row is rendered');
+        });
+    });
+
+    QUnit.test('Virtual row should not be rendered after the last inserted row with certain height and row count', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 50; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            keyExpr: 'id',
+            editing: {
+                mode: 'row',
+                allowAdding: true,
+                newRowPosition: 'last',
+            },
+            height: 440,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            }
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.addRow();
+        const $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
+        const visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.ok(visibleRows[visibleRows.length - 1].isNewRow, 'last new row is rendered');
+        assert.strictEqual($virtualRowElement.length, 1, 'only one virtual row is rendered');
     });
 });

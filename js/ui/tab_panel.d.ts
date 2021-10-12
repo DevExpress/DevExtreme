@@ -8,7 +8,7 @@ import {
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions,
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -234,6 +234,3 @@ export type Properties = dxTabPanelOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTabPanelOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxTabPanelOptions;

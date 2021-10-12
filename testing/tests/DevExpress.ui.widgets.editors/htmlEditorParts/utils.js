@@ -16,7 +16,7 @@ function checkLink(assert, { content, href, afterLink }, text) {
 }
 
 function prepareTableValue(value) {
-    return value.replace(/(\s?style="[^"]*")|(\s?data(-header)?(-cell)?(-row)?(-line)?="[^"]*")/ig, '');
+    return value.replace(/(\s?style="[^"]*")|(\s?data(-header)?(-cell)?(-row)?(-line)?="[^"]*")|(\s?class="ql-table(-header)?(-data)?(-cell)?(-line)?")/ig, '');
 }
 
 function prepareEmbedValue(value) {

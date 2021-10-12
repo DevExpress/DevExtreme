@@ -151,6 +151,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return options.viewportSize;
             },
 
+            viewportHeight: function() {
+            },
+
             viewportItemSize: function() {},
 
             setContentItemSizes: function() {},

@@ -1,11 +1,12 @@
 /**
+ * @public
  * @docid
  * @section commonObjectStructures
  * @type object
  * @namespace DevExpress
  * @export default
  */
-export interface Device {
+export type Device = {
     /**
      * @docid
      * @public
@@ -51,7 +52,7 @@ export interface Device {
      * @public
      */
     version?: Array<number>;
-}
+};
 
 type EventName = 'orientationChanged';
 

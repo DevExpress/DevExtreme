@@ -10,7 +10,7 @@ import {
 } from '../core/templates/template';
 
 import DataSource, {
-    DataSourceOptions,
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -395,6 +395,17 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @public
      */
     descriptionExpr?: string;
+    /**
+      * @docid
+      * @default "dropDownAppointment"
+      * @type_function_param1 itemData:object
+      * @type_function_param2 itemIndex:number
+      * @type_function_param3 contentElement:DxElement
+      * @type_function_return string|Element|jQuery
+      * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
+      * @public
+      */
+    dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default true
@@ -882,6 +893,16 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        */
       appointmentTooltipTemplate?: template | ((model: AppointmentTooltipTemplateData, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
       /**
+      * @docid
+      * @default "dropDownAppointment"
+      * @type_function_param1 itemData:object
+      * @type_function_param2 itemIndex:number
+      * @type_function_param3 contentElement:DxElement
+      * @type_function_return string|Element|jQuery
+      * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
+      */
+      dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: DxElement) => string | UserDefinedElement);
+      /**
        * @docid
        * @default 30
        */
@@ -1161,6 +1182,3 @@ export interface dxSchedulerScrolling {
    */
   mode?: 'standard' | 'virtual';
 }
-
-/** @deprecated use Properties instead */
-export type IOptions = dxSchedulerOptions;

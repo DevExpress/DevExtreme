@@ -2,7 +2,21 @@ import $ from 'jquery';
 import 'ui/html_editor';
 import devices from 'core/devices';
 
-import { showTablePropertiesForm, showCellPropertiesForm } from 'ui/html_editor/ui/tableForms';
+import { getFormatHandlers } from 'ui/html_editor/utils/toolbar_helper';
+
+const showCellPropertiesForm = (instance, $cellElement) => {
+    showForm(instance, $cellElement, 'cellProperties');
+};
+
+const showTablePropertiesForm = (instance, $tableElement) => {
+    showForm(instance, $tableElement, 'tableProperties');
+};
+
+const showForm = (instance, $element, formatType) => {
+    const contextMenuModule = instance.getModule('tableContextMenu');
+    const formatHelpers = getFormatHandlers(contextMenuModule);
+    formatHelpers[formatType]($element);
+};
 
 const tableMarkup = '\
     before table text<br>\
@@ -185,9 +199,9 @@ module('Table properties forms', {
         test('show cell Form', function(assert) {
             this.createWidget();
 
-            const $tableElement = this.$element.find('table').eq(0);
+            const $cellElement = this.$element.find('table').eq(0);
 
-            showCellPropertiesForm(this.instance, $tableElement);
+            showCellPropertiesForm(this.instance, $cellElement);
             this.clock.tick();
             const $form = $('.dx-form:not(.dx-formdialog-form)');
             const $scrollView = $form.closest('.dx-scrollview');

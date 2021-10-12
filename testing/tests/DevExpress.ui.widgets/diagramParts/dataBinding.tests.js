@@ -75,12 +75,6 @@ QUnit.module('DataBinding', {
                             text: 'text3'
                         }
                     ],
-                    children: [
-                        {
-                            id: '4',
-                            text: 'text4'
-                        }
-                    ]
                 },
                 {
                     id: '2',
@@ -104,7 +98,6 @@ QUnit.module('DataBinding', {
         assert.equal(this.instance._nodesOption._getIndexByKey('1'), 0);
         assert.equal(this.instance._nodesOption._getIndexByKey('2'), 1);
         assert.equal(this.instance._nodesOption._getIndexByKey('3'), 2);
-        assert.equal(this.instance._nodesOption._getIndexByKey('4'), 3);
 
         store.insert({
             id: '5',
@@ -115,7 +108,6 @@ QUnit.module('DataBinding', {
         assert.equal(this.instance._nodesOption._getIndexByKey('1'), 0);
         assert.equal(this.instance._nodesOption._getIndexByKey('2'), 1);
         assert.equal(this.instance._nodesOption._getIndexByKey('3'), 3);
-        assert.equal(this.instance._nodesOption._getIndexByKey('4'), 4);
         assert.equal(this.instance._nodesOption._getIndexByKey('5'), 2);
     });
 

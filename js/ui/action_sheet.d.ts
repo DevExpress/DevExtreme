@@ -205,6 +205,3 @@ export type Properties = dxActionSheetOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxActionSheetOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxActionSheetOptions;

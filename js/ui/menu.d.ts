@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import DataSource, {
-    DataSourceOptions,
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -285,6 +285,3 @@ export type Properties = dxMenuOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxMenuOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxMenuOptions;

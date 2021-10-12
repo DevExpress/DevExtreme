@@ -42,7 +42,7 @@ const REVERT_BUTTON_CLASS = 'dx-revert-button';
 
 const FAST_EDITING_DELETE_KEY = 'delete';
 
-const INTERACTIVE_ELEMENTS_SELECTOR = 'input:not([type=\'hidden\']), textarea, a, select, button, [tabindex], .dx-dropdowneditor-icon';
+const INTERACTIVE_ELEMENTS_SELECTOR = 'input:not([type=\'hidden\']), textarea, a, select, button, [tabindex], .dx-dropdowneditor-icon, .dx-checkbox';
 
 const EDIT_MODE_ROW = 'row';
 const EDIT_MODE_FORM = 'form';
@@ -1581,12 +1581,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
     _editingCellHandler: function(eventArgs, editorValue) {
-        const $input = this._getFocusedCell().find('.dx-texteditor-input').eq(0);
+        const $input = this._getFocusedCell().find(INTERACTIVE_ELEMENTS_SELECTOR).eq(0);
         const keyDownEvent = createEvent(eventArgs, { type: 'keydown', target: $input.get(0) });
         const keyPressEvent = createEvent(eventArgs, { type: 'keypress', target: $input.get(0) });
         const inputEvent = createEvent(eventArgs, { type: 'input', target: $input.get(0) });
 
-        $input.get(0).select();
+        $input.get(0).select?.();
         eventsEngine.trigger($input, keyDownEvent);
 
         if(!keyDownEvent.isDefaultPrevented()) {

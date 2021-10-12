@@ -1,16 +1,28 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { SchedulerProps } from '../props';
+import DataSource from '../../../../data/data_source';
+import { SchedulerProps, ScrollingProps } from '../props';
 import { Scheduler, viewFunction as ViewFunction } from '../scheduler';
 import { Widget, WidgetProps } from '../../common/widget';
 import * as viewsModel from '../model/views';
 import { ViewType } from '../types';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import { WorkSpace } from '../workspaces/base/work_space';
-import { getAppointmentDataProvider, getTimeZoneCalculator } from '../../../../ui/scheduler/instanceFactory';
 import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
 import { Group } from '../workspaces/types';
+import { filterAppointments } from '../common';
+import { getAppointmentsConfig } from '../model/appointments';
+
+jest.mock('../model/appointments', () => ({
+  ...jest.requireActual('../model/appointments'),
+  getAppointmentsConfig: jest.fn(() => 'Test_getAppointmentsConfig'),
+}));
+
+jest.mock('../common', () => ({
+  ...jest.requireActual('../common'),
+  filterAppointments: jest.fn(() => 'Test_filterAppointments'),
+}));
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -161,17 +173,6 @@ describe('Scheduler', () => {
         });
     });
 
-    it('should correctly create factory instances', () => {
-      const scheduler = new Scheduler(new SchedulerProps());
-
-      scheduler.initialization();
-
-      expect(getAppointmentDataProvider(scheduler.key))
-        .toBeDefined();
-      expect(getTimeZoneCalculator(scheduler.key))
-        .toBeDefined();
-    });
-
     it('should not render toolbar if toolbar prop is an empty array', () => {
       const tree = renderComponent({ props: { toolbar: [] } });
       const schedulerToolbar = tree.find(SchedulerToolbar);
@@ -240,6 +241,22 @@ describe('Scheduler', () => {
               ],
             } as Group,
           ]);
+      });
+
+      it('loadDataSource should load dataItems', () => {
+        const data = [{
+          startDate: new Date(2021, 9, 6, 15, 15),
+          endDate: new Date(2021, 9, 6, 16, 16),
+          allDay: false,
+        }];
+        const scheduler = new Scheduler({
+          dataSource: data,
+        });
+
+        scheduler.loadDataSource();
+
+        expect(scheduler.dataItems)
+          .toMatchObject(data);
       });
     });
 
@@ -382,13 +399,6 @@ describe('Scheduler', () => {
         expect(scrollToTime).toHaveBeenCalled();
       });
 
-      it('should initialize key', () => {
-        const scheduler = new Scheduler(new SchedulerProps());
-
-        expect(scheduler.key)
-          .toBeGreaterThan(-1);
-      });
-
       it('dataAccessors should be correctly created', () => {
         const scheduler = new Scheduler({
           ...new SchedulerProps(),
@@ -468,6 +478,8 @@ describe('Scheduler', () => {
   });
 
   describe('Logic', () => {
+    afterEach(() => jest.clearAllMocks());
+
     describe('Getters', () => {
       describe('currentViewProps', () => {
         it('should return correct current view', () => {
@@ -549,26 +561,36 @@ describe('Scheduler', () => {
         [
           {
             scrollingMode: 'standard',
-            viewScrollingMode: 'virtual',
+            viewScrolling: { mode: 'virtual' },
             expected: true,
           },
           {
             scrollingMode: 'virtual',
-            viewScrollingMode: 'virtual',
+            viewScrolling: { mode: 'virtual' },
             expected: true,
           },
           {
             scrollingMode: 'standard',
-            viewScrollingMode: 'standard',
+            viewScrolling: { mode: 'standard' },
             expected: false,
           },
           {
             scrollingMode: 'virtual',
-            viewScrollingMode: 'standard',
+            viewScrolling: { mode: 'standard' },
             expected: true,
           },
-        ].forEach(({ scrollingMode, viewScrollingMode, expected }) => {
-          it(`should has correct value if scheduler scrolling.mode is ${scrollingMode} and view scrolling.mode is ${viewScrollingMode}`, () => {
+          {
+            scrollingMode: 'virtual',
+            viewScrolling: undefined,
+            expected: true,
+          },
+          {
+            scrollingMode: 'standard',
+            viewScrolling: undefined,
+            expected: false,
+          },
+        ].forEach(({ scrollingMode, viewScrolling, expected }) => {
+          it(`should has correct value if scheduler scrolling.mode is ${scrollingMode} and view scrolling.mode is ${viewScrolling?.mode}`, () => {
             const scheduler = new Scheduler({
               ...new SchedulerProps(),
               scrolling: {
@@ -576,15 +598,93 @@ describe('Scheduler', () => {
               },
               views: [{
                 type: 'day',
-                scrolling: {
-                  mode: viewScrollingMode as any,
-                },
+                scrolling: viewScrolling as ScrollingProps,
               }],
             });
 
             expect(scheduler.isVirtualScrolling)
               .toBe(expected);
           });
+        });
+      });
+
+      describe('timeZoneCalculator', () => {
+        it('should be created correctly', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            timeZone: 'America/Los_Angeles',
+          });
+
+          expect(scheduler.timeZoneCalculator.getOffsets(new Date(2021, 8, 19), 'Europe/Moscow'))
+            .toMatchObject({
+              common: -7,
+              appointment: 3,
+            });
+        });
+      });
+
+      describe('appointmentsConfig', () => {
+        it('should be created correctly if viewDataProvider exists', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          scheduler.viewDataProvider = new ViewDataProvider('day') as any;
+
+          expect(scheduler.appointmentsConfig)
+            .toBe('Test_getAppointmentsConfig');
+
+          expect(getAppointmentsConfig)
+            .toHaveBeenCalledTimes(1);
+        });
+
+        it('should be created correctly if viewDataProvider is not exists', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          expect(scheduler.appointmentsConfig)
+            .toBe(undefined);
+
+          expect(getAppointmentsConfig)
+            .toHaveBeenCalledTimes(0);
+        });
+      });
+
+      describe('internalDataSource', () => {
+        it('should be created correctly if dataSource is array', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            dataSource: [{
+              startDate: new Date(2021, 9, 5),
+              endDate: new Date(2021, 9, 6),
+            }],
+          });
+
+          expect(scheduler.internalDataSource)
+            .toBeInstanceOf(DataSource);
+        });
+
+        it('should be created correctly if dataSource is DataSource', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            dataSource: new DataSource([{
+              startDate: new Date(2021, 9, 5),
+              endDate: new Date(2021, 9, 6),
+            }]),
+          });
+
+          expect(scheduler.internalDataSource)
+            .toBeInstanceOf(DataSource);
+        });
+      });
+
+      describe('filteredItems', () => {
+        it('should invoke filterAppointments correctly', () => {
+          const schedulerProps = new SchedulerProps();
+          const scheduler = new Scheduler(schedulerProps);
+
+          expect(scheduler.filteredItems)
+            .toBe('Test_filterAppointments');
+
+          expect(filterAppointments)
+            .toHaveBeenCalledTimes(1);
         });
       });
     });

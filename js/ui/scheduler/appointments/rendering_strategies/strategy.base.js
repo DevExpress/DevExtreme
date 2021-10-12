@@ -7,6 +7,8 @@ import { current as currentTheme } from '../../../themes';
 import { AppointmentSettingsGenerator } from '../settingsGenerator';
 
 import timeZoneUtils from '../../utils.timeZone';
+import { createAppointmentAdapter } from '../../appointmentAdapter';
+import { getAppointmentTakesAllDay } from '../dataProvider/utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -53,7 +55,8 @@ class BaseRenderingStrategy {
     get allowResizing() { return this.options.allowResizing; }
     get allowAllDayResizing() { return this.options.allowAllDayResizing; }
     get viewDataProvider() { return this.options.viewDataProvider; }
-    get appointmentDataProvider() { return this.options.appointmentDataProvider; }
+    get dataAccessors() { return this.options.dataAccessors; }
+    get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
@@ -237,11 +240,8 @@ class BaseRenderingStrategy {
     }
 
     isAppointmentTakesAllDay(rawAppointment) {
-        return this.appointmentDataProvider.appointmentTakesAllDay(
-            rawAppointment,
-            this.viewStartDayHour,
-            this.viewEndDayHour
-        );
+        const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
+        return getAppointmentTakesAllDay(adapter, this.viewStartDayHour, this.viewEndDayHour);
     }
 
     _getAppointmentParts() {

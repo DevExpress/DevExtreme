@@ -894,6 +894,3 @@ export type Properties = dxVectorMapOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxVectorMapOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxVectorMapOptions;

@@ -6,7 +6,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import $ from 'jquery';
 import 'ui/scheduler/workspaces/ui.scheduler.work_space_week';
-import { createFactoryInstances, getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
+import { createFactoryInstances } from 'ui/scheduler/instanceFactory';
 import VerticalAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_vertical';
 import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/appointments/rendering_strategies/strategy_horizontal_month';
 import SchedulerAppointments from 'ui/scheduler/appointments/appointmentCollection';
@@ -23,6 +23,7 @@ import { DataSource } from 'data/data_source/data_source';
 import { ExpressionUtils } from 'ui/scheduler/expressionUtils';
 import { Deferred } from 'core/utils/deferred';
 import { createExpressions } from 'ui/scheduler/resources/utils';
+import { AppointmentDataProvider } from 'ui/scheduler/appointments/dataProvider/appointmentDataProvider.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`
@@ -104,10 +105,7 @@ const createSubscribes = (coordinates, cellWidth, cellHeight) => ({
 
         return result;
     },
-    appendSingleAppointmentData: (data) => data,
-    getAppointmentDataProvider: () => {
-        return getAppointmentDataProvider(0);
-    }
+    appendSingleAppointmentData: (data) => data
 });
 
 const createInstance = (options, subscribesConfig) => {
@@ -128,7 +126,6 @@ const createInstance = (options, subscribesConfig) => {
 
     const key = createFactoryInstances({
         getIsVirtualScrolling: () => false,
-        getDataAccessors: () => dataAccessors
     });
 
     const instance = $('#scheduler-appointments').dxSchedulerAppointments({
@@ -138,7 +135,11 @@ const createInstance = (options, subscribesConfig) => {
         getResources: () => [],
         getAgendaResourceProcessor: () => ({}),
         getAppointmentColor: () => new Deferred(),
-        getResourceDataAccessors: () => createExpressions([])
+        getResourceDataAccessors: () => createExpressions([]),
+        dataAccessors,
+        getAppointmentDataProvider: () => new AppointmentDataProvider({
+            getIsVirtualScrolling: () => false
+        })
     }).dxSchedulerAppointments('instance');
 
     const workspaceInstance = $('#scheduler-work-space').dxSchedulerWorkSpaceWeek({

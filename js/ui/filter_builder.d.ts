@@ -10,7 +10,7 @@ import {
 import Store from '../data/abstract_store';
 
 import {
-    DataSourceOptions,
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import {
@@ -490,6 +490,3 @@ export type Properties = dxFilterBuilderOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxFilterBuilderOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxFilterBuilderOptions;

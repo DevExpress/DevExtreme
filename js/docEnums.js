@@ -1011,12 +1011,17 @@
 
 /**
  * @typedef {string} Enums.HtmlEditorToolbarItem
- * @enum {'background'|'bold'|'color'|'font'|'italic'|'link'|'image'|'size'|'strike'|'subscript'|'superscript'|'underline'|'blockquote'|'header'|'increaseIndent'|'decreaseIndent'|'orderedList'|'bulletList'|'alignLeft'|'alignCenter'|'alignRight'|'alignJustify'|'codeBlock'|'variable'|'separator'|'undo'|'redo'|'clear'|'insertTable'|'insertRowAbove'|'insertRowBelow'|'insertColumnLeft'|'insertColumnRight'|'deleteColumn'|'deleteRow'|'deleteTable'}
+ * @enum {'background'|'bold'|'color'|'font'|'italic'|'link'|'image'|'size'|'strike'|'subscript'|'superscript'|'underline'|'blockquote'|'header'|'increaseIndent'|'decreaseIndent'|'orderedList'|'bulletList'|'alignLeft'|'alignCenter'|'alignRight'|'alignJustify'|'codeBlock'|'variable'|'separator'|'undo'|'redo'|'clear'|'cellProperties'|'tableProperties'|'insertTable'|'insertHeaderRow'|'insertRowAbove'|'insertRowBelow'|'insertColumnLeft'|'insertColumnRight'|'deleteColumn'|'deleteRow'|'deleteTable'}
  */
 
 /**
  * @typedef {string} Enums.HtmlEditorFormat
  * @enum {'background'|'bold'|'color'|'font'|'italic'|'link'|'size'|'strike'|'script'|'underline'|'blockquote'|'header'|'indent'|'list'|'align'|'code-block'}
+ */
+
+/**
+ * @typedef {string} Enums.HtmlEditorContextMenuItem
+ * @enum {'background'|'bold'|'color'|'font'|'italic'|'link'|'image'|'strike'|'subscript'|'superscript'|'underline'|'blockquote'|'increaseIndent'|'decreaseIndent'|'orderedList'|'bulletList'|'alignLeft'|'alignCenter'|'alignRight'|'alignJustify'|'codeBlock'|'variable'|'undo'|'redo'|'clear'|'insertTable'|'insertHeaderRow'|'insertRowAbove'|'insertRowBelow'|'insertColumnLeft'|'insertColumnRight'|'deleteColumn'|'deleteRow'|'deleteTable'|'cellProperties'|'tableProperties'}
  */
 
 /**
@@ -1027,6 +1032,11 @@
 /**
  * @typedef {string} Enums.EditorLabelMode
  * @enum {'static'|'floating'|'hidden'}
+ */
+
+/**
+ * @typedef {string} Enums.FormLabelMode
+ * @enum {'static'|'floating'|'hidden'|'outside'}
  */
 
 /**

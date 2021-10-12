@@ -57,47 +57,54 @@ const restoreFocus = function(focusedElement, selectionRange) {
 
 const ResizingController = modules.ViewController.inherit({
     _initPostRenderHandlers: function() {
-        const that = this;
-        const dataController = that._dataController;
+        const dataController = this._dataController;
 
-        if(!that._refreshSizesHandler) {
-            that._refreshSizesHandler = function(e) {
-                dataController.changed.remove(that._refreshSizesHandler);
+        if(!this._refreshSizesHandler) {
+            this._refreshSizesHandler = (e) => {
+                dataController.changed.remove(this._refreshSizesHandler);
 
-                let resizeDeferred;
-                const changeType = e && e.changeType;
-                const isDelayed = e && e.isDelayed;
-                const items = dataController.items();
-
-                if(!e || changeType === 'refresh' || changeType === 'prepend' || changeType === 'append') {
-                    if(!isDelayed) {
-                        resizeDeferred = that.resize();
-                    }
-                } else if(changeType === 'update') {
-                    if(e.changeTypes?.length === 0) {
-                        return;
-                    }
-                    if((items.length > 1 || e.changeTypes[0] !== 'insert') &&
-                        !(items.length === 0 && e.changeTypes[0] === 'remove') && !e.needUpdateDimensions) {
-                        deferUpdate(() => deferRender(() => deferUpdate(() => {
-                            that._setScrollerSpacing(that._hasHeight);
-                            that._rowsView.resize();
-                        })));
-                    } else {
-                        resizeDeferred = that.resize();
-                    }
-                }
-
-                if(changeType && changeType !== 'updateSelection' && changeType !== 'updateFocusedRow' && changeType !== 'pageIndex' && !isDelayed) {
-                    when(resizeDeferred).done(function() {
-                        that._setAriaRowColCount();
-                        that.fireContentReadyAction();
-                    });
-                }
+                const templateDeferreds = e && e.templateDeferreds || [];
+                when.apply(this, templateDeferreds).done(() => {
+                    this._refreshSizes(e);
+                });
             };
             // TODO remove resubscribing
-            that._dataController.changed.add(function() {
-                that._dataController.changed.add(that._refreshSizesHandler);
+            dataController.changed.add(() => {
+                dataController.changed.add(this._refreshSizesHandler);
+            });
+        }
+    },
+
+    _refreshSizes: function(e) {
+        let resizeDeferred;
+        const that = this;
+        const changeType = e && e.changeType;
+        const isDelayed = e && e.isDelayed;
+        const items = that._dataController.items();
+
+        if(!e || changeType === 'refresh' || changeType === 'prepend' || changeType === 'append') {
+            if(!isDelayed) {
+                resizeDeferred = that.resize();
+            }
+        } else if(changeType === 'update') {
+            if(e.changeTypes?.length === 0) {
+                return;
+            }
+            if((items.length > 1 || e.changeTypes[0] !== 'insert') &&
+                !(items.length === 0 && e.changeTypes[0] === 'remove') && !e.needUpdateDimensions) {
+                deferUpdate(() => deferRender(() => deferUpdate(() => {
+                    that._setScrollerSpacing(that._hasHeight);
+                    that._rowsView.resize();
+                })));
+            } else {
+                resizeDeferred = that.resize();
+            }
+        }
+
+        if(changeType && changeType !== 'updateSelection' && changeType !== 'updateFocusedRow' && changeType !== 'pageIndex' && !isDelayed) {
+            when(resizeDeferred).done(function() {
+                that._setAriaRowColCount();
+                that.fireContentReadyAction();
             });
         }
     },

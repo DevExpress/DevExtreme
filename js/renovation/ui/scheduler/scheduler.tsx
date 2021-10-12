@@ -6,6 +6,7 @@ import {
   JSXComponent,
   Method,
 } from '@devextreme-generator/declarations';
+import { TimeZoneCalculator } from './timeZoneCalculator/utils';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 // eslint-disable-next-line import/named
 import dxScheduler, { Appointment } from '../../../ui/scheduler';
@@ -14,6 +15,7 @@ import { ViewProps, SchedulerProps } from './props';
 import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
+import type { Options as DataSourceOptions } from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import {
@@ -22,10 +24,13 @@ import {
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import { createFactoryInstances, generateKey } from '../../../ui/scheduler/instanceFactory';
 import { DataAccessorType } from './types';
-import { createDataAccessors } from './common';
+import {
+  createDataAccessors, createTimeZoneCalculator, filterAppointments,
+} from './common';
 import { loadResources } from '../../../ui/scheduler/resources/utils';
+import { getAppointmentsConfig } from './model/appointments';
+import { AppointmentsConfigType } from './model/types';
 
 export const viewFunction = ({
   restAttributes,
@@ -141,7 +146,9 @@ export const viewFunction = ({
           allDayPanelExpanded={allDayPanelExpanded}
           onViewRendered={onViewRendered}
 
-          appointments={<div className="appointments" />} // Appointments go here
+          appointments={(
+            <div className="appointments" />
+        )}
           allDayAppointments={<div className="all-day-appointments" />}
         />
       </div>
@@ -160,11 +167,11 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() cellsMetaData!: CellsMetaData;
 
-  @InternalState() key = generateKey();
-
   @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
 
   @InternalState() loadedResources: Group[] = [];
+
+  @InternalState() dataItems: Appointment[] = [];
 
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
@@ -208,6 +215,40 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   get isVirtualScrolling(): boolean {
     return this.props.scrolling.mode === 'virtual'
       || this.currentViewProps.scrolling?.mode === 'virtual';
+  }
+
+  get timeZoneCalculator(): TimeZoneCalculator {
+    return createTimeZoneCalculator(this.props.timeZone);
+  }
+
+  get internalDataSource(): DataSource {
+    return this.props.dataSource instanceof DataSource
+      ? this.props.dataSource
+      : new DataSource(this.props.dataSource as Appointment[] | DataSourceOptions);
+  }
+
+  get appointmentsConfig(): AppointmentsConfigType | undefined {
+    if (!this.viewDataProvider) {
+      return undefined;
+    }
+
+    return getAppointmentsConfig(
+      this.props, // TODO extract props for performace
+      this.currentViewConfig, // TODO extract props for performace
+      this.loadedResources,
+      this.viewDataProvider,
+    );
+  }
+
+  get filteredItems(): Appointment[] {
+    return filterAppointments(
+      this.appointmentsConfig,
+      this.dataItems,
+      this.dataAccessors,
+      this.timeZoneCalculator,
+      this.loadedResources,
+      this.viewDataProvider,
+    );
   }
 
   @Method()
@@ -284,23 +325,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return () => { this.instance.dispose(); };
   }
 
-  @Effect({ run: 'once' })
-  initialization(): void {
-    createFactoryInstances({
-      key: this.key,
-      resources: this.props.resources,
-      dataSource: this.props.dataSource,
-      startDayHour: this.currentViewConfig.startDayHour,
-      endDayHour: this.currentViewConfig.endDayHour,
-      appointmentDuration: this.currentViewConfig.cellDuration,
-      firstDayOfWeek: this.currentViewConfig.firstDayOfWeek,
-      showAllDayPanel: this.props.showAllDayPanel,
-      timeZone: this.props.timeZone,
-      getIsVirtualScrolling: () => this.isVirtualScrolling,
-      getDataAccessors: (): DataAccessorType => this.dataAccessors,
-    });
-  }
-
   @Effect()
   loadGroupResources(): void {
     const { groups, resources } = this.props;
@@ -309,6 +333,16 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     (loadResources(groups, resources, this.resourcePromisesMap) as Promise<Group[]>)
       .then((loadedResources) => {
         this.loadedResources = loadedResources;
+      });
+  }
+
+  @Effect()
+  loadDataSource(): void {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    this.internalDataSource
+      .load()
+      .then((items) => {
+        this.dataItems = items;
       });
   }
 

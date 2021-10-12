@@ -25,6 +25,3 @@ export type Properties = dxRecurrenceEditorOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxRecurrenceEditorOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxRecurrenceEditorOptions;
