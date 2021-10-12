@@ -64,10 +64,10 @@ export const getAppointmentsConfig = (
 ): AppointmentsConfigType => {
   const groupCount = getGroupCount(loadedResources);
 
-  const startViewDate = viewDataProvider?.getStartViewDate();
+  const startViewDate = viewDataProvider.getStartViewDate();
   const dateRange = [ // TODO get rid of dateRange
     startViewDate,
-    viewDataProvider?.getLastViewDateByEndDayHour(viewConfig.endDayHour),
+    viewDataProvider.getLastViewDateByEndDayHour(viewConfig.endDayHour),
   ];
 
   return {
