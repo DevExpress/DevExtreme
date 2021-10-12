@@ -1,6 +1,6 @@
 import $ from '../../../core/renderer';
 import localizationMessage from '../../../localization/message';
-import { getTableOperationHandler, hasEmbedContent, unfixTableWidth, getColumnElements, getAutoSizedElements, setLineElementsAttrValue, getLineElements, getRowElements } from './table_helper';
+import { getTableOperationHandler, hasEmbedContent, unfixTableWidth, getColumnElements, getAutoSizedElements, /* setLineElementsAttrValue,*/ getLineElements, getRowElements } from './table_helper';
 import { isDefined, isBoolean } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 
@@ -44,12 +44,10 @@ const ICON_MAP = {
     clear: 'clearformat'
 };
 
-function setLineElementsAttrValue2($lineElements, property, value, module) {
+function setLineElementsFormat(module, $lineElements, property, value) {
     each($lineElements, (i, element) => {
-        const position = module.quill.getIndex(module.quill.scroll.find(element));
-        module.quill.setSelection(position, 0);
-        module.editorInstance.format(position, 'cellWidth', value + 'px');
-        // $(element).attr(property, value + 'px');
+        const cellBlot = module.quill.scroll.find(element);
+        cellBlot.format('cell' + property[0].toUpperCase() + property.substring(1), value + 'px');
     });
 }
 
@@ -109,13 +107,13 @@ function prepareShowFormProperties(module, type) {
         if(!$element?.length) {
             $element = $(getTargetTableNode(module, type));
         }
-
+        const tableData = module.quill.getModule('table').getTable();
 
         const formats = module.quill.getFormat(module.editorInstance.getSelection(true));
         // console.log(module.editorInstance.getSelection());
         // console.log(formats);
 
-        const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, $element, formats);
+        const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, $element, formats, tableData);
 
         let formInstance;
 
@@ -408,7 +406,7 @@ function prepareInsertTableHandler(module) {
     };
 }
 
-function getTablePropertiesFormConfig(module, $table, formats) {
+function getTablePropertiesFormConfig(module, $table, formats, tableData) {
     const window = getWindow();
     let alignmentEditorInstance;
     let borderColorEditorInstance;
@@ -426,9 +424,9 @@ function getTablePropertiesFormConfig(module, $table, formats) {
             width: startTableWidth,
             height: formats.tableHeight ?? getOuterHeight($table),
             backgroundColor: formats.tableBackgroundColor ?? tableStyles.backgroundColor,
-            borderStyle: formats.tableBorderStyle ?? tableStyles.borderStyle,
-            borderColor: formats.tableBorderColor ?? tableStyles.borderColor,
-            borderWidth: formats.tableBorderWidth ?? parseInt(tableStyles.borderWidth),
+            borderStyle: formats.tableBorderStyle ?? tableStyles.borderTopStyle,
+            borderColor: formats.tableBorderColor ?? tableStyles.borderTopColor,
+            borderWidth: formats.tableBorderWidth ?? parseInt(tableStyles.borderTopWidth),
             alignment: formats.tableAlign ?? startTextAlign
         },
         items: [{
@@ -547,7 +545,7 @@ function getTablePropertiesFormConfig(module, $table, formats) {
     const applyHandler = (formInstance) => {
         const formData = formInstance.option('formData');
         const widthArg = formData.width === startTableWidth ? undefined : formData.width;
-        applyTableDimensionChanges(module, $table, formData.height, widthArg);
+        applyTableDimensionChanges(module, $table, formData.height, widthArg, tableData);
 
         module.editorInstance.format('tableBorderStyle', formData.borderStyle);
         module.editorInstance.format('tableBorderWidth', formData.borderWidth);
@@ -562,7 +560,7 @@ function getTablePropertiesFormConfig(module, $table, formats) {
     };
 }
 
-function getCellPropertiesFormConfig(module, $cell, formats) {
+function getCellPropertiesFormConfig(module, $cell, formats, tableData) {
     const window = getWindow();
     let alignmentEditorInstance;
     let verticalAlignmentEditorInstance;
@@ -583,9 +581,9 @@ function getCellPropertiesFormConfig(module, $cell, formats) {
             width: startCellWidth,
             height: formats.cellHeight ?? getOuterHeight($cell),
             backgroundColor: formats.cellBackgroundColor ?? cellStyles.backgroundColor,
-            borderStyle: formats.cellBorderStyle ?? cellStyles.borderStyle,
-            borderColor: formats.cellBorderColor ?? cellStyles.borderColor,
-            borderWidth: formats.cellBorderWidth ?? parseInt(cellStyles.borderWidth),
+            borderStyle: formats.cellBorderStyle ?? cellStyles.borderTopStyle,
+            borderColor: formats.cellBorderColor ?? cellStyles.borderTopColor,
+            borderWidth: formats.cellBorderWidth ?? parseInt(cellStyles.borderTopWidth),
             alignment: formats.cellTextAlign ?? startTextAlign,
             verticalAlignment: formats.cellVerticalAlign ?? cellStyles.verticalAlign,
             verticalPadding: formats.cellPaddingTop ?? parseInt(cellStyles.paddingTop),
@@ -738,7 +736,7 @@ function getCellPropertiesFormConfig(module, $cell, formats) {
     const applyHandler = (formInstance) => {
         const formData = formInstance.option('formData');
         const widthArg = formData.width === parseInt(startCellWidth) ? undefined : formData.width;
-        applyCellDimensionChanges($cell, formData.height, widthArg);
+        applyCellDimensionChanges(module, $cell, formData.height, widthArg, tableData);
 
         module.editorInstance.format('cellBorderWidth', formData.borderWidth);
         // module.editorInstance.format('cellBorderWidth', formData.borderWidth + 'px');
@@ -764,7 +762,7 @@ function getFormConfigConstructor(type) {
     return type === 'cell' ? getCellPropertiesFormConfig : getTablePropertiesFormConfig;
 }
 
-function applyTableDimensionChanges(module, $table, newHeight, newWidth) {
+function applyTableDimensionChanges(module, $table, newHeight, newWidth, tableData) {
     if(isDefined(newWidth)) {
         const autoWidthColumns = getAutoSizedElements($table);
 
@@ -774,16 +772,15 @@ function applyTableDimensionChanges(module, $table, newHeight, newWidth) {
             const $columns = getColumnElements($table);
             const oldTableWidth = getOuterWidth($table);
 
-            unfixTableWidth($table);
+            unfixTableWidth($table, tableData);
 
             each($columns, (i, element) => {
                 const $element = $(element);
                 const newElementWidth = newWidth / oldTableWidth * getOuterWidth($element);
-                // $element.attr('width', newElementWidth);
 
                 const $lineElements = getLineElements($table, $element.index(), 'horizontal');
 
-                setLineElementsAttrValue2($lineElements, 'width', newElementWidth, module);
+                setLineElementsFormat(module, $lineElements, 'width', newElementWidth);
             });
         }
     }
@@ -791,7 +788,8 @@ function applyTableDimensionChanges(module, $table, newHeight, newWidth) {
     const autoHeightRows = getAutoSizedElements($table, 'vertical');
 
     if(autoHeightRows?.length > 0) {
-        $table.css('height', newHeight);
+        // $table.css('height', newHeight);
+        tableData[0].format('tableHeight', newHeight + 'px');
     } else {
         const $rows = getRowElements($table);
         const oldTableHeight = getOuterHeight($table);
@@ -800,13 +798,12 @@ function applyTableDimensionChanges(module, $table, newHeight, newWidth) {
             const $element = $(element);
             const newElementHeight = newHeight / oldTableHeight * getOuterHeight($element);
             const $lineElements = getLineElements($table, i, 'vertical');
-
-            setLineElementsAttrValue($lineElements, 'height', newElementHeight);
+            setLineElementsFormat(module, $lineElements, 'height', newElementHeight);
         });
     }
 }
 
-function applyCellDimensionChanges($target, newHeight, newWidth) {
+function applyCellDimensionChanges(module, $target, newHeight, newWidth, tableData) {
     const $table = $($target.closest('table'));
     if(isDefined(newWidth)) {
         const index = $($target).index();
@@ -817,38 +814,47 @@ function applyCellDimensionChanges($target, newHeight, newWidth) {
         const tableWidth = getOuterWidth($table);
 
         if(newWidth > tableWidth) {
-            unfixTableWidth($table);
+            unfixTableWidth($table, tableData);
         }
 
-        setLineElementsAttrValue($verticalCells, 'width', newWidth);
+        // setLineElementsAttrValue($verticalCells, 'width', newWidth);
+        setLineElementsFormat(module, $verticalCells, 'width', newWidth);
 
         const $nextColumnCell = $target.next();
         const shouldUpdateNearestColumnWidth = getAutoSizedElements($table).length === 0;
 
         if(shouldUpdateNearestColumnWidth) {
-            unfixTableWidth($table);
+            unfixTableWidth($table, tableData);
             if($nextColumnCell.length === 1) {
                 $verticalCells = getLineElements($table, index + 1);
                 const nextColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
-                setLineElementsAttrValue($verticalCells, 'width', Math.max(nextColumnWidth, 0));
+                // setLineElementsAttrValue($verticalCells, 'width', Math.max(nextColumnWidth, 0));
+                setLineElementsFormat(module, $verticalCells, 'width', Math.max(nextColumnWidth, 0));
             } else {
                 const $prevColumnCell = $target.prev();
                 if($prevColumnCell.length === 1) {
                     $verticalCells = getLineElements($table, index - 1);
                     const prevColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
-                    setLineElementsAttrValue($verticalCells, 'width', Math.max(prevColumnWidth, 0));
+                    // setLineElementsAttrValue($verticalCells, 'width', Math.max(prevColumnWidth, 0));
+                    setLineElementsFormat(module, $verticalCells, 'width', Math.max(prevColumnWidth, 0));
                 }
             }
         }
     }
 
-    const $horizontalCells = $target.closest('tr').find('td');
 
-    setLineElementsAttrValue($horizontalCells, 'height', newHeight);
+    // const $horizontalCells = $target.closest('tr').find('td');
+
+    // setLineElementsAttrValue($horizontalCells, 'height', newHeight);
+
+    each(tableData[1], (index, rowCell) => {
+        rowCell.format('cellHeight', newHeight + 'px');
+    });
     const autoHeightRows = getAutoSizedElements($table, 'vertical');
 
     if(autoHeightRows.length === 0) {
-        $table.css('height', 'auto');
+        // $table.css('height', 'auto');
+        tableData[0].format('tableHeight', 'auto');
     }
 }
 

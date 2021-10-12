@@ -30,8 +30,13 @@ function hasEmbedContent(module, selection) {
     return !!selection && module.quill.getText(selection).trim().length < selection.length;
 }
 
-function unfixTableWidth($table) {
-    $table.css('width', 'initial');
+function unfixTableWidth($table, tableData) {
+    const unfixValue = 'initial';
+    if(tableData) {
+        tableData[0].format('tableWidth', unfixValue);
+    } else {
+        $table.css('width', unfixValue);
+    }
 }
 
 function getColumnElements($table, index = 0) {

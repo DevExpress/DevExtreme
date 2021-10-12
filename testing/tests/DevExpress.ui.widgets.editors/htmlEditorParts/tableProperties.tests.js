@@ -218,6 +218,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(6);
+            this.quillInstance.setSelection(50, 1);
 
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
