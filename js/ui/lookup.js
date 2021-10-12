@@ -38,6 +38,7 @@ const LOOKUP_POPOVER_MODE = 'dx-lookup-popover-mode';
 const LOOKUP_EMPTY_CLASS = 'dx-lookup-empty';
 const LOOKUP_POPOVER_FLIP_VERTICAL_CLASS = 'dx-popover-flipped-vertical';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const DROP_DOWN_EDITOR_OVERLAY = 'dx-dropdowneditor-overlay';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
@@ -227,10 +228,12 @@ const Lookup = DropDownList.inherit({
         });
     },
 
+    _updatePopupPosition: noop,
+
     _defaultOptionsRules: function() {
         const themeName = current();
 
-        return this.callBase().concat([
+        const defaultOptionsRules = this.callBase().concat([
             {
                 device: function() {
                     return !nativeScrolling;
@@ -307,6 +310,13 @@ const Lookup = DropDownList.inherit({
                 }
             }
         ]);
+
+        return defaultOptionsRules.map((option) => {
+            if(option.options.dropDownOptions && option.options.dropDownOptions.position) {
+                delete option.options.dropDownOptions.position;
+            }
+            return option;
+        });
     },
 
     _init: function() {
@@ -679,26 +689,29 @@ const Lookup = DropDownList.inherit({
     _preventFocusOnPopup: noop,
 
     _popupConfig: function() {
-        const result = extend(this.callBase(), {
-
-            toolbarItems: this._getPopupToolbarItems(),
-
-            hideOnParentScroll: false,
-            onPositioned: null,
-
-            maxHeight: '100vh',
-
+        const result = {
+            onInitialized: this._popupInitializedHandler(),
             showTitle: this.option('dropDownOptions.showTitle'),
+            _ignoreFunctionValueDeprecation: true,
+            width: () => getElementWidth(this.$element()),
+            height: 'auto',
+            shading: this.option('dropDownOptions.shading'),
+            wrapperAttr: { class: DROP_DOWN_EDITOR_OVERLAY },
+            hideOnParentScroll: false,
+            closeOnOutsideClick: this.option('dropDownOptions.closeOnOutsideClick'),
+            deferRendering: false,
+            focusStateEnabled: false,
+            showCloseButton: false,
+            dragEnabled: false,
+            toolbarItems: this._getPopupToolbarItems(),
+            onPositioned: null,
+            fullScreen: this.option('dropDownOptions.fullScreen'),
+            contentTemplate: null,
+            maxHeight: '100vh',
             title: this.option('dropDownOptions.title'),
             titleTemplate: this._getTemplateByOption('dropDownOptions.titleTemplate'),
             onTitleRendered: this.option('dropDownOptions.onTitleRendered'),
-            fullScreen: this.option('dropDownOptions.fullScreen'),
-            shading: this.option('dropDownOptions.shading'),
-            closeOnOutsideClick: this.option('dropDownOptions.closeOnOutsideClick'),
-        });
-
-        delete result.animation;
-        delete result.position;
+        };
 
         if(this.option('_scrollToSelectedItemEnabled')) {
             result.position = this.option('dropDownCentered') ? {
@@ -1097,6 +1110,10 @@ const Lookup = DropDownList.inherit({
                             fullName,
                             value: value === 'auto' ? this.initialOption('dropDownOptions')[getFieldName(fullName)] : value
                         });
+                        this._options.cache('dropDownOptions', this.option('dropDownOptions'));
+                        break;
+                    case 'dropDownOptions.position':
+                        this._popupOptionChanged(args);
                         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
                         break;
                     default:

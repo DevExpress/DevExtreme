@@ -693,7 +693,7 @@ QUnit.module('popup options', moduleConfig, () => {
         const instance = new DropDownBox(this.$element, {
             opened: true,
             width: 100,
-            popupPosition: { offset: { v: vOffset } }
+            dropDownOptions: { position: { offset: { v: vOffset } } }
         });
 
         const { bottom: elementBottom } = this.$element.get(0).getBoundingClientRect();

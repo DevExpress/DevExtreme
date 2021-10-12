@@ -2670,7 +2670,7 @@ QUnit.module('datebox w/ calendar', {
             deferRendering: true
         });
 
-        $dateBox.dxDateBox('option', 'popupPosition', { my: 'bottom left' });
+        $dateBox.dxDateBox('option', 'dropDownOptions.position', { my: 'bottom left' });
 
         $dateBox.dxDateBox('option', 'opened', true);
 
