@@ -6,7 +6,7 @@ import CollectionWidget, {
 /** @namespace DevExpress.ui */
 export interface HierarchicalCollectionWidgetOptions<
     TComponent extends HierarchicalCollectionWidget<any, TItem, TKey>,
-    TItem extends ItemLike,
+    TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
     /**
@@ -61,6 +61,6 @@ export interface HierarchicalCollectionWidgetOptions<
  */
 export default class HierarchicalCollectionWidget<
     TProperties extends HierarchicalCollectionWidgetOptions<any, TItem, TKey>,
-    TItem extends ItemLike,
+    TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidget<TProperties, TItem, TKey> { }

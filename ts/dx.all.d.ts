@@ -23118,7 +23118,7 @@ declare module DevExpress.ui {
    */
   export class HierarchicalCollectionWidget<
     TProperties extends HierarchicalCollectionWidgetOptions<any, TItem, TKey>,
-    TItem extends DevExpress.ui.CollectionWidget.ItemLike,
+    TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
     TKey = any
   > extends CollectionWidget<TProperties, TItem, TKey> {}
   /**
@@ -23126,7 +23126,7 @@ declare module DevExpress.ui {
    */
   export interface HierarchicalCollectionWidgetOptions<
     TComponent extends HierarchicalCollectionWidget<any, TItem, TKey>,
-    TItem extends DevExpress.ui.CollectionWidget.ItemLike,
+    TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
     TKey = any
   > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
     /**
