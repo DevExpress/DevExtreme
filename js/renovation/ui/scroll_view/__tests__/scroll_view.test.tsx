@@ -229,7 +229,6 @@ describe('ScrollView', () => {
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
                 expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
-                expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
               }
             });
           });

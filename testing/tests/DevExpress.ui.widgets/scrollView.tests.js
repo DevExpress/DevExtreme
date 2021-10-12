@@ -46,6 +46,8 @@ const getScrollOffset = function($scrollView) {
     };
 };
 
+const isRenovation = !!ScrollView.IS_RENOVATED_WIDGET;
+
 themes.setDefaultTimeout(0);
 
 devices.current('iPhone');
@@ -64,8 +66,6 @@ const moduleConfig = {
         animationFrame.requestAnimationFrame = this._originalRequestAnimationFrame;
     }
 };
-
-const isRenovation = !!ScrollView.IS_RENOVATED_WIDGET;
 
 QUnit.testStart(function() {
     const markup = '\
@@ -364,7 +364,6 @@ QUnit.module('actions', moduleConfig, () => {
 
         assert.equal(location.top, isRenovation ? -($topPocket.height() - offset) : 0, 'translate top position is right');
         assert.equal($container.scrollTop(), isRenovation ? 0 : $topPocket.height() - offset, 'scroll top position is right');
-
     });
 
     QUnit.test('onReachBottom action', function(assert) {
@@ -462,13 +461,13 @@ QUnit.module('actions', moduleConfig, () => {
             $scrollView.dxScrollView('option', actionName, noop);
 
             this.clock.restore();
+            const resizeWaitTimeout = 50;
             setTimeout(() => {
                 const location = getScrollOffset($scrollView);
                 assert.equal(location.top, -$topPocket.height() - 10, actionName + ' case scrollable rerendered');
 
                 actionName === 'onReachBottom' && done();
-            }, 50);
-
+            }, resizeWaitTimeout);
         };
 
         testAction('onPullDown');
@@ -585,19 +584,19 @@ QUnit.module('dynamic', moduleConfig, () => {
         $scrollView.dxScrollView('option', 'pullDownEnabled', true);
         $scrollView.dxScrollView('option', 'onPullDown', noop);
 
+        const resizeWaitTimeout = 50;
         setTimeout(() => {
             const location = getScrollOffset($scrollView);
 
             assert.equal(location.top, -10 - $topPocket.height(), 'content position was not changed');
 
             done();
-        }, 50);
+        }, resizeWaitTimeout);
     });
 
     QUnit.test('onPullDown disabled does not change the position of content', function(assert) {
         this.clock.restore();
         const done = assert.async();
-
         assert.expect(1);
 
         const $scrollView = $('#scrollView').dxScrollView({
@@ -654,7 +653,6 @@ QUnit.module('dynamic', moduleConfig, () => {
             .move(0, $container.height() - $content.height())
             .up();
 
-
         const resizeWaitTimer = 50;
         setTimeout(() => {
             $scrollView.dxScrollView('option', 'pullDownEnabled', false);
@@ -662,7 +660,6 @@ QUnit.module('dynamic', moduleConfig, () => {
 
             setTimeout(() => {
                 const location = getScrollOffset($scrollView);
-
                 const maxScrollTopOffset = $content.height() - $container.height();
 
                 assert.equal(location.top, -maxScrollTopOffset, 'content position was not changed');
@@ -976,7 +973,6 @@ QUnit.module('dynamic', moduleConfig, () => {
                 } else {
                     assert.roughEqual(location.top, $container.height() - $content.height(), 1, 'scrollview bounced');
                 }
-
             }
         });
 
@@ -1345,6 +1341,7 @@ QUnit.module('api', moduleConfig, () => {
         scrollView.scrollTo(scrollView.scrollHeight());
         $children.remove();
 
+        const resizeWaitTimeout = 50;
         setTimeout(() => {
             pointerMock($scrollableContent).start().down(); // NOTE: call update without moveToBound location
             scrollView.release();
@@ -1354,8 +1351,8 @@ QUnit.module('api', moduleConfig, () => {
                 assert.equal(locate.top, -pullDownSize, 'moveToBound was called immediately after release');
 
                 done();
-            }, 50);
-        }, 50);
+            }, resizeWaitTimeout);
+        }, resizeWaitTimeout);
     });
 
     QUnit.test('toggleLoading', function(assert) {
@@ -1689,6 +1686,7 @@ QUnit.module('native pullDown strategy', {
 
         $scrollView.dxScrollView('option', 'pullDownEnabled', true);
         $scrollView.dxScrollView('option', 'onPullDown', noop);
+
         setTimeout(() => {
             const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollView);
             const $topPocket = $('.' + SCROLLVIEW_TOP_POCKET_CLASS, $scrollView);

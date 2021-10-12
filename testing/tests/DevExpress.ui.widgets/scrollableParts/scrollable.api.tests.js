@@ -288,7 +288,7 @@ QUnit.test('scrollBy to location with dynamic content if auto update is prevente
         onEnd: function() {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
-                assert.equal(location.top, isRenovation ? -20 : 0, 'scroll to correctly vertical position');
+                assert.equal(location.top, isRenovation ? -20 : 0, 'vertical location set correctly');
             }
             wasFirstMove = true;
         }
@@ -296,7 +296,6 @@ QUnit.test('scrollBy to location with dynamic content if auto update is prevente
 
     const scrollable = $scrollable.dxScrollable('instance');
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
-
 
     $content.append($('<div>').height(100));
     scrollable.scrollBy(distance);
