@@ -48,7 +48,7 @@ import commonUtils from 'core/utils/common';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import 'ui/drop_down_box';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
-import { createDataGrid, baseModuleConfig, isChildInsideParentViewport } from '../../helpers/dataGridHelper.js';
+import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { generateItems } from '../../helpers/dataGridMocks.js';
 import { getOuterHeight } from 'core/utils/size';
 
@@ -6186,17 +6186,16 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
         // act
         dataGrid.addRow();
         const $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
-        const $rowsViewElement = $(dataGrid.element()).find('.dx-datagrid-rowsview');
         const visibleRows = dataGrid.getVisibleRows();
         const lastRowIndex = visibleRows.length - 1;
         const $lastRowElement = $(dataGrid.getRowElement(lastRowIndex));
 
         // assert
         assert.strictEqual($virtualRowElement.length, 1, 'only one virtual row is rendered');
-        assert.notOk(isChildInsideParentViewport($rowsViewElement, $virtualRowElement), 'virtual row is rendered outside viewport');
+        assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($virtualRowElement), 'virtual row is rendered outside viewport');
         assert.ok(visibleRows[lastRowIndex].isNewRow, 'last new row is rendered');
         assert.ok($lastRowElement.hasClass('dx-row-inserted'), 'last row is a new row');
-        assert.ok(isChildInsideParentViewport($rowsViewElement, $lastRowElement), 'new row is in viewport');
+        assert.ok(dataGridWrapper.rowsView.isRowVisible($lastRowElement.index()), 'new row is in viewport');
     });
 
     QUnit.test('Virtual row should not be rendered in the viewport when the edit form is inserted in the first position with certain height and row count', function(assert) {
@@ -6239,15 +6238,14 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
         // act
         dataGrid.addRow();
         const $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
-        const $rowsViewElement = $(dataGrid.element()).find('.dx-datagrid-rowsview');
         visibleRows = dataGrid.getVisibleRows();
         const $firstRowElement = $(dataGrid.getRowElement(0));
 
         // assert
         assert.strictEqual($virtualRowElement.length, 1, 'only one virtual row is rendered');
-        assert.notOk(isChildInsideParentViewport($rowsViewElement, $virtualRowElement), 'virtual row is rendered outside viewport');
+        assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($virtualRowElement), 'virtual row is rendered outside viewport');
         assert.ok(visibleRows[0].isNewRow, 'first new row is rendered');
         assert.ok($firstRowElement.hasClass('dx-row-inserted'), 'first row is a new row');
-        assert.ok(isChildInsideParentViewport($rowsViewElement, $firstRowElement), 'new row is in viewport');
+        assert.ok(dataGridWrapper.rowsView.isRowVisible($firstRowElement.index()), 'new row is in viewport');
     });
 });
