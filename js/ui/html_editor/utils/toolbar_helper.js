@@ -414,23 +414,22 @@ function getTablePropertiesFormConfig(module, $table, formats) {
     let borderColorEditorInstance;
     let backgroundColorEditorInstance;
     const editorInstance = module.editorInstance;
-    const startTableWidth = getOuterWidth($table);
+    const startTableWidth = formats.tableWidth ?? getOuterWidth($table);
     const tableStyles = window.getComputedStyle($table.get(0));
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
 
-    // const tableFormats = module.quill.getFormat();
     // console.log(formats);
 
     const formOptions = {
         colCount: 2,
         formData: {
             width: startTableWidth,
-            height: getOuterHeight($table),
-            backgroundColor: tableStyles.backgroundColor,
-            borderStyle: tableStyles.borderStyle,
-            borderColor: tableStyles.borderColor,
-            borderWidth: parseInt(tableStyles.borderWidth),
-            alignment: startTextAlign
+            height: formats.tableHeight ?? getOuterHeight($table),
+            backgroundColor: formats.tableBackgroundColor ?? tableStyles.backgroundColor,
+            borderStyle: formats.tableBorderStyle ?? tableStyles.borderStyle,
+            borderColor: formats.tableBorderColor ?? tableStyles.borderColor,
+            borderWidth: formats.tableBorderWidth ?? parseInt(tableStyles.borderWidth),
+            alignment: formats.tableAlign ?? startTextAlign
         },
         items: [{
             itemType: 'group',
@@ -551,7 +550,7 @@ function getTablePropertiesFormConfig(module, $table, formats) {
         applyTableDimensionChanges(module, $table, formData.height, widthArg);
 
         module.editorInstance.format('tableBorderStyle', formData.borderStyle);
-        module.editorInstance.format('tableBorderWidth', formData.borderWidth + 'px');
+        module.editorInstance.format('tableBorderWidth', formData.borderWidth);
         module.editorInstance.format('tableBorderColor', borderColorEditorInstance.option('value'));
         module.editorInstance.format('tableBackgroundColor', backgroundColorEditorInstance.option('value'));
         module.editorInstance.format('tableTextAlign', alignmentEditorInstance.option('selectedItemKeys')[0]);
@@ -741,8 +740,8 @@ function getCellPropertiesFormConfig(module, $cell, formats) {
         const widthArg = formData.width === parseInt(startCellWidth) ? undefined : formData.width;
         applyCellDimensionChanges($cell, formData.height, widthArg);
 
-        module.editorInstance.format('cellBorderWidth', formData.borderWidth + 'px');
-        module.editorInstance.format('cellBorderWidth', formData.borderWidth + 'px');
+        module.editorInstance.format('cellBorderWidth', formData.borderWidth);
+        // module.editorInstance.format('cellBorderWidth', formData.borderWidth + 'px');
         module.editorInstance.format('cellBorderColor', borderColorEditorInstance.option('value'));
         module.editorInstance.format('cellBorderStyle', formData.borderStyle);
         module.editorInstance.format('cellBackgroundColor', backgroundColorEditorInstance.option('value'));
