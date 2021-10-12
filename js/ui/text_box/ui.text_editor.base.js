@@ -468,15 +468,13 @@ const TextEditorBase = Editor.inherit({
         return buttonsBeforeWidth ?? 0;
     },
 
+    _updateLabelWidth: function() {
+        this._label.updateBeforeWidth(this._getLabelBeforeWidth());
+        this._label.updateLabelWidth(this._getLabelContainerWidth());
+    },
+
     _renderLabel: function() {
-        // TODO: Let's get rid of `init` producing method.
-        // We can create TextEditorLabel instance only once on the initMatkup end
-        // and modifu its state using new public api which we need to implement
-        if(this._label) {
-            this._label.init(this._getLabelConfig());
-        } else {
-            this._label = new TextEditorLabel(this._getLabelConfig());
-        }
+        this._label = new TextEditorLabel(this._getLabelConfig());
     },
 
     _renderPlaceholder: function() {
@@ -738,6 +736,7 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'mode':
                 this._renderInputType();
+                this._updateLabelWidth();
                 break;
             case 'onEnterKey':
                 this._renderEnterKeyAction();
@@ -746,13 +745,18 @@ const TextEditorBase = Editor.inherit({
                 this._renderPlaceholder();
                 break;
             case 'label':
-            case 'labelMode':
+                this._label.updateLabelText(value);
+                break;
             case 'labelMark':
-                this._renderLabel();
+                this._label.updateLabelMark(value);
+                break;
+            case 'labelMode':
+                this._label._props.mode = value;
+                this._label.addEditorClasses();
                 break;
             case 'width':
                 this.callBase(args);
-                this._renderLabel();
+                this._label.updateLabelWidth(this._getLabelContainerWidth());
                 break;
             case 'readOnly':
             case 'disabled':
@@ -773,7 +777,7 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'stylingMode':
                 this._renderStylingMode();
-                this._renderLabel();
+                this._updateLabelWidth();
                 break;
             case 'buttons':
                 if(fullName === name) {
@@ -782,6 +786,7 @@ const TextEditorBase = Editor.inherit({
                 this._cleanButtonContainers();
                 this._renderButtonContainers();
                 this._updateButtonsStyling(this.option('stylingMode'));
+                this._updateLabelWidth();
                 break;
             case 'visible':
                 this.callBase(args);
