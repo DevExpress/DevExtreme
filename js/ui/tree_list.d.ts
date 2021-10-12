@@ -862,6 +862,7 @@ export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowDat
      * @docid dxTreeListOptions.editing.allowAdding
      * @default false
      * @type boolean|function
+     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_return Boolean
      * @public
@@ -871,6 +872,7 @@ export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowDat
      * @docid dxTreeListOptions.editing.allowDeleting
      * @default false
      * @type boolean|function
+     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_return Boolean
      * @public
@@ -880,6 +882,7 @@ export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowDat
      * @docid dxTreeListOptions.editing.allowUpdating
      * @default false
      * @type boolean|function
+     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_return Boolean
      * @public
@@ -1340,6 +1343,7 @@ export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends Colu
      * @docid dxTreeListColumnButton.visible
      * @default true
      * @type boolean | function
+     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_param1_field3 column:dxTreeListColumn
      * @type_function_return Boolean
@@ -1350,6 +1354,7 @@ export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends Colu
      * @docid dxTreeListColumnButton.disabled
      * @default false
      * @type boolean | function
+     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_param1_field3 column:dxTreeListColumn
      * @type_function_return Boolean
