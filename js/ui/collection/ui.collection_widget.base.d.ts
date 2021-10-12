@@ -23,7 +23,7 @@ import Widget, {
     WidgetOptions,
 } from '../widget/ui.widget';
 
-type ItemLike = string | CollectionWidgetItem<any> | any;
+export type ItemLike = string | CollectionWidgetItem<any> | any;
 
 export interface SelectionChangedInfo<TItem extends ItemLike = any> {
     readonly addedItems: Array<TItem>;

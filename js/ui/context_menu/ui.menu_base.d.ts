@@ -17,7 +17,11 @@ import {
 } from '../menu';
 
 /** @namespace DevExpress.ui */
-export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWidgetOptions<TComponent> {
+export interface dxMenuBaseOptions<
+  TComponent extends dxMenuBase<any, TItem, TKey>,
+  TItem extends dxMenuBaseItem<any> = dxMenuBaseItem<any>,
+  TKey = any,
+> extends HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey> {
     /**
      * @docid
      * @default true
@@ -51,14 +55,16 @@ export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWid
     /**
      * @docid
      * @default null
+     * @type string | Array<dxMenuBaseItem> | Store | DataSource | DataSourceOptions
      * @public
      */
-    dataSource?: string | Array<dxMenuBaseItem> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
     /**
      * @docid
      * @public
+     * @type Array<dxMenuBaseItem>
      */
-    items?: Array<dxMenuBaseItem>;
+    items?: Array<TItem>;
     /**
      * @docid
      * @default false
@@ -109,7 +115,11 @@ export interface dxMenuBaseOptions<TComponent> extends HierarchicalCollectionWid
  * @hidden
  * @namespace DevExpress.ui
  */
-export default class dxMenuBase<TProperties> extends HierarchicalCollectionWidget<TProperties> {
+export default class dxMenuBase<
+  TProperties extends dxMenuBaseOptions<any, TItem, TKey>,
+  TItem extends dxMenuBaseItem<any> = dxMenuBaseItem<any>,
+  TKey = any,
+> extends HierarchicalCollectionWidget<TProperties, TItem, TKey> {
     /**
      * @docid
      * @publicName selectItem(itemElement)
