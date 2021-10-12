@@ -1,5 +1,5 @@
 import DataSource, {
-    DataSourceOptions,
+  DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -13,131 +13,136 @@ import {
 } from '../events/index';
 
 import CollectionWidget, {
-    CollectionWidgetItem,
-    CollectionWidgetOptions,
+  CollectionWidgetItem,
+  CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-/** @public */
-export type ContentReadyEvent = EventInfo<dxResponsiveBox>;
+type ItemLike = string | Item<any> | any;
 
 /** @public */
-export type DisposingEvent = EventInfo<dxResponsiveBox>;
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxResponsiveBox>;
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxResponsiveBox<TItem, TKey>>;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxResponsiveBox> & ChangedOptionInfo;
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxResponsiveBox<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxResponsiveBox> {
+export interface dxResponsiveBoxOptions<
+  TItem extends ItemLike = any,
+  TKey = any,
+  > extends CollectionWidgetOptions<dxResponsiveBox<TItem, TKey>, TItem, TKey> {
+  /**
+   * @docid
+   * @public
+   */
+  cols?: Array<{
     /**
      * @docid
-     * @public
+     * @type number | Enums.Mode
+     * @default 0
      */
-    cols?: Array<{
-      /**
-       * @docid
-       * @type number | Enums.Mode
-       * @default 0
-       */
-      baseSize?: number | 'auto';
-      /**
-       * @docid
-       * @default 1
-       */
-      ratio?: number;
-      /**
-       * @docid
-       * @default undefined
-       */
-      screen?: string;
-      /**
-       * @docid
-       * @default 1
-       */
-      shrink?: number;
-    }>;
+    baseSize?: number | 'auto';
     /**
      * @docid
-     * @type string | Array<string | dxResponsiveBoxItem | any> | Store | DataSource | DataSourceOptions
-     * @default null
-     * @public
+     * @default 1
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    ratio?: number;
     /**
      * @docid
-     * @default '100%'
-     * @public
+     * @default undefined
      */
-    height?: number | string | (() => number | string);
+    screen?: string;
     /**
      * @docid
-     * @type Array<string | dxResponsiveBoxItem | any>
-     * @fires dxResponsiveBoxOptions.onOptionChanged
-     * @public
+     * @default 1
      */
-    items?: Array<string | Item | any>;
+    shrink?: number;
+  }>;
+  /**
+   * @docid
+   * @type string | Array<string | dxResponsiveBoxItem | any> | Store | DataSource | DataSourceOptions
+   * @default null
+   * @public
+   */
+  dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
+  /**
+   * @docid
+   * @default '100%'
+   * @public
+   */
+  height?: number | string | (() => number | string);
+  /**
+   * @docid
+   * @type Array<string | dxResponsiveBoxItem | any>
+   * @fires dxResponsiveBoxOptions.onOptionChanged
+   * @public
+   */
+  items?: Array<TItem>;
+  /**
+   * @docid
+   * @public
+   */
+  rows?: Array<{
     /**
      * @docid
-     * @public
+     * @type number | Enums.Mode
+     * @default 0
      */
-    rows?: Array<{
-      /**
-       * @docid
-       * @type number | Enums.Mode
-       * @default 0
-       */
-      baseSize?: number | 'auto';
-      /**
-       * @docid
-       * @default 1
-       */
-      ratio?: number;
-      /**
-       * @docid
-       * @default undefined
-       */
-      screen?: string;
-      /**
-       * @docid
-       * @default 1
-       */
-      shrink?: number;
-    }>;
+    baseSize?: number | 'auto';
     /**
      * @docid
-     * @default null
-     * @public
+     * @default 1
      */
-    screenByWidth?: Function;
+    ratio?: number;
     /**
      * @docid
-     * @default ""
-     * @public
+     * @default undefined
      */
-    singleColumnScreen?: string;
+    screen?: string;
     /**
      * @docid
-     * @default '100%'
-     * @public
+     * @default 1
      */
-    width?: number | string | (() => number | string);
+    shrink?: number;
+  }>;
+  /**
+   * @docid
+   * @default null
+   * @public
+   */
+  screenByWidth?: Function;
+  /**
+   * @docid
+   * @default ""
+   * @public
+   */
+  singleColumnScreen?: string;
+  /**
+   * @docid
+   * @default '100%'
+   * @public
+   */
+  width?: number | string | (() => number | string);
 }
 /**
  * @docid
@@ -145,52 +150,77 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxResponsiveBox extends CollectionWidget<dxResponsiveBoxOptions> { }
+export default class dxResponsiveBox<
+  TItem extends ItemLike = any,
+  TKey = any,
+  > extends CollectionWidget<dxResponsiveBoxOptions<TItem, TKey>, TItem, TKey> { }
 
 /**
  * @public
  * @namespace DevExpress.ui.dxResponsiveBox
  */
-export type Item = dxResponsiveBoxItem;
+export type Item<TItem extends Item<any> | any = any> = dxResponsiveBoxItem<TItem>;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxResponsiveBoxItem extends CollectionWidgetItem {
+export interface dxResponsiveBoxItem<TItem extends dxResponsiveBoxItem<any> | any = any> extends CollectionWidgetItem<TItem> {
+  /**
+   * @docid
+   * @public
+   */
+  location?: {
     /**
      * @docid
-     * @public
      */
-    location?: {
-      /**
-       * @docid
-       */
-      col?: number;
-      /**
-       * @docid
-       * @default undefined
-       */
-      colspan?: number;
-      /**
-       * @docid
-       */
-      row?: number;
-      /**
-       * @docid
-       * @default undefined
-       */
-      rowspan?: number;
-      /**
-       * @docid
-       * @default undefined
-       */
-      screen?: string;
-    } | Array<{ col?: number; colspan?: number; row?: number; rowspan?: number; screen?: string }>;
+    col?: number;
+    /**
+     * @docid
+     * @default undefined
+     */
+    colspan?: number;
+    /**
+     * @docid
+     */
+    row?: number;
+    /**
+     * @docid
+     * @default undefined
+     */
+    rowspan?: number;
+    /**
+     * @docid
+     * @default undefined
+     */
+    screen?: string;
+  } | Array<{ col?: number; colspan?: number; row?: number; rowspan?: number; screen?: string }>;
 }
 
 /** @public */
-export type Properties = dxResponsiveBoxOptions;
+export type ExplicitTypes<
+  TItem extends ItemLike,
+  TKey,
+> = {
+  Properties: Properties<TItem, TKey>;
+  ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+  DisposingEvent: DisposingEvent<TItem, TKey>;
+  InitializedEvent: InitializedEvent<TItem, TKey>;
+  ItemClickEvent: ItemClickEvent<TItem, TKey>;
+  ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+  ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+  ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+  OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+};
+
+/** @public */
+export type Properties<
+  TItem extends ItemLike = any,
+  TKey = any,
+  > = dxResponsiveBoxOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = dxResponsiveBoxOptions;
+export type Options<
+  TItem extends ItemLike = any,
+  TKey = any,
+  > = Properties<TItem, TKey>;

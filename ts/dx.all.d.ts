@@ -17730,35 +17730,79 @@ declare module DevExpress.ui {
   /**
    * [descr:dxResponsiveBox]
    */
-  export class dxResponsiveBox extends CollectionWidget<dxResponsiveBoxOptions> {}
+  export class dxResponsiveBox<
+    TItem extends DevExpress.ui.dxResponsiveBox.ItemLike = any,
+    TKey = any
+  > extends CollectionWidget<
+    dxResponsiveBoxOptions<TItem, TKey>,
+    TItem,
+    TKey
+  > {}
   module dxResponsiveBox {
-    export type ContentReadyEvent =
-      DevExpress.events.EventInfo<dxResponsiveBox>;
-    export type DisposingEvent = DevExpress.events.EventInfo<dxResponsiveBox>;
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxResponsiveBox>;
-    export type ItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxResponsiveBox> &
-        DevExpress.events.ItemInfo;
-    export type ItemContextMenuEvent =
-      DevExpress.events.NativeEventInfo<dxResponsiveBox> &
-        DevExpress.events.ItemInfo;
-    export type ItemHoldEvent =
-      DevExpress.events.NativeEventInfo<dxResponsiveBox> &
-        DevExpress.events.ItemInfo;
-    export type ItemRenderedEvent =
-      DevExpress.events.NativeEventInfo<dxResponsiveBox> &
-        DevExpress.events.ItemInfo;
-    export type OptionChangedEvent =
-      DevExpress.events.EventInfo<dxResponsiveBox> &
-        DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxResponsiveBoxOptions;
+    export type ContentReadyEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxResponsiveBox<TItem, TKey>>;
+    export type DisposingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxResponsiveBox<TItem, TKey>>;
+    export type ExplicitTypes<TItem extends ItemLike, TKey> = {
+      Properties: Properties<TItem, TKey>;
+      ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+      DisposingEvent: DisposingEvent<TItem, TKey>;
+      InitializedEvent: InitializedEvent<TItem, TKey>;
+      ItemClickEvent: ItemClickEvent<TItem, TKey>;
+      ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+      ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+      ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+      OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    };
+    export type InitializedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.InitializedEventInfo<dxResponsiveBox<TItem, TKey>>;
+    export type ItemClickEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxResponsiveBox<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    export type ItemContextMenuEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxResponsiveBox<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    export type ItemHoldEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxResponsiveBox<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type ItemLike = string | Item<any> | any;
+    export type ItemRenderedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxResponsiveBox<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    export type OptionChangedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxResponsiveBox<TItem, TKey>> &
+      DevExpress.events.ChangedOptionInfo;
+    export type Properties<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = dxResponsiveBoxOptions<TItem, TKey>;
   }
   /**
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxResponsiveBoxItem extends CollectionWidgetItem {
+  export interface dxResponsiveBoxItem<
+    TItem extends dxResponsiveBoxItem<any> | any = any
+  > extends CollectionWidgetItem<TItem> {
     /**
      * [descr:dxResponsiveBoxItem.location]
      */
@@ -17797,8 +17841,10 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxResponsiveBoxOptions
-    extends CollectionWidgetOptions<dxResponsiveBox> {
+  export interface dxResponsiveBoxOptions<
+    TItem extends DevExpress.ui.dxResponsiveBox.ItemLike = any,
+    TKey = any
+  > extends CollectionWidgetOptions<dxResponsiveBox<TItem, TKey>, TItem, TKey> {
     /**
      * [descr:dxResponsiveBoxOptions.cols]
      */
@@ -17825,10 +17871,16 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | DevExpress.ui.dxResponsiveBox.Item | any>
-      | DevExpress.data.Store
-      | DevExpress.data.DataSource
-      | DevExpress.data.DataSourceOptions;
+      | Array<TItem>
+      | DevExpress.data.Store<TItem, string | Array<string>, TKey>
+      | DevExpress.data.DataSource<TItem, string | Array<string>, TKey>
+      | DevExpress.data.DataSourceOptions<
+          TItem,
+          TItem,
+          TItem,
+          string | Array<string>,
+          TKey
+        >;
     /**
      * [descr:dxResponsiveBoxOptions.height]
      */
@@ -17836,7 +17888,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResponsiveBoxOptions.items]
      */
-    items?: Array<string | DevExpress.ui.dxResponsiveBox.Item | any>;
+    items?: Array<TItem>;
     /**
      * [descr:dxResponsiveBoxOptions.rows]
      */
@@ -23383,7 +23435,8 @@ declare module DevExpress.ui.dxPopup {
   export type ToolbarItem = dxPopupToolbarItem;
 }
 declare module DevExpress.ui.dxResponsiveBox {
-  export type Item = dxResponsiveBoxItem;
+  export type Item<TItem extends Item<any> | any = any> =
+    dxResponsiveBoxItem<TItem>;
 }
 declare module DevExpress.ui.dxSlideOut {
   export type Item = dxSlideOutItem;
