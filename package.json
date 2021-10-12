@@ -162,6 +162,7 @@
     "run-sequence": "^1.1.5",
     "sass": "^1.38.0",
     "shelljs": "^0.8.3",
+    "sinon": "^1.10.3",
     "staged-git-files": "^1.2.0",
     "string-replace-loader": "^3.0.3",
     "stylelint": "^13.13.1",
