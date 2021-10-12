@@ -549,6 +549,7 @@ const SelectBox = DropDownList.inherit({
 
         if(shouldCancelSearch) {
             const isPopupVisible = this._popup?._hideAnimationProcessing;
+            this._clearSearchTimer();
             if(isPopupVisible) {
                 this._shouldCancelSearch(true);
             } else {
