@@ -157,6 +157,3 @@ export type Properties = dxDrawerOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxDrawerOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxDrawerOptions;

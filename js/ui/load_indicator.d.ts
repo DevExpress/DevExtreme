@@ -45,6 +45,3 @@ export type Properties = dxLoadIndicatorOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxLoadIndicatorOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxLoadIndicatorOptions;

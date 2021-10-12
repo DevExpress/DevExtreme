@@ -309,6 +309,8 @@
         "dxHtmlEditor-deleteTable": "Удалить таблицу",
         "dxHtmlEditor-cellProperties": "Свойства ячейки",
         "dxHtmlEditor-tableProperties": "Свойства таблицы",
+        "dxHtmlEditor-insert": "Вставка",
+        "dxHtmlEditor-delete": "Удаление",
         "dxHtmlEditor-border": "Граница",
         "dxHtmlEditor-style": "Стиль",
         "dxHtmlEditor-width": "Ширина",

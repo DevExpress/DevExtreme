@@ -342,6 +342,8 @@
         "dxHtmlEditor-deleteTable": "Delete Table",
         "dxHtmlEditor-cellProperties": "Cell Properties",
         "dxHtmlEditor-tableProperties": "Table Properties",
+        "dxHtmlEditor-insert": "Insert",
+        "dxHtmlEditor-delete": "Delete",
         "dxHtmlEditor-border": "Border",
         "dxHtmlEditor-style": "Style",
         "dxHtmlEditor-width": "Width",

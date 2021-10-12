@@ -794,6 +794,3 @@ export type Properties = dxPivotGridOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxPivotGridOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxPivotGridOptions;

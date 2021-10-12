@@ -1479,6 +1479,3 @@ export type Properties<TRowData = any, TKey = any> = dxTreeListOptions<TRowData,
 
 /** @deprecated use Properties instead */
 export type Options<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
-
-/** @deprecated use Properties instead */
-export type IOptions<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;

@@ -234,6 +234,3 @@ export type Properties = dxTabPanelOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTabPanelOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxTabPanelOptions;
