@@ -6351,6 +6351,16 @@ declare module DevExpress.ui {
     export interface DataErrorOccurredInfo {
       readonly error?: Error;
     }
+    export type DataRowTemplateData<TRowData = any, TKey = any> = {
+      readonly key: TKey;
+      readonly data: TRowData;
+      readonly component: dxDataGrid<TRowData, TKey>;
+      readonly values: Array<any>;
+      readonly rowIndex: number;
+      readonly columns: Array<Column<TRowData, TKey>>;
+      readonly isSelected?: boolean;
+      readonly isExpanded?: boolean;
+    };
     export type DisposingEvent<
       TRowData = any,
       TKey = any
@@ -6723,6 +6733,7 @@ declare module DevExpress.ui {
       RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
       RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
       RowTemplateData: RowTemplateData<TRowData, TKey>;
+      DataRowTemplateData: DataRowTemplateData<TRowData, TKey>;
       RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
       RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
       RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
@@ -8458,7 +8469,7 @@ declare module DevExpress.ui {
       | DevExpress.core.template
       | ((
           rowElement: DevExpress.core.DxElement,
-          rowInfo: DevExpress.ui.dxDataGrid.RowTemplateData<TRowData, TKey>
+          rowInfo: DevExpress.ui.dxDataGrid.DataRowTemplateData<TRowData, TKey>
         ) => any);
     /**
      * [descr:dxDataGridOptions.scrolling]

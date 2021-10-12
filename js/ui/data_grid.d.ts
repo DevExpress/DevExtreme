@@ -3179,6 +3179,18 @@ export type RowTemplateData<TRowData = any, TKey = any> = {
   readonly isExpanded?: boolean;
 };
 
+/** @public */
+export type DataRowTemplateData<TRowData = any, TKey = any> = {
+  readonly key: TKey;
+  readonly data: TRowData;
+  readonly component: dxDataGrid<TRowData, TKey>;
+  readonly values: Array<any>;
+  readonly rowIndex: number;
+  readonly columns: Array<Column<TRowData, TKey>>;
+  readonly isSelected?: boolean;
+  readonly isExpanded?: boolean;
+};
+
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
@@ -3659,12 +3671,10 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
      * @type_function_param2_field5 rowIndex:number
      * @type_function_param2_field6 columns:Array<dxDataGridColumn>
      * @type_function_param2_field7 isSelected:boolean
-     * @type_function_param2_field8 rowType:string
-     * @type_function_param2_field9 groupIndex:number
-     * @type_function_param2_field10 isExpanded:boolean
+     * @type_function_param2_field8 isExpanded:boolean
      * @public
      */
-    dataRowTemplate?: template | ((rowElement: DxElement, rowInfo: RowTemplateData<TRowData, TKey>) => any);
+    dataRowTemplate?: template | ((rowElement: DxElement, rowInfo: DataRowTemplateData<TRowData, TKey>) => any);
     /**
      * @docid
      * @public
@@ -4792,6 +4802,7 @@ export type ExplicitTypes<TRowData, TKey> = {
   RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
   RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
   RowTemplateData: RowTemplateData<TRowData, TKey>;
+  DataRowTemplateData: DataRowTemplateData<TRowData, TKey>;
   RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
   RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
   RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
