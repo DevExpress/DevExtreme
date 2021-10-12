@@ -185,9 +185,9 @@ export class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items
 
     const min = trimTime(new Date(this.props.min));
 
-    const { startDate } = this.caption;
+    const { endDate } = this.caption;
 
-    const previousDate = this.getNextDate(-1, startDate);
+    const previousDate = this.getNextDate(-1, endDate);
     return previousDate < min;
   }
 
@@ -198,9 +198,9 @@ export class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items
 
     const max = new Date(new Date(this.props.max).setHours(23, 59, 59));
 
-    const { endDate } = this.caption;
+    const { startDate } = this.caption;
 
-    const nextDate = this.getNextDate(1, endDate);
+    const nextDate = this.getNextDate(1, startDate);
     return nextDate > max;
   }
 
