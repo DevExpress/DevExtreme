@@ -23369,7 +23369,8 @@ declare module DevExpress.ui.dialog {
   export function custom(options: CustomDialogOptions): any;
 }
 declare module DevExpress.ui.dxAccordion {
-  export type Item = dxAccordionItem;
+  export type Item<TItem extends Item<any> | any = any> =
+    dxAccordionItem<TItem>;
 }
 declare module DevExpress.ui.dxActionSheet {
   export type Item = dxActionSheetItem;
