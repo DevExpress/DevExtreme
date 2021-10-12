@@ -21025,6 +21025,68 @@ declare module DevExpress.ui {
         readonly dataField?: string;
         readonly row?: Row<TRowData, TKey>;
       };
+    export type ExplicitTypes<TRowData, TKey> = {
+      AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<
+        TRowData,
+        TKey
+      >;
+      CellClickEvent: CellClickEvent<TRowData, TKey>;
+      CellDblClickEvent: CellDblClickEvent<TRowData, TKey>;
+      CellHoverChangedEvent: CellHoverChangedEvent<TRowData, TKey>;
+      CellPreparedEvent: CellPreparedEvent<TRowData, TKey>;
+      ColumnButtonClickEvent: ColumnButtonClickEvent<TRowData, TKey>;
+      ColumnButtonTemplateData: ColumnButtonTemplateData<TRowData, TKey>;
+      ColumnCellTemplateData: ColumnCellTemplateData<TRowData, TKey>;
+      ColumnEditCellTemplateData: ColumnEditCellTemplateData<TRowData, TKey>;
+      ContentReadyEvent: ContentReadyEvent<TRowData, TKey>;
+      ContextMenuPreparingEvent: ContextMenuPreparingEvent<TRowData, TKey>;
+      DataErrorOccurredEvent: DataErrorOccurredEvent<TRowData, TKey>;
+      DisposingEvent: DisposingEvent<TRowData, TKey>;
+      EditCanceledEvent: EditCanceledEvent<TRowData, TKey>;
+      EditCancelingEvent: EditCancelingEvent<TRowData, TKey>;
+      Editing: Editing<TRowData, TKey>;
+      EditingStartEvent: EditingStartEvent<TRowData, TKey>;
+      EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
+      EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
+      FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
+      FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
+      FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;
+      FocusedRowChangingEvent: FocusedRowChangingEvent<TRowData, TKey>;
+      InitializedEvent: InitializedEvent<TRowData, TKey>;
+      InitNewRowEvent: InitNewRowEvent<TRowData, TKey>;
+      KeyDownEvent: KeyDownEvent<TRowData, TKey>;
+      NodesInitializedEvent: NodesInitializedEvent<TRowData, TKey>;
+      OptionChangedEvent: OptionChangedEvent<TRowData, TKey>;
+      Properties: Properties<TRowData, TKey>;
+      RowClickEvent: RowClickEvent<TRowData, TKey>;
+      RowCollapsedEvent: RowCollapsedEvent<TRowData, TKey>;
+      RowCollapsingEvent: RowCollapsingEvent<TRowData, TKey>;
+      RowDblClickEvent: RowDblClickEvent<TRowData, TKey>;
+      RowDraggingAddEvent: RowDraggingAddEvent<TRowData, TKey>;
+      RowDraggingChangeEvent: RowDraggingChangeEvent<TRowData, TKey>;
+      RowDraggingEndEvent: RowDraggingEndEvent<TRowData, TKey>;
+      RowDraggingMoveEvent: RowDraggingMoveEvent<TRowData, TKey>;
+      RowDraggingRemoveEvent: RowDraggingRemoveEvent<TRowData, TKey>;
+      RowDraggingReorderEvent: RowDraggingReorderEvent<TRowData, TKey>;
+      RowDraggingStartEvent: RowDraggingStartEvent<TRowData, TKey>;
+      RowDraggingTemplateData: RowDraggingTemplateData<TRowData>;
+      RowExpandedEvent: RowExpandedEvent<TRowData, TKey>;
+      RowExpandingEvent: RowExpandingEvent<TRowData, TKey>;
+      RowInsertedEvent: RowInsertedEvent<TRowData, TKey>;
+      RowInsertingEvent: RowInsertingEvent<TRowData, TKey>;
+      RowPreparedEvent: RowPreparedEvent<TRowData, TKey>;
+      RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
+      RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
+      RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
+      RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
+      RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
+      SavedEvent: SavedEvent<TRowData, TKey>;
+      SavingEvent: SavingEvent<TRowData, TKey>;
+      Scrolling: Scrolling;
+      Selection: Selection;
+      SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
+      ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
+    };
     export type FocusedCellChangedEvent<
       TRowData = any,
       TKey = any
