@@ -13,6 +13,11 @@ import 'ui/data_grid';
 
 const TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+const rowsViewMock = {
+    getTopVisibleItemIndex: () => 0,
+    _getCellElement: () => {}
+};
+
 const createDataSource = function(data, storeOptions, dataSourceOptions) {
     const arrayStore = new ArrayStore(storeOptions ? $.extend(true, { data: data }, storeOptions) : data);
     const dataSource = new DataSource($.extend(true, { store: arrayStore, requireTotalCount: true, _preferSync: true }, dataSourceOptions));
@@ -3590,10 +3595,7 @@ const setupVirtualRenderingModule = function() {
         that.changedArgs.push(e);
     });
 
-    this._views.rowsView = {
-        getTopVisibleItemIndex: () => 0,
-        _getCellElement: () => {}
-    };
+    this._views.rowsView = { ...rowsViewMock };
 };
 
 const teardownVirtualRenderingModule = function() {
@@ -8480,10 +8482,7 @@ QUnit.module('Grouping', { beforeEach: setupModule, afterEach: teardownModule },
 
 QUnit.module('Editing', { beforeEach: function() {
     setupModule.apply(this, arguments);
-    this._views.rowsView = {
-        getTopVisibleItemIndex: () => 0,
-        _getCellElement: () => {}
-    };
+    this._views.rowsView = { ...rowsViewMock };
 }, afterEach: teardownModule }, () => {
 
     QUnit.test('Inserting Row', function(assert) {
@@ -11838,10 +11837,7 @@ QUnit.module('Summary with Editing', {
         this.setupDataGridModules = function(options) {
             setupDataGridModules(this, ['data', 'columns', 'filterRow', 'grouping', 'summary', 'editing', 'editingRowBased', 'editingCellBased'], options);
 
-            this._views.rowsView = {
-                getTopVisibleItemIndex: () => 0,
-                _getCellElement: () => {}
-            };
+            this._views.rowsView = { ...rowsViewMock };
         };
 
         this.getTotalValues = function() {
@@ -12686,10 +12682,7 @@ QUnit.module('Partial update', {
         that.setupModules = function() {
             setupModule.call(that);
 
-            this._views.rowsView = {
-                getTopVisibleItemIndex: () => 0,
-                _getCellElement: () => {}
-            };
+            this._views.rowsView = { ...rowsViewMock };
 
             that.array = [
                 { name: 'Alex', age: 30 },

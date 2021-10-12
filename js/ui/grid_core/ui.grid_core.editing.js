@@ -587,7 +587,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _getInsertRowIndex: function(items, change) {
             let result = -1;
-            const keyExpr = this._dataController.key();
+            const dataController = this._dataController;
             const key = this._getInsertAfterOrBeforeKey(change);
 
             if(!isDefined(key) && items.length === 0) {
@@ -599,10 +599,8 @@ const EditingController = modules.ViewController.inherit((function() {
                             if(equalByValue(item.key, key)) {
                                 result = index;
                             }
-                        } else if(isDefined(keyExpr)) {
-                            if(equalByValue(item[keyExpr], key)) {
-                                result = index;
-                            }
+                        } else if(equalByValue(dataController.keyOf(item), key)) {
+                            result = index;
                         } else {
                             if(equalByValue(item, key)) {
                                 result = index;
@@ -626,17 +624,6 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             return result;
-        },
-
-        _needInsertItem: function(change, items) {
-            const dataController = this._dataController;
-            const rowIndex = this._getInsertRowIndex(items, change);
-            const newRowPosition = this.option('editing.newRowPosition');
-            const pageIndex = dataController.pageIndex();
-            const pageCount = dataController.pageCount();
-            const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
-
-            return rowIndex >= 0 || newRowPosition !== FIRST_NEW_ROW_POSITION && pageIndex === 0 && !isDefined(insertAfterOrBeforeKey) || newRowPosition === LAST_NEW_ROW_POSITION && pageIndex === (pageCount - 1);
         },
 
         _generateNewItem: function(key) {

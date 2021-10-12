@@ -304,7 +304,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         clock.tick();
         const scrollable = $('.dx-scrollable').dxScrollable('instance');
 
-        scrollable.scrollTo({ y: 20 });
+        scrollable.scrollTo({ y: 10 });
         clock.tick();
 
         // act
