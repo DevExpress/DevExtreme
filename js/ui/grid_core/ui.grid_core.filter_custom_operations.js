@@ -41,25 +41,47 @@ function baseOperation(grid) {
     };
 
     const headerFilterController = grid && grid.getController('headerFilter');
-    const customizeText = function(fieldInfo) {
+    const customizeText = function(fieldInfo, options) {
+        options = options || {};
         const value = fieldInfo.value;
         let column = grid.columnOption(fieldInfo.field.dataField);
         const headerFilter = column && column.headerFilter;
         const lookup = column && column.lookup;
+        const values = options.values || [value];
 
         if((headerFilter && headerFilter.dataSource) || (lookup && lookup.dataSource)) {
-            column = extend({}, column, { filterType: 'include', filterValues: [value] });
-            const dataSourceOptions = headerFilterController.getDataSource(column);
-            dataSourceOptions.paginate = false;
-            const dataSource = new DataSource(dataSourceOptions);
             const result = new Deferred();
+            const itemsDeferred = options.items || new Deferred();
+            if(!options.items) {
+                column = extend({}, column, { filterType: 'include', filterValues: values });
+                const dataSourceOptions = headerFilterController.getDataSource(column);
+                dataSourceOptions.paginate = false;
+                const dataSource = new DataSource(dataSourceOptions);
+                const key = dataSource.store().key();
 
-            const key = dataSource.store().key();
-            if(key) {
-                dataSource.filter([key, '=', fieldInfo.value]);
+                if(key) {
+                    const { values } = options;
+                    if(values && values.length > 1) {
+                        const filter = values.reduce((result, value) => {
+                            if(result.length) {
+                                result.push('or');
+                            }
+                            result.push([key, '=', value]);
+                            return result;
+                        }, []);
+                        dataSource.filter(filter);
+                    } else {
+                        dataSource.filter([key, '=', fieldInfo.value]);
+                    }
+                }
+
+                options.items = itemsDeferred;
+
+                dataSource.load().done(itemsDeferred.resolve);
             }
-            dataSource.load().done(items => {
-                result.resolve(getSelectedItemsTexts(items)[0]);
+            itemsDeferred.done(items => {
+                const index = values.indexOf(fieldInfo.value);
+                result.resolve(getSelectedItemsTexts(items)[index]);
             });
             return result;
         } else {
