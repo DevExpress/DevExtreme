@@ -61,7 +61,8 @@ describe("metadata-generator", function() {
                             }
                         },
                         DocID: 'dxTestWidget',
-                        Module: 'test_widget'
+                        Module: 'test_widget',
+                        OptionsTypeParams: ['T1', 'T2'],
                     },
                     dxEditorWidget: {
                         Options: {
@@ -206,6 +207,10 @@ describe("metadata-generator", function() {
 
         it("should generate proper module name", function() {
             expect(metas.DxTestWidget.module).toBe("widgetPackageName/test_widget");
+        });
+
+        it("should generate proper optionsTypeParams", function() {
+            expect(metas.DxTestWidget.optionsTypeParams).toBe(["T1", "T2"]);
         });
 
         it("should detect editors", function() {

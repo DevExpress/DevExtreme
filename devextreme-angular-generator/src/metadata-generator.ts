@@ -65,6 +65,7 @@ interface WidgetComponent extends ComponentMeta, Container {
     isExtension: boolean;
     isEditor: boolean;
     packageName: string;
+    optionsTypeParams: string[];
 }
 
 interface Component extends ComponentMeta, Container {
@@ -240,7 +241,8 @@ export default class DXComponentMetadataGenerator {
                 module: config.widgetPackageName + '/' + widget.Module,
                 packageName: config.wrapperPackageName,
                 imports: buildImports(getValues(widget.Options), config.widgetPackageName),
-                nestedComponents: widgetNestedComponents
+                nestedComponents: widgetNestedComponents,
+                optionsTypeParams: widget.OptionsTypeParams
             };
 
             logger('Write metadata to file ' + outputFilePath);

@@ -3,6 +3,7 @@
 var collectionProperties = it.properties.filter(item => item.isCollection).map(item => item.name);
 var collectionNestedComponents = it.nestedComponents.filter(item => item.isCollection && item.root);
 var baseClass = it.isExtension ? 'DxComponentExtension' : 'DxComponent';
+var reExportExplicitTypes = it.optionsTypeParams && it.optionsTypeParams.length;
 
 var implementedInterfaces = ['OnDestroy'];
 
@@ -37,7 +38,8 @@ import {
     QueryList<#?#>
 } from '@angular/core';
 
-
+<#? reExportExplicitTypes #>export { ExplicitTypes } from '<#= it.module #>';
+<#?#>
 <#? it.imports #><#~ it.imports :file #>import <#= file.importString #> from '<#= file.path #>';
 <#~#><#?#>
 import <#= it.className #> from '<#= it.module #>';

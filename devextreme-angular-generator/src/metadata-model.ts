@@ -43,7 +43,8 @@ export interface Metadata {
             IsDeprecated?: boolean;
             Options: {
                 [optionName: string]: Option;
-            }
+            };
+            OptionsTypeParams: string[];
         }
     };
     ExtraObjects: any[];
