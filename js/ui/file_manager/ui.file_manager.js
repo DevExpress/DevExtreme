@@ -279,7 +279,7 @@ class FileManager extends Widget {
 
     _updateToolbar(selectedItems) {
         const items = selectedItems || this._getSelectedItemInfos();
-        this._toolbar.option('selectedItems', ensureDefined(items, []));
+        this._toolbar.option('contextItems', ensureDefined(items, []));
     }
 
     _switchView(viewMode) {

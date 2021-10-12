@@ -517,7 +517,7 @@ class FileManagerToolbar extends Widget {
     }
 
     _isCommandAvailable(name) {
-        return this._commandManager.isCommandAvailable(name, this.option('selectedItems'));
+        return this._commandManager.isCommandAvailable(name, this.option('contextItems'));
     }
 
     _updateItemInToolbar(toolbar, commandName, options) {
@@ -566,7 +566,7 @@ class FileManagerToolbar extends Widget {
             case 'fileItems':
                 this.repaint();
                 break;
-            case 'selectedItems':
+            case 'contextItems':
                 this._update();
                 break;
             case 'onItemClick':
@@ -636,7 +636,7 @@ class FileManagerToolbar extends Widget {
     }
 
     _update() {
-        const showGeneralToolbar = this.option('selectedItems').length === 0 || !this._fileToolbarHasEffectiveItems();
+        const showGeneralToolbar = this.option('contextItems').length === 0 || !this._fileToolbarHasEffectiveItems();
         if(this._generalToolbarVisible !== showGeneralToolbar) {
             this._generalToolbar.option('visible', showGeneralToolbar);
             this._fileToolbar.option('visible', !showGeneralToolbar);
