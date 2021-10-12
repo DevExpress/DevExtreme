@@ -12,7 +12,7 @@ import {
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions,
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -31,41 +31,46 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-/** @public */
-export type ContentReadyEvent = EventInfo<dxAccordion>;
+type ItemLike = string | Item<any> | any;
 
 /** @public */
-export type DisposingEvent = EventInfo<dxAccordion>;
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxAccordion>;
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxAccordion<TItem, TKey>>;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemTitleClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxAccordion> & ChangedOptionInfo;
+export type ItemTitleClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxAccordion<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type SelectionChangedEvent = EventInfo<dxAccordion> & SelectionChangedInfo;
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
+export interface dxAccordionOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidgetOptions<dxAccordion<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @default 300
@@ -85,7 +90,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
     /**
      * @docid
      * @default true
@@ -117,7 +122,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @type_function_return string|Element|jQuery
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    itemTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @default "title"
@@ -125,14 +130,14 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @type_function_return string|Element|jQuery
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    itemTitleTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @type Array<string | dxAccordionItem | any>
      * @fires dxAccordionOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | Item | any>;
+    items?: Array<TItem>;
     /**
      * @docid
      * @default false
@@ -153,7 +158,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @action
      * @public
      */
-    onItemTitleClick?: ((e: ItemTitleClickEvent) => void) | string;
+    onItemTitleClick?: ((e: ItemTitleClickEvent<TItem, TKey>) => void) | string;
     /**
      * @docid
      * @default false
@@ -173,7 +178,10 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxAccordion extends CollectionWidget<dxAccordionOptions> {
+export default class dxAccordion<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidget<dxAccordionOptions<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @publicName collapseItem(index)
@@ -203,13 +211,13 @@ export default class dxAccordion extends CollectionWidget<dxAccordionOptions> {
  * @public
  * @namespace DevExpress.ui.dxAccordion
  */
-export type Item = dxAccordionItem;
+export type Item<TItem extends Item<any> | any = any> = dxAccordionItem<TItem>;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxAccordionItem extends CollectionWidgetItem {
+export interface dxAccordionItem<TItem extends dxAccordionItem<any> | any = any> extends CollectionWidgetItem<TItem> {
     /**
      * @docid
      * @public
@@ -223,7 +231,31 @@ export interface dxAccordionItem extends CollectionWidgetItem {
 }
 
 /** @public */
-export type Properties = dxAccordionOptions;
+export type ExplicitTypes<
+    TItem extends ItemLike,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    ItemTitleClickEvent: ItemTitleClickEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+};
+
+/** @public */
+export type Properties<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = dxAccordionOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = dxAccordionOptions;
+export type Options<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
