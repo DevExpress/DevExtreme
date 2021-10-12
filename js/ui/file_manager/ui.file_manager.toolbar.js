@@ -549,7 +549,7 @@ class FileManagerToolbar extends Widget {
             commandManager: null,
             generalItems: [],
             fileItems: [],
-            selectedItems: [],
+            contextItems: [],
             itemViewMode: 'details',
             onItemClick: null
         });
