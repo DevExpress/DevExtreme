@@ -80,7 +80,7 @@ export class DateGeneratorBaseStrategy {
     _getProcessedByAppointmentTimeZone(appointmentList, appointment) {
         const hasAppointmentTimeZone = !isEmptyObject(appointment.startDateTimeZone) || !isEmptyObject(appointment.endDateTimeZone);
 
-        if(appointmentList.length > 1 && hasAppointmentTimeZone) {
+        if(hasAppointmentTimeZone) {
             const appointmentOffsets = {
                 startDate: this.timeZoneCalculator.getOffsets(appointment.startDate, appointment.startDateTimeZone),
                 endDate: this.timeZoneCalculator.getOffsets(appointment.endDate, appointment.endDateTimeZone),
