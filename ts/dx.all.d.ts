@@ -23492,7 +23492,8 @@ declare module DevExpress.ui.dxButtonGroup {
   export type Item = dxButtonGroupItem;
 }
 declare module DevExpress.ui.dxContextMenu {
-  export type Item = dxContextMenuItem;
+  export type Item<TItem extends Item<any> = Item<any>> =
+    dxContextMenuItem<TItem>;
 }
 declare module DevExpress.ui.dxDiagram {
   export type Item = dxDiagramItem;
