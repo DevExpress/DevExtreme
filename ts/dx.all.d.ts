@@ -2970,7 +2970,7 @@ declare module DevExpress.data {
     push(
       changes: Array<{
         type: 'insert' | 'update' | 'remove';
-        data?: TValue;
+        data?: DevExpress.core.DeepPartial<TValue>;
         key?: TKey;
         index?: number;
       }>
@@ -2989,7 +2989,10 @@ declare module DevExpress.data {
     /**
      * [descr:Store.update(key, values)]
      */
-    update(key: TKey, values: TValue): DevExpress.core.utils.DxPromise<TValue>;
+    update(
+      key: TKey,
+      values: DevExpress.core.DeepPartial<TValue>
+    ): DevExpress.core.utils.DxPromise<TValue>;
   }
   module Store {
     /**
@@ -3239,8 +3242,8 @@ declare module DevExpress.events {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ItemInfo {
-    readonly itemData?: any;
+  export interface ItemInfo<TItemData = any> {
+    readonly itemData?: TItemData;
     readonly itemElement: DevExpress.core.DxElement;
     readonly itemIndex: number;
   }
@@ -4228,23 +4231,37 @@ declare module DevExpress.ui {
    * [descr:CollectionWidget]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export class CollectionWidget<TProperties> extends Widget<TProperties> {
-    getDataSource(): DevExpress.data.DataSource;
+  export class CollectionWidget<
+    TProperties extends CollectionWidgetOptions<any, TItem, TKey>,
+    TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+    TKey = any
+  > extends Widget<TProperties> {
+    getDataSource(): DevExpress.data.DataSource<
+      TItem,
+      string | Array<string>,
+      TKey
+    >;
   }
   module CollectionWidget {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export interface SelectionChangedInfo<T = any> {
-      readonly addedItems: Array<T>;
-      readonly removedItems: Array<T>;
+    type ItemLike = string | CollectionWidgetItem<any> | any;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface SelectionChangedInfo<TItem extends ItemLike = any> {
+      readonly addedItems: Array<TItem>;
+      readonly removedItems: Array<TItem>;
     }
   }
   /**
    * [descr:CollectionWidgetItem]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface CollectionWidgetItem {
+  export interface CollectionWidgetItem<
+    TItem extends CollectionWidgetItem<any> | any = any
+  > {
     /**
      * [descr:CollectionWidgetItem.disabled]
      */
@@ -4259,7 +4276,7 @@ declare module DevExpress.ui {
     template?:
       | DevExpress.core.template
       | ((
-          itemData: any,
+          itemData: TItem,
           itemIndex: number,
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
@@ -4275,17 +4292,26 @@ declare module DevExpress.ui {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface CollectionWidgetOptions<TComponent>
-    extends WidgetOptions<TComponent> {
+  export interface CollectionWidgetOptions<
+    TComponent extends CollectionWidget<any, TItem, TKey> | any,
+    TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+    TKey = any
+  > extends WidgetOptions<TComponent> {
     /**
      * [descr:CollectionWidgetOptions.dataSource]
      */
     dataSource?:
       | string
-      | Array<string | CollectionWidgetItem>
-      | DevExpress.data.Store
-      | DevExpress.data.DataSource
-      | DevExpress.data.DataSource.Options;
+      | Array<TItem>
+      | DevExpress.data.Store<TItem, string | Array<string>, TKey>
+      | DevExpress.data.DataSource<TItem, string | Array<string>, TKey>
+      | DevExpress.data.DataSource.Options<
+          TItem,
+          TItem,
+          TItem,
+          string | Array<string>,
+          TKey
+        >;
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
      */
@@ -4296,14 +4322,14 @@ declare module DevExpress.ui {
     itemTemplate?:
       | DevExpress.core.template
       | ((
-          itemData: any,
+          itemData: TItem,
           itemIndex: number,
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:CollectionWidgetOptions.items]
      */
-    items?: Array<string | CollectionWidgetItem | any>;
+    items?: Array<TItem>;
     /**
      * [descr:CollectionWidgetOptions.keyExpr]
      */
@@ -4318,7 +4344,7 @@ declare module DevExpress.ui {
     onItemClick?:
       | ((
           e: DevExpress.events.NativeEventInfo<TComponent> &
-            DevExpress.events.ItemInfo
+            DevExpress.events.ItemInfo<TItem>
         ) => void)
       | string;
     /**
@@ -4326,28 +4352,28 @@ declare module DevExpress.ui {
      */
     onItemContextMenu?: (
       e: DevExpress.events.NativeEventInfo<TComponent> &
-        DevExpress.events.ItemInfo
+        DevExpress.events.ItemInfo<TItem>
     ) => void;
     /**
      * [descr:CollectionWidgetOptions.onItemHold]
      */
     onItemHold?: (
       e: DevExpress.events.NativeEventInfo<TComponent> &
-        DevExpress.events.ItemInfo
+        DevExpress.events.ItemInfo<TItem>
     ) => void;
     /**
      * [descr:CollectionWidgetOptions.onItemRendered]
      */
     onItemRendered?: (
       e: DevExpress.events.NativeEventInfo<TComponent> &
-        DevExpress.events.ItemInfo
+        DevExpress.events.ItemInfo<TItem>
     ) => void;
     /**
      * [descr:CollectionWidgetOptions.onSelectionChanged]
      */
     onSelectionChanged?: (
       e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.CollectionWidget.SelectionChangedInfo
+        DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>
     ) => void;
     /**
      * [descr:CollectionWidgetOptions.selectedIndex]
@@ -4356,15 +4382,15 @@ declare module DevExpress.ui {
     /**
      * [descr:CollectionWidgetOptions.selectedItem]
      */
-    selectedItem?: any;
+    selectedItem?: TItem;
     /**
      * [descr:CollectionWidgetOptions.selectedItemKeys]
      */
-    selectedItemKeys?: Array<any>;
+    selectedItemKeys?: Array<TKey>;
     /**
      * [descr:CollectionWidgetOptions.selectedItems]
      */
-    selectedItems?: Array<any>;
+    selectedItems?: Array<TItem>;
   }
   /**
    * [descr:CompareRule]
@@ -6325,6 +6351,16 @@ declare module DevExpress.ui {
     export interface DataErrorOccurredInfo {
       readonly error?: Error;
     }
+    export type DataRowTemplateData<TRowData = any, TKey = any> = {
+      readonly key: TKey;
+      readonly data: TRowData;
+      readonly component: dxDataGrid<TRowData, TKey>;
+      readonly values: Array<any>;
+      readonly rowIndex: number;
+      readonly columns: Array<Column<TRowData, TKey>>;
+      readonly isSelected?: boolean;
+      readonly isExpanded?: boolean;
+    };
     export type DisposingEvent<
       TRowData = any,
       TKey = any
@@ -6697,6 +6733,7 @@ declare module DevExpress.ui {
       RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
       RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
       RowTemplateData: RowTemplateData<TRowData, TKey>;
+      DataRowTemplateData: DataRowTemplateData<TRowData, TKey>;
       RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
       RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
       RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
@@ -8432,7 +8469,7 @@ declare module DevExpress.ui {
       | DevExpress.core.template
       | ((
           rowElement: DevExpress.core.DxElement,
-          rowInfo: DevExpress.ui.dxDataGrid.RowTemplateData<TRowData, TKey>
+          rowInfo: DevExpress.ui.dxDataGrid.DataRowTemplateData<TRowData, TKey>
         ) => any);
     /**
      * [descr:dxDataGridOptions.scrolling]
@@ -14744,7 +14781,10 @@ declare module DevExpress.ui {
   /**
    * [descr:dxList]
    */
-  export class dxList extends CollectionWidget<dxListOptions> {
+  export class dxList<
+    TItem extends DevExpress.ui.dxList.ItemLike = any,
+    TKey = any
+  > extends CollectionWidget<dxListOptions<TItem, TKey>, TItem, TKey> {
     /**
      * [descr:dxList.clientHeight()]
      */
@@ -14845,53 +14885,126 @@ declare module DevExpress.ui {
     updateDimensions(): DevExpress.core.utils.DxPromise<void>;
   }
   module dxList {
-    export type ContentReadyEvent = DevExpress.events.EventInfo<dxList>;
-    export type DisposingEvent = DevExpress.events.EventInfo<dxList>;
-    export type GroupRenderedEvent = DevExpress.events.EventInfo<dxList> & {
+    export type ContentReadyEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>>;
+    export type DisposingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>>;
+    export type ExplicitTypes<TItem extends ItemLike, TKey> = {
+      Properties: Properties<TItem, TKey>;
+      ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+      DisposingEvent: DisposingEvent<TItem, TKey>;
+      GroupRenderedEvent: GroupRenderedEvent<TItem, TKey>;
+      InitializedEvent: InitializedEvent<TItem, TKey>;
+      ItemClickEvent: ItemClickEvent<TItem, TKey>;
+      ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+      ItemDeletedEvent: ItemDeletedEvent<TItem, TKey>;
+      ItemDeletingEvent: ItemDeletingEvent<TItem, TKey>;
+      ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+      ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+      ItemReorderedEvent: ItemReorderedEvent<TItem, TKey>;
+      ItemSwipeEvent: ItemSwipeEvent<TItem, TKey>;
+      OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+      PageLoadingEvent: PageLoadingEvent<TItem, TKey>;
+      PullRefreshEvent: PullRefreshEvent<TItem, TKey>;
+      ScrollEvent: ScrollEvent<TItem, TKey>;
+      SelectAllValueChangedEvent: SelectAllValueChangedEvent<TItem, TKey>;
+      SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+    };
+    export type GroupRenderedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> & {
       readonly groupData?: any;
       readonly groupElement?: DevExpress.core.DxElement;
       readonly groupIndex?: number;
     };
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxList>;
-    export type ItemClickEvent = DevExpress.events.NativeEventInfo<dxList> &
-      ListItemInfo;
-    export type ItemContextMenuEvent =
-      DevExpress.events.NativeEventInfo<dxList> & ListItemInfo;
-    export type ItemDeletedEvent = DevExpress.events.EventInfo<dxList> &
-      ListItemInfo;
-    export type ItemDeletingEvent = DevExpress.events.EventInfo<dxList> &
-      ListItemInfo & {
+    export type InitializedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.InitializedEventInfo<dxList<TItem, TKey>>;
+    export type ItemClickEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
+      ListItemInfo<TItem>;
+    export type ItemContextMenuEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
+      ListItemInfo<TItem>;
+    export type ItemDeletedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
+    export type ItemDeletingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
+      ListItemInfo<TItem> & {
         cancel?: boolean | PromiseLike<void>;
       };
-    export type ItemHoldEvent = DevExpress.events.NativeEventInfo<dxList> &
-      ListItemInfo;
-    export type ItemRenderedEvent = DevExpress.events.NativeEventInfo<dxList> &
-      DevExpress.events.ItemInfo;
-    export type ItemReorderedEvent = DevExpress.events.EventInfo<dxList> &
-      ListItemInfo & {
+    export type ItemHoldEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
+      ListItemInfo<TItem>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type ItemLike = string | Item<any> | any;
+    export type ItemRenderedEvent<
+      TItem extends Item<any> | any = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    export type ItemReorderedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
+      ListItemInfo<TItem> & {
         readonly fromIndex: number;
         readonly toIndex: number;
       };
-    export type ItemSwipeEvent = DevExpress.events.NativeEventInfo<dxList> &
-      ListItemInfo & {
+    export type ItemSwipeEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
+      ListItemInfo<TItem> & {
         readonly direction: string;
       };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    interface ListItemInfo {
-      readonly itemData?: any;
+    interface ListItemInfo<TItem extends ItemLike> {
+      readonly itemData?: TItem;
       readonly itemElement: DevExpress.core.DxElement;
       readonly itemIndex: number | { group: number; item: number };
     }
-    export type OptionChangedEvent = DevExpress.events.EventInfo<dxList> &
+    export type OptionChangedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
       DevExpress.events.ChangedOptionInfo;
-    export type PageLoadingEvent = DevExpress.events.EventInfo<dxList>;
-    export type Properties = dxListOptions;
-    export type PullRefreshEvent = DevExpress.events.EventInfo<dxList>;
-    export type ScrollEvent = DevExpress.events.NativeEventInfo<dxList> &
-      ScrollInfo;
+    export type PageLoadingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>>;
+    export type Properties<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = dxListOptions<TItem, TKey>;
+    export type PullRefreshEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>>;
+    export type ScrollEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> & ScrollInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -14902,18 +15015,24 @@ declare module DevExpress.ui {
       readonly reachedTop: boolean;
       readonly reachedBottom: boolean;
     }
-    export type SelectAllValueChangedEvent =
-      DevExpress.events.EventInfo<dxList> & {
-        readonly value: boolean;
-      };
-    export type SelectionChangedEvent = DevExpress.events.EventInfo<dxList> &
-      DevExpress.ui.CollectionWidget.SelectionChangedInfo;
+    export type SelectAllValueChangedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> & {
+      readonly value: boolean;
+    };
+    export type SelectionChangedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxList<TItem, TKey>> &
+      DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>;
   }
   /**
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxListItem extends CollectionWidgetItem {
+  export interface dxListItem<TItem extends dxListItem<any> | any = any>
+    extends CollectionWidgetItem<TItem> {
     /**
      * [descr:dxListItem.badge]
      */
@@ -14935,8 +15054,10 @@ declare module DevExpress.ui {
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxListOptions
-    extends CollectionWidgetOptions<dxList>,
+  export interface dxListOptions<
+    TItem extends DevExpress.ui.dxList.ItemLike = any,
+    TKey = any
+  > extends CollectionWidgetOptions<dxList<TItem, TKey>, TItem, TKey>,
       SearchBoxMixinOptions {
     /**
      * [descr:dxListOptions.activeStateEnabled]
@@ -14959,14 +15080,20 @@ declare module DevExpress.ui {
      */
     dataSource?:
       | string
-      | Array<string | DevExpress.ui.dxList.Item | any>
-      | DevExpress.data.Store
-      | DevExpress.data.DataSource
-      | DevExpress.data.DataSource.Options;
+      | Array<TItem>
+      | DevExpress.data.Store<TItem, string | Array<string>, TKey>
+      | DevExpress.data.DataSource<TItem, string | Array<string>, TKey>
+      | DevExpress.data.DataSource.Options<
+          TItem,
+          TItem,
+          TItem,
+          string | Array<string>,
+          TKey
+        >;
     /**
      * [descr:dxListOptions.displayExpr]
      */
-    displayExpr?: string | ((item: any) => string);
+    displayExpr?: string | ((item: TItem) => string);
     /**
      * [descr:dxListOptions.focusStateEnabled]
      */
@@ -15010,7 +15137,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.items]
      */
-    items?: Array<string | DevExpress.ui.dxList.Item | any>;
+    items?: Array<TItem>;
     /**
      * [descr:dxListOptions.menuItems]
      */
@@ -15018,7 +15145,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxListOptions.menuItems.action]
        */
-      action?: (itemElement: DevExpress.core.DxElement, itemData: any) => any;
+      action?: (itemElement: DevExpress.core.DxElement, itemData: TItem) => any;
       /**
        * [descr:dxListOptions.menuItems.text]
        */
@@ -15035,52 +15162,68 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.onGroupRendered]
      */
-    onGroupRendered?: (e: DevExpress.ui.dxList.GroupRenderedEvent) => void;
+    onGroupRendered?: (
+      e: DevExpress.ui.dxList.GroupRenderedEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onItemClick]
      */
-    onItemClick?: ((e: DevExpress.ui.dxList.ItemClickEvent) => void) | string;
+    onItemClick?:
+      | ((e: DevExpress.ui.dxList.ItemClickEvent<TItem, TKey>) => void)
+      | string;
     /**
      * [descr:dxListOptions.onItemContextMenu]
      */
-    onItemContextMenu?: (e: DevExpress.ui.dxList.ItemContextMenuEvent) => void;
+    onItemContextMenu?: (
+      e: DevExpress.ui.dxList.ItemContextMenuEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onItemDeleted]
      */
-    onItemDeleted?: (e: DevExpress.ui.dxList.ItemDeletedEvent) => void;
+    onItemDeleted?: (
+      e: DevExpress.ui.dxList.ItemDeletedEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onItemDeleting]
      */
-    onItemDeleting?: (e: DevExpress.ui.dxList.ItemDeletingEvent) => void;
+    onItemDeleting?: (
+      e: DevExpress.ui.dxList.ItemDeletingEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onItemHold]
      */
-    onItemHold?: (e: DevExpress.ui.dxList.ItemHoldEvent) => void;
+    onItemHold?: (e: DevExpress.ui.dxList.ItemHoldEvent<TItem, TKey>) => void;
     /**
      * [descr:dxListOptions.onItemReordered]
      */
-    onItemReordered?: (e: DevExpress.ui.dxList.ItemReorderedEvent) => void;
+    onItemReordered?: (
+      e: DevExpress.ui.dxList.ItemReorderedEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onItemSwipe]
      */
-    onItemSwipe?: (e: DevExpress.ui.dxList.ItemSwipeEvent) => void;
+    onItemSwipe?: (e: DevExpress.ui.dxList.ItemSwipeEvent<TItem, TKey>) => void;
     /**
      * [descr:dxListOptions.onPageLoading]
      */
-    onPageLoading?: (e: DevExpress.ui.dxList.PageLoadingEvent) => void;
+    onPageLoading?: (
+      e: DevExpress.ui.dxList.PageLoadingEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onPullRefresh]
      */
-    onPullRefresh?: (e: DevExpress.ui.dxList.PullRefreshEvent) => void;
+    onPullRefresh?: (
+      e: DevExpress.ui.dxList.PullRefreshEvent<TItem, TKey>
+    ) => void;
     /**
      * [descr:dxListOptions.onScroll]
      */
-    onScroll?: (e: DevExpress.ui.dxList.ScrollEvent) => void;
+    onScroll?: (e: DevExpress.ui.dxList.ScrollEvent<TItem, TKey>) => void;
     /**
      * [descr:dxListOptions.onSelectAllValueChanged]
      */
     onSelectAllValueChanged?: (
-      e: DevExpress.ui.dxList.SelectAllValueChangedEvent
+      e: DevExpress.ui.dxList.SelectAllValueChangedEvent<TItem, TKey>
     ) => void;
     /**
      * [descr:dxListOptions.pageLoadMode]
@@ -20452,14 +20595,16 @@ declare module DevExpress.ui {
   /**
    * [descr:dxTreeList]
    */
-  export class dxTreeList
-    extends Widget<dxTreeListOptions>
-    implements GridBase
+  export class dxTreeList<TRowData = any, TKey = any>
+    extends Widget<dxTreeListOptions<TRowData, TKey>>
+    implements GridBase<TRowData, TKey>
   {
     /**
      * [descr:dxTreeList.addColumn(columnOptions)]
      */
-    addColumn(columnOptions: any | string): void;
+    addColumn(
+      columnOptions: DevExpress.ui.dxTreeList.Column<TRowData, TKey> | string
+    ): void;
     /**
      * [descr:dxTreeList.addRow()]
      */
@@ -20467,15 +20612,15 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeList.addRow(parentId)]
      */
-    addRow(parentId: any): DevExpress.core.utils.DxPromise<void>;
+    addRow(parentId: TKey): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:dxTreeList.collapseRow(key)]
      */
-    collapseRow(key: any): DevExpress.core.utils.DxPromise<void>;
+    collapseRow(key: TKey): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:dxTreeList.expandRow(key)]
      */
-    expandRow(key: any): DevExpress.core.utils.DxPromise<void>;
+    expandRow(key: TKey): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:dxTreeList.forEachNode(callback)]
      */
@@ -20484,51 +20629,51 @@ declare module DevExpress.ui {
      * [descr:dxTreeList.forEachNode(nodes, callback)]
      */
     forEachNode(
-      nodes: Array<DevExpress.ui.dxTreeList.Node>,
+      nodes: Array<DevExpress.ui.dxTreeList.Node<TRowData, TKey>>,
       callback: Function
     ): void;
     /**
      * [descr:dxTreeList.getNodeByKey(key)]
      */
-    getNodeByKey(key: any | string | number): DevExpress.ui.dxTreeList.Node;
+    getNodeByKey(key: TKey): DevExpress.ui.dxTreeList.Node<TRowData, TKey>;
     /**
      * [descr:dxTreeList.getRootNode()]
      */
-    getRootNode(): DevExpress.ui.dxTreeList.Node;
+    getRootNode(): DevExpress.ui.dxTreeList.Node<TRowData, TKey>;
     /**
      * [descr:dxTreeList.getSelectedRowKeys()]
      */
-    getSelectedRowKeys(): Array<any>;
+    getSelectedRowKeys(): Array<TKey>;
     /**
      * [descr:dxTreeList.getSelectedRowKeys(mode)]
      */
-    getSelectedRowKeys(mode: string): Array<any>;
+    getSelectedRowKeys(mode: string): Array<TKey>;
     /**
      * [descr:dxTreeList.getSelectedRowsData()]
      */
-    getSelectedRowsData(): Array<any>;
+    getSelectedRowsData(): Array<TRowData>;
     /**
      * [descr:dxTreeList.getSelectedRowsData(mode)]
      */
-    getSelectedRowsData(mode: string): Array<any>;
+    getSelectedRowsData(mode: string): Array<TRowData>;
     /**
      * [descr:dxTreeList.getVisibleColumns()]
      */
-    getVisibleColumns(): Array<DevExpress.ui.dxTreeList.Column>;
+    getVisibleColumns(): Array<DevExpress.ui.dxTreeList.Column<TRowData, TKey>>;
     /**
      * [descr:dxTreeList.getVisibleColumns(headerLevel)]
      */
     getVisibleColumns(
       headerLevel: number
-    ): Array<DevExpress.ui.dxTreeList.Column>;
+    ): Array<DevExpress.ui.dxTreeList.Column<TRowData, TKey>>;
     /**
      * [descr:dxTreeList.getVisibleRows()]
      */
-    getVisibleRows(): Array<DevExpress.ui.dxTreeList.Row>;
+    getVisibleRows(): Array<DevExpress.ui.dxTreeList.Row<TRowData, TKey>>;
     /**
      * [descr:dxTreeList.isRowExpanded(key)]
      */
-    isRowExpanded(key: any): boolean;
+    isRowExpanded(key: TKey): boolean;
     /**
      * [descr:dxTreeList.loadDescendants()]
      */
@@ -20536,17 +20681,17 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeList.loadDescendants(keys)]
      */
-    loadDescendants(keys: Array<any>): DevExpress.core.utils.DxPromise<void>;
+    loadDescendants(keys: Array<TKey>): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:dxTreeList.loadDescendants(keys, childrenOnly)]
      */
     loadDescendants(
-      keys: Array<any>,
+      keys: Array<TKey>,
       childrenOnly: boolean
     ): DevExpress.core.utils.DxPromise<void>;
 
     beginCustomLoading(messageText: string): void;
-    byKey(key: any | string | number): DevExpress.core.utils.DxPromise<any>;
+    byKey(key: TKey): DevExpress.core.utils.DxPromise<TRowData>;
     cancelEditData(): void;
     cellValue(rowIndex: number, dataField: string): any;
     cellValue(rowIndex: number, dataField: string, value: any): void;
@@ -20570,12 +20715,14 @@ declare module DevExpress.ui {
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
     deselectAll(): DevExpress.core.utils.DxPromise<void>;
-    deselectRows(keys: Array<any>): DevExpress.core.utils.DxPromise<any>;
+    deselectRows(
+      keys: Array<TKey>
+    ): DevExpress.core.utils.DxPromise<Array<TRowData>>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
     endCustomLoading(): void;
-    expandAdaptiveDetailRow(key: any): void;
+    expandAdaptiveDetailRow(key: TKey): void;
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
@@ -20590,21 +20737,25 @@ declare module DevExpress.ui {
     ): DevExpress.core.DxElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DevExpress.data.DataSource;
-    getKeyByRowIndex(rowIndex: number): any;
+    getDataSource(): DevExpress.data.DataSource<
+      TRowData,
+      string | Array<string>,
+      TKey
+    >;
+    getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(
       rowIndex: number
     ): DevExpress.core.UserDefinedElementsArray | undefined;
-    getRowIndexByKey(key: any | string | number): number;
+    getRowIndexByKey(key: TKey): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
-    isAdaptiveDetailRowExpanded(key: any): boolean;
-    isRowFocused(key: any): boolean;
-    isRowSelected(key: any): boolean;
-    keyOf(obj: any): any;
-    navigateToRow(key: any): DevExpress.core.utils.DxPromise<void>;
+    isAdaptiveDetailRowExpanded(key: TKey): boolean;
+    isRowFocused(key: TKey): boolean;
+    isRowSelected(key: TKey): boolean;
+    keyOf(obj: TRowData): TKey;
+    navigateToRow(key: TKey): DevExpress.core.utils.DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DevExpress.core.utils.DxPromise<void>;
@@ -20617,12 +20768,12 @@ declare module DevExpress.ui {
     searchByText(text: string): void;
     selectAll(): DevExpress.core.utils.DxPromise<void>;
     selectRows(
-      keys: Array<any>,
+      keys: Array<TKey>,
       preserve: boolean
-    ): DevExpress.core.utils.DxPromise<any>;
+    ): DevExpress.core.utils.DxPromise<Array<TRowData>>;
     selectRowsByIndexes(
       indexes: Array<number>
-    ): DevExpress.core.utils.DxPromise<any>;
+    ): DevExpress.core.utils.DxPromise<Array<TRowData>>;
     showColumnChooser(): void;
     state(): any;
     state(state: any): void;
@@ -20630,110 +20781,141 @@ declare module DevExpress.ui {
     updateDimensions(): void;
   }
   module dxTreeList {
-    export type AdaptiveDetailRowPreparingEvent =
-      DevExpress.events.EventInfo<dxTreeList> &
-        DevExpress.ui.dxDataGrid.AdaptiveDetailRowPreparingInfo;
-    export type CellClickEvent = DevExpress.events.NativeEventInfo<dxTreeList> &
-      CellInfo;
-    export type CellDblClickEvent =
-      DevExpress.events.NativeEventInfo<dxTreeList> & CellInfo;
-    export type CellHoverChangedEvent =
-      DevExpress.events.EventInfo<dxTreeList> &
-        CellInfo & {
-          readonly eventType: string;
-        };
+    export type AdaptiveDetailRowPreparingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.AdaptiveDetailRowPreparingInfo;
+    export type CellClickEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> &
+      CellInfo<TRowData, TKey>;
+    export type CellDblClickEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> &
+      CellInfo<TRowData, TKey>;
+    export type CellHoverChangedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      CellInfo<TRowData, TKey> & {
+        readonly eventType: string;
+      };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    interface CellInfo {
-      readonly data: any;
-      readonly key: any;
+    interface CellInfo<TRowData = any, TKey = any> {
+      readonly data: TRowData;
+      readonly key: TKey;
       readonly value?: any;
       readonly displayValue?: any;
       readonly text: string;
       readonly columnIndex: number;
-      readonly column: Column;
+      readonly column: Column<TRowData, TKey>;
       readonly rowIndex: number;
       readonly rowType: string;
       readonly cellElement: DevExpress.core.DxElement;
-      readonly row: Row;
+      readonly row: Row<TRowData, TKey>;
     }
-    export type CellPreparedEvent = DevExpress.events.EventInfo<dxTreeList> &
-      CellInfo & {
+    export type CellPreparedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      CellInfo<TRowData, TKey> & {
         readonly isSelected?: boolean;
         readonly isExpanded?: boolean;
         readonly isNewRow?: boolean;
         readonly watch?: Function;
         readonly oldValue?: any;
       };
-    export type Column = dxTreeListColumn;
-    export type ColumnButton = dxTreeListColumnButton;
-    export type ColumnButtonClickEvent =
-      DevExpress.events.NativeEventInfo<dxTreeList> & {
-        row?: Row;
-        column?: Column;
-      };
-    export type ColumnButtonTemplateData = {
-      readonly component: dxTreeList;
-      readonly data: any;
-      readonly key: any;
+    export type Column<TRowData = any, TKey = any> = dxTreeListColumn<
+      TRowData,
+      TKey
+    >;
+    export type ColumnButton<
+      TRowData = any,
+      TKey = any
+    > = dxTreeListColumnButton<TRowData, TKey>;
+    export type ColumnButtonClickEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+      row?: Row<TRowData, TKey>;
+      column?: Column<TRowData, TKey>;
+    };
+    export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
+      readonly component: dxTreeList<TRowData, TKey>;
+      readonly data: TRowData;
+      readonly key: TKey;
       readonly columnIndex: number;
-      readonly column: Column;
+      readonly column: Column<TRowData, TKey>;
       readonly rowIndex: number;
       readonly rowType: string;
-      readonly row: Row;
+      readonly row: Row<TRowData, TKey>;
     };
-    export type ColumnCellTemplateData = {
-      readonly data: any;
-      readonly component: dxTreeList;
+    export type ColumnCellTemplateData<TRowData = any, TKey = any> = {
+      readonly data: TRowData;
+      readonly component: dxTreeList<TRowData, TKey>;
       readonly value?: any;
       readonly oldValue?: any;
       readonly displayValue?: any;
       readonly text: string;
       readonly columnIndex: number;
       readonly rowIndex: number;
-      readonly column: Column;
-      readonly row: Row;
+      readonly column: Column<TRowData, TKey>;
+      readonly row: Row<TRowData, TKey>;
       readonly rowType: string;
       readonly watch?: Function;
     };
-    export type ColumnEditCellTemplateData = {
+    export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
       readonly setValue?: any;
-      readonly data: any;
-      readonly component: dxTreeList;
+      readonly data: TRowData;
+      readonly component: dxTreeList<TRowData, TKey>;
       readonly value?: any;
       readonly displayValue?: any;
       readonly text: string;
       readonly columnIndex: number;
       readonly rowIndex: number;
-      readonly column: Column;
-      readonly row: Row;
+      readonly column: Column<TRowData, TKey>;
+      readonly row: Row<TRowData, TKey>;
       readonly rowType: string;
       readonly watch?: Function;
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type ColumnHeaderCellTemplateData = {
-      readonly component: dxTreeList;
+    export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
+      readonly component: dxTreeList<TRowData, TKey>;
       readonly columnIndex: number;
-      readonly column: Column;
+      readonly column: Column<TRowData, TKey>;
     };
-    export type ContentReadyEvent = DevExpress.events.EventInfo<dxTreeList>;
-    export type ContextMenuPreparingEvent =
-      DevExpress.events.EventInfo<dxTreeList> & {
-        items?: Array<any>;
-        readonly target: string;
-        readonly targetElement: DevExpress.core.DxElement;
-        readonly columnIndex: number;
-        readonly column?: Column;
-        readonly rowIndex: number;
-        readonly row?: Row;
-      };
-    export type DataErrorOccurredEvent =
-      DevExpress.events.EventInfo<dxTreeList> &
-        DevExpress.ui.dxDataGrid.DataErrorOccurredInfo;
-    export type DisposingEvent = DevExpress.events.EventInfo<dxTreeList>;
+    export type ContentReadyEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>>;
+    export type ContextMenuPreparingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> & {
+      items?: Array<any>;
+      readonly target: string;
+      readonly targetElement: DevExpress.core.DxElement;
+      readonly columnIndex: number;
+      readonly column?: Column<TRowData, TKey>;
+      readonly rowIndex: number;
+      readonly row?: Row<TRowData, TKey>;
+    };
+    export type DataErrorOccurredEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.DataErrorOccurredInfo;
+    export type DisposingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -20744,20 +20926,27 @@ declare module DevExpress.ui {
       | 'revertButton'
       | 'saveButton'
       | 'searchPanel';
-    export type EditCanceledEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.DataChangeInfo;
-    export type EditCancelingEvent = DevExpress.events.Cancelable &
-      DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.DataChangeInfo;
-    export interface Editing extends DevExpress.ui.dxDataGrid.EditingBase {
+    export type EditCanceledEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.DataChangeInfo<TRowData, TKey>;
+    export type EditCancelingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.DataChangeInfo<TRowData, TKey>;
+    export interface Editing<TRowData = any, TKey = any>
+      extends DevExpress.ui.dxDataGrid.EditingBase<TRowData, TKey> {
       /**
        * [descr:dxTreeListOptions.editing.allowAdding]
        */
       allowAdding?:
         | boolean
         | ((options: {
-            readonly component: dxTreeList;
-            readonly row?: Row;
+            readonly component: dxTreeList<TRowData, TKey>;
+            readonly row?: Row<TRowData, TKey>;
           }) => boolean);
       /**
        * [descr:dxTreeListOptions.editing.allowDeleting]
@@ -20765,8 +20954,8 @@ declare module DevExpress.ui {
       allowDeleting?:
         | boolean
         | ((options: {
-            readonly component: dxTreeList;
-            readonly row?: Row;
+            readonly component: dxTreeList<TRowData, TKey>;
+            readonly row?: Row<TRowData, TKey>;
           }) => boolean);
       /**
        * [descr:dxTreeListOptions.editing.allowUpdating]
@@ -20774,19 +20963,22 @@ declare module DevExpress.ui {
       allowUpdating?:
         | boolean
         | ((options: {
-            readonly component: dxTreeList;
-            readonly row?: Row;
+            readonly component: dxTreeList<TRowData, TKey>;
+            readonly row?: Row<TRowData, TKey>;
           }) => boolean);
       /**
        * [descr:dxTreeListOptions.editing.texts]
        */
       texts?: EditingTexts;
     }
-    export type EditingStartEvent = DevExpress.events.Cancelable &
-      DevExpress.events.EventInfo<dxTreeList> & {
-        readonly data: any;
-        readonly key: any;
-        readonly column: any;
+    export type EditingStartEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> & {
+        readonly data: TRowData;
+        readonly key: TKey;
+        readonly column: Column<TRowData, TKey>;
       };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -20798,22 +20990,27 @@ declare module DevExpress.ui {
        */
       addRowToNode?: string;
     }
-    export type EditorPreparedEvent =
-      DevExpress.events.EventInfo<dxTreeList> & {
-        readonly parentType: string;
-        readonly value?: any;
-        readonly setValue?: any;
-        readonly updateValueTimeout?: number;
-        readonly width?: number;
-        readonly disabled: boolean;
-        readonly rtlEnabled: boolean;
-        readonly editorElement: DevExpress.core.DxElement;
-        readonly readOnly: boolean;
-        readonly dataField?: string;
-        readonly row?: Row;
-      };
-    export type EditorPreparingEvent = DevExpress.events.Cancelable &
-      DevExpress.events.EventInfo<dxTreeList> & {
+    export type EditorPreparedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> & {
+      readonly parentType: string;
+      readonly value?: any;
+      readonly setValue?: any;
+      readonly updateValueTimeout?: number;
+      readonly width?: number;
+      readonly disabled: boolean;
+      readonly rtlEnabled: boolean;
+      readonly editorElement: DevExpress.core.DxElement;
+      readonly readOnly: boolean;
+      readonly dataField?: string;
+      readonly row?: Row<TRowData, TKey>;
+    };
+    export type EditorPreparingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> & {
         readonly parentType: string;
         readonly value?: any;
         readonly setValue?: any;
@@ -20826,58 +21023,137 @@ declare module DevExpress.ui {
         editorName: string;
         editorOptions: any;
         readonly dataField?: string;
-        readonly row?: Row;
+        readonly row?: Row<TRowData, TKey>;
       };
-    export type FocusedCellChangedEvent =
-      DevExpress.events.EventInfo<dxTreeList> & {
-        readonly cellElement: DevExpress.core.DxElement;
-        readonly columnIndex: number;
-        readonly rowIndex: number;
-        readonly row: Row;
-        readonly column: Column;
-      };
-    export type FocusedCellChangingEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxTreeList> & {
+    export type ExplicitTypes<TRowData, TKey> = {
+      AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<
+        TRowData,
+        TKey
+      >;
+      CellClickEvent: CellClickEvent<TRowData, TKey>;
+      CellDblClickEvent: CellDblClickEvent<TRowData, TKey>;
+      CellHoverChangedEvent: CellHoverChangedEvent<TRowData, TKey>;
+      CellPreparedEvent: CellPreparedEvent<TRowData, TKey>;
+      ColumnButtonClickEvent: ColumnButtonClickEvent<TRowData, TKey>;
+      ColumnButtonTemplateData: ColumnButtonTemplateData<TRowData, TKey>;
+      ColumnCellTemplateData: ColumnCellTemplateData<TRowData, TKey>;
+      ColumnEditCellTemplateData: ColumnEditCellTemplateData<TRowData, TKey>;
+      ContentReadyEvent: ContentReadyEvent<TRowData, TKey>;
+      ContextMenuPreparingEvent: ContextMenuPreparingEvent<TRowData, TKey>;
+      DataErrorOccurredEvent: DataErrorOccurredEvent<TRowData, TKey>;
+      DisposingEvent: DisposingEvent<TRowData, TKey>;
+      EditCanceledEvent: EditCanceledEvent<TRowData, TKey>;
+      EditCancelingEvent: EditCancelingEvent<TRowData, TKey>;
+      Editing: Editing<TRowData, TKey>;
+      EditingStartEvent: EditingStartEvent<TRowData, TKey>;
+      EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
+      EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
+      FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
+      FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
+      FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;
+      FocusedRowChangingEvent: FocusedRowChangingEvent<TRowData, TKey>;
+      InitializedEvent: InitializedEvent<TRowData, TKey>;
+      InitNewRowEvent: InitNewRowEvent<TRowData, TKey>;
+      KeyDownEvent: KeyDownEvent<TRowData, TKey>;
+      NodesInitializedEvent: NodesInitializedEvent<TRowData, TKey>;
+      OptionChangedEvent: OptionChangedEvent<TRowData, TKey>;
+      Properties: Properties<TRowData, TKey>;
+      RowClickEvent: RowClickEvent<TRowData, TKey>;
+      RowCollapsedEvent: RowCollapsedEvent<TRowData, TKey>;
+      RowCollapsingEvent: RowCollapsingEvent<TRowData, TKey>;
+      RowDblClickEvent: RowDblClickEvent<TRowData, TKey>;
+      RowDraggingAddEvent: RowDraggingAddEvent<TRowData, TKey>;
+      RowDraggingChangeEvent: RowDraggingChangeEvent<TRowData, TKey>;
+      RowDraggingEndEvent: RowDraggingEndEvent<TRowData, TKey>;
+      RowDraggingMoveEvent: RowDraggingMoveEvent<TRowData, TKey>;
+      RowDraggingRemoveEvent: RowDraggingRemoveEvent<TRowData, TKey>;
+      RowDraggingReorderEvent: RowDraggingReorderEvent<TRowData, TKey>;
+      RowDraggingStartEvent: RowDraggingStartEvent<TRowData, TKey>;
+      RowDraggingTemplateData: RowDraggingTemplateData<TRowData>;
+      RowExpandedEvent: RowExpandedEvent<TRowData, TKey>;
+      RowExpandingEvent: RowExpandingEvent<TRowData, TKey>;
+      RowInsertedEvent: RowInsertedEvent<TRowData, TKey>;
+      RowInsertingEvent: RowInsertingEvent<TRowData, TKey>;
+      RowPreparedEvent: RowPreparedEvent<TRowData, TKey>;
+      RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
+      RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
+      RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
+      RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
+      RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
+      SavedEvent: SavedEvent<TRowData, TKey>;
+      SavingEvent: SavingEvent<TRowData, TKey>;
+      Scrolling: Scrolling;
+      Selection: Selection;
+      SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
+      ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
+    };
+    export type FocusedCellChangedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> & {
+      readonly cellElement: DevExpress.core.DxElement;
+      readonly columnIndex: number;
+      readonly rowIndex: number;
+      readonly row: Row<TRowData, TKey>;
+      readonly column: Column<TRowData, TKey>;
+    };
+    export type FocusedCellChangingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
         readonly cellElement: DevExpress.core.DxElement;
         readonly prevColumnIndex: number;
         readonly prevRowIndex: number;
         newColumnIndex: number;
         newRowIndex: number;
-        readonly rows: Array<Row>;
-        readonly columns: Array<Column>;
+        readonly rows: Array<Row<TRowData, TKey>>;
+        readonly columns: Array<Column<TRowData, TKey>>;
         isHighlighted: boolean;
       };
-    export type FocusedRowChangedEvent =
-      DevExpress.events.EventInfo<dxTreeList> & {
-        readonly rowElement: DevExpress.core.DxElement;
-        readonly rowIndex: number;
-        readonly row: Row;
-      };
-    export type FocusedRowChangingEvent =
-      DevExpress.events.NativeEventInfo<dxTreeList> & {
-        readonly rowElement: DevExpress.core.DxElement;
-        readonly prevRowIndex: number;
-        newRowIndex: number;
-        readonly rows: Array<Row>;
-      };
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxTreeList>;
-    export type InitNewRowEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.NewRowInfo;
-    export type KeyDownEvent = DevExpress.events.NativeEventInfo<dxTreeList> &
+    export type FocusedRowChangedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> & {
+      readonly rowElement: DevExpress.core.DxElement;
+      readonly rowIndex: number;
+      readonly row: Row<TRowData, TKey>;
+    };
+    export type FocusedRowChangingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+      readonly rowElement: DevExpress.core.DxElement;
+      readonly prevRowIndex: number;
+      newRowIndex: number;
+      readonly rows: Array<Row<TRowData, TKey>>;
+    };
+    export type InitializedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.InitializedEventInfo<dxTreeList<TRowData, TKey>>;
+    export type InitNewRowEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.NewRowInfo<TRowData>;
+    export type KeyDownEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.ui.dxDataGrid.KeyDownInfo;
     /**
      * [descr:dxTreeListNode]
      */
-    export interface Node {
+    export interface Node<TRowData = any, TKey = any> {
       /**
        * [descr:dxTreeListNode.children]
        */
-      children?: Array<Node>;
+      children?: Array<Node<TRowData, TKey>>;
       /**
        * [descr:dxTreeListNode.data]
        */
-      data?: any;
+      data?: TRowData;
       /**
        * [descr:dxTreeListNode.hasChildren]
        */
@@ -20885,7 +21161,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxTreeListNode.key]
        */
-      key: any;
+      key: TKey;
       /**
        * [descr:dxTreeListNode.level]
        */
@@ -20893,17 +21169,22 @@ declare module DevExpress.ui {
       /**
        * [descr:dxTreeListNode.parent]
        */
-      parent?: Node;
+      parent?: Node<TRowData, TKey>;
       /**
        * [descr:dxTreeListNode.visible]
        */
       visible?: boolean;
     }
-    export type NodesInitializedEvent =
-      DevExpress.events.EventInfo<dxTreeList> & {
-        readonly root: Node;
-      };
-    export type OptionChangedEvent = DevExpress.events.EventInfo<dxTreeList> &
+    export type NodesInitializedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> & {
+      readonly root: Node<TRowData, TKey>;
+    };
+    export type OptionChangedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.events.ChangedOptionInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -20914,11 +21195,14 @@ declare module DevExpress.ui {
        */
       enabled?: boolean;
     }
-    export type Properties = dxTreeListOptions;
+    export type Properties<TRowData = any, TKey = any> = dxTreeListOptions<
+      TRowData,
+      TKey
+    >;
     /**
      * [descr:dxTreeListRowObject]
      */
-    export interface Row {
+    export interface Row<TRowData = any, TKey = any> {
       /**
        * [descr:dxTreeListRowObject.isEditing]
        */
@@ -20938,7 +21222,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxTreeListRowObject.key]
        */
-      readonly key: any;
+      readonly key: TKey;
       /**
        * [descr:dxTreeListRowObject.level]
        */
@@ -20946,7 +21230,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxTreeListRowObject.node]
        */
-      readonly node: Node;
+      readonly node: Node<TRowData, TKey>;
       /**
        * [descr:dxTreeListRowObject.rowIndex]
        */
@@ -20959,99 +21243,195 @@ declare module DevExpress.ui {
        * [descr:dxTreeListRowObject.values]
        */
       readonly values: Array<any>;
+      /**
+       * [descr:dxTreeListRowObject.data]
+       */
+      readonly data: TRowData;
     }
-    export type RowClickEvent =
-      DevExpress.events.NativeEventInfo<dxTreeList> & {
-        readonly data: any;
-        readonly key: any;
-        readonly values: Array<any>;
-        readonly columns: Array<any>;
-        readonly rowIndex: number;
-        readonly rowType: string;
-        readonly isSelected?: boolean;
-        readonly isExpanded?: boolean;
-        readonly isNewRow?: boolean;
-        readonly rowElement: DevExpress.core.DxElement;
-        readonly handled: boolean;
-        readonly node: Node;
-        readonly level: number;
-      };
-    export type RowCollapsedEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.RowKeyInfo;
-    export type RowCollapsingEvent = DevExpress.events.Cancelable &
-      DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.RowKeyInfo;
-    export type RowDblClickEvent =
-      DevExpress.events.NativeEventInfo<dxTreeList> & {
-        readonly data: any;
-        readonly key: any;
-        readonly values: Array<any>;
-        readonly columns: Array<Column>;
-        readonly rowIndex: number;
-        readonly rowType: string;
-        readonly isSelected?: boolean;
-        readonly isExpanded?: boolean;
-        readonly isNewRow?: boolean;
-        readonly rowElement: DevExpress.core.DxElement;
-      };
-    export type RowDraggingAddEvent =
-      DevExpress.ui.dxDataGrid.RowDraggingEventInfo<dxTreeList> &
-        DevExpress.ui.dxDataGrid.DragDropInfo;
-    export type RowDraggingChangeEvent = DevExpress.events.Cancelable &
-      DevExpress.ui.dxDataGrid.RowDraggingEventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.DragDropInfo;
-    export type RowDraggingEndEvent = DevExpress.events.Cancelable &
-      DevExpress.ui.dxDataGrid.RowDraggingEventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.DragDropInfo;
-    export type RowDraggingMoveEvent = DevExpress.events.Cancelable &
-      DevExpress.ui.dxDataGrid.RowDraggingEventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.DragDropInfo;
-    export type RowDraggingRemoveEvent =
-      DevExpress.ui.dxDataGrid.RowDraggingEventInfo<dxTreeList>;
-    export type RowDraggingReorderEvent =
-      DevExpress.ui.dxDataGrid.RowDraggingEventInfo<dxTreeList> &
-        DevExpress.ui.dxDataGrid.DragReorderInfo;
-    export type RowDraggingStartEvent = DevExpress.events.Cancelable &
-      DevExpress.ui.dxDataGrid.DragStartEventInfo<dxTreeList>;
-    export type RowDraggingTemplateData =
-      DevExpress.ui.dxDataGrid.RowDraggingTemplateDataModel;
-    export type RowExpandedEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.RowKeyInfo;
-    export type RowExpandingEvent = DevExpress.events.Cancelable &
-      DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.RowKeyInfo;
-    export type RowInsertedEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.RowInsertedInfo;
-    export type RowInsertingEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.RowInsertingInfo;
-    export type RowPreparedEvent = DevExpress.events.EventInfo<dxTreeList> & {
-      readonly data: any;
-      readonly key: any;
+    export type RowClickEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+      readonly data: TRowData;
+      readonly key: TKey;
       readonly values: Array<any>;
-      readonly columns: Array<Column>;
+      readonly columns: Array<Column<TRowData, TKey>>;
       readonly rowIndex: number;
       readonly rowType: string;
       readonly isSelected?: boolean;
       readonly isExpanded?: boolean;
       readonly isNewRow?: boolean;
       readonly rowElement: DevExpress.core.DxElement;
-      readonly node: Node;
+      readonly handled: boolean;
+      readonly node: Node<TRowData, TKey>;
       readonly level: number;
     };
-    export type RowRemovedEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.RowRemovedInfo;
-    export type RowRemovingEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.RowRemovingInfo;
-    export type RowUpdatedEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.RowUpdatedInfo;
-    export type RowUpdatingEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.RowUpdatingInfo;
-    export type RowValidatingEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.RowValidatingInfo;
-    export type SavedEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.DataChangeInfo;
-    export type SavingEvent = DevExpress.events.EventInfo<dxTreeList> &
-      DevExpress.ui.dxDataGrid.SavingInfo;
+    export type RowCollapsedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>;
+    export type RowCollapsingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>;
+    export type RowDblClickEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+      readonly data: TRowData;
+      readonly key: TKey;
+      readonly values: Array<any>;
+      readonly columns: Array<Column<TRowData, TKey>>;
+      readonly rowIndex: number;
+      readonly rowType: string;
+      readonly isSelected?: boolean;
+      readonly isExpanded?: boolean;
+      readonly isNewRow?: boolean;
+      readonly rowElement: DevExpress.core.DxElement;
+    };
+    export type RowDraggingAddEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.ui.dxDataGrid.RowDraggingEventInfo<
+      dxTreeList<TRowData, TKey>,
+      TRowData,
+      TKey
+    > &
+      DevExpress.ui.dxDataGrid.DragDropInfo;
+    export type RowDraggingChangeEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.ui.dxDataGrid.RowDraggingEventInfo<
+        dxTreeList<TRowData, TKey>,
+        TRowData,
+        TKey
+      > &
+      DevExpress.ui.dxDataGrid.DragDropInfo;
+    export type RowDraggingEndEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.ui.dxDataGrid.RowDraggingEventInfo<
+        dxTreeList<TRowData, TKey>,
+        TRowData,
+        TKey
+      > &
+      DevExpress.ui.dxDataGrid.DragDropInfo;
+    export type RowDraggingMoveEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.ui.dxDataGrid.RowDraggingEventInfo<
+        dxTreeList<TRowData, TKey>,
+        TRowData,
+        TKey
+      > &
+      DevExpress.ui.dxDataGrid.DragDropInfo;
+    export type RowDraggingRemoveEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.ui.dxDataGrid.RowDraggingEventInfo<
+      dxTreeList<TRowData, TKey>,
+      TRowData,
+      TKey
+    >;
+    export type RowDraggingReorderEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.ui.dxDataGrid.RowDraggingEventInfo<
+      dxTreeList<TRowData, TKey>,
+      TRowData,
+      TKey
+    > &
+      DevExpress.ui.dxDataGrid.DragReorderInfo;
+    export type RowDraggingStartEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.ui.dxDataGrid.DragStartEventInfo<
+        dxTreeList<TRowData, TKey>,
+        TRowData,
+        TKey
+      >;
+    export type RowDraggingTemplateData<TRowData = any> =
+      DevExpress.ui.dxDataGrid.RowDraggingTemplateDataModel<TRowData>;
+    export type RowExpandedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>;
+    export type RowExpandingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>;
+    export type RowInsertedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.RowInsertedInfo<TRowData, TKey>;
+    export type RowInsertingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.RowInsertingInfo<TRowData>;
+    export type RowPreparedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> & {
+      readonly data: TRowData;
+      readonly key: TKey;
+      readonly values: Array<any>;
+      readonly columns: Array<Column<TRowData, TKey>>;
+      readonly rowIndex: number;
+      readonly rowType: string;
+      readonly isSelected?: boolean;
+      readonly isExpanded?: boolean;
+      readonly isNewRow?: boolean;
+      readonly rowElement: DevExpress.core.DxElement;
+      readonly node: Node<TRowData, TKey>;
+      readonly level: number;
+    };
+    export type RowRemovedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.RowRemovedInfo<TRowData, TKey>;
+    export type RowRemovingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.RowRemovingInfo<TRowData, TKey>;
+    export type RowUpdatedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.RowUpdatedInfo<TRowData, TKey>;
+    export type RowUpdatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.RowUpdatingInfo<TRowData, TKey>;
+    export type RowValidatingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.RowValidatingInfo<TRowData, TKey>;
+    export type SavedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.DataChangeInfo<TRowData, TKey>;
+    export type SavingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.SavingInfo<TRowData, TKey>;
     export interface Scrolling extends DevExpress.ui.dxDataGrid.ScrollingBase {
       /**
        * [descr:dxTreeListOptions.scrolling.mode]
@@ -21064,19 +21444,23 @@ declare module DevExpress.ui {
        */
       recursive?: boolean;
     }
-    export type SelectionChangedEvent =
-      DevExpress.events.EventInfo<dxTreeList> &
-        DevExpress.ui.dxDataGrid.SelectionChangedInfo;
-    export type ToolbarPreparingEvent =
-      DevExpress.events.EventInfo<dxTreeList> &
-        DevExpress.ui.dxDataGrid.ToolbarPreparingInfo;
+    export type SelectionChangedEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.SelectionChangedInfo<TRowData, TKey>;
+    export type ToolbarPreparingEvent<
+      TRowData = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
+      DevExpress.ui.dxDataGrid.ToolbarPreparingInfo;
   }
   /**
    * @deprecated Use the DevExpress.ui.dxTreeList.Column type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxTreeListColumn
-    extends DevExpress.ui.dxDataGrid.ColumnBase {
+  export interface dxTreeListColumn<TRowData = any, TKey = any>
+    extends DevExpress.ui.dxDataGrid.ColumnBase<TRowData> {
     /**
      * [descr:dxTreeListColumn.buttons]
      */
@@ -21087,7 +21471,7 @@ declare module DevExpress.ui {
       | 'edit'
       | 'save'
       | 'undelete'
-      | DevExpress.ui.dxTreeList.ColumnButton
+      | DevExpress.ui.dxTreeList.ColumnButton<TRowData, TKey>
     >;
     /**
      * [descr:dxTreeListColumn.cellTemplate]
@@ -21096,12 +21480,15 @@ declare module DevExpress.ui {
       | DevExpress.core.template
       | ((
           cellElement: DevExpress.core.DxElement,
-          cellInfo: DevExpress.ui.dxTreeList.ColumnCellTemplateData
+          cellInfo: DevExpress.ui.dxTreeList.ColumnCellTemplateData<
+            TRowData,
+            TKey
+          >
         ) => any);
     /**
      * [descr:dxTreeListColumn.columns]
      */
-    columns?: Array<DevExpress.ui.dxTreeList.Column | string>;
+    columns?: Array<DevExpress.ui.dxTreeList.Column<TRowData, TKey> | string>;
     /**
      * [descr:dxTreeListColumn.editCellTemplate]
      */
@@ -21109,7 +21496,10 @@ declare module DevExpress.ui {
       | DevExpress.core.template
       | ((
           cellElement: DevExpress.core.DxElement,
-          cellInfo: DevExpress.ui.dxTreeList.ColumnEditCellTemplateData
+          cellInfo: DevExpress.ui.dxTreeList.ColumnEditCellTemplateData<
+            TRowData,
+            TKey
+          >
         ) => any);
     /**
      * [descr:dxTreeListColumn.headerCellTemplate]
@@ -21118,7 +21508,10 @@ declare module DevExpress.ui {
       | DevExpress.core.template
       | ((
           columnHeader: DevExpress.core.DxElement,
-          headerInfo: DevExpress.ui.dxTreeList.ColumnHeaderCellTemplateData
+          headerInfo: DevExpress.ui.dxTreeList.ColumnHeaderCellTemplateData<
+            TRowData,
+            TKey
+          >
         ) => any);
     /**
      * [descr:dxTreeListColumn.type]
@@ -21129,7 +21522,7 @@ declare module DevExpress.ui {
    * @deprecated Use the TreeList's ColumnButton type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxTreeListColumnButton
+  export interface dxTreeListColumnButton<TRowData = any, TKey = any>
     extends DevExpress.ui.dxDataGrid.ColumnButtonBase {
     /**
      * [descr:dxTreeListColumnButton.name]
@@ -21138,7 +21531,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListColumnButton.onClick]
      */
-    onClick?: (e: DevExpress.ui.dxTreeList.ColumnButtonClickEvent) => void;
+    onClick?: (
+      e: DevExpress.ui.dxTreeList.ColumnButtonClickEvent<TRowData, TKey>
+    ) => void;
     /**
      * [descr:dxTreeListColumnButton.template]
      */
@@ -21146,7 +21541,10 @@ declare module DevExpress.ui {
       | DevExpress.core.template
       | ((
           cellElement: DevExpress.core.DxElement,
-          cellInfo: DevExpress.ui.dxTreeList.ColumnButtonTemplateData
+          cellInfo: DevExpress.ui.dxTreeList.ColumnButtonTemplateData<
+            TRowData,
+            TKey
+          >
         ) => string | DevExpress.core.UserDefinedElement);
     /**
      * [descr:dxTreeListColumnButton.visible]
@@ -21154,9 +21552,9 @@ declare module DevExpress.ui {
     visible?:
       | boolean
       | ((options: {
-          readonly component: dxTreeList;
-          readonly row?: DevExpress.ui.dxTreeList.Row;
-          readonly column: DevExpress.ui.dxTreeList.Column;
+          readonly component: dxTreeList<TRowData, TKey>;
+          readonly row?: DevExpress.ui.dxTreeList.Row<TRowData, TKey>;
+          readonly column: DevExpress.ui.dxTreeList.Column<TRowData, TKey>;
         }) => boolean);
     /**
      * [descr:dxTreeListColumnButton.disabled]
@@ -21164,15 +21562,18 @@ declare module DevExpress.ui {
     disabled?:
       | boolean
       | ((options: {
-          readonly component: dxTreeList;
-          readonly row?: DevExpress.ui.dxTreeList.Row;
-          readonly column: DevExpress.ui.dxTreeList.Column;
+          readonly component: dxTreeList<TRowData, TKey>;
+          readonly row?: DevExpress.ui.dxTreeList.Row<TRowData, TKey>;
+          readonly column: DevExpress.ui.dxTreeList.Column<TRowData, TKey>;
         }) => boolean);
   }
   /**
    * @deprecated Use DevExpress.ui.dxTreeList.Editing instead
    */
-  export type dxTreeListEditing = DevExpress.ui.dxTreeList.Editing;
+  export type dxTreeListEditing<
+    TRowData = any,
+    TKey = any
+  > = DevExpress.ui.dxTreeList.Editing<TRowData, TKey>;
   /**
    * @deprecated 
    */
@@ -21181,12 +21582,16 @@ declare module DevExpress.ui {
    * @deprecated Use DevExpress.ui.dxTreeList.Node instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type dxTreeListNode = DevExpress.ui.dxTreeList.Node;
+  export type dxTreeListNode<
+    TRowData = any,
+    TKey = any
+  > = DevExpress.ui.dxTreeList.Node<TRowData, TKey>;
   /**
    * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
+  export interface dxTreeListOptions<TRowData = any, TKey = any>
+    extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
     /**
      * [descr:dxTreeListOptions.autoExpandAll]
      */
@@ -21194,12 +21599,12 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.columns]
      */
-    columns?: Array<DevExpress.ui.dxTreeList.Column | string>;
+    columns?: Array<DevExpress.ui.dxTreeList.Column<TRowData, TKey> | string>;
     /**
      * [descr:dxTreeListOptions.customizeColumns]
      */
     customizeColumns?: (
-      columns: Array<DevExpress.ui.dxTreeList.Column>
+      columns: Array<DevExpress.ui.dxTreeList.Column<TRowData, TKey>>
     ) => void;
     /**
      * [descr:dxTreeListOptions.dataStructure]
@@ -21208,7 +21613,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.editing]
      */
-    editing?: DevExpress.ui.dxTreeList.Editing;
+    editing?: DevExpress.ui.dxTreeList.Editing<TRowData, TKey>;
     /**
      * [descr:dxTreeListOptions.expandNodesOnFiltering]
      */
@@ -21216,7 +21621,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.expandedRowKeys]
      */
-    expandedRowKeys?: Array<any>;
+    expandedRowKeys?: Array<TKey>;
     /**
      * [descr:dxTreeListOptions.filterMode]
      */
@@ -21236,85 +21641,99 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.onCellClick]
      */
-    onCellClick?: (e: DevExpress.ui.dxTreeList.CellClickEvent) => void;
+    onCellClick?: (
+      e: DevExpress.ui.dxTreeList.CellClickEvent<TRowData, TKey>
+    ) => void;
     /**
      * [descr:dxTreeListOptions.onCellDblClick]
      */
-    onCellDblClick?: (e: DevExpress.ui.dxTreeList.CellDblClickEvent) => void;
+    onCellDblClick?: (
+      e: DevExpress.ui.dxTreeList.CellDblClickEvent<TRowData, TKey>
+    ) => void;
     /**
      * [descr:dxTreeListOptions.onCellHoverChanged]
      */
     onCellHoverChanged?: (
-      e: DevExpress.ui.dxTreeList.CellHoverChangedEvent
+      e: DevExpress.ui.dxTreeList.CellHoverChangedEvent<TRowData, TKey>
     ) => void;
     /**
      * [descr:dxTreeListOptions.onCellPrepared]
      */
-    onCellPrepared?: (e: DevExpress.ui.dxTreeList.CellPreparedEvent) => void;
+    onCellPrepared?: (
+      e: DevExpress.ui.dxTreeList.CellPreparedEvent<TRowData, TKey>
+    ) => void;
     /**
      * [descr:dxTreeListOptions.onContextMenuPreparing]
      */
     onContextMenuPreparing?: (
-      e: DevExpress.ui.dxTreeList.ContextMenuPreparingEvent
+      e: DevExpress.ui.dxTreeList.ContextMenuPreparingEvent<TRowData, TKey>
     ) => void;
     /**
      * [descr:dxTreeListOptions.onEditingStart]
      */
-    onEditingStart?: (e: DevExpress.ui.dxTreeList.EditingStartEvent) => void;
+    onEditingStart?: (
+      e: DevExpress.ui.dxTreeList.EditingStartEvent<TRowData, TKey>
+    ) => void;
     /**
      * [descr:dxTreeListOptions.onEditorPrepared]
      */
     onEditorPrepared?: (
-      options: DevExpress.ui.dxTreeList.EditorPreparedEvent
+      options: DevExpress.ui.dxTreeList.EditorPreparedEvent<TRowData, TKey>
     ) => void;
     /**
      * [descr:dxTreeListOptions.onEditorPreparing]
      */
     onEditorPreparing?: (
-      e: DevExpress.ui.dxTreeList.EditorPreparingEvent
+      e: DevExpress.ui.dxTreeList.EditorPreparingEvent<TRowData, TKey>
     ) => void;
     /**
      * [descr:dxTreeListOptions.onFocusedCellChanged]
      */
     onFocusedCellChanged?: (
-      e: DevExpress.ui.dxTreeList.FocusedCellChangedEvent
+      e: DevExpress.ui.dxTreeList.FocusedCellChangedEvent<TRowData, TKey>
     ) => void;
     /**
      * [descr:dxTreeListOptions.onFocusedCellChanging]
      */
     onFocusedCellChanging?: (
-      e: DevExpress.ui.dxTreeList.FocusedCellChangingEvent
+      e: DevExpress.ui.dxTreeList.FocusedCellChangingEvent<TRowData, TKey>
     ) => void;
     /**
      * [descr:dxTreeListOptions.onFocusedRowChanged]
      */
     onFocusedRowChanged?: (
-      e: DevExpress.ui.dxTreeList.FocusedRowChangedEvent
+      e: DevExpress.ui.dxTreeList.FocusedRowChangedEvent<TRowData, TKey>
     ) => void;
     /**
      * [descr:dxTreeListOptions.onFocusedRowChanging]
      */
     onFocusedRowChanging?: (
-      e: DevExpress.ui.dxTreeList.FocusedRowChangingEvent
+      e: DevExpress.ui.dxTreeList.FocusedRowChangingEvent<TRowData, TKey>
     ) => void;
     /**
      * [descr:dxTreeListOptions.onNodesInitialized]
      */
     onNodesInitialized?: (
-      e: DevExpress.ui.dxTreeList.NodesInitializedEvent
+      e: DevExpress.ui.dxTreeList.NodesInitializedEvent<TRowData, TKey>
     ) => void;
     /**
      * [descr:dxTreeListOptions.onRowClick]
      */
-    onRowClick?: (e: DevExpress.ui.dxTreeList.RowClickEvent) => void;
+    onRowClick?: (
+      e: DevExpress.ui.dxTreeList.RowClickEvent<TRowData, TKey>
+    ) => void;
     /**
      * [descr:dxTreeListOptions.onRowDblClick]
      */
-    onRowDblClick?: (e: DevExpress.ui.dxTreeList.RowDblClickEvent) => void;
+    onRowDblClick?: (
+      e: DevExpress.ui.dxTreeList.RowDblClickEvent<TRowData, TKey>
+    ) => void;
     /**
      * [descr:dxTreeListOptions.onRowPrepared]
      */
-    onRowPrepared?: (e: DevExpress.ui.dxTreeList.RowPreparedEvent) => void;
+    onRowPrepared?: (
+      e: DevExpress.ui.dxTreeList.RowPreparedEvent<TRowData, TKey>
+    ) => void;
     /**
      * [descr:dxTreeListOptions.paging]
      */
@@ -21345,7 +21764,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.rootValue]
      */
-    rootValue?: any;
+    rootValue?: TKey;
     /**
      * [descr:dxTreeListOptions.scrolling]
      */
@@ -22721,6 +23140,7 @@ declare module DevExpress.ui {
     ) => void;
     /**
      * [descr:GridBaseOptions.onToolbarPreparing]
+     * @deprecated [depNote:GridBaseOptions.onToolbarPreparing]
      */
     onToolbarPreparing?: (
       e: DevExpress.events.EventInfo<TComponent> &
@@ -23227,7 +23647,7 @@ declare module DevExpress.ui.dxHtmlEditor {
   export type ToolbarItem = dxHtmlEditorToolbarItem;
 }
 declare module DevExpress.ui.dxList {
-  export type Item = dxListItem;
+  export type Item<TItem extends Item<any> | any = any> = dxListItem<TItem>;
 }
 declare module DevExpress.ui.dxMenu {
   export type Item = dxMenuItem;

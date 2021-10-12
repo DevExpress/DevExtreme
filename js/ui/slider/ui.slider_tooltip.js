@@ -1,4 +1,3 @@
-
 import Tooltip from '../tooltip';
 import { extend } from '../../core/utils/extend';
 import { SliderTooltipPositionController } from './slider_tooltip_position_controller';
