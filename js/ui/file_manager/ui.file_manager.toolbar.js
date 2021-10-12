@@ -130,15 +130,17 @@ class FileManagerToolbar extends Widget {
     _init() {
         super._init();
         this._generalToolbarVisible = true;
-        this._commandManager = this.option('commandManager');
-        this._createItemClickedAction();
     }
 
     _initMarkup() {
+        this._commandManager = this.option('commandManager');
+        this._createItemClickedAction();
+
         this._$viewSwitcherPopup = $('<div>').addClass(FILE_MANAGER_VIEW_SWITCHER_POPUP_CLASS);
         this._generalToolbar = this._createToolbar(this.option('generalItems'), !this._generalToolbarVisible);
         this._fileToolbar = this._createToolbar(this.option('fileItems'), this._generalToolbarVisible);
         this._$viewSwitcherPopup.appendTo(this.$element());
+
         this.$element().addClass(FILE_MANAGER_TOOLBAR_CLASS + ' ' + FILE_MANAGER_GENERAL_TOOLBAR_CLASS);
     }
 
@@ -149,6 +151,8 @@ class FileManagerToolbar extends Widget {
     }
 
     _clean() {
+        delete this._commandManager;
+        delete this._itemClickedAction;
         delete this._$viewSwitcherPopup;
         delete this._generalToolbar;
         delete this._fileToolbar;
