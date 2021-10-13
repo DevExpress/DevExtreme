@@ -767,7 +767,8 @@ function applyTableDimensionChanges(module, $table, newHeight, newWidth, tableDa
         const autoWidthColumns = getAutoSizedElements($table);
 
         if(autoWidthColumns.length > 0) {
-            module.editorInstance.format('tableWidth', newWidth + 'px');
+            // module.editorInstance.format('tableWidth', newWidth + 'px');  // todo return
+            $table.css('width', newWidth + 'px');
         } else {
             const $columns = getColumnElements($table);
             const oldTableWidth = getOuterWidth($table);
@@ -857,8 +858,9 @@ function applyCellDimensionChanges(module, $target, newHeight, newWidth, tableDa
     const autoHeightRows = getAutoSizedElements($table, 'vertical');
 
     if(autoHeightRows.length === 0) {
-        // $table.css('height', 'auto');
-        tableData[0].format('tableHeight', 'auto');
+        $table.css('height', 'auto');
+
+        // tableData[0].format('tableHeight', 'auto'); // todo return
     }
 }
 
