@@ -45,7 +45,7 @@ function getAutoSizedElements($table, direction = 'horizontal') {
 
     $lineElements.each((index, element) => {
         const $element = $(element);
-        if(!isDefined($element.attr(isHorizontal ? 'width' : 'height'))) {
+        if(!isDefined($element.css(isHorizontal ? 'width' : 'height'))) {
             result.push($element);
         }
     });
@@ -53,9 +53,9 @@ function getAutoSizedElements($table, direction = 'horizontal') {
     return result;
 }
 
-function setLineElementsAttrValue($lineElements, property, value) {
+function setLineElementsStyleValue($lineElements, property, value) {
     each($lineElements, (i, element) => {
-        $(element).attr(property, value + 'px');
+        $(element).css(property, value + 'px');
     });
 }
 
@@ -86,7 +86,7 @@ export {
     unfixTableWidth,
     getColumnElements,
     getAutoSizedElements,
-    setLineElementsAttrValue,
+    setLineElementsStyleValue,
     getLineElements,
     getRowElements,
     hasEmbedContent

@@ -1,6 +1,15 @@
 import $ from '../../../core/renderer';
 import localizationMessage from '../../../localization/message';
-import { getTableOperationHandler, hasEmbedContent, unfixTableWidth, getColumnElements, getAutoSizedElements, setLineElementsAttrValue, getLineElements, getRowElements } from './table_helper';
+import {
+    getTableOperationHandler,
+    hasEmbedContent,
+    unfixTableWidth,
+    getColumnElements,
+    getAutoSizedElements,
+    setLineElementsStyleValue,
+    getLineElements,
+    getRowElements
+} from './table_helper';
 import { isDefined, isBoolean } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 
@@ -757,11 +766,11 @@ function applyTableDimensionChanges($table, newHeight, newWidth) {
             each($columns, (i, element) => {
                 const $element = $(element);
                 const newElementWidth = newWidth / oldTableWidth * getOuterWidth($element);
-                $element.attr('width', newElementWidth);
+                $element.css('width', newElementWidth);
 
                 const $lineElements = getLineElements($table, $element.index(), 'horizontal');
 
-                setLineElementsAttrValue($lineElements, 'width', newElementWidth);
+                setLineElementsStyleValue($lineElements, 'width', newElementWidth);
             });
         }
     }
@@ -779,7 +788,7 @@ function applyTableDimensionChanges($table, newHeight, newWidth) {
             const newElementHeight = newHeight / oldTableHeight * getOuterHeight($element);
             const $lineElements = getLineElements($table, i, 'vertical');
 
-            setLineElementsAttrValue($lineElements, 'height', newElementHeight);
+            setLineElementsStyleValue($lineElements, 'height', newElementHeight);
         });
     }
 }
@@ -798,7 +807,7 @@ function applyCellDimensionChanges($target, newHeight, newWidth) {
             unfixTableWidth($table);
         }
 
-        setLineElementsAttrValue($verticalCells, 'width', newWidth);
+        setLineElementsStyleValue($verticalCells, 'width', newWidth);
 
         const $nextColumnCell = $target.next();
         const shouldUpdateNearestColumnWidth = getAutoSizedElements($table).length === 0;
@@ -808,13 +817,13 @@ function applyCellDimensionChanges($target, newHeight, newWidth) {
             if($nextColumnCell.length === 1) {
                 $verticalCells = getLineElements($table, index + 1);
                 const nextColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
-                setLineElementsAttrValue($verticalCells, 'width', Math.max(nextColumnWidth, 0));
+                setLineElementsStyleValue($verticalCells, 'width', Math.max(nextColumnWidth, 0));
             } else {
                 const $prevColumnCell = $target.prev();
                 if($prevColumnCell.length === 1) {
                     $verticalCells = getLineElements($table, index - 1);
                     const prevColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
-                    setLineElementsAttrValue($verticalCells, 'width', Math.max(prevColumnWidth, 0));
+                    setLineElementsStyleValue($verticalCells, 'width', Math.max(prevColumnWidth, 0));
                 }
             }
         }
@@ -822,7 +831,7 @@ function applyCellDimensionChanges($target, newHeight, newWidth) {
 
     const $horizontalCells = $target.closest('tr').find('td');
 
-    setLineElementsAttrValue($horizontalCells, 'height', newHeight);
+    setLineElementsStyleValue($horizontalCells, 'height', newHeight);
     const autoHeightRows = getAutoSizedElements($table, 'vertical');
 
     if(autoHeightRows.length === 0) {
