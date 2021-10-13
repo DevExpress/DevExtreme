@@ -582,10 +582,10 @@ const EditingController = modules.ViewController.inherit((function() {
         getPopupContent: noop,
 
         _isProcessedItem: function(item) {
-            return isDefined(item.rowType);
+            return false;
         },
 
-        _getInsertRowIndex: function(items, change) {
+        _getInsertRowIndex: function(items, change, isProcessedItems) {
             let result = -1;
             const dataController = this._dataController;
             const key = this._getInsertAfterOrBeforeKey(change);
@@ -594,8 +594,10 @@ const EditingController = modules.ViewController.inherit((function() {
                 result = 0;
             } else if(isDefined(key)) {
                 items.some((item, index) => {
+                    isProcessedItems = isProcessedItems || this._isProcessedItem(item);
+
                     if(isObject(item)) {
-                        if(this._isProcessedItem(item) || isDefined(item[INSERT_INDEX])) {
+                        if(isProcessedItems || isDefined(item[INSERT_INDEX])) {
                             if(equalByValue(item.key, key)) {
                                 result = index;
                             }
@@ -897,7 +899,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const key = insertInfo.key;
             const pageIndexToInsertRow = this._getPageIndexToInsertRow();
 
-            let rowIndex = this._getInsertRowIndex(dataController.items(), change);
+            let rowIndex = this._getInsertRowIndex(dataController.items(), change, true);
 
             this._setEditRowKey(key, true);
             this._addChange(change);
