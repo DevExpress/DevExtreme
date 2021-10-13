@@ -62,12 +62,11 @@ import {
 } from '../common/consts';
 
 import { Scrollbar } from '../scrollbar/scrollbar';
-import { isVisible } from '../utils/is_element_visible';
+import { isElementVisible } from '../utils/is_element_visible';
 import { ScrollableNativeProps } from '../common/native_strategy_props';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { getScrollTopMax } from '../utils/get_scroll_top_max';
 import { subscribeToResize } from '../utils/subscribe_to_resize';
-import { getBoundingRect } from '../utils/get_bounding_rect';
 
 export const viewFunction = (viewModel: ScrollableNative): JSX.Element => {
   const {
@@ -483,7 +482,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   startLoading(): void {
-    if (this.loadingIndicatorEnabled && isVisible(this.scrollableRef.current!)) {
+    if (this.loadingIndicatorEnabled && isElementVisible(this.scrollableRef.current!)) {
       this.isLoadPanelVisible = true;
     }
     this.lock();
@@ -872,26 +871,10 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   get hScrollOffsetMax(): number {
-    // el.scrollWidth returns 1363 & el.clientWidth returns 1362
-    // in case when realSizes: container=1362.32, content=1362.33
-    const contentEl = this.contentRef?.current;
-    const containerEl = this.containerRef?.current;
-    if (getBoundingRect(contentEl).width - getBoundingRect(containerEl).width > 0.5) {
-      return -Math.max(this.contentWidth - this.containerClientWidth, 0);
-    }
-
-    return 0;
+    return -Math.max(this.contentWidth - this.containerClientWidth, 0);
   }
 
   get vScrollOffsetMax(): number {
-    // el.scrollHeight returns 1363 & el.clientHeight returns 1362
-    // in case when realSizes: container=1362.32, content=1362.33
-    const contentEl = this.contentRef?.current;
-    const containerEl = this.containerRef?.current;
-    if (getBoundingRect(contentEl).height - getBoundingRect(containerEl).height > 0.5) {
-      return -Math.max(this.contentHeight - this.containerClientHeight, 0);
-    }
-
-    return 0;
+    return -Math.max(this.contentHeight - this.containerClientHeight, 0);
   }
 }
