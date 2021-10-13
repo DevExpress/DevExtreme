@@ -77,7 +77,8 @@ const DOMComponent = Component.inherit({
             'width', 'height',
             'maxHeight', 'maxWidth',
             'minHeight', 'minWidth',
-            'popupHeight', 'popupWidth'
+            'popupHeight', 'popupWidth',
+            'position',
         ]);
         this._attachWindowResizeCallback();
         this._initTemplateManager();
