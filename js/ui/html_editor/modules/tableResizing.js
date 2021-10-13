@@ -132,8 +132,8 @@ export default class TableResizingModule extends BaseModule {
     }
 
     _getWidthStyleValue($element) {
-        const styleValue = $element.css('width');
-        return styleValue ? parseInt(styleValue) : undefined;
+        const styleValue = $element[0].style.width;
+        return styleValue !== '' ? parseInt(styleValue) : undefined;
     }
 
     _tableLastWidth(frame, newValue) {

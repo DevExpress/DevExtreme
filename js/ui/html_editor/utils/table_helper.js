@@ -1,5 +1,4 @@
 import $ from '../../../core/renderer';
-import { isDefined } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 
 
@@ -45,7 +44,7 @@ function getAutoSizedElements($table, direction = 'horizontal') {
 
     $lineElements.each((index, element) => {
         const $element = $(element);
-        if(!isDefined($element.css(isHorizontal ? 'width' : 'height'))) {
+        if($element.get(0).style[isHorizontal ? 'width' : 'height'] === '') {
             result.push($element);
         }
     });
