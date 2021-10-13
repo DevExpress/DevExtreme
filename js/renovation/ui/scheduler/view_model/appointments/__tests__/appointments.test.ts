@@ -332,8 +332,8 @@ describe('Appointments view model', () => {
         .toEqual({
           appointment:
           {
-            endDate: new Date('2021-09-23T21:00:00.000Z'),
-            startDate: new Date('2021-09-22T21:00:00.000Z'),
+            startDate: new Date(2021, 8, 23),
+            endDate: new Date(2021, 8, 24),
           },
           geometry: {
             empty: true,
