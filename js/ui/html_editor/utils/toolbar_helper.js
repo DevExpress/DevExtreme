@@ -412,7 +412,7 @@ function getTablePropertiesFormConfig(module, $table, formats, tableData) {
     let borderColorEditorInstance;
     let backgroundColorEditorInstance;
     const editorInstance = module.editorInstance;
-    const startTableWidth = formats.tableWidth ?? getOuterWidth($table);
+    const startTableWidth = parseInt(formats.tableWidth) ?? getOuterWidth($table);
     const tableStyles = window.getComputedStyle($table.get(0));
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
 
@@ -422,7 +422,7 @@ function getTablePropertiesFormConfig(module, $table, formats, tableData) {
         colCount: 2,
         formData: {
             width: startTableWidth,
-            height: formats.tableHeight ?? getOuterHeight($table),
+            height: parseInt(formats.tableHeight) ?? getOuterHeight($table),
             backgroundColor: formats.tableBackgroundColor ?? tableStyles.backgroundColor,
             borderStyle: formats.tableBorderStyle ?? tableStyles.borderTopStyle,
             borderColor: formats.tableBorderColor ?? tableStyles.borderTopColor,
@@ -567,7 +567,7 @@ function getCellPropertiesFormConfig(module, $cell, formats, tableData) {
     let borderColorEditorInstance;
     let backgroundColorEditorInstance;
 
-    const startCellWidth = formats.cellWidth ?? getOuterWidth($cell);
+    const startCellWidth = parseInt(formats.cellWidth) ?? getOuterWidth($cell);
     const editorInstance = module.editorInstance;
     const cellStyles = window.getComputedStyle($cell.get(0));
     const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
@@ -579,7 +579,7 @@ function getCellPropertiesFormConfig(module, $cell, formats, tableData) {
         colCount: 2,
         formData: {
             width: startCellWidth,
-            height: formats.cellHeight ?? getOuterHeight($cell),
+            height: parseInt(formats.cellHeight) ?? getOuterHeight($cell),
             backgroundColor: formats.cellBackgroundColor ?? cellStyles.backgroundColor,
             borderStyle: formats.cellBorderStyle ?? cellStyles.borderTopStyle,
             borderColor: formats.cellBorderColor ?? cellStyles.borderTopColor,
@@ -847,9 +847,13 @@ function applyCellDimensionChanges(module, $target, newHeight, newWidth, tableDa
 
     // setLineElementsAttrValue($horizontalCells, 'height', newHeight);
 
-    each(tableData[1], (index, rowCell) => {
+    // each(tableData[1].children, (index, rowCell) => {
+    //     rowCell.format('cellHeight', newHeight + 'px');
+    // });
+    tableData[1].children.forEach((rowCell) => {
         rowCell.format('cellHeight', newHeight + 'px');
     });
+
     const autoHeightRows = getAutoSizedElements($table, 'vertical');
 
     if(autoHeightRows.length === 0) {

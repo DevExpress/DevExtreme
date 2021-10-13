@@ -195,8 +195,8 @@ module('Table properties forms', {
 
             this.applyFormChanges(formInstance);
 
-            assert.strictEqual($tableElement.outerHeight(), 90, 'cell height is applied');
-            assert.strictEqual($tableElement.outerWidth(), 600, 'cell width is applied');
+            assert.strictEqual($tableElement.outerHeight(), 90, 'table height is applied');
+            assert.strictEqual($tableElement.outerWidth(), 600, 'table width is applied');
         });
 
         test('show cell Form', function(assert) {
@@ -667,7 +667,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(2);
 
-            this.quillInstance.setSelection(5, 1);
+            this.quillInstance.setSelection(17, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
