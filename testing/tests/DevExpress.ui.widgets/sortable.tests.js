@@ -31,6 +31,9 @@ QUnit.testStart(function() {
                 <div id="item5" class="draggable" style="background: red;">item5</div>
                 <div id="item6" class="draggable" style="background: blue;">item6</div>
             </div>
+            <div id="itemsEmpty" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
+            </div>
+        </div>
         </div>
         <div id="items3" style="vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;"></div>
         <div id="itemsHorizontal" style="width: 250px; height: 300px;">
@@ -1417,6 +1420,47 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         assert.strictEqual(onAddSpy.getCall(0).args[0].toData, 'y', 'toData');
         assert.strictEqual($(onAddSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
         assert.strictEqual($(sortable2.element()).children('#item2').length, 1, 'item is added');
+    });
+
+    QUnit.test('onAdd on drop under empty sortable if html has overflow auto style (T1034893)', function(assert) {
+        try {
+            $('html').css('overflow', 'auto');
+
+            const onAddSpy = sinon.spy();
+
+            const sortable1 = this.createSortable({
+                filter: '.draggable',
+                data: 'x',
+                moveItemOnDrop: true,
+                group: 'shared'
+            }, $('#items'));
+
+            const sortable2 = this.createSortable({
+                filter: '.draggable',
+                group: 'shared',
+                data: 'y',
+                moveItemOnDrop: true,
+                onAdd: onAddSpy
+            }, $('#itemsEmpty'));
+
+            // act
+            const $sourceElement = sortable1.$element().children().eq(1);
+            pointerMock($sourceElement).start({ x: 0, y: 35 }).down().move(700, 30).move(50, 0).up();
+
+            // assert
+            assert.strictEqual(onAddSpy.callCount, 1, 'onAdd is called');
+            assert.deepEqual(onAddSpy.getCall(0).args[0].fromComponent, sortable1, 'sourceComponent');
+            assert.deepEqual(onAddSpy.getCall(0).args[0].toComponent, sortable2, 'component');
+            assert.strictEqual(onAddSpy.getCall(0).args[0].fromIndex, 1, 'fromIndex');
+            assert.strictEqual(onAddSpy.getCall(0).args[0].toIndex, 0, 'toIndex');
+            assert.strictEqual(onAddSpy.getCall(0).args[0].fromData, 'x', 'fromData');
+            assert.strictEqual(onAddSpy.getCall(0).args[0].toData, 'y', 'toData');
+            assert.strictEqual($(onAddSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
+            assert.strictEqual($(sortable2.element()).children().length, 1, 'item is added');
+        } finally {
+            $('html').css('overflow', '');
+
+        }
     });
 
     QUnit.test('onAdd - not add item when eventArgs.cancel is true', function(assert) {
@@ -3263,7 +3307,7 @@ QUnit.module('Drag and drop with nested sortable', crossComponentModuleConfig, (
         assert.strictEqual($placeholder.length, 1, 'placeholder exists');
         assert.equal($placeholder.get(0).style.height, '250px', 'placeholder height style');
         assert.equal($placeholder.get(0).style.width, '', 'placeholder width style');
-        assert.deepEqual(translator.locate($placeholder), { left: 604, top: 0 }, 'placeholder position');
+        assert.deepEqual(translator.locate($placeholder), { left: 608, top: 0 }, 'placeholder position');
     });
 });
 
