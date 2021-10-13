@@ -64,6 +64,13 @@ function setLineElementsAttrValue($lineElements, property, value) {
     });
 }
 
+function setLineElementsFormat(module, $lineElements, property, value) {
+    each($lineElements, (i, element) => {
+        const cellBlot = module.quill.scroll.find(element);
+        cellBlot.format('cell' + property[0].toUpperCase() + property.substring(1), value + 'px');
+    });
+}
+
 function getLineElements($table, index, direction = 'horizontal') {
     return direction === 'horizontal' ? getRowElements($table, index) : getColumnElements($table, index);
 }
@@ -92,6 +99,7 @@ export {
     getColumnElements,
     getAutoSizedElements,
     setLineElementsAttrValue,
+    setLineElementsFormat,
     getLineElements,
     getRowElements,
     hasEmbedContent
