@@ -277,20 +277,66 @@ describe('Scheduler', () => {
           ]);
       });
 
-      it('loadDataSource should load dataItems', () => {
-        const data = [{
-          startDate: new Date(2021, 9, 6, 15, 15),
-          endDate: new Date(2021, 9, 6, 16, 16),
-          allDay: false,
-        }];
-        const scheduler = new Scheduler({
-          dataSource: data,
+      describe('loadDataSource', () => {
+        it('loadDataSource should load dataItems', () => {
+          const data = [{
+            startDate: new Date(2021, 9, 6, 15, 15),
+            endDate: new Date(2021, 9, 6, 16, 16),
+            allDay: false,
+          }];
+          const scheduler = new Scheduler({
+            dataSource: data,
+          });
+
+          scheduler.loadDataSource();
+
+          expect(scheduler.dataItems)
+            .toMatchObject(data);
         });
 
-        scheduler.loadDataSource();
+        it('loadDataSource should not load dataItems if internalDataSource is loaded', () => {
+          const data = [{
+            startDate: new Date(2021, 9, 6, 15, 15),
+            endDate: new Date(2021, 9, 6, 16, 16),
+            allDay: false,
+          }];
+          const scheduler = new Scheduler({
+            dataSource: data,
+          });
 
-        expect(scheduler.dataItems)
-          .toMatchObject(data);
+          jest.spyOn(scheduler, 'internalDataSource', 'get')
+            .mockReturnValue({
+              isLoaded: () => true,
+              isLoading: () => false,
+            } as any);
+
+          scheduler.loadDataSource();
+
+          expect(scheduler.dataItems)
+            .toHaveLength(0);
+        });
+
+        it('loadDataSource should not load dataItems if internalDataSource is in loading phase', () => {
+          const data = [{
+            startDate: new Date(2021, 9, 6, 15, 15),
+            endDate: new Date(2021, 9, 6, 16, 16),
+            allDay: false,
+          }];
+          const scheduler = new Scheduler({
+            dataSource: data,
+          });
+
+          jest.spyOn(scheduler, 'internalDataSource', 'get')
+            .mockReturnValue({
+              isLoaded: () => false,
+              isLoading: () => true,
+            } as any);
+
+          scheduler.loadDataSource();
+
+          expect(scheduler.dataItems)
+            .toHaveLength(0);
+        });
       });
     });
 

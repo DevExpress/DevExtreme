@@ -364,10 +364,12 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadDataSource(): void {
-    (this.internalDataSource.load() as DataSourcePromise)
-      .done((items: Appointment[]) => {
-        this.dataItems = items;
-      });
+    if (!this.internalDataSource.isLoaded() && !this.internalDataSource.isLoading()) {
+      (this.internalDataSource.load() as DataSourcePromise)
+        .done((items: Appointment[]) => {
+          this.dataItems = items;
+        });
+    }
   }
 
   onViewRendered(viewMetaData: ViewMetaData): void {
