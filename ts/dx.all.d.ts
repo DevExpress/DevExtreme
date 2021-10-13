@@ -19843,10 +19843,6 @@ declare module DevExpress.ui {
      */
     scrollingEnabled?: boolean;
     /**
-     * [descr:dxTabsOptions.selectedItems]
-     */
-    selectedItems?: Array<string | number | any>;
-    /**
      * [descr:dxTabsOptions.selectionMode]
      */
     selectionMode?: 'multiple' | 'single';
