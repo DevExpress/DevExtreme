@@ -315,7 +315,7 @@ export default {
                     return result.promise();
                 },
 
-                _closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData) {
+                _closeEditCellCore: function(isError, oldEditRowIndex, withoutSaveEditData) {
                     const dataController = this._dataController;
                     const deferred = new Deferred();
                     const promise = deferred.promise();
@@ -331,18 +331,19 @@ export default {
                             });
                             return promise;
                         }
-                    } else if(oldEditRowIndex >= 0) {
-                        const rowIndices = [oldEditRowIndex];
-
+                    } else {
                         this._resetEditRowKey();
                         this._resetEditColumnName();
 
-                        this._beforeCloseEditCellInBatchMode(rowIndices);
-                        if(!isError) {
-                            dataController.updateItems({
-                                changeType: 'update',
-                                rowIndices: rowIndices
-                            });
+                        if(oldEditRowIndex >= 0) {
+                            const rowIndices = [oldEditRowIndex];
+                            this._beforeCloseEditCellInBatchMode(rowIndices);
+                            if(!isError) {
+                                dataController.updateItems({
+                                    changeType: 'update',
+                                    rowIndices: rowIndices
+                                });
+                            }
                         }
                     }
 
