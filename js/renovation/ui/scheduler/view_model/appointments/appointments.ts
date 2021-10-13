@@ -19,7 +19,5 @@ export const getAppointmentsViewModel = (
     },
   ) as AppointmentViewModelType;
 
-  return result
-    ? result.viewModel
-    : [] as AppointmentViewModel[];
+  return result.viewModel;
 };
