@@ -738,11 +738,11 @@ module('Table properties forms', {
             this.createWidget({ width: 632, value: '\
             <table>\
                 <tr>\
-                    <td width="400">0_0 content</td>\
+                    <td style="width: 400px;">0_0 content</td>\
                     <td>0_1</td>\
                 </tr>\
                 <tr>\
-                    <td width="400">1_0</td>\
+                    <td style="width: 400px;">1_0</td>\
                     <td>1_1</td>\
                 </tr>\
             </table>\
