@@ -56,6 +56,39 @@ const tableWithFixedDimensionsMarkup = '\
     </table>\
     <br>';
 
+const tableMarkupWithHeaderRow = '\
+    <table>\
+        <thead>\
+            <tr>\
+                <th>0</th>\
+                <th>1</th>\
+                <th>2</th>\
+                <th>3</th>\
+            </tr>\
+        </thead>\
+        <tbody>\
+            <tr>\
+                <td>0_0 content</td>\
+                <td>0_1</td>\
+                <td>0_2</td>\
+                <td style="text-align: right;">0_3</td>\
+            </tr>\
+            <tr>\
+                <td>1_0</td>\
+                <td>1_1</td>\
+                <td>1_2</td>\
+                <td style="text-align: right;">1_3</td>\
+            </tr>\
+            <tr>\
+                <td>2_0</td>\
+                <td>2_1</td>\
+                <td>2_2</td>\
+                <td style="text-align: right;">2_3</td>\
+            </tr>\
+        </tbody>\
+    </table>\
+    <br><br>';
+
 const { test, module } = QUnit;
 
 module('Table properties forms', {
@@ -295,6 +328,40 @@ module('Table properties forms', {
             const initialCellHeight = $targetCell.outerHeight();
 
             this.quillInstance.setSelection(50, 1);
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
+
+            const heightEditor = formInstance.getEditor('height');
+            heightEditor.option('value', 80);
+
+            const widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 180);
+
+            this.applyFormChanges(formInstance);
+
+            assert.strictEqual($targetCell.outerHeight(), 80, 'cell height is applied');
+            assert.strictEqual($targetCell.attr('height'), '80px', 'cell height attribute is correct');
+            assert.strictEqual($targetCell.next().attr('height'), '80px', 'sibling cell height attribute is correct');
+
+            assert.strictEqual($targetCell.outerWidth(), 180, 'cell width is applied');
+            assert.strictEqual($targetCell.attr('width'), '180px', 'cell width attribute is correct');
+            assert.strictEqual($tableElement.find('td').eq(2).attr('width'), '180px', 'other this column cell width attribute is correct');
+
+            assert.roughEqual(initialTableWidth, $tableElement.outerWidth(), 1, 'table width is not changed');
+            assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';
+        });
+
+        test('Check header row cell dimensions edititng', function(assert) {
+            this.createWidget({ value: tableMarkupWithHeaderRow });
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const initialTableWidth = $tableElement.outerWidth();
+            const initialTableHeight = $tableElement.outerHeight();
+            const $targetCell = $tableElement.find('td').eq(6);
+            const initialCellHeight = $targetCell.outerHeight();
+
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
