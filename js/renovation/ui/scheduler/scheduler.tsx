@@ -31,7 +31,7 @@ import {
 import { loadResources } from '../../../ui/scheduler/resources/utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
 import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
-import { AppointmentViewModel } from './appointment/types';
+import { AppointmentsViewModelType } from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 
@@ -153,10 +153,15 @@ export const viewFunction = ({
 
           appointments={(
             <AppointmentLayout
-              appointments={appointmentsViewModel}
+              appointments={appointmentsViewModel.regular}
             />
           )}
-          allDayAppointments={<div className="all-day-appointments" />}
+
+          allDayAppointments={(
+            <AppointmentLayout
+              appointments={appointmentsViewModel.allDay}
+            />
+          )}
         />
       </div>
     </Widget>
@@ -258,9 +263,12 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     );
   }
 
-  get appointmentsViewModel(): AppointmentViewModel[] {
+  get appointmentsViewModel(): AppointmentsViewModelType {
     if (!this.appointmentsConfig || this.filteredItems.length === 0) {
-      return [];
+      return {
+        regular: [],
+        allDay: [],
+      };
     }
 
     const model = getAppointmentsModel(
