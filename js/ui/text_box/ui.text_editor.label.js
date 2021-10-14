@@ -51,6 +51,8 @@ class TextEditorLabel {
 
         this._updateMark();
         this._updateText();
+        this._updateBeforeWidth();
+        this._updateWidth();
     }
 
     _toggleMarkupVisibility() {
@@ -59,13 +61,9 @@ class TextEditorLabel {
         this._updateEditorBeforeButtonsClass(visible);
         this._updateEditorLabelClass(visible);
 
-        if(visible) {
-            this._$root.appendTo(this._props.$editor);
-            this._updateBeforeWidth();
-            this._updateWidth();
-        } else {
-            this._$root.detach();
-        }
+        visible
+            ? this._$root.appendTo(this._props.$editor)
+            : this._$root.detach();
     }
 
     _updateEditorLabelClass(visible) {
@@ -82,7 +80,7 @@ class TextEditorLabel {
         }
     }
 
-    _updateEditorBeforeButtonsClass(visible) {
+    _updateEditorBeforeButtonsClass(visible = this._isVisible()) {
         this._props.$editor
             .removeClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
 
@@ -109,6 +107,7 @@ class TextEditorLabel {
         this._$label.css({ maxWidth: this._props.containerWidth });
     }
 
+
     $element() {
         return this._$root;
     }
@@ -131,7 +130,7 @@ class TextEditorLabel {
 
     updateContainsButtonsBefore(containsButtonsBefore) {
         this._props.containsButtonsBefore = containsButtonsBefore;
-        this._toggleMarkupVisibility();
+        this._updateEditorBeforeButtonsClass();
     }
 
     updateBeforeWidth(beforeWidth) {

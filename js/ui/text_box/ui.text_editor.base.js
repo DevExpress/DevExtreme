@@ -786,7 +786,7 @@ const TextEditorBase = Editor.inherit({
                 this._renderButtonContainers();
                 this._updateButtonsStyling(this.option('stylingMode'));
                 this._updateLabelWidth();
-                this._label.getContainsButtonsBefore(value.length !== 0);
+                this._label.updateContainsButtonsBefore(value.length !== 0);
                 break;
             case 'visible':
                 this.callBase(args);
