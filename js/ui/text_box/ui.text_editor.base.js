@@ -202,6 +202,7 @@ const TextEditorBase = Editor.inherit({
         this._renderValue();
 
         this._renderLabel();
+        //  this._updateBeforeButtonsClass();
     },
 
     _render: function() {
@@ -446,8 +447,8 @@ const TextEditorBase = Editor.inherit({
         return {
             $editor: this.$element(),
             text: label,
-            mode: labelMode,
             mark: labelMark,
+            mode: labelMode,
             containsButtonsBefore: !!this._$beforeButtonsContainer,
             containerWidth: this._getLabelContainerWidth(),
             beforeWidth: this._getLabelBeforeWidth()
@@ -470,7 +471,7 @@ const TextEditorBase = Editor.inherit({
 
     _updateLabelWidth: function() {
         this._label.updateBeforeWidth(this._getLabelBeforeWidth());
-        this._label.updateLabelWidth(this._getLabelContainerWidth());
+        this._label.updateWidth(this._getLabelContainerWidth());
     },
 
     _renderLabel: function() {
@@ -745,18 +746,19 @@ const TextEditorBase = Editor.inherit({
                 this._renderPlaceholder();
                 break;
             case 'label':
-                this._label.updateLabelText(value);
+                this._label.updateText(value);
+                this._label.getContainsButtonsBefore(!!this._$beforeButtonsContainer);
                 break;
             case 'labelMark':
-                this._label.updateLabelMark(value);
+                this._label.updateMark(value);
                 break;
             case 'labelMode':
-                this._label._props.mode = value;
-                this._label.addEditorClasses();
+                this._label.updateMode(value);
+                this._label.getContainsButtonsBefore(!!this._$beforeButtonsContainer);
                 break;
             case 'width':
                 this.callBase(args);
-                this._label.updateLabelWidth(this._getLabelContainerWidth());
+                this._label.updateWidth(this._getLabelContainerWidth());
                 break;
             case 'readOnly':
             case 'disabled':
@@ -787,6 +789,7 @@ const TextEditorBase = Editor.inherit({
                 this._renderButtonContainers();
                 this._updateButtonsStyling(this.option('stylingMode'));
                 this._updateLabelWidth();
+                this._label.getContainsButtonsBefore(value.length !== 0);
                 break;
             case 'visible':
                 this.callBase(args);

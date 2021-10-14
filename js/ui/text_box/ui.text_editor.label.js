@@ -1,66 +1,38 @@
 import $ from '../../core/renderer';
 
+
+const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
 const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
-const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
+
 const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
 
 class TextEditorLabel {
     constructor({
         $editor,
         text, mode, mark,
+        containsButtonsBefore,
         containerWidth,
-        beforeWidth,
-        containsButtonsBefore
+        beforeWidth
     }) {
         this._props = {
             $editor,
             text, mode, mark,
+            containsButtonsBefore,
             containerWidth,
-            beforeWidth,
-            containsButtonsBefore
+            beforeWidth
         };
 
-        if(this._isVisible()) {
-            this.addEditorClasses();
-            this._addEditorSubClass();
-            this._render();
-            this.updateBeforeWidth(beforeWidth);
-            this.updateLabelWidth(containerWidth);
-        }
+        this._render();
+        this._toggleMarkupVisibility();
     }
 
     $element() {
         return this._$root;
     }
 
-    addEditorClasses() {
-        this._props.$editor
-            .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
-            .removeClass(TEXTEDITOR_WITH_LABEL_CLASS);
-
-        if(this._isVisible()) {
-            const labelClass = this._props.mode === 'floating' ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS : TEXTEDITOR_WITH_LABEL_CLASS;
-
-            this._props.$editor
-                .addClass(labelClass);
-        }
-    }
-
     _isVisible() {
         return this._props.text && this._props.mode !== 'hidden';
-    }
-
-    _addEditorSubClass() {
-        this._props.$editor
-            .removeClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
-
-        if(this._isVisible()) {
-            const beforeButtonsClass = this._props.containsButtonsBefore ? TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS : '';
-
-            this._props.$editor
-                .addClass(beforeButtonsClass);
-        }
     }
 
     _render() {
@@ -81,32 +53,75 @@ class TextEditorLabel {
             .append(this._$before)
             .append(this._$label)
             .append(this._$after);
-
-        this._$root.appendTo(this._props.$editor);
     }
 
-    updateLabelText(labelText) {
-        if(this._isVisible()) {
-            this._$labelSpan.text(labelText);
+    _toggleMarkupVisibility() {
+        const visible = this._isVisible();
+
+        this._updateBeforeButtonsClass(visible);
+        this._updateLabelClass(visible);
+
+        if(visible) {
+            this._$root.appendTo(this._props.$editor);
+            this.updateBeforeWidth(this._props.beforeWidth);
+            this.updateWidth(this._props.containerWidth);
+        } else {
+            this._$root.detach();
         }
     }
 
-    updateLabelMark(labelMark) {
-        if(this._isVisible()) {
-            this._$labelSpan.attr('data-mark', labelMark);
+
+    _updateLabelClass(visible) {
+        this._props.$editor
+            .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
+            .removeClass(TEXTEDITOR_WITH_LABEL_CLASS);
+
+        if(visible) {
+            const labelClass = this._props.mode === 'floating' ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS : TEXTEDITOR_WITH_LABEL_CLASS;
+
+            this._props.$editor
+                .addClass(labelClass);
         }
+    }
+
+    _updateBeforeButtonsClass(visible) {
+        this._props.$editor
+            .removeClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
+
+        if(visible) {
+            const beforeButtonsClass = this._props.containsButtonsBefore ? TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS : '';
+
+            this._props.$editor
+                .addClass(beforeButtonsClass);
+        }
+    }
+
+    updateMode(mode) {
+        this._props.mode = mode;
+        this._toggleMarkupVisibility();
+    }
+
+    updateText(text) {
+        this._props.text = text;
+        this._$labelSpan.text(text);
+        this._toggleMarkupVisibility();
+    }
+
+    updateMark(mark) {
+        this._$labelSpan.attr('data-mark', mark);
+    }
+
+    getContainsButtonsBefore(containsButtonsBefore) {
+        this._props.containsButtonsBefore = containsButtonsBefore;
+        this._toggleMarkupVisibility();
     }
 
     updateBeforeWidth(beforeWidth) {
-        if(this._isVisible()) {
-            this._$before.css({ width: beforeWidth });
-        }
+        this._$before.css({ width: beforeWidth });
     }
 
-    updateLabelWidth(containerWidth) {
-        if(this._isVisible()) {
-            this._$label.css({ maxWidth: containerWidth });
-        }
+    updateWidth(containerWidth) {
+        this._$label.css({ maxWidth: containerWidth });
     }
 }
 

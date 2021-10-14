@@ -22,6 +22,11 @@ const CLEAR_BUTTON_SELECTOR = '.dx-clear-button-area';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
+const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
+const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
+const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
+const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
+
 const EVENTS = [
     'FocusIn', 'FocusOut',
     'KeyDown', 'KeyUp',
@@ -461,6 +466,120 @@ QUnit.module('general', {}, () => {
         assert.ok($textEditor.hasClass('dx-editor-filled'));
 
         themes.isMaterial = realIsMaterial;
+    });
+});
+
+
+QUnit.module('label integration', {}, () => {
+    QUnit.module('check label classes in Generic theme', () => {
+        QUnit.test('default behavior', function(assert) {
+            const $container = $('#texteditor');
+            const textEditor = $container
+                .dxTextEditor()
+                .dxTextEditor('instance');
+
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
+
+            textEditor.option('label', 'label');
+
+            assert.ok($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container has static class');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
+
+            textEditor.option('buttons', [{
+                name: 'prevDate',
+                location: 'before',
+                options: {
+                    text: 'text',
+                    icon: 'home',
+                    stylingMode: 'text'
+                }
+            }]);
+            assert.ok($container.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS), 'container has before buttons class');
+
+            textEditor.option('label', '');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS), 'container does not have before buttons class');
+        });
+
+        QUnit.test('change label mode', function(assert) {
+            const $container = $('#texteditor');
+            const textEditor = $container
+                .dxTextEditor({
+                    label: 'Label'
+                })
+                .dxTextEditor('instance');
+
+            textEditor.option('labelMode', 'floating');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container has static class');
+            assert.ok($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container has floating class');
+
+            textEditor.option('labelMode', 'hidden');
+            assert.equal($container.find('.' + TEXTEDITOR_LABEL_CLASS).length, 0, 'a label does not render if label mode is hidden');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS), 'container does not have before buttons class');
+        });
+    });
+
+    QUnit.module('check label classes in Material theme', {
+        beforeEach: function() {
+            themes.isMaterial = () => {
+                return true;
+            };
+        },
+        afterEach: function() {
+            themes.isMaterial = () => {
+                return false;
+            };
+        }
+    }, () => {
+        QUnit.test('default behavior', function(assert) {
+            const $container = $('#texteditor');
+            const textEditor = $container
+                .dxTextEditor()
+                .dxTextEditor('instance');
+
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
+
+            textEditor.option('label', 'label');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
+            assert.ok($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container has floating class');
+
+            textEditor.option('buttons', [{
+                name: 'prevDate',
+                location: 'before',
+                options: {
+                    text: 'text',
+                    icon: 'home',
+                    stylingMode: 'text'
+                }
+            }]);
+            assert.ok($container.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS), 'container has before buttons class');
+
+            textEditor.option('label', '');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS), 'container does not have before buttons class');
+        });
+
+        QUnit.test('change label mode', function(assert) {
+            const $container = $('#texteditor');
+            const textEditor = $container
+                .dxTextEditor({
+                    label: 'Label'
+                })
+                .dxTextEditor('instance');
+
+            textEditor.option('labelMode', 'static');
+            assert.ok($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container has static class');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
+
+            textEditor.option('labelMode', 'hidden');
+            assert.equal($container.find('.' + TEXTEDITOR_LABEL_CLASS).length, 0, 'a label does not render if label mode is hidden');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
+            assert.notOk($container.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS), 'container does not have before buttons class');
+        });
+
     });
 });
 
