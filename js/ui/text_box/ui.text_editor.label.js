@@ -52,7 +52,7 @@ class TextEditorLabel {
         this._updateMark();
         this._updateText();
         this._updateBeforeWidth();
-        this._updateWidth();
+        this._updateMaxWidth();
     }
 
     _toggleMarkupVisibility() {
@@ -103,7 +103,7 @@ class TextEditorLabel {
         this._$before.css({ width: this._props.beforeWidth });
     }
 
-    _updateWidth() {
+    _updateMaxWidth() {
         this._$label.css({ maxWidth: this._props.containerWidth });
     }
 
@@ -138,9 +138,9 @@ class TextEditorLabel {
         this._updateBeforeWidth();
     }
 
-    updateWidth(containerWidth) {
+    updateMaxWidth(containerWidth) {
         this._props.containerWidth = containerWidth;
-        this._updateWidth();
+        this._updateMaxWidth();
     }
 }
 

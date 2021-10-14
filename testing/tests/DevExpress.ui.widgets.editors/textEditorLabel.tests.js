@@ -73,8 +73,8 @@ QUnit.module('textEditorLabel', {
             assert.strictEqual(beforeWidth, this.labelInitialConfig.beforeWidth, 'before element width is correct');
         });
 
-        QUnit.test('label internal element should have width equal to containerWidth prop', function(assert) {
-            const labelWidth = getWidth(this.getLabelElement());
+        QUnit.test('label internal element should have max-width equal to containerWidth prop', function(assert) {
+            const labelWidth = Number.parseInt(this.getLabelElement().css('maxWidth'), 10);
 
             assert.strictEqual(labelWidth, this.labelInitialConfig.containerWidth, 'label internal element width is correct');
         });
@@ -154,12 +154,12 @@ QUnit.module('textEditorLabel', {
             assert.strictEqual(labelBeforeWidth, newBeforeWidth, 'before element width is updated');
         });
 
-        QUnit.test('updateWidth', function(assert) {
+        QUnit.test('updateMaxWidth', function(assert) {
             const newContainerWidth = 300;
-            this.label.updateWidth(newContainerWidth);
+            this.label.updateMaxWidth(newContainerWidth);
 
-            const labelWidth = getWidth(this.getLabelElement());
-            assert.strictEqual(labelWidth, newContainerWidth, 'label width is updated');
+            const labelWidth = Number.parseInt(this.getLabelElement().css('maxWidth'), 10);
+            assert.strictEqual(labelWidth, newContainerWidth, 'label max width is updated');
         });
 
         QUnit.module('updateMode', () => {

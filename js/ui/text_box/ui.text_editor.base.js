@@ -456,7 +456,7 @@ const TextEditorBase = Editor.inherit({
 
     _updateLabelWidth: function() {
         this._label.updateBeforeWidth(this._getLabelBeforeWidth());
-        this._label.updateWidth(this._getLabelContainerWidth());
+        this._label.updateMaxWidth(this._getLabelContainerWidth());
     },
 
     _renderLabel: function() {
@@ -744,18 +744,16 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'label':
                 this._label.updateText(value);
-                this._label.getContainsButtonsBefore(!!this._$beforeButtonsContainer);
                 break;
             case 'labelMark':
                 this._label.updateMark(value);
                 break;
             case 'labelMode':
                 this._label.updateMode(value);
-                this._label.getContainsButtonsBefore(!!this._$beforeButtonsContainer);
                 break;
             case 'width':
                 this.callBase(args);
-                this._label.updateWidth(this._getLabelContainerWidth());
+                this._label.updateMaxWidth(this._getLabelContainerWidth());
                 break;
             case 'readOnly':
             case 'disabled':
