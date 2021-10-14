@@ -27,7 +27,7 @@ const DATE_INTERVAL_FORMATS = {
     }
 };
 
-function ungroupDates(items, dateParts, dates) {
+function ungroupUTCDates(items, dateParts, dates) {
     dateParts = dateParts || [];
     dates = dates || [];
 
@@ -36,7 +36,7 @@ function ungroupDates(items, dateParts, dates) {
             const isMonthPart = dateParts.length === 1;
             dateParts.push(isMonthPart ? item.key - 1 : item.key);
             if(item.items) {
-                ungroupDates(item.items, dateParts, dates);
+                ungroupUTCDates(item.items, dateParts, dates);
             } else {
                 const date = new Date(Date.UTC.apply(Date, dateParts));
                 dates.push(date);
@@ -50,7 +50,7 @@ function ungroupDates(items, dateParts, dates) {
 }
 
 function convertDataFromUTCToLocal(data, column) {
-    const dates = ungroupDates(data);
+    const dates = ungroupUTCDates(data);
     const query = dataQuery(dates);
     const group = gridCoreUtils.getHeaderFilterGroupParameters({
         ...column,
@@ -236,7 +236,7 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                         options.dataField = column.dataField || column.name;
 
                         dataSource.load(options).done(function(data) {
-                            const convertUTCDates = isUTCFormat(column.serializationFormat) && cutoffLevel > 2;
+                            const convertUTCDates = isUTCFormat(column.serializationFormat) && cutoffLevel > 3;
                             if(convertUTCDates) {
                                 data = convertDataFromUTCToLocal(data, column);
                             }
