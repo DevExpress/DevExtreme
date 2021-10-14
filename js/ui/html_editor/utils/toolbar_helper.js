@@ -761,8 +761,7 @@ function applyTableDimensionChanges(module, $table, newHeight, newWidth, tableDa
         const autoWidthColumns = getAutoSizedElements($table);
 
         if(autoWidthColumns.length > 0) {
-            // module.editorInstance.format('tableWidth', newWidth + 'px');  // todo return
-            $table.css('width', newWidth + 'px');
+            module.editorInstance.format('tableWidth', newWidth + 'px');
         } else {
             const $columns = getColumnElements($table);
             const oldTableWidth = getOuterWidth($table);
