@@ -21926,7 +21926,7 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxTreeView> & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number | any;
+        readonly itemIndex?: number;
         readonly node?: Node;
       };
     export type ItemCollapsedEvent =
@@ -21940,7 +21940,7 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxTreeView> & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number | any;
+        readonly itemIndex?: number;
         readonly node?: Node;
       };
     export type ItemExpandedEvent =
