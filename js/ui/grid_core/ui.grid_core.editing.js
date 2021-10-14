@@ -594,10 +594,10 @@ const EditingController = modules.ViewController.inherit((function() {
                 result = 0;
             } else if(isDefined(key)) {
                 items.some((item, index) => {
-                    isProcessedItems = isProcessedItems || this._isProcessedItem(item);
+                    const isProcessedItem = isProcessedItems || this._isProcessedItem(item);
 
                     if(isObject(item)) {
-                        if(isProcessedItems || isDefined(item[INSERT_INDEX])) {
+                        if(isProcessedItem || isDefined(item[INSERT_INDEX])) {
                             if(equalByValue(item.key, key)) {
                                 result = index;
                             }
@@ -640,8 +640,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
             return item;
         },
-        _getLoadedRowIndex: function(items, change) {
-            let loadedRowIndex = this._getInsertRowIndex(items, change);
+        _getLoadedRowIndex: function(items, change, isProcessedItems) {
+            let loadedRowIndex = this._getInsertRowIndex(items, change, isProcessedItems);
             const dataController = this._dataController;
 
             if(loadedRowIndex < 0) {
@@ -791,7 +791,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     break;
                 default: {
                     const isViewportBottom = newRowPosition === VIEWPORT_BOTTOM_NEW_ROW_POSITION;
-                    let visibleItemIndex = isViewportBottom ? rowsView?.getBottomVisibleItemIndex(isViewportBottom) : rowsView?.getTopVisibleItemIndex(isViewportBottom);
+                    let visibleItemIndex = isViewportBottom ? rowsView?.getBottomVisibleItemIndex() : rowsView?.getTopVisibleItemIndex();
                     const row = dataController.getVisibleRows()[visibleItemIndex];
 
                     if(row && (!row.isEditing && row.rowType === 'detail' || row.rowType === 'detailAdaptive')) {
@@ -801,7 +801,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     const insertKey = dataController.getKeyByRowIndex(visibleItemIndex);
 
                     if(isDefined(insertKey)) {
-                        change[isViewportBottom ? 'insertAfterKey' : 'insertBeforeKey'] = insertKey;
+                        change['insertBeforeKey'] = insertKey;
                     }
                 }
             }
@@ -899,7 +899,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const key = insertInfo.key;
             const pageIndexToInsertRow = this._getPageIndexToInsertRow();
 
-            let rowIndex = this._getInsertRowIndex(dataController.items(), change, true);
+            let rowIndex = this._getLoadedRowIndex(dataController.items(), change, true);
 
             this._setEditRowKey(key, true);
             this._addChange(change);

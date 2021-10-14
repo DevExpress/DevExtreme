@@ -1056,7 +1056,7 @@ export const virtualScrollingModule = {
                                 const { skipForCurrentPage } = this.getLoadPageParams(true);
                                 const startLoadIndex = items[0].loadIndex + skipForCurrentPage;
 
-                                result = items.filter(it => it.loadIndex >= startLoadIndex && it.loadIndex < startLoadIndex + this._loadViewportParams.take);
+                                result = items.filter(it => (it.loadIndex >= startLoadIndex || it.isNewRow && it.loadIndex >= startLoadIndex - 1) && it.loadIndex < startLoadIndex + this._loadViewportParams.take);
                             }
 
                             return result;
