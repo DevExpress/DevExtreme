@@ -844,6 +844,7 @@ declare module DevExpress {
       value: unknown,
       previousValue: unknown
     ): void;
+    _createElement(element: HTMLElement): void;
   }
   module DOMComponent {
     /**
