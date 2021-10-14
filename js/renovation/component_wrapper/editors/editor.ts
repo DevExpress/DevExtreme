@@ -13,9 +13,9 @@ const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const VALIDATION_TARGET = 'dx-validation-target';
 
 export default class Editor extends Component {
-  showValidationMessageTimeout?: ReturnType<typeof setTimeout> = undefined;
+  showValidationMessageTimeout?: ReturnType<typeof setTimeout>;
 
-  validationRequest: ReturnType<typeof Callbacks> = Callbacks();
+  validationRequest!: ReturnType<typeof Callbacks>;
 
   // eslint-disable-next-line @typescript-eslint/ban-types
   _valueChangeAction!: Function;
@@ -54,6 +54,8 @@ export default class Editor extends Component {
 
   _createElement(element: HTMLElement): void {
     super._createElement(element);
+    this.showValidationMessageTimeout = undefined;
+    this.validationRequest = Callbacks();
     data(this.$element()[0], VALIDATION_TARGET, this);
   }
 
