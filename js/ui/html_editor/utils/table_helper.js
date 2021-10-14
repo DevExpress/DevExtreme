@@ -61,7 +61,7 @@ function getAutoSizedElements($table, direction = 'horizontal') {
 function setLineElementsFormat(module, { elements, property, value }) {
     each(elements, (i, element) => {
         const cellBlot = module.quill.scroll.find(element);
-        cellBlot.format('cell' + camelize(property), value + 'px');
+        cellBlot.format(`cell${camelize(property, true)}`, value + 'px');
     });
 }
 

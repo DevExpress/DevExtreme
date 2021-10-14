@@ -406,11 +406,12 @@ function prepareInsertTableHandler(module) {
     };
 }
 
-function getTablePropertiesFormConfig(module, { $table, formats, tableBlot }) {
+function getTablePropertiesFormConfig(module, { $element, formats, tableBlot }) {
     const window = getWindow();
     let alignmentEditorInstance;
     let borderColorEditorInstance;
     let backgroundColorEditorInstance;
+    const $table = $element;
     const editorInstance = module.editorInstance;
     const startTableWidth = parseInt(formats.tableWidth) ?? getOuterWidth($table);
     const tableStyles = window.getComputedStyle($table.get(0));
@@ -559,13 +560,14 @@ function getTablePropertiesFormConfig(module, { $table, formats, tableBlot }) {
     };
 }
 
-function getCellPropertiesFormConfig(module, { $cell, formats, tableBlot, rowBlot }) {
+function getCellPropertiesFormConfig(module, { $element, formats, tableBlot, rowBlot }) {
     const window = getWindow();
     let alignmentEditorInstance;
     let verticalAlignmentEditorInstance;
     let borderColorEditorInstance;
     let backgroundColorEditorInstance;
 
+    const $cell = $element;
     const startCellWidth = parseInt(formats.cellWidth) ?? getOuterWidth($cell);
     const editorInstance = module.editorInstance;
     const cellStyles = window.getComputedStyle($cell.get(0));
