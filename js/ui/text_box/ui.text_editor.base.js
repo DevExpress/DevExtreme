@@ -734,7 +734,6 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'mode':
                 this._renderInputType();
-                this._updateLabelWidth();
                 break;
             case 'onEnterKey':
                 this._renderEnterKeyAction();
