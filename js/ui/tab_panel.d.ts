@@ -30,56 +30,58 @@ import dxMultiView, {
     dxMultiViewOptions,
 } from './multi_view';
 
-/** @public */
-export type ContentReadyEvent = EventInfo<dxTabPanel>;
+type ItemLike = string | Item<any> | any;
 
-/** @public */
-export type DisposingEvent = EventInfo<dxTabPanel>;
-
-/** @public */
-export type InitializedEvent = InitializedEventInfo<dxTabPanel>;
-
-/** @public */
-export type ItemClickEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
-
-/** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
-
-/** @public */
-export type ItemHoldEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
-
-/** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
-
-/** @public */
-export type OptionChangedEvent = EventInfo<dxTabPanel> & ChangedOptionInfo;
-
-/** @public */
-export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo;
-
-/** @public */
-export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
-    readonly itemData?: any;
+interface TabPanelItemInfo<TItem extends ItemLike> {
+    readonly itemData?: TItem;
     readonly itemElement?: DxElement;
-};
+}
 
 /** @public */
-export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
-    readonly itemData?: any;
-    readonly itemElement?: DxElement;
-};
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>>;
 
 /** @public */
-export type TitleRenderedEvent = EventInfo<dxTabPanel> & {
-    readonly itemData?: any;
-    readonly itemElement?: DxElement;
-};
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>>;
+
+/** @public */
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxTabPanel<TItem, TKey>>;
+
+/** @public */
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & SelectionChangedInfo<TItem>;
+
+/** @public */
+export type TitleClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>> & TabPanelItemInfo<TItem>;
+
+/** @public */
+export type TitleHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxTabPanel<TItem, TKey>> & TabPanelItemInfo<TItem>;
+
+/** @public */
+export type TitleRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTabPanel<TItem, TKey>> & TabPanelItemInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
-export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
+export interface dxTabPanelOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends dxMultiViewOptions<dxTabPanel<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @default false
@@ -93,7 +95,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
     /**
      * @docid
      * @default true
@@ -107,14 +109,14 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    itemTitleTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @type Array<string | dxTabPanelItem | any>
      * @fires dxTabPanelOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | Item | any>;
+    items?: Array<TItem>;
     /**
      * @docid
      * @default null
@@ -128,7 +130,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @action
      * @public
      */
-    onTitleClick?: ((e: TitleClickEvent) => void) | string;
+    onTitleClick?: ((e: TitleClickEvent<TItem, TKey>) => void) | string;
     /**
      * @docid
      * @default null
@@ -142,7 +144,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @action
      * @public
      */
-    onTitleHold?: ((e: TitleHoldEvent) => void);
+    onTitleHold?: ((e: TitleHoldEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -155,7 +157,7 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      * @action
      * @public
      */
-    onTitleRendered?: ((e: TitleRenderedEvent) => void);
+    onTitleRendered?: ((e: TitleRenderedEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default false
@@ -193,19 +195,22 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTabPanel extends dxMultiView<dxTabPanelOptions> { }
+export default class dxTabPanel<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends dxMultiView<dxTabPanelOptions<TItem, TKey>, TItem, TKey> { }
 
 /**
  * @public
  * @namespace DevExpress.ui.dxTabPanel
  */
-export type Item = dxTabPanelItem;
+export type Item<TItem extends Item<any> | any = any> = dxTabPanelItem<TItem>;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxTabPanelItem extends dxMultiViewItem {
+export interface dxTabPanelItem<TItem extends dxTabPanelItem<any> | any = any> extends dxMultiViewItem<TItem> {
     /**
      * @docid
      * @public
@@ -230,7 +235,33 @@ export interface dxTabPanelItem extends dxMultiViewItem {
 }
 
 /** @public */
-export type Properties = dxTabPanelOptions;
+export type ExplicitTypes<
+    TItem extends ItemLike,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+    TitleClickEvent: TitleClickEvent<TItem, TKey>;
+    TitleHoldEvent: TitleHoldEvent<TItem, TKey>;
+    TitleRenderedEvent: TitleRenderedEvent<TItem, TKey>;
+};
+
+/** @public */
+export type Properties<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = dxTabPanelOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = dxTabPanelOptions;
+export type Options<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
