@@ -112,8 +112,6 @@ function prepareShowFormProperties(module, type) {
         const tableData = module.quill.getModule('table').getTable();
 
         const formats = module.quill.getFormat(module.editorInstance.getSelection(true));
-        // console.log(module.editorInstance.getSelection());
-        // console.log(formats);
 
         const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, $element, formats, tableData);
 
@@ -418,8 +416,6 @@ function getTablePropertiesFormConfig(module, $table, formats, tableData) {
     const tableStyles = window.getComputedStyle($table.get(0));
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
 
-    // console.log(formats);
-
     const formOptions = {
         colCount: 2,
         formData: {
@@ -573,9 +569,6 @@ function getCellPropertiesFormConfig(module, $cell, formats, tableData) {
     const editorInstance = module.editorInstance;
     const cellStyles = window.getComputedStyle($cell.get(0));
     const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
-
-    // const cellFormats = module.quill.getFormat();
-    // console.log(formats);
 
     const formOptions = {
         colCount: 2,
@@ -741,7 +734,6 @@ function getCellPropertiesFormConfig(module, $cell, formats, tableData) {
         applyCellDimensionChanges(module, $cell, formData.height, widthArg, tableData);
 
         module.editorInstance.format('cellBorderWidth', formData.borderWidth + 'px');
-        // module.editorInstance.format('cellBorderWidth', formData.borderWidth + 'px');
         module.editorInstance.format('cellBorderColor', borderColorEditorInstance.option('value'));
         module.editorInstance.format('cellBorderStyle', formData.borderStyle);
         module.editorInstance.format('cellBackgroundColor', backgroundColorEditorInstance.option('value'));
@@ -791,7 +783,6 @@ function applyTableDimensionChanges(module, $table, newHeight, newWidth, tableDa
     const autoHeightRows = getAutoSizedElements($table, 'vertical');
 
     if(autoHeightRows?.length > 0) {
-        // $table.css('height', newHeight);
         tableData[0].format('tableHeight', newHeight + 'px');
     } else {
         const $rows = getRowElements($table);
@@ -820,7 +811,6 @@ function applyCellDimensionChanges(module, $target, newHeight, newWidth, tableDa
             unfixTableWidth($table, tableData);
         }
 
-        // setLineElementsAttrValue($verticalCells, 'width', newWidth);
         setLineElementsFormat(module, $verticalCells, 'width', newWidth);
 
         const $nextColumnCell = $target.next();
@@ -831,28 +821,18 @@ function applyCellDimensionChanges(module, $target, newHeight, newWidth, tableDa
             if($nextColumnCell.length === 1) {
                 $verticalCells = getLineElements($table, index + 1);
                 const nextColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
-                // setLineElementsAttrValue($verticalCells, 'width', Math.max(nextColumnWidth, 0));
                 setLineElementsFormat(module, $verticalCells, 'width', Math.max(nextColumnWidth, 0));
             } else {
                 const $prevColumnCell = $target.prev();
                 if($prevColumnCell.length === 1) {
                     $verticalCells = getLineElements($table, index - 1);
                     const prevColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;
-                    // setLineElementsAttrValue($verticalCells, 'width', Math.max(prevColumnWidth, 0));
                     setLineElementsFormat(module, $verticalCells, 'width', Math.max(prevColumnWidth, 0));
                 }
             }
         }
     }
 
-
-    // const $horizontalCells = $target.closest('tr').find('td');
-
-    // setLineElementsAttrValue($horizontalCells, 'height', newHeight);
-
-    // each(tableData[1].children, (index, rowCell) => {
-    //     rowCell.format('cellHeight', newHeight + 'px');
-    // });
     tableData[1].children.forEach((rowCell) => {
         rowCell.format('cellHeight', newHeight + 'px');
     });
@@ -861,8 +841,6 @@ function applyCellDimensionChanges(module, $target, newHeight, newWidth, tableDa
 
     if(autoHeightRows.length === 0) {
         $table.css('height', 'auto');
-
-        // tableData[0].format('tableHeight', 'auto'); // todo return
     }
 }
 

@@ -341,12 +341,12 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerHeight(), 80, 'cell height is applied');
-            assert.strictEqual($targetCell.attr('height'), '80px', 'cell height attribute is correct');
-            assert.strictEqual($targetCell.next().attr('height'), '80px', 'sibling cell height attribute is correct');
+            assert.strictEqual($targetCell.get(0).style.height, '80px', 'cell height style is correct');
+            assert.strictEqual($targetCell.next().get(0).style.height, '80px', 'sibling cell height style is correct');
 
             assert.strictEqual($targetCell.outerWidth(), 180, 'cell width is applied');
-            assert.strictEqual($targetCell.attr('width'), '180px', 'cell width attribute is correct');
-            assert.strictEqual($tableElement.find('td').eq(2).attr('width'), '180px', 'other this column cell width attribute is correct');
+            assert.strictEqual($targetCell.get(0).style.width, '180px', 'cell width style is correct');
+            assert.strictEqual($tableElement.find('td').eq(2).get(0).style.width, '180px', 'other this column cell width style is correct');
 
             assert.roughEqual(initialTableWidth, $tableElement.outerWidth(), 1, 'table width is not changed');
             assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';
