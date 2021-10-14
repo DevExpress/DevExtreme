@@ -79,9 +79,9 @@ export function convertToRenderFieldItemOptions({
 
 export function convertToLabelMarkOptions({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }, isRequired) {
     return {
-        isRequiredMark: showRequiredMark && isRequired,
+        showRequiredMark: showRequiredMark && isRequired,
         requiredMark,
-        isOptionalMark: showOptionalMark && !isRequired,
+        showOptionalMark: showOptionalMark && !isRequired,
         optionalMark
     };
 }
