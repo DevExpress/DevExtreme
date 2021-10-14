@@ -72,7 +72,6 @@ QUnit.module('Row dragging', baseModuleConfig, () => {
     });
 
     QUnit.test('Row reordering should work when columnFixed is enabled', function(assert) {
-        $('#qunit-fixture').attr('id', 'qunit-fixture-visible');
         // arrange
         const tasks = [{ id: 1 }, { id: 2 }, { id: 3 }];
         const tasksStore = new CustomStore({
