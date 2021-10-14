@@ -55,6 +55,7 @@ const KEY_ENTER = 'Enter';
 const KEY_DOWN = 'ArrowDown';
 const KEY_SPACE = ' ';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
+const LABEL_CLASS = 'dx-label';
 
 const TIME_TO_WAIT = 500;
 
@@ -7270,5 +7271,19 @@ QUnit.module('valueChanged should receive correct event parameter', {
                 this.testProgramChange(assert);
             });
         });
+    });
+});
+
+QUnit.module('label integration', () => {
+    QUnit.test('label should have max width equal to tag container width', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            label: 'some'
+        });
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+        const $label = $tagBox.find(`.${LABEL_CLASS}`);
+
+        const tagContainerWidth = getWidth($tagContainer);
+        const labelMaxWidth = Number.parseInt($label.css('maxWidth'), 10);
+        assert.strictEqual(labelMaxWidth, tagContainerWidth);
     });
 });

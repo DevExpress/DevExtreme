@@ -202,7 +202,6 @@ const TextEditorBase = Editor.inherit({
         this._renderValue();
 
         this._renderLabel();
-        //  this._updateBeforeButtonsClass();
     },
 
     _render: function() {
@@ -441,20 +440,6 @@ const TextEditorBase = Editor.inherit({
         this._input().prop('spellcheck', this.option('spellcheck'));
     },
 
-    _getLabelConfig: function() {
-        const { label, labelMode, labelMark } = this.option();
-
-        return {
-            $editor: this.$element(),
-            text: label,
-            mark: labelMark,
-            mode: labelMode,
-            containsButtonsBefore: !!this._$beforeButtonsContainer,
-            containerWidth: this._getLabelContainerWidth(),
-            beforeWidth: this._getLabelBeforeWidth()
-        };
-    },
-
     _getLabelContainer: function() {
         return this._input();
     },
@@ -471,11 +456,23 @@ const TextEditorBase = Editor.inherit({
 
     _updateLabelWidth: function() {
         this._label.updateBeforeWidth(this._getLabelBeforeWidth());
-        this._label.updateWidth(this._getLabelContainerWidth());
+        this._label.updateMaxWidth(this._getLabelContainerWidth());
     },
 
     _renderLabel: function() {
-        this._label = new TextEditorLabel(this._getLabelConfig());
+        const { label, labelMode, labelMark } = this.option();
+
+        const labelConfig = {
+            $editor: this.$element(),
+            text: label,
+            mark: labelMark,
+            mode: labelMode,
+            containsButtonsBefore: !!this._$beforeButtonsContainer,
+            containerWidth: this._getLabelContainerWidth(),
+            beforeWidth: this._getLabelBeforeWidth()
+        };
+
+        this._label = new TextEditorLabel(labelConfig);
     },
 
     _renderPlaceholder: function() {
@@ -737,7 +734,6 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'mode':
                 this._renderInputType();
-                this._updateLabelWidth();
                 break;
             case 'onEnterKey':
                 this._renderEnterKeyAction();
@@ -747,18 +743,16 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'label':
                 this._label.updateText(value);
-                this._label.getContainsButtonsBefore(!!this._$beforeButtonsContainer);
                 break;
             case 'labelMark':
                 this._label.updateMark(value);
                 break;
             case 'labelMode':
                 this._label.updateMode(value);
-                this._label.getContainsButtonsBefore(!!this._$beforeButtonsContainer);
                 break;
             case 'width':
                 this.callBase(args);
-                this._label.updateWidth(this._getLabelContainerWidth());
+                this._label.updateMaxWidth(this._getLabelContainerWidth());
                 break;
             case 'readOnly':
             case 'disabled':
@@ -789,7 +783,7 @@ const TextEditorBase = Editor.inherit({
                 this._renderButtonContainers();
                 this._updateButtonsStyling(this.option('stylingMode'));
                 this._updateLabelWidth();
-                this._label.getContainsButtonsBefore(value.length !== 0);
+                this._label.updateContainsButtonsBefore(value.length !== 0);
                 break;
             case 'visible':
                 this.callBase(args);

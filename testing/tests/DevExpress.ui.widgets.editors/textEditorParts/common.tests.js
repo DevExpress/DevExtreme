@@ -9,6 +9,7 @@ import themes from 'ui/themes';
 import config from 'core/config';
 import consoleUtils from 'core/utils/console';
 import { normalizeKeyName } from 'events/utils/index';
+import { getWidth } from 'core/utils/size';
 
 import 'ui/text_box/ui.text_editor';
 
@@ -21,11 +22,7 @@ const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 const CLEAR_BUTTON_SELECTOR = '.dx-clear-button-area';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
-
-const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
-const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
-const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
-const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
+const LABEL_CLASS = 'dx-label';
 
 const EVENTS = [
     'FocusIn', 'FocusOut',
@@ -469,117 +466,23 @@ QUnit.module('general', {}, () => {
     });
 });
 
-
-QUnit.module('label integration', {}, () => {
-    QUnit.module('check label classes in Generic theme', () => {
-        QUnit.test('default behavior', function(assert) {
-            const $container = $('#texteditor');
-            const textEditor = $container
-                .dxTextEditor()
-                .dxTextEditor('instance');
-
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
-
-            textEditor.option('label', 'label');
-
-            assert.ok($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container has static class');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
-
-            textEditor.option('buttons', [{
-                name: 'prevDate',
-                location: 'before',
-                options: {
-                    text: 'text',
-                    icon: 'home',
-                    stylingMode: 'text'
-                }
-            }]);
-            assert.ok($container.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS), 'container has before buttons class');
-
-            textEditor.option('label', '');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS), 'container does not have before buttons class');
+QUnit.module('label integration', {
+    beforeEach: function() {
+        this.$textEditor = $('#texteditor');
+        this.textEditor = this.$textEditor.dxTextEditor({
+            label: 'some'
         });
+        this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
+        this.getLabelElement = () => this.$textEditor.find(`.${LABEL_CLASS}`);
+    }
+}, () => {
+    QUnit.test('label should have max width equal to input width', function(assert) {
+        const $label = this.getLabelElement();
 
-        QUnit.test('change label mode', function(assert) {
-            const $container = $('#texteditor');
-            const textEditor = $container
-                .dxTextEditor({
-                    label: 'Label'
-                })
-                .dxTextEditor('instance');
+        const inputWidth = getWidth(this.$input);
+        const labelMaxWidth = Number.parseInt($label.css('maxWidth'), 10);
 
-            textEditor.option('labelMode', 'floating');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container has static class');
-            assert.ok($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container has floating class');
-
-            textEditor.option('labelMode', 'hidden');
-            assert.equal($container.find('.' + TEXTEDITOR_LABEL_CLASS).length, 0, 'a label does not render if label mode is hidden');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS), 'container does not have before buttons class');
-        });
-    });
-
-    QUnit.module('check label classes in Material theme', {
-        beforeEach: function() {
-            themes.isMaterial = () => {
-                return true;
-            };
-        },
-        afterEach: function() {
-            themes.isMaterial = () => {
-                return false;
-            };
-        }
-    }, () => {
-        QUnit.test('default behavior', function(assert) {
-            const $container = $('#texteditor');
-            const textEditor = $container
-                .dxTextEditor()
-                .dxTextEditor('instance');
-
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
-
-            textEditor.option('label', 'label');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
-            assert.ok($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container has floating class');
-
-            textEditor.option('buttons', [{
-                name: 'prevDate',
-                location: 'before',
-                options: {
-                    text: 'text',
-                    icon: 'home',
-                    stylingMode: 'text'
-                }
-            }]);
-            assert.ok($container.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS), 'container has before buttons class');
-
-            textEditor.option('label', '');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS), 'container does not have before buttons class');
-        });
-
-        QUnit.test('change label mode', function(assert) {
-            const $container = $('#texteditor');
-            const textEditor = $container
-                .dxTextEditor({
-                    label: 'Label'
-                })
-                .dxTextEditor('instance');
-
-            textEditor.option('labelMode', 'static');
-            assert.ok($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container has static class');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
-
-            textEditor.option('labelMode', 'hidden');
-            assert.equal($container.find('.' + TEXTEDITOR_LABEL_CLASS).length, 0, 'a label does not render if label mode is hidden');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'container does not have static class');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'container does not have floating class');
-            assert.notOk($container.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS), 'container does not have before buttons class');
-        });
-
+        assert.strictEqual(labelMaxWidth, inputWidth);
     });
 });
 

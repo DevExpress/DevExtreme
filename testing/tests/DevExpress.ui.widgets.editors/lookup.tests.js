@@ -81,6 +81,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const SCROLL_VIEW_LOAD_PANEL_CLASS = 'dx-scrollview-loadpanel';
 
 const FOCUSED_CLASS = 'dx-state-focused';
+const LABEL_CLASS = 'dx-label';
 
 const toSelector = function(val) {
     return '.' + val;
@@ -1373,6 +1374,17 @@ QUnit.module('Lookup', {
         this.clock.tick(100);
 
         assert.equal(this.$field.text(), 'John', 'display field work in text');
+    });
+
+    QUnit.module('label integration', () => {
+        QUnit.test('label max width should be equal to field width', function(assert) {
+            this.instance.option('label', 'some');
+            const $label = this.element.find(`.${LABEL_CLASS}`);
+
+            const fieldWidth = getWidth(this.$field);
+            const labelMaxWidth = Number.parseInt($label.css('maxWidth'), 10);
+            assert.strictEqual(labelMaxWidth, fieldWidth);
+        });
     });
 });
 
