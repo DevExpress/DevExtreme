@@ -75,7 +75,7 @@ class App extends React.Component {
         <Column type="buttons" width={110}>
           <Button name="edit" />
           <Button name="delete" />
-          <Button hint="Clone" icon="repeat" visible={this.isCloneIconVisible} disabled={this.isCloneIconDisabled} onClick={this.cloneIconClick} />
+          <Button hint="Clone" icon="copy" visible={this.isCloneIconVisible} disabled={this.isCloneIconDisabled} onClick={this.cloneIconClick} />
         </Column>
         <Column dataField="Prefix" caption="Title" />
         <Column dataField="FirstName" />

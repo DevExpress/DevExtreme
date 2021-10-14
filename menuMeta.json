@@ -109,7 +109,6 @@
             "Title": "Record Paging",
             "Name": "RecordPaging",
             "Widget": "DataGrid",
-            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridScrollingController.cs",
               "/Models/User.cs"
@@ -357,7 +356,6 @@
             "Widget": "DataGrid",
             "DemoType": "Web",
             "Equivalents": "",
-            "Badge": "Updated",
             "Modules": "whatwg-fetch,vuex",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridWebApiController.cs",
@@ -538,7 +536,6 @@
           {
             "Title": "Multiple Record Selection API",
             "Name": "MultipleRecordSelectionAPI",
-            "Badge": "Updated",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Models/SampleData/DataGridEmployees.cs"
@@ -619,6 +616,7 @@
             "Title": "State Persistence",
             "Name": "StatePersistence",
             "Widget": "DataGrid",
+            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Models/Order.cs",
               "/Models/SampleData/Orders.cs"
@@ -674,6 +672,7 @@
             "Title": "Row Template",
             "Name": "RowTemplate",
             "Widget": "DataGrid",
+            "Badge": "Updated",
             "Modules": "globalize--vue&react",
             "MvcAdditionalFiles": [
               "/Models/DataGrid/Employee.cs",
@@ -848,6 +847,7 @@
             "Title": "Overview",
             "Name": "ExcelJSOverview",
             "Widget": "DataGrid",
+            "Badge": "Updated",
             "Modules": "exceljs&file-saver",
             "MvcAdditionalFiles": [
               "/Models/DataGrid/Employee.cs",
@@ -1523,6 +1523,7 @@
             "Title": "State Persistence",
             "Name": "StatePersistence",
             "Widget": "TreeList",
+            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/TreeListEmployeesController.cs",
               "/Models/TreeList/Employee.cs",

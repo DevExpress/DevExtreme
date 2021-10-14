@@ -25,7 +25,7 @@
         <DxButton name="delete"/>
         <DxButton
           hint="Clone"
-          icon="repeat"
+          icon="copy"
           :visible="isCloneIconVisible"
           :disabled="isCloneIconDisabled"
           @click="cloneIconClick"

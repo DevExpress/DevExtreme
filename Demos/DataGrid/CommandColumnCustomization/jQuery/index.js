@@ -38,7 +38,7 @@ $(() => {
         width: 110,
         buttons: ['edit', 'delete', {
           hint: 'Clone',
-          icon: 'repeat',
+          icon: 'copy',
           visible(e) {
             return !e.row.isEditing;
           },
