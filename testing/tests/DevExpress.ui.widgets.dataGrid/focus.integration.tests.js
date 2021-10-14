@@ -3877,6 +3877,82 @@ QUnit.module('View\'s focus', {
             assert.ok(isInputTextSelected($secondCellInput), 'text is selected in the second input cell');
         });
     });
+
+    QUnit.testInActiveWindow('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRenderingMode: virtual', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
+        // arrange
+        const generateData = (rowCount, columnCount) => {
+            const items = [];
+
+            for(let i = 0; i < rowCount; i += 1) {
+                const item = {};
+                for(let j = 0; j < columnCount; j += 1) {
+                    item[`field${j}`] = `${i}-${j}`;
+                }
+                items.push(item);
+            }
+            return items;
+        };
+        const getVisibleRowIndex = (index) => {
+            return index - this.dataGrid.getController('data').getRowIndexOffset();
+        };
+        let rowIndex = 0;
+        let keyboard;
+        this.dataGrid.option({
+            width: 300,
+            height: 200,
+            dataSource: generateData(20, 2),
+            keyExpr: 'field0',
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            paging: {
+                enabled: false,
+            },
+            onFocusedCellChanging: (e) => {
+                e.isHighlighted = true;
+            }
+        });
+        this.clock.tick(300);
+
+        // act
+        $(this.dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
+        this.clock.tick(300);
+
+        // assert
+        assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), `Cell[${rowIndex}, 0] is focused`);
+
+        // Moving Down
+        for(let i = 0; i < 19; i++) {
+            // act
+            keyboard = keyboardMock($(this.dataGrid.getCellElement(getVisibleRowIndex(i), 0)));
+            keyboard.keyDown('down');
+            this.clock.tick(300);
+            $(this.dataGrid.getScrollable().content()).trigger('scroll');
+            rowIndex = i + 1;
+
+            // assert
+            assert.ok($(this.dataGrid.getCellElement(getVisibleRowIndex(rowIndex), 0)).hasClass('dx-focused'), `Cell[${rowIndex}, 0] is focused`);
+        }
+
+        // Moving Up
+        for(let i = 19; i >= 1; i -= 1) {
+            // act
+            keyboard = keyboardMock($(this.dataGrid.getCellElement(getVisibleRowIndex(i), 0)));
+            keyboard.keyDown('up');
+            this.clock.tick(300);
+            $(this.dataGrid.getScrollable().content()).trigger('scroll');
+            rowIndex = i - 1;
+
+            // assert
+            assert.ok($(this.dataGrid.getCellElement(getVisibleRowIndex(rowIndex), 0)).hasClass('dx-focused'), `Cell[${rowIndex}, 0] is focused`);
+        }
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
