@@ -1,5 +1,6 @@
 import $ from '../../../core/renderer';
 import { each } from '../../../core/utils/iterator';
+import { camelize } from '../../../core/utils/inflector';
 
 
 const TABLE_FORMATS = ['table', 'tableHeaderCell'];
@@ -29,10 +30,10 @@ function hasEmbedContent(module, selection) {
     return !!selection && module.quill.getText(selection).trim().length < selection.length;
 }
 
-function unfixTableWidth($table, tableData) {
+function unfixTableWidth($table, tableBlot) {
     const unfixValue = 'initial';
-    if(tableData && tableData[0]) {
-        tableData[0].format('tableWidth', unfixValue);
+    if(tableBlot) {
+        tableBlot.format('tableWidth', unfixValue);
     } else {
         $table.css('width', unfixValue);
     }
@@ -57,10 +58,10 @@ function getAutoSizedElements($table, direction = 'horizontal') {
     return result;
 }
 
-function setLineElementsFormat(module, { lineElements, property, value }) {
-    each(lineElements, (i, element) => {
+function setLineElementsFormat(module, { elements, property, value }) {
+    each(elements, (i, element) => {
         const cellBlot = module.quill.scroll.find(element);
-        cellBlot.format('cell' + property[0].toUpperCase() + property.substring(1), value + 'px');
+        cellBlot.format('cell' + camelize(property), value + 'px');
     });
 }
 
