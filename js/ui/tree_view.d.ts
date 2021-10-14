@@ -95,6 +95,7 @@ export type SelectionChangedEvent<TItem extends Item<any> = Item<any>, TKey = an
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
 export interface dxTreeViewOptions<
     TItem extends Item<any> = Item<any>,
