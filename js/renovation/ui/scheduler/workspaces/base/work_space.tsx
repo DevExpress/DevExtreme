@@ -32,7 +32,7 @@ import { CrossScrollingLayout } from './cross_scrolling_layout';
 import { MainLayoutProps } from './main_layout_props';
 
 export const prepareGenerationOptions = (
-  workSpaceProps: WorkSpaceProps,
+  workSpaceProps: Partial<WorkSpaceProps>,
   renderConfig: ViewRenderConfig,
   isAllDayPanelVisible: boolean,
 ): unknown => {
@@ -272,13 +272,41 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
   // TODO: rework
   get viewDataProvider(): ViewDataProviderType {
-    const { type } = this.props;
+    const {
+      intervalCount,
+      groups,
+      groupByDate,
+      groupOrientation,
+      startDayHour,
+      endDayHour,
+      currentDate,
+      startDate,
+      firstDayOfWeek,
+      hoursInterval,
+      type,
+      cellDuration,
+    } = this.props;
 
     // TODO: convert ViewdataProvider to TS
     const viewDataProvider = (new ViewDataProvider(type) as unknown) as ViewDataProviderType;
 
     const generationOptions = prepareGenerationOptions(
-      this.props, this.renderConfig, this.isAllDayPanelVisible,
+      {
+        intervalCount,
+        groups,
+        groupByDate,
+        groupOrientation,
+        startDayHour,
+        endDayHour,
+        currentDate,
+        startDate,
+        firstDayOfWeek,
+        hoursInterval,
+        type,
+        cellDuration,
+      },
+      this.renderConfig,
+      this.isAllDayPanelVisible,
     );
     viewDataProvider.update(generationOptions, true);
 

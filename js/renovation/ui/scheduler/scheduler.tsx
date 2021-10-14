@@ -24,12 +24,15 @@ import {
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import { DataAccessorType } from './types';
+import { DataAccessorType, DataSourcePromise } from './types';
 import {
   createDataAccessors, createTimeZoneCalculator, filterAppointments,
 } from './common';
 import { loadResources } from '../../../ui/scheduler/resources/utils';
-import { getAppointmentsConfig } from './model/appointments';
+import { getAppointmentsViewModel } from './view_model/appointments/appointments';
+import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
+import { AppointmentsViewModelType } from './appointment/types';
+import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 
 export const viewFunction = ({
@@ -40,6 +43,7 @@ export const viewFunction = ({
   setCurrentDate,
   setCurrentView,
   startViewDate,
+  appointmentsViewModel,
   props: {
     accessKey,
     activeStateEnabled,
@@ -148,9 +152,16 @@ export const viewFunction = ({
           onViewRendered={onViewRendered}
 
           appointments={(
-            <div className="appointments" />
-        )}
-          allDayAppointments={<div className="all-day-appointments" />}
+            <AppointmentLayout
+              appointments={appointmentsViewModel.regular}
+            />
+          )}
+
+          allDayAppointments={(
+            <AppointmentLayout
+              appointments={appointmentsViewModel.allDay}
+            />
+          )}
         />
       </div>
     </Widget>
@@ -229,7 +240,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get appointmentsConfig(): AppointmentsConfigType | undefined {
-    if (!this.viewDataProvider) {
+    if (!this.viewDataProvider || !this.cellsMetaData) {
       return undefined;
     }
 
@@ -249,6 +260,28 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.timeZoneCalculator,
       this.loadedResources,
       this.viewDataProvider,
+    );
+  }
+
+  get appointmentsViewModel(): AppointmentsViewModelType {
+    if (!this.appointmentsConfig || this.filteredItems.length === 0) {
+      return {
+        regular: [],
+        allDay: [],
+      };
+    }
+
+    const model = getAppointmentsModel(
+      this.appointmentsConfig,
+      this.viewDataProvider,
+      this.timeZoneCalculator,
+      this.dataAccessors,
+      this.cellsMetaData,
+    );
+
+    return getAppointmentsViewModel(
+      model,
+      this.filteredItems,
     );
   }
 
@@ -339,12 +372,12 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadDataSource(): void {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.internalDataSource
-      .load()
-      .then((items) => {
-        this.dataItems = items;
-      });
+    if (!this.internalDataSource.isLoaded() && !this.internalDataSource.isLoading()) {
+      (this.internalDataSource.load() as DataSourcePromise)
+        .done((items: Appointment[]) => {
+          this.dataItems = items;
+        });
+    }
   }
 
   onViewRendered(viewMetaData: ViewMetaData): void {
