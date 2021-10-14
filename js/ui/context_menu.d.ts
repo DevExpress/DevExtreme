@@ -82,6 +82,7 @@ export type ShownEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventI
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
 export interface dxContextMenuOptions<
     TItem extends Item<any> = Item<any>,

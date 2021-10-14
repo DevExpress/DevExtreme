@@ -5520,7 +5520,6 @@ declare module DevExpress.ui {
   }
   /**
    * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxContextMenuOptions<
     TItem extends DevExpress.ui.dxContextMenu.Item<any> = DevExpress.ui.dxContextMenu.Item<any>,
@@ -16102,7 +16101,6 @@ declare module DevExpress.ui {
   }
   /**
    * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxMenuOptions<
     TItem extends DevExpress.ui.dxMenu.Item<any> = DevExpress.ui.dxMenu.Item<any>,

@@ -73,6 +73,7 @@ export type SubmenuShownEvent<TItem extends Item<any> = Item<any>, TKey = any> =
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
 export interface dxMenuOptions<
     TItem extends Item<any> = Item<any>,
