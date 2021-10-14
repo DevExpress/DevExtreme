@@ -66,6 +66,7 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
 export interface dxAccordionOptions<
     TItem extends ItemLike = any,
