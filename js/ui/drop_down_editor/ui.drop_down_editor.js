@@ -222,8 +222,8 @@ const DropDownEditor = TextBox.inherit({
         const { my, at } = this._getDefaultPopupPosition(isRtlEnabled);
         const currentPosition = this.option('dropDownOptions.position');
         const shouldUpdatePosition = currentPosition === undefined
-            || (currentPosition.at === this._getDefaultPopupPosition(!isRtlEnabled).at
-            && currentPosition.my === this._getDefaultPopupPosition(!isRtlEnabled).my);
+            || (currentPosition?.at === this._getDefaultPopupPosition(!isRtlEnabled)?.at
+            && currentPosition?.my === this._getDefaultPopupPosition(!isRtlEnabled)?.my);
 
         if(shouldUpdatePosition) {
             this.option('dropDownOptions.position', extend({}, currentPosition, { my, at }));
