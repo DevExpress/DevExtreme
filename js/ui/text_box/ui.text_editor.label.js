@@ -36,10 +36,7 @@ class TextEditorLabel {
     _render() {
         this._$before = $('<div>').addClass(LABEL_BEFORE_CLASS);
 
-        this._$labelSpan = $('<span>')
-            .attr('data-mark', this._props.mark)
-            .text(this._props.text);
-
+        this._$labelSpan = $('<span>');
         this._$label = $('<div>')
             .addClass(LABEL_CLASS)
             .append(this._$labelSpan);
@@ -51,6 +48,9 @@ class TextEditorLabel {
             .append(this._$before)
             .append(this._$label)
             .append(this._$after);
+
+        this._updateMark();
+        this._updateText();
     }
 
     _toggleMarkupVisibility() {
@@ -61,8 +61,8 @@ class TextEditorLabel {
 
         if(visible) {
             this._$root.appendTo(this._props.$editor);
-            this.updateBeforeWidth(this._props.beforeWidth);
-            this.updateWidth(this._props.containerWidth);
+            this._updateBeforeWidth();
+            this._updateWidth();
         } else {
             this._$root.detach();
         }
@@ -93,6 +93,22 @@ class TextEditorLabel {
         }
     }
 
+    _updateMark() {
+        this._$labelSpan.attr('data-mark', this._props.mark);
+    }
+
+    _updateText() {
+        this._$labelSpan.text(this._props.text);
+    }
+
+    _updateBeforeWidth() {
+        this._$before.css({ width: this._props.beforeWidth });
+    }
+
+    _updateWidth() {
+        this._$label.css({ maxWidth: this._props.containerWidth });
+    }
+
     $element() {
         return this._$root;
     }
@@ -104,25 +120,28 @@ class TextEditorLabel {
 
     updateText(text) {
         this._props.text = text;
-        this._$labelSpan.text(text);
+        this._updateText();
         this._toggleMarkupVisibility();
     }
 
     updateMark(mark) {
-        this._$labelSpan.attr('data-mark', mark);
+        this._props.mark = mark;
+        this._updateMark();
     }
 
-    getContainsButtonsBefore(containsButtonsBefore) {
+    updateContainsButtonsBefore(containsButtonsBefore) {
         this._props.containsButtonsBefore = containsButtonsBefore;
         this._toggleMarkupVisibility();
     }
 
     updateBeforeWidth(beforeWidth) {
-        this._$before.css({ width: beforeWidth });
+        this._props.beforeWidth = beforeWidth;
+        this._updateBeforeWidth();
     }
 
     updateWidth(containerWidth) {
-        this._$label.css({ maxWidth: containerWidth });
+        this._props.containerWidth = containerWidth;
+        this._updateWidth();
     }
 }
 

@@ -177,13 +177,13 @@ QUnit.module('textEditorLabel', {
 
             QUnit.test('editor has no dx-texteditor-with-before-buttons class if containsButtonsBefore is changed to false', function(assert) {
                 this.reinit({ containsButtonsBefore: true });
-                this.label.getContainsButtonsBefore(false);
+                this.label.updateContainsButtonsBefore(false);
 
                 assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS));
             });
 
             QUnit.test('editor has dx-texteditor-with-before-buttons class if containsButtonsBefore is changed to true', function(assert) {
-                this.label.getContainsButtonsBefore(true);
+                this.label.updateContainsButtonsBefore(true);
 
                 assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS));
             });
