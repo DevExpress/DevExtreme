@@ -1,11 +1,13 @@
 import $ from '../../core/renderer';
 
-
 const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
 const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
-
 const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
+
+const LABEL_BEFORE_CLASS = 'dx-label-before';
+const LABEL_CLASS = 'dx-label';
+const LABEL_AFTER_CLASS = 'dx-label-after';
 
 class TextEditorLabel {
     constructor({
@@ -27,26 +29,22 @@ class TextEditorLabel {
         this._toggleMarkupVisibility();
     }
 
-    $element() {
-        return this._$root;
-    }
-
     _isVisible() {
         return this._props.text && this._props.mode !== 'hidden';
     }
 
     _render() {
-        this._$before = $('<div>').addClass('dx-label-before');
+        this._$before = $('<div>').addClass(LABEL_BEFORE_CLASS);
 
         this._$labelSpan = $('<span>')
             .attr('data-mark', this._props.mark)
             .text(this._props.text);
 
         this._$label = $('<div>')
-            .addClass('dx-label')
+            .addClass(LABEL_CLASS)
             .append(this._$labelSpan);
 
-        this._$after = $('<div>').addClass('dx-label-after');
+        this._$after = $('<div>').addClass(LABEL_AFTER_CLASS);
 
         this._$root = $('<div>')
             .addClass(TEXTEDITOR_LABEL_CLASS)
@@ -59,7 +57,7 @@ class TextEditorLabel {
         const visible = this._isVisible();
 
         this._updateBeforeButtonsClass(visible);
-        this._updateLabelClass(visible);
+        this._updateEditorLabelClass(visible);
 
         if(visible) {
             this._$root.appendTo(this._props.$editor);
@@ -70,17 +68,17 @@ class TextEditorLabel {
         }
     }
 
-
-    _updateLabelClass(visible) {
+    _updateEditorLabelClass(visible) {
         this._props.$editor
             .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
             .removeClass(TEXTEDITOR_WITH_LABEL_CLASS);
 
         if(visible) {
-            const labelClass = this._props.mode === 'floating' ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS : TEXTEDITOR_WITH_LABEL_CLASS;
+            const labelClass = this._props.mode === 'floating'
+                ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS
+                : TEXTEDITOR_WITH_LABEL_CLASS;
 
-            this._props.$editor
-                .addClass(labelClass);
+            this._props.$editor.addClass(labelClass);
         }
     }
 
@@ -94,6 +92,10 @@ class TextEditorLabel {
             this._props.$editor
                 .addClass(beforeButtonsClass);
         }
+    }
+
+    $element() {
+        return this._$root;
     }
 
     updateMode(mode) {

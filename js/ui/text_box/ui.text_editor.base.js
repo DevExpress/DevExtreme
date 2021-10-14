@@ -202,7 +202,6 @@ const TextEditorBase = Editor.inherit({
         this._renderValue();
 
         this._renderLabel();
-        //  this._updateBeforeButtonsClass();
     },
 
     _render: function() {
@@ -441,20 +440,6 @@ const TextEditorBase = Editor.inherit({
         this._input().prop('spellcheck', this.option('spellcheck'));
     },
 
-    _getLabelConfig: function() {
-        const { label, labelMode, labelMark } = this.option();
-
-        return {
-            $editor: this.$element(),
-            text: label,
-            mark: labelMark,
-            mode: labelMode,
-            containsButtonsBefore: !!this._$beforeButtonsContainer,
-            containerWidth: this._getLabelContainerWidth(),
-            beforeWidth: this._getLabelBeforeWidth()
-        };
-    },
-
     _getLabelContainer: function() {
         return this._input();
     },
@@ -475,7 +460,19 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderLabel: function() {
-        this._label = new TextEditorLabel(this._getLabelConfig());
+        const { label, labelMode, labelMark } = this.option();
+
+        const labelConfig = {
+            $editor: this.$element(),
+            text: label,
+            mark: labelMark,
+            mode: labelMode,
+            containsButtonsBefore: !!this._$beforeButtonsContainer,
+            containerWidth: this._getLabelContainerWidth(),
+            beforeWidth: this._getLabelBeforeWidth()
+        };
+
+        this._label = new TextEditorLabel(labelConfig);
     },
 
     _renderPlaceholder: function() {
