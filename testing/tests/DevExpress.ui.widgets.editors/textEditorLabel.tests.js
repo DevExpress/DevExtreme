@@ -95,11 +95,48 @@ QUnit.module('textEditorLabel', {
     });
 
     QUnit.module('public methods', () => {
-        QUnit.test('updateText', function(assert) {
-            const newText = 'LabelNew';
-            this.label.updateText(newText);
+        QUnit.module('updateText', () => {
+            QUnit.test('updates text', function(assert) {
+                const newText = 'LabelNew';
+                this.label.updateText(newText);
 
-            assert.strictEqual(this.getSpan().text(), newText, 'text is updated');
+                assert.strictEqual(this.getSpan().text(), newText, 'text is updated');
+            });
+
+            QUnit.test('toggles markup visibility', function(assert) {
+                this.label.updateText();
+
+                assert.notOk(this.$editor.find(LABEL_SELECTOR).length, 'markup is detached');
+            });
+
+            QUnit.test('text="" removes label classes from editor element', function(assert) {
+                this.label.updateText('');
+
+                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'editor has no default label class');
+                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'editor has no floating label class');
+            });
+
+            QUnit.test('not empty text adds label classes to editor element if mode is not "hidden"', function(assert) {
+                this.reinit({ text: '' });
+                this.label.updateText('some');
+
+                assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'editor has label class');
+            });
+        });
+
+        QUnit.module('updateContainsButtonsBefore', () => {
+            QUnit.test('change to false removes dx-texteditor-with-before-buttons class from editor element', function(assert) {
+                this.reinit({ containsButtonsBefore: true });
+                this.label.updateContainsButtonsBefore(false);
+
+                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS));
+            });
+
+            QUnit.test('change to true adds dx-texteditor-with-before-buttons class to editor element', function(assert) {
+                this.label.updateContainsButtonsBefore(true);
+
+                assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS));
+            });
         });
 
         QUnit.test('updateMark', function(assert) {
@@ -124,83 +161,79 @@ QUnit.module('textEditorLabel', {
             const labelWidth = getWidth(this.getLabelElement());
             assert.strictEqual(labelWidth, newContainerWidth, 'label width is updated');
         });
-    });
 
-    QUnit.module('adding classes to editor', () => {
-        QUnit.module('on init', () => {
-            QUnit.test('editor has correct class if mode="static"', function(assert) {
-                assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has default label class');
-                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has no floating label class');
+        QUnit.module('updateMode', () => {
+            QUnit.module('markup visibility toggling', () => {
+                QUnit.test('mode="hidden" removes label classes from editor element', function(assert) {
+                    this.label.updateMode('hidden');
+
+                    assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'editor has no default label class');
+                    assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'editor has no floating label class');
+                });
+
+                QUnit.test('mode not "hidden" adds label classes to editor element if text is not empty', function(assert) {
+                    this.reinit({ mode: 'hidden' });
+                    this.label.updateMode('static');
+
+                    assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'editor has label class');
+                });
             });
 
-            QUnit.test('editor has correct class if mode="floating"', function(assert) {
-                this.reinit({ mode: 'floating' });
+            QUnit.module('editor classes toggling', () => {
+                QUnit.test('editor has correct class if mode is changed to "static"', function(assert) {
+                    this.reinit({ mode: 'floating' });
 
-                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has no default label class');
-                assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has floating label class');
-            });
+                    this.label.updateMode('static');
 
-            QUnit.test('editor has not label class if label is hidden', function(assert) {
-                this.reinit({ mode: 'hidden' });
+                    assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has default label class');
+                    assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has no floating label class');
+                });
 
-                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has no default label class');
-                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has no floating label class');
-            });
+                QUnit.test('editor has correct class if mode is changed to "floating"', function(assert) {
+                    this.label.updateMode('floating');
 
-            QUnit.test('editor has no dx-texteditor-with-before-buttons class if containsButtonsBefore=false', function(assert) {
-                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS));
-            });
+                    assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has no default label class');
+                    assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has floating label class');
+                });
 
-            QUnit.test('editor has dx-texteditor-with-before-buttons class if containsButtonsBefore=true', function(assert) {
-                this.reinit({ containsButtonsBefore: true });
+                QUnit.test('editor has not label class if after mode changed to "hidden"', function(assert) {
+                    this.label.updateMode('hidden');
 
-                assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS));
+                    assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has no default label class');
+                    assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has no floating label class');
+                });
             });
         });
+    });
 
-        QUnit.module('after prop update', () => {
-            QUnit.test('editor has correct class if mode is changed to "static"', function(assert) {
-                this.reinit({ mode: 'floating' });
+    QUnit.module('adding classes to editor on init', () => {
+        QUnit.test('editor has correct class if mode="static"', function(assert) {
+            assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has default label class');
+            assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has no floating label class');
+        });
 
-                this.label.updateMode('static');
+        QUnit.test('editor has correct class if mode="floating"', function(assert) {
+            this.reinit({ mode: 'floating' });
 
-                assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has default label class');
-                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has no floating label class');
-            });
+            assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has no default label class');
+            assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has floating label class');
+        });
 
-            QUnit.test('editor has correct class if mode is changed to "floating"', function(assert) {
-                this.label.updateMode('floating');
+        QUnit.test('editor has not label class if label is hidden', function(assert) {
+            this.reinit({ mode: 'hidden' });
 
-                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has no default label class');
-                assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has floating label class');
-            });
+            assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has no default label class');
+            assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has no floating label class');
+        });
 
-            QUnit.test('editor has not label class if after text became empty', function(assert) {
-                this.label.updateText('');
+        QUnit.test('editor has no dx-texteditor-with-before-buttons class if containsButtonsBefore=false', function(assert) {
+            assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS));
+        });
 
-                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has no default label class');
-                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has no floating label class');
-            });
+        QUnit.test('editor has dx-texteditor-with-before-buttons class if containsButtonsBefore=true', function(assert) {
+            this.reinit({ containsButtonsBefore: true });
 
-            QUnit.test('editor has not label class if after mode changed to "hidden"', function(assert) {
-                this.label.updateMode('hidden');
-
-                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS), 'has no default label class');
-                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS), 'has no floating label class');
-            });
-
-            QUnit.test('editor has no dx-texteditor-with-before-buttons class if containsButtonsBefore is changed to false', function(assert) {
-                this.reinit({ containsButtonsBefore: true });
-                this.label.updateContainsButtonsBefore(false);
-
-                assert.notOk(this.$editor.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS));
-            });
-
-            QUnit.test('editor has dx-texteditor-with-before-buttons class if containsButtonsBefore is changed to true', function(assert) {
-                this.label.updateContainsButtonsBefore(true);
-
-                assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS));
-            });
+            assert.ok(this.$editor.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS));
         });
     });
 });
