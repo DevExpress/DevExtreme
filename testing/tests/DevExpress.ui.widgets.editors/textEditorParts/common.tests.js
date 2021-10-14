@@ -9,6 +9,7 @@ import themes from 'ui/themes';
 import config from 'core/config';
 import consoleUtils from 'core/utils/console';
 import { normalizeKeyName } from 'events/utils/index';
+import { getWidth } from 'core/utils/size';
 
 import 'ui/text_box/ui.text_editor';
 
@@ -21,6 +22,7 @@ const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 const CLEAR_BUTTON_SELECTOR = '.dx-clear-button-area';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
+const LABEL_CLASS = 'dx-label';
 
 const EVENTS = [
     'FocusIn', 'FocusOut',
@@ -464,9 +466,24 @@ QUnit.module('general', {}, () => {
     });
 });
 
+QUnit.module('label integration', {
+    beforeEach: function() {
+        this.$textEditor = $('#texteditor');
+        this.textEditor = this.$textEditor.dxTextEditor({
+            label: 'some'
+        });
+        this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
+        this.getLabelElement = () => this.$textEditor.find(`.${LABEL_CLASS}`);
+    }
+}, () => {
+    QUnit.test('label should have max width equal to input width', function(assert) {
+        const $label = this.getLabelElement();
 
-QUnit.module('label integration', {}, () => {
+        const inputWidth = getWidth(this.$input);
+        const labelMaxWidth = Number.parseInt($label.css('maxWidth'), 10);
 
+        assert.strictEqual(labelMaxWidth, inputWidth);
+    });
 });
 
 QUnit.module('text option', moduleConfig, () => {
