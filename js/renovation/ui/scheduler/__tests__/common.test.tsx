@@ -28,6 +28,9 @@ describe('Scheduler common', () => {
       recurrenceRuleExpr: 'test-recurrenceRule-expr',
       recurrenceExceptionExpr: 'test-recurrenceException-expr',
       dateSerializationFormat: '',
+      resources: [{
+        fieldExpr: 'testFieldExpr',
+      }],
     };
 
     it('should return dataAccessors with correct field expressions', () => {
@@ -45,6 +48,25 @@ describe('Scheduler common', () => {
           startDateTimeZoneExpr: 'test-startDateTimeZoneExpr-expr',
           textExpr: 'test-text-expr',
         });
+
+      expect(dataAccessors.resources?.getter)
+        .toBeDefined();
+
+      expect(dataAccessors.resources?.setter)
+        .toBeDefined();
+    });
+
+    it('should return correct dataAccessors for resources', () => {
+      const testData = { testFieldExpr: 'test-field' };
+      const dataAccessors = createDataAccessors(props, true);
+
+      expect(dataAccessors.resources?.getter.testFieldExpr(testData))
+        .toEqual(testData.testFieldExpr);
+
+      dataAccessors.resources?.setter.testFieldExpr(testData, 'changed-test-field');
+
+      expect(dataAccessors.resources?.getter.testFieldExpr(testData))
+        .toEqual('changed-test-field');
     });
 
     it('should return dataAccessors with correct getters if forceIsoDateParsing is true', () => {
@@ -190,10 +212,6 @@ describe('Scheduler common', () => {
         DOMMetaData: DOMMetaData as any,
       };
     };
-
-    // [true, false].forEach((isVirtualScrolling) => {
-
-    // });
 
     it('should filtered appointments correctly', () => {
       const instances = prepareInstances(

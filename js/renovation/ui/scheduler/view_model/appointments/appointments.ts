@@ -1,15 +1,23 @@
 import type { Appointment } from '../../../../../ui/scheduler';
 import { AppointmentsModelType } from '../../model/types';
+import { AppointmentViewModelGenerator } from '../../../../../ui/scheduler/appointments/viewModelGenerator';
+import { AppointmentViewModel } from '../../appointment/types';
 import { AppointmentViewModelType } from './types';
-import { AppointmentViewModel } from '../../../../../ui/scheduler/appointments/viewModelGenerator';
 
 export const getAppointmentsViewModel = (
   model: AppointmentsModelType,
   filteredItems: Appointment[],
-): AppointmentViewModelType => {
-  const appointmentViewModel = new AppointmentViewModel();
+): AppointmentViewModel[] => {
+  const appointmentViewModel = new AppointmentViewModelGenerator();
 
-  const result = appointmentViewModel.generate(filteredItems, model);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const result = appointmentViewModel.generate(
+    filteredItems,
+    {
+      ...model,
+      isRenovatedAppointments: true,
+    },
+  ) as AppointmentViewModelType;
 
-  return result;
+  return result.viewModel;
 };

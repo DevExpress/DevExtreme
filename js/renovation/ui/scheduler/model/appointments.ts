@@ -166,8 +166,9 @@ export const getAppointmentsModel = (
 
   const getAppointmentColor = createGetAppointmentColor({
     resources: appointmentsConfig.resources,
-    resourceDataAccessors: dataAccessors,
-    loadedResources: [], // TODO fill after load resources
+    // TODO dataAccessors -> resourceDataAccessors
+    dataAccessors: dataAccessors.resources as DataAccessorType,
+    loadedResources: appointmentsConfig.loadedResources,
     resourceLoaderMap: new Map(), // TODO fill after load resources
   });
 

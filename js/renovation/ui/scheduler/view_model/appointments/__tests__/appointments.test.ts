@@ -118,6 +118,39 @@ describe('Appointments view model', () => {
 
   describe('getAppointmentsViewModel', () => {
     it('should be generated correctly', () => {
+      const expectedViewModel0 = {
+        appointment: {
+          startDate: new Date(2021, 8, 23, 10),
+          endDate: new Date(2021, 8, 23, 11),
+        },
+        geometry: {
+          height: -200,
+          width: 74,
+          top: 200,
+          left: 100,
+          empty: true,
+          leftVirtualWidth: 0,
+          topVirtualHeight: 0,
+        },
+        info: {
+          appointment: {
+            startDate: new Date(2021, 8, 23, 10),
+            endDate: new Date(2021, 8, 23, 11),
+            source: {
+              startDate: new Date(2021, 8, 23, 10),
+              endDate: new Date(2021, 8, 23, 11),
+              exceptionDate: new Date(2021, 8, 23, 10),
+            },
+            normalizedEndDate: new Date(2021, 8, 23, 11),
+          },
+          sourceAppointment: {
+            startDate: new Date(2021, 8, 23, 10),
+            endDate: new Date(2021, 8, 23, 11),
+            exceptionDate: new Date(2021, 8, 23, 10),
+          },
+          dateText: '10:00 AM - 11:00 AM',
+        },
+      };
       const viewModel = getAppointmentsViewModel(
         appointmentsModel,
         [{
@@ -129,192 +162,116 @@ describe('Appointments view model', () => {
         }],
       );
 
-      expect(viewModel.positionMap)
-        .toHaveLength(2);
+      expect(viewModel)
+        .toHaveLength(4);
 
-      // expect(viewModel[0])
-      //   .toMatchObject({
-      //     itemData: {
-      //       startDate: new Date(2021, 8, 23, 10),
-      //       endDate: new Date(2021, 8, 23, 11),
-      //     },
-      //     needRemove: false,
-      //     needRepaint: true,
-      //     settings: [{
-      //       allDay: false,
-      //       appointmentReduced: null,
-      //       cellPosition: 100,
-      //       columnIndex: 4,
-      //       count: 1,
-      //       dateSettingIndex: 0,
-      //       direction: 'vertical',
-      //       groupIndex: 0,
-      //       hMax: 0,
-      //       height: -200,
-      //       index: 0,
-      //       info: {
-      //         appointment: {
-      //           startDate: new Date(2021, 8, 23, 10),
-      //           endDate: new Date(2021, 8, 23, 11),
-      //           normalizedEndDate: new Date(2021, 8, 23, 11),
-      //           source: {
-      //             startDate: new Date(2021, 8, 23, 10),
-      //             endDate: new Date(2021, 8, 23, 11),
-      //             exceptionDate: new Date(2021, 8, 23, 10),
-      //           },
-      //         },
-      //         dateText: '10:00 AM - 11:00 AM',
-      //         resourceColor: undefined,
-      //         sourceAppointment: {
-      //           startDate: new Date(2021, 8, 23, 10),
-      //           endDate: new Date(2021, 8, 23, 11),
-      //           exceptionDate: new Date(2021, 8, 23, 10),
-      //         },
-      //       },
-      //       left: 100,
-      //       leftVirtualCellCount: 0,
-      //       leftVirtualWidth: 0,
-      //       rowIndex: 20,
-      //       sortedIndex: 0,
-      //       top: 200,
-      //       topVirtualCellCount: 0,
-      //       topVirtualHeight: 0,
-      //       vMax: 0,
-      //       width: 0,
-      //     },
-      //     {
-      //       appointmentReduced: 'tail',
-      //       cellPosition: 100,
-      //       columnIndex: 5,
-      //       count: 2,
-      //       dateSettingIndex: 0,
-      //       direction: 'vertical',
-      //       groupIndex: 0,
-      //       hMax: 0,
-      //       height: 600,
-      //       index: 0,
-      //       info: {
-      //         appointment: {
-      //           startDate: new Date(2021, 8, 23, 10),
-      //           endDate: new Date(2021, 8, 23, 11),
-      //           normalizedEndDate: new Date(2021, 8, 23, 11),
-      //           source: {
-      //             startDate: new Date(2021, 8, 23, 10),
-      //             endDate: new Date(2021, 8, 23, 11),
-      //             exceptionDate: new Date(2021, 8, 23, 10),
-      //           },
-      //         },
-      //         dateText: '10:00 AM - 11:00 AM',
-      //         sourceAppointment: {
-      //           startDate: new Date(2021, 8, 23, 10),
-      //           endDate: new Date(2021, 8, 23, 11),
-      //           exceptionDate: new Date(2021, 8, 23, 10),
-      //         },
-      //       },
-      //       left: 200,
-      //       leftVirtualCellCount: 0,
-      //       leftVirtualWidth: 0,
-      //       rowIndex: 0,
-      //       sortedIndex: 2,
-      //       top: 0,
-      //       topVirtualCellCount: 0,
-      //       topVirtualHeight: 0,
-      //       vMax: 0,
-      //       width: 0,
-      //     }],
-      //   });
+      expect(viewModel[0])
+        .toMatchObject(expectedViewModel0);
 
-      // expect(viewModel[1])
-      //   .toMatchObject({
-      //     itemData: {
-      //       startDate: new Date(2021, 8, 24, 11),
-      //       endDate: new Date(2021, 8, 24, 12),
-      //     },
-      //     needRemove: false,
-      //     needRepaint: true,
-      //     settings: [{
-      //       allDay: false,
-      //       appointmentReduced: null,
-      //       cellPosition: 100,
-      //       columnIndex: 5,
-      //       count: 1,
-      //       dateSettingIndex: 0,
-      //       direction: 'vertical',
-      //       groupIndex: 0,
-      //       hMax: 0,
-      //       height: -300,
-      //       index: 0,
-      //       info: {
-      //         appointment: {
-      //           startDate: new Date(2021, 8, 24, 11),
-      //           endDate: new Date(2021, 8, 24, 12),
-      //           normalizedEndDate: new Date(2021, 8, 24, 12),
-      //           source: {
-      //             startDate: new Date(2021, 8, 24, 11),
-      //             endDate: new Date(2021, 8, 24, 12),
-      //             exceptionDate: new Date(2021, 8, 24, 11),
-      //           },
-      //         },
-      //         dateText: '11:00 AM - 12:00 PM',
-      //         resourceColor: undefined,
-      //         sourceAppointment: {
-      //           startDate: new Date(2021, 8, 24, 11),
-      //           endDate: new Date(2021, 8, 24, 12),
-      //           exceptionDate: new Date(2021, 8, 24, 11),
-      //         },
-      //       },
-      //       left: 100,
-      //       leftVirtualCellCount: 0,
-      //       leftVirtualWidth: 0,
-      //       rowIndex: 22,
-      //       sortedIndex: 1,
-      //       top: 300,
-      //       topVirtualCellCount: 0,
-      //       topVirtualHeight: 0,
-      //       vMax: 0,
-      //       width: 0,
-      //     },
-      //     {
-      //       appointmentReduced: 'tail',
-      //       cellPosition: 100,
-      //       columnIndex: 6,
-      //       count: 2,
-      //       dateSettingIndex: 0,
-      //       direction: 'vertical',
-      //       groupIndex: 0,
-      //       hMax: 0,
-      //       height: 700,
-      //       index: 1,
-      //       info: {
-      //         appointment: {
-      //           startDate: new Date(2021, 8, 24, 11),
-      //           endDate: new Date(2021, 8, 24, 12),
-      //           normalizedEndDate: new Date(2021, 8, 24, 12),
-      //           source: {
-      //             startDate: new Date(2021, 8, 24, 11),
-      //             endDate: new Date(2021, 8, 24, 12),
-      //             exceptionDate: new Date(2021, 8, 24, 11),
-      //           },
-      //         },
-      //         dateText: '11:00 AM - 12:00 PM',
-      //         sourceAppointment: {
-      //           startDate: new Date(2021, 8, 24, 11),
-      //           endDate: new Date(2021, 8, 24, 12),
-      //           exceptionDate: new Date(2021, 8, 24, 11),
-      //         },
-      //       },
-      //       left: 200,
-      //       leftVirtualCellCount: 0,
-      //       leftVirtualWidth: 0,
-      //       rowIndex: 0,
-      //       sortedIndex: 3,
-      //       top: 0,
-      //       topVirtualCellCount: 0,
-      //       topVirtualHeight: 0,
-      //       vMax: 0,
-      //       width: 0,
-      //     }],
-      //   });
+      expect(viewModel[1])
+        .toMatchObject({
+          appointment: {
+            startDate: new Date(2021, 8, 23, 10),
+            endDate: new Date(2021, 8, 23, 11),
+          },
+          geometry: {
+            height: 600,
+            width: 74,
+            top: 0,
+            left: 200,
+            empty: false,
+            leftVirtualWidth: 0,
+            topVirtualHeight: 0,
+          },
+          info: {
+            appointment: {
+              startDate: new Date(2021, 8, 23, 10),
+              endDate: new Date(2021, 8, 23, 11),
+              source: {
+                startDate: new Date(2021, 8, 23, 10),
+                endDate: new Date(2021, 8, 23, 11),
+                exceptionDate: new Date(2021, 8, 23, 10),
+              },
+              normalizedEndDate: new Date(2021, 8, 23, 11),
+            },
+            sourceAppointment: {
+              startDate: new Date(2021, 8, 23, 10),
+              endDate: new Date(2021, 8, 23, 11),
+              exceptionDate: new Date(2021, 8, 23, 10),
+            },
+            dateText: '10:00 AM - 11:00 AM',
+          },
+        });
+
+      expect(viewModel[2])
+        .toMatchObject({
+          appointment: {
+            startDate: new Date(2021, 8, 24, 11),
+            endDate: new Date(2021, 8, 24, 12),
+          },
+          geometry: {
+            height: -300,
+            width: 74,
+            top: 300,
+            left: 100,
+            empty: true,
+            leftVirtualWidth: 0,
+            topVirtualHeight: 0,
+          },
+          info: {
+            appointment: {
+              startDate: new Date(2021, 8, 24, 11),
+              endDate: new Date(2021, 8, 24, 12),
+              source: {
+                startDate: new Date(2021, 8, 24, 11),
+                endDate: new Date(2021, 8, 24, 12),
+                exceptionDate: new Date(2021, 8, 24, 11),
+              },
+              normalizedEndDate: new Date(2021, 8, 24, 12),
+            },
+            sourceAppointment: {
+              startDate: new Date(2021, 8, 24, 11),
+              endDate: new Date(2021, 8, 24, 12),
+              exceptionDate: new Date(2021, 8, 24, 11),
+            },
+            dateText: '11:00 AM - 12:00 PM',
+          },
+        });
+
+      expect(viewModel[3])
+        .toMatchObject({
+          appointment: {
+            startDate: new Date(2021, 8, 24, 11),
+            endDate: new Date(2021, 8, 24, 12),
+          },
+          geometry: {
+            height: 700,
+            width: 74,
+            top: 0,
+            left: 274,
+            empty: false,
+            leftVirtualWidth: 0,
+            topVirtualHeight: 0,
+          },
+          info: {
+            appointment: {
+              startDate: new Date(2021, 8, 24, 11),
+              endDate: new Date(2021, 8, 24, 12),
+              source: {
+                startDate: new Date(2021, 8, 24, 11),
+                endDate: new Date(2021, 8, 24, 12),
+                exceptionDate: new Date(2021, 8, 24, 11),
+              },
+              normalizedEndDate: new Date(2021, 8, 24, 12),
+            },
+            sourceAppointment: {
+              startDate: new Date(2021, 8, 24, 11),
+              endDate: new Date(2021, 8, 24, 12),
+              exceptionDate: new Date(2021, 8, 24, 11),
+            },
+            dateText: '11:00 AM - 12:00 PM',
+          },
+        });
     });
   });
 });
