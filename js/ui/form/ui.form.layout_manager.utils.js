@@ -41,7 +41,6 @@ export function convertToRenderFieldItemOptions({
         labelLocation: managerLabelLocation,
     });
 
-
     const needRenderLabel = labelOptions.visible && labelOptions.text;
     const { location: labelLocation, labelID } = labelOptions;
     const labelNeedBaselineAlign =
@@ -79,9 +78,9 @@ export function convertToRenderFieldItemOptions({
 
 export function convertToLabelMarkOptions({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }, isRequired) {
     return {
-        isRequiredMark: showRequiredMark && isRequired,
+        showRequiredMark: showRequiredMark && isRequired,
         requiredMark,
-        isOptionalMark: showOptionalMark && !isRequired,
+        showOptionalMark: showOptionalMark && !isRequired,
         optionalMark
     };
 }
