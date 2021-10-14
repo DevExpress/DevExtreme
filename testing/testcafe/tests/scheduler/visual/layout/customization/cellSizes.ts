@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
-import Scheduler from '../../../../model/scheduler';
+import createWidget from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import Scheduler from '../../../../../model/scheduler';
 
 fixture`Scheduler: Layout Customization: Cell Sizes`
   .page(url(__dirname, './cellSizesCustomizationContainer.html'));

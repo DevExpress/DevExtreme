@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
-import Scheduler from '../../../../model/scheduler';
+import createWidget from '../../../../../helpers/createWidget';
+import url from '../../../../../helpers/getPageUrl';
+import Scheduler from '../../../../../model/scheduler';
 
-fixture`Scheduler: Layout Customization: Group Panel`
-  .page(url(__dirname, './groupPanelCustomizationContainer.html'));
+fixture`Scheduler: Layout Customization: Header Panel`
+  .page(url(__dirname, './headerPanelCustomizationContainer.html'));
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -17,8 +17,8 @@ const createScheduler = async (
     showAllDayPanel: false,
     dataSource: [{
       text: 'Create Report on Customer Feedback',
-      startDate: new Date(2021, 4, 1, 14),
-      endDate: new Date(2021, 4, 1, 15),
+      startDate: new Date(2021, 4, 11, 14),
+      endDate: new Date(2021, 4, 11, 15),
       priorityId: 0,
     }, {
       text: 'Review Customer Feedback Report',
@@ -48,20 +48,20 @@ const createScheduler = async (
 
 const views = [{
   type: 'week',
-  groupOrientation: 'vertical',
+  groupOrientation: 'horizontal',
 }, {
   type: 'month',
-  groupOrientation: 'vertical',
+  groupOrientation: 'horizontal',
 }, {
   type: 'timelineWeek',
-  groupOrientation: 'vertical',
+  groupOrientation: 'horizontal',
 }, {
   type: 'timelineMonth',
-  groupOrientation: 'vertical',
+  groupOrientation: 'horizontal',
 }];
 
 [false, true].forEach((crossScrollingEnabled) => {
-  test('Group panel customization should work', async (t) => {
+  test('Header panel customization should work', async (t) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -70,7 +70,7 @@ const views = [{
       await scheduler.option('currentView', view.type);
 
       await t.expect(
-        await takeScreenshot(`custom-group-panel-in-${view.type}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element),
+        await takeScreenshot(`custom-header-panel-in-${view.type}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element),
       ).ok();
     }
 
