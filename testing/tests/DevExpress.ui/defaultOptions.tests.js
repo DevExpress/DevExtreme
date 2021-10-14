@@ -252,7 +252,8 @@ testComponentDefaults(DropDownMenu,
 testComponentDefaults(TextEditor,
     {},
     {
-        stylingMode: 'filled'
+        stylingMode: 'filled',
+        labelMode: 'floating'
     },
     function() {
         this.origIsMaterial = themes.isMaterial;

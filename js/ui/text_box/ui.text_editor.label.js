@@ -56,7 +56,7 @@ class TextEditorLabel {
     _toggleMarkupVisibility() {
         const visible = this._isVisible();
 
-        this._updateBeforeButtonsClass(visible);
+        this._updateEditorBeforeButtonsClass(visible);
         this._updateEditorLabelClass(visible);
 
         if(visible) {
@@ -82,15 +82,14 @@ class TextEditorLabel {
         }
     }
 
-    _updateBeforeButtonsClass(visible) {
+    _updateEditorBeforeButtonsClass(visible) {
         this._props.$editor
             .removeClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
 
         if(visible) {
             const beforeButtonsClass = this._props.containsButtonsBefore ? TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS : '';
 
-            this._props.$editor
-                .addClass(beforeButtonsClass);
+            this._props.$editor.addClass(beforeButtonsClass);
         }
     }
 
