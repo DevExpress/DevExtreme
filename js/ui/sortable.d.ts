@@ -351,6 +351,3 @@ export type Properties = dxSortableOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxSortableOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxSortableOptions;

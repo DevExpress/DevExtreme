@@ -143,6 +143,3 @@ export type Properties = dxResizableOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxResizableOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxResizableOptions;

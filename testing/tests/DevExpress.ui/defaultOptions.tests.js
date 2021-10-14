@@ -41,6 +41,8 @@ const Scheduler = require('ui/scheduler/ui.scheduler');
 const Scrollable = require('ui/scroll_view/ui.scrollable');
 const ScrollView = require('ui/scroll_view');
 const SelectBox = require('ui/select_box');
+const SliderHandle = require('ui/slider/ui.slider_handle');
+const SliderTooltip = require('ui/slider/ui.slider_tooltip');
 const Tabs = require('ui/tabs');
 const TabPanel = require('ui/tab_panel');
 const TagBox = require('ui/tag_box');
@@ -642,29 +644,12 @@ testComponentDefaults(Gallery,
     }
 );
 
-if(!Scrollable.IS_RENOVATED_WIDGET) {
-    testComponentDefaults(Scrollable,
-        {},
-        {
-            useNative: false,
-            useSimulatedScrollbar: true
-        },
-        function() {
-            this._supportNativeScrolling = support.nativeScrolling;
-            support.nativeScrolling = false;
-        },
-        function() {
-            support.nativeScrolling = this._supportNativeScrolling;
-        }
-    );
-}
-
-
 testComponentDefaults(Scrollable,
     {},
     {
         useNative: false,
-        useSimulatedScrollbar: true
+        // NOTE: useSimulatedScrollbar setting value doesn't affect on simulated strategy
+        useSimulatedScrollbar: Scrollable.IS_RENOVATED_WIDGET ? false : true
     },
     function() {
         this._supportNativeScrolling = support.nativeScrolling;
@@ -1006,6 +991,34 @@ testComponentDefaults(TreeView,
 testComponentDefaults(SelectBox, {},
     {
         allowClearing: true
+    }
+);
+
+testComponentDefaults(SliderHandle, {},
+    {
+        hoverStateEnabled: false,
+        value: 0,
+        tooltip: {
+            enabled: false,
+            position: 'top',
+            showMode: 'onHover'
+        }
+    }
+);
+
+testComponentDefaults(SliderTooltip, {},
+    {
+        visible: false,
+        position: 'top',
+        closeOnOutsideClick: false,
+        hideTopOverlayHandler: null,
+        hideOnParentScroll: false,
+        animation: null,
+        templatesRenderAsynchronously: false,
+        _fixWrapperPosition: false,
+        useResizeObserver: false,
+        showMode: 'onHover',
+        value: 0
     }
 );
 

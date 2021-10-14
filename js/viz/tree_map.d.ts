@@ -736,6 +736,3 @@ export type Properties = dxTreeMapOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTreeMapOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxTreeMapOptions;

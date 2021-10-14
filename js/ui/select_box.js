@@ -549,6 +549,7 @@ const SelectBox = DropDownList.inherit({
 
         if(shouldCancelSearch) {
             const isPopupVisible = this._popup?._hideAnimationProcessing;
+            this._clearSearchTimer();
             if(isPopupVisible) {
                 this._shouldCancelSearch(true);
             } else {
@@ -739,6 +740,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _clearValueHandler: function(e) {
+        this._preventFiltering = true;
         this.callBase(e);
 
         return false;

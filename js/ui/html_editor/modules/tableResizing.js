@@ -11,7 +11,7 @@ import Draggable from '../../draggable';
 import { each } from '../../../core/utils/iterator';
 import { getWindow, hasWindow } from '../../../core/utils/window';
 import { extend } from '../../../core/utils/extend';
-import { setLineElementsAttrValue, getLineElements, getAutoSizedElements, getColumnElements, unfixTableWidth } from '../utils/table_helper';
+import { setLineElementsStyleValue, getLineElements, getAutoSizedElements, getColumnElements, unfixTableWidth } from '../utils/table_helper';
 
 
 const DX_COLUMN_RESIZE_FRAME_CLASS = 'dx-table-resize-frame';
@@ -131,9 +131,9 @@ export default class TableResizingModule extends BaseModule {
         return $(this._quillContainer).find('table');
     }
 
-    _getWidthAttrValue($element) {
-        const attrValue = $element.attr('width');
-        return attrValue ? parseInt(attrValue) : undefined;
+    _getWidthStyleValue($element) {
+        const styleValue = $element[0].style.width;
+        return styleValue !== '' ? parseInt(styleValue) : undefined;
     }
 
     _tableLastWidth(frame, newValue) {
@@ -392,7 +392,7 @@ export default class TableResizingModule extends BaseModule {
             return true;
         } else if((nextColumnNewSize >= this._minColumnWidth)) {
             const isWidthIncreased = this._nextColumnOffsetLimit ? (eventOffset < this._nextColumnOffsetLimit) : (eventOffset < 0);
-            const isWidthLimited = Math.abs(this._getWidthAttrValue($nextColumnElement) - getOuterWidth($nextColumnElement)) > ROUGH_OFFSET;
+            const isWidthLimited = Math.abs(this._getWidthStyleValue($nextColumnElement) - getOuterWidth($nextColumnElement)) > ROUGH_OFFSET;
 
             return (isWidthIncreased || !isWidthLimited);
         }
@@ -413,10 +413,10 @@ export default class TableResizingModule extends BaseModule {
 
         if(isCurrentColumnWidthEnough) {
             if(this._isNextColumnWidthEnough(nextColumnNewSize, $determinantElements.eq(index + 1), eventOffset)) {
-                setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, currentLineNewSize);
+                setLineElementsStyleValue($lineElements, directionInfo.positionStyleProperty, currentLineNewSize);
 
                 if(this._shouldSetNextColumnWidth(nextColumnNewSize)) {
-                    setLineElementsAttrValue($nextLineElements, directionInfo.positionStyleProperty, nextColumnNewSize);
+                    setLineElementsStyleValue($nextLineElements, directionInfo.positionStyleProperty, nextColumnNewSize);
                 }
 
 
@@ -424,12 +424,12 @@ export default class TableResizingModule extends BaseModule {
                 const shouldRevertNewValue = Math.abs(realWidthDiff) > ROUGH_OFFSET || (!this._nextLineSize && isTableWidthChanged);
 
                 if(shouldRevertNewValue) {
-                    setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, getOuterWidth($lineElements.eq(0)));
+                    setLineElementsStyleValue($lineElements, directionInfo.positionStyleProperty, getOuterWidth($lineElements.eq(0)));
 
                     nextColumnNewSize += currentLineNewSize - getOuterWidth($lineElements.eq(0));
 
                     if(this._shouldSetNextColumnWidth(nextColumnNewSize)) {
-                        setLineElementsAttrValue($nextLineElements, directionInfo.positionStyleProperty, nextColumnNewSize);
+                        setLineElementsStyleValue($nextLineElements, directionInfo.positionStyleProperty, nextColumnNewSize);
                     }
                 }
             } else {
@@ -444,7 +444,7 @@ export default class TableResizingModule extends BaseModule {
         const newHeight = Math.max(currentLineNewSize, this._minRowHeight);
         const $lineElements = getLineElements(frame.$table, index, 'vertical');
 
-        setLineElementsAttrValue($lineElements, directionInfo.positionStyleProperty, newHeight);
+        setLineElementsStyleValue($lineElements, directionInfo.positionStyleProperty, newHeight);
 
         const rowHeightDiff = getOuterHeight($determinantElements.eq(index)) - currentLineNewSize;
 
@@ -546,7 +546,7 @@ export default class TableResizingModule extends BaseModule {
         each(determinantElements, (index, element) => {
             const columnWidth = getOuterWidth(element);
             const $lineElements = getLineElements($table, index);
-            setLineElementsAttrValue($lineElements, 'width', Math.max(columnWidth, this._minColumnWidth));
+            setLineElementsStyleValue($lineElements, 'width', Math.max(columnWidth, this._minColumnWidth));
         });
     }
 
@@ -556,7 +556,7 @@ export default class TableResizingModule extends BaseModule {
 
         each(columnElements, (index, element) => {
             const $element = $(element);
-            const columnWidth = this._getWidthAttrValue($element) || getOuterWidth($element);
+            const columnWidth = this._getWidthStyleValue($element) || getOuterWidth($element);
 
             columnsWidths[index] = Math.max(columnWidth, this._minColumnWidth);
             columnsSum += columnsWidths[index];
@@ -578,7 +578,7 @@ export default class TableResizingModule extends BaseModule {
                 resultWidth = this._minColumnWidth;
             }
 
-            setLineElementsAttrValue($lineElements, 'width', resultWidth);
+            setLineElementsStyleValue($lineElements, 'width', resultWidth);
         });
     }
 

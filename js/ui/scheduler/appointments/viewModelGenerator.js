@@ -12,7 +12,7 @@ const RENDERING_STRATEGIES = {
     'agenda': AgendaAppointmentsStrategy
 };
 
-export class AppointmentViewModel {
+export class AppointmentViewModelGenerator {
     initRenderingStrategy(options) {
         const RenderingStrategy = RENDERING_STRATEGIES[options.appointmentRenderingStrategyName];
         this.renderingStrategy = new RenderingStrategy(options);
