@@ -22,7 +22,7 @@ import { ScrollViewLoadPanel } from '../internal/load_panel';
 
 import { combineClasses } from '../../../utils/combine_classes';
 import { getScrollLeftMax } from '../utils/get_scroll_left_max';
-import { getBoundaryProps, isReachedBottom } from '../utils/get_boundary_props';
+import { getBoundaryProps } from '../utils/get_boundary_props';
 import { getScrollSign, normalizeOffsetLeft } from '../utils/normalize_offset_left';
 import {
   getElementOverflowX,
@@ -62,7 +62,7 @@ import {
 } from '../common/consts';
 
 import { Scrollbar } from '../scrollbar/scrollbar';
-import { isVisible } from '../utils/is_element_visible';
+import { isElementVisible } from '../utils/is_element_visible';
 import { ScrollableNativeProps } from '../common/native_strategy_props';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { getScrollTopMax } from '../utils/get_scroll_top_max';
@@ -449,7 +449,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   /* istanbul ignore next */
   subscribeContentToResize(): EffectReturn {
     return subscribeToResize(
-      this.contentRef.current,
+      this.content(),
       (element: HTMLDivElement) => { this.setContentDimensions(element); },
     );
   }
@@ -482,7 +482,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   startLoading(): void {
-    if (this.loadingIndicatorEnabled && isVisible(this.scrollableRef.current!)) {
+    if (this.loadingIndicatorEnabled && isElementVisible(this.scrollableRef.current!)) {
       this.isLoadPanelVisible = true;
     }
     this.lock();
@@ -593,30 +593,26 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   updateElementDimensions(): void {
-    this.setContentDimensions(this.contentRef.current!);
+    this.setContentDimensions(this.content());
     this.setContainerDimensions(this.containerRef.current!);
   }
 
   setContainerDimensions(containerEl: HTMLDivElement): void {
-    if (this.props.useSimulatedScrollbar) {
-      this.containerClientWidth = containerEl.clientWidth;
-      this.containerClientHeight = containerEl.clientHeight;
-    }
+    this.containerClientWidth = containerEl.clientWidth;
+    this.containerClientHeight = containerEl.clientHeight;
   }
 
   setContentDimensions(contentEl: HTMLDivElement): void {
-    if (this.props.useSimulatedScrollbar) {
-      this.contentClientWidth = contentEl.clientWidth;
-      this.contentClientHeight = contentEl.clientHeight;
+    this.contentClientWidth = contentEl.clientWidth;
+    this.contentClientHeight = contentEl.clientHeight;
 
-      this.contentScrollWidth = contentEl.scrollWidth;
-      this.contentScrollHeight = contentEl.scrollHeight;
-    }
+    this.contentScrollWidth = contentEl.scrollWidth;
+    this.contentScrollHeight = contentEl.scrollHeight;
 
     if (this.props.forceGeneratePockets) {
       /* istanbul ignore next */
       this.topPocketHeight = this.topPocketRef?.current!.clientHeight; // ?. for angular
-      /* istanbul ignore next */
+      /* istanbul ignore next */ // it is not used more
       this.bottomPocketHeight = this.bottomPocketRef?.current!.clientHeight; // ?. for angular
     }
   }
@@ -791,8 +787,9 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   isReachBottom(): boolean {
     const { scrollTop } = this.containerRef.current!;
 
+    // T1032842;
     return this.props.reachBottomEnabled
-      && isReachedBottom(this.containerRef.current!, scrollTop, this.bottomPocketHeight);
+      && Math.round(-scrollTop - this.vScrollOffsetMax) <= 1;
   }
 
   tryGetAllowedDirection(): ScrollableDirection | undefined {

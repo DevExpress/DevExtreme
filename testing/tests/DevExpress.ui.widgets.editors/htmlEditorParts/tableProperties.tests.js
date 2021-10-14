@@ -2,7 +2,21 @@ import $ from 'jquery';
 import 'ui/html_editor';
 import devices from 'core/devices';
 
-import { showTablePropertiesForm, showCellPropertiesForm } from 'ui/html_editor/ui/tableForms';
+import { getFormatHandlers } from 'ui/html_editor/utils/toolbar_helper';
+
+const showCellPropertiesForm = (instance, $cellElement) => {
+    showForm(instance, $cellElement, 'cellProperties');
+};
+
+const showTablePropertiesForm = (instance, $tableElement) => {
+    showForm(instance, $tableElement, 'tableProperties');
+};
+
+const showForm = (instance, $element, formatType) => {
+    const contextMenuModule = instance.getModule('tableContextMenu');
+    const formatHelpers = getFormatHandlers(contextMenuModule);
+    formatHelpers[formatType]($element);
+};
 
 const tableMarkup = '\
     before table text<br>\
@@ -185,9 +199,9 @@ module('Table properties forms', {
         test('show cell Form', function(assert) {
             this.createWidget();
 
-            const $tableElement = this.$element.find('table').eq(0);
+            const $cellElement = this.$element.find('table').eq(0);
 
-            showCellPropertiesForm(this.instance, $tableElement);
+            showCellPropertiesForm(this.instance, $cellElement);
             this.clock.tick();
             const $form = $('.dx-form:not(.dx-formdialog-form)');
             const $scrollView = $form.closest('.dx-scrollview');
@@ -286,12 +300,12 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerHeight(), 80, 'cell height is applied');
-            assert.strictEqual($targetCell.attr('height'), '80px', 'cell height attribute is correct');
-            assert.strictEqual($targetCell.next().attr('height'), '80px', 'sibling cell height attribute is correct');
+            assert.strictEqual($targetCell.get(0).style.height, '80px', 'cell height style is correct');
+            assert.strictEqual($targetCell.next().get(0).style.height, '80px', 'sibling cell height style is correct');
 
             assert.strictEqual($targetCell.outerWidth(), 180, 'cell width is applied');
-            assert.strictEqual($targetCell.attr('width'), '180px', 'cell width attribute is correct');
-            assert.strictEqual($tableElement.find('td').eq(2).attr('width'), '180px', 'other this column cell width attribute is correct');
+            assert.strictEqual($targetCell.get(0).style.width, '180px', 'cell width style is correct');
+            assert.strictEqual($tableElement.find('td').eq(2).get(0).style.width, '180px', 'other this column cell width style is correct');
 
             assert.roughEqual(initialTableWidth, $tableElement.outerWidth(), 1, 'table width is not changed');
             assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';
@@ -330,7 +344,7 @@ module('Table properties forms', {
             assert.strictEqual($targetCell.next().outerWidth(), 350, 'next cell width is correct');
         });
 
-        test('Check cell width attributes after edititing if all columns width is not fixed', function(assert) {
+        test('Check cell width styles after edititing if all columns width is not fixed', function(assert) {
             this.createWidget({ width: 632, value: '\
             <table>\
                 <tr>\
@@ -357,9 +371,9 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
-            assert.strictEqual($targetCell.attr('width'), '250px', 'cell width attr is applied');
-            assert.roughEqual($targetCell.next().outerWidth(), 348, 2, 'next cell width attr is correct');
-            assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is correct');
+            assert.strictEqual($targetCell.get(0).style.width, '250px', 'cell width style is applied');
+            assert.roughEqual($targetCell.next().outerWidth(), 348, 2, 'next cell width style is correct');
+            assert.strictEqual($targetCell.next().get(0).style.width, '', 'next cell width style is correct');
         });
 
         test('Check cell width edititing for the last table column if all columns width is fixed', function(assert) {
@@ -437,9 +451,9 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
-            assert.strictEqual($targetCell.attr('width'), '250px', 'cell width attr is applied');
-            assert.roughEqual(parseInt($targetCell.prev().outerWidth()), 350, 2, 'previous cell width attr is correct');
-            assert.roughEqual(parseInt($targetCell.prev().outerWidth()), 350, 2, 'previous cell width attr is correct');
+            assert.strictEqual($targetCell.get(0).style.width, '250px', 'cell width style is applied');
+            assert.roughEqual(parseInt($targetCell.prev().outerWidth()), 350, 2, 'previous cell width style is correct');
+            assert.roughEqual(parseInt($targetCell.prev().outerWidth()), 350, 2, 'previous cell width style is correct');
         });
 
         test('Check cell width edititing if the table has two column with auto width and one with fixed width', function(assert) {
@@ -471,14 +485,14 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerWidth(), 400, 'cell width is applied');
-            assert.strictEqual($targetCell.attr('width'), '400px', 'cell width attr is applied');
+            assert.strictEqual($targetCell.get(0).style.width, '400px', 'cell width style is applied');
             assert.roughEqual($targetCell.prev().outerWidth(), 300, 2, 'previous cell width is correct');
-            assert.roughEqual(parseInt($targetCell.prev().attr('width')), 300, 2, 'previous cell width attr is correct');
+            assert.roughEqual(parseInt($targetCell.prev().get(0).style.width), 300, 2, 'previous cell width style is correct');
             assert.roughEqual($targetCell.next().outerWidth(), 200, 2, 'next cell width is correct');
-            assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is correct');
+            assert.strictEqual($targetCell.next().get(0).style.width, '', 'next cell width style is correct');
         });
 
-        test('Check cell width attributes if new value is more than the full table width', function(assert) {
+        test('Check cell width styles if new value is more than the full table width', function(assert) {
             this.createWidget({ width: 632, value: '\
             <table>\
                 <tr>\
@@ -505,13 +519,13 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
 
             assert.roughEqual($targetCell.outerWidth(), 567, 3, 'cell width is applied');
-            assert.strictEqual($targetCell.attr('width'), '700px', 'cell width attr is applied');
-            assert.roughEqual($targetCell.next().outerWidth(), 32, 3, 'next cell width attr is correct');
-            assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is correct');
+            assert.strictEqual($targetCell.get(0).style.width, '700px', 'cell width style is applied');
+            assert.roughEqual($targetCell.next().outerWidth(), 32, 3, 'next cell width style is correct');
+            assert.strictEqual($targetCell.next().get(0).style.width, '', 'next cell width style is correct');
             assert.roughEqual($tableElement.outerWidth(), 600, 2, 'table width is not changed');
         });
 
-        test('Check cell width attributes if new value is more than the full table width and all columns has fixed width', function(assert) {
+        test('Check cell width styles if new value is more than the full table width and all columns has fixed width', function(assert) {
             this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -527,13 +541,13 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
 
             assert.roughEqual($targetCell.outerWidth(), 567, 3, 'cell width is applied');
-            assert.strictEqual($targetCell.attr('width'), '700px', 'cell width attr is applied');
-            assert.roughEqual($targetCell.next().outerWidth(), 32, 3, 'next cell width attr is correct');
-            assert.strictEqual($targetCell.next().attr('width'), '0px', 'next cell width attr is correct');
+            assert.strictEqual($targetCell.get(0).style.width, '700px', 'cell width style is applied');
+            assert.roughEqual($targetCell.next().outerWidth(), 32, 3, 'next cell width style is correct');
+            assert.strictEqual($targetCell.next().get(0).style.width, '0px', 'next cell width style is correct');
             assert.roughEqual($tableElement.outerWidth(), 600, 2, 'table width is not changed');
         });
 
-        test('Check cell width attributes if it is changed after the table width was changed (columns width is fixed)', function(assert) {
+        test('Check cell width styles if it is changed after the table width was changed (columns width is fixed)', function(assert) {
             this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -560,13 +574,13 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
 
             assert.roughEqual($targetCell.outerWidth(), 150, 2, 'cell width is applied');
-            assert.strictEqual($targetCell.attr('width'), '150px', 'cell width attr is applied');
-            assert.roughEqual(parseInt($targetCell.next().outerWidth()), 250, 2, 'next cell width attr is correct');
-            assert.roughEqual(parseInt($targetCell.next().attr('width')), 250, 2, 'next cell width attr is correct');
+            assert.strictEqual($targetCell.get(0).style.width, '150px', 'cell width style is applied');
+            assert.roughEqual(parseInt($targetCell.next().outerWidth()), 250, 2, 'next cell width style is correct');
+            assert.roughEqual(parseInt($targetCell.next().get(0).style.width), 250, 2, 'next cell width style is correct');
             assert.roughEqual($tableElement.outerWidth(), 400, 2, 'table width is correct');
         });
 
-        test('Check cell width attributes if it is changed after the table width was changed (columns width is not fixed)', function(assert) {
+        test('Check cell width styles if it is changed after the table width was changed (columns width is not fixed)', function(assert) {
             this.createWidget({ width: 1032 });
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -594,10 +608,10 @@ module('Table properties forms', {
             const $rowCells = $targetCell.closest('tr').find('td');
 
             assert.roughEqual($targetCell.outerWidth(), 110, 2, 'cell width is applied');
-            assert.strictEqual($targetCell.attr('width'), '110px', 'cell width attr is applied');
-            assert.roughEqual(parseInt($rowCells.eq(1).outerWidth()), 230, 2, 'second cell width attr is correct');
-            assert.roughEqual(parseInt($rowCells.eq(2).outerWidth()), 230, 2, 'third cell width attr is correct');
-            assert.roughEqual(parseInt($rowCells.eq(3).outerWidth()), 230, 2, 'fourth cell width attr is correct');
+            assert.strictEqual($targetCell.get(0).style.width, '110px', 'cell width style is applied');
+            assert.roughEqual(parseInt($rowCells.eq(1).outerWidth()), 230, 2, 'second cell width style is correct');
+            assert.roughEqual(parseInt($rowCells.eq(2).outerWidth()), 230, 2, 'third cell width style is correct');
+            assert.roughEqual(parseInt($rowCells.eq(3).outerWidth()), 230, 2, 'fourth cell width style is correct');
             assert.roughEqual($tableElement.outerWidth(), 800, 2, 'table width is correct');
         });
     });
@@ -621,7 +635,7 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
 
             assert.strictEqual($targetCell.outerHeight(), 80, 'cell height is applied');
-            assert.strictEqual($targetCell.attr('height'), '80px', 'cell height attribute is correct');
+            assert.strictEqual($targetCell.get(0).style.height, '80px', 'cell height style is correct');
 
             assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';
         });
@@ -642,7 +656,7 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
 
             assert.roughEqual($targetCell.outerHeight(), 24, 2, 'cell height is applied');
-            assert.strictEqual($targetCell.attr('height'), '10px', 'cell height attribute is correct');
+            assert.strictEqual($targetCell.get(0).style.height, '10px', 'cell height style is correct');
 
             assert.roughEqual($tableElement.outerHeight(), 48, 3), 'table height is changed as expected';
         });
@@ -667,9 +681,9 @@ module('Table properties forms', {
 
             assert.roughEqual($tableElement.outerHeight(), 150, 2.01, 'table height is changed as expected');
             assert.roughEqual($verticalCells.eq(0).outerHeight(), 50, 2, 'first row cell height is applied');
-            assert.roughEqual(parseInt($verticalCells.eq(0).attr('height')), 50, 2, 'first row cell height attr is applied');
-            assert.roughEqual(parseInt($verticalCells.eq(1).outerHeight()), 99, 3, 'second row cell height attr is applied');
-            assert.roughEqual(parseInt($verticalCells.eq(1).attr('height')), 99, 3, 'second row cell height attr is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(0).get(0).style.height), 50, 2, 'first row cell height style is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(1).outerHeight()), 99, 3, 'second row cell height style is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(1).get(0).style.height), 99, 3, 'second row cell height style is applied');
         });
 
         test('Check table height edititng if new value is less than the content', function(assert) {
@@ -690,9 +704,9 @@ module('Table properties forms', {
 
             assert.roughEqual($tableElement.outerHeight(), 48, 3, 'table height is changed as expected');
             assert.roughEqual($verticalCells.eq(0).outerHeight(), 24, 2, 'first row cell height is applied');
-            assert.roughEqual(parseInt($verticalCells.eq(0).attr('height')), 10, 2, 'first row cell height attr is applied');
-            assert.roughEqual(parseInt($verticalCells.eq(1).outerHeight()), 24, 2, 'second row cell height attr is applied');
-            assert.roughEqual(parseInt($verticalCells.eq(1).attr('height')), 20, 2, 'second row cell height attr is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(0).get(0).style.height), 10, 2, 'first row cell height style is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(1).outerHeight()), 24, 2, 'second row cell height style is applied');
+            assert.roughEqual(parseInt($verticalCells.eq(1).get(0).style.height), 20, 2, 'second row cell height style is applied');
         });
     });
 
@@ -715,20 +729,20 @@ module('Table properties forms', {
 
             assert.roughEqual($tableElement.outerWidth(), 400, 2, 'table width is changed as expected');
             assert.roughEqual($horizontalCells.eq(0).outerWidth(), 200, 2, 'first column cell width is applied');
-            assert.roughEqual(parseInt($horizontalCells.eq(0).attr('width')), 200, 2, 'first column cell width attr is applied');
-            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 200, 2, 'second column cell width attr is applied');
-            assert.roughEqual(parseInt($horizontalCells.eq(1).attr('width')), 200, 2, 'second column cell width attr is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(0).get(0).style.width), 200, 2, 'first column cell width style is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 200, 2, 'second column cell width style is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(1).get(0).style.width), 200, 2, 'second column cell width style is applied');
         });
 
         test('Check table width edititng if one column width is fixed', function(assert) {
             this.createWidget({ width: 632, value: '\
             <table>\
                 <tr>\
-                    <td width="400">0_0 content</td>\
+                    <td style="width: 400px;">0_0 content</td>\
                     <td>0_1</td>\
                 </tr>\
                 <tr>\
-                    <td width="400">1_0</td>\
+                    <td style="width: 400px;">1_0</td>\
                     <td>1_1</td>\
                 </tr>\
             </table>\
@@ -749,9 +763,9 @@ module('Table properties forms', {
 
             assert.roughEqual($tableElement.outerWidth(), 900, 2, 'table width is changed as expected');
             assert.roughEqual($horizontalCells.eq(0).outerWidth(), 400, 2, 'first column cell width is applied');
-            assert.roughEqual(parseInt($horizontalCells.eq(0).attr('width')), 400, 2, 'first column cell width attr is applied');
-            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 500, 2, 'second column cell width attr is applied');
-            assert.strictEqual($horizontalCells.eq(1).attr('width'), undefined, 'second column cell width attr is undefined');
+            assert.roughEqual(parseInt($horizontalCells.eq(0).get(0).style.width), 400, 2, 'first column cell width style is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 500, 2, 'second column cell width style is applied');
+            assert.strictEqual($horizontalCells.eq(1).get(0).style.width, '', 'second column cell width style is undefined');
         });
 
         test('Check table width edititng if new width is less than the content', function(assert) {
@@ -772,12 +786,12 @@ module('Table properties forms', {
 
             assert.roughEqual($tableElement.outerWidth(), 90, 3, 'table width is changed as expected');
             assert.roughEqual($horizontalCells.eq(0).outerWidth(), 60, 4.01, 'first column cell width is applied');
-            assert.roughEqual(parseInt($horizontalCells.eq(0).attr('width')), 30, 2, 'first column cell width attr is applied');
-            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 30, 4.01, 'second column cell width attr is applied');
-            assert.roughEqual(parseInt($horizontalCells.eq(1).attr('width')), 30, 2, 'second column cell width attr is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(0).get(0).style.width), 30, 2, 'first column cell width style is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(1).outerWidth()), 30, 4.01, 'second column cell width style is applied');
+            assert.roughEqual(parseInt($horizontalCells.eq(1).get(0).style.width), 30, 2, 'second column cell width style is applied');
         });
 
-        test('Check table width attributes if it is changed after the cell width was changed (columns width is not fixed)', function(assert) {
+        test('Check table width styles if it is changed after the cell width was changed (columns width is not fixed)', function(assert) {
             this.createWidget({ width: 632, value: '\
             <table>\
                 <tr>\
@@ -813,13 +827,13 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
 
             assert.roughEqual($targetCell.outerWidth(), 200, 2, 'cell width is applied');
-            assert.strictEqual($targetCell.attr('width'), '200px', 'cell width attr is applied');
-            assert.roughEqual($targetCell.next().outerWidth(), 600, 2, 'next cell width attr is correct');
-            assert.strictEqual($targetCell.next().attr('width'), undefined, 'next cell width attr is not defined');
+            assert.strictEqual($targetCell.get(0).style.width, '200px', 'cell width style is applied');
+            assert.roughEqual($targetCell.next().outerWidth(), 600, 2, 'next cell width style is correct');
+            assert.strictEqual($targetCell.next().get(0).style.width, '', 'next cell width style is not defined');
             assert.roughEqual($tableElement.outerWidth(), 800, 2, 'table width is correct');
         });
 
-        test('Check table width attributes if it is changed after the cell width was changed (columns width is fixed)', function(assert) {
+        test('Check table width styles if it is changed after the cell width was changed (columns width is fixed)', function(assert) {
             this.createWidget({ width: 632, value: tableWithFixedDimensionsMarkup });
 
             const $tableElement = this.$element.find('table').eq(0);
@@ -844,9 +858,9 @@ module('Table properties forms', {
             this.applyFormChanges(formInstance);
 
             assert.roughEqual($targetCell.outerWidth(), 150, 2, 'cell width is applied');
-            assert.roughEqual(parseInt($targetCell.attr('width')), 150, 2, 'cell width attr is applied');
-            assert.roughEqual($targetCell.next().outerWidth(), 300, 2, 'next cell width attr is correct');
-            assert.strictEqual(parseInt($targetCell.next().attr('width')), 300, 'next cell width attr is not defined');
+            assert.roughEqual(parseInt($targetCell.get(0).style.width), 150, 2, 'cell width style is applied');
+            assert.roughEqual($targetCell.next().outerWidth(), 300, 2, 'next cell width style is correct');
+            assert.strictEqual(parseInt($targetCell.next().get(0).style.width), 300, 'next cell width style is not defined');
             assert.roughEqual($tableElement.outerWidth(), 450, 2, 'table width is correct');
         });
     });

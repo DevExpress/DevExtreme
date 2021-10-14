@@ -415,9 +415,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         $scrollContainer.trigger('scroll');
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, devices.real().ios ? 4 : 3, 'Visible row count');
+        assert.equal(dataGrid.getVisibleRows().length, 3, 'Visible row count');
         assert.equal(dataGrid.getTopVisibleRowData().id, 11, 'Focused row is visible');
-        assert.equal(dataGrid.pageIndex(), devices.real().ios ? 1 : 2, 'Page index');
+        assert.equal(dataGrid.pageIndex(), 2, 'Page index');
     });
 
     QUnit.test('Focused row should be visible if scrolling mode is virtual and rowRenderingMode is virtual ()', function(assert) {
@@ -3821,6 +3821,137 @@ QUnit.module('View\'s focus', {
         }
 
         assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), 'the first cell is still focused');
+    });
+
+    ['Batch', 'Cell'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - Cell text should be selected on Tab when selectTextOnEditStart is enabled (T1030893)`, function(assert) {
+            // arrange
+            const isInputTextSelected = function($input) {
+                const text = $input.val();
+                const inputElement = $input.get(0);
+
+                return text.length > 0 && inputElement.selectionStart === 0 && inputElement.selectionEnd === text.length;
+            };
+            this.dataGrid.option({
+                dataSource: [
+                    { ID: 1, Field1: 'Field1', Field2: 'Field2' }
+                ],
+                columns: ['Field1', 'Field2'],
+                keyExpr: 'ID',
+                keyboardNavigation: {
+                    enterKeyAction: 'moveFocus',
+                    enterKeyDirection: 'column',
+                    editOnKeyPress: true
+                },
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true,
+                    startEditAction: 'dblClick',
+                    selectTextOnEditStart: true
+                },
+                onFocusedCellChanging: function(e) {
+                    e.isHighlighted = true;
+                }
+            });
+            this.clock.tick();
+
+            // act
+            let keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)));
+            keyboard.keyDown('a');
+            this.clock.tick(25);
+            const $firstCellInput = $(this.dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input');
+
+            // assert
+            assert.equal($firstCellInput.length, 1, 'input is rendered in the first cell');
+            assert.strictEqual($firstCellInput.val(), 'a', 'correct editor value');
+
+            // act
+            keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)));
+            keyboard.keyDown('tab');
+            this.clock.tick(25);
+            const $secondCellInput = $(this.dataGrid.getCellElement(0, 1)).find('.dx-texteditor-input');
+
+            // assert
+            assert.strictEqual(this.dataGrid.cellValue(0, 0), 'a', 'correct cell value');
+            assert.equal($secondCellInput.length, 1, 'input is rendered in the second cell');
+            assert.ok(isInputTextSelected($secondCellInput), 'text is selected in the second input cell');
+        });
+    });
+
+    QUnit.testInActiveWindow('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRenderingMode: virtual', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'desktop specific test');
+            return;
+        }
+
+        // arrange
+        const generateData = (rowCount, columnCount) => {
+            const items = [];
+
+            for(let i = 0; i < rowCount; i += 1) {
+                const item = {};
+                for(let j = 0; j < columnCount; j += 1) {
+                    item[`field${j}`] = `${i}-${j}`;
+                }
+                items.push(item);
+            }
+            return items;
+        };
+        const getVisibleRowIndex = (index) => {
+            return index - this.dataGrid.getController('data').getRowIndexOffset();
+        };
+        let rowIndex = 0;
+        let keyboard;
+        this.dataGrid.option({
+            width: 300,
+            height: 200,
+            dataSource: generateData(20, 2),
+            keyExpr: 'field0',
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            paging: {
+                enabled: false,
+            },
+            onFocusedCellChanging: (e) => {
+                e.isHighlighted = true;
+            }
+        });
+        this.clock.tick(300);
+
+        // act
+        $(this.dataGrid.getCellElement(0, 0)).trigger(CLICK_EVENT);
+        this.clock.tick(300);
+
+        // assert
+        assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), `Cell[${rowIndex}, 0] is focused`);
+
+        // Moving Down
+        for(let i = 0; i < 19; i++) {
+            // act
+            keyboard = keyboardMock($(this.dataGrid.getCellElement(getVisibleRowIndex(i), 0)));
+            keyboard.keyDown('down');
+            this.clock.tick(300);
+            $(this.dataGrid.getScrollable().content()).trigger('scroll');
+            rowIndex = i + 1;
+
+            // assert
+            assert.ok($(this.dataGrid.getCellElement(getVisibleRowIndex(rowIndex), 0)).hasClass('dx-focused'), `Cell[${rowIndex}, 0] is focused`);
+        }
+
+        // Moving Up
+        for(let i = 19; i >= 1; i -= 1) {
+            // act
+            keyboard = keyboardMock($(this.dataGrid.getCellElement(getVisibleRowIndex(i), 0)));
+            keyboard.keyDown('up');
+            this.clock.tick(300);
+            $(this.dataGrid.getScrollable().content()).trigger('scroll');
+            rowIndex = i - 1;
+
+            // assert
+            assert.ok($(this.dataGrid.getCellElement(getVisibleRowIndex(rowIndex), 0)).hasClass('dx-focused'), `Cell[${rowIndex}, 0] is focused`);
+        }
     });
 });
 

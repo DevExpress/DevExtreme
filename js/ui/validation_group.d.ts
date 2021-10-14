@@ -106,6 +106,3 @@ export type Properties = dxValidationGroupOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxValidationGroupOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxValidationGroupOptions;

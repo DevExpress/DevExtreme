@@ -310,11 +310,11 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   get isReachBottom(): boolean {
-    // TODO: adapt this method for 4k monitor
+    // T1032842
     // when sizes is decimal and a rounding error of about 1px
     // scrollLocation = 72.3422123432px | maxOffset = 73px
     return this.props.reachBottomEnabled
-      && (this.props.scrollLocation - this.props.maxOffset <= 0);
+      && Math.round(this.props.scrollLocation - this.props.maxOffset) <= 1;
   }
 
   start(animatorName: 'inertia' | 'bounce', receivedVelocity?: number, thumbScrolling?: boolean, crossThumbScrolling?: boolean): void {

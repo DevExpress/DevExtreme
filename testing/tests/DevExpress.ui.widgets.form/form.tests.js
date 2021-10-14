@@ -439,7 +439,7 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
 });
 
 QUnit.test('From renders editors with the right label, labelMode', function(assert) {
-    ['default', 'hidden', 'static', 'floating'].forEach(labelMode => {
+    ['outside', 'hidden', 'static', 'floating'].forEach(labelMode => {
         const form = $('#form').dxForm({
             formData: { name: 'Name' },
             labelMode
@@ -449,8 +449,8 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
         const widgetLabelMode = renderedWidget.option('labelMode');
         const widgetLabelText = renderedWidget.option('label');
 
-        assert.equal(widgetLabelMode, labelMode === 'default' ? 'hidden' : labelMode);
-        assert.equal(widgetLabelText, labelMode === 'default' ? '' : 'Name:');
+        assert.equal(widgetLabelMode, labelMode === 'outside' ? 'hidden' : labelMode);
+        assert.equal(widgetLabelText, labelMode === 'outside' ? '' : 'Name:');
 
         form.dispose();
     });

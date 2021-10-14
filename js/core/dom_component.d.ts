@@ -118,6 +118,7 @@ export default class DOMComponent<TProperties = Properties> extends Component<TP
     _invalidate(): void;
     _refresh(): void;
     _notifyOptionChanged(fullName: string, value: unknown, previousValue: unknown): void;
+    _createElement(element: HTMLElement): void;
 }
 
 export type ComponentClass<TProperties> = {
@@ -131,6 +132,3 @@ type Properties = DOMComponentOptions<DOMComponentInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;
-
-/** @deprecated use Properties instead */
-export type IOptions = Properties;

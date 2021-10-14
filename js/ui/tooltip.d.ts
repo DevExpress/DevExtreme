@@ -53,6 +53,3 @@ export type Properties = dxTooltipOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTooltipOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxTooltipOptions;

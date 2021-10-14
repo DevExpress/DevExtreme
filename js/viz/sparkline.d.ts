@@ -205,6 +205,3 @@ export type Properties = dxSparklineOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxSparklineOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxSparklineOptions;

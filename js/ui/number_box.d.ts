@@ -150,6 +150,3 @@ export type Properties = dxNumberBoxOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxNumberBoxOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxNumberBoxOptions;

@@ -264,6 +264,3 @@ export type Properties = dxContextMenuOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxContextMenuOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxContextMenuOptions;
