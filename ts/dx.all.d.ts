@@ -15053,7 +15053,6 @@ declare module DevExpress.ui {
   }
   /**
    * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxListOptions<
     TItem extends DevExpress.ui.dxList.ItemLike = any,
@@ -21589,7 +21588,6 @@ declare module DevExpress.ui {
   > = DevExpress.ui.dxTreeList.Node<TRowData, TKey>;
   /**
    * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeListOptions<TRowData = any, TKey = any>
     extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
