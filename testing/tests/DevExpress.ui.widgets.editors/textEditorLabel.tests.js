@@ -78,6 +78,20 @@ QUnit.module('textEditorLabel', {
 
             assert.strictEqual(labelWidth, this.labelInitialConfig.containerWidth, 'label internal element width is correct');
         });
+
+        QUnit.module('markup visibility', function(assert) {
+            QUnit.test('markup should be detached if mode="hidden"', function(assert) {
+                this.reinit({ mode: 'hidden' });
+
+                assert.notOk(this.$editor.find(LABEL_SELECTOR).length, 'markup is detached');
+            });
+
+            QUnit.test('markup should be detached if text is empty', function(assert) {
+                this.reinit({ text: '' });
+
+                assert.notOk(this.$editor.find(LABEL_SELECTOR).length, 'markup is detached');
+            });
+        });
     });
 
     QUnit.module('public methods', () => {
