@@ -57,8 +57,8 @@ function getAutoSizedElements($table, direction = 'horizontal') {
     return result;
 }
 
-function setLineElementsFormat(module, $lineElements, property, value) {
-    each($lineElements, (i, element) => {
+function setLineElementsFormat(module, { lineElements, property, value }) {
+    each(lineElements, (i, element) => {
         const cellBlot = module.quill.scroll.find(element);
         cellBlot.format('cell' + property[0].toUpperCase() + property.substring(1), value + 'px');
     });
