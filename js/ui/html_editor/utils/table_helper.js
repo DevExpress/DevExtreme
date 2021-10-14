@@ -1,5 +1,4 @@
 import $ from '../../../core/renderer';
-import { isDefined } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 
 
@@ -50,18 +49,12 @@ function getAutoSizedElements($table, direction = 'horizontal') {
 
     $lineElements.each((index, element) => {
         const $element = $(element);
-        if(!isDefined($element.attr(isHorizontal ? 'width' : 'height'))) {
+        if($element.get(0).style[isHorizontal ? 'width' : 'height'] === '') {
             result.push($element);
         }
     });
 
     return result;
-}
-
-function setLineElementsAttrValue($lineElements, property, value) {
-    each($lineElements, (i, element) => {
-        $(element).attr(property, value + 'px');
-    });
 }
 
 function setLineElementsFormat(module, $lineElements, property, value) {
@@ -98,7 +91,6 @@ export {
     unfixTableWidth,
     getColumnElements,
     getAutoSizedElements,
-    setLineElementsAttrValue,
     setLineElementsFormat,
     getLineElements,
     getRowElements,

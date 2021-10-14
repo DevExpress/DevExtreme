@@ -777,7 +777,34 @@ QUnit.module('visibility events integration', {
     }
 });
 
+[true, false].forEach((useNative) => {
+    QUnit.test(`scroll should save position on visibility change useNative: ${useNative}`, function(assert) {
+        const done = assert.async();
+        const $scrollable = $('#scrollable');
+
+        const scrollable = $scrollable.dxScrollable({
+            useNative: useNative,
+            direction: 'both'
+        }).dxScrollable('instance');
+
+        scrollable.scrollTo({ left: 10, top: 20 });
+        $scrollable.hide();
+
+        const resizeWaitTimeout = 50;
+        setTimeout(() => {
+            scrollable.scrollTo({ left: 0, top: 0 });
+            $scrollable.show();
+            setTimeout(() => {
+                assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after shown');
+                done();
+            }, resizeWaitTimeout);
+        }, resizeWaitTimeout);
+    });
+});
+
+
 QUnit.test('scroll should save position on dxhiding and restore on dxshown', function(assert) {
+    const done = assert.async();
     const $scrollable = $('#scrollable');
 
     const scrollable = $scrollable.dxScrollable({
@@ -786,17 +813,21 @@ QUnit.test('scroll should save position on dxhiding and restore on dxshown', fun
     }).dxScrollable('instance');
 
     scrollable.scrollTo({ left: 10, top: 20 });
-
     triggerHidingEvent($scrollable);
-
     $scrollable.hide();
 
-    scrollable.scrollTo({ left: 0, top: 0 });
+    const resizeWaitTimeout = 50;
+    setTimeout(() => {
+        scrollable.scrollTo({ left: 0, top: 0 });
 
-    $scrollable.show();
-    triggerShownEvent($scrollable);
+        $scrollable.show();
+        triggerShownEvent($scrollable);
 
-    assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after dxshown');
+        setTimeout(() => {
+            assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after dxshown');
+            done();
+        }, resizeWaitTimeout);
+    }, resizeWaitTimeout);
 });
 
 QUnit.test('scroll should restore on second dxshown', function(assert) {
@@ -819,6 +850,7 @@ QUnit.test('scroll should restore on second dxshown', function(assert) {
 });
 
 QUnit.test('scroll should save position on dxhiding when scroll is hidden', function(assert) {
+    const done = assert.async();
     const $scrollable = $('#scrollable');
 
     const scrollable = $scrollable.dxScrollable({
@@ -829,12 +861,18 @@ QUnit.test('scroll should save position on dxhiding when scroll is hidden', func
     triggerHidingEvent($scrollable);
     $scrollable.hide();
 
-    scrollable.scrollTo({ left: 0, top: 0 });
+    const resizeWaitTimeout = 50;
+    setTimeout(() => {
+        scrollable.scrollTo({ left: 0, top: 0 });
 
-    $scrollable.show();
-    triggerShownEvent($scrollable);
+        $scrollable.show();
+        triggerShownEvent($scrollable);
 
-    assert.deepEqual(scrollable.scrollOffset(), { left: 0, top: 20 }, 'scroll position restored after dxshown');
+        setTimeout(() => {
+            assert.deepEqual(scrollable.scrollOffset(), { left: 0, top: 20 }, 'scroll position restored after dxshown');
+            done();
+        }, resizeWaitTimeout);
+    }, resizeWaitTimeout);
 });
 
 

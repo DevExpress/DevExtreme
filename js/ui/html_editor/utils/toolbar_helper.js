@@ -1,6 +1,15 @@
 import $ from '../../../core/renderer';
 import localizationMessage from '../../../localization/message';
-import { getTableOperationHandler, hasEmbedContent, unfixTableWidth, getColumnElements, getAutoSizedElements, setLineElementsFormat, getLineElements, getRowElements } from './table_helper';
+import {
+    getTableOperationHandler,
+    hasEmbedContent,
+    unfixTableWidth,
+    getColumnElements,
+    getAutoSizedElements,
+    setLineElementsFormat,
+    getLineElements,
+    getRowElements
+} from './table_helper';
 import { isDefined, isBoolean } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 

@@ -131,9 +131,9 @@ export default class TableResizingModule extends BaseModule {
         return $(this._quillContainer).find('table');
     }
 
-    _getWidthAttrValue($element) {
-        const attrValue = $element.attr('width');
-        return attrValue ? parseInt(attrValue) : undefined;
+    _getWidthStyleValue($element) {
+        const styleValue = $element[0].style.width;
+        return styleValue !== '' ? parseInt(styleValue) : undefined;
     }
 
     _tableLastWidth(frame, newValue) {
@@ -392,7 +392,7 @@ export default class TableResizingModule extends BaseModule {
             return true;
         } else if((nextColumnNewSize >= this._minColumnWidth)) {
             const isWidthIncreased = this._nextColumnOffsetLimit ? (eventOffset < this._nextColumnOffsetLimit) : (eventOffset < 0);
-            const isWidthLimited = Math.abs(this._getWidthAttrValue($nextColumnElement) - getOuterWidth($nextColumnElement)) > ROUGH_OFFSET;
+            const isWidthLimited = Math.abs(this._getWidthStyleValue($nextColumnElement) - getOuterWidth($nextColumnElement)) > ROUGH_OFFSET;
 
             return (isWidthIncreased || !isWidthLimited);
         }
@@ -556,7 +556,7 @@ export default class TableResizingModule extends BaseModule {
 
         each(columnElements, (index, element) => {
             const $element = $(element);
-            const columnWidth = this._getWidthAttrValue($element) || getOuterWidth($element);
+            const columnWidth = this._getWidthStyleValue($element) || getOuterWidth($element);
 
             columnsWidths[index] = Math.max(columnWidth, this._minColumnWidth);
             columnsSum += columnsWidths[index];
