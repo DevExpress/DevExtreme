@@ -69,6 +69,7 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
 export interface dxSlideOutOptions<
     TItem extends ItemLike = any,
