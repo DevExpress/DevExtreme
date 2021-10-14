@@ -55,6 +55,7 @@ export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = Event
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
 export interface dxToolbarOptions<
     TItem extends ItemLike = any,
