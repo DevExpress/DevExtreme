@@ -636,6 +636,11 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         this.callBase();
 
         const scrollable = this.getScrollable();
+
+        if(scrollable?._disposed) {
+            return;
+        }
+
         const scrollTop = scrollable && scrollable.scrollOffset().top;
 
         this._updateFixedTablePosition(scrollTop);

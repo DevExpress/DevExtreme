@@ -782,6 +782,23 @@ module('Events', setupModule, () => {
 
         assert.strictEqual(this.$input.val(), 'January 31 2019', 'value is correct');
     });
+
+    test('change event should be triggered before focusout event (T1026909)', function(assert) {
+        const valueChangedStub = sinon.stub();
+        const focusOutStub = sinon.stub();
+
+        this.instance.option({
+            onValueChanged: valueChangedStub,
+            onFocusOut: focusOutStub
+        });
+
+        this.keyboard
+            .focus()
+            .type('1')
+            .blur();
+
+        assert.ok(valueChangedStub.calledBefore(focusOutStub));
+    });
 });
 
 

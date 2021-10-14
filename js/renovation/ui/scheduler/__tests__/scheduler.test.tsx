@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import DataSource from '../../../../data/data_source';
 import { SchedulerProps, ScrollingProps } from '../props';
 import { Scheduler, viewFunction as ViewFunction } from '../scheduler';
 import { Widget, WidgetProps } from '../../common/widget';
@@ -10,6 +11,18 @@ import { WorkSpace } from '../workspaces/base/work_space';
 import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
 import { Group } from '../workspaces/types';
+import { filterAppointments } from '../common';
+import { getAppointmentsConfig } from '../model/appointments';
+
+jest.mock('../model/appointments', () => ({
+  ...jest.requireActual('../model/appointments'),
+  getAppointmentsConfig: jest.fn(() => 'Test_getAppointmentsConfig'),
+}));
+
+jest.mock('../common', () => ({
+  ...jest.requireActual('../common'),
+  filterAppointments: jest.fn(() => 'Test_filterAppointments'),
+}));
 
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -228,6 +241,22 @@ describe('Scheduler', () => {
               ],
             } as Group,
           ]);
+      });
+
+      it('loadDataSource should load dataItems', () => {
+        const data = [{
+          startDate: new Date(2021, 9, 6, 15, 15),
+          endDate: new Date(2021, 9, 6, 16, 16),
+          allDay: false,
+        }];
+        const scheduler = new Scheduler({
+          dataSource: data,
+        });
+
+        scheduler.loadDataSource();
+
+        expect(scheduler.dataItems)
+          .toMatchObject(data);
       });
     });
 
@@ -449,6 +478,8 @@ describe('Scheduler', () => {
   });
 
   describe('Logic', () => {
+    afterEach(() => jest.clearAllMocks());
+
     describe('Getters', () => {
       describe('currentViewProps', () => {
         it('should return correct current view', () => {
@@ -589,6 +620,71 @@ describe('Scheduler', () => {
               common: -7,
               appointment: 3,
             });
+        });
+      });
+
+      describe('appointmentsConfig', () => {
+        it('should be created correctly if viewDataProvider exists', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          scheduler.viewDataProvider = new ViewDataProvider('day') as any;
+
+          expect(scheduler.appointmentsConfig)
+            .toBe('Test_getAppointmentsConfig');
+
+          expect(getAppointmentsConfig)
+            .toHaveBeenCalledTimes(1);
+        });
+
+        it('should be created correctly if viewDataProvider is not exists', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          expect(scheduler.appointmentsConfig)
+            .toBe(undefined);
+
+          expect(getAppointmentsConfig)
+            .toHaveBeenCalledTimes(0);
+        });
+      });
+
+      describe('internalDataSource', () => {
+        it('should be created correctly if dataSource is array', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            dataSource: [{
+              startDate: new Date(2021, 9, 5),
+              endDate: new Date(2021, 9, 6),
+            }],
+          });
+
+          expect(scheduler.internalDataSource)
+            .toBeInstanceOf(DataSource);
+        });
+
+        it('should be created correctly if dataSource is DataSource', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            dataSource: new DataSource([{
+              startDate: new Date(2021, 9, 5),
+              endDate: new Date(2021, 9, 6),
+            }]),
+          });
+
+          expect(scheduler.internalDataSource)
+            .toBeInstanceOf(DataSource);
+        });
+      });
+
+      describe('filteredItems', () => {
+        it('should invoke filterAppointments correctly', () => {
+          const schedulerProps = new SchedulerProps();
+          const scheduler = new Scheduler(schedulerProps);
+
+          expect(scheduler.filteredItems)
+            .toBe('Test_filterAppointments');
+
+          expect(filterAppointments)
+            .toHaveBeenCalledTimes(1);
         });
       });
     });

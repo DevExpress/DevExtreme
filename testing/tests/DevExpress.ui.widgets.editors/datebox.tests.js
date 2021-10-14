@@ -6084,4 +6084,21 @@ QUnit.module('validation', {
             assert.ok(validationCallbackStub.calledOnce, 'custom validation was called only once');
         });
     });
+
+    QUnit.test('custom validation should get actual value as parameter if value was not changed (T1024043)', function(assert) {
+        const value = '2021-08-24';
+        this.dateBox.option({ value });
+        const validationCallbackStub = sinon.stub();
+
+        this.$dateBox.dxValidator({
+            validationRules: [{
+                type: 'custom',
+                validationCallback: validationCallbackStub
+            }]
+        });
+
+        this.keyboard.press('enter');
+
+        assert.strictEqual(validationCallbackStub.getCall(0).args[0].value, value, 'validation callback value parameter is correct');
+    });
 });
