@@ -128,7 +128,10 @@ const DropDownEditor = TextBox.inherit({
 
             buttons: void 0,
 
-            dropDownOptions: { showTitle: false, position: this._getDefaultPopupPosition() },
+            dropDownOptions: {
+                showTitle: false,
+                position: this._getDefaultPopupPosition()
+            },
             onPopupInitialized: null,
             applyButtonText: messageLocalization.format('OK'),
             cancelButtonText: messageLocalization.format('Cancel'),
@@ -218,8 +221,13 @@ const DropDownEditor = TextBox.inherit({
     _updatePopupPosition: function(isRtlEnabled) {
         const { my, at } = this._getDefaultPopupPosition(isRtlEnabled);
         const currentPosition = this.option('dropDownOptions.position');
+        const shouldUpdatePosition = currentPosition === undefined
+            || (currentPosition.at === this._getDefaultPopupPosition(!isRtlEnabled).at
+            && currentPosition.my === this._getDefaultPopupPosition(!isRtlEnabled).my);
 
-        this.option('dropDownOptions.position', extend({}, currentPosition, { my, at }));
+        if(shouldUpdatePosition) {
+            this.option('dropDownOptions.position', extend({}, currentPosition, { my, at }));
+        }
     },
 
     _initVisibilityActions: function() {
@@ -564,9 +572,9 @@ const DropDownEditor = TextBox.inherit({
     _popupConfig: function() {
         return {
             onInitialized: this._popupInitializedHandler(),
-            position: extend(this.option('dropDownOptions.position'), {
+            position: typeof this.option('dropDownOptions.position') === 'object' ? extend(this.option('dropDownOptions.position'), {
                 of: this.$element()
-            }),
+            }) : this.option('dropDownOptions.position'),
             showTitle: this.option('dropDownOptions.showTitle'),
             _ignoreFunctionValueDeprecation: true,
             width: () => getElementWidth(this.$element()),
@@ -609,7 +617,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _popupPositionedHandler: function(e) {
-        e.position && this._popup.$overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
+        e.position && this._popup?.$overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
     },
 
     _popupShowingHandler: noop,
@@ -838,10 +846,8 @@ const DropDownEditor = TextBox.inherit({
                 this._updateButtons(['dropDown']);
                 break;
             case 'dropDownOptions':
-                if(args.fullName !== 'dropDownOptions.position') {
-                    this._popupOptionChanged(args);
-                    this._options.cache('dropDownOptions', this.option('dropDownOptions'));
-                }
+                this._popupOptionChanged(args);
+                this._options.cache('dropDownOptions', this.option('dropDownOptions'));
                 break;
             case 'deferRendering':
                 if(hasWindow()) {

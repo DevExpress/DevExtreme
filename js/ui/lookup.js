@@ -1114,10 +1114,6 @@ const Lookup = DropDownList.inherit({
                         });
                         this._options.cache('dropDownOptions', this.option('dropDownOptions'));
                         break;
-                    case 'dropDownOptions.position':
-                        this._popupOptionChanged(args);
-                        this._options.cache('dropDownOptions', this.option('dropDownOptions'));
-                        break;
                     default:
                         this.callBase(...arguments);
                 }

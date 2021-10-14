@@ -153,9 +153,6 @@ dropDownEditorsNames.forEach(widgetName => {
                     || widgetName === 'dxDropDownButton' && option === 'showCloseButton') {
                     return;
                 }
-                if(option === 'position') {
-                    return;
-                }
 
                 QUnit.test(`${option} is correct`, function(assert) {
                     const editor = new dropDownEditorsList[widgetName]('#editor', { deferRendering: false, applyValueMode: 'instantly' });
@@ -178,10 +175,6 @@ dropDownEditorsNames.forEach(widgetName => {
                         assert.ok('it is tested in separate module below or in widget specific test package');
                         return;
                     }
-                    if(option === 'position') {
-                        assert.ok('no need to check postion because this option is overrides in code');
-                        return;
-                    }
 
                     const editor = new dropDownEditorsList[widgetName]('#editor', {
                         deferRendering: false,
@@ -201,9 +194,6 @@ dropDownEditorsNames.forEach(widgetName => {
             dropDownOptionsKeys.forEach(option => {
                 if(widgetName === 'dxDropDownButton' && (option === 'visible' || option === 'position')) {
                     // TODO: fix this cases
-                    return;
-                }
-                if(option === 'position') {
                     return;
                 }
 
