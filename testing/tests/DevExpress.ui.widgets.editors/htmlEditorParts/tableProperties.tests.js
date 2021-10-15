@@ -152,6 +152,7 @@ module('Table properties forms', {
             showCellPropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
+            const tableBorderColor = $tableElement.css('borderTopColor');
             const tableBackgroundColor = $tableElement.css('backgroundColor');
 
             const borderStyleEditor = formInstance.getEditor('borderStyle');
@@ -164,7 +165,7 @@ module('Table properties forms', {
 
             assert.strictEqual(borderStyleEditor.option('value'), 'none', 'borderStyleEditor value is correct');
             assert.strictEqual(borderWidthEditor.option('value'), 0, 'borderWidthEditor value is correct');
-            assert.strictEqual(borderColorEditor.option('value'), 'rgb(128, 128, 128)', 'borderColorEditor value is correct');
+            assert.strictEqual(borderColorEditor.option('value'), tableBorderColor, 'borderColorEditor value is correct');
             assert.strictEqual(backgroundColorEditor.option('value'), tableBackgroundColor, 'backgroundColorEditor value is correct');
             assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
             assert.roughEqual(heightEditor.option('value'), 73, 3, 'heightEditor value is correct');
