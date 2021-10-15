@@ -1106,12 +1106,20 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
+    _isNewRowInEditMode: function() {
+        const visibleEditRowIndex = this._editingController._getVisibleEditRowIndex();
+        const rows = this._dataController.items();
+
+        return visibleEditRowIndex >= 0 ? rows[visibleEditRowIndex].isNewRow : false;
+    },
+
     _updateFocus: function(isRenderView) {
         this._updateFocusTimeout = setTimeout(() => {
             const editingController = this._editingController;
             const isCellEditMode = editingController.getEditMode() === EDIT_MODE_CELL;
+            const isBatchEditMode = editingController.getEditMode() === EDIT_MODE_BATCH;
 
-            if(isCellEditMode && editingController.hasChanges()) {
+            if((isCellEditMode && editingController.hasChanges()) || (isBatchEditMode && this._isNewRowInEditMode())) {
                 editingController._focusEditingCell();
                 return;
             }
