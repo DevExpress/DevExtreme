@@ -44,7 +44,7 @@ export type InitializedEvent = InitializedEventInfo<dxTreeView>;
 export type ItemClickEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-    readonly itemIndex?: number | any;
+    readonly itemIndex?: number;
     readonly node?: Node;
 };
 
@@ -60,7 +60,7 @@ export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
 export type ItemContextMenuEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-    readonly itemIndex?: number | any;
+    readonly itemIndex?: number;
     readonly node?: Node;
 };
 
@@ -183,7 +183,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number | object
+     * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
@@ -215,7 +215,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number | object
+     * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
