@@ -1641,6 +1641,7 @@ test.skip('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowR
       dataSource: data,
       scrolling: {
         columnRenderingMode: 'virtual',
+        useNative: false,
       },
       editing: {
         mode: editMode,
@@ -1725,6 +1726,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     dataSource: data,
     scrolling: {
       columnRenderingMode: 'virtual',
+      useNative: false,
     },
     width: 500,
     selection: {
@@ -1815,6 +1817,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     rtlEnabled: true,
     scrolling: {
       columnRenderingMode: 'virtual',
+      useNative: false,
     },
     width: 500,
     selection: {

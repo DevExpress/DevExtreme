@@ -90,6 +90,32 @@ const baseFixedColumns = {
         }
     },
 
+    _partialUpdateFixedTable(fixedColumns) {
+        const fixedTableElement = this._fixedTableElement;
+        const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
+        const transparentColumn = fixedColumns[transparentColumnIndex];
+        const columnIndexOffset = this._columnsController.getColumnIndexOffset();
+        const $rows = this._getRowElementsCore(fixedTableElement);
+        const $colgroup = fixedTableElement.children('colgroup');
+
+        $colgroup.replaceWith(this._createColGroup(fixedColumns));
+
+        for(let i = 0; i < $rows.length; i++) {
+            const cellElements = $rows[i].childNodes;
+            let colIndex = columnIndexOffset + 1;
+            for(let j = 0; j < cellElements.length; j++) {
+                cellElements[j].setAttribute('aria-colindex', colIndex);
+
+                if(j === transparentColumnIndex) {
+                    cellElements[j].setAttribute('colspan', transparentColumn.colspan);
+                    colIndex += transparentColumn.colspan;
+                } else {
+                    colIndex++;
+                }
+            }
+        }
+    },
+
     _renderTable: function(options) {
         const that = this;
         let $fixedTable;
@@ -98,21 +124,26 @@ const baseFixedColumns = {
         that._isFixedColumns = !!fixedColumns.length;
         const $table = that.callBase(options);
 
+
         if(that._isFixedColumns) {
+            const change = options?.change;
+
             that._isFixedTableRendering = true;
 
-            const change = options && options.change;
-            // cells = options.cells,
-            const columnIndices = change && change.columnIndices;
+            if(change?.virtualColumnsScrolling && this.option('scrolling.legacyMode') !== true) {
+                this._partialUpdateFixedTable(fixedColumns);
+            } else {
+                const columnIndices = change?.columnIndices;
 
-            that._correctColumnIndicesForFixedColumns(fixedColumns, change);
+                that._correctColumnIndicesForFixedColumns(fixedColumns, change);
 
-            $fixedTable = that._createTable(fixedColumns);
-            that._renderRows($fixedTable, extend({}, options, { columns: fixedColumns }));
-            that._updateContent($fixedTable, change);
+                $fixedTable = that._createTable(fixedColumns);
+                that._renderRows($fixedTable, extend({}, options, { columns: fixedColumns }));
+                that._updateContent($fixedTable, change);
 
-            if(columnIndices) {
-                change.columnIndices = columnIndices;
+                if(columnIndices) {
+                    change.columnIndices = columnIndices;
+                }
             }
 
             that._isFixedTableRendering = false;
