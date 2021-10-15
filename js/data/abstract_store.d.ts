@@ -8,7 +8,10 @@ export type Options<
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
 > = StoreOptions<TValue, TKeyExpr, TKey>;
 
-/** @namespace DevExpress.data */
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ */
 export interface StoreOptions<
     TValue = any,
     TKeyExpr extends string | Array<string> = string | Array<string>,

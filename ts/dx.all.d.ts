@@ -2019,8 +2019,12 @@ declare module DevExpress.data {
       | (DevExpress.data.ArrayStore.Options<TSourceValue, TKeyExpr, TKey> & {
           type: 'array';
         })
-      | (LocalStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'local' })
-      | (ODataStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'odata' })
+      | (DevExpress.data.LocalStore.Options<TSourceValue, TKeyExpr, TKey> & {
+          type: 'local';
+        })
+      | (DevExpress.data.ODataStore.Options<TSourceValue, TKeyExpr, TKey> & {
+          type: 'odata';
+        })
       | DevExpress.data.CustomStore.Options<TSourceValue, TKeyExpr, TKey>;
   }
   /**
@@ -2153,13 +2157,23 @@ declare module DevExpress.data {
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
   > extends ArrayStore<TValue, TKeyExpr, TKey> {
-    constructor(options?: LocalStoreOptions<TValue, TKeyExpr, TKey>);
+    constructor(
+      options?: DevExpress.data.LocalStore.Options<TValue, TKeyExpr, TKey>
+    );
     /**
      * [descr:LocalStore.clear()]
      */
     clear(): void;
   }
+  module LocalStore {
+    export type Options<
+      TValue = any,
+      TKeyExpr extends string | Array<string> = string | Array<string>,
+      TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+    > = LocalStoreOptions<TValue, TKeyExpr, TKey>;
+  }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface LocalStoreOptions<
@@ -2288,7 +2302,9 @@ declare module DevExpress.data {
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
   > extends Store<TValue, TKeyExpr, TKey> {
-    constructor(options?: ODataStoreOptions<TValue, TKeyExpr, TKey>);
+    constructor(
+      options?: DevExpress.data.ODataStore.Options<TValue, TKeyExpr, TKey>
+    );
     byKey(key: TKey): DevExpress.core.utils.DxPromise<TValue>;
     /**
      * [descr:ODataStore.byKey(key, extraOptions)]
@@ -2318,6 +2334,11 @@ declare module DevExpress.data {
       DevExpress.data.ODataStore.PromiseExtension<TValue>;
   }
   module ODataStore {
+    export type Options<
+      TValue = any,
+      TKeyExpr extends string | Array<string> = string | Array<string>,
+      TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
+    > = ODataStoreOptions<TValue, TKeyExpr, TKey>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -2338,13 +2359,14 @@ declare module DevExpress.data {
     }
   }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface ODataStoreOptions<
     TValue = any,
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any
-  > extends StoreOptions<TValue, TKeyExpr, TKey> {
+  > extends DevExpress.data.Store.Options<TValue, TKeyExpr, TKey> {
     /**
      * [descr:ODataStoreOptions.beforeSend]
      */
@@ -3035,6 +3057,7 @@ declare module DevExpress.data {
     > = StoreOptions<TValue, TKeyExpr, TKey>;
   }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface StoreOptions<

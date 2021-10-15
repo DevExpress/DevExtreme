@@ -5,8 +5,8 @@ import { DxPromise } from '../core/utils/deferred';
 import Store from './abstract_store';
 import { Options as CustomStoreOptions } from './custom_store';
 import { Options as ArrayStoreOptions } from './array_store';
-import { LocalStoreOptions } from './local_store';
-import { ODataStoreOptions } from './odata/store';
+import { Options as LocalStoreOptions } from './local_store';
+import { Options as ODataStoreOptions } from './odata/store';
 
 /** @public */
 export type Options<

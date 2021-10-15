@@ -1,5 +1,5 @@
 import { DxPromise } from '../../core/utils/deferred';
-import Store, { StoreOptions } from '../abstract_store';
+import Store, { Options as StoreOptions } from '../abstract_store';
 import { LoadOptions } from '../index';
 import { Query } from '../query';
 import { ODataRequestOptions } from './context';
@@ -11,9 +11,19 @@ interface PromiseExtension<T> {
     ): Promise<TResult1 | TResult2>;
 }
 
-/** @namespace DevExpress.data */
-export interface ODataStoreOptions
-<TValue = any,
+/** @public */
+export type Options<
+    TValue = any,
+    TKeyExpr extends string | Array<string> = string | Array<string>,
+    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+> = ODataStoreOptions<TValue, TKeyExpr, TKey>;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ */
+export interface ODataStoreOptions<
+    TValue = any,
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
 > extends StoreOptions<TValue, TKeyExpr, TKey> {
@@ -98,7 +108,7 @@ export default class ODataStore
     TKeyExpr extends string | Array<string> = string | Array<string>,
     TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
 > extends Store<TValue, TKeyExpr, TKey> {
-    constructor(options?: ODataStoreOptions<TValue, TKeyExpr, TKey>)
+    constructor(options?: Options<TValue, TKeyExpr, TKey>)
     byKey(key: TKey): DxPromise<TValue>;
     /**
      * @docid
