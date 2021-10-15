@@ -14559,16 +14559,87 @@ declare module DevExpress.ui {
    * @deprecated Use DevExpress.ui.dxHtmlEditor.ContextMenuItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxHtmlEditorTableContextMenuItem
-    extends DevExpress.ui.dxContextMenu.Item {
+  export interface dxHtmlEditorTableContextMenuItem extends MenuBasePlainItem {
     /**
      * [descr:dxHtmlEditorTableContextMenuItem.name]
      */
-    name?: string;
+    name?:
+      | 'background'
+      | 'bold'
+      | 'color'
+      | 'font'
+      | 'italic'
+      | 'link'
+      | 'image'
+      | 'strike'
+      | 'subscript'
+      | 'superscript'
+      | 'underline'
+      | 'blockquote'
+      | 'header'
+      | 'increaseIndent'
+      | 'decreaseIndent'
+      | 'orderedList'
+      | 'bulletList'
+      | 'alignLeft'
+      | 'alignCenter'
+      | 'alignRight'
+      | 'alignJustify'
+      | 'codeBlock'
+      | 'variable'
+      | 'separator'
+      | 'undo'
+      | 'redo'
+      | 'clear'
+      | 'insertTable'
+      | 'insertRowAbove'
+      | 'insertRowBelow'
+      | 'insertColumnLeft'
+      | 'insertColumnRight'
+      | 'deleteColumn'
+      | 'deleteRow'
+      | 'deleteTable';
     /**
      * [descr:dxHtmlEditorTableContextMenuItem.items]
      */
-    items?: Array<DevExpress.ui.dxHtmlEditor.ContextMenuItem>;
+    items?: Array<
+      | DevExpress.ui.dxHtmlEditor.ContextMenuItem
+      | 'background'
+      | 'bold'
+      | 'color'
+      | 'font'
+      | 'italic'
+      | 'link'
+      | 'image'
+      | 'strike'
+      | 'subscript'
+      | 'superscript'
+      | 'underline'
+      | 'blockquote'
+      | 'header'
+      | 'increaseIndent'
+      | 'decreaseIndent'
+      | 'orderedList'
+      | 'bulletList'
+      | 'alignLeft'
+      | 'alignCenter'
+      | 'alignRight'
+      | 'alignJustify'
+      | 'codeBlock'
+      | 'variable'
+      | 'separator'
+      | 'undo'
+      | 'redo'
+      | 'clear'
+      | 'insertTable'
+      | 'insertRowAbove'
+      | 'insertRowBelow'
+      | 'insertColumnLeft'
+      | 'insertColumnRight'
+      | 'deleteColumn'
+      | 'deleteRow'
+      | 'deleteTable'
+    >;
   }
   /**
    * [descr:dxHtmlEditorTableResizing]
@@ -15840,43 +15911,11 @@ declare module DevExpress.ui {
    * [descr:dxMenuBaseItem]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxMenuBaseItem extends CollectionWidgetItem {
-    /**
-     * [descr:dxMenuBaseItem.beginGroup]
-     */
-    beginGroup?: boolean;
-    /**
-     * [descr:dxMenuBaseItem.closeMenuOnClick]
-     */
-    closeMenuOnClick?: boolean;
-    /**
-     * [descr:dxMenuBaseItem.disabled]
-     */
-    disabled?: boolean;
-    /**
-     * [descr:dxMenuBaseItem.icon]
-     */
-    icon?: string;
+  export interface dxMenuBaseItem extends MenuBasePlainItem {
     /**
      * [descr:dxMenuBaseItem.items]
      */
     items?: Array<dxMenuBaseItem>;
-    /**
-     * [descr:dxMenuBaseItem.selectable]
-     */
-    selectable?: boolean;
-    /**
-     * [descr:dxMenuBaseItem.selected]
-     */
-    selected?: boolean;
-    /**
-     * [descr:dxMenuBaseItem.text]
-     */
-    text?: string;
-    /**
-     * [descr:dxMenuBaseItem.visible]
-     */
-    visible?: boolean;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -23280,6 +23319,44 @@ declare module DevExpress.ui {
      * [descr:MapLocation.lng]
      */
     lng: number;
+  }
+  /**
+   * [descr:MenuBasePlainItem]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface MenuBasePlainItem extends CollectionWidgetItem {
+    /**
+     * [descr:MenuBasePlainItem.beginGroup]
+     */
+    beginGroup?: boolean;
+    /**
+     * [descr:MenuBasePlainItem.closeMenuOnClick]
+     */
+    closeMenuOnClick?: boolean;
+    /**
+     * [descr:MenuBasePlainItem.disabled]
+     */
+    disabled?: boolean;
+    /**
+     * [descr:MenuBasePlainItem.icon]
+     */
+    icon?: string;
+    /**
+     * [descr:MenuBasePlainItem.selectable]
+     */
+    selectable?: boolean;
+    /**
+     * [descr:MenuBasePlainItem.selected]
+     */
+    selected?: boolean;
+    /**
+     * [descr:MenuBasePlainItem.text]
+     */
+    text?: string;
+    /**
+     * [descr:MenuBasePlainItem.visible]
+     */
+    visible?: boolean;
   }
   /**
    * [descr:ui.notify(message,type,displayTime)]

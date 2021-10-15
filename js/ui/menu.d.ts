@@ -208,57 +208,66 @@ export default class dxMenu extends dxMenuBase<dxMenuOptions> { }
  * @type object
  * @namespace DevExpress.ui
  */
-export interface dxMenuBaseItem extends CollectionWidgetItem {
-    /**
-     * @docid
-     * @public
-     */
-    beginGroup?: boolean;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    closeMenuOnClick?: boolean;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    disabled?: boolean;
-    /**
-     * @docid
-     * @public
-     */
-    icon?: string;
+ export interface MenuBasePlainItem extends CollectionWidgetItem {
+  /**
+   * @docid
+   * @public
+   */
+  beginGroup?: boolean;
+  /**
+   * @docid
+   * @default true
+   * @public
+   */
+  closeMenuOnClick?: boolean;
+  /**
+   * @docid
+   * @default false
+   * @public
+   */
+  disabled?: boolean;
+  /**
+   * @docid
+   * @public
+   */
+  icon?: string;
+  /**
+   * @docid
+   * @default false
+   * @public
+   */
+  selectable?: boolean;
+  /**
+   * @docid
+   * @default false
+   * @public
+   */
+  selected?: boolean;
+  /**
+   * @docid
+   * @public
+   */
+  text?: string;
+  /**
+   * @docid
+   * @default true
+   * @public
+   */
+  visible?: boolean;
+}
+
+/**
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ * @namespace DevExpress.ui
+ */
+export interface dxMenuBaseItem extends MenuBasePlainItem {
     /**
      * @docid
      * @public
      */
     items?: Array<dxMenuBaseItem>;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    selectable?: boolean;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    selected?: boolean;
-    /**
-     * @docid
-     * @public
-     */
-    text?: string;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    visible?: boolean;
 }
 
 /**
