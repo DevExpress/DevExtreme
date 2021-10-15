@@ -109,7 +109,7 @@ function prepareShowFormProperties(module, type) {
         if(!$element?.length) {
             $element = $(getTargetTableNode(module, type));
         }
-        const [tableBlot, rowBlot ] = module.quill.getModule('table').getTable();
+        const [tableBlot, rowBlot] = module.quill.getModule('table').getTable() ?? [];
 
         const formats = module.quill.getFormat(module.editorInstance.getSelection(true));
 
