@@ -358,10 +358,10 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const initialTableWidth = $tableElement.outerWidth();
             const initialTableHeight = $tableElement.outerHeight();
-            const $targetCell = $tableElement.find('td').eq(6);
+            const $targetCell = $tableElement.find('th').eq(1);
             const initialCellHeight = $targetCell.outerHeight();
 
-            this.quillInstance.setSelection(5, 1);
+            this.quillInstance.setSelection(3, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -380,7 +380,7 @@ module('Table properties forms', {
 
             assert.strictEqual($targetCell.outerWidth(), 180, 'cell width is applied');
             assert.strictEqual($targetCell.get(0).style.width, '180px', 'cell width style is correct');
-            assert.strictEqual($tableElement.find('td').eq(2).get(0).style.width, '180px', 'other this column cell width style is correct');
+            assert.strictEqual($tableElement.find('td').eq(1).get(0).style.width, '180px', 'other this column cell width style is correct');
 
             assert.roughEqual(initialTableWidth, $tableElement.outerWidth(), 1, 'table width is not changed');
             assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';

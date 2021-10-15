@@ -568,7 +568,7 @@ function getCellPropertiesFormConfig(module, { $element, formats, tableBlot, row
     let backgroundColorEditorInstance;
 
     const $cell = $element;
-    const startCellWidth = parseInt(formats.cellWidth) ?? getOuterWidth($cell);
+    const startCellWidth = isDefined(formats.cellWidth) ? parseInt(formats.cellWidth) : getOuterWidth($cell);
     const editorInstance = module.editorInstance;
     const cellStyles = window.getComputedStyle($cell.get(0));
     const startTextAlign = cellStyles.textAlign === 'start' ? 'left' : cellStyles.textAlign;
@@ -577,7 +577,7 @@ function getCellPropertiesFormConfig(module, { $element, formats, tableBlot, row
         colCount: 2,
         formData: {
             width: startCellWidth,
-            height: parseInt(formats.cellHeight) ?? getOuterHeight($cell),
+            height: isDefined(formats.cellHeight) ? parseInt(formats.cellHeight) : getOuterHeight($cell),
             backgroundColor: formats.cellBackgroundColor ?? cellStyles.backgroundColor,
             borderStyle: formats.cellBorderStyle ?? cellStyles.borderTopStyle,
             borderColor: formats.cellBorderColor ?? cellStyles.borderTopColor,
