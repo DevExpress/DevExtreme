@@ -32,7 +32,6 @@ QUnit.testStart(function() {
                 <div id="item6" class="draggable" style="background: blue;">item6</div>
             </div>
         </div>
-        </div>
         <div id="items3" style="vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;"></div>
         <div id="itemsHorizontal" style="width: 250px; height: 300px;">
             <div style="width: 30px; height: 300px; display: inline-block;">item1</div><div style="width: 30px; height: 300px; display: inline-block;">item2</div><div style="width: 30px; height: 300px; display: inline-block;">item3</div>
