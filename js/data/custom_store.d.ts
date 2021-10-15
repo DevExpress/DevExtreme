@@ -10,7 +10,7 @@ export type Options<
 
 /**
  * @namespace DevExpress.data
- * @deprecated Use Options instead
+ * @deprecated {data/custom_store.Options}
  */
 export interface CustomStoreOptions<
     TValue = any,

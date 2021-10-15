@@ -72,7 +72,7 @@ export interface MapLocation {
 }
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/map.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxMapOptions extends WidgetOptions<dxMap> {
@@ -353,5 +353,5 @@ export default class dxMap extends Widget<dxMapOptions> {
 /** @public */
 export type Properties = dxMapOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/map.Properties} */
 export type Options = dxMapOptions;

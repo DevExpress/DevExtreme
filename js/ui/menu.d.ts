@@ -71,7 +71,7 @@ export type SubmenuShownEvent = EventInfo<dxMenu> & {
 };
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/menu.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
@@ -268,7 +268,7 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
 export type Item = dxMenuItem;
 
 /**
- * @deprecated Use Item instead
+ * @deprecated {ui/menu.Item}
  * @namespace DevExpress.ui
  */
 export interface dxMenuItem extends dxMenuBaseItem {
@@ -283,5 +283,5 @@ export interface dxMenuItem extends dxMenuBaseItem {
 /** @public */
 export type Properties = dxMenuOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/menu.Properties} */
 export type Options = dxMenuOptions;

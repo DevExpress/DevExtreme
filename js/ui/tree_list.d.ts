@@ -389,7 +389,7 @@ export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
 export type RowDraggingTemplateData<TRowData = any> = RowDraggingTemplateDataModel<TRowData>;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/tree_list.Properties}
  * @namespace DevExpress.ui
  * @public
  */
@@ -853,7 +853,7 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated Use Editing instead
+ * @deprecated {ui/tree_list.Editing}
  */
 export type dxTreeListEditing<TRowData = any, TKey = any> = Editing<TRowData, TKey>;
 
@@ -932,7 +932,7 @@ export interface Paging extends PagingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated Use Scrolling instead
+ * @deprecated {ui/tree_list.Scrolling}
  */
 export type dxTreeListScrolling = Scrolling;
 
@@ -950,7 +950,7 @@ export interface Scrolling extends ScrollingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated Use Selection instead
+ * @deprecated {ui/tree_list.Selection}
  */
 export type dxTreeListSelection = Selection;
 
@@ -1227,7 +1227,7 @@ export type Column<TRowData = any, TKey = any> = dxTreeListColumn<TRowData, TKey
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use the Column type instead
+ * @deprecated {ui/tree_list.Column}
  */
 export interface dxTreeListColumn<TRowData = any, TKey = any> extends ColumnBase<TRowData> {
     /**
@@ -1304,7 +1304,7 @@ export type ColumnButton<TRowData = any, TKey = any> = dxTreeListColumnButton<TR
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use the TreeList's ColumnButton type instead
+ * @deprecated {ui/tree_list.ColumnButton}
  */
 export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends ColumnButtonBase {
     /**
@@ -1366,7 +1366,7 @@ export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends Colu
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use Node instead
+ * @deprecated {ui/tree_list.Node}
  */
 export type dxTreeListNode<TRowData = any, TKey = any> = Node<TRowData, TKey>;
 
@@ -1417,7 +1417,7 @@ export interface Node<TRowData = any, TKey = any> {
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use Row instead
+ * @deprecated {ui/tree_list.Row}
  */
 export type dxTreeListRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey>;
 
@@ -1549,5 +1549,5 @@ export type ExplicitTypes<TRowData, TKey> = {
 /** @public */
 export type Properties<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/tree_list.Properties} */
 export type Options<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;

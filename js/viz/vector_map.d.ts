@@ -214,7 +214,7 @@ export interface MapLayerElement {
 export type LegendItem = VectorMapLegendItem;
 
 /**
- * @deprecated Use LegendItem instead
+ * @deprecated {viz/vector_map.LegendItem}
  * @namespace DevExpress.viz
  */
 export interface VectorMapLegendItem extends BaseLegendItem {
@@ -241,7 +241,7 @@ export interface VectorMapLegendItem extends BaseLegendItem {
 }
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {viz/tree_map.Properties}
  * @namespace DevExpress.viz
  */
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
@@ -892,5 +892,5 @@ export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
 /** @public */
 export type Properties = dxVectorMapOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/tree_map.Properties} */
 export type Options = dxVectorMapOptions;

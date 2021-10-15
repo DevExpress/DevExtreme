@@ -65,7 +65,7 @@ export type OptionChangedEvent = EventInfo<dxSlideOut> & ChangedOptionInfo;
 export type SelectionChangedEvent = EventInfo<dxSlideOut> & SelectionChangedInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/slide_out.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
@@ -206,7 +206,7 @@ export default class dxSlideOut extends CollectionWidget<dxSlideOutOptions> {
 export type Item = dxSlideOutItem;
 
 /**
- * @deprecated Use Item instead
+ * @deprecated {ui/slide_out.Item}
  * @namespace DevExpress.ui
  */
 export interface dxSlideOutItem extends CollectionWidgetItem {
@@ -221,5 +221,5 @@ export interface dxSlideOutItem extends CollectionWidgetItem {
 /** @public */
 export type Properties = dxSlideOutOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/slide_out.Properties} */
 export type Options = dxSlideOutOptions;

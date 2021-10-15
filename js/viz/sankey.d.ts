@@ -78,7 +78,7 @@ export type NodeHoverEvent = EventInfo<dxSankey> & {
 export type OptionChangedEvent = EventInfo<dxSankey> & ChangedOptionInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {viz/sankey.Properties}
  * @namespace DevExpress.viz
  */
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
@@ -717,5 +717,5 @@ export interface dxSankeyNode {
 /** @public */
 export type Properties = dxSankeyOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/sankey.Properties} */
 export type Options = dxSankeyOptions;

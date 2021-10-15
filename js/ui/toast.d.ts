@@ -44,7 +44,7 @@ export type ShowingEvent = Cancelable & EventInfo<dxToast>;
 export type ShownEvent = EventInfo<dxToast>;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/toast.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxToastOptions extends dxOverlayOptions<dxToast> {
@@ -163,5 +163,5 @@ export default class dxToast extends dxOverlay<dxToastOptions> { }
 /** @public */
 export type Properties = dxToastOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/toast.Properties} */
 export type Options = dxToastOptions;

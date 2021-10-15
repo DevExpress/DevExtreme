@@ -130,5 +130,5 @@ interface DOMComponentInstance extends DOMComponent<Properties> { }
 
 type Properties = DOMComponentOptions<DOMComponentInstance>;
 
-/** @deprecated use Properties instead */
+/** @deprecated {core/dom_component.Properties} */
 export type Options = Properties;

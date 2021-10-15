@@ -110,7 +110,7 @@ export type AnimationConfig = {
 
 /**
  * @public
- * @deprecated Use the AnimationConfig type instead
+ * @deprecated {animation/fx.AnimationConfig}
  */
 export type animationConfig = AnimationConfig;
 

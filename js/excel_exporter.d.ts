@@ -11,7 +11,7 @@ export type DataGridCell = ExcelDataGridCell;
 
 /**
  * @namespace DevExpress.excelExporter
- * @deprecated Use DataGridCell instead
+ * @deprecated {excel_exporter.DataGridCell}
  */
 export interface ExcelDataGridCell {
     /**
@@ -69,7 +69,7 @@ export type PivotGridCell = ExcelPivotGridCell;
 
 /**
  * @namespace DevExpress.excelExporter
- * @deprecated Use PivotGridCell instead
+ * @deprecated {excel_exporter.PivotGridCell}
  */
 export interface ExcelPivotGridCell extends Cell {
     /**

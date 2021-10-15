@@ -62,7 +62,7 @@ export type PasteEvent = NativeEventInfo<dxTextArea>;
 export type ValueChangedEvent = NativeEventInfo<dxTextArea> & ValueChangedInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/text_area.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
@@ -103,5 +103,5 @@ export default class dxTextArea extends dxTextBox<dxTextAreaOptions> { }
 /** @public */
 export type Properties = dxTextAreaOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/text_area.Properties} */
 export type Options = dxTextAreaOptions;

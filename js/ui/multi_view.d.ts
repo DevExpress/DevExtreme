@@ -46,7 +46,7 @@ export type OptionChangedEvent = EventInfo<dxMultiView> & ChangedOptionInfo;
 export type SelectionChangedEvent = EventInfo<dxMultiView> & SelectionChangedInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/multi_view.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxMultiViewOptions<TComponent> extends CollectionWidgetOptions<TComponent> {
@@ -116,7 +116,7 @@ export default class dxMultiView<TProperties = Properties> extends CollectionWid
 export type Item = dxMultiViewItem;
 
 /**
- * @deprecated Use Item instead
+ * @deprecated {ui/multi_view.Item}
  * @namespace DevExpress.ui
  */
 export interface dxMultiViewItem extends CollectionWidgetItem {
@@ -127,5 +127,5 @@ interface MultiViewInstance extends dxMultiView<Properties> { }
 /** @public */
 export type Properties = dxMultiViewOptions<MultiViewInstance>;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/multi_view.Properties} */
 export type Options = Properties;

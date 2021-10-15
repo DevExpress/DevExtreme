@@ -56,7 +56,7 @@ export type ShownEvent = EventInfo<dxPopover>;
 export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/popover.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent> {
@@ -192,5 +192,5 @@ interface PopoverInstance extends dxPopover<Properties> { }
 /** @public */
 export type Properties = dxPopoverOptions<PopoverInstance>;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/popover.Properties} */
 export type Options = Properties;

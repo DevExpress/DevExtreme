@@ -3192,7 +3192,7 @@ export type DataRowTemplateData<TRowData = any, TKey = any> = {
 };
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/data_grid.Properties}
  * @namespace DevExpress.ui
  * @public
  */
@@ -4194,7 +4194,7 @@ export interface dxDataGridToolbar {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated Use Editing instead
+ * @deprecated {ui/data_grid.Editing}
  */
 export type dxDataGridEditing<TRowData, TKey = any> = Editing<TRowData, TKey>;
 
@@ -4243,7 +4243,7 @@ export type Editing<TRowData = any, TKey = any> = EditingBase<TRowData, TKey> & 
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated Use Scrolling instead
+ * @deprecated {ui/data_grid.Scrolling}
  */
 export type dxDataGridScrolling = Scrolling;
 
@@ -4261,7 +4261,7 @@ export type Scrolling = ScrollingBase & {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated Use Selection instead
+ * @deprecated {ui/data_grid.Selection}
  */
 export type dxDataGridSelection = Selection;
 
@@ -4487,7 +4487,7 @@ export type Column<TRowData = any, TKey = any> = dxDataGridColumn<TRowData, TKey
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use the Column type instead
+ * @deprecated {ui/data_grid.Column}
  */
 export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase<TRowData> {
     /**
@@ -4618,7 +4618,7 @@ export interface dxDataGridColumn<TRowData = any, TKey = any> extends ColumnBase
 export type ColumnButton<TRowData = any, TKey = any> = dxDataGridColumnButton<TRowData, TKey>;
 /**
  * @namespace DevExpress.ui
- * @deprecated Use the DataGrid's ColumnButton type instead
+ * @deprecated {ui/data_grid.ColumnButton}
  */
 export interface dxDataGridColumnButton<TRowData = any, TKey = any> extends ColumnButtonBase {
     /**
@@ -4680,7 +4680,7 @@ export interface dxDataGridColumnButton<TRowData = any, TKey = any> extends Colu
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use Row instead
+ * @deprecated {ui/data_grid.Row}
  */
 export type dxDataGridRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey>;
 
@@ -4818,7 +4818,7 @@ export type ExplicitTypes<TRowData, TKey> = {
 /** @public */
 export type Properties<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/data_grid.Properties} */
 export type Options<TRowData = any, TKey = any> = dxDataGridOptions<TRowData, TKey>;
 
 export default dxDataGrid;

@@ -12,7 +12,7 @@ export type Options<
 
 /**
  * @namespace DevExpress.data
- * @deprecated Use Options instead
+ * @deprecated {data/array_store.Options}
  */
 export interface ArrayStoreOptions<
     TValue = any,

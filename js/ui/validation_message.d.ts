@@ -24,5 +24,5 @@ export default class dxValidationMessage extends dxOverlay<dxValidationMessageOp
 /** @public */
 export type Properties = dxValidationMessageOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/validation_message.Properties} */
 export type Options = dxValidationMessageOptions;

@@ -81,7 +81,7 @@ export type CustomShapeToolboxTemplateData = {
 };
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/diagram.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
@@ -1199,7 +1199,7 @@ export interface dxDiagramConnector extends Item {
 export type Item = dxDiagramItem;
 
 /**
- * @deprecated Use Item instead
+ * @deprecated {ui/diagram.Item}
  * @namespace DevExpress.ui
  */
 export interface dxDiagramItem {
@@ -1604,5 +1604,5 @@ export interface dxDiagramMoveShapeArgs {
 /** @public */
 export type Properties = dxDiagramOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/diagram.Properties} */
 export type Options = dxDiagramOptions;

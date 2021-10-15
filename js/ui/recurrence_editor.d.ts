@@ -23,5 +23,5 @@ export default class dxRecurrenceEditor extends Editor<dxRecurrenceEditorOptions
 
 export type Properties = dxRecurrenceEditorOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/recurrence_editor.Properties} */
 export type Options = dxRecurrenceEditorOptions;

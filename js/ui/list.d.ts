@@ -123,7 +123,7 @@ export type SelectAllValueChangedEvent<TItem extends ItemLike = any, TKey = any>
 export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/list.Properties}
  * @namespace DevExpress.ui
  * @public
  */
@@ -716,7 +716,7 @@ export default class dxList<
 export type Item<TItem extends Item<any> | any = any> = dxListItem<TItem>;
 
 /**
- * @deprecated Use Item instead
+ * @deprecated {ui/html_editor.Item}
  * @namespace DevExpress.ui
  */
 export interface dxListItem<TItem extends dxListItem<any> | any = any> extends CollectionWidgetItem<TItem> {
@@ -774,7 +774,7 @@ export type Properties<
     TKey = any,
 > = dxListOptions<TItem, TKey>;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/html_editor.Properties} */
 export type Options<
     TItem extends ItemLike = any,
     TKey = any,

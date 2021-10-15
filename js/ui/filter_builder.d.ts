@@ -93,7 +93,7 @@ export type FieldEditorTemplate = {
 };
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/filter_builder.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
@@ -488,5 +488,5 @@ export interface dxFilterBuilderField {
 /** @public */
 export type Properties = dxFilterBuilderOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/filter_builder.Properties} */
 export type Options = dxFilterBuilderOptions;

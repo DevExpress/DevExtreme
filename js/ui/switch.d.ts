@@ -26,7 +26,7 @@ export type OptionChangedEvent = EventInfo<dxSwitch> & ChangedOptionInfo;
 export type ValueChangedEvent = NativeEventInfo<dxSwitch> & ValueChangedInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/switch.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
@@ -85,5 +85,5 @@ export default class dxSwitch extends Editor<dxSwitchOptions> { }
 /** @public */
 export type Properties = dxSwitchOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/speed_dial_action.Properties} */
 export type Options = dxSwitchOptions;

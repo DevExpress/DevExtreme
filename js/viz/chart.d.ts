@@ -572,7 +572,7 @@ export interface chartSeriesObject extends baseSeriesObject {
 }
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {viz/chart.Properties}
  * @namespace DevExpress.viz
  */
 export interface dxChartOptions extends BaseChartOptions<dxChart> {
@@ -5154,5 +5154,5 @@ export interface dxChartSeriesTypesStockSeriesLabel extends dxChartSeriesTypesCo
 /** @public */
 export type Properties = dxChartOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/chart.Properties} */
 export type Options = dxChartOptions;

@@ -54,7 +54,7 @@ import BaseWidget, {
 export type LegendItem = FunnelLegendItem;
 
 /**
- * @deprecated Use LegendItem instead
+ * @deprecated {viz/funnel.LegendItem}
  * @namespace DevExpress.viz
  */
 export interface FunnelLegendItem extends BaseLegendItem {
@@ -107,7 +107,7 @@ export type OptionChangedEvent = EventInfo<dxFunnel> & ChangedOptionInfo;
 export type SelectionChangedEvent = EventInfo<dxFunnel> & FunnelItemInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {viz/funnel.Properties}
  * @namespace DevExpress.viz
  */
 export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
@@ -631,7 +631,7 @@ export default class dxFunnel extends BaseWidget<dxFunnelOptions> {
 export type Item = dxFunnelItem;
 
 /**
- * @deprecated Use Item instead
+ * @deprecated {viz/funnel.Item}
  * @namespace DevExpress.viz
  */
 export interface dxFunnelItem {
@@ -701,5 +701,5 @@ export interface dxFunnelItem {
 /** @public */
 export type Properties = dxFunnelOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/funnel.Properties} */
 export type Options = dxFunnelOptions;

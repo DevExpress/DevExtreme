@@ -73,7 +73,7 @@ export type ShowingEvent = Cancelable & EventInfo<dxPopup>;
 export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/popup.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent> {
@@ -241,7 +241,7 @@ export interface dxPopupAnimation extends dxOverlayAnimation {
 export type ToolbarItem = dxPopupToolbarItem;
 
 /**
- * @deprecated Use ToolbarItem instead
+ * @deprecated {ui/popup.ToolbarItem}
  * @namespace DevExpress.ui
  */
 export interface dxPopupToolbarItem {
@@ -312,5 +312,5 @@ interface PopupInstance extends dxPopup<Properties> { }
 /** @public */
 export type Properties = dxPopupOptions<PopupInstance>;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/popup.Properties} */
 export type Options = Properties;

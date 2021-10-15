@@ -19,7 +19,7 @@ export type Options<
 
 /**
  * @namespace DevExpress.data
- * @deprecated Use Options instead
+ * @deprecated {data/data_source.Options}
  */
 export interface DataSourceOptions<
     TSourceValue = any, TValue = TSourceValue,

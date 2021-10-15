@@ -108,6 +108,6 @@ export interface PositionConfig {
 
 /**
  * @public
- * @deprecated Use the PositionConfig type instead
+ * @deprecated {animation/position.PositionConfig}
  */
 export interface positionConfig extends PositionConfig { }

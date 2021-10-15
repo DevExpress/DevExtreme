@@ -51,7 +51,7 @@ export type TooltipHiddenEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 export type TooltipShownEvent = EventInfo<dxLinearGauge> & TooltipInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {viz/linear_gauge.Properties}
  * @namespace DevExpress.viz
  */
 export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
@@ -174,5 +174,5 @@ export default class dxLinearGauge extends BaseGauge<dxLinearGaugeOptions> { }
 /** @public */
 export type Properties = dxLinearGaugeOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/linear_gauge.Properties} */
 export type Options = dxLinearGaugeOptions;
