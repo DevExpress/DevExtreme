@@ -12,7 +12,7 @@ window.onload = function () {
     const that = this;
     const maxDate = new Date();
 
-    maxDate.setYear(maxDate.getYear() - 21);
+    maxDate.setFullYear(maxDate.getFullYear() - 21);
 
     // define validation rules
     that.emailValidationRules = {
@@ -114,7 +114,7 @@ window.onload = function () {
     that.phoneValidationRules = {
       validationRules: [{
         type: 'pattern',
-        pattern: /^\+\s*1\s*\(\s*[02-9]\d{2}\)\s*\d{3}\s*-\s*\d{4}$/,
+        pattern: /^[02-9]\d{9}$/,
         message: 'The phone must have a correct USA phone format',
       }],
     };
@@ -125,7 +125,6 @@ window.onload = function () {
         X: /[02-9]/,
       },
       maskInvalidMessage: 'The phone must have a correct USA phone format',
-      useMaskedValue: true,
     };
 
     that.checkValidationRules = {

@@ -3,7 +3,7 @@ const DemoApp = angular.module('DemoApp', ['dx']);
 DemoApp.controller('DemoController', ($scope) => {
   const maxDate = new Date();
 
-  maxDate.setYear(maxDate.getYear() - 21);
+  maxDate.setFullYear(maxDate.getFullYear() - 21);
 
   const sendRequest = function (value) {
     const validEmail = 'test@dx-email.com';
@@ -110,21 +110,20 @@ DemoApp.controller('DemoController', ($scope) => {
     }],
   };
 
+  $scope.phoneValidationRules = {
+    validationRules: [{
+      type: 'pattern',
+      pattern: /^[02-9]\d{9}$/,
+      message: 'The phone must have a correct USA phone format',
+    }],
+  };
+
   $scope.phoneTextBoxOptions = {
     mask: '+1 (X00) 000-0000',
     maskRules: {
       X: /[02-9]/,
     },
     maskInvalidMessage: 'The phone must have a correct USA phone format',
-    useMaskedValue: true,
-  };
-
-  $scope.phoneValidationRules = {
-    validationRules: [{
-      type: 'pattern',
-      pattern: /^\+\s*1\s*\(\s*[02-9]\d{2}\)\s*\d{3}\s*-\s*\d{4}$/,
-      message: 'The phone must have a correct USA phone format',
-    }],
   };
 
   $scope.checkValidationRules = {

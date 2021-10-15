@@ -43,7 +43,6 @@ class App extends React.Component {
       maskRules: {
         X: /[02-9]/,
       },
-      useMaskedValue: true,
       maskInvalidMessage: 'The phone must have a correct USA phone format',
     };
     this.maxDate = new Date().setFullYear(new Date().getFullYear() - 21);
@@ -124,7 +123,7 @@ class App extends React.Component {
               >
                 <PatternRule
                   message="The phone must have a correct USA phone format"
-                  pattern={/^\+\s*1\s*\(\s*[02-9]\d{2}\)\s*\d{3}\s*-\s*\d{4}$/}
+                  pattern={/^[02-9]\d{9}$/}
                 />
               </SimpleItem>
               <SimpleItem dataField="Accepted"

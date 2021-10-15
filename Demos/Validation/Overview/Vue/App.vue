@@ -130,7 +130,6 @@
         <div class="dx-field-value">
           <DxTextBox
             :mask-rules="phoneRules"
-            :use-masked-value="true"
             mask="+1 (X00) 000-0000"
             mask-invalid-message="The phone must have a correct USA phone format"
           >
@@ -226,7 +225,7 @@ export default {
       },
       password: '',
       namePattern: /^[^0-9]+$/,
-      phonePattern: /^\+\s*1\s*\(\s*[02-9]\d{2}\)\s*\d{3}\s*-\s*\d{4}$/,
+      phonePattern: /^[02-9]\d{9}$/,
       maxDate: new Date(currentDate.setFullYear(currentDate.getFullYear() - 21)),
     };
   },
