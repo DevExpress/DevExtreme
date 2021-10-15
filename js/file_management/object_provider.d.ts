@@ -6,7 +6,7 @@ import FileSystemProviderBase, {
 export type Options = ObjectFileSystemProviderOptions;
 
 /**
- * @deprecated Use Options instead
+ * @deprecated {file_management/object_provider.Options}
  * @namespace DevExpress.fileManagement
  */
 export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseOptions<ObjectFileSystemProvider> {

@@ -190,7 +190,7 @@ export type DateNavigatorTextInfo = {
 };
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/scheduler.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
@@ -1098,7 +1098,7 @@ export type Appointment = dxSchedulerAppointment;
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use the Scheduler's Appointment type instead
+ * @deprecated {ui/scheduler.Appointment}
  */
 export interface dxSchedulerAppointment extends CollectionWidgetItem {
     /**
@@ -1173,7 +1173,7 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
 /** @public */
 export type Properties = dxSchedulerOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/scheduler.Properties} */
 export type Options = dxSchedulerOptions;
 
 /**
@@ -1191,5 +1191,5 @@ export interface dxSchedulerScrolling {
   mode?: 'standard' | 'virtual';
 }
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/scheduler.Properties} */
 export type IOptions = dxSchedulerOptions;

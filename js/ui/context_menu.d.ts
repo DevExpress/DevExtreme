@@ -80,7 +80,7 @@ export type ShowingEvent = Cancelable & EventInfo<dxContextMenu>;
 export type ShownEvent = EventInfo<dxContextMenu>;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/context_menu.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
@@ -248,7 +248,7 @@ export default class dxContextMenu extends dxMenuBase {
 export type Item = dxContextMenuItem;
 
 /**
- * @deprecated Use Item instead
+ * @deprecated {ui/context_menu.Item}
  * @namespace DevExpress.ui
  */
 export interface dxContextMenuItem extends dxMenuBaseItem {
@@ -263,8 +263,8 @@ export interface dxContextMenuItem extends dxMenuBaseItem {
 /** @public */
 export type Properties = dxContextMenuOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/context_menu.Properties} */
 export type Options = dxContextMenuOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/context_menu.Properties} */
 export type IOptions = dxContextMenuOptions;

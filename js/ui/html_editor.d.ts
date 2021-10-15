@@ -57,7 +57,7 @@ export interface MentionTemplateData {
     readonly value?: any;
 }
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/html_editor.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
@@ -480,7 +480,7 @@ export interface dxHtmlEditorToolbar {
 export type ToolbarItem = dxHtmlEditorToolbarItem;
 
 /**
- * @deprecated Use ToolbarItem instead
+ * @deprecated {ui/html_editor.ToolbarItem}
  * @namespace DevExpress.ui
  */
 export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
@@ -538,8 +538,8 @@ export interface dxHtmlEditorVariables {
 /** @public */
 export type Properties = dxHtmlEditorOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/html_editor.Properties} */
 export type Options = dxHtmlEditorOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/html_editor.Properties} */
 export type IOptions = dxHtmlEditorOptions;

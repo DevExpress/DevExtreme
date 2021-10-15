@@ -36,7 +36,7 @@ export type RenderedEvent = EventInfo<dxDeferRendering>;
 export type ShownEvent = EventInfo<dxDeferRendering>;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/defer_rendering.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
@@ -93,8 +93,8 @@ export default class dxDeferRendering extends Widget {
 /** @public */
 export type Properties = dxDeferRenderingOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/defer_rendering.Properties} */
 export type Options = dxDeferRenderingOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/defer_rendering.Properties} */
 export type IOptions = dxDeferRenderingOptions;

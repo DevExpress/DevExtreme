@@ -31,7 +31,7 @@ export type InitializedEvent = InitializedEventInfo<dxSlideOutView>;
 export type OptionChangedEvent = EventInfo<dxSlideOutView> & ChangedOptionInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/slide_out_view.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
@@ -116,8 +116,8 @@ export default class dxSlideOutView extends Widget {
 /** @public */
 export type Properties = dxSlideOutViewOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/slide_out_view.Properties} */
 export type Options = dxSlideOutViewOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/slide_out_view.Properties} */
 export type IOptions = dxSlideOutViewOptions;

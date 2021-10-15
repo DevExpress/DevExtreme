@@ -94,7 +94,7 @@ export type ContentTemplateData = {
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/drop_down_box.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropDownBox>, dxDropDownEditorOptions<dxDropDownBox> {
@@ -167,8 +167,8 @@ export default class dxDropDownBox extends dxDropDownEditor {
 /** @public */
 export type Properties = dxDropDownBoxOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/drop_down_box.Properties} */
 export type Options = dxDropDownBoxOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/drop_down_box.Properties} */
 export type IOptions = dxDropDownBoxOptions;

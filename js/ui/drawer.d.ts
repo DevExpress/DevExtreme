@@ -32,7 +32,7 @@ export type InitializedEvent = InitializedEventInfo<dxDrawer>;
 export type OptionChangedEvent = EventInfo<dxDrawer> & ChangedOptionInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/drawer.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
@@ -156,8 +156,8 @@ export default class dxDrawer extends Widget {
 /** @public */
 export type Properties = dxDrawerOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/drawer.Properties} */
 export type Options = dxDrawerOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/drawer.Properties} */
 export type IOptions = dxDrawerOptions;

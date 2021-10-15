@@ -54,7 +54,7 @@ export type OptionChangedEvent = EventInfo<dxGallery> & ChangedOptionInfo;
 export type SelectionChangedEvent = EventInfo<dxGallery> & SelectionChangedInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/gallery.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
@@ -195,7 +195,7 @@ export default class dxGallery extends CollectionWidget {
 export type Item = dxGalleryItem;
 
 /**
- * @deprecated Use Item instead
+ * @deprecated {ui/gallery.Item}
  * @namespace DevExpress.ui
  */
 export interface dxGalleryItem extends CollectionWidgetItem {
@@ -214,8 +214,8 @@ export interface dxGalleryItem extends CollectionWidgetItem {
 /** @public */
 export type Properties = dxGalleryOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/gallery.Properties} */
 export type Options = dxGalleryOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/gallery.Properties} */
 export type IOptions = dxGalleryOptions;

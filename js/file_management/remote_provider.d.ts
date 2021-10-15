@@ -6,7 +6,7 @@ import FileSystemProviderBase, {
 export type Options = RemoteFileSystemProviderOptions;
 
 /**
- * @deprecated Use Options instead
+ * @deprecated {file_management/remote_provider.Options}
  * @namespace DevExpress.fileManagement
  */
 export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {

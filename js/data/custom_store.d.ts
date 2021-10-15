@@ -11,7 +11,7 @@ export type Options = CustomStoreOptions;
 
 /**
  * @namespace DevExpress.data
- * @deprecated Use Options instead
+ * @deprecated {data/custom_store.Options}
  */
 export interface CustomStoreOptions extends StoreOptions {
     /**

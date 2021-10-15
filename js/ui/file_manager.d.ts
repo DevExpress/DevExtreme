@@ -100,7 +100,7 @@ export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager> & {
 };
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/file_manager.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
@@ -446,7 +446,7 @@ export interface dxFileManagerContextMenu {
 export type ContextMenuItem = dxFileManagerContextMenuItem;
 
 /**
- * @deprecated Use ContextMenuItem instead
+ * @deprecated {ui/file_manager.ContextMenuItem}
  * @namespace DevExpress.ui
  */
 export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
@@ -504,7 +504,7 @@ export interface dxFileManagerToolbar {
 export type ToolbarItem = dxFileManagerToolbarItem;
 
 /**
- * @deprecated Use ToolbarItem instead
+ * @deprecated {ui/file_manager.ToolbarItem}
  * @namespace DevExpress.ui
  */
 export interface dxFileManagerToolbarItem extends dxToolbarItem {
@@ -633,8 +633,8 @@ export interface dxFileManagerDetailsColumn {
 /** @public */
 export type Properties = dxFileManagerOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/file_manager.Properties} */
 export type Options = dxFileManagerOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/file_manager.Properties} */
 export type IOptions = dxFileManagerOptions;

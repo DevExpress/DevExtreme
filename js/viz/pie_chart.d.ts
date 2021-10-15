@@ -110,7 +110,7 @@ export type TooltipShownEvent = EventInfo<dxPieChart> & TooltipInfo;
 export type LegendItem = PieChartLegendItem;
 
 /**
- * @deprecated Use LegendItem instead
+ * @deprecated {viz/pie_chart.LegendItem}
  * @namespace DevExpress.viz
  */
 export interface PieChartLegendItem extends BaseLegendItem {
@@ -158,7 +158,7 @@ export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSerie
     tag?: any;
 }
 /**
- * @deprecated use Properties instead
+ * @deprecated {viz/pie_chart.Properties}
  * @namespace DevExpress.viz
  */
 export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
@@ -879,8 +879,8 @@ export interface pieChartSeriesObject extends baseSeriesObject {
 /** @public */
 export type Properties = dxPieChartOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/pie_chart.Properties} */
 export type Options = dxPieChartOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/pie_chart.Properties} */
 export type IOptions = dxPieChartOptions;

@@ -75,7 +75,7 @@ export type ValueChangedEvent = NativeEventInfo<dxRangeSelector> & {
 };
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {viz/range_selector.Properties}
  * @namespace DevExpress.viz
  */
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
@@ -783,8 +783,8 @@ export default class dxRangeSelector extends BaseWidget {
 /** @public */
 export type Properties = dxRangeSelectorOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/range_selector.Properties} */
 export type Options = dxRangeSelectorOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/range_selector.Properties} */
 export type IOptions = dxRangeSelectorOptions;

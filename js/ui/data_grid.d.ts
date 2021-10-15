@@ -3152,7 +3152,7 @@ export type RowTemplateData = {
 };
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/data_grid.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
@@ -4089,7 +4089,7 @@ export interface SummaryTexts {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated Use Editing instead
+ * @deprecated {ui/data_grid.Editing}
  */
 export type dxDataGridEditing = Editing;
 
@@ -4127,7 +4127,7 @@ export interface Editing extends EditingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated Use Scrolling instead
+ * @deprecated {ui/data_grid.Scrolling}
  */
 export type dxDataGridScrolling = Scrolling;
 
@@ -4145,7 +4145,7 @@ export interface Scrolling extends ScrollingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated Use Selection instead
+ * @deprecated {ui/data_grid.Selection}
  */
 export type dxDataGridSelection = Selection;
 
@@ -4372,7 +4372,7 @@ export type Column = dxDataGridColumn;
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use the Column type instead
+ * @deprecated {ui/data_grid.Column}
  */
 export interface dxDataGridColumn extends ColumnBase {
     /**
@@ -4503,7 +4503,7 @@ export interface dxDataGridColumn extends ColumnBase {
 export type ColumnButton = dxDataGridColumnButton;
 /**
  * @namespace DevExpress.ui
- * @deprecated Use the DataGrid's ColumnButton type instead
+ * @deprecated {ui/data_grid.ColumnButton}
  */
 export interface dxDataGridColumnButton extends ColumnButtonBase {
     /**
@@ -4552,7 +4552,7 @@ export interface dxDataGridColumnButton extends ColumnButtonBase {
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use Row instead
+ * @deprecated {ui/data_grid.Row}
  */
 export type dxDataGridRowObject = Row;
 
@@ -4617,10 +4617,10 @@ export interface Row {
 /** @public */
 export type Properties = dxDataGridOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/data_grid.Properties} */
 export type Options = dxDataGridOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/data_grid.Properties} */
 export type IOptions = dxDataGridOptions;
 
 export default dxDataGrid;

@@ -46,7 +46,7 @@ export type ItemRenderedEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
 export type OptionChangedEvent = EventInfo<dxResponsiveBox> & ChangedOptionInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/responsive_box.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxResponsiveBox> {
@@ -160,7 +160,7 @@ export default class dxResponsiveBox extends CollectionWidget {
 export type Item = dxResponsiveBoxItem;
 
 /**
- * @deprecated Use Item instead
+ * @deprecated {ui/responsive_box.Item}
  * @namespace DevExpress.ui
  */
 export interface dxResponsiveBoxItem extends CollectionWidgetItem {
@@ -198,8 +198,8 @@ export interface dxResponsiveBoxItem extends CollectionWidgetItem {
 /** @public */
 export type Properties = dxResponsiveBoxOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/responsive_box.Properties} */
 export type Options = dxResponsiveBoxOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/responsive_box.Properties} */
 export type IOptions = dxResponsiveBoxOptions;

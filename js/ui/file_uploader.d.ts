@@ -92,7 +92,7 @@ export type ValueChangedEvent = NativeEventInfo<dxFileUploader> & {
 };
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/file_uploader.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
@@ -508,8 +508,8 @@ export default class dxFileUploader extends Editor {
 /** @public */
 export type Properties = dxFileUploaderOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/file_uploader.Properties} */
 export type Options = dxFileUploaderOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/file_uploader.Properties} */
 export type IOptions = dxFileUploaderOptions;

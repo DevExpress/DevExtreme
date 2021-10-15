@@ -47,7 +47,7 @@ export type ShowingEvent = EventInfo<dxLoadPanel>;
 export type ShownEvent = EventInfo<dxLoadPanel>;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/load_panel.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
@@ -169,8 +169,8 @@ export default class dxLoadPanel extends dxOverlay {
 /** @public */
 export type Properties = dxLoadPanelOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/load_panel.Properties} */
 export type Options = dxLoadPanelOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/load_panel.Properties} */
 export type IOptions = dxLoadPanelOptions;

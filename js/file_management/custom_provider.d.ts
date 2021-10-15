@@ -9,7 +9,7 @@ import UploadInfo from './upload_info';
 export type Options = CustomFileSystemProviderOptions;
 
 /**
- * @deprecated Use Options instead
+ * @deprecated {file_management/custom_provider.Options}
  * @namespace DevExpress.fileManagement
  */
 export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {

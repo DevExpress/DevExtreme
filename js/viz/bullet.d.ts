@@ -49,7 +49,7 @@ export type TooltipHiddenEvent = EventInfo<dxBullet>;
 export type TooltipShownEvent = EventInfo<dxBullet>;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {viz/bullet.Properties}
  * @namespace DevExpress.viz
  */
 export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
@@ -125,8 +125,8 @@ export default class dxBullet extends BaseSparkline {
 /** @public */
 export type Properties = dxBulletOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/bullet.Properties} */
 export type Options = dxBulletOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/bullet.Properties} */
 export type IOptions = dxBulletOptions;

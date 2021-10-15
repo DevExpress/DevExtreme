@@ -160,7 +160,7 @@ export type Options = PivotGridDataSourceOptions;
 
 /**
  * @namespace DevExpress.data
- * @deprecated Use Options instead
+ * @deprecated {ui/pivot_grid/data_source.Options}
  */
 export interface PivotGridDataSourceOptions {
     /**
@@ -247,7 +247,7 @@ export type Field = PivotGridDataSourceField;
 
 /**
  * @namespace DevExpress.data
- * @deprecated Use Field instead
+ * @deprecated {ui/pivot_grid/data_source.Field}
  */
 export interface PivotGridDataSourceField {
     /**

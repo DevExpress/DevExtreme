@@ -47,7 +47,7 @@ export type OptionChangedEvent = EventInfo<dxNavBar> & ChangedOptionInfo;
 export type SelectionChangedEvent = EventInfo<dxNavBar> & SelectionChangedInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/nav_bar.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
@@ -75,7 +75,7 @@ export default class dxNavBar extends dxTabs {
 export type Item = dxNavBarItem;
 
 /**
- * @deprecated Use Item instead
+ * @deprecated {ui/nav_bar.Item}
  * @namespace DevExpress.ui
  */
 export interface dxNavBarItem extends dxTabsItem {
@@ -89,8 +89,8 @@ export interface dxNavBarItem extends dxTabsItem {
 /** @public */
 export type Properties = dxNavBarOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/nav_bar.Properties} */
 export type Options = dxNavBarOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/nav_bar.Properties} */
 export type IOptions = dxNavBarOptions;

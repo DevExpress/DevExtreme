@@ -86,7 +86,7 @@ export type SimpleItemTemplateData = {
 };
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/form.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxFormOptions extends WidgetOptions<dxForm> {
@@ -334,7 +334,7 @@ export default class dxForm extends Widget {
 export type ButtonItem = dxFormButtonItem;
 
 /**
- * @deprecated Use ButtonItem instead
+ * @deprecated {ui/form.ButtonItem}
  * @namespace DevExpress.ui
  */
 export interface dxFormButtonItem {
@@ -404,7 +404,7 @@ export interface dxFormButtonItem {
 export type EmptyItem = dxFormEmptyItem;
 
 /**
- * @deprecated Use EmptyItem instead
+ * @deprecated {ui/form.EmptyItem}
  * @namespace DevExpress.ui
  */
 export interface dxFormEmptyItem {
@@ -454,7 +454,7 @@ export interface dxFormEmptyItem {
 export type GroupItem = dxFormGroupItem;
 
 /**
- * @deprecated Use GroupItem instead
+ * @deprecated {ui/form.GroupItem}
  * @namespace DevExpress.ui
  */
 export interface dxFormGroupItem {
@@ -546,7 +546,7 @@ export interface dxFormGroupItem {
 export type SimpleItem = dxFormSimpleItem;
 
 /**
- * @deprecated Use SimpleItem instead
+ * @deprecated {ui/form.SimpleItem}
  * @namespace DevExpress.ui
  */
 export interface dxFormSimpleItem {
@@ -678,7 +678,7 @@ export interface dxFormSimpleItem {
 export type TabbedItem = dxFormTabbedItem;
 
 /**
- * @deprecated Use TabbedItem instead
+ * @deprecated {ui/form.TabbedItem}
  * @namespace DevExpress.ui
  */
 export interface dxFormTabbedItem {
@@ -792,8 +792,8 @@ export interface dxFormTabbedItem {
 /** @public */
 export type Properties = dxFormOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/form.Properties} */
 export type Options = dxFormOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/form.Properties} */
 export type IOptions = dxFormOptions;

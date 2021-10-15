@@ -43,7 +43,7 @@ export type OptionChangedEvent = EventInfo<dxButtonGroup> & ChangedOptionInfo;
 export type SelectionChangedEvent = EventInfo<dxButtonGroup> & SelectionChangedInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/button_group.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
@@ -152,7 +152,7 @@ export default class dxButtonGroup extends Widget {
 export type Item = dxButtonGroupItem;
 
 /**
- * @deprecated Use Item instead
+ * @deprecated {ui/button_group.Item}
  * @namespace DevExpress.ui
  */
 export interface dxButtonGroupItem extends CollectionWidgetItem {
@@ -184,8 +184,8 @@ export interface dxButtonGroupItem extends CollectionWidgetItem {
 /** @public */
 export type Properties = dxButtonGroupOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/button_group.Properties} */
 export type Options = dxButtonGroupOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/button_group.Properties} */
 export type IOptions = dxButtonGroupOptions;

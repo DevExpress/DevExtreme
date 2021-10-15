@@ -67,7 +67,7 @@ export interface BarGaugeBarInfo {
 export type LegendItem = BarGaugeLegendItem;
 
 /**
- * @deprecated Use LegendItem instead
+ * @deprecated {viz/bar_gauge.LegendItem}
  * @namespace DevExpress.viz
  */
 export interface BarGaugeLegendItem extends BaseLegendItem {
@@ -113,7 +113,7 @@ export type TooltipHiddenEvent = EventInfo<dxBarGauge> & TooltipInfo;
 export type TooltipShownEvent = EventInfo<dxBarGauge> & TooltipInfo;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {viz/bar_gauge.Properties}
  * @namespace DevExpress.viz
  */
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
@@ -394,8 +394,8 @@ export default class dxBarGauge extends BaseWidget {
 /** @public */
 export type Properties = dxBarGaugeOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/bar_gauge.Properties} */
 export type Options = dxBarGaugeOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {viz/bar_gauge.Properties} */
 export type IOptions = dxBarGaugeOptions;

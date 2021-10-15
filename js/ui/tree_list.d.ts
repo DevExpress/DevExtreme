@@ -387,7 +387,7 @@ export type ColumnHeaderCellTemplateData = {
 export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/tree_list.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
@@ -844,7 +844,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated Use Editing instead
+ * @deprecated {ui/tree_list.Editing}
  */
 export type dxTreeListEditing = Editing;
 
@@ -917,7 +917,7 @@ export interface Paging extends PagingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated Use Scrolling instead
+ * @deprecated {ui/tree_list.Scrolling}
  */
 export type dxTreeListScrolling = Scrolling;
 
@@ -935,7 +935,7 @@ export interface Scrolling extends ScrollingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated Use Selection instead
+ * @deprecated {ui/tree_list.Selection}
  */
 export type dxTreeListSelection = Selection;
 
@@ -1169,7 +1169,7 @@ export type Column = dxTreeListColumn;
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use the Column type instead
+ * @deprecated {ui/tree_list.Column}
  */
 export interface dxTreeListColumn extends ColumnBase {
     /**
@@ -1246,7 +1246,7 @@ export type ColumnButton = dxTreeListColumnButton;
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use the TreeList's ColumnButton type instead
+ * @deprecated {ui/tree_list.ColumnButton}
  */
 export interface dxTreeListColumnButton extends ColumnButtonBase {
     /**
@@ -1295,7 +1295,7 @@ export interface dxTreeListColumnButton extends ColumnButtonBase {
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use Node instead
+ * @deprecated {ui/tree_list.Node}
  */
 export type dxTreeListNode = Node;
 
@@ -1346,7 +1346,7 @@ export interface Node {
 
 /**
  * @namespace DevExpress.ui
- * @deprecated Use Row instead
+ * @deprecated {ui/tree_list.Row}
  */
 export type dxTreeListRowObject = Row;
 
@@ -1412,8 +1412,8 @@ export interface Row {
 /** @public */
 export type Properties = dxTreeListOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/tree_list.Properties} */
 export type Options = dxTreeListOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/tree_list.Properties} */
 export type IOptions = dxTreeListOptions;

@@ -7,7 +7,7 @@ export type Options = ArrayStoreOptions;
 
 /**
  * @namespace DevExpress.data
- * @deprecated Use Options instead
+ * @deprecated {data/array_store.Options}
  */
 export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions { // eslint-disable-line @typescript-eslint/no-unused-vars
     /**

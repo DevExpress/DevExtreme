@@ -15,7 +15,7 @@ export type Options = DataSourceOptions;
 
 /**
  * @namespace DevExpress.data
- * @deprecated Use Options instead
+ * @deprecated {data/data_source.Options}
  */
 export interface DataSourceOptions {
     /**

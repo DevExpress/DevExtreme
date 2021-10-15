@@ -1443,7 +1443,7 @@ declare module DevExpress.data {
     export type Options = ArrayStoreOptions;
   }
   /**
-   * @deprecated Use Options instead
+   * @deprecated {data/array_store.Options}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface ArrayStoreOptions<T = ArrayStore>
@@ -1472,7 +1472,7 @@ declare module DevExpress.data {
     export type Options = CustomStoreOptions;
   }
   /**
-   * @deprecated Use Options instead
+   * @deprecated {data/custom_store.Options}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface CustomStoreOptions extends DevExpress.data.Store.Options {
@@ -1685,7 +1685,7 @@ declare module DevExpress.data {
     export type Options = DataSourceOptions;
   }
   /**
-   * @deprecated Use Options instead
+   * @deprecated {data/data_source.Options}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface DataSourceOptions {
@@ -2208,7 +2208,7 @@ declare module DevExpress.data {
     export type Options = PivotGridDataSourceOptions;
   }
   /**
-   * @deprecated Use Field instead
+   * @deprecated {ui/pivot_grid/data_source.Field}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface PivotGridDataSourceField {
@@ -2387,7 +2387,7 @@ declare module DevExpress.data {
     wordWrapEnabled?: boolean;
   }
   /**
-   * @deprecated Use Options instead
+   * @deprecated {ui/pivot_grid/data_source.Options}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface PivotGridDataSourceOptions {
@@ -3027,7 +3027,7 @@ declare module DevExpress.excelExporter {
   }
   export type DataGridCell = ExcelDataGridCell;
   /**
-   * @deprecated Use DataGridCell instead
+   * @deprecated {excel_exporter.DataGridCell}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface ExcelDataGridCell {
@@ -3142,7 +3142,7 @@ declare module DevExpress.excelExporter {
     }) => void;
   }
   /**
-   * @deprecated Use PivotGridCell instead
+   * @deprecated {excel_exporter.PivotGridCell}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface ExcelPivotGridCell extends DevExpress.ui.dxPivotGrid.Cell {
@@ -3224,7 +3224,7 @@ declare module DevExpress.fileManagement {
     export type Options = CustomFileSystemProviderOptions;
   }
   /**
-   * @deprecated Use Options instead
+   * @deprecated {file_management/custom_provider.Options}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface CustomFileSystemProviderOptions
@@ -3514,7 +3514,7 @@ declare module DevExpress.fileManagement {
     export type Options = ObjectFileSystemProviderOptions;
   }
   /**
-   * @deprecated Use Options instead
+   * @deprecated {file_management/object_provider.Options}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface ObjectFileSystemProviderOptions
@@ -3544,7 +3544,7 @@ declare module DevExpress.fileManagement {
     export type Options = RemoteFileSystemProviderOptions;
   }
   /**
-   * @deprecated Use Options instead
+   * @deprecated {file_management/remote_provider.Options}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface RemoteFileSystemProviderOptions
@@ -4167,7 +4167,7 @@ declare module DevExpress.ui {
         DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/accordion.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxAccordionItem extends CollectionWidgetItem {
@@ -4181,7 +4181,7 @@ declare module DevExpress.ui {
     title?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/accordion.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxAccordionOptions
@@ -4308,7 +4308,7 @@ declare module DevExpress.ui {
     export type Properties = dxActionSheetOptions;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/action_sheet.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxActionSheetItem extends CollectionWidgetItem {
@@ -4333,7 +4333,7 @@ declare module DevExpress.ui {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/action_sheet.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxActionSheetOptions
@@ -4435,7 +4435,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/autocomplete.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxAutocompleteOptions
@@ -4484,7 +4484,7 @@ declare module DevExpress.ui {
     export type Properties = dxBoxOptions;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/box.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxBoxItem extends CollectionWidgetItem {
@@ -4506,7 +4506,7 @@ declare module DevExpress.ui {
     shrink?: number;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/box.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
@@ -4587,7 +4587,7 @@ declare module DevExpress.ui {
         DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/button_group.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxButtonGroupItem extends CollectionWidgetItem {
@@ -4610,7 +4610,7 @@ declare module DevExpress.ui {
     elementAttr?: { [key: string]: any };
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/button_group.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
@@ -4667,7 +4667,7 @@ declare module DevExpress.ui {
     stylingMode?: 'text' | 'outlined' | 'contained';
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/button.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxButtonOptions extends WidgetOptions<dxButton> {
@@ -4752,7 +4752,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/calendar.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
@@ -4847,7 +4847,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/check_box.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
@@ -4912,7 +4912,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/color_box.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxColorBoxOptions
@@ -5005,7 +5005,7 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxContextMenu>;
   }
   /**
-   * @deprecated Use DevExpress.ui.dxContextMenu.Item instead
+   * @deprecated {ui/context_menu.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxContextMenuItem extends dxMenuBaseItem {
@@ -5015,7 +5015,7 @@ declare module DevExpress.ui {
     items?: Array<DevExpress.ui.dxContextMenu.Item>;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/context_menu.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxContextMenuOptions
@@ -7345,7 +7345,7 @@ declare module DevExpress.ui {
     }
   }
   /**
-   * @deprecated Use the DevExpress.ui.dxDataGrid.Column type instead
+   * @deprecated {ui/data_grid.Column}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDataGridColumn
@@ -7437,7 +7437,7 @@ declare module DevExpress.ui {
       | 'drag';
   }
   /**
-   * @deprecated Use the DataGrid's ColumnButton type instead
+   * @deprecated {ui/data_grid.ColumnButton}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDataGridColumnButton
@@ -7471,11 +7471,11 @@ declare module DevExpress.ui {
         }) => boolean);
   }
   /**
-   * @deprecated Use DevExpress.ui.dxDataGrid.Editing instead
+   * @deprecated {ui/data_grid.Editing}
    */
   export type dxDataGridEditing = DevExpress.ui.dxDataGrid.Editing;
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/data_grid.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
@@ -7674,11 +7674,11 @@ declare module DevExpress.ui {
     summary?: DevExpress.ui.dxDataGrid.Summary;
   }
   /**
-   * @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead
+   * @deprecated {ui/data_grid.Scrolling}
    */
   export type dxDataGridScrolling = DevExpress.ui.dxDataGrid.Scrolling;
   /**
-   * @deprecated Use DevExpress.ui.dxDataGrid.Selection instead
+   * @deprecated {ui/data_grid.Selection}
    */
   export type dxDataGridSelection = DevExpress.ui.dxDataGrid.Selection;
   /**
@@ -7728,7 +7728,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/date_box.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
@@ -7830,7 +7830,7 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxDeferRendering>;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/defer_rendering.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDeferRenderingOptions
@@ -8271,7 +8271,7 @@ declare module DevExpress.ui {
     shape?: dxDiagramShape;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/diagram.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDiagramItem {
@@ -8329,7 +8329,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/diagram.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
@@ -9761,7 +9761,7 @@ declare module DevExpress.ui {
     export type Properties = dxDraggableOptions;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/draggable.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDraggableOptions
@@ -9826,7 +9826,7 @@ declare module DevExpress.ui {
     export type Properties = dxDrawerOptions;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/drawer.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
@@ -9929,7 +9929,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/drop_down_box.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDropDownBoxOptions
@@ -10035,7 +10035,7 @@ declare module DevExpress.ui {
       };
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/drop_down_button.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDropDownButtonItem extends DevExpress.ui.dxList.Item {
@@ -10052,7 +10052,7 @@ declare module DevExpress.ui {
       | string;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/drop_down_button.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxDropDownButtonOptions
@@ -10488,7 +10488,7 @@ declare module DevExpress.ui {
     >;
   }
   /**
-   * @deprecated Use DevExpress.ui.dxFileManager.ContextMenuItem instead
+   * @deprecated {ui/file_manager.ContextMenuItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFileManagerContextMenuItem
@@ -10572,7 +10572,7 @@ declare module DevExpress.ui {
     width?: number | string;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/file_manager.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
@@ -10805,7 +10805,7 @@ declare module DevExpress.ui {
     >;
   }
   /**
-   * @deprecated Use ToolbarItem instead
+   * @deprecated {ui/file_manager.ToolbarItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFileManagerToolbarItem
@@ -10961,7 +10961,7 @@ declare module DevExpress.ui {
       };
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/file_uploader.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
@@ -11389,7 +11389,7 @@ declare module DevExpress.ui {
     trueText?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/filter_builder.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFilterBuilderOptions
@@ -11592,7 +11592,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated Use ButtonItem instead
+   * @deprecated {ui/form.ButtonItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormButtonItem {
@@ -11634,7 +11634,7 @@ declare module DevExpress.ui {
     visibleIndex?: number;
   }
   /**
-   * @deprecated Use EmptyItem instead
+   * @deprecated {ui/form.EmptyItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormEmptyItem {
@@ -11664,7 +11664,7 @@ declare module DevExpress.ui {
     visibleIndex?: number;
   }
   /**
-   * @deprecated Use GroupItem instead
+   * @deprecated {ui/form.GroupItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormGroupItem {
@@ -11723,7 +11723,7 @@ declare module DevExpress.ui {
     visibleIndex?: number;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/form.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormOptions extends WidgetOptions<dxForm> {
@@ -11819,7 +11819,7 @@ declare module DevExpress.ui {
     validationGroup?: string;
   }
   /**
-   * @deprecated Use SimpleItem instead
+   * @deprecated {ui/form.SimpleItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormSimpleItem {
@@ -11934,7 +11934,7 @@ declare module DevExpress.ui {
     visibleIndex?: number;
   }
   /**
-   * @deprecated Use TabbedItem instead
+   * @deprecated {ui/form.TabbedItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFormTabbedItem {
@@ -12068,7 +12068,7 @@ declare module DevExpress.ui {
       DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/gallery.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxGalleryItem extends CollectionWidgetItem {
@@ -12082,7 +12082,7 @@ declare module DevExpress.ui {
     imageSrc?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/gallery.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
@@ -12431,7 +12431,7 @@ declare module DevExpress.ui {
     >;
   }
   /**
-   * @deprecated Use ContextMenuItem instead
+   * @deprecated {ui/gantt.ContextMenuItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxGanttContextMenuItem
@@ -12454,7 +12454,7 @@ declare module DevExpress.ui {
       | string;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/gantt.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxGanttOptions extends WidgetOptions<dxGantt> {
@@ -12918,7 +12918,7 @@ declare module DevExpress.ui {
     >;
   }
   /**
-   * @deprecated Use ToolbarItem instead
+   * @deprecated {ui/gantt.ToolbarItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxGanttToolbarItem extends DevExpress.ui.dxToolbar.Item {
@@ -13230,7 +13230,7 @@ declare module DevExpress.ui {
     valueExpr?: string | Function;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/html_editor.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
@@ -13362,7 +13362,7 @@ declare module DevExpress.ui {
     multiline?: boolean;
   }
   /**
-   * @deprecated Use ToolbarItem instead
+   * @deprecated {ui/html_editor.ToolbarItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxHtmlEditorToolbarItem
@@ -13660,7 +13660,7 @@ declare module DevExpress.ui {
       DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/list.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxListItem extends CollectionWidgetItem {
@@ -13682,7 +13682,7 @@ declare module DevExpress.ui {
     showChevron?: boolean;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/list.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxListOptions
@@ -13914,7 +13914,7 @@ declare module DevExpress.ui {
     export type Properties = dxLoadIndicatorOptions;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/load_indicator.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxLoadIndicatorOptions
@@ -13961,7 +13961,7 @@ declare module DevExpress.ui {
     show?: animationConfig;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/load_panel.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
@@ -14067,7 +14067,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/lookup.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
@@ -14327,7 +14327,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/map.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxMapOptions extends WidgetOptions<dxMap> {
@@ -14667,7 +14667,7 @@ declare module DevExpress.ui {
       | 'onHover';
   }
   /**
-   * @deprecated Use DevExpress.ui.dxMenu.Item instead
+   * @deprecated {ui/menu.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxMenuItem extends dxMenuBaseItem {
@@ -14677,7 +14677,7 @@ declare module DevExpress.ui {
     items?: Array<DevExpress.ui.dxMenu.Item>;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/menu.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
@@ -14787,12 +14787,12 @@ declare module DevExpress.ui {
         DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/multi_view.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxMultiViewItem extends CollectionWidgetItem {}
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/multi_view.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxMultiViewOptions<T = dxMultiView>
@@ -14865,7 +14865,7 @@ declare module DevExpress.ui {
       DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/nav_bar.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxNavBarItem extends DevExpress.ui.dxTabs.Item {
@@ -14875,7 +14875,7 @@ declare module DevExpress.ui {
     badge?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/nav_bar.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
@@ -14917,7 +14917,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/number_box.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
@@ -15232,7 +15232,7 @@ declare module DevExpress.ui {
     export type Properties = dxPivotGridFieldChooserOptions;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/pivot_grid_field_chooser.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxPivotGridFieldChooserOptions
@@ -15340,7 +15340,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/pivot_grid.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
@@ -15751,7 +15751,7 @@ declare module DevExpress.ui {
     wordWrapEnabled?: boolean;
   }
   /**
-   * @deprecated Use Cell instead
+   * @deprecated {ui/pivot_grid.Cell}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxPivotGridPivotGridCell {
@@ -15923,7 +15923,7 @@ declare module DevExpress.ui {
     show?: animationConfig;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/popover.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
@@ -16043,7 +16043,7 @@ declare module DevExpress.ui {
     show?: animationConfig;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/popup.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
@@ -16136,7 +16136,7 @@ declare module DevExpress.ui {
     width?: number | string | (() => number | string);
   }
   /**
-   * @deprecated Use ToolbarItem instead
+   * @deprecated {ui/popup.ToolbarItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxPopupToolbarItem {
@@ -16212,7 +16212,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/progress_bar.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxProgressBarOptions
@@ -16257,7 +16257,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/radio_group.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxRadioGroupOptions
@@ -16315,7 +16315,7 @@ declare module DevExpress.ui {
         };
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/range_slider.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxRangeSliderOptions
@@ -16401,7 +16401,7 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxResizable> & ResizeInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/resizable.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
@@ -16479,7 +16479,7 @@ declare module DevExpress.ui {
     export type Properties = dxResponsiveBoxOptions;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/responsive_box.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxResponsiveBoxItem extends CollectionWidgetItem {
@@ -16518,7 +16518,7 @@ declare module DevExpress.ui {
         }>;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/responsive_box.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxResponsiveBoxOptions
@@ -16787,7 +16787,7 @@ declare module DevExpress.ui {
     }
   }
   /**
-   * @deprecated Use the Scheduler's Appointment type instead
+   * @deprecated {ui/scheduler.Appointment}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSchedulerAppointment extends CollectionWidgetItem {
@@ -16845,7 +16845,7 @@ declare module DevExpress.ui {
     visible?: boolean;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/scheduler.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
@@ -17622,7 +17622,7 @@ declare module DevExpress.ui {
       DevExpress.ui.dxScrollable.ScrollEventInfo<dxScrollView>;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/scroll_view.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxScrollViewOptions
@@ -17704,7 +17704,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/select_box.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSelectBoxOptions<T = dxSelectBox>
@@ -17799,7 +17799,7 @@ declare module DevExpress.ui {
         DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/slide_out.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSlideOutItem extends CollectionWidgetItem {
@@ -17811,7 +17811,7 @@ declare module DevExpress.ui {
       | (() => string | DevExpress.core.UserDefinedElement);
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/slide_out.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSlideOutOptions
@@ -17936,7 +17936,7 @@ declare module DevExpress.ui {
     export type Properties = dxSlideOutViewOptions;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/slide_out_view.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
@@ -18059,7 +18059,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/slider.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
@@ -18175,7 +18175,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/sortable.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
@@ -18268,7 +18268,7 @@ declare module DevExpress.ui {
     export type Properties = dxSpeedDialActionOptions;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/speed_dial_action.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSpeedDialActionOptions
@@ -18322,7 +18322,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/switch.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
@@ -18401,7 +18401,7 @@ declare module DevExpress.ui {
     };
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/tab_panel.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTabPanelItem extends DevExpress.ui.dxMultiView.Item {
@@ -18425,7 +18425,7 @@ declare module DevExpress.ui {
     title?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/tab_panel.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
@@ -18524,7 +18524,7 @@ declare module DevExpress.ui {
       DevExpress.ui.CollectionWidget.SelectionChangedInfo;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/tabs.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTabsItem extends CollectionWidgetItem {
@@ -18538,7 +18538,7 @@ declare module DevExpress.ui {
     icon?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/tabs.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTabsOptions<T = dxTabs>
@@ -18642,7 +18642,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/tag_box.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTagBoxOptions
@@ -18751,7 +18751,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/text_area.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
@@ -18805,7 +18805,7 @@ declare module DevExpress.ui {
         DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/text_box.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTextBoxOptions<T = dxTextBox>
@@ -19019,7 +19019,7 @@ declare module DevExpress.ui {
     export type Properties = dxTileViewOptions;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/tile_view.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTileViewItem extends CollectionWidgetItem {
@@ -19033,7 +19033,7 @@ declare module DevExpress.ui {
     widthRatio?: number;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/tile_view.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTileViewOptions
@@ -19125,7 +19125,7 @@ declare module DevExpress.ui {
     show?: animationConfig;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/toast.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxToastOptions extends dxOverlayOptions<dxToast> {
@@ -19211,7 +19211,7 @@ declare module DevExpress.ui {
     export type Properties = dxToolbarOptions;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {ui/toolbar.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxToolbarItem extends CollectionWidgetItem {
@@ -19257,7 +19257,7 @@ declare module DevExpress.ui {
       | 'dxDropDownButton';
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/toolbar.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
@@ -19314,7 +19314,7 @@ declare module DevExpress.ui {
     export type ShownEvent = DevExpress.events.EventInfo<dxTooltip>;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/tooltip.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {}
@@ -19955,7 +19955,7 @@ declare module DevExpress.ui {
         DevExpress.ui.dxDataGrid.ToolbarPreparingInfo;
   }
   /**
-   * @deprecated Use the DevExpress.ui.dxTreeList.Column type instead
+   * @deprecated {ui/tree_list.Column}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeListColumn
@@ -20009,7 +20009,7 @@ declare module DevExpress.ui {
     type?: 'adaptive' | 'buttons' | 'drag';
   }
   /**
-   * @deprecated Use the TreeList's ColumnButton type instead
+   * @deprecated {ui/tree_list.ColumnButton}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeListColumnButton
@@ -20043,7 +20043,7 @@ declare module DevExpress.ui {
         }) => boolean);
   }
   /**
-   * @deprecated Use DevExpress.ui.dxTreeList.Editing instead
+   * @deprecated {ui/tree_list.Editing}
    */
   export type dxTreeListEditing = DevExpress.ui.dxTreeList.Editing;
   /**
@@ -20051,12 +20051,12 @@ declare module DevExpress.ui {
    */
   export type dxTreeListEditingTexts = DevExpress.ui.dxTreeList.EditingTexts;
   /**
-   * @deprecated Use DevExpress.ui.dxTreeList.Node instead
+   * @deprecated {ui/tree_list.Node}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type dxTreeListNode = DevExpress.ui.dxTreeList.Node;
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/tree_list.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
@@ -20233,11 +20233,11 @@ declare module DevExpress.ui {
    */
   export type dxTreeListPaging = DevExpress.ui.dxTreeList.Paging;
   /**
-   * @deprecated Use DevExpress.ui.dxTreeList.Scrolling instead
+   * @deprecated {ui/tree_list.Scrolling}
    */
   export type dxTreeListScrolling = DevExpress.ui.dxTreeList.Scrolling;
   /**
-   * @deprecated Use DevExpress.ui.dxTreeList.Selection instead
+   * @deprecated {ui/tree_list.Selection}
    */
   export type dxTreeListSelection = DevExpress.ui.dxTreeList.Selection;
   /**
@@ -20406,7 +20406,7 @@ declare module DevExpress.ui {
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxTreeView>;
   }
   /**
-   * @deprecated Use DevExpress.ui.dxTreeView.Item instead
+   * @deprecated {ui/tree_view.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeViewItem extends CollectionWidgetItem {
@@ -20479,7 +20479,7 @@ declare module DevExpress.ui {
     text?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/tree_view.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeViewOptions
@@ -20645,7 +20645,7 @@ declare module DevExpress.ui {
     export type ValidationResult = dxValidationGroupResult;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/validation_group.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxValidationGroupOptions
@@ -20736,7 +20736,7 @@ declare module DevExpress.ui {
     export type Properties = dxValidationSummaryOptions;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/validation_summary.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxValidationSummaryOptions
@@ -20786,7 +20786,7 @@ declare module DevExpress.ui {
     export type ValidationResult = dxValidatorResult;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {ui/validator.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
@@ -22209,7 +22209,7 @@ declare module DevExpress.viz {
     value?: number;
   }
   /**
-   * @deprecated Use LegendItem instead
+   * @deprecated {viz/bar_gauge.LegendItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface BarGaugeLegendItem extends BaseLegendItem {
@@ -24259,7 +24259,7 @@ declare module DevExpress.viz {
     enabled?: boolean;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/bar_gauge.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
@@ -24431,7 +24431,7 @@ declare module DevExpress.viz {
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxBullet>;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/bullet.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
@@ -25419,7 +25419,7 @@ declare module DevExpress.viz {
     position?: 'inside' | 'outside';
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/chart.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxChartOptions extends BaseChartOptions<dxChart> {
@@ -28130,7 +28130,7 @@ declare module DevExpress.viz {
         DevExpress.viz.BaseGauge.TooltipInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/circular_gauge.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxCircularGaugeOptions
@@ -28258,7 +28258,7 @@ declare module DevExpress.viz {
       FunnelItemInfo;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated {viz/funnel.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFunnelItem {
@@ -28342,7 +28342,7 @@ declare module DevExpress.viz {
     visible?: boolean;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/funnel.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
@@ -28723,7 +28723,7 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseGauge.TooltipInfo;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/linear_gauge.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxLinearGaugeOptions
@@ -28971,7 +28971,7 @@ declare module DevExpress.viz {
         ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/pie_chart.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
@@ -29983,7 +29983,7 @@ declare module DevExpress.viz {
     hoverMode?: 'excludePoints' | 'includePoints' | 'none';
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/polar_chart.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
@@ -30997,7 +30997,7 @@ declare module DevExpress.viz {
       };
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/range_selector.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxRangeSelectorOptions
@@ -31670,7 +31670,7 @@ declare module DevExpress.viz {
     title?: string;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/sankey.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
@@ -32084,7 +32084,7 @@ declare module DevExpress.viz {
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxSparkline>;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/sparkline.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxSparklineOptions
@@ -32351,7 +32351,7 @@ declare module DevExpress.viz {
     value(): number;
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/tree_map.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
@@ -32914,7 +32914,7 @@ declare module DevExpress.viz {
     };
   }
   /**
-   * @deprecated use Properties instead
+   * @deprecated {viz/vector_map.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
@@ -33335,7 +33335,7 @@ declare module DevExpress.viz {
     weight?: number;
   }
   /**
-   * @deprecated Use LegendItem instead
+   * @deprecated {viz/funnel.LegendItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface FunnelLegendItem extends BaseLegendItem {
@@ -33473,7 +33473,7 @@ declare module DevExpress.viz {
     | 'Material'
     | 'Office';
   /**
-   * @deprecated Use LegendItem instead
+   * @deprecated {viz/pie_chart.LegendItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface PieChartLegendItem extends BaseLegendItem {
@@ -33622,7 +33622,7 @@ declare module DevExpress.viz {
     | 'week'
     | 'year';
   /**
-   * @deprecated Use LegendItem instead
+   * @deprecated {viz/vector_map.LegendItem}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface VectorMapLegendItem extends BaseLegendItem {

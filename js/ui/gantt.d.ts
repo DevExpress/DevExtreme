@@ -238,7 +238,7 @@ export type TimeTooltipTemplateData = {
 };
 
 /**
- * @deprecated use Properties instead
+ * @deprecated {ui/gantt.Properties}
  * @namespace DevExpress.ui
  */
 export interface dxGanttOptions extends WidgetOptions<dxGantt> {
@@ -1136,7 +1136,7 @@ export interface dxGanttContextMenu {
 export type ToolbarItem = dxGanttToolbarItem;
 
 /**
- * @deprecated Use ToolbarItem instead
+ * @deprecated {ui/gantt.ToolbarItem}
  * @namespace DevExpress.ui
  */
 export interface dxGanttToolbarItem extends dxToolbarItem {
@@ -1162,7 +1162,7 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
 export type ContextMenuItem = dxGanttContextMenuItem;
 
 /**
- * @deprecated Use ContextMenuItem instead
+ * @deprecated {ui/gantt.ContextMenuItem}
  * @namespace DevExpress.ui
  */
 export interface dxGanttContextMenuItem extends dxContextMenuItem {
@@ -1209,8 +1209,8 @@ export interface dxGanttStripLine {
 /** @public */
 export type Properties = dxGanttOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/gantt.Properties} */
 export type Options = dxGanttOptions;
 
-/** @deprecated use Properties instead */
+/** @deprecated {ui/gantt.Properties} */
 export type IOptions = dxGanttOptions;
