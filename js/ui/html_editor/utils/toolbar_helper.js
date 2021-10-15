@@ -413,7 +413,7 @@ function getTablePropertiesFormConfig(module, { $element, formats, tableBlot }) 
     let backgroundColorEditorInstance;
     const $table = $element;
     const editorInstance = module.editorInstance;
-    const startTableWidth = parseInt(formats.tableWidth) ?? getOuterWidth($table);
+    const startTableWidth = isDefined(formats.tableWidth) ? parseInt(formats.tableWidth) : getOuterWidth($table);
     const tableStyles = window.getComputedStyle($table.get(0));
     const startTextAlign = tableStyles.textAlign === 'start' ? 'left' : tableStyles.textAlign;
 
@@ -421,12 +421,12 @@ function getTablePropertiesFormConfig(module, { $element, formats, tableBlot }) 
         colCount: 2,
         formData: {
             width: startTableWidth,
-            height: parseInt(formats.tableHeight) ?? getOuterHeight($table),
-            backgroundColor: formats.tableBackgroundColor ?? tableStyles.backgroundColor,
-            borderStyle: formats.tableBorderStyle ?? tableStyles.borderTopStyle,
-            borderColor: formats.tableBorderColor ?? tableStyles.borderTopColor,
-            borderWidth: parseInt(formats.tableBorderWidth ?? tableStyles.borderTopWidth),
-            alignment: formats.tableAlign ?? startTextAlign
+            height: isDefined(formats.tableHeight) ? parseInt(formats.tableHeight) : getOuterHeight($table),
+            backgroundColor: formats.tableBackgroundColor || tableStyles.backgroundColor,
+            borderStyle: formats.tableBorderStyle || tableStyles.borderTopStyle,
+            borderColor: formats.tableBorderColor || tableStyles.borderTopColor,
+            borderWidth: parseInt(isDefined(formats.tableBorderWidth) ? formats.tableBorderWidth : tableStyles.borderTopWidth),
+            alignment: formats.tableAlign || startTextAlign
         },
         items: [{
             itemType: 'group',
@@ -578,14 +578,14 @@ function getCellPropertiesFormConfig(module, { $element, formats, tableBlot, row
         formData: {
             width: startCellWidth,
             height: isDefined(formats.cellHeight) ? parseInt(formats.cellHeight) : getOuterHeight($cell),
-            backgroundColor: formats.cellBackgroundColor ?? cellStyles.backgroundColor,
-            borderStyle: formats.cellBorderStyle ?? cellStyles.borderTopStyle,
-            borderColor: formats.cellBorderColor ?? cellStyles.borderTopColor,
-            borderWidth: parseInt(formats.cellBorderWidth ?? cellStyles.borderTopWidth),
-            alignment: formats.cellTextAlign ?? startTextAlign,
-            verticalAlignment: formats.cellVerticalAlign ?? cellStyles.verticalAlign,
-            verticalPadding: formats.cellPaddingTop ?? parseInt(cellStyles.paddingTop),
-            horizontalPadding: formats.cellPaddingLeft ?? parseInt(cellStyles.paddingLeft),
+            backgroundColor: formats.cellBackgroundColor || cellStyles.backgroundColor,
+            borderStyle: formats.cellBorderStyle || cellStyles.borderTopStyle,
+            borderColor: formats.cellBorderColor || cellStyles.borderTopColor,
+            borderWidth: parseInt(isDefined(formats.cellBorderWidth) ? formats.cellBorderWidth : cellStyles.borderTopWidth),
+            alignment: formats.cellTextAlign || startTextAlign,
+            verticalAlignment: formats.cellVerticalAlign || cellStyles.verticalAlign,
+            verticalPadding: parseInt(isDefined(formats.cellPaddingTop) ? formats.cellPaddingTop : cellStyles.paddingTop),
+            horizontalPadding: parseInt(isDefined(formats.cellPaddingLeft) ? formats.cellPaddingLeft : cellStyles.paddingLeft),
         },
         items: [{
             itemType: 'group',

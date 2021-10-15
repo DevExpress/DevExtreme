@@ -142,6 +142,34 @@ module('Table properties forms', {
             assert.ok($scrollView.length, 'Form should be in the ScrollView');
         });
 
+        test('show table form start values', function(assert) {
+            this.createWidget({ width: 432 });
+
+            const $tableElement = this.$element.find('table').eq(0);
+
+            this.quillInstance.setSelection(50, 1);
+
+            showCellPropertiesForm(this.instance, $tableElement);
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
+
+            const borderStyleEditor = formInstance.getEditor('borderStyle');
+            const borderWidthEditor = formInstance.getEditor('borderWidth');
+            const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
+            const backgroundColorEditor = formInstance.$element().find('.dx-colorbox').eq(1).dxColorBox('instance');
+            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            const heightEditor = formInstance.getEditor('height');
+            const widthEditor = formInstance.getEditor('width');
+
+            assert.strictEqual(borderStyleEditor.option('value'), 'none', 'borderStyleEditor value is correct');
+            assert.strictEqual(borderWidthEditor.option('value'), 0, 'borderWidthEditor value is correct');
+            assert.strictEqual(borderColorEditor.option('value'), 'rgb(128, 128, 128)', 'borderColorEditor value is correct');
+            assert.strictEqual(backgroundColorEditor.option('value'), 'rgba(0, 0, 0, 0)', 'backgroundColorEditor value is correct');
+            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
+            assert.roughEqual(heightEditor.option('value'), 72, 2, 'heightEditor value is correct');
+            assert.roughEqual(widthEditor.option('value'), 400, 2, 'widthEditor value is correct');
+        });
+
         test('Form popup use a fullscreen mode for mobile devices', function(assert) {
             const isPhone = devices.real().deviceType === 'phone';
 
@@ -235,11 +263,13 @@ module('Table properties forms', {
         test('show cell Form', function(assert) {
             this.createWidget();
 
-            const $cellElement = this.$element.find('table').eq(0);
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(6);
 
             this.quillInstance.setSelection(50, 1);
 
-            showCellPropertiesForm(this.instance, $cellElement);
+            showCellPropertiesForm(this.instance, $targetCell);
+
             this.clock.tick();
             const $form = $('.dx-form:not(.dx-formdialog-form)');
             const $scrollView = $form.closest('.dx-scrollview');
@@ -247,6 +277,41 @@ module('Table properties forms', {
             assert.strictEqual($form.length, 1);
             assert.ok($form.eq(0).is(':visible'));
             assert.ok($scrollView.length, 'Form should be in the ScrollView');
+        });
+
+        test('show cell form start values', function(assert) {
+            this.createWidget({ width: 432 });
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(6);
+
+            this.quillInstance.setSelection(50, 1);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
+
+            const borderStyleEditor = formInstance.getEditor('borderStyle');
+            const borderWidthEditor = formInstance.getEditor('borderWidth');
+            const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
+            const backgroundColorEditor = formInstance.$element().find('.dx-colorbox').eq(1).dxColorBox('instance');
+            const horizontalPaddingEditor = formInstance.getEditor('horizontalPadding');
+            const verticalPaddingEditor = formInstance.getEditor('verticalPadding');
+            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            const verticalAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(1).dxButtonGroup('instance');
+            const heightEditor = formInstance.getEditor('height');
+            const widthEditor = formInstance.getEditor('width');
+
+            assert.strictEqual(borderStyleEditor.option('value'), 'solid', 'borderStyleEditor value is correct');
+            assert.strictEqual(borderWidthEditor.option('value'), 1, 'borderWidthEditor value is correct');
+            assert.strictEqual(borderColorEditor.option('value'), 'rgb(221, 221, 221)', 'borderColorEditor value is correct');
+            assert.strictEqual(backgroundColorEditor.option('value'), 'rgba(0, 0, 0, 0)', 'backgroundColorEditor value is correct');
+            assert.strictEqual(horizontalPaddingEditor.option('value'), 5, 'horizontalPaddingEditor value is correct');
+            assert.strictEqual(verticalPaddingEditor.option('value'), 2, 'verticalPaddingEditor value is correct');
+            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
+            assert.strictEqual(verticalAlignmentEditor.option('selectedItemKeys')[0], 'middle', 'verticalAlignmentEditor selectedItemKeys is correct');
+            assert.roughEqual(heightEditor.option('value'), 24, 2, 'heightEditor value is correct');
+            assert.roughEqual(widthEditor.option('value'), 100, 2, 'widthEditor value is correct');
         });
 
         test('Check properties edititng at the cell Form (without dimensions)', function(assert) {
