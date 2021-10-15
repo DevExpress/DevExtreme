@@ -14559,7 +14559,8 @@ declare module DevExpress.ui {
    * @deprecated Use DevExpress.ui.dxHtmlEditor.ContextMenuItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxHtmlEditorTableContextMenuItem extends MenuBasePlainItem {
+  export interface dxHtmlEditorTableContextMenuItem
+    extends DevExpress.ui.dxMenu.MenuBasePlainItem {
     /**
      * [descr:dxHtmlEditorTableContextMenuItem.name]
      */
@@ -15872,6 +15873,43 @@ declare module DevExpress.ui {
       DevExpress.events.NativeEventInfo<dxMenu> & DevExpress.events.ItemInfo;
     export type ItemRenderedEvent = DevExpress.events.NativeEventInfo<dxMenu> &
       DevExpress.events.ItemInfo;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export interface MenuBasePlainItem extends CollectionWidgetItem {
+      /**
+       * [descr:dxMenuBaseItem.beginGroup]
+       */
+      beginGroup?: boolean;
+      /**
+       * [descr:dxMenuBaseItem.closeMenuOnClick]
+       */
+      closeMenuOnClick?: boolean;
+      /**
+       * [descr:dxMenuBaseItem.disabled]
+       */
+      disabled?: boolean;
+      /**
+       * [descr:dxMenuBaseItem.icon]
+       */
+      icon?: string;
+      /**
+       * [descr:dxMenuBaseItem.selectable]
+       */
+      selectable?: boolean;
+      /**
+       * [descr:dxMenuBaseItem.selected]
+       */
+      selected?: boolean;
+      /**
+       * [descr:dxMenuBaseItem.text]
+       */
+      text?: string;
+      /**
+       * [descr:dxMenuBaseItem.visible]
+       */
+      visible?: boolean;
+    }
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxMenu> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxMenuOptions;
@@ -15911,7 +15949,8 @@ declare module DevExpress.ui {
    * [descr:dxMenuBaseItem]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxMenuBaseItem extends MenuBasePlainItem {
+  export interface dxMenuBaseItem
+    extends DevExpress.ui.dxMenu.MenuBasePlainItem {
     /**
      * [descr:dxMenuBaseItem.items]
      */
@@ -23319,44 +23358,6 @@ declare module DevExpress.ui {
      * [descr:MapLocation.lng]
      */
     lng: number;
-  }
-  /**
-   * [descr:MenuBasePlainItem]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface MenuBasePlainItem extends CollectionWidgetItem {
-    /**
-     * [descr:MenuBasePlainItem.beginGroup]
-     */
-    beginGroup?: boolean;
-    /**
-     * [descr:MenuBasePlainItem.closeMenuOnClick]
-     */
-    closeMenuOnClick?: boolean;
-    /**
-     * [descr:MenuBasePlainItem.disabled]
-     */
-    disabled?: boolean;
-    /**
-     * [descr:MenuBasePlainItem.icon]
-     */
-    icon?: string;
-    /**
-     * [descr:MenuBasePlainItem.selectable]
-     */
-    selectable?: boolean;
-    /**
-     * [descr:MenuBasePlainItem.selected]
-     */
-    selected?: boolean;
-    /**
-     * [descr:MenuBasePlainItem.text]
-     */
-    text?: string;
-    /**
-     * [descr:MenuBasePlainItem.visible]
-     */
-    visible?: boolean;
   }
   /**
    * [descr:ui.notify(message,type,displayTime)]
