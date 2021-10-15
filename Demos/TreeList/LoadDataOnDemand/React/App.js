@@ -5,8 +5,14 @@ import 'whatwg-fetch';
 const dataSource = {
   load(loadOptions) {
     const parentIdsParam = loadOptions.parentIds;
+    const url = new URL('https://js.devexpress.com/Demos/Mvc/api/treeListData');
+    if (parentIdsParam) {
+      parentIdsParam.forEach((id) => {
+        url.searchParams.append('parentIds', id);
+      });
+    }
 
-    return fetch(`https://js.devexpress.com/Demos/Mvc/api/treeListData?parentIds=${parentIdsParam}`)
+    return fetch(url)
       .then((response) => response.json())
       .catch(() => { throw new Error('Data Loading Error'); });
   },
