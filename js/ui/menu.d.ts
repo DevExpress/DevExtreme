@@ -202,54 +202,48 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
  */
 export default class dxMenu extends dxMenuBase<dxMenuOptions> { }
 
-/**
- * @docid
- * @inherits CollectionWidgetItem
- * @type object
- * @namespace DevExpress.ui
- */
- export interface MenuBasePlainItem extends CollectionWidgetItem {
+export interface MenuBasePlainItem extends CollectionWidgetItem {
   /**
-   * @docid
+   * @docid dxMenuBaseItem.beginGroup
    * @public
    */
   beginGroup?: boolean;
   /**
-   * @docid
+   * @docid dxMenuBaseItem.closeMenuOnClick
    * @default true
    * @public
    */
   closeMenuOnClick?: boolean;
   /**
-   * @docid
+   * @docid dxMenuBaseItem.disabled
    * @default false
    * @public
    */
   disabled?: boolean;
   /**
-   * @docid
+   * @docid dxMenuBaseItem.icon
    * @public
    */
   icon?: string;
   /**
-   * @docid
+   * @docid dxMenuBaseItem.selectable
    * @default false
    * @public
    */
   selectable?: boolean;
   /**
-   * @docid
+   * @docid dxMenuBaseItem.selected
    * @default false
    * @public
    */
   selected?: boolean;
   /**
-   * @docid
+   * @docid dxMenuBaseItem.text
    * @public
    */
   text?: string;
   /**
-   * @docid
+   * @docid dxMenuBaseItem.visible
    * @default true
    * @public
    */
