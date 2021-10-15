@@ -51,5 +51,5 @@ export default class dxTooltip extends dxPopover<dxTooltipOptions> { }
 /** @public */
 export type Properties = dxTooltipOptions;
 
-/** @deprecated {ui/toolbar.Properties} */
+/** @deprecated {ui/tooltip.Properties} */
 export type Options = dxTooltipOptions;

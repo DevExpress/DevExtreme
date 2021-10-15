@@ -85,5 +85,5 @@ export default class dxSwitch extends Editor<dxSwitchOptions> { }
 /** @public */
 export type Properties = dxSwitchOptions;
 
-/** @deprecated {ui/speed_dial_action.Properties} */
+/** @deprecated {ui/switch.Properties} */
 export type Options = dxSwitchOptions;

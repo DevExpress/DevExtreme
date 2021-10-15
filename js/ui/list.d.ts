@@ -716,7 +716,7 @@ export default class dxList<
 export type Item<TItem extends Item<any> | any = any> = dxListItem<TItem>;
 
 /**
- * @deprecated {ui/html_editor.Item}
+ * @deprecated {ui/list.Item}
  * @namespace DevExpress.ui
  */
 export interface dxListItem<TItem extends dxListItem<any> | any = any> extends CollectionWidgetItem<TItem> {
@@ -774,7 +774,7 @@ export type Properties<
     TKey = any,
 > = dxListOptions<TItem, TKey>;
 
-/** @deprecated {ui/html_editor.Properties} */
+/** @deprecated {ui/list.Properties} */
 export type Options<
     TItem extends ItemLike = any,
     TKey = any,

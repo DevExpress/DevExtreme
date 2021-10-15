@@ -15029,7 +15029,7 @@ declare module DevExpress.ui {
       DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>;
   }
   /**
-   * @deprecated {ui/html_editor.Item}
+   * @deprecated {ui/list.Item}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxListItem<TItem extends dxListItem<any> | any = any>
@@ -34366,7 +34366,7 @@ declare module DevExpress.viz {
     };
   }
   /**
-   * @deprecated {viz/tree_map.Properties}
+   * @deprecated {viz/vector_map.Properties}
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {

@@ -241,7 +241,7 @@ export interface VectorMapLegendItem extends BaseLegendItem {
 }
 
 /**
- * @deprecated {viz/tree_map.Properties}
+ * @deprecated {viz/vector_map.Properties}
  * @namespace DevExpress.viz
  */
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
@@ -892,5 +892,5 @@ export default class dxVectorMap extends BaseWidget<dxVectorMapOptions> {
 /** @public */
 export type Properties = dxVectorMapOptions;
 
-/** @deprecated {viz/tree_map.Properties} */
+/** @deprecated {viz/vector_map.Properties} */
 export type Options = dxVectorMapOptions;
