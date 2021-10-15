@@ -9,7 +9,7 @@ fixture`Display* arguments in appointment templates and events`
 [undefined, 'America/Los_Angeles'].forEach((timeZone) => {
   test(`displayStartDate and displayEndDate arguments should be right with timeZone='${timeZone}'`, async (t) => {
     const scheduler = new Scheduler('#container');
-    const etalon = '2021-02-28T06:30:00.000Z 2021-02-28T07:00:00.000Z';
+    const etalon = '2021-02-15T06:30:00.000Z 2021-02-15T07:00:00.000Z';
 
     await t.doubleClick(scheduler.getDateTableCell(1, 0), { speed: 0.1 });
 
@@ -36,7 +36,7 @@ fixture`Display* arguments in appointment templates and events`
     dataSource: [],
     views: ['day'],
     currentView: 'day',
-    currentDate: new Date(2021, 1, 28),
+    currentDate: new Date(2021, 1, 15),
     startDayHour: 9,
     height: 600,
 
