@@ -102,6 +102,33 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  hasScrollable(): Promise<boolean> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => Boolean((getGridInstance() as any).getScrollable()),
+      { dependencies: { getGridInstance } },
+    )();
+  }
+
+  isReady(): Promise<boolean> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => (getGridInstance() as any).isReady(),
+      { dependencies: { getGridInstance } },
+    )();
+  }
+
+  scrollBy(options: { x?: number; y?: number; top?: number }): Promise<void> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => (getGridInstance() as any).getScrollable().scrollBy(options),
+      { dependencies: { getGridInstance, options } },
+    )();
+  }
+
   getScrollLeft(): Promise<number> {
     const { getGridInstance } = this;
 
@@ -216,6 +243,15 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiExpandRow(key: unknown): Promise<void> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => (getGridInstance() as any).expandRow(key),
+      { dependencies: { getGridInstance, key } },
+    )();
+  }
+
   apiCancelEditData(): Promise<void> {
     const { getGridInstance } = this;
     return ClientFunction(
@@ -277,6 +313,14 @@ export default class DataGrid extends Widget {
         key: r.key,
         rowType: r.rowType,
       }));
+    }, { dependencies: { getGridInstance } })();
+  }
+
+  apiGetTopVisibleRowData(): Promise<any> {
+    const { getGridInstance } = this;
+    return ClientFunction(() => {
+      const dataGrid = getGridInstance() as any;
+      return dataGrid.getTopVisibleRowData();
     }, { dependencies: { getGridInstance } })();
   }
 }

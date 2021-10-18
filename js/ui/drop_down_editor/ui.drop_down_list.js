@@ -442,7 +442,6 @@ const DropDownList = DropDownEditor.inherit({
 
         this._clearFilter();
         this._clearSelectedItem();
-        this._preventFiltering = true;
     },
 
     _listItemElements: function() {

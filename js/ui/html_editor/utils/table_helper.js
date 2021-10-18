@@ -1,6 +1,6 @@
 import $ from '../../../core/renderer';
-import { isDefined } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
+
 
 const TABLE_FORMATS = ['table', 'tableHeaderCell'];
 const TABLE_OPERATIONS = [
@@ -17,6 +17,7 @@ const TABLE_OPERATIONS = [
     'tableProperties'
 ];
 
+
 function getTableFormats(quill) {
     const tableModule = quill.getModule('table');
 
@@ -24,16 +25,8 @@ function getTableFormats(quill) {
     return tableModule?.tableFormats ? tableModule.tableFormats() : TABLE_FORMATS;
 }
 
-function getTableOperationHandler(quill, operationName, ...rest) {
-    return () => {
-        const table = quill.getModule('table');
-
-        if(!table) {
-            return;
-        }
-        quill.focus();
-        return table[operationName](...rest);
-    };
+function hasEmbedContent(module, selection) {
+    return !!selection && module.quill.getText(selection).trim().length < selection.length;
 }
 
 function unfixTableWidth($table) {
@@ -51,7 +44,7 @@ function getAutoSizedElements($table, direction = 'horizontal') {
 
     $lineElements.each((index, element) => {
         const $element = $(element);
-        if(!isDefined($element.attr(isHorizontal ? 'width' : 'height'))) {
+        if($element.get(0).style[isHorizontal ? 'width' : 'height'] === '') {
             result.push($element);
         }
     });
@@ -59,9 +52,9 @@ function getAutoSizedElements($table, direction = 'horizontal') {
     return result;
 }
 
-function setLineElementsAttrValue($lineElements, property, value) {
+function setLineElementsStyleValue($lineElements, property, value) {
     each($lineElements, (i, element) => {
-        $(element).attr(property, value + 'px');
+        $(element).css(property, value + 'px');
     });
 }
 
@@ -73,6 +66,18 @@ function getRowElements($table, index = 0) {
     return $table.find(`th:nth-child(${(1 + index)}), td:nth-child(${(1 + index)})`);
 }
 
+function getTableOperationHandler(quill, operationName, ...rest) {
+    return () => {
+        const table = quill.getModule('table');
+
+        if(!table) {
+            return;
+        }
+        quill.focus();
+        return table[operationName](...rest);
+    };
+}
+
 export {
     TABLE_OPERATIONS,
     getTableFormats,
@@ -80,7 +85,8 @@ export {
     unfixTableWidth,
     getColumnElements,
     getAutoSizedElements,
-    setLineElementsAttrValue,
+    setLineElementsStyleValue,
     getLineElements,
-    getRowElements
+    getRowElements,
+    hasEmbedContent
 };

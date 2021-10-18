@@ -484,7 +484,7 @@ const DateBox = DropDownEditor.inherit({
         if(text === this._getDisplayedText(currentValue)) {
             if(!validationError || validationError.editorSpecific) {
                 this._applyInternalValidation(currentValue);
-                this._applyCustomValidation();
+                this._applyCustomValidation(currentValue);
             }
             return;
         }

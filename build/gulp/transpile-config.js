@@ -8,7 +8,7 @@ const common = {
         'transform-object-assign',
         ['@babel/plugin-proposal-object-rest-spread', { loose: true }],
     ],
-    ignore: ['**/*.json', '**/sinon.js'],
+    ignore: ['**/*.json'],
 };
 
 module.exports = {
