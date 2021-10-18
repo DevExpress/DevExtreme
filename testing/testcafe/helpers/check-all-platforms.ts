@@ -1,21 +1,17 @@
 import { IComparerOptions } from 'devextreme-screenshot-comparer/build/src/options';
 import { resolve } from 'path';
-import { ClientFunction } from 'testcafe';
+import * as Replicator from 'replicator';
 import url from './getPageUrl';
 
 const platformsSiteRootPath = resolve('./testing/renovation/platforms');
 
-async function prepareComponentOptions(componentOptions: any) {
-  await ClientFunction(
-    () => {
-      (window as any).componentOptions = componentOptions ?? { };
-    },
-    {
-      dependencies: {
-        componentOptions,
-      },
-    },
-  )();
+function prepareClientScripts(componentOptions: any): ClientScript[] {
+  const encodedOptions = encodeURIComponent(new Replicator().encode(componentOptions));
+  return [
+    { content: 'module = { };' },
+    { module: 'replicator' },
+    { content: `localStorage.setItem('componentOptions', decodeURIComponent('${encodedOptions}'))` },
+  ];
 }
 
 const cloneTest = (
@@ -33,14 +29,14 @@ const cloneTest = (
   platforms.forEach((platform) => {
     const pageUrl = url(`${platformsSiteRootPath}/${platform}/dist`, `${page}.html`);
     test
+      .clientScripts(prepareClientScripts(componentOptions))
       .page(pageUrl)(
         `${platform}: ${testName}`,
         (t) => testBody(t, {
           platform,
           screenshotComparerOptions: { screenshotsRelativePath: `/screenshots/${platform}` },
         }),
-      )
-      .before(async () => prepareComponentOptions(componentOptions));
+      );
   });
 };
 
