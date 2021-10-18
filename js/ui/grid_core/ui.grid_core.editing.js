@@ -1913,15 +1913,18 @@ const EditingController = modules.ViewController.inherit((function() {
         _createButton: function($container, button, options) {
             let icon = EDIT_ICON_CLASS[button.name];
             const useIcons = this.option('editing.useIcons');
+            const useLegacyColumnButtonTemplate = this.option('useLegacyColumnButtonTemplate');
             let $button = $('<a>')
                 .attr('href', '#')
                 .addClass(LINK_CLASS)
                 .addClass(button.cssClass);
 
-            if(button.template) {
+            if(button.template && useLegacyColumnButtonTemplate) {
                 this._rowsView.renderTemplate($container, button.template, options, true);
             } else {
-                if(useIcons && icon || button.icon) {
+                if(button.template) {
+                    $button = $('<div>').addClass('dx-link').addClass(button.cssClass);
+                } else if(useIcons && icon || button.icon) {
                     icon = button.icon || icon;
                     const iconType = iconUtils.getImageSourceType(icon);
 
@@ -1950,6 +1953,10 @@ const EditingController = modules.ViewController.inherit((function() {
                     e.event.stopPropagation();
                 }));
                 $container.append($button, '&nbsp;');
+
+                if(button.template) {
+                    this._rowsView.renderTemplate($button, button.template, options, true);
+                }
             }
         },
 
@@ -2109,7 +2116,8 @@ export const editingModule = {
                 editColumnName: null,
 
                 changes: []
-            }
+            },
+            useLegacyColumnButtonTemplate: true
         };
     },
     controllers: {
@@ -2393,6 +2401,9 @@ export const editingModule = {
                             this.callBase(args);
                             break;
                         }
+                        case 'useLegacyColumnButtonTemplate':
+                            args.handled = true;
+                            break;
                         default:
                             this.callBase(args);
                     }
