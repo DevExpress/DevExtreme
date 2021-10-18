@@ -9,7 +9,7 @@ fixture`Display* arguments in appointment templates and events`
 [undefined, 'America/Los_Angeles'].forEach((timeZone) => {
   test(`displayStartDate and displayEndDate arguments should be right with timeZone='${timeZone}'`, async (t) => {
     const scheduler = new Scheduler('#container');
-    const etalon = '2021-02-15T06:30:00.000Z 2021-02-15T07:00:00.000Z';
+    const etalon = '09:30:00 10:00:00';
 
     await t.doubleClick(scheduler.getDateTableCell(1, 0), { speed: 0.1 });
 
@@ -29,8 +29,6 @@ fixture`Display* arguments in appointment templates and events`
     await t
       .expect(ClientFunction(() => (window as any).testDisplayValue)())
       .eql(etalon);
-
-    await t.expect(true).eql(true);
   }).before(async () => createWidget('dxScheduler', {
     timeZone,
     dataSource: [],
@@ -43,19 +41,19 @@ fixture`Display* arguments in appointment templates and events`
     onAppointmentClick: ClientFunction((model) => {
       const { displayStartDate, displayEndDate } = model.targetedAppointmentData;
 
-      (window as any).testDisplayValue = `${displayStartDate.toISOString()} ${displayEndDate.toISOString()}`;
+      (window as any).testDisplayValue = `${displayStartDate.toLocaleTimeString('en-US', { hour12: false })} ${displayEndDate.toLocaleTimeString('en-US', { hour12: false })}`;
     }),
 
     appointmentTooltipTemplate: (model) => {
       const { displayStartDate, displayEndDate } = model.targetedAppointmentData;
 
-      return `${displayStartDate.toISOString()} ${displayEndDate.toISOString()}`;
+      return `${displayStartDate.toLocaleTimeString('en-US', { hour12: false })} ${displayEndDate.toLocaleTimeString('en-US', { hour12: false })}`;
     },
 
     appointmentTemplate: (model) => {
       const { displayStartDate, displayEndDate } = model.targetedAppointmentData;
 
-      return `${displayStartDate.toISOString()} ${displayEndDate.toISOString()}`;
+      return `${displayStartDate.toLocaleTimeString('en-US', { hour12: false })} ${displayEndDate.toLocaleTimeString('en-US', { hour12: false })}`;
     },
   }, true));
 });
