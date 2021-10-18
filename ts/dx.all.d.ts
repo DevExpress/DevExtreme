@@ -34388,9 +34388,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.dataSource]
            */
-          dataSource?:
-            | object
-            | DevExpress.data.DataSource.DataSourceLike<any>;
+          dataSource?: object | DevExpress.data.DataSource.DataSourceLike<any>;
           /**
            * [descr:dxVectorMapOptions.layers.elementType]
            */
@@ -34497,9 +34495,7 @@ declare module DevExpress.viz {
           colorGroups?: Array<number>;
           customize?: (elements: Array<MapLayerElement>) => any;
           dataField?: string;
-          dataSource?:
-            | object
-            | DevExpress.data.DataSource.DataSourceLike<any>;
+          dataSource?: object | DevExpress.data.DataSource.DataSourceLike<any>;
           elementType?: 'bubble' | 'dot' | 'image' | 'pie';
           hoverEnabled?: boolean;
           hoveredBorderColor?: string;
