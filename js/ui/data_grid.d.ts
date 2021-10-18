@@ -1785,7 +1785,7 @@ export interface ScrollingBase {
     /**
      * @docid GridBaseOptions.scrolling.scrollByContent
      * @default true
-     * @default false [for](non-touch_devices)
+     * @default false &for(non-touch_devices)
      * @public
      */
     scrollByContent?: boolean;
