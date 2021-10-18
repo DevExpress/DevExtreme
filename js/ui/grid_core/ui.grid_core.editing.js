@@ -93,7 +93,6 @@ const ACTION_OPTION_NAMES = {
 const BUTTON_NAMES = ['edit', 'save', 'cancel', 'delete', 'undelete'];
 
 const EDITING_CHANGES_OPTION_NAME = 'editing.changes';
-const LEGACY_SCROLLING_MODE = 'scrolling.legacyMode';
 
 const createFailureHandler = function(deferred) {
     return function(arg) {
@@ -582,40 +581,47 @@ const EditingController = modules.ViewController.inherit((function() {
 
         getPopupContent: noop,
 
-        _needInsertItem: function(change, changeType) {
+        _isProcessedItem: function(item) {
+            return false;
+        },
+
+        _getInsertRowIndex: function(items, change, isProcessedItems) {
+            let result = -1;
             const dataController = this._dataController;
-            const dataSource = dataController.dataSource();
-            const scrollingMode = this.option('scrolling.mode');
-            const pageIndex = dataSource.pageIndex();
-            const beginPageIndex = dataSource.beginPageIndex ? dataSource.beginPageIndex() : pageIndex;
-            const endPageIndex = dataSource.endPageIndex ? dataSource.endPageIndex() : pageIndex;
-            const isLastPage = endPageIndex === dataSource.pageCount() - 1;
+            const key = this._getInsertAfterOrBeforeKey(change);
 
-            if(scrollingMode !== 'standard') {
-                const newRowPosition = this.option('editing.newRowPosition');
-                const pageSize = dataSource.pageSize() || 1;
-                const changePageIndex = Math.floor(change.index / pageSize);
-                const needInsertOnLastPosition = newRowPosition === PAGE_BOTTOM_NEW_ROW_POSITION || isLastPage && change.index === -1;
+            if(!isDefined(key) && items.length === 0) {
+                result = 0;
+            } else if(isDefined(key)) {
+                items.some((item, index) => {
+                    const isProcessedItem = isProcessedItems || this._isProcessedItem(item);
 
-                switch(changeType) {
-                    case 'append':
-                        return changePageIndex === endPageIndex || needInsertOnLastPosition;
-                    case 'prepend':
-                        return changePageIndex === beginPageIndex;
-                    default: {
-                        const topItemIndex = dataController.topItemIndex?.();
-                        const bottomItemIndex = dataController.bottomItemIndex?.();
+                    if(isObject(item)) {
+                        if(isProcessedItem || isDefined(item[INSERT_INDEX])) {
+                            if(equalByValue(item.key, key)) {
+                                result = index;
+                            }
+                        } else if(equalByValue(dataController.keyOf(item), key)) {
+                            result = index;
+                        }
+                    }
 
-                        if(this.option(LEGACY_SCROLLING_MODE) === false && isDefined(topItemIndex)) {
-                            return change.index >= topItemIndex && change.index <= bottomItemIndex || needInsertOnLastPosition;
+                    if(result >= 0) {
+                        const nextItem = items[result + 1];
+
+                        if(nextItem && (nextItem.rowType === 'detail' || nextItem.rowType === 'detailAdaptive') && isDefined(change.insertAfterKey)) {
+                            return;
                         }
 
-                        return changePageIndex >= beginPageIndex && changePageIndex <= endPageIndex || needInsertOnLastPosition;
+                        if(isDefined(change.insertAfterKey)) {
+                            result += 1;
+                        }
+                        return true;
                     }
-                }
+                });
             }
 
-            return change.pageIndex === pageIndex || change.pageIndex === -1 && isLastPage;
+            return result;
         },
 
         _generateNewItem: function(key) {
@@ -630,36 +636,20 @@ const EditingController = modules.ViewController.inherit((function() {
 
             return item;
         },
-        _getLoadedRowIndex: function(items, e, change) {
-            const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
-
-            if(isDefined(insertAfterOrBeforeKey)) {
-                const loadedRowIndex = gridCoreUtils.getIndexByKey(insertAfterOrBeforeKey, items, this._dataController.key());
-
-                if(loadedRowIndex < 0) {
-                    return loadedRowIndex;
-                }
-
-                return isDefined(change.insertAfterKey) ? loadedRowIndex + 1 : loadedRowIndex;
-            }
-
-            const key = change.key;
+        _getLoadedRowIndex: function(items, change, isProcessedItems) {
+            let loadedRowIndex = this._getInsertRowIndex(items, change, isProcessedItems);
             const dataController = this._dataController;
-            const loadedRowIndexOffset = dataController.getRowIndexOffset(true);
-            const changes = this.getChanges();
-            const index = e ? changes.filter(editChange => equalByValue(editChange.key, key))[0].index : 0;
-            let loadedRowIndex = index - loadedRowIndexOffset;
 
-            if(e.changeType === 'append') {
-                loadedRowIndex -= dataController.items(true).length;
-                if(e.removeCount) {
-                    loadedRowIndex += e.removeCount;
-                }
-            }
+            if(loadedRowIndex < 0) {
+                const newRowPosition = this.option('editing.newRowPosition');
+                const pageIndex = dataController.pageIndex();
+                const pageCount = dataController.pageCount();
+                const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
 
-            for(let i = 0; i < loadedRowIndex; i++) {
-                if(items[i] && items[i][INSERT_INDEX]) {
-                    loadedRowIndex++;
+                if(newRowPosition !== LAST_NEW_ROW_POSITION && pageIndex === 0 && !isDefined(insertAfterOrBeforeKey)) {
+                    loadedRowIndex = 0;
+                } else if(newRowPosition === LAST_NEW_ROW_POSITION && pageIndex === (pageCount - 1)) {
+                    loadedRowIndex = items.length;
                 }
             }
 
@@ -686,18 +676,11 @@ const EditingController = modules.ViewController.inherit((function() {
                     key = insertInfo.key;
                 }
 
-                const loadedRowIndex = this._getLoadedRowIndex(items, e, change);
-                const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
+                const loadedRowIndex = this._getLoadedRowIndex(items, change);
                 const item = this._generateNewItem(key);
 
-                if(loadedRowIndex >= 0 && isDefined(insertAfterOrBeforeKey)) {
+                if(loadedRowIndex >= 0) {
                     items.splice(loadedRowIndex, 0, item);
-                } else if((loadedRowIndex >= 0 || change.index === -1) && this._needInsertItem(change, changeType, items, item)) {
-                    if(change.index !== -1) {
-                        items.splice(change.index ? loadedRowIndex : 0, 0, item);
-                    } else {
-                        items.push(item);
-                    }
                 }
             });
 
@@ -753,15 +736,6 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        _calculateIndex: function(rowIndex) {
-            const dataController = this._dataController;
-            const rows = dataController.items();
-
-            return dataController.getRowIndexOffset() + rows.filter(function(row, index) {
-                return index < rowIndex && (row.rowType === 'data' && !row.isNewRow || row.rowType === 'group');
-            }).length;
-        },
-
         _createInsertInfo: function() {
             const insertInfo = {};
 
@@ -770,22 +744,8 @@ const EditingController = modules.ViewController.inherit((function() {
             return insertInfo;
         },
 
-        _getCorrectedInsertRowIndex: function(parentKey) {
-            let rowIndex = this._getInsertRowIndex(parentKey);
-            const dataController = this._dataController;
-            const rows = dataController.items();
-            const row = rows[rowIndex];
-
-            if(row && (!row.isEditing && row.rowType === 'detail' || row.rowType === 'detailAdaptive')) {
-                rowIndex++;
-            }
-
-            return rowIndex;
-        },
-
         _addInsertInfo: function(change, parentKey) {
             let insertInfo;
-            let rowIndex;
             let { key } = change;
 
             if(!isDefined(key)) {
@@ -795,81 +755,52 @@ const EditingController = modules.ViewController.inherit((function() {
 
             insertInfo = this._getInternalData(key)?.insertInfo;
             if(!isDefined(insertInfo)) {
-                rowIndex = this._getCorrectedInsertRowIndex(parentKey);
+                const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
+
                 insertInfo = this._createInsertInfo();
-                this._setIndexes(change, rowIndex);
+
+                if(!isDefined(insertAfterOrBeforeKey)) {
+                    this._setInsertAfterOrBeforeKey(change, parentKey);
+                }
             }
 
             this._addInternalData({ insertInfo, key });
 
-            return { insertInfo, key, rowIndex };
+            return { insertInfo, key };
         },
 
-        _setIndexes: function(change, rowIndex) {
+        _setInsertAfterOrBeforeKey: function(change, parentKey) {
             const dataController = this._dataController;
-            const pageSize = dataController.pageSize();
-            const pageIndex = dataController.pageIndex();
-            const pageCount = dataController.pageCount();
+            const allItems = dataController.items(true);
+            const rowsView = this.getView('rowsView');
             const newRowPosition = this.option('editing.newRowPosition');
-            const scrollingMode = this.option('scrolling.mode');
 
             switch(newRowPosition) {
                 case FIRST_NEW_ROW_POSITION:
-                    change.index = 0;
-                    change.pageIndex = 0;
-                    break;
                 case LAST_NEW_ROW_POSITION:
-                    change.index = -1;
-                    change.pageIndex = pageCount - 1;
                     break;
                 case PAGE_TOP_NEW_ROW_POSITION:
-                    change.index = scrollingMode === 'standard' ? 0 : pageIndex * pageSize;
+                    change.insertBeforeKey = allItems[0].key;
                     break;
                 case PAGE_BOTTOM_NEW_ROW_POSITION:
-                    change.index = scrollingMode === 'standard' ? pageSize : (pageIndex * pageSize) + pageSize;
+                    change.insertAfterKey = allItems[allItems.length - 1].key;
                     break;
-                default:
-                    change.index = change.index ?? this._calculateIndex(rowIndex);
-            }
+                default: {
+                    const isViewportBottom = newRowPosition === VIEWPORT_BOTTOM_NEW_ROW_POSITION;
+                    let visibleItemIndex = isViewportBottom ? rowsView?.getBottomVisibleItemIndex() : rowsView?.getTopVisibleItemIndex();
+                    const row = dataController.getVisibleRows()[visibleItemIndex];
 
-            if(scrollingMode !== 'virtual') {
-                change.pageIndex = change.pageIndex ?? dataController.pageIndex();
-            }
-        },
+                    if(row && (!row.isEditing && row.rowType === 'detail' || row.rowType === 'detailAdaptive')) {
+                        visibleItemIndex++;
+                    }
 
-        _getInsertRowIndex: function(parentKey) {
-            const rowsView = this.getView('rowsView');
-            const dataController = this._dataController;
-            const items = dataController.items();
-            const parentRowIndex = dataController.getRowIndexByKey(parentKey);
-            const newRowPosition = this.option('editing.newRowPosition');
-            const dataSource = dataController.dataSource();
-            const pageIndex = dataSource.pageIndex();
-            const pageSize = dataSource.pageSize();
-            const beginPageIndex = dataSource.beginPageIndex ? dataSource.beginPageIndex() : pageIndex;
+                    const insertKey = dataController.getKeyByRowIndex(visibleItemIndex);
 
-            if(parentRowIndex >= 0) {
-                return parentRowIndex + 1;
-            }
-
-            if(rowsView) {
-                switch(newRowPosition) {
-                    case FIRST_NEW_ROW_POSITION:
-                        return 0;
-                    case PAGE_TOP_NEW_ROW_POSITION:
-                        return ((pageIndex - beginPageIndex) * pageSize);
-                    case LAST_NEW_ROW_POSITION:
-                        return items.length;
-                    case PAGE_BOTTOM_NEW_ROW_POSITION:
-                        return ((pageIndex - beginPageIndex) * pageSize) + pageSize;
-                    case VIEWPORT_BOTTOM_NEW_ROW_POSITION:
-                        return rowsView.getBottomVisibleItemIndex(true);
-                    default:
-                        return rowsView.getTopVisibleItemIndex(true);
+                    if(isDefined(insertKey)) {
+                        change['insertBeforeKey'] = insertKey;
+                    }
                 }
             }
-
-            return 0;
         },
 
         _getInsertIndex: function() {
@@ -888,13 +819,20 @@ const EditingController = modules.ViewController.inherit((function() {
             return insertChange.insertAfterKey ?? insertChange.insertBeforeKey;
         },
 
-        needChangePageIndexToInsertRow: function() {
+        _getPageIndexToInsertRow: function() {
             const newRowPosition = this.option('editing.newRowPosition');
             const dataController = this._dataController;
             const pageIndex = dataController.pageIndex();
             const pageCount = dataController.pageCount();
+            const lastPageIndex = pageCount - 1;
 
-            return newRowPosition === FIRST_NEW_ROW_POSITION && pageIndex !== 0 || newRowPosition === LAST_NEW_ROW_POSITION && pageIndex !== (pageCount - 1);
+            if(newRowPosition === FIRST_NEW_ROW_POSITION && pageIndex !== 0) {
+                return 0;
+            } else if(newRowPosition === LAST_NEW_ROW_POSITION && pageIndex !== lastPageIndex) {
+                return lastPageIndex;
+            }
+
+            return -1;
         },
 
         addRow: function(parentKey) {
@@ -949,27 +887,29 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
+            const dataController = this._dataController;
             const change = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
             const d = new Deferred();
             const oldEditRowIndex = this._getVisibleEditRowIndex();
             const insertInfo = this._addInsertInfo(change, parentKey);
             const key = insertInfo.key;
+            const pageIndexToInsertRow = this._getPageIndexToInsertRow();
 
-            let rowIndex = insertInfo.rowIndex;
+            let rowIndex = this._getLoadedRowIndex(dataController.items(), change, true);
 
             this._setEditRowKey(key, true);
             this._addChange(change);
 
-            if(this.needChangePageIndexToInsertRow()) {
-                this._dataController.pageIndex(change.pageIndex).done(() => {
+            if(pageIndexToInsertRow >= 0) {
+                dataController.pageIndex(pageIndexToInsertRow).done(() => {
                     const focusController = this.getController('focus');
                     when(focusController?.navigateToRow(change.key)).done(() => {
-                        rowIndex = this._dataController.getRowIndexByKey(key);
+                        rowIndex = dataController.getRowIndexByKey(key);
                         d.resolve();
                     });
                 }).fail(d.reject);
             } else {
-                this._dataController.updateItems({
+                dataController.updateItems({
                     changeType: 'update',
                     rowIndices: [initialOldEditRowIndex, oldEditRowIndex, rowIndex]
                 });
@@ -1177,6 +1117,18 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
+        _updateInsertAfterOrBeforeKeys: function(changes, index) {
+            const removeChange = changes[index];
+
+            changes.forEach((change) => {
+                const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
+
+                if(equalByValue(insertAfterOrBeforeKey, removeChange.key)) {
+                    change[isDefined(change.insertAfterKey) ? 'insertAfterKey' : 'insertBeforeKey'] = this._getInsertAfterOrBeforeKey(removeChange);
+                }
+            });
+        },
+
         _removeChange: function(index) {
             if(index >= 0) {
                 const changes = [...this.getChanges()];
@@ -1184,6 +1136,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
                 this._removeInternalData(key);
 
+                this._updateInsertAfterOrBeforeKeys(changes, index);
                 changes.splice(index, 1);
                 this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
                 if(equalByValue(this.option(EDITING_EDITROWKEY_OPTION_NAME), key)) {

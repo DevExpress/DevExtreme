@@ -26,8 +26,8 @@ import Editor, {
 } from './editor/editor';
 
 import {
-    Item as dxContextMenuItem,
-} from './context_menu';
+  MenuBasePlainItem,
+} from './menu';
 
 import {
     Item as dxToolbarItem,
@@ -422,19 +422,20 @@ export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
  * @deprecated Use ContextMenuItem instead
  * @namespace DevExpress.ui
  */
-export interface dxHtmlEditorTableContextMenuItem extends dxContextMenuItem {
+export interface dxHtmlEditorTableContextMenuItem extends MenuBasePlainItem {
     /**
      * @docid
      * @default undefined
+     * @type Enums.HtmlEditorContextMenuItem
      * @public
      */
-    name?: string;
+    name?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable';
     /**
      * @docid
      * @public
-     * @type Array<dxHtmlEditorTableContextMenuItem>
+     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorContextMenuItem>
      */
-    items?: Array<ContextMenuItem>;
+    items?: Array<ContextMenuItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
 }
 
 /**
