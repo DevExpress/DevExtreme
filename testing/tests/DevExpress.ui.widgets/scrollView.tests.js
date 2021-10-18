@@ -1365,28 +1365,6 @@ QUnit.module('api', moduleConfig, () => {
         mouse.up();
     });
 
-    QUnit.test('isFull', function(assert) {
-        const $scrollView = $('#scrollView').dxScrollView({});
-        const $container = $scrollView.find('.dx-scrollable-container');
-        const $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS);
-
-        $container.height(50);
-        $content.children().height(100);
-        $scrollView.dxScrollView('update');
-        assert.equal($scrollView.dxScrollView('isFull'), true, 'container is full');
-    });
-
-    QUnit.test('isFull should be false if container has same height as content', function(assert) {
-        const $scrollView = $('#scrollView').dxScrollView({});
-        const $container = $scrollView.find('.dx-scrollable-container');
-        const $content = $scrollView.find('.' + SCROLLVIEW_CONTENT_CLASS);
-
-        $container.height(50);
-        $content.children().height(25);
-        $scrollView.dxScrollView('update');
-        assert.equal($scrollView.dxScrollView('isFull'), false, 'container is full');
-    });
-
     QUnit.test('refresh', function(assert) {
         assert.expect(2);
 
