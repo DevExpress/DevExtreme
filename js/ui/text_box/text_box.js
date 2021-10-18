@@ -121,7 +121,7 @@ const TextBox = TextEditor.inherit({
                 this._toggleMaxLengthProp();
                 break;
             case 'mode':
-                this.callBase();
+                this.callBase(args);
                 this._updateLabelWidth();
                 break;
             case 'mask':

@@ -30,7 +30,7 @@ class TextEditorLabel {
     }
 
     _isVisible() {
-        return this._props.text && this._props.mode !== 'hidden';
+        return !!this._props.text && this._props.mode !== 'hidden';
     }
 
     _render() {
@@ -110,6 +110,10 @@ class TextEditorLabel {
 
     $element() {
         return this._$root;
+    }
+
+    isVisible() {
+        return this._isVisible();
     }
 
     updateMode(mode) {

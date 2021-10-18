@@ -56,6 +56,8 @@ const CONTROL_KEYS = [
     'downArrow',
 ];
 
+let TextEditorLabelCreator = TextEditorLabel;
+
 function checkButtonsOptionType(buttons) {
     if(isDefined(buttons) && !Array.isArray(buttons)) {
         throw errors.Error('E1053');
@@ -472,7 +474,7 @@ const TextEditorBase = Editor.inherit({
             beforeWidth: this._getLabelBeforeWidth()
         };
 
-        this._label = new TextEditorLabel(labelConfig);
+        this._label = new TextEditorLabelCreator(labelConfig);
     },
 
     _renderPlaceholder: function() {
@@ -855,5 +857,15 @@ const TextEditorBase = Editor.inherit({
         return result;
     }
 });
+
+
+///#DEBUG
+TextEditorBase.mockTextEditorLabel = (mock) => {
+    TextEditorLabelCreator = mock;
+};
+TextEditorBase.restoreTextEditorLabel = (mock) => {
+    TextEditorLabelCreator = TextEditorLabel;
+};
+///#ENDDEBUG
 
 export default TextEditorBase;
