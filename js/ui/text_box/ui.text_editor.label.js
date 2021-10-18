@@ -30,7 +30,7 @@ class TextEditorLabel {
     }
 
     _isVisible() {
-        return this._props.text && this._props.mode !== 'hidden';
+        return !!this._props.text && this._props.mode !== 'hidden';
     }
 
     _render() {
