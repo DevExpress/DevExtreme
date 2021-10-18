@@ -202,63 +202,66 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
  */
 export default class dxMenu extends dxMenuBase<dxMenuOptions> { }
 
+export interface MenuBasePlainItem extends CollectionWidgetItem {
+  /**
+   * @docid dxMenuBaseItem.beginGroup
+   * @public
+   */
+  beginGroup?: boolean;
+  /**
+   * @docid dxMenuBaseItem.closeMenuOnClick
+   * @default true
+   * @public
+   */
+  closeMenuOnClick?: boolean;
+  /**
+   * @docid dxMenuBaseItem.disabled
+   * @default false
+   * @public
+   */
+  disabled?: boolean;
+  /**
+   * @docid dxMenuBaseItem.icon
+   * @public
+   */
+  icon?: string;
+  /**
+   * @docid dxMenuBaseItem.selectable
+   * @default false
+   * @public
+   */
+  selectable?: boolean;
+  /**
+   * @docid dxMenuBaseItem.selected
+   * @default false
+   * @public
+   */
+  selected?: boolean;
+  /**
+   * @docid dxMenuBaseItem.text
+   * @public
+   */
+  text?: string;
+  /**
+   * @docid dxMenuBaseItem.visible
+   * @default true
+   * @public
+   */
+  visible?: boolean;
+}
+
 /**
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
  * @namespace DevExpress.ui
  */
-export interface dxMenuBaseItem extends CollectionWidgetItem {
-    /**
-     * @docid
-     * @public
-     */
-    beginGroup?: boolean;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    closeMenuOnClick?: boolean;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    disabled?: boolean;
-    /**
-     * @docid
-     * @public
-     */
-    icon?: string;
+export interface dxMenuBaseItem extends MenuBasePlainItem {
     /**
      * @docid
      * @public
      */
     items?: Array<dxMenuBaseItem>;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    selectable?: boolean;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    selected?: boolean;
-    /**
-     * @docid
-     * @public
-     */
-    text?: string;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    visible?: boolean;
 }
 
 /**

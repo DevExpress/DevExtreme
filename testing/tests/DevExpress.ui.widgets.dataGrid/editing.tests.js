@@ -16336,7 +16336,9 @@ QUnit.module('Editing with scrolling', {
 
         that.options.scrolling = {
             mode: 'infinite',
-            useNative: false
+            useNative: false,
+            legacyMode: false,
+            prerenderedRowCount: 1
         };
 
         that.options.onRowValidating = function(e) {
@@ -16352,21 +16354,21 @@ QUnit.module('Editing with scrolling', {
 
         // assert
         assert.equal(that.dataController.pageIndex(), 0, 'page index');
-        assert.equal(that.dataController.items().length, 8, 'count items');
+        assert.equal(that.dataController.items().length, 7, 'count items');
 
         // arrange
         that.rowsView.scrollTo({ y: 500 });
 
         // assert
         assert.equal(that.dataController.pageIndex(), 2, 'page index');
-        assert.equal(that.dataController.items().length, 16, 'count items');
+        assert.equal(that.dataController.items().length, 8, 'count items');
 
         // arrange
         that.addRow();
         that.clock.tick();
 
         // assert
-        assert.equal(that.dataController.items().length, 17, 'count items');
+        assert.equal(that.dataController.items().length, 9, 'count items');
 
         // arrange
         that.rowsView.scrollTo({ y: 0 });
@@ -16379,7 +16381,7 @@ QUnit.module('Editing with scrolling', {
 
         // assert
         const items = that.dataController.items();
-        assert.equal(items.length, 17, 'count items');
+        assert.equal(items.length, 6, 'count items');
         assert.ok(items[0].isNewRow, 'inserted item');
     });
 
@@ -20067,6 +20069,39 @@ QUnit.module('Editing - new row position', {
                 // arrange
                 const $testElement = $('#container');
 
+                this.options.editing.newRowPosition = 'first';
+                this.setupModules();
+                this.clock.tick();
+
+                this.rowsView.render($testElement);
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 10, 'row count');
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+
+                // act
+                this.addRow();
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 11, 'row count');
+                assert.ok(rows[0].isNewRow, 'new row');
+
+                const $insertRow = $testElement.find('tbody > .dx-data-row').first();
+                const $input = $insertRow.find('td').eq(0).find('.dx-texteditor-input');
+                assert.ok($insertRow.hasClass('dx-row-inserted'), 'first row is inserted');
+                assert.ok($insertRow.hasClass('dx-edit-row'), 'inserted row is edited');
+                assert.ok($input.is(':focus'), 'editor of the first cell is focused');
+            });
+
+            QUnit.test('newRowPosition = first when pageIndex = 2', function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
                 this.options.paging.pageIndex = 2;
                 this.options.editing.newRowPosition = 'first';
                 this.setupModules();
@@ -20108,6 +20143,32 @@ QUnit.module('Editing - new row position', {
 
                 // assert
                 let rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 10, 'row count');
+
+                // act
+                this.addRow();
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 9, 'pageIndex');
+                assert.strictEqual(rows.length, 11, 'row count');
+                assert.ok(rows[10].isNewRow, 'new row');
+            });
+
+            QUnit.test('newRowPosition = last when page is last', function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
+                this.options.paging.pageIndex = 9;
+                this.options.editing.newRowPosition = 'last';
+                this.setupModules();
+                this.rowsView.render($testElement);
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 9, 'pageIndex');
                 assert.strictEqual(rows.length, 10, 'row count');
 
                 // act
@@ -20197,7 +20258,7 @@ QUnit.module('Editing - new row position', {
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
                 assert.strictEqual(rows.length, 11, 'row count');
-                assert.ok(rows[4].isNewRow, 'new row');
+                assert.ok(rows[5].isNewRow, 'new row');
             });
 
             QUnit.test('newRowPosition = viewportTop', function(assert) {
