@@ -9,7 +9,7 @@ const generateSync = require('devextreme-vue-generator').default;
 const config = require('./build.config');
 
 gulp.task('build.components', gulp.series(
-  (done) => 
+  (done) =>
     mkdir(config.oldComponentsDir, {}, done),
   (done) => {
     generateSync(
@@ -23,15 +23,20 @@ gulp.task('build.components', gulp.series(
       },
       config.widgetsPackage
     );
-  
+
     done();
   }
 ));
 
 gulp.task('clean', gulp.parallel(
-  (c) => del([`${config.generatedComponentsDir}\\*`, `!${config.coreComponentsDir}`], c), 
+  (c) => del([`${config.generatedComponentsDir}\\*`, `!${config.coreComponentsDir}`], c),
   (c) => del(config.npm.dist, c)
 ));
+
+gulp.task('copy-helper', () => {
+  return gulp.src('../devextreme-vue/src/core/helpers.ts')
+    .pipe(gulp.dest('./src/core'));
+});
 
 gulp.task('build.strategy', function() {
   return gulp.src([
@@ -44,6 +49,7 @@ gulp.task('build.strategy', function() {
 
 gulp.task('build', gulp.series(
   'clean',
+  'copy-helper',
   'build.strategy',
   'build.components'
 ));

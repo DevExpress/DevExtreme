@@ -41,7 +41,8 @@ const TestComponent = Vue.extend({
         (this as any as IWidgetComponent).$_WidgetClass = WidgetClass;
     },
     props: {
-        prop1: Number
+        prop1: Number,
+        templateName: String
     },
     model: {
         prop: "prop1",
@@ -146,6 +147,47 @@ describe("options", () => {
 
         expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
             sampleProp: "default"
+        });
+    });
+
+    it("pass the same template name as in props", () => {
+        const vm = new Vue({
+            template:
+                `<test-component id="component" templateName="myTemplate">
+                    <template #myTemplate>
+                        content
+                    </template>
+                </test-component>`,
+            components: {
+                TestComponent
+            }
+        });
+
+        vm.$mount();
+
+        expect(WidgetClass.mock.calls[0][0]).toBe(vm.$el);
+
+        expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
+            templateName: "myTemplate"
+        });
+    });
+
+    it("pass template name as default", () => {
+        const vm = new Vue({
+            template:
+                `<test-component id="component">
+                    <template #templateName>
+                        content
+                    </template>
+                </test-component>`,
+            components: {
+                TestComponent
+            }
+        });
+        vm.$mount();
+        expect(WidgetClass.mock.calls[0][0]).toBe(vm.$el);
+        expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
+            templateName: "templateName"
         });
     });
 

@@ -8,7 +8,7 @@ import Configuration, { bindOptionWatchers, setEmitOptionChangedFunc } from "./c
 import { getConfig, getInnerChanges, IConfigurable, initOptionChangedFunc } from "./configuration-component";
 import { DX_REMOVE_EVENT } from "./constants";
 import { IExtension, IExtensionComponentNode } from "./extension-component";
-import { camelize, forEachChildNode, getOptionValue, toComparable } from "./helpers";
+import { camelize, forEachChildNode, getOptionValue, getTemplatePropName, toComparable } from "./helpers";
 import {
     IEventBusHolder
 } from "./templates-discovering";
@@ -84,8 +84,9 @@ const BaseComponent = (): VueConstructor<IBaseComponent> => Vue.extend({
                 this.$_templatesManager.templates
             );
 
+            const props = this.$vnode?.componentOptions?.propsData;
             for (const name of Object.keys(this.$_templatesManager.templates)) {
-                this.$_instance.option(name, name);
+                this.$_instance.option(getTemplatePropName(props, name), name);
             }
 
             this.$_templatesManager.resetDirtyFlag();
@@ -171,8 +172,9 @@ const BaseComponent = (): VueConstructor<IBaseComponent> => Vue.extend({
                 const templates = this.$_templatesManager.templates;
 
                 result.integrationOptions.templates = templates;
+                const props = this.$vnode?.componentOptions?.propsData;
                 for (const name of Object.keys(templates)) {
-                    result[name] = name;
+                    result[getTemplatePropName(props, name)] = name;
                 }
 
                 this.$_templatesManager.resetDirtyFlag();
