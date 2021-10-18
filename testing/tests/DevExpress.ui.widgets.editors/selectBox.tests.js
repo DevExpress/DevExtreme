@@ -1545,6 +1545,25 @@ QUnit.module('clearButton', moduleSetup, () => {
         assert.strictEqual(selectBox.option('opened'), true, 'selectBox is opened after instant re-click');
     });
 
+    QUnit.test('search should not be prevented after reset method call (T1021888)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: [1, 2, 3],
+            searchEnabled: true,
+            value: 1,
+            searchTimeout: 0
+        });
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+        const $list = $selectBox.find(`.${LIST_CLASS}`);
+
+        selectBox.reset();
+
+        keyboard.type('1');
+
+        assert.strictEqual($list.find(toSelector(LIST_ITEM_CLASS)).length, 1, 'items are filtered');
+    });
+
     QUnit.test('drop down list should be still opened if click \'clear\' during the search', function(assert) {
         const $element = $('#selectBox').dxSelectBox({
             items: [1, 2, 3],
@@ -2726,6 +2745,31 @@ QUnit.module('search', moduleSetup, () => {
 
                 assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
             });
+        });
+
+        QUnit.test('item selection even if new search is in progress (T1027535)', function(assert) {
+            const clock = sinon.useFakeTimers();
+            fx.off = false;
+            const searchTimeout = 500;
+
+            try {
+                this.reinit({ searchTimeout });
+
+                this.keyboard.type('1');
+                clock.tick(searchTimeout);
+
+                this.keyboard.type('2');
+                const $firstItem = this.getListItems().eq(0);
+                $firstItem.trigger('dxclick');
+                clock.tick(searchTimeout);
+
+                const $overlayContent = $(this.instance.content()).parent();
+
+                assert.ok($overlayContent.hasClass('dx-state-invisible'), 'popup is not visible');
+                assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            } finally {
+                clock.restore();
+            }
         });
 
         QUnit.test('item adding when acceptCustomValue is true', function(assert) {

@@ -1,3 +1,4 @@
+import { titleize } from '../../../../core/utils/inflector';
 import {
   ElementOffset,
   ScrollableDirection, ScrollOffset,
@@ -30,23 +31,35 @@ export function getElementLocationInternal(
 
   const prop = isVertical ? 'top' : 'left';
   const inverseProp = isVertical ? 'bottom' : 'right';
+  const dimension = isVertical ? 'height' : 'width';
 
-  const dimension = isVertical ? 'Height' : 'Width';
+  const containerOffsetSize: number = containerElement[`offset${titleize(dimension)}`];
+  const containerClientSize: number = containerElement[`client${titleize(dimension)}`];
+  const containerSize = containerElement.getBoundingClientRect()[dimension];
+  const elementSize = targetElement.getBoundingClientRect()[dimension];
+
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+  let scale = 1;
+
+  // For support zooming using styles: transform = scale(0.33) or zoom = 0.33
+  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+  if (Math.abs(containerSize - containerOffsetSize) > 1) {
+    scale = containerSize / containerOffsetSize;
+  }
 
   // T162489
-  const relativeElementOffset = getRelativeOffset(targetElement.closest(`.${SCROLLABLE_CONTENT_CLASS}`), targetElement)[prop];
+  const relativeElementOffset = getRelativeOffset(
+    SCROLLABLE_CONTENT_CLASS,
+    targetElement,
+  )[prop] / scale;
+
   const containerScrollOffset = scrollOffset[prop];
-
-  const containerSize: number = containerElement[`client${dimension}`];
-
-  const targetElementRect = targetElement.getBoundingClientRect();
-  const elementSize = targetElementRect[inverseProp] - targetElementRect[prop];
 
   const relativeStartOffset = containerScrollOffset - relativeElementOffset
     + additionalOffset[prop];
   const relativeEndOffset = containerScrollOffset - relativeElementOffset
-    - elementSize
-    + containerSize
+    - elementSize / scale
+    + containerClientSize
     - additionalOffset[inverseProp];
 
   if (relativeStartOffset <= 0 && relativeEndOffset >= 0) {

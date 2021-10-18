@@ -97,11 +97,6 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
     scrollingEnabled?: boolean;
     /**
      * @docid
-     * @public
-     */
-    selectedItems?: Array<string | number | any>;
-    /**
-     * @docid
      * @type Enums.NavSelectionMode
      * @default 'single'
      * @public
@@ -153,6 +148,3 @@ export type Properties = dxTabsOptions<TabsInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;
-
-/** @deprecated use Properties instead */
-export type IOptions = Properties;

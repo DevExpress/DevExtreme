@@ -1101,36 +1101,6 @@ QUnit.test('min < 0, max > 0, minVisible < 0, maxVisible > 0', function(assert) 
     });
 });
 
-QUnit.test('min > 0, max > 0, minVisible > 0, maxVisible > 0. Logarithmic axis', function(assert) {
-    this.checkRanges(assert, {
-        min: 10,
-        max: 100,
-        minVisible: 20,
-        maxVisible: 80,
-        axisType: 'logarithmic'
-    }, {
-        min: 10,
-        max: 100,
-        minVisible: 20,
-        maxVisible: 80
-    });
-});
-
-QUnit.test('min < 0, max < 0, minVisible < 0, maxVisible < 0. Logarithmic axis', function(assert) {
-    this.checkRanges(assert, {
-        min: -100,
-        max: -10,
-        minVisible: -80,
-        maxVisible: -20,
-        axisType: 'logarithmic'
-    }, {
-        min: -100,
-        max: -10,
-        minVisible: -80,
-        maxVisible: -20
-    });
-});
-
 QUnit.module('discrete zooming');
 
 QUnit.test('min/max categories after create range with min and max categories', function(assert) {
