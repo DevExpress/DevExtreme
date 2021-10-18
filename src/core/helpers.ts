@@ -1,3 +1,13 @@
+export function getTemplatePropName(props: Record<string, unknown> | null, templateName: string): string {
+    for (const propName in props) {
+        if (props[propName] === templateName) {
+            return propName;
+        }
+    }
+
+    return templateName;
+}
+
 export function uppercaseFirst(value: string): string {
     return value[0].toUpperCase() + value.substr(1);
 }
