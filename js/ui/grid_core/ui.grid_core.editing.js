@@ -603,10 +603,6 @@ const EditingController = modules.ViewController.inherit((function() {
                             }
                         } else if(equalByValue(dataController.keyOf(item), key)) {
                             result = index;
-                        } else {
-                            if(equalByValue(item, key)) {
-                                result = index;
-                            }
                         }
                     }
 
