@@ -434,6 +434,6 @@ export default class DataSource
  * @docid
  * @type Store|DataSource|DataSourceOptions|string|Array<any>
  * */
-export type CommonDataSource<TItem, TKey = any> = string | Array<TItem> | Store<TItem, any, TKey> | Options<any, TItem, any, any, TKey> | DataSource<TItem, any, TKey>;
+export type DataSourceLike<TItem, TKey = any> = string | Array<TItem> | Store<TItem, any, TKey> | Options<any, TItem, any, any, TKey> | DataSource<TItem, any, TKey>;
 
 type EventName = 'changed' | 'loadError' | 'loadingChanged';

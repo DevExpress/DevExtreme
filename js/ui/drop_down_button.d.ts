@@ -11,7 +11,7 @@ import {
     template,
 } from '../core/templates/template';
 
-import DataSource, { CommonDataSource } from '../data/data_source';
+import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
     EventInfo,
@@ -72,7 +72,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default null
      * @public
      */
-    dataSource?: CommonDataSource<Item | any>;
+    dataSource?: DataSourceLike<Item | any>;
     /**
      * @docid
      * @default true

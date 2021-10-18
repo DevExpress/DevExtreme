@@ -7,7 +7,7 @@ import {
     template,
 } from '../../core/templates/template';
 
-import DataSource, { CommonDataSource } from '../../data/data_source';
+import DataSource, { DataSourceLike } from '../../data/data_source';
 
 import {
     CollectionWidgetItem,
@@ -22,7 +22,7 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
      * @type Store|DataSource|DataSourceOptions|string|Array<CollectionWidgetItem | any>
      * @public
      */
-    dataSource?: CommonDataSource<CollectionWidgetItem | any>;
+    dataSource?: DataSourceLike<CollectionWidgetItem | any>;
     /**
      * @docid
      * @default undefined

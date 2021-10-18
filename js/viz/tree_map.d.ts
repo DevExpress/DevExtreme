@@ -1,4 +1,4 @@
-import DataSource, { CommonDataSource } from '../data/data_source';
+import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
     UserDefinedElement,
@@ -149,7 +149,7 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: CommonDataSource<any>;
+    dataSource?: DataSourceLike<any>;
     /**
      * @docid
      * @public

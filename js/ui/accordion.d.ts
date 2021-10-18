@@ -1,4 +1,4 @@
-import { CommonDataSource } from '../data/data_source';
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -80,7 +80,7 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
      * @default null
      * @public
      */
-    dataSource?: CommonDataSource<string | Item | any>;
+    dataSource?: DataSourceLike<string | Item | any>;
     /**
      * @docid
      * @default true

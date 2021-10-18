@@ -1,5 +1,5 @@
 import { Skip } from '../core';
-import { CommonDataSource } from '../data/data_source';
+import { DataSourceLike } from '../data/data_source';
 import {
     DxElement,
 } from '../core/element';
@@ -127,7 +127,7 @@ export interface dxTreeViewOptions extends Skip<HierarchicalCollectionWidgetOpti
      * @default null
      * @public
      */
-    dataSource?: CommonDataSource<Item>;
+    dataSource?: DataSourceLike<Item>;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure

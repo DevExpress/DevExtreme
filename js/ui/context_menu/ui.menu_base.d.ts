@@ -1,5 +1,5 @@
 import { Skip } from '../../core';
-import { CommonDataSource } from '../../data/data_source';
+import { DataSourceLike } from '../../data/data_source';
 import {
     AnimationConfig,
 } from '../../animation/fx';
@@ -50,7 +50,7 @@ export interface dxMenuBaseOptions<TComponent> extends Skip<HierarchicalCollecti
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<dxMenuBaseItem>
      */
-    dataSource?: CommonDataSource<dxMenuBaseItem>;
+    dataSource?: DataSourceLike<dxMenuBaseItem>;
     /**
      * @docid
      * @public

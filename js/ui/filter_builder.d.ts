@@ -1,4 +1,4 @@
-import DataSource, { CommonDataSource } from '../data/data_source';
+import DataSource, { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -365,7 +365,7 @@ export interface dxFilterBuilderCustomOperation {
     name?: string;
 }
 
-export type FilterLookupDataSource<T> = Exclude<CommonDataSource<T>, string | DataSource>;
+export type FilterLookupDataSource<T> = Exclude<DataSourceLike<T>, string | DataSource>;
 
 /**
  * @@docid

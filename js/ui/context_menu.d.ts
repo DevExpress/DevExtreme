@@ -1,4 +1,4 @@
-import { CommonDataSource } from '../data/data_source';
+import { DataSourceLike } from '../data/data_source';
 import {
     PositionConfig,
 } from '../animation/position';
@@ -93,7 +93,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default null
      * @public
      */
-    dataSource?: CommonDataSource<Item>;
+    dataSource?: DataSourceLike<Item>;
     /**
      * @docid
      * @type Array<dxContextMenuItem>

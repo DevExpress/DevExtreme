@@ -7,7 +7,7 @@ import {
     template,
 } from '../core/templates/template';
 
-import DataSource, { CommonDataSource } from '../data/data_source';
+import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
     DxEvent,
@@ -369,7 +369,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @public
      * @type string|Array<dxSchedulerAppointment>|Store|DataSource|DataSourceOptions
      */
-    dataSource?: CommonDataSource<Appointment>;
+    dataSource?: DataSourceLike<Appointment>;
     /**
      * @docid
      * @default null
@@ -750,7 +750,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default null
        * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: CommonDataSource<any>;
+      dataSource?: DataSourceLike<any>;
       /**
        * @docid
        * @type_function_param1 resource:object

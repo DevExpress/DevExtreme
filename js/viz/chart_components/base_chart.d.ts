@@ -12,7 +12,7 @@ import {
     template,
 } from '../../core/templates/template';
 
-import DataSource, { CommonDataSource } from '../../data/data_source';
+import DataSource, { DataSourceLike } from '../../data/data_source';
 
 import {
     EventInfo,
@@ -106,7 +106,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: CommonDataSource<any>;
+    dataSource?: DataSourceLike<any>;
     /**
      * @docid
      * @inherits BaseLegend

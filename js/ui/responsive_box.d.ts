@@ -1,4 +1,4 @@
-import { CommonDataSource } from '../data/data_source';
+import { DataSourceLike } from '../data/data_source';
 
 import {
   EventInfo,
@@ -75,7 +75,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
      * @default null
      * @public
      */
-    dataSource?: CommonDataSource<string | Item | any>;
+    dataSource?: DataSourceLike<string | Item | any>;
     /**
      * @docid
      * @default '100%'

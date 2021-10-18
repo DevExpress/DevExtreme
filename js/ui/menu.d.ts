@@ -1,4 +1,4 @@
-import { CommonDataSource } from '../data/data_source';
+import { DataSourceLike } from '../data/data_source';
 import {
     DxElement,
 } from '../core/element';
@@ -82,7 +82,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @default null
      * @public
      */
-    dataSource?: CommonDataSource<Item>;
+    dataSource?: DataSourceLike<Item>;
     /**
      * @docid
      * @default false

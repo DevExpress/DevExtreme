@@ -7,7 +7,7 @@ import {
     template,
 } from '../../core/templates/template';
 
-import DataSource, { CommonDataSource } from '../../data/data_source';
+import DataSource, { DataSourceLike } from '../../data/data_source';
 
 import {
     EventInfo,
@@ -39,7 +39,7 @@ export interface CollectionWidgetOptions<
      * @public
      * @type string | Array<string | CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions
      */
-    dataSource?: CommonDataSource<TItem, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @default 750

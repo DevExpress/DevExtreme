@@ -1,4 +1,4 @@
-import { CommonDataSource } from '../data/data_source';
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -56,7 +56,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @default null
      * @public
      */
-    dataSource?: CommonDataSource<string | Item | any>;
+    dataSource?: DataSourceLike<string | Item | any>;
     /**
      * @docid
      * @type Array<string | dxToolbarItem | any>

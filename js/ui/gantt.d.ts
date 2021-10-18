@@ -1,4 +1,4 @@
-import { CommonDataSource } from '../data/data_source';
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -260,7 +260,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @default null
        * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: CommonDataSource<any>;
+      dataSource?: DataSourceLike<any>;
       /**
        * @docid
        * @default "id"
@@ -736,7 +736,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @default null
        * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: CommonDataSource<any>;
+      dataSource?: DataSourceLike<any>;
       /**
        * @docid
        * @default "id"
@@ -769,7 +769,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @default null
        * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: CommonDataSource<any>;
+      dataSource?: DataSourceLike<any>;
       /**
        * @docid
        * @default "id"
@@ -866,7 +866,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
        * @default null
        * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: CommonDataSource<any>;
+      dataSource?: DataSourceLike<any>;
       /**
        * @docid
        * @default "end"
