@@ -100,6 +100,32 @@ describe('Appointment', () => {
     });
   });
 
+  describe('Behavir', () => {
+    describe('Methods', () => {
+      describe('onItemClick', () => {
+        it('should call onItemClick props with correct arguments', () => {
+          const mockCallback = jest.fn();
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+            index: 2021,
+            onItemClick: mockCallback,
+          });
+          appointment.thisAptRef = 'ref' as any;
+
+          appointment.onItemClick();
+
+          expect(mockCallback).toBeCalledTimes(1);
+
+          expect(mockCallback).toHaveBeenCalledWith(
+            [defaultViewModel],
+            'ref',
+            2021,
+          );
+        });
+      });
+    });
+  });
+
   describe('Logic', () => {
     describe('Getters', () => {
       describe('styles', () => {
