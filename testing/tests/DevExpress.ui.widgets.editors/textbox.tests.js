@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'ui/text_box';
+import TextBox from 'ui/text_box';
 import devices from 'core/devices';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { getWidth, getOuterWidth } from 'core/utils/size';
@@ -304,31 +304,26 @@ QUnit.module('label integration', {
         this.init = (options = {}) => {
             this.$textBox = $('#textbox').dxTextBox($.extend(initialOptions, options));
             this.textBox = this.$textBox.dxTextBox('instance');
-            this.$inputContainer = this.$textBox.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
         };
-        this.reinit = (options = {}) => {
-            this.textBox.dispose();
-            this.init(options);
-        };
-        this.init();
 
         this.LabelMock = {
             updateMaxWidth: sinon.stub(),
             updateBeforeWidth: sinon.stub()
         };
         this.constructorMock = sinon.stub().returns(this.LabelMock);
-        this.textBox.mockTextEditorLabel(this.constructorMock);
+        TextBox.mockTextEditorLabel(this.constructorMock);
     },
     afterEach: function() {
         Object.values(this.LabelMock, (stub) => {
             stub.reset();
         });
         this.constructorMock.reset();
+        TextBox.restoreTextEditorLabel();
     }
 },
 () => {
     QUnit.test('editor should pass beforeWidth equal to buttons container width + search icon outer width', function(assert) {
-        this.reinit({
+        this.init({
             buttons: [{
                 name: 'button',
                 location: 'before'
@@ -345,7 +340,7 @@ QUnit.module('label integration', {
     });
 
     QUnit.test('editor should pass containerWidth equal to input container width - buttons container width - search icon outer width', function(assert) {
-        this.reinit({
+        this.init({
             buttons: [{
                 name: 'button',
                 location: 'before'
@@ -363,10 +358,10 @@ QUnit.module('label integration', {
     });
 
     QUnit.test('mode option change should call label updateMaxWidth and updateBeforeWidth methods with correct parameters', function(assert) {
-        this.reinit();
+        this.init();
         this.textBox.option('mode', 'search');
 
-        const inputContainerWidth = getWidth(this.$inputContainer);
+        const inputContainerWidth = getWidth(this.$textBox.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
         const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
         const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
 

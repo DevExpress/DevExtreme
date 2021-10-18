@@ -11,7 +11,7 @@ import consoleUtils from 'core/utils/console';
 import { normalizeKeyName } from 'events/utils/index';
 import { getWidth } from 'core/utils/size';
 
-import 'ui/text_box/ui.text_editor';
+import TextEditor from 'ui/text_box/ui.text_editor';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const INPUT_CLASS = 'dx-texteditor-input';
@@ -477,22 +477,17 @@ QUnit.module('label integration', {
                 .dxTextEditor('instance');
             this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
         };
-        this.reinit = (options = {}) => {
-            this.textEditor.dispose();
-            this.init(options);
-        };
-
-        this.init();
     }
 }, () => {
     QUnit.module('init', {
         beforeEach: function() {
             this.constructorStub = sinon.stub();
-            this.textEditor.mockTextEditorLabel(this.constructorStub);
+            TextEditor.mockTextEditorLabel(this.constructorStub);
             this.getProps = () => this.constructorStub.getCall(0).args[0];
         },
         afterEach: function() {
             this.constructorStub.reset();
+            TextEditor.restoreTextEditorLabel();
         }
     }, () => {
         QUnit.test('correct props are passed to TextEditorLabel', function(assert) {
@@ -500,7 +495,7 @@ QUnit.module('label integration', {
             const labelMode = 'floating';
             const labelMark = ':';
 
-            this.reinit({
+            this.init({
                 label: labelText,
                 labelMode,
                 labelMark,
@@ -524,14 +519,14 @@ QUnit.module('label integration', {
         });
 
         QUnit.test('editor should pass containerWidth equal to input width', function(assert) {
-            this.reinit();
+            this.init();
             const inputWidth = getWidth(this.$input);
 
             assert.strictEqual(this.getProps().containerWidth, inputWidth);
         });
 
         QUnit.test('editor should pass beforeWidth equal to before buttons container width', function(assert) {
-            this.reinit();
+            this.init();
             const beforeButtonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
 
             assert.strictEqual(this.getProps().beforeWidth, beforeButtonsContainerWidth);
@@ -551,13 +546,14 @@ QUnit.module('label integration', {
             const constructorMock = () => {
                 return this.LabelMock;
             };
-            this.textEditor.mockTextEditorLabel(constructorMock);
-            this.reinit();
+            TextEditor.mockTextEditorLabel(constructorMock);
+            this.init();
         },
         afterEach: function() {
             Object.values(this.LabelMock, (stub) => {
                 stub.reset();
             });
+            TextEditor.restoreTextEditorLabel();
         }
     }, () => {
         QUnit.test('width', function(assert) {

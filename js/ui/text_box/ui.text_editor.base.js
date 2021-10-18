@@ -461,12 +461,6 @@ const TextEditorBase = Editor.inherit({
         this._label.updateMaxWidth(this._getLabelContainerWidth());
     },
 
-    ///#DEBUG
-    mockTextEditorLabel(mock) {
-        TextEditorLabelCreator = mock;
-    },
-    ///#ENDDEBUG
-
     _renderLabel: function() {
         const { label, labelMode, labelMark } = this.option();
 
@@ -863,5 +857,15 @@ const TextEditorBase = Editor.inherit({
         return result;
     }
 });
+
+
+///#DEBUG
+TextEditorBase.mockTextEditorLabel = (mock) => {
+    TextEditorLabelCreator = mock;
+};
+TextEditorBase.restoreTextEditorLabel = (mock) => {
+    TextEditorLabelCreator = TextEditorLabel;
+};
+///#ENDDEBUG
 
 export default TextEditorBase;
