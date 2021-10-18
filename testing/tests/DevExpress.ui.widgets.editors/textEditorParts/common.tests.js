@@ -22,7 +22,10 @@ const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 const CLEAR_BUTTON_SELECTOR = '.dx-clear-button-area';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
+
 const LABEL_CLASS = 'dx-label';
+const LABEL_BEFORE_CLASS = 'dx-label-before';
+const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 
 const EVENTS = [
     'FocusIn', 'FocusOut',
@@ -469,11 +472,22 @@ QUnit.module('general', {}, () => {
 QUnit.module('label integration', {
     beforeEach: function() {
         this.$textEditor = $('#texteditor');
-        this.textEditor = this.$textEditor.dxTextEditor({
-            label: 'some'
-        });
-        this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
-        this.getLabelElement = () => this.$textEditor.find(`.${LABEL_CLASS}`);
+        const initialOptions = { label: 'some' };
+        this.init = (options) => {
+            this.textEditor = this.$textEditor
+                .dxTextEditor($.extend(initialOptions, options))
+                .dxTextEditor('instance');
+            this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
+            this.getLabelElement = () => this.$textEditor.find(`.${LABEL_CLASS}`);
+            this.getLabelBeforeElement = () => this.$textEditor.find(`.${LABEL_BEFORE_CLASS}`);
+            this.getLabel = () => this.textEditor._label;
+        };
+        this.reinit = (options) => {
+            this.textEditor.dispose();
+            this.init(options);
+        };
+
+        this.init({});
     }
 }, () => {
     QUnit.test('label should have max width equal to input width', function(assert) {
@@ -483,6 +497,21 @@ QUnit.module('label integration', {
         const labelMaxWidth = Number.parseInt($label.css('maxWidth'), 10);
 
         assert.strictEqual(labelMaxWidth, inputWidth);
+    });
+
+    QUnit.test('label before element should have width equal to buttons container width', function(assert) {
+        this.reinit({
+            buttons: [{
+                name: 'button',
+                location: 'before'
+            }]
+        });
+
+        const $labelBefore = this.getLabelBeforeElement();
+        const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
+        const labelBeforeWidth = Number.parseInt($labelBefore.css('width'), 10);
+
+        assert.strictEqual(labelBeforeWidth, buttonsContainerWidth);
     });
 });
 
