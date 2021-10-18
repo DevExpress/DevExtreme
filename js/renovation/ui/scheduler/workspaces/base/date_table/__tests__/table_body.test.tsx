@@ -94,12 +94,14 @@ describe('DateTableBody', () => {
 
       rows.forEach((row) => {
         expect(row.props())
-          .toMatchObject({
-            className: 'dx-scheduler-date-table-row',
+          .toEqual({
+            className: 'dx-scheduler-date-table-row dx-scheduler-cell-sizes-vertical',
             leftVirtualCellWidth: 100,
             rightVirtualCellWidth: 200,
             leftVirtualCellCount: 2,
             rightVirtualCellCount: 21,
+            children: expect.anything(),
+            isHeaderRow: false,
           });
       });
     });

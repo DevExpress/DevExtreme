@@ -91,7 +91,7 @@ export const viewFunction = ({
   } = currentViewConfig;
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
-      classes="dx-scheduler"
+      classes="dx-scheduler dx-scheduler-native"
       accessKey={accessKey}
       activeStateEnabled={activeStateEnabled}
       disabled={disabled}

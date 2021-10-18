@@ -106,7 +106,7 @@ describe('Scheduler', () => {
         .toEqual({
           ...new WidgetProps(),
           'custom-attribute': 'customAttribute',
-          classes: 'dx-scheduler',
+          classes: 'dx-scheduler dx-scheduler-native',
           ...props,
           children: expect.anything(),
         });
