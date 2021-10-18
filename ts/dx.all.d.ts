@@ -1529,10 +1529,6 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type Except<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export class FunctionTemplate {
     render(template: {
       container: unknown;
@@ -1548,6 +1544,10 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   interface PromiseType<T> extends JQueryPromise<T> {}
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type Skip<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
   /**
    * [descr:template]
    */
@@ -1651,12 +1651,12 @@ declare module DevExpress.data {
    * [descr:CommonDataSource]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type CommonDataSource<T> =
+  export type CommonDataSource<TItem, TKey = any> =
     | string
-    | Array<T>
-    | Store<T>
-    | DataSourceOptions<T>
-    | DataSource<T>;
+    | Array<TItem>
+    | Store<TItem, any, TKey>
+    | DevExpress.data.DataSource.Options<any, TItem, any, any, TKey>
+    | DataSource<TItem, any, TKey>;
   /**
    * [descr:CustomStore]
    */
@@ -1924,6 +1924,7 @@ declare module DevExpress.data {
     > = DataSourceOptions<TSourceValue, TValue, TMappedValue, TKeyExpr, TKey>;
   }
   /**
+   * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface DataSourceOptions<
@@ -4314,15 +4315,7 @@ declare module DevExpress.ui {
     /**
      * [descr:CollectionWidgetOptions.dataSource]
      */
-    dataSource?: DevExpress.data.CommonDataSource<
-      string | CollectionWidgetItem
-    >;
-          TItem,
-          TItem,
-          TItem,
-          string | Array<string>,
-          TKey
-        >;
+    dataSource?: DevExpress.data.CommonDataSource<TItem, TKey>;
     /**
      * [descr:CollectionWidgetOptions.itemHoldTimeout]
      */
@@ -6233,7 +6226,10 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
-        | (() => DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>);
+        | ((options: {
+            component?: any;
+            dataSource?: DevExpress.data.DataSource.Options;
+          }) => void);
       /**
        * [descr:GridBaseColumn.headerFilter.groupInterval]
        */
@@ -6272,7 +6268,10 @@ declare module DevExpress.ui {
        */
       dataSource?:
         | DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>
-        | (() => DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>);
+        | ((options: {
+            data?: any;
+            key?: any;
+          }) => DevExpress.ui.dxFilterBuilder.FilterLookupDataSource<any>);
       /**
        * [descr:GridBaseColumn.lookup.displayExpr]
        */
@@ -14502,8 +14501,7 @@ declare module DevExpress.ui {
    * @deprecated Use DevExpress.ui.dxHtmlEditor.ContextMenuItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxHtmlEditorTableContextMenuItem
-    extends DevExpress.ui.dxMenu.MenuBasePlainItem {
+  export interface dxHtmlEditorTableContextMenuItem extends MenuBasePlainItem {
     /**
      * [descr:dxHtmlEditorTableContextMenuItem.name]
      */
@@ -15089,14 +15087,9 @@ declare module DevExpress.ui {
      * [descr:dxListOptions.dataSource]
      */
     dataSource?: DevExpress.data.CommonDataSource<
-      string | DevExpress.ui.dxList.Item | any
+      string | DevExpress.ui.dxList.Item | any,
+      TKey
     >;
-          TItem,
-          TItem,
-          TItem,
-          string | Array<string>,
-          TKey
-        >;
     /**
      * [descr:dxListOptions.displayExpr]
      */
@@ -15895,7 +15888,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxMenuBaseOptions<TComponent>
-    extends DevExpress.core.Except<
+    extends DevExpress.core.Skip<
       HierarchicalCollectionWidgetOptions<TComponent>,
       'dataSource'
     > {
@@ -22030,7 +22023,7 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxTreeViewOptions
-    extends DevExpress.core.Except<
+    extends DevExpress.core.Skip<
         HierarchicalCollectionWidgetOptions<dxTreeView>,
         'dataSource'
       >,
@@ -22875,13 +22868,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.dataSource]
      */
-    dataSource?: DevExpress.data.CommonDataSource<any>;
-          TRowData,
-          TRowData,
-          TRowData,
-          string | Array<string>,
-          TKey
-        >;
+    dataSource?: DevExpress.data.CommonDataSource<TRowData, TKey>;
     /**
      * [descr:GridBaseOptions.dateSerializationFormat]
      */
@@ -34398,7 +34385,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.dataSource]
            */
-          dataSource?: DevExpress.data.CommonDataSource<any>;
+          dataSource?: object | DevExpress.data.CommonDataSource<any>;
           /**
            * [descr:dxVectorMapOptions.layers.elementType]
            */
@@ -34505,7 +34492,7 @@ declare module DevExpress.viz {
           colorGroups?: Array<number>;
           customize?: (elements: Array<MapLayerElement>) => any;
           dataField?: string;
-          dataSource?: DevExpress.data.CommonDataSource<any>;
+          dataSource?: object | DevExpress.data.CommonDataSource<any>;
           elementType?: 'bubble' | 'dot' | 'image' | 'pie';
           hoverEnabled?: boolean;
           hoveredBorderColor?: string;

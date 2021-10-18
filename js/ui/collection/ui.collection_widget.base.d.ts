@@ -41,7 +41,7 @@ export interface CollectionWidgetOptions<
      * @public
      * @type string | Array<string | CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions
      */
-    dataSource?: CommonDataSource<string | CollectionWidgetItem>;
+    dataSource?: CommonDataSource<TItem, TKey>;
     /**
      * @docid
      * @default 750

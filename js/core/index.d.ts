@@ -24,4 +24,4 @@ export type DeepPartial<T> = {
 };
 
 // Omit does not exist in TS < 3.5.1
-export type Except<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+export type Skip<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

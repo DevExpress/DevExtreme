@@ -13,11 +13,10 @@ import {
     template,
 } from '../core/templates/template';
 
-import DataSource from '../data/data_source';
+import DataSource, { Options as DataSourceOptions } from '../data/data_source';
 import {
     DeepPartial,
 } from '../core/index';
-
 
 import {
     DxEvent,
@@ -2679,9 +2678,9 @@ export interface ColumnHeaderFilter {
    * @type_function_param1_field1 component:object
    * @default undefined
    * @type_function_return Array<any>|Store|DataSourceOptions
-   * @type Array<any>|Store|DataSourceOptions
+   * @type Array<any>|Store|DataSourceOptions|Function
    */
-  dataSource?: FilterLookupDataSource<any> | (() => FilterLookupDataSource<any>);
+  dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions }) => void);
   /**
    * @docid GridBaseColumn.headerFilter.groupInterval
    * @type Enums.HeaderFilterGroupInterval|number
@@ -2717,9 +2716,9 @@ export interface ColumnLookup {
    * @type_function_param1_field1 data:object
    * @default undefined
    * @type_function_return Array<any>|Store|DataSourceOptions
-   * @type Array<any>|Store|DataSourceOptions
+   * @type Array<any>|Store|DataSourceOptions|Function
    */
-  dataSource?: FilterLookupDataSource<any> | (() => FilterLookupDataSource<any>);
+  dataSource?: FilterLookupDataSource<any> | ((options: { data?: any; key?: any }) => FilterLookupDataSource<any>);
   /**
    * @docid GridBaseColumn.lookup.displayExpr
    * @default undefined
