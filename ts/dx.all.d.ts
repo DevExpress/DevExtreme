@@ -20230,7 +20230,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTextEditorOptions.label]
      */
-    label?: boolean;
+    label?: string;
     /**
      * [descr:dxTextEditorOptions.labelMode]
      */
