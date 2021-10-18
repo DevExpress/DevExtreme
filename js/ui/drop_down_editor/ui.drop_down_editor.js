@@ -627,7 +627,7 @@ const DropDownEditor = TextBox.inherit({
 
         if($label && $popupOverlayContent.hasClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED)) {
             move($popupOverlayContent, {
-                top: position.top - parseInt($label.css('font-size'))
+                top: position.top - parseInt($label.css('fontSize'))
             });
         }
 
