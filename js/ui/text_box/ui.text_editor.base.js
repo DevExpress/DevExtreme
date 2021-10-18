@@ -56,6 +56,8 @@ const CONTROL_KEYS = [
     'downArrow',
 ];
 
+let TextEditorLabelCreator = TextEditorLabel;
+
 function checkButtonsOptionType(buttons) {
     if(isDefined(buttons) && !Array.isArray(buttons)) {
         throw errors.Error('E1053');
@@ -459,6 +461,12 @@ const TextEditorBase = Editor.inherit({
         this._label.updateMaxWidth(this._getLabelContainerWidth());
     },
 
+    ///#DEBUG
+    mockTextEditorLabel(mock) {
+        TextEditorLabelCreator = mock;
+    },
+    ///#ENDDEBUG
+
     _renderLabel: function() {
         const { label, labelMode, labelMark } = this.option();
 
@@ -472,7 +480,7 @@ const TextEditorBase = Editor.inherit({
             beforeWidth: this._getLabelBeforeWidth()
         };
 
-        this._label = new TextEditorLabel(labelConfig);
+        this._label = new TextEditorLabelCreator(labelConfig);
     },
 
     _renderPlaceholder: function() {

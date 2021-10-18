@@ -23,8 +23,6 @@ const SEARCHBOX_CLASS = 'dx-searchbox';
 const SEARCH_ICON_CLASS = 'dx-icon-search';
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
 
-const LABEL_CLASS = 'dx-label';
-const LABEL_BEFORE_CLASS = 'dx-label-before';
 const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
@@ -303,24 +301,33 @@ QUnit.module('label integration', {
         const initialOptions = {
             label: 'some'
         };
-        this.init = (options) => {
+        this.init = (options = {}) => {
             this.$textBox = $('#textbox').dxTextBox($.extend(initialOptions, options));
             this.textBox = this.$textBox.dxTextBox('instance');
             this.$inputContainer = this.$textBox.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`);
-            this.getLabel = () => this.textBox._label;
-            this.getLabelElement = () => this.$textBox.find(`.${LABEL_CLASS}`);
-            this.getLabelBeforeElement = () => this.$textBox.find(`.${LABEL_BEFORE_CLASS}`);
         };
-        this.reinit = (options) => {
+        this.reinit = (options = {}) => {
             this.textBox.dispose();
             this.init(options);
         };
+        this.init();
 
-        this.init({});
+        this.LabelMock = {
+            updateMaxWidth: sinon.stub(),
+            updateBeforeWidth: sinon.stub()
+        };
+        this.constructorMock = sinon.stub().returns(this.LabelMock);
+        this.textBox.mockTextEditorLabel(this.constructorMock);
+    },
+    afterEach: function() {
+        Object.values(this.LabelMock, (stub) => {
+            stub.reset();
+        });
+        this.constructorMock.reset();
     }
 },
 () => {
-    QUnit.test('label before element should have width equal to buttons container width + search icon outer width', function(assert) {
+    QUnit.test('editor should pass beforeWidth equal to buttons container width + search icon outer width', function(assert) {
         this.reinit({
             buttons: [{
                 name: 'button',
@@ -329,15 +336,15 @@ QUnit.module('label integration', {
             mode: 'search'
         });
 
-        const $labelBefore = this.getLabelBeforeElement();
         const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
         const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
-        const labelBeforeWidth = Number.parseInt($labelBefore.css('width'), 10);
+        const expectedBeforeWidth = buttonsContainerWidth + searchIconOuterWidth;
 
-        assert.strictEqual(labelBeforeWidth, buttonsContainerWidth + searchIconOuterWidth);
+        const beforeWidth = this.constructorMock.getCall(0).args[0].beforeWidth;
+        assert.strictEqual(beforeWidth, expectedBeforeWidth);
     });
 
-    QUnit.test('label main element should have maxWidth equal to input container width - buttons container width - search icon outer width', function(assert) {
+    QUnit.test('editor should pass containerWidth equal to input container width - buttons container width - search icon outer width', function(assert) {
         this.reinit({
             buttons: [{
                 name: 'button',
@@ -345,20 +352,18 @@ QUnit.module('label integration', {
             }],
             mode: 'search'
         });
-        this.$label = this.getLabelElement();
 
-        const inputContainerWidth = getWidth(this.$inputContainer);
+        const inputContainerWidth = getWidth(this.$textBox.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
         const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
         const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
+        const expectedContainerWidth = inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth;
 
-        const labelMaxWidth = Number.parseInt(this.$label.css('maxWidth'), 10);
-        assert.strictEqual(labelMaxWidth, inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth);
+        const containerWidth = this.constructorMock.getCall(0).args[0].containerWidth;
+        assert.strictEqual(containerWidth, expectedContainerWidth);
     });
 
     QUnit.test('mode option change should call label updateMaxWidth and updateBeforeWidth methods with correct parameters', function(assert) {
-        const labelUpdateMaxWidthSpy = sinon.spy(this.getLabel(), 'updateMaxWidth');
-        const labelUpdateBeforeWidthSpy = sinon.spy(this.getLabel(), 'updateBeforeWidth');
-
+        this.reinit();
         this.textBox.option('mode', 'search');
 
         const inputContainerWidth = getWidth(this.$inputContainer);
@@ -368,10 +373,7 @@ QUnit.module('label integration', {
         const newLabelMaxWidth = inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth;
         const newLabelBeforeWidth = buttonsContainerWidth + searchIconOuterWidth;
 
-        assert.ok(labelUpdateMaxWidthSpy.called, 'label updateMaxWidth method is called');
-        assert.ok(labelUpdateBeforeWidthSpy.called, 'label updateBeforeWidth method is called');
-
-        assert.strictEqual(labelUpdateMaxWidthSpy.getCall(0).args[0], newLabelMaxWidth, 'updateMaxWidth parameter is correct');
-        assert.strictEqual(labelUpdateBeforeWidthSpy.getCall(0).args[0], newLabelBeforeWidth, 'updateBeforeWidth parameter is correct');
+        assert.strictEqual(this.LabelMock.updateMaxWidth.getCall(0).args[0], newLabelMaxWidth, 'updateMaxWidth parameter is correct');
+        assert.strictEqual(this.LabelMock.updateBeforeWidth.getCall(0).args[0], newLabelBeforeWidth, 'updateBeforeWidth parameter is correct');
     });
 });

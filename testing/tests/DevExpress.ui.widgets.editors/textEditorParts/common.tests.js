@@ -23,13 +23,7 @@ const CLEAR_BUTTON_SELECTOR = '.dx-clear-button-area';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
-const LABEL_CLASS = 'dx-label';
-const LABEL_BEFORE_CLASS = 'dx-label-before';
 const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
-
-const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
-const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
-const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
 
 const EVENTS = [
     'FocusIn', 'FocusOut',
@@ -477,146 +471,157 @@ QUnit.module('label integration', {
     beforeEach: function() {
         this.$textEditor = $('#texteditor');
         const initialOptions = { label: 'some' };
-        this.init = (options) => {
+        this.init = (options = {}) => {
             this.textEditor = this.$textEditor
                 .dxTextEditor($.extend(initialOptions, options))
                 .dxTextEditor('instance');
             this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
-            this.getLabelElement = () => this.$textEditor.find(`.${LABEL_CLASS}`);
-            this.getLabelBeforeElement = () => this.$textEditor.find(`.${LABEL_BEFORE_CLASS}`);
-            this.getLabel = () => this.textEditor._label;
         };
-        this.reinit = (options) => {
+        this.reinit = (options = {}) => {
             this.textEditor.dispose();
             this.init(options);
         };
 
-        this.init({});
+        this.init();
     }
 }, () => {
-    QUnit.module('label init', () => {
-        QUnit.test('label should have max width equal to input width', function(assert) {
-            const $label = this.getLabelElement();
+    QUnit.module('init', {
+        beforeEach: function() {
+            this.constructorStub = sinon.stub();
+            this.textEditor.mockTextEditorLabel(this.constructorStub);
+            this.getProps = () => this.constructorStub.getCall(0).args[0];
+        },
+        afterEach: function() {
+            this.constructorStub.reset();
+        }
+    }, () => {
+        QUnit.test('correct props are passed to TextEditorLabel', function(assert) {
+            const labelText = 'new label';
+            const labelMode = 'floating';
+            const labelMark = ':';
 
+            this.reinit({
+                label: labelText,
+                labelMode,
+                labelMark,
+                buttons: [{
+                    name: 'button',
+                    location: 'before'
+                }],
+            });
+
+            const {
+                $editor,
+                text, mode, mark,
+                containsButtonsBefore,
+            } = this.getProps();
+
+            assert.strictEqual($editor.get(0), this.$textEditor.get(0));
+            assert.strictEqual(text, labelText);
+            assert.strictEqual(mode, labelMode);
+            assert.strictEqual(mark, labelMark);
+            assert.strictEqual(containsButtonsBefore, true);
+        });
+
+        QUnit.test('editor should pass containerWidth equal to input width', function(assert) {
+            this.reinit();
             const inputWidth = getWidth(this.$input);
-            const labelMaxWidth = Number.parseInt($label[0].style.maxWidth, 10);
-            const borderWidth = 2;
 
-            assert.strictEqual(labelMaxWidth + borderWidth, inputWidth);
+            assert.strictEqual(this.getProps().containerWidth, inputWidth);
         });
 
-        QUnit.test('label before element should have width 0', function(assert) {
-            const $labelBeforeElement = this.getBeforeElement();
+        QUnit.test('editor should pass beforeWidth equal to before buttons container width', function(assert) {
+            this.reinit();
+            const beforeButtonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
 
-            const labelBeforeWidth = Number.parseInt($labelBeforeElement[0].style.width);
-
-            assert.strictEqual(labelBeforeWidth, 0);
-        });
-
-        QUnit.test('label text should match "label" option value', function(assert) {
-            const $label = this.getLabelElement();
-
-            const labelText = $label.text();
-
-            assert.strictEqual(labelText, this.textEditor.option('label'));
-        });
-
-        QUnit.test('label text should match "labelMark" option value', function(assert) {
-            const $label = this.getLabelElement();
-
-            const labelMark = $label.find('span').attr('data-mark');
-
-            assert.strictEqual(!!labelMark, !!this.textEditor.option('labelMark'));
-        });
-
-        QUnit.test('label mode should give right label class for editor', function(assert) {
-            assert.ok(this.$textEditor.hasClass(TEXTEDITOR_WITH_LABEL_CLASS));
-        });
-
-        QUnit.test('editor shoudn`t have class related before buttons', function(assert) {
-            assert.notOk(this.$textEditor.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS));
+            assert.strictEqual(this.getProps().beforeWidth, beforeButtonsContainerWidth);
         });
     });
 
-    QUnit.module('label option change', () => {
-        QUnit.test('label should change max width after update width option', function(assert) {
-
+    QUnit.module('option change', {
+        beforeEach: function() {
+            this.LabelMock = {
+                updateMaxWidth: sinon.stub(),
+                updateBeforeWidth: sinon.stub(),
+                updateMode: sinon.stub(),
+                updateText: sinon.stub(),
+                updateMark: sinon.stub(),
+                updateContainsButtonsBefore: sinon.stub()
+            };
+            const constructorMock = () => {
+                return this.LabelMock;
+            };
+            this.textEditor.mockTextEditorLabel(constructorMock);
+            this.reinit();
+        },
+        afterEach: function() {
+            Object.values(this.LabelMock, (stub) => {
+                stub.reset();
+            });
+        }
+    }, () => {
+        QUnit.test('width', function(assert) {
             this.textEditor.option('width', 300);
-
-            const $label = this.getLabelElement();
-
             const inputWidth = getWidth(this.$input);
-            const labelMaxWidth = Number.parseInt($label[0].style.maxWidth, 10);
 
-            assert.strictEqual(labelMaxWidth, inputWidth);
+            const updateMaxWidthCall = this.LabelMock.updateMaxWidth.getCall(0);
+            assert.strictEqual(updateMaxWidthCall.args[0], inputWidth);
         });
 
 
-        QUnit.test('label text should change after update "label" option', function(assert) {
-            this.textEditor.option('label', 'any');
+        QUnit.test('label', function(assert) {
+            const labelText = 'new text';
+            this.textEditor.option('label', labelText);
 
-            const $label = this.getLabelElement();
-
-            const labelText = $label.text();
-
-            assert.strictEqual(labelText, this.textEditor.option('label'));
+            const updateTextCall = this.LabelMock.updateText.getCall(0);
+            assert.strictEqual(updateTextCall.args[0], labelText);
         });
 
-        QUnit.test('label text should change after update "labelMark" option', function(assert) {
-            this.textEditor.option('labelMark', '*');
+        QUnit.test('labelMark', function(assert) {
+            const newLabelMark = '*';
+            this.textEditor.option('labelMark', newLabelMark);
 
-            const $label = this.getLabelElement();
-
-            const labelMark = $label.find('span').attr('data-mark');
-
-            assert.strictEqual(labelMark, this.textEditor.option('labelMark'));
+            const updateMarkCall = this.LabelMock.updateMark.getCall(0);
+            assert.strictEqual(updateMarkCall.args[0], newLabelMark);
         });
 
-        QUnit.test('editor should have right label class after "labelMode" option update', function(assert) {
-            this.textEditor.option('labelMode', 'floating');
+        QUnit.test('labelMode', function(assert) {
+            const newLabelMode = 'floating';
+            this.textEditor.option('labelMode', newLabelMode);
 
-            assert.ok(this.$textEditor.hasClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS));
+            const updateModeCall = this.LabelMock.updateMode.getCall(0);
+            assert.strictEqual(updateModeCall.args[0], newLabelMode);
         });
 
-        QUnit.test('editor shoudn`t have class related before buttons', function(assert) {
+        QUnit.test('buttons', function(assert) {
             this.textEditor.option('buttons', [{
-                name: 'prevDate',
-                location: 'before',
-                options: {
-                    text: 'text',
-                    icon: 'home',
-                    stylingMode: 'text'
-                }
-            }]);
-
-            assert.ok(this.$textEditor.hasClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS));
-        });
-
-        QUnit.test('label before element should change width after update buttons option', function(assert) {
-            this.textEditor.option('mode', 'search');
-
-            const $buttonsContainer = this.$textEditor.find('.dx-texteditor-buttons-container');
-            const $labelBeforeElement = this.getBeforeElement();
-
-            const labelBeforeWidth = Number.parseInt($labelBeforeElement[0].style.width);
-
-            assert.strictEqual(labelBeforeWidth, getWidth($buttonsContainer));
-        });
-    });
-
-    QUnit.test('label before element should have width equal to buttons container width', function(assert) {
-        this.reinit({
-            buttons: [{
                 name: 'button',
-                location: 'before'
-            }]
+                location: 'before',
+            }]);
+            const updateMaxWidthCall = this.LabelMock.updateMaxWidth.getCall(0);
+            const updateBeforeWidthCall = this.LabelMock.updateBeforeWidth.getCall(0);
+            const updateContainsButtonsBeforeCall = this.LabelMock.updateContainsButtonsBefore.getCall(0);
+
+            const newLabelMaxWidth = getWidth(this.$input);
+            const newLabelBeforeWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
+
+            assert.strictEqual(updateMaxWidthCall.args[0], newLabelMaxWidth);
+            assert.strictEqual(updateBeforeWidthCall.args[0], newLabelBeforeWidth);
+            assert.strictEqual(updateContainsButtonsBeforeCall.args[0], true);
         });
 
-        const $labelBefore = this.getLabelBeforeElement();
-        const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
-        const labelBeforeWidth = Number.parseInt($labelBefore.css('width'), 10);
+        QUnit.test('stylingMode', function(assert) {
+            this.textEditor.option('stylingMode', 'underlined');
 
-        assert.strictEqual(labelBeforeWidth, buttonsContainerWidth);
+            const updateMaxWidthCall = this.LabelMock.updateMaxWidth.getCall(0);
+            const updateBeforeWidthCall = this.LabelMock.updateBeforeWidth.getCall(0);
+
+            const newLabelMaxWidth = getWidth(this.$input);
+            const newLabelBeforeWidth = 0;
+
+            assert.strictEqual(updateMaxWidthCall.args[0], newLabelMaxWidth);
+            assert.strictEqual(updateBeforeWidthCall.args[0], newLabelBeforeWidth);
+        });
     });
 });
 
