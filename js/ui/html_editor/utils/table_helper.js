@@ -1,5 +1,6 @@
 import $ from '../../../core/renderer';
 import { each } from '../../../core/utils/iterator';
+import { camelize } from '../../../core/utils/inflector';
 
 
 const TABLE_FORMATS = ['table', 'tableHeaderCell'];
@@ -29,8 +30,13 @@ function hasEmbedContent(module, selection) {
     return !!selection && module.quill.getText(selection).trim().length < selection.length;
 }
 
-function unfixTableWidth($table) {
-    $table.css('width', 'initial');
+function unfixTableWidth($table, tableBlot) {
+    const unfixValue = 'initial';
+    if(tableBlot) {
+        tableBlot.format('tableWidth', unfixValue);
+    } else {
+        $table.css('width', unfixValue);
+    }
 }
 
 function getColumnElements($table, index = 0) {
@@ -52,9 +58,11 @@ function getAutoSizedElements($table, direction = 'horizontal') {
     return result;
 }
 
-function setLineElementsStyleValue($lineElements, property, value) {
-    each($lineElements, (i, element) => {
-        $(element).css(property, value + 'px');
+function setLineElementsFormat(module, { elements, property, value }) {
+    each(elements, (i, element) => {
+        const cellBlot = module.quill.scroll.find(element);
+        const fullPropertyName = `cell${camelize(property, true)}`;
+        cellBlot?.format(fullPropertyName, value + 'px');
     });
 }
 
@@ -85,7 +93,7 @@ export {
     unfixTableWidth,
     getColumnElements,
     getAutoSizedElements,
-    setLineElementsStyleValue,
+    setLineElementsFormat,
     getLineElements,
     getRowElements,
     hasEmbedContent
