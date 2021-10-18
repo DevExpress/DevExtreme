@@ -5,6 +5,7 @@ import {
   InternalState,
   JSXComponent,
   Method,
+  RefObject,
 } from '@devextreme-generator/declarations';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
@@ -31,9 +32,10 @@ import {
 import { loadResources } from '../../../ui/scheduler/resources/utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
 import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
-import { AppointmentsViewModelType } from './appointment/types';
+import { AppointmentsViewModelType, AppointmentViewModel } from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
+import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
 
 export const viewFunction = ({
   restAttributes,
@@ -44,6 +46,11 @@ export const viewFunction = ({
   setCurrentView,
   startViewDate,
   appointmentsViewModel,
+  tooltipData,
+  tooltipTarget,
+  tooltipVisible,
+  changeTooltipVisible,
+  showTooltip,
   props: {
     accessKey,
     activeStateEnabled,
@@ -154,14 +161,22 @@ export const viewFunction = ({
           appointments={(
             <AppointmentLayout
               appointments={appointmentsViewModel.regular}
+              onAppointmentClick={showTooltip}
             />
           )}
 
           allDayAppointments={(
             <AppointmentLayout
               appointments={appointmentsViewModel.allDay}
+              onAppointmentClick={showTooltip}
             />
           )}
+        />
+        <AppointmentTooltip
+          visible={tooltipVisible}
+          onVisibleChange={changeTooltipVisible}
+          target={tooltipTarget}
+          dataList={tooltipData}
         />
       </div>
     </Widget>
@@ -184,6 +199,12 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   @InternalState() loadedResources: Group[] = [];
 
   @InternalState() dataItems: Appointment[] = [];
+
+  @InternalState() tooltipTarget: RefObject<HTMLElement> | undefined;
+
+  @InternalState() tooltipVisible = false;
+
+  @InternalState() tooltipData: AppointmentViewModel[] = [];
 
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
@@ -391,5 +412,22 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   setCurrentDate(date: Date): void {
     this.props.currentDate = date;
+  }
+
+  showTooltip(
+    tooltipData: AppointmentViewModel[],
+    target: RefObject<HTMLElement>,
+  ): void {
+    this.tooltipData = tooltipData;
+    this.tooltipTarget = target;
+    this.changeTooltipVisible(true);
+  }
+
+  hideTooltip(): void {
+    this.changeTooltipVisible(false);
+  }
+
+  changeTooltipVisible(value: boolean): void {
+    this.tooltipVisible = value;
   }
 }

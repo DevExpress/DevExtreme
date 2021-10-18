@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template,
+  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template, RefObject,
 } from '@devextreme-generator/declarations';
 import { AppointmentTemplateProps, AppointmentViewModel } from './types';
 import { Appointment } from './appointment';
@@ -9,6 +9,7 @@ export const viewFunction = ({
   props: {
     appointments,
     appointmentTemplate,
+    onAppointmentClick,
   },
 }: AppointmentLayout): JSX.Element => (
   <div
@@ -21,6 +22,7 @@ export const viewFunction = ({
           appointmentTemplate={appointmentTemplate}
           index={index}
           key={getAppointmentKey(item)}
+          onItemClick={onAppointmentClick}
         />
       ))
     }
@@ -32,6 +34,12 @@ export class AppointmentLayoutProps {
   @OneWay() appointments: AppointmentViewModel[] = [];
 
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
+
+  @OneWay() onAppointmentClick?: (
+    data: AppointmentViewModel[],
+    target: RefObject<HTMLElement>,
+    index: number
+  ) => void;
 }
 
 @Component({
