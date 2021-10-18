@@ -1899,9 +1899,6 @@ class Scheduler extends Widget {
         const targetedAdapter = adapter.clone();
 
         if(this._isAgenda() && adapter.isRecurrent) {
-            // const getStartDate = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
-            // const newStartDate = getStartDate($(element), adapter.startDate).startDate;
-
             const agendaSettings = settings.agendaSettings;
 
             targetedAdapter.startDate = agendaSettings.startDate;
