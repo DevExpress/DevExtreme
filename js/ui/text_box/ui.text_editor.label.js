@@ -112,6 +112,10 @@ class TextEditorLabel {
         return this._$root;
     }
 
+    isVisible() {
+        return this._isVisible();
+    }
+
     updateMode(mode) {
         this._props.mode = mode;
         this._toggleMarkupVisibility();

@@ -204,6 +204,24 @@ QUnit.module('textEditorLabel', {
                 });
             });
         });
+
+        QUnit.module('isVisible', () => {
+            QUnit.test('returns true if text is not empty and mode is not "hidden"', function(assert) {
+                assert.strictEqual(this.label.isVisible(), true);
+            });
+
+            QUnit.test('return false if mode="hidden"', function(assert) {
+                this.reinit({ mode: 'hidden' });
+
+                assert.strictEqual(this.label.isVisible(), false);
+            });
+
+            QUnit.test('return false if text is empty', function(assert) {
+                this.reinit({ text: '' });
+
+                assert.strictEqual(this.label.isVisible(), false);
+            });
+        });
     });
 
     QUnit.module('adding classes to editor on init', () => {
