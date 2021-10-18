@@ -5,8 +5,7 @@ import {
   Component, ComponentBindings, JSXComponent, Fragment, InternalState, Effect,
 } from '@devextreme-generator/declarations';
 import React from 'react';
-import { getComponentOptions } from '../helpers/getComponentOptions';
-import { SchedulerProps } from '../../../../js/renovation/ui/scheduler/props';
+import { getComponentOptions } from './helpers/getComponentOptions';
 import { getWindow } from '../../../../js/core/utils/window';
 // import { Scheduler } from '../../../../js/renovation/ui/scheduler/scheduler';
 
@@ -28,7 +27,7 @@ class AppProps { }
   view: viewFunction,
 })
 export class App extends JSXComponent<AppProps>() {
-  @InternalState() options: Partial<SchedulerProps> = getComponentOptions();
+  @InternalState() options = getComponentOptions();
 
   @Effect({ run: 'once' })
   optionsUpdated(): void {
