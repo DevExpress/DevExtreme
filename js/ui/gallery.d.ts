@@ -1,4 +1,4 @@
-import { CommonDataSource } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source';
 import {
     DxPromise,
 } from '../core/utils/deferred';

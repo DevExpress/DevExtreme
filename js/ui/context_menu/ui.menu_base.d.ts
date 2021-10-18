@@ -1,5 +1,5 @@
 import { Skip } from '../../core';
-import { CommonDataSource } from '../../data/data_source_aliases';
+import { CommonDataSource } from '../../data/data_source';
 import {
     AnimationConfig,
 } from '../../animation/fx';

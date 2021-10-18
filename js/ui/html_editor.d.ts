@@ -1,4 +1,4 @@
-import { CommonDataSource } from '../data/data_source_aliases';
+import { CommonDataSource } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -20,9 +20,9 @@ import Editor, {
     EditorOptions,
 } from './editor/editor';
 
+import {
   MenuBasePlainItem,
 } from './menu';
-
 
 import {
     Item as dxToolbarItem,

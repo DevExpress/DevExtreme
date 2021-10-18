@@ -1,5 +1,3 @@
-import { CommonDataSource } from '../../data/data_source_aliases';
-
 import {
     UserDefinedElement,
     DxElement,
@@ -9,7 +7,7 @@ import {
     template,
 } from '../../core/templates/template';
 
-import DataSource from '../../data/data_source';
+import DataSource, { CommonDataSource } from '../../data/data_source';
 
 import {
     CollectionWidgetItem,

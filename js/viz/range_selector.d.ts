@@ -1,11 +1,9 @@
-import { CommonDataSource } from '../data/data_source_aliases';
+import DataSource, { CommonDataSource } from '../data/data_source';
 
 import {
     PaletteType,
     PaletteExtensionModeType,
 } from './palette';
-
-import DataSource from '../data/data_source';
 
 import {
     EventInfo,

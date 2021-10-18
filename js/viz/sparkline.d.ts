@@ -1,12 +1,10 @@
-import { CommonDataSource } from '../data/data_source_aliases';
+import DataSource, { CommonDataSource } from '../data/data_source';
 
 import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
-
-import DataSource from '../data/data_source';
 
 import {
     FileSavingEventInfo,

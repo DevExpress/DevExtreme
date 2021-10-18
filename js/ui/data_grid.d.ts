@@ -1,4 +1,4 @@
-import { CommonDataSource } from '../data/data_source_aliases';
+import DataSource, { CommonDataSource, Options as DataSourceOptions } from '../data/data_source';
 import {
   UserDefinedElement,
   DxElement,
@@ -13,7 +13,6 @@ import {
     template,
 } from '../core/templates/template';
 
-import DataSource, { Options as DataSourceOptions } from '../data/data_source';
 import {
     DeepPartial,
 } from '../core/index';
