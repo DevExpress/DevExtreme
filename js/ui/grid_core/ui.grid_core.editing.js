@@ -372,22 +372,22 @@ const EditingController = modules.ViewController.inherit((function() {
             });
         },
 
-        _renderEditingButtons: function($container, buttons, options) {
+        _renderEditingButtons: function($container, buttons, options, change) {
             buttons.forEach((button) => {
                 if(this._isButtonVisible(button, options)) {
-                    this._createButton($container, button, options);
+                    this._createButton($container, button, options, change);
                 }
             });
         },
 
         _getEditCommandCellTemplate: function() {
-            return (container, options) => {
+            return (container, options, change) => {
                 const $container = $(container);
 
                 if(options.rowType === 'data') {
                     const buttons = this._getEditingButtons(options);
 
-                    this._renderEditingButtons($container, buttons, options);
+                    this._renderEditingButtons($container, buttons, options, change);
 
                     options.watch && options.watch(
                         () => buttons.map(button => this._isButtonVisible(button, options)),
@@ -2015,18 +2015,21 @@ const EditingController = modules.ViewController.inherit((function() {
             return template;
         },
 
-        _createButton: function($container, button, options) {
+        _createButton: function($container, button, options, change) {
             let icon = EDIT_ICON_CLASS[button.name];
             const useIcons = this.option('editing.useIcons');
+            const useLegacyButtonTemplate = this.option('useLegacyButtonTemplate');
             let $button = $('<a>')
                 .attr('href', '#')
                 .addClass(LINK_CLASS)
                 .addClass(button.cssClass);
 
-            if(button.template) {
+            if(button.template && useLegacyButtonTemplate) {
                 this._rowsView.renderTemplate($container, button.template, options, true);
             } else {
-                if(useIcons && icon || button.icon) {
+                if(button.template) {
+                    $button = $('<div>').addClass('dx-link').addClass(button.cssClass);
+                } else if(useIcons && icon || button.icon) {
                     icon = button.icon || icon;
                     const iconType = iconUtils.getImageSourceType(icon);
 
@@ -2060,6 +2063,10 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
 
                 $container.append($button, '&nbsp;');
+
+                if(button.template) {
+                    this._rowsView.renderTemplate($button, button.template, options, true, change);
+                }
             }
         },
 
@@ -2211,7 +2218,8 @@ export const editingModule = {
                 editColumnName: null,
 
                 changes: []
-            }
+            },
+            useLegacyButtonTemplate: false
         };
     },
     controllers: {
@@ -2495,6 +2503,9 @@ export const editingModule = {
                             this.callBase(args);
                             break;
                         }
+                        case 'useLegacyButtonTemplate':
+                            args.handled = true;
+                            break;
                         default:
                             this.callBase(args);
                     }
