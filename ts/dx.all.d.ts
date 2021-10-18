@@ -5564,7 +5564,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGrid.collapseRow(key)]
      */
-    collapseRow(key: TKey): DevExpress.core.utils.DxPromise<void>;
+    collapseRow(key: TKey | any[]): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:dxDataGrid.expandAll(groupIndex)]
      */
@@ -5572,7 +5572,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGrid.expandRow(key)]
      */
-    expandRow(key: TKey): DevExpress.core.utils.DxPromise<void>;
+    expandRow(key: TKey | any[]): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:dxDataGrid.exportToExcel(selectionOnly)]
      * @deprecated [depNote:dxDataGrid.exportToExcel(selectionOnly)]
@@ -7079,6 +7079,12 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
+    export interface GroupRowKeyInfo<TKey = any> {
+      readonly key: TKey | any[];
+    }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
     export interface HeaderFilter {
       /**
        * [descr:GridBaseOptions.headerFilter.allowSearch]
@@ -7328,7 +7334,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridRowObject.key]
        */
-      readonly key: TKey;
+      readonly key: TKey | any[];
       /**
        * [descr:dxDataGridRowObject.rowIndex]
        */
@@ -7363,13 +7369,13 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowKeyInfo<TKey>;
+      GroupRowKeyInfo<TKey>;
     export type RowCollapsingEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> &
-      RowKeyInfo<TKey>;
+      GroupRowKeyInfo<TKey>;
     export type RowDblClickEvent<
       TRowData = any,
       TKey = any
@@ -23043,7 +23049,7 @@ declare module DevExpress.ui {
      */
     onRowCollapsed?: (
       e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>
+        DevExpress.ui.dxDataGrid.GroupRowKeyInfo<TKey>
     ) => void;
     /**
      * [descr:GridBaseOptions.onRowCollapsing]
@@ -23051,14 +23057,14 @@ declare module DevExpress.ui {
     onRowCollapsing?: (
       e: DevExpress.events.Cancelable &
         DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>
+        DevExpress.ui.dxDataGrid.GroupRowKeyInfo<TKey>
     ) => void;
     /**
      * [descr:GridBaseOptions.onRowExpanded]
      */
     onRowExpanded?: (
       e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>
+        DevExpress.ui.dxDataGrid.GroupRowKeyInfo<TKey>
     ) => void;
     /**
      * [descr:GridBaseOptions.onRowExpanding]
@@ -23066,7 +23072,7 @@ declare module DevExpress.ui {
     onRowExpanding?: (
       e: DevExpress.events.Cancelable &
         DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxDataGrid.RowKeyInfo<TKey>
+        DevExpress.ui.dxDataGrid.GroupRowKeyInfo<TKey>
     ) => void;
     /**
      * [descr:GridBaseOptions.onRowInserted]
