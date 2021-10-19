@@ -82,6 +82,8 @@ import {
   Format,
 } from '../localization';
 
+type TRowKey<TKey> = TKey | any[];
+
 export interface AdaptiveDetailRowPreparingInfo {
   readonly formOptions: any;
 }
@@ -104,7 +106,7 @@ export interface KeyDownInfo {
 }
 
 export interface RowKeyInfo<TKey = any> {
-  readonly key: TKey | any[];
+  readonly key: TRowKey<TKey>;
 }
 
 export interface RowInsertedInfo<TRowData = any, TKey = any> {
@@ -627,7 +629,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @fires GridBaseOptions.onFocusedRowChanged
      * @public
      */
-    focusedRowKey?: TKey;
+    focusedRowKey?: TRowKey<TKey>;
     /**
      * @docid
      * @type object
@@ -2112,7 +2114,7 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @return any
      * @public
      */
-    getKeyByRowIndex(rowIndex: number): TKey | undefined;
+    getKeyByRowIndex(rowIndex: number): TRowKey<TKey> | undefined;
     /**
      * @docid
      * @publicName getRowElement(rowIndex)
@@ -2128,7 +2130,7 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @return numeric
      * @public
      */
-    getRowIndexByKey(key: TKey): number;
+    getRowIndexByKey(key: TRowKey<TKey>): number;
     /**
      * @docid
      * @publicName getScrollable()
@@ -2172,7 +2174,7 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @return boolean
      * @public
      */
-    isRowFocused(key: TKey): boolean;
+    isRowFocused(key: TRowKey<TKey>): boolean;
     /**
      * @docid
      * @publicName isRowSelected(key)
@@ -4328,7 +4330,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
      * @return Promise<void>
      * @public
      */
-    collapseRow(key: TKey | any[]): DxPromise<void>;
+    collapseRow(key: TRowKey<TKey>): DxPromise<void>;
     /**
      * @docid
      * @publicName expandAll(groupIndex)
@@ -4342,7 +4344,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
      * @return Promise<void>
      * @public
      */
-    expandRow(key: TKey | any[]): DxPromise<void>;
+    expandRow(key: TRowKey<TKey>): DxPromise<void>;
     /**
      * @docid
      * @publicName exportToExcel(selectionOnly)
@@ -4397,7 +4399,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
      * @publicName isRowExpanded(key)
      * @public
      */
-    isRowExpanded(key: TKey): boolean;
+    isRowExpanded(key: TRowKey<TKey>): boolean;
     /**
      * @docid
      * @publicName isRowSelected(data)
@@ -4449,15 +4451,15 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource<TRowData, string | Array<string>, TKey>;
-    getKeyByRowIndex(rowIndex: number): TKey | undefined;
+    getKeyByRowIndex(rowIndex: number): TRowKey<TKey> | undefined;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
-    getRowIndexByKey(key: TKey): number;
+    getRowIndexByKey(key: TRowKey<TKey>): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
     isAdaptiveDetailRowExpanded(key: TKey): boolean;
-    isRowFocused(key: TKey): boolean;
+    isRowFocused(key: TRowKey<TKey>): boolean;
     keyOf(obj: TRowData): TKey;
     navigateToRow(key: TKey): DxPromise<void>;
     pageCount(): number;
@@ -4724,7 +4726,7 @@ export interface Row<TRowData = any, TKey = any> {
      * @docid dxDataGridRowObject.key
      * @public
      */
-    readonly key: TKey | any[];
+    readonly key: TRowKey<TKey>;
     /**
      * @docid dxDataGridRowObject.rowIndex
      * @public
