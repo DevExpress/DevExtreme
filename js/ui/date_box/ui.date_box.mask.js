@@ -159,7 +159,10 @@ const DateBoxMask = DateBoxBase.inherit({
         } else if(this._isSingleCharKey(e)) {
             this._processInputKey(key);
             e.originalEvent.preventDefault();
-            this.option('onInput') && this.option('onInput').call();
+            if(this.option('onInput')) {
+                const action = this._createActionByOption('onInput', { excludeValidators: ['readOnly'] });
+                action({ event: e });
+            }
         }
 
         return result;
@@ -193,7 +196,10 @@ const DateBoxMask = DateBoxBase.inherit({
         const key = e.originalEvent.data;
         this._processInputKey(key);
         e.preventDefault();
-        this.option('onInput') && this.option('onInput').call();
+        if(this.option('onInput')) {
+            const action = this._createActionByOption('onInput', { excludeValidators: ['readOnly'] });
+            action({ event: e });
+        }
         return true;
     },
 
