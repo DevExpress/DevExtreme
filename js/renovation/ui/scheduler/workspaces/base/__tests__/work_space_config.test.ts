@@ -29,6 +29,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: false,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
+          defaultGroupOrientation: 'horizontal',
         });
     });
 
@@ -49,6 +50,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
+          defaultGroupOrientation: 'horizontal',
         });
     });
 
@@ -69,6 +71,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
+          defaultGroupOrientation: 'horizontal',
         });
     });
 
@@ -89,6 +92,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
+          defaultGroupOrientation: 'horizontal',
         });
     });
 
@@ -108,6 +112,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
+          defaultGroupOrientation: 'horizontal',
         });
     });
 
@@ -127,6 +132,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: true,
+          defaultGroupOrientation: 'horizontal',
         });
     });
 
@@ -146,6 +152,7 @@ describe('Workspace config utils', () => {
           className: 'dx-scheduler-timeline-day dx-scheduler-timeline',
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
+          defaultGroupOrientation: 'vertical',
         });
     });
 
@@ -165,6 +172,7 @@ describe('Workspace config utils', () => {
           className: 'dx-scheduler-timeline-day dx-scheduler-timeline',
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
+          defaultGroupOrientation: 'vertical',
         });
     });
 
@@ -184,6 +192,7 @@ describe('Workspace config utils', () => {
           className: 'dx-scheduler-timeline-week dx-scheduler-timeline',
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
+          defaultGroupOrientation: 'vertical',
         });
     });
 
@@ -203,6 +212,7 @@ describe('Workspace config utils', () => {
           className: 'dx-scheduler-timeline-work-week dx-scheduler-timeline',
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
+          defaultGroupOrientation: 'vertical',
         });
     });
 
@@ -222,6 +232,7 @@ describe('Workspace config utils', () => {
           className: 'dx-scheduler-timeline-month dx-scheduler-timeline',
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
+          defaultGroupOrientation: 'vertical',
         });
     });
 
@@ -242,6 +253,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
+          defaultGroupOrientation: 'horizontal',
         });
     });
   });
