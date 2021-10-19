@@ -1883,7 +1883,7 @@ declare module DevExpress.data {
       | string
       | Array<TItem>
       | Store<TItem, TKey>
-      | Options<any, TItem, any, TKey>
+      | Options<any, any, TItem, TKey>
       | DataSource<TItem, TKey>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.

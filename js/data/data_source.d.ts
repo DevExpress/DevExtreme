@@ -435,7 +435,7 @@ export type DataSourceLike<TItem, TKey = any> =
     string |
     Array<TItem> |
     Store<TItem, TKey> |
-    Options<any, TItem, any, TKey> |
+    Options<any, any, TItem, TKey> |
     DataSource<TItem, TKey>;
 
 type EventName = 'changed' | 'loadError' | 'loadingChanged';
