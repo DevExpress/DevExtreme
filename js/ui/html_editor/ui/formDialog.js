@@ -7,7 +7,7 @@ import domAdapter from '../../../core/dom_adapter';
 import { resetActiveElement } from '../../../core/utils/dom';
 import { Deferred } from '../../../core/utils/deferred';
 import localizationMessage from '../../../localization/message';
-import { getCurrentScreenFactor } from '../../../core/utils/window';
+import { getCurrentScreenFactor, hasWindow } from '../../../core/utils/window';
 import browser from '../../../core/utils/browser';
 import devices from '../../../core/devices';
 
@@ -43,7 +43,7 @@ class FormDialog {
     }
 
     _getFullScreen() {
-        const screenFactor = getCurrentScreenFactor();
+        const screenFactor = hasWindow() ?? getCurrentScreenFactor();
         return devices.real().deviceType === 'phone' || screenFactor === 'xs';
     }
 
