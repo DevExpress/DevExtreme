@@ -259,10 +259,10 @@ const Overlay = Widget.inherit({
         };
 
         this._updateResizeCallbackSkipCondition();
-        this._checkPositionValues();
+        this.warnPositionAsFunction();
     },
 
-    _checkPositionValues() {
+    warnPositionAsFunction() {
         if(isFunction(this.option('position'))) { // position as function deprecated in 21.2
             errors.log('W0018');
         }
