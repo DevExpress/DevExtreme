@@ -5,6 +5,7 @@ import Popup from '../../popup';
 import Form from '../../form';
 import { Deferred } from '../../../core/utils/deferred';
 import localizationMessage from '../../../localization/message';
+import getCurrentScreenFactor from '../../../core/utils/window';
 import devices from '../../../core/devices';
 
 const DIALOG_CLASS = 'dx-formdialog';
@@ -50,7 +51,8 @@ class FormDialog {
     }
 
     _getFullScreen() {
-        return devices.real().deviceType === 'phone';
+        const screenFactor = getCurrentScreenFactor();
+        return devices.real().deviceType === 'phone' || screenFactor === 'xs' || screenFactor === 'sm';
     }
 
     _getPopupConfig() {
