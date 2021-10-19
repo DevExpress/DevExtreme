@@ -124,6 +124,25 @@ describe('Appointment', () => {
             2021,
           );
         });
+
+        it('should cnot fail if ref is undefined', () => {
+          const mockCallback = jest.fn();
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+            index: 2021,
+            onItemClick: mockCallback,
+          });
+
+          appointment.onItemClick();
+
+          expect(mockCallback).toBeCalledTimes(1);
+
+          expect(mockCallback).toHaveBeenCalledWith(
+            [defaultViewModel],
+            undefined,
+            2021,
+          );
+        });
       });
     });
   });
