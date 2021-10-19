@@ -2778,7 +2778,7 @@ export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventI
 /** @public */
 export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
   readonly data: TRowData;
-  readonly key: TKey;
+  readonly key: TRowKey<TKey>;
   readonly value?: any;
   readonly displayValue?: any;
   readonly text: string;
@@ -2793,7 +2793,7 @@ export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataG
 /** @public */
 export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
   readonly data: TRowData;
-  readonly key: TKey;
+  readonly key: TRowKey<TKey>;
   readonly value?: any;
   readonly displayValue?: any;
   readonly text: string;
@@ -2809,7 +2809,7 @@ export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDa
 export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
   readonly eventType: string;
   readonly data: TRowData;
-  readonly key: TKey;
+  readonly key: TRowKey<TKey>;
   readonly value?: any;
   readonly text: string;
   readonly displayValue?: any;
@@ -2824,7 +2824,7 @@ export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxData
 /** @public */
 export type CellPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
   readonly data: TRowData;
-  readonly key: TKey;
+  readonly key: TRowKey<TKey>;
   readonly value?: any;
   readonly displayValue?: any;
   readonly text: string;
@@ -2975,7 +2975,7 @@ export type OptionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGri
 /** @public */
 export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
   readonly data: TRowData;
-  readonly key: TKey;
+  readonly key: TRowKey<TKey>;
   readonly values: Array<any>;
   readonly columns: Array<Column<TRowData, TKey>>;
   readonly rowIndex: number;
@@ -2997,7 +2997,7 @@ export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventI
 /** @public */
 export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
   readonly data: TRowData;
-  readonly key: TKey;
+  readonly key: TRowKey<TKey>;
   readonly values: Array<any>;
   readonly columns: Array<Column<TRowData, TKey>>;
   readonly rowIndex: number;
@@ -3024,7 +3024,7 @@ export type RowInsertingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid
 /** @public */
 export type RowPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
   readonly data: TRowData;
-  readonly key: TKey;
+  readonly key: TRowKey<TKey>;
   readonly values: Array<any>;
   readonly columns: Array<Column<TRowData, TKey>>;
   readonly rowIndex: number;
@@ -3136,7 +3136,10 @@ export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
 
 /** @public */
 export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
-  readonly data?: TRowData;
+  readonly data?: {
+    key: any[];
+    items: Array<TRowData>;
+  };
   readonly component: dxDataGrid<TRowData, TKey>;
   readonly value?: any;
   readonly text: string;
