@@ -1707,7 +1707,7 @@ declare module DevExpress.data {
     constructor(
       options:
         | DevExpress.data.CustomStore.Options<TItem, TKey>
-        | DevExpress.data.DataSource.Options<any, TItem, any, TKey>
+        | DevExpress.data.DataSource.Options<any, any, TItem, TKey>
     );
     constructor(store: Store<TItem, TKey>);
     constructor(url: string);
