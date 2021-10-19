@@ -11,8 +11,8 @@ import { Options as ODataStoreOptions } from './odata/store';
 /** @public */
 export type Options<
     TStoreItem = any,
-    TItem = TStoreItem,
-    TMappedItem = TItem,
+    TMappedItem = TStoreItem,
+    TItem = TMappedItem,
     TKey = any,
 > = DataSourceOptions<TStoreItem, TItem, TMappedItem, TKey>;
 
@@ -22,8 +22,8 @@ export type Options<
  */
 export interface DataSourceOptions<
     TStoreItem = any,
-    TItem = TStoreItem,
-    TMappedItem = TItem,
+    TMappedItem = TStoreItem,
+    TItem = TMappedItem,
     TKey = any,
 > {
     /**

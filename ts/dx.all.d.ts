@@ -1891,8 +1891,8 @@ declare module DevExpress.data {
     type EventName = 'changed' | 'loadError' | 'loadingChanged';
     export type Options<
       TStoreItem = any,
-      TItem = TStoreItem,
-      TMappedItem = TItem,
+      TMappedItem = TStoreItem,
+      TItem = TMappedItem,
       TKey = any
     > = DataSourceOptions<TStoreItem, TItem, TMappedItem, TKey>;
   }
@@ -1902,8 +1902,8 @@ declare module DevExpress.data {
    */
   export interface DataSourceOptions<
     TStoreItem = any,
-    TItem = TStoreItem,
-    TMappedItem = TItem,
+    TMappedItem = TStoreItem,
+    TItem = TMappedItem,
     TKey = any
   > {
     /**
