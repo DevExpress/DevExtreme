@@ -5,23 +5,23 @@ import { Query } from './query';
 
 /** @public */
 export type Options<
-    TValue = any,
+    TItem = any,
     TKey = any,
-> = ArrayStoreOptions<TValue, TKey>;
+> = ArrayStoreOptions<TItem, TKey>;
 
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
  */
 export interface ArrayStoreOptions<
-    TValue = any,
+    TItem = any,
     TKey = any,
-> extends StoreOptions<TValue, TKey> {
+> extends StoreOptions<TItem, TKey> {
     /**
      * @docid
      * @public
      */
-    data?: Array<TValue>;
+    data?: Array<TItem>;
 }
 /**
  * @docid
@@ -29,10 +29,10 @@ export interface ArrayStoreOptions<
  * @public
  */
 export default class ArrayStore<
-    TValue = any,
+    TItem = any,
     TKey = any,
-> extends Store<TValue, TKey> {
-    constructor(options?: Options<TValue, TKey>)
+> extends Store<TItem, TKey> {
+    constructor(options?: Options<TItem, TKey>)
     /**
      * @docid
      * @publicName clear()

@@ -1599,11 +1599,8 @@ declare module DevExpress.data {
   /**
    * [descr:ArrayStore]
    */
-  export class ArrayStore<TValue = any, TKey = any> extends Store<
-    TValue,
-    TKey
-  > {
-    constructor(options?: DevExpress.data.ArrayStore.Options<TValue, TKey>);
+  export class ArrayStore<TItem = any, TKey = any> extends Store<TItem, TKey> {
+    constructor(options?: DevExpress.data.ArrayStore.Options<TItem, TKey>);
     /**
      * [descr:ArrayStore.clear()]
      */
@@ -1614,8 +1611,8 @@ declare module DevExpress.data {
     createQuery(): Query;
   }
   module ArrayStore {
-    export type Options<TValue = any, TKey = any> = ArrayStoreOptions<
-      TValue,
+    export type Options<TItem = any, TKey = any> = ArrayStoreOptions<
+      TItem,
       TKey
     >;
   }
@@ -1623,12 +1620,12 @@ declare module DevExpress.data {
    * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ArrayStoreOptions<TValue = any, TKey = any>
-    extends DevExpress.data.Store.Options<TValue, TKey> {
+  export interface ArrayStoreOptions<TItem = any, TKey = any>
+    extends DevExpress.data.Store.Options<TItem, TKey> {
     /**
      * [descr:ArrayStoreOptions.data]
      */
-    data?: Array<TValue>;
+    data?: Array<TItem>;
   }
   /**
    * [descr:Utils.base64_encode(input)]
@@ -1643,19 +1640,16 @@ declare module DevExpress.data {
   /**
    * [descr:CustomStore]
    */
-  export class CustomStore<TValue = any, TKey = any> extends Store<
-    TValue,
-    TKey
-  > {
-    constructor(options?: DevExpress.data.CustomStore.Options<TValue, TKey>);
+  export class CustomStore<TItem = any, TKey = any> extends Store<TItem, TKey> {
+    constructor(options?: DevExpress.data.CustomStore.Options<TItem, TKey>);
     /**
      * [descr:CustomStore.clearRawDataCache()]
      */
     clearRawDataCache(): void;
   }
   module CustomStore {
-    export type Options<TValue = any, TKey = any> = CustomStoreOptions<
-      TValue,
+    export type Options<TItem = any, TKey = any> = CustomStoreOptions<
+      TItem,
       TKey
     >;
   }
@@ -1663,12 +1657,12 @@ declare module DevExpress.data {
    * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface CustomStoreOptions<TValue = any, TKey = any>
-    extends DevExpress.data.Store.Options<TValue, TKey> {
+  export interface CustomStoreOptions<TItem = any, TKey = any>
+    extends DevExpress.data.Store.Options<TItem, TKey> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
-    byKey?: (key: TKey) => PromiseLike<TValue>;
+    byKey?: (key: TKey) => PromiseLike<TItem>;
     /**
      * [descr:CustomStoreOptions.cacheRawData]
      */
@@ -1676,11 +1670,11 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.insert]
      */
-    insert?: (values: TValue) => PromiseLike<TValue>;
+    insert?: (values: TItem) => PromiseLike<TItem>;
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load: (options: LoadOptions<TValue>) => PromiseLike<TValue> | Array<TValue>;
+    load: (options: LoadOptions<TItem>) => PromiseLike<TItem> | Array<TItem>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -1694,12 +1688,12 @@ declare module DevExpress.data {
      */
     totalCount?: (loadOptions: {
       filter?: FilterDescriptor | Array<FilterDescriptor>;
-      group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
+      group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     }) => PromiseLike<number>;
     /**
      * [descr:CustomStoreOptions.update]
      */
-    update?: (key: TKey, values: TValue) => PromiseLike<any>;
+    update?: (key: TKey, values: TItem) => PromiseLike<any>;
     /**
      * [descr:CustomStoreOptions.useDefaultSearch]
      */
@@ -1708,14 +1702,14 @@ declare module DevExpress.data {
   /**
    * [descr:DataSource]
    */
-  export class DataSource<TValue = any, TKey = any> {
-    constructor(data: Array<TValue>);
+  export class DataSource<TItem = any, TKey = any> {
+    constructor(data: Array<TItem>);
     constructor(
       options:
-        | DevExpress.data.CustomStore.Options<TValue, TKey>
-        | DevExpress.data.DataSource.Options<any, TValue, any, TKey>
+        | DevExpress.data.CustomStore.Options<TItem, TKey>
+        | DevExpress.data.DataSource.Options<any, TItem, any, TKey>
     );
-    constructor(store: Store<TValue, TKey>);
+    constructor(store: Store<TItem, TKey>);
     constructor(url: string);
     /**
      * [descr:DataSource.cancel(operationId)]
@@ -1736,12 +1730,12 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.group()]
      */
-    group(): GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
+    group(): GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
      * [descr:DataSource.group(groupExpr)]
      */
     group(
-      groupExpr: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>
+      groupExpr: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>
     ): void;
     /**
      * [descr:DataSource.isLastPage()]
@@ -1770,7 +1764,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.loadOptions()]
      */
-    loadOptions(): LoadOptions<TValue>;
+    loadOptions(): LoadOptions<TItem>;
     /**
      * [descr:DataSource.off(eventName)]
      */
@@ -1858,25 +1852,23 @@ declare module DevExpress.data {
     /**
      * [descr:DataSource.select()]
      */
-    select(): SelectDescriptor<TValue>;
+    select(): SelectDescriptor<TItem>;
     /**
      * [descr:DataSource.select(expr)]
      */
-    select(expr: SelectDescriptor<TValue>): void;
+    select(expr: SelectDescriptor<TItem>): void;
     /**
      * [descr:DataSource.sort()]
      */
-    sort(): SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
+    sort(): SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
     /**
      * [descr:DataSource.sort(sortExpr)]
      */
-    sort(
-      sortExpr: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>
-    ): void;
+    sort(sortExpr: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>): void;
     /**
      * [descr:DataSource.store()]
      */
-    store(): Store<TValue, TKey>;
+    store(): Store<TItem, TKey>;
     /**
      * [descr:DataSource.totalCount()]
      */
@@ -1898,20 +1890,20 @@ declare module DevExpress.data {
      */
     type EventName = 'changed' | 'loadError' | 'loadingChanged';
     export type Options<
-      TSourceValue = any,
-      TValue = TSourceValue,
-      TMappedValue = TValue,
+      TSourceItem = any,
+      TItem = TSourceItem,
+      TMappedItem = TItem,
       TKey = any
-    > = DataSourceOptions<TSourceValue, TValue, TMappedValue, TKey>;
+    > = DataSourceOptions<TSourceItem, TItem, TMappedItem, TKey>;
   }
   /**
    * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface DataSourceOptions<
-    TSourceValue = any,
-    TValue = TSourceValue,
-    TMappedValue = TValue,
+    TSourceItem = any,
+    TItem = TSourceItem,
+    TMappedItem = TItem,
     TKey = any
   > {
     /**
@@ -1929,15 +1921,15 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.group]
      */
-    group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
+    group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
      * [descr:DataSourceOptions.map]
      */
-    map?: (dataItem: TSourceValue) => TMappedValue;
+    map?: (dataItem: TSourceItem) => TMappedItem;
     /**
      * [descr:DataSourceOptions.onChanged]
      */
-    onChanged?: (e: { readonly changes?: Array<TMappedValue> }) => void;
+    onChanged?: (e: { readonly changes?: Array<TMappedItem> }) => void;
     /**
      * [descr:DataSourceOptions.onLoadError]
      */
@@ -1957,7 +1949,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.postProcess]
      */
-    postProcess?: (data: Array<TMappedValue>) => Array<TValue>;
+    postProcess?: (data: Array<TMappedItem>) => Array<TItem>;
     /**
      * [descr:DataSourceOptions.pushAggregationTimeout]
      */
@@ -1985,27 +1977,27 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.select]
      */
-    select?: SelectDescriptor<TValue>;
+    select?: SelectDescriptor<TItem>;
     /**
      * [descr:DataSourceOptions.sort]
      */
-    sort?: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
+    sort?: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
     /**
      * [descr:DataSourceOptions.store]
      */
     store?:
-      | Array<TSourceValue>
-      | Store<TSourceValue, TKey>
-      | (DevExpress.data.ArrayStore.Options<TSourceValue, TKey> & {
+      | Array<TSourceItem>
+      | Store<TSourceItem, TKey>
+      | (DevExpress.data.ArrayStore.Options<TSourceItem, TKey> & {
           type: 'array';
         })
-      | (DevExpress.data.LocalStore.Options<TSourceValue, TKey> & {
+      | (DevExpress.data.LocalStore.Options<TSourceItem, TKey> & {
           type: 'local';
         })
-      | (DevExpress.data.ODataStore.Options<TSourceValue, TKey> & {
+      | (DevExpress.data.ODataStore.Options<TSourceItem, TKey> & {
           type: 'odata';
         })
-      | DevExpress.data.CustomStore.Options<TSourceValue, TKey>;
+      | DevExpress.data.CustomStore.Options<TSourceItem, TKey>;
   }
   /**
    * [descr:EdmLiteral]
@@ -2132,19 +2124,19 @@ declare module DevExpress.data {
   /**
    * [descr:LocalStore]
    */
-  export class LocalStore<TValue = any, TKey = any> extends ArrayStore<
-    TValue,
+  export class LocalStore<TItem = any, TKey = any> extends ArrayStore<
+    TItem,
     TKey
   > {
-    constructor(options?: DevExpress.data.LocalStore.Options<TValue, TKey>);
+    constructor(options?: DevExpress.data.LocalStore.Options<TItem, TKey>);
     /**
      * [descr:LocalStore.clear()]
      */
     clear(): void;
   }
   module LocalStore {
-    export type Options<TValue = any, TKey = any> = LocalStoreOptions<
-      TValue,
+    export type Options<TItem = any, TKey = any> = LocalStoreOptions<
+      TItem,
       TKey
     >;
   }
@@ -2152,8 +2144,8 @@ declare module DevExpress.data {
    * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface LocalStoreOptions<TValue = any, TKey = any>
-    extends ArrayStoreOptions<TValue, TKey> {
+  export interface LocalStoreOptions<TItem = any, TKey = any>
+    extends ArrayStoreOptions<TItem, TKey> {
     /**
      * [descr:LocalStoreOptions.flushInterval]
      */
@@ -2270,12 +2262,9 @@ declare module DevExpress.data {
   /**
    * [descr:ODataStore]
    */
-  export class ODataStore<TValue = any, TKey = any> extends Store<
-    TValue,
-    TKey
-  > {
-    constructor(options?: DevExpress.data.ODataStore.Options<TValue, TKey>);
-    byKey(key: TKey): DevExpress.core.utils.DxPromise<TValue>;
+  export class ODataStore<TItem = any, TKey = any> extends Store<TItem, TKey> {
+    constructor(options?: DevExpress.data.ODataStore.Options<TItem, TKey>);
+    byKey(key: TKey): DevExpress.core.utils.DxPromise<TItem>;
     /**
      * [descr:ODataStore.byKey(key, extraOptions)]
      */
@@ -2285,7 +2274,7 @@ declare module DevExpress.data {
         expand?: string | Array<string>;
         select?: string | Array<string>;
       }
-    ): DevExpress.core.utils.DxPromise<TValue>;
+    ): DevExpress.core.utils.DxPromise<TItem>;
     /**
      * [descr:ODataStore.createQuery(loadOptions)]
      */
@@ -2299,13 +2288,13 @@ declare module DevExpress.data {
      * [descr:ODataStore.insert(values)]
      */
     insert(
-      values: TValue
-    ): DevExpress.core.utils.DxPromise<TValue> &
-      DevExpress.data.ODataStore.PromiseExtension<TValue>;
+      values: TItem
+    ): DevExpress.core.utils.DxPromise<TItem> &
+      DevExpress.data.ODataStore.PromiseExtension<TItem>;
   }
   module ODataStore {
-    export type Options<TValue = any, TKey = any> = ODataStoreOptions<
-      TValue,
+    export type Options<TItem = any, TKey = any> = ODataStoreOptions<
+      TItem,
       TKey
     >;
     /**
@@ -2331,8 +2320,8 @@ declare module DevExpress.data {
    * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ODataStoreOptions<TValue = any, TKey = any>
-    extends DevExpress.data.Store.Options<TValue, TKey> {
+  export interface ODataStoreOptions<TItem = any, TKey = any>
+    extends DevExpress.data.Store.Options<TItem, TKey> {
     /**
      * [descr:ODataStoreOptions.beforeSend]
      */
@@ -2384,7 +2373,7 @@ declare module DevExpress.data {
     /**
      * [descr:ODataStoreOptions.onLoading]
      */
-    onLoading?: (loadOptions: LoadOptions<TValue>) => void;
+    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
     /**
      * [descr:ODataStoreOptions.url]
      */
@@ -2908,19 +2897,19 @@ declare module DevExpress.data {
    * [descr:Store]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export class Store<TValue = any, TKey = any> {
-    constructor(options?: DevExpress.data.Store.Options<TValue, TKey>);
+  export class Store<TItem = any, TKey = any> {
+    constructor(options?: DevExpress.data.Store.Options<TItem, TKey>);
     /**
      * [descr:Store.byKey(key)]
      */
     byKey(
       key: TKey,
-      extraOptions?: LoadOptions<TValue>
-    ): DevExpress.core.utils.DxPromise<TValue>;
+      extraOptions?: LoadOptions<TItem>
+    ): DevExpress.core.utils.DxPromise<TItem>;
     /**
      * [descr:Store.insert(values)]
      */
-    insert(values: TValue): DevExpress.core.utils.DxPromise<TValue>;
+    insert(values: TItem): DevExpress.core.utils.DxPromise<TItem>;
     /**
      * [descr:Store.key()]
      */
@@ -2928,17 +2917,17 @@ declare module DevExpress.data {
     /**
      * [descr:Store.keyOf(obj)]
      */
-    keyOf(obj: TValue): TKey;
+    keyOf(obj: TItem): TKey;
     /**
      * [descr:Store.load()]
      */
-    load(): DevExpress.core.utils.DxPromise<Array<TValue>>;
+    load(): DevExpress.core.utils.DxPromise<Array<TItem>>;
     /**
      * [descr:Store.load(options)]
      */
     load(
-      options: LoadOptions<TValue>
-    ): DevExpress.core.utils.DxPromise<Array<TValue>>;
+      options: LoadOptions<TItem>
+    ): DevExpress.core.utils.DxPromise<Array<TItem>>;
     /**
      * [descr:Store.off(eventName)]
      */
@@ -2967,7 +2956,7 @@ declare module DevExpress.data {
     push(
       changes: Array<{
         type: 'insert' | 'update' | 'remove';
-        data?: DevExpress.core.DeepPartial<TValue>;
+        data?: DevExpress.core.DeepPartial<TItem>;
         key?: TKey;
         index?: number;
       }>
@@ -2981,15 +2970,15 @@ declare module DevExpress.data {
      */
     totalCount(obj: {
       filter?: FilterDescriptor | Array<FilterDescriptor>;
-      group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
+      group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     }): DevExpress.core.utils.DxPromise<number>;
     /**
      * [descr:Store.update(key, values)]
      */
     update(
       key: TKey,
-      values: DevExpress.core.DeepPartial<TValue>
-    ): DevExpress.core.utils.DxPromise<TValue>;
+      values: DevExpress.core.DeepPartial<TItem>
+    ): DevExpress.core.utils.DxPromise<TItem>;
   }
   module Store {
     /**
@@ -3010,13 +2999,13 @@ declare module DevExpress.data {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    export type Options<TValue = any, TKey = any> = StoreOptions<TValue, TKey>;
+    export type Options<TItem = any, TKey = any> = StoreOptions<TItem, TKey>;
   }
   /**
    * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface StoreOptions<TValue = any, TKey = any> {
+  export interface StoreOptions<TItem = any, TKey = any> {
     /**
      * [descr:StoreOptions.errorHandler]
      */
@@ -3028,22 +3017,19 @@ declare module DevExpress.data {
     /**
      * [descr:StoreOptions.onInserted]
      */
-    onInserted?: (values: TValue, key: TKey) => void;
+    onInserted?: (values: TItem, key: TKey) => void;
     /**
      * [descr:StoreOptions.onInserting]
      */
-    onInserting?: (values: TValue) => void;
+    onInserting?: (values: TItem) => void;
     /**
      * [descr:StoreOptions.onLoaded]
      */
-    onLoaded?: (
-      result: Array<TValue>,
-      loadOptions: LoadOptions<TValue>
-    ) => void;
+    onLoaded?: (result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void;
     /**
      * [descr:StoreOptions.onLoading]
      */
-    onLoading?: (loadOptions: LoadOptions<TValue>) => void;
+    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
     /**
      * [descr:StoreOptions.onModified]
      */
@@ -3055,7 +3041,7 @@ declare module DevExpress.data {
     /**
      * [descr:StoreOptions.onPush]
      */
-    onPush?: (changes: Array<TValue>) => void;
+    onPush?: (changes: Array<TItem>) => void;
     /**
      * [descr:StoreOptions.onRemoved]
      */
@@ -3067,11 +3053,11 @@ declare module DevExpress.data {
     /**
      * [descr:StoreOptions.onUpdated]
      */
-    onUpdated?: (key: TKey, values: TValue) => void;
+    onUpdated?: (key: TKey, values: TItem) => void;
     /**
      * [descr:StoreOptions.onUpdating]
      */
-    onUpdating?: (key: TKey, values: TValue) => void;
+    onUpdating?: (key: TKey, values: TItem) => void;
   }
   /**
    * [descr:SummaryDescriptor]

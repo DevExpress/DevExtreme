@@ -3,16 +3,16 @@ import { DeepPartial } from '../core/index';
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 
 export type Options<
-    TValue = any,
+    TItem = any,
     TKey = any,
-> = StoreOptions<TValue, TKey>;
+> = StoreOptions<TItem, TKey>;
 
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
  */
 export interface StoreOptions<
-    TValue = any,
+    TItem = any,
     TKey = any,
 > {
     /**
@@ -32,28 +32,28 @@ export interface StoreOptions<
      * @action
      * @public
      */
-    onInserted?: ((values: TValue, key: TKey) => void);
+    onInserted?: ((values: TItem, key: TKey) => void);
     /**
      * @docid
      * @type_function_param1 values:object
      * @action
      * @public
      */
-    onInserting?: ((values: TValue) => void);
+    onInserting?: ((values: TItem) => void);
     /**
      * @docid
      * @type_function_param2 loadOptions:LoadOptions
      * @action
      * @public
      */
-    onLoaded?: ((result: Array<TValue>, loadOptions: LoadOptions<TValue>) => void);
+    onLoaded?: ((result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void);
     /**
      * @docid
      * @type_function_param1 loadOptions:LoadOptions
      * @action
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions<TValue>) => void);
+    onLoading?: ((loadOptions: LoadOptions<TItem>) => void);
     /**
      * @docid
      * @action
@@ -71,7 +71,7 @@ export interface StoreOptions<
      * @action
      * @public
      */
-    onPush?: ((changes: Array<TValue>) => void);
+    onPush?: ((changes: Array<TItem>) => void);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
@@ -93,7 +93,7 @@ export interface StoreOptions<
      * @action
      * @public
      */
-    onUpdated?: ((key: TKey, values: TValue) => void);
+    onUpdated?: ((key: TKey, values: TItem) => void);
     /**
      * @docid
      * @type_function_param1 key:object|string|number
@@ -101,7 +101,7 @@ export interface StoreOptions<
      * @action
      * @public
      */
-    onUpdating?: ((key: TKey, values: TValue) => void);
+    onUpdating?: ((key: TKey, values: TItem) => void);
 }
 
 type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | 'updating' | 'push' | 'removed' | 'removing' | 'modified' | 'modifying';
@@ -112,10 +112,10 @@ type EventName = 'loaded' | 'loading' | 'inserted' | 'inserting' | 'updated' | '
  * @namespace DevExpress.data
  */
 export default class Store<
-    TValue = any,
+    TItem = any,
     TKey = any,
 > {
-    constructor(options?: Options<TValue, TKey>)
+    constructor(options?: Options<TItem, TKey>)
     /**
      * @docid
      * @publicName byKey(key)
@@ -124,7 +124,7 @@ export default class Store<
      * @return Promise<any>
      * @public
      */
-    byKey(key: TKey, extraOptions?: LoadOptions<TValue>): DxPromise<TValue>;
+    byKey(key: TKey, extraOptions?: LoadOptions<TItem>): DxPromise<TItem>;
     /**
      * @docid
      * @publicName insert(values)
@@ -132,7 +132,7 @@ export default class Store<
      * @return Promise<any>
      * @public
      */
-    insert(values: TValue): DxPromise<TValue>;
+    insert(values: TItem): DxPromise<TItem>;
     /**
      * @docid
      * @publicName key()
@@ -146,14 +146,14 @@ export default class Store<
      * @return any|string|number
      * @public
      */
-    keyOf(obj: TValue): TKey;
+    keyOf(obj: TItem): TKey;
     /**
      * @docid
      * @publicName load()
      * @return Promise<any>
      * @public
      */
-    load(): DxPromise<Array<TValue>>;
+    load(): DxPromise<Array<TItem>>;
     /**
      * @docid
      * @publicName load(options)
@@ -161,7 +161,7 @@ export default class Store<
      * @return Promise<any>
      * @public
      */
-    load(options: LoadOptions<TValue>): DxPromise<Array<TValue>>;
+    load(options: LoadOptions<TItem>): DxPromise<Array<TItem>>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -202,7 +202,7 @@ export default class Store<
      * @param1 changes:Array<any>
      * @public
      */
-    push(changes: Array<{ type: 'insert' | 'update' | 'remove'; data?: DeepPartial<TValue>; key?: TKey; index?: number }>): void;
+    push(changes: Array<{ type: 'insert' | 'update' | 'remove'; data?: DeepPartial<TItem>; key?: TKey; index?: number }>): void;
     /**
      * @docid
      * @publicName remove(key)
@@ -219,7 +219,7 @@ export default class Store<
      * @return Promise<number>
      * @public
      */
-    totalCount(obj: { filter?: FilterDescriptor | Array<FilterDescriptor>; group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>> }): DxPromise<number>;
+    totalCount(obj: { filter?: FilterDescriptor | Array<FilterDescriptor>; group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>> }): DxPromise<number>;
     /**
      * @docid
      * @publicName update(key, values)
@@ -228,5 +228,5 @@ export default class Store<
      * @return Promise<any>
      * @public
      */
-    update(key: TKey, values: DeepPartial<TValue>): DxPromise<TValue>;
+    update(key: TKey, values: DeepPartial<TItem>): DxPromise<TItem>;
 }

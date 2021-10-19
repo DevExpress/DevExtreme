@@ -13,18 +13,18 @@ interface PromiseExtension<T> {
 
 /** @public */
 export type Options<
-    TValue = any,
+    TItem = any,
     TKey = any,
-> = ODataStoreOptions<TValue, TKey>;
+> = ODataStoreOptions<TItem, TKey>;
 
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
  */
 export interface ODataStoreOptions<
-    TValue = any,
+    TItem = any,
     TKey = any,
-> extends StoreOptions<TValue, TKey> {
+> extends StoreOptions<TItem, TKey> {
     /**
      * @docid
      * @type_function_param1_field5 params:object
@@ -76,7 +76,7 @@ export interface ODataStoreOptions<
      * @action
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions<TValue>) => void);
+    onLoading?: ((loadOptions: LoadOptions<TItem>) => void);
     /**
      * @docid
      * @public
@@ -102,11 +102,11 @@ export interface ODataStoreOptions<
  * @public
  */
 export default class ODataStore<
-    TValue = any,
+    TItem = any,
     TKey = any,
-> extends Store<TValue, TKey> {
-    constructor(options?: Options<TValue, TKey>)
-    byKey(key: TKey): DxPromise<TValue>;
+> extends Store<TItem, TKey> {
+    constructor(options?: Options<TItem, TKey>)
+    byKey(key: TKey): DxPromise<TItem>;
     /**
      * @docid
      * @publicName byKey(key, extraOptions)
@@ -114,7 +114,7 @@ export default class ODataStore<
      * @return Promise<any>
      * @public
      */
-    byKey(key: TKey, extraOptions: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<TValue>;
+    byKey(key: TKey, extraOptions: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<TItem>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)
@@ -130,5 +130,5 @@ export default class ODataStore<
      * @return Promise<any>
      * @public
      */
-    insert(values: TValue): DxPromise<TValue> & PromiseExtension<TValue>;
+    insert(values: TItem): DxPromise<TItem> & PromiseExtension<TItem>;
 }

@@ -10,19 +10,20 @@ import { Options as ODataStoreOptions } from './odata/store';
 
 /** @public */
 export type Options<
-    TSourceValue = any,
-    TValue = TSourceValue,
-    TMappedValue = TValue,
+    TSourceItem = any,
+    TItem = TSourceItem,
+    TMappedItem = TItem,
     TKey = any,
-> = DataSourceOptions<TSourceValue, TValue, TMappedValue, TKey>;
+> = DataSourceOptions<TSourceItem, TItem, TMappedItem, TKey>;
 
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
  */
 export interface DataSourceOptions<
-    TSourceValue = any, TValue = TSourceValue,
-    TMappedValue = TValue,
+    TSourceItem = any,
+    TItem = TSourceItem,
+    TMappedItem = TItem,
     TKey = any,
 > {
     /**
@@ -46,14 +47,14 @@ export interface DataSourceOptions<
      * @type Group expression
      * @public
      */
-    group?: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
+    group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
      * @docid
      * @type_function_param1 dataItem:object
      * @type_function_return object
      * @public
      */
-    map?: ((dataItem: TSourceValue) => TMappedValue);
+    map?: ((dataItem: TSourceItem) => TMappedItem);
     /**
      * @docid
      * @type_function_param1 e:Object
@@ -61,7 +62,7 @@ export interface DataSourceOptions<
      * @action
      * @public
      */
-    onChanged?: ((e: { readonly changes?: Array<TMappedValue> }) => void);
+    onChanged?: ((e: { readonly changes?: Array<TMappedItem> }) => void);
     /**
      * @docid
      * @type_function_param1 error:Object
@@ -93,7 +94,7 @@ export interface DataSourceOptions<
      * @type_function_return Array<any>
      * @public
      */
-    postProcess?: ((data: Array<TMappedValue>) => Array<TValue>);
+    postProcess?: ((data: Array<TMappedItem>) => Array<TItem>);
     /**
      * @docid
      * @default undefined
@@ -134,36 +135,36 @@ export interface DataSourceOptions<
      * @type Select expression
      * @public
      */
-    select?: SelectDescriptor<TValue>;
+    select?: SelectDescriptor<TItem>;
     /**
      * @docid
      * @type Sort expression
      * @public
      */
-    sort?: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
+    sort?: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
     /**
      * @docid
      * @public
      * @type Store|StoreOptions|Array<any>
      */
-    store?: Array<TSourceValue> |
-        Store<TSourceValue, TKey> |
-        ArrayStoreOptions<TSourceValue, TKey> & { type: 'array' } |
-        LocalStoreOptions<TSourceValue, TKey> & { type: 'local' } |
-        ODataStoreOptions<TSourceValue, TKey> & { type: 'odata' } |
-        CustomStoreOptions<TSourceValue, TKey>;
+    store?: Array<TSourceItem> |
+        Store<TSourceItem, TKey> |
+        ArrayStoreOptions<TSourceItem, TKey> & { type: 'array' } |
+        LocalStoreOptions<TSourceItem, TKey> & { type: 'local' } |
+        ODataStoreOptions<TSourceItem, TKey> & { type: 'odata' } |
+        CustomStoreOptions<TSourceItem, TKey>;
 }
 /**
  * @docid
  * @public
  */
 export default class DataSource<
-    TValue = any,
+    TItem = any,
     TKey = any,
 > {
-    constructor(data: Array<TValue>);
-    constructor(options: CustomStoreOptions<TValue, TKey> | Options<any, TValue, any, TKey>);
-    constructor(store: Store<TValue, TKey>);
+    constructor(data: Array<TItem>);
+    constructor(options: CustomStoreOptions<TItem, TKey> | Options<any, TItem, any, TKey>);
+    constructor(store: Store<TItem, TKey>);
     constructor(url: string);
     /**
      * @docid
@@ -197,14 +198,14 @@ export default class DataSource<
      * @return object
      * @public
      */
-    group(): GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>;
+    group(): GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
     /**
      * @docid
      * @publicName group(groupExpr)
      * @param1 groupExpr:object
      * @public
      */
-    group(groupExpr: GroupDescriptor<TValue> | Array<GroupDescriptor<TValue>>): void;
+    group(groupExpr: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>): void;
     /**
      * @docid
      * @publicName isLastPage()
@@ -248,7 +249,7 @@ export default class DataSource<
      * @return object
      * @public
      */
-    loadOptions(): LoadOptions<TValue>;
+    loadOptions(): LoadOptions<TItem>;
     /**
      * @docid
      * @publicName off(eventName)
@@ -388,35 +389,35 @@ export default class DataSource<
      * @return any
      * @public
      */
-    select(): SelectDescriptor<TValue>;
+    select(): SelectDescriptor<TItem>;
     /**
      * @docid
      * @publicName select(expr)
      * @param1 expr:any
      * @public
      */
-    select(expr: SelectDescriptor<TValue>): void;
+    select(expr: SelectDescriptor<TItem>): void;
     /**
      * @docid
      * @publicName sort()
      * @return any
      * @public
      */
-    sort(): SortDescriptor<TValue> | Array<SortDescriptor<TValue>>;
+    sort(): SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
     /**
      * @docid
      * @publicName sort(sortExpr)
      * @param1 sortExpr:any
      * @public
      */
-    sort(sortExpr: SortDescriptor<TValue> | Array<SortDescriptor<TValue>>): void;
+    sort(sortExpr: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>): void;
     /**
      * @docid
      * @publicName store()
      * @return object
      * @public
      */
-    store(): Store<TValue, TKey>;
+    store(): Store<TItem, TKey>;
     /**
      * @docid
      * @publicName totalCount()

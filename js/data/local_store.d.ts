@@ -4,18 +4,18 @@ import ArrayStore, {
 
 /** @public */
 export type Options<
-    TValue = any,
+    TItem = any,
     TKey = any,
-> = LocalStoreOptions<TValue, TKey>;
+> = LocalStoreOptions<TItem, TKey>;
 
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
  */
 export interface LocalStoreOptions<
-    TValue = any,
+    TItem = any,
     TKey = any,
-> extends ArrayStoreOptions<TValue, TKey> {
+> extends ArrayStoreOptions<TItem, TKey> {
     /**
      * @docid
      * @default 10000
@@ -40,10 +40,10 @@ export interface LocalStoreOptions<
  * @public
  */
 export default class LocalStore<
-    TValue = any,
+    TItem = any,
     TKey = any,
-> extends ArrayStore<TValue, TKey> {
-    constructor(options?: Options<TValue, TKey>)
+> extends ArrayStore<TItem, TKey> {
+    constructor(options?: Options<TItem, TKey>)
     /**
      * @docid
      * @publicName clear()
