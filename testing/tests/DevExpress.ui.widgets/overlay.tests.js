@@ -986,7 +986,7 @@ testModule('position', moduleConfig, () => {
 
             assert.strictEqual($content.position().left, $('body').position().left + 7, 'overlay positioned correctly');
             assert.strictEqual(errors.log.callCount, 1);
-            assert.deepEqual(errors.log.lastCall.args, ['W0017', 'position' ]);
+            assert.deepEqual(errors.log.lastCall.args, ['W0018']);
         } finally {
             errors.log.restore();
         }
