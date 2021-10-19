@@ -189,6 +189,7 @@ const DateBoxMask = DateBoxBase.inherit({
         const key = e.originalEvent.data;
         this._processInputKey(key);
         e.preventDefault();
+        this.option('onInput') && this.option('onInput').call();
         return true;
     },
 
