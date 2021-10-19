@@ -20,6 +20,11 @@ type TemplateWrapperRenderer = () => TemplateWrapper;
 
 const removalListenerStyle = { display: 'none' };
 
+enum TableNodeNames {
+  TABLE = 'tbody',
+  TBODY = 'tr',
+}
+
 class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITemplateWrapperState> {
   private readonly _removalListenerRef = React.createRef<HTMLElement>();
 
@@ -107,13 +112,15 @@ class TemplateWrapper extends React.PureComponent<ITemplateWrapperProps, ITempla
       ? React.createElement('span', { style: removalListenerStyle, ref: this._removalListenerRef })
       : undefined;
 
+    const nodeName = TableNodeNames[container.nodeName] || 'div';
+
     return ReactDOM.createPortal(
       React.createElement(
         React.Fragment,
         null,
         content,
         content && React.createElement(
-          'div',
+          nodeName,
           { style: { display: 'none' }, ref: this.getPreviousSiblingNode },
         ),
         removalListener,

@@ -240,7 +240,33 @@ function testTemplateOption(testedOption: string) {
     renderItemTemplate({ text: 'with data' }, table);
 
     expect(table.innerHTML)
-      .toBe('<tbody><tr><td>Template with data</td></tr></tbody><div style=\"display: none;\"></div>');
+      .toBe('<tbody><tr><td>Template with data</td></tr></tbody><tbody style=\"display: none;\"></tbody>');
+  });
+
+  it('render invisible element as tr tag', () => {
+    const ref = React.createRef() as React.RefObject<HTMLDivElement>;
+
+    const elementOptions: Record<string, any> = {};
+    elementOptions[testedOption] = prepareTemplate((data: any) => (
+      <tr>
+        <td>
+          Template
+          {' '}
+          {data.text}
+        </td>
+      </tr>
+    ));
+    render(
+      <ComponentWithTemplates {...elementOptions}>
+        <div ref={ref} />
+      </ComponentWithTemplates>,
+    );
+
+    const table = document.createElement('tbody');
+    renderItemTemplate({ text: 'with data' }, table);
+
+    expect(table.innerHTML)
+      .toBe('<tr><td>Template with data</td></tr><tr style=\"display: none;\"></tr>');
   });
 
   it('calls onRendered callback', () => {
