@@ -104,10 +104,6 @@ export interface KeyDownInfo {
 }
 
 export interface RowKeyInfo<TKey = any> {
-  readonly key: TKey;
-}
-
-export interface GroupRowKeyInfo<TKey = any> {
   readonly key: TKey | any[];
 }
 
@@ -748,7 +744,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @action
      * @public
      */
-    onRowCollapsed?: ((e: EventInfo<TComponent> & GroupRowKeyInfo<TKey>) => void);
+    onRowCollapsed?: ((e: EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -761,7 +757,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @action
      * @public
      */
-    onRowCollapsing?: ((e: Cancelable & EventInfo<TComponent> & GroupRowKeyInfo<TKey>) => void);
+    onRowCollapsing?: ((e: Cancelable & EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -773,7 +769,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @action
      * @public
      */
-    onRowExpanded?: ((e: EventInfo<TComponent> & GroupRowKeyInfo<TKey>) => void);
+    onRowExpanded?: ((e: EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -786,7 +782,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @action
      * @public
      */
-    onRowExpanding?: ((e: Cancelable & EventInfo<TComponent> & GroupRowKeyInfo<TKey>) => void);
+    onRowExpanding?: ((e: Cancelable & EventInfo<TComponent> & RowKeyInfo<TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -2991,10 +2987,10 @@ export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGr
 };
 
 /** @public */
-export type RowCollapsedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & GroupRowKeyInfo<TKey>;
+export type RowCollapsedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxDataGrid<TRowData, TKey>> & GroupRowKeyInfo<TKey>;
+export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxDataGrid<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
 export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
