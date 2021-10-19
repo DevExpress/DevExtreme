@@ -1,12 +1,7 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     DxElement,
 } from '../core/element';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     Cancelable,
@@ -87,7 +82,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<Item> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<Item>;
     /**
      * @docid
      * @default false

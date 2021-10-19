@@ -1,3 +1,4 @@
+import DataSource, { DataSourceLike, Options as DataSourceOptions } from '../data/data_source';
 import {
   UserDefinedElement,
   DxElement,
@@ -15,12 +16,6 @@ import {
 import {
     DeepPartial,
 } from '../core/index';
-
-import Store from '../data/abstract_store';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
 
 import {
     DxEvent,
@@ -43,6 +38,7 @@ import dxDraggable from './draggable';
 
 import {
     dxFilterBuilderOptions,
+    FilterLookupDataSource,
 } from './filter_builder';
 
 import {
@@ -540,9 +536,9 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @docid
      * @default null
      * @public
-     * @type string | Array<any> | Store | DataSource | DataSourceOptions
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: string | Array<TRowData> | Store<TRowData, string | Array<string>, TKey> | DataSource<TRowData, string | Array<string>, TKey> | DataSourceOptions<TRowData, TRowData, TRowData, string | Array<string>, TKey>;
+    dataSource?: DataSourceLike<TRowData, TKey>;
     /**
      * @docid
      * @public
@@ -2680,9 +2676,10 @@ export interface ColumnHeaderFilter {
    * @docid GridBaseColumn.headerFilter.dataSource
    * @type_function_param1_field1 component:object
    * @default undefined
-   * @type_function_return void
+   * @type_function_return Array<any>|Store|DataSourceOptions
+   * @type Array<any>|Store|DataSourceOptions|Function
    */
-  dataSource?: Array<any> | Store | ((options: { component?: any; dataSource?: DataSourceOptions }) => any) | DataSourceOptions;
+  dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions }) => void);
   /**
    * @docid GridBaseColumn.headerFilter.groupInterval
    * @type Enums.HeaderFilterGroupInterval|number
@@ -2717,8 +2714,10 @@ export interface ColumnLookup {
    * @docid GridBaseColumn.lookup.dataSource
    * @type_function_param1_field1 data:object
    * @default undefined
+   * @type_function_return Array<any>|Store|DataSourceOptions
+   * @type Array<any>|Store|DataSourceOptions|Function
    */
-  dataSource?: Array<any> | DataSourceOptions | Store | ((options: { data?: any; key?: any }) => Array<any> | DataSourceOptions | Store);
+  dataSource?: FilterLookupDataSource<any> | ((options: { data?: any; key?: any }) => FilterLookupDataSource<any>);
   /**
    * @docid GridBaseColumn.lookup.displayExpr
    * @default undefined
