@@ -184,7 +184,7 @@ export default class CollectionWidget<
     TItem extends ItemLike = any,
     TKey = any,
 > extends Widget<TProperties> {
-    getDataSource(): DataSource<TItem, string | Array<string>, TKey>;
+    getDataSource(): DataSource<TItem, TKey>;
 }
 
 /**

@@ -5,9 +5,8 @@ import ArrayStore, {
 /** @public */
 export type Options<
     TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> = LocalStoreOptions<TValue, TKeyExpr, TKey>;
+    TKey = any,
+> = LocalStoreOptions<TValue, TKey>;
 
 /**
  * @namespace DevExpress.data
@@ -15,9 +14,8 @@ export type Options<
  */
 export interface LocalStoreOptions<
     TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends ArrayStoreOptions<TValue, TKeyExpr, TKey> {
+    TKey = any,
+> extends ArrayStoreOptions<TValue, TKey> {
     /**
      * @docid
      * @default 10000
@@ -41,12 +39,11 @@ export interface LocalStoreOptions<
  * @inherits ArrayStore
  * @public
  */
-export default class LocalStore
-<TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends ArrayStore<TValue, TKeyExpr, TKey> {
-    constructor(options?: Options<TValue, TKeyExpr, TKey>)
+export default class LocalStore<
+    TValue = any,
+    TKey = any,
+> extends ArrayStore<TValue, TKey> {
+    constructor(options?: Options<TValue, TKey>)
     /**
      * @docid
      * @publicName clear()

@@ -13,9 +13,8 @@ export type Options<
     TSourceValue = any,
     TValue = TSourceValue,
     TMappedValue = TValue,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> = DataSourceOptions<TSourceValue, TValue, TMappedValue, TKeyExpr, TKey>;
+    TKey = any,
+> = DataSourceOptions<TSourceValue, TValue, TMappedValue, TKey>;
 
 /**
  * @namespace DevExpress.data
@@ -24,8 +23,7 @@ export type Options<
 export interface DataSourceOptions<
     TSourceValue = any, TValue = TSourceValue,
     TMappedValue = TValue,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+    TKey = any,
 > {
     /**
      * @docid
@@ -149,24 +147,23 @@ export interface DataSourceOptions<
      * @type Store|StoreOptions|Array<any>
      */
     store?: Array<TSourceValue> |
-        Store<TSourceValue, TKeyExpr, TKey> |
-        ArrayStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'array' } |
-        LocalStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'local' } |
-        ODataStoreOptions<TSourceValue, TKeyExpr, TKey> & { type: 'odata' } |
-        CustomStoreOptions<TSourceValue, TKeyExpr, TKey>;
+        Store<TSourceValue, TKey> |
+        ArrayStoreOptions<TSourceValue, TKey> & { type: 'array' } |
+        LocalStoreOptions<TSourceValue, TKey> & { type: 'local' } |
+        ODataStoreOptions<TSourceValue, TKey> & { type: 'odata' } |
+        CustomStoreOptions<TSourceValue, TKey>;
 }
 /**
  * @docid
  * @public
  */
-export default class DataSource
-<TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
+export default class DataSource<
+    TValue = any,
+    TKey = any,
 > {
     constructor(data: Array<TValue>);
-    constructor(options: CustomStoreOptions<TValue, TKeyExpr, TKey> | Options<any, TValue, any, TKeyExpr, TKey>);
-    constructor(store: Store<TValue, TKeyExpr, TKey>);
+    constructor(options: CustomStoreOptions<TValue, TKey> | Options<any, TValue, any, TKey>);
+    constructor(store: Store<TValue, TKey>);
     constructor(url: string);
     /**
      * @docid
@@ -235,10 +232,9 @@ export default class DataSource
     /**
      * @docid
      * @publicName key()
-     * @return string | Array<string>
      * @public
      */
-    key(): TKeyExpr;
+    key(): string | Array<string>;
     /**
      * @docid
      * @publicName load()
@@ -420,7 +416,7 @@ export default class DataSource
      * @return object
      * @public
      */
-    store(): Store<TValue, TKeyExpr, TKey>;
+    store(): Store<TValue, TKey>;
     /**
      * @docid
      * @publicName totalCount()
@@ -434,6 +430,6 @@ export default class DataSource
  * @docid
  * @type Store|DataSource|DataSourceOptions|string|Array<any>
  * */
-export type DataSourceLike<TItem, TKey = any> = string | Array<TItem> | Store<TItem, any, TKey> | Options<any, TItem, any, any, TKey> | DataSource<TItem, any, TKey>;
+export type DataSourceLike<TItem, TKey = any> = string | Array<TItem> | Store<TItem, TKey> | Options<any, TItem, any, TKey> | DataSource<TItem, TKey>;
 
 type EventName = 'changed' | 'loadError' | 'loadingChanged';

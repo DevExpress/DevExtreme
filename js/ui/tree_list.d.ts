@@ -1143,7 +1143,7 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DataSource<TRowData, string | Array<string>, TKey>;
+    getDataSource(): DataSource<TRowData, TKey>;
     getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;

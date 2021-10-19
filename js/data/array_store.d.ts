@@ -6,9 +6,8 @@ import { Query } from './query';
 /** @public */
 export type Options<
     TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> = ArrayStoreOptions<TValue, TKeyExpr, TKey>;
+    TKey = any,
+> = ArrayStoreOptions<TValue, TKey>;
 
 /**
  * @namespace DevExpress.data
@@ -16,9 +15,8 @@ export type Options<
  */
 export interface ArrayStoreOptions<
     TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends StoreOptions<TValue, TKeyExpr, TKey> {
+    TKey = any,
+> extends StoreOptions<TValue, TKey> {
     /**
      * @docid
      * @public
@@ -32,10 +30,9 @@ export interface ArrayStoreOptions<
  */
 export default class ArrayStore<
     TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends Store<TValue, TKeyExpr, TKey> {
-    constructor(options?: Options<TValue, TKeyExpr, TKey>)
+    TKey = any,
+> extends Store<TValue, TKey> {
+    constructor(options?: Options<TValue, TKey>)
     /**
      * @docid
      * @publicName clear()

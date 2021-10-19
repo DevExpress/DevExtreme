@@ -4,9 +4,8 @@ import Store, { Options as StoreOptions } from './abstract_store';
 /** @public */
 export type Options<
     TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> = CustomStoreOptions<TValue, TKeyExpr, TKey>;
+    TKey = any,
+> = CustomStoreOptions<TValue, TKey>;
 
 /**
  * @namespace DevExpress.data
@@ -14,9 +13,8 @@ export type Options<
  */
 export interface CustomStoreOptions<
     TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends StoreOptions<TValue, TKeyExpr, TKey> {
+    TKey = any,
+> extends StoreOptions<TValue, TKey> {
     /**
      * @docid
      * @type_function_param1 key:object|string|number
@@ -87,10 +85,9 @@ export interface CustomStoreOptions<
  */
 export default class CustomStore<
     TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends Store<TValue, TKeyExpr, TKey> {
-    constructor(options?: Options<TValue, TKeyExpr, TKey>)
+    TKey = any,
+> extends Store<TValue, TKey> {
+    constructor(options?: Options<TValue, TKey>)
     /**
      * @docid
      * @publicName clearRawDataCache()

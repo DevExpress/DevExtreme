@@ -14,9 +14,8 @@ interface PromiseExtension<T> {
 /** @public */
 export type Options<
     TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> = ODataStoreOptions<TValue, TKeyExpr, TKey>;
+    TKey = any,
+> = ODataStoreOptions<TValue, TKey>;
 
 /**
  * @namespace DevExpress.data
@@ -24,9 +23,8 @@ export type Options<
  */
 export interface ODataStoreOptions<
     TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends StoreOptions<TValue, TKeyExpr, TKey> {
+    TKey = any,
+> extends StoreOptions<TValue, TKey> {
     /**
      * @docid
      * @type_function_param1_field5 params:object
@@ -103,12 +101,11 @@ export interface ODataStoreOptions<
  * @inherits Store
  * @public
  */
-export default class ODataStore
-<TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends Store<TValue, TKeyExpr, TKey> {
-    constructor(options?: Options<TValue, TKeyExpr, TKey>)
+export default class ODataStore<
+    TValue = any,
+    TKey = any,
+> extends Store<TValue, TKey> {
+    constructor(options?: Options<TValue, TKey>)
     byKey(key: TKey): DxPromise<TValue>;
     /**
      * @docid
