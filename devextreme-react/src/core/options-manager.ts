@@ -91,10 +91,9 @@ class OptionsManager {
       this.setValue(key, changes.options[key]);
     });
 
+    this.currentConfig = config;
     this.instance.endUpdate();
     this.isUpdating = false;
-
-    this.currentConfig = config;
   }
 
   public onOptionChanged(e: { name: string, fullName: string, value: unknown }): void {
