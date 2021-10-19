@@ -86,11 +86,14 @@ export default CollectionWidget.inherit({
     _shouldAddNewGroup: function(changes, items) {
         let result = false;
         if(this.option('grouped')) {
+            if(!changes.length) {
+                result = true;
+            }
             each(changes, (i, change) => {
                 if(change.type === 'insert') {
                     result = true;
                     each(items, (_, item) => {
-                        if(change.data.key === item.key) {
+                        if(change.data.key !== undefined && change.data.key === item.key) {
                             result = false;
                             return false;
                         }
