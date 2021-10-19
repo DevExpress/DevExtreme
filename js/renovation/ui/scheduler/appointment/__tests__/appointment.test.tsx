@@ -132,7 +132,7 @@ describe('Appointment', () => {
         it('should return correct styles', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
-          });
+          } as any);
 
           expect(appointment.styles)
             .toEqual({
@@ -149,7 +149,7 @@ describe('Appointment', () => {
         it('should return correct text', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
-          });
+          } as any);
 
           expect(appointment.text)
             .toBe('Some text');
@@ -160,7 +160,7 @@ describe('Appointment', () => {
         it('should return correct dateText', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
-          });
+          } as any);
 
           expect(appointment.dateText)
             .toBe('1AM - 2PM');
@@ -171,7 +171,7 @@ describe('Appointment', () => {
         it('shoud return correct data', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
-          });
+          } as any);
 
           expect(appointment.data)
             .toEqual({
@@ -200,7 +200,7 @@ describe('Appointment', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
             index: 1234,
-          });
+          } as any);
 
           expect(appointment.index)
             .toEqual(1234);

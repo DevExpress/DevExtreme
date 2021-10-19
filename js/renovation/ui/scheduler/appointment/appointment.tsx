@@ -61,7 +61,7 @@ export class AppointmentProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Appointment extends JSXComponent<AppointmentProps, 'viewModel'>() {
+export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'onItemClick'>() {
   @Ref() thisAptRef!: RefObject<HTMLElement>;
 
   get text(): string { return this.props.viewModel.appointment.text; }

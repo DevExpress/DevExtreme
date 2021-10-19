@@ -121,7 +121,7 @@ describe('Scheduler', () => {
 
     it('should render work space and pass to it correct props', () => {
       const tree = renderComponent({
-        onViewRendered: () => {},
+        onViewRendered: () => { },
       });
 
       const workSpace = tree.find(WorkSpace);
@@ -154,7 +154,7 @@ describe('Scheduler', () => {
             location: 'after',
           },
         ],
-        customizeDateNavigatorText: () => {},
+        customizeDateNavigatorText: () => { },
       };
       const setCurrentDate = () => {};
       const setCurrentView = () => {};
@@ -574,6 +574,41 @@ describe('Scheduler', () => {
             .toBe(new Date(2021, 1, 2).getTime());
         });
       });
+
+      describe('showTooltip', () => {
+        it('should change state correct', () => {
+          const data = 'data';
+          const target = 'target';
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+          });
+
+          scheduler.tooltipVisible = false;
+          scheduler.tooltipTarget = null as any;
+          scheduler.tooltipData = null as any;
+
+          scheduler.showTooltip(data as any, target as any);
+
+          expect(scheduler.tooltipVisible).toBe(true);
+          expect(scheduler.tooltipTarget).toBe(target);
+          expect(scheduler.tooltipData).toBe(data);
+        });
+      });
+
+      describe('hideTooltip', () => {
+        it('should change visible', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+          });
+
+          scheduler.tooltipVisible = true;
+
+          scheduler.hideTooltip();
+
+          expect(scheduler.tooltipVisible).toBe(false);
+        });
+      });
     });
   });
 
@@ -727,7 +762,7 @@ describe('Scheduler', () => {
         it('should be created correctly if viewDataProvider and cellsMetaData exists', () => {
           const scheduler = new Scheduler(new SchedulerProps());
 
-          scheduler.cellsMetaData = { } as any;
+          scheduler.cellsMetaData = {} as any;
           scheduler.viewDataProvider = new ViewDataProvider('day') as any;
 
           expect(scheduler.appointmentsConfig)

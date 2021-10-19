@@ -4,6 +4,7 @@ import {
   JSXComponent,
   OneWay,
   RefObject,
+  Ref,
 } from '@devextreme-generator/declarations';
 import { Tooltip } from '../../../overlays/tooltip';
 import { AppointmentList } from './appointment_list';
@@ -38,7 +39,7 @@ export class AppointmentTooltipProps {
 
   @OneWay() onVisibleChange!: (value: boolean) => void;
 
-  @OneWay() target!: RefObject<HTMLElement>;
+  @Ref() target!: RefObject<HTMLElement>;
 
   @OneWay() dataList!: AppointmentViewModel[];
 }
