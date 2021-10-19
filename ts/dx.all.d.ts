@@ -1890,19 +1890,19 @@ declare module DevExpress.data {
      */
     type EventName = 'changed' | 'loadError' | 'loadingChanged';
     export type Options<
-      TSourceItem = any,
-      TItem = TSourceItem,
+      TStoreItem = any,
+      TItem = TStoreItem,
       TMappedItem = TItem,
       TKey = any
-    > = DataSourceOptions<TSourceItem, TItem, TMappedItem, TKey>;
+    > = DataSourceOptions<TStoreItem, TItem, TMappedItem, TKey>;
   }
   /**
    * @deprecated Use Options instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface DataSourceOptions<
-    TSourceItem = any,
-    TItem = TSourceItem,
+    TStoreItem = any,
+    TItem = TStoreItem,
     TMappedItem = TItem,
     TKey = any
   > {
@@ -1925,7 +1925,7 @@ declare module DevExpress.data {
     /**
      * [descr:DataSourceOptions.map]
      */
-    map?: (dataItem: TSourceItem) => TMappedItem;
+    map?: (dataItem: TStoreItem) => TMappedItem;
     /**
      * [descr:DataSourceOptions.onChanged]
      */
@@ -1986,18 +1986,18 @@ declare module DevExpress.data {
      * [descr:DataSourceOptions.store]
      */
     store?:
-      | Array<TSourceItem>
-      | Store<TSourceItem, TKey>
-      | (DevExpress.data.ArrayStore.Options<TSourceItem, TKey> & {
+      | Array<TStoreItem>
+      | Store<TStoreItem, TKey>
+      | (DevExpress.data.ArrayStore.Options<TStoreItem, TKey> & {
           type: 'array';
         })
-      | (DevExpress.data.LocalStore.Options<TSourceItem, TKey> & {
+      | (DevExpress.data.LocalStore.Options<TStoreItem, TKey> & {
           type: 'local';
         })
-      | (DevExpress.data.ODataStore.Options<TSourceItem, TKey> & {
+      | (DevExpress.data.ODataStore.Options<TStoreItem, TKey> & {
           type: 'odata';
         })
-      | DevExpress.data.CustomStore.Options<TSourceItem, TKey>;
+      | DevExpress.data.CustomStore.Options<TStoreItem, TKey>;
   }
   /**
    * [descr:EdmLiteral]

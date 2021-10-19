@@ -10,19 +10,19 @@ import { Options as ODataStoreOptions } from './odata/store';
 
 /** @public */
 export type Options<
-    TSourceItem = any,
-    TItem = TSourceItem,
+    TStoreItem = any,
+    TItem = TStoreItem,
     TMappedItem = TItem,
     TKey = any,
-> = DataSourceOptions<TSourceItem, TItem, TMappedItem, TKey>;
+> = DataSourceOptions<TStoreItem, TItem, TMappedItem, TKey>;
 
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
  */
 export interface DataSourceOptions<
-    TSourceItem = any,
-    TItem = TSourceItem,
+    TStoreItem = any,
+    TItem = TStoreItem,
     TMappedItem = TItem,
     TKey = any,
 > {
@@ -54,7 +54,7 @@ export interface DataSourceOptions<
      * @type_function_return object
      * @public
      */
-    map?: ((dataItem: TSourceItem) => TMappedItem);
+    map?: ((dataItem: TStoreItem) => TMappedItem);
     /**
      * @docid
      * @type_function_param1 e:Object
@@ -147,12 +147,12 @@ export interface DataSourceOptions<
      * @public
      * @type Store|StoreOptions|Array<any>
      */
-    store?: Array<TSourceItem> |
-        Store<TSourceItem, TKey> |
-        ArrayStoreOptions<TSourceItem, TKey> & { type: 'array' } |
-        LocalStoreOptions<TSourceItem, TKey> & { type: 'local' } |
-        ODataStoreOptions<TSourceItem, TKey> & { type: 'odata' } |
-        CustomStoreOptions<TSourceItem, TKey>;
+    store?: Array<TStoreItem> |
+        Store<TStoreItem, TKey> |
+        ArrayStoreOptions<TStoreItem, TKey> & { type: 'array' } |
+        LocalStoreOptions<TStoreItem, TKey> & { type: 'local' } |
+        ODataStoreOptions<TStoreItem, TKey> & { type: 'odata' } |
+        CustomStoreOptions<TStoreItem, TKey>;
 }
 /**
  * @docid
