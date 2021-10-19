@@ -2122,6 +2122,13 @@ const EditingController = modules.ViewController.inherit((function() {
             const columnIndex = parameters.columnIndex;
             const modifiedValues = parameters.row && (parameters.row.isNewRow ? parameters.row.values : parameters.row.modifiedValues);
             return !!modifiedValues && modifiedValues[columnIndex] !== undefined;
+        },
+
+        isNewRowInEditMode: function() {
+            const visibleEditRowIndex = this._getVisibleEditRowIndex();
+            const rows = this._dataController.items();
+
+            return visibleEditRowIndex >= 0 ? rows[visibleEditRowIndex].isNewRow : false;
         }
     };
 })());
