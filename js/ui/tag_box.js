@@ -224,6 +224,10 @@ const TagBox = SelectBox.inherit({
         return this.callBase();
     },
 
+    _getLabelContainer: function() {
+        return this._$tagsContainer;
+    },
+
     _scrollContainer: function(direction) {
         if(this.option('multiline') || !hasWindow()) {
             return;
