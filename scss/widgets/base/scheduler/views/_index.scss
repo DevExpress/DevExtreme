@@ -948,3 +948,21 @@ $scheduler-month-date-text-padding: 6px;
     flex-shrink: 0;
   }
 }
+
+.dx-scheduler .dx-scheduler-work-space-both-scrollbar:not(.dx-scheduler-timeline) {
+  .dx-scheduler-header-tables-container,
+  .dx-scheduler-header-scrollable,
+  .dx-scheduler-date-table-scrollable,
+  .dx-scheduler-date-table-container,
+  .dx-scheduler-header-panel {
+    width: 100%;
+  }
+
+  .dx-scheduler-date-table-cell,
+  .dx-scheduler-header-panel-cell,
+  .dx-scheduler-all-day-table-cell,
+  .dx-scheduler-virtual-cell {
+    flex-shrink: 0;
+    width: 75px;
+  }
+}
