@@ -11,11 +11,7 @@ import {
     template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
     EventInfo,
@@ -76,7 +72,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default null
      * @public
      */
-    dataSource?: string | Array<Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<Item | any>;
     /**
      * @docid
      * @default true

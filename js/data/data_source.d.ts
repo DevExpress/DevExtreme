@@ -430,4 +430,10 @@ export default class DataSource
     totalCount(): number;
 }
 
+/**
+ * @docid
+ * @type Store|DataSource|DataSourceOptions|string|Array<any>
+ * */
+export type DataSourceLike<TItem, TKey = any> = string | Array<TItem> | Store<TItem, any, TKey> | Options<any, TItem, any, any, TKey> | DataSource<TItem, any, TKey>;
+
 type EventName = 'changed' | 'loadError' | 'loadingChanged';

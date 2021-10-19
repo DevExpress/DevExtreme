@@ -188,7 +188,12 @@
                     'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
                     'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
+                    '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
                     '@@devextreme/runtime/inferno': '@Url.Content("~/node_modules/@devextreme/runtime/inferno")',
+                    '@@devextreme/runtime/declarations': '@Url.Content("~/node_modules/@devextreme/runtime/declarations")',
+                    '@@devextreme/runtime/angular': '@Url.Content("~/node_modules/@devextreme/runtime/angular")',
+                    '@@devextreme/runtime/vue': '@Url.Content("~/node_modules/@devextreme/runtime/vue")',
+                    '@@devextreme/runtime/react': '@Url.Content("~/node_modules/@devextreme/runtime/react")',
                     'devextreme-quill': '@Url.Content("~/node_modules/devextreme-quill/dist/dx-quill.js")',
                     'devexpress-diagram': '@Url.Content("~/artifacts/js/dx-diagram.js")',
                     'devexpress-gantt': '@Url.Content("~/artifacts/js/dx-gantt.js")',
@@ -219,6 +224,26 @@
                     },
                     '@@devextreme/runtime/inferno': {
                         main: '../cjs/inferno/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/angular': {
+                        main: '../cjs/angular/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/react': {
+                        main: '../cjs/react/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/vue': {
+                        main: '../cjs/vue/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/declarations': {
+                        main: '../cjs/declarations/index.js',
                         defaultExtension: 'js',
                         format: 'cjs'
                     },

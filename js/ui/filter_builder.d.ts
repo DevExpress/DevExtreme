@@ -1,3 +1,4 @@
+import DataSource, { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -6,12 +7,6 @@ import {
 import {
     template,
 } from '../core/templates/template';
-
-import Store from '../data/abstract_store';
-
-import {
-    Options as DataSourceOptions,
-} from '../data/data_source';
 
 import {
     Cancelable,
@@ -370,6 +365,8 @@ export interface dxFilterBuilderCustomOperation {
     name?: string;
 }
 
+export type FilterLookupDataSource<T> = Exclude<DataSourceLike<T>, string | DataSource>;
+
 /**
  * @@docid
  * @type object
@@ -456,8 +453,9 @@ export interface dxFilterBuilderField {
       /**
        * @docid
        * @default undefined
+       * @type Array<any> | Store | DataSourceOptions
        */
-      dataSource?: Array<any> | Store | DataSourceOptions;
+      dataSource?: FilterLookupDataSource<any>;
       /**
        * @docid
        * @default undefined

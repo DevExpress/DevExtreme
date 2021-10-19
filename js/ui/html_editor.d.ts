@@ -1,3 +1,4 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -6,12 +7,6 @@ import {
 import {
     template,
 } from '../core/templates/template';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -371,25 +366,25 @@ export interface dxHtmlEditorMediaResizing {
  * @type object
  * @namespace DevExpress.ui
  */
- export interface dxHtmlEditorTableResizing {
-  /**
-   * @docid
-   * @default 40
-   * @public
-   */
-   minColumnWidth?: number;
-  /**
-   * @docid
-   * @default 24
-   * @public
-   */
-  minRowHeight?: number;
-  /**
-   * @docid
-   * @default false
-   * @public
-   */
-  enabled?: boolean;
+export interface dxHtmlEditorTableResizing {
+ /**
+  * @docid
+  * @default 40
+  * @public
+  */
+  minColumnWidth?: number;
+ /**
+  * @docid
+  * @default 24
+  * @public
+  */
+ minRowHeight?: number;
+ /**
+  * @docid
+  * @default false
+  * @public
+  */
+ enabled?: boolean;
 }
 
 /**
@@ -448,8 +443,9 @@ export interface dxHtmlEditorMention {
      * @docid
      * @default null
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: Array<string> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string>;
     /**
      * @docid
      * @default "this"
@@ -586,8 +582,9 @@ export interface dxHtmlEditorVariables {
      * @docid
      * @default null
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<string>
      */
-    dataSource?: string | Array<string> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string>;
     /**
      * @docid
      * @default ""
