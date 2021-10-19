@@ -3975,16 +3975,130 @@ QUnit.module('Header Filter with real columnsController', {
         this.options.columns = [{ dataField: 'birthday', dataType: 'datetime' }];
         this.setupDataGrid();
         const column = this.columnsController.getVisibleColumns()[0];
-        const headerFilterDataSource = this.headerFilterController.getDataSource(column);
+        const dataSourceOptions = this.headerFilterController.getDataSource(column);
 
         // act
-        headerFilterDataSource.load({ group: headerFilterDataSource.group }).done(function(data) {
+        dataSourceOptions.load({ group: dataSourceOptions.group }).done(function(data) {
             items = data;
         });
         this.clock.tick();
 
         // assert
         assert.deepEqual(getTreeText(items), ['1992', 'September', '6', '12', '13'], 'loaded data');
+    });
+
+    [null, 'yyyy-MM-ddTHH:mm:ssZ', 'yyyy-MM-ddTHH:mm:ss\'Z\'', 'yyyy-MM-dd HH:mm:ss'].forEach(dateSerializationFormat => {
+        QUnit.test('Load data for column with dataType is \'datetime\' if remoteOperations is enabled and dates are formatted in UTC (T1029128)', function(assert) {
+        // arrange
+            let items;
+            const getTreeText = function(items) {
+                const result = [];
+                let item = items[0];
+
+                while(item) {
+                    result.push(item.text);
+                    item = item.items && item.items[0];
+                }
+
+                return result;
+            };
+
+            const loadArgs = [];
+            const date = new Date(2021, 3, 26, 16, 30);
+
+            this.options.columns = [{ dataField: 'birthday', dataType: 'datetime' }];
+            this.options.remoteOperations = true;
+            this.options.dateSerializationFormat = dateSerializationFormat;
+
+            const isUTCFormat = dateSerializationFormat && dateSerializationFormat.indexOf('Z') >= 0;
+            this.options.dataSource = {
+                load: function(options) {
+                    loadArgs.push(options);
+                    return $.Deferred().resolve([{
+                        key: 2021, items: [{
+                            key: date.getMonth() + 1, items: [{
+                                key: isUTCFormat ? date.getUTCDate() : date.getDate(), items: [{
+                                    key: isUTCFormat ? date.getUTCHours() : date.getHours(), items: [{
+                                        key: isUTCFormat ? date.getUTCMinutes() : date.getMinutes(), items: null
+                                    }]
+                                }]
+                            }]
+                        }]
+                    }], { totalCount: 1 });
+                }
+            };
+            this.setupDataGrid();
+            const column = this.columnsController.getVisibleColumns()[0];
+            const dataSourceOptions = this.headerFilterController.getDataSource(column);
+
+            // act
+            dataSourceOptions.load({}).done(function(data) {
+                items = data;
+            });
+            this.clock.tick();
+
+            // assert
+            assert.deepEqual(getTreeText(items), [
+                '2021',
+                'April',
+                date.getDate().toString(),
+                date.getHours().toString(),
+                date.getMinutes().toString()
+            ], 'loaded data');
+        });
+
+    });
+
+    QUnit.test('Load null data for column with dataType is \'datetime\' if remoteOperations is enabled and dates are formatted in UTC (T1029128)', function(assert) {
+        // arrange
+        let items;
+        const getTreeText = function(items) {
+            const result = [];
+            let item = items[0];
+
+            while(item) {
+                result.push(item.text);
+                item = item.items && item.items[0];
+            }
+
+            return result;
+        };
+
+        const loadArgs = [];
+
+        this.options.columns = [{ dataField: 'birthday', dataType: 'datetime' }];
+        this.options.remoteOperations = true;
+        this.options.dateSerializationFormat = 'yyyy-MM-ddTHH:mm:ssZ';
+        this.options.dataSource = {
+            load: function(options) {
+                loadArgs.push(options);
+                return $.Deferred().resolve([{
+                    key: null, items: [{
+                        key: null, items: [{
+                            key: null, items: [{
+                                key: null, items: [{
+                                    key: null, items: null
+                                }]
+                            }]
+                        }]
+                    }]
+                }], { totalCount: 1 });
+            }
+        };
+        this.setupDataGrid();
+        const column = this.columnsController.getVisibleColumns()[0];
+        const dataSourceOptions = this.headerFilterController.getDataSource(column);
+
+        // act
+        dataSourceOptions.load({}).done(function(data) {
+            items = data;
+        });
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(getTreeText(items), [
+            '(Blanks)',
+        ], 'loaded data');
     });
 
     // T534059
