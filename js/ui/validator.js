@@ -130,7 +130,8 @@ const Validator = DOMComponent.inherit({
     _toggleAccessibilityAttributes() {
         const dxStandardEditor = this._getEditor();
         if(dxStandardEditor) {
-            const isRequired = this._getValidationRules().some(({ type }) => type === 'required') || null;
+            const rules = this.option('validationRules') || [];
+            const isRequired = rules.some(({ type }) => type === 'required') || null;
             dxStandardEditor.setAria('required', isRequired);
         }
     },
