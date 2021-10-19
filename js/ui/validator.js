@@ -148,7 +148,7 @@ const Validator = DOMComponent.inherit({
                 return;
             case 'validationRules':
                 this._resetValidationRules();
-                this._applyAccessibilityAttributes();
+                this._toggleAccessibilityAttributes();
                 this.option('isValid') !== undefined && this.validate();
                 return;
             case 'adapter':
