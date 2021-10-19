@@ -5,7 +5,7 @@ import { isPromise } from 'core/utils/type';
 import { getActiveElement } from 'core/dom_adapter';
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
-import { getCurrentScreenFactor } from 'core/utils/window';
+import { getCurrentScreenFactor, hasWindow } from 'core/utils/window';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 
 const DIALOG_CLASS = 'dx-formdialog';
@@ -57,7 +57,7 @@ QUnit.module('FormDialog', moduleConfig, () => {
     });
 
     test('check dialog popup fullscreen mode (T1026801)', function(assert) {
-        const expectedFullScreen = devices.real().deviceType === 'phone' || getCurrentScreenFactor() === 'xs';
+        const expectedFullScreen = hasWindow() && (devices.real().deviceType === 'phone' || getCurrentScreenFactor() === 'xs');
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });
         formDialog.show({ items: ['name'] });
 
