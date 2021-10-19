@@ -299,7 +299,7 @@
         "dxHtmlEditor-redo": "Повторить",
         "dxHtmlEditor-clear": "Очистить форматирование",
         "dxHtmlEditor-insertTable": "Вставить таблицу",
-        "dxHtmlEditor-insertHeaderRow": "Вставить строку заголовка",
+        "dxHtmlEditor-insertHeaderRow": "Вставить строку заголовков",
         "dxHtmlEditor-insertRowAbove": "Вставить строку сверху",
         "dxHtmlEditor-insertRowBelow": "Вставить строку снизу",
         "dxHtmlEditor-insertColumnLeft": "Вставить колонку слева",
