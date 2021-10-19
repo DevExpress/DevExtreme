@@ -155,6 +155,7 @@ const DateBoxMask = DateBoxBase.inherit({
         } else if(this._isSingleCharKey(e)) {
             this._processInputKey(key);
             e.originalEvent.preventDefault();
+            this.option('onInput') && this.option('onInput').call();
         }
 
         return result;

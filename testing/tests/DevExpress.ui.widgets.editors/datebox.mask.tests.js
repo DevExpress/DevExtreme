@@ -799,6 +799,18 @@ module('Events', setupModule, () => {
 
         assert.ok(valueChangedStub.calledBefore(focusOutStub));
     });
+
+    test('onInput event handler should be called even when useMaskBehavior option is true (T1023540)', function(assert) {
+        const onInput = sinon.stub();
+
+        this.instance.option({ onInput });
+
+        this.keyboard
+            .focus()
+            .type('1');
+
+        assert.ok(onInput.calledOnce);
+    });
 });
 
 
