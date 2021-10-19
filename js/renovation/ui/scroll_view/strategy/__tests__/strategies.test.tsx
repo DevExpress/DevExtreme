@@ -574,10 +574,10 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
 
       each([
         { expected: -100 },
-        { contentSize: 190, containerSize: 200, expected: 0 },
-        { contentSize: 200, containerSize: 200, expected: 0 },
-        { contentSize: 200.49, containerSize: 200, expected: 0 },
-        { contentSize: 200.50, containerSize: 200, expected: 0 },
+        { contentSize: 190, containerSize: 200, expected: -0 },
+        { contentSize: 200, containerSize: 200, expected: -0 },
+        { contentSize: 200.49, containerSize: 200, expected: -0.4900000000000091 },
+        { contentSize: 200.50, containerSize: 200, expected: -0.5 },
         { contentSize: 200.52, containerSize: 200, expected: -0.5200000000000102 },
         { contentSize: 400, containerSize: 125, expected: -275 },
       ]).describe('Dimensions: %o', ({ contentSize, containerSize, expected }) => {
@@ -631,7 +631,6 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
                 expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
-                expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
               }
             });
           });

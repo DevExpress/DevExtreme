@@ -3,7 +3,7 @@ import {
     getModelProvider,
     getTimeZoneCalculator
 } from './instanceFactory';
-import { AppointmentViewModel } from './appointments/viewModelGenerator';
+import { AppointmentViewModelGenerator } from './appointments/viewModelGenerator';
 import { getGroupCount } from './resources/utils';
 import { getCellWidth, getCellHeight, getAllDayHeight } from './workspaces/helpers/positionHelper';
 import { getCellDuration } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
@@ -11,7 +11,7 @@ import { getCellDuration } from '../../renovation/ui/scheduler/view_model/to_tes
 class AppointmentLayoutManager {
     constructor(instance) {
         this.instance = instance;
-        this.appointmentViewModel = new AppointmentViewModel();
+        this.appointmentViewModel = new AppointmentViewModelGenerator();
     }
 
     get modelProvider() { return getModelProvider(this.instance.key); }

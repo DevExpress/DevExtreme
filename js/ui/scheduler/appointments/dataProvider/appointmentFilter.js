@@ -121,20 +121,27 @@ export class AppointmentFilterBaseStrategy {
     get firstDayOfWeek() { return this.options.firstDayOfWeek; }
     get showAllDayPanel() { return this.options.showAllDayPanel; }
 
-    get loadedResources() { return this.options.getLoadedResources(); }
-    get supportAllDayRow() { return this.options.getSupportAllDayRow(); }
-    get viewType() { return this.options.getViewType(); }
-    get viewDirection() { return this.options.getViewDirection(); }
-    get dateRange() { return this.options.getDateRange(); }
-    get groupCount() { return this.options.getGroupCount(); }
-    get viewDataProvider() { return this.options.getViewDataProvider(); }
+    get loadedResources() { return this._resolveOption('loadedResources'); }
+    get supportAllDayRow() { return this._resolveOption('supportAllDayRow'); }
+    get viewType() { return this._resolveOption('viewType'); }
+    get viewDirection() { return this._resolveOption('viewDirection'); }
+    get dateRange() { return this._resolveOption('dateRange'); }
+    get groupCount() { return this._resolveOption('groupCount'); }
+    get viewDataProvider() { return this._resolveOption('viewDataProvider'); }
+
+    _resolveOption(name) {
+        const result = this.options[name];
+        return typeof result === 'function'
+            ? result()
+            : result;
+    }
 
     _init() {
         this.setDataAccessors(this.dataAccessors);
         this.setDataSource(this.dataSource);
     }
 
-    filter() {
+    filter(preparedItems) {
         const dateRange = this.dateRange;
 
         let allDay;
@@ -153,7 +160,7 @@ export class AppointmentFilterBaseStrategy {
             resources: this.loadedResources,
             allDay: allDay,
             firstDayOfWeek: this.firstDayOfWeek,
-        });
+        }, preparedItems);
     }
 
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
@@ -517,14 +524,14 @@ export class AppointmentFilterBaseStrategy {
         return result;
     }
 
-    filterLoadedAppointments(filterOptions) {
-        const filteredItems = this.filterPreparedItems(filterOptions);
+    filterLoadedAppointments(filterOptions, preparedItems) {
+        const filteredItems = this.filterPreparedItems(filterOptions, preparedItems);
         return filteredItems.map(({ rawAppointment }) => rawAppointment);
     }
 
-    filterPreparedItems(filterOptions) {
+    filterPreparedItems(filterOptions, preparedItems) {
         const combinedFilter = this._createAppointmentFilter(filterOptions);
-        return query(this.preparedItems)
+        return query(preparedItems || this.preparedItems /* Only for QUnit tests */)
             .filter(combinedFilter)
             .toArray();
     }
@@ -542,7 +549,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
     get strategyName() { return FilterStrategies.virtual; }
     get resources() { return this.options.resources; }
 
-    filter() {
+    filter(preparedItems) {
         const hourMs = toMs('hour');
         const isCalculateStartAndEndDayHour = calculateIsDateAndTimeView(this.viewType);
         const checkIntersectViewport = isCalculateStartAndEndDayHour && this.viewDirection === 'horizontal';
@@ -590,7 +597,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         return this.filterLoadedAppointments({
             filterOptions,
             groupCount: this.groupCount
-        });
+        }, preparedItems);
     }
 
     filterPreparedItems({ filterOptions, groupCount }) {

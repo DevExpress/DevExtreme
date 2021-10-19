@@ -45,6 +45,7 @@ const compareLocales = function(first, second, assert) {
         'dxHtmlEditor-dialogImageUrlField',
         'dxHtmlEditor-dialogLinkUrlField',
         'dxHtmlEditor-dialogLinkTextField',
+        'dxHtmlEditor-horizontal',
         'dxDiagram-uiExport',
         'dxDiagram-uiLayout',
         'dxDiagram-uiText',
