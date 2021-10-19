@@ -5,7 +5,6 @@ import {
   InternalState,
   JSXComponent,
   Method,
-  RefObject,
 } from '@devextreme-generator/declarations';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
@@ -200,7 +199,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() dataItems: Appointment[] = [];
 
-  @InternalState() tooltipTarget: RefObject<HTMLElement> | undefined;
+  @InternalState() tooltipTarget: HTMLElement | undefined;
 
   @InternalState() tooltipVisible = false;
 
@@ -416,7 +415,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   showTooltip(
     tooltipData: AppointmentViewModel[],
-    target: RefObject<HTMLElement>,
+    target: HTMLElement | undefined,
   ): void {
     this.tooltipData = tooltipData;
     this.tooltipTarget = target;

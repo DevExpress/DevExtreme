@@ -154,6 +154,7 @@ describe('Calendar', () => {
           schedulerCalendar.updateDate(new Date(2021, 8, 8));
 
           expect(mockCallback).toBeCalledTimes(1);
+          expect(mockCallback).toHaveBeenCalledWith(new Date(2021, 8, 8));
         });
       });
     });

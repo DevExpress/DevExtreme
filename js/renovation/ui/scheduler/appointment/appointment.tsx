@@ -13,7 +13,7 @@ export const viewFunction = ({
   styles,
   data,
   index,
-  thisAptRef,
+  ref,
   onItemClick,
   props: {
     appointmentTemplate,
@@ -23,7 +23,7 @@ export const viewFunction = ({
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events
     <div // eslint-disable-line jsx-a11y/no-static-element-interactions
-      ref={thisAptRef}
+      ref={ref}
       onClick={onItemClick}
       className="dx-scheduler-appointment"
       style={styles}
@@ -52,7 +52,7 @@ export class AppointmentProps {
 
   @OneWay() onItemClick!: (
     data: AppointmentViewModel[],
-    target: RefObject<HTMLElement>,
+    target: HTMLElement | undefined,
     index: number
   ) => void;
 }
@@ -62,7 +62,7 @@ export class AppointmentProps {
   view: viewFunction,
 })
 export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'onItemClick'>() {
-  @Ref() thisAptRef!: RefObject<HTMLElement>;
+  @Ref() ref!: RefObject<HTMLElement>;
 
   get text(): string { return this.props.viewModel.appointment.text; }
 
@@ -82,6 +82,9 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'o
   }
 
   onItemClick(): void {
-    this.props.onItemClick([this.props.viewModel], this.thisAptRef, this.props.index);
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const target = this.ref?.current || undefined;
+
+    this.props.onItemClick([this.props.viewModel], target, this.props.index);
   }
 }

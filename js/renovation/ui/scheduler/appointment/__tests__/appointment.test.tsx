@@ -100,17 +100,19 @@ describe('Appointment', () => {
     });
   });
 
-  describe('Behavir', () => {
+  describe('Behavior', () => {
     describe('Methods', () => {
       describe('onItemClick', () => {
-        it('should call onItemClick props with correct arguments', () => {
+        it('should call onItemClick prop with correct arguments', () => {
           const mockCallback = jest.fn();
           const appointment = new Appointment({
             viewModel: defaultViewModel,
             index: 2021,
             onItemClick: mockCallback,
           });
-          appointment.thisAptRef = 'ref' as any;
+          appointment.ref = {
+            current: 'element',
+          } as any;
 
           appointment.onItemClick();
 
@@ -118,7 +120,7 @@ describe('Appointment', () => {
 
           expect(mockCallback).toHaveBeenCalledWith(
             [defaultViewModel],
-            'ref',
+            'element',
             2021,
           );
         });

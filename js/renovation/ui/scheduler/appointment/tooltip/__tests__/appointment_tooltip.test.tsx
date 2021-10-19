@@ -13,7 +13,7 @@ describe('Appointment tooltip', () => {
       }),
     );
 
-    it('it should be render', () => {
+    it('should be correct rendered without errors', () => {
       expect(() => render()).not.toThrow();
     });
   });
@@ -34,33 +34,6 @@ describe('Appointment tooltip', () => {
 
           expect(mockCallback).toBeCalledTimes(1);
           expect(mockCallback).toHaveBeenCalledWith(false);
-        });
-      });
-    });
-  });
-
-  describe('Logic', () => {
-    describe('Getters', () => {
-      describe('target', () => {
-        it('should return correct element', () => {
-          const current = 'current';
-          const tooltip = new AppointmentTooltip({
-            ...new AppointmentTooltipProps(),
-            target: {
-              current,
-            } as any,
-          });
-
-          expect(tooltip.target).toEqual(current);
-        });
-
-        it('should not fail if "target" prop is undefined', () => {
-          const tooltip = new AppointmentTooltip({
-            ...new AppointmentTooltipProps(),
-            target: undefined as any,
-          });
-
-          expect(() => tooltip.target).not.toThrow();
         });
       });
     });

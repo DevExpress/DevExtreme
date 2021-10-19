@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template, RefObject,
+  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template,
 } from '@devextreme-generator/declarations';
 import { AppointmentTemplateProps, AppointmentViewModel } from './types';
 import { Appointment } from './appointment';
@@ -37,7 +37,7 @@ export class AppointmentLayoutProps {
 
   @OneWay() onAppointmentClick?: (
     data: AppointmentViewModel[],
-    target: RefObject<HTMLElement>,
+    target: HTMLElement | undefined,
     index: number
   ) => void;
 }

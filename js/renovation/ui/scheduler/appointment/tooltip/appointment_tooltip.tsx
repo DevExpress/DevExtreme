@@ -3,8 +3,6 @@ import {
   ComponentBindings,
   JSXComponent,
   OneWay,
-  RefObject,
-  Ref,
 } from '@devextreme-generator/declarations';
 import { Tooltip } from '../../../overlays/tooltip';
 import { AppointmentList } from './appointment_list';
@@ -12,10 +10,10 @@ import { AppointmentViewModel } from '../types';
 
 export const viewFunction = ({
   updateVisible,
-  target,
   props: {
     visible,
     dataList,
+    target,
   },
 }: AppointmentTooltip): JSX.Element => (
   <Tooltip
@@ -39,7 +37,7 @@ export class AppointmentTooltipProps {
 
   @OneWay() onVisibleChange!: (value: boolean) => void;
 
-  @Ref() target!: RefObject<HTMLElement>;
+  @OneWay() target!: HTMLElement | undefined;
 
   @OneWay() dataList!: AppointmentViewModel[];
 }
@@ -47,12 +45,6 @@ export class AppointmentTooltipProps {
 @Component({ view: viewFunction })
 export class AppointmentTooltip extends
   JSXComponent<AppointmentTooltipProps, 'visible' | 'onVisibleChange' | 'target' | 'dataList'>() {
-  get target(): HTMLElement | undefined {
-    const element = this.props.target?.current;
-    // eslint-disable-next-line no-unneeded-ternary
-    return element ? element : undefined;
-  }
-
   updateVisible(visible: boolean): void {
     this.props.onVisibleChange(visible);
   }
