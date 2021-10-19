@@ -7774,13 +7774,13 @@ QUnit.module('Editing with real dataController', {
         assert.strictEqual(window.getComputedStyle(svgIcon.find('svg')[0]).pointerEvents, 'none', 'dx-svg-icon svg does not allow pointer events');
     });
 
-    QUnit.test('Add a custom command column with useLegacyButtonTemplate', function(assert) {
+    QUnit.test('Add a custom command column with useLegacyColumnButtonTemplate', function(assert) {
         // arrange
         const that = this;
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
-        this.options.useLegacyButtonTemplate = true;
+        this.options.useLegacyColumnButtonTemplate = true;
         $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,

@@ -2018,13 +2018,13 @@ const EditingController = modules.ViewController.inherit((function() {
         _createButton: function($container, button, options, change) {
             let icon = EDIT_ICON_CLASS[button.name];
             const useIcons = this.option('editing.useIcons');
-            const useLegacyButtonTemplate = this.option('useLegacyButtonTemplate');
+            const useLegacyColumnButtonTemplate = this.option('useLegacyColumnButtonTemplate');
             let $button = $('<a>')
                 .attr('href', '#')
                 .addClass(LINK_CLASS)
                 .addClass(button.cssClass);
 
-            if(button.template && useLegacyButtonTemplate) {
+            if(button.template && useLegacyColumnButtonTemplate) {
                 this._rowsView.renderTemplate($container, button.template, options, true);
             } else {
                 if(button.template) {
@@ -2219,7 +2219,7 @@ export const editingModule = {
 
                 changes: []
             },
-            useLegacyButtonTemplate: false
+            useLegacyColumnButtonTemplate: false
         };
     },
     controllers: {
@@ -2503,7 +2503,7 @@ export const editingModule = {
                             this.callBase(args);
                             break;
                         }
-                        case 'useLegacyButtonTemplate':
+                        case 'useLegacyColumnButtonTemplate':
                             args.handled = true;
                             break;
                         default:

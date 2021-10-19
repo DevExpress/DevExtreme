@@ -1670,5 +1670,5 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @OneWay() useLegacyKeyboardNavigation?: boolean = false;
 
-  @OneWay() useLegacyButtonTemplate?: boolean = false;
+  @OneWay() useLegacyColumnButtonTemplate?: boolean = false;
 }
