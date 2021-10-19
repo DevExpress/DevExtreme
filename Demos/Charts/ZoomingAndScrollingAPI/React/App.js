@@ -14,9 +14,8 @@ import RangeSelector, {
   Margin,
   Scale,
   Behavior,
+} from 'devextreme-react/range-selector';
 
-}
-  from 'devextreme-react/range-selector';
 import { zoomingData } from './data.js';
 
 class App extends React.Component {
