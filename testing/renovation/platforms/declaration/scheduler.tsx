@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable react/prop-types */
@@ -6,7 +7,6 @@ import {
 } from '@devextreme-generator/declarations';
 import React from 'react';
 import { getComponentOptions } from './helpers/getComponentOptions';
-import { getWindow } from '../../../../js/core/utils/window';
 // import { Scheduler } from '../../../../js/renovation/ui/scheduler/scheduler';
 
 export const viewFunction = (/* { options } */): JSX.Element => (
@@ -31,7 +31,7 @@ export class App extends JSXComponent<AppProps>() {
 
   @Effect({ run: 'once' })
   optionsUpdated(): void {
-    (getWindow() as any).onOptionsUpdated = (newOptions) => {
+    (window as any).onOptionsUpdated = (newOptions) => {
       this.options = {
         ...this.options,
         ...newOptions,
