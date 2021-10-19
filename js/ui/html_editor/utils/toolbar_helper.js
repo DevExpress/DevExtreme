@@ -18,7 +18,7 @@ import ButtonGroup from '../../button_group';
 import ColorBox from '../../color_box';
 import ScrollView from '../../scroll_view';
 
-import { getOuterHeight, getOuterWidth } from '../../../core/utils/size';
+import { getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
 
 import { getWindow } from '../../../core/utils/window';
 
@@ -129,7 +129,8 @@ function prepareShowFormProperties(module, type) {
             },
             title: localizationMessage.format(`dxHtmlEditor-${type}Properties`),
             minHeight: MIN_HEIGHT,
-            minWidth: 800
+            minWidth: Math.min(800, getWidth(getWindow()) * 0.9 - 1),
+            maxWidth: getWidth(getWindow()) * 0.9
         });
 
         const promise = module.editorInstance.showFormDialog();
@@ -538,7 +539,7 @@ function getTablePropertiesFormConfig(module, { $element, formats, tableBlot }) 
         }],
         showColonAfterLabel: true,
         labelLocation: 'top',
-        minColWidth: 300
+        minColWidth: 400
     };
 
     const applyHandler = (formInstance) => {
@@ -728,7 +729,7 @@ function getCellPropertiesFormConfig(module, { $element, formats, tableBlot, row
         }],
         showColonAfterLabel: true,
         labelLocation: 'top',
-        minColWidth: 300
+        minColWidth: 400
     };
 
     const applyHandler = (formInstance) => {
