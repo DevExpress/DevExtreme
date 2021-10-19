@@ -391,6 +391,7 @@ export type RowDraggingTemplateData<TRowData = any> = RowDraggingTemplateDataMod
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
 export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
     /**

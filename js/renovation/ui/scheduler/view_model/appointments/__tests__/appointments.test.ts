@@ -31,6 +31,7 @@ const prepareInstances = (
   viewType: ViewType,
   currentDate: Date,
   intervalCount: number,
+  isAllDayPanelVisible: boolean,
 ): {
   appointmentsConfig: AppointmentsConfigType;
   timeZoneCalculator: TimeZoneCalculator;
@@ -56,11 +57,21 @@ const prepareInstances = (
   const generationOptions = prepareGenerationOptions(
     workspaceProps,
     viewRenderConfig,
-    false,
+    isAllDayPanelVisible,
   );
   viewDataProvider.update(generationOptions, true);
+
+  const allDayPanelCellsMeta = isAllDayPanelVisible
+    ? new Array(intervalCount).fill('').map((_, index) => ({
+      left: index * 50,
+      top: 0,
+      width: 100,
+      height: 200,
+    }))
+    : [];
+
   const DOMMetaData = {
-    allDayPanelCellsMeta: [],
+    allDayPanelCellsMeta,
     dateTableCellsMeta: [
       [],
       [{
@@ -102,22 +113,23 @@ const prepareInstances = (
 };
 
 describe('Appointments view model', () => {
-  const instances = prepareInstances(
-    'week',
-    new Date(2021, 8, 22),
-    7,
-  );
-
-  const appointmentsModel = getAppointmentsModel(
-    instances.appointmentsConfig,
-    instances.viewDataProvider,
-    instances.timeZoneCalculator,
-    defaultDataAccessors,
-    instances.DOMMetaData,
-  );
-
   describe('getAppointmentsViewModel', () => {
-    it('should be generated correctly', () => {
+    it('should generate regular appoitments correctly', () => {
+      const instances = prepareInstances(
+        'week',
+        new Date(2021, 8, 22),
+        7,
+        false,
+      );
+
+      const appointmentsModel = getAppointmentsModel(
+        instances.appointmentsConfig,
+        instances.viewDataProvider,
+        instances.timeZoneCalculator,
+        defaultDataAccessors,
+        instances.DOMMetaData,
+      );
+
       const expectedViewModel0 = {
         appointment: {
           startDate: new Date(2021, 8, 23, 10),
@@ -162,13 +174,21 @@ describe('Appointments view model', () => {
         }],
       );
 
-      expect(viewModel)
+      const {
+        regular,
+        allDay,
+      } = viewModel;
+
+      expect(regular)
         .toHaveLength(4);
 
-      expect(viewModel[0])
+      expect(allDay)
+        .toHaveLength(0);
+
+      expect(regular[0])
         .toMatchObject(expectedViewModel0);
 
-      expect(viewModel[1])
+      expect(regular[1])
         .toMatchObject({
           appointment: {
             startDate: new Date(2021, 8, 23, 10),
@@ -203,7 +223,7 @@ describe('Appointments view model', () => {
           },
         });
 
-      expect(viewModel[2])
+      expect(regular[2])
         .toMatchObject({
           appointment: {
             startDate: new Date(2021, 8, 24, 11),
@@ -238,7 +258,7 @@ describe('Appointments view model', () => {
           },
         });
 
-      expect(viewModel[3])
+      expect(regular[3])
         .toMatchObject({
           appointment: {
             startDate: new Date(2021, 8, 24, 11),
@@ -270,6 +290,79 @@ describe('Appointments view model', () => {
               exceptionDate: new Date(2021, 8, 24, 11),
             },
             dateText: '11:00 AM - 12:00 PM',
+          },
+        });
+    });
+
+    it('should generate all day appoitments correctly', () => {
+      const instances = prepareInstances(
+        'week',
+        new Date(2021, 8, 22),
+        7,
+        true,
+      );
+
+      const appointmentsModel = getAppointmentsModel(
+        instances.appointmentsConfig,
+        instances.viewDataProvider,
+        instances.timeZoneCalculator,
+        defaultDataAccessors,
+        instances.DOMMetaData,
+      );
+
+      const viewModel = getAppointmentsViewModel(
+        {
+          ...appointmentsModel,
+          showAllDayPanel: true,
+          supportAllDayRow: true,
+          allDayHeight: 75,
+        },
+        [{
+          startDate: new Date(2021, 8, 23),
+          endDate: new Date(2021, 8, 24),
+        }],
+      );
+
+      const { allDay } = viewModel;
+
+      expect(allDay)
+        .toHaveLength(1);
+
+      expect(allDay[0])
+        .toEqual({
+          appointment:
+          {
+            startDate: new Date(2021, 8, 23),
+            endDate: new Date(2021, 8, 24),
+          },
+          geometry: {
+            empty: true,
+            height: 24.5,
+            left: 200,
+            leftVirtualWidth: 0,
+            top: 0,
+            topVirtualHeight: 0,
+            width: -200,
+          },
+          info: {
+            allDay: true,
+            appointment: {
+              startDate: new Date(2021, 8, 23),
+              endDate: new Date(2021, 8, 24),
+              normalizedEndDate: new Date(2021, 8, 24),
+              source: {
+                startDate: new Date(2021, 8, 23),
+                endDate: new Date(2021, 8, 24),
+                exceptionDate: new Date(2021, 8, 23),
+              },
+            },
+            dateText: '12:00 AM - 12:00 AM',
+            resourceColor: undefined,
+            sourceAppointment: {
+              startDate: new Date(2021, 8, 23),
+              endDate: new Date(2021, 8, 24),
+              exceptionDate: new Date(2021, 8, 23),
+            },
           },
         });
     });

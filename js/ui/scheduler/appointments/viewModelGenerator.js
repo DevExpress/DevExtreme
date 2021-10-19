@@ -31,11 +31,11 @@ export class AppointmentViewModelGenerator {
 
         const renderingStrategy = this.getRenderingStrategy();
         const positionMap = renderingStrategy.createTaskPositionMap(appointments); // TODO - appointments are mutated inside!
-        let viewModel = this.postProcess(appointments, positionMap, appointmentRenderingStrategyName, isRenovatedAppointments);
+        const viewModel = this.postProcess(appointments, positionMap, appointmentRenderingStrategyName, isRenovatedAppointments);
 
         if(isRenovatedAppointments) {
             // TODO this structure should be by default after remove old render
-            viewModel = this.makeRenovatedViewModel(viewModel);
+            return this.makeRenovatedViewModel(viewModel);
         }
 
         return {
@@ -72,14 +72,15 @@ export class AppointmentViewModelGenerator {
         });
     }
     makeRenovatedViewModel(viewModel) {
-        const result = [];
         const strategy = this.getRenderingStrategy();
+        const regularViewModel = [];
+        const allDayViewModel = [];
 
         viewModel.forEach(({ itemData, settings }) => {
-            const items = settings.map((options) => {
+            settings.forEach((options) => {
                 const geometry = strategy.getAppointmentGeometry(options);
 
-                return {
+                const item = {
                     appointment: itemData,
                     geometry: {
                         ...geometry,
@@ -87,14 +88,24 @@ export class AppointmentViewModelGenerator {
                         leftVirtualWidth: options.leftVirtualWidth,
                         topVirtualHeight: options.topVirtualHeight
                     },
-                    info: options.info
+                    info: {
+                        ...options.info,
+                        allDay: options.allDay
+                    }
                 };
-            });
 
-            result.push(...items);
+                if(options.allDay) {
+                    allDayViewModel.push(item);
+                } else {
+                    regularViewModel.push(item);
+                }
+            });
         });
 
-        return result;
+        return {
+            allDay: allDayViewModel,
+            regular: regularViewModel
+        };
     }
 
     getRenderingStrategy() {

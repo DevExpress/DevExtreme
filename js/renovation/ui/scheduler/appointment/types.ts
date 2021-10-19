@@ -31,6 +31,11 @@ export interface AppointmentViewModel {
   };
 }
 
+export interface AppointmentsViewModelType {
+  regular: AppointmentViewModel[];
+  allDay: AppointmentViewModel[];
+}
+
 export interface AppointmentTemplateProps extends BaseTemplateProps {
   data: AppointmentTemplateData;
 }

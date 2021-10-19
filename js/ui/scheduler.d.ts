@@ -1,5 +1,3 @@
-import './scheduler/utils';
-
 import {
     UserDefinedElement,
     DxElement,
@@ -9,11 +7,7 @@ import {
     template,
 } from '../core/templates/template';
 
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
     DxEvent,
@@ -375,7 +369,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @public
      * @type string|Array<dxSchedulerAppointment>|Store|DataSource|DataSourceOptions
      */
-    dataSource?: string | Array<Appointment> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<Appointment>;
     /**
      * @docid
      * @default null
@@ -754,8 +748,9 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       /**
        * @docid
        * @default null
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: string | Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: DataSourceLike<any>;
       /**
        * @docid
        * @type_function_param1 resource:object

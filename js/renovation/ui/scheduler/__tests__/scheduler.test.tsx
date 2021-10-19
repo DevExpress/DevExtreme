@@ -14,6 +14,7 @@ import { Group } from '../workspaces/types';
 import { filterAppointments } from '../common';
 import { getAppointmentsConfig, getAppointmentsModel } from '../model/appointments';
 import { getAppointmentsViewModel } from '../view_model/appointments/appointments';
+import { AppointmentLayout } from '../appointment/layout';
 
 jest.mock('../model/appointments', () => ({
   ...jest.requireActual('../model/appointments'),
@@ -34,6 +35,11 @@ const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
 
 describe('Scheduler', () => {
+  const defaultAppointmentViewModel = {
+    regular: [],
+    allDay: [],
+  };
+
   describe('Render', () => {
     const defaultCurrentViewConfig = {
       firstDayOfWeek: 0,
@@ -61,6 +67,7 @@ describe('Scheduler', () => {
     const renderComponent = (viewModel) => shallow(
       <ViewFunction
         currentViewConfig={defaultCurrentViewConfig}
+        appointmentsViewModel={defaultAppointmentViewModel}
         {...viewModel}
         props={{
           ...new SchedulerProps(),
@@ -195,7 +202,10 @@ describe('Scheduler', () => {
           currentView: 'day',
         };
 
-        const appointmentsViewModel = [{}];
+        const appointmentsViewModel = {
+          regular: [{}],
+          allDay: [{}, {}],
+        };
 
         const scheduler = renderComponent({
           props,
@@ -203,13 +213,23 @@ describe('Scheduler', () => {
         });
 
         const workspace = scheduler.find(WorkSpace);
+        const appointments = workspace.prop('appointments');
+        const allDayAppointments = workspace.prop('allDayAppointments');
 
-        expect(!!workspace.prop('appointments'))
-          .toBe(true);
+        expect(appointments.type)
+          .toBe(AppointmentLayout);
 
-        expect(workspace.prop('appointments').props)
+        expect(appointments.props)
           .toEqual({
-            appointments: appointmentsViewModel,
+            appointments: appointmentsViewModel.regular,
+          });
+
+        expect(allDayAppointments.type)
+          .toBe(AppointmentLayout);
+
+        expect(allDayAppointments.props)
+          .toEqual({
+            appointments: appointmentsViewModel.allDay,
           });
       });
     });
@@ -808,7 +828,7 @@ describe('Scheduler', () => {
             );
         });
 
-        it('should return empty array if appointmentsConfig is not exist', () => {
+        it('should return empty viewModel if appointmentsConfig is not exist', () => {
           const schedulerProps = new SchedulerProps();
           const scheduler = new Scheduler(schedulerProps);
 
@@ -816,7 +836,7 @@ describe('Scheduler', () => {
             .mockReturnValue(undefined);
 
           expect(scheduler.appointmentsViewModel)
-            .toHaveLength(0);
+            .toEqual(defaultAppointmentViewModel);
 
           expect(filterAppointments)
             .toHaveBeenCalledTimes(0);
@@ -828,7 +848,7 @@ describe('Scheduler', () => {
             .toHaveBeenCalledTimes(0);
         });
 
-        it('should return empty array if filteredItems is empty', () => {
+        it('should return empty viewModel if filteredItems is empty', () => {
           const schedulerProps = new SchedulerProps();
           const scheduler = new Scheduler(schedulerProps);
 
@@ -836,7 +856,7 @@ describe('Scheduler', () => {
             .mockReturnValue([]);
 
           expect(scheduler.appointmentsViewModel)
-            .toHaveLength(0);
+            .toEqual(defaultAppointmentViewModel);
 
           expect(filterAppointments)
             .toHaveBeenCalledTimes(0);
