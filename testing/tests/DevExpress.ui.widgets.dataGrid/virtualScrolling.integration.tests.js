@@ -565,7 +565,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.ok(dataGrid.getCellElement(0, 0).is($fixedCell), 'Fixed cell is not rerendered');
+        assert.ok($(dataGrid.getCellElement(0, 0)).is($fixedCell), 'Fixed cell is not rerendered');
 
         const $rowElements = $(dataGrid.getRowElement(0));
         assert.equal($rowElements.eq(1).children().eq(0).attr('aria-colindex'), columnOffset, 'Fixed cell 1 aria-colindex');
@@ -613,7 +613,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.notOk(dataGrid.getCellElement(0, 0).is($fixedCell), 'Fixed cell is rerendered');
+        assert.notOk($(dataGrid.getCellElement(0, 0)).is($fixedCell), 'Fixed cell is rerendered');
     });
 
     // T595044
