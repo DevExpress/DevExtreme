@@ -9,8 +9,7 @@ test('Tooltip\'s date should be equal to date of current appointment(T1037028)',
   const scheduler = new Scheduler('#container');
   const appointmentName = 'Text';
 
-  // eslint-disable-next-line no-plusplus
-  for (let index = 0; index < 5; index++) {
+  for (let index = 0; index < 5; index += 1) {
     await scheduler.hideAppointmentTooltip();
 
     await t.click(scheduler.getAppointment(appointmentName, index).element, { speed: 0.1 });
