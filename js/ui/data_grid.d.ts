@@ -4161,6 +4161,13 @@ export interface dxDataGridToolbarItem extends dxToolbarItem {
    * @public
    */
   name?: dxDataGridDefaultToolbarItemName | string;
+  /**
+   * @docid
+   * @type Enums.ToolbarItemLocation
+   * @default 'after'
+   * @public
+   */
+  location?: 'after' | 'before' | 'center';
 }
 
 /**
