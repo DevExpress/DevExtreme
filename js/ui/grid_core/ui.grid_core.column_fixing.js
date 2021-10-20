@@ -117,39 +117,38 @@ const baseFixedColumns = {
     },
 
     _renderTable: function(options) {
-        const that = this;
         let $fixedTable;
-        const fixedColumns = that.getFixedColumns();
+        const fixedColumns = this.getFixedColumns();
 
-        that._isFixedColumns = !!fixedColumns.length;
-        const $table = that.callBase(options);
+        this._isFixedColumns = !!fixedColumns.length;
+        const $table = this.callBase(options);
 
 
-        if(that._isFixedColumns) {
+        if(this._isFixedColumns) {
             const change = options?.change;
 
-            that._isFixedTableRendering = true;
+            this._isFixedTableRendering = true;
 
             if(change?.virtualColumnsScrolling && this.option('scrolling.legacyMode') !== true) {
                 this._partialUpdateFixedTable(fixedColumns);
             } else {
                 const columnIndices = change?.columnIndices;
 
-                that._correctColumnIndicesForFixedColumns(fixedColumns, change);
+                this._correctColumnIndicesForFixedColumns(fixedColumns, change);
 
-                $fixedTable = that._createTable(fixedColumns);
-                that._renderRows($fixedTable, extend({}, options, { columns: fixedColumns }));
-                that._updateContent($fixedTable, change);
+                $fixedTable = this._createTable(fixedColumns);
+                this._renderRows($fixedTable, extend({}, options, { columns: fixedColumns }));
+                this._updateContent($fixedTable, change);
 
                 if(columnIndices) {
                     change.columnIndices = columnIndices;
                 }
             }
 
-            that._isFixedTableRendering = false;
+            this._isFixedTableRendering = false;
         } else {
-            that._fixedTableElement && that._fixedTableElement.parent().remove();
-            that._fixedTableElement = null;
+            this._fixedTableElement && this._fixedTableElement.parent().remove();
+            this._fixedTableElement = null;
         }
 
         return $table;
