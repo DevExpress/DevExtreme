@@ -51,7 +51,7 @@ class FormDialog {
     }
 
     _getFullScreen() {
-        const screenFactor = hasWindow() ?? getCurrentScreenFactor();
+        const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
         return devices.real().deviceType === 'phone' || screenFactor === 'xs';
     }
 
