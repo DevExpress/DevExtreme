@@ -1,11 +1,13 @@
 import {
   CSSAttributes,
-  Component, ComponentBindings, JSXComponent, OneWay, JSXTemplate, Template, Ref, RefObject,
+  Component, ComponentBindings, JSXComponent, OneWay, JSXTemplate, Template,
+  Ref, RefObject, Event,
 } from '@devextreme-generator/declarations';
 import type { AppointmentTemplateData } from '../../../../ui/scheduler';
 import { AppointmentTemplateProps, AppointmentViewModel } from './types';
 import { getAppointmentStyles } from './utils';
 import { AppointmentContent } from './content';
+import { Widget } from '../../common/widget';
 
 export const viewFunction = ({
   text,
@@ -21,24 +23,26 @@ export const viewFunction = ({
 }: Appointment): JSX.Element => {
   const AppointmentTemplate = appointmentTemplate;
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
-    <div // eslint-disable-line jsx-a11y/no-static-element-interactions
-      ref={ref}
+    <Widget
       onClick={onItemClick}
-      className="dx-scheduler-appointment"
-      style={styles}
     >
-      {
-        !!AppointmentTemplate && (
-          <AppointmentTemplate data={data} index={index} />
-        )
-      }
-      {
-        !AppointmentTemplate && (
-          <AppointmentContent text={text} dateText={dateText} />
-        )
-      }
-    </div>
+      <div
+        ref={ref}
+        className="dx-scheduler-appointment"
+        style={styles}
+      >
+        {
+          !!AppointmentTemplate && (
+            <AppointmentTemplate data={data} index={index} />
+          )
+        }
+        {
+          !AppointmentTemplate && (
+            <AppointmentContent text={text} dateText={dateText} />
+          )
+        }
+      </div>
+    </Widget>
   );
 };
 
@@ -50,11 +54,11 @@ export class AppointmentProps {
 
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
-  @OneWay() onItemClick!: (
-    data: AppointmentViewModel[],
-    target: HTMLElement | undefined,
-    index: number
-  ) => void;
+  @Event() onItemClick!: (e: {
+    data: AppointmentViewModel[];
+    target: HTMLElement | undefined;
+    index: number;
+  }) => void;
 }
 
 @Component({
@@ -82,9 +86,12 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'o
   }
 
   onItemClick(): void {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    const target = this.ref?.current || undefined;
+    const e = {
+      data: [this.props.viewModel],
+      target: this.ref.current!,
+      index: this.props.index,
+    };
 
-    this.props.onItemClick([this.props.viewModel], target, this.props.index);
+    this.props.onItemClick(e);
   }
 }

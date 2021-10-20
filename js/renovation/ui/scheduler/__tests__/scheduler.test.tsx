@@ -588,7 +588,7 @@ describe('Scheduler', () => {
           scheduler.tooltipTarget = null as any;
           scheduler.tooltipData = null as any;
 
-          scheduler.showTooltip(data as any, target as any);
+          scheduler.showTooltip({ data, target } as any);
 
           expect(scheduler.tooltipVisible).toBe(true);
           expect(scheduler.tooltipTarget).toBe(target);

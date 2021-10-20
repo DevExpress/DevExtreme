@@ -9,8 +9,9 @@ import { AppointmentList } from './appointment_list';
 import { AppointmentViewModel } from '../types';
 
 export const viewFunction = ({
-  updateVisible,
+  wrapperAttr,
   props: {
+    onVisibleChange,
     visible,
     dataList,
     target,
@@ -19,11 +20,9 @@ export const viewFunction = ({
   <Tooltip
     closeOnOutsideClick
     visible={visible}
-    visibleChange={updateVisible}
+    visibleChange={onVisibleChange}
     target={target}
-    wrapperAttr={{
-      class: 'dx-scheduler-appointment-tooltip-wrapper',
-    }}
+    wrapperAttr={wrapperAttr}
   >
     <AppointmentList
       appointments={dataList}
@@ -45,7 +44,7 @@ export class AppointmentTooltipProps {
 @Component({ view: viewFunction })
 export class AppointmentTooltip extends
   JSXComponent<AppointmentTooltipProps, 'visible' | 'onVisibleChange' | 'target' | 'dataList'>() {
-  updateVisible(visible: boolean): void {
-    this.props.onVisibleChange(visible);
-  }
+  wrapperAttr = {
+    class: 'dx-scheduler-appointment-tooltip-wrapper',
+  };
 }

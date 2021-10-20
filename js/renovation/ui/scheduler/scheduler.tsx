@@ -413,12 +413,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     this.props.currentDate = date;
   }
 
-  showTooltip(
-    tooltipData: AppointmentViewModel[],
-    target: HTMLElement | undefined,
-  ): void {
-    this.tooltipData = tooltipData;
-    this.tooltipTarget = target;
+  showTooltip(e: {
+    data: AppointmentViewModel[];
+    target: HTMLElement | undefined;
+    index: number;
+  }): void {
+    this.tooltipData = e.data;
+    this.tooltipTarget = e.target;
     this.changeTooltipVisible(true);
   }
 

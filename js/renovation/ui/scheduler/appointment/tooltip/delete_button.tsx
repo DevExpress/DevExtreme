@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay,
+  Component, ComponentBindings, JSXComponent, Event,
 } from '@devextreme-generator/declarations';
 import { Button } from '../../../button';
 
@@ -15,7 +15,7 @@ export const viewFunction = (): JSX.Element => (
 
 @ComponentBindings()
 export class DeleteButtonProps {
-  @OneWay() color?: string;
+  @Event() onClick?: () => void;
 }
 
 @Component({

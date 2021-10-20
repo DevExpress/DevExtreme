@@ -1,5 +1,5 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction, AppointmentTooltip, AppointmentTooltipProps } from '../appointment_tooltip';
+import { viewFunction, AppointmentTooltip } from '../appointment_tooltip';
 
 describe('Appointment tooltip', () => {
   describe('Render', () => {
@@ -18,22 +18,15 @@ describe('Appointment tooltip', () => {
     });
   });
 
-  describe('Behavior', () => {
-    describe('Methods', () => {
-      describe('updateVisible', () => {
-        it('should call "onVisibleChange" prop', () => {
-          const mockCallback = jest.fn();
-          const tooltip: any = new AppointmentTooltip({
-            ...new AppointmentTooltipProps(),
-            visible: true,
+  describe('Logic', () => {
+    describe('Fields', () => {
+      describe('wrapperAttr', () => {
+        it('should have correct class', () => {
+          const tooltip = new AppointmentTooltip({} as any);
+
+          expect(tooltip.wrapperAttr).toEqual({
+            class: 'dx-scheduler-appointment-tooltip-wrapper',
           });
-
-          tooltip.props.onVisibleChange = mockCallback;
-
-          tooltip.updateVisible(false);
-
-          expect(mockCallback).toBeCalledTimes(1);
-          expect(mockCallback).toHaveBeenCalledWith(false);
         });
       });
     });

@@ -43,12 +43,11 @@ describe('Appointment', () => {
     }));
 
     it('it should has correct render', () => {
-      const appointment = render({
+      const tree = render({
         styles: 'some-styles',
       });
 
-      expect(appointment.hasClass('dx-scheduler-appointment'))
-        .toBe(true);
+      const appointment = tree.find('.dx-scheduler-appointment');
 
       expect(appointment.is('div'))
         .toBe(true);
@@ -63,7 +62,7 @@ describe('Appointment', () => {
         index: 1234,
       };
       const template = '<div class="some-template">Some Template</div>';
-      const appointment = render({
+      const tree = render({
         styles: 'some-styles',
         ...templateProps,
         props: {
@@ -71,8 +70,7 @@ describe('Appointment', () => {
         },
       });
 
-      expect(appointment.hasClass('dx-scheduler-appointment'))
-        .toBe(true);
+      const appointment = tree.find('.dx-scheduler-appointment');
 
       expect(appointment.is('div'))
         .toBe(true);
@@ -93,7 +91,9 @@ describe('Appointment', () => {
     });
 
     it('it should has correct content container', () => {
-      const appointment = render({});
+      const tree = render({});
+
+      const appointment = tree.find('.dx-scheduler-appointment');
 
       expect(appointment.children().type())
         .toBe(AppointmentContent);
@@ -118,30 +118,11 @@ describe('Appointment', () => {
 
           expect(mockCallback).toBeCalledTimes(1);
 
-          expect(mockCallback).toHaveBeenCalledWith(
-            [defaultViewModel],
-            'element',
-            2021,
-          );
-        });
-
-        it('should cnot fail if ref is undefined', () => {
-          const mockCallback = jest.fn();
-          const appointment = new Appointment({
-            viewModel: defaultViewModel,
+          expect(mockCallback).toHaveBeenCalledWith({
+            data: [defaultViewModel],
+            target: 'element',
             index: 2021,
-            onItemClick: mockCallback,
           });
-
-          appointment.onItemClick();
-
-          expect(mockCallback).toBeCalledTimes(1);
-
-          expect(mockCallback).toHaveBeenCalledWith(
-            [defaultViewModel],
-            undefined,
-            2021,
-          );
         });
       });
     });
