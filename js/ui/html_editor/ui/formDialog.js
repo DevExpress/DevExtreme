@@ -50,7 +50,7 @@ class FormDialog {
         e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
     }
 
-    _getFullScreen() {
+    _isSmallScreen() {
         const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
         return devices.real().deviceType === 'phone' || screenFactor === 'xs';
     }
@@ -65,8 +65,8 @@ class FormDialog {
             deferRendering: false,
             focusStateEnabled: false,
             showCloseButton: false,
-            fullScreen: this._getFullScreen(),
             wrapperAttr: { class: 'dx-formdialog' },
+            fullScreen: this._isSmallScreen(),
             contentTemplate: (contentElem) => {
                 const $formContainer = $('<div>').appendTo(contentElem);
 
