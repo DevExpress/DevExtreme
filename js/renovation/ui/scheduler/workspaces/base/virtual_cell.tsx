@@ -13,7 +13,7 @@ export const viewFunction = ({
   },
 }: VirtualCell): JSX.Element => (
   <Cell
-    className="dx-scheduler-virtual-cell"
+    className="dx-scheduler-virtual-cell dx-scheduler-cell-sizes-horizontal"
     styles={style}
     colSpan={colSpan}
   />

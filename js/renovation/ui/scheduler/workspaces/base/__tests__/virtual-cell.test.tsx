@@ -36,6 +36,15 @@ describe('VirtualCell', () => {
       expect(cell.prop('colSpan'))
         .toBe(34);
     });
+
+    it('should have correct classes', () => {
+      const cell = render({});
+
+      expect(cell.hasClass('dx-scheduler-virtual-cell'))
+        .toBe(true);
+      expect(cell.hasClass('dx-scheduler-cell-sizes-horizontal'))
+        .toBe(true);
+    });
   });
 
   describe('Logic', () => {
