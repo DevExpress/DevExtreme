@@ -959,7 +959,7 @@ $scheduler-month-date-text-padding: 6px;
   }
 
   .dx-scheduler-date-table-cell,
-  .dx-scheduler-header-panel-cell,
+  &:not(.dx-scheduler-work-space-group-by-date) .dx-scheduler-header-panel-cell,
   .dx-scheduler-all-day-table-cell,
   .dx-scheduler-virtual-cell {
     flex-shrink: 0;

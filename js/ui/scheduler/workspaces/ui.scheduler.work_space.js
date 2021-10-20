@@ -225,7 +225,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     get isSetHeaderWidth() {
-        return !this.isAllDayPanelVisible && this._isHorizontalGroupedWorkSpace() && this.option('crossScrollingEnabled');
+        return this._needCreateCrossScrolling();
     }
 
     _supportedKeys() {
