@@ -1,6 +1,6 @@
 import { CSSAttributes } from '@devextreme-generator/declarations';
 import { addToStyles } from '../workspaces/utils';
-import { AppointmentViewModel } from './types';
+import { AppointmentGeometry, AppointmentViewModel } from './types';
 
 export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes => {
   const {
@@ -39,20 +39,13 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
   return result;
 };
 
-export const getAppointmentKey = (item: AppointmentViewModel): string => {
+export const getAppointmentKey = (geometry: AppointmentGeometry): string => {
   const {
-    geometry: {
-      width,
-      height,
-      top,
-      left,
-      leftVirtualWidth,
-      topVirtualHeight,
-    },
-  } = item;
+    left,
+    top,
+    width,
+    height,
+  } = geometry;
 
-  const leftOffset = left + leftVirtualWidth;
-  const topOffset = top + topVirtualHeight;
-
-  return `${leftOffset}-${topOffset}-${width}-${height}`;
+  return `${left}-${top}-${width}-${height}`;
 };

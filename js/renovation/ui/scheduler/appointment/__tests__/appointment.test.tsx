@@ -4,6 +4,8 @@ import { AppointmentContent } from '../content';
 
 describe('Appointment', () => {
   const defaultViewModel = {
+    key: '1-2-10-20',
+
     appointment: {
       startDate: new Date('2021-08-05T10:00:00.000Z'),
       endDate: new Date('2021-08-05T12:00:00.000Z'),
