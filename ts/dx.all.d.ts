@@ -8467,6 +8467,10 @@ declare module DevExpress.ui {
      * [descr:dxDataGridToolbarItem.name]
      */
     name?: DevExpress.ui.dxDataGrid.dxDataGridDefaultToolbarItemName | string;
+    /**
+     * [descr:dxDataGridToolbarItem.location]
+     */
+    location?: 'after' | 'before' | 'center';
   }
   /**
    * [descr:dxDateBox]
@@ -21735,6 +21739,10 @@ declare module DevExpress.ui {
      * [descr:dxTreeListToolbarItem.name]
      */
     name?: DevExpress.ui.dxTreeList.dxTreeListDefaultToolbarItemName | string;
+    /**
+     * [descr:dxTreeListToolbarItem.location]
+     */
+    location?: 'after' | 'before' | 'center';
   }
   /**
    * [descr:dxTreeView]
