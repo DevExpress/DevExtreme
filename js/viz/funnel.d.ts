@@ -450,6 +450,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFunnel
      * @type_function_param1_field2 element:DxElement
@@ -464,6 +465,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxFunnel
      * @type_function_param1_field2 element:DxElement
