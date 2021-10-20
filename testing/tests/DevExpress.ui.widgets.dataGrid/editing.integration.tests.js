@@ -281,7 +281,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     button1: {
                         render({ container, model, onRendered }) {
                             setTimeout(() => {
-                                $('<adiv>').addClass('my-button1').text('Button1').appendTo(container);
+                                $('<div>').addClass('my-button1').text('Button1').appendTo(container);
                                 onRendered();
                             });
 
