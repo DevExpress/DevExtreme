@@ -767,10 +767,10 @@ export type ExplicitTypes<
 export type Properties<
     TItem extends ItemLike = any,
     TKey = any,
-    > = dxListOptions<TItem, TKey>;
+> = dxListOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
 export type Options<
     TItem extends ItemLike = any,
     TKey = any,
-    > = Properties<TItem, TKey>;
+> = Properties<TItem, TKey>;
