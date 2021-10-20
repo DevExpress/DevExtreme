@@ -2101,7 +2101,7 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @public
      */
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DataSource<TRowData, string | Array<string>, TKey>;
+    getDataSource(): DataSource<TRowData, TKey>;
     /**
      * @docid
      * @publicName getKeyByRowIndex(rowIndex)
@@ -4161,6 +4161,13 @@ export interface dxDataGridToolbarItem extends dxToolbarItem {
    * @public
    */
   name?: dxDataGridDefaultToolbarItemName | string;
+  /**
+   * @docid
+   * @type Enums.ToolbarItemLocation
+   * @default 'after'
+   * @public
+   */
+  location?: 'after' | 'before' | 'center';
 }
 
 /**
@@ -4448,7 +4455,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DataSource<TRowData, string | Array<string>, TKey>;
+    getDataSource(): DataSource<TRowData, TKey>;
     getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;

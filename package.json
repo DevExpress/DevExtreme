@@ -185,7 +185,8 @@
     "webpack": "^5.47.0",
     "webpack-stream": "^6.1.2",
     "yaml": "^1.10.2",
-    "yargs": "^4.6.0"
+    "yargs": "^4.6.0",
+    "replicator": "^1.0.5"
   },
   "bin": {
     "devextreme-bundler-init": "bin/bundler-init.js",
@@ -214,6 +215,7 @@
     "build:vue:watch": "gulp generate-vue-watch",
     "build:modular": "cd ./playground/modular && webpack",
     "build:modular:watch": "cd ./playground/modular && webpack --watch",
+    "build:testing-playground": "gulp build-renovation-testing:watch",
     "compile:r": "node ./node_modules/typescript/bin/tsc -p ./renovation.tsconfig.json",
     "dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true gulp dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",

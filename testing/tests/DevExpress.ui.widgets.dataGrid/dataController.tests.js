@@ -2045,6 +2045,40 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.deepEqual(this.dataController.items()[0].values, ['Dan', 25]);
     });
 
+    QUnit.test('calculateSortValue should have correct context on sorting if customizeColumns is used (T1036411)', function(assert) {
+        const array = [
+            { name: 'Alex', age: 30 },
+            { name: 'Dan', age: 25 },
+            { name: 'Bob', age: 20 }
+        ];
+
+        const dataSource = createDataSource(array, { key: 'name' });
+
+        const ascOrder = ['Dan', 'Alex', 'Bob'];
+
+        this.applyOptions({
+            commonColumnSettings: { allowSorting: true },
+            customizeColumns: function() {},
+            columns: [{
+                dataField: 'name', calculateSortValue: function(data) {
+                    if(this.sortOrder === 'asc') {
+                        return $.inArray(data.name, ascOrder);
+                    }
+
+                    return data.name;
+                }
+            }, 'age'],
+            sorting: { mode: 'single' }
+        });
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        // act
+        this.columnsController.changeSortOrder(0, 'asc');
+
+        assert.deepEqual(this.dataController.items().map(item => item.key), ascOrder);
+    });
+
     QUnit.test('sorting when sortingMethod is defined', function(assert) {
         const array = [
             { name: 'Alex', age: 30 },

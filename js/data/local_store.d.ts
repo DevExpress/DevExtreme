@@ -2,12 +2,20 @@ import ArrayStore, {
     ArrayStoreOptions,
 } from './array_store';
 
-/** @namespace DevExpress.data */
-export interface LocalStoreOptions
-<TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends ArrayStoreOptions<TValue, TKeyExpr, TKey> {
+/** @public */
+export type Options<
+    TItem = any,
+    TKey = any,
+> = LocalStoreOptions<TItem, TKey>;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ */
+export interface LocalStoreOptions<
+    TItem = any,
+    TKey = any,
+> extends ArrayStoreOptions<TItem, TKey> {
     /**
      * @docid
      * @default 10000
@@ -31,12 +39,11 @@ export interface LocalStoreOptions
  * @inherits ArrayStore
  * @public
  */
-export default class LocalStore
-<TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends ArrayStore<TValue, TKeyExpr, TKey> {
-    constructor(options?: LocalStoreOptions<TValue, TKeyExpr, TKey>)
+export default class LocalStore<
+    TItem = any,
+    TKey = any,
+> extends ArrayStore<TItem, TKey> {
+    constructor(options?: Options<TItem, TKey>)
     /**
      * @docid
      * @publicName clear()
