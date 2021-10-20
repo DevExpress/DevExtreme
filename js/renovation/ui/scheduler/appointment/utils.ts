@@ -49,21 +49,10 @@ export const getAppointmentKey = (item: AppointmentViewModel): string => {
       leftVirtualWidth,
       topVirtualHeight,
     },
-    info: {
-      appointment: {
-        startDate,
-        endDate,
-      },
-      sourceAppointment: {
-        groupIndex,
-      },
-    },
   } = item;
 
-  const startTime = startDate.getTime();
-  const endTime = endDate.getTime();
   const leftOffset = left + leftVirtualWidth;
   const topOffset = top + topVirtualHeight;
 
-  return `${groupIndex}-${startTime}-${endTime}_${leftOffset}-${topOffset}-${width}-${height}`;
+  return `${leftOffset}-${topOffset}-${width}-${height}`;
 };

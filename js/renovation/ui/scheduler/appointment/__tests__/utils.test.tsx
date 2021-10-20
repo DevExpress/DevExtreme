@@ -99,6 +99,6 @@ describe('Appointment utils', () => {
 
   it('getAppointmentKey', () => {
     expect(getAppointmentKey(testViewModel))
-      .toBe('99-1628157600000-1628164800000_2-4-10-20');
+      .toBe('2-4-10-20');
   });
 });
