@@ -235,10 +235,22 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return createTimeZoneCalculator(this.props.timeZone);
   }
 
-  get internalDataSource(): DataSource {
-    return this.props.dataSource instanceof DataSource
-      ? this.props.dataSource
-      : new DataSource(this.props.dataSource as Appointment[] | DataSourceOptions);
+  get internalDataSource(): DataSource { // TODO make helper function
+    if (this.props.dataSource instanceof DataSource) {
+      return this.props.dataSource;
+    }
+
+    if (this.props.dataSource instanceof Array) {
+      return new DataSource({
+        store: {
+          type: 'array',
+          data: this.props.dataSource,
+        },
+        paginate: false,
+      } as DataSourceOptions);
+    }
+
+    return new DataSource(this.props.dataSource as DataSourceOptions);
   }
 
   get appointmentsConfig(): AppointmentsConfigType | undefined {

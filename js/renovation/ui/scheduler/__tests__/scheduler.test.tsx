@@ -298,7 +298,7 @@ describe('Scheduler', () => {
       });
 
       describe('loadDataSource', () => {
-        it('loadDataSource should load dataItems', () => {
+        it('loadDataSource should load if data items is array', () => {
           const data = [{
             startDate: new Date(2021, 9, 6, 15, 15),
             endDate: new Date(2021, 9, 6, 16, 16),
@@ -306,6 +306,27 @@ describe('Scheduler', () => {
           }];
           const scheduler = new Scheduler({
             dataSource: data,
+          });
+
+          scheduler.loadDataSource();
+
+          expect(scheduler.dataItems)
+            .toMatchObject(data);
+        });
+
+        it('loadDataSource should load if data items is DataSourceOptions', () => {
+          const data = [{
+            startDate: new Date(2021, 9, 6, 15, 15),
+            endDate: new Date(2021, 9, 6, 16, 16),
+            allDay: false,
+          }];
+          const scheduler = new Scheduler({
+            dataSource: {
+              store: {
+                type: 'array',
+                data,
+              },
+            },
           });
 
           scheduler.loadDataSource();
