@@ -3348,7 +3348,7 @@ QUnit.module('search', moduleSetup, () => {
 
         keyboardMock($input)
             .focus()
-            .type('aa');
+            .type('a');
 
         instance.close();
 
@@ -3362,6 +3362,26 @@ QUnit.module('search', moduleSetup, () => {
         assert.ok(instance.option('opened'), 'selectBox is opened');
         assert.equal($items.length, 0, 'items is not rendered');
         assert.equal($emptyMessage.length, 1, 'empty message is rendered');
+    });
+
+    QUnit.test('selectBox opening after search should trigger search if minSearchLength is exceeded (T1027110)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: ['11'],
+            searchEnabled: true,
+            minSearchLength: 2,
+            searchTimeout: 0
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input)
+            .focus()
+            .type('11');
+
+        $input.trigger('dxclick');
+        $input.trigger('dxclick');
+
+        const $items = $(toSelector(LIST_ITEM_CLASS));
+        assert.strictEqual($items.length, 1, 'filtered item is shown');
     });
 
     QUnit.test('Input value should not be changed after dropdown click when \'startswith\' search mode is enabled', function(assert) {
