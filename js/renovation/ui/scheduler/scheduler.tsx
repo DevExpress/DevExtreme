@@ -35,6 +35,8 @@ import { AppointmentsViewModelType, AppointmentViewModel } from './appointment/t
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
+import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
+import { isVerticalGroupingApplied } from './workspaces/utils';
 
 export const viewFunction = ({
   restAttributes,
@@ -264,11 +266,24 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       return undefined;
     }
 
+    const isVerticalGrouping = isVerticalGroupingApplied(
+      this.loadedResources,
+      this.currentViewConfig.groupOrientation,
+    );
+
+    const renderConfig = getViewRenderConfigByType(
+      this.currentViewConfig.type,
+      this.currentViewConfig.crossScrollingEnabled,
+      this.currentViewConfig.intervalCount,
+      isVerticalGrouping,
+    );
+
     return getAppointmentsConfig(
       this.props, // TODO extract props for performace
       this.currentViewConfig, // TODO extract props for performace
       this.loadedResources,
       this.viewDataProvider,
+      renderConfig.isAllDayPanelSupported,
     );
   }
 

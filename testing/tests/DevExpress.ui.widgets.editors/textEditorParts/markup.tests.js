@@ -126,17 +126,6 @@ module('Basic markup', () => {
             }
         });
     });
-
-    test('labelMark should be rendered as attribute', function(assert) {
-        const $editor = $('#texteditor').dxTextEditor({
-            label: 'Label text',
-            labelMode: 'static',
-            labelMark: 'Mark text'
-        });
-
-        const mark = $editor.find('.dx-label > span').attr('data-mark');
-        assert.equal(mark, 'Mark text');
-    });
 });
 
 module('the \'name\' option', () => {

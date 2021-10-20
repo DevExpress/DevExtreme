@@ -201,6 +201,7 @@ describe('Scheduler common', () => {
         workspaceProps,
         [],
         viewDataProvider,
+        true,
       );
 
       const timeZoneCalculator = createTimeZoneCalculator('');

@@ -61,6 +61,7 @@ export const getAppointmentsConfig = (
   viewConfig: CurrentViewConfigType,
   loadedResources: Group[],
   viewDataProvider: ViewDataProviderType,
+  isAllDayPanelSupported: boolean,
 ): AppointmentsConfigType => {
   const groupCount = getGroupCount(loadedResources);
 
@@ -86,11 +87,11 @@ export const getAppointmentsConfig = (
     intervalCount: viewConfig.intervalCount,
     hoursInterval: viewConfig.hoursInterval,
     showAllDayPanel: viewConfig.showAllDayPanel,
+    supportAllDayRow: isAllDayPanelSupported, // ?
     groupOrientation: viewConfig.groupOrientation,
     firstDayOfWeek: viewConfig.firstDayOfWeek,
     viewType: viewConfig.type,
     cellDurationInMinutes: viewConfig.cellDuration,
-    supportAllDayRow: viewConfig.showAllDayPanel, // ?
     isVerticalGroupOrientation: viewConfig.groupOrientation === 'vertical',
     groupByDate: viewConfig.groupByDate,
     startViewDate,

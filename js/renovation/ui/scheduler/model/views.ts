@@ -106,7 +106,7 @@ export const getCurrentViewConfig = (
 
     // indicatorTime: new Date(), // TODO
     allowMultipleCellSelection: true, // TODO
-    allDayPanelExpanded: false, // TODO
+    allDayPanelExpanded: true, // TODO
 
     // noDataText: this.props.noDataText, // TODO: necessary for agenda
     // dataCellTemplate: this.props.dataCellTemplate, // TODO

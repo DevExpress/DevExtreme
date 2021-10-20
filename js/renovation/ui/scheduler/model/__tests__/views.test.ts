@@ -108,7 +108,7 @@ describe('Model views', () => {
           groupOrientation: undefined,
           schedulerHeight: 500,
           schedulerWidth: 500,
-          allDayPanelExpanded: false,
+          allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
         });
     });
@@ -156,7 +156,7 @@ describe('Model views', () => {
           hoursInterval: 5,
           schedulerHeight: 500,
           schedulerWidth: 500,
-          allDayPanelExpanded: false,
+          allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
         });
     });
@@ -195,7 +195,7 @@ describe('Model views', () => {
           hoursInterval: 0.25,
           schedulerHeight: 500,
           schedulerWidth: 500,
-          allDayPanelExpanded: false,
+          allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
           crossScrollingEnabled: true,
         });
@@ -236,7 +236,7 @@ describe('Model views', () => {
           hoursInterval: 0.25,
           schedulerHeight: 500,
           schedulerWidth: 500,
-          allDayPanelExpanded: false,
+          allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
           crossScrollingEnabled: true,
         });

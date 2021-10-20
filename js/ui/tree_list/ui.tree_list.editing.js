@@ -29,7 +29,19 @@ const EditingController = editingModule.controllers.editing.inherit((function() 
             return item;
         },
 
-        _needInsertItem: function(change, changeType, items, item) {
+        _isProcessedItem: function() {
+            return true;
+        },
+
+        _setInsertAfterOrBeforeKey: function(change, parentKey) {
+            if(parentKey !== undefined && parentKey !== this.option('rootValue')) {
+                change.insertAfterKey = parentKey;
+            } else {
+                this.callBase.apply(this, arguments);
+            }
+        },
+
+        _getLoadedRowIndex: function(items, change) {
             const dataController = this.getController('data');
             const dataSourceAdapter = dataController.dataSource();
             const parentKey = dataSourceAdapter?.parentKeyOf(change.data);
@@ -37,9 +49,9 @@ const EditingController = editingModule.controllers.editing.inherit((function() 
             if(parentKey !== undefined && parentKey !== this.option('rootValue')) {
                 const rowIndex = gridCoreUtils.getIndexByKey(parentKey, items);
                 if(rowIndex >= 0 && this._dataController.isRowExpanded(parentKey)) {
-                    items.splice(rowIndex + 1, 0, item);
+                    return rowIndex + 1;
                 }
-                return false;
+                return -1;
             }
             return this.callBase.apply(this, arguments);
         },
