@@ -122,24 +122,6 @@ QUnit.test('Header panel, all-day panel, date table should have a correct width'
     assert.equal(dateTableWidth, 525, 'Width is OK');
 });
 
-QUnit.test('Header panel, all-day panel, date table should have a correct width if cell is larger than 75px', function(assert) {
-    const $element = this.instance.$element();
-    const $cells = $element.find('.dx-scheduler-date-table-cell');
-
-    $cells.get(0).style.width = '300px';
-
-    triggerHidingEvent($element);
-    triggerShownEvent($element);
-
-    const headerPanelWidth = getOuterWidth($element.find('.dx-scheduler-header-panel'));
-    const allDayTableWidth = getOuterWidth($element.find('.dx-scheduler-all-day-table'));
-    const dateTableWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
-
-    assert.equal(headerPanelWidth, 2100, 'Width is OK');
-    assert.equal(allDayTableWidth, 2100, 'Width is OK');
-    assert.equal(dateTableWidth, 2100, 'Width is OK');
-});
-
 QUnit.test('Header panel, all-day panel, date table should always take all work space width', function(assert) {
     const $element = this.instance.$element();
 
@@ -152,9 +134,9 @@ QUnit.test('Header panel, all-day panel, date table should always take all work 
     const allDayTableWidth = getOuterWidth($element.find('.dx-scheduler-all-day-table'));
     const dateTableWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
 
-    assert.roughEqual(headerPanelWidth, 896, 5, 'Width of the header panel is OK');
-    assert.roughEqual(allDayTableWidth, 896, 5, 'Width of the allDay table is OK');
-    assert.roughEqual(dateTableWidth, 896, 5, 'Width of the date table is OK');
+    assert.roughEqual(headerPanelWidth, 525, 5, 'Width of the header panel is OK');
+    assert.roughEqual(allDayTableWidth, 525, 5, 'Width of the allDay table is OK');
+    assert.roughEqual(dateTableWidth, 525, 5, 'Width of the date table is OK');
 });
 
 QUnit.test('Workspace tables width should not be less than element width', function(assert) {
