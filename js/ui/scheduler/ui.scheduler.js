@@ -1914,6 +1914,11 @@ class Scheduler extends Widget {
             this.setTargetedAppointmentResources(rawTargetedAppointment, element, appointmentIndex);
         }
 
+        if(info) {
+            rawTargetedAppointment.displayStartDate = new Date(info.appointment.startDate);
+            rawTargetedAppointment.displayEndDate = new Date(info.appointment.endDate);
+        }
+
         return rawTargetedAppointment;
     }
 
@@ -2162,12 +2167,19 @@ class Scheduler extends Widget {
     }
 
     showAppointmentPopup(rawAppointment, createNewAppointment, rawTargetedAppointment) {
+        const newRawTargetedAppointment = { ...rawTargetedAppointment };
+        if(newRawTargetedAppointment) {
+            delete newRawTargetedAppointment.displayStartDate;
+            delete newRawTargetedAppointment.displayEndDate;
+        }
+
         const appointment = createAppointmentAdapter(
-            (rawTargetedAppointment || rawAppointment),
+            (newRawTargetedAppointment || rawAppointment),
             this._dataAccessors,
             getTimeZoneCalculator(this.key)
         );
-        const newTargetedAppointment = extend({}, rawAppointment, rawTargetedAppointment);
+
+        const newTargetedAppointment = extend({}, rawAppointment, newRawTargetedAppointment);
 
         const isCreateAppointment = createNewAppointment ?? isEmptyObject(rawAppointment);
 
