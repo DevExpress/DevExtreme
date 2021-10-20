@@ -858,7 +858,8 @@ const EditingController = modules.ViewController.inherit((function() {
             this.refresh();
 
             if(!this._allowRowAdding()) {
-                return deferred.reject('cancel');
+                when(this._navigateToNewRow(oldEditRowIndex)).done(deferred.resolve).fail(deferred.reject);
+                return deferred.promise();
             }
 
             if(!key) {
@@ -887,38 +888,49 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
-            const dataController = this._dataController;
             const change = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
-            const d = new Deferred();
-            const oldEditRowIndex = this._getVisibleEditRowIndex();
+            const editRowIndex = this._getVisibleEditRowIndex();
             const insertInfo = this._addInsertInfo(change, parentKey);
             const key = insertInfo.key;
-            const pageIndexToInsertRow = this._getPageIndexToInsertRow();
-
-            let rowIndex = this._getLoadedRowIndex(dataController.items(), change, true);
 
             this._setEditRowKey(key, true);
             this._addChange(change);
+
+            return this._navigateToNewRow(initialOldEditRowIndex, change, editRowIndex);
+        },
+
+        _navigateToNewRow: function(oldEditRowIndex, change, editRowIndex) {
+            const d = new Deferred();
+            editRowIndex = editRowIndex ?? -1;
+            change = change ?? this.getChanges().filter(c => c.type === DATA_EDIT_DATA_INSERT_TYPE)[0];
+
+            if(!change) {
+                return d.reject('cancel').promise();
+            }
+
+            const pageIndexToInsertRow = this._getPageIndexToInsertRow();
+            const dataController = this._dataController;
+            let rowIndex = this._getLoadedRowIndex(dataController.items(), change, true);
 
             if(pageIndexToInsertRow >= 0) {
                 dataController.pageIndex(pageIndexToInsertRow).done(() => {
                     const focusController = this.getController('focus');
                     when(focusController?.navigateToRow(change.key)).done(() => {
-                        rowIndex = dataController.getRowIndexByKey(key);
+                        rowIndex = dataController.getRowIndexByKey(change.key);
                         d.resolve();
                     });
                 }).fail(d.reject);
             } else {
                 dataController.updateItems({
                     changeType: 'update',
-                    rowIndices: [initialOldEditRowIndex, oldEditRowIndex, rowIndex]
+                    rowIndices: [oldEditRowIndex, editRowIndex, rowIndex]
                 });
                 d.resolve();
             }
 
             d.done(() => {
                 this._showAddedRow(rowIndex);
-                this._afterInsertRow(key);
+                this._afterInsertRow(change.key);
             });
 
             return d.promise();
