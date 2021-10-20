@@ -12,7 +12,7 @@ import { isString, isObject } from '../../../core/utils/type';
 import { titleize, camelize } from '../../../core/utils/inflector';
 import { extend } from '../../../core/utils/extend';
 
-const MODULE_NAMESPACE = 'dxHtmlTableContextMenu';
+const MODULE_NAMESPACE = 'dxHtmlEditorTableContextMenu';
 
 const CONTEXT_MENU_EVENT = addNamespace('dxcontextmenu', MODULE_NAMESPACE);
 
@@ -38,9 +38,9 @@ if(Quill) {
         }
 
         _enableContextMenu(items) {
-            if(!this._contextMenu) {
-                this._contextMenu = this._createContextMenu(items);
-            }
+            this._contextMenu?.dispose();
+            this._contextMenu = this._createContextMenu(items);
+
             this._attachEvents();
         }
 
@@ -49,7 +49,7 @@ if(Quill) {
         }
 
         _detachEvents() {
-            eventsEngine.off(this.editorInstance._getContent(), MODULE_NAMESPACE);
+            eventsEngine.off(this.editorInstance._getContent(), CONTEXT_MENU_EVENT);
         }
 
         _createContextMenu(items) {
@@ -171,9 +171,17 @@ if(Quill) {
         }
 
         option(option, value) {
+            if(option === 'tableContextMenu') {
+                Object.keys(value).forEach((optionName) => this.option(optionName, value[optionName]));
+                return;
+            }
+
             if(option === 'enabled') {
                 this.enabled = value;
                 value ? this._enableContextMenu() : this._detachEvents();
+            } else if(option === 'items') {
+                this._contextMenu?.dispose();
+                this._contextMenu = this._createContextMenu(value);
             }
         }
 
