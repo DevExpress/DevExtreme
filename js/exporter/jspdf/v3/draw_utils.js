@@ -12,7 +12,9 @@ function drawCellsContent(doc, cellsArray, docStyles) {
     cellsArray.forEach(cell => {
         drawCellBackground(doc, cell);
         if(isDefined(cell.customDrawCell)) {
-            cell.customDrawCell(cell._rect);
+            // cut unnecessary properties
+            const { _rect, customDrawCell, pdfRowInfo, gridCell, ...pdfCell } = cell;
+            cell.customDrawCell(_rect, pdfCell);
         } else {
             drawCellText(doc, cell, docStyles);
         }

@@ -262,6 +262,40 @@ const JSPdfCustomDrawCellTests = {
                     done();
                 });
             });
+
+            QUnit.test('customDrawCell check event arg', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    width: 500,
+                    columns: [{ caption: 'f1' }]
+                });
+
+                const customizeCell = ({ gridCell, pdfCell }) => {
+                    pdfCell.customDrawCell = (rect, cell) => {
+                        assert.deepEqual(rect, { h: 18.4, w: 500, x: 10, y: 10 });
+                        assert.deepEqual(cell, {
+                            backgroundColor: undefined,
+                            horizontalAlign: 'left',
+                            padding: {
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                top: 0
+                            },
+                            text: 'f1',
+                            verticalAlign: 'middle',
+                            wordWrapEnabled: false
+                        });
+                    };
+                };
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 10 }, customizeCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    done();
+                });
+            });
         });
     }
 };
