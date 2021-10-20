@@ -901,6 +901,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _navigateToNewRow: function(oldEditRowIndex, change, editRowIndex) {
             const d = new Deferred();
+            const dataController = this._dataController;
+            const focusController = this.getController('focus');
             editRowIndex = editRowIndex ?? -1;
             change = change ?? this.getChanges().filter(c => c.type === DATA_EDIT_DATA_INSERT_TYPE)[0];
 
@@ -909,17 +911,21 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             const pageIndexToInsertRow = this._getPageIndexToInsertRow();
-            const dataController = this._dataController;
             let rowIndex = this._getLoadedRowIndex(dataController.items(), change, true);
+            const navigateToRowByKey = (key) => {
+                when(focusController?.navigateToRow(key)).done(() => {
+                    rowIndex = dataController.getRowIndexByKey(change.key);
+                    d.resolve();
+                });
+            };
+            const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
 
             if(pageIndexToInsertRow >= 0) {
                 dataController.pageIndex(pageIndexToInsertRow).done(() => {
-                    const focusController = this.getController('focus');
-                    when(focusController?.navigateToRow(change.key)).done(() => {
-                        rowIndex = dataController.getRowIndexByKey(change.key);
-                        d.resolve();
-                    });
+                    navigateToRowByKey(change.key);
                 }).fail(d.reject);
+            } else if(rowIndex < 0 && isDefined(insertAfterOrBeforeKey)) {
+                navigateToRowByKey(insertAfterOrBeforeKey);
             } else {
                 dataController.updateItems({
                     changeType: 'update',
