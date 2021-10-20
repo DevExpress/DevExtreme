@@ -145,4 +145,5 @@ export interface ViewRenderConfig {
   isGenerateWeekDaysHeaderData: boolean;
   scrollingDirection: ScrollableDirection;
   isCreateCrossScrolling: boolean;
+  defaultGroupOrientation: GroupOrientation;
 }
