@@ -130,11 +130,11 @@ module('crossScrollingEnabled = true', config, () => {
             crossScrollingEnabled: true
         });
 
-        const appointmentsInstance = scheduler.instance.getAppointmentsInstance();
-        const items = appointmentsInstance.option('items');
+        scheduler.appointmentList[0].getElement().css('background', 'red');
 
         scheduler.option('crossScrollingEnabled', false);
-        assert.notDeepEqual(appointmentsInstance.option('items'), items, 'Appointments are repainted');
+
+        assert.notEqual(scheduler.appointmentList[0].getElement().css('background'), 'red', 'Appointments are repainted');
     });
 
     if(!isMobile) {
