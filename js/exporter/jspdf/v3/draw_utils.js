@@ -11,7 +11,11 @@ function round(value) {
 function drawCellsContent(doc, cellsArray, docStyles) {
     cellsArray.forEach(cell => {
         drawCellBackground(doc, cell);
-        drawCellText(doc, cell, docStyles);
+        if(isDefined(cell.customDrawCell)) {
+            cell.customDrawCell(cell._rect);
+        } else {
+            drawCellText(doc, cell, docStyles);
+        }
     });
 }
 

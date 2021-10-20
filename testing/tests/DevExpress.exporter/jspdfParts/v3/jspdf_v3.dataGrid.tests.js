@@ -19,6 +19,7 @@ import { JSPdfVerticalAlignTests } from './jspdf_v3.dataGrid.verticalAlign.tests
 import { JSPdfHorizontalAlignTests } from './jspdf_v3.dataGrid.horizontalAlign.tests.js';
 import { JSPdfPageMarginsTests } from './jspdf_v3.dataGrid.pageMargin.tests.js';
 import { JSPdfColumnWidthsTests } from './jspdf_v3.dataGrid.columnAutoWidth.tests.js';
+import { JSPdfCustomDrawCellTests } from './jspdf_v3.dataGrid.customDrawCell.tests.js';
 
 import 'generic_light.css!';
 
@@ -128,6 +129,12 @@ function createMockPdfDoc(options) {
         }
         this.__log.push('text,' + argumentsToString.apply(null, arguments));
         this.__text.apply(this, arguments);
+    };
+
+    result.__addImage = result.addImage;
+    result.addImage = function() {
+        this.__log.push('addImage,' + argumentsToString.apply(null, ['someImage', ...[...arguments].slice(1)]));
+        this.__addImage.apply(this, arguments);
     };
 
     result.__addPage = result.addPage;
@@ -1270,3 +1277,4 @@ JSPdfVerticalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid)
 JSPdfHorizontalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfColumnWidthsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfPageMarginsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfCustomDrawCellTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

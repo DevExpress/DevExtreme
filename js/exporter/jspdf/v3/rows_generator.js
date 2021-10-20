@@ -21,7 +21,8 @@ import { isDefined } from '../../../core/utils/type';
 //              drawRightBorder,
 //              drawLeftBorder
 //              drawTopBorder
-//              drawBottomBorder
+//              drawBottomBorder,
+//              customDrawCell: (rect) => void
 //          }
 //        }
 //      ],
@@ -75,6 +76,7 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
                 wordWrapEnabled,
                 backgroundColor,
                 padding: 0,
+                customDrawCell: undefined,
                 _rect: {}
             }
         };
