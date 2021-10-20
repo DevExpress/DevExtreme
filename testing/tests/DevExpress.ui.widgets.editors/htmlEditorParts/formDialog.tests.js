@@ -55,7 +55,9 @@ QUnit.module('FormDialog', moduleConfig, () => {
     });
 
     test('check dialog popup fullscreen mode (T1026801)', function(assert) {
-        const expectedFullScreen = hasWindow() && (devices.real().deviceType === 'phone' || getCurrentScreenFactor() === 'xs');
+        const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
+        const expectedFullScreen = devices.real().deviceType === 'phone' || screenFactor === 'xs';
+
         const formDialog = new FormDialog(this.componentMock, { container: this.$element });
         formDialog.show({ items: ['name'] });
 
