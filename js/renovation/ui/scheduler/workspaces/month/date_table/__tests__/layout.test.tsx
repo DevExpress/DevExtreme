@@ -41,16 +41,18 @@ describe('MonthDateTableLayout', () => {
         props: {
           addDateTableClass: 'addDateTableClass',
           tableRef: 'tableRef',
+          addVerticalSizesClassToRows: false,
         },
       });
 
       expect(layout.props())
-        .toMatchObject({
+        .toEqual({
           viewData,
           groupOrientation: VERTICAL_GROUP_ORIENTATION,
           cellTemplate: MonthDateTableCell,
           addDateTableClass: 'addDateTableClass',
           tableRef: 'tableRef',
+          addVerticalSizesClassToRows: false,
         });
     });
   });
