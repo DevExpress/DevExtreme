@@ -1512,7 +1512,7 @@ module('Virtual scrolling integration', () => {
                                     height: 450
                                 }, {
                                     groupIndex: 1,
-                                    left: 525,
+                                    left: 524,
                                     top: 100,
                                     height: 450
                                 }],
@@ -1539,7 +1539,7 @@ module('Virtual scrolling integration', () => {
                                     height: 300
                                 }, {
                                     groupIndex: 1,
-                                    left: 525,
+                                    left: 524,
                                     top: 250,
                                     height: 300
                                 }],
@@ -1560,7 +1560,7 @@ module('Virtual scrolling integration', () => {
                                     height: 400
                                 }, {
                                     groupIndex: 1,
-                                    left: 525,
+                                    left: 524,
                                     top: 900,
                                     height: 400
                                 }]
@@ -1587,7 +1587,7 @@ module('Virtual scrolling integration', () => {
                                     height: 650
                                 }, {
                                     groupIndex: 1,
-                                    left: 525,
+                                    left: 524,
                                     top: 900,
                                     height: 650
                                 }]]
@@ -1612,7 +1612,7 @@ module('Virtual scrolling integration', () => {
                                     height: 300
                                 }, {
                                     groupIndex: 1,
-                                    left: 525,
+                                    left: 524,
                                     top: 250,
                                     height: 300
                                 }],
@@ -1633,7 +1633,7 @@ module('Virtual scrolling integration', () => {
                                     height: 400
                                 }, {
                                     groupIndex: 1,
-                                    left: 525,
+                                    left: 524,
                                     top: 900,
                                     height: 400
                                 }]
