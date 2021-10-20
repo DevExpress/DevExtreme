@@ -25,23 +25,20 @@ export const viewFunction = ({
   return (
     <Widget
       onClick={onItemClick}
+      rootElementRef={ref}
+      className="dx-scheduler-appointment"
+      style={styles}
     >
-      <div
-        ref={ref}
-        className="dx-scheduler-appointment"
-        style={styles}
-      >
-        {
-          !!AppointmentTemplate && (
-            <AppointmentTemplate data={data} index={index} />
-          )
-        }
-        {
-          !AppointmentTemplate && (
-            <AppointmentContent text={text} dateText={dateText} />
-          )
-        }
-      </div>
+      {
+        !!AppointmentTemplate && (
+          <AppointmentTemplate data={data} index={index} />
+        )
+      }
+      {
+        !AppointmentTemplate && (
+          <AppointmentContent text={text} dateText={dateText} />
+        )
+      }
     </Widget>
   );
 };
@@ -66,7 +63,7 @@ export class AppointmentProps {
   view: viewFunction,
 })
 export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'onItemClick'>() {
-  @Ref() ref!: RefObject<HTMLElement>;
+  @Ref() ref!: RefObject<HTMLDivElement>;
 
   get text(): string { return this.props.viewModel.appointment.text; }
 

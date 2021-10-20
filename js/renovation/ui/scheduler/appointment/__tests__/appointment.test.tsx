@@ -1,6 +1,8 @@
-import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction, Appointment, AppointmentProps } from '../appointment';
+import React from 'react';
+import { shallow } from 'enzyme';
+import { viewFunction as ViewFunction, Appointment, AppointmentProps } from '../appointment';
 import { AppointmentContent } from '../content';
+import { Widget } from '../../../common/widget';
 
 describe('Appointment', () => {
   const defaultViewModel = {
@@ -34,23 +36,26 @@ describe('Appointment', () => {
   };
 
   describe('Render', () => {
-    const render = (viewModel): ShallowWrapper => shallow(viewFunction({
-      ...viewModel,
-      props: {
-        ...viewModel.props,
-        viewModel: defaultViewModel,
-      },
-    }));
+    const render = (viewModel) => shallow(
+      <ViewFunction
+        {...viewModel}
+        props={{
+          ...new AppointmentProps(),
+          ...viewModel.props,
+        }}
+      />,
+    );
 
     it('it should has correct render', () => {
-      const tree = render({
+      const appointment = render({
         styles: 'some-styles',
       });
 
-      const appointment = tree.find('.dx-scheduler-appointment');
-
-      expect(appointment.is('div'))
+      expect(appointment.is(Widget))
         .toBe(true);
+
+      expect(appointment.prop('className'))
+        .toEqual('dx-scheduler-appointment');
 
       expect(appointment.prop('style'))
         .toEqual('some-styles');
@@ -62,7 +67,7 @@ describe('Appointment', () => {
         index: 1234,
       };
       const template = '<div class="some-template">Some Template</div>';
-      const tree = render({
+      const appointment = render({
         styles: 'some-styles',
         ...templateProps,
         props: {
@@ -70,9 +75,10 @@ describe('Appointment', () => {
         },
       });
 
-      const appointment = tree.find('.dx-scheduler-appointment');
+      expect(appointment.prop('className'))
+        .toEqual('dx-scheduler-appointment');
 
-      expect(appointment.is('div'))
+      expect(appointment.is(Widget))
         .toBe(true);
 
       expect(appointment.prop('style'))
@@ -91,9 +97,7 @@ describe('Appointment', () => {
     });
 
     it('it should has correct content container', () => {
-      const tree = render({});
-
-      const appointment = tree.find('.dx-scheduler-appointment');
+      const appointment = render({});
 
       expect(appointment.children().type())
         .toBe(AppointmentContent);
