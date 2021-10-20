@@ -1839,6 +1839,8 @@ const JSPdfPageMarginsTests = {
                     columns: [{ caption: 'f1' }]
                 });
 
+                assert.equal(1, 2);
+
                 const expectedLog = [
                     'text,f1,20,19.2,{baseline:middle}',
                     'setLineWidth,1',
