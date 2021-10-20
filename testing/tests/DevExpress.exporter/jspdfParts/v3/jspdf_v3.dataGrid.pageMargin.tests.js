@@ -1764,7 +1764,7 @@ const JSPdfPageMarginsTests = {
                 });
             });
 
-            QUnit.test('1 col - 1 row. grid.Width=100, Margin=10, topLeft={x=10,y=0}, pageOrientation=portrait', function(assert) {
+            QUnit.test('1 col - 1 row. grid.Width=100, Margin=10, topLeft={x=10,y=0}, pageOrientation=landscape', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc({ orientation: 'l' });
 
