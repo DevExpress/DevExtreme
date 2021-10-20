@@ -143,6 +143,31 @@ module('Table resizing module', moduleConfig, () => {
         assert.strictEqual(this.detachSeparatorEventsSpy.callCount, 1, 'Events are detached on module deinitialization');
     });
 
+    test('module should work correct if it has been enabled or disabled some times at runtime', function(assert) {
+        this.options.enabled = true;
+        const resizingInstance = new TableResizing(this.quillMock, this.options);
+
+        this.clock.tick();
+
+        try {
+            resizeCallbacks.fire();
+
+            resizingInstance.option('enabled', true);
+
+            this.clock.tick();
+
+            resizingInstance.option('enabled', false);
+
+            this.clock.tick();
+
+            resizingInstance.option('enabled', true);
+
+            assert.strictEqual(typeof resizingInstance._resizeHandler, 'function', 'resizingInstance._resizeHandler is still a function');
+        } catch(e) {
+            assert.ok(false);
+        }
+    });
+
     test('Window resize callback should be added', function(assert) {
         this.options.enabled = true;
         const resizingInstance = new TableResizing(this.quillMock, this.options);
