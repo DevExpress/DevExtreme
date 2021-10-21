@@ -635,6 +635,57 @@ test.skip('New virtual mode. Virtual rows should not be in view port', async (t)
   });
 });
 
+test('New row should be rendered at the top when grid is scrolled in virtual scrolling', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await dataGrid.scrollTo({ top: 2350 });
+
+  const topVisibleRowData = await dataGrid.apiGetTopVisibleRowData();
+
+  // assert
+  await t
+    .expect(topVisibleRowData.ID)
+    .eql(70);
+
+  await t
+    .click(dataGrid.getHeaderPanel().getAddRowButton());
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).isInserted)
+    .ok();
+}).before(async () => {
+  const generateData = (): Record<string, unknown>[] => {
+    const items: Record<string, unknown>[] = [];
+    for (let i = 0; i < 130; i += 1) {
+      items.push({
+        ID: i + 1,
+        Name: `Name ${i + 1}`,
+      });
+    }
+    return items;
+  };
+  await ClientFunction(() => {
+    $('#container').css('max-height', 440);
+  })();
+  await createWidget('dxDataGrid', {
+    dataSource: generateData(),
+    keyExpr: 'ID',
+    scrolling: {
+      mode: 'virtual',
+    },
+    paging: {
+      pageSize: 10,
+    },
+    editing: {
+      mode: 'row',
+      allowAdding: true,
+      newRowPosition: 'first',
+    },
+  });
+});
+
 fixture`Remote Scrolling`
   .page(url(__dirname, '../containerAspNetData.html'));
 
