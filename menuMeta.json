@@ -1963,6 +1963,7 @@
           {
             "Title": "Tables",
             "Name": "Tables",
+            "Badge": "Updated",
             "Widget": "HtmlEditor",
             "MvcDescription": "",
             "NetCoreDescription": "",
