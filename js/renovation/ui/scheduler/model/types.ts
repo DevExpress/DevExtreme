@@ -39,7 +39,7 @@ export interface AppointmentsConfigType {
 
 export interface AppointmentsModelType extends AppointmentsConfigType {
   appointmentRenderingStrategyName: string;
-  loadedResources: [];
+  loadedResources: Group[];
   dataAccessors: DataAccessorType;
   timeZoneCalculator: unknown;
   viewDataProvider: unknown;

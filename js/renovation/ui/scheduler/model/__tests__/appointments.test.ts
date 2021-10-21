@@ -4,7 +4,7 @@ import { ViewType } from '../../types';
 import { prepareGenerationOptions } from '../../workspaces/base/work_space';
 import { getViewRenderConfigByType } from '../../workspaces/base/work_space_config';
 import { WorkSpaceProps } from '../../workspaces/props';
-import { CellsMetaData, ViewDataProviderType } from '../../workspaces/types';
+import { CellsMetaData, Group, ViewDataProviderType } from '../../workspaces/types';
 import { getAppointmentsConfig, getAppointmentsModel } from '../appointments';
 import {
   createFactoryInstances,
@@ -19,6 +19,7 @@ const prepareInstances = (
   currentDate: Date,
   intervalCount: number,
   supportAllDayRow: boolean,
+  loadedResources: Group[],
 ): {
   appointmentsConfig: AppointmentsConfigType;
   timeZoneCalculator: TimeZoneCalculator;
@@ -62,7 +63,7 @@ const prepareInstances = (
   const appointmentsConfig = getAppointmentsConfig(
     schedulerProps,
     workspaceProps,
-    [],
+    loadedResources,
     viewDataProvider,
     supportAllDayRow,
   );
@@ -76,68 +77,77 @@ const prepareInstances = (
 };
 
 describe('Appointments model', () => {
-  [true, false].forEach((supportAllDayRow) => {
-    describe(`getAppointmentsModel if supportAllDayPanel is ${supportAllDayRow}`, () => {
-      const instances = prepareInstances(
-        'week',
-        new Date(2021, 8, 22),
-        7,
-        supportAllDayRow,
-      );
+  [
+    [],
+    [
+      { items: [{ id: 1 }] },
+      { items: [{ id: 2 }] },
+    ],
+  ].forEach((loadedResources) => {
+    [true, false].forEach((supportAllDayRow) => {
+      describe(`getAppointmentsModel if supportAllDayPanel is ${supportAllDayRow} and loaded resources is ${!!loadedResources.length}`, () => {
+        const instances = prepareInstances(
+          'week',
+          new Date(2021, 8, 22),
+          7,
+          supportAllDayRow,
+          loadedResources as Group[],
+        );
 
-      const appointmentsModel = getAppointmentsModel(
-        instances.appointmentsConfig,
-        instances.viewDataProvider,
-        instances.timeZoneCalculator,
-        { } as any,
-        instances.DOMMetaData,
-      );
+        const appointmentsModel = getAppointmentsModel(
+          instances.appointmentsConfig,
+          instances.viewDataProvider,
+          instances.timeZoneCalculator,
+          { } as any,
+          instances.DOMMetaData,
+        );
 
-      it('should be creared correctly', () => {
-        expect(appointmentsModel)
-          .toMatchObject({
-            adaptivityEnabled: false,
-            rtlEnabled: false,
-            startDayHour: 0,
-            viewStartDayHour: 0, // TODO remove
-            endDayHour: 24,
-            viewEndDayHour: 24, // TODO remove
-            resources: [],
-            maxAppointmentsPerCell: 'auto',
-            currentDate: new Date('2021-09-22T00:00:00'),
-            isVirtualScrolling: false,
-            intervalCount: 7,
-            hoursInterval: 0.5,
-            showAllDayPanel: false,
-            modelGroups: [],
-            appointmentCountPerCell: 2, // TODO default
-            appointmentOffset: 26, // TODO default
-            allowResizing: false, // TODO resizing
-            allowAllDayResizing: false, // TODO resizing
-            dateTableOffset: 0,
-            groupOrientation: 'horizontal',
-            startViewDate: new Date(2021, 8, 19),
-            timeZone: '',
-            firstDayOfWeek: 0,
-            viewType: 'week',
-            cellDurationInMinutes: 30,
-            supportAllDayRow,
-            isVerticalGroupOrientation: false,
-            loadedResources: [],
-            intervalDuration: 4233600000,
-            allDayIntervalDuration: 311040000000000,
-          });
-      });
+        it('should be creared correctly', () => {
+          expect(appointmentsModel)
+            .toMatchObject({
+              adaptivityEnabled: false,
+              rtlEnabled: false,
+              startDayHour: 0,
+              viewStartDayHour: 0, // TODO remove
+              endDayHour: 24,
+              viewEndDayHour: 24, // TODO remove
+              resources: [],
+              maxAppointmentsPerCell: 'auto',
+              currentDate: new Date('2021-09-22T00:00:00'),
+              isVirtualScrolling: false,
+              intervalCount: 7,
+              hoursInterval: 0.5,
+              showAllDayPanel: false,
+              modelGroups: [],
+              appointmentCountPerCell: 2, // TODO default
+              appointmentOffset: 26, // TODO default
+              allowResizing: false, // TODO resizing
+              allowAllDayResizing: false, // TODO resizing
+              dateTableOffset: 0,
+              groupOrientation: 'horizontal',
+              startViewDate: new Date(2021, 8, 19),
+              timeZone: '',
+              firstDayOfWeek: 0,
+              viewType: 'week',
+              cellDurationInMinutes: 30,
+              supportAllDayRow,
+              isVerticalGroupOrientation: false,
+              loadedResources,
+              intervalDuration: 1800000,
+              allDayIntervalDuration: 86400000,
+            });
+        });
 
-      it('should contains correct instances', () => {
-        expect(appointmentsModel.timeZoneCalculator)
-          .toEqual(instances.timeZoneCalculator);
+        it('should contains correct instances', () => {
+          expect(appointmentsModel.timeZoneCalculator)
+            .toEqual(instances.timeZoneCalculator);
 
-        expect(appointmentsModel.viewDataProvider)
-          .toEqual(instances.viewDataProvider);
+          expect(appointmentsModel.viewDataProvider)
+            .toEqual(instances.viewDataProvider);
 
-        expect(appointmentsModel.DOMMetaData)
-          .toEqual(instances.DOMMetaData);
+          expect(appointmentsModel.DOMMetaData)
+            .toEqual(instances.DOMMetaData);
+        });
       });
     });
   });

@@ -335,6 +335,8 @@ describe('Appointments view model', () => {
 
       expect(allDay[0])
         .toEqual({
+          key: '200-0--200-24.5',
+
           appointment:
           {
             startDate: new Date(2021, 8, 23),

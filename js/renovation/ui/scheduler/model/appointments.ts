@@ -119,11 +119,13 @@ export const getAppointmentsModel = (
     appointmentsConfig.groupByDate,
   );
 
+  const { groupCount, isVerticalGroupOrientation } = appointmentsConfig;
   const positionHelper = new PositionHelper({
     viewDataProvider,
     groupedByDate,
     rtlEnabled: appointmentsConfig.rtlEnabled,
-    groupCount: appointmentsConfig.groupCount,
+    groupCount,
+    isVerticalGrouping: groupCount && isVerticalGroupOrientation,
     getDOMMetaDataCallback: (): CellsMetaData => cellsMetaData,
   });
 
@@ -155,8 +157,6 @@ export const getAppointmentsModel = (
     appointmentsConfig.hoursInterval,
   );
 
-  const intervalDuration = viewDataProvider.getIntervalDuration(appointmentsConfig.intervalCount);
-  const allDayIntervalDuration = toMs('day') * 3600000;
   const { leftVirtualCellCount, topVirtualRowCount } = viewDataProvider.viewData;
   const cellDuration = getCellDuration(
     appointmentsConfig.viewType,
@@ -180,7 +180,7 @@ export const getAppointmentsModel = (
   return {
     ...appointmentsConfig,
     appointmentRenderingStrategyName,
-    loadedResources: [],
+    loadedResources: appointmentsConfig.loadedResources,
     dataAccessors,
     timeZoneCalculator,
     viewDataProvider,
@@ -193,8 +193,8 @@ export const getAppointmentsModel = (
     isGroupedByDate: groupedByDate,
     endViewDate,
     visibleDayDuration,
-    intervalDuration,
-    allDayIntervalDuration,
+    intervalDuration: cellDuration,
+    allDayIntervalDuration: toMs('day'),
     leftVirtualCellCount,
     topVirtualCellCount: topVirtualRowCount,
     cellDuration,
