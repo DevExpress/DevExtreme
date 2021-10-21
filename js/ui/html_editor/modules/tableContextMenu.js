@@ -172,7 +172,7 @@ if(Quill) {
 
         option(option, value) {
             if(option === 'tableContextMenu') {
-                Object.keys(value).forEach((optionName) => this.option(optionName, value[optionName]));
+                this.handleOptionChangeValue(value);
                 return;
             }
 
