@@ -1339,7 +1339,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
         this.clock.tick();
 
         assert.equal(buttonTemplateCallCount, 1, 'template is rendered asynchronously');
-        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test', 'template is applied');
+        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test\u00A0', 'template is applied');
     });
 
     QUnit.test('showEditorAlways column should render synchronously if renderAsync is true and column renderAsync is false', function(assert) {
