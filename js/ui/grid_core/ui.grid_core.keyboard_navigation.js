@@ -43,6 +43,7 @@ const REVERT_BUTTON_CLASS = 'dx-revert-button';
 const FAST_EDITING_DELETE_KEY = 'delete';
 
 const INTERACTIVE_ELEMENTS_SELECTOR = 'input:not([type=\'hidden\']), textarea, a, select, button, [tabindex], .dx-dropdowneditor-icon, .dx-checkbox';
+const NON_FOCUSABLE_ELEMENTS_SELECTOR = '.dx-dropdowneditor-icon';
 
 const EDIT_MODE_ROW = 'row';
 const EDIT_MODE_FORM = 'form';
@@ -1759,7 +1760,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         return this._isCellEditMode() && this.option('keyboardNavigation.editOnKeyPress');
     },
     _getInteractiveElement: function($cell, isLast) {
-        const $focusedElement = $cell.find(INTERACTIVE_ELEMENTS_SELECTOR).filter(':visible');
+        const $focusedElement = $cell.find(INTERACTIVE_ELEMENTS_SELECTOR).not(NON_FOCUSABLE_ELEMENTS_SELECTOR).filter(':visible');
 
         return isLast ? $focusedElement.last() : $focusedElement.first();
     },
