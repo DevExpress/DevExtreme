@@ -3140,10 +3140,7 @@ export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
 
 /** @public */
 export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
-  readonly data?: {
-    key: any[];
-    items: Array<TRowData>;
-  };
+  readonly data?: TGroupData<TRowData>;
   readonly component: dxDataGrid<TRowData, TKey>;
   readonly value?: any;
   readonly text: string;
