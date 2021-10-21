@@ -39,10 +39,14 @@ const prepareInstances = (
     workspaceProps.type,
     false,
     workspaceProps.intervalCount,
-    false,
+    [],
+    'horizontal',
   );
   const generationOptions = prepareGenerationOptions(
-    workspaceProps,
+    {
+      ...workspaceProps,
+      groupOrientation: 'horizontal',
+    },
     viewRenderConfig,
     false,
   );

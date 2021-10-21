@@ -163,7 +163,8 @@ describe('Scheduler common', () => {
         workspaceProps.type,
         workspaceProps.crossScrollingEnabled,
         workspaceProps.intervalCount,
-        workspaceProps.groupOrientation === 'vertical',
+        workspaceProps.groups,
+        workspaceProps.groupOrientation,
       );
       const generationOptions = prepareGenerationOptions(
         workspaceProps,
