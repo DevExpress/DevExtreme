@@ -1,6 +1,6 @@
 import Quill from 'devextreme-quill';
 import EmptyModule from './empty';
-import { isObject } from '../../../core/utils/type';
+import { isObject, isDefined } from '../../../core/utils/type';
 
 let BaseModule = EmptyModule;
 
@@ -25,7 +25,7 @@ if(Quill) {
         handleOptionChangeValue(changes) {
             if(isObject(changes)) {
                 Object.entries(changes).forEach(([name, value]) => this.option(name, value));
-            } else if(changes === null) {
+            } else if(!isDefined(changes)) {
                 this?.clean();
             }
         }
