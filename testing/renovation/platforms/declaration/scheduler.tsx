@@ -7,15 +7,15 @@ import {
 } from '@devextreme-generator/declarations';
 import React from 'react';
 import { getComponentOptions } from './helpers/getComponentOptions';
-// import { Scheduler } from '../../../../js/renovation/ui/scheduler/scheduler';
+import { Scheduler } from '../../../../js/renovation/ui/scheduler/scheduler';
 
-export const viewFunction = (/* { options } */): JSX.Element => (
+export const viewFunction = ({ options }): JSX.Element => (
   <Fragment>
-    {/* <Scheduler
+    <Scheduler
       className="test-scheduler"
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...options}
-    /> */}
+    />
   </Fragment>
 );
 
