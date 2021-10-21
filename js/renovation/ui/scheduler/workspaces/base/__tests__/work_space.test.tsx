@@ -807,7 +807,7 @@ describe('WorkSpace', () => {
             });
 
           expect(getViewRenderConfigByType)
-            .toBeCalledWith('week', true, 3, true);
+            .toBeCalledWith('week', true, 3, groups, 'vertical');
         });
       });
 

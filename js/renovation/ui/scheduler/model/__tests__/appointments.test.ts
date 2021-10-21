@@ -39,7 +39,8 @@ const prepareInstances = (
     workspaceProps.type,
     false,
     workspaceProps.intervalCount,
-    false,
+    [],
+    'horizontal',
   );
   const generationOptions = prepareGenerationOptions(
     {

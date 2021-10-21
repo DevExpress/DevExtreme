@@ -200,15 +200,12 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   groupPanelRef!: RefObject<HTMLDivElement>;
 
   get renderConfig(): ViewRenderConfig {
-    const isVerticalGrouping = isVerticalGroupingApplied(
-      this.props.groups, this.props.groupOrientation,
-    );
-
     return getViewRenderConfigByType(
       this.props.type,
       this.props.crossScrollingEnabled,
       this.props.intervalCount,
-      isVerticalGrouping,
+      this.props.groups,
+      this.props.groupOrientation,
     );
   }
 
