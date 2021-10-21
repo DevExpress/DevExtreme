@@ -24,7 +24,7 @@ export default {
             rootElement.find('.' + SORT_CLASS).remove();
             !$indicatorsContainer.children().length && $indicatorsContainer.remove();
 
-            const isSortingAllowed = (sortingMode === 'single' || sortingMode === 'multiple') && column.allowSorting;
+            const isSortingAllowed = sortingMode !== 'none' && column.allowSorting;
 
             if(!isDefined(column.groupIndex) && (isSortingAllowed || isDefined(column.sortOrder))) {
                 ariaSortState = column.sortOrder === 'asc' ? 'ascending' : 'descending';
@@ -41,7 +41,9 @@ export default {
                     $sortIndicator.addClass(SORT_INDEX_CLASS);
                 }
 
-                options.rootElement.addClass(that.addWidgetPrefix(HEADERS_ACTION_CLASS));
+                if(isSortingAllowed) {
+                    options.rootElement.addClass(that.addWidgetPrefix(HEADERS_ACTION_CLASS));
+                }
             }
 
             if(!isDefined(column.sortOrder)) {

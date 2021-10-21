@@ -958,6 +958,7 @@ export interface GridBaseScrolling {
      * @docid GridBaseOptions.scrolling.scrollByContent
      * @type boolean
      * @default true
+     * @default false [for](non-touch_devices)
      * @prevFileNamespace DevExpress.ui
      * @public
      */

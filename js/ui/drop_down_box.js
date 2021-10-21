@@ -131,11 +131,10 @@ const DropDownBox = DropDownEditor.inherit({
 
     _renderInputValue: function() {
         this._rejectValueLoading();
-        const callBase = this.callBase.bind(this);
         const values = [];
 
         if(!this._dataSource) {
-            callBase(values);
+            this.callBase(values);
             return new Deferred().resolve();
         }
 
@@ -144,21 +143,27 @@ const DropDownBox = DropDownEditor.inherit({
 
         keys = Array.isArray(keys) ? keys : [keys];
 
-        const itemLoadDeferreds = map(keys, (function(key) {
-            return this._loadItem(key).always((function(item) {
-                const displayValue = this._displayGetter(item);
-                if(isDefined(displayValue)) {
-                    values.push(displayValue);
-                }
-            }).bind(this));
-        }).bind(this));
+        const itemLoadDeferreds = map(keys, key => {
+            const deferred = new Deferred();
+            this
+                ._loadItem(key)
+                .always(item => {
+                    const displayValue = this._displayGetter(item);
+                    if(isDefined(displayValue)) {
+                        values.push(displayValue);
+                    }
+                    deferred.resolve();
+                });
+            return deferred;
+        });
 
+        const callBase = this.callBase.bind(this);
         return when
             .apply(this, itemLoadDeferreds)
-            .always((function() {
+            .always(() => {
                 this.option('displayValue', values);
                 callBase(values.length && values);
-            }).bind(this));
+            });
     },
 
     _loadItem: function(value) {

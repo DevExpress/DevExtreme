@@ -970,7 +970,7 @@ QUnit.module('Toolbar', moduleConfig, () => {
 
         const toolbar = this.wrapper.getInstance()._toolbar;
         toolbar._toolbarHasItemsOverflow = () => true;
-        toolbar.update();
+        toolbar._update();
         this.clock.tick(800);
 
         const $generalElements = this.wrapper.getGeneralToolbarElements();
@@ -1132,6 +1132,31 @@ QUnit.module('Toolbar', moduleConfig, () => {
         this.clock.tick(400);
         this.wrapper.getToolbarViewSwitcherListItem(1).trigger('dxclick');
         assert.ok(customClick1.notCalled, 'switchView has its default action');
+    });
+
+    test('toolbar must keeps its state during refreshes (T1031638)', function(assert) {
+        createFileManager(true);
+        this.clock.tick(400);
+
+        this.wrapper.getInstance().option('toolbar', {
+            items: ['create', 'refresh'],
+            fileSelectionItems: ['rename', 'move', 'create', 'switchView']
+        });
+        this.clock.tick(400);
+
+        this.wrapper.findThumbnailsItem('File 1.txt').trigger('dxclick');
+        this.clock.tick(100);
+
+        assert.notOk(this.wrapper.getGeneralToolbar().is(':visible'), 'general toolbar is invisible');
+        assert.ok(this.wrapper.getFileSelectionToolbar().is(':visible'), 'file selection toolbar is visible');
+        assert.strictEqual(this.wrapper.getToolbarElements().length, 4, 'file selection toolbar has 4 visible items');
+        this.wrapper.getToolbarDropDownButton().find(`.${Consts.BUTTON_CLASS}`).trigger('dxclick');
+        this.clock.tick(100);
+        this.wrapper.getToolbarViewSwitcherListItem(0).trigger('dxclick');
+        this.clock.tick(400);
+        assert.notOk(this.wrapper.getGeneralToolbar().is(':visible'), 'general toolbar is invisible');
+        assert.ok(this.wrapper.getFileSelectionToolbar().is(':visible'), 'file selection toolbar is visible');
+        assert.strictEqual(this.wrapper.getToolbarElements().length, 4, 'file selection toolbar has 4 visible items');
     });
 
 });
