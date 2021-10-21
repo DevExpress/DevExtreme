@@ -1,0 +1,66 @@
+<dx-data-grid
+  id="gridContainer"
+  [dataSource]="dataSource"
+  [showBorders]="true"
+  [columnAutoWidth]="true"
+  [remoteOperations]="true"
+  (onRowInserted)="onRowInserted($event)"
+>
+  <dxo-scrolling [mode]="scrollingMode"></dxo-scrolling>
+  <dxo-editing
+    mode="row"
+    [allowAdding]="true"
+    [allowDeleting]="true"
+    [allowUpdating]="true"
+    [confirmDelete]="false"
+    [useIcons]="true"
+    [newRowPosition]="newRowPosition"
+    [changes]="changes"
+    [(editRowKey)]="editRowKey"
+  ></dxo-editing>
+
+  <dxi-column dataField="OrderID" [allowEditing]="false"></dxi-column>
+  <dxi-column dataField="OrderDate" dataType="date">
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dxi-column>
+  <dxi-column dataField="ShipName"></dxi-column>
+  <dxi-column dataField="ShipCity"></dxi-column>
+  <dxi-column dataField="ShipPostalCode"></dxi-column>
+  <dxi-column dataField="ShipCountry"></dxi-column>
+  <dxi-column type="buttons">
+    <dxi-button
+      icon="add"
+      [onClick]="onAddButtonClick"
+      [visible]="isAddButtonVisible"
+    ></dxi-button>
+    <dxi-button name="delete"></dxi-button>
+    <dxi-button name="save"></dxi-button>
+    <dxi-button name="cancel"></dxi-button>
+  </dxi-column>
+
+  <dxo-toolbar>
+    <dxi-item name="addRowButton" showText="always"></dxi-item>
+  </dxo-toolbar>
+</dx-data-grid>
+
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="option-container">
+    <div class="option">
+      <span>New Row Position</span>
+      <dx-select-box
+        id="newRowPositionSelectBox"
+        [(value)]="newRowPosition"
+        [items]="newRowPositionOptions"
+      ></dx-select-box>
+    </div>
+    <div class="option">
+      <span>Scrolling Mode</span>
+      <dx-select-box
+        id="scrollingModeSelectBox"
+        [(value)]="scrollingMode"
+        [items]="scrollingModeOptions"
+      ></dx-select-box>
+    </div>
+  </div>
+</div>

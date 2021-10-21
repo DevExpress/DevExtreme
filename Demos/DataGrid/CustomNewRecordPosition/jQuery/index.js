@@ -30,7 +30,6 @@ $(() => {
           icon: 'add',
           onClick(e) {
             const key = new DevExpress.data.Guid().toString();
-            dataGrid.option('editing.changes', []);
             dataGrid.option('editing.changes', [{
               key,
               type: 'insert',
