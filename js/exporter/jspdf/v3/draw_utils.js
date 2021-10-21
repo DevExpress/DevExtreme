@@ -10,12 +10,12 @@ function round(value) {
 
 function drawCellsContent(doc, cellsArray, docStyles) {
     cellsArray.forEach(cell => {
-        drawCellBackground(doc, cell);
         if(isDefined(cell.customDrawCell)) {
             // cut unnecessary properties
             const { _rect, customDrawCell, pdfRowInfo, gridCell, ...pdfCell } = cell;
-            cell.customDrawCell({ rect: _rect, cell: pdfCell });
+            cell.customDrawCell({ doc, rect: _rect, cell: pdfCell });
         } else {
+            drawCellBackground(doc, cell);
             drawCellText(doc, cell, docStyles);
         }
     });

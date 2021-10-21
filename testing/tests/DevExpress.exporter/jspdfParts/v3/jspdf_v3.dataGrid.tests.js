@@ -131,12 +131,6 @@ function createMockPdfDoc(options) {
         this.__text.apply(this, arguments);
     };
 
-    result.__addImage = result.addImage;
-    result.addImage = function() {
-        this.__log.push('addImage,' + argumentsToString.apply(null, ['someImage', ...[...arguments].slice(1)]));
-        this.__addImage.apply(this, arguments);
-    };
-
     result.__addPage = result.addPage;
     result.addPage = function() {
         this.__log.push('addPage,' + argumentsToString.apply(null, arguments));
