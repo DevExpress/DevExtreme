@@ -149,6 +149,20 @@ module('Table context menu integration', {
             assert.strictEqual($contextMenu.length, 1);
         });
 
+        test('Context menu should support value change to null at runtime', function(assert) {
+            this.createWidget();
+
+            try {
+                this.instance.option('tableContextMenu', null);
+
+                const $contextMenu = this.getContextMenu();
+
+                assert.strictEqual($contextMenu.length, 0);
+            } catch(e) {
+                assert.ok(false);
+            }
+        });
+
         test('Context menu should be only one', function(assert) {
             this.createWidget();
 
@@ -439,6 +453,27 @@ module('Table context menu integration', {
             assert.strictEqual($menuItems.length, 2, 'all items are rendered');
             assert.strictEqual($menuItems.eq(0).text(), 'Insert Table', 'first item is correct');
             assert.strictEqual($menuItems.eq(1).text(), 'Table Properties', 'second item is correct');
+        });
+
+        test('Context menu custom items should be reseted to defaults after the option is set to null', function(assert) {
+            this.createWidget({
+                tableContextMenu: {
+                    enabled: true,
+                    items: ['insertTable', 'tableProperties']
+                }
+            });
+
+            try {
+                this.instance.option('tableContextMenu', null);
+
+                this.instance.option('tableContextMenu', { enabled: true });
+
+                const $contextMenu = this.getContextMenu();
+
+                assert.strictEqual($contextMenu.length, 4);
+            } catch(e) {
+                assert.ok(false);
+            }
         });
 
         test('default items is rendered if tableContextMenu.items option is changed to null at runtime', function(assert) {

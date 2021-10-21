@@ -170,6 +170,11 @@ if(Quill) {
             return !!$(targetElement).closest('.dx-htmleditor-content td, .dx-htmleditor-content th').length;
         }
 
+        clean() {
+            this._detachEvents();
+            this._contextMenu?.dispose();
+        }
+
         option(option, value) {
             if(option === 'tableContextMenu') {
                 this.handleOptionChangeValue(value);
@@ -178,7 +183,7 @@ if(Quill) {
 
             if(option === 'enabled') {
                 this.enabled = value;
-                value ? this._enableContextMenu() : this._detachEvents();
+                value ? this._enableContextMenu() : this.clean();
             } else if(option === 'items') {
                 this._contextMenu?.dispose();
                 this._contextMenu = this._createContextMenu(value);
@@ -187,7 +192,7 @@ if(Quill) {
 
         prepareCleanCallback() {
             return () => {
-                this._detachEvents();
+                this.clean();
             };
         }
     };
