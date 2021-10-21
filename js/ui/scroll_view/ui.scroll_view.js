@@ -1,4 +1,3 @@
-import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import devices from '../../core/devices';
 import { hasWindow } from '../../core/utils/window';
@@ -290,16 +289,6 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     */
     toggleLoading: function(showOrHide) {
         this._reachBottomEnable(showOrHide);
-    },
-
-    /**
-    * @name dxScrollView.isFull
-    * @publicName isFull()
-    * @return boolean
-    * @hidden
-    */
-    isFull: function() {
-        return getHeight(this.content()) > getHeight(this.container());
     },
 
     refresh: function() {

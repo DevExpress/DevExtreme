@@ -18,6 +18,7 @@ const prepareInstances = (
   viewType: ViewType,
   currentDate: Date,
   intervalCount: number,
+  supportAllDayRow: boolean,
 ): {
   appointmentsConfig: AppointmentsConfigType;
   timeZoneCalculator: TimeZoneCalculator;
@@ -59,6 +60,7 @@ const prepareInstances = (
     workspaceProps,
     [],
     viewDataProvider,
+    supportAllDayRow,
   );
 
   return {
@@ -70,66 +72,69 @@ const prepareInstances = (
 };
 
 describe('Appointments model', () => {
-  const instances = prepareInstances(
-    'week',
-    new Date(2021, 8, 22),
-    7,
-  );
+  [true, false].forEach((supportAllDayRow) => {
+    describe(`getAppointmentsModel if supportAllDayPanel is ${supportAllDayRow}`, () => {
+      const instances = prepareInstances(
+        'week',
+        new Date(2021, 8, 22),
+        7,
+        supportAllDayRow,
+      );
 
-  const appointmentsModel = getAppointmentsModel(
-    instances.appointmentsConfig,
-    instances.viewDataProvider,
-    instances.timeZoneCalculator,
-    { } as any,
-    instances.DOMMetaData,
-  );
+      const appointmentsModel = getAppointmentsModel(
+        instances.appointmentsConfig,
+        instances.viewDataProvider,
+        instances.timeZoneCalculator,
+        { } as any,
+        instances.DOMMetaData,
+      );
 
-  describe('getAppointmentsModel', () => {
-    it('should be creared correctly', () => {
-      expect(appointmentsModel)
-        .toMatchObject({
-          adaptivityEnabled: false,
-          rtlEnabled: false,
-          startDayHour: 0,
-          viewStartDayHour: 0, // TODO remove
-          endDayHour: 24,
-          viewEndDayHour: 24, // TODO remove
-          resources: [],
-          maxAppointmentsPerCell: 'auto',
-          currentDate: new Date('2021-09-22T00:00:00'),
-          isVirtualScrolling: false,
-          intervalCount: 7,
-          hoursInterval: 0.5,
-          showAllDayPanel: false,
-          modelGroups: [],
-          appointmentCountPerCell: 2, // TODO default
-          appointmentOffset: 26, // TODO default
-          allowResizing: false, // TODO resizing
-          allowAllDayResizing: false, // TODO resizing
-          dateTableOffset: 0,
-          groupOrientation: 'horizontal',
-          startViewDate: new Date(2021, 8, 19),
-          timeZone: '',
-          firstDayOfWeek: 0,
-          viewType: 'week',
-          cellDurationInMinutes: 30,
-          supportAllDayRow: false,
-          isVerticalGroupOrientation: false,
-          loadedResources: [],
-          intervalDuration: 4233600000,
-          allDayIntervalDuration: 311040000000000,
-        });
-    });
+      it('should be creared correctly', () => {
+        expect(appointmentsModel)
+          .toMatchObject({
+            adaptivityEnabled: false,
+            rtlEnabled: false,
+            startDayHour: 0,
+            viewStartDayHour: 0, // TODO remove
+            endDayHour: 24,
+            viewEndDayHour: 24, // TODO remove
+            resources: [],
+            maxAppointmentsPerCell: 'auto',
+            currentDate: new Date('2021-09-22T00:00:00'),
+            isVirtualScrolling: false,
+            intervalCount: 7,
+            hoursInterval: 0.5,
+            showAllDayPanel: false,
+            modelGroups: [],
+            appointmentCountPerCell: 2, // TODO default
+            appointmentOffset: 26, // TODO default
+            allowResizing: false, // TODO resizing
+            allowAllDayResizing: false, // TODO resizing
+            dateTableOffset: 0,
+            groupOrientation: 'horizontal',
+            startViewDate: new Date(2021, 8, 19),
+            timeZone: '',
+            firstDayOfWeek: 0,
+            viewType: 'week',
+            cellDurationInMinutes: 30,
+            supportAllDayRow,
+            isVerticalGroupOrientation: false,
+            loadedResources: [],
+            intervalDuration: 4233600000,
+            allDayIntervalDuration: 311040000000000,
+          });
+      });
 
-    it('should contains correct instances', () => {
-      expect(appointmentsModel.timeZoneCalculator)
-        .toEqual(instances.timeZoneCalculator);
+      it('should contains correct instances', () => {
+        expect(appointmentsModel.timeZoneCalculator)
+          .toEqual(instances.timeZoneCalculator);
 
-      expect(appointmentsModel.viewDataProvider)
-        .toEqual(instances.viewDataProvider);
+        expect(appointmentsModel.viewDataProvider)
+          .toEqual(instances.viewDataProvider);
 
-      expect(appointmentsModel.DOMMetaData)
-        .toEqual(instances.DOMMetaData);
+        expect(appointmentsModel.DOMMetaData)
+          .toEqual(instances.DOMMetaData);
+      });
     });
   });
 });

@@ -2747,6 +2747,31 @@ QUnit.module('search', moduleSetup, () => {
             });
         });
 
+        QUnit.test('item selection even if new search is in progress (T1027535)', function(assert) {
+            const clock = sinon.useFakeTimers();
+            fx.off = false;
+            const searchTimeout = 500;
+
+            try {
+                this.reinit({ searchTimeout });
+
+                this.keyboard.type('1');
+                clock.tick(searchTimeout);
+
+                this.keyboard.type('2');
+                const $firstItem = this.getListItems().eq(0);
+                $firstItem.trigger('dxclick');
+                clock.tick(searchTimeout);
+
+                const $overlayContent = $(this.instance.content()).parent();
+
+                assert.ok($overlayContent.hasClass('dx-state-invisible'), 'popup is not visible');
+                assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            } finally {
+                clock.restore();
+            }
+        });
+
         QUnit.test('item adding when acceptCustomValue is true', function(assert) {
             this.reinit({ acceptCustomValue: true });
 
@@ -3323,7 +3348,7 @@ QUnit.module('search', moduleSetup, () => {
 
         keyboardMock($input)
             .focus()
-            .type('aa');
+            .type('a');
 
         instance.close();
 
@@ -3337,6 +3362,26 @@ QUnit.module('search', moduleSetup, () => {
         assert.ok(instance.option('opened'), 'selectBox is opened');
         assert.equal($items.length, 0, 'items is not rendered');
         assert.equal($emptyMessage.length, 1, 'empty message is rendered');
+    });
+
+    QUnit.test('selectBox opening after search should trigger search if minSearchLength is exceeded (T1027110)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: ['11'],
+            searchEnabled: true,
+            minSearchLength: 2,
+            searchTimeout: 0
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input)
+            .focus()
+            .type('11');
+
+        $input.trigger('dxclick');
+        $input.trigger('dxclick');
+
+        const $items = $(toSelector(LIST_ITEM_CLASS));
+        assert.strictEqual($items.length, 1, 'filtered item is shown');
     });
 
     QUnit.test('Input value should not be changed after dropdown click when \'startswith\' search mode is enabled', function(assert) {

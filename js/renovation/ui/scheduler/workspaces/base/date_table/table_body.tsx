@@ -15,6 +15,7 @@ import {
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
 import { LayoutProps } from '../layout_props';
 import { DateTableCellBase } from './cell';
+import { combineClasses } from '../../../../../utils/combine_classes';
 
 export interface CellTemplateProps extends ViewCellData {
   dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
@@ -27,6 +28,7 @@ export const viewFunction = ({
     dataCellTemplate,
     cellTemplate: Cell,
   },
+  rowClasses,
 }: DateTableBody): JSX.Element => (
   <Fragment>
     {viewData
@@ -45,7 +47,7 @@ export const viewFunction = ({
           )}
           {dateTable.map((cellsRow) => (
             <Row
-              className="dx-scheduler-date-table-row"
+              className={rowClasses}
               key={cellsRow[0].key - viewData.leftVirtualCellCount}
               leftVirtualCellWidth={viewData.leftVirtualCellWidth}
               rightVirtualCellWidth={viewData.rightVirtualCellWidth}
@@ -102,4 +104,13 @@ export class DateTableBodyProps extends LayoutProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateTableBody extends JSXComponent<DateTableBodyProps, 'cellTemplate'>() {}
+export class DateTableBody extends JSXComponent<DateTableBodyProps, 'cellTemplate'>() {
+  get rowClasses(): string {
+    const { addVerticalSizesClassToRows } = this.props;
+
+    return combineClasses({
+      'dx-scheduler-date-table-row': true,
+      'dx-scheduler-cell-sizes-vertical': addVerticalSizesClassToRows,
+    });
+  }
+}

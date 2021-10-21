@@ -32,7 +32,7 @@ import { CrossScrollingLayout } from './cross_scrolling_layout';
 import { MainLayoutProps } from './main_layout_props';
 
 export const prepareGenerationOptions = (
-  workSpaceProps: WorkSpaceProps,
+  workSpaceProps: Partial<WorkSpaceProps>,
   renderConfig: ViewRenderConfig,
   isAllDayPanelVisible: boolean,
 ): unknown => {
@@ -126,6 +126,7 @@ export const viewFunction = ({
   renderConfig: {
     isRenderDateHeader,
     scrollingDirection,
+    groupPanelClassName,
   },
   headerPanelTemplate,
   dateTableTemplate,
@@ -144,6 +145,8 @@ export const viewFunction = ({
     groups={groups}
     groupByDate={groupByDate}
     groupOrientation={groupOrientation}
+    groupPanelClassName={groupPanelClassName}
+
     intervalCount={intervalCount}
 
     headerPanelTemplate={headerPanelTemplate}
@@ -272,13 +275,41 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
   // TODO: rework
   get viewDataProvider(): ViewDataProviderType {
-    const { type } = this.props;
+    const {
+      intervalCount,
+      groups,
+      groupByDate,
+      groupOrientation,
+      startDayHour,
+      endDayHour,
+      currentDate,
+      startDate,
+      firstDayOfWeek,
+      hoursInterval,
+      type,
+      cellDuration,
+    } = this.props;
 
     // TODO: convert ViewdataProvider to TS
     const viewDataProvider = (new ViewDataProvider(type) as unknown) as ViewDataProviderType;
 
     const generationOptions = prepareGenerationOptions(
-      this.props, this.renderConfig, this.isAllDayPanelVisible,
+      {
+        intervalCount,
+        groups,
+        groupByDate,
+        groupOrientation,
+        startDayHour,
+        endDayHour,
+        currentDate,
+        startDate,
+        firstDayOfWeek,
+        hoursInterval,
+        type,
+        cellDuration,
+      },
+      this.renderConfig,
+      this.isAllDayPanelVisible,
     );
     viewDataProvider.update(generationOptions, true);
 
@@ -333,7 +364,8 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       'dx-scheduler-work-space-all-day': this.isAllDayPanelVisible,
       'dx-scheduler-work-space-group-by-date': groupByDate,
       'dx-scheduler-work-space-grouped': groups.length > 0,
-      'dx-scheduler-work-space-vertical-grouped': this.isVerticalGrouping,
+      'dx-scheduler-work-space-vertical-grouped': this.isVerticalGrouping
+        && this.renderConfig.defaultGroupOrientation !== 'vertical',
       'dx-scheduler-group-column-count-one': this.isVerticalGrouping && groups.length === 1,
       'dx-scheduler-group-column-count-two': this.isVerticalGrouping && groups.length === 2,
       'dx-scheduler-group-column-count-three': this.isVerticalGrouping && groups.length === 3,

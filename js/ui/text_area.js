@@ -241,6 +241,12 @@ const TextArea = TextBox.inherit({
         }
     },
 
+    _dimensionChanged: function() {
+        if(this.option('visible')) {
+            this._updateInputHeight();
+        }
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'autoResizeEnabled':

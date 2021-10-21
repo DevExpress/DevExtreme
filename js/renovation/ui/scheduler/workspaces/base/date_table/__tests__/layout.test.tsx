@@ -66,7 +66,11 @@ describe('DateTableLayoutBase', () => {
       const dataCellTemplate = () => null;
       const layout = render({
         classes: 'some-class',
-        props: { dataCellTemplate, tableRef: 'tableRef' },
+        props: {
+          dataCellTemplate,
+          tableRef: 'tableRef',
+          addVerticalSizesClassToRows: false,
+        },
         topVirtualRowHeight: 100,
         bottomVirtualRowHeight: 200,
         leftVirtualCellWidth: 300,
@@ -82,7 +86,7 @@ describe('DateTableLayoutBase', () => {
         .toBe(true);
 
       expect(table.props())
-        .toMatchObject({
+        .toEqual({
           topVirtualRowHeight: 100,
           bottomVirtualRowHeight: 200,
           leftVirtualCellWidth: 300,
@@ -91,22 +95,23 @@ describe('DateTableLayoutBase', () => {
           leftVirtualCellCount: 32,
           rightVirtualCellCount: 44,
           tableRef: 'tableRef',
+          className: 'some-class',
+          children: expect.anything(),
         });
-      expect(table.hasClass('some-class'))
-        .toBe(true);
 
       const tableBody = layout.find(DateTableBody);
       expect(tableBody.exists())
         .toBe(true);
 
       expect(tableBody.props())
-        .toMatchObject({
+        .toEqual({
           viewData: viewDataBase,
           groupOrientation: VERTICAL_GROUP_ORIENTATION,
           cellTemplate,
           dataCellTemplate,
           leftVirtualCellWidth: 300,
           rightVirtualCellWidth: 400,
+          addVerticalSizesClassToRows: false,
         });
     });
   });

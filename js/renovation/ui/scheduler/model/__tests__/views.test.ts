@@ -103,14 +103,12 @@ describe('Model views', () => {
           ...viewProps,
           hoursInterval: 0.25,
           type: 'week',
-          selectedCellData: [],
-          indicatorTime: expect.any(Date),
           intervalCount: undefined,
           startDate: undefined,
           groupOrientation: undefined,
           schedulerHeight: 500,
           schedulerWidth: 500,
-          allDayPanelExpanded: false,
+          allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
         });
     });
@@ -156,12 +154,10 @@ describe('Model views', () => {
           ...viewProps,
           ...currentViewProps,
           hoursInterval: 5,
-          selectedCellData: [],
           schedulerHeight: 500,
           schedulerWidth: 500,
-          allDayPanelExpanded: false,
+          allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
-          indicatorTime: expect.any(Date),
         });
     });
 
@@ -197,12 +193,10 @@ describe('Model views', () => {
           ...viewProps,
           ...currentViewProps,
           hoursInterval: 0.25,
-          selectedCellData: [],
           schedulerHeight: 500,
           schedulerWidth: 500,
-          allDayPanelExpanded: false,
+          allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
-          indicatorTime: expect.any(Date),
           crossScrollingEnabled: true,
         });
     });
@@ -240,12 +234,10 @@ describe('Model views', () => {
           ...viewProps,
           ...currentViewProps,
           hoursInterval: 0.25,
-          selectedCellData: [],
           schedulerHeight: 500,
           schedulerWidth: 500,
-          allDayPanelExpanded: false,
+          allDayPanelExpanded: true,
           allowMultipleCellSelection: true,
-          indicatorTime: expect.any(Date),
           crossScrollingEnabled: true,
         });
     });
