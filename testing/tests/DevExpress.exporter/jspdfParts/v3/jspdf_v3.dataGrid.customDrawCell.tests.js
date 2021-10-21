@@ -46,7 +46,7 @@ const JSPdfCustomDrawCellTests = {
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     if(pdfCell.text === 'f2') {
-                        pdfCell.customDrawCell = (rect) => { };
+                        pdfCell.customDrawCell = ({ rect }) => { };
                     }
                 };
 
@@ -76,7 +76,7 @@ const JSPdfCustomDrawCellTests = {
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     if(pdfCell.text === 'f1') {
-                        pdfCell.customDrawCell = (rect) => {
+                        pdfCell.customDrawCell = ({ rect }) => {
                             doc.rect(rect.x, rect.y, rect.w, rect.h, 'F');
                         };
                     }
@@ -109,7 +109,7 @@ const JSPdfCustomDrawCellTests = {
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     if(pdfCell.text === 'f2') {
-                        pdfCell.customDrawCell = (rect) => {
+                        pdfCell.customDrawCell = ({ rect }) => {
                             doc.rect(rect.x, rect.y, rect.w, rect.h, 'F');
                         };
                     }
@@ -142,7 +142,7 @@ const JSPdfCustomDrawCellTests = {
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     if(pdfCell.text === 'f1') {
-                        pdfCell.customDrawCell = (rect) => {
+                        pdfCell.customDrawCell = ({ rect }) => {
                             doc.textWithLink('Click here', rect.x, rect.y + rect.h - 1, { url: 'http://www.google.com' });
                         };
                     }
@@ -175,7 +175,7 @@ const JSPdfCustomDrawCellTests = {
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     if(pdfCell.text === 'f2') {
-                        pdfCell.customDrawCell = (rect) => {
+                        pdfCell.customDrawCell = ({ rect }) => {
                             doc.textWithLink('Click here', rect.x, rect.y + rect.h - 1, { url: 'http://www.google.com' });
                         };
                     }
@@ -208,7 +208,7 @@ const JSPdfCustomDrawCellTests = {
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     if(pdfCell.text === 'f1') {
-                        pdfCell.customDrawCell = (rect) => {
+                        pdfCell.customDrawCell = ({ rect }) => {
                             doc.addImage(logoBase64, 'JPEG', rect.x, rect.y, 16, 16);
                         };
                     }
@@ -241,7 +241,7 @@ const JSPdfCustomDrawCellTests = {
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
                     if(pdfCell.text === 'f2') {
-                        pdfCell.customDrawCell = (rect) => {
+                        pdfCell.customDrawCell = ({ rect }) => {
                             doc.addImage(logoBase64, 'JPEG', rect.x, rect.y, 16, 16);
                         };
                     }
@@ -273,7 +273,7 @@ const JSPdfCustomDrawCellTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.customDrawCell = (rect, cell) => {
+                    pdfCell.customDrawCell = ({ rect, cell }) => {
                         assert.deepEqual(rect, { h: 18.4, w: 500, x: 10, y: 10 });
                         assert.deepEqual(cell, {
                             backgroundColor: undefined,

@@ -14,7 +14,7 @@ function drawCellsContent(doc, cellsArray, docStyles) {
         if(isDefined(cell.customDrawCell)) {
             // cut unnecessary properties
             const { _rect, customDrawCell, pdfRowInfo, gridCell, ...pdfCell } = cell;
-            cell.customDrawCell(_rect, pdfCell);
+            cell.customDrawCell({ rect: _rect, cell: pdfCell });
         } else {
             drawCellText(doc, cell, docStyles);
         }

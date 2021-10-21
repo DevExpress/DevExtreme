@@ -22,7 +22,7 @@ import { isDefined } from '../../../core/utils/type';
 //              drawLeftBorder
 //              drawTopBorder
 //              drawBottomBorder,
-//              customDrawCell: (rect, pdfCell) => void
+//              customDrawCell: ({rect, cell:pdfCell}) => void
 //          }
 //        }
 //      ],
