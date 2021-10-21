@@ -40,10 +40,10 @@ describe('Appointment utils', () => {
       expect(getAppointmentStyles(testViewModel))
         .toEqual({
           backgroundColor: '#1A2BC',
-          height: 20,
-          left: 1,
-          top: 2,
-          width: 10,
+          height: '20px',
+          left: '1px',
+          top: '2px',
+          width: '10px',
         });
     });
 
@@ -56,10 +56,10 @@ describe('Appointment utils', () => {
         },
       }))
         .toEqual({
-          height: 20,
-          left: 1,
-          top: 2,
-          width: 10,
+          height: '20px',
+          left: '1px',
+          top: '2px',
+          width: '10px',
         });
     });
 
@@ -73,10 +73,10 @@ describe('Appointment utils', () => {
       }))
         .toEqual({
           backgroundColor: '#1A2BC',
-          height: 50,
-          left: 1,
-          top: 2,
-          width: 10,
+          height: '50px',
+          left: '1px',
+          top: '2px',
+          width: '10px',
         });
     });
 
@@ -90,10 +90,10 @@ describe('Appointment utils', () => {
       }))
         .toEqual({
           backgroundColor: '#1A2BC',
-          height: 20,
-          left: 1,
-          top: 2,
-          width: 50,
+          height: '20px',
+          left: '1px',
+          top: '2px',
+          width: '50px',
         });
     });
   });

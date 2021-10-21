@@ -113,10 +113,10 @@ describe('Appointment', () => {
           expect(appointment.styles)
             .toEqual({
               backgroundColor: '#1A2BC',
-              height: 20,
-              left: 1,
-              top: 2,
-              width: 10,
+              height: '20px',
+              left: '1px',
+              top: '2px',
+              width: '10px',
             });
         });
       });

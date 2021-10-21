@@ -3,6 +3,7 @@ import { addToStyles } from '../workspaces/utils';
 import { AppointmentGeometry, AppointmentViewModel } from './types';
 
 export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes => {
+  const defaultSize = 50;
   const {
     geometry: {
       width,
@@ -17,16 +18,16 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
 
   let result = addToStyles([{
     attr: 'height',
-    value: height || 50,
+    value: `${height || defaultSize}px`,
   }, {
     attr: 'width',
-    value: width || 50,
+    value: `${width || defaultSize}px`,
   }, {
     attr: 'top',
-    value: top,
+    value: `${top}px`,
   }, {
     attr: 'left',
-    value: left,
+    value: `${left}px`,
   }]);
 
   if (resourceColor) {

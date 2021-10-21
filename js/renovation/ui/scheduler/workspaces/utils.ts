@@ -1,6 +1,5 @@
 import { CSSAttributes } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../utils/combine_classes';
-import { isDefined } from '../../../../core/utils/type';
 import { Group, GroupedViewData, TimePanelData } from './types.d';
 import { GroupOrientation } from '../types.d';
 import {
@@ -30,7 +29,7 @@ export const getKeyByGroup = (
 export const addToStyles = (
   options: {
     attr: string;
-    value?: string | number;
+    value: string | number;
   } [],
   style?: CSSAttributes,
 ): CSSAttributes => {
@@ -38,9 +37,7 @@ export const addToStyles = (
   const result = { ...nextStyle };
 
   options.forEach(({ attr, value }) => {
-    result[attr] = isDefined(value)
-      ? value
-      : nextStyle[attr];
+    result[attr] = value || nextStyle[attr];
   });
 
   return result;
@@ -50,7 +47,7 @@ export const addHeightToStyle = (
   value: number | undefined,
   style?: CSSAttributes,
 ): CSSAttributes => {
-  const height = isDefined(value) ? `${value}px` : undefined;
+  const height = value ? `${value}px` : '';
   return addToStyles([{ attr: 'height', value: height }], style);
 };
 
@@ -58,7 +55,7 @@ export const addWidthToStyle = (
   value: number | undefined,
   style?: CSSAttributes,
 ): CSSAttributes => {
-  const width = isDefined(value) ? `${value}px` : undefined;
+  const width = value ? `${value}px` : '';
   return addToStyles([{ attr: 'width', value: width }], style);
 };
 
