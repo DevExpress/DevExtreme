@@ -6179,18 +6179,36 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
                     useNative: false
                 }
             });
-            let newRowVisibleIndex = 0;
-            switch(newRowPosition) {
-                case 'last':
-                case 'viewportBottom': {
-                    newRowVisibleIndex = 10;
-                    break;
+            const getNewRowInfo = () => {
+                let visibleIndex = 0;
+                const row = dataGrid.getVisibleRows().filter((item, index) => {
+                    if(item.isNewRow) {
+                        visibleIndex = index;
+                        return true;
+                    }
+                    return false;
+                })[0];
+
+                return {
+                    visibleIndex,
+                    row
+                };
+            };
+            let newRowInfo;
+            const checkNeighboringRow = () => {
+                if(newRowPosition === 'first') {
+                    assert.strictEqual(dataGrid.getVisibleRows()[newRowInfo.visibleIndex + 1].key, 1, 'data row after the first new row');
                 }
-                case 'viewportTop': {
-                    newRowVisibleIndex = 1;
-                    break;
+                if(newRowPosition === 'viewportTop') {
+                    assert.ok(dataGrid.getVisibleRows()[newRowInfo.visibleIndex - 1].key >= 44, 'data row before a new row at the viewport top');
                 }
-            }
+                if(newRowPosition === 'viewportBottom') {
+                    assert.ok(dataGrid.getVisibleRows()[newRowInfo.visibleIndex - 1].key >= 54, 'data row before a new row at the viewport bottom');
+                }
+                if(newRowPosition === 'last') {
+                    assert.strictEqual(dataGrid.getVisibleRows()[newRowInfo.visibleIndex - 1].key, 100, 'data row before the last new row');
+                }
+            };
 
             this.clock.tick(300);
 
@@ -6206,19 +6224,15 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             // act
             dataGrid.addRow();
             this.clock.tick(300);
+            newRowInfo = getNewRowInfo();
 
             // assert
-            assert.ok(dataGrid.getVisibleRows()[newRowVisibleIndex].isNewRow, 'new row was added initially');
-            assert.ok(dataGridWrapper.rowsView.isRowVisible(newRowVisibleIndex), 'new row visible after adding');
-            if(newRowPosition === 'viewportTop') {
-                assert.ok(dataGrid.getVisibleRows()[newRowVisibleIndex - 1].key >= 44, 'data row before a new row at the viewport top');
-            }
-            if(newRowPosition === 'viewportBottom') {
-                assert.ok(dataGrid.getVisibleRows()[newRowVisibleIndex - 1].key >= 54, 'data row before a new row at the viewport bottom');
-            }
+            assert.ok(newRowInfo.row.isNewRow, 'new row was added initially');
+            assert.ok(dataGridWrapper.rowsView.isRowVisible(newRowInfo.visibleIndex), 'new row visible after adding');
+            checkNeighboringRow();
 
             // act
-            $(dataGrid.getCellElement(newRowVisibleIndex, 1)).find('.dx-texteditor-input').val('111').trigger('change');
+            $(dataGrid.getCellElement(newRowInfo.visibleIndex, 1)).find('.dx-texteditor-input').val('111').trigger('change');
             dataGrid.getScrollable().scrollTo({ top: newRowPosition === 'first' ? 3500 : 0 });
             this.clock.tick(300);
 
@@ -6228,24 +6242,13 @@ QUnit.module('newRowPosition', baseModuleConfig, () => {
             // act
             dataGrid.addRow();
             this.clock.tick(300);
-            const newRow = dataGrid.getVisibleRows().filter((item, index) => {
-                if(item.isNewRow) {
-                    newRowVisibleIndex = index;
-                    return true;
-                }
-                return false;
-            })[0];
+            newRowInfo = getNewRowInfo();
 
             // assert
-            assert.ok(newRow, 'new row was added repeatedly');
-            assert.ok(dataGridWrapper.rowsView.isRowVisible(newRowVisibleIndex), 'new row visible after adding repeatedly');
-            if(newRowPosition === 'viewportTop') {
-                assert.ok(dataGrid.getVisibleRows()[newRowVisibleIndex - 1].key >= 44, 'data row before a new row at the viewport top');
-            }
-            if(newRowPosition === 'viewportBottom') {
-                assert.ok(dataGrid.getVisibleRows()[newRowVisibleIndex - 1].key >= 54, 'data row before a new row at the viewport bottom');
-            }
-            assert.strictEqual($(dataGrid.getCellElement(newRowVisibleIndex, 1)).find('.dx-texteditor-input').val(), '111', 'cell value in a new row is not changed');
+            assert.ok(newRowInfo.row.isNewRow, 'new row was added repeatedly');
+            assert.ok(dataGridWrapper.rowsView.isRowVisible(newRowInfo.visibleIndex), 'new row visible after adding repeatedly');
+            checkNeighboringRow();
+            assert.strictEqual($(dataGrid.getCellElement(newRowInfo.visibleIndex, 1)).find('.dx-texteditor-input').val(), '111', 'cell value in a new row is not changed');
         });
     });
 });
