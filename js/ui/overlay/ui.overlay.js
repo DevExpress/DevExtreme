@@ -272,8 +272,6 @@ const Overlay = Widget.inherit({
 
         // NOTE: hack to fix B251087
         eventsEngine.on(this._$wrapper, 'MSPointerDown', noop);
-        // NOTE: bootstrap integration T342292
-        eventsEngine.on(this._$wrapper, 'focusin', e => { e.stopPropagation(); });
 
         this._toggleViewPortSubscription(true);
         this._initHideTopOverlayHandler(this.option('hideTopOverlayHandler'));
