@@ -21,8 +21,8 @@ if(Quill) {
             this.editorInstance.addCleanCallback(callback);
         }
 
-        handleOptionChangeValue(value) {
-            Object.entries(value).forEach(([name, value]) => this.option(name, value));
+        handleOptionChangeValue(changes) {
+            Object.entries(changes).forEach(([name, value]) => this.option(name, value));
         }
     };
 }
