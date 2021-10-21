@@ -32,6 +32,7 @@ const prepareInstances = (
   currentDate: Date,
   intervalCount: number,
   isAllDayPanelVisible: boolean,
+  supportAllDayRow: boolean,
 ): {
   appointmentsConfig: AppointmentsConfigType;
   timeZoneCalculator: TimeZoneCalculator;
@@ -100,6 +101,7 @@ const prepareInstances = (
     workspaceProps,
     [],
     viewDataProvider,
+    supportAllDayRow,
   );
 
   const timeZoneCalculator = createTimeZoneCalculator('');
@@ -119,6 +121,7 @@ describe('Appointments view model', () => {
         'week',
         new Date(2021, 8, 22),
         7,
+        false,
         false,
       );
 
@@ -299,6 +302,7 @@ describe('Appointments view model', () => {
         'week',
         new Date(2021, 8, 22),
         7,
+        true,
         true,
       );
 

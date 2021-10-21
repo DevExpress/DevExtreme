@@ -34,6 +34,8 @@ import { getAppointmentsConfig, getAppointmentsModel } from './model/appointment
 import { AppointmentsViewModelType } from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
+import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
+import { isVerticalGroupingApplied } from './workspaces/utils';
 
 export const viewFunction = ({
   restAttributes,
@@ -91,7 +93,7 @@ export const viewFunction = ({
   } = currentViewConfig;
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
-      classes="dx-scheduler"
+      classes="dx-scheduler dx-scheduler-native"
       accessKey={accessKey}
       activeStateEnabled={activeStateEnabled}
       disabled={disabled}
@@ -233,10 +235,22 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return createTimeZoneCalculator(this.props.timeZone);
   }
 
-  get internalDataSource(): DataSource {
-    return this.props.dataSource instanceof DataSource
-      ? this.props.dataSource
-      : new DataSource(this.props.dataSource as Appointment[] | DataSourceOptions);
+  get internalDataSource(): DataSource { // TODO make helper function
+    if (this.props.dataSource instanceof DataSource) {
+      return this.props.dataSource;
+    }
+
+    if (this.props.dataSource instanceof Array) {
+      return new DataSource({
+        store: {
+          type: 'array',
+          data: this.props.dataSource,
+        },
+        paginate: false,
+      } as DataSourceOptions);
+    }
+
+    return new DataSource(this.props.dataSource as DataSourceOptions);
   }
 
   get appointmentsConfig(): AppointmentsConfigType | undefined {
@@ -244,11 +258,24 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       return undefined;
     }
 
+    const isVerticalGrouping = isVerticalGroupingApplied(
+      this.loadedResources,
+      this.currentViewConfig.groupOrientation,
+    );
+
+    const renderConfig = getViewRenderConfigByType(
+      this.currentViewConfig.type,
+      this.currentViewConfig.crossScrollingEnabled,
+      this.currentViewConfig.intervalCount,
+      isVerticalGrouping,
+    );
+
     return getAppointmentsConfig(
       this.props, // TODO extract props for performace
       this.currentViewConfig, // TODO extract props for performace
       this.loadedResources,
       this.viewDataProvider,
+      renderConfig.isAllDayPanelSupported,
     );
   }
 

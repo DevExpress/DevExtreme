@@ -598,13 +598,8 @@ export const rowsModule = {
                     const rowOptions = extend({ columns: options.columns }, row);
                     const $tbody = this._createRow(row, 'tbody');
                     $tbody.appendTo($table);
-                    const templateDeferred = this.renderTemplate($tbody, dataRowTemplate, rowOptions, true);
+                    this.renderTemplate($tbody, dataRowTemplate, rowOptions, true, options.change);
                     this._rowPrepared($tbody, rowOptions, options.row);
-                    const change = options.change;
-                    if(change) {
-                        change.templateDeferreds = change.templateDeferreds || [];
-                        change.templateDeferreds.push(templateDeferred);
-                    }
                 },
 
                 _renderRow: function($table, options) {

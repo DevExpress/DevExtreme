@@ -245,5 +245,9 @@ export default errorUtils({
     /**
     * @name ErrorsCore.W0017
     */
-    W0017: 'Setting the "{0}" property with a function is deprecated since v21.2'
+    W0017: 'Setting the "{0}" property with a function is deprecated since v21.2',
+    /**
+    * @name ErrorsCore.W0018
+    */
+    W0018: 'Setting the "position" property with a function is deprecated since v21.2'
 });

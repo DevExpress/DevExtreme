@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import 'ui/html_editor';
-import devices from 'core/devices';
 
 import { getFormatHandlers } from 'ui/html_editor/utils/toolbar_helper';
 
@@ -56,6 +55,39 @@ const tableWithFixedDimensionsMarkup = '\
     </table>\
     <br>';
 
+const tableMarkupWithHeaderRow = '\
+    <table>\
+        <thead>\
+            <tr>\
+                <th>0</th>\
+                <th>1</th>\
+                <th>2</th>\
+                <th>3</th>\
+            </tr>\
+        </thead>\
+        <tbody>\
+            <tr>\
+                <td>0_0 content</td>\
+                <td>0_1</td>\
+                <td>0_2</td>\
+                <td style="text-align: right;">0_3</td>\
+            </tr>\
+            <tr>\
+                <td>1_0</td>\
+                <td>1_1</td>\
+                <td>1_2</td>\
+                <td style="text-align: right;">1_3</td>\
+            </tr>\
+            <tr>\
+                <td>2_0</td>\
+                <td>2_1</td>\
+                <td>2_2</td>\
+                <td style="text-align: right;">2_3</td>\
+            </tr>\
+        </tbody>\
+    </table>\
+    <br><br>';
+
 const { test, module } = QUnit;
 
 module('Table properties forms', {
@@ -109,24 +141,42 @@ module('Table properties forms', {
             assert.ok($scrollView.length, 'Form should be in the ScrollView');
         });
 
-        test('Form popup use a fullscreen mode for mobile devices', function(assert) {
-            const isPhone = devices.real().deviceType === 'phone';
-
-            this.createWidget();
+        test('show table form start values', function(assert) {
+            this.createWidget({ width: 432 });
 
             const $tableElement = this.$element.find('table').eq(0);
 
-            showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick();
-            const $popup = $('.dx-overlay-content');
+            this.quillInstance.setSelection(50, 1);
 
-            assert.strictEqual($popup.hasClass('dx-popup-fullscreen'), isPhone);
+            showCellPropertiesForm(this.instance, $tableElement);
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
+            const tableBorderColor = $tableElement.css('borderTopColor');
+            const tableBackgroundColor = $tableElement.css('backgroundColor');
+
+            const borderStyleEditor = formInstance.getEditor('borderStyle');
+            const borderWidthEditor = formInstance.getEditor('borderWidth');
+            const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
+            const backgroundColorEditor = formInstance.$element().find('.dx-colorbox').eq(1).dxColorBox('instance');
+            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            const heightEditor = formInstance.getEditor('height');
+            const widthEditor = formInstance.getEditor('width');
+
+            assert.strictEqual(borderStyleEditor.option('value'), 'none', 'borderStyleEditor value is correct');
+            assert.strictEqual(borderWidthEditor.option('value'), 0, 'borderWidthEditor value is correct');
+            assert.strictEqual(borderColorEditor.option('value'), tableBorderColor, 'borderColorEditor value is correct');
+            assert.strictEqual(backgroundColorEditor.option('value'), tableBackgroundColor, 'backgroundColorEditor value is correct');
+            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
+            assert.roughEqual(heightEditor.option('value'), 73, 3, 'heightEditor value is correct');
+            assert.roughEqual(widthEditor.option('value'), 400, 3, 'widthEditor value is correct');
         });
 
         test('Check properties edititng at the table Form (without dimensions)', function(assert) {
             this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
+
+            this.quillInstance.setSelection(50, 1);
 
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
@@ -162,6 +212,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
+            this.quillInstance.setSelection(50, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -177,9 +228,9 @@ module('Table properties forms', {
 
         test('Check base dimensions edititng at the table Form', function(assert) {
             this.createWidget();
-
             const $tableElement = this.$element.find('table').eq(0);
 
+            this.quillInstance.setSelection(50, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -192,16 +243,20 @@ module('Table properties forms', {
 
             this.applyFormChanges(formInstance);
 
-            assert.strictEqual($tableElement.outerHeight(), 90, 'cell height is applied');
-            assert.strictEqual($tableElement.outerWidth(), 600, 'cell width is applied');
+            assert.strictEqual($tableElement.outerHeight(), 90, 'table height is applied');
+            assert.strictEqual($tableElement.outerWidth(), 600, 'table width is applied');
         });
 
         test('show cell Form', function(assert) {
             this.createWidget();
 
-            const $cellElement = this.$element.find('table').eq(0);
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(6);
 
-            showCellPropertiesForm(this.instance, $cellElement);
+            this.quillInstance.setSelection(50, 1);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+
             this.clock.tick();
             const $form = $('.dx-form:not(.dx-formdialog-form)');
             const $scrollView = $form.closest('.dx-scrollview');
@@ -211,11 +266,47 @@ module('Table properties forms', {
             assert.ok($scrollView.length, 'Form should be in the ScrollView');
         });
 
+        test('show cell form start values', function(assert) {
+            this.createWidget({ width: 432 });
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(6);
+
+            this.quillInstance.setSelection(50, 1);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
+
+            const borderStyleEditor = formInstance.getEditor('borderStyle');
+            const borderWidthEditor = formInstance.getEditor('borderWidth');
+            const borderColorEditor = formInstance.$element().find('.dx-colorbox').eq(0).dxColorBox('instance');
+            const backgroundColorEditor = formInstance.$element().find('.dx-colorbox').eq(1).dxColorBox('instance');
+            const horizontalPaddingEditor = formInstance.getEditor('horizontalPadding');
+            const verticalPaddingEditor = formInstance.getEditor('verticalPadding');
+            const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
+            const verticalAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(1).dxButtonGroup('instance');
+            const heightEditor = formInstance.getEditor('height');
+            const widthEditor = formInstance.getEditor('width');
+
+            assert.strictEqual(borderStyleEditor.option('value'), 'solid', 'borderStyleEditor value is correct');
+            assert.strictEqual(borderWidthEditor.option('value'), 1, 'borderWidthEditor value is correct');
+            assert.strictEqual(borderColorEditor.option('value'), 'rgb(221, 221, 221)', 'borderColorEditor value is correct');
+            assert.strictEqual(backgroundColorEditor.option('value'), 'rgba(0, 0, 0, 0)', 'backgroundColorEditor value is correct');
+            assert.strictEqual(horizontalPaddingEditor.option('value'), 5, 'horizontalPaddingEditor value is correct');
+            assert.strictEqual(verticalPaddingEditor.option('value'), 2, 'verticalPaddingEditor value is correct');
+            assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
+            assert.strictEqual(verticalAlignmentEditor.option('selectedItemKeys')[0], 'middle', 'verticalAlignmentEditor selectedItemKeys is correct');
+            assert.roughEqual(heightEditor.option('value'), 24, 2, 'heightEditor value is correct');
+            assert.roughEqual(widthEditor.option('value'), 100, 2, 'widthEditor value is correct');
+        });
+
         test('Check properties edititng at the cell Form (without dimensions)', function(assert) {
             this.createWidget();
 
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(6);
+            this.quillInstance.setSelection(50, 1);
 
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
@@ -265,6 +356,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
+            this.quillInstance.setSelection(50, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -287,6 +379,7 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(6);
             const initialCellHeight = $targetCell.outerHeight();
 
+            this.quillInstance.setSelection(50, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -306,6 +399,40 @@ module('Table properties forms', {
             assert.strictEqual($targetCell.outerWidth(), 180, 'cell width is applied');
             assert.strictEqual($targetCell.get(0).style.width, '180px', 'cell width style is correct');
             assert.strictEqual($tableElement.find('td').eq(2).get(0).style.width, '180px', 'other this column cell width style is correct');
+
+            assert.roughEqual(initialTableWidth, $tableElement.outerWidth(), 1, 'table width is not changed');
+            assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';
+        });
+
+        test('Check header row cell dimensions edititng', function(assert) {
+            this.createWidget({ value: tableMarkupWithHeaderRow });
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const initialTableWidth = $tableElement.outerWidth();
+            const initialTableHeight = $tableElement.outerHeight();
+            const $targetCell = $tableElement.find('th').eq(1);
+            const initialCellHeight = $targetCell.outerHeight();
+
+            this.quillInstance.setSelection(3, 1);
+            showCellPropertiesForm(this.instance, $targetCell);
+            this.clock.tick();
+            const formInstance = this.getFormInstance();
+
+            const heightEditor = formInstance.getEditor('height');
+            heightEditor.option('value', 80);
+
+            const widthEditor = formInstance.getEditor('width');
+            widthEditor.option('value', 180);
+
+            this.applyFormChanges(formInstance);
+
+            assert.strictEqual($targetCell.outerHeight(), 80, 'cell height is applied');
+            assert.strictEqual($targetCell.get(0).style.height, '80px', 'cell height style is correct');
+            assert.strictEqual($targetCell.next().get(0).style.height, '80px', 'sibling cell height style is correct');
+
+            assert.strictEqual($targetCell.outerWidth(), 180, 'cell width is applied');
+            assert.strictEqual($targetCell.get(0).style.width, '180px', 'cell width style is correct');
+            assert.strictEqual($tableElement.find('td').eq(1).get(0).style.width, '180px', 'other this column cell width style is correct');
 
             assert.roughEqual(initialTableWidth, $tableElement.outerWidth(), 1, 'table width is not changed');
             assert.roughEqual(initialTableHeight + 80 - initialCellHeight, $tableElement.outerHeight(), 1), 'table height is changed as expected';
@@ -331,6 +458,7 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(0);
             $tableElement.css('width', 'initial');
 
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -361,6 +489,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -383,6 +512,7 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(1);
             $tableElement.css('width', 'initial');
 
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -411,6 +541,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -441,6 +572,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(1);
 
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -475,6 +607,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(1);
 
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -509,6 +642,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -531,6 +665,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -552,6 +687,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             let formInstance = this.getFormInstance();
@@ -563,6 +699,7 @@ module('Table properties forms', {
 
             const $targetCell = $tableElement.find('td').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
 
@@ -585,6 +722,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
+            this.quillInstance.setSelection(50, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             let formInstance = this.getFormInstance();
@@ -596,6 +734,7 @@ module('Table properties forms', {
 
             const $targetCell = $tableElement.find('td').eq(0);
 
+            this.quillInstance.setSelection(50, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             formInstance = this.getFormInstance();
@@ -625,6 +764,7 @@ module('Table properties forms', {
             const $targetCell = $tableElement.find('td').eq(0);
             const initialCellHeight = $targetCell.outerHeight();
 
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -646,6 +786,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(2);
 
+            this.quillInstance.setSelection(17, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -669,6 +810,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -691,6 +833,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -716,6 +859,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -750,6 +894,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -773,6 +918,7 @@ module('Table properties forms', {
 
             const $tableElement = this.$element.find('table').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             const formInstance = this.getFormInstance();
@@ -808,6 +954,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             let formInstance = this.getFormInstance();
@@ -817,6 +964,7 @@ module('Table properties forms', {
 
             this.applyFormChanges(formInstance);
 
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             formInstance = this.getFormInstance();
@@ -839,6 +987,7 @@ module('Table properties forms', {
             const $tableElement = this.$element.find('table').eq(0);
             const $targetCell = $tableElement.find('td').eq(0);
 
+            this.quillInstance.setSelection(5, 1);
             showCellPropertiesForm(this.instance, $targetCell);
             this.clock.tick();
             let formInstance = this.getFormInstance();
@@ -848,6 +997,7 @@ module('Table properties forms', {
 
             this.applyFormChanges(formInstance);
 
+            this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
             this.clock.tick();
             formInstance = this.getFormInstance();

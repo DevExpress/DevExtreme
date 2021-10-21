@@ -34,6 +34,7 @@ const verticalViewConfig: ViewRenderConfig = {
   scrollingDirection: 'vertical',
   className: 'dx-scheduler-work-space-day',
   isCreateCrossScrolling: false,
+  defaultGroupOrientation: 'horizontal',
 };
 const timelineViewConfig: ViewRenderConfig = {
   headerPanelTemplate: TimelineHeaderPanelLayout,
@@ -49,6 +50,7 @@ const timelineViewConfig: ViewRenderConfig = {
   scrollingDirection: 'horizontal',
   className: `dx-scheduler-timeline-day ${TIMELINE_CLASS}`,
   isCreateCrossScrolling: true,
+  defaultGroupOrientation: 'vertical',
 };
 
 const getVerticalViewConfig = (crossScrollingEnabled: boolean): ViewRenderConfig => ({
@@ -100,6 +102,7 @@ const getMonthViewConfig: GetRenderConfig = (
   className: 'dx-scheduler-work-space-month',
   scrollingDirection: 'vertical',
   isCreateCrossScrolling: crossScrollingEnabled || isVerticalGrouping,
+  defaultGroupOrientation: 'horizontal',
 });
 
 const getTimelineDayViewConfig: GetRenderConfig = (_, intervalCount) => ({

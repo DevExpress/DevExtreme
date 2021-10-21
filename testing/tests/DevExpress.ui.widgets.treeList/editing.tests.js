@@ -565,7 +565,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             this.rowsView.render($testElement);
 
             // act
-            this.addRowViaChanges(undefined, { index: -1 });
+            this.addRowViaChanges(undefined, { insertAfterKey: 2 });
             this.clock.tick();
 
             // assert
