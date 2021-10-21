@@ -242,7 +242,7 @@ export default class DXComponentMetadataGenerator {
                 packageName: config.wrapperPackageName,
                 imports: buildImports(getValues(widget.Options), config.widgetPackageName),
                 nestedComponents: widgetNestedComponents,
-                optionsTypeParams: widget.OptionsTypeParams
+                optionsTypeParams: widget.OptionsTypeParams,
             };
 
             logger('Write metadata to file ' + outputFilePath);
@@ -327,12 +327,12 @@ export default class DXComponentMetadataGenerator {
         return result;
     }
 
-    private mergeArrayTypes(array1, array2) {
+    private mergeArrayTypes<T>(array1: T[], array2: T[]): T[] {
         let newTypes = array2.filter(type => array1.indexOf(type) === -1);
         return [].concat(array1, newTypes);
     }
 
-    private getExternalObjectInfo(metadata: Metadata, typeName) {
+    private getExternalObjectInfo(metadata: Metadata, typeName: string) {
         let externalObject = metadata.ExtraObjects[typeName];
 
         if (!externalObject) {
@@ -492,7 +492,7 @@ export default class DXComponentMetadataGenerator {
                 } else {
                     existingComponent.properties = existingComponent.properties
                         .concat(...component.properties)
-                        .reduce((properties, property) => {
+                        .reduce((properties: Property[], property) => {
                             if (properties.filter(p => p.name === property.name).length === 0) {
                                 properties.push(property);
                             } else {
@@ -515,7 +515,7 @@ export default class DXComponentMetadataGenerator {
 
                     existingComponent.events = existingComponent.events
                         .concat(...component.events)
-                        .reduce((events, event) => {
+                        .reduce((events: Event[], event) => {
                             if (events.filter(e => e.emit === event.emit).length === 0) {
                                 events.push(event);
                             }
@@ -535,7 +535,8 @@ export default class DXComponentMetadataGenerator {
             }, []);
 
         normalizedMetadata.forEach(component => {
-            component.collectionNestedComponents = component.collectionNestedComponents.reduce((result, nestedComponent) => {
+            component.collectionNestedComponents = component.collectionNestedComponents
+              .reduce((result: NestedComponent[], nestedComponent) => {
                 if (result.filter(c => nestedComponent.className === c.className).length === 0) {
                     result.push(nestedComponent);
                 }

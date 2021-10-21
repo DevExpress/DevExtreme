@@ -210,7 +210,7 @@ describe("metadata-generator", function() {
         });
 
         it("should generate proper optionsTypeParams", function() {
-            expect(metas.DxTestWidget.optionsTypeParams).toBe(["T1", "T2"]);
+            expect(metas.DxTestWidget.optionsTypeParams).toEqual(["T1", "T2"]);
         });
 
         it("should detect editors", function() {
