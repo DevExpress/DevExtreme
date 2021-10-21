@@ -651,7 +651,7 @@ export default class TableResizingModule extends BaseModule {
 
     option(option, value) {
         if(option === 'tableResizing') {
-            Object.keys(value).forEach((optionName) => this.option(optionName, value[optionName]));
+            this.handleOptionChangeValue(value);
             return;
         }
 
