@@ -42,7 +42,10 @@ const prepareInstances = (
     false,
   );
   const generationOptions = prepareGenerationOptions(
-    workspaceProps,
+    {
+      ...workspaceProps,
+      groupOrientation: 'horizontal',
+    },
     viewRenderConfig,
     false,
   );

@@ -88,11 +88,11 @@ export const getAppointmentsConfig = (
     hoursInterval: viewConfig.hoursInterval,
     showAllDayPanel: viewConfig.showAllDayPanel,
     supportAllDayRow: isAllDayPanelSupported, // ?
-    groupOrientation: viewConfig.groupOrientation,
+    groupOrientation: viewDataProvider.getViewOptions().groupOrientation,
     firstDayOfWeek: viewConfig.firstDayOfWeek,
     viewType: viewConfig.type,
     cellDurationInMinutes: viewConfig.cellDuration,
-    isVerticalGroupOrientation: viewConfig.groupOrientation === 'vertical',
+    isVerticalGroupOrientation: viewDataProvider.getViewOptions().isVerticalGrouping,
     groupByDate: viewConfig.groupByDate,
     startViewDate,
     loadedResources,
