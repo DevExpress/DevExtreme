@@ -4218,7 +4218,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    type ItemLike = string | CollectionWidgetItem<any> | any;
+    type ItemLike = string | CollectionWidgetItem | any;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -4231,9 +4231,7 @@ declare module DevExpress.ui {
    * [descr:CollectionWidgetItem]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface CollectionWidgetItem<
-    TItem extends CollectionWidgetItem<any> | any = any
-  > {
+  export interface CollectionWidgetItem {
     /**
      * [descr:CollectionWidgetItem.disabled]
      */
@@ -4248,7 +4246,7 @@ declare module DevExpress.ui {
     template?:
       | DevExpress.core.template
       | ((
-          itemData: TItem,
+          itemData: this,
           itemIndex: number,
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
@@ -14922,9 +14920,9 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    type ItemLike = string | Item<any> | any;
+    type ItemLike = string | Item | any;
     export type ItemRenderedEvent<
-      TItem extends Item<any> | any = any,
+      TItem extends Item | any = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<dxList<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
@@ -14998,8 +14996,7 @@ declare module DevExpress.ui {
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxListItem<TItem extends dxListItem<any> | any = any>
-    extends CollectionWidgetItem<TItem> {
+  export interface dxListItem extends CollectionWidgetItem {
     /**
      * [descr:dxListItem.badge]
      */
@@ -15044,10 +15041,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<
-      string | DevExpress.ui.dxList.Item | any,
-      TKey
-    >;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<TItem, TKey>;
     /**
      * [descr:dxListOptions.displayExpr]
      */
@@ -23551,7 +23545,7 @@ declare module DevExpress.ui.dxHtmlEditor {
   export type ToolbarItem = dxHtmlEditorToolbarItem;
 }
 declare module DevExpress.ui.dxList {
-  export type Item<TItem extends Item<any> | any = any> = dxListItem<TItem>;
+  export type Item = dxListItem;
 }
 declare module DevExpress.ui.dxMenu {
   export type Item = dxMenuItem;
