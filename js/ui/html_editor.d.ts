@@ -1,3 +1,4 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -6,12 +7,6 @@ import {
 import {
     template,
 } from '../core/templates/template';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -24,6 +19,10 @@ import Editor, {
     ValueChangedInfo,
     EditorOptions,
 } from './editor/editor';
+
+import {
+  MenuBasePlainItem,
+} from './menu';
 
 import {
     Item as dxToolbarItem,
@@ -367,27 +366,32 @@ export interface dxHtmlEditorMediaResizing {
  * @type object
  * @namespace DevExpress.ui
  */
- export interface dxHtmlEditorTableResizing {
-  /**
-   * @docid
-   * @default 40
-   * @public
-   */
-   minColumnWidth?: number;
-  /**
-   * @docid
-   * @default 24
-   * @public
-   */
-  minRowHeight?: number;
-  /**
-   * @docid
-   * @default false
-   * @public
-   */
-  enabled?: boolean;
+export interface dxHtmlEditorTableResizing {
+ /**
+  * @docid
+  * @default 40
+  * @public
+  */
+  minColumnWidth?: number;
+ /**
+  * @docid
+  * @default 24
+  * @public
+  */
+ minRowHeight?: number;
+ /**
+  * @docid
+  * @default false
+  * @public
+  */
+ enabled?: boolean;
 }
 
+/**
+ * @docid
+ * @type object
+ * @namespace DevExpress.ui
+ */
 export interface dxHtmlEditorTableContextMenu {
     /**
      * @docid
@@ -395,7 +399,39 @@ export interface dxHtmlEditorTableContextMenu {
      * @public
      */
     enabled?: boolean;
-  }
+    /**
+     * @docid
+     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorContextMenuItem>
+     * @public
+     */
+    items?: Array<ContextMenuItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
+}
+
+/**
+ * @public
+ * @namespace DevExpress.ui.dxHtmlEditor
+ */
+export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
+
+/**
+ * @deprecated Use ContextMenuItem instead
+ * @namespace DevExpress.ui
+ */
+export interface dxHtmlEditorTableContextMenuItem extends MenuBasePlainItem {
+    /**
+     * @docid
+     * @default undefined
+     * @type Enums.HtmlEditorContextMenuItem
+     * @public
+     */
+    name?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable';
+    /**
+     * @docid
+     * @public
+     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorContextMenuItem>
+     */
+    items?: Array<ContextMenuItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
+}
 
 /**
  * @docid
@@ -407,8 +443,9 @@ export interface dxHtmlEditorMention {
      * @docid
      * @default null
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: Array<string> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string>;
     /**
      * @docid
      * @default "this"
@@ -545,8 +582,9 @@ export interface dxHtmlEditorVariables {
      * @docid
      * @default null
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<string>
      */
-    dataSource?: string | Array<string> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string>;
     /**
      * @docid
      * @default ""

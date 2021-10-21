@@ -81,15 +81,7 @@ export class GanttView extends Widget {
         this._ganttViewCore.selectTaskById(id);
     }
     _update(keepExpandState) {
-        const core = this._ganttViewCore;
-        const state = keepExpandState && core.getTasksExpandedState();
-        core.loadOptionsFromGanttOwner();
-
-        if(keepExpandState) {
-            core.applyTasksExpandedState(state);
-        } else {
-            core.resetAndUpdate();
-        }
+        this._ganttViewCore?.updateWithDataReload(keepExpandState);
     }
 
     _getCultureInfo() {

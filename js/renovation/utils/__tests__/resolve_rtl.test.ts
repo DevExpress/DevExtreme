@@ -23,7 +23,8 @@ describe('rtlEnabled', () => {
   });
 });
 
-each`
+describe('rtlEnabledDefinition', () => {
+  each`
   global       | rtlEnabled   | parentRtlEnabled | expected
   ${true}      | ${true}      | ${true}          | ${false}
   ${undefined} | ${undefined} | ${undefined}     | ${false}
@@ -36,16 +37,22 @@ each`
   ${true}      | ${undefined} | ${false}         | ${false}
   ${true}      | ${true}      | ${true}          | ${false}
     `
-  .describe('resolveRtlEnabledDefinition truth table', ({
-    global, rtlEnabled, parentRtlEnabled, expected,
-  }) => {
-    const name = `${JSON.stringify({
+    .describe('resolveRtlEnabledDefinition truth table', ({
       global, rtlEnabled, parentRtlEnabled, expected,
-    })}`;
+    }) => {
+      const name = `${JSON.stringify({
+        global, rtlEnabled, parentRtlEnabled, expected,
+      })}`;
 
-    it(name, () => {
-      config().rtlEnabled = global;
-      const contextConfig = { rtlEnabled: parentRtlEnabled } as ConfigContextValue;
-      expect(resolveRtlEnabledDefinition(rtlEnabled, contextConfig)).toBe(expected);
+      it(name, () => {
+        config().rtlEnabled = global;
+        const contextConfig = { rtlEnabled: parentRtlEnabled } as ConfigContextValue;
+        expect(resolveRtlEnabledDefinition(rtlEnabled, contextConfig)).toBe(expected);
+      });
     });
+
+  it('should process undefined config', () => {
+    config().rtlEnabled = true;
+    expect(resolveRtlEnabledDefinition(undefined, undefined)).toBe(true);
   });
+});

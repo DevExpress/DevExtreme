@@ -90,20 +90,42 @@ describe('Workspace base utils', () => {
   });
 
   describe('createCellElementMetaData', () => {
-    it('should update cellRect based on tableRect', () => {
-      const cellRect: any = {
-        left: 150,
-        top: 350,
-      };
-      const tableRect: any = {
-        left: 100,
-        top: 200,
+    it('should update cellRect based on tableRect (DOMRect fields are getters)', () => {
+      const cellRect = {
+        get x() { return 1; },
+        get y() { return 2; },
+        get left() { return 150; },
+        get top() { return 350; },
+        get width() { return 5; },
+        get height() { return 6; },
+        get bottom() { return 7; },
+        get right() { return 8; },
       };
 
-      expect(createCellElementMetaData(tableRect, cellRect))
+      const tableRect = {
+        get x() { return 9; },
+        get y() { return 10; },
+        get left() { return 100; },
+        get top() { return 200; },
+        get width() { return 13; },
+        get height() { return 14; },
+        get bottom() { return 15; },
+        get right() { return 16; },
+      };
+
+      expect(createCellElementMetaData(
+        tableRect as any,
+        cellRect as any,
+      ))
         .toEqual({
+          x: 1,
+          y: 2,
           left: 50,
           top: 150,
+          width: 5,
+          height: 6,
+          bottom: 7,
+          right: 8,
         });
     });
   });

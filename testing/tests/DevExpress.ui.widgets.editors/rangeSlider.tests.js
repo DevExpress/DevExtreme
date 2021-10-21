@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Tooltip from 'ui/tooltip';
+import SliderTooltip from 'ui/slider/ui.slider_tooltip';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
@@ -182,8 +182,8 @@ QUnit.module('slider with tooltip', () => {
         const $tooltips = $handle.find('.' + TOOLTIP_CLASS);
 
         assert.equal($tooltips.length, 2);
-        assert.ok(Tooltip.getInstance($tooltips.eq(0)));
-        assert.ok(Tooltip.getInstance($tooltips.eq(1)));
+        assert.ok(SliderTooltip.getInstance($tooltips.eq(0)));
+        assert.ok(SliderTooltip.getInstance($tooltips.eq(1)));
     });
 
     QUnit.test('\'tooltip.format\' should not be called for \'value\' option', function(assert) {

@@ -3,6 +3,7 @@ import HorizontalAppointmentsStrategy from './rendering_strategies/strategy_hori
 import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/strategy_horizontal_month_line';
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/strategy_horizontal_month';
 import AgendaAppointmentsStrategy from './rendering_strategies/strategy_agenda';
+import { getAppointmentKey } from '../../../renovation/ui/scheduler/appointment/utils';
 
 const RENDERING_STRATEGIES = {
     'horizontal': HorizontalAppointmentsStrategy,
@@ -12,7 +13,7 @@ const RENDERING_STRATEGIES = {
     'agenda': AgendaAppointmentsStrategy
 };
 
-export class AppointmentViewModel {
+export class AppointmentViewModelGenerator {
     initRenderingStrategy(options) {
         const RenderingStrategy = RENDERING_STRATEGIES[options.appointmentRenderingStrategyName];
         this.renderingStrategy = new RenderingStrategy(options);
@@ -31,11 +32,11 @@ export class AppointmentViewModel {
 
         const renderingStrategy = this.getRenderingStrategy();
         const positionMap = renderingStrategy.createTaskPositionMap(appointments); // TODO - appointments are mutated inside!
-        let viewModel = this.postProcess(appointments, positionMap, appointmentRenderingStrategyName, isRenovatedAppointments);
+        const viewModel = this.postProcess(appointments, positionMap, appointmentRenderingStrategyName, isRenovatedAppointments);
 
         if(isRenovatedAppointments) {
             // TODO this structure should be by default after remove old render
-            viewModel = this.makeRenovatedViewModel(viewModel);
+            return this.makeRenovatedViewModel(viewModel);
         }
 
         return {
@@ -72,14 +73,16 @@ export class AppointmentViewModel {
         });
     }
     makeRenovatedViewModel(viewModel) {
-        const result = [];
         const strategy = this.getRenderingStrategy();
+        const regularViewModel = [];
+        const allDayViewModel = [];
 
         viewModel.forEach(({ itemData, settings }) => {
-            const items = settings.map((options) => {
+            settings.forEach((options) => {
                 const geometry = strategy.getAppointmentGeometry(options);
 
-                return {
+                const item = {
+                    key: getAppointmentKey(geometry),
                     appointment: itemData,
                     geometry: {
                         ...geometry,
@@ -87,14 +90,24 @@ export class AppointmentViewModel {
                         leftVirtualWidth: options.leftVirtualWidth,
                         topVirtualHeight: options.topVirtualHeight
                     },
-                    info: options.info
+                    info: {
+                        ...options.info,
+                        allDay: options.allDay
+                    },
                 };
-            });
 
-            result.push(...items);
+                if(options.allDay) {
+                    allDayViewModel.push(item);
+                } else {
+                    regularViewModel.push(item);
+                }
+            });
         });
 
-        return result;
+        return {
+            allDay: allDayViewModel,
+            regular: regularViewModel
+        };
     }
 
     getRenderingStrategy() {
