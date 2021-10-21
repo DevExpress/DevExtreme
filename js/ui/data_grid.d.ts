@@ -626,6 +626,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
     /**
      * @docid
      * @default undefined
+     * @type any
      * @fires GridBaseOptions.onFocusedRowChanged
      * @public
      */
@@ -4705,6 +4706,7 @@ export type dxDataGridRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey
 export interface Row<TRowData = any, TKey = any> {
     /**
      * @docid dxDataGridRowObject.data
+     * @type any
      * @public
      */
     readonly data: TRowData | TGroupData<TRowData>;
@@ -4735,6 +4737,7 @@ export interface Row<TRowData = any, TKey = any> {
     readonly isSelected?: boolean;
     /**
      * @docid dxDataGridRowObject.key
+     * @type any
      * @public
      */
     readonly key: TKey | TGroupKey;
