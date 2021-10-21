@@ -47,6 +47,7 @@ const WidgetClass = jest.fn(createWidget);
 const TestComponent = createComponent({
     beforeCreate() {
         this.$_WidgetClass = WidgetClass;
+        this.$_hasAsyncTemplate = true;
     },
     props: {
         prop1: Number,

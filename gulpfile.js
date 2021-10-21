@@ -18,7 +18,7 @@ const
   OUTPUTDIR_CLEAN = 'output-dir.clean',
   OLD_OUTPUTDIR_CREATE = 'output-dir.create',
   GEN_RUN = 'generator.run',
-  
+
   COPY_STRATEGY = 'copy.strategy',
   NPM_CLEAN = 'npm.clean',
   NPM_PACKAGE = 'npm.package',
@@ -26,7 +26,8 @@ const
   ADD_HEADERS = 'npm.license-headers',
   NPM_README = 'npm.readme',
   NPM_BUILD = 'npm.build',
-  NPM_PACK = 'npm.pack';
+  NPM_PACK = 'npm.pack',
+  VUE_VERSION = 3;
 
 gulp.task(OUTPUTDIR_CLEAN, (c) =>
   del([`${config.generatedComponentsDir}\\*`, `!${config.coreComponentsDir}`], c)
@@ -52,7 +53,8 @@ gulp.task(GEN_RUN, (done) => {
       oldComponentsDir: config.oldComponentsDir,
       indexFileName: config.indexFileName
     },
-    config.widgetsPackage
+    config.widgetsPackage,
+    VUE_VERSION
   );
 
   done();

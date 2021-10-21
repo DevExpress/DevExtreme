@@ -33,6 +33,7 @@ export interface IBaseComponent extends ComponentPublicInstance, IWidgetComponen
     $_createEmitters: () => void;
     $_processChildren: () => void;
     $_getTemplates: () => object;
+    $_hasAsyncTemplate: boolean;
 }
 
 const includeAttrs = ["id", "class", "style"];
@@ -182,7 +183,7 @@ function initBaseComponent() {
                 }
 
                 const options: object = {
-                    templatesRenderAsynchronously: true,
+                    templatesRenderAsynchronously: thisComponent.$_hasAsyncTemplate,
                     ...getComponentProps(thisComponent),
                     ...config.initialValues,
                     ...config.getNestedOptionValues(),
