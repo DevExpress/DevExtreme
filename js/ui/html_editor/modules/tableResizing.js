@@ -59,7 +59,7 @@ export default class TableResizingModule extends BaseModule {
         }
 
         this.addCleanCallback(this.clean.bind(this));
-        this._resizeHandler = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
+        this._resizeHandlerWithContext = _windowResizeCallbacks.add(this._resizeHandler.bind(this));
     }
 
     _minSizeLimit(propertyName, newValue) {
@@ -667,9 +667,9 @@ export default class TableResizingModule extends BaseModule {
         this._removeResizeFrames(true);
         this._detachEvents();
 
-        _windowResizeCallbacks.remove(this._resizeHandler);
+        _windowResizeCallbacks.remove(this._resizeHandlerWithContext);
         clearTimeout(this._windowResizeTimeout);
-        this._resizeHandler = undefined;
+        this._resizeHandlerWithContext = undefined;
         this._isVerticalDragging = undefined;
         this._startTableWidth = undefined;
 

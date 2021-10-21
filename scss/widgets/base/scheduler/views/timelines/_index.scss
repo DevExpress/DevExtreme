@@ -106,8 +106,6 @@ $scheduler-timeline-min-height: 100px;
 
     .dx-scheduler-date-table-row {
       @include flex-container(row, nowrap);
-
-      flex: 1;
     }
 
     .dx-scheduler-date-table-cell {
@@ -223,5 +221,11 @@ $scheduler-timeline-min-height: 100px;
         border-right: none;
       }
     }
+  }
+}
+
+.dx-scheduler:not(.dx-scheduler-native) .dx-scheduler-timeline {
+  .dx-scheduler-date-table .dx-scheduler-date-table-row {
+    flex: 1;
   }
 }

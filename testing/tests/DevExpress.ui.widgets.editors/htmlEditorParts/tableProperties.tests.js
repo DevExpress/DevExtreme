@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import 'ui/html_editor';
-import devices from 'core/devices';
 
 import { getFormatHandlers } from 'ui/html_editor/utils/toolbar_helper';
 
@@ -170,20 +169,6 @@ module('Table properties forms', {
             assert.strictEqual(alignmentEditor.option('selectedItemKeys')[0], 'left', 'alignmentEditor selectedItemKeys is correct');
             assert.roughEqual(heightEditor.option('value'), 73, 3, 'heightEditor value is correct');
             assert.roughEqual(widthEditor.option('value'), 400, 3, 'widthEditor value is correct');
-        });
-
-        test('Form popup use a fullscreen mode for mobile devices', function(assert) {
-            const isPhone = devices.real().deviceType === 'phone';
-
-            this.createWidget();
-
-            const $tableElement = this.$element.find('table').eq(0);
-
-            showTablePropertiesForm(this.instance, $tableElement);
-            this.clock.tick();
-            const $popup = $('.dx-overlay-content');
-
-            assert.strictEqual($popup.hasClass('dx-popup-fullscreen'), isPhone);
         });
 
         test('Check properties edititng at the table Form (without dimensions)', function(assert) {

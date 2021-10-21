@@ -13,7 +13,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
 QUnit.testStart(function() {
-    $('#qunit-fixture').html('<div id="scheduler-timeline"></div>\
+    $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-timeline"></div></div>\
                                 <div id="scheduler-timeline-rtl"></div>');
 });
 
