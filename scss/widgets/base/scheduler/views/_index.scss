@@ -20,6 +20,7 @@ $scheduler-focused-cell-shadow: null !default;
 $scheduler-droppable-cell-background-color: null !default;
 
 $scheduler-left-column-width: null !default;
+$scheduler-timeline-cell-height: null !default;
 
 $scheduler-other-month-cell-opacity: null !default;
 $scheduler-workspace-month-text-color: null !default;
@@ -78,6 +79,9 @@ $scheduler-month-date-text-padding: 6px;
   $scheduler-small-font-size: $scheduler-small-font-size,
   $scheduler-workspace-info-font-size: $scheduler-workspace-info-font-size,
   $scheduler-other-month-cell-opacity: $scheduler-other-month-cell-opacity,
+);
+@use "./renovation" with (
+  $scheduler-timeline-cell-height: $scheduler-timeline-cell-height,
 );
 
 .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {

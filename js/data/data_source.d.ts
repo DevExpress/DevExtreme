@@ -163,7 +163,7 @@ export default class DataSource<
     TKey = any,
 > {
     constructor(data: Array<TItem>);
-    constructor(options: CustomStoreOptions<TItem, TKey> | Options<any, TItem, any, TKey>);
+    constructor(options: CustomStoreOptions<TItem, TKey> | Options<any, any, TItem, TKey>);
     constructor(store: Store<TItem, TKey>);
     constructor(url: string);
     /**

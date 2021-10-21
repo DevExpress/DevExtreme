@@ -1707,7 +1707,7 @@ declare module DevExpress.data {
     constructor(
       options:
         | DevExpress.data.CustomStore.Options<TItem, TKey>
-        | DevExpress.data.DataSource.Options<any, TItem, any, TKey>
+        | DevExpress.data.DataSource.Options<any, any, TItem, TKey>
     );
     constructor(store: Store<TItem, TKey>);
     constructor(url: string);
@@ -5523,15 +5523,13 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGrid.getSelectedRowKeys()]
      */
-    getSelectedRowKeys():
-      | Array<TKey>
-      | DevExpress.core.utils.DxPromise<Array<TKey>>;
+    getSelectedRowKeys(): Array<TKey> &
+      DevExpress.core.utils.DxPromise<Array<TKey>>;
     /**
      * [descr:dxDataGrid.getSelectedRowsData()]
      */
-    getSelectedRowsData():
-      | Array<TRowData>
-      | DevExpress.core.utils.DxPromise<Array<TRowData>>;
+    getSelectedRowsData(): Array<TRowData> &
+      DevExpress.core.utils.DxPromise<Array<TRowData>>;
     /**
      * [descr:dxDataGrid.getTotalSummaryValue(summaryItemName)]
      */

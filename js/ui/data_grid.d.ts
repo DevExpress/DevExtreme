@@ -4363,14 +4363,14 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
      * @return Array<any> | Promise<any>
      * @public
      */
-    getSelectedRowKeys(): Array<TKey> | DxPromise<Array<TKey>>;
+    getSelectedRowKeys(): Array<TKey> & DxPromise<Array<TKey>>;
     /**
      * @docid
      * @publicName getSelectedRowsData()
      * @return Array<any> | Promise<any>
      * @public
      */
-    getSelectedRowsData(): Array<TRowData> | DxPromise<Array<TRowData>>;
+    getSelectedRowsData(): Array<TRowData> & DxPromise<Array<TRowData>>;
     /**
      * @docid
      * @publicName getTotalSummaryValue(summaryItemName)
