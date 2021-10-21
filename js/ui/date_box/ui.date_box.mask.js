@@ -138,10 +138,11 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _keyInputHandler(e, key) {
-        this._inputKeyProcessed = false;
+        const oldInputValue = this._input().val();
         this._processInputKey(key);
         e.preventDefault();
-        this._inputKeyProcessed && eventsEngine.trigger(this._input(), 'input');
+        const isValueChanged = oldInputValue !== this._input().val();
+        isValueChanged && eventsEngine.trigger(this._input(), 'input');
     },
 
     _keyboardHandler(e) {
@@ -221,7 +222,6 @@ const DateBoxMask = DateBoxBase.inherit({
             this._searchString(key);
         } else {
             this._searchNumber(key);
-            this._inputKeyProcessed = true;
         }
     },
 
