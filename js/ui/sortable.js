@@ -266,7 +266,7 @@ const Sortable = Draggable.inherit({
             const itemPoints = this.option('itemPoints');
             const itemPoint = itemPoints?.filter(item => item.index === toIndex)[0];
 
-            if(itemPoint) {
+            if(itemPoint && itemPoint.top !== undefined) {
                 const isVertical = this._isVerticalOrientation();
                 if(isVertical) {
                     return top <= itemPoint.top && itemPoint.top <= bottom;

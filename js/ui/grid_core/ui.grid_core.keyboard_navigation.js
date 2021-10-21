@@ -1110,8 +1110,9 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._updateFocusTimeout = setTimeout(() => {
             const editingController = this._editingController;
             const isCellEditMode = editingController.getEditMode() === EDIT_MODE_CELL;
+            const isBatchEditMode = editingController.getEditMode() === EDIT_MODE_BATCH;
 
-            if(isCellEditMode && editingController.hasChanges()) {
+            if((isCellEditMode && editingController.hasChanges()) || (isBatchEditMode && editingController.isNewRowInEditMode())) {
                 editingController._focusEditingCell();
                 return;
             }
