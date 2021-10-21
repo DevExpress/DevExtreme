@@ -102,7 +102,12 @@ export interface KeyDownInfo {
 type TGroupKey = any[];
 type TGroupData<TRowData> = {
   key: any;
-  items: Array<TRowData>;
+  items: Array<TRowData> | Array<TGroupData<TRowData>> | null;
+  collapsedItems: Array<TRowData> | Array<TGroupData<TRowData>> | null;
+  aggregates?: Array<any>;
+  summary?: Array<any>;
+  isContinuation?: boolean;
+  isContinuationOnNextPage?: boolean;
 };
 
 export interface RowKeyInfo<TKey = any> {
