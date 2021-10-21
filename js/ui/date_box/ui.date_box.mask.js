@@ -137,6 +137,13 @@ const DateBoxMask = DateBoxBase.inherit({
         return device.android && device.version[0] > 4;
     },
 
+    _keyInputHandler(e, key) {
+        this._inputKeyProcessed = false;
+        this._processInputKey(key);
+        e.preventDefault();
+        this._inputKeyProcessed && eventsEngine.trigger(this._input(), 'input');
+    },
+
     _keyboardHandler(e) {
         let key = e.originalEvent.key;
 
@@ -153,12 +160,7 @@ const DateBoxMask = DateBoxBase.inherit({
                 this._renderSelectedPart();
             };
         } else if(this._isSingleCharKey(e)) {
-            this._processInputKey(key);
-            e.originalEvent.preventDefault();
-            if(this.option('onInput')) {
-                const action = this._createActionByOption('onInput', { excludeValidators: ['readOnly'] });
-                action({ event: e });
-            }
+            this._keyInputHandler(e.originalEvent, key);
         }
 
         return result;
@@ -190,12 +192,8 @@ const DateBoxMask = DateBoxBase.inherit({
         }
 
         const key = e.originalEvent.data;
-        this._processInputKey(key);
-        e.preventDefault();
-        if(this.option('onInput')) {
-            const action = this._createActionByOption('onInput', { excludeValidators: ['readOnly'] });
-            action({ event: e });
-        }
+        this._keyInputHandler(e, key);
+
         return true;
     },
 
@@ -489,6 +487,7 @@ const DateBoxMask = DateBoxBase.inherit({
 
         isFunction(setter) ? setter(dateValue, value) : dateValue[setter](value);
         this._renderDisplayText(this._getDisplayedText(dateValue));
+        this._inputKeyProcessed = true;
 
         this._renderDateParts();
     },
