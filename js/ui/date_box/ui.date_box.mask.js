@@ -221,6 +221,7 @@ const DateBoxMask = DateBoxBase.inherit({
             this._searchString(key);
         } else {
             this._searchNumber(key);
+            this._inputKeyProcessed = true;
         }
     },
 
@@ -487,7 +488,6 @@ const DateBoxMask = DateBoxBase.inherit({
 
         isFunction(setter) ? setter(dateValue, value) : dateValue[setter](value);
         this._renderDisplayText(this._getDisplayedText(dateValue));
-        this._inputKeyProcessed = true;
 
         this._renderDateParts();
     },
