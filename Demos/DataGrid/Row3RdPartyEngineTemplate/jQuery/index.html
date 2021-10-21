@@ -22,20 +22,18 @@
     <div class="demo-container">
       <div id="gridContainer"></div>
       <script id="gridRow" type="text/html">
-        <tbody class="employee <%= (rowIndex % 2) ? 'dx-row-alt' : '' %>">
-          <tr class="dx-row main-row">
-            <td rowspan="2"><img src="<%= data.Picture %>" /></td>
-            <td><%= data.Prefix %></td>
-            <td><%= data.FirstName %></td>
-            <td><%= data.LastName %></td>
-            <td><%= data.Position %></td>
-            <td><%= data.BirthDate %></td>
-            <td><%= data.HireDate %></td>
-          </tr>
-          <tr class="notes-row">
-            <td colspan="6"><div><%= data.Notes %></div></td>
-          </tr>
-        </tbody>
+        <tr class="main-row">
+          <td rowspan="2"><img src="<%= data.Picture %>" /></td>
+          <td><%= data.Prefix %></td>
+          <td><%= data.FirstName %></td>
+          <td><%= data.LastName %></td>
+          <td><%= data.Position %></td>
+          <td><%= data.BirthDate %></td>
+          <td><%= data.HireDate %></td>
+        </tr>
+        <tr class="notes-row">
+          <td colspan="6"><div><%= data.Notes %></div></td>
+        </tr>
       </script>
     </div>
   </body>

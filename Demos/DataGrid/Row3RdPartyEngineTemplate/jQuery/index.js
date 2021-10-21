@@ -5,7 +5,9 @@ $(() => {
     dataSource: employees,
     keyExpr: 'ID',
     showBorders: true,
-    rowTemplate: $('#gridRow'),
+    hoverStateEnabled: true,
+    rowAlternationEnabled: true,
+    dataRowTemplate: $('#gridRow'),
     columns: [{
       dataField: 'Photo',
       allowFiltering: false,
