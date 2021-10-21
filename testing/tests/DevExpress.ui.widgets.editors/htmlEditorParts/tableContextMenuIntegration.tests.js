@@ -469,8 +469,9 @@ module('Table context menu integration', {
                 this.instance.option('tableContextMenu', { enabled: true });
 
                 const $contextMenu = this.getContextMenu();
+                const $menuItems = $contextMenu.find(`.${ITEM_HAS_TEXT_CLASS}`);
 
-                assert.strictEqual($contextMenu.length, 4);
+                assert.strictEqual($menuItems.length, 4);
             } catch(e) {
                 assert.ok(false);
             }

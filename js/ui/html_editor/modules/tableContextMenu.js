@@ -172,7 +172,6 @@ if(Quill) {
 
         clean() {
             this._detachEvents();
-            this._contextMenu?.dispose();
         }
 
         option(option, value) {

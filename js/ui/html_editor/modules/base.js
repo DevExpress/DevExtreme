@@ -26,7 +26,7 @@ if(Quill) {
             if(isObject(changes)) {
                 Object.entries(changes).forEach(([name, value]) => this.option(name, value));
             } else if(changes === null) {
-                this.clean();
+                this?.clean();
             }
         }
     };
