@@ -649,20 +649,19 @@ export const rowsModule = {
                 },
 
                 _renderCore: function(change) {
-                    const that = this;
-                    const $element = that.element();
+                    const $element = this.element();
 
-                    $element.addClass(that.addWidgetPrefix(ROWS_VIEW_CLASS)).toggleClass(that.addWidgetPrefix(NOWRAP_CLASS), !that.option('wordWrapEnabled'));
-                    $element.toggleClass(EMPTY_CLASS, that._dataController.items().length === 0);
+                    $element.addClass(this.addWidgetPrefix(ROWS_VIEW_CLASS)).toggleClass(this.addWidgetPrefix(NOWRAP_CLASS), !this.option('wordWrapEnabled'));
+                    $element.toggleClass(EMPTY_CLASS, this._dataController.isEmpty());
 
-                    that.setAria('role', 'presentation', $element);
+                    this.setAria('role', 'presentation', $element);
 
-                    const $table = that._renderTable({ change: change });
-                    that._updateContent($table, change);
+                    const $table = this._renderTable({ change: change });
+                    this._updateContent($table, change);
 
-                    that.callBase(change);
+                    this.callBase(change);
 
-                    that._lastColumnWidths = null;
+                    this._lastColumnWidths = null;
                 },
 
                 _getRows: function(change) {
