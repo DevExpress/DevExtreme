@@ -5525,15 +5525,13 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGrid.getSelectedRowKeys()]
      */
-    getSelectedRowKeys():
-      | Array<TKey>
-      | DevExpress.core.utils.DxPromise<Array<TKey>>;
+    getSelectedRowKeys(): Array<TKey> &
+      DevExpress.core.utils.DxPromise<Array<TKey>>;
     /**
      * [descr:dxDataGrid.getSelectedRowsData()]
      */
-    getSelectedRowsData():
-      | Array<TRowData>
-      | DevExpress.core.utils.DxPromise<Array<TRowData>>;
+    getSelectedRowsData(): Array<TRowData> &
+      DevExpress.core.utils.DxPromise<Array<TRowData>>;
     /**
      * [descr:dxDataGrid.getTotalSummaryValue(summaryItemName)]
      */
