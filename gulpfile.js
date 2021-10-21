@@ -7,6 +7,7 @@ const ts = require('gulp-typescript');
 const generateSync = require('devextreme-vue-generator').default;
 
 const config = require('./build.config');
+const VUE_VERSION = 2;
 
 gulp.task('build.components', gulp.series(
   (done) =>
@@ -21,7 +22,8 @@ gulp.task('build.components', gulp.series(
         oldComponentsDir: config.oldComponentsDir,
         indexFileName: config.indexFileName
       },
-      config.widgetsPackage
+      config.widgetsPackage,
+      VUE_VERSION
     );
 
     done();
