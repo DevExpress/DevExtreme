@@ -4339,6 +4339,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     /**
      * @docid
      * @publicName collapseRow(key)
+     * @type_function_param1 key:any
      * @return Promise<void>
      * @public
      */
@@ -4353,6 +4354,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     /**
      * @docid
      * @publicName expandRow(key)
+     * @type_function_param1 key:any
      * @return Promise<void>
      * @public
      */
@@ -4409,6 +4411,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     /**
      * @docid
      * @publicName isRowExpanded(key)
+     * @type_function_param1 key:any
      * @public
      */
     isRowExpanded(key: TKey | TGroupKey): boolean;
