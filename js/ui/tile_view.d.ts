@@ -13,7 +13,7 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-type ItemLike = string | Item<any> | any;
+type ItemLike = string | Item | any;
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxTileView<TItem, TKey>>;
@@ -141,13 +141,13 @@ export default class dxTileView<
  * @public
  * @namespace DevExpress.ui.dxTileView
  */
-export type Item<TItem extends Item<any> | any = any> = dxTileViewItem<TItem>;
+export type Item = dxTileViewItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxTileViewItem<TItem extends dxTileViewItem<any> | any = any> extends CollectionWidgetItem<TItem> {
+export interface dxTileViewItem extends CollectionWidgetItem {
     /**
      * @docid
      * @default 1
