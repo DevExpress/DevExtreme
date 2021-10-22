@@ -22,7 +22,6 @@ import { isDefined } from '../../../core/utils/type';
 //              drawLeftBorder
 //              drawTopBorder
 //              drawBottomBorder,
-//              customDrawCell: ({doc, rect, cell:pdfCell}) => void
 //          }
 //        }
 //      ],
@@ -76,7 +75,6 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
                 wordWrapEnabled,
                 backgroundColor,
                 padding: 0,
-                customDrawCell: undefined,
                 _rect: {}
             }
         };
