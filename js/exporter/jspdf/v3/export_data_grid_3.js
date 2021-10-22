@@ -88,7 +88,7 @@ function exportDataGrid(doc, dataGrid, options) {
             );
 
             const docStyles = getDocumentStyles(doc);
-            drawCellsContent(doc, options.onCellExporting, pdfCellsInfo, docStyles);
+            drawCellsContent(doc, options.customDrawCell, pdfCellsInfo, docStyles);
             drawCellsLines(doc, pdfCellsInfo, docStyles);
 
             const isDrawTableBorderSpecified = options.drawTableBorder === true;
