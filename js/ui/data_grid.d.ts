@@ -100,18 +100,25 @@ export interface KeyDownInfo {
 }
 
 type GroupKey = any[];
-type GroupData<TRowData> = {
+
+/** @public */
+export type GroupData<TRowData> = {
   key: any;
   items: Array<TRowData> | Array<GroupData<TRowData>> | null;
+  /** @deprecated Attention! This property is for internal purposes only. */
   collapsedItems?: Array<TRowData> | Array<GroupData<TRowData>>;
+  /** @deprecated Attention! This property is for internal purposes only. */
   aggregates?: Array<any>;
+  /** @deprecated Attention! This property is for internal purposes only. */
   summary?: Array<any>;
+  /** @deprecated Attention! This property is for internal purposes only. */
   isContinuation?: boolean;
+  /** @deprecated Attention! This property is for internal purposes only. */
   isContinuationOnNextPage?: boolean;
 };
 
 export interface RowKeyInfo<TKey = any> {
-  readonly key: TKey | GroupKey;
+  readonly key: TKey;
 }
 
 export interface RowInsertedInfo<TRowData = any, TKey = any> {
@@ -635,7 +642,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @fires GridBaseOptions.onFocusedRowChanged
      * @public
      */
-    focusedRowKey?: TKey | GroupKey;
+    focusedRowKey?: TKey;
     /**
      * @docid
      * @type object
@@ -2121,7 +2128,7 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @return any
      * @public
      */
-    getKeyByRowIndex(rowIndex: number): TKey | GroupKey | undefined;
+    getKeyByRowIndex(rowIndex: number): TKey | undefined;
     /**
      * @docid
      * @publicName getRowElement(rowIndex)
@@ -2137,7 +2144,7 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @return numeric
      * @public
      */
-    getRowIndexByKey(key: TKey | GroupKey): number;
+    getRowIndexByKey(key: TKey): number;
     /**
      * @docid
      * @publicName getScrollable()
@@ -2181,7 +2188,7 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @return boolean
      * @public
      */
-    isRowFocused(key: TKey | GroupKey): boolean;
+    isRowFocused(key: TKey): boolean;
     /**
      * @docid
      * @publicName isRowSelected(key)
@@ -2787,8 +2794,8 @@ export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventI
 
 /** @public */
 export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-  readonly data: TRowData | GroupData<TRowData>;
-  readonly key: TKey | GroupKey;
+  readonly data: TRowData;
+  readonly key: TKey;
   readonly value?: any;
   readonly displayValue?: any;
   readonly text: string;
@@ -2802,8 +2809,8 @@ export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataG
 
 /** @public */
 export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-  readonly data: TRowData | GroupData<TRowData>;
-  readonly key: TKey | GroupKey;
+  readonly data: TRowData;
+  readonly key: TKey;
   readonly value?: any;
   readonly displayValue?: any;
   readonly text: string;
@@ -2818,8 +2825,8 @@ export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDa
 /** @public */
 export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
   readonly eventType: string;
-  readonly data: TRowData | GroupData<TRowData>;
-  readonly key: TKey | GroupKey;
+  readonly data: TRowData;
+  readonly key: TKey;
   readonly value?: any;
   readonly text: string;
   readonly displayValue?: any;
@@ -2833,8 +2840,8 @@ export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxData
 
 /** @public */
 export type CellPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
-  readonly data: TRowData | GroupData<TRowData>;
-  readonly key: TKey | GroupKey;
+  readonly data: TRowData;
+  readonly key: TKey;
   readonly value?: any;
   readonly displayValue?: any;
   readonly text: string;
@@ -2984,8 +2991,8 @@ export type OptionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGri
 
 /** @public */
 export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-  readonly data: TRowData | GroupData<TRowData>;
-  readonly key: TKey | GroupKey;
+  readonly data: TRowData;
+  readonly key: TKey;
   readonly values: Array<any>;
   readonly columns: Array<Column<TRowData, TKey>>;
   readonly rowIndex: number;
@@ -3006,8 +3013,8 @@ export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventI
 
 /** @public */
 export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-  readonly data: TRowData | GroupData<TRowData>;
-  readonly key: TKey | GroupKey;
+  readonly data: TRowData;
+  readonly key: TKey;
   readonly values: Array<any>;
   readonly columns: Array<Column<TRowData, TKey>>;
   readonly rowIndex: number;
@@ -3033,8 +3040,8 @@ export type RowInsertingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid
 
 /** @public */
 export type RowPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & {
-  readonly data: TRowData | GroupData<TRowData>;
-  readonly key: TKey | GroupKey;
+  readonly data: TRowData;
+  readonly key: TKey;
   readonly values: Array<any>;
   readonly columns: Array<Column<TRowData, TKey>>;
   readonly rowIndex: number;
@@ -4348,7 +4355,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
      * @return Promise<void>
      * @public
      */
-    collapseRow(key: TKey | GroupKey): DxPromise<void>;
+    collapseRow(key: TKey): DxPromise<void>;
     /**
      * @docid
      * @publicName expandAll(groupIndex)
@@ -4363,7 +4370,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
      * @return Promise<void>
      * @public
      */
-    expandRow(key: TKey | GroupKey): DxPromise<void>;
+    expandRow(key: TKey): DxPromise<void>;
     /**
      * @docid
      * @publicName exportToExcel(selectionOnly)
@@ -4419,7 +4426,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
      * @param1 key:any
      * @public
      */
-    isRowExpanded(key: TKey | GroupKey): boolean;
+    isRowExpanded(key: TKey): boolean;
     /**
      * @docid
      * @publicName isRowSelected(data)
@@ -4471,15 +4478,15 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource<TRowData, TKey>;
-    getKeyByRowIndex(rowIndex: number): TKey | GroupKey | undefined;
+    getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
-    getRowIndexByKey(key: TKey | GroupKey): number;
+    getRowIndexByKey(key: TKey): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
     isAdaptiveDetailRowExpanded(key: TKey): boolean;
-    isRowFocused(key: TKey | GroupKey): boolean;
+    isRowFocused(key: TKey): boolean;
     keyOf(obj: TRowData): TKey;
     navigateToRow(key: TKey): DxPromise<void>;
     pageCount(): number;
@@ -4717,7 +4724,7 @@ export interface Row<TRowData = any, TKey = any> {
      * @type any
      * @public
      */
-    readonly data: TRowData | GroupData<TRowData>;
+    readonly data: TRowData;
     /**
      * @docid dxDataGridRowObject.groupIndex
      * @public
@@ -4748,7 +4755,7 @@ export interface Row<TRowData = any, TKey = any> {
      * @type any
      * @public
      */
-    readonly key: TKey | GroupKey;
+    readonly key: TKey;
     /**
      * @docid dxDataGridRowObject.rowIndex
      * @public
@@ -4837,6 +4844,7 @@ export type ExplicitTypes<TRowData, TKey> = {
   SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
   Summary: Summary<TRowData, TKey>;
   ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
+  GroupData: GroupData<TRowData>;
 };
 
 /** @public */

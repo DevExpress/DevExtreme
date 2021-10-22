@@ -5508,9 +5508,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGrid.collapseRow(key)]
      */
-    collapseRow(
-      key: TKey | DevExpress.ui.dxDataGrid.GroupKey
-    ): DevExpress.core.utils.DxPromise<void>;
+    collapseRow(key: TKey): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:dxDataGrid.expandAll(groupIndex)]
      */
@@ -5518,9 +5516,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGrid.expandRow(key)]
      */
-    expandRow(
-      key: TKey | DevExpress.ui.dxDataGrid.GroupKey
-    ): DevExpress.core.utils.DxPromise<void>;
+    expandRow(key: TKey): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:dxDataGrid.exportToExcel(selectionOnly)]
      * @deprecated [depNote:dxDataGrid.exportToExcel(selectionOnly)]
@@ -5557,7 +5553,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGrid.isRowExpanded(key)]
      */
-    isRowExpanded(key: TKey | DevExpress.ui.dxDataGrid.GroupKey): boolean;
+    isRowExpanded(key: TKey): boolean;
     /**
      * [descr:dxDataGrid.isRowSelected(data)]
      */
@@ -5616,19 +5612,17 @@ declare module DevExpress.ui {
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DevExpress.data.DataSource<TRowData, TKey>;
-    getKeyByRowIndex(
-      rowIndex: number
-    ): TKey | DevExpress.ui.dxDataGrid.GroupKey | undefined;
+    getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(
       rowIndex: number
     ): DevExpress.core.UserDefinedElementsArray | undefined;
-    getRowIndexByKey(key: TKey | DevExpress.ui.dxDataGrid.GroupKey): number;
+    getRowIndexByKey(key: TKey): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
     isAdaptiveDetailRowExpanded(key: TKey): boolean;
-    isRowFocused(key: TKey | DevExpress.ui.dxDataGrid.GroupKey): boolean;
+    isRowFocused(key: TKey): boolean;
     keyOf(obj: TRowData): TKey;
     navigateToRow(key: TKey): DevExpress.core.utils.DxPromise<void>;
     pageCount(): number;
@@ -5671,8 +5665,8 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-      readonly data: TRowData | GroupData<TRowData>;
-      readonly key: TKey | GroupKey;
+      readonly data: TRowData;
+      readonly key: TKey;
       readonly value?: any;
       readonly displayValue?: any;
       readonly text: string;
@@ -5687,8 +5681,8 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-      readonly data: TRowData | GroupData<TRowData>;
-      readonly key: TKey | GroupKey;
+      readonly data: TRowData;
+      readonly key: TKey;
       readonly value?: any;
       readonly displayValue?: any;
       readonly text: string;
@@ -5704,8 +5698,8 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
       readonly eventType: string;
-      readonly data: TRowData | GroupData<TRowData>;
-      readonly key: TKey | GroupKey;
+      readonly data: TRowData;
+      readonly key: TKey;
       readonly value?: any;
       readonly text: string;
       readonly displayValue?: any;
@@ -5720,8 +5714,8 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
-      readonly data: TRowData | GroupData<TRowData>;
-      readonly key: TKey | GroupKey;
+      readonly data: TRowData;
+      readonly key: TKey;
       readonly value?: any;
       readonly displayValue?: any;
       readonly text: string;
@@ -6681,6 +6675,7 @@ declare module DevExpress.ui {
       SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
       Summary: Summary<TRowData, TKey>;
       ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
+      GroupData: GroupData<TRowData>;
     };
     export type Export<TRowData = any, TKey = any> = {
       /**
@@ -6946,16 +6941,28 @@ declare module DevExpress.ui {
         newRowIndex: number;
         readonly rows: Array<Row<TRowData, TKey>>;
       };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    type GroupData<TRowData> = {
+    export type GroupData<TRowData> = {
       key: any;
       items: Array<TRowData> | Array<GroupData<TRowData>> | null;
+      /**
+       * @deprecated Attention! This property is for internal purposes only.
+       */
       collapsedItems?: Array<TRowData> | Array<GroupData<TRowData>>;
+      /**
+       * @deprecated Attention! This property is for internal purposes only.
+       */
       aggregates?: Array<any>;
+      /**
+       * @deprecated Attention! This property is for internal purposes only.
+       */
       summary?: Array<any>;
+      /**
+       * @deprecated Attention! This property is for internal purposes only.
+       */
       isContinuation?: boolean;
+      /**
+       * @deprecated Attention! This property is for internal purposes only.
+       */
       isContinuationOnNextPage?: boolean;
     };
     /**
@@ -7008,10 +7015,6 @@ declare module DevExpress.ui {
        */
       ungroupAll?: string;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    type GroupKey = any[];
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7257,7 +7260,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridRowObject.data]
        */
-      readonly data: TRowData | GroupData<TRowData>;
+      readonly data: TRowData;
       /**
        * [descr:dxDataGridRowObject.groupIndex]
        */
@@ -7281,7 +7284,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridRowObject.key]
        */
-      readonly key: TKey | GroupKey;
+      readonly key: TKey;
       /**
        * [descr:dxDataGridRowObject.rowIndex]
        */
@@ -7299,8 +7302,8 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-      readonly data: TRowData | GroupData<TRowData>;
-      readonly key: TKey | GroupKey;
+      readonly data: TRowData;
+      readonly key: TKey;
       readonly values: Array<any>;
       readonly columns: Array<Column<TRowData, TKey>>;
       readonly rowIndex: number;
@@ -7327,8 +7330,8 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
-      readonly data: TRowData | GroupData<TRowData>;
-      readonly key: TKey | GroupKey;
+      readonly data: TRowData;
+      readonly key: TKey;
       readonly values: Array<any>;
       readonly columns: Array<Column<TRowData, TKey>>;
       readonly rowIndex: number;
@@ -7580,14 +7583,14 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export interface RowKeyInfo<TKey = any> {
-      readonly key: TKey | GroupKey;
+      readonly key: TKey;
     }
     export type RowPreparedEvent<
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
-      readonly data: TRowData | GroupData<TRowData>;
-      readonly key: TKey | GroupKey;
+      readonly data: TRowData;
+      readonly key: TKey;
       readonly values: Array<any>;
       readonly columns: Array<Column<TRowData, TKey>>;
       readonly rowIndex: number;
@@ -22636,9 +22639,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBase.getKeyByRowIndex(rowIndex)]
      */
-    getKeyByRowIndex(
-      rowIndex: number
-    ): TKey | DevExpress.ui.dxDataGrid.GroupKey | undefined;
+    getKeyByRowIndex(rowIndex: number): TKey | undefined;
     /**
      * [descr:GridBase.getRowElement(rowIndex)]
      */
@@ -22648,7 +22649,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBase.getRowIndexByKey(key)]
      */
-    getRowIndexByKey(key: TKey | DevExpress.ui.dxDataGrid.GroupKey): number;
+    getRowIndexByKey(key: TKey): number;
     /**
      * [descr:GridBase.getScrollable()]
      */
@@ -22672,7 +22673,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBase.isRowFocused(key)]
      */
-    isRowFocused(key: TKey | DevExpress.ui.dxDataGrid.GroupKey): boolean;
+    isRowFocused(key: TKey): boolean;
     /**
      * [descr:GridBase.isRowSelected(key)]
      */
@@ -22902,7 +22903,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.focusedRowKey]
      */
-    focusedRowKey?: TKey | DevExpress.ui.dxDataGrid.GroupKey;
+    focusedRowKey?: TKey;
     /**
      * [descr:GridBaseOptions.headerFilter]
      */
