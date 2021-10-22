@@ -13,7 +13,7 @@ import CollectionWidget, {
   CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-type ItemLike = string | Item<any> | any;
+type ItemLike = string | Item | any;
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxResponsiveBox<TItem, TKey>>;
@@ -156,13 +156,13 @@ export default class dxResponsiveBox<
  * @public
  * @namespace DevExpress.ui.dxResponsiveBox
  */
-export type Item<TItem extends Item<any> | any = any> = dxResponsiveBoxItem<TItem>;
+export type Item = dxResponsiveBoxItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxResponsiveBoxItem<TItem extends dxResponsiveBoxItem<any> | any = any> extends CollectionWidgetItem<TItem> {
+export interface dxResponsiveBoxItem extends CollectionWidgetItem {
   /**
    * @docid
    * @public
@@ -214,10 +214,10 @@ export type ExplicitTypes<
 export type Properties<
   TItem extends ItemLike = any,
   TKey = any,
-  > = dxResponsiveBoxOptions<TItem, TKey>;
+> = dxResponsiveBoxOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
 export type Options<
   TItem extends ItemLike = any,
   TKey = any,
-  > = Properties<TItem, TKey>;
+> = Properties<TItem, TKey>;

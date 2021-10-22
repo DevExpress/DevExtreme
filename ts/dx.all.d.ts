@@ -17808,7 +17808,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    type ItemLike = string | Item<any> | any;
+    type ItemLike = string | Item | any;
     export type ItemRenderedEvent<
       TItem extends ItemLike = any,
       TKey = any
@@ -17828,9 +17828,7 @@ declare module DevExpress.ui {
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxResponsiveBoxItem<
-    TItem extends dxResponsiveBoxItem<any> | any = any
-  > extends CollectionWidgetItem<TItem> {
+  export interface dxResponsiveBoxItem extends CollectionWidgetItem {
     /**
      * [descr:dxResponsiveBoxItem.location]
      */
@@ -17896,9 +17894,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResponsiveBoxOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<
-      string | DevExpress.ui.dxResponsiveBox.Item | any
-    >;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<TItem, TKey>;
     /**
      * [descr:dxResponsiveBoxOptions.height]
      */
@@ -23683,8 +23679,7 @@ declare module DevExpress.ui.dxPopup {
   export type ToolbarItem = dxPopupToolbarItem;
 }
 declare module DevExpress.ui.dxResponsiveBox {
-  export type Item<TItem extends Item<any> | any = any> =
-    dxResponsiveBoxItem<TItem>;
+  export type Item = dxResponsiveBoxItem;
 }
 declare module DevExpress.ui.dxSlideOut {
   export type Item = dxSlideOutItem;
