@@ -21,7 +21,7 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-type ItemLike = string | Item<any> | any;
+type ItemLike = string | Item | any;
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxToolbar<TItem, TKey>>;
@@ -101,13 +101,13 @@ export default class dxToolbar<
  * @public
  * @namespace DevExpress.ui.dxToolbar
  * */
-export type Item<TItem extends Item<any> | any = any> = dxToolbarItem<TItem>;
+export type Item = dxToolbarItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxToolbarItem<TItem extends dxToolbarItem<any> | any = any> extends CollectionWidgetItem<TItem> {
+export interface dxToolbarItem extends CollectionWidgetItem {
     /**
      * @docid
      * @default undefined
