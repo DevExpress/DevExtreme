@@ -21,7 +21,7 @@ import { isDefined } from '../../../core/utils/type';
 //              drawRightBorder,
 //              drawLeftBorder
 //              drawTopBorder
-//              drawBottomBorder,
+//              drawBottomBorder
 //          }
 //        }
 //      ],

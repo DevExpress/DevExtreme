@@ -48,7 +48,7 @@ const JSPdfOnCellExportingTests = {
                 });
             });
 
-            QUnit.test('onCellExporting for f1 returns false', function(assert) {
+            QUnit.test('onCellExporting for f1 returns false (not draw content of the f1)', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -81,7 +81,7 @@ const JSPdfOnCellExportingTests = {
                 });
             });
 
-            QUnit.test('onCellExporting for f2 returns false', function(assert) {
+            QUnit.test('onCellExporting for f2 returns false  (not draw content of the f2)', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
