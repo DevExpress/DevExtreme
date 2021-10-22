@@ -3,6 +3,9 @@ import 'ui/html_editor';
 
 import { getFormatHandlers } from 'ui/html_editor/utils/toolbar_helper';
 
+const FORM_CLASS = 'dx-formdialog-form';
+const FIELD_ITEM_CLASS = 'dx-field-item';
+
 const showCellPropertiesForm = (instance, $cellElement) => {
     showForm(instance, $cellElement, 'cellProperties');
 };
@@ -264,6 +267,33 @@ module('Table properties forms', {
             assert.strictEqual($form.length, 1);
             assert.ok($form.eq(0).is(':visible'));
             assert.ok($scrollView.length, 'Form should be in the ScrollView');
+        });
+
+        test('Cell Form can not update other form dialogs', function(assert) {
+            this.createWidget();
+
+            const $tableElement = this.$element.find('table').eq(0);
+            const $targetCell = $tableElement.find('td').eq(6);
+
+            this.quillInstance.setSelection(50, 1);
+
+            showCellPropertiesForm(this.instance, $targetCell);
+
+            this.clock.tick();
+
+            const formInstance = this.getFormInstance();
+
+            this.applyFormChanges(formInstance);
+
+            const contextMenuModule = this.instance.getModule('tableContextMenu');
+            const formatHelpers = getFormatHandlers(contextMenuModule);
+            formatHelpers['link'](this.$element);
+
+            this.clock.tick();
+
+            const formItemsCount = $(`.${FORM_CLASS} .${FIELD_ITEM_CLASS}`).length;
+
+            assert.equal(formItemsCount, 3, '3 form items are rendered');
         });
 
         test('show cell form start values', function(assert) {

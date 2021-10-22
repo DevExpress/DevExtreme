@@ -115,6 +115,15 @@ function prepareShowFormProperties(module, type) {
 
         const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, { $element, formats, tableBlot, rowBlot });
 
+        const formDialogPopupInstance = module.editorInstance._formDialog._popup;
+        const savedDialogOptions = {
+            contentTemplate: formDialogPopupInstance.option('contentTemplate'),
+            title: formDialogPopupInstance.option('title'),
+            minHeight: formDialogPopupInstance.option('minHeight'),
+            minWidth: formDialogPopupInstance.option('minWidth'),
+            maxWidth: formDialogPopupInstance.option('maxWidth')
+        };
+
         let formInstance;
 
         module.editorInstance.formDialogOption({
@@ -130,7 +139,17 @@ function prepareShowFormProperties(module, type) {
             title: localizationMessage.format(`dxHtmlEditor-${type}Properties`),
             minHeight: MIN_HEIGHT,
             minWidth: Math.min(800, getWidth(getWindow()) * 0.9 - 1),
-            maxWidth: getWidth(getWindow()) * 0.9
+            maxWidth: getWidth(getWindow()) * 0.9,
+            onHiding: () => {
+                module.editorInstance.formDialogOption({
+                    contentTemplate: savedDialogOptions.contentTemplate,
+                    title: savedDialogOptions.title,
+                    minHeight: savedDialogOptions.minHeight || 0,
+                    minWidth: savedDialogOptions.minWidth || 0,
+                    maxWidth: savedDialogOptions.maxWidth || 'none',
+                    onHidden: null
+                });
+            }
         });
 
         const promise = module.editorInstance.showFormDialog();
