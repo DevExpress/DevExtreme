@@ -87,4 +87,5 @@ export class GanttCustomFieldsManager {
             this.cache.saveData(key, customFieldsData, forceUpdateOnKeyExpire ? updateCallback : null);
         }
     }
+    resetCustomFieldsDataCache(key) { this.cache.resetCache(key); }
 }

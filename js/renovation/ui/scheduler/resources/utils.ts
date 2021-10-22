@@ -2,11 +2,12 @@ import type { Appointment } from '../../../../ui/scheduler';
 import { getAppointmentColor } from '../../../../ui/scheduler/resources/utils';
 import { ResourceProps } from '../props';
 import { DataAccessorType } from '../types';
+import { Group } from '../workspaces/types';
 
 export interface ResourcesConfigType {
   resources: ResourceProps[];
-  resourceDataAccessors: DataAccessorType;
-  loadedResources: [];
+  dataAccessors: DataAccessorType;
+  loadedResources: Group[];
   resourceLoaderMap: unknown;
 }
 
