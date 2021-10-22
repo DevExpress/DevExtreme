@@ -1,14 +1,10 @@
+import DataSource, { DataSourceLike } from '../data/data_source';
+
 import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     FileSavingEventInfo,
@@ -77,8 +73,9 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      * @docid
      * @notUsedInTheme
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
+    dataSource?: DataSourceLike<any>;
     /**
      * @docid
      * @default '#666666'

@@ -13,7 +13,7 @@ import { TimelineHeaderPanelLayout } from '../../timeline/header_panel/layout';
 describe('Workspace config utils', () => {
   describe('getViewRenderConfigByType', () => {
     it('should work correctly when view type is day', () => {
-      expect(getViewRenderConfigByType('day', false, 1, false))
+      expect(getViewRenderConfigByType('day', false, 1, []))
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
@@ -29,11 +29,12 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: false,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
+          defaultGroupOrientation: 'horizontal',
         });
     });
 
     it('should work correctly when view type is day and intervalCount is larger than 1', () => {
-      expect(getViewRenderConfigByType('day', false, 3, false))
+      expect(getViewRenderConfigByType('day', false, 3, []))
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
@@ -49,11 +50,12 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
+          defaultGroupOrientation: 'horizontal',
         });
     });
 
     it('should work correctly when view type is week', () => {
-      expect(getViewRenderConfigByType('week', false, 1, false))
+      expect(getViewRenderConfigByType('week', false, 1, []))
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
@@ -69,11 +71,12 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
+          defaultGroupOrientation: 'horizontal',
         });
     });
 
     it('should work correctly when view type is workWeek', () => {
-      expect(getViewRenderConfigByType('workWeek', false, 1, false))
+      expect(getViewRenderConfigByType('workWeek', false, 1, []))
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
@@ -89,11 +92,12 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
+          defaultGroupOrientation: 'horizontal',
         });
     });
 
     it('should work correctly when view type is month', () => {
-      expect(getViewRenderConfigByType('month', false, 1, false))
+      expect(getViewRenderConfigByType('month', false, 1, []))
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: MonthDateTableLayout,
@@ -108,11 +112,22 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
+          defaultGroupOrientation: 'horizontal',
         });
     });
 
     it('should work correctly when view type is month adn grouping is vertical', () => {
-      expect(getViewRenderConfigByType('month', false, 1, true))
+      expect(getViewRenderConfigByType(
+        'month',
+        false,
+        1,
+        [{
+          name: 'priorityId',
+          items: [{ id: 0 }],
+          data: [{ id: 0 }],
+        }],
+        'vertical',
+      ))
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: MonthDateTableLayout,
@@ -127,11 +142,12 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: true,
+          defaultGroupOrientation: 'horizontal',
         });
     });
 
     it('should work correctly when view type is timelineDay', () => {
-      expect(getViewRenderConfigByType('timelineDay', false, 1, false))
+      expect(getViewRenderConfigByType('timelineDay', false, 1, []))
         .toEqual({
           headerPanelTemplate: TimelineHeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
@@ -146,11 +162,12 @@ describe('Workspace config utils', () => {
           className: 'dx-scheduler-timeline-day dx-scheduler-timeline',
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
+          defaultGroupOrientation: 'vertical',
         });
     });
 
     it('should work correctly when view type is timelineDay when intervalCount is larget than 1', () => {
-      expect(getViewRenderConfigByType('timelineDay', false, 13, false))
+      expect(getViewRenderConfigByType('timelineDay', false, 13, []))
         .toEqual({
           headerPanelTemplate: TimelineHeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
@@ -165,11 +182,12 @@ describe('Workspace config utils', () => {
           className: 'dx-scheduler-timeline-day dx-scheduler-timeline',
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
+          defaultGroupOrientation: 'vertical',
         });
     });
 
     it('should work correctly when view type is timelineWeek', () => {
-      expect(getViewRenderConfigByType('timelineWeek', false, 1, false))
+      expect(getViewRenderConfigByType('timelineWeek', false, 1, []))
         .toEqual({
           headerPanelTemplate: TimelineHeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
@@ -184,11 +202,12 @@ describe('Workspace config utils', () => {
           className: 'dx-scheduler-timeline-week dx-scheduler-timeline',
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
+          defaultGroupOrientation: 'vertical',
         });
     });
 
     it('should work correctly when view type is timelineWorkWeek', () => {
-      expect(getViewRenderConfigByType('timelineWorkWeek', false, 1, false))
+      expect(getViewRenderConfigByType('timelineWorkWeek', false, 1, []))
         .toEqual({
           headerPanelTemplate: TimelineHeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
@@ -203,11 +222,12 @@ describe('Workspace config utils', () => {
           className: 'dx-scheduler-timeline-work-week dx-scheduler-timeline',
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
+          defaultGroupOrientation: 'vertical',
         });
     });
 
     it('should work correctly when view type is timelineMonth', () => {
-      expect(getViewRenderConfigByType('timelineMonth', false, 1, false))
+      expect(getViewRenderConfigByType('timelineMonth', false, 1, []))
         .toEqual({
           headerPanelTemplate: TimelineHeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
@@ -222,11 +242,12 @@ describe('Workspace config utils', () => {
           className: 'dx-scheduler-timeline-month dx-scheduler-timeline',
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
+          defaultGroupOrientation: 'vertical',
         });
     });
 
     it('should work correctly when view type is agenda', () => {
-      expect(getViewRenderConfigByType('week', false, 1, false))
+      expect(getViewRenderConfigByType('week', false, 1, []))
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
@@ -242,6 +263,7 @@ describe('Workspace config utils', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
+          defaultGroupOrientation: 'horizontal',
         });
     });
   });

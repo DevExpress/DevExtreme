@@ -1,13 +1,15 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
-import { DateTableBodyProps, viewFunction as TableBodyView } from '../table_body';
+import { DateTableBody, DateTableBodyProps, viewFunction as TableBodyView } from '../table_body';
 import { Row } from '../../row';
 import { AllDayPanelTableBody } from '../all_day_panel/table_body';
 import * as utilsModule from '../../../utils';
+import * as combineClassesUtils from '../../../../../../utils/combine_classes';
 
 const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel').mockImplementation(() => true);
 const getKeyByGroup = jest.spyOn(utilsModule, 'getKeyByGroup');
+const combineClasses = jest.spyOn(combineClassesUtils, 'combineClasses');
 
 describe('DateTableBody', () => {
   describe('Render', () => {
@@ -71,6 +73,7 @@ describe('DateTableBody', () => {
 
     const render = (viewModel) => shallow(
       <TableBodyView
+        rowClasses="dx-scheduler-date-table-row"
         {...viewModel}
         props={{
           ...new DateTableBodyProps(),
@@ -94,12 +97,14 @@ describe('DateTableBody', () => {
 
       rows.forEach((row) => {
         expect(row.props())
-          .toMatchObject({
+          .toEqual({
             className: 'dx-scheduler-date-table-row',
             leftVirtualCellWidth: 100,
             rightVirtualCellWidth: 200,
             leftVirtualCellCount: 2,
             rightVirtualCellCount: 21,
+            children: expect.anything(),
+            isHeaderRow: false,
           });
       });
     });
@@ -252,6 +257,27 @@ describe('DateTableBody', () => {
         .toHaveBeenNthCalledWith(1, 3, VERTICAL_GROUP_ORIENTATION);
       expect(getKeyByGroup)
         .toHaveBeenNthCalledWith(2, 4, VERTICAL_GROUP_ORIENTATION);
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('rowClasses', () => {
+        it('should call combine classes with correct parameters', () => {
+          const tableBody = new DateTableBody({
+            addVerticalSizesClassToRows: true,
+          } as any);
+
+          expect(tableBody.rowClasses)
+            .toBe('dx-scheduler-date-table-row dx-scheduler-cell-sizes-vertical');
+
+          expect(combineClasses)
+            .toHaveBeenCalledWith({
+              'dx-scheduler-date-table-row': true,
+              'dx-scheduler-cell-sizes-vertical': true,
+            });
+        });
+      });
     });
   });
 });

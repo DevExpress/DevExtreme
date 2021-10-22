@@ -1,8 +1,4 @@
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import { DataSourceLike } from '../data/data_source';
 
 import {
     EventInfo,
@@ -69,7 +65,7 @@ export interface dxMultiViewOptions<
      * @default null
      * @public
      */
-    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @default true

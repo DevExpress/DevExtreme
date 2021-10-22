@@ -1,3 +1,4 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -6,12 +7,6 @@ import {
 import {
     template,
 } from '../core/templates/template';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -95,7 +90,7 @@ export interface dxTabPanelOptions<
      * @default null
      * @public
      */
-    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @default true
@@ -120,6 +115,7 @@ export interface dxTabPanelOptions<
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement

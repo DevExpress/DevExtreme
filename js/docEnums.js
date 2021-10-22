@@ -166,7 +166,7 @@
 
 /**
  * @typedef {string} Enums.ButtonGroupSelectionMode
- * @enum {'multiple'|'single'}
+ * @enum {'multiple'|'single'|'none'}
  */
 
 /**

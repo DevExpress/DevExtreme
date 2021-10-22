@@ -1,3 +1,4 @@
+import DataSource, { DataSourceLike, Options as DataSourceOptions } from '../data/data_source';
 import {
   UserDefinedElement,
   DxElement,
@@ -15,12 +16,6 @@ import {
 import {
     DeepPartial,
 } from '../core/index';
-
-import Store from '../data/abstract_store';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
 
 import {
     DxEvent,
@@ -43,6 +38,7 @@ import dxDraggable from './draggable';
 
 import {
     dxFilterBuilderOptions,
+    FilterLookupDataSource,
 } from './filter_builder';
 
 import {
@@ -102,6 +98,24 @@ export interface NewRowInfo<TRowData = any> {
 export interface KeyDownInfo {
   handled: boolean;
 }
+
+type GroupKey = any[];
+
+/** @public */
+export type GroupData<TRowData> = {
+  key: any;
+  items: Array<TRowData> | Array<GroupData<TRowData>> | null;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  collapsedItems?: Array<TRowData> | Array<GroupData<TRowData>>;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  aggregates?: Array<any>;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  summary?: Array<any>;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  isContinuation?: boolean;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  isContinuationOnNextPage?: boolean;
+};
 
 export interface RowKeyInfo<TKey = any> {
   readonly key: TKey;
@@ -540,9 +554,9 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @docid
      * @default null
      * @public
-     * @type string | Array<any> | Store | DataSource | DataSourceOptions
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: string | Array<TRowData> | Store<TRowData, string | Array<string>, TKey> | DataSource<TRowData, string | Array<string>, TKey> | DataSourceOptions<TRowData, TRowData, TRowData, string | Array<string>, TKey>;
+    dataSource?: DataSourceLike<TRowData, TKey>;
     /**
      * @docid
      * @public
@@ -1785,6 +1799,7 @@ export interface ScrollingBase {
     /**
      * @docid GridBaseOptions.scrolling.scrollByContent
      * @default true
+     * @default false &for(non-touch_devices)
      * @public
      */
     scrollByContent?: boolean;
@@ -2104,7 +2119,7 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @public
      */
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DataSource<TRowData, string | Array<string>, TKey>;
+    getDataSource(): DataSource<TRowData, TKey>;
     /**
      * @docid
      * @publicName getKeyByRowIndex(rowIndex)
@@ -2679,9 +2694,10 @@ export interface ColumnHeaderFilter {
    * @docid GridBaseColumn.headerFilter.dataSource
    * @type_function_param1_field1 component:object
    * @default undefined
-   * @type_function_return void
+   * @type_function_return Array<any>|Store|DataSourceOptions
+   * @type Array<any>|Store|DataSourceOptions|Function
    */
-  dataSource?: Array<any> | Store | ((options: { component?: any; dataSource?: DataSourceOptions }) => any) | DataSourceOptions;
+  dataSource?: FilterLookupDataSource<any> | ((options: { component?: any; dataSource?: DataSourceOptions }) => void);
   /**
    * @docid GridBaseColumn.headerFilter.groupInterval
    * @type Enums.HeaderFilterGroupInterval|number
@@ -2716,8 +2732,10 @@ export interface ColumnLookup {
    * @docid GridBaseColumn.lookup.dataSource
    * @type_function_param1_field1 data:object
    * @default undefined
+   * @type_function_return Array<any>|Store|DataSourceOptions
+   * @type Array<any>|Store|DataSourceOptions|Function
    */
-  dataSource?: Array<any> | DataSourceOptions | Store | ((options: { data?: any; key?: any }) => Array<any> | DataSourceOptions | Store);
+  dataSource?: FilterLookupDataSource<any> | ((options: { data?: any; key?: any }) => FilterLookupDataSource<any>);
   /**
    * @docid GridBaseColumn.lookup.displayExpr
    * @default undefined
@@ -3134,7 +3152,7 @@ export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
 
 /** @public */
 export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
-  readonly data?: TRowData;
+  readonly data?: GroupData<TRowData>;
   readonly component: dxDataGrid<TRowData, TKey>;
   readonly value?: any;
   readonly text: string;
@@ -3142,7 +3160,7 @@ export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column<TRowData, TKey>;
-  readonly row: Row<TRowData, TKey>;
+  readonly row: Row<GroupData<TRowData>, GroupKey>;
   readonly summaryItems: Array<any>;
   readonly groupContinuesMessage?: string;
   readonly groupContinuedMessage?: string;
@@ -4161,6 +4179,13 @@ export interface dxDataGridToolbarItem extends dxToolbarItem {
    * @public
    */
   name?: dxDataGridDefaultToolbarItemName | string;
+  /**
+   * @docid
+   * @type Enums.ToolbarItemLocation
+   * @default 'after'
+   * @public
+   */
+  location?: 'after' | 'before' | 'center';
 }
 
 /**
@@ -4356,14 +4381,14 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
      * @return Array<any> | Promise<any>
      * @public
      */
-    getSelectedRowKeys(): Array<TKey> | DxPromise<Array<TKey>>;
+    getSelectedRowKeys(): Array<TKey> & DxPromise<Array<TKey>>;
     /**
      * @docid
      * @publicName getSelectedRowsData()
      * @return Array<any> | Promise<any>
      * @public
      */
-    getSelectedRowsData(): Array<TRowData> | DxPromise<Array<TRowData>>;
+    getSelectedRowsData(): Array<TRowData> & DxPromise<Array<TRowData>>;
     /**
      * @docid
      * @publicName getTotalSummaryValue(summaryItemName)
@@ -4448,7 +4473,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DataSource<TRowData, string | Array<string>, TKey>;
+    getDataSource(): DataSource<TRowData, TKey>;
     getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
@@ -4813,6 +4838,7 @@ export type ExplicitTypes<TRowData, TKey> = {
   SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
   Summary: Summary<TRowData, TKey>;
   ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
+  GroupData: GroupData<TRowData>;
 };
 
 /** @public */

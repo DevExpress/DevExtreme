@@ -413,6 +413,10 @@ const Lookup = DropDownList.inherit({
         this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option('selectedItem'));
     },
 
+    _getLabelContainer: function() {
+        return this._$field;
+    },
+
     _renderDisplayText: function(text) {
         if(this._input().length) {
             this.callBase(text);

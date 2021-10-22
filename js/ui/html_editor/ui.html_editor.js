@@ -419,24 +419,15 @@ const HtmlEditor = Editor.inherit({
         return this._$htmlContainer;
     },
 
-    _tableResizingOptionChanged: function(args) {
-        const tableResizingModule = this._quillInstance?.getModule('tableResizing');
-        const shouldPassOptionsToModule = Boolean(tableResizingModule);
+    _moduleOptionChanged: function(moduleName, args) {
+        const moduleInstance = this._quillInstance?.getModule(moduleName);
+        const shouldPassOptionsToModule = Boolean(moduleInstance);
 
         if(shouldPassOptionsToModule) {
             const optionData = args.fullName?.split('.');
             const optionName = optionData.length === 2 ? optionData[1] : args.name;
 
-            tableResizingModule.option(optionName, args.value);
-        } else {
-            this._invalidate();
-        }
-    },
-
-    _tableContextMenuOptionChanged: function(args) {
-        const contextMenuModule = this._quillInstance?.getModule('tableContextMenu');
-        if(contextMenuModule) {
-            contextMenuModule.option(args.name, args.value);
+            moduleInstance.option(optionName, args.value);
         } else {
             this._invalidate();
         }
@@ -469,7 +460,7 @@ const HtmlEditor = Editor.inherit({
                 this._invalidate();
                 break;
             case 'tableResizing':
-                this._tableResizingOptionChanged(args);
+                this._moduleOptionChanged('tableResizing', args);
                 break;
             case 'valueType': {
                 this._prepareConverters();
@@ -494,7 +485,7 @@ const HtmlEditor = Editor.inherit({
                 this._renderFormDialog();
                 break;
             case 'tableContextMenu':
-                this._tableContextMenuOptionChanged();
+                this._moduleOptionChanged('tableContextMenu', args);
                 break;
             case 'mediaResizing':
                 if(!args.previousValue || !args.value) {

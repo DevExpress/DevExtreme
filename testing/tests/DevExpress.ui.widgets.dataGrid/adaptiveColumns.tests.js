@@ -3871,7 +3871,7 @@ QUnit.module('Editing', {
         // act
         this.editingController.addRow();
 
-        assert.strictEqual(args.length, 2, 'onRowPrepared call count');
+        assert.strictEqual(args.length, 4, 'onRowPrepared call count');
     });
 });
 

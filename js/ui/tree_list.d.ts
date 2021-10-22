@@ -391,6 +391,7 @@ export type RowDraggingTemplateData<TRowData = any> = RowDraggingTemplateDataMod
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
 export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
     /**
@@ -1142,7 +1143,7 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DataSource<TRowData, string | Array<string>, TKey>;
+    getDataSource(): DataSource<TRowData, TKey>;
     getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
@@ -1189,6 +1190,13 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
      * @public
      */
     name?: dxTreeListDefaultToolbarItemName | string;
+    /**
+     * @docid
+     * @type Enums.ToolbarItemLocation
+     * @default 'after'
+     * @public
+     */
+    location?: 'after' | 'before' | 'center';
 }
 
 /**

@@ -13,6 +13,7 @@ export const viewFunction = ({
   <DomComponentWrapper
     componentType={LegacyDateBox}
     componentProps={props}
+    templateNames={[]}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
