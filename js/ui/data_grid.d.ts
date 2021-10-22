@@ -105,15 +105,15 @@ type GroupKey = any[];
 export type GroupData<TRowData> = {
   key: any;
   items: Array<TRowData> | Array<GroupData<TRowData>> | null;
-  /** @deprecated Attention! This property is for internal purposes only. */
+  /** @deprecated Attention! This property is not public and can be modified in the future without notification. */
   collapsedItems?: Array<TRowData> | Array<GroupData<TRowData>>;
-  /** @deprecated Attention! This property is for internal purposes only. */
+  /** @deprecated Attention! This property is not public and can be modified in the future without notification. */
   aggregates?: Array<any>;
-  /** @deprecated Attention! This property is for internal purposes only. */
+  /** @deprecated Attention! This property is not public and can be modified in the future without notification. */
   summary?: Array<any>;
-  /** @deprecated Attention! This property is for internal purposes only. */
+  /** @deprecated Attention! This property is not public and can be modified in the future without notification. */
   isContinuation?: boolean;
-  /** @deprecated Attention! This property is for internal purposes only. */
+  /** @deprecated Attention! This property is not public and can be modified in the future without notification. */
   isContinuationOnNextPage?: boolean;
 };
 
