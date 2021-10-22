@@ -4364,7 +4364,6 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     /**
      * @docid
      * @publicName expandRow(key)
-     * @param1 key:any
      * @return Promise<void>
      * @public
      */
@@ -4718,7 +4717,6 @@ export type dxDataGridRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey
 export interface Row<TRowData = any, TKey = any> {
     /**
      * @docid dxDataGridRowObject.data
-     * @type any
      * @public
      */
     readonly data: TRowData;
