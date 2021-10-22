@@ -1214,6 +1214,20 @@ export interface dxTreeListToolbar {
      * @public
      */
     items?: Array<TreeListToolbarItem | dxTreeListToolbarItem>;
+    /**
+     * @docid
+     * @type boolean
+     * @default undefined
+     * @public
+     */
+     visible?: boolean;
+     /**
+      * @docid
+      * @type boolean
+      * @default false
+      * @public
+      */
+     disabled?: boolean;
 }
 
 /**
@@ -1231,7 +1245,7 @@ export interface dxTreeListColumn<TRowData = any, TKey = any> extends ColumnBase
      * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
      * @public
      */
-    buttons?: Array<TreeListColumnButtonName | ColumnButton>;
+    buttons?: Array<TreeListColumnButtonName | ColumnButton<TRowData, TKey>>;
     /**
      * @docid dxTreeListColumn.cellTemplate
      * @type_function_param2 cellInfo:object

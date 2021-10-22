@@ -4413,7 +4413,7 @@ declare module DevExpress.types {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
+  export type DiagramDataLayoutType = 'off' | 'tree' | 'layered';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -4422,22 +4422,6 @@ declare module DevExpress.types {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type DiagramItemType = 'shape' | 'connector';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DiagramModelOperation =
-    | 'addShape'
-    | 'addShapeFromToolbox'
-    | 'deleteShape'
-    | 'deleteConnector'
-    | 'changeConnection'
-    | 'changeConnectorPoints'
-    | 'beforeChangeShapeText'
-    | 'changeShapeText'
-    | 'beforeChangeConnectorText'
-    | 'changeConnectorText'
-    | 'resizeShape'
-    | 'moveShape';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -7452,7 +7436,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.filterOperations]
        */
-      filterOperations?: Array<DevExpress.types.GridFilterOperations | string>;
+      filterOperations?: Array<DevExpress.types.GridFilterOperations>;
       /**
        * [descr:GridBaseColumn.filterType]
        */
@@ -10259,7 +10243,13 @@ declare module DevExpress.ui {
     export type Properties = dxDiagramOptions;
     export type RequestEditOperationEvent =
       DevExpress.events.EventInfo<dxDiagram> & {
-        readonly operation: DevExpress.types.DiagramModelOperation;
+        readonly operation:
+          | 'addShape'
+          | 'addShapeFromToolbox'
+          | 'deleteShape'
+          | 'deleteConnector'
+          | 'changeConnection'
+          | 'changeConnectorPoints';
         readonly args:
           | dxDiagramAddShapeArgs
           | dxDiagramAddShapeFromToolboxArgs
@@ -11193,9 +11183,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramOptions.propertiesPanel.tabs.commands]
          */
-        commands?: Array<
-          'lineStyle' | 'lineWidth' | DevExpress.types.DiagramCommand
-        >;
+        commands?: Array<DevExpress.types.DiagramCommand>;
         /**
          * [descr:dxDiagramOptions.propertiesPanel.tabs.groups]
          */
@@ -11203,9 +11191,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxDiagramOptions.propertiesPanel.tabs.groups.commands]
            */
-          commands?: Array<
-            'lineStyle' | 'lineWidth' | DevExpress.types.DiagramCommand
-          >;
+          commands?: Array<DevExpress.types.DiagramCommand>;
           /**
            * [descr:dxDiagramOptions.propertiesPanel.tabs.groups.title]
            */
@@ -11248,9 +11234,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.mainToolbar.commands]
        */
-      commands?: Array<
-        'lineStyle' | 'lineWidth' | DevExpress.types.DiagramCommand
-      >;
+      commands?: Array<DevExpress.types.DiagramCommand>;
       /**
        * [descr:dxDiagramOptions.mainToolbar.visible]
        */
@@ -11263,9 +11247,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.historyToolbar.commands]
        */
-      commands?: Array<
-        'lineStyle' | 'lineWidth' | DevExpress.types.DiagramCommand
-      >;
+      commands?: Array<DevExpress.types.DiagramCommand>;
       /**
        * [descr:dxDiagramOptions.historyToolbar.visible]
        */
@@ -11278,9 +11260,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.viewToolbar.commands]
        */
-      commands?: Array<
-        'lineStyle' | 'lineWidth' | DevExpress.types.DiagramCommand
-      >;
+      commands?: Array<DevExpress.types.DiagramCommand>;
       /**
        * [descr:dxDiagramOptions.viewToolbar.visible]
        */
@@ -12296,7 +12276,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerDetailsColumn.alignment]
      */
-    alignment?: DevExpress.types.HorizontalAlignment;
+    alignment?: DevExpress.types.HorizontalAlignment | undefined;
     /**
      * [descr:dxFileManagerDetailsColumn.caption]
      */
@@ -14822,7 +14802,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttSorting.mode]
      */
-    mode?: DevExpress.types.GanttSortingMode | string;
+    mode?: DevExpress.types.GanttSortingMode;
     /**
      * [descr:dxGanttSorting.showSortIndexes]
      */
@@ -21833,7 +21813,7 @@ declare module DevExpress.ui {
      */
     buttons?: Array<
       | DevExpress.types.TreeListColumnButtonName
-      | DevExpress.ui.dxTreeList.ColumnButton
+      | DevExpress.ui.dxTreeList.ColumnButton<TRowData, TKey>
     >;
     /**
      * [descr:dxTreeListColumn.cellTemplate]
@@ -22160,6 +22140,14 @@ declare module DevExpress.ui {
      * [descr:dxTreeListToolbar.items]
      */
     items?: Array<DevExpress.types.TreeListToolbarItem | dxTreeListToolbarItem>;
+    /**
+     * [descr:dxTreeListToolbar.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxTreeListToolbar.disabled]
+     */
+    disabled?: boolean;
   }
   /**
    * [descr:dxTreeListToolbarItem]
@@ -34737,7 +34725,7 @@ declare module DevExpress.viz {
           minSize?: number;
           name?: string;
           opacity?: number;
-          palette?: Array<string> | PaletteType;
+          palette?: Array<string> | DevExpress.types.VizPalette;
           paletteSize?: number;
           selectedBorderColor?: string;
           selectedBorderWidth?: number;

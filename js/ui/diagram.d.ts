@@ -33,7 +33,6 @@ import {
   DiagramAutoZoomMode,
   DiagramItemType,
   DiagramExportFormat,
-  DiagramModelOperation,
   DiagramRequestEditOperationReason,
   DiagramConnectorPosition,
 } from '../types/enums';
@@ -69,7 +68,7 @@ export type OptionChangedEvent = EventInfo<dxDiagram> & ChangedOptionInfo;
 
 /** @public */
 export type RequestEditOperationEvent = EventInfo<dxDiagram> & {
-    readonly operation: DiagramModelOperation;
+    readonly operation: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints';
     readonly args: dxDiagramAddShapeArgs | dxDiagramAddShapeFromToolboxArgs | dxDiagramDeleteShapeArgs | dxDiagramDeleteConnectorArgs | dxDiagramChangeConnectionArgs | dxDiagramChangeConnectorPointsArgs | dxDiagramBeforeChangeShapeTextArgs | dxDiagramChangeShapeTextArgs | dxDiagramBeforeChangeConnectorTextArgs | dxDiagramChangeConnectorTextArgs | dxDiagramResizeShapeArgs | dxDiagramMoveShapeArgs;
     readonly reason: DiagramRequestEditOperationReason;
     allowed?: boolean;
@@ -118,7 +117,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
-      commands?: Array<DiagramCommand >;
+      commands?: Array<DiagramCommand>;
       /**
        * @docid
        * @default true
@@ -835,7 +834,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
          * @docid
          * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
          */
-        commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
+        commands?: Array<DiagramCommand>;
         /**
          * @docid
          */
@@ -844,7 +843,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
            * @docid
            * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
            */
-          commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
+          commands?: Array<DiagramCommand>;
           /**
            * @docid
            */
@@ -903,7 +902,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
-      commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
+      commands?: Array<DiagramCommand>;
       /**
        * @docid
        * @default false
@@ -921,7 +920,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
-      commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
+      commands?: Array<DiagramCommand>;
       /**
        * @docid
        * @default true
@@ -939,7 +938,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
-      commands?: Array<'lineStyle' | 'lineWidth' | DiagramCommand>;
+      commands?: Array<DiagramCommand>;
       /**
        * @docid
        * @default true

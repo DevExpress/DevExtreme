@@ -145,10 +145,11 @@ class RecurrenceEditor extends Editor {
 
             /**
             * @name dxRecurrenceEditorOptions.firstDayOfWeek
+            * @type Enums.FirstDayOfWeek
             * @default undefined
             * @hidden
             */
-            firstDayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6,
+            firstDayOfWeek: undefined
         });
     }
 

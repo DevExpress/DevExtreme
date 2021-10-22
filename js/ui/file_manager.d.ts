@@ -844,7 +844,7 @@ export interface dxFileManagerDetailsColumn {
      * @acceptValues undefined
      * @public
      */
-    alignment?: HorizontalAlignment;
+    alignment?: HorizontalAlignment | undefined;
     /**
      * @docid
      * @default undefined

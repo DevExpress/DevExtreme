@@ -1225,8 +1225,8 @@ export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
     aggregationGroupWidth?: number;
     /**
      * @docid dxChartOptions.argumentAxis.aggregationInterval
-     * @type number|object|Enums.VizTimeInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.VizTimeInterval
      * @public
      */
     aggregationInterval?: VizTimeInterval;

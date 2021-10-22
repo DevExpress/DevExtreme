@@ -430,7 +430,7 @@ export type FileManagerItemViewMode = 'details' | 'thumbnails';
 
 export type FileManagerViewArea = 'navPane' | 'itemView';
 
-export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
+export type DiagramDataLayoutType = 'off' | 'tree' | 'layered';
 
 export type DiagramDataLayoutOrientation = 'vertical' | 'horizontal';
 
