@@ -13,7 +13,7 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-type ItemLike<TKey> = string | Item<any, TKey> | any;
+type ItemLike<TKey> = string | Item<TKey> | any;
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxBox<TItem, TKey>>;
@@ -99,13 +99,13 @@ export default class dxBox<
  * @public
  * @namespace DevExpress.ui.dxBox
  */
-export type Item<TItem extends Item<any, TKey> | any = any, TKey = any> = dxBoxItem<TItem, TKey>;
+export type Item<TKey = any> = dxBoxItem<TKey>;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxBoxItem<TItem extends dxBoxItem<any, TKey> | any = any, TKey = any> extends CollectionWidgetItem<TItem> {
+export interface dxBoxItem<TKey = any> extends CollectionWidgetItem {
     /**
      * @docid
      * @type number | Enums.Mode
@@ -119,7 +119,7 @@ export interface dxBoxItem<TItem extends dxBoxItem<any, TKey> | any = any, TKey 
      * @public
      * @type dxBoxOptions
      */
-    box?: dxBoxOptions<TItem, TKey>;
+    box?: dxBoxOptions<this, TKey>;
     /**
      * @docid
      * @default 0
