@@ -302,7 +302,7 @@ export const Component = Class.inherit({
                 }
                 ///#ENDDEBUG
 
-                actionFunc = this.option(optionName);
+                actionFunc = this.option()[optionName];
             }
 
             if(!action && !actionFunc && !config.beforeExecute && !config.afterExecute && !this._eventsStrategy.hasEvent(eventName)) {

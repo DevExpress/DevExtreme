@@ -132,4 +132,13 @@ export default class Scheduler extends Widget {
       },
     })();
   }
+
+  hideAppointmentTooltip(): Promise<any> {
+    const { name, element } = this;
+    const hideAppointmentTooltip = (): any => $(element())[name]('instance').hideAppointmentTooltip();
+
+    return ClientFunction(hideAppointmentTooltip, {
+      dependencies: { element, name },
+    })();
+  }
 }

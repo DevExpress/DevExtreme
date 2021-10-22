@@ -51,13 +51,18 @@ const ScrollViewMock = DOMComponent.inherit({
 
     NAME: 'dxScrollView',
 
+    _containerHeight: 300,
+    _contentHeight: 400,
+
     _init() {
-        const content = this.$element().find('.scroll-view-content');
-        if(content.length) {
-            this._$scrollViewContent = content;
+        const container = this.$element().find('.scroll-view-container');
+        if(container.length) {
+            this._$scrollViewContainer = container;
+            this._$scrollViewContent = container.children();
         } else {
-            this._$scrollViewContent = $('<div />').addClass('scroll-view-content');
-            this.$element().append(this._$scrollViewContent);
+            this._$scrollViewContainer = $('<div />').addClass('scroll-view-container').height(this._containerHeight);
+            this._$scrollViewContent = $('<div />').addClass('scroll-view-content').height(this._contentHeight).appendTo(this._$scrollViewContainer);
+            this.$element().append(this._$scrollViewContainer);
         }
 
         this.callBase();
@@ -67,6 +72,10 @@ const ScrollViewMock = DOMComponent.inherit({
         this._pageLoading = true;
         this._loading = false;
         this._pos = 0;
+    },
+
+    container() {
+        return this._$scrollViewContainer;
     },
 
     content() {
@@ -101,10 +110,6 @@ const ScrollViewMock = DOMComponent.inherit({
     update() {
         this._updateCount++;
         return $.Deferred().resolve().promise();
-    },
-
-    isFull() {
-        return true;
     },
 
     startLoading() {
@@ -1992,9 +1997,7 @@ QUnit.module('events', moduleSetup, () => {
 QUnit.module('dataSource integration', moduleSetup, () => {
     QUnit.test('pageLoading should be ordered for async dataSource (T233998)', function(assert) {
         setScrollView(ScrollViewMock.inherit({
-            isFull() {
-                return false;
-            }
+            _containerHeight: 600
         }));
 
         const $list = $('#list').dxList({
@@ -2371,9 +2374,7 @@ QUnit.module('dataSource integration', moduleSetup, () => {
 
     QUnit.test('first item rendered when pageSize is 1 and dataSource set as array', function(assert) {
         setScrollView(ScrollViewMock.inherit({
-            isFull() {
-                return false;
-            }
+            _containerHeight: 600
         }));
 
         const $list = this.element.dxList({
@@ -2610,17 +2611,16 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
     });
 
     QUnit.test('infinite loading should not happen if widget element is hidden', function(assert) {
+        setScrollView(ScrollViewMock.inherit({
+            _containerHeight: 600
+        }));
+
         const $element = this.element.hide().dxList({
             pageLoadMode: 'scrollBottom',
             scrollingEnabled: true,
             dataSource: {
                 store: new ArrayStore([1, 2, 3, 4]),
                 pageSize: 2
-            },
-            onInitialized(e) {
-                $(e.element).dxScrollView('instance').isFull = () => {
-                    return false;
-                };
             }
         });
 
@@ -2630,17 +2630,16 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
     });
 
     QUnit.test('infinite loading should happen when widget element is shown', function(assert) {
+        setScrollView(ScrollViewMock.inherit({
+            _containerHeight: 600
+        }));
+
         const $element = this.element.hide().dxList({
             pageLoadMode: 'scrollBottom',
             scrollingEnabled: true,
             dataSource: {
                 store: new ArrayStore([1, 2, 3, 4]),
                 pageSize: 2
-            },
-            onInitialized(e) {
-                $(e.element).dxScrollView('instance').isFull = () => {
-                    return false;
-                };
             }
         });
 
@@ -2653,6 +2652,10 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
     });
 
     QUnit.test('widget has pageIndex == 1 if the pageSize is equal to dataSource length', function(assert) {
+        setScrollView(ScrollViewMock.inherit({
+            _containerHeight: 600
+        }));
+
         const dataSource = new DataSource({
             store: new ArrayStore([1, 2, 3, 4]),
             pageSize: 4
@@ -2660,12 +2663,7 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
         const $element = this.element.hide().dxList({
             pageLoadMode: 'scrollBottom',
             scrollingEnabled: true,
-            dataSource: dataSource,
-            onInitialized(e) {
-                $(e.element).dxScrollView('instance').isFull = () => {
-                    return false;
-                };
-            }
+            dataSource: dataSource
         });
 
         $element.show().triggerHandler('dxshown');
@@ -2675,6 +2673,10 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
     });
 
     QUnit.test('widget has a correct pageIndex if the pageSize is equal to dataSource length if it has _revertPageOnEmptyLoad is true (T942881)', function(assert) {
+        setScrollView(ScrollViewMock.inherit({
+            _containerHeight: 600
+        }));
+
         const onContentReadySpy = sinon.spy();
         const dataSource = new DataSource({
             store: new ArrayStore([1, 2, 3, 4]),
@@ -2685,12 +2687,7 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
             scrollingEnabled: true,
             dataSource: dataSource,
             _revertPageOnEmptyLoad: true,
-            onContentReady: onContentReadySpy,
-            onInitialized(e) {
-                $(e.element).dxScrollView('instance').isFull = () => {
-                    return false;
-                };
-            }
+            onContentReady: onContentReadySpy
         });
 
         $element.show().triggerHandler('dxshown');
@@ -3039,9 +3036,8 @@ QUnit.module('scrollView integration', {
             scrollingEnabled: true,
             onInitialized(e) {
                 const list = e.component;
-                const $list = $(e.element);
 
-                $list.dxScrollView('instance').isFull = () => {
+                list._scrollViewIsFull = () => {
                     const height = list.option('height');
                     return height <= 300;
                 };

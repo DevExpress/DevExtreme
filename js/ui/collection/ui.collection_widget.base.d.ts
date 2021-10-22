@@ -7,11 +7,7 @@ import {
     template,
 } from '../../core/templates/template';
 
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../../data/data_source';
-
-import Store from '../../data/abstract_store';
+import DataSource, { DataSourceLike } from '../../data/data_source';
 
 import {
     EventInfo,
@@ -23,7 +19,7 @@ import Widget, {
     WidgetOptions,
 } from '../widget/ui.widget';
 
-type ItemLike = string | CollectionWidgetItem<any> | any;
+type ItemLike = string | CollectionWidgetItem | any;
 
 export interface SelectionChangedInfo<TItem extends ItemLike = any> {
     readonly addedItems: Array<TItem>;
@@ -39,10 +35,11 @@ export interface CollectionWidgetOptions<
     /**
      * @docid
      * @default null
+     * @type Store|DataSource|DataSourceOptions|string|Array<string | CollectionWidgetItem>
      * @public
      * @type string | Array<string | CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions
      */
-    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @default 750
@@ -79,6 +76,7 @@ export interface CollectionWidgetOptions<
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
@@ -187,7 +185,7 @@ export default class CollectionWidget<
     TItem extends ItemLike = any,
     TKey = any,
 > extends Widget<TProperties> {
-    getDataSource(): DataSource<TItem, string | Array<string>, TKey>;
+    getDataSource(): DataSource<TItem, TKey>;
 }
 
 /**
@@ -195,7 +193,7 @@ export default class CollectionWidget<
  * @type object
  * @namespace DevExpress.ui
  */
-export interface CollectionWidgetItem<TItem extends CollectionWidgetItem<any> | any = any> {
+export interface CollectionWidgetItem {
     /**
      * @docid
      * @default false
@@ -212,7 +210,7 @@ export interface CollectionWidgetItem<TItem extends CollectionWidgetItem<any> | 
      * @type_function_return string|Element|jQuery
      * @public
      */
-    template?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    template?: template | ((itemData: this, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @public

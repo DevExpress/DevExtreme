@@ -358,14 +358,14 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return col;
     },
 
-    renderDelayedTemplates: function() {
+    renderDelayedTemplates: function(change) {
         const delayedTemplates = this._delayedTemplates;
         const syncTemplates = delayedTemplates.filter(template => !template.async);
         const asyncTemplates = delayedTemplates.filter(template => template.async);
 
         this._delayedTemplates = [];
 
-        this._renderDelayedTemplatesCore(syncTemplates);
+        this._renderDelayedTemplatesCore(syncTemplates, false, change);
         this._renderDelayedTemplatesCoreAsync(asyncTemplates);
     },
 
@@ -378,7 +378,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
     },
 
-    _renderDelayedTemplatesCore: function(templates, isAsync) {
+    _renderDelayedTemplatesCore: function(templates, isAsync, change) {
         const date = new Date();
 
         while(templates.length) {
@@ -388,6 +388,9 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             const doc = domAdapter.getDocument();
 
             if(!isAsync || $(options.container).closest(doc).length) {
+                if(change) {
+                    options.change = change;
+                }
                 templateParameters.template.render(options);
             }
             if(isAsync && (new Date() - date) > 30) {
@@ -409,14 +412,14 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             renderingTemplate = {
                 allowRenderToDetachedContainer: template.allowRenderToDetachedContainer,
                 render: function(options) {
-                    template.render(options.container, options.model);
+                    template.render(options.container, options.model, options.change);
                     options.deferred && options.deferred.resolve();
                 }
             };
         } else if(isFunction(template)) {
             renderingTemplate = {
                 render: function(options) {
-                    const renderedTemplate = template(getPublicElement(options.container), options.model);
+                    const renderedTemplate = template(getPublicElement(options.container), options.model, options.change);
                     if(renderedTemplate && (renderedTemplate.nodeType || isRenderer(renderedTemplate))) {
                         options.container.append(renderedTemplate);
                     }
@@ -440,7 +443,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return renderingTemplate;
     },
 
-    renderTemplate: function(container, template, options, allowRenderToDetachedContainer) {
+    renderTemplate: function(container, template, options, allowRenderToDetachedContainer, change) {
         const that = this;
         const renderingTemplate = that._processTemplate(template, options);
         const column = options.column;
@@ -468,6 +471,10 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 renderingTemplate.render(templateOptions);
             } else {
                 that._delayedTemplates.push({ template: renderingTemplate, options: templateOptions, async: async });
+            }
+            if(change) {
+                change.templateDeferreds = change.templateDeferreds || [];
+                change.templateDeferreds.push(templateDeferred);
             }
         } else {
             templateDeferred.reject();

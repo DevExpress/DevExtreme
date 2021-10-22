@@ -44,6 +44,7 @@ import {
 import { AnimatedScrollbar } from '../../scrollbar/animated_scrollbar';
 import { getElementOffset } from '../../../../utils/get_element_offset';
 import { permissibleWheelDirection } from '../../utils/get_permissible_wheel_direction';
+import { isElementVisible } from '../../utils/is_element_visible';
 
 jest.mock('../../../../../core/devices', () => {
   const actualDevices = jest.requireActual('../../../../../core/devices').default;
@@ -54,6 +55,11 @@ jest.mock('../../../../../core/devices', () => {
 jest.mock('../../utils/get_element_style', () => ({
   ...jest.requireActual('../../utils/get_element_style'),
   getElementPadding: jest.fn(() => 8),
+}));
+
+jest.mock('../../utils/is_element_visible', () => ({
+  ...jest.requireActual('../../utils/is_element_visible'),
+  isElementVisible: jest.fn(() => true),
 }));
 
 jest.mock('../../../../utils/get_element_offset', () => ({
@@ -615,6 +621,11 @@ describe('Simulated > Behavior', () => {
 
         expect(containerElement.scrollTop).toEqual(expectedScrollTop);
         expect(containerElement.scrollLeft).toEqual(expectedScrollLeft);
+
+        helper.viewModel.scrolling = false;
+        helper.viewModel.scrollEffect();
+        emit('scroll', {} as any);
+
         expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollLeft);
         expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollTop);
       });
@@ -1352,50 +1363,6 @@ describe('Simulated > Behavior', () => {
         expect(helper.viewModel.updateElementDimensions).toBeCalledTimes(1);
       });
 
-      each([{ scrollTop: 1, scrollLeft: 1 }, undefined]).describe('initialSavedScrollOffset: %o', (initialSavedScrollOffset) => {
-        test.each([true, false])('onVisibilityChangeHandler(%o)', (visible) => {
-          const viewModel = new Scrollable({
-            onVisibilityChange: actionHandler,
-          });
-
-          viewModel.savedScrollOffset = initialSavedScrollOffset;
-          viewModel.updateHandler = jest.fn();
-          viewModel.containerRef = {
-            current: {
-              scrollTop: 10,
-              scrollLeft: 20,
-            },
-          } as RefObject<HTMLDivElement>;
-
-          viewModel.onVisibilityChangeHandler(visible);
-
-          if (actionHandler) {
-            expect(actionHandler).toHaveBeenCalledTimes(1);
-            expect(actionHandler).toHaveBeenLastCalledWith(visible);
-          }
-
-          let expectedContainerScrollTop = 10;
-          let expectedContainerScrollLeft = 20;
-          let expectedSavedScrollOffset: any = undefined;
-
-          if (visible) {
-            expect(viewModel.updateHandler).toBeCalledTimes(1);
-
-            if (initialSavedScrollOffset) {
-              expectedContainerScrollTop = initialSavedScrollOffset.scrollTop;
-              expectedContainerScrollLeft = initialSavedScrollOffset.scrollLeft;
-            }
-          } else {
-            expect(viewModel.updateHandler).toBeCalledTimes(0);
-            expectedSavedScrollOffset = { scrollTop: 10, scrollLeft: 20 };
-          }
-
-          expect(viewModel.savedScrollOffset).toEqual(expectedSavedScrollOffset);
-          expect(viewModel.containerRef.current!.scrollTop).toEqual(expectedContainerScrollTop);
-          expect(viewModel.containerRef.current!.scrollLeft).toEqual(expectedContainerScrollLeft);
-        });
-      });
-
       each([0, 100]).describe('containerClientWidth: %o', (containerClientWidth) => {
         each([0, 100]).describe('containerClientHeight: %o', (containerClientHeight) => {
           test('containerHasSizes()', () => {
@@ -1590,6 +1557,70 @@ describe('Simulated > Behavior', () => {
         });
 
         each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
+          it('scrollBy({ top: 20, left: 20 }), scrollable is visible', () => {
+            const initialScrollOffset = { top: 50, left: 50 };
+            const expectedScrollOffset = { top: 70, left: 65 };
+            const helper = new ScrollableTestHelper({
+              direction,
+              rtlEnabled,
+              contentSize: 200,
+              containerSize: 100,
+            });
+
+            helper.initScrollbarSettings({
+              props: {
+                vScrollLocation: -initialScrollOffset.top,
+                hScrollLocation: -initialScrollOffset.top,
+              },
+            });
+            helper.initScrollbarHandlerMocks();
+            helper.changeScrollbarMethod('stopScrolling', jest.fn());
+            helper.initContainerPosition(initialScrollOffset);
+
+            helper.viewModel.scrollByLocation({ top: 20, left: 15 });
+
+            expectedScrollOffset.top = helper.isVertical
+              ? expectedScrollOffset.top : initialScrollOffset.top;
+            expectedScrollOffset.left = helper.isHorizontal
+              ? expectedScrollOffset.left : initialScrollOffset.left;
+
+            expect(helper.viewModel.scrollOffset()).toEqual(expectedScrollOffset);
+            expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollOffset.top);
+            expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollOffset.left);
+            helper.checkContainerPosition(expect, expectedScrollOffset);
+          });
+
+          it('scrollBy({ top: 20, left: 20 }), scrollable is hidden', () => {
+            (isElementVisible as jest.Mock).mockImplementation(() => false);
+            const initialScrollOffset = { top: 50, left: 50 };
+            const expectedScrollOffset = { top: 50, left: 50 };
+            const helper = new ScrollableTestHelper({
+              direction,
+              rtlEnabled,
+              contentSize: 200,
+              containerSize: 100,
+            });
+
+            helper.initScrollbarSettings({
+              props: {
+                vScrollLocation: -initialScrollOffset.top,
+                hScrollLocation: -initialScrollOffset.top,
+              },
+            });
+            helper.initScrollbarHandlerMocks();
+            helper.changeScrollbarMethod('stopScrolling', jest.fn());
+            helper.initContainerPosition(initialScrollOffset);
+
+            helper.viewModel.scrollByLocation({ top: 20, left: 15 });
+
+            expect(helper.viewModel.scrollOffset()).toEqual(expectedScrollOffset);
+            expect(helper.viewModel.vScrollLocation).toEqual(-expectedScrollOffset.top);
+            expect(helper.viewModel.hScrollLocation).toEqual(-expectedScrollOffset.left);
+            helper.checkContainerPosition(expect, expectedScrollOffset);
+
+            (isElementVisible as jest.Mock).mockImplementation(() => true);
+          });
+
           each([
             [{ top: 50, left: 40 }, { top: 0, left: 20 }, { top: 50, left: 60 }],
             [{ top: 50, left: 40 }, { top: 20, left: 0 }, { top: 70, left: 40 }],

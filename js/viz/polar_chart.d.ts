@@ -277,6 +277,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 argument:Date|Number|string
      * @notUsedInTheme
@@ -287,6 +288,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
      * @type_function_param1_field2 element:DxElement
@@ -301,6 +303,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPolarChart
      * @type_function_param1_field2 element:DxElement
