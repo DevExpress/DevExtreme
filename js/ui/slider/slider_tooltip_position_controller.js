@@ -1,4 +1,3 @@
-
 import { PopoverPositionController } from '../popover/popover_position_controller';
 import { move } from '../../animation/translator';
 import positionUtils from '../../animation/position';
@@ -14,7 +13,8 @@ const SLIDER_CLASS = 'dx-slider';
 
 class SliderTooltipPositionController extends PopoverPositionController {
     _normalizePosition(positionProp, $sliderHandle) {
-        const $slider = $sliderHandle?.closest(`.${SLIDER_CLASS}`);
+        const sliderClass = `.${SLIDER_CLASS}`;
+        const $slider = $sliderHandle?.closest(sliderClass);
         const defaultPositionConfig = {
             of: $sliderHandle,
             boundaryOffset: SLIDER_TOOLTIP_DEFAULT_BOUNDARY_OFFSET,

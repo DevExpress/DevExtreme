@@ -16,6 +16,7 @@ export const viewFunction = ({
   <DomComponentWrapper
     componentType={LegacyNumberBox}
     componentProps={props}
+    templateNames={[]}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />

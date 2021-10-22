@@ -1,8 +1,9 @@
 import { CSSAttributes } from '@devextreme-generator/declarations';
 import { addToStyles } from '../workspaces/utils';
-import { AppointmentViewModel } from './types';
+import { AppointmentGeometry, AppointmentViewModel } from './types';
 
 export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes => {
+  const defaultSize = 50;
   const {
     geometry: {
       width,
@@ -17,16 +18,16 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
 
   let result = addToStyles([{
     attr: 'height',
-    value: height || 50,
+    value: `${height || defaultSize}px`,
   }, {
     attr: 'width',
-    value: width || 50,
+    value: `${width || defaultSize}px`,
   }, {
     attr: 'top',
-    value: top,
+    value: `${top}px`,
   }, {
     attr: 'left',
-    value: left,
+    value: `${left}px`,
   }]);
 
   if (resourceColor) {
@@ -39,31 +40,13 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
   return result;
 };
 
-export const getAppointmentKey = (item: AppointmentViewModel): string => {
+export const getAppointmentKey = (geometry: AppointmentGeometry): string => {
   const {
-    geometry: {
-      width,
-      height,
-      top,
-      left,
-      leftVirtualWidth,
-      topVirtualHeight,
-    },
-    info: {
-      appointment: {
-        startDate,
-        endDate,
-      },
-      sourceAppointment: {
-        groupIndex,
-      },
-    },
-  } = item;
+    left,
+    top,
+    width,
+    height,
+  } = geometry;
 
-  const startTime = startDate.getTime();
-  const endTime = endDate.getTime();
-  const leftOffset = left + leftVirtualWidth;
-  const topOffset = top + topVirtualHeight;
-
-  return `${groupIndex}-${startTime}-${endTime}_${leftOffset}-${topOffset}-${width}-${height}`;
+  return `${left}-${top}-${width}-${height}`;
 };

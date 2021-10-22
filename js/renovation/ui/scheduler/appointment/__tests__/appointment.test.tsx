@@ -4,6 +4,8 @@ import { AppointmentContent } from '../content';
 
 describe('Appointment', () => {
   const defaultViewModel = {
+    key: '1-2-10-20',
+
     appointment: {
       startDate: new Date('2021-08-05T10:00:00.000Z'),
       endDate: new Date('2021-08-05T12:00:00.000Z'),
@@ -111,10 +113,10 @@ describe('Appointment', () => {
           expect(appointment.styles)
             .toEqual({
               backgroundColor: '#1A2BC',
-              height: 20,
-              left: 1,
-              top: 2,
-              width: 10,
+              height: '20px',
+              left: '1px',
+              top: '2px',
+              width: '10px',
             });
         });
       });

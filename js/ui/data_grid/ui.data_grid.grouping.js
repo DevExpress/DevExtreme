@@ -659,6 +659,11 @@ gridCore.registerModule('grouping', {
 
                     return options;
                 },
+            },
+            editing: {
+                _isProcessedItem: function(item) {
+                    return isDefined(item.groupIndex) && isString(item.rowType) && item.rowType.indexOf('group') === 0;
+                }
             }
         },
         views: {

@@ -820,4 +820,47 @@ QUnit.module('Draw buttons in header panel', {
         assert.ok($buttonsBefore.eq(0).hasClass('dx-datagrid-column-chooser-button'), 'has column chooser button');
         assert.ok($buttonsBefore.eq(1).hasClass('dx-datagrid-addrow-button'), 'has add button');
     });
+
+    QUnit.test('toolbar.item[].location should be \'after\' by default', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.toolbar = {
+            items: [
+                {
+                    widget: 'dxButton',
+                    options: { text: 'Custom button' },
+                }
+            ]
+        };
+
+        // act
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $button = $testElement.find('.dx-toolbar .dx-toolbar-after .dx-item');
+
+        // assert
+        assert.equal($button.length, 1, 'button location is after');
+    });
+
+    QUnit.test('toolbar.item[].location should be \'center\' by default if added via onToolbarPrepared', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.onToolbarPreparing = function(e) {
+            e.toolbarOptions.items.push({
+                widget: 'dxButton',
+                options: { text: 'Custom button' },
+            });
+        };
+
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $button = $testElement.find('.dx-toolbar .dx-toolbar-center .dx-item');
+
+        // assert
+        assert.equal($button.length, 1, 'button location is center');
+    });
 });
