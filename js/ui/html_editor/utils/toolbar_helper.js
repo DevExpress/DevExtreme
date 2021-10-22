@@ -115,13 +115,13 @@ function prepareShowFormProperties(module, type) {
 
         const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, { $element, formats, tableBlot, rowBlot });
 
-        const formDialogPopupInstance = module.editorInstance._formDialog._popup;
+        const formDialogPopupOptions = module.editorInstance._formDialog._popup.option() ?? {};
         const savedDialogOptions = {
-            contentTemplate: formDialogPopupInstance.option('contentTemplate'),
-            title: formDialogPopupInstance.option('title'),
-            minHeight: formDialogPopupInstance.option('minHeight'),
-            minWidth: formDialogPopupInstance.option('minWidth'),
-            maxWidth: formDialogPopupInstance.option('maxWidth')
+            contentTemplate: formDialogPopupOptions.contentTemplate,
+            title: formDialogPopupOptions.title,
+            minHeight: formDialogPopupOptions.minHeight,
+            minWidth: formDialogPopupOptions.minWidth,
+            maxWidth: formDialogPopupOptions.maxWidth
         };
 
         let formInstance;
@@ -147,7 +147,7 @@ function prepareShowFormProperties(module, type) {
                     minHeight: savedDialogOptions.minHeight || 0,
                     minWidth: savedDialogOptions.minWidth || 0,
                     maxWidth: savedDialogOptions.maxWidth || 'none',
-                    onHidden: null
+                    onHiding: null
                 });
             }
         });
