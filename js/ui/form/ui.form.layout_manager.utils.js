@@ -42,7 +42,6 @@ export function convertToRenderFieldItemOptions({
         labelLocation: managerLabelLocation,
     });
 
-
     const isOutsideLabelMode = labelMode === 'outside';
     const needRenderLabel = labelOptions.visible && labelOptions.text && isOutsideLabelMode;
     const { location: labelLocation, labelID } = labelOptions;
@@ -82,19 +81,19 @@ export function convertToRenderFieldItemOptions({
     };
 }
 
-export function getLabelMarkText({ isRequiredMark, requiredMark, isOptionalMark, optionalMark }) {
-    if(!isRequiredMark && !isOptionalMark) {
+export function getLabelMarkText({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }) {
+    if(!showRequiredMark && !showOptionalMark) {
         return '';
     }
 
-    return String.fromCharCode(160) + (isRequiredMark ? requiredMark : optionalMark);
+    return String.fromCharCode(160) + (showRequiredMark ? requiredMark : optionalMark);
 }
 
 export function convertToLabelMarkOptions({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }, isRequired) {
     return {
-        isRequiredMark: showRequiredMark && isRequired,
+        showRequiredMark: showRequiredMark && isRequired,
         requiredMark,
-        isOptionalMark: showOptionalMark && !isRequired,
+        showOptionalMark: showOptionalMark && !isRequired,
         optionalMark
     };
 }

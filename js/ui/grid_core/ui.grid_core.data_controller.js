@@ -276,7 +276,9 @@ export const dataControllerModule = {
                     // B255430
                     const updateItemsHandler = function() {
                         that._columnsController.columnsChanged.remove(updateItemsHandler);
-                        that.updateItems();
+                        that.updateItems({
+                            virtualColumnsScrolling: e.changeTypes.virtualColumnsScrolling
+                        });
                     };
 
                     if(changeTypes.sorting || changeTypes.grouping) {

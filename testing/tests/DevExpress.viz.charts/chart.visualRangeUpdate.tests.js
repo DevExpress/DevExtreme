@@ -199,6 +199,43 @@ QUnit.test('No data -> set visualRange -> set data - keep visual range', functio
     assert.deepEqual(onOptionChanged.getCall(2).args[0].value, { startValue: 20, endValue: 40 }, 'Case 5');
 });
 
+// T1032216
+QUnit.test('No data -> set constant line with extendedAxis option -> set data - reset visual range', function(assert) {
+    const dataSource = [
+        { arg: 1, val: 10 },
+        { arg: 2, val: 20 },
+        { arg: 3, val: 30 },
+        { arg: 4, val: 40 },
+        { arg: 5, val: 50 }
+    ];
+
+    const [chart] = this.createChart({
+        valueAxis: {
+            constantLines: [{
+                value: 100,
+                extendAxis: true
+            }, {
+                value: 120,
+                extendAxis: true
+            }],
+        },
+        argumentAxis: {
+            constantLines: [{
+                value: 10,
+                extendAxis: true
+            }, {
+                value: 12,
+                extendAxis: true
+            }],
+        }
+    });
+
+    chart.option({ dataSource });
+
+    assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 10, endValue: 120 });
+    assert.deepEqual(chart.option('argumentAxis.visualRange'), { startValue: 1, endValue: 12 });
+});
+
 QUnit.test('No data -> set visualRange < wholeRange -> set data - keep visual range', function(assert) {
     const dataSource = [
         { arg: 1, val: 10 },
