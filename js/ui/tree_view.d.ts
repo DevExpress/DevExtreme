@@ -27,66 +27,61 @@ import {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
-interface TreeViewItemInfo<
-    TItem extends Item<any> = Item<any>,
-    TKey = any,
-> {
-    readonly itemData?: TItem;
+interface TreeViewItemInfo<TKey = any> {
+    readonly itemData?: Item;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
-    readonly node?: Node<TItem, TKey>;
+    readonly node?: Node<TKey>;
 }
 
 /** @public */
-export type ContentReadyEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventInfo<dxTreeView<TItem, TKey>>;
+export type ContentReadyEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 
 /** @public */
-export type DisposingEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventInfo<dxTreeView<TItem, TKey>>;
+export type DisposingEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 
 /** @public */
-export type InitializedEvent<TItem extends Item<any> = Item<any>, TKey = any> = InitializedEventInfo<dxTreeView<TItem, TKey>>;
+export type InitializedEvent<TKey = any> = InitializedEventInfo<dxTreeView<TKey>>;
 
 /** @public */
-export type ItemClickEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>> & TreeViewItemInfo<TItem, TKey>;
+export type ItemClickEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
 
 /** @public */
-export type ItemCollapsedEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>> & TreeViewItemInfo<TItem, TKey>;
+export type ItemCollapsedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
 
 /** @public */
-export type ItemContextMenuEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>> & TreeViewItemInfo<TItem, TKey>;
+export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
 
 /** @public */
-export type ItemExpandedEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>> & TreeViewItemInfo<TItem, TKey>;
+export type ItemExpandedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
 
 /** @public */
-export type ItemHoldEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>> & TreeViewItemInfo<TItem, TKey>;
+export type ItemHoldEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
 
 /** @public */
-export type ItemRenderedEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>> & TreeViewItemInfo<TItem, TKey>;
+export type ItemRenderedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
 
 /** @public */
-export type ItemSelectionChangedEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventInfo<dxTreeView<TItem, TKey>> & TreeViewItemInfo<TItem, TKey>;
+export type ItemSelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
 
 /** @public */
-export type OptionChangedEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventInfo<dxTreeView<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type SelectAllValueChangedEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventInfo<dxTreeView<TItem, TKey>> & {
+export type SelectAllValueChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & {
     readonly value?: boolean | undefined;
 };
 
 /** @public */
-export type SelectionChangedEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventInfo<dxTreeView<TItem, TKey>>;
+export type SelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  * @public
  */
-export interface dxTreeViewOptions<
-    TItem extends Item<any> = Item<any>,
-    TKey = any,
-> extends Skip<HierarchicalCollectionWidgetOptions<dxTreeView<TItem, TKey>, TItem, TKey>, 'dataSource'>, SearchBoxMixinOptions {
+export interface dxTreeViewOptions<TKey = any>
+    extends Skip<HierarchicalCollectionWidgetOptions<dxTreeView<TKey>, dxTreeViewItem, TKey>, 'dataSource'>, SearchBoxMixinOptions {
     /**
      * @docid
      * @default true
@@ -99,14 +94,14 @@ export interface dxTreeViewOptions<
      * @type_function_return Promise<any>|Array<Object>
      * @public
      */
-    createChildren?: ((parentNode: Node<TItem, TKey>) => PromiseLike<any> | Array<any>);
+    createChildren?: ((parentNode: Node<TKey>) => PromiseLike<any> | Array<any>);
     /**
      * @docid
      * @type string | Array<dxTreeViewItem> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<Item, TKey>;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure
@@ -151,7 +146,7 @@ export interface dxTreeViewOptions<
      * @type Array<dxTreeViewItem>
      * @public
      */
-    items?: Array<TItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default null
@@ -167,7 +162,7 @@ export interface dxTreeViewOptions<
      * @action
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void);
+    onItemClick?: ((e: ItemClickEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -183,7 +178,7 @@ export interface dxTreeViewOptions<
      * @action
      * @public
      */
-    onItemCollapsed?: ((e: ItemCollapsedEvent<TItem, TKey>) => void);
+    onItemCollapsed?: ((e: ItemCollapsedEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -199,7 +194,7 @@ export interface dxTreeViewOptions<
      * @action
      * @public
      */
-    onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
+    onItemContextMenu?: ((e: ItemContextMenuEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -215,7 +210,7 @@ export interface dxTreeViewOptions<
      * @action
      * @public
      */
-    onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void);
+    onItemExpanded?: ((e: ItemExpandedEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -231,7 +226,7 @@ export interface dxTreeViewOptions<
      * @action
      * @public
      */
-    onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void);
+    onItemHold?: ((e: ItemHoldEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -246,7 +241,7 @@ export interface dxTreeViewOptions<
      * @action
      * @public
      */
-    onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
+    onItemRendered?: ((e: ItemRenderedEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -261,7 +256,7 @@ export interface dxTreeViewOptions<
      * @action
      * @public
      */
-    onItemSelectionChanged?: ((e: ItemSelectionChangedEvent<TItem, TKey>) => void);
+    onItemSelectionChanged?: ((e: ItemSelectionChangedEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -273,7 +268,7 @@ export interface dxTreeViewOptions<
      * @action
      * @public
      */
-    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -285,7 +280,7 @@ export interface dxTreeViewOptions<
      * @public
      * @override
      */
-    onSelectionChanged?: ((e: SelectionChangedEvent<TItem, TKey>) => void);
+    onSelectionChanged?: ((e: SelectionChangedEvent<TKey>) => void);
     /**
      * @docid
      * @default 'parentId'
@@ -358,10 +353,8 @@ export interface dxTreeViewOptions<
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTreeView<
-    TItem extends Item<any> = Item<any>,
-    TKey = any,
-> extends HierarchicalCollectionWidget<dxTreeViewOptions<TItem, TKey>, TItem, TKey> {
+export default class dxTreeView<TKey = any>
+    extends HierarchicalCollectionWidget<dxTreeViewOptions<TKey>, dxTreeViewItem, TKey> {
     /**
      * @docid
      * @publicName collapseAll()
@@ -371,11 +364,11 @@ export default class dxTreeView<
     /**
      * @docid
      * @publicName collapseItem(itemData)
-     * @param1 itemData:Object
+     * @param1 itemData:dxTreeViewItem
      * @return Promise<void>
      * @public
      */
-    collapseItem(itemData: TItem): DxPromise<void>;
+    collapseItem(itemData: Item): DxPromise<void>;
     /**
      * @docid
      * @publicName collapseItem(itemElement)
@@ -399,11 +392,11 @@ export default class dxTreeView<
     /**
      * @docid
      * @publicName expandItem(itemData)
-     * @param1 itemData:Object
+     * @param1 itemData:dxTreeViewItem
      * @return Promise<void>
      * @public
      */
-    expandItem(itemData: TItem): DxPromise<void>;
+    expandItem(itemData: Item): DxPromise<void>;
     /**
      * @docid
      * @publicName expandItem(itemElement)
@@ -424,14 +417,14 @@ export default class dxTreeView<
      * @public
      * @return Array<dxTreeViewNode>
      */
-    getNodes(): Array<Node<TItem, TKey>>;
+    getNodes(): Array<Node<TKey>>;
     /**
      * @docid
      * @publicName getSelectedNodes()
      * @public
      * @return Array<dxTreeViewNode>
      */
-    getSelectedNodes(): Array<Node<TItem, TKey>>;
+    getSelectedNodes(): Array<Node<TKey>>;
     /**
      * @docid
      * @publicName getSelectedNodeKeys()
@@ -447,10 +440,10 @@ export default class dxTreeView<
     /**
      * @docid
      * @publicName selectItem(itemData)
-     * @param1 itemData:Object
+     * @param1 itemData:dxTreeViewItem
      * @public
      */
-    selectItem(itemData: TItem): boolean;
+    selectItem(itemData: Item): boolean;
     /**
      * @docid
      * @publicName selectItem(itemElement)
@@ -472,10 +465,10 @@ export default class dxTreeView<
     /**
      * @docid
      * @publicName unselectItem(itemData)
-     * @param1 itemData:Object
+     * @param1 itemData:dxTreeViewItem
      * @public
      */
-    unselectItem(itemData: TItem): boolean;
+    unselectItem(itemData: Item): boolean;
     /**
      * @docid
      * @publicName unselectItem(itemElement)
@@ -498,11 +491,11 @@ export default class dxTreeView<
     /**
      * @docid
      * @publicName scrollToItem(itemData)
-     * @param1 itemData:Object
+     * @param1 itemData:dxTreeViewItem
      * @return Promise<void>
      * @public
      */
-    scrollToItem(itemData: TItem): DxPromise<void>;
+    scrollToItem(itemData: Item): DxPromise<void>;
     /**
      * @docid
      * @publicName scrollToItem(itemElement)
@@ -523,13 +516,13 @@ export default class dxTreeView<
  * @public
  * @namespace DevExpress.ui.dxTreeView
  */
-export type Item<TItem extends Item<any> = Item<any>> = dxTreeViewItem<TItem>;
+export type Item = dxTreeViewItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxTreeViewItem<TItem extends dxTreeViewItem<any> = dxTreeViewItem<any>> extends CollectionWidgetItem<TItem> {
+export interface dxTreeViewItem extends CollectionWidgetItem {
     /**
      * @docid
      * @default false
@@ -550,9 +543,8 @@ export interface dxTreeViewItem<TItem extends dxTreeViewItem<any> = dxTreeViewIt
     /**
      * @docid
      * @public
-     * @type Array<dxTreeViewItem>
      */
-    items?: Array<TItem>;
+    items?: Array<dxTreeViewItem>;
     /**
      * @docid
      * @default undefined
@@ -574,10 +566,7 @@ export interface dxTreeViewItem<TItem extends dxTreeViewItem<any> = dxTreeViewIt
 }
 
 /** @public */
-export type Node<
-    TItem extends Item<any> = Item<any>,
-    TKey = any,
-> = dxTreeViewNode<TItem, TKey>;
+export type Node<TKey = any> = dxTreeViewNode<TKey>;
 
 /**
  * @docid
@@ -585,16 +574,13 @@ export type Node<
  * @type object
  * @namespace DevExpress.ui
  */
-export interface dxTreeViewNode<
-    TItem extends Item<any> = Item<any>,
-    TKey = any,
-> {
+export interface dxTreeViewNode<TKey = any> {
     /**
      * @docid
      * @public
      * @type Array<dxTreeViewNode>;
      */
-    children?: Array<dxTreeViewNode<TItem, TKey>>;
+    children?: Array<dxTreeViewNode<TKey>>;
     /**
      * @docid
      * @public
@@ -608,9 +594,9 @@ export interface dxTreeViewNode<
     /**
      * @docid
      * @public
-     * @type any
+     * @type dxTreeViewItem
      */
-    itemData?: TItem;
+    itemData?: Item;
     /**
      * @docid
      * @public
@@ -621,7 +607,7 @@ export interface dxTreeViewNode<
      * @public
      * @type dxTreeViewNode
      */
-    parent?: dxTreeViewNode<TItem, TKey>;
+    parent?: dxTreeViewNode<TKey>;
     /**
      * @docid
      * @public
@@ -635,35 +621,26 @@ export interface dxTreeViewNode<
 }
 
 /** @public */
-export type ExplicitTypes<
-    TItem extends Item<any> = Item<any>,
-    TKey = any,
-> = {
-    Properties: Properties<TItem, TKey>;
-    Node: Node<TItem, TKey>;
-    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
-    DisposingEvent: DisposingEvent<TItem, TKey>;
-    InitializedEvent: InitializedEvent<TItem, TKey>;
-    ItemClickEvent: ItemClickEvent<TItem, TKey>;
-    ItemCollapsedEvent: ItemCollapsedEvent<TItem, TKey>;
-    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
-    ItemExpandedEvent: ItemExpandedEvent<TItem, TKey>;
-    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
-    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
-    ItemSelectionChangedEvent: ItemSelectionChangedEvent<TItem, TKey>;
-    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
-    SelectAllValueChangedEvent: SelectAllValueChangedEvent<TItem, TKey>;
-    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+export type ExplicitTypes<TKey = any> = {
+    Properties: Properties<TKey>;
+    Node: Node<TKey>;
+    ContentReadyEvent: ContentReadyEvent<TKey>;
+    DisposingEvent: DisposingEvent<TKey>;
+    InitializedEvent: InitializedEvent<TKey>;
+    ItemClickEvent: ItemClickEvent<TKey>;
+    ItemCollapsedEvent: ItemCollapsedEvent<TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TKey>;
+    ItemExpandedEvent: ItemExpandedEvent<TKey>;
+    ItemHoldEvent: ItemHoldEvent<TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TKey>;
+    ItemSelectionChangedEvent: ItemSelectionChangedEvent<TKey>;
+    OptionChangedEvent: OptionChangedEvent<TKey>;
+    SelectAllValueChangedEvent: SelectAllValueChangedEvent<TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TKey>;
 };
 
 /** @public */
-export type Properties<
-    TItem extends Item<any> = Item<any>,
-    TKey = any,
-> = dxTreeViewOptions<TItem, TKey>;
+export type Properties<TKey = any> = dxTreeViewOptions<TKey>;
 
 /** @deprecated use Properties instead */
-export type Options<
-    TItem extends Item<any> = Item<any>,
-    TKey = any,
-> = Properties<TItem, TKey>;
+export type Options<TKey = any> = Properties<TKey>;

@@ -21808,12 +21808,9 @@ declare module DevExpress.ui {
   /**
    * [descr:dxTreeView]
    */
-  export class dxTreeView<
-    TItem extends DevExpress.ui.dxTreeView.Item<any> = DevExpress.ui.dxTreeView.Item<any>,
-    TKey = any
-  > extends HierarchicalCollectionWidget<
-    dxTreeViewOptions<TItem, TKey>,
-    TItem,
+  export class dxTreeView<TKey = any> extends HierarchicalCollectionWidget<
+    dxTreeViewOptions<TKey>,
+    dxTreeViewItem,
     TKey
   > {
     /**
@@ -21823,7 +21820,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeView.collapseItem(itemData)]
      */
-    collapseItem(itemData: TItem): DevExpress.core.utils.DxPromise<void>;
+    collapseItem(
+      itemData: DevExpress.ui.dxTreeView.Item
+    ): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:dxTreeView.collapseItem(itemElement)]
      */
@@ -21839,7 +21838,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeView.expandItem(itemData)]
      */
-    expandItem(itemData: TItem): DevExpress.core.utils.DxPromise<void>;
+    expandItem(
+      itemData: DevExpress.ui.dxTreeView.Item
+    ): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:dxTreeView.expandItem(itemElement)]
      */
@@ -21851,11 +21852,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeView.getNodes()]
      */
-    getNodes(): Array<DevExpress.ui.dxTreeView.Node<TItem, TKey>>;
+    getNodes(): Array<DevExpress.ui.dxTreeView.Node<TKey>>;
     /**
      * [descr:dxTreeView.getSelectedNodes()]
      */
-    getSelectedNodes(): Array<DevExpress.ui.dxTreeView.Node<TItem, TKey>>;
+    getSelectedNodes(): Array<DevExpress.ui.dxTreeView.Node<TKey>>;
     /**
      * [descr:dxTreeView.getSelectedNodeKeys()]
      */
@@ -21867,7 +21868,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeView.selectItem(itemData)]
      */
-    selectItem(itemData: TItem): boolean;
+    selectItem(itemData: DevExpress.ui.dxTreeView.Item): boolean;
     /**
      * [descr:dxTreeView.selectItem(itemElement)]
      */
@@ -21883,7 +21884,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeView.unselectItem(itemData)]
      */
-    unselectItem(itemData: TItem): boolean;
+    unselectItem(itemData: DevExpress.ui.dxTreeView.Item): boolean;
     /**
      * [descr:dxTreeView.unselectItem(itemElement)]
      */
@@ -21899,7 +21900,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeView.scrollToItem(itemData)]
      */
-    scrollToItem(itemData: TItem): DevExpress.core.utils.DxPromise<void>;
+    scrollToItem(
+      itemData: DevExpress.ui.dxTreeView.Item
+    ): DevExpress.core.utils.DxPromise<void>;
     /**
      * [descr:dxTreeView.scrollToItem(itemElement)]
      */
@@ -21910,96 +21913,81 @@ declare module DevExpress.ui {
     scrollToItem(key: TKey): DevExpress.core.utils.DxPromise<void>;
   }
   module dxTreeView {
-    export type ContentReadyEvent = DevExpress.events.EventInfo<dxTreeView>;
-    export type DisposingEvent = DevExpress.events.EventInfo<dxTreeView>;
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxTreeView>;
-    export type ItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxTreeView> & {
-        readonly itemData?: any;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number;
-        readonly node?: Node;
-      };
-    export type ItemCollapsedEvent =
-      DevExpress.events.NativeEventInfo<dxTreeView> & {
-        readonly itemData?: any;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number;
-        readonly node?: Node;
-      };
-    export type ItemContextMenuEvent =
-      DevExpress.events.NativeEventInfo<dxTreeView> & {
-        readonly itemData?: any;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number;
-        readonly node?: Node;
-      };
-    export type ItemExpandedEvent =
-      DevExpress.events.NativeEventInfo<dxTreeView> & {
-        readonly itemData?: any;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number;
-        readonly node?: Node;
-      };
-    export type ItemHoldEvent =
-      DevExpress.events.NativeEventInfo<dxTreeView> & {
-        readonly itemData?: any;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number;
-        readonly node?: Node;
-      };
-    export type ItemRenderedEvent =
-      DevExpress.events.NativeEventInfo<dxTreeView> & {
-        readonly itemData?: any;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemIndex?: number;
-        readonly node?: Node;
-      };
-    export type ItemSelectionChangedEvent =
-      DevExpress.events.EventInfo<dxTreeView> & {
-        readonly node?: Node;
-        readonly itemElement?: DevExpress.core.DxElement;
-        readonly itemData?: any;
-        readonly itemIndex?: number;
-      };
-    export type Node = dxTreeViewNode;
-    export type OptionChangedEvent = DevExpress.events.EventInfo<dxTreeView> &
-      DevExpress.events.ChangedOptionInfo;
-    export type Properties<
-      TItem extends Item<any> = Item<any>,
-      TKey = any
-    > = dxTreeViewOptions<TItem, TKey>;
-    export type SelectAllValueChangedEvent<
-      TItem extends Item<any> = Item<any>,
-      TKey = any
-    > = DevExpress.events.EventInfo<dxTreeView<TItem, TKey>> & {
-      readonly value?: boolean | undefined;
+    export type ContentReadyEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxTreeView<TKey>
+    >;
+    export type DisposingEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxTreeView<TKey>
+    >;
+    export type ExplicitTypes<TKey = any> = {
+      Properties: Properties<TKey>;
+      Node: Node<TKey>;
+      ContentReadyEvent: ContentReadyEvent<TKey>;
+      DisposingEvent: DisposingEvent<TKey>;
+      InitializedEvent: InitializedEvent<TKey>;
+      ItemClickEvent: ItemClickEvent<TKey>;
+      ItemCollapsedEvent: ItemCollapsedEvent<TKey>;
+      ItemContextMenuEvent: ItemContextMenuEvent<TKey>;
+      ItemExpandedEvent: ItemExpandedEvent<TKey>;
+      ItemHoldEvent: ItemHoldEvent<TKey>;
+      ItemRenderedEvent: ItemRenderedEvent<TKey>;
+      ItemSelectionChangedEvent: ItemSelectionChangedEvent<TKey>;
+      OptionChangedEvent: OptionChangedEvent<TKey>;
+      SelectAllValueChangedEvent: SelectAllValueChangedEvent<TKey>;
+      SelectionChangedEvent: SelectionChangedEvent<TKey>;
     };
-    export type SelectionChangedEvent<
-      TItem extends Item<any> = Item<any>,
-      TKey = any
-    > = DevExpress.events.EventInfo<dxTreeView<TItem, TKey>>;
+    export type InitializedEvent<TKey = any> =
+      DevExpress.events.InitializedEventInfo<dxTreeView<TKey>>;
+    export type ItemClickEvent<TKey = any> = DevExpress.events.NativeEventInfo<
+      dxTreeView<TKey>
+    > &
+      TreeViewItemInfo<TKey>;
+    export type ItemCollapsedEvent<TKey = any> =
+      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> &
+        TreeViewItemInfo<TKey>;
+    export type ItemContextMenuEvent<TKey = any> =
+      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> &
+        TreeViewItemInfo<TKey>;
+    export type ItemExpandedEvent<TKey = any> =
+      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> &
+        TreeViewItemInfo<TKey>;
+    export type ItemHoldEvent<TKey = any> = DevExpress.events.NativeEventInfo<
+      dxTreeView<TKey>
+    > &
+      TreeViewItemInfo<TKey>;
+    export type ItemRenderedEvent<TKey = any> =
+      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> &
+        TreeViewItemInfo<TKey>;
+    export type ItemSelectionChangedEvent<TKey = any> =
+      DevExpress.events.EventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
+    export type Node<TKey = any> = dxTreeViewNode<TKey>;
+    export type OptionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxTreeView<TKey>
+    > &
+      DevExpress.events.ChangedOptionInfo;
+    export type Properties<TKey = any> = dxTreeViewOptions<TKey>;
+    export type SelectAllValueChangedEvent<TKey = any> =
+      DevExpress.events.EventInfo<dxTreeView<TKey>> & {
+        readonly value?: boolean | undefined;
+      };
+    export type SelectionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxTreeView<TKey>
+    >;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    interface TreeViewItemInfo<
-      TItem extends Item<any> = Item<any>,
-      TKey = any
-    > {
-      readonly itemData?: TItem;
+    interface TreeViewItemInfo<TKey = any> {
+      readonly itemData?: Item;
       readonly itemElement?: DevExpress.core.DxElement;
       readonly itemIndex?: number;
-      readonly node?: Node<TItem, TKey>;
+      readonly node?: Node<TKey>;
     }
   }
   /**
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxTreeViewItem<
-    TItem extends dxTreeViewItem<any> = dxTreeViewItem<any>
-  > extends CollectionWidgetItem<TItem> {
+  export interface dxTreeViewItem extends CollectionWidgetItem {
     /**
      * [descr:dxTreeViewItem.expanded]
      */
@@ -22015,7 +22003,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewItem.items]
      */
-    items?: Array<TItem>;
+    items?: Array<dxTreeViewItem>;
     /**
      * [descr:dxTreeViewItem.id]
      */
@@ -22034,14 +22022,11 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxTreeViewNode]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxTreeViewNode<
-    TItem extends DevExpress.ui.dxTreeView.Item<any> = DevExpress.ui.dxTreeView.Item<any>,
-    TKey = any
-  > {
+  export interface dxTreeViewNode<TKey = any> {
     /**
      * [descr:dxTreeViewNode.children]
      */
-    children?: Array<dxTreeViewNode<TItem, TKey>>;
+    children?: Array<dxTreeViewNode<TKey>>;
     /**
      * [descr:dxTreeViewNode.disabled]
      */
@@ -22053,7 +22038,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewNode.itemData]
      */
-    itemData?: TItem;
+    itemData?: DevExpress.ui.dxTreeView.Item;
     /**
      * [descr:dxTreeViewNode.key]
      */
@@ -22061,7 +22046,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewNode.parent]
      */
-    parent?: dxTreeViewNode<TItem, TKey>;
+    parent?: dxTreeViewNode<TKey>;
     /**
      * [descr:dxTreeViewNode.selected]
      */
@@ -22074,9 +22059,13 @@ declare module DevExpress.ui {
   /**
    * @deprecated use Properties instead
    */
-  export interface dxTreeViewOptions
+  export interface dxTreeViewOptions<TKey = any>
     extends DevExpress.core.Skip<
-        HierarchicalCollectionWidgetOptions<dxTreeView>,
+        HierarchicalCollectionWidgetOptions<
+          dxTreeView<TKey>,
+          dxTreeViewItem,
+          TKey
+        >,
         'dataSource'
       >,
       SearchBoxMixinOptions {
@@ -22088,12 +22077,15 @@ declare module DevExpress.ui {
      * [descr:dxTreeViewOptions.createChildren]
      */
     createChildren?: (
-      parentNode: DevExpress.ui.dxTreeView.Node<TItem, TKey>
+      parentNode: DevExpress.ui.dxTreeView.Node<TKey>
     ) => PromiseLike<any> | Array<any>;
     /**
      * [descr:dxTreeViewOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxTreeView.Item>;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<
+      DevExpress.ui.dxTreeView.Item,
+      TKey
+    >;
     /**
      * [descr:dxTreeViewOptions.dataStructure]
      */
@@ -22121,60 +22113,56 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.items]
      */
-    items?: Array<TItem>;
+    items?: Array<DevExpress.ui.dxTreeView.Item>;
     /**
      * [descr:dxTreeViewOptions.onItemClick]
      */
-    onItemClick?: (
-      e: DevExpress.ui.dxTreeView.ItemClickEvent<TItem, TKey>
-    ) => void;
+    onItemClick?: (e: DevExpress.ui.dxTreeView.ItemClickEvent<TKey>) => void;
     /**
      * [descr:dxTreeViewOptions.onItemCollapsed]
      */
     onItemCollapsed?: (
-      e: DevExpress.ui.dxTreeView.ItemCollapsedEvent<TItem, TKey>
+      e: DevExpress.ui.dxTreeView.ItemCollapsedEvent<TKey>
     ) => void;
     /**
      * [descr:dxTreeViewOptions.onItemContextMenu]
      */
     onItemContextMenu?: (
-      e: DevExpress.ui.dxTreeView.ItemContextMenuEvent<TItem, TKey>
+      e: DevExpress.ui.dxTreeView.ItemContextMenuEvent<TKey>
     ) => void;
     /**
      * [descr:dxTreeViewOptions.onItemExpanded]
      */
     onItemExpanded?: (
-      e: DevExpress.ui.dxTreeView.ItemExpandedEvent<TItem, TKey>
+      e: DevExpress.ui.dxTreeView.ItemExpandedEvent<TKey>
     ) => void;
     /**
      * [descr:dxTreeViewOptions.onItemHold]
      */
-    onItemHold?: (
-      e: DevExpress.ui.dxTreeView.ItemHoldEvent<TItem, TKey>
-    ) => void;
+    onItemHold?: (e: DevExpress.ui.dxTreeView.ItemHoldEvent<TKey>) => void;
     /**
      * [descr:dxTreeViewOptions.onItemRendered]
      */
     onItemRendered?: (
-      e: DevExpress.ui.dxTreeView.ItemRenderedEvent<TItem, TKey>
+      e: DevExpress.ui.dxTreeView.ItemRenderedEvent<TKey>
     ) => void;
     /**
      * [descr:dxTreeViewOptions.onItemSelectionChanged]
      */
     onItemSelectionChanged?: (
-      e: DevExpress.ui.dxTreeView.ItemSelectionChangedEvent<TItem, TKey>
+      e: DevExpress.ui.dxTreeView.ItemSelectionChangedEvent<TKey>
     ) => void;
     /**
      * [descr:dxTreeViewOptions.onSelectAllValueChanged]
      */
     onSelectAllValueChanged?: (
-      e: DevExpress.ui.dxTreeView.SelectAllValueChangedEvent<TItem, TKey>
+      e: DevExpress.ui.dxTreeView.SelectAllValueChangedEvent<TKey>
     ) => void;
     /**
      * [descr:dxTreeViewOptions.onSelectionChanged]
      */
     onSelectionChanged?: (
-      e: DevExpress.ui.dxTreeView.SelectionChangedEvent<TItem, TKey>
+      e: DevExpress.ui.dxTreeView.SelectionChangedEvent<TKey>
     ) => void;
     /**
      * [descr:dxTreeViewOptions.parentIdExpr]
@@ -23697,7 +23685,7 @@ declare module DevExpress.ui.dxToolbar {
   export type Item = dxToolbarItem;
 }
 declare module DevExpress.ui.dxTreeView {
-  export type Item<TItem extends Item<any> = Item<any>> = dxTreeViewItem<TItem>;
+  export type Item = dxTreeViewItem;
 }
 declare module DevExpress.utils {
   /**
