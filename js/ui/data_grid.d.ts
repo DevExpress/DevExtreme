@@ -638,6 +638,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
     /**
      * @docid
      * @default undefined
+     * @type any
      * @fires GridBaseOptions.onFocusedRowChanged
      * @public
      */
@@ -1652,6 +1653,7 @@ export interface DataChange<TRowData = any, TKey = any> {
     type: 'insert' | 'update' | 'remove';
     /**
      * @docid
+     * @type any
      */
     data: DeepPartial<TRowData>;
     /**
@@ -2059,6 +2061,7 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName expandAdaptiveDetailRow(key)
+     * @param1 key:any
      * @public
      */
     expandAdaptiveDetailRow(key: TKey): void;
@@ -2173,6 +2176,7 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName isAdaptiveDetailRowExpanded(key)
+     * @param1 key:any
      * @return boolean
      * @public
      */
@@ -2180,6 +2184,7 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName isRowFocused(key)
+     * @param1 key:any
      * @return boolean
      * @public
      */
@@ -2187,6 +2192,7 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName isRowSelected(key)
+     * @param1 key:any
      * @return boolean
      * @public
      */
@@ -2202,6 +2208,7 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName navigateToRow(key)
+     * @param1 key:any
      * @public
      * @return Promise<void>
      */
@@ -4344,6 +4351,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     /**
      * @docid
      * @publicName collapseRow(key)
+     * @param1 key:any
      * @return Promise<void>
      * @public
      */
@@ -4358,6 +4366,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     /**
      * @docid
      * @publicName expandRow(key)
+     * @param1 key:any
      * @return Promise<void>
      * @public
      */
@@ -4414,6 +4423,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     /**
      * @docid
      * @publicName isRowExpanded(key)
+     * @param1 key:any
      * @public
      */
     isRowExpanded(key: TKey): boolean;
@@ -4711,6 +4721,7 @@ export type dxDataGridRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey
 export interface Row<TRowData = any, TKey = any> {
     /**
      * @docid dxDataGridRowObject.data
+     * @type any
      * @public
      */
     readonly data: TRowData;
@@ -4741,6 +4752,7 @@ export interface Row<TRowData = any, TKey = any> {
     readonly isSelected?: boolean;
     /**
      * @docid dxDataGridRowObject.key
+     * @type any
      * @public
      */
     readonly key: TKey;
