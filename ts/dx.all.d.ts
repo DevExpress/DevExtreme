@@ -6186,7 +6186,7 @@ declare module DevExpress.ui {
       unfix?: string;
     }
     export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
-      readonly data?: TRowData;
+      readonly data?: GroupData<TRowData>;
       readonly component: dxDataGrid<TRowData, TKey>;
       readonly value?: any;
       readonly text: string;
@@ -6194,7 +6194,7 @@ declare module DevExpress.ui {
       readonly columnIndex: number;
       readonly rowIndex: number;
       readonly column: Column<TRowData, TKey>;
-      readonly row: Row<TRowData, TKey>;
+      readonly row: Row<GroupData<TRowData>, GroupKey>;
       readonly summaryItems: Array<any>;
       readonly groupContinuesMessage?: string;
       readonly groupContinuedMessage?: string;
@@ -6713,6 +6713,7 @@ declare module DevExpress.ui {
       SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
       Summary: Summary<TRowData, TKey>;
       ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
+      GroupData: GroupData<TRowData>;
     };
     export type Export<TRowData = any, TKey = any> = {
       /**
@@ -6978,6 +6979,30 @@ declare module DevExpress.ui {
         newRowIndex: number;
         readonly rows: Array<Row<TRowData, TKey>>;
       };
+    export type GroupData<TRowData> = {
+      key: any;
+      items: Array<TRowData> | Array<GroupData<TRowData>> | null;
+      /**
+       * @deprecated Attention! This property is for internal purposes only.
+       */
+      collapsedItems?: Array<TRowData> | Array<GroupData<TRowData>>;
+      /**
+       * @deprecated Attention! This property is for internal purposes only.
+       */
+      aggregates?: Array<any>;
+      /**
+       * @deprecated Attention! This property is for internal purposes only.
+       */
+      summary?: Array<any>;
+      /**
+       * @deprecated Attention! This property is for internal purposes only.
+       */
+      isContinuation?: boolean;
+      /**
+       * @deprecated Attention! This property is for internal purposes only.
+       */
+      isContinuationOnNextPage?: boolean;
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7028,6 +7053,10 @@ declare module DevExpress.ui {
        */
       ungroupAll?: string;
     }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type GroupKey = any[];
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
