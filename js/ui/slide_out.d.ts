@@ -26,7 +26,7 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-type ItemLike = string | Item<any> | any;
+type ItemLike = string | Item | any;
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxSlideOut<TItem, TKey>>;
@@ -207,13 +207,13 @@ export default class dxSlideOut<
  * @public
  * @namespace DevExpress.ui.dxSlideOut
  */
-export type Item<TItem extends Item<any> | any = any> = dxSlideOutItem<TItem>;
+export type Item = dxSlideOutItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxSlideOutItem<TItem extends dxSlideOutItem<any> | any = any> extends CollectionWidgetItem<TItem> {
+export interface dxSlideOutItem extends CollectionWidgetItem {
     /**
      * @docid
      * @type_function_return string|Element|jQuery

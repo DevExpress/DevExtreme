@@ -19114,7 +19114,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    type ItemLike = string | Item<any> | any;
+    type ItemLike = string | Item | any;
     export type ItemRenderedEvent<
       TItem extends ItemLike = any,
       TKey = any
@@ -19147,8 +19147,7 @@ declare module DevExpress.ui {
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxSlideOutItem<TItem extends dxSlideOutItem<any> | any = any>
-    extends CollectionWidgetItem<TItem> {
+  export interface dxSlideOutItem extends CollectionWidgetItem {
     /**
      * [descr:dxSlideOutItem.menuTemplate]
      */
@@ -19178,9 +19177,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSlideOutOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<
-      string | DevExpress.ui.dxSlideOut.Item | any
-    >;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<TItem, TKey>;
     /**
      * [descr:dxSlideOutOptions.items]
      */
@@ -23695,7 +23692,7 @@ declare module DevExpress.ui.dxResponsiveBox {
   export type Item = dxResponsiveBoxItem;
 }
 declare module DevExpress.ui.dxSlideOut {
-  export type Item<TItem extends Item<any> | any = any> = dxSlideOutItem<TItem>;
+  export type Item = dxSlideOutItem;
 }
 declare module DevExpress.ui.dxTabPanel {
   export type Item = dxTabPanelItem;
