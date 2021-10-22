@@ -29,5 +29,7 @@ export class LayoutProps {
 
   @OneWay() addDateTableClass = true;
 
+  @OneWay() addVerticalSizesClassToRows = true;
+
   @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }

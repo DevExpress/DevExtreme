@@ -18,6 +18,11 @@ export const viewFunction = ({
   <DomComponentWrapper
     componentType={LegacySelectBox}
     componentProps={props}
+    templateNames={[
+      'dropDownButtonTemplate',
+      'groupTemplate',
+      'itemTemplate',
+    ]}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
@@ -46,4 +51,4 @@ export class SelectBoxProps extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class SelectBox extends JSXComponent(SelectBoxProps) { }
+export class SelectBox extends JSXComponent(SelectBoxProps) {}

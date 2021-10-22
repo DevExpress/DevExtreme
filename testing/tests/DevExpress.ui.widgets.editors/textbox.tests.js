@@ -1,7 +1,8 @@
 import $ from 'jquery';
-import 'ui/text_box';
+import TextBox from 'ui/text_box';
 import devices from 'core/devices';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import { getWidth, getOuterWidth } from 'core/utils/size';
 
 import 'generic_light.css!';
 
@@ -21,6 +22,9 @@ const PLACEHOLDER_CLASS = 'dx-placeholder';
 const SEARCHBOX_CLASS = 'dx-searchbox';
 const SEARCH_ICON_CLASS = 'dx-icon-search';
 const CLEAR_BUTTON_AREA_CLASS = 'dx-clear-button-area';
+
+const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
+const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 QUnit.module('common', {}, () => {
     QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
@@ -289,5 +293,82 @@ QUnit.module('valueChanged should receive correct event parameter', {
         assert.strictEqual(event.target, $clearButton.get(0), 'event target is correct');
 
         this.testProgramChange(assert);
+    });
+});
+
+QUnit.module('label integration', {
+    beforeEach: function() {
+        const initialOptions = {
+            label: 'some'
+        };
+        this.init = (options = {}) => {
+            this.$textBox = $('#textbox').dxTextBox($.extend(initialOptions, options));
+            this.textBox = this.$textBox.dxTextBox('instance');
+        };
+
+        this.LabelMock = {
+            updateMaxWidth: sinon.stub(),
+            updateBeforeWidth: sinon.stub()
+        };
+        this.constructorMock = sinon.stub().returns(this.LabelMock);
+        TextBox.mockTextEditorLabel(this.constructorMock);
+    },
+    afterEach: function() {
+        Object.values(this.LabelMock, (stub) => {
+            stub.reset();
+        });
+        this.constructorMock.reset();
+        TextBox.restoreTextEditorLabel();
+    }
+},
+() => {
+    QUnit.test('editor should pass beforeWidth equal to buttons container width + search icon outer width', function(assert) {
+        this.init({
+            buttons: [{
+                name: 'button',
+                location: 'before'
+            }],
+            mode: 'search'
+        });
+
+        const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
+        const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
+        const expectedBeforeWidth = buttonsContainerWidth + searchIconOuterWidth;
+
+        const beforeWidth = this.constructorMock.getCall(0).args[0].beforeWidth;
+        assert.strictEqual(beforeWidth, expectedBeforeWidth);
+    });
+
+    QUnit.test('editor should pass containerWidth equal to input container width - buttons container width - search icon outer width', function(assert) {
+        this.init({
+            buttons: [{
+                name: 'button',
+                location: 'before'
+            }],
+            mode: 'search'
+        });
+
+        const inputContainerWidth = getWidth(this.$textBox.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
+        const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
+        const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
+        const expectedContainerWidth = inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth;
+
+        const containerWidth = this.constructorMock.getCall(0).args[0].containerWidth;
+        assert.strictEqual(containerWidth, expectedContainerWidth);
+    });
+
+    QUnit.test('mode option change should call label updateMaxWidth and updateBeforeWidth methods with correct parameters', function(assert) {
+        this.init();
+        this.textBox.option('mode', 'search');
+
+        const inputContainerWidth = getWidth(this.$textBox.find(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
+        const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
+        const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
+
+        const newLabelMaxWidth = inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth;
+        const newLabelBeforeWidth = buttonsContainerWidth + searchIconOuterWidth;
+
+        assert.strictEqual(this.LabelMock.updateMaxWidth.getCall(0).args[0], newLabelMaxWidth, 'updateMaxWidth parameter is correct');
+        assert.strictEqual(this.LabelMock.updateBeforeWidth.getCall(0).args[0], newLabelBeforeWidth, 'updateBeforeWidth parameter is correct');
     });
 });

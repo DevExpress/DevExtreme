@@ -19,6 +19,7 @@ export const viewFunction = ({
   <DomComponentWrapper
     componentType={LegacyOverlay}
     componentProps={props}
+    templateNames={[]}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
@@ -65,4 +66,4 @@ export class OverlayProps extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Overlay extends JSXComponent(OverlayProps) { }
+export class Overlay extends JSXComponent(OverlayProps) {}

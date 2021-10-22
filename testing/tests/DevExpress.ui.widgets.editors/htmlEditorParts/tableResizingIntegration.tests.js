@@ -230,6 +230,22 @@ module('Table resizing integration', {
             assert.strictEqual($resizeFrame.length, 0, 'Frame is not created for table');
         });
 
+        test('Table resuizing should support value change to null at runtime', function(assert) {
+            this.createWidget();
+            this.clock.tick(TIME_TO_WAIT);
+
+            try {
+                this.instance.option('tableResizing', null);
+                this.clock.tick(TIME_TO_WAIT);
+
+                const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+
+                assert.strictEqual($resizeFrame.length, 0, 'Frame is not created for table');
+            } catch(e) {
+                assert.ok(false);
+            }
+        });
+
         test('Frame is removed if tableResizing.enabled option is disabled at runtime', function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);

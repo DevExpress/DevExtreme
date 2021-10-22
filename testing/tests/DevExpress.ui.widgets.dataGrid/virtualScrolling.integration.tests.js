@@ -531,6 +531,91 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal($cell.attr('aria-colindex'), columnPageSize + 10, `Virtual cell aria-colindex == ${colIndex}`);
     });
 
+    QUnit.test('update fixed table partially if scrolling.columnRenderingMode: virtual for fixed columns', function(assert) {
+        // arrange, act
+        const data = [{}];
+
+        for(let i = 0; i < 100; i++) {
+            data[0][`field_${i}`] = `0-${i + 1}`;
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 200,
+            dataSource: data,
+            customizeColumns(columns) {
+                columns[0].fixed = true;
+                columns[0].fixedPosition = 'left';
+                columns[99].fixed = true;
+                columns[99].fixedPosition = 'right';
+            },
+            columnWidth: 100,
+            scrolling: {
+                columnRenderingMode: 'virtual',
+                useNative: false
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick(300);
+
+        const $fixedCell = $(dataGrid.getCellElement(0, 0));
+        const columnOffset = 9;
+        const fixedColumnCount = 2;
+
+        dataGrid.getScrollable().scrollTo({ x: 1000 });
+        this.clock.tick();
+
+        // assert
+        assert.ok($(dataGrid.getCellElement(0, 0)).is($fixedCell), 'Fixed cell is not rerendered');
+
+        const $rowElements = $(dataGrid.getRowElement(0));
+        assert.equal($rowElements.eq(1).children().eq(0).attr('aria-colindex'), columnOffset, 'Fixed cell 1 aria-colindex');
+        assert.equal($rowElements.eq(1).children().eq(1).attr('colspan'), dataGrid.getVisibleColumns().length - fixedColumnCount, 'Fixed cell 2 colspan');
+        assert.equal($rowElements.eq(1).children().eq(2).attr('aria-colindex'), columnOffset + dataGrid.getVisibleColumns().length - 1, 'Fixed cell 3 aria-colindex');
+
+        const $colgroups = $(dataGrid.element()).find('colgroup');
+        assert.equal($colgroups.length, 4, 'colgroup count');
+
+        for(let i = 0; i < $colgroups.length; i++) {
+            assert.equal($colgroups.eq(i).children().length, dataGrid.getVisibleColumns().length, `colgroup ${i} col count`);
+        }
+    });
+
+    QUnit.test('update fixed table fully if scrolling.columnRenderingMode: virtual for fixed columns and if legacyMode is true', function(assert) {
+        // arrange, act
+        const data = [{}];
+
+        for(let i = 0; i < 100; i++) {
+            data[0][`field_${i}`] = `0-${i + 1}`;
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            width: 200,
+            dataSource: data,
+            customizeColumns(columns) {
+                columns[0].fixed = true;
+                columns[0].fixedPosition = 'left';
+                columns[99].fixed = true;
+                columns[99].fixedPosition = 'right';
+            },
+            columnWidth: 100,
+            scrolling: {
+                columnRenderingMode: 'virtual',
+                useNative: false,
+                legacyMode: true
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick(300);
+
+        const $fixedCell = $(dataGrid.getCellElement(0, 0));
+
+        dataGrid.getScrollable().scrollTo({ x: 1000 });
+        this.clock.tick();
+
+        // assert
+        assert.notOk($(dataGrid.getCellElement(0, 0)).is($fixedCell), 'Fixed cell is rerendered');
+    });
+
     // T595044
     QUnit.test('aria-rowindex aria-colindex if virtual scrolling', function(assert) {
         // arrange, act
@@ -3302,19 +3387,19 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                         type: 'insert',
                         key: 101,
                         data: {},
-                        index: 0
+                        insertBeforeKey: 1
                     },
                     {
                         type: 'insert',
                         key: 102,
                         data: {},
-                        index: 50
+                        insertBeforeKey: 51
                     },
                     {
                         type: 'insert',
                         key: 103,
                         data: {},
-                        index: -1
+                        insertAfterKey: 100
                     }
                 ]
             }
@@ -3667,6 +3752,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                 paging: true,
                 sorting: true
             },
+            editing: {
+                newRowPosition: 'last'
+            },
             scrolling: {
                 mode: 'virtual',
                 legacyMode: false
@@ -3718,9 +3806,9 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.option('editing.changes', [
-            { type: 'insert', index: 0 },
-            { type: 'insert', index: 4 },
-            { type: 'insert', index: -1 }
+            { type: 'insert', insertBeforeKey: ['Category 1'] },
+            { type: 'insert', insertBeforeKey: ['Category 2'] },
+            { type: 'insert' }
         ]);
         this.clock.tick();
         loadIndices = dataGrid.getVisibleRows().map(it => it.loadIndex);
@@ -5025,19 +5113,19 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
                         type: 'insert',
                         key: 101,
                         data: {},
-                        index: 0
+                        insertBeforeKey: 1
                     },
                     {
                         type: 'insert',
                         key: 102,
                         data: {},
-                        index: 50
+                        insertBeforeKey: 51
                     },
                     {
                         type: 'insert',
                         key: 103,
                         data: {},
-                        index: -1
+                        insertAfterKey: 100
                     }
                 ]
             }
