@@ -6156,7 +6156,7 @@ declare module DevExpress.ui {
       readonly columnIndex: number;
       readonly rowIndex: number;
       readonly column: Column<TRowData, TKey>;
-      readonly row: Row<TRowData, TKey>;
+      readonly row: Row<GroupData<TRowData>, any[]>;
       readonly summaryItems: Array<any>;
       readonly groupContinuesMessage?: string;
       readonly groupContinuedMessage?: string;

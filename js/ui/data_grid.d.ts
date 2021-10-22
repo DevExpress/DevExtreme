@@ -638,7 +638,6 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
     /**
      * @docid
      * @default undefined
-     * @type any
      * @fires GridBaseOptions.onFocusedRowChanged
      * @public
      */
@@ -3161,7 +3160,7 @@ export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column<TRowData, TKey>;
-  readonly row: Row<TRowData, TKey>;
+  readonly row: Row<GroupData<TRowData>, any[]>;
   readonly summaryItems: Array<any>;
   readonly groupContinuesMessage?: string;
   readonly groupContinuedMessage?: string;
@@ -4351,7 +4350,6 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     /**
      * @docid
      * @publicName collapseRow(key)
-     * @param1 key:any
      * @return Promise<void>
      * @public
      */
@@ -4423,7 +4421,6 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     /**
      * @docid
      * @publicName isRowExpanded(key)
-     * @param1 key:any
      * @public
      */
     isRowExpanded(key: TKey): boolean;
@@ -4752,7 +4749,6 @@ export interface Row<TRowData = any, TKey = any> {
     readonly isSelected?: boolean;
     /**
      * @docid dxDataGridRowObject.key
-     * @type any
      * @public
      */
     readonly key: TKey;
