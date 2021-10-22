@@ -17,7 +17,7 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-type ItemLike = string | Item<any> | any;
+type ItemLike = string | Item | any;
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxGallery<TItem, TKey>>;
@@ -191,13 +191,13 @@ export default class dxGallery<
  * @public
  * @namespace DevExpress.ui.dxGallery
  */
-export type Item<TItem extends Item<any> | any = any> = dxGalleryItem<TItem>;
+export type Item = dxGalleryItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxGalleryItem<TItem extends dxGalleryItem<any> | any = any> extends CollectionWidgetItem<TItem> {
+export interface dxGalleryItem extends CollectionWidgetItem {
     /**
      * @docid
      * @public

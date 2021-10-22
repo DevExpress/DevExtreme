@@ -13010,7 +13010,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    type ItemLike = string | Item<any> | any;
+    type ItemLike = string | Item | any;
     export type ItemRenderedEvent<
       TItem extends ItemLike = any,
       TKey = any
@@ -13035,8 +13035,7 @@ declare module DevExpress.ui {
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxGalleryItem<TItem extends dxGalleryItem<any> | any = any>
-    extends CollectionWidgetItem<TItem> {
+  export interface dxGalleryItem extends CollectionWidgetItem {
     /**
      * [descr:dxGalleryItem.imageAlt]
      */
@@ -13064,9 +13063,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGalleryOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<
-      string | DevExpress.ui.dxGallery.Item | any
-    >;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<TItem, TKey>;
     /**
      * [descr:dxGalleryOptions.focusStateEnabled]
      */
@@ -23625,7 +23622,7 @@ declare module DevExpress.ui.dxForm {
   export type TabbedItem = dxFormTabbedItem;
 }
 declare module DevExpress.ui.dxGallery {
-  export type Item<TItem extends Item<any> | any = any> = dxGalleryItem<TItem>;
+  export type Item = dxGalleryItem;
 }
 declare module DevExpress.ui.dxGantt {
   export type ContextMenuItem = dxGanttContextMenuItem;
