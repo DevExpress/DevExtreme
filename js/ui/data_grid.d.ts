@@ -99,6 +99,24 @@ export interface KeyDownInfo {
   handled: boolean;
 }
 
+type GroupKey = any[];
+
+/** @public */
+export type GroupData<TRowData> = {
+  key: any;
+  items: Array<TRowData> | Array<GroupData<TRowData>> | null;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  collapsedItems?: Array<TRowData> | Array<GroupData<TRowData>>;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  aggregates?: Array<any>;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  summary?: Array<any>;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  isContinuation?: boolean;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  isContinuationOnNextPage?: boolean;
+};
+
 export interface RowKeyInfo<TKey = any> {
   readonly key: TKey;
 }
@@ -3134,7 +3152,7 @@ export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
 
 /** @public */
 export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
-  readonly data?: TRowData;
+  readonly data?: GroupData<TRowData>;
   readonly component: dxDataGrid<TRowData, TKey>;
   readonly value?: any;
   readonly text: string;
@@ -3142,7 +3160,7 @@ export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column<TRowData, TKey>;
-  readonly row: Row<TRowData, TKey>;
+  readonly row: Row<GroupData<TRowData>, GroupKey>;
   readonly summaryItems: Array<any>;
   readonly groupContinuesMessage?: string;
   readonly groupContinuedMessage?: string;
@@ -4820,6 +4838,7 @@ export type ExplicitTypes<TRowData, TKey> = {
   SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
   Summary: Summary<TRowData, TKey>;
   ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
+  GroupData: GroupData<TRowData>;
 };
 
 /** @public */
