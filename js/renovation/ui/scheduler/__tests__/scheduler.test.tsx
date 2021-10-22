@@ -122,6 +122,7 @@ describe('Scheduler', () => {
     it('should render work space and pass to it correct props', () => {
       const tree = renderComponent({
         onViewRendered: () => {},
+        workSpaceKey: 'workSpaceKey',
       });
 
       const workSpace = tree.find(WorkSpace);
@@ -135,6 +136,8 @@ describe('Scheduler', () => {
           appointments: expect.anything(),
           allDayAppointments: expect.anything(),
         });
+      expect(workSpace.key())
+        .toBe('workSpaceKey');
     });
 
     it('should render toolbar and pass to it correct props', () => {
