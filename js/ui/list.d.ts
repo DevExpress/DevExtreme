@@ -1,3 +1,4 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -10,12 +11,6 @@ import {
 import {
     DxPromise,
 } from '../core/utils/deferred';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -39,7 +34,7 @@ import {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
-type ItemLike = string | Item<any> | any;
+type ItemLike = string | Item | any;
 
 interface ListItemInfo<TItem extends ItemLike> {
     readonly itemData?: TItem;
@@ -89,7 +84,7 @@ export type ItemDeletingEvent<TItem extends ItemLike = any, TKey = any> = EventI
 export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent<TItem extends Item<any> | any = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends Item | any = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
 export type ItemReorderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
@@ -125,6 +120,7 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
 export interface dxListOptions<
     TItem extends ItemLike = any,
@@ -161,7 +157,7 @@ export interface dxListOptions<
      * @default null
      * @public
      */
-    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @default undefined
@@ -270,6 +266,7 @@ export interface dxListOptions<
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
@@ -712,13 +709,13 @@ export default class dxList<
  * @public
  * @namespace DevExpress.ui.dxList
  */
-export type Item<TItem extends Item<any> | any = any> = dxListItem<TItem>;
+export type Item = dxListItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxListItem<TItem extends dxListItem<any> | any = any> extends CollectionWidgetItem<TItem> {
+export interface dxListItem extends CollectionWidgetItem {
     /**
      * @docid
      * @public

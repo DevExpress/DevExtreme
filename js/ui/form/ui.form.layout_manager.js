@@ -30,11 +30,10 @@ import '../check_box';
 import '../date_box';
 import '../button';
 
-import { getLabelWidthByInnerHTML } from './components/label';
 import { renderFieldItem } from './components/field_item.js';
 import { renderButtonItem } from './components/button_item.js';
 import { renderEmptyItem } from './components/empty_item.js';
-import { convertToLabelMarkOptions, convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils.js';
+import { convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils.js';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -581,12 +580,6 @@ const LayoutManager = Widget.inherit({
             widgetInstance,
             guid: item.guid,
             $itemContainer: $rootElement
-        });
-    },
-
-    _getLabelWidthByInnerHTML: function({ innerHTML, location }) {
-        return getLabelWidthByInnerHTML({
-            innerHTML, location, markOptions: convertToLabelMarkOptions(this._getMarkOptions())
         });
     },
 

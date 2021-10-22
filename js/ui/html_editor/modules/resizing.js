@@ -160,13 +160,13 @@ export default class ResizingModule extends BaseModule {
 
     _deleteImage() {
         if(this._isAllowedTarget(this._$target)) {
-            Quill.find(this._$target).deleteAt(0);
+            Quill.find(this._$target)?.deleteAt(0);
         }
     }
 
     option(option, value) {
         if(option === 'mediaResizing') {
-            Object.keys(value).forEach((optionName) => this.option(optionName, value[optionName]));
+            this.handleOptionChangeValue(value);
             return;
         }
 

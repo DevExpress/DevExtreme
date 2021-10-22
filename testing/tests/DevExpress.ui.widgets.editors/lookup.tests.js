@@ -1376,6 +1376,24 @@ QUnit.module('Lookup', {
     });
 });
 
+QUnit.module('label integration', () => {
+    QUnit.test('lookup should pass containerWidth equal to field width', function(assert) {
+        const constructorMock = sinon.stub();
+        Lookup.mockTextEditorLabel(constructorMock);
+
+        try {
+            $('#lookup').dxLookup({
+                label: 'some'
+            });
+
+            const fieldWidth = getWidth($(`.${LOOKUP_FIELD_CLASS}`));
+            assert.strictEqual(constructorMock.getCall(0).args[0].containerWidth, fieldWidth);
+        } finally {
+            Lookup.restoreTextEditorLabel();
+        }
+    });
+});
+
 QUnit.module('hidden input', () => {
     QUnit.test('the hidden input should get correct value on widget value change', function(assert) {
         const $element = $('#lookup').dxLookup({

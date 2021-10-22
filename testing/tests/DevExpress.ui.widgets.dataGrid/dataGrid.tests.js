@@ -1339,7 +1339,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
         this.clock.tick();
 
         assert.equal(buttonTemplateCallCount, 1, 'template is rendered asynchronously');
-        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test', 'template is applied');
+        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test\u00A0', 'template is applied');
     });
 
     QUnit.test('showEditorAlways column should render synchronously if renderAsync is true and column renderAsync is false', function(assert) {
@@ -4355,6 +4355,28 @@ QUnit.module('templates', baseModuleConfig, () => {
             'rowTemplate',
             '21.2',
             'Use the "dataRowTemplate" option instead'
+        ], 'error.log args');
+
+        log.restore();
+    });
+
+    QUnit.test('deprecate warnings should be fired for onToolbarPreparing', function(assert) {
+        const log = sinon.spy(errors, 'log');
+
+        createDataGrid({
+            onToolbarPreparing: function() {},
+            dataSource: [{ id: 1 }],
+        });
+
+        this.clock.tick();
+
+        assert.strictEqual(log.callCount, 1, 'error.log is called once');
+        assert.deepEqual(log.getCall(0).args, [
+            'W0001',
+            'dxDataGrid',
+            'onToolbarPreparing',
+            '21.2',
+            'Use the "toolbar" option instead'
         ], 'error.log args');
 
         log.restore();

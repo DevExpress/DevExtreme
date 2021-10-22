@@ -5,25 +5,23 @@ import { Query } from './query';
 
 /** @public */
 export type Options<
-    TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> = ArrayStoreOptions<TValue, TKeyExpr, TKey>;
+    TItem = any,
+    TKey = any,
+> = ArrayStoreOptions<TItem, TKey>;
 
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
  */
 export interface ArrayStoreOptions<
-    TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends StoreOptions<TValue, TKeyExpr, TKey> {
+    TItem = any,
+    TKey = any,
+> extends StoreOptions<TItem, TKey> {
     /**
      * @docid
      * @public
      */
-    data?: Array<TValue>;
+    data?: Array<TItem>;
 }
 /**
  * @docid
@@ -31,11 +29,10 @@ export interface ArrayStoreOptions<
  * @public
  */
 export default class ArrayStore<
-    TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends Store<TValue, TKeyExpr, TKey> {
-    constructor(options?: Options<TValue, TKeyExpr, TKey>)
+    TItem = any,
+    TKey = any,
+> extends Store<TItem, TKey> {
+    constructor(options?: Options<TItem, TKey>)
     /**
      * @docid
      * @publicName clear()

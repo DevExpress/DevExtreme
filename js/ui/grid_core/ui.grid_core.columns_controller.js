@@ -1808,10 +1808,16 @@ export const columnsControllerModule = {
 
                     each(['calculateSortValue', 'calculateGroupValue', 'calculateDisplayValue'], function(_, calculateCallbackName) {
                         const calculateCallback = column[calculateCallbackName];
-                        if(isFunction(calculateCallback) && !calculateCallback.originalCallback) {
-                            column[calculateCallbackName] = function(data) { return calculateCallback.call(column, data); };
-                            column[calculateCallbackName].originalCallback = calculateCallback;
-                            column[calculateCallbackName].columnIndex = columnIndex;
+                        if(isFunction(calculateCallback)) {
+                            if(!calculateCallback.originalCallback) {
+                                const context = { column };
+                                column[calculateCallbackName] = function(data) { return calculateCallback.call(context.column, data); };
+                                column[calculateCallbackName].originalCallback = calculateCallback;
+                                column[calculateCallbackName].columnIndex = columnIndex;
+                                column[calculateCallbackName].context = context;
+                            } else {
+                                column[calculateCallbackName].context.column = column;
+                            }
                         }
                     });
 

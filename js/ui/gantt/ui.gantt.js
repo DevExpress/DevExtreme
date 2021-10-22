@@ -516,7 +516,14 @@ class Gantt extends Widget {
         const coreTaskData = this._mappingHelper.convertMappedToCoreData(GANTT_TASKS, data);
         const isCustomFieldsUpdateOnly = !Object.keys(coreTaskData).length;
         this._customFieldsManager.saveCustomFieldsDataToCache(key, data, true, isCustomFieldsUpdateOnly);
-        this._ganttView._ganttViewCore.updateTask(key, coreTaskData);
+        if(isCustomFieldsUpdateOnly) {
+            const customFieldsData = this._customFieldsManager._getCustomFieldsData(data);
+            if(Object.keys(customFieldsData).length > 0) {
+                this._actionsManager.raiseUpdatingAction(GANTT_TASKS, { cancel: false, key: key, newValues: { } });
+            }
+        } else {
+            this._ganttView._ganttViewCore.updateTask(key, coreTaskData);
+        }
     }
     getDependencyData(key) {
         if(!isDefined(key)) {
