@@ -104,6 +104,16 @@ function getFormatHandlers(module) {
     };
 }
 
+function resetFormDialogOptions(editorInstance, savedOptions) {
+    editorInstance.formDialogOption({
+        contentTemplate: savedOptions.contentTemplate,
+        title: savedOptions.title,
+        minHeight: savedOptions.minHeight || 0,
+        minWidth: savedOptions.minWidth || 0,
+        maxWidth: savedOptions.maxWidth || 'none',
+    });
+}
+
 function prepareShowFormProperties(module, type) {
     return ($element) => {
         if(!$element?.length) {
@@ -148,22 +158,15 @@ function prepareShowFormProperties(module, type) {
             module.saveValueChangeEvent(event);
             tablePropertiesFormConfig.applyHandler(formInstance);
             formInstance.dispose();
+        }).then(() => {
+            resetFormDialogOptions(module.editorInstance, savedDialogOptions);
         });
 
         promise.fail(() => {
             module.quill.focus();
             formInstance.dispose();
-        });
-
-        promise.always(() => {
-            module.editorInstance.formDialogOption({
-                contentTemplate: savedDialogOptions.contentTemplate,
-                title: savedDialogOptions.title,
-                minHeight: savedDialogOptions.minHeight || 0,
-                minWidth: savedDialogOptions.minWidth || 0,
-                maxWidth: savedDialogOptions.maxWidth || 'none',
-                onHidden: null
-            });
+        }).then(() => {
+            resetFormDialogOptions(module.editorInstance, savedDialogOptions);
         });
     };
 }
