@@ -126,17 +126,6 @@ function prepareShowFormProperties(module, type) {
 
         let formInstance;
 
-        const resetDialogOptions = () => {
-            module.editorInstance.formDialogOption({
-                contentTemplate: savedDialogOptions.contentTemplate,
-                title: savedDialogOptions.title,
-                minHeight: savedDialogOptions.minHeight || 0,
-                minWidth: savedDialogOptions.minWidth || 0,
-                maxWidth: savedDialogOptions.maxWidth || 'none',
-                onHidden: null
-            });
-        };
-
         module.editorInstance.formDialogOption({
             'contentTemplate': (container) => {
                 const $content = $('<div>').appendTo(container);
@@ -159,13 +148,22 @@ function prepareShowFormProperties(module, type) {
             module.saveValueChangeEvent(event);
             tablePropertiesFormConfig.applyHandler(formInstance);
             formInstance.dispose();
-            resetDialogOptions();
         });
 
         promise.fail(() => {
             module.quill.focus();
             formInstance.dispose();
-            resetDialogOptions();
+        });
+
+        promise.always(() => {
+            module.editorInstance.formDialogOption({
+                contentTemplate: savedDialogOptions.contentTemplate,
+                title: savedDialogOptions.title,
+                minHeight: savedDialogOptions.minHeight || 0,
+                minWidth: savedDialogOptions.minWidth || 0,
+                maxWidth: savedDialogOptions.maxWidth || 'none',
+                onHidden: null
+            });
         });
     };
 }
