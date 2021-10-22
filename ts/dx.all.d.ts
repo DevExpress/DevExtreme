@@ -4981,6 +4981,16 @@ declare module DevExpress.types {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
+  export type GridNewRowPosition =
+    | 'first'
+    | 'last'
+    | 'pageBottom'
+    | 'pageTop'
+    | 'viewportBottom'
+    | 'viewportTop';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
   export type GridPagerDisplayMode = 'adaptive' | 'compact' | 'full';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7951,13 +7961,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.editing.newRowPosition]
        */
-      newRowPosition?:
-        | 'first'
-        | 'last'
-        | 'pageBottom'
-        | 'pageTop'
-        | 'viewportBottom'
-        | 'viewportTop';
+      newRowPosition?: DevExpress.types.GridNewRowPosition;
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
