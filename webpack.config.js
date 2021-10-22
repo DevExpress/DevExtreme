@@ -37,7 +37,12 @@ module.exports = {
     },
     resolve: {
         alias: {
-            '@devextreme/runtime/inferno': path.resolve('./node_modules/@devextreme/runtime/cjs/inferno/index.js')
+            '@devextreme/vdom': path.resolve('./node_modules/@devextreme/vdom/dist/cjs/index.js'),
+            '@devextreme/runtime/inferno': path.resolve('./node_modules/@devextreme/runtime/cjs/inferno/index.js'),
+            '@devextreme/runtime/declarations': path.resolve('./node_modules/@devextreme/runtime/cjs/declarations/index.js'),
+            '@devextreme/runtime/angular': path.resolve('./node_modules/@devextreme/runtime/cjs/angular/index.js'),
+            '@devextreme/runtime/vue': path.resolve('./node_modules/@devextreme/runtime/cjs/vue/index.js'),
+            '@devextreme/runtime/react': path.resolve('./node_modules/@devextreme/runtime/cjs/react/index.js')
         }
     },
 };

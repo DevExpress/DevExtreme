@@ -7272,3 +7272,22 @@ QUnit.module('valueChanged should receive correct event parameter', {
         });
     });
 });
+
+QUnit.module('label integration', () => {
+    QUnit.test('tagBox should pass containerWidth equal to tag container width', function(assert) {
+        const constructorMock = sinon.stub();
+        TagBox.mockTextEditorLabel(constructorMock);
+
+        try {
+            const $tagBox = $('#tagBox').dxTagBox({
+                label: 'some'
+            });
+
+            const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+            const tagContainerWidth = getWidth($tagContainer);
+            assert.strictEqual(constructorMock.getCall(0).args[0].containerWidth, tagContainerWidth);
+        } finally {
+            TagBox.restoreTextEditorLabel();
+        }
+    });
+});

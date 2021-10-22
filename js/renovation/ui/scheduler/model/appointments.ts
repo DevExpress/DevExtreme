@@ -61,6 +61,7 @@ export const getAppointmentsConfig = (
   viewConfig: CurrentViewConfigType,
   loadedResources: Group[],
   viewDataProvider: ViewDataProviderType,
+  isAllDayPanelSupported: boolean,
 ): AppointmentsConfigType => {
   const groupCount = getGroupCount(loadedResources);
 
@@ -86,12 +87,12 @@ export const getAppointmentsConfig = (
     intervalCount: viewConfig.intervalCount,
     hoursInterval: viewConfig.hoursInterval,
     showAllDayPanel: viewConfig.showAllDayPanel,
-    groupOrientation: viewConfig.groupOrientation,
+    supportAllDayRow: isAllDayPanelSupported, // ?
+    groupOrientation: viewDataProvider.getViewOptions().groupOrientation,
     firstDayOfWeek: viewConfig.firstDayOfWeek,
     viewType: viewConfig.type,
     cellDurationInMinutes: viewConfig.cellDuration,
-    supportAllDayRow: viewConfig.showAllDayPanel, // ?
-    isVerticalGroupOrientation: viewConfig.groupOrientation === 'vertical',
+    isVerticalGroupOrientation: viewDataProvider.getViewOptions().isVerticalGrouping,
     groupByDate: viewConfig.groupByDate,
     startViewDate,
     loadedResources,
@@ -118,11 +119,13 @@ export const getAppointmentsModel = (
     appointmentsConfig.groupByDate,
   );
 
+  const { groupCount, isVerticalGroupOrientation } = appointmentsConfig;
   const positionHelper = new PositionHelper({
     viewDataProvider,
     groupedByDate,
     rtlEnabled: appointmentsConfig.rtlEnabled,
-    groupCount: appointmentsConfig.groupCount,
+    groupCount,
+    isVerticalGrouping: groupCount && isVerticalGroupOrientation,
     getDOMMetaDataCallback: (): CellsMetaData => cellsMetaData,
   });
 
@@ -154,8 +157,6 @@ export const getAppointmentsModel = (
     appointmentsConfig.hoursInterval,
   );
 
-  const intervalDuration = viewDataProvider.getIntervalDuration(appointmentsConfig.intervalCount);
-  const allDayIntervalDuration = toMs('day') * 3600000;
   const { leftVirtualCellCount, topVirtualRowCount } = viewDataProvider.viewData;
   const cellDuration = getCellDuration(
     appointmentsConfig.viewType,
@@ -166,8 +167,9 @@ export const getAppointmentsModel = (
 
   const getAppointmentColor = createGetAppointmentColor({
     resources: appointmentsConfig.resources,
-    resourceDataAccessors: dataAccessors,
-    loadedResources: [], // TODO fill after load resources
+    // TODO dataAccessors -> resourceDataAccessors
+    dataAccessors: dataAccessors.resources as DataAccessorType,
+    loadedResources: appointmentsConfig.loadedResources,
     resourceLoaderMap: new Map(), // TODO fill after load resources
   });
 
@@ -178,7 +180,7 @@ export const getAppointmentsModel = (
   return {
     ...appointmentsConfig,
     appointmentRenderingStrategyName,
-    loadedResources: [],
+    loadedResources: appointmentsConfig.loadedResources,
     dataAccessors,
     timeZoneCalculator,
     viewDataProvider,
@@ -191,8 +193,8 @@ export const getAppointmentsModel = (
     isGroupedByDate: groupedByDate,
     endViewDate,
     visibleDayDuration,
-    intervalDuration,
-    allDayIntervalDuration,
+    intervalDuration: cellDuration,
+    allDayIntervalDuration: toMs('day'),
     leftVirtualCellCount,
     topVirtualCellCount: topVirtualRowCount,
     cellDuration,

@@ -109,7 +109,7 @@ _Range.prototype = {
     correctValueZeroLevel: function() {
         const that = this;
 
-        if(that[axisTypeSelector] === 'logarithmic' || _isDate(that[maxSelector]) || _isDate(that[minSelector])) {
+        if(_isDate(that[maxSelector]) || _isDate(that[minSelector])) {
             return that;
         }
 

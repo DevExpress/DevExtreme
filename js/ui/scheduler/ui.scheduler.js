@@ -1899,11 +1899,10 @@ class Scheduler extends Widget {
         const targetedAdapter = adapter.clone();
 
         if(this._isAgenda() && adapter.isRecurrent) {
-            const getStartDate = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
-            const newStartDate = getStartDate($(element), adapter.startDate).startDate;
+            const agendaSettings = settings.agendaSettings;
 
-            targetedAdapter.startDate = newStartDate;
-            targetedAdapter.endDate = new Date(newStartDate.getTime() + adapter.duration);
+            targetedAdapter.startDate = agendaSettings.startDate;
+            targetedAdapter.endDate = agendaSettings.endDate;
 
         } else if(settings) {
             targetedAdapter.startDate = info ? info.sourceAppointment.startDate : adapter.startDate; // TODO: in agenda we havn't info field
@@ -1913,6 +1912,11 @@ class Scheduler extends Widget {
         const rawTargetedAppointment = targetedAdapter.source();
         if(element) {
             this.setTargetedAppointmentResources(rawTargetedAppointment, element, appointmentIndex);
+        }
+
+        if(info) {
+            rawTargetedAppointment.displayStartDate = new Date(info.appointment.startDate);
+            rawTargetedAppointment.displayEndDate = new Date(info.appointment.endDate);
         }
 
         return rawTargetedAppointment;
@@ -2163,12 +2167,19 @@ class Scheduler extends Widget {
     }
 
     showAppointmentPopup(rawAppointment, createNewAppointment, rawTargetedAppointment) {
+        const newRawTargetedAppointment = { ...rawTargetedAppointment };
+        if(newRawTargetedAppointment) {
+            delete newRawTargetedAppointment.displayStartDate;
+            delete newRawTargetedAppointment.displayEndDate;
+        }
+
         const appointment = createAppointmentAdapter(
-            (rawTargetedAppointment || rawAppointment),
+            (newRawTargetedAppointment || rawAppointment),
             this._dataAccessors,
             getTimeZoneCalculator(this.key)
         );
-        const newTargetedAppointment = extend({}, rawAppointment, rawTargetedAppointment);
+
+        const newTargetedAppointment = extend({}, rawAppointment, newRawTargetedAppointment);
 
         const isCreateAppointment = createNewAppointment ?? isEmptyObject(rawAppointment);
 

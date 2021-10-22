@@ -2,11 +2,12 @@
 import React, { createRef } from 'react';
 import { mount, shallow } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
+import { renderTemplate } from '../../../../../node_modules/@devextreme/runtime/cjs/declarations/index';
 import { DomComponentWrapper, DomComponentWrapperProps, viewFunction as DomComponentWrapperView } from '../dom_component_wrapper';
-import { renderTemplate } from '../../../utils/render_template';
 import { getUpdatedOptions } from '../utils/get_updated_options';
 
-jest.mock('../../../utils/render_template', () => ({ renderTemplate: jest.fn() }));
+jest.mock('../../../../../node_modules/@devextreme/runtime/esm/declarations/index', () => ({ hasTemplate: jest.fn(() => true), renderTemplate: jest.fn() }));
+jest.mock('../../../../../node_modules/@devextreme/runtime/cjs/declarations/index', () => ({ hasTemplate: jest.fn(() => true), renderTemplate: jest.fn() }));
 
 jest.mock('../utils/get_updated_options', () => {
   const defaultImplementation = jest.requireActual('../utils/get_updated_options');
@@ -53,8 +54,9 @@ describe('DomComponentWrapper', () => {
     describe('properties', () => {
       it('itemTemplate', () => {
         const component = new DomComponentWrapper({
+          templateNames: ['itemTemplate'],
           componentProps: {
-            itemTemplate: 'some template',
+            itemTemplate: () => 'some Template',
             tabIndex: 2,
             disabled: true,
           },
@@ -69,8 +71,24 @@ describe('DomComponentWrapper', () => {
         expect(properties.disabled).toStrictEqual(true);
       });
 
+      it('haven`t template', () => {
+        jest.resetAllMocks();
+        const component = new DomComponentWrapper({
+          templateNames: ['itemTemplate'],
+          componentProps: {
+            itemTemplate: () => 'some Template',
+          },
+        } as Partial<DomComponentWrapperProps> as any);
+
+        const { properties } = component;
+        expect(renderTemplate).not.toBeCalled();
+        (properties as any).itemTemplate();
+        expect(renderTemplate).not.toBeCalled();
+      });
+
       it('picks props except valueChange', () => {
         const component = new DomComponentWrapper({
+          templateNames: [],
           componentProps: {
             valueChange: () => { },
             tabIndex: 2,
@@ -88,6 +106,7 @@ describe('DomComponentWrapper', () => {
       describe('rtlEnabled', () => {
         it('get from props', () => {
           const component = new DomComponentWrapper({
+            templateNames: [],
             componentProps: { rtlEnabled: true },
           } as Partial<DomComponentWrapperProps> as any);
           component.config = { rtlEnabled: false };
@@ -96,24 +115,27 @@ describe('DomComponentWrapper', () => {
 
         it('get from context', () => {
           const component = new DomComponentWrapper({
+            templateNames: [],
             componentProps: {},
-          } as DomComponentWrapperProps);
+          } as Partial<DomComponentWrapperProps> as any);
           component.config = { rtlEnabled: true };
           expect(component.properties.rtlEnabled).toBe(true);
         });
 
         it('should be undefined', () => {
           const component = new DomComponentWrapper({
+            templateNames: [],
             componentProps: {},
-          } as DomComponentWrapperProps);
+          } as Partial<DomComponentWrapperProps> as any);
           expect(component.properties.rtlEnabled).toBe(false);
         });
       });
 
       it('default onValueChange', () => {
         const component = new DomComponentWrapper({
+          templateNames: [],
           componentProps: {},
-        } as DomComponentWrapperProps);
+        } as Partial<DomComponentWrapperProps> as any);
 
         const { onValueChanged } = component.properties;
 
@@ -123,6 +145,7 @@ describe('DomComponentWrapper', () => {
       it('onValueChange wraps valueChange prop', () => {
         const fn = jest.fn();
         const component = new DomComponentWrapper({
+          templateNames: [],
           componentProps: { valueChange: fn },
         } as Partial<DomComponentWrapperProps> as any);
         const { onValueChanged } = component.properties;
@@ -143,6 +166,7 @@ describe('DomComponentWrapper', () => {
         const component = new DomComponentWrapper({
           componentProps: {},
           componentType: DomComponentMock as any,
+          templateNames: [],
         } as DomComponentWrapperProps);
         return component;
       };

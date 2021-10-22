@@ -1,3 +1,4 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
 } from '../core/element';
@@ -5,12 +6,6 @@ import {
 import {
     DxPromise,
 } from '../core/utils/deferred';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     Cancelable,
@@ -76,7 +71,7 @@ export interface dxActionSheetOptions<
      * @default null
      * @public
      */
-    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @type Array<string | dxActionSheetItem | any>
@@ -87,6 +82,7 @@ export interface dxActionSheetOptions<
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:dxActionSheet
@@ -196,6 +192,7 @@ export interface dxActionSheetItem<
      * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
+     * @type function
      * @public
      */
     onClick?: ((e: NativeEventInfo<dxActionSheet<TItem, TKey>>) => void) | string;

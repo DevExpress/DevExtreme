@@ -1,3 +1,4 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -6,12 +7,6 @@ import {
 import {
     template,
 } from '../core/templates/template';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -26,8 +21,8 @@ import Editor, {
 } from './editor/editor';
 
 import {
-    Item as dxContextMenuItem,
-} from './context_menu';
+  MenuBasePlainItem,
+} from './menu';
 
 import {
     Item as dxToolbarItem,
@@ -371,25 +366,25 @@ export interface dxHtmlEditorMediaResizing {
  * @type object
  * @namespace DevExpress.ui
  */
- export interface dxHtmlEditorTableResizing {
-  /**
-   * @docid
-   * @default 40
-   * @public
-   */
-   minColumnWidth?: number;
-  /**
-   * @docid
-   * @default 24
-   * @public
-   */
-  minRowHeight?: number;
-  /**
-   * @docid
-   * @default false
-   * @public
-   */
-  enabled?: boolean;
+export interface dxHtmlEditorTableResizing {
+ /**
+  * @docid
+  * @default 40
+  * @public
+  */
+  minColumnWidth?: number;
+ /**
+  * @docid
+  * @default 24
+  * @public
+  */
+ minRowHeight?: number;
+ /**
+  * @docid
+  * @default false
+  * @public
+  */
+ enabled?: boolean;
 }
 
 /**
@@ -422,19 +417,20 @@ export type ContextMenuItem = dxHtmlEditorTableContextMenuItem;
  * @deprecated Use ContextMenuItem instead
  * @namespace DevExpress.ui
  */
-export interface dxHtmlEditorTableContextMenuItem extends dxContextMenuItem {
+export interface dxHtmlEditorTableContextMenuItem extends MenuBasePlainItem {
     /**
      * @docid
      * @default undefined
+     * @type Enums.HtmlEditorContextMenuItem
      * @public
      */
-    name?: string;
+    name?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable';
     /**
      * @docid
      * @public
-     * @type Array<dxHtmlEditorTableContextMenuItem>
+     * @type Array<dxHtmlEditorTableContextMenuItem,Enums.HtmlEditorContextMenuItem>
      */
-    items?: Array<ContextMenuItem>;
+    items?: Array<ContextMenuItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
 }
 
 /**
@@ -447,8 +443,9 @@ export interface dxHtmlEditorMention {
      * @docid
      * @default null
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: Array<string> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string>;
     /**
      * @docid
      * @default "this"
@@ -585,8 +582,9 @@ export interface dxHtmlEditorVariables {
      * @docid
      * @default null
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<string>
      */
-    dataSource?: string | Array<string> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string>;
     /**
      * @docid
      * @default ""

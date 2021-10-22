@@ -17,6 +17,7 @@ export const viewFunction = ({
   <DomComponentWrapper
     componentType={LegacyCalendar}
     componentProps={props}
+    templateNames={['cellTemplate']}
     ref={domComponentWrapperRef}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}

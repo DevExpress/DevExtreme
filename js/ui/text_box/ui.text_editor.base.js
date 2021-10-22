@@ -1,4 +1,3 @@
-import { getWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
@@ -18,16 +17,15 @@ import config from '../../core/config';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
+import { TextEditorLabel } from './ui.text_editor.label';
+import { getWidth } from '../../core/utils/size';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
-const TEXTEDITOR_WITH_LABEL_CLASS = 'dx-texteditor-with-label';
-const TEXTEDITOR_WITH_FLOATING_LABEL_CLASS = 'dx-texteditor-with-floating-label';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXTEDITOR_INPUT_SELECTOR = '.' + TEXTEDITOR_INPUT_CLASS;
 const TEXTEDITOR_CONTAINER_CLASS = 'dx-texteditor-container';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
-const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXTEDITOR_PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 
@@ -57,6 +55,8 @@ const CONTROL_KEYS = [
     'rightArrow',
     'downArrow',
 ];
+
+let TextEditorLabelCreator = TextEditorLabel;
 
 function checkButtonsOptionType(buttons) {
     if(isDefined(buttons) && !Array.isArray(buttons)) {
@@ -442,44 +442,39 @@ const TextEditorBase = Editor.inherit({
         this._input().prop('spellcheck', this.option('spellcheck'));
     },
 
+    _getLabelContainer: function() {
+        return this._input();
+    },
+
+    _getLabelContainerWidth: function() {
+        return getWidth(this._getLabelContainer());
+    },
+
+    _getLabelBeforeWidth: function() {
+        const buttonsBeforeWidth = this._$beforeButtonsContainer && getWidth(this._$beforeButtonsContainer);
+
+        return buttonsBeforeWidth ?? 0;
+    },
+
+    _updateLabelWidth: function() {
+        this._label.updateBeforeWidth(this._getLabelBeforeWidth());
+        this._label.updateMaxWidth(this._getLabelContainerWidth());
+    },
+
     _renderLabel: function() {
-        const TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS = 'dx-texteditor-with-before-buttons';
-        const labelElement = this.$element().find('.' + TEXTEDITOR_LABEL_CLASS);
+        const { label, labelMode, labelMark } = this.option();
 
-        if(!this.label && labelElement.length === 1 || labelElement.length === 2) {
-            labelElement.first().remove();
-        }
+        const labelConfig = {
+            $editor: this.$element(),
+            text: label,
+            mark: labelMark,
+            mode: labelMode,
+            containsButtonsBefore: !!this._$beforeButtonsContainer,
+            containerWidth: this._getLabelContainerWidth(),
+            beforeWidth: this._getLabelBeforeWidth()
+        };
 
-        if(this._$label) {
-            this._$label.remove();
-            this._$label = null;
-        }
-
-        this.$element()
-            .removeClass(TEXTEDITOR_WITH_LABEL_CLASS)
-            .removeClass(TEXTEDITOR_WITH_FLOATING_LABEL_CLASS)
-            .removeClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
-
-        if(!this.option('label') || this.option('labelMode') === 'hidden') return;
-
-        this.$element().addClass(this.option('labelMode') === 'floating' ? TEXTEDITOR_WITH_FLOATING_LABEL_CLASS : TEXTEDITOR_WITH_LABEL_CLASS);
-
-        const labelText = this.option('label');
-        const labelMark = this.option('labelMark');
-        const $label = this._$label = $('<div>')
-            .addClass(TEXTEDITOR_LABEL_CLASS)
-            .html(`<div class="dx-label-before"></div><div class="dx-label"><span data-mark="${labelMark}">${labelText}</span></div><div class="dx-label-after"></div>`);
-
-        $label.appendTo(this.$element());
-
-        if(this._$beforeButtonsContainer) {
-            this.$element().addClass(TEXTEDITOR_WITH_BEFORE_BUTTONS_CLASS);
-            this._$label.find('.dx-label-before').css('width', getWidth(this._$beforeButtonsContainer));
-        }
-
-        const labelWidth = this._$field ? getWidth(this._$field) : (this._$tagsContainer ? getWidth(this._$tagsContainer) : getWidth(this._input()));
-
-        this._$label.find('.dx-label').css('maxWidth', labelWidth);
+        this._label = new TextEditorLabelCreator(labelConfig);
     },
 
     _renderPlaceholder: function() {
@@ -749,13 +744,17 @@ const TextEditorBase = Editor.inherit({
                 this._renderPlaceholder();
                 break;
             case 'label':
-            case 'labelMode':
+                this._label.updateText(value);
+                break;
             case 'labelMark':
-                this._renderLabel();
+                this._label.updateMark(value);
+                break;
+            case 'labelMode':
+                this._label.updateMode(value);
                 break;
             case 'width':
                 this.callBase(args);
-                this._renderLabel();
+                this._label.updateMaxWidth(this._getLabelContainerWidth());
                 break;
             case 'readOnly':
             case 'disabled':
@@ -776,7 +775,7 @@ const TextEditorBase = Editor.inherit({
                 break;
             case 'stylingMode':
                 this._renderStylingMode();
-                this._renderLabel();
+                this._updateLabelWidth();
                 break;
             case 'buttons':
                 if(fullName === name) {
@@ -785,6 +784,8 @@ const TextEditorBase = Editor.inherit({
                 this._cleanButtonContainers();
                 this._renderButtonContainers();
                 this._updateButtonsStyling(this.option('stylingMode'));
+                this._updateLabelWidth();
+                this._label.updateContainsButtonsBefore(value.length !== 0);
                 break;
             case 'visible':
                 this.callBase(args);
@@ -856,5 +857,15 @@ const TextEditorBase = Editor.inherit({
         return result;
     }
 });
+
+
+///#DEBUG
+TextEditorBase.mockTextEditorLabel = (mock) => {
+    TextEditorLabelCreator = mock;
+};
+TextEditorBase.restoreTextEditorLabel = (mock) => {
+    TextEditorLabelCreator = TextEditorLabel;
+};
+///#ENDDEBUG
 
 export default TextEditorBase;

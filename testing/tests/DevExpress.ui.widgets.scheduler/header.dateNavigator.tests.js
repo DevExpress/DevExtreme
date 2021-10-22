@@ -215,7 +215,7 @@ module('Option Changing', () => {
                 type: 'agenda',
                 agendaDuration: 5,
             }],
-            currentView: 'agemda',
+            currentView: 'agenda',
             currentDate: new Date(2021, 4, 7),
         });
         assert.equal(scheduler.header.navigator.getText(), '7-11 May 2021', 'Caption is correct');
