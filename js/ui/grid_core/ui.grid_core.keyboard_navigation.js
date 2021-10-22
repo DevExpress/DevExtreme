@@ -41,7 +41,8 @@ const REVERT_BUTTON_CLASS = 'dx-revert-button';
 
 const FAST_EDITING_DELETE_KEY = 'delete';
 
-const INTERACTIVE_ELEMENTS_SELECTOR = 'input:not([type=\'hidden\']), textarea, a, select, button, [tabindex], .dx-dropdowneditor-icon, .dx-checkbox';
+const INTERACTIVE_ELEMENTS_SELECTOR = 'input:not([type=\'hidden\']), textarea, a, select, button, [tabindex], .dx-checkbox';
+const NON_FOCUSABLE_ELEMENTS_SELECTOR = `${INTERACTIVE_ELEMENTS_SELECTOR}, .dx-dropdowneditor-icon`;
 
 const EDIT_MODE_ROW = 'row';
 const EDIT_MODE_FORM = 'form';
@@ -945,11 +946,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 this._isNeedFocus = false;
                 this._isHiddenFocus = false;
             } else {
-                const $target = event && $(event.target).closest(INTERACTIVE_ELEMENTS_SELECTOR + ', td');
-                const isInteractiveTarget = $target && $target.not($cell).is(INTERACTIVE_ELEMENTS_SELECTOR);
+                const $target = event && $(event.target).closest(NON_FOCUSABLE_ELEMENTS_SELECTOR + ', td');
+                const skipFocusEvent = $target && $target.not($cell).is(NON_FOCUSABLE_ELEMENTS_SELECTOR);
                 const isEditor = !!column && !column.command && $cell.hasClass(EDITOR_CELL_CLASS);
-                const isDisabled = !isEditor && (!args.isHighlighted || isInteractiveTarget);
-                this._focus($cell, isDisabled, isInteractiveTarget);
+                const isDisabled = !isEditor && (!args.isHighlighted || skipFocusEvent);
+                this._focus($cell, isDisabled, skipFocusEvent);
             }
         } else {
             this.setRowFocusType();
@@ -1053,7 +1054,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         gridCoreUtils.focusAndSelectElement(this, $focusedElement);
     },
 
-    _focus: function($cell, disableFocus, isInteractiveElement) {
+    _focus: function($cell, disableFocus, skipFocusEvent) {
         const $row = ($cell && !$cell.hasClass(ROW_CLASS)) ? $cell.closest(`.${ROW_CLASS}`) : $cell;
 
         if($row && isNotFocusedRow($row)) {
@@ -1091,7 +1092,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     $focusElement.removeClass(CELL_FOCUS_DISABLED_CLASS);
                 }
             });
-            if(!isInteractiveElement) {
+            if(!skipFocusEvent) {
                 this._applyTabIndexToElement($focusElement);
                 eventsEngine.trigger($focusElement, 'focus');
             }
