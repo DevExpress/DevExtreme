@@ -27,7 +27,7 @@ export default class AppointmentTooltip {
     this.wrapper = Selector(`.${CLASS.tooltipWrapper}.${CLASS.appointmentTooltipWrapper}`);
   }
 
-  getListItem(title: string, index = 0): ListItem {
+  getListItem(title?: string, index = 0): ListItem {
     return new ListItem(this.wrapper, title, index);
   }
 

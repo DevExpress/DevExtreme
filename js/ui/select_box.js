@@ -426,7 +426,8 @@ const SelectBox = DropDownList.inherit({
 
         if(this._wasSearch() && isVisible) {
             this._wasSearch(false);
-            const showDataImmediately = this.option('showDataBeforeSearch') || this.option('minSearchLength') === 0;
+            const showDataImmediately = this.option('showDataBeforeSearch')
+                || this._isMinSearchLengthExceeded();
 
             if(showDataImmediately && this._dataSource) {
                 if(this._searchTimer) return;
@@ -549,6 +550,7 @@ const SelectBox = DropDownList.inherit({
 
         if(shouldCancelSearch) {
             const isPopupVisible = this._popup?._hideAnimationProcessing;
+            this._clearSearchTimer();
             if(isPopupVisible) {
                 this._shouldCancelSearch(true);
             } else {
@@ -739,6 +741,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _clearValueHandler: function(e) {
+        this._preventFiltering = true;
         this.callBase(e);
 
         return false;

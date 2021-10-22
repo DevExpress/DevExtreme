@@ -143,6 +143,31 @@ module('Table resizing module', moduleConfig, () => {
         assert.strictEqual(this.detachSeparatorEventsSpy.callCount, 1, 'Events are detached on module deinitialization');
     });
 
+    test('module should work correct if it has been enabled or disabled some times at runtime', function(assert) {
+        this.options.enabled = true;
+        const resizingInstance = new TableResizing(this.quillMock, this.options);
+
+        this.clock.tick();
+
+        try {
+            resizeCallbacks.fire();
+
+            resizingInstance.option('enabled', true);
+
+            this.clock.tick();
+
+            resizingInstance.option('enabled', false);
+
+            this.clock.tick();
+
+            resizingInstance.option('enabled', true);
+
+            assert.strictEqual(typeof resizingInstance._resizeHandler, 'function', 'resizingInstance._resizeHandler is still a function');
+        } catch(e) {
+            assert.ok(false);
+        }
+    });
+
     test('Window resize callback should be added', function(assert) {
         this.options.enabled = true;
         const resizingInstance = new TableResizing(this.quillMock, this.options);
@@ -151,7 +176,7 @@ module('Table resizing module', moduleConfig, () => {
 
         resizeCallbacks.fire();
 
-        assert.strictEqual(typeof resizingInstance._resizeHandler, 'object', '_resizeHandler is an object');
+        assert.strictEqual(typeof resizingInstance._resizeHandlerWithContext, 'object', '_resizeHandler is an object');
     });
 
     test('Window resize callback should be cleaned after the widget dispose', function(assert) {
@@ -164,7 +189,8 @@ module('Table resizing module', moduleConfig, () => {
 
         resizingInstance.clean();
 
-        assert.strictEqual(resizingInstance._resizeHandler, undefined, '_resizeHandler has been cleared on clean()');
+        assert.strictEqual(resizingInstance._resizeHandlerWithContext, undefined, '_resizeHandler has been cleared on clean()');
+        assert.strictEqual(typeof resizingInstance._resizeHandler, 'function', 'resizingInstance._resizeHandler is still a function');
     });
 
     test('minColumnWidth can be applied', function(assert) {

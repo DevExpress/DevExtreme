@@ -1,8 +1,4 @@
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import { DataSourceLike } from '../data/data_source';
 
 import {
     EventInfo,
@@ -66,7 +62,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string | Item | any>;
     /**
      * @docid
      * @type Enums.BoxDirection

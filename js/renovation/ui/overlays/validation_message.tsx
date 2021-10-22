@@ -12,6 +12,7 @@ export const viewFunction = ({
   <DomComponentWrapper
     componentType={LegacyValidationMessage}
     componentProps={props}
+    templateNames={[]}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
@@ -39,4 +40,4 @@ export class ValidationMessageProps extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class ValidationMessage extends JSXComponent(ValidationMessageProps) { }
+export class ValidationMessage extends JSXComponent(ValidationMessageProps) {}

@@ -3,7 +3,6 @@ import {
 } from '@devextreme-generator/declarations';
 import { AppointmentTemplateProps, AppointmentViewModel } from './types';
 import { Appointment } from './appointment';
-import { getAppointmentKey } from './utils';
 
 export const viewFunction = ({
   props: {
@@ -20,7 +19,7 @@ export const viewFunction = ({
           viewModel={item}
           appointmentTemplate={appointmentTemplate}
           index={index}
-          key={getAppointmentKey(item)}
+          key={item.key}
         />
       ))
     }

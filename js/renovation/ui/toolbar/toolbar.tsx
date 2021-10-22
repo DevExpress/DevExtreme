@@ -14,6 +14,7 @@ export const viewFunction = ({ componentProps, restAttributes }: Toolbar): JSX.E
   <DomComponentWrapper
     componentType={LegacyToolbar}
     componentProps={componentProps}
+    templateNames={[]}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />

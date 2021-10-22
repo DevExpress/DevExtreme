@@ -313,7 +313,9 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const customFormatter = formatOption?.formatter || formatOption;
         const formatter = isFunction(customFormatter) ? customFormatter : number.format;
 
-        return formatter(value, format);
+        const formattedValue = value === null ? '' : formatter(value, format);
+
+        return formattedValue;
     },
 
     _getFormatPattern: function() {

@@ -1,3 +1,5 @@
+import { Skip } from '../core';
+import { DataSourceLike } from '../data/data_source';
 import {
     DxElement,
 } from '../core/element';
@@ -5,12 +7,6 @@ import {
 import {
     DxPromise,
 } from '../core/utils/deferred';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -51,23 +47,13 @@ export type DisposingEvent<TItem extends Item<any> = Item<any>, TKey = any> = Ev
 export type InitializedEvent<TItem extends Item<any> = Item<any>, TKey = any> = InitializedEventInfo<dxTreeView<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>> & {
-    readonly itemData?: TItem;
-    readonly itemElement?: DxElement;
-    readonly itemIndex?: number | any;
-    readonly node?: Node<TItem, TKey>;
-};
+export type ItemClickEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>> & TreeViewItemInfo<TItem, TKey>;
 
 /** @public */
 export type ItemCollapsedEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>> & TreeViewItemInfo<TItem, TKey>;
 
 /** @public */
-export type ItemContextMenuEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>> & {
-    readonly itemData?: TItem;
-    readonly itemElement?: DxElement;
-    readonly itemIndex?: number | any;
-    readonly node?: Node<TItem, TKey>;
-};
+export type ItemContextMenuEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>> & TreeViewItemInfo<TItem, TKey>;
 
 /** @public */
 export type ItemExpandedEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxTreeView<TItem, TKey>> & TreeViewItemInfo<TItem, TKey>;
@@ -100,7 +86,7 @@ export type SelectionChangedEvent<TItem extends Item<any> = Item<any>, TKey = an
 export interface dxTreeViewOptions<
     TItem extends Item<any> = Item<any>,
     TKey = any,
-> extends HierarchicalCollectionWidgetOptions<dxTreeView<TItem, TKey>, TItem, TKey>, SearchBoxMixinOptions {
+> extends Skip<HierarchicalCollectionWidgetOptions<dxTreeView<TItem, TKey>, TItem, TKey>, 'dataSource'>, SearchBoxMixinOptions {
     /**
      * @docid
      * @default true
@@ -120,7 +106,7 @@ export interface dxTreeViewOptions<
      * @default null
      * @public
      */
-    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure
@@ -172,7 +158,7 @@ export interface dxTreeViewOptions<
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number | object
+     * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
@@ -204,7 +190,7 @@ export interface dxTreeViewOptions<
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number | object
+     * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
