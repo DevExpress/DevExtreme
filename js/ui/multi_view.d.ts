@@ -14,7 +14,7 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-export type ItemLike = string | Item<any> | any;
+export type ItemLike = string | Item | any;
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>>;
@@ -121,13 +121,13 @@ export default class dxMultiView<
  * @public
  * @namespace DevExpress.ui.dxMultiView
  */
-export type Item<TItem extends Item<any> | any = any> = dxMultiViewItem<TItem>;
+export type Item = dxMultiViewItem;
 
  /**
   * @deprecated Use Item instead
   * @namespace DevExpress.ui
   */
-export interface dxMultiViewItem<TItem extends dxMultiViewItem<any> | any = any> extends CollectionWidgetItem<TItem> {}
+export interface dxMultiViewItem extends CollectionWidgetItem {}
 
 /** @public */
 export type ExplicitTypes<

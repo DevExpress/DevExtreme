@@ -25,7 +25,7 @@ import dxMultiView, {
     dxMultiViewOptions,
 } from './multi_view';
 
-type ItemLike = string | Item<any> | any;
+type ItemLike = string | Item | any;
 
 interface TabPanelItemInfo<TItem extends ItemLike> {
     readonly itemData?: TItem;
@@ -200,13 +200,13 @@ export default class dxTabPanel<
  * @public
  * @namespace DevExpress.ui.dxTabPanel
  */
-export type Item<TItem extends Item<any> | any = any> = dxTabPanelItem<TItem>;
+export type Item = dxTabPanelItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxTabPanelItem<TItem extends dxTabPanelItem<any> | any = any> extends dxMultiViewItem<TItem> {
+export interface dxTabPanelItem extends dxMultiViewItem {
     /**
      * @docid
      * @public
