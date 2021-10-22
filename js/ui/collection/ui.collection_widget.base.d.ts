@@ -19,7 +19,7 @@ import Widget, {
     WidgetOptions,
 } from '../widget/ui.widget';
 
-type ItemLike = string | CollectionWidgetItem<any> | any;
+type ItemLike = string | CollectionWidgetItem | any;
 
 export interface SelectionChangedInfo<TItem extends ItemLike = any> {
     readonly addedItems: Array<TItem>;
@@ -193,7 +193,7 @@ export default class CollectionWidget<
  * @type object
  * @namespace DevExpress.ui
  */
-export interface CollectionWidgetItem<TItem extends CollectionWidgetItem<any> | any = any> {
+export interface CollectionWidgetItem {
     /**
      * @docid
      * @default false
@@ -210,7 +210,7 @@ export interface CollectionWidgetItem<TItem extends CollectionWidgetItem<any> | 
      * @type_function_return string|Element|jQuery
      * @public
      */
-    template?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    template?: template | ((itemData: this, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @public
