@@ -4706,7 +4706,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxAccordionOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<TItem>;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<TItem, TKey>;
     /**
      * [descr:dxAccordionOptions.deferRendering]
      */

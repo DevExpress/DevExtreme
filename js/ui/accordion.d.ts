@@ -86,7 +86,7 @@ export interface dxAccordionOptions<
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @default true
