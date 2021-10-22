@@ -1,12 +1,7 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     DxElement,
 } from '../core/element';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     Cancelable,
@@ -91,7 +86,7 @@ export interface dxMenuOptions<
      * @default null
      * @public
      */
-    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @default false
@@ -209,64 +204,67 @@ export default class dxMenu<
     TKey = any,
 > extends dxMenuBase<dxMenuOptions<TItem, TKey>, TItem, TKey> { }
 
+export interface MenuBasePlainItem extends CollectionWidgetItem {
+  /**
+   * @docid dxMenuBaseItem.beginGroup
+   * @public
+   */
+  beginGroup?: boolean;
+  /**
+   * @docid dxMenuBaseItem.closeMenuOnClick
+   * @default true
+   * @public
+   */
+  closeMenuOnClick?: boolean;
+  /**
+   * @docid dxMenuBaseItem.disabled
+   * @default false
+   * @public
+   */
+  disabled?: boolean;
+  /**
+   * @docid dxMenuBaseItem.icon
+   * @public
+   */
+  icon?: string;
+  /**
+   * @docid dxMenuBaseItem.selectable
+   * @default false
+   * @public
+   */
+  selectable?: boolean;
+  /**
+   * @docid dxMenuBaseItem.selected
+   * @default false
+   * @public
+   */
+  selected?: boolean;
+  /**
+   * @docid dxMenuBaseItem.text
+   * @public
+   */
+  text?: string;
+  /**
+   * @docid dxMenuBaseItem.visible
+   * @default true
+   * @public
+   */
+  visible?: boolean;
+}
+
 /**
  * @docid
  * @inherits CollectionWidgetItem
  * @type object
  * @namespace DevExpress.ui
  */
-export interface dxMenuBaseItem<TItem extends dxMenuBaseItem<any> = dxMenuBaseItem<any>> extends CollectionWidgetItem<TItem> {
-    /**
-     * @docid
-     * @public
-     */
-    beginGroup?: boolean;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    closeMenuOnClick?: boolean;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    disabled?: boolean;
-    /**
-     * @docid
-     * @public
-     */
-    icon?: string;
+export interface dxMenuBaseItem extends MenuBasePlainItem {
     /**
      * @docid
      * @type Array<dxMenuBaseItem>
      * @public
      */
-    items?: Array<TItem>;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    selectable?: boolean;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    selected?: boolean;
-    /**
-     * @docid
-     * @public
-     */
-    text?: string;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    visible?: boolean;
+    items?: Array<this>;
 }
 
 /**

@@ -7,11 +7,7 @@ import {
     template,
 } from '../../core/templates/template';
 
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../../data/data_source';
-
-import Store from '../../data/abstract_store';
+import DataSource, { DataSourceLike } from '../../data/data_source';
 
 import {
     CollectionWidgetItem,
@@ -23,9 +19,10 @@ export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
     /**
      * @docid
      * @default null
+     * @type Store|DataSource|DataSourceOptions|string|Array<CollectionWidgetItem | any>
      * @public
      */
-    dataSource?: string | Array<CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<CollectionWidgetItem | any>;
     /**
      * @docid
      * @default undefined

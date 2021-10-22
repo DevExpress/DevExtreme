@@ -803,7 +803,7 @@ export const virtualScrollingModule = {
                         this._allItems = null;
                         this._loadViewportParams = null;
 
-                        if(this.option('scrolling.mode') !== 'virtual' && virtualRowsRendering !== true || virtualRowsRendering === false || !this.option('scrolling.rowPageSize')) {
+                        if(this.option('scrolling.mode') !== 'virtual' && virtualRowsRendering !== true || virtualRowsRendering === false || this.option(LEGACY_SCROLLING_MODE) !== false && !this.option('scrolling.rowPageSize')) {
                             this._visibleItems = null;
                             this._rowsScrollController = null;
                             return;
@@ -1056,7 +1056,7 @@ export const virtualScrollingModule = {
                                 const { skipForCurrentPage } = this.getLoadPageParams(true);
                                 const startLoadIndex = items[0].loadIndex + skipForCurrentPage;
 
-                                result = items.filter(it => it.loadIndex >= startLoadIndex && it.loadIndex < startLoadIndex + this._loadViewportParams.take);
+                                result = items.filter(it => (it.loadIndex >= startLoadIndex || it.isNewRow && it.loadIndex >= startLoadIndex - 1) && it.loadIndex < startLoadIndex + this._loadViewportParams.take);
                             }
 
                             return result;

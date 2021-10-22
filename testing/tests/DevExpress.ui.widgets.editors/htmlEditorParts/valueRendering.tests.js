@@ -520,7 +520,7 @@ export default function() {
         });
 
         test('apply value with table after change valueType', function(assert) {
-            const done = assert.async(2);
+            const done = assert.async();
             const tableMarkup = '<table><tbody><tr><td><p>Data1</p></td><td><p>Data2</p></td></tr></tbody></table>';
             const value = `<p><strong>bold</strong></p>${tableMarkup}`;
             const expectedMd = `**bold**\n\n${tableMarkup}`;

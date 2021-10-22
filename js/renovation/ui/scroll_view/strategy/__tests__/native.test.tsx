@@ -1118,7 +1118,7 @@ describe('Scrollbar integration', () => {
       const commonOptions = {
         containerSize: 0,
         contentSize: 0,
-        maxOffset: 0,
+        maxOffset: -0,
         scrollLocation: 0,
         visible: false,
         showScrollbar: 'onScroll',

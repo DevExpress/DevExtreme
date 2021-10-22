@@ -1,3 +1,5 @@
+import { Skip } from '../core';
+import { DataSourceLike } from '../data/data_source';
 import {
     DxElement,
 } from '../core/element';
@@ -5,12 +7,6 @@ import {
 import {
     DxPromise,
 } from '../core/utils/deferred';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -44,7 +40,7 @@ export type InitializedEvent = InitializedEventInfo<dxTreeView>;
 export type ItemClickEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-    readonly itemIndex?: number | any;
+    readonly itemIndex?: number;
     readonly node?: Node;
 };
 
@@ -60,7 +56,7 @@ export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
 export type ItemContextMenuEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-    readonly itemIndex?: number | any;
+    readonly itemIndex?: number;
     readonly node?: Node;
 };
 
@@ -111,7 +107,7 @@ export type SelectionChangedEvent = EventInfo<dxTreeView>;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions {
+export interface dxTreeViewOptions extends Skip<HierarchicalCollectionWidgetOptions<dxTreeView>, 'dataSource'>, SearchBoxMixinOptions {
     /**
      * @docid
      * @default true
@@ -131,7 +127,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @default null
      * @public
      */
-    dataSource?: string | Array<Item> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<Item>;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure
@@ -183,7 +179,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number | object
+     * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
@@ -215,7 +211,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number | object
+     * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView

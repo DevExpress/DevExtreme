@@ -275,6 +275,17 @@ export class RowsViewWrapper extends GridTableElement {
         return this._isInnerElementVisible($row, precision);
     }
 
+    isElementIntersectViewport($element) {
+        const rowsViewRect = this.getElement()[0].getBoundingClientRect();
+        const elementRect = $element[0].getBoundingClientRect();
+
+        const result = (elementRect.top > rowsViewRect.top && elementRect.top < rowsViewRect.bottom)
+            || (elementRect.bottom > rowsViewRect.top && elementRect.bottom < rowsViewRect.bottom)
+            || (elementRect.top <= rowsViewRect.top && elementRect.bottom >= rowsViewRect.bottom);
+
+        return result;
+    }
+
     _isInnerElementVisible($element, precision = 0) {
         const rowsViewRect = this.getContainer()[0].getBoundingClientRect();
         const elementRect = $element[0].getBoundingClientRect();

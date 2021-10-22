@@ -848,7 +848,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                     endDate: new Date(2015, 4, 25, 11),
                     recurrenceRule: 'FREQ=DAILY;COUNT=3',
                     startDate: new Date(2015, 4, 25, 9),
-                    text: 'Task 2'
+                    text: 'Task 2',
+                    displayEndDate: new Date(2015, 4, 25, 11),
+                    displayStartDate: new Date(2015, 4, 25, 9),
                 });
             }
         });
@@ -871,7 +873,9 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
                 assert.deepEqual(model.targetedAppointmentData, {
                     startDate: new Date(2015, 4, 24, 9),
                     endDate: new Date(2015, 4, 24, 11),
-                    text: 'Task 1'
+                    text: 'Task 1',
+                    displayStartDate: new Date(2015, 4, 24, 9),
+                    displayEndDate: new Date(2015, 4, 24, 11),
                 });
             }
         });

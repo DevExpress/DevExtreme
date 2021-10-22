@@ -48,6 +48,7 @@ export type SummaryDescriptor<T> = KeySelector<T> | BaseGroupDescriptor<T> & {
 };
 
 /**
+ * @public
  * @docid
  * @namespace DevExpress.data
  * @type object

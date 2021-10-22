@@ -16,6 +16,7 @@ export const viewFunction = ({
   <DomComponentWrapper
     componentType={LegacyForm}
     componentProps={props}
+    templateNames={[]}
    // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
@@ -27,4 +28,5 @@ export const viewFunction = ({
   view: viewFunction,
 })
 
-export class Form extends JSXComponent<FormProps>() {}
+export class Form extends JSXComponent<FormProps>() {
+}

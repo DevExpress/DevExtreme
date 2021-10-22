@@ -1,4 +1,4 @@
-import { BaseTemplateProps } from '../types';
+import { BaseTemplateProps, GroupOrientation } from '../types';
 
 export interface ViewCellData {
   startDate: Date;
@@ -147,6 +147,11 @@ interface CountGenerationConfig {
   endDayHour: number;
 }
 
+interface ViewOptions {
+  isVerticalGrouping: boolean;
+  groupOrientation: GroupOrientation;
+}
+
 // TODO: tempporary
 export interface ViewDataProviderType {
   timePanelData: TimePanelData;
@@ -165,11 +170,12 @@ export interface ViewDataProviderType {
   getLastViewDateByEndDayHour: (endDayHour: number) => Date;
   getIntervalDuration: (intervalCount: number) => number;
   getStartViewDate: () => Date;
+  getViewOptions: () => ViewOptions;
 }
 
 export interface CellsMetaData {
-  dateTableCellsMeta: ClientRect[][];
-  allDayPanelCellsMeta: ClientRect[];
+  dateTableCellsMeta: DOMRect[][];
+  allDayPanelCellsMeta: DOMRect[];
 }
 
 export interface ViewMetaData {

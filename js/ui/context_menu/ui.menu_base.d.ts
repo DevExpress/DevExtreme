@@ -1,12 +1,8 @@
+import { Skip } from '../../core';
+import { DataSourceLike } from '../../data/data_source';
 import {
     AnimationConfig,
 } from '../../animation/fx';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../../data/data_source';
-
-import Store from '../../data/abstract_store';
 
 import HierarchicalCollectionWidget, {
     HierarchicalCollectionWidgetOptions,
@@ -21,7 +17,7 @@ export interface dxMenuBaseOptions<
   TComponent extends dxMenuBase<any, TItem, TKey>,
   TItem extends dxMenuBaseItem<any> = dxMenuBaseItem<any>,
   TKey = any,
-> extends HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey> {
+> extends Skip<HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey>, 'dataSource'> {
     /**
      * @docid
      * @default true
@@ -57,8 +53,9 @@ export interface dxMenuBaseOptions<
      * @default null
      * @type string | Array<dxMenuBaseItem> | Store | DataSource | DataSourceOptions
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<dxMenuBaseItem>
      */
-    dataSource?: string | Array<TItem> | Store<TItem, string | Array<string>, TKey> | DataSource<TItem, string | Array<string>, TKey> | DataSourceOptions<TItem, TItem, TItem, string | Array<string>, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @public
