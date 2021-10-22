@@ -15,7 +15,7 @@ import dxTabs, {
     dxTabsOptions,
 } from './tabs';
 
-type ItemLike = string | Item<any> | any;
+type ItemLike = string | Item | any;
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxNavBar<TItem, TKey>>;
@@ -75,13 +75,13 @@ export default class dxNavBar<
  * @public
  * @namespace DevExpress.ui.dxNavBar
  */
-export type Item<TItem extends Item<any> | any = any> = dxNavBarItem<TItem>;
+export type Item = dxNavBarItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxNavBarItem<TItem extends dxNavBarItem<any> | any = any> extends dxTabsItem<TItem> {
+export interface dxNavBarItem extends dxTabsItem {
     /**
      * @docid
      * @public

@@ -14,7 +14,7 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-export type ItemLike = string | Item<any> | any;
+export type ItemLike = string | Item | any;
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
@@ -130,13 +130,13 @@ export default class dxTabs<
  * @public
  * @namespace DevExpress.ui.dxTabs
  */
-export type Item<TItem extends Item<any> | any = any> = dxTabsItem<TItem>;
+export type Item = dxTabsItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxTabsItem<TItem extends dxTabsItem<any> | any = any> extends CollectionWidgetItem<TItem> {
+export interface dxTabsItem extends CollectionWidgetItem {
     /**
      * @docid
      * @public
