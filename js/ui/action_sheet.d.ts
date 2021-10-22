@@ -21,7 +21,7 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-type ItemLike<TKey> = string | Item<any, TKey> | any;
+type ItemLike<TKey> = string | Item<TKey> | any;
 
 /** @public */
 export type CancelClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Cancelable & EventInfo<dxActionSheet<TItem, TKey>>;
@@ -167,19 +167,13 @@ export default class dxActionSheet<
  * @public
  * @namespace DevExpress.ui.dxActionSheet
  */
-export type Item<
-    TItem extends Item<any, TKey> | any = any,
-    TKey = any,
-> = dxActionSheetItem<TItem, TKey>;
+export type Item<TKey = any> = dxActionSheetItem<TKey>;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxActionSheetItem<
-    TItem extends dxActionSheetItem<any, TKey> | any = any,
-    TKey = any,
-> extends CollectionWidgetItem<TItem> {
+export interface dxActionSheetItem<TKey = any> extends CollectionWidgetItem {
     /**
      * @docid
      * @public
@@ -195,7 +189,7 @@ export interface dxActionSheetItem<
      * @type function
      * @public
      */
-    onClick?: ((e: NativeEventInfo<dxActionSheet<TItem, TKey>>) => void) | string;
+    onClick?: ((e: NativeEventInfo<dxActionSheet<this, TKey>>) => void) | string;
     /**
      * @docid
      * @type Enums.ButtonType

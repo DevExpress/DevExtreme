@@ -4788,7 +4788,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    type ItemLike<TKey> = string | Item<any, TKey> | any;
+    type ItemLike<TKey> = string | Item<TKey> | any;
     export type ItemRenderedEvent<
       TItem extends ItemLike<TKey> = any,
       TKey = any
@@ -4808,10 +4808,7 @@ declare module DevExpress.ui {
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxActionSheetItem<
-    TItem extends dxActionSheetItem<any, TKey> | any = any,
-    TKey = any
-  > extends CollectionWidgetItem<TItem> {
+  export interface dxActionSheetItem<TKey = any> extends CollectionWidgetItem {
     /**
      * [descr:dxActionSheetItem.icon]
      */
@@ -4821,7 +4818,7 @@ declare module DevExpress.ui {
      */
     onClick?:
       | ((
-          e: DevExpress.events.NativeEventInfo<dxActionSheet<TItem, TKey>>
+          e: DevExpress.events.NativeEventInfo<dxActionSheet<this, TKey>>
         ) => void)
       | string;
     /**
@@ -4847,9 +4844,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxActionSheetOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<
-      string | DevExpress.ui.dxActionSheet.Item | any
-    >;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<TItem, TKey>;
     /**
      * [descr:dxActionSheetOptions.items]
      */
@@ -23583,10 +23578,7 @@ declare module DevExpress.ui.dxAccordion {
   export type Item = dxAccordionItem;
 }
 declare module DevExpress.ui.dxActionSheet {
-  export type Item<
-    TItem extends Item<any, TKey> | any = any,
-    TKey = any
-  > = dxActionSheetItem<TItem, TKey>;
+  export type Item<TKey = any> = dxActionSheetItem<TKey>;
 }
 declare module DevExpress.ui.dxBox {
   export type Item = dxBoxItem;
