@@ -1999,7 +1999,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 this._rowsView.renderTemplate($container, button.template, options, true);
             } else {
                 if(button.template) {
-                    $button = $('<div>').addClass('dx-link').addClass(button.cssClass);
+                    $button = $('<span>').addClass(button.cssClass);
                 } else if(useIcons && icon || button.icon) {
                     icon = button.icon || icon;
                     const iconType = iconUtils.getImageSourceType(icon);
