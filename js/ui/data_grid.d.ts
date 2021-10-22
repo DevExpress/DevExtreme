@@ -3160,7 +3160,7 @@ export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column<TRowData, TKey>;
-  readonly row: Row<GroupData<TRowData>, any[]>;
+  readonly row: Row<GroupData<TRowData>, GroupKey>;
   readonly summaryItems: Array<any>;
   readonly groupContinuesMessage?: string;
   readonly groupContinuedMessage?: string;
