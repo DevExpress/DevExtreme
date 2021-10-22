@@ -11,11 +11,7 @@ import {
     template,
 } from '../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import DataSource, { DataSourceLike } from '../data/data_source';
 
 import {
     EventInfo,
@@ -76,7 +72,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default null
      * @public
      */
-    dataSource?: string | Array<Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<Item | any>;
     /**
      * @docid
      * @default true
@@ -153,6 +149,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 selectedItem:object
@@ -166,6 +163,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:object
@@ -180,6 +178,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:object
      * @type_function_param1_field5 previousItem:object
@@ -305,6 +304,7 @@ export interface dxDropDownButtonItem extends dxListItem {
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDropDownButton
      * @type_function_param1_field2 element:DxElement

@@ -20,6 +20,7 @@ $scheduler-appointment-text-color: null !default;
 $scheduler-fill-focused-appointment: null !default;
 $scheduler-dd-appointment-hover-text-color: null !default;
 $scheduler-tooltip-appointment-text-color: null !default;
+$scheduler-timeline-cell-height: null !default;
 
 $scheduler-appointment-overlay-bg: null !default;
 $agenda-appointment-hover-bg: null !default;
@@ -135,6 +136,7 @@ $scheduler-appointment-form-label-padding: 20px;
   $scheduler-droppable-cell-background-color: $scheduler-droppable-cell-background-color,
 
   $scheduler-left-column-width: $scheduler-left-column-width,
+  $scheduler-timeline-cell-height: $scheduler-timeline-cell-height,
 
   $scheduler-other-month-cell-opacity: $scheduler-other-month-cell-opacity,
   $scheduler-workspace-month-text-color: $scheduler-workspace-month-text-color,

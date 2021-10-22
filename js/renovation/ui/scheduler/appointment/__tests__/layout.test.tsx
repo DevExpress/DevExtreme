@@ -41,6 +41,7 @@ describe('AppointmentLayout', () => {
       const appointmentTemplate = '<div class="test-template">Some template</div>';
       const viewModel0 = {
         ...defaultViewModel,
+        key: '1-2-10-20',
         geometry: {
           ...defaultViewModel.geometry,
           left: 10,
@@ -48,6 +49,7 @@ describe('AppointmentLayout', () => {
       };
       const viewModel1 = {
         ...defaultViewModel,
+        key: '100-200-10-20',
         info: {
           ...defaultViewModel.info,
           sourceAppointment: {
@@ -73,13 +75,13 @@ describe('AppointmentLayout', () => {
 
       let appointment = layout.childAt(0);
       expect(appointment.key())
-        .toEqual('1-1628157600000-1628164800000_11-4-10-20');
+        .toEqual('1-2-10-20');
       expect(appointment.prop('viewModel'))
         .toBe(viewModel0);
 
       appointment = layout.childAt(1);
       expect(appointment.key())
-        .toEqual('11-1628157600000-1628164800000_2-4-10-20');
+        .toEqual('100-200-10-20');
       expect(appointment.prop('viewModel'))
         .toBe(viewModel1);
       expect(appointment.prop('appointmentTemplate'))

@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import 'ui/gantt';
+import { extend } from 'core/utils/extend';
 import { Consts, showTaskEditDialog, data, getGanttViewCore } from '../../../helpers/ganttHelpers.js';
 const { test } = QUnit;
 
@@ -49,7 +50,7 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         this.instance._onParentTasksRecalculated = (data) => {
             dataToCheck = data;
         };
-        getGanttViewCore(this.instance).viewModel.updateModel();
+        getGanttViewCore(this.instance).viewModel.updateModel(true);
         this.clock.tick();
 
         assert.equal(dataToCheck.length, 3, 'length');
@@ -221,5 +222,41 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
         this.clock.tick();
 
         assert.notDeepEqual(tasks[2].end, values.end, 'onTaskUpdated is triggrered');
+    });
+
+    test('onTaskUpdated for parents is triggered and data source updated (T1034724)', function(assert) {
+        const start = new Date('2019-02-19');
+        const end = new Date('2019-02-26');
+        const updated = { };
+        const tasks = [
+            { 'my_id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-22'), 'progress': 10 },
+            { 'my_id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-20'), 'end': new Date('2019-02-20'), 'progress': 20 },
+            { 'my_id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': start, 'end': end, 'progress': 40 },
+            { 'my_id': 4, 'parentId': 2, 'title': 'Determine project scope 2', 'start': start, 'end': end, 'progress': 80 },
+
+        ];
+        const options = {
+            tasks: {
+                keyExpr: 'my_id',
+                dataSource: tasks
+            },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true }
+        };
+        this.createInstance(options);
+        this.instance.option('onTaskUpdated', (e) => {
+            if(!updated[e.key]) {
+                updated[e.key] = { };
+            }
+            extend(updated[e.key], e.values);
+        });
+        this.clock.tick();
+        const newEnd = new Date('2020-02-27');
+        this.instance.updateTask(4, { 'end': newEnd });
+        this.clock.tick();
+        assert.equal(updated['4'].end, newEnd, 'event triggered for child');
+        assert.equal(updated['2'].end, newEnd, 'event triggered for parent');
+        assert.equal(tasks[1].end, newEnd, 'parent updated in data source');
+        assert.equal(tasks[3].end, newEnd, 'parent updated in data source');
     });
 });

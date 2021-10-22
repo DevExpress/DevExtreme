@@ -1,5 +1,5 @@
 import { DxPromise } from '../../core/utils/deferred';
-import Store, { StoreOptions } from '../abstract_store';
+import Store, { Options as StoreOptions } from '../abstract_store';
 import { LoadOptions } from '../index';
 import { Query } from '../query';
 import { ODataRequestOptions } from './context';
@@ -11,12 +11,20 @@ interface PromiseExtension<T> {
     ): Promise<TResult1 | TResult2>;
 }
 
-/** @namespace DevExpress.data */
-export interface ODataStoreOptions
-<TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends StoreOptions<TValue, TKeyExpr, TKey> {
+/** @public */
+export type Options<
+    TItem = any,
+    TKey = any,
+> = ODataStoreOptions<TItem, TKey>;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ */
+export interface ODataStoreOptions<
+    TItem = any,
+    TKey = any,
+> extends StoreOptions<TItem, TKey> {
     /**
      * @docid
      * @type_function_param1_field5 params:object
@@ -68,7 +76,7 @@ export interface ODataStoreOptions
      * @action
      * @public
      */
-    onLoading?: ((loadOptions: LoadOptions<TValue>) => void);
+    onLoading?: ((loadOptions: LoadOptions<TItem>) => void);
     /**
      * @docid
      * @public
@@ -93,13 +101,12 @@ export interface ODataStoreOptions
  * @inherits Store
  * @public
  */
-export default class ODataStore
-<TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends Store<TValue, TKeyExpr, TKey> {
-    constructor(options?: ODataStoreOptions<TValue, TKeyExpr, TKey>)
-    byKey(key: TKey): DxPromise<TValue>;
+export default class ODataStore<
+    TItem = any,
+    TKey = any,
+> extends Store<TItem, TKey> {
+    constructor(options?: Options<TItem, TKey>)
+    byKey(key: TKey): DxPromise<TItem>;
     /**
      * @docid
      * @publicName byKey(key, extraOptions)
@@ -107,7 +114,7 @@ export default class ODataStore
      * @return Promise<any>
      * @public
      */
-    byKey(key: TKey, extraOptions: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<TValue>;
+    byKey(key: TKey, extraOptions: { expand?: string | Array<string>; select?: string | Array<string> }): DxPromise<TItem>;
     /**
      * @docid
      * @publicName createQuery(loadOptions)
@@ -123,5 +130,5 @@ export default class ODataStore
      * @return Promise<any>
      * @public
      */
-    insert(values: TValue): DxPromise<TValue> & PromiseExtension<TValue>;
+    insert(values: TItem): DxPromise<TItem> & PromiseExtension<TItem>;
 }
