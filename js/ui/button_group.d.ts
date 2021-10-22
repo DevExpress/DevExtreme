@@ -187,6 +187,3 @@ export type Properties = dxButtonGroupOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxButtonGroupOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxButtonGroupOptions;

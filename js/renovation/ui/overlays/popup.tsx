@@ -38,6 +38,10 @@ export const viewFunction = ({
     <DomComponentWrapper
       componentType={LegacyPopup}
       componentProps={props}
+      templateNames={[
+        'titleTemplate',
+        'contentTemplate',
+      ]}
       ref={domComponentWrapperRef}
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}

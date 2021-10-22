@@ -1,8 +1,4 @@
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import { DataSourceLike } from '../data/data_source';
 
 import {
     EventInfo,
@@ -72,7 +68,7 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string | Item | any>;
     /**
      * @docid
      * @default 'horizontal'
@@ -163,6 +159,3 @@ export type Properties = dxTileViewOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTileViewOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxTileViewOptions;

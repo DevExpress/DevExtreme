@@ -42,6 +42,8 @@ class SchedulerAgenda extends WorkSpace {
 
     get renderingStrategy() { return this.invoke('getLayoutManager').getRenderingStrategyInstance(); }
 
+    get appointmentDataProvider() { return this.option('getAppointmentDataProvider')(); }
+
     getStartViewDate() {
         return this._startViewDate;
     }
@@ -241,12 +243,10 @@ class SchedulerAgenda extends WorkSpace {
     }
 
     _makeGroupRows() {
-        const { filteredItems } = this.invoke('getAppointmentDataProvider'); // TODO refactoring
-
         const tree = createReducedResourcesTree(
             this.option('loadedResources'),
             (field, action) => getDataAccessors(this.option('getResourceDataAccessors')(), field, action),
-            filteredItems
+            this.option('getFilteredItems')()
         );
 
         const cellTemplate = this.option('resourceCellTemplate');

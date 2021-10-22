@@ -1641,6 +1641,7 @@ test.skip('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowR
       dataSource: data,
       scrolling: {
         columnRenderingMode: 'virtual',
+        useNative: false,
       },
       editing: {
         mode: editMode,
@@ -1725,6 +1726,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     dataSource: data,
     scrolling: {
       columnRenderingMode: 'virtual',
+      useNative: false,
     },
     width: 500,
     selection: {
@@ -1815,6 +1817,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     rtlEnabled: true,
     scrolling: {
       columnRenderingMode: 'virtual',
+      useNative: false,
     },
     width: 500,
     selection: {
@@ -2525,42 +2528,46 @@ test('New mode. A cell should be focused when the PageDow/Up key is pressed (T89
   });
 });
 
-test('Focus next cell using tab after adding row if some another row is focused and repaintChangesOnly is enabled (T1004913)', async (t) => {
-  const dataGrid = new DataGrid('#container');
+['Row', 'Cell', 'Batch'].forEach((editMode) => {
+  [false, true].forEach((repaintChangesOnly) => {
+    test(`${editMode} - Focus next cell using tab after adding row if some another row is focused and repaintChangesOnly is ${repaintChangesOnly} (T1004913, T1036685)`, async (t) => {
+      const dataGrid = new DataGrid('#container');
 
-  const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
-  const cell00 = dataGrid.getDataCell(0, 0);
-  const editor00 = cell00.getEditor();
-  const cell01 = dataGrid.getDataCell(0, 1);
-  const editor01 = cell01.getEditor();
+      const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();
+      const cell00 = dataGrid.getDataCell(0, 0);
+      const editor00 = cell00.getEditor();
+      const cell01 = dataGrid.getDataCell(0, 1);
+      const editor01 = cell01.getEditor();
 
-  await t
-    .click(addRowButton)
+      await t
+        .click(addRowButton)
 
-    .expect(cell00.isFocused)
-    .ok()
-    .expect(editor00.element.focused)
-    .ok()
+        .expect(cell00.isFocused)
+        .ok()
+        .expect(editor00.element.focused)
+        .ok()
 
-    .pressKey('tab')
+        .pressKey('tab')
 
-    .expect(cell01.isFocused)
-    .ok()
-    .expect(editor01.element.focused)
-    .ok();
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: [{ ID: 1, FirstName: 'John' }],
-  keyExpr: 'ID',
-  repaintChangesOnly: true,
-  editing: {
-    mode: 'cell',
-    allowUpdating: true,
-    allowAdding: true,
-  },
-  focusedRowEnabled: true,
-  focusedRowKey: 1,
-  columns: ['ID', 'FirstName'],
-}));
+        .expect(cell01.isFocused)
+        .ok()
+        .expect(editor01.element.focused)
+        .ok();
+    }).before(async () => createWidget('dxDataGrid', {
+      dataSource: [{ ID: 1, FirstName: 'John' }],
+      keyExpr: 'ID',
+      repaintChangesOnly,
+      editing: {
+        mode: editMode.toLowerCase(),
+        allowUpdating: true,
+        allowAdding: true,
+      },
+      focusedRowEnabled: true,
+      focusedRowKey: 1,
+      columns: ['ID', 'FirstName'],
+    }));
+  });
+});
 
 test('All rows should be focused on arrow-up/down when virtual scrolling enabled with group summary (T1014612)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -2673,4 +2680,92 @@ test('All rows should be focused on arrow-up/down when virtual scrolling enabled
     dataField: 'name',
     groupIndex: 0,
   }],
+}));
+
+test('Cells should be focused after saving data when filter is applied and cell mode is used (T1029906)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 0).getEditor().element.exists)
+    .ok();
+
+  // act
+  await t
+    .pressKey('esc');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 0).getEditor().element.exists)
+    .notOk();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('d')
+    .pressKey('enter');
+
+  const visibleRows = await dataGrid.apiGetVisibleRows();
+
+  // assert
+  await t
+    .expect(visibleRows.length)
+    .eql(4)
+    .expect(dataGrid.getDataCell(2, 0).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(3, 0).isFocused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 1, name: 'aaa' },
+    { id: 2, name: 'aba' },
+    { id: 3, name: 'baa' },
+    { id: 4, name: 'bca' },
+    { id: 5, name: 'acd' },
+  ],
+  keyExpr: 'id',
+  columns: [{
+    dataField: 'name',
+    filterValue: 'a',
+  }],
+  filterRow: {
+    visible: true,
+    applyFilter: 'auto',
+  },
+  keyboardNavigation: {
+    enterKeyAction: 'moveFocus',
+    enterKeyDirection: 'column',
+    editOnKeyPress: true,
+  },
+
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+  },
+  onFocusedCellChanging(e) {
+    e.isHighlighted = true;
+  },
 }));

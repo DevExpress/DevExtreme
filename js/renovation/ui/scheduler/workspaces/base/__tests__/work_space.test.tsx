@@ -108,6 +108,7 @@ describe('WorkSpace', () => {
       className: 'custom',
       isRenderDateHeader: true,
       scrollingDirection: 'vertical',
+      groupPanelClassName: 'dx-scheduler-group-table',
     };
 
     const renderComponent = (viewModel) => shallow(WorkSpaceLayout({
@@ -779,6 +780,9 @@ describe('WorkSpace', () => {
         it('should call "getViewRenderConfigByType" and pass correct props to it', () => {
           const workSpace = new WorkSpace({
             type: 'week',
+            crossScrollingEnabled: true,
+            groups,
+            groupOrientation: 'vertical',
             intervalCount: 3,
           } as any);
 
@@ -797,10 +801,12 @@ describe('WorkSpace', () => {
               isGenerateWeekDaysHeaderData: false,
               className: 'dx-scheduler-work-space-week',
               scrollingDirection: 'vertical',
+              isCreateCrossScrolling: true,
+              defaultGroupOrientation: 'horizontal',
             });
 
           expect(getViewRenderConfigByType)
-            .toBeCalledWith('week', 3);
+            .toBeCalledWith('week', true, 3, true);
         });
       });
 
@@ -840,14 +846,14 @@ describe('WorkSpace', () => {
         });
       });
 
-      describe('isRenderGroupPanel', () => {
+      describe('isVerticalGrouping', () => {
         it('should call isVerticalGroupingApplied', () => {
           const workSpace = new WorkSpace({
             groups,
             groupOrientation: 'vertical',
           } as any);
 
-          const result = workSpace.isRenderGroupPanel;
+          const result = workSpace.isVerticalGrouping;
 
           expect(result)
             .toBe(true);
@@ -1136,6 +1142,36 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-grouped': false,
             'dx-scheduler-work-space-vertical-grouped': false,
             'dx-scheduler-group-column-count-one': false,
+            'dx-scheduler-group-column-count-two': false,
+            'dx-scheduler-group-column-count-three': false,
+            'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-both-scrollbar': true,
+          });
+      });
+
+      it('should not assign vertical-grouped class when default group orientation is "vertical"', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'timelineDay',
+          crossScrollingEnabled: true,
+          groups,
+          groupOrientation: 'vertical',
+        } as any);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        workSpace.classes;
+
+        expect(combineClasses)
+          .toBeCalledWith({
+            'dx-scheduler-timeline-day dx-scheduler-timeline': true,
+            'dx-scheduler-work-space-count': false,
+            'dx-scheduler-work-space-odd-cells': false,
+            'dx-scheduler-work-space-all-day-collapsed': false,
+            'dx-scheduler-work-space-all-day': false,
+            'dx-scheduler-work-space-group-by-date': false,
+            'dx-scheduler-work-space-grouped': true,
+            'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-group-column-count-one': true,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,

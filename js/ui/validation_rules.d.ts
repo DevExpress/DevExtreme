@@ -93,12 +93,6 @@ export interface CompareRule {
     message?: string;
     /**
      * @docid
-     * @default true
-     * @public
-     */
-    reevaluate?: boolean;
-    /**
-     * @docid
      * @type Enums.ValidationRuleType
      * @public
      */

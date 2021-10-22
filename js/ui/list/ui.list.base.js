@@ -527,7 +527,8 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _scrollViewIsFull: function() {
-        return !this._scrollView || this._scrollView.isFull();
+        const scrollView = this._scrollView;
+        return !scrollView || getHeight(scrollView.content()) > getHeight(scrollView.container());
     },
 
     _pullDownHandler: function(e) {

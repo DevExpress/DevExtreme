@@ -1,3 +1,5 @@
+import DataSource, { DataSourceLike } from '../data/data_source';
+
 import {
     UserDefinedElement,
     DxElement,
@@ -6,12 +8,6 @@ import {
 import {
     template,
 } from '../core/templates/template';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -370,7 +366,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @type object|Store|DataSource|DataSourceOptions|string|Array<any>
        * @notUsedInTheme
        */
-      dataSource?: any | Store | DataSource | DataSourceOptions | string;
+      dataSource?: object | DataSourceLike<any>;
       /**
        * @docid
        * @notUsedInTheme
@@ -489,7 +485,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
        * @notUsedInTheme
        */
       type?: VectorMapLayerType;
-    }> | { borderColor?: string; borderWidth?: number; color?: string; colorGroupingField?: string; colorGroups?: Array<number>; customize?: ((elements: Array<MapLayerElement>) => any); dataField?: string; dataSource?: any | Store | DataSource | DataSourceOptions | string; elementType?: 'bubble' | 'dot' | 'image' | 'pie'; hoverEnabled?: boolean; hoveredBorderColor?: string; hoveredBorderWidth?: number; hoveredColor?: string; label?: { dataField?: string; enabled?: boolean; font?: Font }; maxSize?: number; minSize?: number; name?: string; opacity?: number; palette?: Array<string> | VizPalette; paletteSize?: number; selectedBorderColor?: string; selectedBorderWidth?: number; selectedColor?: string; selectionMode?: 'multiple' | 'none' | 'single'; size?: number; sizeGroupingField?: string; sizeGroups?: Array<number>; type?: 'area' | 'line' | 'marker' };
+    }> | { borderColor?: string; borderWidth?: number; color?: string; colorGroupingField?: string; colorGroups?: Array<number>; customize?: ((elements: Array<MapLayerElement>) => any); dataField?: string; dataSource?: object | DataSourceLike<any>; elementType?: 'bubble' | 'dot' | 'image' | 'pie'; hoverEnabled?: boolean; hoveredBorderColor?: string; hoveredBorderWidth?: number; hoveredColor?: string; label?: { dataField?: string; enabled?: boolean; font?: Font }; maxSize?: number; minSize?: number; name?: string; opacity?: number; palette?: Array<string> | PaletteType; paletteSize?: number; selectedBorderColor?: string; selectedBorderWidth?: number; selectedColor?: string; selectionMode?: 'multiple' | 'none' | 'single'; size?: number; sizeGroupingField?: string; sizeGroups?: Array<number>; type?: 'area' | 'line' | 'marker' };
     /**
      * @docid
      * @type Array<Object>
@@ -527,6 +523,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxVectorMap
      * @type_function_param1_field2 element:DxElement
@@ -894,6 +891,3 @@ export type Properties = dxVectorMapOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxVectorMapOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxVectorMapOptions;

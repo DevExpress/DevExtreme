@@ -15,6 +15,7 @@ import { ViewProps, SchedulerProps } from './props';
 import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
+import type { Options as DataSourceOptions } from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import {
@@ -23,9 +24,18 @@ import {
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import { DataAccessorType } from './types';
-import { createDataAccessors, createTimeZoneCalculator } from './common';
+import { DataAccessorType, DataSourcePromise } from './types';
+import {
+  createDataAccessors, createTimeZoneCalculator, filterAppointments,
+} from './common';
 import { loadResources } from '../../../ui/scheduler/resources/utils';
+import { getAppointmentsViewModel } from './view_model/appointments/appointments';
+import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
+import { AppointmentsViewModelType } from './appointment/types';
+import { AppointmentLayout } from './appointment/layout';
+import { AppointmentsConfigType } from './model/types';
+import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
+import { isVerticalGroupingApplied } from './workspaces/utils';
 
 export const viewFunction = ({
   restAttributes,
@@ -35,6 +45,7 @@ export const viewFunction = ({
   setCurrentDate,
   setCurrentView,
   startViewDate,
+  appointmentsViewModel,
   props: {
     accessKey,
     activeStateEnabled,
@@ -54,6 +65,7 @@ export const viewFunction = ({
     customizeDateNavigatorText,
     min,
     max,
+    focusStateEnabled,
   },
 }: Scheduler): JSX.Element => {
   const {
@@ -81,11 +93,11 @@ export const viewFunction = ({
   } = currentViewConfig;
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
-      classes="dx-scheduler"
+      classes="dx-scheduler dx-scheduler-native"
       accessKey={accessKey}
       activeStateEnabled={activeStateEnabled}
       disabled={disabled}
-      focusStateEnabled={false}// TODO: waiting for a toolbar wrapper rerender fix
+      focusStateEnabled={focusStateEnabled}
       height={height}
       hint={hint}
       hoverStateEnabled={hoverStateEnabled}
@@ -141,8 +153,17 @@ export const viewFunction = ({
           allDayPanelExpanded={allDayPanelExpanded}
           onViewRendered={onViewRendered}
 
-          appointments={<div className="appointments" />} // Appointments go here
-          allDayAppointments={<div className="all-day-appointments" />}
+          appointments={(
+            <AppointmentLayout
+              appointments={appointmentsViewModel.regular}
+            />
+          )}
+
+          allDayAppointments={(
+            <AppointmentLayout
+              appointments={appointmentsViewModel.allDay}
+            />
+          )}
         />
       </div>
     </Widget>
@@ -163,6 +184,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
 
   @InternalState() loadedResources: Group[] = [];
+
+  @InternalState() dataItems: Appointment[] = [];
 
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
@@ -210,6 +233,83 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   get timeZoneCalculator(): TimeZoneCalculator {
     return createTimeZoneCalculator(this.props.timeZone);
+  }
+
+  get internalDataSource(): DataSource { // TODO make helper function
+    if (this.props.dataSource instanceof DataSource) {
+      return this.props.dataSource;
+    }
+
+    if (this.props.dataSource instanceof Array) {
+      return new DataSource({
+        store: {
+          type: 'array',
+          data: this.props.dataSource,
+        },
+        paginate: false,
+      } as DataSourceOptions);
+    }
+
+    return new DataSource(this.props.dataSource as DataSourceOptions);
+  }
+
+  get appointmentsConfig(): AppointmentsConfigType | undefined {
+    if (!this.viewDataProvider || !this.cellsMetaData) {
+      return undefined;
+    }
+
+    const isVerticalGrouping = isVerticalGroupingApplied(
+      this.loadedResources,
+      this.currentViewConfig.groupOrientation,
+    );
+
+    const renderConfig = getViewRenderConfigByType(
+      this.currentViewConfig.type,
+      this.currentViewConfig.crossScrollingEnabled,
+      this.currentViewConfig.intervalCount,
+      isVerticalGrouping,
+    );
+
+    return getAppointmentsConfig(
+      this.props, // TODO extract props for performace
+      this.currentViewConfig, // TODO extract props for performace
+      this.loadedResources,
+      this.viewDataProvider,
+      renderConfig.isAllDayPanelSupported,
+    );
+  }
+
+  get filteredItems(): Appointment[] {
+    return filterAppointments(
+      this.appointmentsConfig,
+      this.dataItems,
+      this.dataAccessors,
+      this.timeZoneCalculator,
+      this.loadedResources,
+      this.viewDataProvider,
+    );
+  }
+
+  get appointmentsViewModel(): AppointmentsViewModelType {
+    if (!this.appointmentsConfig || this.filteredItems.length === 0) {
+      return {
+        regular: [],
+        allDay: [],
+      };
+    }
+
+    const model = getAppointmentsModel(
+      this.appointmentsConfig,
+      this.viewDataProvider,
+      this.timeZoneCalculator,
+      this.dataAccessors,
+      this.cellsMetaData,
+    );
+
+    return getAppointmentsViewModel(
+      model,
+      this.filteredItems,
+    );
   }
 
   @Method()
@@ -295,6 +395,16 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       .then((loadedResources) => {
         this.loadedResources = loadedResources;
       });
+  }
+
+  @Effect()
+  loadDataSource(): void {
+    if (!this.internalDataSource.isLoaded() && !this.internalDataSource.isLoading()) {
+      (this.internalDataSource.load() as DataSourcePromise)
+        .done((items: Appointment[]) => {
+          this.dataItems = items;
+        });
+    }
   }
 
   onViewRendered(viewMetaData: ViewMetaData): void {

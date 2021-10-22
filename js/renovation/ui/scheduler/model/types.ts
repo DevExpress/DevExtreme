@@ -1,10 +1,9 @@
 import { ResourceProps } from '../props';
 import { AppointmentColorConfigType } from '../resources/utils';
-import { DataAccessorType, GroupOrientation } from '../types';
+import { DataAccessorType, GroupOrientation, ViewType } from '../types';
 import { CellsMetaData, Group } from '../workspaces/types';
 
 export interface AppointmentsConfigType {
-  key: number;
   adaptivityEnabled: boolean;
   rtlEnabled?: boolean;
   startDayHour: number;
@@ -18,7 +17,9 @@ export interface AppointmentsConfigType {
   intervalCount: number;
   hoursInterval: number;
   showAllDayPanel: boolean;
-  modelGroups: Group[];
+  loadedResources: Group[];
+  modelGroups: string[];
+  groupByDate: boolean;
   appointmentCountPerCell: number;
   appointmentOffset: number;
   allowResizing: boolean;
@@ -28,10 +29,12 @@ export interface AppointmentsConfigType {
   startViewDate?: Date;
   timeZone: string;
   firstDayOfWeek: number;
-  viewType: string;
+  viewType: ViewType;
   cellDurationInMinutes: number;
   supportAllDayRow: boolean; // ?
   isVerticalGroupOrientation: boolean; // ?
+  groupCount: number; // resource manager
+  dateRange: Date[]; // ? -> viewDataProvider
 }
 
 export interface AppointmentsModelType extends AppointmentsConfigType {
@@ -39,20 +42,17 @@ export interface AppointmentsModelType extends AppointmentsConfigType {
   loadedResources: [];
   dataAccessors: DataAccessorType;
   timeZoneCalculator: unknown;
-  appointmentDataProvider: unknown;
   viewDataProvider: unknown;
   positionHelper: unknown;
   resizableStep: number; // positionHelper.getResizableStep()
   isGroupedAllDayPanel: boolean;
   rowCount: number;
-  groupCount: number; // resource manager
   cellWidth: number;
   cellHeight: number;
   allDayHeight: number;
   isGroupedByDate: boolean;
   endViewDate: Date;
   visibleDayDuration: number;
-  dateRange: Date[]; // ? -> viewDataProvider
   intervalDuration: number; // ?
   allDayIntervalDuration: number; // ?
   leftVirtualCellCount: number;

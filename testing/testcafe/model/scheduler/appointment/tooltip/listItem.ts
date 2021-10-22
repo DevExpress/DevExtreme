@@ -12,8 +12,12 @@ export default class ListItem {
 
   readonly subject: Selector;
 
-  constructor(wrapper: Selector, title: string, index = 0) {
-    this.element = wrapper.find(`.${CLASS.listItem}`).withText(title).nth(index);
+  constructor(wrapper: Selector, title?: string, index = 0) {
+    if (title) {
+      this.element = wrapper.find(`.${CLASS.listItem}`).withText(title).nth(index);
+    } else {
+      this.element = wrapper.find(`.${CLASS.listItem}`).nth(index);
+    }
     this.date = this.element.find(`.${CLASS.contentDate}`);
     this.subject = this.element.find(`.${CLASS.contentSubject}`);
   }

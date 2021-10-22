@@ -1,3 +1,4 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -6,12 +7,6 @@ import {
 import {
     DxPromise,
 } from '../core/utils/deferred';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     DxEvent,
@@ -77,7 +72,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string | Item | any>;
     /**
      * @docid
      * @type Array<string | dxActionSheetItem | any>
@@ -88,6 +83,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:dxActionSheet
@@ -184,6 +180,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
      * @public
@@ -208,6 +205,3 @@ export type Properties = dxActionSheetOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxActionSheetOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxActionSheetOptions;

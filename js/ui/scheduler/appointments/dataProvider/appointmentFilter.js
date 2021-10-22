@@ -16,7 +16,7 @@ import {
     compareDateWithStartDayHour,
     compareDateWithEndDayHour,
     getTrimDates,
-    _isEndDateWrong,
+    replaceWrongEndDate,
     getAppointmentTakesSeveralDays,
     _appointmentPartInInterval,
     getRecurrenceException,
@@ -112,12 +112,6 @@ export class AppointmentFilterBaseStrategy {
 
     get strategyName() { return FilterStrategies.standard; }
 
-    get key() { return this.options.key; }
-
-    // TODO - Use DI to get appropriate services
-    get scheduler() { return this.options.scheduler; } // TODO get rid
-    get workspace() { return this.scheduler.getWorkSpace(); } // TODO get rid
-    get viewDataProvider() { return this.workspace.viewDataProvider; }
     get timeZoneCalculator() { return this.options.timeZoneCalculator; }
 
     get viewStartDayHour() { return this.options.startDayHour; }
@@ -127,17 +121,32 @@ export class AppointmentFilterBaseStrategy {
     get firstDayOfWeek() { return this.options.firstDayOfWeek; }
     get showAllDayPanel() { return this.options.showAllDayPanel; }
 
+    get loadedResources() { return this._resolveOption('loadedResources'); }
+    get supportAllDayRow() { return this._resolveOption('supportAllDayRow'); }
+    get viewType() { return this._resolveOption('viewType'); }
+    get viewDirection() { return this._resolveOption('viewDirection'); }
+    get dateRange() { return this._resolveOption('dateRange'); }
+    get groupCount() { return this._resolveOption('groupCount'); }
+    get viewDataProvider() { return this._resolveOption('viewDataProvider'); }
+
+    _resolveOption(name) {
+        const result = this.options[name];
+        return typeof result === 'function'
+            ? result()
+            : result;
+    }
+
     _init() {
         this.setDataAccessors(this.dataAccessors);
         this.setDataSource(this.dataSource);
     }
 
-    filter() {
-        const dateRange = this.workspace.getDateRange();
+    filter(preparedItems) {
+        const dateRange = this.dateRange;
 
         let allDay;
 
-        if(!this.showAllDayPanel && this.workspace.supportAllDayRow()) {
+        if(!this.showAllDayPanel && this.supportAllDayRow) {
             allDay = false;
         }
 
@@ -148,10 +157,10 @@ export class AppointmentFilterBaseStrategy {
             viewEndDayHour: this.viewEndDayHour,
             min: dateRange[0],
             max: dateRange[1],
-            resources: this.options.getLoadedResources(),
+            resources: this.loadedResources,
             allDay: allDay,
             firstDayOfWeek: this.firstDayOfWeek,
-        });
+        }, preparedItems);
     }
 
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
@@ -219,21 +228,6 @@ export class AppointmentFilterBaseStrategy {
             if(this.dataSource.isLoaded()) {
                 updateItems(this.dataSource.items());
             }
-        }
-    }
-
-    calculateAppointmentEndDate(isAllDay, startDate) {
-        if(isAllDay) {
-            return dateUtils.setToDayEnd(new Date(startDate));
-        }
-
-        return new Date(startDate.getTime() + this.appointmentDuration * toMs('minute'));
-    }
-
-    replaceWrongEndDate(appointment, startDate, endDate) {
-        if(_isEndDateWrong(startDate, endDate)) {
-            const calculatedEndDate = this.calculateAppointmentEndDate(appointment.allDay, startDate);
-            this.dataAccessors.setter.endDate(appointment, calculatedEndDate);
         }
     }
 
@@ -501,9 +495,9 @@ export class AppointmentFilterBaseStrategy {
             const startDate = new Date(this.dataAccessors.getter.startDate(rawAppointment));
             const endDate = new Date(this.dataAccessors.getter.endDate(rawAppointment));
 
-            this.replaceWrongEndDate(rawAppointment, startDate, endDate);
+            replaceWrongEndDate(rawAppointment, startDate, endDate, this.appointmentDuration, this.dataAccessors);
 
-            const adapter = createAppointmentAdapter(this.key, rawAppointment);
+            const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
 
             const comparableStartDate = adapter.startDate && adapter.calculateStartDate('toGrid');
             const comparableEndDate = adapter.endDate && adapter.calculateEndDate('toGrid') || comparableStartDate;
@@ -530,14 +524,14 @@ export class AppointmentFilterBaseStrategy {
         return result;
     }
 
-    filterLoadedAppointments(filterOptions) {
-        const filteredItems = this.filterPreparedItems(filterOptions);
+    filterLoadedAppointments(filterOptions, preparedItems) {
+        const filteredItems = this.filterPreparedItems(filterOptions, preparedItems);
         return filteredItems.map(({ rawAppointment }) => rawAppointment);
     }
 
-    filterPreparedItems(filterOptions) {
+    filterPreparedItems(filterOptions, preparedItems) {
         const combinedFilter = this._createAppointmentFilter(filterOptions);
-        return query(this.preparedItems)
+        return query(preparedItems || this.preparedItems /* Only for QUnit tests */)
             .filter(combinedFilter)
             .toArray();
     }
@@ -553,13 +547,14 @@ export class AppointmentFilterBaseStrategy {
 
 export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
     get strategyName() { return FilterStrategies.virtual; }
+    get resources() { return this.options.resources; }
 
-    filter() {
+    filter(preparedItems) {
         const hourMs = toMs('hour');
-        const isCalculateStartAndEndDayHour = calculateIsDateAndTimeView(this.workspace.type);
-        const checkIntersectViewport = isCalculateStartAndEndDayHour && this.workspace.viewDirection === 'horizontal';
+        const isCalculateStartAndEndDayHour = calculateIsDateAndTimeView(this.viewType);
+        const checkIntersectViewport = isCalculateStartAndEndDayHour && this.viewDirection === 'horizontal';
 
-        const isAllDayWorkspace = !this.workspace.supportAllDayRow();
+        const isAllDayWorkspace = !this.supportAllDayRow;
         const showAllDayAppointments = this.showAllDayPanel || isAllDayWorkspace;
 
         const endViewDate = this.viewDataProvider.getLastViewDateByEndDayHour(this.viewEndDayHour);
@@ -581,7 +576,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
             const resources = this._getPrerenderFilterResources(groupIndex);
 
             const allDayPanel = this.viewDataProvider.getAllDayPanel(groupIndex);
-            // TODO split by workspace strategies
+
             const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && allDayPanel?.length > 0);
 
             filterOptions.push({
@@ -601,8 +596,8 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
 
         return this.filterLoadedAppointments({
             filterOptions,
-            groupCount: this.workspace._getGroupCount()
-        });
+            groupCount: this.groupCount
+        }, preparedItems);
     }
 
     filterPreparedItems({ filterOptions, groupCount }) {
@@ -645,8 +640,8 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         const cellGroup = this.viewDataProvider.getCellsGroup(groupIndex);
 
         return getResourcesDataByGroups(
-            this.options.getLoadedResources(),
-            this.options.resources,
+            this.loadedResources,
+            this.resources,
             [cellGroup]
         );
     }

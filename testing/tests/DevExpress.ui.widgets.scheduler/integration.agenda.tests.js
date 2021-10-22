@@ -10,7 +10,6 @@ import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
 import { createWrapper, SchedulerTestWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import timeZoneUtils from 'ui/scheduler/utils.timeZone';
-import { getAppointmentDataProvider } from 'ui/scheduler/instanceFactory';
 
 const {
     module,
@@ -1545,7 +1544,7 @@ module('Integration: Agenda', moduleConfig, () => {
             dataSource: data
         });
 
-        const { filteredItems } = getAppointmentDataProvider(instance.key);
+        const filteredItems = instance.filteredItems;
 
         assert.equal(filteredItems.length, 1, 'Filtered items amount is correct');
         assert.deepEqual(filteredItems[0], data[2], 'Filtered item is correct');

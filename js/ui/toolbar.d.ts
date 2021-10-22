@@ -1,3 +1,4 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -6,12 +7,6 @@ import {
 import {
     template,
 } from '../core/templates/template';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -68,7 +63,7 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string | Item | any>;
     /**
      * @docid
      * @type Array<string | dxToolbarItem | any>
@@ -158,6 +153,3 @@ export type Properties = dxToolbarOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxToolbarOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxToolbarOptions;

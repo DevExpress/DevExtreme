@@ -1,8 +1,4 @@
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import { DataSourceLike } from '../data/data_source';
 
 import {
   EventInfo,
@@ -82,7 +78,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string | Item | any>;
     /**
      * @docid
      * @default '100%'
@@ -196,6 +192,3 @@ export type Properties = dxResponsiveBoxOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxResponsiveBoxOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxResponsiveBoxOptions;

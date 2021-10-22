@@ -42,9 +42,8 @@ export function convertToRenderFieldItemOptions({
         labelLocation: managerLabelLocation,
     });
 
-
-    const isDefaultLabelMode = labelMode === 'default';
-    const needRenderLabel = labelOptions.visible && labelOptions.text && isDefaultLabelMode;
+    const isOutsideLabelMode = labelMode === 'outside';
+    const needRenderLabel = labelOptions.visible && labelOptions.text && isOutsideLabelMode;
     const { location: labelLocation, labelID } = labelOptions;
     const labelNeedBaselineAlign =
         labelLocation !== 'top'
@@ -75,26 +74,26 @@ export function convertToRenderFieldItemOptions({
             editorInputId: itemId,
             editorValidationBoundary,
             editorStylingMode,
-            labelMode: isDefaultLabelMode ? 'hidden' : labelMode,
-            labelText: isDefaultLabelMode ? undefined : labelOptions.text,
+            labelMode: isOutsideLabelMode ? 'hidden' : labelMode,
+            labelText: isOutsideLabelMode ? undefined : labelOptions.text,
             labelMark: getLabelMarkText(labelOptions.markOptions),
         })
     };
 }
 
-export function getLabelMarkText({ isRequiredMark, requiredMark, isOptionalMark, optionalMark }) {
-    if(!isRequiredMark && !isOptionalMark) {
+export function getLabelMarkText({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }) {
+    if(!showRequiredMark && !showOptionalMark) {
         return '';
     }
 
-    return String.fromCharCode(160) + (isRequiredMark ? requiredMark : optionalMark);
+    return String.fromCharCode(160) + (showRequiredMark ? requiredMark : optionalMark);
 }
 
 export function convertToLabelMarkOptions({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }, isRequired) {
     return {
-        isRequiredMark: showRequiredMark && isRequired,
+        showRequiredMark: showRequiredMark && isRequired,
         requiredMark,
-        isOptionalMark: showOptionalMark && !isRequired,
+        showOptionalMark: showOptionalMark && !isRequired,
         optionalMark
     };
 }

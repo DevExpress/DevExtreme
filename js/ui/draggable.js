@@ -600,11 +600,11 @@ const Draggable = DOMComponent.inherit({
     _dragStartHandler: function(e) {
         const $element = this._getDraggableElement(e);
 
-        if(this._$sourceElement) {
-            return;
-        }
         if(!this._isValidElement(e, $element)) {
             e.cancel = true;
+            return;
+        }
+        if(this._$sourceElement) {
             return;
         }
 

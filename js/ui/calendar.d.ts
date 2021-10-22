@@ -164,6 +164,3 @@ export type Properties = dxCalendarOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxCalendarOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxCalendarOptions;

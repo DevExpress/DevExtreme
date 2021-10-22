@@ -143,6 +143,3 @@ export type Properties = dxButtonOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxButtonOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxButtonOptions;

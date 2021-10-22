@@ -3,11 +3,20 @@ import { SchedulerProps } from './props';
 import { DataAccessorType } from './types';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
 import timeZoneUtils from '../../../ui/scheduler/utils.timeZone';
+import { AppointmentsConfigType } from './model/types';
+import { Group, ViewDataProviderType } from './workspaces/types';
+import {
+  AppointmentFilterBaseStrategy,
+  AppointmentFilterVirtualStrategy,
+} from '../../../ui/scheduler/appointments/dataProvider/appointmentFilter';
+import type { Appointment } from '../../../ui/scheduler';
+import { createExpressions } from '../../../ui/scheduler/resources/utils';
 
 export const createDataAccessors = (
   props: SchedulerProps,
+  forceIsoDateParsing = false,
 ): DataAccessorType => {
-  const result = utils.dataAccessors.create(
+  const dataAccessors = utils.dataAccessors.create(
     {
       startDate: props.startDateExpr,
       endDate: props.endDateExpr,
@@ -19,9 +28,15 @@ export const createDataAccessors = (
       recurrenceRule: props.recurrenceRuleExpr,
       recurrenceException: props.recurrenceExceptionExpr,
     },
-  );
+    null,
+    forceIsoDateParsing,
+    props.dateSerializationFormat,
+  ) as DataAccessorType;
 
-  return result as DataAccessorType;
+  // TODO move to the 'utils.dataAccessors.create'
+  dataAccessors.resources = createExpressions(props.resources) as DataAccessorType;
+
+  return dataAccessors;
 };
 
 export const createTimeZoneCalculator = (
@@ -42,3 +57,46 @@ export const createTimeZoneCalculator = (
     date,
   ) as number,
 });
+
+export const filterAppointments = (
+  appointmentsConfig: AppointmentsConfigType | undefined,
+  dataItems: Appointment[],
+  dataAccessors: DataAccessorType,
+  timeZoneCalculator: TimeZoneCalculator,
+  loadedResources: Group[],
+  viewDataProvider: ViewDataProviderType,
+): Appointment[] => {
+  if (!appointmentsConfig) {
+    return [] as Appointment[];
+  }
+
+  const filterOptions = {
+    resources: appointmentsConfig.resources,
+    startDayHour: appointmentsConfig.startDayHour,
+    endDayHour: appointmentsConfig.endDayHour,
+    appointmentDuration: appointmentsConfig.cellDurationInMinutes,
+    showAllDayPanel: appointmentsConfig.showAllDayPanel,
+    supportAllDayRow: appointmentsConfig.supportAllDayRow,
+    firstDayOfWeek: appointmentsConfig.firstDayOfWeek,
+    viewType: appointmentsConfig.viewType,
+    viewDirection: 'vertical', // TODO,
+    dateRange: appointmentsConfig.dateRange,
+    groupCount: appointmentsConfig.groupCount,
+    //
+    timeZoneCalculator,
+    dataSource: undefined,
+    dataAccessors,
+    loadedResources,
+    viewDataProvider,
+  };
+
+  const filterStrategy = appointmentsConfig.isVirtualScrolling
+    ? new AppointmentFilterVirtualStrategy(filterOptions)
+    : new AppointmentFilterBaseStrategy(filterOptions);
+
+  const preparedDataItems = filterStrategy.getPreparedDataItems(dataItems);
+
+  const filteredItems = filterStrategy.filter(preparedDataItems);
+
+  return filteredItems as Appointment[];
+};

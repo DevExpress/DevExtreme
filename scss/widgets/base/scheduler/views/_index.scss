@@ -20,6 +20,7 @@ $scheduler-focused-cell-shadow: null !default;
 $scheduler-droppable-cell-background-color: null !default;
 
 $scheduler-left-column-width: null !default;
+$scheduler-timeline-cell-height: null !default;
 
 $scheduler-other-month-cell-opacity: null !default;
 $scheduler-workspace-month-text-color: null !default;
@@ -79,6 +80,9 @@ $scheduler-month-date-text-padding: 6px;
   $scheduler-workspace-info-font-size: $scheduler-workspace-info-font-size,
   $scheduler-other-month-cell-opacity: $scheduler-other-month-cell-opacity,
 );
+@use "./renovation" with (
+  $scheduler-timeline-cell-height: $scheduler-timeline-cell-height,
+);
 
 .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
   color: $scheduler-current-time-cell-color;
@@ -105,7 +109,7 @@ $scheduler-month-date-text-padding: 6px;
     width: 1.5 * $scheduler-left-column-width;
   }
 
-  .dx-scheduler-group-flex-container .dx-scheduler-group-row {
+  .dx-scheduler-group-flex-container .dx-scheduler-group-header {
     width: 0.75 * $scheduler-left-column-width;
   }
 }
@@ -115,7 +119,7 @@ $scheduler-month-date-text-padding: 6px;
     width: 2 * $scheduler-left-column-width;
   }
 
-  .dx-scheduler-group-flex-container .dx-scheduler-group-row {
+  .dx-scheduler-group-flex-container .dx-scheduler-group-header {
     width: math.div($scheduler-left-column-width * 2, 3);
   }
 }
@@ -215,6 +219,9 @@ $scheduler-month-date-text-padding: 6px;
 
 .dx-scheduler-header-panel-container {
   display: flex;
+
+  // Header collapses in Safari without it
+  flex-shrink: 0;
 }
 
 .dx-scheduler-header-panel-empty-cell {
@@ -296,10 +303,9 @@ $scheduler-month-date-text-padding: 6px;
     @include flex-container(column, nowrap);
 
     flex: 0 0 auto;
-    width: $scheduler-left-column-width;
     min-width: 0;
 
-    &:last-child {
+    &:last-child .dx-scheduler-group-header {
       border-right: $scheduler-base-border;
     }
 
@@ -309,7 +315,7 @@ $scheduler-month-date-text-padding: 6px;
       flex: 1 1 100%;
       padding: 0 5px;
       height: auto;
-      width: 100%;
+      width: $scheduler-left-column-width;
       justify-content: flex-start;
       align-items: flex-start;
       text-align: left;
@@ -771,7 +777,7 @@ $scheduler-month-date-text-padding: 6px;
 
   .dx-scheduler-work-space-vertical-grouped,
   .dx-scheduler-sidebar-scrollable {
-    .dx-scheduler-group-row:last-child {
+    .dx-scheduler-group-row:last-child .dx-scheduler-group-header {
       border-right: none;
       border-left: $scheduler-base-border;
     }

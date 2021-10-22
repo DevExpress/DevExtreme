@@ -32,7 +32,7 @@ import { CrossScrollingLayout } from './cross_scrolling_layout';
 import { MainLayoutProps } from './main_layout_props';
 
 export const prepareGenerationOptions = (
-  workSpaceProps: WorkSpaceProps,
+  workSpaceProps: Partial<WorkSpaceProps>,
   renderConfig: ViewRenderConfig,
   isAllDayPanelVisible: boolean,
 ): unknown => {
@@ -100,7 +100,7 @@ export const viewFunction = ({
   timePanelRef,
   groupPanelRef,
 
-  isRenderGroupPanel,
+  isVerticalGrouping,
   isStandaloneAllDayPanel,
 
   groupPanelHeight,
@@ -126,6 +126,7 @@ export const viewFunction = ({
   renderConfig: {
     isRenderDateHeader,
     scrollingDirection,
+    groupPanelClassName,
   },
   headerPanelTemplate,
   dateTableTemplate,
@@ -144,6 +145,8 @@ export const viewFunction = ({
     groups={groups}
     groupByDate={groupByDate}
     groupOrientation={groupOrientation}
+    groupPanelClassName={groupPanelClassName}
+
     intervalCount={intervalCount}
 
     headerPanelTemplate={headerPanelTemplate}
@@ -154,7 +157,7 @@ export const viewFunction = ({
     isAllDayPanelVisible={isAllDayPanelVisible}
     isRenderDateHeader={isRenderDateHeader}
     isRenderHeaderEmptyCell={isRenderHeaderEmptyCell}
-    isRenderGroupPanel={isRenderGroupPanel}
+    isRenderGroupPanel={isVerticalGrouping}
     isStandaloneAllDayPanel={isStandaloneAllDayPanel}
 
     scrollingDirection={scrollingDirection}
@@ -195,14 +198,23 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   @ForwardRef()
   groupPanelRef!: RefObject<HTMLDivElement>;
 
+  get isVerticalGrouping(): boolean {
+    return isVerticalGroupingApplied(this.props.groups, this.props.groupOrientation);
+  }
+
   get renderConfig(): ViewRenderConfig {
-    return getViewRenderConfigByType(this.props.type, this.props.intervalCount);
+    return getViewRenderConfigByType(
+      this.props.type,
+      this.props.crossScrollingEnabled,
+      this.props.intervalCount,
+      this.isVerticalGrouping,
+    );
   }
 
   get layout(): JSXTemplate<
   MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
   > {
-    return this.props.crossScrollingEnabled
+    return this.renderConfig.isCreateCrossScrolling
       ? CrossScrollingLayout
       : OrdinaryLayout;
   }
@@ -263,13 +275,41 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
   // TODO: rework
   get viewDataProvider(): ViewDataProviderType {
-    const { type } = this.props;
+    const {
+      intervalCount,
+      groups,
+      groupByDate,
+      groupOrientation,
+      startDayHour,
+      endDayHour,
+      currentDate,
+      startDate,
+      firstDayOfWeek,
+      hoursInterval,
+      type,
+      cellDuration,
+    } = this.props;
 
     // TODO: convert ViewdataProvider to TS
     const viewDataProvider = (new ViewDataProvider(type) as unknown) as ViewDataProviderType;
 
     const generationOptions = prepareGenerationOptions(
-      this.props, this.renderConfig, this.isAllDayPanelVisible,
+      {
+        intervalCount,
+        groups,
+        groupByDate,
+        groupOrientation,
+        startDayHour,
+        endDayHour,
+        currentDate,
+        startDate,
+        firstDayOfWeek,
+        hoursInterval,
+        type,
+        cellDuration,
+      },
+      this.renderConfig,
+      this.isAllDayPanelVisible,
     );
     viewDataProvider.update(generationOptions, true);
 
@@ -300,11 +340,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   }
 
   get isRenderHeaderEmptyCell(): boolean {
-    const isVerticalGrouping = isVerticalGroupingApplied(
-      this.props.groups, this.props.groupOrientation,
-    );
-
-    return isVerticalGrouping || !!this.timePanelTemplate;
+    return this.isVerticalGrouping || !!this.timePanelTemplate;
   }
 
   // eslint-disable-next-line @typescript-eslint/class-literal-property-style
@@ -318,7 +354,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       allDayPanelExpanded,
       groupByDate,
       groups,
-      groupOrientation,
     } = this.props;
 
     return combineClasses({
@@ -329,24 +364,14 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       'dx-scheduler-work-space-all-day': this.isAllDayPanelVisible,
       'dx-scheduler-work-space-group-by-date': groupByDate,
       'dx-scheduler-work-space-grouped': groups.length > 0,
-      'dx-scheduler-work-space-vertical-grouped': isVerticalGroupingApplied(groups, groupOrientation),
-      'dx-scheduler-group-column-count-one': isVerticalGroupingApplied(groups, groupOrientation)
-        && groups.length === 1,
-      'dx-scheduler-group-column-count-two': isVerticalGroupingApplied(groups, groupOrientation)
-        && groups.length === 2,
-      'dx-scheduler-group-column-count-three': isVerticalGroupingApplied(groups, groupOrientation)
-        && groups.length === 3,
+      'dx-scheduler-work-space-vertical-grouped': this.isVerticalGrouping
+        && this.renderConfig.defaultGroupOrientation !== 'vertical',
+      'dx-scheduler-group-column-count-one': this.isVerticalGrouping && groups.length === 1,
+      'dx-scheduler-group-column-count-two': this.isVerticalGrouping && groups.length === 2,
+      'dx-scheduler-group-column-count-three': this.isVerticalGrouping && groups.length === 3,
       'dx-scheduler-work-space-both-scrollbar': this.props.crossScrollingEnabled,
       'dx-scheduler-work-space': true,
     });
-  }
-
-  get isRenderGroupPanel(): boolean {
-    const {
-      groups, groupOrientation,
-    } = this.props;
-
-    return isVerticalGroupingApplied(groups, groupOrientation);
   }
 
   get isStandaloneAllDayPanel(): boolean {

@@ -40,7 +40,7 @@ import {
 } from './validation_rules';
 
 import {
-    dxValidationGroupResult,
+    ValidationResult,
 } from './validation_group';
 
 import Widget, {
@@ -329,8 +329,9 @@ export default class dxForm extends Widget<dxFormOptions> {
      * @docid
      * @publicName validate()
      * @public
+     * @return dxValidationGroupResult
      */
-    validate(): dxValidationGroupResult;
+    validate(): ValidationResult;
 }
 
 /**
@@ -796,6 +797,3 @@ export type Properties = dxFormOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxFormOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxFormOptions;

@@ -121,6 +121,3 @@ export type Properties = dxBulletOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxBulletOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxBulletOptions;

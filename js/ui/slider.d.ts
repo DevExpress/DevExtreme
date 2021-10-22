@@ -161,6 +161,3 @@ export type Properties = dxSliderOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxSliderOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxSliderOptions;

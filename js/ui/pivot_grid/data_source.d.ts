@@ -3,7 +3,7 @@ import {
 } from '../../core/utils/deferred';
 
 import Store, {
-    StoreOptions,
+    Options as StoreOptions,
 } from '../../data/abstract_store';
 
 import DataSource from '../../data/data_source';
@@ -168,7 +168,13 @@ interface dxPivotGridSummaryCell {
     value(postProcessed: boolean): any;
 }
 
-/** @namespace DevExpress.data */
+/** @public */
+export type Options = PivotGridDataSourceOptions;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ */
 export interface PivotGridDataSourceOptions {
     /**
      * @docid
@@ -497,7 +503,7 @@ export interface PivotGridDataSourceField {
  * @public
  */
 export default class PivotGridDataSource {
-    constructor(options?: PivotGridDataSourceOptions)
+    constructor(options?: Options)
     /**
      * @docid
      * @publicName collapseAll(id)

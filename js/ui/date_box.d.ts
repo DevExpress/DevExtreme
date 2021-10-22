@@ -247,6 +247,3 @@ export type Properties = dxDateBoxOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxDateBoxOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxDateBoxOptions;

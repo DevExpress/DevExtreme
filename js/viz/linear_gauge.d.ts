@@ -177,6 +177,3 @@ export type Properties = dxLinearGaugeOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxLinearGaugeOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxLinearGaugeOptions;

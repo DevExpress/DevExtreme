@@ -1,9 +1,9 @@
-import { DomRect } from '../common/types';
+import { DomRect } from '../common/types.d';
 
 export function getBoundingRect(
   el: Element | undefined | null,
 ): DomRect {
-  return el ? el.getBoundingClientRect() : {
+  return el?.getBoundingClientRect ? el.getBoundingClientRect() : {
     width: 0,
     height: 0,
     bottom: 0,

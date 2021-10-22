@@ -283,9 +283,10 @@ if(devices.real().deviceType === 'desktop') {
             }
 
             QUnit.testInActiveWindow(`Update scroll location on tab: useNative - ${useNativeMode}, direction: ${scrollbarDirection}`, function(assert) {
-                assert.expect(2);
+                assert.expect(isRenovation && !useNativeMode ? 3 : 2);
 
                 const done = assert.async();
+                let firstCall = true;
 
                 const scrollableContainerSize = 200;
                 const $scrollable = $('#scrollable_container').dxScrollable({
@@ -310,9 +311,16 @@ if(devices.real().deviceType === 'desktop') {
 
                 $scrollable.dxScrollable('option', 'onScroll', () => {
                     setTimeout(() => {
-                        this.clock.tick(400);
                         checkScrollLocation($scrollable, scrollbarDirection === 'vertical' ? { top: 100, left: 0 } : { top: 0, left: 100 });
-                        done();
+                        if(useNativeMode || !isRenovation) {
+                            done();
+                        } else {
+                            if(firstCall) {
+                                firstCall = false;
+                            } else {
+                                done();
+                            }
+                        }
                     });
                     this.clock.tick();
                 });

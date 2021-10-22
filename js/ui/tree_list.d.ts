@@ -71,36 +71,36 @@ import {
     TreeListToolbarItem,
 } from '../types/enums';
 
-interface CellInfo {
-    readonly data: any;
-    readonly key: any;
+interface CellInfo<TRowData = any, TKey = any> {
+    readonly data: TRowData;
+    readonly key: TKey;
     readonly value?: any;
     readonly displayValue?: any;
     readonly text: string;
     readonly columnIndex: number;
-    readonly column: Column;
+    readonly column: Column<TRowData, TKey>;
     readonly rowIndex: number;
     readonly rowType: string;
     readonly cellElement: DxElement;
-    readonly row: RowObject;
+    readonly row: Row<TRowData, TKey>;
 }
 
 /** @public */
-export type AdaptiveDetailRowPreparingEvent = EventInfo<dxTreeList> & AdaptiveDetailRowPreparingInfo;
+export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent = NativeEventInfo<dxTreeList> & CellInfo;
+export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey>;
 
 /** @public */
-export type CellDblClickEvent = NativeEventInfo<dxTreeList> & CellInfo;
+export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey>;
 
 /** @public */
-export type CellHoverChangedEvent = EventInfo<dxTreeList> & CellInfo & {
+export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey> & {
     readonly eventType: string;
 };
 
 /** @public */
-export type CellPreparedEvent = EventInfo<dxTreeList> & CellInfo & {
+export type CellPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey> & {
     readonly isSelected?: boolean;
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
@@ -109,40 +109,40 @@ export type CellPreparedEvent = EventInfo<dxTreeList> & CellInfo & {
 };
 
 /** @public */
-export type ContentReadyEvent = EventInfo<dxTreeList>;
+export type ContentReadyEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>>;
 
 /** @public */
-export type ContextMenuPreparingEvent = EventInfo<dxTreeList> & {
+export type ContextMenuPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     items?: Array<any>;
     readonly target: string;
     readonly targetElement: DxElement;
     readonly columnIndex: number;
-    readonly column?: Column;
+    readonly column?: Column<TRowData, TKey>;
     readonly rowIndex: number;
-    readonly row?: RowObject;
+    readonly row?: Row<TRowData, TKey>;
 };
 
 /** @public */
-export type DataErrorOccurredEvent = EventInfo<dxTreeList> & DataErrorOccurredInfo;
+export type DataErrorOccurredEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & DataErrorOccurredInfo;
 
 /** @public */
-export type DisposingEvent = EventInfo<dxTreeList>;
+export type DisposingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>>;
 
 /** @public */
-export type EditCanceledEvent = EventInfo<dxTreeList> & DataChangeInfo;
+export type EditCanceledEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
 
 /** @public */
-export type EditCancelingEvent = Cancelable & EventInfo<dxTreeList> & DataChangeInfo;
+export type EditCancelingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
 
 /** @public */
-export type EditingStartEvent = Cancelable & EventInfo<dxTreeList> & {
-    readonly data: any;
-    readonly key: any;
-    readonly column: any;
+export type EditingStartEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & {
+    readonly data: TRowData;
+    readonly key: TKey;
+    readonly column: Column<TRowData, TKey>;
 };
 
 /** @public */
-export type EditorPreparedEvent = EventInfo<dxTreeList> & {
+export type EditorPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     readonly parentType: string;
     readonly value?: any;
     readonly setValue?: any;
@@ -153,11 +153,11 @@ export type EditorPreparedEvent = EventInfo<dxTreeList> & {
     readonly editorElement: DxElement;
     readonly readOnly: boolean;
     readonly dataField?: string;
-    readonly row?: RowObject;
+    readonly row?: Row<TRowData, TKey>;
 };
 
 /** @public */
-export type EditorPreparingEvent = Cancelable & EventInfo<dxTreeList> & {
+export type EditorPreparingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & {
     readonly parentType: string;
     readonly value?: any;
     readonly setValue?: any;
@@ -170,68 +170,68 @@ export type EditorPreparingEvent = Cancelable & EventInfo<dxTreeList> & {
     editorName: string;
     editorOptions: any;
     readonly dataField?: string;
-    readonly row?: RowObject;
+    readonly row?: Row<TRowData, TKey>;
 };
 
 /** @public */
-export type FocusedCellChangedEvent = EventInfo<dxTreeList> & {
+export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     readonly cellElement: DxElement;
     readonly columnIndex: number;
     readonly rowIndex: number;
-    readonly row: RowObject;
-    readonly column: Column;
+    readonly row: Row<TRowData, TKey>;
+    readonly column: Column<TRowData, TKey>;
 };
 
 /** @public */
-export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxTreeList> & {
+export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>> & {
     readonly cellElement: DxElement;
     readonly prevColumnIndex: number;
     readonly prevRowIndex: number;
     newColumnIndex: number;
     newRowIndex: number;
-    readonly rows: Array<RowObject>;
-    readonly columns: Array<Column>;
+    readonly rows: Array<Row<TRowData, TKey>>;
+    readonly columns: Array<Column<TRowData, TKey>>;
     isHighlighted: boolean;
 };
 
 /** @public */
-export type FocusedRowChangedEvent = EventInfo<dxTreeList> & {
+export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
     readonly rowElement: DxElement;
     readonly rowIndex: number;
-    readonly row: RowObject;
+    readonly row: Row<TRowData, TKey>;
 };
 
 /** @public */
-export type FocusedRowChangingEvent = NativeEventInfo<dxTreeList> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
     readonly rowElement: DxElement;
     readonly prevRowIndex: number;
     newRowIndex: number;
-    readonly rows: Array<RowObject>;
+    readonly rows: Array<Row<TRowData, TKey>>;
 };
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxTreeList>;
+export type InitializedEvent<TRowData = any, TKey = any> = InitializedEventInfo<dxTreeList<TRowData, TKey>>;
 
 /** @public */
-export type InitNewRowEvent = EventInfo<dxTreeList> & NewRowInfo;
+export type InitNewRowEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & NewRowInfo<TRowData>;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxTreeList> & KeyDownInfo;
+export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & KeyDownInfo;
 
 /** @public */
-export type NodesInitializedEvent = EventInfo<dxTreeList> & {
-    readonly root: Node;
+export type NodesInitializedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
+    readonly root: Node<TRowData, TKey>;
 };
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxTreeList> & ChangedOptionInfo;
+export type OptionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent = NativeEventInfo<dxTreeList> & {
-    readonly data: any;
-    readonly key: any;
+export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+    readonly data: TRowData;
+    readonly key: TKey;
     readonly values: Array<any>;
-    readonly columns: Array<any>;
+    readonly columns: Array<Column<TRowData, TKey>>;
     readonly rowIndex: number;
     readonly rowType: string;
     readonly isSelected?: boolean;
@@ -239,22 +239,22 @@ export type RowClickEvent = NativeEventInfo<dxTreeList> & {
     readonly isNewRow?: boolean;
     readonly rowElement: DxElement;
     readonly handled: boolean;
-    readonly node: Node;
+    readonly node: Node<TRowData, TKey>;
     readonly level: number;
 };
 
 /** @public */
-export type RowCollapsedEvent = EventInfo<dxTreeList> & RowKeyInfo;
+export type RowCollapsedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowCollapsingEvent = Cancelable & EventInfo<dxTreeList> & RowKeyInfo;
+export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowDblClickEvent = NativeEventInfo<dxTreeList> & {
-    readonly data: any;
-    readonly key: any;
+export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+    readonly data: TRowData;
+    readonly key: TKey;
     readonly values: Array<any>;
-    readonly columns: Array<Column>;
+    readonly columns: Array<Column<TRowData, TKey>>;
     readonly rowIndex: number;
     readonly rowType: string;
     readonly isSelected?: boolean;
@@ -264,145 +264,146 @@ export type RowDblClickEvent = NativeEventInfo<dxTreeList> & {
 };
 
 /** @public */
-export type RowExpandedEvent = EventInfo<dxTreeList> & RowKeyInfo;
+export type RowExpandedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowExpandingEvent = Cancelable & EventInfo<dxTreeList> & RowKeyInfo;
+export type RowExpandingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowInsertedEvent = EventInfo<dxTreeList> & RowInsertedInfo;
+export type RowInsertedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowInsertedInfo<TRowData, TKey>;
 
 /** @public */
-export type RowInsertingEvent = EventInfo<dxTreeList> & RowInsertingInfo;
+export type RowInsertingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowInsertingInfo<TRowData>;
 
 /** @public */
-export type RowPreparedEvent = EventInfo<dxTreeList> & {
-    readonly data: any;
-    readonly key: any;
+export type RowPreparedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
+    readonly data: TRowData;
+    readonly key: TKey;
     readonly values: Array<any>;
-    readonly columns: Array<Column>;
+    readonly columns: Array<Column<TRowData, TKey>>;
     readonly rowIndex: number;
     readonly rowType: string;
     readonly isSelected?: boolean;
     readonly isExpanded?: boolean;
     readonly isNewRow?: boolean;
     readonly rowElement: DxElement;
-    readonly node: Node;
+    readonly node: Node<TRowData, TKey>;
     readonly level: number;
 };
 
 /** @public */
-export type RowRemovedEvent = EventInfo<dxTreeList> & RowRemovedInfo;
+export type RowRemovedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowRemovedInfo<TRowData, TKey>;
 
 /** @public */
-export type RowRemovingEvent = EventInfo<dxTreeList> & RowRemovingInfo;
+export type RowRemovingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowRemovingInfo<TRowData, TKey>;
 
 /** @public */
-export type RowUpdatedEvent = EventInfo<dxTreeList> & RowUpdatedInfo;
+export type RowUpdatedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowUpdatedInfo<TRowData, TKey>;
 
 /** @public */
-export type RowUpdatingEvent = EventInfo<dxTreeList> & RowUpdatingInfo;
+export type RowUpdatingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowUpdatingInfo<TRowData, TKey>;
 
 /** @public */
-export type RowValidatingEvent = EventInfo<dxTreeList> & RowValidatingInfo;
+export type RowValidatingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & RowValidatingInfo<TRowData, TKey>;
 
 /** @public */
-export type SavedEvent = EventInfo<dxTreeList> & DataChangeInfo;
+export type SavedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & DataChangeInfo<TRowData, TKey>;
 
 /** @public */
-export type SavingEvent = EventInfo<dxTreeList> & SavingInfo;
+export type SavingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & SavingInfo<TRowData, TKey>;
 
 /** @public */
-export type SelectionChangedEvent = EventInfo<dxTreeList> & SelectionChangedInfo;
+export type SelectionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & SelectionChangedInfo<TRowData, TKey>;
 
 /** @public */
-export type ToolbarPreparingEvent = EventInfo<dxTreeList> & ToolbarPreparingInfo;
+export type ToolbarPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & ToolbarPreparingInfo;
 
 /** @public */
-export type RowDraggingAddEvent = RowDraggingEventInfo<dxTreeList> & DragDropInfo;
+export type RowDraggingAddEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
 
 /** @public */
-export type RowDraggingChangeEvent = Cancelable & RowDraggingEventInfo<dxTreeList> & DragDropInfo;
+export type RowDraggingChangeEvent<TRowData = any, TKey = any> = Cancelable & RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
 
 /** @public */
-export type RowDraggingEndEvent = Cancelable & RowDraggingEventInfo<dxTreeList> & DragDropInfo;
+export type RowDraggingEndEvent<TRowData = any, TKey = any> = Cancelable & RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
 
 /** @public */
-export type RowDraggingMoveEvent = Cancelable & RowDraggingEventInfo<dxTreeList> & DragDropInfo;
+export type RowDraggingMoveEvent<TRowData = any, TKey = any> = Cancelable & RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragDropInfo;
 
 /** @public */
-export type RowDraggingStartEvent = Cancelable & DragStartEventInfo<dxTreeList>;
+export type RowDraggingStartEvent<TRowData = any, TKey = any> = Cancelable & DragStartEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey>;
 
 /** @public */
-export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxTreeList>;
+export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey>;
 
 /** @public */
-export type RowDraggingReorderEvent = RowDraggingEventInfo<dxTreeList> & DragReorderInfo;
+export type RowDraggingReorderEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragReorderInfo;
 
 /** @public */
-export type ColumnButtonClickEvent = NativeEventInfo<dxTreeList> & {
-    row?: RowObject;
-    column?: Column;
+export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+    row?: Row<TRowData, TKey>;
+    column?: Column<TRowData, TKey>;
 };
 
 /** @public */
-export type ColumnButtonTemplateData = {
-    readonly component: dxTreeList;
-    readonly data: any;
-    readonly key: any;
+export type ColumnButtonTemplateData<TRowData = any, TKey = any> = {
+    readonly component: dxTreeList<TRowData, TKey>;
+    readonly data: TRowData;
+    readonly key: TKey;
     readonly columnIndex: number;
-    readonly column: Column;
+    readonly column: Column<TRowData, TKey>;
     readonly rowIndex: number;
     readonly rowType: string;
-    readonly row: RowObject;
+    readonly row: Row<TRowData, TKey>;
 };
 
 /** @public */
-export type ColumnCellTemplateData = {
-    readonly data: any;
-    readonly component: dxTreeList;
+export type ColumnCellTemplateData<TRowData = any, TKey = any> = {
+    readonly data: TRowData;
+    readonly component: dxTreeList<TRowData, TKey>;
     readonly value?: any;
     readonly oldValue?: any;
     readonly displayValue?: any;
     readonly text: string;
     readonly columnIndex: number;
     readonly rowIndex: number;
-    readonly column: Column;
-    readonly row: RowObject;
+    readonly column: Column<TRowData, TKey>;
+    readonly row: Row<TRowData, TKey>;
     readonly rowType: string;
     readonly watch?: Function;
 };
 
 /** @public */
-export type ColumnEditCellTemplateData = {
+export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
     readonly setValue?: any;
-    readonly data: any;
-    readonly component: dxTreeList;
+    readonly data: TRowData;
+    readonly component: dxTreeList<TRowData, TKey>;
     readonly value?: any;
     readonly displayValue?: any;
     readonly text: string;
     readonly columnIndex: number;
     readonly rowIndex: number;
-    readonly column: Column;
-    readonly row: RowObject;
+    readonly column: Column<TRowData, TKey>;
+    readonly row: Row<TRowData, TKey>;
     readonly rowType: string;
     readonly watch?: Function;
 };
 
-export type ColumnHeaderCellTemplateData = {
-    readonly component: dxTreeList;
+export type ColumnHeaderCellTemplateData<TRowData = any, TKey = any> = {
+    readonly component: dxTreeList<TRowData, TKey>;
     readonly columnIndex: number;
-    readonly column: Column;
+    readonly column: Column<TRowData, TKey>;
 };
 
 /** @public */
-export type RowDraggingTemplateData = RowDraggingTemplateDataModel;
+export type RowDraggingTemplateData<TRowData = any> = RowDraggingTemplateDataModel<TRowData>;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
-export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
+export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseOptions<dxTreeList<TRowData, TKey>, TRowData, TKey> {
     /**
      * @docid
      * @default false
@@ -415,13 +416,13 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @default undefined
      * @public
      */
-    columns?: Array<Column | string>;
+    columns?: Array<Column<TRowData, TKey> | string>;
     /**
      * @docid
      * @type_function_param1 columns:Array<dxTreeListColumn>
      * @public
      */
-    customizeColumns?: ((columns: Array<Column>) => void);
+    customizeColumns?: ((columns: Array<Column<TRowData, TKey>>) => void);
     /**
      * @docid
      * @default "plain"
@@ -433,7 +434,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @public
      * @type object
      */
-    editing?: Editing;
+    editing?: Editing<TRowData, TKey>;
     /**
      * @docid
      * @default true
@@ -446,7 +447,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @fires dxTreeListOptions.onOptionChanged
      * @public
      */
-    expandedRowKeys?: Array<any>;
+    expandedRowKeys?: Array<TKey>;
     /**
      * @docid
      * @default "withAncestors"
@@ -492,7 +493,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onCellClick?: ((e: CellClickEvent) => void);
+    onCellClick?: ((e: CellClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -515,7 +516,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onCellDblClick?: ((e: CellDblClickEvent) => void);
+    onCellDblClick?: ((e: CellDblClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -538,7 +539,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onCellHoverChanged?: ((e: CellHoverChangedEvent) => void);
+    onCellHoverChanged?: ((e: CellHoverChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -565,7 +566,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onCellPrepared?: ((e: CellPreparedEvent) => void);
+    onCellPrepared?: ((e: CellPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:Object
@@ -583,7 +584,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent) => void);
+    onContextMenuPreparing?: ((e: ContextMenuPreparingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -598,7 +599,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onEditingStart?: ((e: EditingStartEvent) => void);
+    onEditingStart?: ((e: EditingStartEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 options:object
@@ -620,7 +621,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onEditorPrepared?: ((options: EditorPreparedEvent) => void);
+    onEditorPrepared?: ((options: EditorPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -645,7 +646,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onEditorPreparing?: ((e: EditorPreparingEvent) => void);
+    onEditorPreparing?: ((e: EditorPreparingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -661,7 +662,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onFocusedCellChanged?: ((e: FocusedCellChangedEvent) => void);
+    onFocusedCellChanged?: ((e: FocusedCellChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -682,7 +683,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onFocusedCellChanging?: ((e: FocusedCellChangingEvent) => void);
+    onFocusedCellChanging?: ((e: FocusedCellChangingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -696,7 +697,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onFocusedRowChanged?: ((e: FocusedRowChangedEvent) => void);
+    onFocusedRowChanged?: ((e: FocusedRowChangedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -713,7 +714,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onFocusedRowChanging?: ((e: FocusedRowChangingEvent) => void);
+    onFocusedRowChanging?: ((e: FocusedRowChangingEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -725,7 +726,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onNodesInitialized?: ((e: NodesInitializedEvent) => void);
+    onNodesInitialized?: ((e: NodesInitializedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -750,7 +751,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onRowClick?: ((e: RowClickEvent) => void);
+    onRowClick?: ((e: RowClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -772,7 +773,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onRowDblClick?: ((e: RowDblClickEvent) => void);
+    onRowDblClick?: ((e: RowDblClickEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -795,7 +796,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @action
      * @public
      */
-    onRowPrepared?: ((e: RowPreparedEvent) => void);
+    onRowPrepared?: ((e: RowPreparedEvent<TRowData, TKey>) => void);
     /**
      * @docid
      * @public
@@ -835,7 +836,7 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @default 0
      * @public
      */
-    rootValue?: any;
+    rootValue?: TKey;
     /**
      * @docid
      * @public
@@ -859,35 +860,42 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Editing instead
  */
-export type dxTreeListEditing = Editing;
+export type dxTreeListEditing<TRowData = any, TKey = any> = Editing<TRowData, TKey>;
 
-export interface Editing extends EditingBase {
+/** @public */
+export interface Editing<TRowData = any, TKey = any> extends EditingBase<TRowData, TKey> {
     /**
      * @docid dxTreeListOptions.editing.allowAdding
      * @default false
+     * @type boolean|function
+     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_return Boolean
      * @public
      */
-    allowAdding?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject }) => boolean);
+    allowAdding?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey> }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.allowDeleting
      * @default false
+     * @type boolean|function
+     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_return Boolean
      * @public
      */
-    allowDeleting?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject }) => boolean);
+    allowDeleting?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey> }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.allowUpdating
      * @default false
+     * @type boolean|function
+     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_return Boolean
      * @public
      */
-    allowUpdating?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject }) => boolean);
+    allowUpdating?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey> }) => boolean);
     /**
      * @docid dxTreeListOptions.editing.texts
      * @type object
@@ -931,10 +939,11 @@ export interface Paging extends PagingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Scrolling instead
  */
 export type dxTreeListScrolling = Scrolling;
 
+/** @public */
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxTreeListOptions.scrolling.mode
@@ -947,10 +956,11 @@ export interface Scrolling extends ScrollingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Selection instead
  */
 export type dxTreeListSelection = Selection;
 
+/** @public */
 export interface Selection extends SelectionBase {
     /**
      * @docid dxTreeListOptions.selection.recursive
@@ -965,14 +975,14 @@ export interface Selection extends SelectionBase {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTreeList extends Widget<dxTreeListOptions> implements GridBase {
+export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTreeListOptions<TRowData, TKey>> implements GridBase<TRowData, TKey> {
     /**
      * @docid
      * @publicName addColumn(columnOptions)
      * @param1 columnOptions:object|string
      * @public
      */
-    addColumn(columnOptions: any | string): void;
+    addColumn(columnOptions: Column<TRowData, TKey> | string): void;
     /**
      * @docid
      * @publicName addRow()
@@ -986,21 +996,21 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Promise<void>
      * @public
      */
-    addRow(parentId: any): DxPromise<void>;
+    addRow(parentId: TKey): DxPromise<void>;
     /**
      * @docid
      * @publicName collapseRow(key)
      * @return Promise<void>
      * @public
      */
-    collapseRow(key: any): DxPromise<void>;
+    collapseRow(key: TKey): DxPromise<void>;
     /**
      * @docid
      * @publicName expandRow(key)
      * @return Promise<void>
      * @public
      */
-    expandRow(key: any): DxPromise<void>;
+    expandRow(key: TKey): DxPromise<void>;
     /**
      * @docid
      * @publicName forEachNode(callback)
@@ -1015,7 +1025,7 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @param2 callback:function
      * @public
      */
-    forEachNode(nodes: Array<Node>, callback: Function): void;
+    forEachNode(nodes: Array<Node<TRowData, TKey>>, callback: Function): void;
     /**
      * @docid
      * @publicName getNodeByKey(key)
@@ -1023,65 +1033,65 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return dxTreeListNode
      * @public
      */
-    getNodeByKey(key: any | string | number): Node;
+    getNodeByKey(key: TKey): Node<TRowData, TKey>;
     /**
      * @docid
      * @publicName getRootNode()
      * @return dxTreeListNode
      * @public
      */
-    getRootNode(): Node;
+    getRootNode(): Node<TRowData, TKey>;
     /**
      * @docid
      * @publicName getSelectedRowKeys()
      * @public
      */
-    getSelectedRowKeys(): Array<any>;
+    getSelectedRowKeys(): Array<TKey>;
     /**
      * @docid
      * @publicName getSelectedRowKeys(mode)
      * @public
      */
-    getSelectedRowKeys(mode: string): Array<any>;
+    getSelectedRowKeys(mode: string): Array<TKey>;
     /**
      * @docid
      * @publicName getSelectedRowsData()
      * @public
      */
-    getSelectedRowsData(): Array<any>;
+    getSelectedRowsData(): Array<TRowData>;
     /**
      * @docid
      * @publicName getSelectedRowsData(mode)
      * @public
      */
-    getSelectedRowsData(mode: string): Array<any>;
+    getSelectedRowsData(mode: string): Array<TRowData>;
     /**
      * @docid
      * @publicName getVisibleColumns()
      * @return Array<dxTreeListColumn>
      * @public
      */
-    getVisibleColumns(): Array<Column>;
+    getVisibleColumns(): Array<Column<TRowData, TKey>>;
     /**
      * @docid
      * @publicName getVisibleColumns(headerLevel)
      * @return Array<dxTreeListColumn>
      * @public
      */
-    getVisibleColumns(headerLevel: number): Array<Column>;
+    getVisibleColumns(headerLevel: number): Array<Column<TRowData, TKey>>;
     /**
      * @docid
      * @publicName getVisibleRows()
      * @return Array<dxTreeListRowObject>
      * @public
      */
-    getVisibleRows(): Array<RowObject>;
+    getVisibleRows(): Array<Row<TRowData, TKey>>;
     /**
      * @docid
      * @publicName isRowExpanded(key)
      * @public
      */
-    isRowExpanded(key: any): boolean;
+    isRowExpanded(key: TKey): boolean;
     /**
      * @docid
      * @publicName loadDescendants()
@@ -1095,17 +1105,17 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
      * @return Promise<void>
      * @public
      */
-    loadDescendants(keys: Array<any>): DxPromise<void>;
+    loadDescendants(keys: Array<TKey>): DxPromise<void>;
     /**
      * @docid
      * @publicName loadDescendants(keys, childrenOnly)
      * @return Promise<void>
      * @public
      */
-    loadDescendants(keys: Array<any>, childrenOnly: boolean): DxPromise<void>;
+    loadDescendants(keys: Array<TKey>, childrenOnly: boolean): DxPromise<void>;
 
     beginCustomLoading(messageText: string): void;
-    byKey(key: any | string | number): DxPromise<any>;
+    byKey(key: TKey): DxPromise<TRowData>;
     cancelEditData(): void;
     cellValue(rowIndex: number, dataField: string): any;
     cellValue(rowIndex: number, dataField: string, value: any): void;
@@ -1125,12 +1135,12 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     deleteColumn(id: number | string): void;
     deleteRow(rowIndex: number): void;
     deselectAll(): DxPromise<void>;
-    deselectRows(keys: Array<any>): DxPromise<any>;
+    deselectRows(keys: Array<TKey>): DxPromise<Array<TRowData>>;
     editCell(rowIndex: number, dataField: string): void;
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     editRow(rowIndex: number): void;
     endCustomLoading(): void;
-    expandAdaptiveDetailRow(key: any): void;
+    expandAdaptiveDetailRow(key: TKey): void;
     filter(): any;
     filter(filterExpr: any): void;
     focus(): void;
@@ -1139,19 +1149,19 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     getCombinedFilter(): any;
     getCombinedFilter(returnDataField: boolean): any;
-    getDataSource(): DataSource;
-    getKeyByRowIndex(rowIndex: number): any;
+    getDataSource(): DataSource<TRowData, TKey>;
+    getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
-    getRowIndexByKey(key: any | string | number): number;
+    getRowIndexByKey(key: TKey): number;
     getScrollable(): dxScrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
-    isAdaptiveDetailRowExpanded(key: any): boolean;
-    isRowFocused(key: any): boolean;
-    isRowSelected(key: any): boolean;
-    keyOf(obj: any): any;
-    navigateToRow(key: any): DxPromise<void>;
+    isAdaptiveDetailRowExpanded(key: TKey): boolean;
+    isRowFocused(key: TKey): boolean;
+    isRowSelected(key: TKey): boolean;
+    keyOf(obj: TRowData): TKey;
+    navigateToRow(key: TKey): DxPromise<void>;
     pageCount(): number;
     pageIndex(): number;
     pageIndex(newIndex: number): DxPromise<void>;
@@ -1163,8 +1173,8 @@ export default class dxTreeList extends Widget<dxTreeListOptions> implements Gri
     saveEditData(): DxPromise<void>;
     searchByText(text: string): void;
     selectAll(): DxPromise<void>;
-    selectRows(keys: Array<any>, preserve: boolean): DxPromise<any>;
-    selectRowsByIndexes(indexes: Array<number>): DxPromise<any>;
+    selectRows(keys: Array<TKey>, preserve: boolean): DxPromise<Array<TRowData>>;
+    selectRowsByIndexes(indexes: Array<number>): DxPromise<Array<TRowData>>;
     showColumnChooser(): void;
     state(): any;
     state(state: any): void;
@@ -1185,18 +1195,11 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
     name?: TreeListToolbarItem | string;
     /**
      * @docid
-     * @type boolean
-     * @default undefined
+     * @type Enums.ToolbarItemLocation
+     * @default 'after'
      * @public
      */
-    visible?: boolean;
-    /**
-     * @docid
-     * @type boolean
-     * @default undefined
-     * @public
-     */
-    disabled?: boolean;
+    location?: 'after' | 'before' | 'center';
 }
 
 /**
@@ -1216,13 +1219,13 @@ export interface dxTreeListToolbar {
 /**
  * @public
  */
-export type Column = dxTreeListColumn;
+export type Column<TRowData = any, TKey = any> = dxTreeListColumn<TRowData, TKey>;
 
 /**
  * @namespace DevExpress.ui
  * @deprecated Use the Column type instead
  */
-export interface dxTreeListColumn extends ColumnBase {
+export interface dxTreeListColumn<TRowData = any, TKey = any> extends ColumnBase<TRowData> {
     /**
      * @docid dxTreeListColumn.buttons
      * @type Array<Enums.TreeListColumnButtonName,dxTreeListColumnButton>
@@ -1246,14 +1249,14 @@ export interface dxTreeListColumn extends ColumnBase {
      * @type_function_param2_field12 watch:function
      * @public
      */
-    cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData) => any);
+    cellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnCellTemplateData<TRowData, TKey>) => any);
     /**
      * @docid dxTreeListColumn.columns
      * @type Array<dxTreeListColumn|string>
      * @default undefined
      * @public
      */
-    columns?: Array<Column | string>;
+    columns?: Array<Column<TRowData, TKey> | string>;
     /**
      * @docid dxTreeListColumn.editCellTemplate
      * @type_function_param2 cellInfo:object
@@ -1271,7 +1274,7 @@ export interface dxTreeListColumn extends ColumnBase {
      * @type_function_param2_field12 watch:function
      * @public
      */
-    editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData) => any);
+    editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData<TRowData, TKey>) => any);
     /**
      * @docid dxTreeListColumn.headerCellTemplate
      * @type_function_param2 headerInfo:object
@@ -1280,7 +1283,7 @@ export interface dxTreeListColumn extends ColumnBase {
      * @type_function_param2_field3 column:dxTreeListColumn
      * @public
      */
-    headerCellTemplate?: template | ((columnHeader: DxElement, headerInfo: ColumnHeaderCellTemplateData) => any);
+    headerCellTemplate?: template | ((columnHeader: DxElement, headerInfo: ColumnHeaderCellTemplateData<TRowData, TKey>) => any);
     /**
      * @docid dxTreeListColumn.type
      * @publicName type
@@ -1292,13 +1295,13 @@ export interface dxTreeListColumn extends ColumnBase {
 /**
  * @public
  */
-export type ColumnButton = dxTreeListColumnButton;
+export type ColumnButton<TRowData = any, TKey = any> = dxTreeListColumnButton<TRowData, TKey>;
 
 /**
  * @namespace DevExpress.ui
  * @deprecated Use the TreeList's ColumnButton type instead
  */
-export interface dxTreeListColumnButton extends ColumnButtonBase {
+export interface dxTreeListColumnButton<TRowData = any, TKey = any> extends ColumnButtonBase {
     /**
      * @docid dxTreeListColumnButton.name
      * @public
@@ -1315,7 +1318,7 @@ export interface dxTreeListColumnButton extends ColumnButtonBase {
      * @type_function_param1_field6 column:dxTreeListColumn
      * @public
      */
-    onClick?: ((e: ColumnButtonClickEvent) => void);
+    onClick?: ((e: ColumnButtonClickEvent<TRowData, TKey>) => void);
     /**
      * @docid dxTreeListColumnButton.template
      * @type_function_param2 cellInfo:object
@@ -1330,50 +1333,54 @@ export interface dxTreeListColumnButton extends ColumnButtonBase {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    template?: template | ((cellElement: DxElement, cellInfo: ColumnButtonTemplateData) => string | UserDefinedElement);
+    template?: template | ((cellElement: DxElement, cellInfo: ColumnButtonTemplateData<TRowData, TKey>) => string | UserDefinedElement);
     /**
      * @docid dxTreeListColumnButton.visible
      * @default true
+     * @type boolean | function
+     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_param1_field3 column:dxTreeListColumn
      * @type_function_return Boolean
      * @public
      */
-    visible?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject; readonly column: Column }) => boolean);
+    visible?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey>; readonly column: Column<TRowData, TKey> }) => boolean);
     /**
      * @docid dxTreeListColumnButton.disabled
      * @default false
+     * @type boolean | function
+     * @type_function_param1_field1 component:dxTreeList
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_param1_field3 column:dxTreeListColumn
      * @type_function_return Boolean
      * @public
      */
-    disabled?: boolean | ((options: { readonly component: dxTreeList; readonly row?: RowObject; readonly column: Column }) => boolean);
+    disabled?: boolean | ((options: { readonly component: dxTreeList<TRowData, TKey>; readonly row?: Row<TRowData, TKey>; readonly column: Column<TRowData, TKey> }) => boolean);
 }
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Node instead
  */
-export type dxTreeListNode = Node;
+export type dxTreeListNode<TRowData = any, TKey = any> = Node<TRowData, TKey>;
 
 /**
+ * @public
  * @docid dxTreeListNode
  * @type object
  */
-export interface Node {
+export interface Node<TRowData = any, TKey = any> {
     /**
      * @docid dxTreeListNode.children
      * @type  Array<dxTreeListNode>
      * @public
      */
-    children?: Array<Node>;
+    children?: Array<Node<TRowData, TKey>>;
     /**
      * @docid dxTreeListNode.data
      * @public
      */
-    data?: any;
+    data?: TRowData;
     /**
      * @docid dxTreeListNode.hasChildren
      * @public
@@ -1383,7 +1390,7 @@ export interface Node {
      * @docid dxTreeListNode.key
      * @public
      */
-    key: any;
+    key: TKey;
     /**
      * @docid dxTreeListNode.level
      * @public
@@ -1394,7 +1401,7 @@ export interface Node {
      * @type dxTreeListNode
      * @public
      */
-    parent?: Node;
+    parent?: Node<TRowData, TKey>;
     /**
      * @docid dxTreeListNode.visible
      * @public
@@ -1403,17 +1410,17 @@ export interface Node {
 }
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated Use RowObject instead
+ * @deprecated Use Row instead
  */
-export type dxTreeListRowObject = RowObject;
+export type dxTreeListRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey>;
 
 /**
+ * @public
  * @docid dxTreeListRowObject
  * @type object
  */
-export interface RowObject {
+export interface Row<TRowData = any, TKey = any> {
     /**
      * @docid dxTreeListRowObject.isEditing
      * @public
@@ -1438,7 +1445,7 @@ export interface RowObject {
      * @docid dxTreeListRowObject.key
      * @public
      */
-    readonly key: any;
+    readonly key: TKey;
     /**
      * @docid dxTreeListRowObject.level
      * @public
@@ -1449,7 +1456,7 @@ export interface RowObject {
      * @type dxTreeListNode
      * @public
      */
-    readonly node: Node;
+    readonly node: Node<TRowData, TKey>;
     /**
      * @docid dxTreeListRowObject.rowIndex
      * @public
@@ -1465,13 +1472,76 @@ export interface RowObject {
      * @public
      */
     readonly values: Array<any>;
+    /**
+     * @docid dxTreeListRowObject.data
+     * @public
+     */
+    readonly data: TRowData;
 }
 
 /** @public */
-export type Properties = dxTreeListOptions;
+export type ExplicitTypes<TRowData, TKey> = {
+  AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<TRowData, TKey>;
+  CellClickEvent: CellClickEvent<TRowData, TKey>;
+  CellDblClickEvent: CellDblClickEvent<TRowData, TKey>;
+  CellHoverChangedEvent: CellHoverChangedEvent<TRowData, TKey>;
+  CellPreparedEvent: CellPreparedEvent<TRowData, TKey>;
+  ColumnButtonClickEvent: ColumnButtonClickEvent<TRowData, TKey>;
+  ColumnButtonTemplateData: ColumnButtonTemplateData<TRowData, TKey>;
+  ColumnCellTemplateData: ColumnCellTemplateData<TRowData, TKey>;
+  ColumnEditCellTemplateData: ColumnEditCellTemplateData<TRowData, TKey>;
+  ContentReadyEvent: ContentReadyEvent<TRowData, TKey>;
+  ContextMenuPreparingEvent: ContextMenuPreparingEvent<TRowData, TKey>;
+  DataErrorOccurredEvent: DataErrorOccurredEvent<TRowData, TKey>;
+  DisposingEvent: DisposingEvent<TRowData, TKey>;
+  EditCanceledEvent: EditCanceledEvent<TRowData, TKey>;
+  EditCancelingEvent: EditCancelingEvent<TRowData, TKey>;
+  Editing: Editing<TRowData, TKey>;
+  EditingStartEvent: EditingStartEvent<TRowData, TKey>;
+  EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
+  EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
+  FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
+  FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
+  FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;
+  FocusedRowChangingEvent: FocusedRowChangingEvent<TRowData, TKey>;
+  InitializedEvent: InitializedEvent<TRowData, TKey>;
+  InitNewRowEvent: InitNewRowEvent<TRowData, TKey>;
+  KeyDownEvent: KeyDownEvent<TRowData, TKey>;
+  NodesInitializedEvent: NodesInitializedEvent<TRowData, TKey>;
+  OptionChangedEvent: OptionChangedEvent<TRowData, TKey>;
+  Properties: Properties<TRowData, TKey>;
+  RowClickEvent: RowClickEvent<TRowData, TKey>;
+  RowCollapsedEvent: RowCollapsedEvent<TRowData, TKey>;
+  RowCollapsingEvent: RowCollapsingEvent<TRowData, TKey>;
+  RowDblClickEvent: RowDblClickEvent<TRowData, TKey>;
+  RowDraggingAddEvent: RowDraggingAddEvent<TRowData, TKey>;
+  RowDraggingChangeEvent: RowDraggingChangeEvent<TRowData, TKey>;
+  RowDraggingEndEvent: RowDraggingEndEvent<TRowData, TKey>;
+  RowDraggingMoveEvent: RowDraggingMoveEvent<TRowData, TKey>;
+  RowDraggingRemoveEvent: RowDraggingRemoveEvent<TRowData, TKey>;
+  RowDraggingReorderEvent: RowDraggingReorderEvent<TRowData, TKey>;
+  RowDraggingStartEvent: RowDraggingStartEvent<TRowData, TKey>;
+  RowDraggingTemplateData: RowDraggingTemplateData<TRowData>;
+  RowExpandedEvent: RowExpandedEvent<TRowData, TKey>;
+  RowExpandingEvent: RowExpandingEvent<TRowData, TKey>;
+  RowInsertedEvent: RowInsertedEvent<TRowData, TKey>;
+  RowInsertingEvent: RowInsertingEvent<TRowData, TKey>;
+  RowPreparedEvent: RowPreparedEvent<TRowData, TKey>;
+  RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
+  RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
+  RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
+  RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
+  RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
+  SavedEvent: SavedEvent<TRowData, TKey>;
+  SavingEvent: SavingEvent<TRowData, TKey>;
+  Scrolling: Scrolling;
+  Selection: Selection;
+  SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
+  ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
+};
+
+/** @public */
+export type Properties<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = dxTreeListOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxTreeListOptions;
+export type Options<TRowData = any, TKey = any> = dxTreeListOptions<TRowData, TKey>;

@@ -222,6 +222,3 @@ export type Properties = dxPivotGridFieldChooserOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxPivotGridFieldChooserOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxPivotGridFieldChooserOptions;

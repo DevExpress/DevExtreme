@@ -7,11 +7,7 @@ import {
     template,
 } from '../../core/templates/template';
 
-import DataSource, {
-    DataSourceOptions,
-} from '../../data/data_source';
-
-import Store from '../../data/abstract_store';
+import DataSource, { DataSourceLike } from '../../data/data_source';
 
 import {
     EventInfo,
@@ -109,8 +105,9 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @docid BaseChartOptions.dataSource
      * @notUsedInTheme
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
+    dataSource?: DataSourceLike<any>;
     /**
      * @docid
      * @inherits BaseLegend
@@ -133,6 +130,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:DxElement

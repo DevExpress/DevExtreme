@@ -259,6 +259,13 @@ const Overlay = Widget.inherit({
         };
 
         this._updateResizeCallbackSkipCondition();
+        this.warnPositionAsFunction();
+    },
+
+    warnPositionAsFunction() {
+        if(isFunction(this.option('position'))) { // position as function deprecated in 21.2
+            errors.log('W0018');
+        }
     },
 
     _initOptions: function(options) {
@@ -1066,7 +1073,7 @@ const Overlay = Widget.inherit({
     _attachWrapperToContainer: function() {
         const $element = this.$element();
         const containerDefined = this.option('container') !== undefined;
-        let renderContainer = containerDefined ? this._positionController._$container : swatch.getSwatchContainer($element);
+        let renderContainer = containerDefined ? this._positionController.$container : swatch.getSwatchContainer($element);
 
         if(renderContainer && renderContainer[0] === $element.parent()[0]) {
             renderContainer = $element;

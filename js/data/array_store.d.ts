@@ -1,31 +1,38 @@
 import Store, {
-    StoreOptions,
+    Options as StoreOptions,
 } from './abstract_store';
 import { Query } from './query';
 
-/** @namespace DevExpress.data */
-export interface ArrayStoreOptions
-<TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends StoreOptions<TValue, TKeyExpr, TKey> {
+/** @public */
+export type Options<
+    TItem = any,
+    TKey = any,
+> = ArrayStoreOptions<TItem, TKey>;
+
+/**
+ * @namespace DevExpress.data
+ * @deprecated Use Options instead
+ */
+export interface ArrayStoreOptions<
+    TItem = any,
+    TKey = any,
+> extends StoreOptions<TItem, TKey> {
     /**
      * @docid
      * @public
      */
-    data?: Array<TValue>;
+    data?: Array<TItem>;
 }
 /**
  * @docid
  * @inherits Store
  * @public
  */
-export default class ArrayStore
-<TValue = any,
-    TKeyExpr extends string | Array<string> = string | Array<string>,
-    TKey = TKeyExpr extends keyof TValue ? TValue[TKeyExpr] : any,
-> extends Store<TValue, TKeyExpr, TKey> {
-    constructor(options?: ArrayStoreOptions<TValue, TKeyExpr, TKey>)
+export default class ArrayStore<
+    TItem = any,
+    TKey = any,
+> extends Store<TItem, TKey> {
+    constructor(options?: Options<TItem, TKey>)
     /**
      * @docid
      * @publicName clear()

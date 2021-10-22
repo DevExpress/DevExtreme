@@ -14,7 +14,7 @@ function calculateColumnsWidths(doc, dataProvider, topLeft, margin) {
 
     const normalizedMargin = normalizeBoundaryValue(margin);
 
-    // TODO: check future orientation, measure units there
+    // TODO: check measure units there
     const availablePageWidth = doc.internal.pageSize.getWidth() - (topLeft?.x ?? 0)
         - normalizedMargin.left - normalizedMargin.right;
 

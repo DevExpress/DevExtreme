@@ -172,4 +172,3 @@ export default class dxDropDownEditor<TProperties> extends dxTextBox<TProperties
 interface DropDownEditorInstance extends dxDropDownEditor<Properties> { }
 type Properties = dxDropDownEditorOptions<DropDownEditorInstance>;
 export type Options = Properties;
-export type IOptions = Properties;

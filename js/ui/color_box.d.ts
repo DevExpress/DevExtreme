@@ -153,6 +153,3 @@ export type Properties = dxColorBoxOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxColorBoxOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxColorBoxOptions;

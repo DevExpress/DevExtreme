@@ -194,8 +194,9 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $cell;
     },
 
-    _createRow: function(rowObject) {
-        const $element = $('<tr>').addClass(ROW_CLASS);
+    _createRow: function(rowObject, tagName) {
+        tagName = tagName || 'tr';
+        const $element = $(`<${tagName}>`).addClass(ROW_CLASS);
         this.setAria('role', 'row', $element);
         return $element;
     },
@@ -357,14 +358,14 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return col;
     },
 
-    renderDelayedTemplates: function() {
+    renderDelayedTemplates: function(change) {
         const delayedTemplates = this._delayedTemplates;
         const syncTemplates = delayedTemplates.filter(template => !template.async);
         const asyncTemplates = delayedTemplates.filter(template => template.async);
 
         this._delayedTemplates = [];
 
-        this._renderDelayedTemplatesCore(syncTemplates);
+        this._renderDelayedTemplatesCore(syncTemplates, false, change);
         this._renderDelayedTemplatesCoreAsync(asyncTemplates);
     },
 
@@ -377,7 +378,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
     },
 
-    _renderDelayedTemplatesCore: function(templates, isAsync) {
+    _renderDelayedTemplatesCore: function(templates, isAsync, change) {
         const date = new Date();
 
         while(templates.length) {
@@ -387,6 +388,9 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             const doc = domAdapter.getDocument();
 
             if(!isAsync || $(options.container).closest(doc).length) {
+                if(change) {
+                    options.change = change;
+                }
                 templateParameters.template.render(options);
             }
             if(isAsync && (new Date() - date) > 30) {
@@ -408,14 +412,14 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             renderingTemplate = {
                 allowRenderToDetachedContainer: template.allowRenderToDetachedContainer,
                 render: function(options) {
-                    template.render(options.container, options.model);
+                    template.render(options.container, options.model, options.change);
                     options.deferred && options.deferred.resolve();
                 }
             };
         } else if(isFunction(template)) {
             renderingTemplate = {
                 render: function(options) {
-                    const renderedTemplate = template(getPublicElement(options.container), options.model);
+                    const renderedTemplate = template(getPublicElement(options.container), options.model, options.change);
                     if(renderedTemplate && (renderedTemplate.nodeType || isRenderer(renderedTemplate))) {
                         options.container.append(renderedTemplate);
                     }
@@ -439,7 +443,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return renderingTemplate;
     },
 
-    renderTemplate: function(container, template, options, allowRenderToDetachedContainer) {
+    renderTemplate: function(container, template, options, allowRenderToDetachedContainer, change) {
         const that = this;
         const renderingTemplate = that._processTemplate(template, options);
         const column = options.column;
@@ -468,6 +472,10 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             } else {
                 that._delayedTemplates.push({ template: renderingTemplate, options: templateOptions, async: async });
             }
+            if(change) {
+                change.templateDeferreds = change.templateDeferreds || [];
+                change.templateDeferreds.push(templateDeferred);
+            }
         } else {
             templateDeferred.reject();
         }
@@ -480,7 +488,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _wrapRowIfNeed: function($table, $row) {
-        const $tBodies = this.option('rowTemplate') && this._getBodies(this._tableElement || $table);
+        const hasDataRowTemplate = this.option().rowTemplate || this.option('dataRowTemplate');
+        const $tBodies = hasDataRowTemplate && this._getBodies(this._tableElement || $table);
 
         if($tBodies && $tBodies.filter('.' + ROW_CLASS).length) {
             const $tbody = $('<tbody>').addClass($row.attr('class'));
@@ -1069,7 +1078,8 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         tableElement = tableElement || this.getTableElement();
 
         if(tableElement) {
-            const tBodies = this.option('rowTemplate') && tableElement.find('> tbody.' + ROW_CLASS);
+            const hasRowTemplate = this.option().rowTemplate || this.option('dataRowTemplate');
+            const tBodies = hasRowTemplate && tableElement.find('> tbody.' + ROW_CLASS);
 
             return tBodies && tBodies.length ? tBodies : tableElement.find('> tbody > ' + '.' + ROW_CLASS + ', > .' + ROW_CLASS);
         }

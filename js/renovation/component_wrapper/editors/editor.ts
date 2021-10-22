@@ -52,16 +52,26 @@ export default class Editor extends Component {
     return props;
   }
 
+  _createElement(element: HTMLElement): void {
+    super._createElement(element);
+    this.showValidationMessageTimeout = undefined;
+    this.validationRequest = Callbacks();
+    data(this.$element()[0], VALIDATION_TARGET, this);
+  }
+
   _init(): void {
     super._init();
-
-    data(this.$element()[0], VALIDATION_TARGET, this);
-    this.validationRequest = Callbacks();
-    this.showValidationMessageTimeout = undefined;
 
     this._valueChangeAction = this._createActionByOption('onValueChanged', {
       excludeValidators: ['disabled', 'readOnly'],
     });
+  }
+
+  _initOptions(options: Record<string, unknown>): void {
+    super._initOptions(options);
+
+    this.option((ValidationEngine as unknown as ({ initValidationOptions }))
+      .initValidationOptions(options));
   }
 
   _getDefaultOptions(): Record<string, unknown> {
