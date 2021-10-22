@@ -338,7 +338,7 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
                 }
 
                 // assert
-                assert.deepEqual(parentIds, initNewRowCalls, 'for every added row sequentially calls onInitNewRow');
+                assert.deepEqual(parentIds.slice(0, 1), initNewRowCalls, 'for every added row sequentially calls onInitNewRow');
 
                 return $.Deferred().resolve();
             };

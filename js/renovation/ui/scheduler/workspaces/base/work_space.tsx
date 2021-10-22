@@ -30,6 +30,7 @@ import { TimePanelLayoutProps } from './time_panel/layout';
 import { isVerticalGroupingApplied } from '../utils';
 import { CrossScrollingLayout } from './cross_scrolling_layout';
 import { MainLayoutProps } from './main_layout_props';
+import { GroupOrientation } from '../../types';
 
 export const prepareGenerationOptions = (
   workSpaceProps: Partial<WorkSpaceProps>,
@@ -102,6 +103,7 @@ export const viewFunction = ({
 
   isVerticalGrouping,
   isStandaloneAllDayPanel,
+  groupOrientation,
 
   groupPanelHeight,
   headerEmptyCellWidth,
@@ -115,7 +117,6 @@ export const viewFunction = ({
 
     groups,
     groupByDate,
-    groupOrientation,
     allDayPanelExpanded,
     intervalCount,
 
@@ -198,17 +199,25 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   @ForwardRef()
   groupPanelRef!: RefObject<HTMLDivElement>;
 
-  get isVerticalGrouping(): boolean {
-    return isVerticalGroupingApplied(this.props.groups, this.props.groupOrientation);
-  }
-
   get renderConfig(): ViewRenderConfig {
     return getViewRenderConfigByType(
       this.props.type,
       this.props.crossScrollingEnabled,
       this.props.intervalCount,
-      this.isVerticalGrouping,
+      this.props.groups,
+      this.props.groupOrientation,
     );
+  }
+
+  get groupOrientation(): GroupOrientation {
+    const { groupOrientation } = this.props;
+    const { defaultGroupOrientation } = this.renderConfig;
+
+    return groupOrientation ?? defaultGroupOrientation;
+  }
+
+  get isVerticalGrouping(): boolean {
+    return isVerticalGroupingApplied(this.props.groups, this.groupOrientation);
   }
 
   get layout(): JSXTemplate<
@@ -279,7 +288,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       intervalCount,
       groups,
       groupByDate,
-      groupOrientation,
       startDayHour,
       endDayHour,
       currentDate,
@@ -298,7 +306,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         intervalCount,
         groups,
         groupByDate,
-        groupOrientation,
+        groupOrientation: this.groupOrientation,
         startDayHour,
         endDayHour,
         currentDate,
@@ -377,10 +385,9 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   get isStandaloneAllDayPanel(): boolean {
     const {
       groups,
-      groupOrientation,
     } = this.props;
 
-    return !isVerticalGroupingApplied(groups, groupOrientation) && this.isAllDayPanelVisible;
+    return !isVerticalGroupingApplied(groups, this.groupOrientation) && this.isAllDayPanelVisible;
   }
 
   @Effect({ run: 'always' })
@@ -406,7 +413,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       hoursInterval,
       startDayHour,
       endDayHour,
-      groupOrientation,
       groups,
     } = this.props;
 
@@ -418,7 +424,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       startDayHour,
       endDayHour,
     });
-    const totalCellCount = getTotalCellCount(cellCount, groupOrientation, groups);
+    const totalCellCount = getTotalCellCount(cellCount, this.groupOrientation, groups);
 
     const dateTableCellsMeta = this.createDateTableElementsMeta(totalCellCount);
     const allDayPanelCellsMeta = this.createAllDayPanelElementsMeta();
@@ -432,10 +438,10 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     });
   }
 
-  createDateTableElementsMeta(totalCellCount: number): ClientRect[][] {
+  createDateTableElementsMeta(totalCellCount: number): DOMRect[][] {
     const dateTableCells = this.dateTableRef.current!.querySelectorAll('td');
     const dateTableRect = this.dateTableRef.current!.getBoundingClientRect();
-    const dateTableCellsMeta: ClientRect[][] = [];
+    const dateTableCellsMeta: DOMRect[][] = [];
 
     dateTableCells.forEach((cellElement, index) => {
       if (index % totalCellCount === 0) {
@@ -454,14 +460,14 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return dateTableCellsMeta;
   }
 
-  createAllDayPanelElementsMeta(): ClientRect[] {
+  createAllDayPanelElementsMeta(): DOMRect[] {
     if (!this.allDayPanelRef.current) {
       return [];
     }
 
     const allDayPanelCells = this.allDayPanelRef.current.querySelectorAll('td');
     const allDayPanelRect = this.allDayPanelRef.current.getBoundingClientRect();
-    const allDayPanelCellsMeta: ClientRect[] = [];
+    const allDayPanelCellsMeta: DOMRect[] = [];
 
     allDayPanelCells.forEach((cellElement) => {
       const cellRect = cellElement.getBoundingClientRect();

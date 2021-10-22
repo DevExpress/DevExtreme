@@ -43,7 +43,7 @@ import {
     ListItemDeleteMode,
 } from '../types/enums';
 
-type ItemLike = string | Item<any> | any;
+type ItemLike = string | Item | any;
 
 interface ListItemInfo<TItem extends ItemLike> {
     readonly itemData?: TItem;
@@ -93,7 +93,7 @@ export type ItemDeletingEvent<TItem extends ItemLike = any, TKey = any> = EventI
 export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent<TItem extends Item<any> | any = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends Item | any = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
 export type ItemReorderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
@@ -166,7 +166,7 @@ export interface dxListOptions<
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<string | Item | any, TKey>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @default undefined
@@ -712,13 +712,13 @@ export default class dxList<
  * @public
  * @namespace DevExpress.ui.dxList
  */
-export type Item<TItem extends Item<any> | any = any> = dxListItem<TItem>;
+export type Item = dxListItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxListItem<TItem extends dxListItem<any> | any = any> extends CollectionWidgetItem<TItem> {
+export interface dxListItem extends CollectionWidgetItem {
     /**
      * @docid
      * @public

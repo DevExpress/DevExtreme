@@ -435,7 +435,39 @@ export type DataSourceLike<TItem, TKey = any> =
     string |
     Array<TItem> |
     Store<TItem, TKey> |
-    Options<any, any, TItem, TKey> |
+    DataSourceOptionsStub<any, any, TItem> |
     DataSource<TItem, TKey>;
+
+    interface DataSourceOptionsStub<
+    TStoreItem = any,
+    TMappedItem = TStoreItem,
+    TItem = TMappedItem,
+> {
+    customQueryParams?: any;
+    expand?: Array<string> | string;
+    filter?: FilterDescriptor | Array<FilterDescriptor>;
+    group?: GroupDescriptor<TItem> | Array<GroupDescriptor<TItem>>;
+    map?: ((dataItem: TStoreItem) => TMappedItem);
+    onChanged?: ((e: { readonly changes?: Array<TMappedItem> }) => void);
+    onLoadError?: ((error: { readonly message?: string }) => void);
+    onLoadingChanged?: ((isLoading: boolean) => void);
+    pageSize?: number;
+    paginate?: boolean;
+    postProcess?: ((data: Array<TMappedItem>) => Array<TItem>);
+    pushAggregationTimeout?: number;
+    requireTotalCount?: boolean;
+    reshapeOnPush?: boolean;
+    searchExpr?: string | Function | Array<string | Function>;
+    searchOperation?: SearchOperation;
+    searchValue?: any;
+    select?: SelectDescriptor<TItem>;
+    sort?: SortDescriptor<TItem> | Array<SortDescriptor<TItem>>;
+    store?: Array<TStoreItem> |
+        Store<TStoreItem, any> |
+        ArrayStoreOptions<TStoreItem, any> & { type: 'array' } |
+        LocalStoreOptions<TStoreItem, any> & { type: 'local' } |
+        ODataStoreOptions<TStoreItem, any> & { type: 'odata' } |
+        CustomStoreOptions<TStoreItem, any>;
+}
 
 type EventName = 'changed' | 'loadError' | 'loadingChanged';
