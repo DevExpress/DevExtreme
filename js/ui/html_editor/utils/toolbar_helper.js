@@ -126,6 +126,17 @@ function prepareShowFormProperties(module, type) {
 
         let formInstance;
 
+        const resetDialogOptions = () => {
+            module.editorInstance.formDialogOption({
+                contentTemplate: savedDialogOptions.contentTemplate,
+                title: savedDialogOptions.title,
+                minHeight: savedDialogOptions.minHeight || 0,
+                minWidth: savedDialogOptions.minWidth || 0,
+                maxWidth: savedDialogOptions.maxWidth || 'none',
+                onHidden: null
+            });
+        };
+
         module.editorInstance.formDialogOption({
             'contentTemplate': (container) => {
                 const $content = $('<div>').appendTo(container);
@@ -139,17 +150,7 @@ function prepareShowFormProperties(module, type) {
             title: localizationMessage.format(`dxHtmlEditor-${type}Properties`),
             minHeight: MIN_HEIGHT,
             minWidth: Math.min(800, getWidth(getWindow()) * 0.9 - 1),
-            maxWidth: getWidth(getWindow()) * 0.9,
-            onHiding: () => {
-                module.editorInstance.formDialogOption({
-                    contentTemplate: savedDialogOptions.contentTemplate,
-                    title: savedDialogOptions.title,
-                    minHeight: savedDialogOptions.minHeight || 0,
-                    minWidth: savedDialogOptions.minWidth || 0,
-                    maxWidth: savedDialogOptions.maxWidth || 'none',
-                    onHiding: null
-                });
-            }
+            maxWidth: getWidth(getWindow()) * 0.9
         });
 
         const promise = module.editorInstance.showFormDialog();
@@ -158,11 +159,13 @@ function prepareShowFormProperties(module, type) {
             module.saveValueChangeEvent(event);
             tablePropertiesFormConfig.applyHandler(formInstance);
             formInstance.dispose();
+            resetDialogOptions();
         });
 
         promise.fail(() => {
             module.quill.focus();
             formInstance.dispose();
+            resetDialogOptions();
         });
     };
 }
