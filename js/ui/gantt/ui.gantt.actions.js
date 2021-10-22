@@ -475,18 +475,26 @@ export class GanttActionsManager {
     raiseUpdatingAction(optionName, coreArgs, action) {
         action = action || this._getUpdatingAction(optionName);
         if(action) {
+            const isTaskUpdating = optionName === GANTT_TASKS;
             const args = {
                 cancel: false,
                 key: coreArgs.key,
                 newValues: this._convertCoreToMappedData(optionName, coreArgs.newValues),
-                values: this._convertCoreToMappedData(optionName, coreArgs.values)
+                values: isTaskUpdating ? this._getTaskData(coreArgs.key) : this._convertCoreToMappedData(optionName, coreArgs.values)
             };
+            if(isTaskUpdating && this._customFieldsManager.cache.hasData(args.key)) {
+                this._customFieldsManager.addCustomFieldsDataFromCache(args.key, args.newValues);
+            }
             action(args);
             coreArgs.cancel = args.cancel;
             coreArgs.newValues = this._convertMappedToCoreData(optionName, args.newValues);
-            if(optionName === GANTT_TASKS) {
-                const forceUpdateOnKeyExpire = !Object.keys(coreArgs.newValues).length;
-                this._saveCustomFieldsDataToCache(args.key, args.newValues, forceUpdateOnKeyExpire);
+            if(isTaskUpdating) {
+                if(args.cancel) {
+                    this._customFieldsManager.resetCustomFieldsDataCache(args.key);
+                } else {
+                    const forceUpdateOnKeyExpire = !Object.keys(coreArgs.newValues).length;
+                    this._saveCustomFieldsDataToCache(args.key, args.newValues, forceUpdateOnKeyExpire);
+                }
             }
         }
     }

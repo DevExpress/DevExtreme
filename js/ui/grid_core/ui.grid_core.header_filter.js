@@ -15,6 +15,8 @@ import dateLocalization from '../../localization/date';
 import variableWrapper from '../../core/utils/variable_wrapper';
 import { Deferred } from '../../core/utils/deferred';
 import { restoreFocus } from '../shared/accessibility';
+import dataQuery from '../../data/query';
+import storeHelper from '../../data/store_helper';
 
 const DATE_INTERVAL_FORMATS = {
     'month': function(value) {
@@ -24,6 +26,42 @@ const DATE_INTERVAL_FORMATS = {
         return dateLocalization.format(new Date(2000, value * 3 - 1), 'quarter');
     }
 };
+
+function ungroupUTCDates(items, dateParts, dates) {
+    dateParts = dateParts || [];
+    dates = dates || [];
+
+    items.forEach(item => {
+        if(isDefined(item.key)) {
+            const isMonthPart = dateParts.length === 1;
+            dateParts.push(isMonthPart ? item.key - 1 : item.key);
+            if(item.items) {
+                ungroupUTCDates(item.items, dateParts, dates);
+            } else {
+                const date = new Date(Date.UTC.apply(Date, dateParts));
+                dates.push(date);
+            }
+            dateParts.pop();
+        } else {
+            dates.push(null);
+        }
+    });
+    return dates;
+}
+
+function convertDataFromUTCToLocal(data, column) {
+    const dates = ungroupUTCDates(data);
+    const query = dataQuery(dates);
+    const group = gridCoreUtils.getHeaderFilterGroupParameters({
+        ...column,
+        calculateCellValue: date => date
+    });
+    return storeHelper.queryByOptions(query, { group }).toArray();
+}
+
+function isUTCFormat(format) {
+    return format?.slice(-1) === 'Z' || format?.slice(-3) === '\'Z\'';
+}
 
 const HeaderFilterController = modules.ViewController.inherit((function() {
     const getFormatOptions = function(value, column, currentLevel) {
@@ -157,8 +195,8 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
         getDataSource: function(column) {
             const that = this;
             const dataSource = that._dataController.dataSource();
-            const group = gridCoreUtils.getHeaderFilterGroupParameters(column, dataSource && dataSource.remoteOperations().grouping);
-            const headerFilterDataSource = column.headerFilter && column.headerFilter.dataSource;
+            const group = gridCoreUtils.getHeaderFilterGroupParameters(column, dataSource?.remoteOperations().grouping);
+            const headerFilterDataSource = column.headerFilter?.dataSource;
             const headerFilterOptions = that.option('headerFilter');
             let isLookup = false;
             const options = {
@@ -198,6 +236,10 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                         options.dataField = column.dataField || column.name;
 
                         dataSource.load(options).done(function(data) {
+                            const convertUTCDates = isUTCFormat(column.serializationFormat) && cutoffLevel > 3;
+                            if(convertUTCDates) {
+                                data = convertDataFromUTCToLocal(data, column);
+                            }
                             that._processGroupItems(data, null, null, {
                                 level: cutoffLevel,
                                 column: column,

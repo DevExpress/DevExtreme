@@ -1,3 +1,4 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     PositionConfig,
 } from '../animation/position';
@@ -9,12 +10,6 @@ import {
 import {
     DxPromise,
 } from '../core/utils/deferred';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     DxEvent,
@@ -98,7 +93,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<Item> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<Item>;
     /**
      * @docid
      * @type Array<dxContextMenuItem>

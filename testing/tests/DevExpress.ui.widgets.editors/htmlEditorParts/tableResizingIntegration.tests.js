@@ -230,6 +230,22 @@ module('Table resizing integration', {
             assert.strictEqual($resizeFrame.length, 0, 'Frame is not created for table');
         });
 
+        test('Table resuizing should support value change to null at runtime', function(assert) {
+            this.createWidget();
+            this.clock.tick(TIME_TO_WAIT);
+
+            try {
+                this.instance.option('tableResizing', null);
+                this.clock.tick(TIME_TO_WAIT);
+
+                const $resizeFrame = this.$element.find(`.${DX_COLUMN_RESIZE_FRAME_CLASS}`);
+
+                assert.strictEqual($resizeFrame.length, 0, 'Frame is not created for table');
+            } catch(e) {
+                assert.ok(false);
+            }
+        });
+
         test('Frame is removed if tableResizing.enabled option is disabled at runtime', function(assert) {
             this.createWidget();
             this.clock.tick(TIME_TO_WAIT);
@@ -783,8 +799,8 @@ module('Table resizing integration', {
             const $columns = $table.find('tr').eq(0).find('td');
 
             each($columns, (_, element) => {
-                const styleAttr = $(element).attr('width') || '';
-                assert.ok(styleAttr.length >= 0);
+                const styleStyle = $(element).css('width') || '';
+                assert.ok(styleStyle.length >= 0);
             });
         });
 
@@ -1091,7 +1107,7 @@ module('Table resizing integration', {
     });
 
     module('API', {}, () => {
-        test('Table and columns width was saved if we apply new markup with td width attributes', function(assert) {
+        test('Table and columns width was saved if we apply new markup with td width styles', function(assert) {
             this.createWidget({ width: 630 });
             this.clock.tick(TIME_TO_WAIT);
 
@@ -1169,7 +1185,7 @@ module('Table resizing integration', {
 
             $table.find('tr').eq(0).find('td').each((i, columnElement) => {
                 assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 2.01, 'Column has expected width, index = ' + i);
-                assert.roughEqual(parseInt($(columnElement).attr('width')), expectedColumnsWidths[i], 2.01, 'Column has expected width attr, index = ' + i);
+                assert.roughEqual(parseInt($(columnElement).css('width')), expectedColumnsWidths[i], 2.01, 'Column has expected width style, index = ' + i);
             });
 
             checkResizerPositions(assert, $columnResizerElements, columnBorderOffsets);
@@ -1463,7 +1479,7 @@ module('Table resizing integration', {
 
             $table.find('tr').eq(0).find('td').each((i, columnElement) => {
                 assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 1.01, 'Column has expected width, index = ' + i);
-                assert.roughEqual(parseInt($(columnElement).attr('width')), expectedColumnsWidths[i], 1.01, 'Column has expected width attr, index = ' + i);
+                assert.roughEqual(parseInt($(columnElement).css('width')), expectedColumnsWidths[i], 1.01, 'Column has expected width style, index = ' + i);
             });
         });
 
@@ -1515,7 +1531,7 @@ module('Table resizing integration', {
 
             $table.find('tr').eq(0).find('td').each((i, columnElement) => {
                 assert.roughEqual($(columnElement).outerWidth(), expectedColumnsWidths[i], 1.01, 'Column has expected width, index = ' + i);
-                assert.roughEqual(parseInt($(columnElement).attr('width')), expectedColumnsWidths[i], 1.01, 'Column has expected width attr, index = ' + i);
+                assert.roughEqual(parseInt($(columnElement).css('width')), expectedColumnsWidths[i], 1.01, 'Column has expected width style, index = ' + i);
             });
         });
 
@@ -1753,7 +1769,7 @@ module('Table resizing integration', {
 
             $table.find('tr').eq(0).find('td').each((i, columnElement) => {
                 assert.roughEqual($(columnElement).outerWidth(), minColumnWidth, 1.01, 'Column has expected width, index = ' + i);
-                assert.roughEqual(parseInt($(columnElement).attr('width')), minColumnWidth, 1.01, 'Column has expected width attr, index = ' + i);
+                assert.roughEqual(parseInt($(columnElement).css('width')), minColumnWidth, 1.01, 'Column has expected width style, index = ' + i);
             });
 
             assert.roughEqual($table.outerWidth(), minColumnWidth * 8, 2, 'Table width');
