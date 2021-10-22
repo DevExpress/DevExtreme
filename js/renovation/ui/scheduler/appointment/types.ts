@@ -1,22 +1,26 @@
 import type { AppointmentTemplateData } from '../../../../ui/scheduler';
 import { BaseTemplateProps } from '../types';
 
+export interface AppointmentGeometry {
+  empty: boolean; // TODO
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  leftVirtualWidth: number;
+  topVirtualHeight: number;
+}
+
 export interface AppointmentViewModel {
+  key: string;
+
   appointment: {
     startDate: Date;
     endDate: Date;
     text: string;
   };
 
-  geometry: {
-    empty: boolean; // TODO
-    left: number;
-    top: number;
-    width: number;
-    height: number;
-    leftVirtualWidth: number;
-    topVirtualHeight: number;
-  };
+  geometry: AppointmentGeometry;
 
   info: {
     appointment: {

@@ -2,7 +2,7 @@ import { formatWeekday, formatWeekdayAndDay } from '../../view_model/to_test/vie
 import {
   getDateForHeaderText as timelineGetDateFrHeaderText,
 } from '../../view_model/to_test/views/utils/timeline_week';
-import { ViewType } from '../../types';
+import { GroupOrientation, ViewType } from '../../types';
 import { MonthDateTableLayout } from '../month/date_table/layout';
 import { ViewRenderConfig } from '../props';
 import { TimelineHeaderPanelLayout } from '../timeline/header_panel/layout';
@@ -10,13 +10,16 @@ import { DateTableLayoutBase } from './date_table/layout';
 import { HeaderPanelLayout } from './header_panel/layout';
 import { TimePanelTableLayout } from './time_panel/layout';
 import { getDateForHeaderText } from './utils';
+import { Group } from '../types';
+import { isVerticalGroupingApplied } from '../utils';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 
 type GetRenderConfig = (
   crossScrollingEnabled: boolean,
   intervalCount: number,
-  isVerticalGrouping: boolean,
+  groups: Group[],
+  groupOrientation?: GroupOrientation,
 ) => ViewRenderConfig;
 
 const verticalViewConfig: ViewRenderConfig = {
@@ -87,7 +90,8 @@ const getWorkWeekViewConfig: GetRenderConfig = (
 const getMonthViewConfig: GetRenderConfig = (
   crossScrollingEnabled,
   _,
-  isVerticalGrouping,
+  groups,
+  groupOrientation,
 ) => ({
   headerPanelTemplate: HeaderPanelLayout,
   dateTableTemplate: MonthDateTableLayout,
@@ -101,7 +105,8 @@ const getMonthViewConfig: GetRenderConfig = (
   isGenerateWeekDaysHeaderData: false,
   className: 'dx-scheduler-work-space-month',
   scrollingDirection: 'vertical',
-  isCreateCrossScrolling: crossScrollingEnabled || isVerticalGrouping,
+  isCreateCrossScrolling: crossScrollingEnabled
+    || isVerticalGroupingApplied(groups, groupOrientation),
   defaultGroupOrientation: 'horizontal',
 });
 
@@ -141,7 +146,8 @@ export const getViewRenderConfigByType = (
   viewType: ViewType,
   crossScrollingEnabled: boolean,
   intervalCount: number,
-  isVerticalGrouping: boolean,
+  groups: Group[],
+  groupOrientation?: GroupOrientation,
 ): ViewRenderConfig => VIEW_CONFIG_GETTERS[viewType](
-  crossScrollingEnabled, intervalCount, isVerticalGrouping,
+  crossScrollingEnabled, intervalCount, groups, groupOrientation,
 );

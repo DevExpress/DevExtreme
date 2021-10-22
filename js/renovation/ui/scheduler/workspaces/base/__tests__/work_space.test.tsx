@@ -129,7 +129,6 @@ describe('WorkSpace', () => {
 
         groups,
         groupByDate: false,
-        groupOrientation: VERTICAL_GROUP_ORIENTATION,
         intervalCount: 1,
       };
       const viewDataProvider = {
@@ -153,6 +152,7 @@ describe('WorkSpace', () => {
         groupPanelRef: 'groupPanelRef',
         dateTableRef: 'dateTableRef',
         allDayPanelRef: 'allDayPanelRef',
+        groupOrientation: VERTICAL_GROUP_ORIENTATION,
       };
 
       const workSpace = renderComponent({
@@ -188,6 +188,7 @@ describe('WorkSpace', () => {
           groupPanelRef: 'groupPanelRef',
           dateTableRef: 'dateTableRef',
           allDayPanelRef: 'allDayPanelRef',
+          groupOrientation: VERTICAL_GROUP_ORIENTATION,
         });
     });
   });
@@ -806,7 +807,7 @@ describe('WorkSpace', () => {
             });
 
           expect(getViewRenderConfigByType)
-            .toBeCalledWith('week', true, 3, true);
+            .toBeCalledWith('week', true, 3, groups, 'vertical');
         });
       });
 
@@ -851,6 +852,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             groups,
             groupOrientation: 'vertical',
+            type: 'day',
           } as any);
 
           const result = workSpace.isVerticalGrouping;
@@ -893,6 +895,38 @@ describe('WorkSpace', () => {
             .toBe(false);
           expect(isVerticalGroupingApplied)
             .toBeCalledWith(groups, 'horizontal');
+        });
+      });
+
+      describe('groupOrientation', () => {
+        [{
+          view: 'day',
+          expectedGroupOrientation: 'horizontal',
+        }, {
+          view: 'week',
+          expectedGroupOrientation: 'horizontal',
+        }, {
+          view: 'month',
+          expectedGroupOrientation: 'horizontal',
+        }, {
+          view: 'timelineDay',
+          expectedGroupOrientation: 'vertical',
+        }, {
+          view: 'timelineWeek',
+          expectedGroupOrientation: 'vertical',
+        }, {
+          view: 'timelineMonth',
+          expectedGroupOrientation: 'vertical',
+        }].forEach(({ view, expectedGroupOrientation }) => {
+          it(`should return correct groupOrientation for ${view} view`, () => {
+            const workSpace = new WorkSpace({
+              ...new WorkSpaceProps(),
+              type: view,
+            } as any);
+
+            expect(workSpace.groupOrientation)
+              .toBe(expectedGroupOrientation);
+          });
         });
       });
     });
