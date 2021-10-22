@@ -486,5 +486,50 @@ QUnit.module('Context menu with rowsView', {
         assert.strictEqual(contextMenuPreparingArg.row.rowType, 'data', 'rowType');
         assert.strictEqual(contextMenuPreparingArg.columnIndex, undefined, 'columnIndex');
     });
+
+    QUnit.test('Context menu should works if dataRowTemplate is defined', function(assert) {
+        // arrange
+        const that = this;
+        let contextMenuPreparingArg;
+        const $testElement = $('#secondContainer');
+
+        that.options = {
+            onContextMenuPreparing: function(options) {
+                if(options.target === 'content') {
+                    contextMenuPreparingArg = options;
+                }
+            },
+            dataRowTemplate: function(container, options) {
+                const data = options.data;
+                $(container).append('<tr class=\'main-row\'>' +
+                        '<td class=\'click-me\'>CLICK ME</td>' +
+                    '</tr>' +
+                    '<tr class=\'notes-row\'>' +
+                        '<td><div>' + data.id + '</div></td>' +
+                    '</tr>');
+            }
+        };
+
+        that.items = [
+            { data: { id: 1 }, values: [1], rowType: 'data', dataIndex: 0 },
+            { data: { id: 2 }, values: [2], rowType: 'data', dataIndex: 1 },
+        ];
+
+        that.columns = [{ dataField: 'Column1' }];
+
+        that.setupDataGrid();
+        that.rowsView.render($testElement);
+        that.contextMenuView.render($testElement);
+
+        // act
+        $('.click-me').eq(1).trigger('contextmenu');
+
+        // assert
+        assert.ok(contextMenuPreparingArg, 'onContextMenuPreparing is called');
+        assert.strictEqual(contextMenuPreparingArg.rowIndex, 1, 'rowIndex');
+        assert.strictEqual(contextMenuPreparingArg.row.rowType, 'data', 'rowType');
+        assert.strictEqual(contextMenuPreparingArg.columnIndex, undefined, 'columnIndex');
+        assert.strictEqual(contextMenuPreparingArg.column, undefined, 'column');
+    });
 });
 

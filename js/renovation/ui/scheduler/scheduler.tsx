@@ -24,13 +24,17 @@ import {
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import { DataAccessorType } from './types';
+import { DataAccessorType, DataSourcePromise } from './types';
 import {
   createDataAccessors, createTimeZoneCalculator, filterAppointments,
 } from './common';
 import { loadResources } from '../../../ui/scheduler/resources/utils';
-import { getAppointmentsConfig } from './model/appointments';
+import { getAppointmentsViewModel } from './view_model/appointments/appointments';
+import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
+import { AppointmentsViewModelType } from './appointment/types';
+import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
+import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
 
 export const viewFunction = ({
   restAttributes,
@@ -40,6 +44,7 @@ export const viewFunction = ({
   setCurrentDate,
   setCurrentView,
   startViewDate,
+  appointmentsViewModel,
   props: {
     accessKey,
     activeStateEnabled,
@@ -59,6 +64,7 @@ export const viewFunction = ({
     customizeDateNavigatorText,
     min,
     max,
+    focusStateEnabled,
   },
 }: Scheduler): JSX.Element => {
   const {
@@ -86,11 +92,11 @@ export const viewFunction = ({
   } = currentViewConfig;
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
-      classes="dx-scheduler"
+      classes="dx-scheduler dx-scheduler-native"
       accessKey={accessKey}
       activeStateEnabled={activeStateEnabled}
       disabled={disabled}
-      focusStateEnabled={false}// TODO: waiting for a toolbar wrapper rerender fix
+      focusStateEnabled={focusStateEnabled}
       height={height}
       hint={hint}
       hoverStateEnabled={hoverStateEnabled}
@@ -147,9 +153,16 @@ export const viewFunction = ({
           onViewRendered={onViewRendered}
 
           appointments={(
-            <div className="appointments" />
-        )}
-          allDayAppointments={<div className="all-day-appointments" />}
+            <AppointmentLayout
+              appointments={appointmentsViewModel.regular}
+            />
+          )}
+
+          allDayAppointments={(
+            <AppointmentLayout
+              appointments={appointmentsViewModel.allDay}
+            />
+          )}
         />
       </div>
     </Widget>
@@ -221,22 +234,43 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return createTimeZoneCalculator(this.props.timeZone);
   }
 
-  get internalDataSource(): DataSource {
-    return this.props.dataSource instanceof DataSource
-      ? this.props.dataSource
-      : new DataSource(this.props.dataSource as Appointment[] | DataSourceOptions);
+  get internalDataSource(): DataSource { // TODO make helper function
+    if (this.props.dataSource instanceof DataSource) {
+      return this.props.dataSource;
+    }
+
+    if (this.props.dataSource instanceof Array) {
+      return new DataSource({
+        store: {
+          type: 'array',
+          data: this.props.dataSource,
+        },
+        paginate: false,
+      } as DataSourceOptions);
+    }
+
+    return new DataSource(this.props.dataSource as DataSourceOptions);
   }
 
   get appointmentsConfig(): AppointmentsConfigType | undefined {
-    if (!this.viewDataProvider) {
+    if (!this.viewDataProvider || !this.cellsMetaData) {
       return undefined;
     }
+
+    const renderConfig = getViewRenderConfigByType(
+      this.currentViewConfig.type,
+      this.currentViewConfig.crossScrollingEnabled,
+      this.currentViewConfig.intervalCount,
+      this.loadedResources,
+      this.currentViewConfig.groupOrientation,
+    );
 
     return getAppointmentsConfig(
       this.props, // TODO extract props for performace
       this.currentViewConfig, // TODO extract props for performace
       this.loadedResources,
       this.viewDataProvider,
+      renderConfig.isAllDayPanelSupported,
     );
   }
 
@@ -248,6 +282,28 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.timeZoneCalculator,
       this.loadedResources,
       this.viewDataProvider,
+    );
+  }
+
+  get appointmentsViewModel(): AppointmentsViewModelType {
+    if (!this.appointmentsConfig || this.filteredItems.length === 0) {
+      return {
+        regular: [],
+        allDay: [],
+      };
+    }
+
+    const model = getAppointmentsModel(
+      this.appointmentsConfig,
+      this.viewDataProvider,
+      this.timeZoneCalculator,
+      this.dataAccessors,
+      this.cellsMetaData,
+    );
+
+    return getAppointmentsViewModel(
+      model,
+      this.filteredItems,
     );
   }
 
@@ -338,12 +394,12 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadDataSource(): void {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.internalDataSource
-      .load()
-      .then((items) => {
-        this.dataItems = items;
-      });
+    if (!this.internalDataSource.isLoaded() && !this.internalDataSource.isLoading()) {
+      (this.internalDataSource.load() as DataSourcePromise)
+        .done((items: Appointment[]) => {
+          this.dataItems = items;
+        });
+    }
   }
 
   onViewRendered(viewMetaData: ViewMetaData): void {

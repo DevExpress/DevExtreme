@@ -4091,7 +4091,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // assert
-        const newRowIndex = rowsView.getTopVisibleItemIndex(true);
+        const newRowIndex = rowsView.getTopVisibleItemIndex();
         const newRow = this.getVisibleRows()[newRowIndex];
         assert.ok(newRow.isNewRow, 'new row');
 

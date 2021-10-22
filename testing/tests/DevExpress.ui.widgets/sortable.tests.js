@@ -1417,6 +1417,47 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         assert.strictEqual($(sortable2.element()).children('#item2').length, 1, 'item is added');
     });
 
+    QUnit.test('onAdd on drop under empty sortable if scroll exists (T1034893)', function(assert) {
+        $('#container').css({
+            overflow: 'auto',
+            width: 200
+        });
+
+        const onAddSpy = sinon.spy();
+
+        const sortable1 = this.createSortable({
+            filter: '.draggable',
+            data: 'x',
+            moveItemOnDrop: true,
+            group: 'shared'
+        }, $('#items'));
+
+
+        $('#items2').children().remove();
+
+        const sortable2 = this.createSortable({
+            filter: '.draggable',
+            group: 'shared',
+            data: 'y',
+            moveItemOnDrop: true,
+            onAdd: onAddSpy
+        }, $('#items2'));
+            // act
+        const $sourceElement = sortable1.$element().children().eq(1);
+        pointerMock($sourceElement).start({ x: 5, y: 5 }).down().move(0, 400).move(50, 0).up();
+
+        // assert
+        assert.strictEqual(onAddSpy.callCount, 1, 'onAdd is called');
+        assert.deepEqual(onAddSpy.getCall(0).args[0].fromComponent, sortable1, 'sourceComponent');
+        assert.deepEqual(onAddSpy.getCall(0).args[0].toComponent, sortable2, 'component');
+        assert.strictEqual(onAddSpy.getCall(0).args[0].fromIndex, 1, 'fromIndex');
+        assert.strictEqual(onAddSpy.getCall(0).args[0].toIndex, 0, 'toIndex');
+        assert.strictEqual(onAddSpy.getCall(0).args[0].fromData, 'x', 'fromData');
+        assert.strictEqual(onAddSpy.getCall(0).args[0].toData, 'y', 'toData');
+        assert.strictEqual($(onAddSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
+        assert.strictEqual($(sortable2.element()).children().length, 1, 'item is added');
+    });
+
     QUnit.test('onAdd - not add item when eventArgs.cancel is true', function(assert) {
         // arrange
         const onAddSpy = sinon.spy((e) => { e.cancel = true; });

@@ -96,7 +96,7 @@ if(devices.current().deviceType === 'desktop') {
             scheduler.option('currentView', 'TestDay');
             assert.equal(viewSwitcher.selectedButton.getText(), 'TestDay', 'current view is correct');
 
-            scheduler.option('currentView', 'Month');
+            scheduler.option('currentView', 'month');
             assert.equal(viewSwitcher.selectedButton.getText(), 'Month', 'current view is correct');
         });
 

@@ -1,4 +1,3 @@
-import { getWidth, getOuterWidth } from '../../core/utils/size';
 import $ from '../../core/renderer';
 import { getWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -7,6 +6,7 @@ import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import TextEditor from './ui.text_editor';
 import { normalizeKeyName } from '../../events/utils/index';
+import { getOuterWidth, getWidth } from '../../core/utils/size';
 
 // STYLE textBox
 
@@ -95,24 +95,34 @@ const TextBox = TextEditor.inherit({
         this._$searchIcon = $searchIcon;
     },
 
+    _getLabelContainerWidth: function() {
+        if(this._$searchIcon) {
+            const $inputContainer = this._input().parent();
 
-    _renderLabel: function() {
-        this.callBase();
-
-        if(this._$searchIcon && this._$label) {
-            const labelBeforeElement = this._$label.find('.dx-label-before');
-            const labelBeforeWidth = getWidth(labelBeforeElement) + getOuterWidth(this._$searchIcon);
-
-            labelBeforeElement.css('width', labelBeforeWidth);
-
-            this._$label.find('.dx-label').css('max-width', getWidth(this._input().parent()) - labelBeforeWidth);
+            return getWidth($inputContainer) - this._getLabelBeforeWidth();
         }
+
+        return this.callBase();
+    },
+
+    _getLabelBeforeWidth: function() {
+        let labelBeforeWidth = this.callBase();
+
+        if(this._$searchIcon) {
+            labelBeforeWidth += getOuterWidth(this._$searchIcon);
+        }
+
+        return labelBeforeWidth;
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
             case 'maxLength':
                 this._toggleMaxLengthProp();
+                break;
+            case 'mode':
+                this.callBase(args);
+                this._updateLabelWidth();
                 break;
             case 'mask':
                 this.callBase(args);

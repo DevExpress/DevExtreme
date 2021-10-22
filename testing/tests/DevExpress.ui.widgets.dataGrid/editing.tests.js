@@ -7774,12 +7774,13 @@ QUnit.module('Editing with real dataController', {
         assert.strictEqual(window.getComputedStyle(svgIcon.find('svg')[0]).pointerEvents, 'none', 'dx-svg-icon svg does not allow pointer events');
     });
 
-    QUnit.test('Add a custom command column', function(assert) {
+    QUnit.test('Add a custom command column with useLegacyColumnButtonTemplate', function(assert) {
         // arrange
         const that = this;
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
+        this.options.useLegacyColumnButtonTemplate = true;
         $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,
@@ -7817,6 +7818,83 @@ QUnit.module('Editing with real dataController', {
         assert.strictEqual($customCommandCell.children('.mylink').text(), 'My link', 'text of the custom link');
         assert.strictEqual($customCommandCell.children('.mybutton').length, 1, 'has custom button');
         assert.strictEqual($customCommandCell.children('.mybutton').text(), 'My button', 'text of the custom button');
+    });
+
+    QUnit.test('Add a custom command column', function(assert) {
+        // arrange
+        const that = this;
+        const rowsView = that.rowsView;
+        const $testElement = $('#container');
+
+        $.extend(that.options.editing, {
+            mode: 'row',
+            allowUpdating: true,
+            allowDeleting: true
+        });
+        that.options.columns.push({ type: 'buttons' }, {
+            type: 'buttons',
+            cssClass: 'mybuttons',
+            buttons: [
+                {
+                    text: 'My link',
+                    cssClass: 'mylink'
+                },
+                {
+                    cssClass: 'mybutton',
+                    template: function($cellElement, options) {
+                        return $('<div/>').addClass('mybuttontext').text('My button');
+                    }
+                }
+            ]
+        });
+        that.columnsController.reset();
+
+        // act
+        rowsView.render($testElement);
+
+        // assert
+        const $linkElements = $testElement.find('.dx-command-edit').first().find('.dx-link');
+        assert.strictEqual($linkElements.length, 2, 'link count');
+        assert.ok($linkElements.eq(0).hasClass('dx-link-edit'), 'the edit link');
+        assert.ok($linkElements.eq(1).hasClass('dx-link-delete'), 'the delete link');
+
+        const $customCommandCell = $testElement.find('.mybuttons').first();
+        assert.strictEqual($customCommandCell.length, 1, 'has custom command cell');
+        assert.strictEqual($customCommandCell.children('.mylink').length, 1, 'has custom link');
+        assert.strictEqual($customCommandCell.children('.mylink').text(), 'My link', 'text of the custom link');
+        assert.strictEqual($customCommandCell.children('.mybutton').length, 1, 'has custom button cssClass');
+        assert.strictEqual($customCommandCell.children('.mybutton').children('.mybuttontext').length, 1, 'has custom button content');
+        assert.strictEqual($customCommandCell.children('.mybutton').text(), 'My button', 'text of the custom button');
+    });
+
+    QUnit.test('Add a custom command column click handler', function(assert) {
+        // arrange
+        const that = this;
+        const rowsView = that.rowsView;
+        const $testElement = $('#container');
+        const clickSpy = sinon.spy();
+        that.options.columns.push({
+            type: 'buttons',
+            cssClass: 'mybuttons',
+            buttons: [
+                {
+                    cssClass: 'mybutton',
+                    onClick: clickSpy,
+                    template: function($cellElement, options) {
+                        return $('<div/>').addClass('mybuttontext').text('My button');
+                    }
+                }
+            ]
+        });
+        that.columnsController.reset();
+
+        // act
+        rowsView.render($testElement);
+
+        $('.mybuttontext').first().trigger('click');
+
+        // assert
+        assert.strictEqual(clickSpy.callCount, 1, 'click is fired once');
     });
 
     QUnit.test('Changing edit icon in the \'buttons\' command column', function(assert) {
@@ -16336,7 +16414,9 @@ QUnit.module('Editing with scrolling', {
 
         that.options.scrolling = {
             mode: 'infinite',
-            useNative: false
+            useNative: false,
+            legacyMode: false,
+            prerenderedRowCount: 1
         };
 
         that.options.onRowValidating = function(e) {
@@ -16352,21 +16432,21 @@ QUnit.module('Editing with scrolling', {
 
         // assert
         assert.equal(that.dataController.pageIndex(), 0, 'page index');
-        assert.equal(that.dataController.items().length, 8, 'count items');
+        assert.equal(that.dataController.items().length, 7, 'count items');
 
         // arrange
         that.rowsView.scrollTo({ y: 500 });
 
         // assert
         assert.equal(that.dataController.pageIndex(), 2, 'page index');
-        assert.equal(that.dataController.items().length, 16, 'count items');
+        assert.equal(that.dataController.items().length, 8, 'count items');
 
         // arrange
         that.addRow();
         that.clock.tick();
 
         // assert
-        assert.equal(that.dataController.items().length, 17, 'count items');
+        assert.equal(that.dataController.items().length, 9, 'count items');
 
         // arrange
         that.rowsView.scrollTo({ y: 0 });
@@ -16379,7 +16459,7 @@ QUnit.module('Editing with scrolling', {
 
         // assert
         const items = that.dataController.items();
-        assert.equal(items.length, 17, 'count items');
+        assert.equal(items.length, 6, 'count items');
         assert.ok(items[0].isNewRow, 'inserted item');
     });
 
@@ -20067,6 +20147,39 @@ QUnit.module('Editing - new row position', {
                 // arrange
                 const $testElement = $('#container');
 
+                this.options.editing.newRowPosition = 'first';
+                this.setupModules();
+                this.clock.tick();
+
+                this.rowsView.render($testElement);
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 10, 'row count');
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+
+                // act
+                this.addRow();
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 11, 'row count');
+                assert.ok(rows[0].isNewRow, 'new row');
+
+                const $insertRow = $testElement.find('tbody > .dx-data-row').first();
+                const $input = $insertRow.find('td').eq(0).find('.dx-texteditor-input');
+                assert.ok($insertRow.hasClass('dx-row-inserted'), 'first row is inserted');
+                assert.ok($insertRow.hasClass('dx-edit-row'), 'inserted row is edited');
+                assert.ok($input.is(':focus'), 'editor of the first cell is focused');
+            });
+
+            QUnit.test('newRowPosition = first when pageIndex = 2', function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
                 this.options.paging.pageIndex = 2;
                 this.options.editing.newRowPosition = 'first';
                 this.setupModules();
@@ -20108,6 +20221,32 @@ QUnit.module('Editing - new row position', {
 
                 // assert
                 let rows = this.getVisibleRows();
+                assert.strictEqual(rows.length, 10, 'row count');
+
+                // act
+                this.addRow();
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 9, 'pageIndex');
+                assert.strictEqual(rows.length, 11, 'row count');
+                assert.ok(rows[10].isNewRow, 'new row');
+            });
+
+            QUnit.test('newRowPosition = last when page is last', function(assert) {
+                // arrange
+                const $testElement = $('#container');
+
+                this.options.paging.pageIndex = 9;
+                this.options.editing.newRowPosition = 'last';
+                this.setupModules();
+                this.rowsView.render($testElement);
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 9, 'pageIndex');
                 assert.strictEqual(rows.length, 10, 'row count');
 
                 // act
@@ -20197,7 +20336,7 @@ QUnit.module('Editing - new row position', {
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
                 assert.strictEqual(rows.length, 11, 'row count');
-                assert.ok(rows[4].isNewRow, 'new row');
+                assert.ok(rows[5].isNewRow, 'new row');
             });
 
             QUnit.test('newRowPosition = viewportTop', function(assert) {
