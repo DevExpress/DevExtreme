@@ -1,6 +1,9 @@
 import {
   Component,
   JSXComponent,
+  Method,
+  Ref,
+  RefObject,
 } from '@devextreme-generator/declarations';
 import { Widget } from '../../../common/widget';
 import { Scrollable } from '../../../scroll_view/scrollable';
@@ -10,6 +13,7 @@ import { HeaderPanelEmptyCell } from './header_panel_empty_cell';
 import { MainLayoutProps } from './main_layout_props';
 
 export const viewFunction = ({
+  dateTableScrollableRef,
   props: {
     headerPanelTemplate: HeaderPanel,
     dateTableTemplate: DateTable,
@@ -83,6 +87,7 @@ export const viewFunction = ({
 
     </div>
     <Scrollable
+      ref={dateTableScrollableRef}
       useKeyboard={false}
       bounceEnabled={false}
       direction={scrollingDirection}
@@ -129,4 +134,12 @@ export const viewFunction = ({
 })
 export class OrdinaryLayout extends JSXComponent<
 MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
->() {}
+>() {
+  @Ref() dateTableScrollableRef!: RefObject<Scrollable>;
+
+  // Bug in generators: https://github.com/DevExpress/devextreme-renovation/issues/791
+  @Method()
+  getScrollableWidth(): number {
+    return this.dateTableScrollableRef.current!.container().getBoundingClientRect().width;
+  }
+}

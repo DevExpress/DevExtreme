@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { viewFunction as LayoutView, AllDayPanelLayout } from '../layout';
 import { AllDayPanelTableBody } from '../table_body';
 import { DefaultSizes } from '../../../../const';
+import { TableProps } from '../../../table';
 
 describe('AllDayPanelLayout', () => {
   const viewData: any = {
@@ -46,13 +47,20 @@ describe('AllDayPanelLayout', () => {
         emptyTableHeight: 123,
         props: {
           dataCellTemplate,
+          width: 321,
         },
       });
 
       const allDayTable = layout.find('.dx-scheduler-all-day-table');
 
-      expect(allDayTable.prop('height'))
-        .toBe(123);
+      expect(allDayTable.props())
+        .toEqual({
+          ...new TableProps(),
+          height: 123,
+          width: 321,
+          className: 'dx-scheduler-all-day-table',
+          children: expect.anything(),
+        });
 
       expect(allDayTable.exists())
         .toBe(true);

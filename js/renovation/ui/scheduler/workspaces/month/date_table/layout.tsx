@@ -11,6 +11,7 @@ export const viewFunction = ({
     groupOrientation,
     tableRef,
     addVerticalSizesClassToRows,
+    width,
   },
 }: MonthDateTableLayout): JSX.Element => (
   <DateTableLayoutBase
@@ -21,6 +22,7 @@ export const viewFunction = ({
     cellTemplate={MonthDateTableCell}
     tableRef={tableRef}
     addVerticalSizesClassToRows={addVerticalSizesClassToRows}
+    width={width}
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />

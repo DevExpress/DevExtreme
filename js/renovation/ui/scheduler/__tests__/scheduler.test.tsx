@@ -889,6 +889,33 @@ describe('Scheduler', () => {
             .toHaveBeenCalledTimes(0);
         });
       });
+
+      describe('workSpaceKey', () => {
+        it('should return empty string if cross-scrolling is not used', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+          });
+
+          expect(scheduler.workSpaceKey)
+            .toBe('');
+        });
+
+        it('should generate correct key if cross-scrolling is used', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            currentView: 'week',
+            views: [{
+              type: 'week',
+              groupOrientation: 'vertical',
+              intervalCount: 3,
+            }],
+            crossScrollingEnabled: true,
+          });
+
+          expect(scheduler.workSpaceKey)
+            .toBe('week_vertical_3');
+        });
+      });
     });
   });
 });

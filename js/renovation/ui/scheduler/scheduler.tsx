@@ -45,6 +45,8 @@ export const viewFunction = ({
   setCurrentView,
   startViewDate,
   appointmentsViewModel,
+  workSpaceKey,
+
   props: {
     accessKey,
     activeStateEnabled,
@@ -163,6 +165,8 @@ export const viewFunction = ({
               appointments={appointmentsViewModel.allDay}
             />
           )}
+
+          key={workSpaceKey}
         />
       </div>
     </Widget>
@@ -305,6 +309,19 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       model,
       this.filteredItems,
     );
+  }
+
+  // TODO: This is a WA because we need to clean workspace completely to set table sizes correctly
+  // We need to remove this after we refactor crossScrolling to set table sizes through CSS, not JS
+  get workSpaceKey(): string {
+    const { currentView, crossScrollingEnabled } = this.props;
+    const { groupOrientation, intervalCount } = this.currentViewConfig;
+
+    if (!crossScrollingEnabled) {
+      return '';
+    }
+
+    return `${currentView}_${groupOrientation}_${intervalCount}`;
   }
 
   @Method()

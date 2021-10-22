@@ -194,7 +194,7 @@ describe('OrdinaryLayout', () => {
         groups,
         resourceCellTemplate: () => null,
       };
-      const layout = render({ props });
+      const layout = render({ props, headerStyles: { width: 324 } });
 
       const headerTable = layout.find('.dx-scheduler-header-panel');
 
@@ -202,6 +202,8 @@ describe('OrdinaryLayout', () => {
         .toBe(true);
       expect(headerTable.is('table'))
         .toBe(true);
+      expect(headerTable.prop('style'))
+        .toEqual({ width: 324 });
 
       const headerPanel = headerTable.childAt(0);
 
@@ -244,6 +246,7 @@ describe('OrdinaryLayout', () => {
         props: {
           ...props,
           dateTableRef: 'dateTableRef',
+          tablesWidth: 543,
         },
       });
 
@@ -255,6 +258,7 @@ describe('OrdinaryLayout', () => {
         .toEqual({
           ...props,
           tableRef: 'dateTableRef',
+          width: 543,
         });
     });
 
@@ -405,6 +409,7 @@ describe('OrdinaryLayout', () => {
           dataCellTemplate,
           allDayPanelRef: 'allDayPanelRef',
           isStandaloneAllDayPanel: true,
+          tablesWidth: 321,
         },
       });
 
@@ -419,6 +424,7 @@ describe('OrdinaryLayout', () => {
           viewData,
           dataCellTemplate,
           tableRef: 'allDayPanelRef',
+          width: 321,
         });
     });
 
@@ -528,6 +534,23 @@ describe('OrdinaryLayout', () => {
             });
         });
       });
+
+      describe('getScrollableWidth', () => {
+        it('should return date-table scrollable\'s width', () => {
+          const layout = new CrossScrollingLayout({} as any);
+
+          layout.dateTableScrollableRef = {
+            current: {
+              container: () => ({
+                getBoundingClientRect: () => ({ width: 324 }),
+              }),
+            },
+          } as any;
+
+          expect(layout.getScrollableWidth())
+            .toBe(324);
+        });
+      });
     });
   });
 
@@ -543,6 +566,17 @@ describe('OrdinaryLayout', () => {
             .toBe(true);
           expect(layout.headerSemaphore instanceof Semaphore)
             .toBe(true);
+        });
+      });
+
+      describe('headerStyles', () => {
+        it('should generate correct styles', () => {
+          const layout = new CrossScrollingLayout({
+            tablesWidth: 345,
+          } as any);
+
+          expect(layout.headerStyles)
+            .toEqual({ width: 345 });
         });
       });
     });

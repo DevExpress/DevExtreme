@@ -9,7 +9,7 @@ import {
   RefObject,
   Slot,
 } from '@devextreme-generator/declarations';
-import { addHeightToStyle } from '../utils';
+import { addHeightToStyle, addWidthToStyle } from '../utils';
 import { VirtualRow } from './virtual_row';
 
 export const viewFunction = ({
@@ -80,6 +80,8 @@ export class TableProps {
 
   @OneWay() height?: number;
 
+  @OneWay() width?: number;
+
   @Slot() children?: JSX.Element | JSX.Element[];
 
   @ForwardRef() tableRef?: RefObject<HTMLTableElement>;
@@ -94,10 +96,12 @@ export class Table extends JSXComponent(TableProps) {
   elementRef!: RefObject<HTMLTableElement>;
 
   get style(): CSSAttributes {
-    const { height } = this.props;
+    const { height, width } = this.props;
     const { style } = this.restAttributes;
 
-    return addHeightToStyle(height, style);
+    const heightAdded = addHeightToStyle(height, style);
+
+    return addWidthToStyle(width, heightAdded);
   }
 
   get hasTopVirtualRow(): boolean {
