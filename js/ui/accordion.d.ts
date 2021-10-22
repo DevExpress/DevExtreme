@@ -26,7 +26,7 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-type ItemLike = string | Item<any> | any;
+type ItemLike = string | Item | any;
 
 /** @public */
 export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxAccordion<TItem, TKey>>;
@@ -208,13 +208,13 @@ export default class dxAccordion<
  * @public
  * @namespace DevExpress.ui.dxAccordion
  */
-export type Item<TItem extends Item<any> | any = any> = dxAccordionItem<TItem>;
+export type Item = dxAccordionItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxAccordionItem<TItem extends dxAccordionItem<any> | any = any> extends CollectionWidgetItem<TItem> {
+export interface dxAccordionItem extends CollectionWidgetItem {
     /**
      * @docid
      * @public
