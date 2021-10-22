@@ -15,7 +15,7 @@ import {
 /** @namespace DevExpress.ui */
 export interface dxMenuBaseOptions<
   TComponent extends dxMenuBase<any, TItem, TKey>,
-  TItem extends dxMenuBaseItem<any> = dxMenuBaseItem<any>,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
   TKey = any,
 > extends Skip<HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey>, 'dataSource'> {
     /**
@@ -114,7 +114,7 @@ export interface dxMenuBaseOptions<
  */
 export default class dxMenuBase<
   TProperties extends dxMenuBaseOptions<any, TItem, TKey>,
-  TItem extends dxMenuBaseItem<any> = dxMenuBaseItem<any>,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
   TKey = any,
 > extends HierarchicalCollectionWidget<TProperties, TItem, TKey> {
     /**

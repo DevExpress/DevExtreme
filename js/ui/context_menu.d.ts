@@ -34,45 +34,45 @@ import {
 } from './collection/ui.collection_widget.base';
 
 /** @public */
-export type ContentReadyEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>>;
+export type ContentReadyEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
 
 /** @public */
-export type DisposingEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>>;
+export type DisposingEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
 
 /** @public */
-export type HiddenEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>>;
+export type HiddenEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
 
 /** @public */
-export type HidingEvent<TItem extends Item<any> = Item<any>, TKey = any> = Cancelable & EventInfo<dxContextMenu<TItem, TKey>>;
+export type HidingEvent<TKey = any> = Cancelable & EventInfo<dxContextMenu<TKey>>;
 
 /** @public */
-export type InitializedEvent<TItem extends Item<any> = Item<any>, TKey = any> = InitializedEventInfo<dxContextMenu<TItem, TKey>>;
+export type InitializedEvent<TKey = any> = InitializedEventInfo<dxContextMenu<TKey>>;
 
 /** @public */
-export type ItemClickEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxContextMenu<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemClickEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>> & ItemInfo<Item>;
 
 /** @public */
-export type ItemContextMenuEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxContextMenu<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>> & ItemInfo<Item>;
 
 /** @public */
-export type ItemRenderedEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxContextMenu<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>> & ItemInfo<Item>;
 
 /** @public */
-export type OptionChangedEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type PositioningEvent<TItem extends Item<any> = Item<any>, TKey = any> = NativeEventInfo<dxContextMenu<TItem, TKey>> & {
+export type PositioningEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>> & {
     readonly position: PositionConfig;
 };
 
 /** @public */
-export type SelectionChangedEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>> & SelectionChangedInfo<TItem>;
+export type SelectionChangedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & SelectionChangedInfo<Item>;
 
 /** @public */
-export type ShowingEvent<TItem extends Item<any> = Item<any>, TKey = any> = Cancelable & EventInfo<dxContextMenu<TItem, TKey>>;
+export type ShowingEvent<TKey = any> = Cancelable & EventInfo<dxContextMenu<TKey>>;
 
 /** @public */
-export type ShownEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventInfo<dxContextMenu<TItem, TKey>>;
+export type ShownEvent<TKey = any> = EventInfo<dxContextMenu<TKey>>;
 
 /**
  * @deprecated use Properties instead
@@ -80,9 +80,8 @@ export type ShownEvent<TItem extends Item<any> = Item<any>, TKey = any> = EventI
  * @public
  */
 export interface dxContextMenuOptions<
-    TItem extends Item<any> = Item<any>,
     TKey = any,
-> extends dxMenuBaseOptions<dxContextMenu<TItem, TKey>, TItem, TKey> {
+> extends dxMenuBaseOptions<dxContextMenu<TKey>, dxContextMenuItem, TKey> {
     /**
      * @docid
      * @default true
@@ -97,13 +96,13 @@ export interface dxContextMenuOptions<
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<TItem, TKey>;
+    dataSource?: DataSourceLike<Item, TKey>;
     /**
      * @docid
      * @type Array<dxContextMenuItem>
      * @public
      */
-    items?: Array<TItem>;
+    items?: Array<Item>;
     /**
      * @docid
      * @default null
@@ -114,7 +113,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onHidden?: ((e: HiddenEvent<TItem, TKey>) => void);
+    onHidden?: ((e: HiddenEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -126,7 +125,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onHiding?: ((e: HidingEvent<TItem, TKey>) => void);
+    onHiding?: ((e: HidingEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -139,7 +138,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onPositioning?: ((e: PositioningEvent<TItem, TKey>) => void);
+    onPositioning?: ((e: PositioningEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -151,7 +150,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onShowing?: ((e: ShowingEvent<TItem, TKey>) => void);
+    onShowing?: ((e: ShowingEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -162,7 +161,7 @@ export interface dxContextMenuOptions<
      * @action
      * @public
      */
-    onShown?: ((e: ShownEvent<TItem, TKey>) => void);
+    onShown?: ((e: ShownEvent<TKey>) => void);
     /**
      * @docid
      * @default { my: 'top left', at: 'top left' }
@@ -216,9 +215,8 @@ export interface dxContextMenuOptions<
  * @public
  */
 export default class dxContextMenu<
-    TItem extends Item<any> = Item<any>,
     TKey = any,
-> extends dxMenuBase<dxContextMenuOptions<TItem, TKey>, TItem, TKey> {
+> extends dxMenuBase<dxContextMenuOptions<TKey>, dxContextMenuItem, TKey> {
     /**
      * @docid
      * @publicName hide()
@@ -246,50 +244,41 @@ export default class dxContextMenu<
  * @public
  * @namespace DevExpress.ui.dxContextMenu
  */
-export type Item<TItem extends Item<any> = Item<any>> = dxContextMenuItem<TItem>;
+export type Item = dxContextMenuItem;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxContextMenuItem<TItem extends dxContextMenuItem<any> = dxContextMenuItem<any>> extends dxMenuBaseItem<TItem> {
+export interface dxContextMenuItem extends dxMenuBaseItem {
     /**
      * @docid
      * @public
      * @type Array<dxContextMenuItem>
      */
-    items?: Array<TItem>;
+    items?: Array<Item>;
 }
 
 /** @public */
-export type ExplicitTypes<
-    TItem extends Item<any> = Item<any>,
-    TKey = any,
-> = {
-    Properties: Properties<TItem, TKey>;
-    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
-    DisposingEvent: DisposingEvent<TItem, TKey>;
-    HiddenEvent: HiddenEvent<TItem, TKey>;
-    HidingEvent: HidingEvent<TItem, TKey>;
-    InitializedEvent: InitializedEvent<TItem, TKey>;
-    ItemClickEvent: ItemClickEvent<TItem, TKey>;
-    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
-    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
-    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
-    PositioningEvent: PositioningEvent<TItem, TKey>;
-    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
-    ShowingEvent: ShowingEvent<TItem, TKey>;
-    ShownEvent: ShownEvent<TItem, TKey>;
+export type ExplicitTypes<TKey = any> = {
+    Properties: Properties<TKey>;
+    ContentReadyEvent: ContentReadyEvent<TKey>;
+    DisposingEvent: DisposingEvent<TKey>;
+    HiddenEvent: HiddenEvent<TKey>;
+    HidingEvent: HidingEvent<TKey>;
+    InitializedEvent: InitializedEvent<TKey>;
+    ItemClickEvent: ItemClickEvent<TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TKey>;
+    OptionChangedEvent: OptionChangedEvent<TKey>;
+    PositioningEvent: PositioningEvent<TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TKey>;
+    ShowingEvent: ShowingEvent<TKey>;
+    ShownEvent: ShownEvent<TKey>;
 };
 
 /** @public */
-export type Properties<
-    TItem extends Item<any> = Item<any>,
-    TKey = any,
-> = dxContextMenuOptions<TItem, TKey>;
+export type Properties<TKey = any> = dxContextMenuOptions<TKey>;
 
 /** @deprecated use Properties instead */
-export type Options<
-    TItem extends Item<any> = Item<any>,
-    TKey = any,
-> = Properties<TItem, TKey>;
+export type Options<TKey = any> = Properties<TKey>;
