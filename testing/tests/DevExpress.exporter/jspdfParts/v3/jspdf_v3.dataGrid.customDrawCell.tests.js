@@ -50,7 +50,7 @@ const JSPdfCustomDrawCellTests = {
                 });
             });
 
-            QUnit.test('customDrawCell -> set cancel=true for f1', function(assert) {
+            QUnit.test('customDrawCell -> set cancel=true for f1, set.cancel=false for f2', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -77,7 +77,7 @@ const JSPdfCustomDrawCellTests = {
                 });
             });
 
-            QUnit.test('customDrawCell -> set cancel=true for f2', function(assert) {
+            QUnit.test('customDrawCell -> set cancel=false for f1, set.cancel=true for f2', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -91,6 +91,32 @@ const JSPdfCustomDrawCellTests = {
                 };
                 const expectedLog = [
                     'text,f1,10,19.2,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,10,10,250,18.4',
+                    'setLineWidth,1',
+                    'rect,260,10,250,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 10 }, customDrawCell }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('customDrawCell dont update cancel property', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    width: 500,
+                    columns: [{ caption: 'f1' }, { caption: 'f2' }]
+                });
+
+                const customDrawCell = () => { };
+                const expectedLog = [
+                    'text,f1,10,19.2,{baseline:middle}',
+                    'text,f2,260,19.2,{baseline:middle}',
                     'setLineWidth,1',
                     'rect,10,10,250,18.4',
                     'setLineWidth,1',
