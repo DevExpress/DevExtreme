@@ -104,13 +104,13 @@ function getFormatHandlers(module) {
     };
 }
 
-function resetFormDialogOptions(editorInstance, savedOptions) {
+function resetFormDialogOptions(editorInstance, { contentTemplate, title, minHeight, minWidth, maxWidth }) {
     editorInstance.formDialogOption({
-        contentTemplate: savedOptions.contentTemplate,
-        title: savedOptions.title,
-        minHeight: savedOptions.minHeight || 0,
-        minWidth: savedOptions.minWidth || 0,
-        maxWidth: savedOptions.maxWidth || 'none',
+        contentTemplate,
+        title,
+        minHeight: minHeight ?? 0,
+        minWidth: minWidth ?? 0,
+        maxWidth: maxWidth ?? 'none'
     });
 }
 
@@ -125,14 +125,7 @@ function prepareShowFormProperties(module, type) {
 
         const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, { $element, formats, tableBlot, rowBlot });
 
-        const formDialogPopupOptions = module.editorInstance._formDialog._popup.option() ?? {};
-        const savedDialogOptions = {
-            contentTemplate: formDialogPopupOptions.contentTemplate,
-            title: formDialogPopupOptions.title,
-            minHeight: formDialogPopupOptions.minHeight,
-            minWidth: formDialogPopupOptions.minWidth,
-            maxWidth: formDialogPopupOptions.maxWidth
-        };
+        const { contentTemplate, title, minHeight, minWidth, maxWidth } = module.editorInstance._formDialog._popup.option();
 
         let formInstance;
 
@@ -159,14 +152,14 @@ function prepareShowFormProperties(module, type) {
             tablePropertiesFormConfig.applyHandler(formInstance);
             formInstance.dispose();
         }).then(() => {
-            resetFormDialogOptions(module.editorInstance, savedDialogOptions);
+            resetFormDialogOptions(module.editorInstance, { contentTemplate, title, minHeight, minWidth, maxWidth });
         });
 
         promise.fail(() => {
             module.quill.focus();
             formInstance.dispose();
         }).then(() => {
-            resetFormDialogOptions(module.editorInstance, savedDialogOptions);
+            resetFormDialogOptions(module.editorInstance, { contentTemplate, title, minHeight, minWidth, maxWidth });
         });
     };
 }
