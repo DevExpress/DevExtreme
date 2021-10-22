@@ -2769,3 +2769,91 @@ test('Cells should be focused after saving data when filter is applied and cell 
     e.isHighlighted = true;
   },
 }));
+
+test('Lookup editor should update cell value on down or up key when cell is focused by tab or shift+tab (T1036028)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getDataRow(0).getCommandCell(3).getButton(0));
+
+  // assert
+  await t
+    .expect(dataGrid.getDataRow(0).isEdited)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 1).isFocused)
+    .ok()
+    .expect(dataGrid.apiGetCellValue(0, 1))
+    .eql('1');
+
+  // act
+  await t
+    .pressKey('down');
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(0, 1))
+    .eql('2');
+
+  // act
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 2).isFocused)
+    .ok();
+
+  // act
+  await t
+    .pressKey('shift+tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 1).isFocused)
+    .ok()
+    .expect(dataGrid.apiGetCellValue(0, 1))
+    .eql('2');
+
+  // act
+  await t
+    .pressKey('up');
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(0, 1))
+    .eql('1');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      id: 1, field1: 'a', field2: '1', field3: 'b',
+    },
+  ],
+  keyExpr: 'id',
+  columns: ['field1',
+    {
+      dataField: 'field2',
+      lookup: {
+        dataSource: [
+          { id: '1' },
+          { id: '2' },
+        ],
+        displayExpr: 'id',
+        valueExpr: 'id',
+      },
+    },
+    'field3'],
+  editing: {
+    mode: 'row',
+    allowUpdating: true,
+  },
+}));
