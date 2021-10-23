@@ -6304,6 +6304,18 @@ declare module DevExpress.ui {
       readonly isSelected?: boolean;
       readonly isExpanded?: boolean;
     };
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type DefaultToolbarItem =
+      | 'addRowButton'
+      | 'applyFilterButton'
+      | 'columnChooserButton'
+      | 'exportButton'
+      | 'groupPanel'
+      | 'revertButton'
+      | 'saveButton'
+      | 'searchPanel';
     export type DisposingEvent<
       TRowData = any,
       TKey = any
@@ -6336,18 +6348,6 @@ declare module DevExpress.ui {
       readonly fromIndex: number;
       readonly fromData?: any;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    type dxDataGridDefaultToolbarItemName =
-      | 'addRowButton'
-      | 'applyFilterButton'
-      | 'columnChooserButton'
-      | 'exportButton'
-      | 'groupPanel'
-      | 'revertButton'
-      | 'saveButton'
-      | 'searchPanel';
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -8466,7 +8466,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridOptions.toolbar]
      */
-    toolbar?: dxDataGridToolbar;
+    toolbar?: Toolbar;
   }
   /**
    * @deprecated Use DevExpress.ui.dxDataGrid.Scrolling instead
@@ -8476,41 +8476,6 @@ declare module DevExpress.ui {
    * @deprecated Use DevExpress.ui.dxDataGrid.Selection instead
    */
   export type dxDataGridSelection = DevExpress.ui.dxDataGrid.Selection;
-  /**
-   * [descr:dxDataGridToolbar]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxDataGridToolbar {
-    /**
-     * [descr:dxDataGridToolbar.items]
-     */
-    items?: Array<
-      | DevExpress.ui.dxDataGrid.dxDataGridDefaultToolbarItemName
-      | dxDataGridToolbarItem
-    >;
-    /**
-     * [descr:dxDataGridToolbar.visible]
-     */
-    visible?: boolean;
-    /**
-     * [descr:dxDataGridToolbar.disabled]
-     */
-    disabled?: boolean;
-  }
-  /**
-   * [descr:dxDataGridToolbarItem]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface dxDataGridToolbarItem extends dxToolbarItem {
-    /**
-     * [descr:dxDataGridToolbarItem.name]
-     */
-    name?: DevExpress.ui.dxDataGrid.dxDataGridDefaultToolbarItemName | string;
-    /**
-     * [descr:dxDataGridToolbarItem.location]
-     */
-    location?: 'after' | 'before' | 'center';
-  }
   /**
    * [descr:dxDateBox]
    */
@@ -23427,6 +23392,38 @@ declare module DevExpress.ui {
      */
     static initialized(callback: Function): void;
     static isMaterial(theme: string): boolean;
+  }
+  /**
+   * [descr:Toolbar]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface Toolbar {
+    /**
+     * [descr:Toolbar.items]
+     */
+    items?: Array<DevExpress.ui.dxDataGrid.DefaultToolbarItem | ToolbarItem>;
+    /**
+     * [descr:Toolbar.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:Toolbar.disabled]
+     */
+    disabled?: boolean;
+  }
+  /**
+   * [descr:ToolbarItem]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface ToolbarItem extends dxToolbarItem {
+    /**
+     * [descr:ToolbarItem.name]
+     */
+    name?: DevExpress.ui.dxDataGrid.DefaultToolbarItem | string;
+    /**
+     * [descr:ToolbarItem.location]
+     */
+    location?: 'after' | 'before' | 'center';
   }
   export interface ValidationCallbackData {
     value?: string | number;
