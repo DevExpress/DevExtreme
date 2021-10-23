@@ -6266,17 +6266,14 @@ declare module DevExpress.ui {
       readonly rowIndex: number;
       readonly row?: Row<TRowData, TKey>;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface CustomSummaryInfo<TRowData = any, TKey = any> {
+    export type CustomSummaryInfo<TRowData = any, TKey = any> = {
       readonly component: dxDataGrid<TRowData, TKey>;
       readonly name?: string;
       readonly summaryProcess: string;
       readonly value?: any;
       totalValue?: any;
       readonly groupIndex?: number;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6563,10 +6560,7 @@ declare module DevExpress.ui {
       readonly dataField?: string;
       readonly row?: Row<TRowData, TKey>;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ExcelCellInfo<TRowData = any, TKey = any> {
+    export type ExcelCellInfo<TRowData = any, TKey = any> = {
       readonly component: dxDataGrid<TRowData, TKey>;
       horizontalAlignment?:
         | 'center'
@@ -6610,7 +6604,7 @@ declare module DevExpress.ui {
       readonly value?: string | number | Date;
       numberFormat?: string;
       gridCell?: DevExpress.excelExporter.DataGridCell;
-    }
+    };
     export type ExplicitTypes<TRowData, TKey> = {
       AdaptiveDetailRowPreparingEvent: AdaptiveDetailRowPreparingEvent<
         TRowData,
@@ -6633,6 +6627,7 @@ declare module DevExpress.ui {
       >;
       ContentReadyEvent: ContentReadyEvent<TRowData, TKey>;
       ContextMenuPreparingEvent: ContextMenuPreparingEvent<TRowData, TKey>;
+      CustomSummaryInfo: CustomSummaryInfo<TRowData, TKey>;
       DataErrorOccurredEvent: DataErrorOccurredEvent<TRowData, TKey>;
       DataRowTemplateData: DataRowTemplateData<TRowData, TKey>;
       DisposingEvent: DisposingEvent<TRowData, TKey>;
@@ -6642,18 +6637,24 @@ declare module DevExpress.ui {
       EditingStartEvent: EditingStartEvent<TRowData, TKey>;
       EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
       EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
+      ExcelCellInfo: ExcelCellInfo<TRowData, TKey>;
       Export: Export<TRowData, TKey>;
       ExportedEvent: ExportedEvent<TRowData, TKey>;
       ExportingEvent: ExportingEvent<TRowData, TKey>;
+      ExportTexts: ExportTexts;
       FileSavingEvent: FileSavingEvent<TRowData, TKey>;
       FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
       FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
       FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;
       FocusedRowChangingEvent: FocusedRowChangingEvent<TRowData, TKey>;
       GroupData: GroupData<TRowData>;
+      Grouping: Grouping;
+      GroupingTexts: GroupingTexts;
+      GroupPanel: GroupPanel;
       InitializedEvent: InitializedEvent<TRowData, TKey>;
       InitNewRowEvent: InitNewRowEvent<TRowData, TKey>;
       KeyDownEvent: KeyDownEvent<TRowData, TKey>;
+      MasterDetail: MasterDetail<TRowData, TKey>;
       MasterDetailTemplateData: MasterDetailTemplateData<TRowData, TKey>;
       OptionChangedEvent: OptionChangedEvent<TRowData, TKey>;
       Properties: Properties<TRowData, TKey>;
@@ -6687,6 +6688,12 @@ declare module DevExpress.ui {
       Selection: Selection;
       SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
       Summary: Summary<TRowData, TKey>;
+      SummaryGroupItem: SummaryGroupItem;
+      SummaryItemTextInfo: SummaryItemTextInfo;
+      SummaryTexts: SummaryTexts;
+      SummaryTotalItem: SummaryTotalItem;
+      Toolbar: Toolbar;
+      ToolbarItem: ToolbarItem;
       ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
     };
     export type Export<TRowData = any, TKey = any> = {
@@ -6744,10 +6751,7 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxDataGrid<TRowData, TKey>> & {
         fileName?: string;
       };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ExportTexts {
+    export type ExportTexts = {
       /**
        * [descr:dxDataGridOptions.export.texts.exportAll]
        */
@@ -6760,7 +6764,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.export.texts.exportTo]
        */
       exportTo?: string;
-    }
+    };
     export type FileSavingEvent<
       TRowData = any,
       TKey = any
@@ -6977,10 +6981,7 @@ declare module DevExpress.ui {
        */
       isContinuationOnNextPage?: boolean;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface Grouping {
+    export type Grouping = {
       /**
        * [descr:dxDataGridOptions.grouping.allowCollapsing]
        */
@@ -7001,11 +7002,8 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.grouping.texts]
        */
       texts?: GroupingTexts;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface GroupingTexts {
+    };
+    export type GroupingTexts = {
       /**
        * [descr:dxDataGridOptions.grouping.texts.groupByThisColumn]
        */
@@ -7026,15 +7024,12 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.grouping.texts.ungroupAll]
        */
       ungroupAll?: string;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     type GroupKey = any[];
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface GroupPanel {
+    export type GroupPanel = {
       /**
        * [descr:dxDataGridOptions.groupPanel.allowColumnDragging]
        */
@@ -7047,7 +7042,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.groupPanel.visible]
        */
       visible?: boolean | 'auto';
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7176,10 +7171,7 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface MasterDetail<TRowData = any, TKey = any> {
+    export type MasterDetail<TRowData = any, TKey = any> = {
       /**
        * [descr:dxDataGridOptions.masterDetail.autoExpandAll]
        */
@@ -7197,7 +7189,7 @@ declare module DevExpress.ui {
             detailElement: DevExpress.core.DxElement,
             detailInfo: MasterDetailTemplateData<TRowData, TKey>
           ) => any);
-    }
+    };
     export type MasterDetailTemplateData<TRowData = any, TKey = any> = {
       readonly key: TKey;
       readonly data: TRowData;
@@ -7272,7 +7264,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridRowObject]
      */
-    export interface Row<TRowData = any, TKey = any> {
+    export type Row<TRowData = any, TKey = any> = {
       /**
        * [descr:dxDataGridRowObject.data]
        */
@@ -7313,7 +7305,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridRowObject.values]
        */
       readonly values: Array<any>;
-    }
+    };
     export type RowClickEvent<
       TRowData = any,
       TKey = any
@@ -7898,7 +7890,7 @@ declare module DevExpress.ui {
        */
       type?: 'custom' | 'localStorage' | 'sessionStorage';
     }
-    export interface Summary<TRowData = any, TKey = any> {
+    export type Summary<TRowData = any, TKey = any> = {
       /**
        * [descr:dxDataGridOptions.summary.calculateCustomSummary]
        */
@@ -7925,11 +7917,8 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.totalItems]
        */
       totalItems?: Array<SummaryTotalItem>;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface SummaryGroupItem {
+    };
+    export type SummaryGroupItem = {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.alignByColumn]
        */
@@ -7970,18 +7959,12 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.groupItems.valueFormat]
        */
       valueFormat?: Format;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface SummaryItemTextInfo {
+    };
+    export type SummaryItemTextInfo = {
       readonly value?: string | number | Date;
       readonly valueText: string;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface SummaryTexts {
+    };
+    export type SummaryTexts = {
       /**
        * [descr:dxDataGridOptions.summary.texts.avg]
        */
@@ -8018,11 +8001,8 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.texts.sumOtherColumn]
        */
       sumOtherColumn?: string;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface SummaryTotalItem {
+    };
+    export type SummaryTotalItem = {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.alignment]
        */
@@ -8063,7 +8043,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.totalItems.valueFormat]
        */
       valueFormat?: Format;
-    }
+    };
     export type ToolbarPreparingEvent<
       TRowData = any,
       TKey = any
@@ -21065,7 +21045,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListNode]
      */
-    export interface Node<TRowData = any, TKey = any> {
+    export type Node<TRowData = any, TKey = any> = {
       /**
        * [descr:dxTreeListNode.children]
        */
@@ -21094,7 +21074,7 @@ declare module DevExpress.ui {
        * [descr:dxTreeListNode.visible]
        */
       visible?: boolean;
-    }
+    };
     export type NodesInitializedEvent<
       TRowData = any,
       TKey = any
@@ -21122,7 +21102,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListRowObject]
      */
-    export interface Row<TRowData = any, TKey = any> {
+    export type Row<TRowData = any, TKey = any> = {
       /**
        * [descr:dxTreeListRowObject.isEditing]
        */
@@ -21167,7 +21147,7 @@ declare module DevExpress.ui {
        * [descr:dxTreeListRowObject.data]
        */
       readonly data: TRowData;
-    }
+    };
     export type RowClickEvent<
       TRowData = any,
       TKey = any
@@ -23395,9 +23375,8 @@ declare module DevExpress.ui {
   }
   /**
    * [descr:Toolbar]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface Toolbar {
+  export type Toolbar = {
     /**
      * [descr:Toolbar.items]
      */
@@ -23410,12 +23389,11 @@ declare module DevExpress.ui {
      * [descr:Toolbar.disabled]
      */
     disabled?: boolean;
-  }
+  };
   /**
    * [descr:ToolbarItem]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ToolbarItem extends dxToolbarItem {
+  export type ToolbarItem = dxToolbarItem & {
     /**
      * [descr:ToolbarItem.name]
      */
@@ -23424,7 +23402,7 @@ declare module DevExpress.ui {
      * [descr:ToolbarItem.location]
      */
     location?: 'after' | 'before' | 'center';
-  }
+  };
   export interface ValidationCallbackData {
     value?: string | number;
     rule: any;

@@ -1382,7 +1382,7 @@ export type dxTreeListNode<TRowData = any, TKey = any> = Node<TRowData, TKey>;
  * @docid dxTreeListNode
  * @type object
  */
-export interface Node<TRowData = any, TKey = any> {
+export type Node<TRowData = any, TKey = any> = {
     /**
      * @docid dxTreeListNode.children
      * @type  Array<dxTreeListNode>
@@ -1420,7 +1420,7 @@ export interface Node<TRowData = any, TKey = any> {
      * @public
      */
     visible?: boolean;
-}
+};
 
 /**
  * @namespace DevExpress.ui
@@ -1433,7 +1433,7 @@ export type dxTreeListRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey
  * @docid dxTreeListRowObject
  * @type object
  */
-export interface Row<TRowData = any, TKey = any> {
+export type Row<TRowData = any, TKey = any> = {
     /**
      * @docid dxTreeListRowObject.isEditing
      * @public
@@ -1490,7 +1490,7 @@ export interface Row<TRowData = any, TKey = any> {
      * @public
      */
     readonly data: TRowData;
-}
+};
 
 /** @public */
 export type ExplicitTypes<TRowData, TKey> = {
