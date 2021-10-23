@@ -771,7 +771,7 @@ class Scheduler extends Widget {
     }
 
     _isAgenda() {
-        return this.modelProvider.getAppointmentRenderingStrategyName() === 'agenda';
+        return this.getLayoutManager().appointmentRenderingStrategyName === 'agenda';
     }
 
     _allowDragging() {

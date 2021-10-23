@@ -21,16 +21,16 @@ import { TimeZoneCalculator } from '../timeZoneCalculator/utils';
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 const toMs = (name: string): number => dateUtils.dateToMilliseconds(name);
 
-const getAppointmentRenderingStrategyName = (viewType: ViewType): string => {
+export const getAppointmentRenderingStrategyName = (viewType: ViewType): string => {
   const appointmentRenderingStrategyMap: Record<ViewType, { renderingStrategy: string }> = {
     day: {
       renderingStrategy: 'vertical',
     },
     week: {
-      renderingStrategy: 'vertical',
+      renderingStrategy: 'week',
     },
     workWeek: {
-      renderingStrategy: 'vertical',
+      renderingStrategy: 'week',
     },
     month: {
       renderingStrategy: 'horizontalMonth',
@@ -51,6 +51,7 @@ const getAppointmentRenderingStrategyName = (viewType: ViewType): string => {
       renderingStrategy: 'agenda',
     },
   };
+
   const { renderingStrategy } = appointmentRenderingStrategyMap[viewType];
 
   return renderingStrategy;

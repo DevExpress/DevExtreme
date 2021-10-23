@@ -255,11 +255,7 @@ const subscribes = {
     },
 
     supportCompactDropDownAppointments: function() {
-        return this._workSpace._supportCompactDropDownAppointments();
-    },
-
-    isApplyCompactAppointmentOffset: function() {
-        return this._workSpace._isApplyCompactAppointmentOffset();
+        return this.getLayoutManager().getRenderingStrategyInstance().supportCompactDropDownAppointments();
     },
 
     getGroupCount: function() {

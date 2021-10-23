@@ -125,10 +125,6 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
         return this._getViewStartByOptions();
     }
 
-    _supportCompactDropDownAppointments() {
-        return false;
-    }
-
     scrollToTime() { return noop(); }
 
     renderRAllDayPanel() {}

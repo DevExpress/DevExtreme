@@ -253,10 +253,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return this.getCellDuration();
     }
 
-    _supportCompactDropDownAppointments() {
-        return false;
-    }
-
     getCellMinWidth() {
         return 0;
     }
