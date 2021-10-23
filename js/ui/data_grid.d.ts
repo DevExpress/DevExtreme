@@ -1638,7 +1638,7 @@ export interface EditingBase<TRowData = any, TKey = any> {
 
 /**
  * @docid
- * @namespace DevExpress.ui
+ * @namespace DevExpress.ui.dxDataGrid
  */
 export interface DataChange<TRowData = any, TKey = any> {
     /**

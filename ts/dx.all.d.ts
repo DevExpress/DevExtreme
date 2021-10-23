@@ -4452,32 +4452,6 @@ declare module DevExpress.ui {
     validationCallback?: (options: ValidationCallbackData) => boolean;
   }
   /**
-   * [descr:DataChange]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export interface DataChange<TRowData = any, TKey = any> {
-    /**
-     * [descr:DataChange.key]
-     */
-    key: TKey;
-    /**
-     * [descr:DataChange.type]
-     */
-    type: 'insert' | 'update' | 'remove';
-    /**
-     * [descr:DataChange.data]
-     */
-    data: DevExpress.core.DeepPartial<TRowData>;
-    /**
-     * [descr:DataChange.insertAfterKey]
-     */
-    insertAfterKey?: TKey;
-    /**
-     * [descr:DataChange.insertBeforeKey]
-     */
-    insertBeforeKey?: TKey;
-  }
-  /**
    * [descr:DataExpressionMixin]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -23578,6 +23552,34 @@ declare module DevExpress.ui.dxButtonGroup {
 }
 declare module DevExpress.ui.dxContextMenu {
   export type Item = dxContextMenuItem;
+}
+declare module DevExpress.ui.dxDataGrid {
+  /**
+   * [descr:DataChange]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface DataChange<TRowData = any, TKey = any> {
+    /**
+     * [descr:DataChange.key]
+     */
+    key: TKey;
+    /**
+     * [descr:DataChange.type]
+     */
+    type: 'insert' | 'update' | 'remove';
+    /**
+     * [descr:DataChange.data]
+     */
+    data: DevExpress.core.DeepPartial<TRowData>;
+    /**
+     * [descr:DataChange.insertAfterKey]
+     */
+    insertAfterKey?: TKey;
+    /**
+     * [descr:DataChange.insertBeforeKey]
+     */
+    insertBeforeKey?: TKey;
+  }
 }
 declare module DevExpress.ui.dxDiagram {
   export type Item = dxDiagramItem;
