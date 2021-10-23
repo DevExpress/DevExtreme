@@ -4785,6 +4785,7 @@ export type ExplicitTypes<TRowData, TKey> = {
   ContentReadyEvent: ContentReadyEvent<TRowData, TKey>;
   ContextMenuPreparingEvent: ContextMenuPreparingEvent<TRowData, TKey>;
   DataErrorOccurredEvent: DataErrorOccurredEvent<TRowData, TKey>;
+  DataRowTemplateData: DataRowTemplateData<TRowData, TKey>;
   DisposingEvent: DisposingEvent<TRowData, TKey>;
   EditCanceledEvent: EditCanceledEvent<TRowData, TKey>;
   EditCancelingEvent: EditCancelingEvent<TRowData, TKey>;
@@ -4800,6 +4801,7 @@ export type ExplicitTypes<TRowData, TKey> = {
   FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
   FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;
   FocusedRowChangingEvent: FocusedRowChangingEvent<TRowData, TKey>;
+  GroupData: GroupData<TRowData>;
   InitializedEvent: InitializedEvent<TRowData, TKey>;
   InitNewRowEvent: InitNewRowEvent<TRowData, TKey>;
   KeyDownEvent: KeyDownEvent<TRowData, TKey>;
@@ -4827,7 +4829,6 @@ export type ExplicitTypes<TRowData, TKey> = {
   RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
   RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
   RowTemplateData: RowTemplateData<TRowData, TKey>;
-  DataRowTemplateData: DataRowTemplateData<TRowData, TKey>;
   RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
   RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
   RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
@@ -4838,7 +4839,6 @@ export type ExplicitTypes<TRowData, TKey> = {
   SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
   Summary: Summary<TRowData, TKey>;
   ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
-  GroupData: GroupData<TRowData>;
 };
 
 /** @public */

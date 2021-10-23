@@ -6634,6 +6634,7 @@ declare module DevExpress.ui {
       ContentReadyEvent: ContentReadyEvent<TRowData, TKey>;
       ContextMenuPreparingEvent: ContextMenuPreparingEvent<TRowData, TKey>;
       DataErrorOccurredEvent: DataErrorOccurredEvent<TRowData, TKey>;
+      DataRowTemplateData: DataRowTemplateData<TRowData, TKey>;
       DisposingEvent: DisposingEvent<TRowData, TKey>;
       EditCanceledEvent: EditCanceledEvent<TRowData, TKey>;
       EditCancelingEvent: EditCancelingEvent<TRowData, TKey>;
@@ -6649,6 +6650,7 @@ declare module DevExpress.ui {
       FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
       FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;
       FocusedRowChangingEvent: FocusedRowChangingEvent<TRowData, TKey>;
+      GroupData: GroupData<TRowData>;
       InitializedEvent: InitializedEvent<TRowData, TKey>;
       InitNewRowEvent: InitNewRowEvent<TRowData, TKey>;
       KeyDownEvent: KeyDownEvent<TRowData, TKey>;
@@ -6676,7 +6678,6 @@ declare module DevExpress.ui {
       RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
       RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
       RowTemplateData: RowTemplateData<TRowData, TKey>;
-      DataRowTemplateData: DataRowTemplateData<TRowData, TKey>;
       RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
       RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
       RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
@@ -6687,7 +6688,6 @@ declare module DevExpress.ui {
       SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
       Summary: Summary<TRowData, TKey>;
       ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
-      GroupData: GroupData<TRowData>;
     };
     export type Export<TRowData = any, TKey = any> = {
       /**
