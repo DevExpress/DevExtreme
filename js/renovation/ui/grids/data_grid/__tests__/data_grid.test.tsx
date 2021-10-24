@@ -7,7 +7,7 @@ import { DataGrid, viewFunction as DataGridView } from '../data_grid';
 import { DataGridEditing, DataGridProps } from '../common/data_grid_props';
 import { Widget } from '../../../common/widget';
 import { DataGridViews } from '../data_grid_views';
-import '../datagrid_component';
+import '../../../../component_wrapper/data_grid/datagrid_component';
 import { getUpdatedOptions } from '../../../common/utils/get_updated_options';
 import devices from '../../../../../core/devices';
 import { current } from '../../../../../ui/themes';
@@ -21,7 +21,7 @@ const mockUpdateSize = jest.fn();
 
 jest.mock('../data_grid_views', () => ({ DataGridViews: () => null }));
 jest.mock('../../../../../ui/data_grid/ui.data_grid', () => jest.fn());
-jest.mock('../datagrid_component', () => ({
+jest.mock('../../../../component_wrapper/data_grid/datagrid_component', () => ({
   DataGridComponent: jest.fn().mockImplementation((element, options) => {
     const component = {
       options,

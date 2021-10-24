@@ -1,5 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import DataSource from '../../../../data/data_source';
 import { SchedulerProps, ScrollingProps } from '../props';
 import { Scheduler, viewFunction as ViewFunction } from '../scheduler';
 import { Widget, WidgetProps } from '../../common/widget';
@@ -10,11 +11,35 @@ import { WorkSpace } from '../workspaces/base/work_space';
 import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
 import { Group } from '../workspaces/types';
+import { filterAppointments } from '../common';
+import { getAppointmentsConfig, getAppointmentsModel } from '../model/appointments';
+import { getAppointmentsViewModel } from '../view_model/appointments/appointments';
+import { AppointmentLayout } from '../appointment/layout';
 
+jest.mock('../model/appointments', () => ({
+  ...jest.requireActual('../model/appointments'),
+  getAppointmentsConfig: jest.fn(() => 'Test_getAppointmentsConfig'),
+  getAppointmentsModel: jest.fn(() => 'Test_getAppointmentsModel'),
+}));
+
+jest.mock('../view_model/appointments/appointments', () => ({
+  ...jest.requireActual('../view_model/appointments/appointments'),
+  getAppointmentsViewModel: jest.fn(() => 'Test_getAppointmentsViewModel'),
+}));
+
+jest.mock('../common', () => ({
+  ...jest.requireActual('../common'),
+  filterAppointments: jest.fn(() => 'Test_filterAppointments'),
+}));
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
 
 describe('Scheduler', () => {
+  const defaultAppointmentViewModel = {
+    regular: [],
+    allDay: [],
+  };
+
   describe('Render', () => {
     const defaultCurrentViewConfig = {
       firstDayOfWeek: 0,
@@ -42,6 +67,7 @@ describe('Scheduler', () => {
     const renderComponent = (viewModel) => shallow(
       <ViewFunction
         currentViewConfig={defaultCurrentViewConfig}
+        appointmentsViewModel={defaultAppointmentViewModel}
         {...viewModel}
         props={{
           ...new SchedulerProps(),
@@ -80,7 +106,7 @@ describe('Scheduler', () => {
         .toEqual({
           ...new WidgetProps(),
           'custom-attribute': 'customAttribute',
-          classes: 'dx-scheduler',
+          classes: 'dx-scheduler dx-scheduler-native',
           ...props,
           children: expect.anything(),
         });
@@ -166,6 +192,47 @@ describe('Scheduler', () => {
 
       expect(schedulerToolbar.exists()).toBe(false);
     });
+
+    describe('Appointments', () => {
+      it('should render appointments as a property of workspace', () => {
+        const props = {
+          min: new Date(2021, 9, 7),
+          max: new Date(2021, 9, 8),
+          views: ['day'],
+          currentView: 'day',
+        };
+
+        const appointmentsViewModel = {
+          regular: [{}],
+          allDay: [{}, {}],
+        };
+
+        const scheduler = renderComponent({
+          props,
+          appointmentsViewModel,
+        });
+
+        const workspace = scheduler.find(WorkSpace);
+        const appointments = workspace.prop('appointments');
+        const allDayAppointments = workspace.prop('allDayAppointments');
+
+        expect(appointments.type)
+          .toBe(AppointmentLayout);
+
+        expect(appointments.props)
+          .toEqual({
+            appointments: appointmentsViewModel.regular,
+          });
+
+        expect(allDayAppointments.type)
+          .toBe(AppointmentLayout);
+
+        expect(allDayAppointments.props)
+          .toEqual({
+            appointments: appointmentsViewModel.allDay,
+          });
+      });
+    });
   });
 
   describe('Behaviour', () => {
@@ -228,6 +295,89 @@ describe('Scheduler', () => {
               ],
             } as Group,
           ]);
+      });
+
+      describe('loadDataSource', () => {
+        it('loadDataSource should load if data items is array', () => {
+          const data = [{
+            startDate: new Date(2021, 9, 6, 15, 15),
+            endDate: new Date(2021, 9, 6, 16, 16),
+            allDay: false,
+          }];
+          const scheduler = new Scheduler({
+            dataSource: data,
+          });
+
+          scheduler.loadDataSource();
+
+          expect(scheduler.dataItems)
+            .toMatchObject(data);
+        });
+
+        it('loadDataSource should load if data items is DataSourceOptions', () => {
+          const data = [{
+            startDate: new Date(2021, 9, 6, 15, 15),
+            endDate: new Date(2021, 9, 6, 16, 16),
+            allDay: false,
+          }];
+          const scheduler = new Scheduler({
+            dataSource: {
+              store: {
+                type: 'array',
+                data,
+              },
+            },
+          });
+
+          scheduler.loadDataSource();
+
+          expect(scheduler.dataItems)
+            .toMatchObject(data);
+        });
+
+        it('loadDataSource should not load dataItems if internalDataSource is loaded', () => {
+          const data = [{
+            startDate: new Date(2021, 9, 6, 15, 15),
+            endDate: new Date(2021, 9, 6, 16, 16),
+            allDay: false,
+          }];
+          const scheduler = new Scheduler({
+            dataSource: data,
+          });
+
+          jest.spyOn(scheduler, 'internalDataSource', 'get')
+            .mockReturnValue({
+              isLoaded: () => true,
+              isLoading: () => false,
+            } as any);
+
+          scheduler.loadDataSource();
+
+          expect(scheduler.dataItems)
+            .toHaveLength(0);
+        });
+
+        it('loadDataSource should not load dataItems if internalDataSource is in loading phase', () => {
+          const data = [{
+            startDate: new Date(2021, 9, 6, 15, 15),
+            endDate: new Date(2021, 9, 6, 16, 16),
+            allDay: false,
+          }];
+          const scheduler = new Scheduler({
+            dataSource: data,
+          });
+
+          jest.spyOn(scheduler, 'internalDataSource', 'get')
+            .mockReturnValue({
+              isLoaded: () => false,
+              isLoading: () => true,
+            } as any);
+
+          scheduler.loadDataSource();
+
+          expect(scheduler.dataItems)
+            .toHaveLength(0);
+        });
       });
     });
 
@@ -449,6 +599,8 @@ describe('Scheduler', () => {
   });
 
   describe('Logic', () => {
+    afterEach(() => jest.clearAllMocks());
+
     describe('Getters', () => {
       describe('currentViewProps', () => {
         it('should return correct current view', () => {
@@ -589,6 +741,152 @@ describe('Scheduler', () => {
               common: -7,
               appointment: 3,
             });
+        });
+      });
+
+      describe('appointmentsConfig', () => {
+        it('should be created correctly if viewDataProvider and cellsMetaData exists', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          scheduler.cellsMetaData = { } as any;
+          scheduler.viewDataProvider = new ViewDataProvider('day') as any;
+
+          expect(scheduler.appointmentsConfig)
+            .toBe('Test_getAppointmentsConfig');
+
+          expect(getAppointmentsConfig)
+            .toHaveBeenCalledTimes(1);
+        });
+
+        it('should not been created if viewDataProvider is not exists', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          expect(scheduler.appointmentsConfig)
+            .toBe(undefined);
+
+          expect(getAppointmentsConfig)
+            .toHaveBeenCalledTimes(0);
+        });
+
+        it('should not been created if cellsMetaData is not exists', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          scheduler.viewDataProvider = new ViewDataProvider('day') as any;
+
+          expect(scheduler.appointmentsConfig)
+            .toBe(undefined);
+
+          expect(getAppointmentsConfig)
+            .toHaveBeenCalledTimes(0);
+        });
+      });
+
+      describe('internalDataSource', () => {
+        it('should be created correctly if dataSource is array', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            dataSource: [{
+              startDate: new Date(2021, 9, 5),
+              endDate: new Date(2021, 9, 6),
+            }],
+          });
+
+          expect(scheduler.internalDataSource)
+            .toBeInstanceOf(DataSource);
+        });
+
+        it('should be created correctly if dataSource is DataSource', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            dataSource: new DataSource([{
+              startDate: new Date(2021, 9, 5),
+              endDate: new Date(2021, 9, 6),
+            }]),
+          });
+
+          expect(scheduler.internalDataSource)
+            .toBeInstanceOf(DataSource);
+        });
+      });
+
+      describe('filteredItems', () => {
+        it('should invoke filterAppointments correctly', () => {
+          const schedulerProps = new SchedulerProps();
+          const scheduler = new Scheduler(schedulerProps);
+
+          expect(scheduler.filteredItems)
+            .toBe('Test_filterAppointments');
+
+          expect(filterAppointments)
+            .toHaveBeenCalledTimes(1);
+        });
+      });
+
+      describe('appointmentsViewModel', () => {
+        it('should be generated correctly if appointmentsConfig is exists', () => {
+          const schedulerProps = new SchedulerProps();
+          const scheduler = new Scheduler(schedulerProps);
+
+          jest.spyOn(scheduler, 'appointmentsConfig', 'get')
+            .mockReturnValue('appointmentsConfig_test' as any);
+
+          expect(scheduler.appointmentsViewModel)
+            .toBe('Test_getAppointmentsViewModel');
+
+          expect(filterAppointments)
+            .toHaveBeenCalledTimes(2);
+
+          expect(getAppointmentsModel)
+            .toHaveBeenCalledTimes(1);
+
+          expect(getAppointmentsViewModel)
+            .toHaveBeenCalledTimes(1);
+
+          expect(getAppointmentsViewModel)
+            .toHaveBeenCalledWith(
+              'Test_getAppointmentsModel',
+              scheduler.filteredItems,
+            );
+        });
+
+        it('should return empty viewModel if appointmentsConfig is not exist', () => {
+          const schedulerProps = new SchedulerProps();
+          const scheduler = new Scheduler(schedulerProps);
+
+          jest.spyOn(scheduler, 'appointmentsConfig', 'get')
+            .mockReturnValue(undefined);
+
+          expect(scheduler.appointmentsViewModel)
+            .toEqual(defaultAppointmentViewModel);
+
+          expect(filterAppointments)
+            .toHaveBeenCalledTimes(0);
+
+          expect(getAppointmentsModel)
+            .toHaveBeenCalledTimes(0);
+
+          expect(getAppointmentsViewModel)
+            .toHaveBeenCalledTimes(0);
+        });
+
+        it('should return empty viewModel if filteredItems is empty', () => {
+          const schedulerProps = new SchedulerProps();
+          const scheduler = new Scheduler(schedulerProps);
+
+          jest.spyOn(scheduler, 'filteredItems', 'get')
+            .mockReturnValue([]);
+
+          expect(scheduler.appointmentsViewModel)
+            .toEqual(defaultAppointmentViewModel);
+
+          expect(filterAppointments)
+            .toHaveBeenCalledTimes(0);
+
+          expect(getAppointmentsModel)
+            .toHaveBeenCalledTimes(0);
+
+          expect(getAppointmentsViewModel)
+            .toHaveBeenCalledTimes(0);
         });
       });
     });

@@ -239,6 +239,3 @@ export type Properties = dxDraggableOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxDraggableOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxDraggableOptions;

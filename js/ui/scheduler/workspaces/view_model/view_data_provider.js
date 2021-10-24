@@ -454,4 +454,8 @@ export default class ViewDataProvider {
     getFirstDayOfWeek(firstDayOfWeekOption) {
         return this.viewDataGenerator.getFirstDayOfWeek(firstDayOfWeekOption);
     }
+
+    getViewOptions() {
+        return this._options;
+    }
 }

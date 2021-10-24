@@ -9,8 +9,9 @@ import themes from 'ui/themes';
 import config from 'core/config';
 import consoleUtils from 'core/utils/console';
 import { normalizeKeyName } from 'events/utils/index';
+import { getWidth } from 'core/utils/size';
 
-import 'ui/text_box/ui.text_editor';
+import TextEditor from 'ui/text_box/ui.text_editor';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const INPUT_CLASS = 'dx-texteditor-input';
@@ -21,6 +22,8 @@ const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
 const CLEAR_BUTTON_SELECTOR = '.dx-clear-button-area';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
+
+const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 
 const EVENTS = [
     'FocusIn', 'FocusOut',
@@ -461,6 +464,160 @@ QUnit.module('general', {}, () => {
         assert.ok($textEditor.hasClass('dx-editor-filled'));
 
         themes.isMaterial = realIsMaterial;
+    });
+});
+
+QUnit.module('label integration', {
+    beforeEach: function() {
+        this.$textEditor = $('#texteditor');
+        const initialOptions = { label: 'some' };
+        this.init = (options = {}) => {
+            this.textEditor = this.$textEditor
+                .dxTextEditor($.extend(initialOptions, options))
+                .dxTextEditor('instance');
+            this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
+        };
+    }
+}, () => {
+    QUnit.module('init', {
+        beforeEach: function() {
+            this.constructorStub = sinon.stub();
+            TextEditor.mockTextEditorLabel(this.constructorStub);
+            this.getProps = () => this.constructorStub.getCall(0).args[0];
+        },
+        afterEach: function() {
+            this.constructorStub.reset();
+            TextEditor.restoreTextEditorLabel();
+        }
+    }, () => {
+        QUnit.test('correct props are passed to TextEditorLabel', function(assert) {
+            const labelText = 'new label';
+            const labelMode = 'floating';
+            const labelMark = ':';
+
+            this.init({
+                label: labelText,
+                labelMode,
+                labelMark,
+                buttons: [{
+                    name: 'button',
+                    location: 'before'
+                }],
+            });
+
+            const {
+                $editor,
+                text, mode, mark,
+                containsButtonsBefore,
+            } = this.getProps();
+
+            assert.strictEqual($editor.get(0), this.$textEditor.get(0));
+            assert.strictEqual(text, labelText);
+            assert.strictEqual(mode, labelMode);
+            assert.strictEqual(mark, labelMark);
+            assert.strictEqual(containsButtonsBefore, true);
+        });
+
+        QUnit.test('editor should pass containerWidth equal to input width', function(assert) {
+            this.init();
+            const inputWidth = getWidth(this.$input);
+
+            assert.strictEqual(this.getProps().containerWidth, inputWidth);
+        });
+
+        QUnit.test('editor should pass beforeWidth equal to before buttons container width', function(assert) {
+            this.init();
+            const beforeButtonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
+
+            assert.strictEqual(this.getProps().beforeWidth, beforeButtonsContainerWidth);
+        });
+    });
+
+    QUnit.module('option change', {
+        beforeEach: function() {
+            this.LabelMock = {
+                updateMaxWidth: sinon.stub(),
+                updateBeforeWidth: sinon.stub(),
+                updateMode: sinon.stub(),
+                updateText: sinon.stub(),
+                updateMark: sinon.stub(),
+                updateContainsButtonsBefore: sinon.stub()
+            };
+            const constructorMock = () => {
+                return this.LabelMock;
+            };
+            TextEditor.mockTextEditorLabel(constructorMock);
+            this.init();
+        },
+        afterEach: function() {
+            Object.values(this.LabelMock, (stub) => {
+                stub.reset();
+            });
+            TextEditor.restoreTextEditorLabel();
+        }
+    }, () => {
+        QUnit.test('width', function(assert) {
+            this.textEditor.option('width', 300);
+            const inputWidth = getWidth(this.$input);
+
+            const updateMaxWidthCall = this.LabelMock.updateMaxWidth.getCall(0);
+            assert.strictEqual(updateMaxWidthCall.args[0], inputWidth);
+        });
+
+
+        QUnit.test('label', function(assert) {
+            const labelText = 'new text';
+            this.textEditor.option('label', labelText);
+
+            const updateTextCall = this.LabelMock.updateText.getCall(0);
+            assert.strictEqual(updateTextCall.args[0], labelText);
+        });
+
+        QUnit.test('labelMark', function(assert) {
+            const newLabelMark = '*';
+            this.textEditor.option('labelMark', newLabelMark);
+
+            const updateMarkCall = this.LabelMock.updateMark.getCall(0);
+            assert.strictEqual(updateMarkCall.args[0], newLabelMark);
+        });
+
+        QUnit.test('labelMode', function(assert) {
+            const newLabelMode = 'floating';
+            this.textEditor.option('labelMode', newLabelMode);
+
+            const updateModeCall = this.LabelMock.updateMode.getCall(0);
+            assert.strictEqual(updateModeCall.args[0], newLabelMode);
+        });
+
+        QUnit.test('buttons', function(assert) {
+            this.textEditor.option('buttons', [{
+                name: 'button',
+                location: 'before',
+            }]);
+            const updateMaxWidthCall = this.LabelMock.updateMaxWidth.getCall(0);
+            const updateBeforeWidthCall = this.LabelMock.updateBeforeWidth.getCall(0);
+            const updateContainsButtonsBeforeCall = this.LabelMock.updateContainsButtonsBefore.getCall(0);
+
+            const newLabelMaxWidth = getWidth(this.$input);
+            const newLabelBeforeWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
+
+            assert.strictEqual(updateMaxWidthCall.args[0], newLabelMaxWidth);
+            assert.strictEqual(updateBeforeWidthCall.args[0], newLabelBeforeWidth);
+            assert.strictEqual(updateContainsButtonsBeforeCall.args[0], true);
+        });
+
+        QUnit.test('stylingMode', function(assert) {
+            this.textEditor.option('stylingMode', 'underlined');
+
+            const updateMaxWidthCall = this.LabelMock.updateMaxWidth.getCall(0);
+            const updateBeforeWidthCall = this.LabelMock.updateBeforeWidth.getCall(0);
+
+            const newLabelMaxWidth = getWidth(this.$input);
+            const newLabelBeforeWidth = 0;
+
+            assert.strictEqual(updateMaxWidthCall.args[0], newLabelMaxWidth);
+            assert.strictEqual(updateBeforeWidthCall.args[0], newLabelBeforeWidth);
+        });
     });
 });
 

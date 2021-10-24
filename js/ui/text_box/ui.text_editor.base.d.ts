@@ -42,7 +42,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @default ''
      * @public
      */
-    label?: boolean;
+    label?: string;
     /**
      * @docid
      * @type Enums.EditorLabelMode

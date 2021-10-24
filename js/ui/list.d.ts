@@ -1,3 +1,4 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -10,12 +11,6 @@ import {
 import {
     DxPromise,
 } from '../core/utils/deferred';
-
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -39,8 +34,10 @@ import {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
-interface ListItemInfo {
-    readonly itemData?: any;
+type ItemLike = string | Item | any;
+
+interface ListItemInfo<TItem extends ItemLike> {
+    readonly itemData?: TItem;
     readonly itemElement: DxElement;
     readonly itemIndex: number | { group: number; item: number };
 }
@@ -54,77 +51,81 @@ export interface ScrollInfo {
 }
 
 /** @public */
-export type ContentReadyEvent = EventInfo<dxList>;
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent = EventInfo<dxList>;
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
 /** @public */
-export type GroupRenderedEvent = EventInfo<dxList> & {
+export type GroupRenderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & {
     readonly groupData?: any;
     readonly groupElement?: DxElement;
     readonly groupIndex?: number;
 };
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxList>;
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxList<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxList> & ListItemInfo;
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxList> & ListItemInfo;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
 
 /** @public */
-export type ItemDeletedEvent = EventInfo<dxList> & ListItemInfo;
+export type ItemDeletedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
 
 /** @public */
-export type ItemDeletingEvent = EventInfo<dxList> & ListItemInfo & {
+export type ItemDeletingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
     cancel?: boolean | PromiseLike<void>;
 };
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxList> & ListItemInfo;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxList> & ItemInfo;
+export type ItemRenderedEvent<TItem extends Item | any = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemReorderedEvent = EventInfo<dxList> & ListItemInfo & {
+export type ItemReorderedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
     readonly fromIndex: number;
     readonly toIndex: number;
 };
 
 /** @public */
-export type ItemSwipeEvent = NativeEventInfo<dxList> & ListItemInfo & {
+export type ItemSwipeEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>> & ListItemInfo<TItem> & {
     readonly direction: string;
 };
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxList> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type PageLoadingEvent = EventInfo<dxList>;
+export type PageLoadingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
 /** @public */
-export type PullRefreshEvent = EventInfo<dxList>;
+export type PullRefreshEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>>;
 
 /** @public */
-export type ScrollEvent = NativeEventInfo<dxList> & ScrollInfo;
+export type ScrollEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxList<TItem, TKey>> & ScrollInfo;
 
 /** @public */
-export type SelectAllValueChangedEvent = EventInfo<dxList> & {
+export type SelectAllValueChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & {
     readonly value: boolean;
 };
 
 /** @public */
-export type SelectionChangedEvent = EventInfo<dxList> & SelectionChangedInfo;
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxList<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
-export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions {
+export interface dxListOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidgetOptions<dxList<TItem, TKey>, TItem, TKey>, SearchBoxMixinOptions {
     /**
      * @docid
      * @default true
@@ -156,14 +157,14 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @default undefined
      * @type_function_param1 item:object
      * @public
      */
-    displayExpr?: string | ((item: any) => string);
+    displayExpr?: string | ((item: TItem) => string);
     /**
      * @docid
      * @default true &for(desktop)
@@ -216,7 +217,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @fires dxListOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | Item | any>;
+    items?: Array<TItem>;
     /**
      * @docid
      * @default []
@@ -228,7 +229,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
        * @type_function_param2 itemData:object
        * @type_function_return void
        */
-      action?: ((itemElement: DxElement, itemData: any) => any);
+      action?: ((itemElement: DxElement, itemData: TItem) => any);
       /**
        * @docid
        */
@@ -261,7 +262,23 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @action
      * @public
      */
-    onGroupRendered?: ((e: GroupRenderedEvent) => void);
+    onGroupRendered?: ((e: GroupRenderedEvent<TItem, TKey>) => void);
+    /**
+     * @docid
+     * @default null
+     * @type function
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 itemData:object
+     * @type_function_param1_field5 itemElement:DxElement
+     * @type_function_param1_field6 itemIndex:number | object
+     * @type_function_param1_field7 event:event
+     * @type_function_param1_field1 component:dxList
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @action
+     * @public
+     */
+    onItemClick?: ((e: ItemClickEvent<TItem, TKey>) => void) | string;
     /**
      * @docid
      * @default null
@@ -276,22 +293,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @action
      * @public
      */
-    onItemClick?: ((e: ItemClickEvent) => void) | string;
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field4 itemData:object
-     * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number | object
-     * @type_function_param1_field7 event:event
-     * @type_function_param1_field1 component:dxList
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @action
-     * @public
-     */
-    onItemContextMenu?: ((e: ItemContextMenuEvent) => void);
+    onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -306,7 +308,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @hidden false
      * @public
      */
-    onItemDeleted?: ((e: ItemDeletedEvent) => void);
+    onItemDeleted?: ((e: ItemDeletedEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -322,7 +324,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @hidden false
      * @public
      */
-    onItemDeleting?: ((e: ItemDeletingEvent) => void);
+    onItemDeleting?: ((e: ItemDeletingEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -337,7 +339,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @action
      * @public
      */
-    onItemHold?: ((e: ItemHoldEvent) => void);
+    onItemHold?: ((e: ItemHoldEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -354,7 +356,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @hidden false
      * @public
      */
-    onItemReordered?: ((e: ItemReorderedEvent) => void);
+    onItemReordered?: ((e: ItemReorderedEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -370,7 +372,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @action
      * @public
      */
-    onItemSwipe?: ((e: ItemSwipeEvent) => void);
+    onItemSwipe?: ((e: ItemSwipeEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -381,7 +383,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @action
      * @public
      */
-    onPageLoading?: ((e: PageLoadingEvent) => void);
+    onPageLoading?: ((e: PageLoadingEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -392,7 +394,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @action
      * @public
      */
-    onPullRefresh?: ((e: PullRefreshEvent) => void);
+    onPullRefresh?: ((e: PullRefreshEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -409,7 +411,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @action
      * @public
      */
-    onScroll?: ((e: ScrollEvent) => void);
+    onScroll?: ((e: ScrollEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @default null
@@ -421,7 +423,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @action
      * @public
      */
-    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent) => void);
+    onSelectAllValueChanged?: ((e: SelectAllValueChangedEvent<TItem, TKey>) => void);
     /**
      * @docid
      * @type Enums.ListPageLoadMode
@@ -538,7 +540,10 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxList extends CollectionWidget<dxListOptions> {
+export default class dxList<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidget<dxListOptions<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @publicName clientHeight()
@@ -734,10 +739,39 @@ export interface dxListItem extends CollectionWidgetItem {
 }
 
 /** @public */
-export type Properties = dxListOptions;
+export type ExplicitTypes<
+    TItem extends ItemLike,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    GroupRenderedEvent: GroupRenderedEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemDeletedEvent: ItemDeletedEvent<TItem, TKey>;
+    ItemDeletingEvent: ItemDeletingEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    ItemReorderedEvent: ItemReorderedEvent<TItem, TKey>;
+    ItemSwipeEvent: ItemSwipeEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    PageLoadingEvent: PageLoadingEvent<TItem, TKey>;
+    PullRefreshEvent: PullRefreshEvent<TItem, TKey>;
+    ScrollEvent: ScrollEvent<TItem, TKey>;
+    SelectAllValueChangedEvent: SelectAllValueChangedEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+};
+
+/** @public */
+export type Properties<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = dxListOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = dxListOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxListOptions;
+export type Options<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = Properties<TItem, TKey>;

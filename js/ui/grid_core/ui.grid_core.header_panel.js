@@ -61,6 +61,10 @@ const HeaderPanel = ColumnsView.inherit({
     },
 
     _normalizeToolbarItems(defaultItems, userItems) {
+        const defaultProps = {
+            location: 'after',
+        };
+
         const isArray = Array.isArray(userItems);
 
         if(!isDefined(userItems)) {
@@ -76,17 +80,17 @@ const HeaderPanel = ColumnsView.inherit({
             defaultButtonsByNames[button.name] = button;
         });
 
-        const normalizedItems = extend(true, [], userItems.map(button => {
+        const normalizedItems = userItems.map(button => {
             if(isString(button)) {
                 button = { name: button };
             }
 
-            if(!isDefined(button.name) || !isDefined(defaultButtonsByNames[button.name])) {
-                return button;
+            if(isDefined(button.name) && isDefined(defaultButtonsByNames[button.name])) {
+                button = extend(true, {}, defaultButtonsByNames[button.name], button);
             }
 
-            return extend(true, defaultButtonsByNames[button.name], button);
-        }));
+            return extend(true, {}, defaultProps, button);
+        });
 
         return isArray ? normalizedItems : normalizedItems[0];
     },

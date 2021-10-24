@@ -531,7 +531,8 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _scrollViewIsFull: function() {
-        return !this._scrollView || this._scrollView.isFull();
+        const scrollView = this._scrollView;
+        return !scrollView || getHeight(scrollView.content()) > getHeight(scrollView.container());
     },
 
     _pullDownHandler: function(e) {
@@ -769,8 +770,8 @@ export const ListBase = CollectionWidget.inherit({
             .addClass(LIST_GROUP_BODY_CLASS)
             .appendTo($groupElement);
 
-        each(groupItemsGetter(group) || [], (function(index, item) {
-            this._renderItem(index, item, $groupBody);
+        each(groupItemsGetter(group) || [], (function(itemIndex, item) {
+            this._renderItem({ group: index, item: itemIndex }, item, $groupBody);
         }).bind(this));
 
         this._groupRenderAction({

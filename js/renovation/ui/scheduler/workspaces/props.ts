@@ -47,7 +47,7 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() groupByDate = false;
 
-  @OneWay() groupOrientation: GroupOrientation = 'horizontal';
+  @OneWay() groupOrientation?: GroupOrientation;
 
   @OneWay() crossScrollingEnabled = false;
 
@@ -145,4 +145,5 @@ export interface ViewRenderConfig {
   isGenerateWeekDaysHeaderData: boolean;
   scrollingDirection: ScrollableDirection;
   isCreateCrossScrolling: boolean;
+  defaultGroupOrientation: GroupOrientation;
 }

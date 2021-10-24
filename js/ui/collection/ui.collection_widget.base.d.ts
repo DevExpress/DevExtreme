@@ -7,11 +7,7 @@ import {
     template,
 } from '../../core/templates/template';
 
-import DataSource, {
-    Options as DataSourceOptions,
-} from '../../data/data_source';
-
-import Store from '../../data/abstract_store';
+import DataSource, { DataSourceLike } from '../../data/data_source';
 
 import {
     EventInfo,
@@ -23,19 +19,27 @@ import Widget, {
     WidgetOptions,
 } from '../widget/ui.widget';
 
-export interface SelectionChangedInfo<T = any> {
-    readonly addedItems: Array<T>;
-    readonly removedItems: Array<T>;
+type ItemLike = string | CollectionWidgetItem | any;
+
+export interface SelectionChangedInfo<TItem extends ItemLike = any> {
+    readonly addedItems: Array<TItem>;
+    readonly removedItems: Array<TItem>;
 }
 
 /** @namespace DevExpress.ui */
-export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComponent> {
+export interface CollectionWidgetOptions<
+    TComponent extends CollectionWidget<any, TItem, TKey> | any,
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends WidgetOptions<TComponent> {
     /**
      * @docid
      * @default null
+     * @type Store|DataSource|DataSourceOptions|string|Array<string | CollectionWidgetItem>
      * @public
+     * @type string | Array<string | CollectionWidgetItem | any> | Store | DataSource | DataSourceOptions
      */
-    dataSource?: string | Array<string | CollectionWidgetItem> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @default 750
@@ -49,13 +53,14 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
      * @type_function_return string|Element|jQuery
      * @public
      */
-    itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    itemTemplate?: template | ((itemData: TItem, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @fires CollectionWidgetOptions.onOptionChanged
+     * @type Array<string | CollectionWidgetItem | any>
      * @public
      */
-    items?: Array<string | CollectionWidgetItem | any>;
+    items?: Array<TItem>;
     /**
      * @docid
      * @default null
@@ -71,6 +76,7 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
@@ -82,7 +88,7 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
      * @action
      * @public
      */
-    onItemClick?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void) | string;
+    onItemClick?: ((e: NativeEventInfo<TComponent> & ItemInfo<TItem>) => void) | string;
     /**
      * @docid
      * @default null
@@ -97,7 +103,7 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
      * @action
      * @public
      */
-    onItemContextMenu?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void);
+    onItemContextMenu?: ((e: NativeEventInfo<TComponent> & ItemInfo<TItem>) => void);
     /**
      * @docid
      * @default null
@@ -112,7 +118,7 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
      * @action
      * @public
      */
-    onItemHold?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void);
+    onItemHold?: ((e: NativeEventInfo<TComponent> & ItemInfo<TItem>) => void);
     /**
      * @docid
      * @default null
@@ -126,7 +132,7 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
      * @action
      * @public
      */
-    onItemRendered?: ((e: NativeEventInfo<TComponent> & ItemInfo) => void);
+    onItemRendered?: ((e: NativeEventInfo<TComponent> & ItemInfo<TItem>) => void);
     /**
      * @docid
      * @default null
@@ -139,7 +145,7 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
      * @action
      * @public
      */
-    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo) => void);
+    onSelectionChanged?: ((e: EventInfo<TComponent> & SelectionChangedInfo<TItem>) => void);
     /**
      * @docid
      * @default -1
@@ -154,19 +160,19 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
      * @ref
      * @public
      */
-    selectedItem?: any;
+    selectedItem?: TItem;
     /**
      * @docid
      * @fires CollectionWidgetOptions.onSelectionChanged
      * @public
      */
-    selectedItemKeys?: Array<any>;
+    selectedItemKeys?: Array<TKey>;
     /**
      * @docid
      * @fires CollectionWidgetOptions.onSelectionChanged
      * @public
      */
-    selectedItems?: Array<any>;
+    selectedItems?: Array<TItem>;
 }
 /**
  * @docid
@@ -174,8 +180,12 @@ export interface CollectionWidgetOptions<TComponent> extends WidgetOptions<TComp
  * @hidden
  * @namespace DevExpress.ui
  */
-export default class CollectionWidget<TProperties> extends Widget<TProperties> {
-    getDataSource(): DataSource;
+export default class CollectionWidget<
+    TProperties extends CollectionWidgetOptions<any, TItem, TKey>,
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends Widget<TProperties> {
+    getDataSource(): DataSource<TItem, TKey>;
 }
 
 /**
@@ -200,7 +210,7 @@ export interface CollectionWidgetItem {
      * @type_function_return string|Element|jQuery
      * @public
      */
-    template?: template | ((itemData: any, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
+    template?: template | ((itemData: this, itemIndex: number, itemElement: DxElement) => string | UserDefinedElement);
     /**
      * @docid
      * @public

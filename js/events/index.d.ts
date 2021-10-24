@@ -41,8 +41,8 @@ export interface ChangedOptionInfo {
     readonly previousValue?: any;
 }
 
-export interface ItemInfo {
-    readonly itemData?: any;
+export interface ItemInfo<TItemData = any> {
+    readonly itemData?: TItemData;
     readonly itemElement: DxElement;
     readonly itemIndex: number;
 }

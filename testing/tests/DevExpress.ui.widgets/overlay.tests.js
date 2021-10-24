@@ -973,16 +973,23 @@ testModule('position', moduleConfig, () => {
         assert.deepEqual(positionUtils.setup($overlayContent), { top: expectedPosition.v.location, left: expectedPosition.h.location }, 'overlay positioned correctly');
     });
 
+    // deprecated in 21.2
     test('position as function', function(assert) {
-        const overlay = $('#overlay').dxOverlay({
-            visible: true,
-            position: function() { return { my: 'left', at: 'left', of: 'body', offset: '7 0' }; }
-        }).dxOverlay('instance');
+        sinon.spy(errors, 'log');
+        try {
+            const overlay = $('#overlay').dxOverlay({
+                visible: true,
+                position: function() { return { my: 'left', at: 'left', of: 'body', offset: '7 0' }; }
+            }).dxOverlay('instance');
 
+            const $content = overlay.$content();
 
-        const $content = overlay.$content();
-
-        assert.strictEqual($content.position().left, $('body').position().left + 7, 'overlay positioned correctly');
+            assert.strictEqual($content.position().left, $('body').position().left + 7, 'overlay positioned correctly');
+            assert.strictEqual(errors.log.callCount, 1);
+            assert.deepEqual(errors.log.lastCall.args, ['W0018']);
+        } finally {
+            errors.log.restore();
+        }
     });
 
     test('overlay wrapper should have correct dimensions even when there is "target" property in window', function(assert) {
@@ -3661,25 +3668,6 @@ testModule('focus policy', {
         keyboardMock($tabbableDiv).press('tab');
 
         assert.strictEqual(contentFocusHandler.callCount, 1, 'focus has been triggered once from keyboardMock');
-    });
-
-    test('focusin event should not be propagated (T342292)', function(assert) {
-        assert.expect(0);
-
-        const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
-            visible: true,
-            shading: true,
-            contentTemplate: $('#focusableTemplate')
-        });
-        const $content = overlay.$content();
-
-        $(document).on('focusin.test', function() {
-            assert.ok(false, 'focusin bubbled');
-        });
-
-        $($content).trigger('focusin');
-
-        $(document).off('.test');
     });
 });
 

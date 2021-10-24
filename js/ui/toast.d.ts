@@ -165,6 +165,3 @@ export type Properties = dxToastOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxToastOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxToastOptions;

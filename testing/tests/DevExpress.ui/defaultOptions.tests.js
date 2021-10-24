@@ -41,6 +41,8 @@ const Scheduler = require('ui/scheduler/ui.scheduler');
 const Scrollable = require('ui/scroll_view/ui.scrollable');
 const ScrollView = require('ui/scroll_view');
 const SelectBox = require('ui/select_box');
+const SliderHandle = require('ui/slider/ui.slider_handle');
+const SliderTooltip = require('ui/slider/ui.slider_tooltip');
 const Tabs = require('ui/tabs');
 const TabPanel = require('ui/tab_panel');
 const TagBox = require('ui/tag_box');
@@ -252,7 +254,8 @@ testComponentDefaults(DropDownMenu,
 testComponentDefaults(TextEditor,
     {},
     {
-        stylingMode: 'filled'
+        stylingMode: 'filled',
+        labelMode: 'floating'
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
@@ -989,6 +992,34 @@ testComponentDefaults(TreeView,
 testComponentDefaults(SelectBox, {},
     {
         allowClearing: true
+    }
+);
+
+testComponentDefaults(SliderHandle, {},
+    {
+        hoverStateEnabled: false,
+        value: 0,
+        tooltip: {
+            enabled: false,
+            position: 'top',
+            showMode: 'onHover'
+        }
+    }
+);
+
+testComponentDefaults(SliderTooltip, {},
+    {
+        visible: false,
+        position: 'top',
+        closeOnOutsideClick: false,
+        hideTopOverlayHandler: null,
+        hideOnParentScroll: false,
+        animation: null,
+        templatesRenderAsynchronously: false,
+        _fixWrapperPosition: false,
+        useResizeObserver: false,
+        showMode: 'onHover',
+        value: 0
     }
 );
 

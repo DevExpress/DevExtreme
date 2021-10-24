@@ -1,8 +1,4 @@
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
+import { DataSourceLike } from '../data/data_source';
 
 import {
     EventInfo,
@@ -56,7 +52,7 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
      * @default null
      * @public
      */
-    dataSource?: string | Array<string | Item | any> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<string | Item | any>;
     /**
      * @docid
      * @default true &for(desktop)
@@ -95,11 +91,6 @@ export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComp
      * @public
      */
     scrollingEnabled?: boolean;
-    /**
-     * @docid
-     * @public
-     */
-    selectedItems?: Array<string | number | any>;
     /**
      * @docid
      * @type Enums.NavSelectionMode
@@ -153,6 +144,3 @@ export type Properties = dxTabsOptions<TabsInstance>;
 
 /** @deprecated use Properties instead */
 export type Options = Properties;
-
-/** @deprecated use Properties instead */
-export type IOptions = Properties;
