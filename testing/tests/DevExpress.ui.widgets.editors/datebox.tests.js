@@ -3376,12 +3376,26 @@ QUnit.module('datebox with time component', {
             });
 
             QUnit.test('updated value should have date and time equal to current date and time after apply button click if value is null (T253298)', function(assert) {
-                // also see T1039021
-
                 this.clickApplyButton();
 
                 assert.strictEqual(this.dateBox.option('value').getDate(), this.currentDateTime.getDate(), 'value date is correct');
                 assert.strictEqual(this.dateBox.option('value').getTime(), this.currentDateTime.getTime(), 'value time is correct');
+            });
+
+            QUnit.test('updated value should have date equal to calendar controured date after apply button click if value is null (T1039021)', function(assert) {
+                const minDate = new Date(2050, 10, 10);
+                this.reinit({
+                    value: null,
+                    min: minDate
+                });
+
+                this.clickApplyButton();
+
+                const expectedDateTime = new Date(minDate);
+                expectedDateTime.setHours(this.currentDateTime.getHours(), this.currentDateTime.getMinutes());
+
+                assert.strictEqual(this.dateBox.option('value').getDate(), expectedDateTime.getDate(), 'value date is correct');
+                assert.strictEqual(this.dateBox.option('value').getTime(), expectedDateTime.getTime(), 'value time is correct');
             });
         });
     });
