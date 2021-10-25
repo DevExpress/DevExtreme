@@ -821,7 +821,6 @@ class SchedulerAppointments extends CollectionWidget {
                     allowDrag: this.option('allowDrag'),
                     cellWidth: this.invoke('getCellWidth'),
                     isCompact: this.invoke('isAdaptive') || this._isGroupCompact(virtualGroup),
-                    applyOffset: !virtualGroup.isAllDay && this.invoke('isApplyCompactAppointmentOffset')
                 });
             }).bind(this));
         });

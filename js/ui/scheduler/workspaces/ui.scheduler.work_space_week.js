@@ -14,13 +14,6 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
     _calculateViewStartDate() {
         return calculateViewStartDate(this.option('startDate'), this._firstDayOfWeek());
     }
-
-    _isApplyCompactAppointmentOffset() {
-        if(this.invoke('isAdaptive') && this.invoke('getMaxAppointmentCountPerCellByType') === 0) {
-            return false;
-        }
-        return super._isApplyCompactAppointmentOffset();
-    }
 }
 
 registerComponent('dxSchedulerWorkSpaceWeek', SchedulerWorkSpaceWeek);

@@ -30,10 +30,10 @@ import '../check_box';
 import '../date_box';
 import '../button';
 
-import { renderFieldItem } from './components/field_item.js';
-import { renderButtonItem } from './components/button_item.js';
-import { renderEmptyItem } from './components/empty_item.js';
-import { convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils.js';
+import { renderFieldItem } from './components/field_item';
+import { renderButtonItem } from './components/button_item';
+import { renderEmptyItem } from './components/empty_item';
+import { convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 

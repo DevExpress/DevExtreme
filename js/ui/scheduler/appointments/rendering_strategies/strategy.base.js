@@ -19,6 +19,9 @@ const COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18;
 
 const DROP_DOWN_BUTTON_ADAPTIVE_SIZE = 28;
 
+const WEEK_VIEW_COLLECTOR_OFFSET = 5;
+const COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET = 1;
+
 class BaseRenderingStrategy {
     constructor(options) {
         this.options = options;
@@ -57,6 +60,7 @@ class BaseRenderingStrategy {
     get viewDataProvider() { return this.options.viewDataProvider; }
     get dataAccessors() { return this.options.dataAccessors; }
     get timeZoneCalculator() { return this.options.timeZoneCalculator; }
+    get intervalCount() { return this.options.intervalCount; }
 
     get isVirtualScrolling() { return this.options.isVirtualScrolling; }
 
@@ -553,17 +557,38 @@ class BaseRenderingStrategy {
         return duration + diff * toMs('minute');
     }
 
+    _getCollectorLeftOffset(isAllDay) {
+        if(isAllDay || !this.isApplyCompactAppointmentOffset()) {
+            return 0;
+        }
+
+        const dropDownButtonWidth = this.getDropDownAppointmentWidth(this.intervalCount, isAllDay);
+        const rightOffset = this._isCompactTheme()
+            ? COMPACT_THEME_WEEK_VIEW_COLLECTOR_OFFSET
+            : WEEK_VIEW_COLLECTOR_OFFSET;
+
+        return this.cellWidth - dropDownButtonWidth - rightOffset;
+    }
+
     _markAppointmentAsVirtual(coordinates, isAllDay = false) {
         const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
         if((coordinates.count - countFullWidthAppointmentInCell) > 0) {
             const { top, left } = coordinates;
             coordinates.virtual = {
                 top,
-                left,
+                left: left + this._getCollectorLeftOffset(isAllDay),
                 index: this._generateAppointmentCollectorIndex(coordinates, isAllDay),
                 isAllDay,
             };
         }
+    }
+
+    isApplyCompactAppointmentOffset() {
+        return this.supportCompactDropDownAppointments();
+    }
+
+    supportCompactDropDownAppointments() {
+        return true;
     }
 
     _generateAppointmentCollectorIndex({
