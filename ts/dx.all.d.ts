@@ -4697,7 +4697,10 @@ declare module DevExpress.ui {
   /**
    * [descr:dxActionSheet]
    */
-  export class dxActionSheet extends CollectionWidget<dxActionSheetOptions> {
+  export class dxActionSheet<
+    TItem extends DevExpress.ui.dxActionSheet.ItemLike<TKey> = any,
+    TKey = any
+  > extends CollectionWidget<dxActionSheetOptions<TItem, TKey>, TItem, TKey> {
     /**
      * [descr:dxActionSheet.hide()]
      */
@@ -4712,34 +4715,74 @@ declare module DevExpress.ui {
     toggle(showing: boolean): DevExpress.core.utils.DxPromise<void>;
   }
   module dxActionSheet {
-    export type CancelClickEvent = DevExpress.events.Cancelable &
-      DevExpress.events.EventInfo<dxActionSheet>;
-    export type ContentReadyEvent = DevExpress.events.EventInfo<dxActionSheet>;
-    export type DisposingEvent = DevExpress.events.EventInfo<dxActionSheet>;
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxActionSheet>;
-    export type ItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxActionSheet> &
-        DevExpress.events.ItemInfo;
-    export type ItemContextMenuEvent =
-      DevExpress.events.NativeEventInfo<dxActionSheet> &
-        DevExpress.events.ItemInfo;
-    export type ItemHoldEvent =
-      DevExpress.events.NativeEventInfo<dxActionSheet> &
-        DevExpress.events.ItemInfo;
-    export type ItemRenderedEvent =
-      DevExpress.events.NativeEventInfo<dxActionSheet> &
-        DevExpress.events.ItemInfo;
-    export type OptionChangedEvent =
-      DevExpress.events.EventInfo<dxActionSheet> &
-        DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxActionSheetOptions;
+    export type CancelClickEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxActionSheet<TItem, TKey>>;
+    export type ContentReadyEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxActionSheet<TItem, TKey>>;
+    export type DisposingEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxActionSheet<TItem, TKey>>;
+    export type ExplicitTypes<TItem extends ItemLike<TKey>, TKey> = {
+      Properties: Properties<TItem, TKey>;
+      CancelClickEvent: CancelClickEvent<TItem, TKey>;
+      ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+      DisposingEvent: DisposingEvent<TItem, TKey>;
+      InitializedEvent: InitializedEvent<TItem, TKey>;
+      ItemClickEvent: ItemClickEvent<TItem, TKey>;
+      ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+      ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+      ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+      OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    };
+    export type InitializedEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.events.InitializedEventInfo<dxActionSheet<TItem, TKey>>;
+    export type ItemClickEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxActionSheet<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    export type ItemContextMenuEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxActionSheet<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    export type ItemHoldEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxActionSheet<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type ItemLike<TKey> = string | Item<TKey> | any;
+    export type ItemRenderedEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxActionSheet<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    export type OptionChangedEvent<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxActionSheet<TItem, TKey>> &
+      DevExpress.events.ChangedOptionInfo;
+    export type Properties<
+      TItem extends ItemLike<TKey> = any,
+      TKey = any
+    > = dxActionSheetOptions<TItem, TKey>;
   }
   /**
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxActionSheetItem extends CollectionWidgetItem {
+  export interface dxActionSheetItem<TKey = any> extends CollectionWidgetItem {
     /**
      * [descr:dxActionSheetItem.icon]
      */
@@ -4748,12 +4791,9 @@ declare module DevExpress.ui {
      * [descr:dxActionSheetItem.onClick]
      */
     onClick?:
-      | ((e: {
-          component?: dxActionSheet;
-          element?: DevExpress.core.DxElement;
-          model?: any;
-          event?: DevExpress.events.DxEvent;
-        }) => void)
+      | ((
+          e: DevExpress.events.NativeEventInfo<dxActionSheet<this, TKey>>
+        ) => void)
       | string;
     /**
      * [descr:dxActionSheetItem.type]
@@ -4766,10 +4806,11 @@ declare module DevExpress.ui {
   }
   /**
    * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxActionSheetOptions
-    extends CollectionWidgetOptions<dxActionSheet> {
+  export interface dxActionSheetOptions<
+    TItem extends DevExpress.ui.dxActionSheet.ItemLike<TKey> = any,
+    TKey = any
+  > extends CollectionWidgetOptions<dxActionSheet<TItem, TKey>, TItem, TKey> {
     /**
      * [descr:dxActionSheetOptions.cancelText]
      */
@@ -4777,18 +4818,16 @@ declare module DevExpress.ui {
     /**
      * [descr:dxActionSheetOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<
-      string | DevExpress.ui.dxActionSheet.Item | any
-    >;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<TItem, TKey>;
     /**
      * [descr:dxActionSheetOptions.items]
      */
-    items?: Array<string | DevExpress.ui.dxActionSheet.Item | any>;
+    items?: Array<TItem>;
     /**
      * [descr:dxActionSheetOptions.onCancelClick]
      */
     onCancelClick?:
-      | ((e: DevExpress.ui.dxActionSheet.CancelClickEvent) => void)
+      | ((e: DevExpress.ui.dxActionSheet.CancelClickEvent<TItem, TKey>) => void)
       | string;
     /**
      * [descr:dxActionSheetOptions.showCancelButton]
@@ -23821,7 +23860,7 @@ declare module DevExpress.ui.dxAccordion {
   export type Item = dxAccordionItem;
 }
 declare module DevExpress.ui.dxActionSheet {
-  export type Item = dxActionSheetItem;
+  export type Item<TKey = any> = dxActionSheetItem<TKey>;
 }
 declare module DevExpress.ui.dxBox {
   export type Item = dxBoxItem;
