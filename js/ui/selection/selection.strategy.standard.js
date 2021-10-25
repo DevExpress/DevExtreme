@@ -390,7 +390,7 @@ export default SelectionStrategy.inherit({
     _isItemSelectionInProgress: function(key, checkPending) {
         const shouldCheckPending = checkPending && this._lastRequestData && this._requestInProgress();
         if(shouldCheckPending) {
-            return this._lastRequestData.addedItems?.indexOf(key) !== -1;
+            return this._lastRequestData.addedItems && this._lastRequestData.addedItems.indexOf(key) !== -1;
         } else {
             return false;
         }
