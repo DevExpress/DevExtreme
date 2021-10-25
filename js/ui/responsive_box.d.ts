@@ -48,98 +48,98 @@ export interface dxResponsiveBoxOptions<
   TItem extends ItemLike = any,
   TKey = any,
   > extends CollectionWidgetOptions<dxResponsiveBox<TItem, TKey>, TItem, TKey> {
-  /**
-   * @docid
-   * @public
-   */
-  cols?: Array<{
     /**
      * @docid
-     * @type number | Enums.Mode
-     * @default 0
+     * @public
      */
-    baseSize?: number | 'auto';
+    cols?: Array<{
+      /**
+       * @docid
+       * @type number | Enums.Mode
+       * @default 0
+       */
+      baseSize?: number | 'auto';
+      /**
+       * @docid
+       * @default 1
+       */
+      ratio?: number;
+      /**
+       * @docid
+       * @default undefined
+       */
+      screen?: string;
+      /**
+       * @docid
+       * @default 1
+       */
+      shrink?: number;
+    }>;
     /**
      * @docid
-     * @default 1
+     * @type string | Array<string | dxResponsiveBoxItem | any> | Store | DataSource | DataSourceOptions
+     * @default null
+     * @public
      */
-    ratio?: number;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
-     * @default undefined
+     * @default '100%'
+     * @public
      */
-    screen?: string;
+    height?: number | string | (() => number | string);
     /**
      * @docid
-     * @default 1
+     * @type Array<string | dxResponsiveBoxItem | any>
+     * @fires dxResponsiveBoxOptions.onOptionChanged
+     * @public
      */
-    shrink?: number;
-  }>;
-  /**
-   * @docid
-   * @type string | Array<string | dxResponsiveBoxItem | any> | Store | DataSource | DataSourceOptions
-   * @default null
-   * @public
-   */
-  dataSource?: DataSourceLike<TItem, TKey>;
-  /**
-   * @docid
-   * @default '100%'
-   * @public
-   */
-  height?: number | string | (() => number | string);
-  /**
-   * @docid
-   * @type Array<string | dxResponsiveBoxItem | any>
-   * @fires dxResponsiveBoxOptions.onOptionChanged
-   * @public
-   */
-  items?: Array<TItem>;
-  /**
-   * @docid
-   * @public
-   */
-  rows?: Array<{
+    items?: Array<TItem>;
     /**
      * @docid
-     * @type number | Enums.Mode
-     * @default 0
+     * @public
      */
-    baseSize?: number | 'auto';
+    rows?: Array<{
+      /**
+       * @docid
+       * @type number | Enums.Mode
+       * @default 0
+       */
+      baseSize?: number | 'auto';
+      /**
+       * @docid
+       * @default 1
+       */
+      ratio?: number;
+      /**
+       * @docid
+       * @default undefined
+       */
+      screen?: string;
+      /**
+       * @docid
+       * @default 1
+       */
+      shrink?: number;
+    }>;
     /**
      * @docid
-     * @default 1
+     * @default null
+     * @public
      */
-    ratio?: number;
+    screenByWidth?: Function;
     /**
      * @docid
-     * @default undefined
+     * @default ""
+     * @public
      */
-    screen?: string;
+    singleColumnScreen?: string;
     /**
      * @docid
-     * @default 1
+     * @default '100%'
+     * @public
      */
-    shrink?: number;
-  }>;
-  /**
-   * @docid
-   * @default null
-   * @public
-   */
-  screenByWidth?: Function;
-  /**
-   * @docid
-   * @default ""
-   * @public
-   */
-  singleColumnScreen?: string;
-  /**
-   * @docid
-   * @default '100%'
-   * @public
-   */
-  width?: number | string | (() => number | string);
+    width?: number | string | (() => number | string);
 }
 /**
  * @docid
@@ -163,35 +163,35 @@ export type Item = dxResponsiveBoxItem;
  * @namespace DevExpress.ui
  */
 export interface dxResponsiveBoxItem extends CollectionWidgetItem {
-  /**
-   * @docid
-   * @public
-   */
-  location?: {
     /**
      * @docid
+     * @public
      */
-    col?: number;
-    /**
-     * @docid
-     * @default undefined
-     */
-    colspan?: number;
-    /**
-     * @docid
-     */
-    row?: number;
-    /**
-     * @docid
-     * @default undefined
-     */
-    rowspan?: number;
-    /**
-     * @docid
-     * @default undefined
-     */
-    screen?: string;
-  } | Array<{ col?: number; colspan?: number; row?: number; rowspan?: number; screen?: string }>;
+    location?: {
+      /**
+       * @docid
+       */
+      col?: number;
+      /**
+       * @docid
+       * @default undefined
+       */
+      colspan?: number;
+      /**
+       * @docid
+       */
+      row?: number;
+      /**
+       * @docid
+       * @default undefined
+       */
+      rowspan?: number;
+      /**
+       * @docid
+       * @default undefined
+       */
+      screen?: string;
+    } | Array<{ col?: number; colspan?: number; row?: number; rowspan?: number; screen?: string }>;
 }
 
 /** @public */
