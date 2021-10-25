@@ -6,6 +6,14 @@ import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
 
+// TODO: check names with techwritters
+// IPDFExportOptions: {
+//    topLeft: {x: number, y: number},
+//    indent: number,
+//    margin: { top:number, left:number, right:number, bottom:number } | number
+//    customizeCell: (IPdfRowInfo): void
+//    customDrawCell: (rect, pdfCell, gridCell, cancel): void
+// }
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
     if(!isDefined(fullOptions.topLeft)) {
