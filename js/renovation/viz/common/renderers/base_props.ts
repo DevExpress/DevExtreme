@@ -1,7 +1,7 @@
 import {
   OneWay, ComponentBindings,
 } from '@devextreme-generator/declarations';
-import { SharpDirection } from './types.d';
+import { SharpDirection } from './types';
 
 @ComponentBindings()
 export default class SvgBaseProps {

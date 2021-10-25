@@ -7,7 +7,7 @@ import {
   JSXTemplate,
 } from '@devextreme-generator/declarations';
 import { Row } from '../row';
-import { DataCellTemplateProps, ViewCellData } from '../../types.d';
+import { DataCellTemplateProps, ViewCellData } from '../../types';
 import {
   getKeyByGroup,
   getIsGroupedAllDayPanel,

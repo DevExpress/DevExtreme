@@ -11,7 +11,7 @@ import { AllDayPanelCell as Cell } from './cell';
 import {
   DataCellTemplateProps,
   ViewCellData,
-} from '../../../types.d';
+} from '../../../types';
 import { combineClasses } from '../../../../../../utils/combine_classes';
 
 export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (

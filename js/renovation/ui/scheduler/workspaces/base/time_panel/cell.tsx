@@ -6,7 +6,7 @@ import {
   Template,
 } from '@devextreme-generator/declarations';
 import { CellBase as Cell, CellBaseProps } from '../cell';
-import { ContentTemplateProps, DateTimeCellTemplateProps } from '../../types.d';
+import { ContentTemplateProps, DateTimeCellTemplateProps } from '../../types';
 
 export const viewFunction = (viewModel: TimePanelCell): JSX.Element => (
   <Cell

@@ -7,7 +7,7 @@ import {
   Method,
 } from '@devextreme-generator/declarations';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
-import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../utils/effect_return';
 // eslint-disable-next-line import/named
 import dxScheduler, { Appointment } from '../../../ui/scheduler';
 import { ViewProps, SchedulerProps } from './props';
@@ -24,7 +24,7 @@ import {
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import { DataAccessorType, DataSourcePromise } from './types';
+import type { DataAccessorType, DataSourcePromise } from './types';
 import {
   createDataAccessors, createTimeZoneCalculator, filterAppointments,
 } from './common';
