@@ -958,6 +958,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': true,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': true,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -989,6 +990,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': true,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': true,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -1019,6 +1021,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': true,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': true,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -1049,6 +1052,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': false,
             'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': false,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -1079,6 +1083,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': false,
             'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': false,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -1145,6 +1150,7 @@ describe('WorkSpace', () => {
               'dx-scheduler-work-space-group-by-date': false,
               'dx-scheduler-work-space-grouped': true,
               'dx-scheduler-work-space-vertical-grouped': groupOrientation === 'vertical',
+              'dx-scheduler-work-space-horizontal-grouped': false,
               'dx-scheduler-group-column-count-one': false,
               'dx-scheduler-group-column-count-two': false,
               'dx-scheduler-group-column-count-three': false,
@@ -1175,6 +1181,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': false,
             'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': false,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -1205,7 +1212,39 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': true,
+            'dx-scheduler-group-column-count-two': false,
+            'dx-scheduler-group-column-count-three': false,
+            'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-both-scrollbar': true,
+          });
+      });
+
+      it('should assign horizontal-grouped class when default group orientation is "vertical" and horizontal grouping is used', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'timelineDay',
+          crossScrollingEnabled: true,
+          groups,
+          groupOrientation: 'horizontal',
+        } as any);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        workSpace.classes;
+
+        expect(combineClasses)
+          .toBeCalledWith({
+            'dx-scheduler-timeline-day dx-scheduler-timeline': true,
+            'dx-scheduler-work-space-count': false,
+            'dx-scheduler-work-space-odd-cells': false,
+            'dx-scheduler-work-space-all-day-collapsed': false,
+            'dx-scheduler-work-space-all-day': false,
+            'dx-scheduler-work-space-group-by-date': false,
+            'dx-scheduler-work-space-grouped': true,
+            'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-work-space-horizontal-grouped': true,
+            'dx-scheduler-group-column-count-one': false,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
