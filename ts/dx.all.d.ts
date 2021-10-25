@@ -4258,7 +4258,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    type ItemLike = string | CollectionWidgetItem | any;
+    export type ItemLike = string | CollectionWidgetItem | any;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -22383,28 +22383,66 @@ declare module DevExpress.ui {
   /**
    * [descr:dxValidationSummary]
    */
-  export class dxValidationSummary extends CollectionWidget<dxValidationSummaryOptions> {}
+  export class dxValidationSummary<
+    TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+    TKey = any
+  > extends CollectionWidget<
+    dxValidationSummaryOptions<TItem, TKey>,
+    TItem,
+    TKey
+  > {}
   module dxValidationSummary {
-    export type ContentReadyEvent =
-      DevExpress.events.EventInfo<dxValidationSummary>;
-    export type DisposingEvent =
-      DevExpress.events.EventInfo<dxValidationSummary>;
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxValidationSummary>;
-    export type ItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxValidationSummary> &
-        DevExpress.events.ItemInfo;
-    export type OptionChangedEvent =
-      DevExpress.events.EventInfo<dxValidationSummary> &
-        DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxValidationSummaryOptions;
+    export type ContentReadyEvent<
+      TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxValidationSummary<TItem, TKey>>;
+    export type DisposingEvent<
+      TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxValidationSummary<TItem, TKey>>;
+    export type ExplicitTypes<
+      TItem extends DevExpress.ui.CollectionWidget.ItemLike,
+      TKey
+    > = {
+      Properties: Properties<TItem, TKey>;
+      ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+      DisposingEvent: DisposingEvent<TItem, TKey>;
+      InitializedEvent: InitializedEvent<TItem, TKey>;
+      ItemClickEvent: ItemClickEvent<TItem, TKey>;
+      OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    };
+    export type InitializedEvent<
+      TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+      TKey = any
+    > = DevExpress.events.InitializedEventInfo<
+      dxValidationSummary<TItem, TKey>
+    >;
+    export type ItemClickEvent<
+      TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxValidationSummary<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    export type OptionChangedEvent<
+      TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxValidationSummary<TItem, TKey>> &
+      DevExpress.events.ChangedOptionInfo;
+    export type Properties<
+      TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+      TKey = any
+    > = dxValidationSummaryOptions<TItem, TKey>;
   }
   /**
    * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxValidationSummaryOptions
-    extends CollectionWidgetOptions<dxValidationSummary> {
+  export interface dxValidationSummaryOptions<
+    TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+    TKey = any
+  > extends CollectionWidgetOptions<
+      dxValidationSummary<TItem, TKey>,
+      TItem,
+      TKey
+    > {
     /**
      * [descr:dxValidationSummaryOptions.validationGroup]
      */
