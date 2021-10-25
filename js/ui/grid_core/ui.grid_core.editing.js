@@ -1516,7 +1516,10 @@ const EditingController = modules.ViewController.inherit((function() {
                             this._saving = false;
                         })
                         .done(deferred.resolve)
-                        .fail(deferred.reject);
+                        .fail(deferred.reject)
+                        .always(() => {
+                            this._focusEditingCell();
+                        });
                 }).fail(deferred.reject);
             }).fail(deferred.reject);
             return deferred.promise();
@@ -1558,9 +1561,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         result.resolve(error);
                     });
 
-                    return result.always(() => {
-                        this._focusEditingCell();
-                    }).promise();
+                    return result.promise();
                 }
 
                 this._cancelSaving(result);
