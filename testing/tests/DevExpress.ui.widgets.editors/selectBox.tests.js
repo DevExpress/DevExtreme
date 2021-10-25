@@ -3975,38 +3975,43 @@ QUnit.module('Async tests', {}, () => {
     });
 
     QUnit.test('no items should be selected if selected item is not on the first page (T1025148)', function(assert) {
-        const done = assert.async();
-        const data = new Array(26).fill(0).map((_, idx) => ({ id: idx + 1, name: String.fromCharCode(65 + idx) }));
-        const $selectBox = $('#selectBox').dxSelectBox({
-            dataSource: {
-                pageSize: 10,
-                paginate: true,
-                store: new CustomStore({
-                    key: 'id',
-                    byKey: key => data.find(el => el.id === key),
-                    load: () => {
-                        const d = $.Deferred();
-                        setTimeout(() => {
-                            d.resolve(data.slice(0, 10));
-                        }, 0);
-                        return d.promise();
-                    }
-                })
-            },
-            displayExpr: 'name',
-            valueExpr: 'id',
-            value: 20
-        });
-        const selectBox = $selectBox.dxSelectBox('instance');
-        selectBox.open();
-        const $list = $(selectBox.content()).find('.dx-list');
+        this.clock = sinon.useFakeTimers();
 
-        setTimeout(() => {
+        try {
+            const data = new Array(26).fill(0).map((_, idx) => ({ id: idx + 1, name: String.fromCharCode(65 + idx) }));
+            const selectBox = $('#selectBox').dxSelectBox({
+                dataSource: {
+                    pageSize: 10,
+                    paginate: true,
+                    store: new CustomStore({
+                        key: 'id',
+                        byKey: key => data.find(el => el.id === key),
+                        load: () => {
+                            const d = $.Deferred();
+                            setTimeout(() => {
+                                d.resolve(data.slice(0, 10));
+                            }, 50);
+                            return d.promise();
+                        }
+                    })
+                },
+                displayExpr: 'name',
+                valueExpr: 'id',
+                value: 20,
+                opened: true
+            }).dxSelectBox('instance');
+            const $list = $(selectBox.content()).find('.dx-list');
+
+            this.clock.tick(50);
+
             const $selectedItems = $list.find(toSelector(LIST_ITEM_SELECTED_CLASS));
 
             assert.strictEqual($selectedItems.length, 0, 'no items are selected');
-            done();
-        }, 0);
+        } catch(e) {
+            assert.ok(false, 'Exception: ' + e);
+        } finally {
+            this.clock.restore();
+        }
     });
 
     QUnit.test('selectbox should not render own components if it was disposed (T517486)', function(assert) {
