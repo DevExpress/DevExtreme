@@ -151,15 +151,11 @@ function prepareShowFormProperties(module, type) {
         promise.done((formData, event) => {
             module.saveValueChangeEvent(event);
             tablePropertiesFormConfig.applyHandler(formInstance);
-            formInstance.dispose();
-        }).then(() => {
             resetFormDialogOptions(module.editorInstance, savedOptions);
         });
 
         promise.fail(() => {
             module.quill.focus();
-            formInstance.dispose();
-        }).then(() => {
             resetFormDialogOptions(module.editorInstance, savedOptions);
         });
     };
