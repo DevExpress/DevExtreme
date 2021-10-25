@@ -113,8 +113,8 @@ module('Table properties forms', {
         };
 
         this.applyFormChanges = (buttonIndex = 0) => {
-            const $okButton = $('.dx-popup-bottom .dx-button:visible').eq(buttonIndex);
-            $okButton.trigger('dxclick');
+            const $button = $('.dx-popup-bottom .dx-button:visible').eq(buttonIndex);
+            $button.trigger('dxclick');
 
             this.clock.tick();
         };
@@ -273,7 +273,7 @@ module('Table properties forms', {
             { text: 'ok', index: 0 },
             { text: 'cancel', index: 1 }
         ].forEach(buttonConfig => {
-            test(`Cell Form can not update other form dialogs if cell form is closed by ${buttonConfig.text} button`, function(assert) {
+            test(`Cell Form can not update other form dialogs if cell form is closed by ${buttonConfig.text} button (T1038636)`, function(assert) {
                 this.createWidget();
 
                 const $tableElement = this.$element.find('table').eq(0);
