@@ -4,6 +4,7 @@
 
 $material-filled-lookup-height: null !default;
 $material-standard-lookup-height: null !default;
+$material-standard-lookup-with-label-height: null !default;
 $material-lookup-font-size: null !default;
 $material-lookup-popup-content-padding: null !default;
 $material-lookup-list-top: null !default;
@@ -21,6 +22,7 @@ $material-lookup-invalid-message-margin-bottom: 20px !default;
 @if $size == "default" {
   $material-filled-lookup-height: 48px !default;
   $material-standard-lookup-height: 32px !default;
+  $material-standard-lookup-with-label-height: 42px !default;
   $material-lookup-font-size: 16px !default;
   $material-lookup-popup-content-padding: 20px !default;
   $material-lookup-list-top: 66px !default;
@@ -29,6 +31,7 @@ $material-lookup-invalid-message-margin-bottom: 20px !default;
 @else if $size == "compact" {
   $material-filled-lookup-height: 32px !default;
   $material-standard-lookup-height: 26px !default;
+  $material-standard-lookup-with-label-height: 30px !default;
   $material-lookup-font-size: 13px !default;
   $material-lookup-popup-content-padding: 8px !default;
   $material-lookup-list-top: 36px !default;
