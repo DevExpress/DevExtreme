@@ -122,6 +122,10 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
             cellPosition: left
         };
     }
+
+    supportCompactDropDownAppointments() {
+        return false;
+    }
 }
 
 export default HorizontalRenderingStrategy;

@@ -1,4 +1,5 @@
 import VerticalAppointmentsStrategy from './rendering_strategies/strategy_vertical';
+import WeekAppointmentRenderingStrategy from './rendering_strategies/strategy_week';
 import HorizontalAppointmentsStrategy from './rendering_strategies/strategy_horizontal';
 import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/strategy_horizontal_month_line';
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/strategy_horizontal_month';
@@ -10,6 +11,7 @@ const RENDERING_STRATEGIES = {
     'horizontalMonth': HorizontalMonthAppointmentsStrategy,
     'horizontalMonthLine': HorizontalMonthLineAppointmentsStrategy,
     'vertical': VerticalAppointmentsStrategy,
+    'week': WeekAppointmentRenderingStrategy,
     'agenda': AgendaAppointmentsStrategy
 };
 
@@ -45,16 +47,18 @@ export class AppointmentViewModelGenerator {
         };
     }
     postProcess(filteredItems, positionMap, appointmentRenderingStrategyName, isRenovatedAppointments) {
+        const renderingStrategy = this.getRenderingStrategy();
+
         return filteredItems.map((data, index) => {
             // TODO research do we need this code
-            if(!this.getRenderingStrategy().keepAppointmentSettings()) {
+            if(!renderingStrategy.keepAppointmentSettings()) {
                 delete data.settings;
             }
 
             // TODO Seems we can analize direction in the rendering strategies
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach((item) => {
-                item.direction = appointmentRenderingStrategyName === 'vertical' && !item.allDay
+                item.direction = renderingStrategy.getDirection() === 'vertical' && !item.allDay
                     ? 'vertical'
                     : 'horizontal';
             });

@@ -7,6 +7,7 @@ import { AppointmentViewModelGenerator } from './appointments/viewModelGenerator
 import { getGroupCount } from './resources/utils';
 import { getCellWidth, getCellHeight, getAllDayHeight } from './workspaces/helpers/positionHelper';
 import { getCellDuration } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { getAppointmentRenderingStrategyName } from '../../renovation/ui/scheduler/model/appointments';
 
 class AppointmentLayoutManager {
     constructor(instance) {
@@ -15,7 +16,9 @@ class AppointmentLayoutManager {
     }
 
     get modelProvider() { return getModelProvider(this.instance.key); }
-    get appointmentRenderingStrategyName() { return this.modelProvider.getAppointmentRenderingStrategyName(); }
+    get appointmentRenderingStrategyName() {
+        return getAppointmentRenderingStrategyName(this.modelProvider.currentViewType);
+    }
 
     getCellDimensions(options) {
         if(this.instance._workSpace) {
