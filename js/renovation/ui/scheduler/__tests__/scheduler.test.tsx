@@ -915,8 +915,38 @@ describe('Scheduler', () => {
             crossScrollingEnabled: true,
           });
 
+          scheduler.loadedResources = [
+            {
+              name: 'priorityId',
+              items: [
+                {
+                  id: 1,
+                  text: 'Low Priority',
+                  color: '#1e90ff',
+                },
+                {
+                  id: 2,
+                  text: 'High Priority',
+                  color: '#ff9747',
+                },
+              ],
+              data: [
+                {
+                  text: 'Low Priority',
+                  id: 1,
+                  color: '#1e90ff',
+                },
+                {
+                  text: 'High Priority',
+                  id: 2,
+                  color: '#ff9747',
+                },
+              ],
+            },
+          ];
+
           expect(scheduler.workSpaceKey)
-            .toBe('week_vertical_3');
+            .toBe('week_vertical_3_2');
         });
       });
     });

@@ -28,7 +28,7 @@ import { DataAccessorType, DataSourcePromise } from './types';
 import {
   createDataAccessors, createTimeZoneCalculator, filterAppointments,
 } from './common';
-import { loadResources } from '../../../ui/scheduler/resources/utils';
+import { getGroupCount, loadResources } from '../../../ui/scheduler/resources/utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
 import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
 import { AppointmentsViewModelType } from './appointment/types';
@@ -321,7 +321,9 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       return '';
     }
 
-    return `${currentView}_${groupOrientation}_${intervalCount}`;
+    const groupCount = getGroupCount(this.loadedResources);
+
+    return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
   }
 
   @Method()
