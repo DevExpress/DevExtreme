@@ -6,7 +6,6 @@ import {
 } from '@devextreme-generator/declarations';
 import { TooltipItemLayout } from './item_layout';
 import { AppointmentViewModel } from '../types';
-import { getAppointmentKey } from '../utils';
 
 export const viewFunction = (viewModel: AppointmentList): JSX.Element => (
   <div>
@@ -14,7 +13,7 @@ export const viewFunction = (viewModel: AppointmentList): JSX.Element => (
       <TooltipItemLayout
         item={item}
         index={index}
-        key={getAppointmentKey(item)}
+        key={item.key}
       />
     ))}
   </div>
