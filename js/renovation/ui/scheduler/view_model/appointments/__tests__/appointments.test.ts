@@ -53,7 +53,8 @@ const prepareInstances = (
     workspaceProps.type,
     workspaceProps.crossScrollingEnabled,
     workspaceProps.intervalCount,
-    workspaceProps.groupOrientation === 'vertical',
+    workspaceProps.groups,
+    workspaceProps.groupOrientation,
   );
   const generationOptions = prepareGenerationOptions(
     workspaceProps,
@@ -334,6 +335,8 @@ describe('Appointments view model', () => {
 
       expect(allDay[0])
         .toEqual({
+          key: '200-0--200-24.5',
+
           appointment:
           {
             startDate: new Date(2021, 8, 23),

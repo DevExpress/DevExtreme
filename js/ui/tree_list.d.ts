@@ -1190,6 +1190,13 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
      * @public
      */
     name?: dxTreeListDefaultToolbarItemName | string;
+    /**
+     * @docid
+     * @type Enums.ToolbarItemLocation
+     * @default 'after'
+     * @public
+     */
+    location?: 'after' | 'before' | 'center';
 }
 
 /**

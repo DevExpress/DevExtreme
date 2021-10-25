@@ -3,6 +3,7 @@ import HorizontalAppointmentsStrategy from './rendering_strategies/strategy_hori
 import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/strategy_horizontal_month_line';
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/strategy_horizontal_month';
 import AgendaAppointmentsStrategy from './rendering_strategies/strategy_agenda';
+import { getAppointmentKey } from '../../../renovation/ui/scheduler/appointment/utils';
 
 const RENDERING_STRATEGIES = {
     'horizontal': HorizontalAppointmentsStrategy,
@@ -81,6 +82,7 @@ export class AppointmentViewModelGenerator {
                 const geometry = strategy.getAppointmentGeometry(options);
 
                 const item = {
+                    key: getAppointmentKey(geometry),
                     appointment: itemData,
                     geometry: {
                         ...geometry,
@@ -91,7 +93,7 @@ export class AppointmentViewModelGenerator {
                     info: {
                         ...options.info,
                         allDay: options.allDay
-                    }
+                    },
                 };
 
                 if(options.allDay) {

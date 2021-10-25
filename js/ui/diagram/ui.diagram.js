@@ -170,8 +170,7 @@ class Diagram extends Widget {
         }
     }
     _processDiagramResize() {
-        this._diagramInstance.updateLayout(true);
-
+        this._diagramInstance.onDimensionChanged();
         if(this._historyToolbarResizeCallback) {
             this._historyToolbarResizeCallback.call(this);
         }

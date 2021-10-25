@@ -78,6 +78,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
      * @type_function_param1_field1 component:dxActionSheet
@@ -174,6 +175,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
      * @public

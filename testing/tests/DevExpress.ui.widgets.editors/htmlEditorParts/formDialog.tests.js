@@ -2,6 +2,8 @@ import $ from 'jquery';
 
 import FormDialog from 'ui/html_editor/ui/formDialog';
 import { isPromise } from 'core/utils/type';
+import devices from 'core/devices';
+import { getCurrentScreenFactor, hasWindow } from 'core/utils/window';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 
 const DIALOG_CLASS = 'dx-formdialog';
@@ -50,6 +52,16 @@ QUnit.module('FormDialog', moduleConfig, () => {
 
         assert.ok(isPromise(promise), 'show returns a promise');
         assert.equal(formItemsCount, 2, '2 form items are rendered');
+    });
+
+    test('check dialog popup fullscreen mode (T1026801)', function(assert) {
+        const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
+        const expectedFullScreen = devices.real().deviceType === 'phone' || screenFactor === 'xs';
+
+        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+        formDialog.show({ items: ['name'] });
+
+        assert.strictEqual(formDialog._popup.option('fullScreen'), expectedFullScreen);
     });
 
     test('confirm dialog by api', function(assert) {
