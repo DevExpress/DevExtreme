@@ -5451,7 +5451,11 @@ declare module DevExpress.ui {
   /**
    * [descr:dxContextMenu]
    */
-  export class dxContextMenu extends dxMenuBase<dxContextMenuOptions> {
+  export class dxContextMenu<TKey = any> extends dxMenuBase<
+    dxContextMenuOptions<TKey>,
+    dxContextMenuItem,
+    TKey
+  > {
     /**
      * [descr:dxContextMenu.hide()]
      */
@@ -5466,36 +5470,63 @@ declare module DevExpress.ui {
     toggle(showing: boolean): DevExpress.core.utils.DxPromise<void>;
   }
   module dxContextMenu {
-    export type ContentReadyEvent = DevExpress.events.EventInfo<dxContextMenu>;
-    export type DisposingEvent = DevExpress.events.EventInfo<dxContextMenu>;
-    export type HiddenEvent = DevExpress.events.EventInfo<dxContextMenu>;
-    export type HidingEvent = DevExpress.events.Cancelable &
-      DevExpress.events.EventInfo<dxContextMenu>;
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxContextMenu>;
-    export type ItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxContextMenu> &
-        DevExpress.events.ItemInfo;
-    export type ItemContextMenuEvent =
-      DevExpress.events.NativeEventInfo<dxContextMenu> &
-        DevExpress.events.ItemInfo;
-    export type ItemRenderedEvent =
-      DevExpress.events.NativeEventInfo<dxContextMenu> &
-        DevExpress.events.ItemInfo;
-    export type OptionChangedEvent =
-      DevExpress.events.EventInfo<dxContextMenu> &
-        DevExpress.events.ChangedOptionInfo;
-    export type PositioningEvent =
-      DevExpress.events.NativeEventInfo<dxContextMenu> & {
+    export type ContentReadyEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxContextMenu<TKey>
+    >;
+    export type DisposingEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxContextMenu<TKey>
+    >;
+    export type ExplicitTypes<TKey = any> = {
+      Properties: Properties<TKey>;
+      ContentReadyEvent: ContentReadyEvent<TKey>;
+      DisposingEvent: DisposingEvent<TKey>;
+      HiddenEvent: HiddenEvent<TKey>;
+      HidingEvent: HidingEvent<TKey>;
+      InitializedEvent: InitializedEvent<TKey>;
+      ItemClickEvent: ItemClickEvent<TKey>;
+      ItemContextMenuEvent: ItemContextMenuEvent<TKey>;
+      ItemRenderedEvent: ItemRenderedEvent<TKey>;
+      OptionChangedEvent: OptionChangedEvent<TKey>;
+      PositioningEvent: PositioningEvent<TKey>;
+      SelectionChangedEvent: SelectionChangedEvent<TKey>;
+      ShowingEvent: ShowingEvent<TKey>;
+      ShownEvent: ShownEvent<TKey>;
+    };
+    export type HiddenEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxContextMenu<TKey>
+    >;
+    export type HidingEvent<TKey = any> = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxContextMenu<TKey>>;
+    export type InitializedEvent<TKey = any> =
+      DevExpress.events.InitializedEventInfo<dxContextMenu<TKey>>;
+    export type ItemClickEvent<TKey = any> = DevExpress.events.NativeEventInfo<
+      dxContextMenu<TKey>
+    > &
+      DevExpress.events.ItemInfo<Item>;
+    export type ItemContextMenuEvent<TKey = any> =
+      DevExpress.events.NativeEventInfo<dxContextMenu<TKey>> &
+        DevExpress.events.ItemInfo<Item>;
+    export type ItemRenderedEvent<TKey = any> =
+      DevExpress.events.NativeEventInfo<dxContextMenu<TKey>> &
+        DevExpress.events.ItemInfo<Item>;
+    export type OptionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxContextMenu<TKey>
+    > &
+      DevExpress.events.ChangedOptionInfo;
+    export type PositioningEvent<TKey = any> =
+      DevExpress.events.NativeEventInfo<dxContextMenu<TKey>> & {
         readonly position: PositionConfig;
       };
-    export type Properties = dxContextMenuOptions;
-    export type SelectionChangedEvent =
-      DevExpress.events.EventInfo<dxContextMenu> &
-        DevExpress.ui.CollectionWidget.SelectionChangedInfo;
-    export type ShowingEvent = DevExpress.events.Cancelable &
-      DevExpress.events.EventInfo<dxContextMenu>;
-    export type ShownEvent = DevExpress.events.EventInfo<dxContextMenu>;
+    export type Properties<TKey = any> = dxContextMenuOptions<TKey>;
+    export type SelectionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxContextMenu<TKey>
+    > &
+      DevExpress.ui.CollectionWidget.SelectionChangedInfo<Item>;
+    export type ShowingEvent<TKey = any> = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxContextMenu<TKey>>;
+    export type ShownEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxContextMenu<TKey>
+    >;
   }
   /**
    * @deprecated Use DevExpress.ui.dxContextMenu.Item instead
@@ -5509,10 +5540,9 @@ declare module DevExpress.ui {
   }
   /**
    * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxContextMenuOptions
-    extends dxMenuBaseOptions<dxContextMenu> {
+  export interface dxContextMenuOptions<TKey = any>
+    extends dxMenuBaseOptions<dxContextMenu<TKey>, dxContextMenuItem, TKey> {
     /**
      * [descr:dxContextMenuOptions.closeOnOutsideClick]
      */
@@ -5522,7 +5552,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxContextMenuOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxContextMenu.Item>;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<
+      DevExpress.ui.dxContextMenu.Item,
+      TKey
+    >;
     /**
      * [descr:dxContextMenuOptions.items]
      */
@@ -5530,23 +5563,25 @@ declare module DevExpress.ui {
     /**
      * [descr:dxContextMenuOptions.onHidden]
      */
-    onHidden?: (e: DevExpress.ui.dxContextMenu.HiddenEvent) => void;
+    onHidden?: (e: DevExpress.ui.dxContextMenu.HiddenEvent<TKey>) => void;
     /**
      * [descr:dxContextMenuOptions.onHiding]
      */
-    onHiding?: (e: DevExpress.ui.dxContextMenu.HidingEvent) => void;
+    onHiding?: (e: DevExpress.ui.dxContextMenu.HidingEvent<TKey>) => void;
     /**
      * [descr:dxContextMenuOptions.onPositioning]
      */
-    onPositioning?: (e: DevExpress.ui.dxContextMenu.PositioningEvent) => void;
+    onPositioning?: (
+      e: DevExpress.ui.dxContextMenu.PositioningEvent<TKey>
+    ) => void;
     /**
      * [descr:dxContextMenuOptions.onShowing]
      */
-    onShowing?: (e: DevExpress.ui.dxContextMenu.ShowingEvent) => void;
+    onShowing?: (e: DevExpress.ui.dxContextMenu.ShowingEvent<TKey>) => void;
     /**
      * [descr:dxContextMenuOptions.onShown]
      */
-    onShown?: (e: DevExpress.ui.dxContextMenu.ShownEvent) => void;
+    onShown?: (e: DevExpress.ui.dxContextMenu.ShownEvent<TKey>) => void;
     /**
      * [descr:dxContextMenuOptions.position]
      */
@@ -15872,18 +15907,45 @@ declare module DevExpress.ui {
   /**
    * [descr:dxMenu]
    */
-  export class dxMenu extends dxMenuBase<dxMenuOptions> {}
+  export class dxMenu<TKey = any> extends dxMenuBase<
+    dxMenuOptions<TKey>,
+    dxMenuItem,
+    TKey
+  > {}
   module dxMenu {
-    export type ContentReadyEvent = DevExpress.events.EventInfo<dxMenu>;
-    export type DisposingEvent = DevExpress.events.EventInfo<dxMenu>;
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxMenu>;
-    export type ItemClickEvent = DevExpress.events.NativeEventInfo<dxMenu> &
-      DevExpress.events.ItemInfo;
-    export type ItemContextMenuEvent =
-      DevExpress.events.NativeEventInfo<dxMenu> & DevExpress.events.ItemInfo;
-    export type ItemRenderedEvent = DevExpress.events.NativeEventInfo<dxMenu> &
-      DevExpress.events.ItemInfo;
+    export type ContentReadyEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxMenu<TKey>
+    >;
+    export type DisposingEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxMenu<TKey>
+    >;
+    export type ExplicitTypes<TKey = any> = {
+      Properties: Properties<TKey>;
+      ContentReadyEvent: ContentReadyEvent<TKey>;
+      DisposingEvent: DisposingEvent<TKey>;
+      InitializedEvent: InitializedEvent<TKey>;
+      ItemClickEvent: ItemClickEvent<TKey>;
+      ItemContextMenuEvent: ItemContextMenuEvent<TKey>;
+      ItemRenderedEvent: ItemRenderedEvent<TKey>;
+      OptionChangedEvent: OptionChangedEvent<TKey>;
+      SelectionChangedEvent: SelectionChangedEvent<TKey>;
+      SubmenuHiddenEvent: SubmenuHiddenEvent<TKey>;
+      SubmenuHidingEvent: SubmenuHidingEvent<TKey>;
+      SubmenuShowingEvent: SubmenuShowingEvent<TKey>;
+      SubmenuShownEvent: SubmenuShownEvent<TKey>;
+    };
+    export type InitializedEvent<TKey = any> =
+      DevExpress.events.InitializedEventInfo<dxMenu<TKey>>;
+    export type ItemClickEvent<TKey = any> = DevExpress.events.NativeEventInfo<
+      dxMenu<TKey>
+    > &
+      DevExpress.events.ItemInfo<Item>;
+    export type ItemContextMenuEvent<TKey = any> =
+      DevExpress.events.NativeEventInfo<dxMenu<TKey>> &
+        DevExpress.events.ItemInfo<Item>;
+    export type ItemRenderedEvent<TKey = any> =
+      DevExpress.events.NativeEventInfo<dxMenu<TKey>> &
+        DevExpress.events.ItemInfo<Item>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -15921,22 +15983,32 @@ declare module DevExpress.ui {
        */
       visible?: boolean;
     }
-    export type OptionChangedEvent = DevExpress.events.EventInfo<dxMenu> &
+    export type OptionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxMenu<TKey>
+    > &
       DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxMenuOptions;
-    export type SelectionChangedEvent = DevExpress.events.EventInfo<dxMenu> &
-      DevExpress.ui.CollectionWidget.SelectionChangedInfo;
-    export type SubmenuHiddenEvent = DevExpress.events.EventInfo<dxMenu> & {
+    export type Properties<TKey = any> = dxMenuOptions<TKey>;
+    export type SelectionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxMenu<TKey>
+    > &
+      DevExpress.ui.CollectionWidget.SelectionChangedInfo<Item>;
+    export type SubmenuHiddenEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxMenu<TKey>
+    > & {
       readonly rootItem?: DevExpress.core.DxElement;
     };
-    export type SubmenuHidingEvent = DevExpress.events.Cancelable &
-      DevExpress.events.EventInfo<dxMenu> & {
+    export type SubmenuHidingEvent<TKey = any> = DevExpress.events.Cancelable &
+      DevExpress.events.EventInfo<dxMenu<TKey>> & {
         readonly rootItem?: DevExpress.core.DxElement;
       };
-    export type SubmenuShowingEvent = DevExpress.events.EventInfo<dxMenu> & {
+    export type SubmenuShowingEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxMenu<TKey>
+    > & {
       readonly rootItem?: DevExpress.core.DxElement;
     };
-    export type SubmenuShownEvent = DevExpress.events.EventInfo<dxMenu> & {
+    export type SubmenuShownEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxMenu<TKey>
+    > & {
       readonly rootItem?: DevExpress.core.DxElement;
     };
   }
@@ -15945,8 +16017,10 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export class dxMenuBase<
-    TProperties
-  > extends HierarchicalCollectionWidget<TProperties> {
+    TProperties extends dxMenuBaseOptions<any, TItem, TKey>,
+    TItem extends dxMenuBaseItem = dxMenuBaseItem,
+    TKey = any
+  > extends HierarchicalCollectionWidget<TProperties, TItem, TKey> {
     /**
      * [descr:dxMenuBase.selectItem(itemElement)]
      */
@@ -15970,9 +16044,12 @@ declare module DevExpress.ui {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxMenuBaseOptions<TComponent>
-    extends DevExpress.core.Skip<
-      HierarchicalCollectionWidgetOptions<TComponent>,
+  export interface dxMenuBaseOptions<
+    TComponent extends dxMenuBase<any, TItem, TKey>,
+    TItem extends dxMenuBaseItem = dxMenuBaseItem,
+    TKey = any
+  > extends DevExpress.core.Skip<
+      HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey>,
       'dataSource'
     > {
     /**
@@ -15999,11 +16076,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuBaseOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<dxMenuBaseItem>;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<TItem, TKey>;
     /**
      * [descr:dxMenuBaseOptions.items]
      */
-    items?: Array<dxMenuBaseItem>;
+    items?: Array<TItem>;
     /**
      * [descr:dxMenuBaseOptions.selectByClick]
      */
@@ -16052,9 +16129,9 @@ declare module DevExpress.ui {
   }
   /**
    * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
+  export interface dxMenuOptions<TKey = any>
+    extends dxMenuBaseOptions<dxMenu<TKey>, dxMenuItem, TKey> {
     /**
      * [descr:dxMenuOptions.adaptivityEnabled]
      */
@@ -16062,7 +16139,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<DevExpress.ui.dxMenu.Item>;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<
+      DevExpress.ui.dxMenu.Item,
+      TKey
+    >;
     /**
      * [descr:dxMenuOptions.hideSubmenuOnMouseLeave]
      */
@@ -16074,19 +16154,25 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuOptions.onSubmenuHidden]
      */
-    onSubmenuHidden?: (e: DevExpress.ui.dxMenu.SubmenuHiddenEvent) => void;
+    onSubmenuHidden?: (
+      e: DevExpress.ui.dxMenu.SubmenuHiddenEvent<TKey>
+    ) => void;
     /**
      * [descr:dxMenuOptions.onSubmenuHiding]
      */
-    onSubmenuHiding?: (e: DevExpress.ui.dxMenu.SubmenuHidingEvent) => void;
+    onSubmenuHiding?: (
+      e: DevExpress.ui.dxMenu.SubmenuHidingEvent<TKey>
+    ) => void;
     /**
      * [descr:dxMenuOptions.onSubmenuShowing]
      */
-    onSubmenuShowing?: (e: DevExpress.ui.dxMenu.SubmenuShowingEvent) => void;
+    onSubmenuShowing?: (
+      e: DevExpress.ui.dxMenu.SubmenuShowingEvent<TKey>
+    ) => void;
     /**
      * [descr:dxMenuOptions.onSubmenuShown]
      */
-    onSubmenuShown?: (e: DevExpress.ui.dxMenu.SubmenuShownEvent) => void;
+    onSubmenuShown?: (e: DevExpress.ui.dxMenu.SubmenuShownEvent<TKey>) => void;
     /**
      * [descr:dxMenuOptions.orientation]
      */
@@ -23591,13 +23677,18 @@ declare module DevExpress.ui {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export class HierarchicalCollectionWidget<
-    TProperties
-  > extends CollectionWidget<TProperties> {}
+    TProperties extends HierarchicalCollectionWidgetOptions<any, TItem, TKey>,
+    TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+    TKey = any
+  > extends CollectionWidget<TProperties, TItem, TKey> {}
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface HierarchicalCollectionWidgetOptions<TComponent>
-    extends CollectionWidgetOptions<TComponent> {
+  export interface HierarchicalCollectionWidgetOptions<
+    TComponent extends HierarchicalCollectionWidget<any, TItem, TKey>,
+    TItem extends DevExpress.ui.CollectionWidget.ItemLike = any,
+    TKey = any
+  > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
     /**
      * [descr:HierarchicalCollectionWidgetOptions.disabledExpr]
      */
@@ -23605,7 +23696,7 @@ declare module DevExpress.ui {
     /**
      * [descr:HierarchicalCollectionWidgetOptions.displayExpr]
      */
-    displayExpr?: string | ((item: any) => string);
+    displayExpr?: string | ((item: TItem) => string);
     /**
      * [descr:HierarchicalCollectionWidgetOptions.focusStateEnabled]
      */
