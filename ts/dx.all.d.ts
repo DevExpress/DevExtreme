@@ -8044,36 +8044,6 @@ declare module DevExpress.ui {
        */
       valueFormat?: Format;
     };
-    /**
-     * [descr:dxDataGridToolbar]
-     */
-    export type Toolbar = {
-      /**
-       * [descr:dxDataGridToolbar.items]
-       */
-      items?: Array<DefaultToolbarItemName | ToolbarItem>;
-      /**
-       * [descr:dxDataGridToolbar.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxDataGridToolbar.disabled]
-       */
-      disabled?: boolean;
-    };
-    /**
-     * [descr:dxDataGridToolbarItem]
-     */
-    export type ToolbarItem = dxToolbarItem & {
-      /**
-       * [descr:dxDataGridToolbarItem.name]
-       */
-      name?: DefaultToolbarItemName | string;
-      /**
-       * [descr:dxDataGridToolbarItem.location]
-       */
-      location?: 'after' | 'before' | 'center';
-    };
     export type ToolbarPreparingEvent<
       TRowData = any,
       TKey = any
@@ -21381,36 +21351,6 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.ui.dxDataGrid.SelectionChangedInfo<TRowData, TKey>;
-    /**
-     * [descr:dxTreeListToolbar]
-     */
-    export interface Toolbar {
-      /**
-       * [descr:dxTreeListToolbar.items]
-       */
-      items?: (DefaultToolbarItemName | ToolbarItem)[];
-      /**
-       * [descr:dxTreeListToolbar.visible]
-       */
-      visible?: boolean;
-      /**
-       * [descr:dxTreeListToolbar.disabled]
-       */
-      disabled?: boolean;
-    }
-    /**
-     * [descr:dxTreeListToolbarItem]
-     */
-    export interface ToolbarItem extends dxToolbarItem {
-      /**
-       * [descr:dxTreeListToolbarItem.name]
-       */
-      name?: DefaultToolbarItemName | string;
-      /**
-       * [descr:dxTreeListToolbarItem.location]
-       */
-      location?: 'after' | 'before' | 'center';
-    }
     export type ToolbarPreparingEvent<
       TRowData = any,
       TKey = any
@@ -23552,6 +23492,37 @@ declare module DevExpress.ui.dxDataGrid {
      */
     insertBeforeKey?: TKey;
   }
+  /**
+   * [descr:dxDataGridToolbar]
+   */
+  export type Toolbar = {
+    /**
+     * [descr:dxDataGridToolbar.items]
+     */
+    items?: Array<DefaultToolbarItemName | ToolbarItem>;
+    /**
+     * [descr:dxDataGridToolbar.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxDataGridToolbar.disabled]
+     */
+    disabled?: boolean;
+  };
+  /**
+   * [descr:dxDataGridToolbarItem]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface ToolbarItem extends dxToolbarItem {
+    /**
+     * [descr:dxDataGridToolbarItem.name]
+     */
+    name?: DefaultToolbarItemName | string;
+    /**
+     * [descr:dxDataGridToolbarItem.location]
+     */
+    location?: 'after' | 'before' | 'center';
+  }
 }
 declare module DevExpress.ui.dxDiagram {
   export type Item = dxDiagramItem;
@@ -23628,6 +23599,39 @@ declare module DevExpress.ui.dxTileView {
 }
 declare module DevExpress.ui.dxToolbar {
   export type Item = dxToolbarItem;
+}
+declare module DevExpress.ui.dxTreeList {
+  /**
+   * [descr:dxTreeListToolbar]
+   */
+  export type Toolbar = {
+    /**
+     * [descr:dxTreeListToolbar.items]
+     */
+    items?: (DefaultToolbarItemName | ToolbarItem)[];
+    /**
+     * [descr:dxTreeListToolbar.visible]
+     */
+    visible?: boolean;
+    /**
+     * [descr:dxTreeListToolbar.disabled]
+     */
+    disabled?: boolean;
+  };
+  /**
+   * [descr:dxTreeListToolbarItem]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface ToolbarItem extends dxToolbarItem {
+    /**
+     * [descr:dxTreeListToolbarItem.name]
+     */
+    name?: DefaultToolbarItemName | string;
+    /**
+     * [descr:dxTreeListToolbarItem.location]
+     */
+    location?: 'after' | 'before' | 'center';
+  }
 }
 declare module DevExpress.ui.dxTreeView {
   export type Item = dxTreeViewItem;

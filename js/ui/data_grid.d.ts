@@ -4180,11 +4180,11 @@ export type SummaryTexts = {
 type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 /**
- * @public
  * @docid dxDataGridToolbarItem
  * @inherits dxToolbarItem
+ * @namespace DevExpress.ui.dxDataGrid
  */
-export type ToolbarItem = dxToolbarItem & {
+export interface ToolbarItem extends dxToolbarItem {
   /**
    * @docid dxDataGridToolbarItem.name
    * @type Enums.DataGridToolbarItem|string
@@ -4198,12 +4198,13 @@ export type ToolbarItem = dxToolbarItem & {
    * @public
    */
   location?: 'after' | 'before' | 'center';
-};
+}
 
 /**
  * @public
  * @docid dxDataGridToolbar
  * @type object
+ * @namespace DevExpress.ui.dxDataGrid
  */
 export type Toolbar = {
   /**
