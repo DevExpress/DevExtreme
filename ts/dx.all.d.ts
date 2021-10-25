@@ -6304,7 +6304,7 @@ declare module DevExpress.ui {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
-    type DefaultToolbarItem =
+    type DefaultToolbarItemName =
       | 'addRowButton'
       | 'applyFilterButton'
       | 'columnChooserButton'
@@ -23380,7 +23380,9 @@ declare module DevExpress.ui {
     /**
      * [descr:Toolbar.items]
      */
-    items?: Array<DevExpress.ui.dxDataGrid.DefaultToolbarItem | ToolbarItem>;
+    items?: Array<
+      DevExpress.ui.dxDataGrid.DefaultToolbarItemName | ToolbarItem
+    >;
     /**
      * [descr:Toolbar.visible]
      */
@@ -23397,7 +23399,7 @@ declare module DevExpress.ui {
     /**
      * [descr:ToolbarItem.name]
      */
-    name?: DevExpress.ui.dxDataGrid.DefaultToolbarItem | string;
+    name?: DevExpress.ui.dxDataGrid.DefaultToolbarItemName | string;
     /**
      * [descr:ToolbarItem.location]
      */

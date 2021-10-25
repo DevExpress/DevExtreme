@@ -4176,7 +4176,7 @@ export type SummaryTexts = {
     sumOtherColumn?: string;
 };
 
-type DefaultToolbarItem = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 /**
  * @public
@@ -4190,7 +4190,7 @@ export type ToolbarItem = dxToolbarItem & {
    * @type Enums.DataGridToolbarItem|string
    * @public
    */
-  name?: DefaultToolbarItem | string;
+  name?: DefaultToolbarItemName | string;
   /**
    * @docid
    * @type Enums.ToolbarItemLocation
@@ -4212,7 +4212,7 @@ export type Toolbar = {
    * @type Array<ToolbarItem,Enums.DataGridToolbarItem>
    * @public
    */
-  items?: Array<DefaultToolbarItem | ToolbarItem>;
+  items?: Array<DefaultToolbarItemName | ToolbarItem>;
   /**
    * @docid
    * @type boolean
