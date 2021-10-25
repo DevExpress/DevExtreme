@@ -844,6 +844,7 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
     selection?: Selection;
     /**
      * @docid
+     * @type dxTreeListToolbar
      * @default undefined
      * @public
      */
@@ -1207,7 +1208,7 @@ export interface ToolbarItem extends dxToolbarItem {
 export interface Toolbar {
     /**
      * @docid dxTreeListToolbar.items
-     * @type Array<ToolbarItem,Enums.TreeListToolbarItem>
+     * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItem>
      * @public
      */
     items?: (DefaultToolbarItemName | ToolbarItem)[];
@@ -1550,6 +1551,8 @@ export type ExplicitTypes<TRowData, TKey> = {
   Scrolling: Scrolling;
   Selection: Selection;
   SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
+  Toolbar: Toolbar;
+  ToolbarItem: ToolbarItem;
   ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
 };
 

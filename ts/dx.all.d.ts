@@ -21015,6 +21015,8 @@ declare module DevExpress.ui {
       Scrolling: Scrolling;
       Selection: Selection;
       SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
+      Toolbar: Toolbar;
+      ToolbarItem: ToolbarItem;
       ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
     };
     export type FocusedCellChangedEvent<

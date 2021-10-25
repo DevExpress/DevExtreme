@@ -3728,6 +3728,7 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     summary?: Summary<TRowData, TKey>;
     /**
      * @docid
+     * @type dxDataGridToolbar
      * @default undefined
      * @public
      */
@@ -4207,7 +4208,7 @@ export type ToolbarItem = dxToolbarItem & {
 export type Toolbar = {
   /**
    * @docid dxDataGridToolbar.items
-   * @type Array<ToolbarItem,Enums.DataGridToolbarItem>
+   * @type Array<dxDataGridToolbarItem,Enums.DataGridToolbarItem>
    * @public
    */
   items?: Array<DefaultToolbarItemName | ToolbarItem>;
