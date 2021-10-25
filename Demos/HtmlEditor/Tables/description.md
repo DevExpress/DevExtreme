@@ -1,9 +1,35 @@
-DevExtreme HtmlEditor allows users to create and manage tables. To enable this functionality, add the following [items](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/toolbar/items/) to the [toolbar](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/toolbar/):
+DevExtreme HTML/Markdown Editor allows users to create and manage tables. This demo illustrates table resize support and table management with the toolbar, context menu, and in code.
 
-- <a href="https://github.com/DevExpress/devextreme-quill/blob/master/docs/modules/table.md#inserttable" target="_blank">insertTable</a> / <a href="https://github.com/DevExpress/devextreme-quill/blob/master/docs/modules/table.md#deletetable" target="_blank">deleteTable</a>
-- <a href="https://github.com/DevExpress/devextreme-quill/blob/master/docs/modules/table.md#insertrowabove" target="_blank">insertRowAbove</a> / <a href="https://github.com/DevExpress/devextreme-quill/blob/master/docs/modules/table.md#insertrowbelow" target="_blank">insertRowBelow</a> / <a href="https://github.com/DevExpress/devextreme-quill/blob/master/docs/modules/table.md#deleterow" target="_blank">deleteRow</a>
-- <a href="https://github.com/DevExpress/devextreme-quill/blob/master/docs/modules/table.md#insertcolumnleft" target="_blank">insertColumnLeft</a> / <a href="https://github.com/DevExpress/devextreme-quill/blob/master/docs/modules/table.md#insertcolumnright" target="_blank">insertColumnRight</a> / <a href="https://github.com/DevExpress/devextreme-quill/blob/master/docs/modules/table.md#deletecolumn" target="_blank">deleteColumn</a>
+## Manage Tables with the Toolbar
 
-You can initiate the same actions from code. Use the [getModules](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Methods/#getModulemoduleName) method to access the Table module. This module contains methods whose names match the toolbar item names listed above. Refer to the following topic for the complete list and examples: <a href="https://github.com/DevExpress/devextreme-quill/blob/master/docs/modules/table.md" target="_blank">DevExtreme Quill modules: Table</a>.
+To allow users to manage tables with the [toolbar](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/toolbar/), add the following [items](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/toolbar/items/) to it:
 
-[note] Further enhancements of this functionality are in development as per the offical <a href="https://js.devexpress.com/Roadmap/#HTMLEditor" target="_blank">Roadmap</a>. Should you have any questions or suggestions, please email your comments to <a href="mailto:support@devexpress.com">support@devexpress.com</a>. You can also share your feedback on <a href="https://github.com/DevExpress/DevExtreme/issues/16538" target="_blank">this feature's discussion page</a>.
+- *"insertTable"* / *"deleteTable"*         
+Manage a table.
+
+- *"insertRowAbove"* / *"insertRowBelow"* / *"deleteRow"*       
+Manage rows.
+
+- *"insertColumnLeft"* / *"insertColumnRight"* / *"deleteColumn"*           
+Manage columns.
+
+- *"tableProperties"* / *"cellProperties"*          
+Open a pop-up window with table or cell customization options.
+
+## Manage Tables with the Context Menu
+
+To enable table management with the context menu, set the [tableContextMenu](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/tableContextMenu/).[enabled](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/tableContextMenu/#enabled) property to **true**. In this demo, you can click the Enable Table Context Menu check box under the HtmlEditor to enable or disable the property. When it is enabled, right-click a table cell to open the context menu.
+
+[note] The context menu cannot be used to create new tables because it is only available within table boundaries. If you want users to create tables, add the *"insertTable"* item to the toolbar.
+
+If you need to customize menu commands, override the **tableContextMenu**.[items](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/tableContextMenu/items/) array. Refer to its description for a code example.
+
+## Manage Tables Programmatically
+
+You can perform table-related actions in code. Use the [getModules](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Methods/#getModulemoduleName) method to access the Table module. This module contains methods whose names match the toolbar item names listed above. Refer to the following topic for the complete method list and code examples: <a href="https://github.com/DevExpress/devextreme-quill/blob/master/docs/modules/table.md" target="_blank">DevExtreme Quill modules: Table</a>.
+
+## Resize Tables
+
+If you want to allow users to resize table rows and columns, set the [tableResizing](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/tableResizing/).[enabled](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/tableResizing/#enabled) property to **true**. In this demo, you can use the Allow Table Resizing check box to change the property value.
+
+You can also set the **tableResizing**.[minColumnWidth](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/tableResizing/#minColumnWidth) and **tableResizing**.[minRowHeight](/Documentation/ApiReference/UI_Components/dxHtmlEditor/Configuration/tableResizing/#minRowHeight) properties to specify the minimum column width and row height. If you do not set these properties, the width and height are determined by the cell content. This demo illustrates the latter behavior when you reduce column width or row height to small values.
