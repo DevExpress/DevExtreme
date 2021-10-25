@@ -1834,7 +1834,10 @@ const EditingController = modules.ViewController.inherit((function() {
                             this._saving = false;
                         })
                         .done(deferred.resolve)
-                        .fail(deferred.reject);
+                        .fail(deferred.reject)
+                        .always(() => {
+                            this._focusEditingCell();
+                        });
                 }).fail(deferred.reject);
             }).fail(deferred.reject);
             return deferred.promise();
@@ -1852,7 +1855,15 @@ const EditingController = modules.ViewController.inherit((function() {
             const dataChanges = [];
             const dataController = this._dataController;
             const dataSource = dataController.dataSource();
+            const editRow = this._dataController.getVisibleRows()[this.getEditRowIndex()];
+            const editColumn = this._getEditColumn();
+            const showEditorAlways = editColumn?.showEditorAlways;
+            const isUpdateInCellMode = this.isCellEditMode() && !editRow?.isNewRow;
             const result = new Deferred();
+
+            if(isUpdateInCellMode && showEditorAlways) {
+                this.addDeferred(result);
+            }
 
             when(this._fireOnSaving()).done(({ cancel, changes }) => {
                 if(cancel) {
@@ -1876,9 +1887,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         result.resolve(error);
                     });
 
-                    return result.always(() => {
-                        this._focusEditingCell();
-                    }).promise();
+                    return result.promise();
                 }
 
                 this._cancelSaving(result);
