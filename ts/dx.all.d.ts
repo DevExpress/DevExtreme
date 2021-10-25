@@ -6362,6 +6362,14 @@ declare module DevExpress.ui {
        */
       summaryItem?: string | number;
     }
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type dxDataGridToolbar = Toolbar;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type dxDataGridToolbarItem = ToolbarItem;
     export type EditCanceledEvent<
       TRowData = any,
       TKey = any
@@ -20826,6 +20834,14 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type dxTreeListToolbar = Toolbar;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type dxTreeListToolbarItem = ToolbarItem;
     export type EditCanceledEvent<
       TRowData = any,
       TKey = any

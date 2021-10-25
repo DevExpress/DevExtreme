@@ -1178,6 +1178,8 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
 }
 
 type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+export type dxTreeListToolbar = Toolbar;
+export type dxTreeListToolbarItem = ToolbarItem;
 
 /**
  * @docid dxTreeListToolbarItem

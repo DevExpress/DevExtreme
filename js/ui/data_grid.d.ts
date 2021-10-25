@@ -4179,6 +4179,9 @@ export type SummaryTexts = {
 
 type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
 
+export type dxDataGridToolbar = Toolbar;
+export type dxDataGridToolbarItem = ToolbarItem;
+
 /**
  * @docid dxDataGridToolbarItem
  * @inherits dxToolbarItem
