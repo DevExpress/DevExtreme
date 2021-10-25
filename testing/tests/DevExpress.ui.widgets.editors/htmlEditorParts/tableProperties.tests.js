@@ -112,9 +112,9 @@ module('Table properties forms', {
             this.quillInstance = this.instance.getQuillInstance();
         };
 
-        this.applyFormChanges = (formInstance) => {
-            const $okButton = $('.dx-popup-bottom .dx-button:visible').eq(0);
-            $okButton.trigger('dxclick');
+        this.applyFormChanges = (buttonIndex = 0) => {
+            const $button = $('.dx-popup-bottom .dx-button:visible').eq(buttonIndex);
+            $button.trigger('dxclick');
 
             this.clock.tick();
         };
@@ -201,7 +201,7 @@ module('Table properties forms', {
             const alignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(0).dxButtonGroup('instance');
             alignmentEditor.option('selectedItemKeys', ['right']);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.strictEqual($tableElement.css('borderTopStyle'), 'dotted', 'border style is applied');
             assert.strictEqual($tableElement.css('borderTopWidth'), '3px', 'border width is applied');
@@ -244,7 +244,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 600);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.strictEqual($tableElement.outerHeight(), 90, 'table height is applied');
             assert.strictEqual($tableElement.outerWidth(), 600, 'table width is applied');
@@ -269,31 +269,34 @@ module('Table properties forms', {
             assert.ok($scrollView.length, 'Form should be in the ScrollView');
         });
 
-        test('Cell Form can not update other form dialogs', function(assert) {
-            this.createWidget();
+        [
+            { text: 'ok', index: 0 },
+            { text: 'cancel', index: 1 }
+        ].forEach(buttonConfig => {
+            test(`Cell Form can not update other form dialogs if cell form is closed by ${buttonConfig.text} button (T1038636)`, function(assert) {
+                this.createWidget();
 
-            const $tableElement = this.$element.find('table').eq(0);
-            const $targetCell = $tableElement.find('td').eq(6);
+                const $tableElement = this.$element.find('table').eq(0);
+                const $targetCell = $tableElement.find('td').eq(6);
 
-            this.quillInstance.setSelection(50, 1);
+                this.quillInstance.setSelection(50, 1);
 
-            showCellPropertiesForm(this.instance, $targetCell);
+                showCellPropertiesForm(this.instance, $targetCell);
 
-            this.clock.tick();
+                this.clock.tick();
 
-            const formInstance = this.getFormInstance();
+                this.applyFormChanges(buttonConfig.index);
 
-            this.applyFormChanges(formInstance);
+                const contextMenuModule = this.instance.getModule('tableContextMenu');
+                const formatHelpers = getFormatHandlers(contextMenuModule);
+                formatHelpers['link'](this.$element);
 
-            const contextMenuModule = this.instance.getModule('tableContextMenu');
-            const formatHelpers = getFormatHandlers(contextMenuModule);
-            formatHelpers['link'](this.$element);
+                this.clock.tick();
 
-            this.clock.tick();
+                const formItemsCount = $(`.${FORM_CLASS} .${FIELD_ITEM_CLASS}`).length;
 
-            const formItemsCount = $(`.${FORM_CLASS} .${FIELD_ITEM_CLASS}`).length;
-
-            assert.equal(formItemsCount, 3, '3 form items are rendered');
+                assert.equal(formItemsCount, 3, '3 form items are rendered');
+            });
         });
 
         test('show cell form start values', function(assert) {
@@ -366,7 +369,7 @@ module('Table properties forms', {
             const verticalAlignmentEditor = formInstance.$element().find('.dx-buttongroup').eq(1).dxButtonGroup('instance');
             verticalAlignmentEditor.option('selectedItemKeys', ['bottom']);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.strictEqual($targetCell.css('borderTopStyle'), 'dotted', 'border style is applied');
             assert.strictEqual($targetCell.css('borderTopWidth'), '3px', 'border width is applied');
@@ -420,7 +423,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 180);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.strictEqual($targetCell.outerHeight(), 80, 'cell height is applied');
             assert.strictEqual($targetCell.get(0).style.height, '80px', 'cell height style is correct');
@@ -454,7 +457,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 180);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.strictEqual($targetCell.outerHeight(), 80, 'cell height is applied');
             assert.strictEqual($targetCell.get(0).style.height, '80px', 'cell height style is correct');
@@ -496,7 +499,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 250);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
             assert.strictEqual($targetCell.next().outerWidth(), 350, 'next cell width is correct');
@@ -527,7 +530,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 250);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
             assert.strictEqual($targetCell.get(0).style.width, '250px', 'cell width style is applied');
@@ -550,7 +553,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 250);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
             assert.strictEqual($targetCell.prev().outerWidth(), 350, 'previous cell width is correct');
@@ -579,7 +582,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 250);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
         });
@@ -610,7 +613,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 250);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.strictEqual($targetCell.outerWidth(), 250, 'cell width is applied');
             assert.strictEqual($targetCell.get(0).style.width, '250px', 'cell width style is applied');
@@ -645,7 +648,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 400);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.strictEqual($targetCell.outerWidth(), 400, 'cell width is applied');
             assert.strictEqual($targetCell.get(0).style.width, '400px', 'cell width style is applied');
@@ -680,7 +683,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 700);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.roughEqual($targetCell.outerWidth(), 567, 3, 'cell width is applied');
             assert.strictEqual($targetCell.get(0).style.width, '700px', 'cell width style is applied');
@@ -703,7 +706,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 700);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.roughEqual($targetCell.outerWidth(), 567, 3, 'cell width is applied');
             assert.strictEqual($targetCell.get(0).style.width, '700px', 'cell width style is applied');
@@ -725,7 +728,7 @@ module('Table properties forms', {
             let widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 400);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             const $targetCell = $tableElement.find('td').eq(0);
 
@@ -738,7 +741,7 @@ module('Table properties forms', {
             widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 150);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.roughEqual($targetCell.outerWidth(), 150, 2, 'cell width is applied');
             assert.strictEqual($targetCell.get(0).style.width, '150px', 'cell width style is applied');
@@ -760,7 +763,7 @@ module('Table properties forms', {
             let widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 800);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             const $targetCell = $tableElement.find('td').eq(0);
 
@@ -772,7 +775,7 @@ module('Table properties forms', {
             widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 110);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             const $rowCells = $targetCell.closest('tr').find('td');
 
@@ -802,7 +805,7 @@ module('Table properties forms', {
             const heightEditor = formInstance.getEditor('height');
             heightEditor.option('value', 80);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.strictEqual($targetCell.outerHeight(), 80, 'cell height is applied');
             assert.strictEqual($targetCell.get(0).style.height, '80px', 'cell height style is correct');
@@ -824,7 +827,7 @@ module('Table properties forms', {
             const heightEditor = formInstance.getEditor('height');
             heightEditor.option('value', 10);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.roughEqual($targetCell.outerHeight(), 24, 2, 'cell height is applied');
             assert.strictEqual($targetCell.get(0).style.height, '10px', 'cell height style is correct');
@@ -848,7 +851,7 @@ module('Table properties forms', {
             const heightEditor = formInstance.getEditor('height');
             heightEditor.option('value', 150);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
             const $verticalCells = $tableElement.find('td:nth-child(1)');
 
             assert.roughEqual($tableElement.outerHeight(), 150, 2.01, 'table height is changed as expected');
@@ -871,7 +874,7 @@ module('Table properties forms', {
             const heightEditor = formInstance.getEditor('height');
             heightEditor.option('value', 30);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             const $verticalCells = $tableElement.find('td:nth-child(1)');
 
@@ -897,7 +900,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 400);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             const $horizontalCells = $tableElement.find('tr:eq(0) td');
 
@@ -932,7 +935,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 900);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             const $horizontalCells = $tableElement.find('tr:eq(0) td');
 
@@ -956,7 +959,7 @@ module('Table properties forms', {
             const widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 60);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             const $horizontalCells = $tableElement.find('tr:eq(0) td');
 
@@ -992,7 +995,7 @@ module('Table properties forms', {
             let widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 200);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
@@ -1002,7 +1005,7 @@ module('Table properties forms', {
             widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 800);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.roughEqual($targetCell.outerWidth(), 200, 2, 'cell width is applied');
             assert.strictEqual($targetCell.get(0).style.width, '200px', 'cell width style is applied');
@@ -1025,7 +1028,7 @@ module('Table properties forms', {
             let widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 200);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             this.quillInstance.setSelection(5, 1);
             showTablePropertiesForm(this.instance, $tableElement);
@@ -1035,7 +1038,7 @@ module('Table properties forms', {
             widthEditor = formInstance.getEditor('width');
             widthEditor.option('value', 450);
 
-            this.applyFormChanges(formInstance);
+            this.applyFormChanges();
 
             assert.roughEqual($targetCell.outerWidth(), 150, 2, 'cell width is applied');
             assert.roughEqual(parseInt($targetCell.get(0).style.width), 150, 2, 'cell width style is applied');
