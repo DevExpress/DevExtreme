@@ -847,7 +847,7 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
      * @default undefined
      * @public
      */
-    toolbar?: dxTreeListToolbar;
+    toolbar?: Toolbar;
 }
 
 /**
@@ -1176,22 +1176,22 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
     updateDimensions(): void;
 }
 
-type dxTreeListDefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
 
 /**
- * @docid
+ * @public
+ * @docid dxTreeListToolbarItem
  * @inherits dxToolbarItem
- * @namespace DevExpress.ui
  */
-export interface dxTreeListToolbarItem extends dxToolbarItem {
+export interface ToolbarItem extends dxToolbarItem {
     /**
-     * @docid
+     * @docid dxTreeListToolbarItem.name
      * @type Enums.TreeListToolbarItem|string
      * @public
      */
-    name?: dxTreeListDefaultToolbarItemName | string;
+    name?: DefaultToolbarItemName | string;
     /**
-     * @docid
+     * @docid dxTreeListToolbarItem.location
      * @type Enums.ToolbarItemLocation
      * @default 'after'
      * @public
@@ -1200,26 +1200,26 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
 }
 
 /**
- * @docid
+ * @public
+ * @docid dxTreeListToolbar
  * @type object
- * @namespace DevExpress.ui
  */
-export interface dxTreeListToolbar {
+export interface Toolbar {
     /**
-     * @docid
-     * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItem>
+     * @docid dxTreeListToolbar.items
+     * @type Array<ToolbarItem,Enums.TreeListToolbarItem>
      * @public
      */
-    items?: (dxTreeListDefaultToolbarItemName | dxTreeListToolbarItem)[];
+    items?: (DefaultToolbarItemName | ToolbarItem)[];
     /**
-     * @docid
+     * @docid dxTreeListToolbar.visible
      * @type boolean
      * @default undefined
      * @public
      */
     visible?: boolean;
     /**
-     * @docid
+     * @docid dxTreeListToolbar.disabled
      * @type boolean
      * @default false
      * @public

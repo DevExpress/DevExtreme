@@ -4180,19 +4180,18 @@ type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChoo
 
 /**
  * @public
- * @docid
+ * @docid dxDataGridToolbarItem
  * @inherits dxToolbarItem
- * @namespace DevExpress.ui
  */
 export type ToolbarItem = dxToolbarItem & {
   /**
-   * @docid
+   * @docid dxDataGridToolbarItem.name
    * @type Enums.DataGridToolbarItem|string
    * @public
    */
   name?: DefaultToolbarItemName | string;
   /**
-   * @docid
+   * @docid dxDataGridToolbarItem.location
    * @type Enums.ToolbarItemLocation
    * @default 'after'
    * @public
@@ -4202,26 +4201,25 @@ export type ToolbarItem = dxToolbarItem & {
 
 /**
  * @public
- * @docid
+ * @docid dxDataGridToolbar
  * @type object
- * @namespace DevExpress.ui
  */
 export type Toolbar = {
   /**
-   * @docid
+   * @docid dxDataGridToolbar.items
    * @type Array<ToolbarItem,Enums.DataGridToolbarItem>
    * @public
    */
   items?: Array<DefaultToolbarItemName | ToolbarItem>;
   /**
-   * @docid
+   * @docid dxDataGridToolbar.visible
    * @type boolean
    * @default undefined
    * @public
    */
   visible?: boolean;
   /**
-   * @docid
+   * @docid dxDataGridToolbar.disabled
    * @type boolean
    * @default false
    * @public
