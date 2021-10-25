@@ -8,7 +8,7 @@ import {
   Template,
 } from '@devextreme-generator/declarations';
 import { getGroupCellClasses } from '../utils';
-import { ContentTemplateProps } from '../types.d';
+import { ContentTemplateProps } from '../types';
 
 export const viewFunction = (viewModel: CellBase): JSX.Element => {
   const ContentTemplate = viewModel.props.contentTemplate;

@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, ForwardRef, Fragment, JSXComponent, RefObject,
 } from '@devextreme-generator/declarations';
-import { GroupRenderItem } from '../../../types.d';
+import { GroupRenderItem } from '../../../types';
 import { Row } from './row';
 import { GroupPanelLayoutProps } from '../group_panel_layout_props';
 
