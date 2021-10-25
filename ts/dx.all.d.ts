@@ -19079,7 +19079,10 @@ declare module DevExpress.ui {
    * [descr:dxSlideOut]
    * @deprecated [depNote:dxSlideOut]
    */
-  export class dxSlideOut extends CollectionWidget<dxSlideOutOptions> {
+  export class dxSlideOut<
+    TItem extends DevExpress.ui.dxSlideOut.ItemLike = any,
+    TKey = any
+  > extends CollectionWidget<dxSlideOutOptions<TItem, TKey>, TItem, TKey> {
     /**
      * [descr:dxSlideOut.hideMenu()]
      */
@@ -19096,29 +19099,78 @@ declare module DevExpress.ui {
     ): DevExpress.core.utils.DxPromise<void>;
   }
   module dxSlideOut {
-    export type ContentReadyEvent = DevExpress.events.EventInfo<dxSlideOut>;
-    export type DisposingEvent = DevExpress.events.EventInfo<dxSlideOut>;
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxSlideOut>;
-    export type ItemClickEvent = DevExpress.events.NativeEventInfo<dxSlideOut> &
-      DevExpress.events.ItemInfo;
-    export type ItemContextMenuEvent =
-      DevExpress.events.NativeEventInfo<dxSlideOut> &
-        DevExpress.events.ItemInfo;
-    export type ItemHoldEvent = DevExpress.events.NativeEventInfo<dxSlideOut> &
-      DevExpress.events.ItemInfo;
-    export type ItemRenderedEvent =
-      DevExpress.events.NativeEventInfo<dxSlideOut> &
-        DevExpress.events.ItemInfo;
-    export type MenuGroupRenderedEvent =
-      DevExpress.events.EventInfo<dxSlideOut>;
-    export type MenuItemRenderedEvent = DevExpress.events.EventInfo<dxSlideOut>;
-    export type OptionChangedEvent = DevExpress.events.EventInfo<dxSlideOut> &
+    export type ContentReadyEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxSlideOut<TItem, TKey>>;
+    export type DisposingEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxSlideOut<TItem, TKey>>;
+    export type ExplicitTypes<TItem extends ItemLike, TKey> = {
+      Properties: Properties<TItem, TKey>;
+      ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+      DisposingEvent: DisposingEvent<TItem, TKey>;
+      InitializedEvent: InitializedEvent<TItem, TKey>;
+      ItemClickEvent: ItemClickEvent<TItem, TKey>;
+      ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+      ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+      ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+      MenuGroupRenderedEvent: MenuGroupRenderedEvent<TItem, TKey>;
+      MenuItemRenderedEvent: MenuItemRenderedEvent<TItem, TKey>;
+      OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+      SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+    };
+    export type InitializedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.InitializedEventInfo<dxSlideOut<TItem, TKey>>;
+    export type ItemClickEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxSlideOut<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    export type ItemContextMenuEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxSlideOut<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    export type ItemHoldEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxSlideOut<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type ItemLike = string | Item | any;
+    export type ItemRenderedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.NativeEventInfo<dxSlideOut<TItem, TKey>> &
+      DevExpress.events.ItemInfo<TItem>;
+    export type MenuGroupRenderedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxSlideOut<TItem, TKey>>;
+    export type MenuItemRenderedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxSlideOut<TItem, TKey>>;
+    export type OptionChangedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxSlideOut<TItem, TKey>> &
       DevExpress.events.ChangedOptionInfo;
-    export type Properties = dxSlideOutOptions;
-    export type SelectionChangedEvent =
-      DevExpress.events.EventInfo<dxSlideOut> &
-        DevExpress.ui.CollectionWidget.SelectionChangedInfo;
+    export type Properties<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = dxSlideOutOptions<TItem, TKey>;
+    export type SelectionChangedEvent<
+      TItem extends ItemLike = any,
+      TKey = any
+    > = DevExpress.events.EventInfo<dxSlideOut<TItem, TKey>> &
+      DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>;
   }
   /**
    * @deprecated Use Item instead
@@ -19134,10 +19186,11 @@ declare module DevExpress.ui {
   }
   /**
    * @deprecated use Properties instead
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxSlideOutOptions
-    extends CollectionWidgetOptions<dxSlideOut> {
+  export interface dxSlideOutOptions<
+    TItem extends DevExpress.ui.dxSlideOut.ItemLike = any,
+    TKey = any
+  > extends CollectionWidgetOptions<dxSlideOut<TItem, TKey>, TItem, TKey> {
     /**
      * [descr:dxSlideOutOptions.activeStateEnabled]
      */
@@ -19153,13 +19206,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSlideOutOptions.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<
-      string | DevExpress.ui.dxSlideOut.Item | any
-    >;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<TItem, TKey>;
     /**
      * [descr:dxSlideOutOptions.items]
      */
-    items?: Array<string | DevExpress.ui.dxSlideOut.Item | any>;
+    items?: Array<TItem>;
     /**
      * [descr:dxSlideOutOptions.menuGroupTemplate]
      */
@@ -19180,7 +19231,7 @@ declare module DevExpress.ui {
     menuItemTemplate?:
       | DevExpress.core.template
       | ((
-          itemData: any,
+          itemData: TItem,
           itemIndex: number,
           itemElement: DevExpress.core.DxElement
         ) => string | DevExpress.core.UserDefinedElement);
@@ -19196,13 +19247,13 @@ declare module DevExpress.ui {
      * [descr:dxSlideOutOptions.onMenuGroupRendered]
      */
     onMenuGroupRendered?: (
-      e: DevExpress.ui.dxSlideOut.MenuGroupRenderedEvent
+      e: DevExpress.ui.dxSlideOut.MenuGroupRenderedEvent<TItem, TKey>
     ) => void;
     /**
      * [descr:dxSlideOutOptions.onMenuItemRendered]
      */
     onMenuItemRendered?: (
-      e: DevExpress.ui.dxSlideOut.MenuItemRenderedEvent
+      e: DevExpress.ui.dxSlideOut.MenuItemRenderedEvent<TItem, TKey>
     ) => void;
     /**
      * [descr:dxSlideOutOptions.selectedIndex]
