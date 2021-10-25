@@ -330,7 +330,8 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
 .dx-scheduler-appointment-collector {
   height: $generic-scheduler-appointment-collector-height;
 
-  .dx-scheduler-appointment-collector-content {
+  .dx-scheduler-appointment-collector-content,
+  .dx-button-content {
     span:last-child {
       line-height: math.div($generic-scheduler-appointment-collector-height, 1.5);
       height: $generic-scheduler-appointment-collector-height;

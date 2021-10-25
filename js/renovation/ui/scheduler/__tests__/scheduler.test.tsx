@@ -37,7 +37,9 @@ const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
 describe('Scheduler', () => {
   const defaultAppointmentViewModel = {
     regular: [],
+    regularCompact: [],
     allDay: [],
+    allDayCompact: [],
   };
 
   describe('Render', () => {
@@ -204,7 +206,9 @@ describe('Scheduler', () => {
 
         const appointmentsViewModel = {
           regular: [{}],
-          allDay: [{}, {}],
+          regularCompact: [{}, {}],
+          allDay: [{}, {}, {}],
+          allDayCompact: [{}, {}, {}, {}],
         };
 
         const scheduler = renderComponent({
@@ -222,6 +226,7 @@ describe('Scheduler', () => {
         expect(appointments.props)
           .toEqual({
             appointments: appointmentsViewModel.regular,
+            overflowIndicators: appointmentsViewModel.regularCompact,
           });
 
         expect(allDayAppointments.type)
@@ -230,6 +235,7 @@ describe('Scheduler', () => {
         expect(allDayAppointments.props)
           .toEqual({
             appointments: appointmentsViewModel.allDay,
+            overflowIndicators: appointmentsViewModel.allDayCompact,
           });
       });
     });
