@@ -212,6 +212,24 @@ const EditingController = modules.ViewController.inherit((function() {
             };
         },
 
+        _getNewRowPosition: function() {
+            const newRowPosition = this.option('editing.newRowPosition');
+            const scrollingMode = this.option('scrolling.mode');
+
+            if(scrollingMode === 'virtual') {
+                switch(newRowPosition) {
+                    case PAGE_TOP_NEW_ROW_POSITION:
+                        return VIEWPORT_TOP_NEW_ROW_POSITION;
+                    case PAGE_BOTTOM_NEW_ROW_POSITION:
+                        return VIEWPORT_BOTTOM_NEW_ROW_POSITION;
+                    default:
+                        return newRowPosition;
+                }
+            }
+
+            return newRowPosition;
+        },
+
         getChanges: function() {
             return this.option(EDITING_CHANGES_OPTION_NAME);
         },
@@ -641,7 +659,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const dataController = this._dataController;
 
             if(loadedRowIndex < 0) {
-                const newRowPosition = this.option('editing.newRowPosition');
+                const newRowPosition = this._getNewRowPosition();
                 const pageIndex = dataController.pageIndex();
                 const pageCount = dataController.pageCount();
                 const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
@@ -773,7 +791,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const dataController = this._dataController;
             const allItems = dataController.items(true);
             const rowsView = this.getView('rowsView');
-            const newRowPosition = this.option('editing.newRowPosition');
+            const newRowPosition = this._getNewRowPosition();
 
             switch(newRowPosition) {
                 case FIRST_NEW_ROW_POSITION:
@@ -820,7 +838,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _getPageIndexToInsertRow: function() {
-            const newRowPosition = this.option('editing.newRowPosition');
+            const newRowPosition = this._getNewRowPosition();
             const dataController = this._dataController;
             const pageIndex = dataController.pageIndex();
             const pageCount = dataController.pageCount();
@@ -931,7 +949,14 @@ const EditingController = modules.ViewController.inherit((function() {
                     changeType: 'update',
                     rowIndices: [oldEditRowIndex, editRowIndex, rowIndex]
                 });
-                d.resolve();
+
+                rowIndex = dataController.getRowIndexByKey(change.key);
+
+                if(rowIndex < 0) {
+                    navigateToRowByKey(change.key);
+                } else {
+                    d.resolve();
+                }
             }
 
             d.done(() => {
