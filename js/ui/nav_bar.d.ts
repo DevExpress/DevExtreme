@@ -15,38 +15,44 @@ import dxTabs, {
     dxTabsOptions,
 } from './tabs';
 
-/** @public */
-export type ContentReadyEvent = EventInfo<dxNavBar>;
+type ItemLike = string | Item | any;
 
 /** @public */
-export type DisposingEvent = EventInfo<dxNavBar>;
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxNavBar<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxNavBar>;
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxNavBar<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<dxNavBar<TItem, TKey>>;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxNavBar<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxNavBar<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxNavBar<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxNavBar> & ChangedOptionInfo;
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<dxNavBar<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type SelectionChangedEvent = EventInfo<dxNavBar> & SelectionChangedInfo;
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxNavBar<TItem, TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<dxNavBar<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
-export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
+export interface dxNavBarOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends dxTabsOptions<dxNavBar<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @public
@@ -60,7 +66,10 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
  * @deprecated dxTabs
  * @public
  */
-export default class dxNavBar extends dxTabs<dxNavBarOptions> { }
+export default class dxNavBar<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends dxTabs<dxNavBarOptions<TItem, TKey>, TItem, TKey> { }
 
 /**
  * @public
@@ -81,7 +90,30 @@ export interface dxNavBarItem extends dxTabsItem {
 }
 
 /** @public */
-export type Properties = dxNavBarOptions;
+export type ExplicitTypes<
+    TItem extends ItemLike,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+};
+
+/** @public */
+export type Properties<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = dxNavBarOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = dxNavBarOptions;
+export type Options<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = Properties<TItem, TKey>;
