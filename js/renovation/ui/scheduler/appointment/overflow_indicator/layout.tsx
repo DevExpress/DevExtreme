@@ -17,14 +17,24 @@ export const viewFunction = ({
     overflowIndicatorTemplate: OverflowIndicatorTemplate,
   },
 }: OverflowIndicator): JSX.Element => {
-  const contentTemplate = OverflowIndicatorTemplate
-    ? (): JSX.Element => (
-      <OverflowIndicatorTemplate
-        appointmentCount={appointmentCount}
-        isCompact={isCompact}
+  if (OverflowIndicatorTemplate) {
+    return (
+      <Button
+        text={text}
+        style={styles}
+        className={classes}
+        type="default"
+        stylingMode="contained"
+        template={(): JSX.Element => (
+          <OverflowIndicatorTemplate
+            appointmentCount={appointmentCount}
+            isCompact={isCompact}
+          />
+        )}
       />
-    )
-    : undefined;
+    );
+  }
+
   return (
     <Button
       text={text}
@@ -32,7 +42,6 @@ export const viewFunction = ({
       className={classes}
       type="default"
       stylingMode="contained"
-      template={contentTemplate}
     />
   );
 };
