@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { PathSvgElement, PathSvgElementProps, viewFunction as PathSvgComponent } from '../svg_path';
-import { Point } from '../types.d';
+import { Point } from '../types';
 import * as utilsModule from '../utils';
 
 describe('PathSvgElement', () => {

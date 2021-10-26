@@ -6,7 +6,7 @@ import {
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import { InternalPagerProps } from './common/pager_props';
 import { getElementWidth, getElementStyle } from './utils/get_element_width';
-import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../utils/effect_return';
 import { PagerContentProps } from './content';
 import { isDefined } from '../../../core/utils/type';
 

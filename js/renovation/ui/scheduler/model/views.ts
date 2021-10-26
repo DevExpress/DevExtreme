@@ -1,7 +1,7 @@
 // import dateUtils from '../../../../core/utils/date';
 import { isObject, isString } from '../../../../core/utils/type';
 import { SchedulerProps, ViewProps } from '../props';
-import { ViewType } from '../types.d';
+import { ViewType } from '../types';
 import { CurrentViewConfigType } from '../workspaces/props';
 
 const VIEW_TYPES = [

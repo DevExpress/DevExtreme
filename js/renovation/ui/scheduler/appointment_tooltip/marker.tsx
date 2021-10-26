@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, OneWay, CSSAttributes,
 } from '@devextreme-generator/declarations';
-import { Color } from './types.d';
+import { Color } from './types';
 
 export const viewFunction = (viewModel: Marker): JSX.Element => (
   <div
