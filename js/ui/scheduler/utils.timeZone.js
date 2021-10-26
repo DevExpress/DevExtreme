@@ -146,7 +146,7 @@ const isEqualLocalTimeZoneByDeclaration = (timeZoneName, date) => {
     const configTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneName, year);
     const [summerTime, winterTime] = configTuple;
 
-    const noDSTInTargetTimeZone = configTuple.length === 0;
+    const noDSTInTargetTimeZone = configTuple.length < 2;
     if(noDSTInTargetTimeZone) {
         const targetTimeZoneOffset = timeZoneDataUtils.getTimeZoneOffsetById(timeZoneName, date);
         const localTimeZoneOffset = getOffset(date);
