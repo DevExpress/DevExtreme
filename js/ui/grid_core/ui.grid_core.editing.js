@@ -1858,7 +1858,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const editRow = this._dataController.getVisibleRows()[this.getEditRowIndex()];
             const editColumn = this._getEditColumn();
             const showEditorAlways = editColumn?.showEditorAlways;
-            const isUpdateInCellMode = this.isCellEditMode() && !editRow?.isNewRow;
+            const isUpdateInCellMode = getEditMode(this) === EDIT_MODE_CELL && !editRow?.isNewRow;
             const result = new Deferred();
 
             if(isUpdateInCellMode && showEditorAlways) {
