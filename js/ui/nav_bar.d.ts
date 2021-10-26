@@ -12,7 +12,7 @@ import {
 
 import dxTabs, {
     Item as dxTabsItem,
-    dxTabsOptions,
+    dxTabsBaseOptions,
 } from './tabs';
 
 type ItemLike = string | Item | any;
@@ -52,7 +52,7 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
 export interface dxNavBarOptions<
     TItem extends ItemLike = any,
     TKey = any,
-> extends dxTabsOptions<dxNavBar<TItem, TKey>, TItem, TKey> {
+> extends dxTabsBaseOptions<dxNavBar<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @public

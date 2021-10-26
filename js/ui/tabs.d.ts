@@ -49,6 +49,15 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
  * @public
  */
 export interface dxTabsOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends Properties<TItem, TKey> {}
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
+export interface dxTabsBaseOptions<
     TComponent extends dxTabs<any, TItem, TKey> = dxTabs<any, any, any>,
     TItem extends ItemLike = any,
     TKey = any,
@@ -61,52 +70,52 @@ export interface dxTabsOptions<
      */
     dataSource?: DataSourceLike<TItem, TKey>;
     /**
-     * @docid
+     * @docid dxTabsOptions.focusStateEnabled
      * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.hoverStateEnabled
      * @default true
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.items
      * @type Array<string | dxTabsItem | any>
      * @fires dxTabsOptions.onOptionChanged
      * @public
      */
     items?: Array<TItem>;
     /**
-     * @docid
+     * @docid dxTabsOptions.repaintChangesOnly
      * @default false
      * @public
      */
     repaintChangesOnly?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.scrollByContent
      * @default true
      * @default false &for(desktop)
      * @public
      */
     scrollByContent?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.scrollingEnabled
      * @default true
      * @public
      */
     scrollingEnabled?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.selectionMode
      * @type Enums.NavSelectionMode
      * @default 'single'
      * @public
      */
     selectionMode?: 'multiple' | 'single';
     /**
-     * @docid
+     * @docid dxTabsOptions.showNavButtons
      * @default true
      * @default false &for(mobile_devices)
      * @public
@@ -121,7 +130,7 @@ export interface dxTabsOptions<
  * @public
  */
 export default class dxTabs<
-    TProperties extends dxTabsOptions<any, TItem, TKey> = dxTabsOptions<any, any, any>,
+    TProperties extends dxTabsOptions<TItem, TKey> = dxTabsOptions<any, any>,
     TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidget<TProperties, TItem, TKey> { }
@@ -172,7 +181,7 @@ interface TabsInstance<TItem, TKey> extends dxTabs<Properties<TItem, TKey>, TIte
 export type Properties<
     TItem extends ItemLike = any,
     TKey = any,
-> = dxTabsOptions<TabsInstance<TItem, TKey>, TItem, TKey>;
+> = dxTabsBaseOptions<TabsInstance<TItem, TKey>, TItem, TKey>;
 
 /** @deprecated use Properties instead */
 export type Options<

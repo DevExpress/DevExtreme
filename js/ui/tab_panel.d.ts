@@ -22,7 +22,7 @@ import {
 
 import dxMultiView, {
     Item as dxMultiViewItem,
-    dxMultiViewOptions,
+    dxMultiViewBaseOptions,
 } from './multi_view';
 
 type ItemLike = string | Item | any;
@@ -76,7 +76,7 @@ export type TitleRenderedEvent<TItem extends ItemLike = any, TKey = any> = Event
 export interface dxTabPanelOptions<
     TItem extends ItemLike = any,
     TKey = any,
-> extends dxMultiViewOptions<dxTabPanel<TItem, TKey>, TItem, TKey> {
+> extends dxMultiViewBaseOptions<dxTabPanel<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @default false

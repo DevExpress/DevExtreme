@@ -16213,11 +16213,10 @@ declare module DevExpress.ui {
    * [descr:dxMultiView]
    */
   export class dxMultiView<
-    TProperties extends dxMultiViewOptions<
+    TProperties extends dxMultiViewOptions<TItem, TKey> = dxMultiViewOptions<
       any,
-      TItem,
-      TKey
-    > = dxMultiViewOptions<any, any, any>,
+      any
+    >,
     TItem extends DevExpress.ui.dxMultiView.ItemLike = any,
     TKey = any
   > extends CollectionWidget<TProperties, TItem, TKey> {}
@@ -16283,7 +16282,7 @@ declare module DevExpress.ui {
     export type Properties<
       TItem extends ItemLike = any,
       TKey = any
-    > = dxMultiViewOptions<MultiViewInstance<TItem, TKey>, TItem, TKey>;
+    > = dxMultiViewBaseOptions<MultiViewInstance<TItem, TKey>, TItem, TKey>;
     export type SelectionChangedEvent<
       TItem extends ItemLike = any,
       TKey = any
@@ -16291,14 +16290,10 @@ declare module DevExpress.ui {
       DevExpress.ui.CollectionWidget.SelectionChangedInfo<TItem>;
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxMultiViewItem extends CollectionWidgetItem {}
-  /**
-   * @deprecated use Properties instead
-   */
-  export interface dxMultiViewOptions<
+  export interface dxMultiViewBaseOptions<
     TComponent extends dxMultiView<any, TItem, TKey> = dxMultiView<
       any,
       any,
@@ -16340,6 +16335,18 @@ declare module DevExpress.ui {
      */
     swipeEnabled?: boolean;
   }
+  /**
+   * @deprecated Use Item instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxMultiViewItem extends CollectionWidgetItem {}
+  /**
+   * @deprecated use DevExpress.ui.dxMultiView.Properties instead
+   */
+  export interface dxMultiViewOptions<
+    TItem extends DevExpress.ui.dxMultiView.ItemLike = any,
+    TKey = any
+  > extends DevExpress.ui.dxMultiView.Properties<TItem, TKey> {}
   /**
    * [descr:dxNavBar]
    * @deprecated [depNote:dxNavBar]
@@ -16428,7 +16435,7 @@ declare module DevExpress.ui {
   export interface dxNavBarOptions<
     TItem extends DevExpress.ui.dxNavBar.ItemLike = any,
     TKey = any
-  > extends dxTabsOptions<dxNavBar<TItem, TKey>, TItem, TKey> {
+  > extends dxTabsBaseOptions<dxNavBar<TItem, TKey>, TItem, TKey> {
     /**
      * [descr:dxNavBarOptions.scrollByContent]
      */
@@ -20053,7 +20060,7 @@ declare module DevExpress.ui {
   export interface dxTabPanelOptions<
     TItem extends DevExpress.ui.dxTabPanel.ItemLike = any,
     TKey = any
-  > extends dxMultiViewOptions<dxTabPanel<TItem, TKey>, TItem, TKey> {
+  > extends dxMultiViewBaseOptions<dxTabPanel<TItem, TKey>, TItem, TKey> {
     /**
      * [descr:dxTabPanelOptions.animationEnabled]
      */
@@ -20123,11 +20130,7 @@ declare module DevExpress.ui {
    * [descr:dxTabs]
    */
   export class dxTabs<
-    TProperties extends dxTabsOptions<any, TItem, TKey> = dxTabsOptions<
-      any,
-      any,
-      any
-    >,
+    TProperties extends dxTabsOptions<TItem, TKey> = dxTabsOptions<any, any>,
     TItem extends DevExpress.ui.dxTabs.ItemLike = any,
     TKey = any
   > extends CollectionWidget<TProperties, TItem, TKey> {}
@@ -20188,7 +20191,7 @@ declare module DevExpress.ui {
     export type Properties<
       TItem extends ItemLike = any,
       TKey = any
-    > = dxTabsOptions<TabsInstance<TItem, TKey>, TItem, TKey>;
+    > = dxTabsBaseOptions<TabsInstance<TItem, TKey>, TItem, TKey>;
     export type SelectionChangedEvent<
       TItem extends ItemLike = any,
       TKey = any
@@ -20201,23 +20204,10 @@ declare module DevExpress.ui {
       extends dxTabs<Properties<TItem, TKey>, TItem, TKey> {}
   }
   /**
-   * @deprecated Use Item instead
+   * @deprecated use Properties instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface dxTabsItem extends CollectionWidgetItem {
-    /**
-     * [descr:dxTabsItem.badge]
-     */
-    badge?: string;
-    /**
-     * [descr:dxTabsItem.icon]
-     */
-    icon?: string;
-  }
-  /**
-   * @deprecated use Properties instead
-   */
-  export interface dxTabsOptions<
+  export interface dxTabsBaseOptions<
     TComponent extends dxTabs<any, TItem, TKey> = dxTabs<any, any, any>,
     TItem extends DevExpress.ui.dxTabs.ItemLike = any,
     TKey = any
@@ -20259,6 +20249,27 @@ declare module DevExpress.ui {
      */
     showNavButtons?: boolean;
   }
+  /**
+   * @deprecated Use Item instead
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export interface dxTabsItem extends CollectionWidgetItem {
+    /**
+     * [descr:dxTabsItem.badge]
+     */
+    badge?: string;
+    /**
+     * [descr:dxTabsItem.icon]
+     */
+    icon?: string;
+  }
+  /**
+   * @deprecated use DevExpress.ui.dxTabs.Properties instead
+   */
+  export interface dxTabsOptions<
+    TItem extends DevExpress.ui.dxTabs.ItemLike = any,
+    TKey = any
+  > extends DevExpress.ui.dxTabs.Properties<TItem, TKey> {}
   /**
    * [descr:dxTagBox]
    */
