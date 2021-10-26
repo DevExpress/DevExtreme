@@ -12,7 +12,7 @@ import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, set
 //    indent: number,
 //    margin: { top:number, left:number, right:number, bottom:number } | number
 //    customizeCell: (IPdfRowInfo): void
-//    customDrawCell: (rect, pdfCell, gridCell, cancel): void
+//    customDrawCell: (rect, pdfCell, gridCell, cancel): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
 // }
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
