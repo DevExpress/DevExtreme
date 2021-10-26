@@ -1,4 +1,5 @@
 import { getHeight, setHeight } from '../core/utils/size';
+import { triggerResizeEvent } from '../events/visibility_change';
 import $ from '../core/renderer';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
@@ -342,6 +343,12 @@ const DropDownMenu = Widget.inherit({
                 }
                 this._itemClickAction(e);
             }).bind(this),
+            onContentReady: function() {
+                // T1037975
+                if(this._popup) {
+                    triggerResizeEvent(this._popup.$element());
+                }
+            }.bind(this),
             tabIndex: -1,
             focusStateEnabled: this.option('focusStateEnabled'),
             activeStateEnabled: this.option('activeStateEnabled'),
