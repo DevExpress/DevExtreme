@@ -192,14 +192,17 @@ const Sortable = Draggable.inherit({
                 if(e.target[scrollProp] !== sourceScrollableInfo[scrollProp]) {
                     const scrollBy = e.target[scrollProp] - sourceScrollableInfo[scrollProp];
                     this._correctItemPoints(scrollBy);
+                    this._movePlaceholder();
                     sourceScrollableInfo[scrollProp] = e.target[scrollProp];
                 }
             });
         }
     },
 
-    _dragEnterHandler: function() {
+    _dragEnterHandler: function(e) {
         this.callBase.apply(this, arguments);
+
+        this._subscribeToSourceScroll(e);
 
         if(this === this._getSourceDraggable()) {
             return;
@@ -242,6 +245,12 @@ const Sortable = Draggable.inherit({
                 }
             }
         }
+    },
+
+    _dragLeaveHandler: function(e) {
+        this.callBase.apply(this, arguments);
+
+        this._unsubscribeFromSourceScroll(e);
     },
 
     dragEnter: function() {
@@ -755,9 +764,13 @@ const Sortable = Draggable.inherit({
         return left;
     },
 
-    _movePlaceholder: function() {
+    _movePlaceholder: function(_isFromHandler) {
         const that = this;
         const $placeholderElement = that._$placeholderElement || that._createPlaceholder();
+        if(!$placeholderElement) {
+            return;
+        }
+
         const items = that._getItems();
         const toIndex = that.option('toIndex');
         const isVerticalOrientation = that._isVerticalOrientation();
