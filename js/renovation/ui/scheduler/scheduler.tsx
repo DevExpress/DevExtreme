@@ -28,7 +28,7 @@ import { DataAccessorType, DataSourcePromise } from './types';
 import {
   createDataAccessors, createTimeZoneCalculator, filterAppointments,
 } from './common';
-import { loadResources } from '../../../ui/scheduler/resources/utils';
+import { getGroupCount, loadResources } from '../../../ui/scheduler/resources/utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
 import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
 import { AppointmentsViewModelType } from './appointment/types';
@@ -45,6 +45,8 @@ export const viewFunction = ({
   setCurrentView,
   startViewDate,
   appointmentsViewModel,
+  workSpaceKey,
+
   props: {
     accessKey,
     activeStateEnabled,
@@ -163,6 +165,8 @@ export const viewFunction = ({
               appointments={appointmentsViewModel.allDay}
             />
           )}
+
+          key={workSpaceKey}
         />
       </div>
     </Widget>
@@ -305,6 +309,21 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       model,
       this.filteredItems,
     );
+  }
+
+  // TODO: This is a WA because we need to clean workspace completely to set table sizes correctly
+  // We need to remove this after we refactor crossScrolling to set table sizes through CSS, not JS
+  get workSpaceKey(): string {
+    const { currentView, crossScrollingEnabled } = this.props;
+    const { groupOrientation, intervalCount } = this.currentViewConfig;
+
+    if (!crossScrollingEnabled) {
+      return '';
+    }
+
+    const groupCount = getGroupCount(this.loadedResources);
+
+    return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
   }
 
   @Method()

@@ -1,6 +1,8 @@
 import {
   Component,
+  CSSAttributes,
   JSXComponent,
+  Method,
   Ref,
   RefObject,
 } from '@devextreme-generator/declarations';
@@ -22,6 +24,8 @@ export const viewFunction = ({
   onHeaderScroll,
   onSideBarScroll,
 
+  headerStyles,
+
   props: {
     headerPanelTemplate: HeaderPanel,
     dateTableTemplate: DateTable,
@@ -40,8 +44,10 @@ export const viewFunction = ({
     className,
     isRenderGroupPanel,
     isStandaloneAllDayPanel,
+
     groupPanelHeight,
     headerEmptyCellWidth,
+    tablesWidth,
 
     dataCellTemplate,
     timeCellTemplate,
@@ -79,7 +85,10 @@ export const viewFunction = ({
           bounceEnabled={false}
           onScroll={onHeaderScroll}
         >
-          <table className="dx-scheduler-header-panel">
+          <table
+            className="dx-scheduler-header-panel"
+            style={headerStyles}
+          >
             <HeaderPanel
               dateHeaderData={dateHeaderData}
               groupPanelData={groupPanelData}
@@ -99,6 +108,7 @@ export const viewFunction = ({
               dataCellTemplate={dataCellTemplate}
               tableRef={allDayPanelRef}
               allDayAppointments={allDayAppointments}
+              width={tablesWidth}
             />
           )}
         </Scrollable>
@@ -155,6 +165,7 @@ export const viewFunction = ({
               viewData={viewData}
               groupOrientation={groupOrientation}
               dataCellTemplate={dataCellTemplate}
+              width={tablesWidth}
             />
             {appointments}
           </div>
@@ -190,6 +201,16 @@ MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' 
   // eslint-disable-next-line class-methods-use-this
   get sideBarSemaphore(): Semaphore {
     return new Semaphore();
+  }
+
+  get headerStyles(): CSSAttributes {
+    return { width: this.props.tablesWidth };
+  }
+
+  // Bug in generators: https://github.com/DevExpress/devextreme-renovation/issues/791
+  @Method()
+  getScrollableWidth(): number {
+    return this.dateTableScrollableRef.current!.container().getBoundingClientRect().width;
   }
 
   onDateTableScroll(e: ScrollEventArgs): void {

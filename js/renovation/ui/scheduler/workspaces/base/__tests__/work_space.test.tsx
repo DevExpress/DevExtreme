@@ -16,9 +16,14 @@ import { TimePanelTableLayout } from '../time_panel/layout';
 import { combineClasses } from '../../../../../utils/combine_classes';
 import * as Utils from '../../utils';
 import { CrossScrollingLayout } from '../cross_scrolling_layout';
+import { getDateTableWidth } from '../utils';
 
 jest.mock('../../../../../utils/combine_classes', () => ({
   combineClasses: jest.fn(),
+}));
+jest.mock('../utils', () => ({
+  ...jest.requireActual('../utils'),
+  getDateTableWidth: jest.fn(() => 1000),
 }));
 const isVerticalGroupingApplied = jest.spyOn(Utils, 'isVerticalGroupingApplied');
 
@@ -147,6 +152,7 @@ describe('WorkSpace', () => {
         classes: 'custom-classes',
         groupPanelHeight: 500,
         headerEmptyCellWidth: 300,
+        tablesWidth: 1900,
 
         timePanelRef: 'timePanelRef',
         groupPanelRef: 'groupPanelRef',
@@ -189,6 +195,7 @@ describe('WorkSpace', () => {
           dateTableRef: 'dateTableRef',
           allDayPanelRef: 'allDayPanelRef',
           groupOrientation: VERTICAL_GROUP_ORIENTATION,
+          tablesWidth: 1900,
         });
     });
   });
@@ -312,6 +319,11 @@ describe('WorkSpace', () => {
 
           workSpace.dateTableRef = dateTableRefMock;
           workSpace.allDayPanelRef = { current: null } as any;
+          workSpace.layoutRef = {
+            current: {
+              getScrollableWidth: () => 1000,
+            },
+          } as any;
 
           workSpace.onViewRendered();
 
@@ -369,6 +381,11 @@ describe('WorkSpace', () => {
 
           workSpace.dateTableRef = dateTableRefMock;
           workSpace.allDayPanelRef = allDayPanelRefMock;
+          workSpace.layoutRef = {
+            current: {
+              getScrollableWidth: () => 1000,
+            },
+          } as any;
 
           workSpace.onViewRendered();
 
@@ -424,6 +441,64 @@ describe('WorkSpace', () => {
                 }],
               },
             });
+        });
+
+        it('should not call onViewRendered when crossScrolling is used and tablesWidth is not equal to real width', () => {
+          const onViewRendered = jest.fn();
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            onViewRendered,
+            currentDate: new Date(),
+            startDayHour: 0,
+            endDayHour: 1,
+            showAllDayPanel: false,
+            crossScrollingEnabled: true,
+            type: 'week',
+          });
+
+          workSpace.tablesWidth = 500;
+          workSpace.dateTableRef = dateTableRefMock;
+          workSpace.allDayPanelRef = allDayPanelRefMock;
+          workSpace.layoutRef = {
+            current: {
+              getScrollableWidth: () => 1000,
+            },
+          } as any;
+
+          workSpace.onViewRendered();
+
+          expect(onViewRendered)
+            .toBeCalledTimes(0);
+        });
+
+        it('should call onViewRendered when crossScrolling is used and tablesWidth is not equal to real width', () => {
+          const onViewRendered = jest.fn();
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            onViewRendered,
+            currentDate: new Date(),
+            startDayHour: 0,
+            endDayHour: 1,
+            showAllDayPanel: false,
+            crossScrollingEnabled: true,
+            type: 'week',
+          });
+
+          workSpace.tablesWidth = 1000;
+          workSpace.dateTableRef = dateTableRefMock;
+          workSpace.allDayPanelRef = allDayPanelRefMock;
+          workSpace.layoutRef = {
+            current: {
+              getScrollableWidth: () => 1200,
+            },
+          } as any;
+
+          workSpace.onViewRendered();
+
+          expect(onViewRendered)
+            .toBeCalledTimes(1);
         });
       });
 
@@ -522,6 +597,81 @@ describe('WorkSpace', () => {
 
           expect(workSpace.headerEmptyCellWidth)
             .toBe(260);
+        });
+      });
+
+      describe('tablesWidthEffect', () => {
+        it('should save tablesWidth into the state', () => {
+          const currentDate = new Date();
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            crossScrollingEnabled: true,
+            type: 'week',
+            currentDate,
+            groups,
+          } as any);
+
+          workSpace.layoutRef = { current: { getScrollableWidth: () => 1500 } } as any;
+          workSpace.dateTableRef = { current: {} } as any;
+
+          workSpace.tablesWidthEffect();
+
+          expect(workSpace.tablesWidth)
+            .toBe(1000);
+          expect(getDateTableWidth)
+            .toHaveBeenCalledWith(
+              1500,
+              workSpace.dateTableRef.current,
+              expect.anything(),
+              {
+                intervalCount: 1,
+                currentDate,
+                viewType: 'week',
+                hoursInterval: 0.5,
+                startDayHour: 0,
+                endDayHour: 24,
+                groups,
+                groupOrientation: 'horizontal',
+              },
+            );
+        });
+
+        it('should not save tablesWidth into the state when cross-scrolling is not used', () => {
+          const currentDate = new Date();
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            crossScrollingEnabled: false,
+            type: 'week',
+            currentDate,
+            groups,
+          } as any);
+
+          workSpace.layoutRef = { current: { getScrollableWidth: () => 1500 } } as any;
+          workSpace.dateTableRef = { current: {} } as any;
+
+          workSpace.tablesWidthEffect();
+
+          expect(workSpace.tablesWidth)
+            .toBe(undefined);
+        });
+
+        it('should not save tablesWidth into the state when timeline view is used', () => {
+          const currentDate = new Date();
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            crossScrollingEnabled: true,
+            type: 'timelineMonth',
+            currentDate,
+            groups,
+          } as any);
+
+          workSpace.layoutRef = { current: { getScrollableWidth: () => 1500 } } as any;
+          workSpace.dateTableRef = { current: {} } as any;
+
+          workSpace.tablesWidthEffect();
+
+          expect(workSpace.tablesWidth)
+            .toBe(undefined);
         });
       });
     });
@@ -1250,6 +1400,52 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space': true,
             'dx-scheduler-work-space-both-scrollbar': true,
           });
+      });
+    });
+
+    describe('isCalculateTablesWidth', () => {
+      it('should return true for ordinary views with cross-scrolling', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'day',
+          crossScrollingEnabled: true,
+        } as any);
+
+        expect(workSpace.isCalculateTablesWidth)
+          .toBe(true);
+      });
+
+      it('should return false for timeline views with cross-scrolling', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'timelineWeek',
+          crossScrollingEnabled: true,
+        } as any);
+
+        expect(workSpace.isCalculateTablesWidth)
+          .toBe(false);
+      });
+
+      it('should return false for ordinary views without cross-scrolling', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'week',
+          crossScrollingEnabled: false,
+        } as any);
+
+        expect(workSpace.isCalculateTablesWidth)
+          .toBe(false);
+      });
+
+      it('should return false for timeline views without cross-scrolling', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'timelineWeek',
+          crossScrollingEnabled: false,
+        } as any);
+
+        expect(workSpace.isCalculateTablesWidth)
+          .toBe(false);
       });
     });
   });

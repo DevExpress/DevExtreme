@@ -122,6 +122,7 @@ describe('Scheduler', () => {
     it('should render work space and pass to it correct props', () => {
       const tree = renderComponent({
         onViewRendered: () => {},
+        workSpaceKey: 'workSpaceKey',
       });
 
       const workSpace = tree.find(WorkSpace);
@@ -135,6 +136,8 @@ describe('Scheduler', () => {
           appointments: expect.anything(),
           allDayAppointments: expect.anything(),
         });
+      expect(workSpace.key())
+        .toBe('workSpaceKey');
     });
 
     it('should render toolbar and pass to it correct props', () => {
@@ -887,6 +890,63 @@ describe('Scheduler', () => {
 
           expect(getAppointmentsViewModel)
             .toHaveBeenCalledTimes(0);
+        });
+      });
+
+      describe('workSpaceKey', () => {
+        it('should return empty string if cross-scrolling is not used', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+          });
+
+          expect(scheduler.workSpaceKey)
+            .toBe('');
+        });
+
+        it('should generate correct key if cross-scrolling is used', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            currentView: 'week',
+            views: [{
+              type: 'week',
+              groupOrientation: 'vertical',
+              intervalCount: 3,
+            }],
+            crossScrollingEnabled: true,
+          });
+
+          scheduler.loadedResources = [
+            {
+              name: 'priorityId',
+              items: [
+                {
+                  id: 1,
+                  text: 'Low Priority',
+                  color: '#1e90ff',
+                },
+                {
+                  id: 2,
+                  text: 'High Priority',
+                  color: '#ff9747',
+                },
+              ],
+              data: [
+                {
+                  text: 'Low Priority',
+                  id: 1,
+                  color: '#1e90ff',
+                },
+                {
+                  text: 'High Priority',
+                  id: 2,
+                  color: '#ff9747',
+                },
+              ],
+            },
+          ];
+
+          expect(scheduler.workSpaceKey)
+            .toBe('week_vertical_3_2');
         });
       });
     });
