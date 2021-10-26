@@ -257,10 +257,13 @@ export const searchModule = {
                         for(let i = 0; i < $contents.length; i++) {
                             const node = $contents.get(i);
                             if(node.nodeType === 3) {
-                                return stringNormalizer(node.textContent || node.nodeValue).indexOf(normalizedSearchText) > -1;
+                                const normalizedText = stringNormalizer(node.textContent || node.nodeValue);
+                                if(normalizedText.indexOf(normalizedSearchText) > -1) {
+                                    return true;
+                                }
                             }
-                            return false;
                         }
+                        return false;
                     });
 
                     return $items;
