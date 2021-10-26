@@ -17,31 +17,31 @@ import CollectionWidget, {
 export type ItemLike = string | Item | any;
 
 /** @public */
-export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<any, TItem, TKey>>;
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<any, TItem, TKey>>;
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<MultiViewInstance<any, TItem, TKey>>;
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<MultiViewInstance<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<any, TItem, TKey>> & ItemInfo<TItem>;
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<any, TItem, TKey>> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<any, TItem, TKey>> & ItemInfo<TItem>;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<any, TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<MultiViewInstance<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<any, TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<any, TItem, TKey>> & SelectionChangedInfo<TItem>;
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<MultiViewInstance<TItem, TKey>> & SelectionChangedInfo<TItem>;
 
 /**
  * @deprecated use Properties instead
@@ -49,56 +49,65 @@ export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = Ev
  * @public
  */
 export interface dxMultiViewOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends Properties<TItem, TKey> {}
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ */
+export interface dxMultiViewBaseOptions<
     TComponent extends dxMultiView<any, TItem, TKey> = dxMultiView<any, any, any>,
     TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidgetOptions<TComponent, TItem, TKey> {
     /**
-     * @docid
+     * @docid dxMultiViewOptions.animationEnabled
      * @default true
      * @public
      */
     animationEnabled?: boolean;
     /**
-     * @docid
+     * @docid dxMultiViewOptions.dataSource
      * @type string | Array<string | dxMultiViewItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
     dataSource?: DataSourceLike<TItem, TKey>;
     /**
-     * @docid
+     * @docid dxMultiViewOptions.deferRendering
      * @default true
      * @public
      */
     deferRendering?: boolean;
     /**
-     * @docid
+     * @docid dxMultiViewOptions.focusStateEnabled
      * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
+     * @docid dxMultiViewOptions.items
      * @type Array<string | dxMultiViewItem | any>
      * @fires dxMultiViewOptions.onOptionChanged
      * @public
      */
     items?: Array<TItem>;
     /**
-     * @docid
+     * @docid dxMultiViewOptions.loop
      * @default false
      * @public
      */
     loop?: boolean;
     /**
-     * @docid
+     * @docid dxMultiViewOptions.selectedIndex
      * @default 0
      * @public
      */
     selectedIndex?: number;
     /**
-     * @docid
+     * @docid dxMultiViewOptions.swipeEnabled
      * @default true
      * @public
      */
@@ -112,7 +121,7 @@ export interface dxMultiViewOptions<
  * @public
  */
 export default class dxMultiView<
-    TProperties extends dxMultiViewOptions<any, TItem, TKey> = dxMultiViewOptions<any, any, any>,
+    TProperties extends dxMultiViewOptions<TItem, TKey> = dxMultiViewOptions<any, any>,
     TItem extends ItemLike = any,
     TKey = any,
 > extends CollectionWidget<TProperties, TItem, TKey> { }
@@ -146,14 +155,13 @@ export type ExplicitTypes<
     SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
 };
 
-interface MultiViewInstance<TComponent, TItem, TKey> extends dxMultiView<Properties<TComponent, TItem, TKey>, TItem, TKey> { }
+interface MultiViewInstance<TItem, TKey> extends dxMultiView<Properties<TItem, TKey>, TItem, TKey> { }
 
 /** @public */
 export type Properties<
-    TComponent = any,
     TItem extends ItemLike = any,
     TKey = any,
-> = dxMultiViewOptions<MultiViewInstance<TComponent, TItem, TKey>, TItem, TKey>;
+> = dxMultiViewBaseOptions<MultiViewInstance<TItem, TKey>, TItem, TKey>;
 
 /** @deprecated use Properties instead */
 export type Options<
