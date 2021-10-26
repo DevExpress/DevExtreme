@@ -71,6 +71,18 @@ export default class ViewDataProvider {
         }
     }
 
+    createGroupedDataMapProvider() {
+        this._groupedDataMapProvider = new GroupedDataMapProvider(
+            this.viewDataGenerator,
+            this.viewDataMap,
+            this.completeViewDataMap,
+            {
+                isVerticalGrouping: this._options.isVerticalGrouping,
+                viewType: this._options.viewType,
+            },
+        );
+    }
+
     updateViewData(options) {
         const renderOptions = this._transformRenderOptions(options);
         this.viewDataMapWithSelection = this.viewDataGenerator
@@ -453,6 +465,10 @@ export default class ViewDataProvider {
 
     getFirstDayOfWeek(firstDayOfWeekOption) {
         return this.viewDataGenerator.getFirstDayOfWeek(firstDayOfWeekOption);
+    }
+
+    setViewOptions(options) {
+        this._options = this._transformRenderOptions(options);
     }
 
     getViewOptions() {
