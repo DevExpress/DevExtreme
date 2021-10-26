@@ -6,6 +6,7 @@ import {
   InternalState,
   JSXComponent,
   JSXTemplate,
+  Ref,
   RefObject,
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../utils/combine_classes';
@@ -20,7 +21,7 @@ import { OrdinaryLayout } from './ordinary_layout';
 
 import ViewDataProvider from '../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import {
-  createCellElementMetaData, getTotalCellCount,
+  createCellElementMetaData, getDateTableWidth, getTotalCellCount,
 } from './utils';
 import { ViewRenderConfig, WorkSpaceProps } from '../props';
 import { getViewRenderConfigByType } from './work_space_config';
@@ -100,6 +101,7 @@ export const viewFunction = ({
   allDayPanelRef,
   timePanelRef,
   groupPanelRef,
+  layoutRef,
 
   isVerticalGrouping,
   isStandaloneAllDayPanel,
@@ -107,6 +109,7 @@ export const viewFunction = ({
 
   groupPanelHeight,
   headerEmptyCellWidth,
+  tablesWidth,
   classes,
 
   props: {
@@ -134,6 +137,8 @@ export const viewFunction = ({
   timePanelTemplate,
 }: WorkSpace): JSX.Element => (
   <Layout
+    ref={layoutRef}
+
     viewData={viewDataProvider.viewData}
     dateHeaderData={viewDataProvider.dateHeaderData}
     timePanelData={viewDataProvider.timePanelData}
@@ -164,6 +169,7 @@ export const viewFunction = ({
     scrollingDirection={scrollingDirection}
     groupPanelHeight={groupPanelHeight}
     headerEmptyCellWidth={headerEmptyCellWidth}
+    tablesWidth={tablesWidth}
 
     className={classes}
     dateTableRef={dateTableRef}
@@ -187,6 +193,9 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   @InternalState()
   headerEmptyCellWidth: number | undefined;
 
+  @InternalState()
+  tablesWidth: number | undefined;
+
   @ForwardRef()
   dateTableRef!: RefObject<HTMLTableElement>;
 
@@ -198,6 +207,11 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
   @ForwardRef()
   groupPanelRef!: RefObject<HTMLDivElement>;
+
+  // Bug in generators: https://github.com/DevExpress/devextreme-renovation/issues/792
+  // We should use RefObject<CrossScrollingLayout | OrdinaryLayout> here
+  @Ref()
+  layoutRef!: RefObject<CrossScrollingLayout>;
 
   get renderConfig(): ViewRenderConfig {
     return getViewRenderConfigByType(
@@ -392,6 +406,10 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return !isVerticalGroupingApplied(groups, this.groupOrientation) && this.isAllDayPanelVisible;
   }
 
+  get isCalculateTablesWidth(): boolean {
+    return this.props.crossScrollingEnabled && this.renderConfig.defaultGroupOrientation !== 'vertical';
+  }
+
   @Effect({ run: 'always' })
   groupPanelHeightEffect(): void {
     this.groupPanelHeight = this.dateTableRef.current?.getBoundingClientRect().height;
@@ -405,39 +423,88 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     this.headerEmptyCellWidth = timePanelWidth + groupPanelWidth;
   }
 
+  @Effect({ run: 'always' })
+  tablesWidthEffect(): void {
+    if (this.isCalculateTablesWidth) {
+      const {
+        intervalCount,
+        currentDate,
+        type: viewType,
+        hoursInterval,
+        startDayHour,
+        endDayHour,
+        groups,
+      } = this.props;
+
+      this.tablesWidth = getDateTableWidth(
+        this.layoutRef.current!.getScrollableWidth(),
+        this.dateTableRef.current!,
+        this.viewDataProvider,
+        {
+          intervalCount,
+          currentDate,
+          viewType,
+          hoursInterval,
+          startDayHour,
+          endDayHour,
+          groups,
+          groupOrientation: this.groupOrientation,
+        },
+      );
+    }
+  }
+
   @Effect()
   onViewRendered(): void {
     const {
-      onViewRendered,
       intervalCount,
       currentDate,
-      type,
+      type: viewType,
       hoursInterval,
       startDayHour,
       endDayHour,
       groups,
+      onViewRendered,
     } = this.props;
 
-    const cellCount = this.viewDataProvider.getCellCount({
-      intervalCount,
-      currentDate,
-      viewType: type,
-      hoursInterval,
-      startDayHour,
-      endDayHour,
-    });
-    const totalCellCount = getTotalCellCount(cellCount, this.groupOrientation, groups);
-
-    const dateTableCellsMeta = this.createDateTableElementsMeta(totalCellCount);
-    const allDayPanelCellsMeta = this.createAllDayPanelElementsMeta();
-
-    onViewRendered({
-      viewDataProvider: this.viewDataProvider,
-      cellsMetaData: {
-        dateTableCellsMeta,
-        allDayPanelCellsMeta,
+    const tableWidths = getDateTableWidth(
+      this.layoutRef.current!.getScrollableWidth(),
+      this.dateTableRef.current!,
+      this.viewDataProvider,
+      {
+        intervalCount,
+        currentDate,
+        viewType,
+        hoursInterval,
+        startDayHour,
+        endDayHour,
+        groups,
+        groupOrientation: this.groupOrientation,
       },
-    });
+    );
+
+    if (!this.isCalculateTablesWidth || tableWidths === this.tablesWidth) {
+      const cellCount = this.viewDataProvider.getCellCount({
+        intervalCount,
+        currentDate,
+        viewType,
+        hoursInterval,
+        startDayHour,
+        endDayHour,
+      });
+      const totalCellCount = getTotalCellCount(cellCount, this.groupOrientation, groups);
+
+      const dateTableCellsMeta = this.createDateTableElementsMeta(totalCellCount);
+      const allDayPanelCellsMeta = this.createAllDayPanelElementsMeta();
+
+      onViewRendered({
+        viewDataProvider: this.viewDataProvider,
+        cellsMetaData: {
+          dateTableCellsMeta,
+          allDayPanelCellsMeta,
+        },
+      });
+    }
   }
 
   createDateTableElementsMeta(totalCellCount: number): DOMRect[][] {

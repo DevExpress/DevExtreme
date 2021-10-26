@@ -182,3 +182,8 @@ export interface ViewMetaData {
   viewDataProvider: ViewDataProviderType;
   cellsMetaData: CellsMetaData;
 }
+
+export interface TableWidthWorkSpaceConfig extends CountGenerationConfig {
+  groups: Group[];
+  groupOrientation: GroupOrientation;
+}

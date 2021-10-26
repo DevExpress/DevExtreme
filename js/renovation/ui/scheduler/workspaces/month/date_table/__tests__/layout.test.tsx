@@ -42,6 +42,7 @@ describe('MonthDateTableLayout', () => {
           addDateTableClass: 'addDateTableClass',
           tableRef: 'tableRef',
           addVerticalSizesClassToRows: false,
+          width: 123,
         },
       });
 
@@ -53,6 +54,7 @@ describe('MonthDateTableLayout', () => {
           addDateTableClass: 'addDateTableClass',
           tableRef: 'tableRef',
           addVerticalSizesClassToRows: false,
+          width: 123,
         });
     });
   });
