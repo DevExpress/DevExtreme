@@ -22373,25 +22373,30 @@ declare module DevExpress.ui {
     export type ItemClickEvent<TKey = any> = DevExpress.events.NativeEventInfo<
       dxTreeView<TKey>
     > &
-      TreeViewItemInfo<TKey>;
+      ItemInfo<TKey>;
     export type ItemCollapsedEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> &
-        TreeViewItemInfo<TKey>;
+      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
     export type ItemContextMenuEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> &
-        TreeViewItemInfo<TKey>;
+      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
     export type ItemExpandedEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> &
-        TreeViewItemInfo<TKey>;
+      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
     export type ItemHoldEvent<TKey = any> = DevExpress.events.NativeEventInfo<
       dxTreeView<TKey>
     > &
-      TreeViewItemInfo<TKey>;
+      ItemInfo<TKey>;
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    interface ItemInfo<TKey = any> {
+      readonly itemData?: Item;
+      readonly itemElement?: DevExpress.core.DxElement;
+      readonly itemIndex?: number;
+      readonly node?: Node<TKey>;
+    }
     export type ItemRenderedEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> &
-        TreeViewItemInfo<TKey>;
+      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
     export type ItemSelectionChangedEvent<TKey = any> =
-      DevExpress.events.EventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
+      DevExpress.events.EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
     export type Node<TKey = any> = dxTreeViewNode<TKey>;
     export type OptionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
       dxTreeView<TKey>
@@ -22405,15 +22410,6 @@ declare module DevExpress.ui {
     export type SelectionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
       dxTreeView<TKey>
     >;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    interface TreeViewItemInfo<TKey = any> {
-      readonly itemData?: Item;
-      readonly itemElement?: DevExpress.core.DxElement;
-      readonly itemIndex?: number;
-      readonly node?: Node<TKey>;
-    }
   }
   /**
    * @deprecated Use Item instead

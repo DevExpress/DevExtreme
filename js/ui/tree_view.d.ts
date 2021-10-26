@@ -27,7 +27,7 @@ import {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
-interface TreeViewItemInfo<TKey = any> {
+interface ItemInfo<TKey = any> {
     readonly itemData?: Item;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
@@ -44,25 +44,25 @@ export type DisposingEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 export type InitializedEvent<TKey = any> = InitializedEventInfo<dxTreeView<TKey>>;
 
 /** @public */
-export type ItemClickEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
+export type ItemClickEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
 /** @public */
-export type ItemCollapsedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
+export type ItemCollapsedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
 /** @public */
-export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
+export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
 /** @public */
-export type ItemExpandedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
+export type ItemExpandedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
 /** @public */
-export type ItemHoldEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
+export type ItemHoldEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
 /** @public */
-export type ItemRenderedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
+export type ItemRenderedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
 /** @public */
-export type ItemSelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & TreeViewItemInfo<TKey>;
+export type ItemSelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
 /** @public */
 export type OptionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ChangedOptionInfo;
