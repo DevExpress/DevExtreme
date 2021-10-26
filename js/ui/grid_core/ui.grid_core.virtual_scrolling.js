@@ -359,8 +359,8 @@ const VirtualScrollingRowsViewExtender = (function() {
 
             this.callBase();
 
-            dataController.pageChanged.add(() => {
-                this.scrollToPage(dataController.pageIndex());
+            dataController.pageChanged.add((pageIndex) => {
+                this.scrollToPage(pageIndex ?? dataController.pageIndex());
             });
 
             dataController.dataSourceChanged.add(() => {
