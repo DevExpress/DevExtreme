@@ -57,7 +57,7 @@ const prepareInstances = (
     workspaceProps.groupOrientation,
   );
   const generationOptions = prepareGenerationOptions(
-    workspaceProps,
+    workspaceProps as any,
     viewRenderConfig,
     isAllDayPanelVisible,
   );
