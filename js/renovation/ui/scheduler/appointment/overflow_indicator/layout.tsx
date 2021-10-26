@@ -16,35 +16,24 @@ export const viewFunction = ({
   props: {
     overflowIndicatorTemplate: OverflowIndicatorTemplate,
   },
-}: OverflowIndicator): JSX.Element => {
-  if (OverflowIndicatorTemplate) {
-    return (
-      <Button
-        text={text}
-        style={styles}
-        className={classes}
-        type="default"
-        stylingMode="contained"
-        template={(): JSX.Element => (
-          <OverflowIndicatorTemplate
-            appointmentCount={appointmentCount}
-            isCompact={isCompact}
-          />
-        )}
-      />
-    );
-  }
-
-  return (
-    <Button
-      text={text}
-      style={styles}
-      className={classes}
-      type="default"
-      stylingMode="contained"
-    />
-  );
-};
+}: OverflowIndicator): JSX.Element => (
+  <Button
+    text={text}
+    style={styles}
+    className={classes}
+    type="default"
+    stylingMode="contained"
+  >
+    {
+      OverflowIndicatorTemplate && (
+        <OverflowIndicatorTemplate
+          appointmentCount={appointmentCount}
+          isCompact={isCompact}
+        />
+      )
+    }
+  </Button>
+);
 
 @ComponentBindings()
 export class OverflowIndicatorProps {

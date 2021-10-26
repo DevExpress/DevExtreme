@@ -73,12 +73,12 @@ describe('OverflowIndicator', () => {
       expect(button)
         .toBeInstanceOf(Button);
 
-      const buttonTemplate = (button.props as any).template();
+      const { children } = button.props as any;
 
-      expect(buttonTemplate.type)
+      expect(children.type)
         .toBe(template);
 
-      expect(buttonTemplate.props)
+      expect(children.props)
         .toEqual({
           isCompact: true,
           appointmentCount: 6,
