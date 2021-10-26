@@ -154,15 +154,17 @@ export const viewFunction = ({
           allDayPanelExpanded={allDayPanelExpanded}
           onViewRendered={onViewRendered}
 
-          appointments={(
-            <AppointmentLayout
-              appointments={appointmentsViewModel.regular}
-            />
-          )}
-
           allDayAppointments={(
             <AppointmentLayout
               appointments={appointmentsViewModel.allDay}
+              overflowIndicators={appointmentsViewModel.allDayCompact}
+            />
+          )}
+
+          appointments={(
+            <AppointmentLayout
+              appointments={appointmentsViewModel.regular}
+              overflowIndicators={appointmentsViewModel.regularCompact}
             />
           )}
 
@@ -292,8 +294,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   get appointmentsViewModel(): AppointmentsViewModelType {
     if (!this.appointmentsConfig || this.filteredItems.length === 0) {
       return {
-        regular: [],
         allDay: [],
+        allDayCompact: [],
+        regular: [],
+        regularCompact: [],
       };
     }
 

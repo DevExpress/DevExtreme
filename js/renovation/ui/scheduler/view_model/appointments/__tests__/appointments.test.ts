@@ -134,6 +134,8 @@ describe('Appointments view model', () => {
         instances.DOMMetaData,
       );
 
+      appointmentsModel.maxAppointmentsPerCell = 'unlimited';
+
       const expectedViewModel0 = {
         appointment: {
           startDate: new Date(2021, 8, 23, 10),
@@ -141,7 +143,7 @@ describe('Appointments view model', () => {
         },
         geometry: {
           height: -200,
-          width: 74,
+          width: 100,
           top: 200,
           left: 100,
           empty: true,
@@ -181,12 +183,20 @@ describe('Appointments view model', () => {
       const {
         regular,
         allDay,
+        regularCompact,
+        allDayCompact,
       } = viewModel;
 
       expect(regular)
         .toHaveLength(4);
 
+      expect(regularCompact)
+        .toHaveLength(0);
+
       expect(allDay)
+        .toHaveLength(0);
+
+      expect(allDayCompact)
         .toHaveLength(0);
 
       expect(regular[0])
@@ -200,7 +210,7 @@ describe('Appointments view model', () => {
           },
           geometry: {
             height: 600,
-            width: 74,
+            width: 47.5,
             top: 0,
             left: 200,
             empty: false,
@@ -235,7 +245,7 @@ describe('Appointments view model', () => {
           },
           geometry: {
             height: -300,
-            width: 74,
+            width: 100,
             top: 300,
             left: 100,
             empty: true,
@@ -270,9 +280,9 @@ describe('Appointments view model', () => {
           },
           geometry: {
             height: 700,
-            width: 74,
+            width: 47.5,
             top: 0,
-            left: 274,
+            left: 247.5,
             empty: false,
             leftVirtualWidth: 0,
             topVirtualHeight: 0,
@@ -370,6 +380,103 @@ describe('Appointments view model', () => {
               endDate: new Date(2021, 8, 24),
               exceptionDate: new Date(2021, 8, 23),
             },
+          },
+        });
+    });
+
+    it('should generate compact regular appoitments correctly', () => {
+      const instances = prepareInstances(
+        'week',
+        new Date(2021, 8, 22),
+        7,
+        false,
+        false,
+      );
+
+      const appointmentsModel = getAppointmentsModel(
+        instances.appointmentsConfig,
+        instances.viewDataProvider,
+        instances.timeZoneCalculator,
+        defaultDataAccessors,
+        instances.DOMMetaData,
+      );
+
+      appointmentsModel.maxAppointmentsPerCell = 0;
+
+      const viewModel = getAppointmentsViewModel(
+        appointmentsModel,
+        [{
+          startDate: new Date(2021, 8, 24, 11),
+          endDate: new Date(2021, 8, 24, 12),
+        }],
+      );
+
+      const {
+        regular,
+        allDay,
+        regularCompact,
+        allDayCompact,
+      } = viewModel;
+
+      expect(regular)
+        .toHaveLength(0);
+
+      expect(regularCompact)
+        .toHaveLength(2);
+
+      expect(allDay)
+        .toHaveLength(0);
+
+      expect(allDayCompact)
+        .toHaveLength(0);
+
+      expect(regularCompact[0])
+        .toMatchObject({
+          key: '0-22-5-false',
+          geometry: {
+            left: 171,
+            top: 300,
+          },
+          isAllDay: false,
+          items: {
+            colors: [],
+            data: [{
+              startDate: new Date(2021, 8, 24, 11),
+              endDate: new Date(2021, 8, 24, 12),
+            }],
+            settings: [{
+              appointment: {
+                startDate: new Date(2021, 8, 24, 11),
+                endDate: new Date(2021, 8, 24, 12),
+              },
+              geometry: {
+                height: -300,
+                width: 74,
+                left: 100,
+                top: 300,
+                empty: true,
+                leftVirtualWidth: 0,
+                topVirtualHeight: 0,
+              },
+              info: {
+                appointment: {
+                  startDate: new Date(2021, 8, 24, 11),
+                  endDate: new Date(2021, 8, 24, 12),
+                  source: {
+                    startDate: new Date(2021, 8, 24, 11),
+                    endDate: new Date(2021, 8, 24, 12),
+                    exceptionDate: new Date(2021, 8, 24, 11),
+                  },
+                  normalizedEndDate: new Date(2021, 8, 24, 12),
+                },
+                sourceAppointment: {
+                  startDate: new Date(2021, 8, 24, 11),
+                  endDate: new Date(2021, 8, 24, 12),
+                  exceptionDate: new Date(2021, 8, 24, 11),
+                },
+                dateText: '11:00 AM - 12:00 PM',
+              },
+            }],
           },
         });
     });

@@ -543,7 +543,8 @@ $scheduler-appointment-form-label-padding: 20px;
         opacity: 0.98;
       }
 
-      .dx-scheduler-appointment-collector-content {
+      .dx-scheduler-appointment-collector-content,
+      .dx-button-content {
         color: $scheduler-dd-appointment-hover-text-color;
         opacity: 0.99;
       }
@@ -551,7 +552,8 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-scheduler-appointment-collector-compact {
-    .dx-scheduler-appointment-collector-content {
+    .dx-scheduler-appointment-collector-content,
+    .dx-button-content {
       span:last-child {
         padding-left: 0;
       }
