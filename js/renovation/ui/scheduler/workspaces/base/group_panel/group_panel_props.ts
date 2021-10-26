@@ -7,7 +7,7 @@ import {
 import {
   GroupPanelData,
   ResourceCellTemplateProps,
-} from '../../types';
+} from '../../types.d';
 
 @ComponentBindings()
 export class GroupPanelBaseProps {

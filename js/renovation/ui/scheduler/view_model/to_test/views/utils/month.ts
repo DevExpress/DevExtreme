@@ -1,6 +1,6 @@
 import dateUtils from '../../../../../../../core/utils/date';
 import dateLocalization from '../../../../../../../localization/date';
-import { CalculateCellIndex } from '../types';
+import { CalculateCellIndex } from '../types.d';
 import {
   getCalculatedFirstDayOfWeek,
   isDateInRange,

@@ -10,7 +10,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import { combineClasses } from '../../../utils/combine_classes';
-import { EffectReturn } from '../../../utils/effect_return';
+import { EffectReturn } from '../../../utils/effect_return.d';
 import domAdapter from '../../../../core/dom_adapter';
 import {
   DIRECTION_HORIZONTAL, SCROLLABLE_SCROLLBAR_CLASS,
@@ -30,7 +30,7 @@ import {
 
 import { BaseWidgetProps } from '../../common/base_props';
 import { inRange } from '../../../../core/utils/math';
-import { DxMouseEvent } from '../common/types';
+import { DxMouseEvent } from '../common/types.d';
 import { clampIntoRange } from '../utils/clamp_into_range';
 import { ScrollbarProps } from '../common/scrollbar_props';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';

@@ -7,7 +7,7 @@ import {
 import {
   Margin,
   Size,
-} from './types';
+} from './types.d';
 
 @ComponentBindings()
 export class BaseWidgetProps {

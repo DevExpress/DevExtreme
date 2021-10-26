@@ -27,18 +27,18 @@ import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { PathSvgElement } from '../common/renderers/svg_path';
 import {
   OnTooltipHiddenFn, OnTooltipShownFn, BaseEventData,
-} from '../common/types';
+} from '../common/types.d';
 import { Tooltip as TooltipComponent, TooltipProps } from '../common/tooltip';
 import { getFormatValue, pointInCanvas } from '../common/utils';
 import eventsEngine from '../../../events/core/events_engine';
 import { addNamespace } from '../../../events/utils/index';
 import pointerEvents from '../../../events/pointer';
-import { EffectReturn } from '../../utils/effect_return';
+import { EffectReturn } from '../../utils/effect_return.d';
 import domAdapter from '../../../core/dom_adapter';
 
 import {
   ArgumentAxisRange, ValueAxisRange, BulletScaleProps,
-} from './types';
+} from './types.d';
 
 import Number from '../../../core/polyfills/number';
 

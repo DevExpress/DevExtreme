@@ -10,7 +10,7 @@ import {
   InternalState,
   Slot,
 } from '@devextreme-generator/declarations';
-import { EffectReturn } from '../../utils/effect_return';
+import { EffectReturn } from '../../utils/effect_return.d';
 
 import {
   start,

@@ -1,7 +1,7 @@
 import {
   RecalculateCoordinates, TooltipCoordinates, Size, CustomizedOptions, CustomizeTooltipFn,
   InitialBorder, TooltipData, Font,
-} from './types';
+} from './types.d';
 import { isFunction, isPlainObject, isDefined } from '../../../core/utils/type';
 import domAdapter from '../../../core/dom_adapter';
 import { getWindow } from '../../../core/utils/window';

@@ -1,6 +1,6 @@
 import type {
   Area, Handle, AreaObject, AreaProp, MovingSides,
-} from './common/types';
+} from './common/types.d';
 import { isWindow } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import {

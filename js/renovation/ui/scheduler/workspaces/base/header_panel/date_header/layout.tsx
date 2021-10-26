@@ -12,8 +12,8 @@ import {
   DateHeaderData,
   DateTimeCellTemplateProps,
   Group,
-} from '../../../types';
-import { GroupOrientation } from '../../../../types';
+} from '../../../types.d';
+import { GroupOrientation } from '../../../../types.d';
 import { isHorizontalGroupingApplied } from '../../../utils';
 import { DateHeaderCell } from './cell';
 

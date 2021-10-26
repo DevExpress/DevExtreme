@@ -1,7 +1,7 @@
 import React, { createRef } from 'react';
 import { mount } from 'enzyme';
 import { RefObject } from '@devextreme-generator/declarations';
-import { DisposeEffectReturn } from '../../../../utils/effect_return';
+import { DisposeEffectReturn } from '../../../../utils/effect_return.d';
 import { LightButton, viewFunction as LightButtonComponent } from '../light_button';
 import { subscribeToClickEvent } from '../../../../utils/subscribe_to_event';
 

@@ -1,4 +1,4 @@
-import { FormattedContent } from '../types';
+import { FormattedContent } from '../types.d';
 /* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../../../ui/scheduler';
 
