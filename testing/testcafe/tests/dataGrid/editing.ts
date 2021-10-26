@@ -1877,7 +1877,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
   return createWidget('dxDataGrid', {
     dataSource: {
       key: 'ID',
-      load(loadOptions) {
+      load(loadOptions): Promise<any> {
         return new Promise((resolve) => {
           setTimeout(() => {
             (window as any).myStore.load(loadOptions).done((data) => {
@@ -1886,7 +1886,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
           }, 100);
         });
       },
-      update(key, values) {
+      update(key, values): Promise<any> {
         return new Promise((resolve) => {
           setTimeout(() => {
             (window as any).myStore.update(key, values).done(() => {
@@ -1895,7 +1895,7 @@ test('Cells should be focused correctly on click when cell editing mode is used 
           }, 100);
         });
       },
-      totalCount(loadOptions) {
+      totalCount(loadOptions): Promise<any> {
         return (window as any).myStore.totalCount(loadOptions);
       },
     },
