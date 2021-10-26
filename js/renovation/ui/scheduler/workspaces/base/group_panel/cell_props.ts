@@ -1,7 +1,7 @@
 import {
   ComponentBindings, JSXTemplate, OneWay, Template,
 } from '@devextreme-generator/declarations';
-import { GroupItem, ResourceCellTemplateProps } from '../../types';
+import { GroupItem, ResourceCellTemplateProps } from '../../types.d';
 
 @ComponentBindings()
 export class GroupPanelCellProps {

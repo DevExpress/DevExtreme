@@ -9,7 +9,7 @@ import { getPublicElement } from '../../../core/element';
 import { removeDifferentElements } from '../utils/utils';
 import Number from '../../../core/polyfills/number';
 import { FunctionTemplate } from '../../../core/templates/function_template';
-import { EffectReturn } from '../../utils/effect_return';
+import { EffectReturn } from '../../utils/effect_return.d';
 import { isDefined } from '../../../core/utils/type';
 
 export interface TemplateModel {

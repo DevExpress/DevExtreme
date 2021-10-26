@@ -1,6 +1,6 @@
 import eventsEngine from '../../events/core/events_engine';
 import * as clickEvent from '../../events/click';
-import { EffectReturn } from './effect_return';
+import { EffectReturn } from './effect_return.d';
 import scrollEvents from '../../events/gesture/emitter.gesture.scroll';
 import pointerEvents from '../../events/pointer';
 

@@ -11,7 +11,7 @@ import {
   RefObject,
   Consumer,
 } from '@devextreme-generator/declarations';
-import { LabelAlignment } from './types';
+import { LabelAlignment } from './types.d';
 import SvgGraphicsProps from './base_graphics_props';
 import {
   TextItem,

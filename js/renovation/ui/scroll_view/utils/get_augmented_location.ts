@@ -4,7 +4,7 @@ import {
 
 import {
   ScrollOffset,
-} from '../common/types';
+} from '../common/types.d';
 
 export function getAugmentedLocation(
   location: number | Partial<ScrollOffset>,

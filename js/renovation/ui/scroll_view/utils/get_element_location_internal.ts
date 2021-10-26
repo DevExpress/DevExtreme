@@ -2,7 +2,7 @@ import { titleize } from '../../../../core/utils/inflector';
 import {
   ElementOffset,
   ScrollableDirection, ScrollOffset,
-} from '../common/types';
+} from '../common/types.d';
 
 import { getRelativeOffset } from './get_relative_offset';
 

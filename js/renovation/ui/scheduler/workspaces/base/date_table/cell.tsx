@@ -8,7 +8,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { CellBase as Cell, CellBaseProps } from '../cell';
 import { combineClasses } from '../../../../../utils/combine_classes';
-import { ContentTemplateProps, DataCellTemplateProps } from '../../types';
+import { ContentTemplateProps, DataCellTemplateProps } from '../../types.d';
 
 const ADD_APPOINTMENT_LABEL = 'Add appointment';
 

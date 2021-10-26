@@ -11,7 +11,7 @@ import {
 
 import { SelectBox } from '../../editors/drop_down_editors/select_box';
 import { calculateValuesFittedWidth } from '../utils/calculate_values_fitted_width';
-import { FullPageSize } from '../common/types';
+import { FullPageSize } from '../common/types.d';
 import { getElementMinWidth } from '../utils/get_element_width';
 import { InternalPagerProps } from '../common/pager_props';
 
