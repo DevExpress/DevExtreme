@@ -58,6 +58,11 @@
   &.dx-editor-underlined {
     height: $material-standard-lookup-height;
 
+    &.dx-texteditor-with-floating-label,
+    &.dx-texteditor-with-label {
+      height: $material-standard-lookup-with-label-height;
+    }
+
     .dx-lookup-field {
       padding: $material-standard-texteditor-input-padding;
       padding-right: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
