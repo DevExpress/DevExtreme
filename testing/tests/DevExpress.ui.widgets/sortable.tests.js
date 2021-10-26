@@ -3078,8 +3078,8 @@ QUnit.module('Dragging between sortables with scroll', {
         };
 
         this.createSortable = (options) => {
-            this.$elements.forEach(($element) => {
-                this.createOneSortable(options, $element);
+            return this.$elements.map(($element) => {
+                return this.createOneSortable(options, $element);
             });
         };
     },
@@ -3140,6 +3140,45 @@ QUnit.module('Dragging between sortables with scroll', {
         assert.equal(this.$elements[1].children().length, 11, 'children count');
         assert.equal(onRemove.callCount, 1, 'onRemove call count');
         assert.equal(onAdd.callCount, 1, 'onAdd call count');
+    });
+
+    QUnit.test('Dragging between two sortables with scroll should update itemPoints (T1035958)', function(assert) {
+        // arrange
+        const done = assert.async();
+        let scrollTimes = 0;
+
+        const sortable = this.createSortable({
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+        });
+
+        $('.draggable').width(280);
+        this.$elements[0].width(280);
+        this.$elements[1].width(280);
+        this.$elements[1].height(280);
+
+        $('#bothScrolls2').css('top', 0);
+        $('#bothScrolls2').css('left', 300);
+
+        this.$scrolls[1].on('scroll', () => {
+            // assert
+            const itemPoints = sortable[1].option('itemPoints');
+
+            if(scrollTimes === 0) {
+                // first scroll event, itemPoints must be the same
+                assert.equal(itemPoints[1].top, 50);
+            } else if(scrollTimes === 1) {
+                // second scroll event, itemPoints must be the same
+                assert.equal(itemPoints[1].top, 49);
+                done();
+            }
+
+            scrollTimes++;
+        });
+
+        // act
+        pointerMock(this.$elements[0].children().eq(0)).start().down().move(300, 200).move(0, 50);
     });
 
     // T872379
@@ -3784,7 +3823,6 @@ QUnit.module('autoscroll', getModuleConfigForTestsWithScroll('#itemsWithScroll',
             done();
         });
     });
-
 });
 
 // T971119
