@@ -1,5 +1,4 @@
 import { Selector } from 'testcafe';
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import DropDownButton from '../../model/dropDownButton';
 
@@ -33,11 +32,21 @@ fixture`Drop Down Button's Popup`
   .page(url(__dirname, './pages/T1034931.html'));
 
 test('Popup should have correct postion when DropDownButton is placed in the right bottom(T1034931)', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dropDownButton = new DropDownButton('#dropDownButton');
+  const dropDownButtonRect = {
+    top: await dropDownButton.element.getBoundingClientRectProperty('top'),
+    left: await dropDownButton.element.getBoundingClientRectProperty('left'),
+  };
+
+  const popupContent = Selector('.dx-overlay-content');
+  const popupContentRect = {
+    bottom: await popupContent.getBoundingClientRectProperty('bottom'),
+    left: await popupContent.getBoundingClientRectProperty('left'),
+  };
 
   await t
-    .expect(await takeScreenshot('dropDownButton-popup-position.png', '#dropDownButton'))
-    .ok()
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+    .expect(Math.abs(dropDownButtonRect.left - popupContentRect.left))
+    .lt(1)
+    .expect(Math.abs(dropDownButtonRect.left - popupContentRect.left))
+    .lt(1);
 });
