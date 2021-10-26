@@ -11,7 +11,7 @@ on:
 
 jobs:
   Tests:
-    runs-on: ubuntu-latest
+    runs-on: INVALID_RUNNER_NAME
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -36,7 +36,7 @@ jobs:
       run: npm run test-styles
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: INVALID_RUNNER_NAME
     name: Send notifications
     needs: [Tests]
     if: always() && contains(needs.*.result, 'failure')

@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: INVALID_RUNNER_NAME
     name: Build
     timeout-minutes: 15
 
@@ -54,7 +54,7 @@ jobs:
 
   qunit-tests:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: INVALID_RUNNER_NAME
     name: ${{ matrix.envs.name }}
     timeout-minutes: 30
     strategy:
@@ -191,7 +191,7 @@ jobs:
       run: echo "::set-output name=last_run_status::success" > last_run_status
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: INVALID_RUNNER_NAME
     name: Send notifications
     needs: [build, qunit-tests]
     if: always() && contains(needs.*.result, 'failure')

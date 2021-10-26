@@ -23,7 +23,7 @@ jobs:
           { componentFolder: "navigation", name: "navigation", quarantineMode: false },
           { componentFolder: "renovation", name: "renovation", quarantineMode: false }
         ]
-    runs-on: ubuntu-latest
+    runs-on: INVALID_RUNNER_NAME
     timeout-minutes: 90
 
     steps:
@@ -84,7 +84,7 @@ jobs:
         if-no-files-found: ignore
 
   notify:
-    runs-on: ubuntu-latest
+    runs-on: INVALID_RUNNER_NAME
     name: Send notifications
     needs: [testcafe]
     if: always() && contains(needs.*.result, 'failure')
