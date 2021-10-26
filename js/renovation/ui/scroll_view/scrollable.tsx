@@ -11,7 +11,7 @@ import {
   ElementOffset,
   ScrollableDirection,
   ScrollOffset,
-} from './common/types.d';
+} from './common/types';
 
 import { ScrollableNative } from './strategy/native';
 import { ScrollableSimulated } from './strategy/simulated';

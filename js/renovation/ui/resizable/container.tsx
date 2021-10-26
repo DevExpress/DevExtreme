@@ -13,11 +13,11 @@ import {
 } from '@devextreme-generator/declarations';
 import type {
   Handle, Corner, DragStartEvent, DragEvent,
-} from './common/types.d';
+} from './common/types';
 import { ResizableHandle } from './handle';
 import { combineClasses } from '../../utils/combine_classes';
 import { triggerResizeEvent } from '../../../events/visibility_change';
-import { EffectReturn } from '../../utils/effect_return.d';
+import { EffectReturn } from '../../utils/effect_return';
 
 const getCssClasses = (
   disabled: boolean,

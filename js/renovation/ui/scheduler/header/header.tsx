@@ -26,7 +26,7 @@ import type { DateNavigatorTextInfo } from '../../../../ui/scheduler';
 import {
   ItemOptions, Direction, ItemView,
 } from './types';
-import { ViewType } from '../types.d';
+import { ViewType } from '../types';
 
 import { SchedulerProps, ViewProps } from '../props';
 import { SchedulerToolbarItem } from './props';
