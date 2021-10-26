@@ -6,12 +6,19 @@ import Group from './Group.js';
 import { ungroupedData, pregroupedData } from './data.js';
 
 const fromUngroupedData = new DataSource({
-  store: ungroupedData,
-  key: 'ID',
+  store: {
+    type: 'array',
+    data: ungroupedData,
+    key: 'ID',
+  },
   group: 'Category',
 });
 const fromPregroupedData = new DataSource({
-  store: pregroupedData,
+  store: {
+    type: 'array',
+    data: pregroupedData,
+    key: 'ID',
+  },
   map(item) {
     item.key = item.Category;
     item.items = item.Products;

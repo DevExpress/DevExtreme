@@ -1,14 +1,20 @@
 const DemoApp = angular.module('DemoApp', ['dx']);
 
 const fromUngroupedData = new DevExpress.data.DataSource({
-  store: ungroupedData,
-  key: 'id',
+  store: {
+    type: 'array',
+    data: ungroupedData,
+    key: 'ID',
+  },
   group: 'Category',
 });
 
 const fromPregroupedData = new DevExpress.data.DataSource({
-  store: pregroupedData,
-  key: 'id',
+  store: {
+    type: 'array',
+    data: pregroupedData,
+    key: 'ID',
+  },
   map(item) {
     item.key = item.Category;
     item.items = item.Products;

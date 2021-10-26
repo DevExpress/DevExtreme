@@ -29,7 +29,7 @@ export class AppComponent {
     this.fromUngroupedData = new DataSource({
       store: new ArrayStore({
         data: service.getUngroupedData(),
-        key: 'id',
+        key: 'ID',
       }),
       group: 'Category',
     });
@@ -37,7 +37,7 @@ export class AppComponent {
     this.fromPregroupedData = new DataSource({
       store: new ArrayStore({
         data: service.getPregroupedData(),
-        key: 'id',
+        key: 'ID',
       }),
       map(item) {
         item.key = item.Category;
