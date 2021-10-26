@@ -253,6 +253,31 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(createdDependency.successorId, dependencyData.successorId, 'new successorId is right');
         assert.equal(createdDependency.type, dependencyData.type, 'new type is right');
     });
+    test('insertDependency with validation (T1034713)', function(assert) {
+        this.createInstance(options.allSourcesOptions);
+        const dependencies = [];
+        this.instance.option('dependencies', { dataSource: dependencies });
+        this.instance.option('editing.enabled', true);
+        this.instance.option('validation.validateDependencies', true);
+        this.instance.option('validation.autoUpdateParentTasks', true);
+        this.clock.tick();
+
+        const count = dependencies.length;
+        let dependencyData = { 'predecessorId': 2, 'successorId': 4, 'type': 0 };
+        this.instance.insertDependency(dependencyData);
+        this.clock.tick();
+
+        assert.equal(dependencies.length, count, 'new dependency was not created');
+        dependencyData = { 'predecessorId': 6, 'successorId': 7, 'type': 0 };
+        this.instance.insertDependency(dependencyData);
+        this.clock.tick();
+
+        assert.equal(dependencies.length, count + 1, 'new dependency was created');
+        const createdDependency = dependencies[dependencies.length - 1];
+        assert.equal(createdDependency.predecessorId, dependencyData.predecessorId, 'new predecessorId is right');
+        assert.equal(createdDependency.successorId, dependencyData.successorId, 'new successorId is right');
+        assert.equal(createdDependency.type, dependencyData.type, 'new type is right');
+    });
     test('deleteDependency', function(assert) {
         this.createInstance(options.allSourcesOptions);
         this.instance.option('editing.enabled', true);

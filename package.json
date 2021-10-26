@@ -31,7 +31,7 @@
     "@babel/runtime": "^7.12.1",
     "@devextreme/runtime": "2.3.8",
     "devexpress-diagram": "2.1.37",
-    "devexpress-gantt": "3.1.25",
+    "devexpress-gantt": "3.1.26",
     "devextreme-quill": "~1.5.5",
     "inferno": "^7.4.9",
     "inferno-compat": "^7.4.9",
