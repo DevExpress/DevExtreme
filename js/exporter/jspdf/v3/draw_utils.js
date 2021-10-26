@@ -8,10 +8,15 @@ function round(value) {
     return Math.round(value * 1000) / 1000; // checked with browser zoom - 500%
 }
 
-function drawCellsContent(doc, cellsArray, docStyles) {
+function drawCellsContent(doc, customDrawCell, cellsArray, docStyles) {
     cellsArray.forEach(cell => {
-        drawCellBackground(doc, cell);
-        drawCellText(doc, cell, docStyles);
+        const { _rect, pdfRowInfo, gridCell, ...pdfCell } = cell;
+        const eventArg = { doc, rect: _rect, pdfCell, gridCell, cancel: false };
+        customDrawCell?.(eventArg);
+        if(!eventArg.cancel) {
+            drawCellBackground(doc, cell);
+            drawCellText(doc, cell, docStyles);
+        }
     });
 }
 
