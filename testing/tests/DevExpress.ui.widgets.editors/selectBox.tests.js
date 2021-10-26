@@ -3967,14 +3967,14 @@ QUnit.module('Async tests', {}, () => {
 
     QUnit.test('no items should be selected if selected item is not on the first page (T1025148)', function(assert) {
         const clock = sinon.useFakeTimers();
-        const data = new Array(26).fill(0).map((_, idx) => ({ id: idx + 1, name: String.fromCharCode(65 + idx) }));
+        const data = [...new Array(26)].map((_, idx) => ({ id: idx + 1, name: String.fromCharCode(65 + idx) }));
         const selectBox = $('#selectBox').dxSelectBox({
             dataSource: {
                 pageSize: 10,
                 paginate: true,
                 store: new CustomStore({
                     key: 'id',
-                    byKey: key => data.find(el => el.id === key),
+                    byKey: key => data.filter(el => el.id === key)[0],
                     load: () => {
                         const d = $.Deferred();
                         setTimeout(() => {
