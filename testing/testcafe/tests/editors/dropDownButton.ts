@@ -1,4 +1,5 @@
 import { Selector } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import DropDownButton from '../../model/dropDownButton';
 
@@ -26,4 +27,17 @@ test('Item collection should be updated after direct option changing (T817436)',
     .click(dropDownButton2.element)
     .expect(list2.getItem().isDisabled)
     .ok();
+});
+
+fixture`Drop Down Button's Popup`
+  .page(url(__dirname, './pages/T1034931.html'));
+
+test('Popup should have correct postion when DropDownButton is placed in the right bottom(T1034931)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .expect(await takeScreenshot('dropDownButton-popup-position.png', '#dropDownButton'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 });
