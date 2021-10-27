@@ -17,7 +17,7 @@ describe('getBoundingRect(element)', () => {
   });
 
   it('element is undefined', () => {
-    const element = null;
+    const element = undefined;
 
     expect(getBoundingRect(element)).toEqual(defaultBoundingRectValue);
   });

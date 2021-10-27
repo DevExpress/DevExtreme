@@ -1252,6 +1252,7 @@ QUnit.module('api', moduleConfig, () => {
     });
 
     QUnit.test('release calls update', function(assert) {
+        const done = assert.async();
         assert.expect(1);
 
         const $scrollView = $('#scrollView').dxScrollView({
@@ -1260,7 +1261,7 @@ QUnit.module('api', moduleConfig, () => {
             pullDownEnabled: true,
             onPullDown: function() {
                 $('.content2').height(400);
-                setTimeout($.proxy(this.release, this));
+                setTimeout(() => { this.release(); });
             },
             onEnd: function() {
                 mouse
@@ -1273,6 +1274,7 @@ QUnit.module('api', moduleConfig, () => {
             onReachBottom: function() {
                 const location = getScrollOffset($scrollView);
                 assert.roughEqual(location.top, $container.height() - $content.height(), 1);
+                done();
             }
         });
 

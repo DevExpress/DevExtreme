@@ -34,6 +34,7 @@ import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './simulat
 import { ScrollableTestHelper as ScrollableNativeTestHelper } from './native_test_helper';
 
 import { getTranslateValues } from '../../utils/get_translate_values';
+import { subscribeToResize } from '../../utils/subscribe_to_resize';
 import {
   getElementOverflowX,
   getElementOverflowY,
@@ -49,6 +50,11 @@ jest.mock('../../utils/get_element_style', () => ({
 jest.mock('../../utils/get_translate_values', () => ({
   ...jest.requireActual('../../utils/get_translate_values'),
   getTranslateValues: jest.fn(() => ({ top: 0, left: 0 })),
+}));
+
+jest.mock('../../utils/subscribe_to_resize', () => ({
+  ...jest.requireActual('../../utils/subscribe_to_resize'),
+  subscribeToResize: jest.fn(),
 }));
 
 jest.mock('../../../../../core/utils/scroll_rtl_behavior');
@@ -174,7 +180,45 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
       describe('Effects', () => {
         beforeEach(clearEventHandlers);
 
-        each(optionValues.direction).describe('ScrollEffect params. Direction: %o', (direction) => {
+        it('should subscribe containerElement to resize event', () => {
+          const subscribeToResizeHandler = jest.fn();
+          (subscribeToResize as jest.Mock).mockImplementation(subscribeToResizeHandler);
+
+          const viewModel = new Scrollable({ });
+          viewModel.containerRef = { current: { clientHeight: 10 } as HTMLElement } as RefObject;
+          viewModel.setContainerDimensions = jest.fn();
+
+          viewModel.subscribeContainerToResize();
+
+          expect(subscribeToResizeHandler).toBeCalledTimes(1);
+          expect(subscribeToResizeHandler.mock.calls[0][0]).toEqual({ clientHeight: 10 });
+
+          subscribeToResizeHandler.mock.calls[0][1](viewModel.containerRef);
+
+          expect(viewModel.setContainerDimensions).toBeCalledTimes(1);
+          expect(viewModel.setContainerDimensions).toBeCalledWith(viewModel.containerRef);
+        });
+
+        it('should subscribe contentElement to resize event', () => {
+          const subscribeToResizeHandler = jest.fn();
+          (subscribeToResize as jest.Mock).mockImplementation(subscribeToResizeHandler);
+
+          const viewModel = new Scrollable({ });
+          viewModel.contentRef = { current: { clientHeight: 10 } as HTMLElement } as RefObject;
+          viewModel.setContentDimensions = jest.fn();
+
+          viewModel.subscribeContentToResize();
+
+          expect(subscribeToResizeHandler).toBeCalledTimes(1);
+          expect(subscribeToResizeHandler.mock.calls[0][0]).toEqual({ clientHeight: 10 });
+
+          subscribeToResizeHandler.mock.calls[0][1](viewModel.contentRef);
+
+          expect(viewModel.setContentDimensions).toBeCalledTimes(1);
+          expect(viewModel.setContentDimensions).toBeCalledWith(viewModel.contentRef);
+        });
+
+        each(optionValues.direction).describe('Direction: %o', (direction) => {
           it('handleScroll(), should not raise any errors when onScroll is not defined', () => {
             const viewModel = new Scrollable({
               direction,

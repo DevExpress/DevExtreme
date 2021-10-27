@@ -7,8 +7,6 @@ import {
 export class ScrollbarProps {
   @OneWay() direction: 'vertical' | 'horizontal' = 'vertical';
 
-  @OneWay() containerHasSizes = false;
-
   @OneWay() containerSize = 0;
 
   @OneWay() contentSize = 0;

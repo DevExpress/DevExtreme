@@ -276,14 +276,20 @@ QUnit.test('bounce bottom', function(assert) {
 });
 
 QUnit.test('bounce up', function(assert) {
+    const done = assert.async();
     assert.expect(1);
 
     let scroll = 0;
+
+    animationFrame.requestAnimationFrame = function(callback) {
+        setTimeout(callback, 0);
+    };
 
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
             assert.ok(scroll > 1, 'Scroll action fired on bounced');
+            done();
         },
         onScroll: function() {
             scroll++;
@@ -296,6 +302,8 @@ QUnit.test('bounce up', function(assert) {
         .down()
         .move(0, 100)
         .up();
+
+    this.clock.tick();
 });
 
 QUnit.test('stop bounce on click', function(assert) {
@@ -452,6 +460,7 @@ QUnit.test('bounce is disabled', function(assert) {
 });
 
 QUnit.test('inertia stopped on the bound when bounce is disabled', function(assert) {
+    const done = assert.async();
     assert.expect(1);
 
     const moveDistance = 10;
@@ -468,6 +477,7 @@ QUnit.test('inertia stopped on the bound when bounce is disabled', function(asse
         onEnd: function() {
             const location = getScrollOffset($scrollable);
             assert.equal(location.top, 0, 'content stopped on the bound');
+            done();
         }
     });
 
@@ -481,6 +491,8 @@ QUnit.test('inertia stopped on the bound when bounce is disabled', function(asse
         .wait(10)
         .move(0, moveDistance)
         .up();
+
+    this.clock.tick();
 });
 
 QUnit.test('inertia is stopped when bound is reached', function(assert) {
