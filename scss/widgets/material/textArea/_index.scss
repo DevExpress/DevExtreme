@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -11,7 +12,7 @@ $textarea-vertical-padding:
   $material-base-inline-block-height;
 
 $textarea-top-padding:
-  floor($textarea-vertical-padding / 2) -
+  floor(math.div($textarea-vertical-padding, 2)) -
   $material-base-border-width;
 
 .dx-textarea {

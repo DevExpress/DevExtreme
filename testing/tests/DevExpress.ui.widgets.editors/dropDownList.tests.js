@@ -30,6 +30,8 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
 
+const TIME_TO_WAIT = 500;
+
 const getPopup = (instance) => {
     return instance._popup;
 };
@@ -70,7 +72,7 @@ QUnit.module('focus policy', {
         }
 
         this.instance.option('opened', true);
-        this.clock.tick(500);
+        this.clock.tick(TIME_TO_WAIT);
         this.keyboard.keyDown('down');
         const $firstItem = this.instance._$list.find(LIST_ITEM_SELECTOR).eq(0);
         assert.equal(isRenderer(this.instance._list.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
@@ -655,21 +657,73 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         assert.equal(loadHandler.callCount, 2, 'dataSource loaded when full time is over after last input character');
     });
 
-    QUnit.test('dropDownList should search for a pasted value', function(assert) {
-        const $element = $('#dropDownList').dxDropDownList({
-            searchEnabled: true,
-            dataSource: ['1', '2', '3']
+    QUnit.module('search', {
+        beforeEach: function() {
+            this.$element = $('#dropDownList').dxDropDownList({
+                searchEnabled: true,
+                dataSource: ['1', 'ㅏ'],
+                deferRendering: false
+            });
+            this.instance = this.$element.dxDropDownList('instance');
+            this.$input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+            this.keyboard = keyboardMock(this.$input);
+            this.getListItemsCount = () => {
+                const $content = $(this.instance.content());
+                const $listItems = $content.find(LIST_ITEM_SELECTOR);
+
+                return $listItems.length;
+            };
+        }
+    }, () => {
+        QUnit.test('dropDownList should search for a pasted value', function(assert) {
+            this.$input.val('1');
+            this.keyboard.input();
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 1, 'was search');
         });
 
-        const instance = $element.dxDropDownList('instance');
-        const searchSpy = sinon.spy(instance, '_searchDataSource');
-        const $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS);
-        const kb = keyboardMock($input);
+        QUnit.test('should not search if composition is in progress (T1003899)', function(assert) {
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+            this.keyboard.type('ㅡ');
+            this.clock.tick(TIME_TO_WAIT);
 
-        kb.input('2');
-        this.clock.tick(600);
+            assert.strictEqual(this.getListItemsCount(), 2, 'was no search');
+        });
 
-        assert.equal(searchSpy.callCount, 1, 'widget searched for a suitable values');
+        QUnit.test('should not cancel search on input if composition is in progress', function(assert) {
+            this.keyboard.type('2');
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 0, 'search is still in progress');
+        });
+
+        QUnit.test('should not get composite characters as search value when compositionend is raised because of next composition start', function(assert) {
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅏ');
+            this.$input.trigger($.Event('compositionend'));
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 1, 'last input composite character is not in search value');
+        });
+
+        QUnit.test('should search if composition is finished', function(assert) {
+            this.$input.trigger($.Event('compositionstart'));
+            this.keyboard.type('ㅇ');
+            this.clock.tick(TIME_TO_WAIT);
+            this.keyboard.type('ㅡ');
+            this.clock.tick(TIME_TO_WAIT);
+            this.$input.trigger($.Event('compositionend'));
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(this.getListItemsCount(), 0, 'was search');
+        });
     });
 
     QUnit.test('dropDownList should search in grouped DataSource', function(assert) {
@@ -688,7 +742,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         const expectedValue = { key: 'b', items: [{ name: '2', key: 'b' }] };
 
         kb.type('2');
-        this.clock.tick(500);
+        this.clock.tick(TIME_TO_WAIT);
 
         assert.deepEqual(instance.option('items')[0], expectedValue, 'widget searched for a suitable values');
     });
@@ -787,6 +841,84 @@ QUnit.module('items & dataSource', moduleConfig, () => {
         $listItem.trigger('dxclick');
 
         assert.equal(spy.callCount, 0, 'byKey is not called when items are loaded');
+    });
+
+    QUnit.module('byKey call result should be ignored', {
+        beforeEach: function() {
+            this.callCount = 0;
+            this.items = [{ id: 1, text: 'first' }, { id: 2, text: 'second' }];
+            this.customStore = new CustomStore({
+                load: () => {
+                    const deferred = $.Deferred();
+                    setTimeout(() => {
+                        deferred.resolve({ data: this.items, totalCount: this.items.length });
+                    }, 100);
+                    return deferred.promise();
+                },
+
+                byKey: (key) => {
+                    const deferred = $.Deferred();
+                    const filter = () => this.items.filter(item => item.id === key)[0];
+                    if(this.callCount === 0) {
+                        setTimeout(() => {
+                            deferred.resolve(filter());
+                        }, 2000);
+                    } else {
+                        setTimeout(() => {
+                            deferred.resolve(filter());
+                        }, 1000);
+                    }
+                    ++this.callCount;
+                    return deferred.promise();
+                }
+            });
+
+            this.dataSource = new DataSource({
+                store: this.customStore
+            });
+
+            this.dropDownList = $('#dropDownList').dxDropDownList({
+                dataSource: this.dataSource,
+                displayExpr: 'text',
+                valueExpr: 'id',
+                value: 1
+            }).dxDropDownList('instance');
+        }
+    }, () => {
+        QUnit.test('after new call', function(assert) {
+            this.dropDownList.option('value', 2);
+
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownList.option('selectedItem').id, 2, 'second request is resolved');
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownList.option('selectedItem').id, 2, 'first init byKey result is ignored');
+        });
+
+        QUnit.test('after value change to already loaded value', function(assert) {
+            this.dropDownList.open();
+            this.clock.tick(100);
+
+            this.dropDownList.option('value', 2);
+
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownList.option('selectedItem').id, 2, 'second request is resolved');
+            this.clock.tick(1000);
+            assert.strictEqual(this.dropDownList.option('selectedItem').id, 2, 'first init byKey result is ignored');
+        });
+
+        QUnit.test('after change value to undefined (T1008488)', function(assert) {
+            this.dropDownList.option('value', undefined);
+            this.clock.tick(2000);
+
+            assert.strictEqual(this.dropDownList.option('selectedItem'), null, 'init byKey result is ignored');
+        });
+
+        QUnit.test('after value reset', function(assert) {
+            this.dropDownList.reset();
+            this.clock.tick(2000);
+
+            assert.strictEqual(this.dropDownList.option('selectedItem'), null, 'byKey result is ignored');
+        });
     });
 });
 
@@ -977,7 +1109,7 @@ QUnit.module('selectedItem', moduleConfig, () => {
         }).dxDropDownList('instance');
 
         dropDownList.option('opened', true);
-        this.clock.tick(1000);
+        this.clock.tick(TIME_TO_WAIT);
 
         assert.equal(dropDownList._list.option('selectedItem'), 1, 'selectedItem is correct');
     });

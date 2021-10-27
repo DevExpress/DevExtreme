@@ -543,6 +543,14 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
      */
     items?: Array<dxTreeViewItem>;
     /**
+     * @docid dxTreeViewItem.id
+     * @type number|string
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    id?: number | string;
+    /**
      * @docid dxTreeViewItem.parentId
      * @type number|string
      * @default undefined

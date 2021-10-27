@@ -284,16 +284,19 @@ const DiagramCommandsManager = {
                     command: DiagramCommand.ConnectorLineOption,
                     widget: 'dxSelectBox',
                     hint: messageLocalization.format('dxDiagram-commandConnectorLineType'),
+                    text: messageLocalization.format('dxDiagram-commandConnectorLineType'),
                     items: [
                         {
                             value: 0,
                             menuIcon: 'dx-diagram-i-connector-straight dx-diagram-i',
-                            hint: messageLocalization.format('dxDiagram-commandConnectorLineStraight')
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineStraight'),
+                            text: messageLocalization.format('dxDiagram-commandConnectorLineStraight')
                         },
                         {
                             value: 1,
                             menuIcon: 'dx-diagram-i-connector-orthogonal dx-diagram-i',
-                            hint: messageLocalization.format('dxDiagram-commandConnectorLineOrthogonal')
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineOrthogonal'),
+                            text: messageLocalization.format('dxDiagram-commandConnectorLineOrthogonal')
                         }
                     ],
                     cssClass: CSS_CLASSES.IMAGE_DROPDOWN_ITEM
@@ -305,25 +308,30 @@ const DiagramCommandsManager = {
                         {
                             value: 0,
                             menuIcon: 'dx-diagram-i-connector-begin-none dx-diagram-i',
-                            hint: messageLocalization.format('dxDiagram-commandConnectorLineNone')
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineNone'),
+                            text: messageLocalization.format('dxDiagram-commandConnectorLineNone')
                         },
                         {
                             value: 1,
                             menuIcon: 'dx-diagram-i-connector-begin-arrow dx-diagram-i',
-                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow'),
+                            text: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
                         },
                         {
                             value: 2,
                             menuIcon: 'dx-diagram-i-connector-begin-outlined-triangle dx-diagram-i',
-                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow'),
+                            text: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
                         },
                         {
                             value: 3,
                             menuIcon: 'dx-diagram-i-connector-begin-filled-triangle dx-diagram-i',
-                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow'),
+                            text: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
                         }
                     ],
                     hint: messageLocalization.format('dxDiagram-commandConnectorLineStart'),
+                    text: messageLocalization.format('dxDiagram-commandConnectorLineStart'),
                     cssClass: CSS_CLASSES.IMAGE_DROPDOWN_ITEM
                 },
                 connectorLineEnd: {
@@ -333,25 +341,30 @@ const DiagramCommandsManager = {
                         {
                             value: 0,
                             menuIcon: 'dx-diagram-i-connector-end-none dx-diagram-i',
-                            hint: messageLocalization.format('dxDiagram-commandConnectorLineNone')
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineNone'),
+                            text: messageLocalization.format('dxDiagram-commandConnectorLineNone')
                         },
                         {
                             value: 1,
                             menuIcon: 'dx-diagram-i-connector-end-arrow dx-diagram-i',
-                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow'),
+                            text: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
                         },
                         {
                             value: 2,
                             menuIcon: 'dx-diagram-i-connector-end-outlined-triangle dx-diagram-i',
-                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow'),
+                            text: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
                         },
                         {
                             value: 3,
                             menuIcon: 'dx-diagram-i-connector-end-filled-triangle dx-diagram-i',
-                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
+                            hint: messageLocalization.format('dxDiagram-commandConnectorLineArrow'),
+                            text: messageLocalization.format('dxDiagram-commandConnectorLineArrow')
                         }
                     ],
                     hint: messageLocalization.format('dxDiagram-commandConnectorLineEnd'),
+                    text: messageLocalization.format('dxDiagram-commandConnectorLineEnd'),
                     cssClass: CSS_CLASSES.IMAGE_DROPDOWN_ITEM
                 },
                 layoutTreeTopToBottom: {
@@ -774,6 +787,9 @@ const DiagramCommandsManager = {
                 return allCommands[c];
             } else if(c.text || c.icon || c.name) {
                 const internalCommand = c.name && allCommands[c.name];
+                if(internalCommand === SEPARATOR_COMMAND) {
+                    return internalCommand;
+                }
                 const command = {
                     command: internalCommand && internalCommand.command,
                     name: c.name,

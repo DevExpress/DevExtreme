@@ -75,15 +75,18 @@ QUnit.module('buttons group rendering', moduleConfig, () => {
         assert.ok(!$radioGroup.find('.dx-collection').hasClass('dx-state-disabled'), 'inner collection hasn\'t disabled-state class');
     });
 
-    test('widget should not try to load undefined initial value from the data source', function(assert) {
-        const loadStub = sinon.stub().returns([1, 2, 3]);
-        $('#radioGroup').dxRadioGroup({
-            dataSource: {
-                load: loadStub
-            }
-        });
+    [null, undefined].forEach(value => {
+        test(`widget should not try to load ${value} initial value from the data source`, function(assert) {
+            const loadStub = sinon.stub().returns([1, 2, 3]);
+            $('#radioGroup').dxRadioGroup({
+                dataSource: {
+                    load: loadStub
+                },
+                value
+            });
 
-        assert.ok(loadStub.calledOnce, 'load callback called once');
+            assert.ok(loadStub.calledOnce, 'load callback called once');
+        });
     });
 
     test('widget should not try to extra load initial value from the data source', function(assert) {

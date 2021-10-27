@@ -2505,6 +2505,39 @@ QUnit.module('keyboard navigation', {
         const $applyButton = this.instance._popup.$wrapper().find('.dx-button.dx-popup-done');
         assert.ok($applyButton.hasClass('dx-state-focused'), 'the apply button is focused');
     });
+
+    QUnit.test('keyboard event handlers passed from a config', function(assert) {
+        const keyDownStub = sinon.stub();
+        const keyUpStub = sinon.stub();
+
+        this.instance.dispose();
+        this.reinit({
+            onKeyDown: keyDownStub,
+            onKeyUp: keyUpStub
+        });
+
+        this.keyboard
+            .focus()
+            .type('a');
+
+        assert.ok(keyDownStub.calledOnce, 'keydown handled');
+        assert.ok(keyUpStub.calledOnce, 'keyup handled');
+    });
+
+    QUnit.test('keyboard event handlers added dynamically', function(assert) {
+        const keyDownStub = sinon.stub();
+        const keyUpStub = sinon.stub();
+
+        this.instance.on('keyDown', keyDownStub);
+        this.instance.on('keyUp', keyUpStub);
+
+        this.keyboard
+            .focus()
+            .type('a');
+
+        assert.ok(keyDownStub.calledOnce, 'keydown handled');
+        assert.ok(keyUpStub.calledOnce, 'keyup handled');
+    });
 });
 
 QUnit.module('keyboard navigation through tags', {
@@ -4956,17 +4989,21 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
 QUnit.module('options changing', moduleSetup, () => {
     ['readOnly', 'disabled'].forEach((optionName) => {
         QUnit.test(`Typing events should be rerendered after ${optionName} option enabled (T986220)`, function(assert) {
-            const tagBox = $('#tagBox').dxTagBox({
+            const $element = $('#tagBox');
+            const tagBox = $element.dxTagBox({
                 items: [1, 2],
                 value: [1],
                 searchEnabled: true
             }).dxTagBox('instance');
-            const typingEventsRenderSpy = sinon.spy(tagBox, '_renderTypingEvent');
 
             tagBox.option(optionName, true);
             tagBox.option(optionName, false);
 
-            assert.strictEqual(typingEventsRenderSpy.callCount, 1);
+            keyboardMock($element.find(`.${TEXTBOX_CLASS}`))
+                .focus()
+                .keyDown('backspace');
+
+            assert.deepEqual(tagBox.option('value'), []);
         });
     });
 });
@@ -6195,6 +6232,71 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         }
 
         assert.ok(true, 'TagBox rendered');
+    });
+
+    QUnit.test('tags loading call result should be ignored after new call', function(assert) {
+        const items = [{ id: 1, text: 'first' }, { id: 2, text: 'second' }];
+        const customStore = new CustomStore({
+            load: () => {
+                const deferred = $.Deferred();
+                setTimeout(() => {
+                    deferred.resolve({ data: items, totalCount: items.length });
+                }, 100);
+                return deferred.promise();
+            }
+        });
+        const dataSource = new DataSource({
+            store: customStore
+        });
+        const tagBox = $('#tagBox').dxTagBox({
+            dataSource: dataSource,
+            displayExpr: 'text',
+            valueExpr: 'id',
+            value: [1],
+        }).dxTagBox('instance');
+
+        this.clock.tick(20);
+        tagBox.option('value', [2]);
+
+        this.clock.tick(80);
+        const list = getList(tagBox).dxList('instance');
+        assert.strictEqual(list.option('selectedItemKeys').length, 0, 'first loading result is ignored');
+        this.clock.tick(20);
+        assert.strictEqual(list.option('selectedItemKeys')[0], 2, 'value is correct');
+    });
+
+    QUnit.test('tags loading call result should be ignored after new call when grouped=true', function(assert) {
+        const items = [{ key: 'key', items: [{ id: 1, text: 'first' }, { id: 2, text: 'second' }] }];
+        const customStore = new CustomStore({
+            load: (options) => {
+                const deferred = $.Deferred();
+                setTimeout(() => {
+                    deferred.resolve({ data: items[0].items, totalCount: 2 });
+                }, 200);
+                return deferred.promise();
+            }
+        });
+        const dataSource = new DataSource({
+            store: customStore,
+            key: 'id'
+        });
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource,
+            displayExpr: 'text',
+            valueExpr: 'id',
+            grouped: true,
+            value: [1],
+            deferRendering: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(100);
+        tagBox.option('value', [2]);
+        this.clock.tick(100);
+
+        assert.strictEqual(tagBox.option('selectedItems').length, 0, 'first request is cancelled');
+        this.clock.tick(100);
+        assert.strictEqual(tagBox.option('selectedItems')[0].id, 2, 'second loading result');
     });
 });
 

@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -224,7 +225,7 @@ $gantt-successor-background-color: white;
     border: 1px solid darken($base-accent, 10%);
     width: $gantt-dependency-successor-size;
     height: $gantt-dependency-successor-size;
-    top: ($gantt-task-height - $gantt-dependency-successor-size - 1) / 2;
+    top: math.div($gantt-task-height - $gantt-dependency-successor-size - 1, 2);
   }
 
   .dx-gantt-task-edit-dependency-r,

@@ -2,6 +2,9 @@ import { isDefined } from './type';
 import { each } from './iterator';
 import { orderEach } from './object';
 import config from '../config';
+import browser from './browser';
+
+const isIE11 = browser.msie && parseInt(browser.version) <= 11;
 
 export const isEmpty = function(entity) {
     return Array.isArray(entity) && !entity.length;
@@ -40,9 +43,13 @@ export const intersection = function(a, b) {
 };
 
 export const uniqueValues = function(data) {
-    return data.filter(function(item, position) {
-        return data.indexOf(item) === position;
-    });
+    if(isIE11) {
+        return data.filter(function(item, position) {
+            return data.indexOf(item) === position;
+        });
+    }
+
+    return [...new Set(data)];
 };
 
 export const removeDuplicates = function(from, what) {
@@ -50,18 +57,16 @@ export const removeDuplicates = function(from, what) {
         return [];
     }
 
+    const result = from.slice();
+
     if(!Array.isArray(what) || what.length === 0) {
-        return from.slice();
+        return result;
     }
 
-    const result = [];
+    each(what, function(_, value) {
+        const index = inArray(value, result);
 
-    each(from, function(_, value) {
-        const index = inArray(value, what);
-
-        if(index === -1) {
-            result.push(value);
-        }
+        result.splice(index, 1);
     });
 
     return result;

@@ -242,7 +242,8 @@ function parseResult(data, total, descriptions, result) {
         } else {
             item = {
                 value: parseValue(dataItem.key, field),
-                index: result[dimensionName + 'Index']++
+                index: result[dimensionName + 'Index']++,
+                displayText: dataItem.displayText
             };
 
             parentPathValue = path.slice(0, level).join('/');
@@ -467,7 +468,8 @@ export default Class.inherit((function() {
                 skip: 0,
                 take: 20
             }).done(function(data) {
-                d.resolve(discoverObjectFields(data, fields));
+                const normalizedArguments = normalizeLoadResult(data);
+                d.resolve(discoverObjectFields(normalizedArguments.data, fields));
             }).fail(d.reject);
 
             return d;

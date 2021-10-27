@@ -32,6 +32,19 @@ const moduleConfig = {
 };
 
 QUnit.module('format: api value changing', moduleConfig, () => {
+    QUnit.test('zero should be typed as another digits (T997851)', function(assert) {
+        this.instance.option({
+            format: '#,##0.##',
+            value: 100000
+        });
+
+        this.input.focus();
+        this.keyboard.caret(1);
+
+        this.keyboard.type('000');
+        assert.strictEqual(this.input.val(), '100,000,000', 'input text is correct');
+    });
+
     QUnit.test('number type of input should be converted to tel on mobile device when inputMode is unsupported', function(assert) {
         const realDeviceMock = sinon.stub(devices, 'real').returns({ deviceType: 'mobile' });
         const realBrowser = browser;
@@ -1365,6 +1378,21 @@ QUnit.module('format: percent format', moduleConfig, () => {
             config({ decimalSeparator: oldDecimalSeparator });
         }
     });
+
+    [
+        { text: '14.55', value: 0.1455 },
+        { text: '20.2', value: 0.202 },
+        { text: '1.0154', value: 0.010154, format: '#0.####%' }
+    ].forEach(({ text, value, format }) => {
+        QUnit.test(`percent format should correctly handle float values, value is ${value}`, function(assert) {
+            this.instance.option('format', format ? format : '#0.##%');
+            this.keyboard.type(text).change();
+
+            assert.equal(this.input.val(), `${text}%`, 'text is correct');
+            assert.equal(this.instance.option('value'), value, 'value is correct');
+        });
+    });
+
 });
 
 QUnit.module('format: removing', moduleConfig, () => {
@@ -2049,6 +2077,23 @@ QUnit.module('format: caret boundaries', moduleConfig, () => {
 
         assert.deepEqual(this.keyboard.caret(), { start: 0, end: 4 }, 'all numberbox value is selected');
     });
+
+    QUnit.test('caret should be moved to the integer part end on input click if format contains stub in the end (T996477)', function(assert) {
+        this.instance.option({
+            format: '#0 \'9\'',
+            value: 0
+        });
+
+        this.input.focus();
+        this.clock.tick(CARET_TIMEOUT_DURATION);
+        for(let i = 0; i < 2; ++i) {
+            this.keyboard.caret(3);
+            this.input.trigger('dxclick');
+            this.clock.tick(CARET_TIMEOUT_DURATION);
+        }
+
+        assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
+    });
 });
 
 QUnit.module('format: custom parser and formatter', moduleConfig, () => {
@@ -2092,6 +2137,21 @@ QUnit.module('format: custom parser and formatter', moduleConfig, () => {
         assert.strictEqual(counter, callCountAfterCreateLdmlPattern + 1 + 1, '+ 1 -> format after typing');
     });
 
+    QUnit.test('custom formatter can be passed right to "format" property (T1010539)', function(assert) {
+        let callCount = 0;
+        this.instance.option({
+            format: () => {
+                callCount++;
+                return '';
+            }
+        });
+        const callCountAfterCreateLdmlPattern = callCount;
+
+        this.keyboard.type('1');
+
+        assert.strictEqual(callCount, callCountAfterCreateLdmlPattern + 1, 'formatter is called after typing');
+    });
+
     QUnit.test('editor should create a new LDML pattern for custom formatter after "format" option change', function(assert) {
         let counter = 0;
         const formatter = (val) => {
@@ -2117,7 +2177,7 @@ QUnit.module('format: custom parser and formatter', moduleConfig, () => {
     QUnit.test('editor should not try to create a related LDML pattern for custom formatter and parser', function(assert) {
         let counter = 0;
         this.instance.option({
-            value: null,
+            value: 1,
             format: {
                 formatter: (val) => {
                     counter++;

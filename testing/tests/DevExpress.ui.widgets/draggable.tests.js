@@ -5,10 +5,12 @@ import viewPort from 'core/utils/view_port';
 import GestureEmitter from 'events/gesture/emitter.gesture.js';
 import animationFrame from 'animation/frame';
 import translator from 'animation/translator';
+import fx from 'animation/fx';
 
 import 'generic_light.css!';
 import 'ui/draggable';
 import 'ui/scroll_view';
+import 'ui/overlay';
 
 $('body').css({
     minHeight: '800px',
@@ -1787,32 +1789,37 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
         assert.equal($('#scrollable').scrollLeft(), 0, 'scrollLeft');
     });
 
-    QUnit.test('Scrolling with scrollView', function(assert) {
-    // arrange
-        const scrollView = $('#scrollable').dxScrollView({
-            direction: 'both',
-            useNative: false
-        }).dxScrollView('instance');
+    [false, true].forEach((isOverlay) => {
+        QUnit.test(`Scrolling with scrollView${isOverlay ? ' inside overlay' : ''}`, function(assert) {
+            // arrange
+            $('body').toggleClass('dx-overlay-content', isOverlay); // T1015060
+            const scrollView = $('#scrollable').dxScrollView({
+                direction: 'both',
+                useNative: false
+            }).dxScrollView('instance');
 
-        this.createDraggable({
-            scrollSensitivity: 10,
-            scrollSpeed: 20
+            this.createDraggable({
+                scrollSensitivity: 10,
+                scrollSpeed: 20
+            });
+
+            // act, assert
+            assert.deepEqual(scrollView.scrollOffset(), { top: 0, left: 0 }, 'scrollOffset');
+
+            this.pointer.down().move(240, 240);
+
+            this.pointer.move(1, 1);
+            this.clock.tick(10);
+
+            assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, 'scrollOffset');
+
+            this.pointer.move(-1, -1);
+            this.clock.tick(10);
+
+            assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, 'scrollOffset');
+
+            $('body').removeClass('dx-overlay-content');
         });
-
-        // act, assert
-        assert.deepEqual(scrollView.scrollOffset(), { top: 0, left: 0 }, 'scrollOffset');
-
-        this.pointer.down().move(240, 240);
-
-        this.pointer.move(1, 1);
-        this.clock.tick(10);
-
-        assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, 'scrollOffset');
-
-        this.pointer.move(-1, -1);
-        this.clock.tick(10);
-
-        assert.deepEqual(scrollView.scrollOffset(), { top: 1, left: 1 }, 'scrollOffset');
     });
 
     QUnit.test('Autoscroll should work fine if element was dropped and dragged again', function(assert) {
@@ -1855,6 +1862,109 @@ QUnit.module('autoScroll', $.extend({}, moduleConfig, {
 
         assert.equal($('#scrollable').scrollLeft(), 1, 'scrollLeft');
         assert.equal($('#scrollable').scrollTop(), 1, 'scrollTop');
+    });
+
+    // T1003319
+    QUnit.test('Autoscroll should not work when draggable element over Overlay content', function(assert) {
+        // arrange
+        fx.off = true;
+
+        try {
+            $('#other').show().dxOverlay({
+                width: 150,
+                height: 250,
+                visible: true,
+                position: {
+                    my: 'left top',
+                    at: 'left top',
+                    of: 'body'
+                },
+                contentTemplate: (container) => {
+                    const $dragElement = $('<div id=\'myDraggable\'/>')
+                        .css({
+                            width: '50px',
+                            height: '50px'
+                        });
+
+                    this.createDraggable({
+                        scrollSensitivity: 10,
+                        scrollSpeed: 20
+                    }, $dragElement);
+
+                    return $dragElement;
+                }
+            });
+
+            // assert
+            assert.strictEqual($('#scrollable').scrollTop(), 0, 'scrollTop');
+
+            // arrange
+            const pointer = pointerMock($('#myDraggable')).start();
+
+            // act
+            pointer.down().move(0, 240);
+            this.clock.tick(10);
+            pointer.down().move(0, 1);
+            this.clock.tick(10);
+
+            // assert
+            assert.strictEqual($('#scrollable').scrollTop(), 0, 'scrollTop');
+        } finally {
+            fx.off = false;
+        }
+    });
+
+    // T1003319
+    [true, false].forEach((shading) => {
+        QUnit.test(`Autoscroll should ${shading ? 'not' : ''} work when draggable element over Overlay wrapper with shading = ${shading}`, function(assert) {
+            // arrange
+            fx.off = true;
+
+            try {
+                $('#other').show().dxOverlay({
+                    width: 150,
+                    height: 250,
+                    visible: true,
+                    shading: shading,
+                    position: {
+                        my: 'left top',
+                        at: 'left top',
+                        of: 'body'
+                    },
+                    contentTemplate: (container) => {
+                        const $dragElement = $('<div id=\'myDraggable\'/>')
+                            .css({
+                                width: '50px',
+                                height: '50px'
+                            });
+
+                        this.createDraggable({
+                            scrollSensitivity: 10,
+                            scrollSpeed: 20
+                        }, $dragElement);
+
+                        return $dragElement;
+                    }
+                });
+
+                // assert
+                assert.strictEqual($('#scrollable').scrollTop(), 0, 'scrollTop');
+
+                // arrange
+                const pointer = pointerMock($('#myDraggable')).start();
+
+                // act
+                pointer.down().move(200, 240);
+                this.clock.tick(10);
+                pointer.down().move(0, 1);
+                this.clock.tick(10);
+
+                // assert
+                assert.strictEqual($('#scrollable').scrollTop(), shading ? 0 : 1, 'scrollTop');
+            } finally {
+                fx.off = false;
+            }
+        });
     });
 });
 

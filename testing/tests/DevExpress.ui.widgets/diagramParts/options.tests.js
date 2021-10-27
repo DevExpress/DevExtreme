@@ -518,6 +518,35 @@ QUnit.module('Options', {
         assert.equal(description.properties.keepRatioOnAutoSize, true);
     });
 
+    test('should change customShape[0].defaultHeight property', function(assert) {
+        const descriptions = this.instance._diagramInstance.shapeDescriptionManager.descriptions;
+        assert.equal(Object.keys(descriptions).length, 43);
+
+        let keys = Object.keys(descriptions);
+        let description = descriptions[keys[keys.length - 1]];
+        assert.equal(description.properties, undefined);
+
+        this.instance.option('customShapes', [
+            {
+                type: 'type1',
+                title: 'type1',
+                defaultHeight: 1
+            }
+        ]);
+
+        keys = Object.keys(descriptions);
+        assert.equal(keys.length, 44);
+
+        description = descriptions[keys[keys.length - 1]];
+        assert.equal(description.key, 'type1');
+        assert.equal(description.title, 'type1');
+        assert.equal(description.properties.defaultHeight, 1440);
+
+        this.instance.option('customShapes[0].defaultHeight', 3);
+        description = descriptions[keys[keys.length - 1]];
+        assert.equal(description.properties.defaultHeight, 4320);
+    });
+
     test('hasChanges changes on import or editing of an unbound diagram', function(assert) {
         assert.equal(this.instance.option('hasChanges'), false, 'on init');
         assert.notOk(this.onOptionChanged.called);

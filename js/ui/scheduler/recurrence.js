@@ -43,7 +43,7 @@ class RecurrenceProcessor {
 
         const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
 
-        this._initializeRRule(options, startDateUtc);
+        this._initializeRRule(options, startDateUtc, rule.until);
 
         const minTime = minDateUtc.getTime();
         const leftBorder = this._getLeftBorder(options, minDateUtc, duration);
@@ -185,7 +185,7 @@ class RecurrenceProcessor {
         return new Date().getTimezoneOffset();
     }
 
-    _initializeRRule(options, startDateUtc) {
+    _initializeRRule(options, startDateUtc, until) {
         const ruleOptions = RRule.parseString(options.rule);
         const firstDayOfWeek = options.firstDayOfWeek;
 
@@ -195,6 +195,8 @@ class RecurrenceProcessor {
             const weekDayNumbers = [6, 0, 1, 2, 3, 4, 5];
             ruleOptions.wkst = weekDayNumbers[firstDayOfWeek];
         }
+
+        ruleOptions.until = timeZoneUtils.createUTCDateWithLocalOffset(until);
 
         this._createRRule(ruleOptions);
 

@@ -1,3 +1,5 @@
+@use "sass:math";
+
 $size: null !default;
 
 @use "colors" as *;
@@ -45,7 +47,7 @@ $generic-base-inline-horizontal-padding: null !default;
 $generic-base-inline-widget-vertical-padding:
   $generic-base-inline-widget-height -
   $generic-base-inline-block-height !default;
-$generic-base-inline-widget-top-padding: floor($generic-base-inline-widget-vertical-padding / 2) !default;
+$generic-base-inline-widget-top-padding: floor(math.div($generic-base-inline-widget-vertical-padding, 2)) !default;
 $generic-base-inline-widget-bottom-padding:
   $generic-base-inline-widget-vertical-padding -
   $generic-base-inline-widget-top-padding !default;

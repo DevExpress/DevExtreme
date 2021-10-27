@@ -209,6 +209,9 @@ const chartPlugin = {
             return coords;
         },
         _annotationsPointerEventHandler(event) {
+            if(this._disposed) {
+                return;
+            }
             const originalEvent = event.originalEvent || {};
             const touch = (originalEvent.touches && originalEvent.touches[0]) || {};
             const rootOffset = this._renderer.getRootOffset();

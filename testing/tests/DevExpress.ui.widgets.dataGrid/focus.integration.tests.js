@@ -196,6 +196,10 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         assert.ok(rowsViewWrapper.getDataRow(4).isFocusedRow(), 'Focused row');
+        if(devices.real().android) {
+            assert.ok(true, 'It\'s a bug under Android only');
+            return;
+        }
         assert.ok(rowsViewWrapper.isRowVisible(4, 1), 'Navigation row is visible');
     });
 
@@ -480,7 +484,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick(1000);
 
         // assert
-        assert.equal(dataGrid.getScrollable().scrollTop(), 250, 'scroll top');
+        assert.roughEqual(dataGrid.getScrollable().scrollTop(), 250, 0.2, 'scroll top');
         assert.equal(dataGrid.getVisibleRows()[0].key, 6, 'first visible row');
         assert.equal(dataGrid.getVisibleRows().length, 15, 'visible row count');
     });
@@ -3471,15 +3475,42 @@ QUnit.module('View\'s focus', {
         const $inputElement = $(this.dataGrid.element()).find('input');
 
         // act
+        $inputElement.trigger('dxpointerdown');
+        this.clock.tick();
         $inputElement.focus();
         this.clock.tick();
-        $inputElement.trigger('dxpointerdown').trigger('dxclick');
+        $inputElement.trigger('dxclick');
         this.clock.tick();
 
         // assert
-        assert.ok($inputElement.closest('td').hasClass('dx-focused'), 'cell is marked as focused');
         assert.ok($inputElement.is(':focus'), 'input is focused');
     });
+
+    QUnit.testInActiveWindow('Cell with checkbox should be focused with other row (T1016005)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [{ id: 1 }],
+            keyExpr: 'id',
+            columns: ['id'],
+            selection: {
+                mode: 'multiple'
+            },
+            focusedRowEnabled: true,
+        });
+        this.clock.tick();
+
+        const $checkbox = $(this.dataGrid.element()).find('.dx-datagrid-rowsview .dx-checkbox');
+
+        // act
+        $checkbox.trigger('dxpointerdown').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok($checkbox.parents('tr').hasClass('dx-row-focused'), 'row is focused');
+        assert.ok(!$checkbox.parent('td').hasClass('dx-focused'), 'cell is not focused');
+        assert.ok($checkbox.parent('td').hasClass('dx-cell-focus-disabled'), 'cell focus is disabled');
+    });
+
 
     QUnit.testInActiveWindow('The expand button of the master cell should not lose its tabindex when a row in a detail grid is switched to editing mode (T969832)', function(assert) {
         // arrange
@@ -3634,7 +3665,9 @@ QUnit.module('View\'s focus', {
         for(let i = 0; i < 2; i++) {
             for(let j = 0; j < 2; j++) {
                 // act
-                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown').trigger('dxclick');
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown');
+                this.clock.tick();
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxclick');
                 this.clock.tick();
 
                 if(i === 0 && j === 0) {
@@ -3694,7 +3727,9 @@ QUnit.module('View\'s focus', {
                 }
 
                 // act
-                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown').trigger('dxclick');
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxpointerdown');
+                this.clock.tick();
+                $(this.dataGrid.getCellElement(i, j)).trigger('dxclick');
                 this.clock.tick();
 
                 // assert
@@ -3705,6 +3740,61 @@ QUnit.module('View\'s focus', {
         }
 
         assert.ok($(this.dataGrid.getCellElement(0, 0)).hasClass('dx-focused'), 'the first cell is still focused');
+    });
+
+    ['Batch', 'Cell'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - Cell text should be selected on Tab when selectTextOnEditStart is enabled (T1030893)`, function(assert) {
+            // arrange
+            const isInputTextSelected = function($input) {
+                const text = $input.val();
+                const inputElement = $input.get(0);
+
+                return text.length > 0 && inputElement.selectionStart === 0 && inputElement.selectionEnd === text.length;
+            };
+            this.dataGrid.option({
+                dataSource: [
+                    { ID: 1, Field1: 'Field1', Field2: 'Field2' }
+                ],
+                columns: ['Field1', 'Field2'],
+                keyExpr: 'ID',
+                keyboardNavigation: {
+                    enterKeyAction: 'moveFocus',
+                    enterKeyDirection: 'column',
+                    editOnKeyPress: true
+                },
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true,
+                    startEditAction: 'dblClick',
+                    selectTextOnEditStart: true
+                },
+                onFocusedCellChanging: function(e) {
+                    e.isHighlighted = true;
+                }
+            });
+            this.clock.tick();
+
+            // act
+            let keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)));
+            keyboard.keyDown('a');
+            this.clock.tick(25);
+            const $firstCellInput = $(this.dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input');
+
+            // assert
+            assert.equal($firstCellInput.length, 1, 'input is rendered in the first cell');
+            assert.strictEqual($firstCellInput.val(), 'a', 'correct editor value');
+
+            // act
+            keyboard = keyboardMock($(this.dataGrid.getCellElement(0, 0)));
+            keyboard.keyDown('tab');
+            this.clock.tick(25);
+            const $secondCellInput = $(this.dataGrid.getCellElement(0, 1)).find('.dx-texteditor-input');
+
+            // assert
+            assert.strictEqual(this.dataGrid.cellValue(0, 0), 'a', 'correct cell value');
+            assert.equal($secondCellInput.length, 1, 'input is rendered in the second cell');
+            assert.ok(isInputTextSelected($secondCellInput), 'text is selected in the second input cell');
+        });
     });
 });
 

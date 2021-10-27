@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -319,7 +320,7 @@ $diagram-toolbox-title-size: 12px;
     padding: 0 $diagram-properties-panel-spacing $diagram-properties-panel-spacing;
 
     .dx-toolbar-item {
-      margin-bottom: $diagram-properties-panel-spacing / 2;
+      margin-bottom: math.div($diagram-properties-panel-spacing, 2);
 
       &.dx-diagram-lg-icon-item .dx-diagram-i {
         background-size: $diagram-properties-layout-icon-size $diagram-properties-layout-icon-size;

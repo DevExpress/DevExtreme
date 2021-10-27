@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:map";
 
 .dx-icon-plus,
@@ -119,7 +120,7 @@
 @mixin dx-icon-sizing($icon-size, $container-size: $icon-size, $borders-size: 0) {
   $icon-paddings-dirty: $container-size - $icon-size;
   $icon-paddings: $icon-paddings-dirty - $borders-size;
-  $icon-padding: floor($icon-paddings / 2);
+  $icon-padding: floor(math.div($icon-paddings, 2));
 
   // Geometry
   width: $container-size;
@@ -148,9 +149,9 @@
     display: block;
     width: $icon-size;
     top: 50%;
-    margin-top: -$icon-size / 2;
+    margin-top: math.div(-$icon-size, 2);
     left: 50%;
-    margin-left: -$icon-size / 2;
+    margin-left: math.div(-$icon-size, 2);
   }
 }
 

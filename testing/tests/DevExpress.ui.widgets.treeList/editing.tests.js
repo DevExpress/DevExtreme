@@ -924,6 +924,45 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
         assert.notOk($(this.getCellElement(0, 0)).hasClass('dx-editor-cell'), 'cell isn\'t editable');
     });
 
+    // T1023019
+    QUnit.test('Batch mode - The checkbox should not be rendered for a new row', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        this.options.editing = {
+            mode: 'batch',
+            allowUpdating: true
+        };
+        this.options.selection = {
+            mode: 'multiple',
+            showCheckBoxesMode: 'always'
+        };
+
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.addRow();
+        this.clock.tick();
+
+        // assert
+        let $newRowElement = $testElement.find('tbody > .dx-data-row').first();
+        assert.ok($newRowElement.hasClass('dx-row-inserted'), 'insert row');
+
+        // act
+        $newRowElement.find('td').eq(1).trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        $newRowElement = $testElement.find('tbody > .dx-data-row').first();
+        const $inputElement = $newRowElement.find('td').eq(1).find('.dx-texteditor-input');
+        assert.strictEqual($inputElement.length, 1, 'second cell has input');
+        assert.ok($inputElement.is(':focus'), 'second cell is focused');
+
+        const $selectCheckbox = $newRowElement.find('td').first().find('.dx-select-checkbox');
+        assert.strictEqual($selectCheckbox.length, 0, 'first cell has not checkbox');
+    });
+
     [false, true].forEach(function(remoteOperations) {
     // T836724
         QUnit.test('The added nodes should be displayed when there is a filter and remoteOperations is ' + remoteOperations, function(assert) {

@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -32,7 +33,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
 @mixin dx-texteditor-icon() {
   position: absolute;
   top: 50%;
-  margin-top: -$generic-texteditor-icon-container-size / 2;
+  margin-top: math.div(-$generic-texteditor-icon-container-size, 2);
 
   @include dx-icon-sizing($generic-texteditor-icon-size, $generic-texteditor-icon-container-size);
 }

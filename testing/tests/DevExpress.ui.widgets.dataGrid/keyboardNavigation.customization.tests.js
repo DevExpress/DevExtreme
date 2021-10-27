@@ -2522,6 +2522,8 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(getTextSelection(input), '', 'Selection');
 
         // act
+        $($('.dx-texteditor-input').get(0)).focus();
+        $($('.dx-texteditor-input').get(1)).blur();
         this.triggerKeyDown('Tab', false, false, $(input).parent());
         input = $('.dx-texteditor-input').get(1);
         this.getController('editing')._focusEditingCell(null, $(input).parent());
@@ -2658,6 +2660,8 @@ QUnit.module('Customize keyboard navigation', {
         assert.equal(getTextSelection(input), '', 'Selection');
 
         // act
+        $($('.dx-texteditor-input').get(0)).focus();
+        $($('.dx-texteditor-input').get(1)).blur();
         this.triggerKeyDown('Tab', false, false, $(input).parent());
         input = $('.dx-texteditor-input').get(1);
         this.getController('editing')._focusEditingCell(null, $(input).parent());
@@ -2783,7 +2787,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusCell(0, 1);
         this.triggerKeyDown('A');
-        this.clock.tick();
+        this.clock.tick(200);
         input = $('.dx-texteditor-input').get(0);
         // assert
         assert.ok(input, 'Editor input');
@@ -2860,6 +2864,48 @@ QUnit.module('Customize keyboard navigation', {
             }
 
             assert.strictEqual($input.val(), 'a', 'entered value is correct');
+        });
+
+        // T998365
+        testInDesktop(`${mode} - Input value should not be duplicated for a number column with format when editOnKeyPress is enabled'`, function(assert) {
+            // arrange
+            this.options = {
+                editing: {
+                    mode: mode.toLowerCase(),
+                    allowUpdating: true
+                },
+                keyboardNavigation: {
+                    editOnKeyPress: true
+                }
+            };
+
+            this.data = [{ name: 'Alex', room: 5 }];
+
+            this.columns = [
+                { dataField: 'name' },
+                {
+                    dataField: 'room',
+                    dataType: 'number',
+                    editorOptions: {
+                        type: 'number',
+                        format: {
+                            precision: 1
+                        }
+                    }
+                }
+            ];
+
+            this.setupModule();
+            this.renderGridView();
+
+            // act
+            this.focusCell(1, 0);
+            this.triggerKeyDown('5');
+            this.clock.tick(300);
+
+            // assert
+            const $input = $('.dx-row .dx-texteditor-input').eq(0);
+            assert.equal($input.val(), '5', 'input value');
         });
     });
 });

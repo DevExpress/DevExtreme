@@ -451,7 +451,8 @@ const SelectBox = DropDownList.inherit({
 
         if(this._wasSearch() && isVisible) {
             this._wasSearch(false);
-            const showDataImmediately = this.option('showDataBeforeSearch') || this.option('minSearchLength') === 0;
+            const showDataImmediately = this.option('showDataBeforeSearch')
+                || this._isMinSearchLengthExceeded();
 
             if(showDataImmediately && this._dataSource) {
                 if(this._searchTimer) return;
@@ -574,6 +575,7 @@ const SelectBox = DropDownList.inherit({
 
         if(shouldCancelSearch) {
             const isPopupVisible = this._popup?._hideAnimationProcessing;
+            this._clearSearchTimer();
             if(isPopupVisible) {
                 this._shouldCancelSearch(true);
             } else {
@@ -675,7 +677,11 @@ const SelectBox = DropDownList.inherit({
             .done((function(item) {
                 deferred.resolve(item);
             }).bind(this))
-            .fail((function() {
+            .fail((function(args) {
+                if(args?.shouldSkipCallback) {
+                    return;
+                }
+
                 const selectedItem = that.option('selectedItem');
                 if(that.option('acceptCustomValue') && value === that._valueGetter(selectedItem)) {
                     deferred.resolve(selectedItem);
@@ -760,6 +766,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _clearValueHandler: function(e) {
+        this._preventFiltering = true;
         this.callBase(e);
 
         return false;
@@ -772,7 +779,7 @@ const SelectBox = DropDownList.inherit({
         this._wasSearchValue = value;
     },
 
-    _searchHandler: function(e) {
+    _searchHandler: function() {
         if(this._preventFiltering) {
             delete this._preventFiltering;
             return;
@@ -782,7 +789,7 @@ const SelectBox = DropDownList.inherit({
             this._wasSearch(true);
         }
 
-        this.callBase(e);
+        this.callBase(arguments);
     },
 
     _dataSourceFiltered: function(searchValue) {

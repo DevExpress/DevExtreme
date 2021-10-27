@@ -424,14 +424,6 @@ const Lookup = DropDownList.inherit({
         this._inkRipple = render();
     },
 
-    _toggleOpenState: function() {
-        this.callBase();
-
-        if(!this.option('dropDownOptions.fullScreen') && this.option('_scrollToSelectedItemEnabled')) {
-            this._setPopupPosition();
-        }
-    },
-
     _toggleActiveState: function($element, value, e) {
         this.callBase(...arguments);
 
@@ -503,6 +495,16 @@ const Lookup = DropDownList.inherit({
         if(this.option('dropDownOptions.fullScreen') && this.option('_scrollToSelectedItemEnabled')) {
             this._popup.option('position').of = $(window);
         }
+    },
+    _popupShownHandler: function() {
+        const scrollToSelectedItemEnabled = this.option('_scrollToSelectedItemEnabled');
+        const fullScreen = this.option('dropDownOptions.fullScreen');
+
+        if(!fullScreen && scrollToSelectedItemEnabled) {
+            this._setPopupPosition();
+        }
+
+        this.callBase();
     },
 
     _scrollToSelectedItem: function() {
@@ -876,7 +878,7 @@ const Lookup = DropDownList.inherit({
                 mode: searchMode,
                 showClearButton: true,
                 valueChangeEvent: this.option('valueChangeEvent'),
-                onValueChanged: this._searchHandler.bind(this)
+                onValueChanged: (e) => { this._searchHandler(e); }
             });
 
             this._registerSearchKeyHandlers();
@@ -978,16 +980,35 @@ const Lookup = DropDownList.inherit({
         this._refreshSelected();
     },
 
+    _runWithoutCloseOnScroll: function(callback) {
+        // NOTE: Focus can trigger "scroll" event
+
+        const { _scrollToSelectedItemEnabled } = this.option();
+        const closeOnTargetScroll = this._popup.option('closeOnTargetScroll');
+
+        if(!_scrollToSelectedItemEnabled) {
+            callback();
+        } else {
+            this._popup.option('closeOnTargetScroll', false);
+            callback();
+            this._closeOnTargetScrollTimer = setTimeout(() => { // T1018037
+                this._popup.option('closeOnTargetScroll', closeOnTargetScroll);
+            });
+        }
+    },
+
     _setFocusPolicy: function() {
         if(!this.option('focusStateEnabled')) {
             return;
         }
 
-        if(this.option('searchEnabled')) {
-            this._searchBox.focus();
-        } else {
-            eventsEngine.trigger(this._$list, 'focus');
-        }
+        this._runWithoutCloseOnScroll(() => {
+            if(this.option('searchEnabled')) {
+                this._searchBox.focus();
+            } else {
+                eventsEngine.trigger(this._$list, 'focus');
+            }
+        });
     },
 
     _focusTarget: function() {
@@ -1043,6 +1064,9 @@ const Lookup = DropDownList.inherit({
 
     _clean: function() {
         this._$fieldWrapper.remove();
+        clearTimeout(this._closeOnTargetScrollTimer);
+
+        this._closeOnTargetScrollTimer = null;
         this._$searchBox = null;
         delete this._inkRipple;
         this.callBase();

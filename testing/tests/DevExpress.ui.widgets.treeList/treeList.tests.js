@@ -1778,6 +1778,32 @@ QUnit.module('Focused Row', defaultModuleConfig, () => {
             assert.ok($(treeList.getRowElement(treeList.getRowIndexByKey(2))).hasClass('dx-row-focused'), 'focused row is visible');
         });
     });
+
+    QUnit.test('Editor should be focused after adding row if some cell was focused (T1023022)', function(assert) {
+        // arrange
+        const treeList = createTreeList({
+            height: 100,
+            keyExpr: 'id',
+            parentIdExpr: 'parentId',
+            dataSource: [{ id: 1, parentId: 0 }],
+            loadingTimeout: null,
+            editing: {
+                mode: 'cell',
+                allowAdding: true,
+            },
+            columns: ['id'],
+        });
+
+        // act
+        treeList.focus(treeList.getCellElement(0, 0));
+        treeList.addRow(1);
+        this.clock.tick();
+
+        // assert
+        const $firstCellInAddedRow = $(treeList.getCellElement(1, 0));
+        assert.ok($firstCellInAddedRow.hasClass('dx-editor-cell'), 'editor is rendered');
+        assert.ok($firstCellInAddedRow.hasClass('dx-focused'), 'editor is focused');
+    });
 });
 
 QUnit.module('Scroll', defaultModuleConfig, () => {

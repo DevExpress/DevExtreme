@@ -211,6 +211,24 @@ QUnit.module('common', {}, () => {
             browser.msie = originalIE;
         }
     });
+    QUnit.test('should have no errors if textBox has custom buttons and "visible" option is false (T998843)', function(assert) {
+        try {
+            $('#textbox').dxTextBox({
+                visible: false,
+                buttons: [
+                    {
+                        name: 'password',
+                        options: {
+                            type: 'default',
+                        },
+                    },
+                ],
+            });
+            assert.ok(true);
+        } catch(e) {
+            assert.ok(false, `the error is thrown: ${e.message}`);
+        }
+    });
 });
 
 QUnit.module('options changing', {

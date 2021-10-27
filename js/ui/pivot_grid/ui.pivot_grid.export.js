@@ -13,7 +13,7 @@ import { when, Deferred } from '../../core/utils/deferred';
 const DEFAULT_DATA_TYPE = 'string';
 const DEFAUL_COLUMN_WIDTH = 100;
 
-export const ExportMixin = extend({}, exportMixin, {
+export const ExportController = extend({}, exportMixin, {
     exportToExcel: function() {
         const that = this;
 
@@ -95,37 +95,17 @@ export const ExportMixin = extend({}, exportMixin, {
     },
 
     getDataProvider: function() {
-        const that = this;
-        const dataController = this._dataController;
-        const items = new Deferred();
-
-        dataController.beginLoading();
-        setTimeout(function() {
-            const columnsInfo = extend(true, [], dataController.getColumnsInfo(true));
-            const rowsInfoItems = extend(true, [], dataController.getRowsInfo(true));
-            const cellsInfo = dataController.getCellsInfo(true);
-
-            items.resolve(that._getAllItems(columnsInfo, rowsInfoItems, cellsInfo));
-            dataController.endLoading();
-        });
-
-        return new DataProvider({
-            items: items,
-            rtlEnabled: this.option('rtlEnabled'),
-            dataFields: this.getDataSource().getAreaFields('data'),
-            customizeExcelCell: this.option('export.customizeExcelCell'),
-            rowsArea: this._rowsArea,
-            columnsArea: this._columnsArea
-        });
+        return new DataProvider(this);
     }
 });
 
 export const DataProvider = Class.inherit({
-    ctor: function(options) {
-        this._options = options;
+    ctor: function(exportController) {
+        this._exportController = exportController;
     },
 
     ready: function() {
+        this._initOptions();
         const options = this._options;
 
         return when(options.items).done((items) => {
@@ -139,6 +119,31 @@ export const DataProvider = Class.inherit({
             options.columns = columns;
             options.items = items;
         });
+    },
+
+    _initOptions: function() {
+        const exportController = this._exportController;
+        const dataController = exportController._dataController;
+        const items = new Deferred();
+
+        dataController.beginLoading();
+        setTimeout(function() {
+            const columnsInfo = extend(true, [], dataController.getColumnsInfo(true));
+            const rowsInfoItems = extend(true, [], dataController.getRowsInfo(true));
+            const cellsInfo = dataController.getCellsInfo(true);
+
+            items.resolve(exportController._getAllItems(columnsInfo, rowsInfoItems, cellsInfo));
+            dataController.endLoading();
+        });
+
+        this._options = {
+            items: items,
+            rtlEnabled: exportController.option('rtlEnabled'),
+            dataFields: exportController.getDataSource().getAreaFields('data'),
+            customizeExcelCell: exportController.option('export.customizeExcelCell'),
+            rowsArea: exportController._rowsArea,
+            columnsArea: exportController._columnsArea
+        };
     },
 
     getColumns: function() {

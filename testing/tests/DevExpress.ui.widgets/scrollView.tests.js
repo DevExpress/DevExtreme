@@ -1708,12 +1708,7 @@ QUnit.module('native pullDown strategy', {
         }
     });
 
-    QUnit.test('scroll fires with correctly arguments', function(assert) {
-        if(this._originalPlatform === 'android' && devices.real().version[0] < 4) {
-            assert.expect(0);
-            return;
-        }
-
+    QUnit.test('scroll fires with correct arguments', function(assert) {
         let top = true;
         let left = true;
         let right = false;
@@ -2028,46 +2023,50 @@ QUnit.module('native swipeDown strategy', {
         }
     });
 
-    QUnit.test('scroll fires with correctly arguments', function(assert) {
-        if(this._originalPlatform === 'android' && devices.real().version[0] < 4) {
-            assert.expect(0);
-            return;
-        }
-
-        assert.expect(12);
-
+    QUnit.test('scroll fires with correct arguments', function(assert) {
         let top = true;
         let left = true;
         let right = false;
         let bottom = false;
-
+        let lastScrollEventArgs;
         const $scrollView = $('#scrollView').width(50).height(50);
         $scrollView.children().width(100).height(100);
+
+        const checkLastScrollEvent = function() {
+            assert.equal(lastScrollEventArgs.reachedTop, top, 'reached top is correct');
+            assert.equal(lastScrollEventArgs.reachedRight, right, 'reached right is correct');
+            assert.equal(lastScrollEventArgs.reachedBottom, bottom, 'reached bottom is correct');
+            assert.equal(lastScrollEventArgs.reachedLeft, left, 'reachde left is correct');
+        };
 
         $scrollView.dxScrollView({
             useNative: true,
             direction: 'both',
             onScroll: function(e) {
-                assert.equal(e.reachedTop, top, 'reached top is correct');
-                assert.equal(e.reachedLeft, left, 'reached left is correct');
-                assert.equal(e.reachedRight, right, 'reached right is correct');
-                assert.equal(e.reachedBottom, bottom, 'reached bottom is correct');
+                lastScrollEventArgs = e;
             }
         });
+
         const scrollView = $scrollView.dxScrollView('instance');
         const $container = $('.' + SCROLLABLE_CONTAINER_CLASS, $scrollView);
 
+        assert.ok(!lastScrollEventArgs, 'scroll was not triggered on start');
+
         $($container).trigger('scroll');
+        checkLastScrollEvent();
 
         scrollView.scrollTo({ x: 1, y: 1 });
         top = false; left = false;
         $($container).trigger('scroll');
+        checkLastScrollEvent();
+
         scrollView.scrollTo({
             x: $container.prop('scrollWidth') - $container.prop('clientWidth'),
             y: $container.prop('scrollHeight') - $container.prop('clientHeight')
         });
         right = true; bottom = true;
         $($container).trigger('scroll');
+        checkLastScrollEvent();
     });
 });
 

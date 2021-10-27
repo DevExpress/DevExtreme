@@ -772,8 +772,8 @@ if(Globalize && Globalize.formatDate) {
                 };
             }
 
-            return Globalize.parseDate(text, format);
-
+            const parsedDate = Globalize.parseDate(text, format);
+            return parsedDate ? parsedDate : this.callBase(text, format);
         },
 
         _isAcceptableFormat: function(format) {

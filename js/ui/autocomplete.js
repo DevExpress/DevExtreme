@@ -175,9 +175,9 @@ const Autocomplete = DropDownList.inherit({
         };
     },
 
-    _searchDataSource: function() {
+    _searchDataSource: function(searchValue) {
         this._dataSource.pageSize(this.option('maxItemCount'));
-        this.callBase();
+        this.callBase(searchValue);
         this._clearFocusedItem();
     },
 

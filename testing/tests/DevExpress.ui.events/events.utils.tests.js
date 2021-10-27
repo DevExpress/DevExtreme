@@ -14,6 +14,69 @@ import nativePointerMock from '../../helpers/nativePointerMock.js';
 
 const { test, testStart, testInActiveWindow } = QUnit;
 
+const W3CEventProps = [
+    'bubbles',
+    'cancelable',
+    'currentTarget',
+    'eventPhase',
+    'target',
+    'timeStamp',
+    'type',
+    'preventDefault',
+    'stopPropagation'
+];
+
+const W3CUIEventProps = W3CEventProps.concat([
+    'detail',
+    'view'
+]);
+
+const W3CMouseEventProps = W3CUIEventProps.concat([
+    'altKey',
+    'button',
+    'clientX',
+    'clientY',
+    'ctrlKey',
+    'metaKey',
+    'relatedTarget',
+    'screenX',
+    'screenY',
+    'shiftKey'
+]);
+
+const W3CTouchEventProps = W3CUIEventProps.concat([
+    'altKey',
+    'changedTouches',
+    'ctrlKey',
+    'metaKey',
+    'shiftKey',
+    'targetTouches',
+    'touches'
+]);
+
+const additionalProps = [
+    'originalEvent',
+
+    'stopPropagation',
+    'stopImmediatePropagation',
+    'preventDefault',
+
+    'relatedTarget',
+    'delegateTarget',
+
+    'which',
+    'button',
+    'charCode',
+
+    'pageX',
+    'pageY',
+
+    'offsetX',
+    'offsetY'
+];
+
+const eventOwnProps = ['originalEvent', 'type', 'currentTarget', 'timeStamp'];
+
 testStart(() => {
     const markup = `
         <div id="container">
@@ -24,6 +87,25 @@ testStart(() => {
 });
 
 QUnit.module('event utils', () => {
+    if(compare($.fn.jquery, [3]) >= 0) {
+        const allProps = additionalProps.concat(W3CTouchEventProps);
+        $.each(['mousedown', 'mousemove', 'mouseup', 'click', 'keydown', 'keyup'], function(index, eventName) {
+            test(`${eventName} support original event properties`, function(assert) {
+                const targetElement = $('#element');
+                const e = nativePointerMock(targetElement).eventMock(eventName, { delegateTarget: $('#element').get(0) });
+
+                $.each(allProps, function() {
+                    assert.ok(this in e || this in e.originalEvent, 'event has \'' + this + '\' property');
+                });
+                if(!navigator.pointerEnabled && !navigator.msPointerEnabled) {
+                    $.each(eventOwnProps, function(_, propName) {
+                        assert.ok(Object.prototype.hasOwnProperty.call(e, propName), 'property \'' + this + '\' is own property');
+                    });
+                }
+            });
+        });
+    }
+
     test('mouse support methods', function(assert) {
         const time = new Date().valueOf();
         const targetElement = $('#element');
@@ -583,6 +665,26 @@ QUnit.module('skip mousewheel event test', () => {
             $element.remove();
         }
     });
+
+    test('needSkipEvent returns false for dropDownList popup (T1000311)', function(assert) {
+        const $element = $('<div class=\'dx-skip-gesture-event\'></div>');
+        const $popup = $('<div class=\'dx-dropdownlist-popup-wrapper\'></div>');
+
+        $popup.appendTo($element);
+
+        assert.notOk(needSkipMouseWheel($popup), 'event is not skipped in inner dropdownlist popup wrapper element');
+    });
+
+    test('needSkipEvent returns false for dropDownList popup child (T1000311)', function(assert) {
+        const $element = $('<div class=\'dx-skip-gesture-event\'></div>');
+        const $popup = $('<div class=\'dx-dropdownlist-popup-wrapper\'></div>');
+        const $content = $('<div class=\'some-content\'></div>');
+
+        $popup.appendTo($element);
+        $content.appendTo($popup);
+
+        assert.notOk(needSkipMouseWheel($content), 'event is not skipped in inner dropdownlist popup wrapper child');
+    });
 });
 
 QUnit.module('skip mouse event tests', () => {
@@ -700,46 +802,6 @@ QUnit.module('skip pointer event tests', () => {
 
 if(compare($.fn.jquery, [3]) < 0) {
     QUnit.module('JQuery integration', () => {
-        const W3CEventProps = [
-            'bubbles',
-            'cancelable',
-            'currentTarget',
-            'eventPhase',
-            'target',
-            'timeStamp',
-            'type',
-            'preventDefault',
-            'stopPropagation'
-        ];
-
-        const W3CUIEventProps = W3CEventProps.concat([
-            'detail',
-            'view'
-        ]);
-
-        const W3CMouseEventProps = W3CUIEventProps.concat([
-            'altKey',
-            'button',
-            'clientX',
-            'clientY',
-            'ctrlKey',
-            'metaKey',
-            'relatedTarget',
-            'screenX',
-            'screenY',
-            'shiftKey'
-        ]);
-
-        const W3CTouchEventProps = W3CUIEventProps.concat([
-            'altKey',
-            'changedTouches',
-            'ctrlKey',
-            'metaKey',
-            'shiftKey',
-            'targetTouches',
-            'touches'
-        ]);
-
         const W3CPointerEventProps = W3CMouseEventProps.concat([
             'pointerId',
             'pointerType',

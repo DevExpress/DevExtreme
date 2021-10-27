@@ -1927,6 +1927,83 @@ QUnit.module('option change', moduleConfig, () => {
         const $fileInput = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
         assert.equal($fileInput.val(), fakeFile.name, 'value was not set to empty string');
     });
+    QUnit.test('event subscriptions should be removed before widget is disposed of (T1016127)', function(assert) {
+        const customDropZone = $('<div>').addClass('dropZone').appendTo('#qunit-fixture');
+        const customDialogTrigger = $('<div>').addClass('trigger').appendTo('#qunit-fixture');
+        const instance = $('#fileuploader').dxFileUploader().dxFileUploader('instance');
+        sinon.stub(instance, '_attachSelectFileDialogHandler');
+        sinon.stub(instance, '_detachSelectFileDialogHandler');
+        sinon.stub(instance, '_attachDragEventHandlers');
+        sinon.stub(instance, '_detachDragEventHandlers');
+
+        instance.option({
+            uploadMode: 'useButtons',
+            dialogTrigger: '.trigger',
+            dropZone: '.dropZone'
+        });
+        this.clock.tick(100);
+        instance._detachSelectFileDialogHandler.reset();
+        instance._detachDragEventHandlers.reset();
+
+        assert.ok(instance._attachSelectFileDialogHandler.callCount >= 1, '_attachSelectFileDialogHandler method called');
+        let items = instance._attachSelectFileDialogHandler.args[0];
+        assert.strictEqual(items.length, 1, '_attachSelectFileDialogHandler args is valid');
+        assert.strictEqual(items[0], '.trigger', '_attachSelectFileDialogHandler args is valid');
+
+        assert.ok(instance._attachDragEventHandlers.callCount >= 1, '_attachDragEventHandlers method called');
+        items = instance._attachDragEventHandlers.args[0];
+        assert.strictEqual(items.length, 1, '_attachDragEventHandlers args is valid');
+        assert.strictEqual(items[0], '.dropZone', '_attachDragEventHandlers args is valid');
+
+        instance.dispose();
+
+        assert.strictEqual(instance._detachSelectFileDialogHandler.callCount, 1, '_detachSelectFileDialogHandler method called');
+        items = instance._detachSelectFileDialogHandler.args[0] || [];
+        assert.strictEqual(items.length, 1, '_detachSelectFileDialogHandler args is valid');
+        assert.strictEqual(items[0], '.trigger', '_detachSelectFileDialogHandler args is valid');
+
+        assert.strictEqual(instance._detachDragEventHandlers.callCount, 1, '_detachDragEventHandlers method called');
+        items = instance._detachDragEventHandlers.args[0] || [];
+        assert.strictEqual(items.length, 1, '_detachDragEventHandlers args is valid');
+        assert.strictEqual(items[0], '.dropZone', '_detachDragEventHandlers args is valid');
+
+        instance._attachSelectFileDialogHandler.restore();
+        instance._detachSelectFileDialogHandler.restore();
+        instance._attachDragEventHandlers.restore();
+        instance._detachDragEventHandlers.restore();
+        customDropZone.remove();
+        customDialogTrigger.remove();
+    });
+    QUnit.test('uploader must change hoverStateEnabled option of all buttons by general hoverStateEnabled change', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons'
+        });
+        simulateFileChoose($fileUploader, fakeFile);
+        this.clock.tick(100);
+
+        let buttonElements = $fileUploader.find('.' + FILEUPLOADER_BUTTON_CLASS);
+        assert.strictEqual(buttonElements.length, 4, 'all buttons found');
+        buttonElements.each((index, button) => {
+            const buttonElem = $(button);
+            buttonElem.trigger('dxpointerenter');
+            assert.ok(buttonElem.hasClass('dx-state-hover'));
+            buttonElem.trigger('dxpointerleave');
+        });
+
+        $fileUploader.dxFileUploader({
+            hoverStateEnabled: false
+        });
+        this.clock.tick(100);
+
+        buttonElements = $fileUploader.find('.' + FILEUPLOADER_BUTTON_CLASS);
+        assert.strictEqual(buttonElements.length, 4, 'all buttons found');
+        buttonElements.each((index, button) => {
+            const buttonElem = $(button);
+            buttonElem.trigger('dxpointerenter');
+            assert.notOk(buttonElem.hasClass('dx-state-hover'));
+            buttonElem.trigger('dxpointerleave');
+        });
+    });
 });
 
 QUnit.module('file uploading', moduleConfig, () => {
@@ -3575,6 +3652,36 @@ QUnit.module('files selection', moduleConfig, () => {
         simulateFileChoose($fileUploader, fakeFile1);
 
         assert.equal($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 1, 'only one file is in list');
+    });
+
+    QUnit.test('the file list should not remove duplicates (T969288)', function(assert) {
+        const uploadedSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            chunkSize: 200000,
+            uploadChunk: () => executeAfterDelay(null, this.xhrMock.LOAD_TIMEOUT),
+            onUploaded: uploadedSpy
+        });
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        const files = [createBlobFile('fake1.png', 100023), createBlobFile('fake2.png', 5000)];
+        simulateFileChoose($fileUploader, files);
+        instance.upload();
+
+        assert.strictEqual($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 2, 'two files are in the list');
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        assert.ok(uploadedSpy.calledTwice, 'two files are loaded');
+
+        uploadedSpy.reset();
+        simulateFileChoose($fileUploader, files);
+        instance.upload();
+
+        assert.strictEqual($fileUploader.find('.' + FILEUPLOADER_FILE_CLASS).length, 4, 'four files are in the list');
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        assert.ok(uploadedSpy.calledTwice, 'two files are loaded again');
     });
 });
 

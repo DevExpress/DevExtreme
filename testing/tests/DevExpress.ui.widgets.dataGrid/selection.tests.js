@@ -1484,6 +1484,23 @@ QUnit.module('Selection', { beforeEach: setupSelectionModule, afterEach: teardow
         assert.strictEqual(this.getSelectedRowKeys().length, 6, 'selected row count');
         assert.strictEqual(this.selectionController.isSelectAll(), true, 'isSelectAll');
     });
+
+    ['single', 'multiple'].forEach(selectionMode => {
+        QUnit.test(`Disabled item should be selected when mode = ${selectionMode} (T1015840)`, function(assert) {
+            this.applyOptions({
+                selection: {
+                    mode: selectionMode
+                }
+            });
+            this.array[0].disabled = true;
+
+            // act
+            this.selectionController.changeItemSelection(0, { control: selectionMode === 'multiple' });
+
+            // assert
+            assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', age: 15, disabled: true }]);
+        });
+    });
 });
 
 QUnit.module('Selection without dataSource', { beforeEach: setupModule, afterEach: teardownModule }, () => {

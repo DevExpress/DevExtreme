@@ -1,4 +1,4 @@
-import { isPlainObject, isEmptyObject, isDefined } from '../core/utils/type';
+import { isPlainObject, isEmptyObject, isDefined, isObject } from '../core/utils/type';
 import config from '../core/config';
 import Guid from '../core/guid';
 import { extend, extendFromObject } from '../core/utils/extend';
@@ -80,11 +80,26 @@ function setDataByKeyMapValue(array, key, data) {
     }
 }
 
-function createObjectWithChanges(target, changes) {
-    const result = target ? Object.create(Object.getPrototypeOf(target)) : {};
-    const targetWithoutPrototype = extendFromObject({}, target);
+function cloneInstance(instance) {
+    const result = instance ? Object.create(Object.getPrototypeOf(instance)) : {};
+    const instanceWithoutPrototype = extendFromObject({}, instance);
 
-    deepExtendArraySafe(result, targetWithoutPrototype, true, true);
+    for(const name in instanceWithoutPrototype) {
+        const prop = instanceWithoutPrototype[name];
+
+        if(isObject(prop) && !isPlainObject(prop)) {
+            instanceWithoutPrototype[name] = cloneInstance(prop);
+        }
+    }
+
+    deepExtendArraySafe(result, instanceWithoutPrototype, true, true);
+
+    return result;
+}
+
+function createObjectWithChanges(target, changes) {
+    const result = cloneInstance(target);
+
     return deepExtendArraySafe(result, changes, true, true);
 }
 

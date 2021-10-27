@@ -105,7 +105,7 @@ const dxPieChart = BaseChart.inherit({
         });
     },
 
-    _optionChangesOrder: ['CENTER_TEMPLATE'],
+    _customChangesOrder: ['CENTER_TEMPLATE'],
 
     _optionChangesMap: {
         diameter: 'REINIT',
@@ -115,7 +115,7 @@ const dxPieChart = BaseChart.inherit({
     },
 
     _change_CENTER_TEMPLATE() {
-        this._renderExtraElements();
+        this._renderCenterTemplate();
     },
 
     _disposeCore: function() {
@@ -333,6 +333,10 @@ const dxPieChart = BaseChart.inherit({
     },
 
     _renderExtraElements() {
+        this._requestChange(['CENTER_TEMPLATE']);
+    },
+
+    _renderCenterTemplate() {
         let template = this.option('centerTemplate');
         const centerTemplateGroup = this._centerTemplateGroup.clear();
 

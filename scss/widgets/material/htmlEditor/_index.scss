@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -33,7 +34,8 @@
     color: $texteditor-placeholder-color;
   }
 
-  pre {
+  code,
+  .ql-code-block-container { // stylelint-disable-line selector-class-pattern
     color: color.change($base-text-color, $alpha: 0.8);
   }
 
@@ -95,7 +97,7 @@
   border-left-color: $htmleditor-toolbar-border-color;
 
   .dx-toolbar-multiline & {
-    height: $material-toolbar-height / 2;
+    height: math.div($material-toolbar-height, 2);
   }
 }
 

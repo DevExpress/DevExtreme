@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "colors" as *;
 @use "../colors" as *;
@@ -128,7 +129,7 @@ $treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $mat
 
     .dx-checkbox {
       top: 50%;
-      margin-top: -$material-grid-base-checkbox-size / 2;
+      margin-top: math.div(-$material-grid-base-checkbox-size, 2);
     }
   }
 }
@@ -138,7 +139,7 @@ $treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $mat
 
   .dx-checkbox {
     left: $treelist-checkbox-offset-left;
-    top: ($material-grid-base-header-height - $material-grid-base-checkbox-size) / 2;
+    top: math.div($material-grid-base-header-height - $material-grid-base-checkbox-size, 2);
   }
 }
 

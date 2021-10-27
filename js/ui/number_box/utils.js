@@ -1,3 +1,5 @@
+import { adjust } from '../../core/utils/math';
+
 const getRealSeparatorIndex = function(str) {
     let quoteBalance = 0;
     let separatorCount = 0;
@@ -38,8 +40,13 @@ const splitByIndex = function(str, index) {
     return [str.slice(0, index), str.slice(index + 1)];
 };
 
+const adjustPercentValue = function(rawValue, precision) {
+    return rawValue && adjust(rawValue / 100, precision);
+};
+
 export {
     getRealSeparatorIndex,
     getNthOccurrence,
-    splitByIndex
+    splitByIndex,
+    adjustPercentValue
 };

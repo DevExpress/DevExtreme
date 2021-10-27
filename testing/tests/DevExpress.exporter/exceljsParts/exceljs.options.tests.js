@@ -1,4 +1,3 @@
-import messageLocalization from 'localization/message';
 import { runCommonOptionTests } from '../commonParts/options.tests.js';
 import DataGrid from 'ui/data_grid/ui.data_grid';
 import PivotGrid from 'ui/pivot_grid/ui.pivot_grid';
@@ -45,18 +44,16 @@ const ExcelJSOptionTests = {
 
             QUnit.test('loadPanel', function(assert) {
                 const component = getComponent();
-                const defaultLoadPanel = { enabled: true, text: messageLocalization.format('dxDataGrid-exporting') };
+                const defaultLoadPanel = { enabled: true };
 
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet }).loadPanel, defaultLoadPanel, 'no member');
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: undefined }).loadPanel, defaultLoadPanel, 'undefined');
                 assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: null }).loadPanel, defaultLoadPanel, 'null');
 
-                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: {} }).loadPanel, { enabled: true, text: defaultLoadPanel.text }, 'loadPanel: {}');
-                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: { enabled: true } }).loadPanel, { enabled: true, text: defaultLoadPanel.text }, '{ enabled: true } }');
-                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: { text: 'my text' } }).loadPanel, { enabled: true, text: 'my text' }, '{ text: my text }');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: {} }).loadPanel, { enabled: true }, 'loadPanel: {}');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: { enabled: true } }).loadPanel, { enabled: true }, '{ enabled: true } }');
 
-                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: { enabled: false } }).loadPanel, { enabled: false, text: defaultLoadPanel.text }, '{ enabled: false } }');
-                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: { enabled: false, text: 'my text' } }).loadPanel, { enabled: false, text: 'my text' }, '{ enabled: false, text: my text } }');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, loadPanel: { enabled: false } }).loadPanel, { enabled: false }, '{ enabled: false } }');
             });
 
             QUnit.test('autoFilterEnabled', function(assert) {

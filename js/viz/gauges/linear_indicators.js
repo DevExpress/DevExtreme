@@ -205,7 +205,7 @@ const triangleMarker = SimpleIndicator.inherit({
         width > 10 || (width = 10);
         length > 20 || (length = 20);
         if(that.vertical) {
-            x1 = x2 = options.x;
+            x1 = options.x;
             x2 = x1 + (that._inverted ? length : -length);
             y1 = that._zeroPosition + width;
             y2 = that._zeroPosition - width;

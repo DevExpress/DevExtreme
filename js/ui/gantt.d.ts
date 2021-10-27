@@ -68,7 +68,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    validation?: { validateDependencies?: boolean, autoUpdateParentTasks?: boolean };
+    validation?: { validateDependencies?: boolean, autoUpdateParentTasks?: boolean, enablePredecessorGap?: boolean};
     /**
      * @docid dxGanttOptions.onSelectionChanged
      * @extends Action

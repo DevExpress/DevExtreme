@@ -80,10 +80,10 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 const startDateOffsetDiff = appointmentOffsets.startDate.appointment - sourceOffsets.startDate.appointment;
                 const endDateOffsetDiff = appointmentOffsets.endDate.appointment - sourceOffsets.endDate.appointment;
 
-                if(startDateOffsetDiff !== 0) {
+                if(sourceOffsets.startDate.appointment !== sourceOffsets.startDate.common) {
                     a.startDate = new Date(a.startDate.getTime() + startDateOffsetDiff * toMs('hour'));
                 }
-                if(endDateOffsetDiff !== 0) {
+                if(sourceOffsets.endDate.appointment !== sourceOffsets.endDate.common) {
                     a.endDate = new Date(a.endDate.getTime() + endDateOffsetDiff * toMs('hour'));
                 }
             });
@@ -156,42 +156,40 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         return offset;
     }
 
+    _getCommonOffset(date) {
+        return this.timeZoneCalculator.getOffsets(date).common;
+    }
+
+
     _getProcessedNotNativeTimezoneDates(appointmentList, appointment) {
-        const startDateRange = appointment.startDate;
-        const endDateRange = appointmentList[appointmentList.length - 1].endDate;
+        return appointmentList.map(item => {
+            let diffStartDateOffset = this._getCommonOffset(appointment.startDate) - this._getCommonOffset(item.startDate);
+            let diffEndDateOffset = this._getCommonOffset(appointment.endDate) - this._getCommonOffset(item.endDate);
 
-        const startDateRangeOffset = this.timeZoneCalculator.getOffsets(startDateRange).common;
-        const endDateRangeOffset = this.timeZoneCalculator.getOffsets(endDateRange).common;
+            if(diffStartDateOffset === 0 && diffEndDateOffset === 0) {
+                return item;
+            }
 
-        const isChangeOffsetInRange = startDateRangeOffset !== endDateRangeOffset;
+            diffStartDateOffset = this._getProcessedNotNativeDateIfCrossDST(item.startDate, diffStartDateOffset);
+            diffEndDateOffset = this._getProcessedNotNativeDateIfCrossDST(item.endDate, diffEndDateOffset);
 
-        if(isChangeOffsetInRange) {
-            return appointmentList.map(a => {
-                let diffStartDateOffset = this.timeZoneCalculator.getOffsets(appointment.startDate).common - this.timeZoneCalculator.getOffsets(a.startDate).common;
-                let diffEndDateOffset = this.timeZoneCalculator.getOffsets(appointment.endDate).common - this.timeZoneCalculator.getOffsets(a.endDate).common;
+            const newStartDate = new Date(item.startDate.getTime() + diffStartDateOffset * toMs('hour'));
+            let newEndDate = new Date(item.endDate.getTime() + diffEndDateOffset * toMs('hour'));
 
-                diffStartDateOffset = this._getProcessedNotNativeDateIfCrossDST(a.startDate, diffStartDateOffset);
-                diffEndDateOffset = this._getProcessedNotNativeDateIfCrossDST(a.endDate, diffEndDateOffset);
+            const testNewStartDate = this.timeZoneCalculator.createDate(newStartDate, { path: 'toGrid' });
+            const testNewEndDate = this.timeZoneCalculator.createDate(newEndDate, { path: 'toGrid' });
 
-                const newStartDate = new Date(a.startDate.getTime() + diffStartDateOffset * toMs('hour'));
-                let newEndDate = new Date(a.endDate.getTime() + diffEndDateOffset * toMs('hour'));
+            if(appointment.duration > testNewEndDate.getTime() - testNewStartDate.getTime()) {
+                newEndDate = new Date(newStartDate.getTime() + appointment.duration);
+            }
 
-                const testNewStartDate = this.timeZoneCalculator.createDate(newStartDate, { path: 'toGrid' });
-                const testNewEndDate = this.timeZoneCalculator.createDate(newEndDate, { path: 'toGrid' });
-
-                if(appointment.duration > testNewEndDate.getTime() - testNewStartDate.getTime()) {
-                    newEndDate = new Date(newStartDate.getTime() + appointment.duration);
-                }
-
-                return {
-                    startDate: newStartDate,
-                    endDate: newEndDate,
-                    exceptionDate: new Date(newStartDate)
-                };
-            });
-        }
-
-        return appointmentList;
+            return {
+                ...item,
+                startDate: newStartDate,
+                endDate: newEndDate,
+                exceptionDate: new Date(newStartDate)
+            };
+        });
     }
 
     _getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment) {

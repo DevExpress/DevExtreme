@@ -87,46 +87,53 @@ QUnit.module('Adaptive columns', baseModuleConfig, () => {
         assert.strictEqual($cell.text(), 'test updated', 'field1 text is updated');
     });
 
-    QUnit.test('Columns hiding - columnHidingEnabled is true', function(assert) {
-        // arrange
-        $('#container').width(200);
+    [false, true].forEach((usingCssStringInWidth) => {
+        QUnit.test(`Columns hiding - columnHidingEnabled is true (usingCssStringInWidth: ${usingCssStringInWidth})`, function(assert) {
+            // arrange
+            const columnWidth = usingCssStringInWidth ? '100px' : 100;
 
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            loadingTimeout: undefined,
-            columnHidingEnabled: true,
-            dataSource: [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy' }],
-            columns: ['firstName', 'lastName']
+            $('#container').width(250);
+
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                loadingTimeout: null,
+                columnHidingEnabled: true,
+                dataSource: [{ value1: '1', value2: '2', value3: '3' }],
+                columns: [{ dataField: 'value1', minWidth: 100 }, { dataField: 'value2', width: columnWidth }, { dataField: 'value3', width: columnWidth }]
+            });
+            const instance = dataGrid.dxDataGrid('instance');
+            const adaptiveColumnsController = instance.getController('adaptiveColumns');
+            let $visibleColumns;
+
+            this.clock.tick();
+            $visibleColumns = $(instance.$element().find('.dx-header-row td:not(.dx-datagrid-hidden-column)'));
+
+            // act
+            assert.equal($visibleColumns.length, 3, 'only 3 column is visible');
+            assert.ok(!dataGridWrapper.headers.isColumnHidden(0), 'first column is shown');
+            assert.ok(!dataGridWrapper.headers.isColumnHidden(1), 'second column is shown');
+            assert.ok(dataGridWrapper.headers.isColumnHidden(2), 'third column is hidden');
+            assert.ok(!dataGridWrapper.headers.isColumnHidden(3), 'adaptive column is shown');
+            assert.equal($visibleColumns.eq(0).text(), 'Value 1', 'it is 1st column');
+            assert.equal(adaptiveColumnsController.getHiddenColumns()[0].dataField, 'value3', '\'3rd\' column is hidden');
+
+            $('#container').width(450);
+            instance.updateDimensions();
+            this.clock.tick();
+
+            $visibleColumns = $(instance.$element().find('.dx-header-row td:not(.dx-datagrid-hidden-column)'));
+
+            // assert
+            assert.equal($visibleColumns.length, 4, '2 columns are visible');
+            assert.ok(!dataGridWrapper.headers.isColumnHidden(0), 'first column is shown');
+            assert.ok(!dataGridWrapper.headers.isColumnHidden(1), 'second column is shown');
+            assert.ok(!dataGridWrapper.headers.isColumnHidden(2), 'third column is shown');
+            assert.ok(dataGridWrapper.headers.isColumnHidden(3), 'adaptive column is hidden');
+            assert.equal($visibleColumns.eq(0).text(), 'Value 1', 'First is \'value1\' column');
+            assert.equal($visibleColumns.eq(1).text(), 'Value 2', 'Second is \'value2\' column');
+            assert.equal($visibleColumns.eq(2).text(), 'Value 3', 'Second is \'value3\' column');
+            assert.equal(adaptiveColumnsController.getHiddenColumns().length, 0, 'There is no hidden columns');
+            assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 3, 'There is 3 columns in hiding queue');
         });
-        const instance = dataGrid.dxDataGrid('instance');
-        const adaptiveColumnsController = instance.getController('adaptiveColumns');
-        let $visibleColumns;
-
-        this.clock.tick();
-        $visibleColumns = $(instance.$element().find('.dx-header-row td'));
-
-        // act
-        assert.equal($visibleColumns.length, 3, 'only 1 column is visible');
-        assert.ok(!dataGridWrapper.headers.isColumnHidden(0), 'first column is shown');
-        assert.ok(dataGridWrapper.headers.isColumnHidden(1), 'second column is hidden');
-        assert.ok(!dataGridWrapper.headers.isColumnHidden(2), 'adaptive column is shown');
-        assert.equal($visibleColumns.eq(0).text(), 'First Name', 'it is \'firstName\' column');
-        assert.equal(adaptiveColumnsController.getHiddenColumns()[0].dataField, 'lastName', '\'lastName\' column is hidden');
-
-        $('#container').width(450);
-        instance.updateDimensions();
-        this.clock.tick();
-
-        $visibleColumns = $(instance.$element().find('.dx-header-row td'));
-
-        // assert
-        assert.equal($visibleColumns.length, 3, '2 columns are visible');
-        assert.ok(!dataGridWrapper.headers.isColumnHidden(0), 'first column is shown');
-        assert.ok(!dataGridWrapper.headers.isColumnHidden(1), 'second column is shown');
-        assert.ok(dataGridWrapper.headers.isColumnHidden(2), 'adaptive column is hidden');
-        assert.equal($visibleColumns.eq(0).text(), 'First Name', 'First is \'firstName\' column');
-        assert.equal($visibleColumns.eq(1).text(), 'Last Name', 'Second is \'lastName\' column');
-        assert.equal(adaptiveColumnsController.getHiddenColumns().length, 0, 'There is no hidden columns');
-        assert.equal(adaptiveColumnsController.getHidingColumnsQueue().length, 2, 'There is 2 columns in hiding queue');
     });
 
     QUnit.test('Columns hiding - hidingPriority', function(assert) {

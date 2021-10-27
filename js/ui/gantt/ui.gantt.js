@@ -537,6 +537,7 @@ class Gantt extends Widget {
                         this._updateGanttRowHeights();
                     }, 300);
                 }
+                dataOption._reloadDataSource();
                 this._raiseInsertedAction(optionName, data, insertedId);
             });
         }
@@ -548,7 +549,7 @@ class Gantt extends Widget {
                 if(optionName === GANTT_TASKS) {
                     this._updateTreeListDataSource();
                 }
-
+                dataOption._reloadDataSource();
                 this._raiseDeletedAction(optionName, key, this._convertCoreToMappedData(optionName, data));
             });
         }
@@ -566,12 +567,9 @@ class Gantt extends Widget {
             }
             dataOption.update(key, data, () => {
                 if(isTaskUpdated) {
-                    if(hasCustomFieldsData) {
-                        dataOption._refreshDataSource();
-                    }
                     this._updateTreeListDataSource();
                 }
-
+                dataOption._reloadDataSource();
                 this._raiseUpdatedAction(optionName, data, key);
             });
         }
@@ -615,11 +613,14 @@ class Gantt extends Widget {
         }
         return inverted;
     }
-    _updateTreeListDataSource() {
+    _updateTreeListDataSource(forceUpdate = false) {
         if(!this._skipUpdateTreeListDataSource()) {
             const dataSource = this.option('tasks.dataSource');
             const storeArray = this._tasksOption._getStore()._array || (dataSource.items && dataSource.items());
             this._setTreeListOption('dataSource', storeArray ? storeArray : dataSource);
+        } else if(forceUpdate) {
+            const data = this._treeList.option('dataSource');
+            this._onParentTasksRecalculated(data);
         }
     }
     _skipUpdateTreeListDataSource() {
@@ -632,7 +633,7 @@ class Gantt extends Widget {
     _addCustomFieldsDataFromCache(key, data) {
         this._cache.pullDataFromCache(key, data);
     }
-    _saveCustomFieldsDataToCache(key, data, forceUpdateOnKeyExpire = false) {
+    _saveCustomFieldsDataToCache(key, data, forceUpdateOnKeyExpire = false, isCustomFieldsUpdateOnly = false) {
         const customFieldsData = this._getCustomFieldsData(data);
         if(Object.keys(customFieldsData).length > 0) {
             const updateCallback = (key, data) => {
@@ -641,8 +642,8 @@ class Gantt extends Widget {
                     dataOption.update(key, data, (data, key) => {
                         const updatedCustomFields = {};
                         this._addCustomFieldsData(key, updatedCustomFields);
-                        this._updateTreeListDataSource();
-                        dataOption._refreshDataSource();
+                        this._updateTreeListDataSource(isCustomFieldsUpdateOnly);
+                        dataOption._reloadDataSource();
                         const selectedRowKey = this.option('selectedRowKey');
                         this._ganttView._selectTask(selectedRowKey);
                         this._raiseUpdatedAction(GANTT_TASKS, updatedCustomFields, key);
@@ -750,7 +751,8 @@ class Gantt extends Widget {
             coreArgs.cancel = args.cancel;
             coreArgs.newValues = this._convertMappedToCoreData(optionName, args.newValues);
             if(optionName === GANTT_TASKS) {
-                this._saveCustomFieldsDataToCache(args.key, args.newValues);
+                const forceUpdateOnKeyExpire = !Object.keys(coreArgs.newValues).length;
+                this._saveCustomFieldsDataToCache(args.key, args.newValues, forceUpdateOnKeyExpire);
             }
         }
     }
@@ -1141,10 +1143,12 @@ class Gantt extends Widget {
             const keyGetter = compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
             const modelItem = modelData && modelData.filter((obj) => keyGetter(obj) === key)[0];
             const customFields = this._getTaskCustomFields();
-            for(let i = 0; i < customFields.length; i++) {
-                const field = customFields[i];
-                if(Object.prototype.hasOwnProperty.call(modelItem, field)) {
-                    data[field] = modelItem[field];
+            if(modelItem) {
+                for(let i = 0; i < customFields.length; i++) {
+                    const field = customFields[i];
+                    if(Object.prototype.hasOwnProperty.call(modelItem, field)) {
+                        data[field] = modelItem[field];
+                    }
                 }
             }
         }
@@ -1506,7 +1510,13 @@ class Gantt extends Widget {
                 * @type boolean
                 * @default false
                 */
-                autoUpdateParentTasks: false
+                autoUpdateParentTasks: false,
+                /**
+                * @name dxGanttOptions.validation.enablePredecessorGap
+                * @type boolean
+                * @default false
+                */
+                enablePredecessorGap: false
             },
             toolbar: null,
             contextMenu: {
@@ -1559,8 +1569,10 @@ class Gantt extends Widget {
         this._ganttView._ganttViewCore.deleteTask(key);
     }
     updateTask(key, data) {
-        this._saveCustomFieldsDataToCache(key, data, true);
-        this._ganttView._ganttViewCore.updateTask(key, this._convertMappedToCoreData(GANTT_TASKS, data));
+        const coreTaskData = this._convertMappedToCoreData(GANTT_TASKS, data);
+        const isCustomFieldsUpdateOnly = !Object.keys(coreTaskData).length;
+        this._saveCustomFieldsDataToCache(key, data, true, isCustomFieldsUpdateOnly);
+        this._ganttView._ganttViewCore.updateTask(key, coreTaskData);
     }
     getDependencyData(key) {
         if(!isDefined(key)) {

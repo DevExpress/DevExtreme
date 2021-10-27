@@ -76,12 +76,13 @@ const moduleConfig = {
         const topLeft = { row: 2, column: 3 };
 
         const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
-            const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft } = options || {};
+            const { keepColumnWidths = true, selectedRowsOnly = false, topLeftCell = topLeft, loadPanel = { enabled: false } } = options || {};
 
             const result = {
                 component: dataGrid,
                 worksheet: context.worksheet,
                 topLeftCell: topLeftCell,
+                loadPanel: loadPanel,
                 customizeCell: (eventArgs) => {
                     if(isDefined(expectedCustomizeCellArgs)) {
                         helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, context.customizeCellCallCount++);
@@ -450,7 +451,7 @@ const moduleConfig = {
             }).dxDataGrid('instance');
 
             exportDataGrid(getOptions(this, dataGrid, null, true)).then(() => {
-                helper.checkColumnWidths([3.8, 67.6, undefined], topLeft.column, 0.2);
+                helper.checkColumnWidths([3.8, 67.6, undefined], topLeft.column);
                 done();
             });
         });
@@ -6545,4 +6546,21 @@ ExcelJSLocalizationFormatTests.runCurrencyTests([
     { value: 'SEK', expected: '$#,##0_);\\($#,##0\\)' } // NOT SUPPORTED in default
 ]);
 ExcelJSOptionTests.runTests(moduleConfig, exportDataGrid.__internals._getFullOptions, () => $('#dataGrid').dxDataGrid({}).dxDataGrid('instance'));
-LoadPanelTests.runTests(moduleConfig, exportDataGrid, () => $('#dataGrid').dxDataGrid({ dataSource: [{ f1: 'f1_1' }], loadingTimeout: undefined }).dxDataGrid('instance'), 'worksheet');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadPanel: { enabled: true },
+        loadingTimeout: null
+    }, 'worksheet');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadPanel: { enabled: false },
+        loadingTimeout: null
+    }, 'worksheet');
+LoadPanelTests.runTests(moduleConfig, exportDataGrid, (options) => $('#dataGrid').dxDataGrid(options).dxDataGrid('instance'),
+    {
+        dataSource: [{ f1: 'f1_1' }],
+        loadPanel: { enabled: 'auto' },
+        loadingTimeout: null
+    }, 'worksheet');

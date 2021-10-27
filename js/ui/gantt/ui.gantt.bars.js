@@ -225,6 +225,7 @@ export class GanttContextMenuBar extends Bar {
     show(point, items) {
         this._menu.option('items', items || this._items);
         this._menu.option('position.offset', { x: point.x, y: point.y });
+        this._menu.option('position.collision', 'fit');
         this._menu.show();
     }
 

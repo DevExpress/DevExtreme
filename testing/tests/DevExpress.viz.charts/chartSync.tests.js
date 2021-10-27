@@ -1590,6 +1590,22 @@ const environment = {
         assert.strictEqual(chart._loadingIndicator, null, 'load indicator is null');
     });
 
+    // T1001697
+    QUnit.test('Call annotationsPointerEventHandler after dispose', function(assert) {
+        // arrange
+        chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
+
+        const chart = this.createChart({
+            series: [{ type: 'line' }]
+        });
+
+        this.$container.remove();
+
+        chart._annotationsPointerEventHandler({});
+
+        assert.ok(true, 'should be no exceptions');
+    });
+
     QUnit.test('Call Dispose several times', function() {
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));
         chartMocks.seriesMockData.series.push(new MockSeries({ points: getPoints(10) }));

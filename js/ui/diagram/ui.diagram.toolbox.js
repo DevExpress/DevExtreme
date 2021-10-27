@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
-import { hasWindow } from '../../core/utils/window';
+import { hasWindow, getWindow } from '../../core/utils/window';
 import { Deferred } from '../../core/utils/deferred';
 import messageLocalization from '../../localization/message';
 import TextBox from '../text_box';
@@ -234,16 +234,14 @@ class DiagramToolbox extends DiagramFloatingPanel {
         return result;
     }
     _createTooltips(targets) {
-        const { Browser } = getDiagram();
-        if(Browser.TouchUI) return;
-
+        if(this._isTouchMode()) return;
         const $container = this.$element();
         targets.each((index, element) => {
             const $target = $(element);
             const title = $target.attr('title');
             if(title) {
                 const $tooltip = $('<div>')
-                    .html(title)
+                    .text(title)
                     .appendTo($container);
                 this._createComponent($tooltip, Tooltip, {
                     target: $target.get(0),
@@ -257,6 +255,17 @@ class DiagramToolbox extends DiagramFloatingPanel {
                 });
             }
         });
+    }
+    _isTouchMode() {
+        const { Browser } = getDiagram();
+        if(Browser.TouchUI) {
+            return true;
+        }
+        if(!hasWindow()) {
+            return false;
+        }
+        const window = getWindow();
+        return window.navigator && window.navigator.maxTouchPoints > 0;
     }
     _renderAccordion($container) {
         const data = this._getAccordionDataSource();

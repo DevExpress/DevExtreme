@@ -66,14 +66,12 @@ const moduleConfig = {
 QUnit.module('Editing operations', moduleConfig, () => {
 
     test('rename folder in folders area', function(assert) {
-        let $folderNode = this.wrapper.getFolderNode(1);
-        assert.equal($folderNode.find('span').text(), 'Folder 1', 'has target folder');
+        assert.equal(this.wrapper.getFolderNode(1).find('span').text(), 'Folder 1', 'has target folder');
 
-        $folderNode.trigger('dxclick');
-        $folderNode.trigger('click');
+        this.wrapper.getFolderActionButton(1).trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.wrapper.getContextMenuItem('Rename').trigger('dxclick');
         this.clock.tick(400);
 
         const $input = this.wrapper.getDialogTextInput();
@@ -83,21 +81,17 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getDialogButton('Save').trigger('dxclick');
         this.clock.tick(400);
 
-        $folderNode = this.wrapper.getFolderNode(1);
-        assert.equal($folderNode.find('span').text(), 'TestFolder 1', 'folder renamed');
-
+        assert.equal(this.wrapper.getFolderNode(1).find('span').text(), 'TestFolder 1', 'folder renamed');
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
     });
 
     test('rename folder in folders area by Enter in dialog input', function(assert) {
-        let $folderNode = this.wrapper.getFolderNode(1);
-        assert.equal($folderNode.find('span').text(), 'Folder 1', 'has target folder');
+        assert.equal(this.wrapper.getFolderNode(1).find('span').text(), 'Folder 1', 'has target folder');
 
-        $folderNode.trigger('dxclick');
-        $folderNode.trigger('click');
+        this.wrapper.getFolderActionButton(1).trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.wrapper.getContextMenuItem('Rename').trigger('dxclick');
         this.clock.tick(400);
 
         const $input = this.wrapper.getDialogTextInput();
@@ -108,9 +102,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         $input.trigger($.Event('keyup', { key: 'enter' }));
         this.clock.tick(400);
 
-        $folderNode = this.wrapper.getFolderNode(1);
-        assert.equal($folderNode.find('span').text(), 'TestFolder 1', 'folder renamed');
-
+        assert.equal(this.wrapper.getFolderNode(1).find('span').text(), 'TestFolder 1', 'folder renamed');
         assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
     });
 
@@ -243,10 +235,10 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $folderNode = $folderNodes.eq(1);
         assert.equal($folderNode.find('span').text(), 'Folder 1', 'has target folder');
 
-        $folderNode.trigger('dxclick');
+        this.wrapper.getFolderActionButton(1).trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Delete').trigger('dxclick');
+        this.wrapper.getContextMenuItem('Delete').trigger('dxclick');
         this.clock.tick(400);
 
         this.wrapper.getDialogButton('Delete').trigger('dxclick');
@@ -318,15 +310,14 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $folderNode = $folderNodes.eq(1);
         assert.equal($folderNode.find('span').text(), 'Folder 1', 'has target folder');
 
-        $folderNode.trigger('dxclick');
-        $folderNode.trigger('dxdblclick');
+        this.wrapper.getFolderActionButton(1).trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.wrapper.getContextMenuItem('Move to').trigger('dxclick');
         this.clock.tick(400);
 
         $folderNodes = this.wrapper.getFolderNodes(true);
-        $folderNodes.eq(5).trigger('dxclick');
+        $folderNodes.eq(3).trigger('dxclick');
 
         this.wrapper.getDialogButton('Move').trigger('dxclick');
         this.clock.tick(400);
@@ -356,15 +347,14 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const $folderNode = $folderNodes.eq(1);
         assert.equal($folderNode.find('span').text(), 'Folder 1', 'has target folder');
 
-        $folderNode.trigger('dxclick');
-        $folderNode.trigger('dxdblclick');
+        this.wrapper.getFolderActionButton(1).trigger('dxclick');
         this.clock.tick(400);
 
-        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.wrapper.getContextMenuItem('Copy to').trigger('dxclick');
         this.clock.tick(400);
 
         $folderNodes = this.wrapper.getFolderNodes(true);
-        $folderNodes.eq(5).trigger('dxclick');
+        $folderNodes.eq(3).trigger('dxclick');
 
         this.wrapper.getDialogButton('Copy').trigger('dxclick');
         this.clock.tick(400);
@@ -623,7 +613,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
     });
 
     test('Action dialogues must have "Cancel" button', function(assert) {
-        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxclick');
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
         this.clock.tick(400);
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
         this.clock.tick(400);
@@ -1668,7 +1658,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
     test('rtlEnabled option must affect choose directory dialogs', function(assert) {
         this.wrapper.getInstance().option({ rtlEnabled: true });
-        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
         this.clock.tick(100);
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
         this.clock.tick(400);
@@ -1678,7 +1669,8 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
     test('rtlEnabled option must affect edit name dialogs', function(assert) {
         this.wrapper.getInstance().option({ rtlEnabled: true });
-        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
         this.clock.tick(100);
         this.wrapper.getToolbarButton('Rename').trigger('dxclick');
         this.clock.tick(400);
@@ -1688,11 +1680,57 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
     test('rtlEnabled option must affect delete item dialog', function(assert) {
         this.wrapper.getInstance().option({ rtlEnabled: true });
-        this.wrapper.findThumbnailsItem('Folder 1').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger(CLICK_EVENT).click();
         this.clock.tick(100);
         this.wrapper.getToolbarButton('Delete').trigger('dxclick');
         this.clock.tick(400);
         assert.ok(this.wrapper.getDeleteItemDialog().hasClass('dx-rtl'));
         this.wrapper.getDialogButton('Cancel').trigger('dxclick');
+    });
+
+    test('it should not be possible to invoke move/copy dialog for treeView folders (T1004864)', function(assert) {
+        const originalFunc = renderer.fn.width;
+        renderer.fn.width = () => 1200;
+
+        this.$element.dxFileManager('option', {
+            selectionMode: 'multiple',
+            itemView: {
+                showFolders: false
+            },
+            width: '1200px'
+        });
+        this.clock.tick(400);
+        this.wrapper.getRowNameCellInDetailsView(1).trigger('dxhold');
+        this.clock.tick(400);
+        this.wrapper.getFolderToggle(0).trigger('dxclick').click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.notOk(this.wrapper.getToolbar().hasClass(Consts.GENERAL_TOOLBAR_CLASS), 'file toolbar displayed');
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        assert.strictEqual($folderNodes.length, 4, 'there are 4 nodes');
+        assert.strictEqual(this.wrapper.getFolderToggles(true).length, 2, 'there are 2 node toggles');
+
+        assert.ok($folderNodes.eq(0).is(':visible'), '\'Files\' node is visible');
+        assert.ok($folderNodes.eq(0).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Files\' node is disabled');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Files', true), true, '\'Files\' toggle is opened');
+
+        assert.ok($folderNodes.eq(1).is(':visible'), '\'Folder 1\' node is visible');
+        assert.notOk($folderNodes.eq(1).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 1\' node is enabled');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 1', true), false, '\'Folder 1\' toggle is closed');
+
+        assert.ok($folderNodes.eq(2).is(':visible'), '\'Folder 2\' node is visible');
+        assert.notOk($folderNodes.eq(2).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 2\' node is ensabled');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 2', true), null, '\'Folder 2\' toggle is absent');
+
+        assert.ok($folderNodes.eq(3).is(':visible'), '\'Folder 3\' node is visible');
+        assert.notOk($folderNodes.eq(3).is(`.${Consts.DISABLED_STATE_CLASS}`), '\'Folder 3\' node is enabled');
+        assert.strictEqual(this.wrapper.isFolderNodeToggleOpened('Folder 3', true), null, '\'Folder 3\' toggle is absent');
+
+        this.wrapper.getDialogButton('Cancel').trigger('dxclick');
+        renderer.fn.width = originalFunc;
     });
 });

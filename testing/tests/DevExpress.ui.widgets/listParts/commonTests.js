@@ -4,6 +4,7 @@ import { isRenderer } from 'core/utils/type';
 import { noop } from 'core/utils/common';
 import config from 'core/config';
 import devices from 'core/devices';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 import errors from 'ui/widget/ui.errors';
 import executeAsyncMock from '../../../helpers/executeAsyncMock.js';
 import fx from 'animation/fx';
@@ -943,6 +944,21 @@ QUnit.module('options', moduleSetup, () => {
 
         instance.option('wrapItemText', false);
         assert.notOk($container.hasClass('dx-wrap-item-text'), 'class was removed');
+    });
+
+    [
+        { isGrouped: false, items: [1] },
+        { isGrouped: true, items: [{ key: 'testGroup', items: [1] }] }
+    ].forEach(({ isGrouped, items }) => {
+        QUnit.test(`wrapItemText option should add the "white-space" style to the ${isGrouped ? 'group' : 'simple'} item content`, function(assert) {
+            const $element = this.element.dxList({
+                items,
+                grouped: isGrouped,
+                wrapItemText: true
+            });
+            const $itemContent = $element.find('.dx-list-item-content');
+            assert.strictEqual($itemContent.css('whiteSpace'), 'normal', 'white-space: normal');
+        });
     });
 });
 
@@ -1893,6 +1909,22 @@ QUnit.module('events', moduleSetup, () => {
 
         instance.option('items', ['a', 'b']);
         assert.strictEqual(itemRenderedSpy.callCount, 2);
+    });
+
+    QUnit.test('onItemRendered should have correct itemIndex parameter when data is grouped (T989015)', function(assert) {
+        const itemRenderedStub = sinon.stub();
+
+        $('#list').dxList({
+            dataSource: [{
+                key: 'a',
+                items: ['1']
+            }],
+            grouped: true,
+            onItemRendered: itemRenderedStub
+        }).dxList('instance');
+
+        const { itemIndex } = itemRenderedStub.getCall(0).args[0];
+        assert.deepEqual(itemIndex, { group: 0, item: 0 });
     });
 
     QUnit.test('itemRendered event', function(assert) {
@@ -3248,6 +3280,64 @@ QUnit.module('scrollView integration', {
 
         instance.scrollToItem(items[0]);
         assert.strictEqual(getCallSpy.callCount, 0);
+    });
+
+    QUnit.test('list should load new items if the new height allows it', function(assert) {
+        const dataSource = new DataSource({
+            store: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            pageSize: 5
+        });
+
+        const listHeight = 60;
+        const $container = $('#list')
+            .wrap('<div>')
+            .parent()
+            .height(listHeight);
+        const $list = $('#list').dxList({
+            height: '100%',
+            dataSource,
+            pageLoadMode: 'scrollBottom'
+        });
+
+        this.clock.tick();
+        const getListItemsCount = () => $(toSelector(LIST_ITEM_CLASS), $list).length;
+
+        assert.strictEqual(getListItemsCount(), 5, 'first page loaded');
+
+        $container.height(listHeight * 10);
+        resizeCallbacks.fire();
+        this.clock.tick();
+
+        assert.strictEqual(getListItemsCount(), 10, 'second page loaded');
+    });
+
+    QUnit.test('list should not load new items if the new height does not allows it', function(assert) {
+        const dataSource = new DataSource({
+            store: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            pageSize: 5
+        });
+
+        const listHeight = 60;
+        const $container = $('#list')
+            .wrap('<div>')
+            .parent()
+            .height(listHeight);
+        const $list = $('#list').dxList({
+            height: '100%',
+            dataSource,
+            pageLoadMode: 'scrollBottom'
+        });
+
+        this.clock.tick();
+        const getListItemsCount = () => $(toSelector(LIST_ITEM_CLASS), $list).length;
+
+        assert.strictEqual(getListItemsCount(), 5, 'first page loaded');
+
+        $container.height(listHeight * 2);
+        resizeCallbacks.fire();
+        this.clock.tick();
+
+        assert.strictEqual(getListItemsCount(), 5, 'new page has not been loaded');
     });
 });
 

@@ -522,8 +522,6 @@ const TagBox = SelectBox.inherit({
         eventsEngine.on(this._$tagsContainer, eventName, `.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`, (event) => {
             tagRemoveAction({ event });
         });
-
-        this._renderTypingEvent();
     },
 
     _renderSingleLineScroll: function() {
@@ -555,10 +553,11 @@ const TagBox = SelectBox.inherit({
         }
     },
 
-    _renderTypingEvent: function() {
+    _renderEvents: function() {
+        this.callBase();
+
         const input = this._input();
         const namespace = addNamespace('keydown', this.NAME);
-        eventsEngine.off(input, namespace);
         eventsEngine.on(input, namespace, (e) => {
             const keyName = normalizeKeyName(e);
             if(!this._isControlKey(keyName) && this._isEditable()) {
@@ -758,6 +757,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _getFilteredItems: function(values) {
+        this._loadFilteredItemsPromise?.reject();
         const creator = new FilterCreator(values);
 
         const listSelectedItems = this._list?.option('selectedItems');
@@ -794,6 +794,7 @@ const TagBox = SelectBox.inherit({
                 })
                 .fail(d.reject);
 
+            this._loadFilteredItemsPromise = d;
             return d.promise();
         }
     },
@@ -863,10 +864,20 @@ const TagBox = SelectBox.inherit({
 
     _getFilteredGroupedItems: function(values) {
         const selectedItems = new Deferred();
+        if(this._filteredGroupedItemsLoadPromise) {
+            this._dataSource.cancel(this._filteredGroupedItemsLoadPromise.operationId);
+        }
         if(!this._dataSource.items().length) {
-            this._dataSource.load().done(function() {
-                selectedItems.resolve(this._getItemsByValues(values));
-            }.bind(this)).fail(selectedItems.resolve([]));
+            this._filteredGroupedItemsLoadPromise = this._dataSource.load()
+                .done(() => {
+                    selectedItems.resolve(this._getItemsByValues(values));
+                })
+                .fail(() => {
+                    selectedItems.resolve([]);
+                })
+                .always(() => {
+                    this._filteredGroupedItemsLoadPromise = undefined;
+                });
         } else {
             selectedItems.resolve(this._getItemsByValues(values));
         }
@@ -1286,7 +1297,7 @@ const TagBox = SelectBox.inherit({
 
     _searchHandler: function(e) {
         if(this.option('searchEnabled') && !!e && !this._isTagRemoved) {
-            this.callBase(e);
+            this.callBase(arguments);
             this._setListDataSourceFilter();
         }
 
@@ -1501,7 +1512,7 @@ const TagBox = SelectBox.inherit({
             case 'readOnly':
             case 'disabled':
                 this.callBase(args);
-                !args.value && this._renderTypingEvent();
+                !args.value && this._refreshEvents();
                 break;
             case 'value':
                 this._valuesToUpdate = args?.value;

@@ -24,3 +24,67 @@ test('Drag-n-drop recurrence appointment between dateTable and allDay panel', as
   startDayHour: 1,
   recurrenceEditMode: 'series',
 }));
+
+test('Appointments in DST should not have offset when '
+  + 'recurring appointment timezoine not equal to scheduler timezone', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t
+    .expect(scheduler.getAppointmentByIndex(0).date.time)
+    .eql('2:00 PM - 2:30 PM')
+
+    .expect(scheduler.getAppointmentByIndex(1).date.time)
+    .eql('2:00 PM - 2:30 PM');
+
+  await scheduler.option('currentDate', new Date(2021, 10, 1));
+
+  await t
+    .expect(scheduler.getAppointmentByIndex(0).date.time)
+    .eql('2:00 PM - 2:30 PM')
+
+    .expect(scheduler.getAppointmentByIndex(1).date.time)
+    .eql('2:00 PM - 2:30 PM');
+}).before(async () => createScheduler({
+  timeZone: 'America/New_York',
+  dataSource: [
+    {
+      text: 'Recurrence',
+      startDate: new Date('2021-03-13T19:00:00.000Z'),
+      endDate: new Date('2021-03-13T19:30:00.000Z'),
+      recurrenceRule: 'FREQ=DAILY;COUNT=1000',
+      startDateTimeZone: 'America/New_York',
+      endDateTimeZone: 'America/New_York',
+    },
+  ],
+  views: ['week'],
+  currentView: 'week',
+  currentDate: new Date(2021, 2, 13),
+  firstDayOfWeek: 1,
+}));
+
+test('Appointments in end of DST should have correct offset', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  await t
+    .expect(scheduler.getAppointmentByIndex(5).date.time)
+    .eql('11:00 AM - 11:30 AM')
+
+    .expect(scheduler.getAppointmentByIndex(6).date.time)
+    .eql('12:00 PM - 12:30 PM');
+}).before(async () => createScheduler({
+  timeZone: 'America/Phoenix',
+  dataSource: [
+    {
+      text: 'Recurrence',
+      startDate: new Date('2021-03-13T19:00:00.000Z'),
+      endDate: new Date('2021-03-13T19:30:00.000Z'),
+      recurrenceRule: 'FREQ=DAILY;COUNT=1000',
+      startDateTimeZone: 'America/New_York',
+      endDateTimeZone: 'America/New_York',
+    },
+  ],
+  views: ['week'],
+  currentView: 'week',
+  currentDate: new Date(2021, 10, 1),
+  firstDayOfWeek: 1,
+}));

@@ -14,6 +14,7 @@ const POPOVER_CLASS = 'dx-popover';
 const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
 const POPOVER_ARROW_CLASS = 'dx-popover-arrow';
 const POPOVER_WITHOUT_TITLE_CLASS = 'dx-popover-without-title';
+const POPOVER_TITLE_CLASS = 'dx-popup-title';
 
 const positionAtWindowCenter = function(element) {
     positionUtils.setup(element, {
@@ -134,7 +135,7 @@ QUnit.module('render', () => {
         fixtures.simple.drop();
     });
 
-    QUnit.test('popup should not render arrow when the position side is center (T701940)', function(assert) {
+    QUnit.test('popover should not render arrow when the position side is center (T701940)', function(assert) {
         fixtures.simple.create();
 
         const popover = new Popover($('#what'), {
@@ -148,7 +149,7 @@ QUnit.module('render', () => {
         fixtures.simple.drop();
     });
 
-    QUnit.test('popup should render correctly when it\'s position.of is event', function(assert) {
+    QUnit.test('popover should render correctly when it\'s position.of is event', function(assert) {
         fixtures.collisionBottomLeft.create();
         try {
             const $target = $('#where');
@@ -225,6 +226,40 @@ QUnit.module('render', () => {
             popover._refresh();
 
             assert.equal(wrapper().find('.' + POPOVER_ARROW_CLASS).length, 1, 'popover has only one arrow');
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
+
+    QUnit.test('popover title should have border-top-radius style (T1010399)', function(assert) {
+        fixtures.simple.create();
+        try {
+            const $popover = $('#what');
+            new Popover($popover, {
+                visible: true,
+                showTitle: true,
+                title: 'title'
+            });
+            const $popoverTitle = wrapper().find('.' + POPOVER_TITLE_CLASS);
+
+            assert.strictEqual($popoverTitle.css('border-top-left-radius'), '6px', 'popover has border-top-left-radius');
+            assert.strictEqual($popoverTitle.css('border-top-right-radius'), '6px', 'popover has border-top-right-radius');
+        } finally {
+            fixtures.simple.drop();
+        }
+    });
+
+    QUnit.test('there should be no error if target=undefined (T1019015)', function(assert) {
+        fixtures.simple.create();
+        try {
+            const $popover = $('#what');
+            new Popover($popover, {
+                visible: true,
+                target: undefined
+            });
+            assert.ok(true, 'no error is raised');
+        } catch(e) {
+            assert.ok(false, `error is raised: ${e}`);
         } finally {
             fixtures.simple.drop();
         }

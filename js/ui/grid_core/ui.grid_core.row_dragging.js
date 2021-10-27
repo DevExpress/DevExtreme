@@ -85,6 +85,10 @@ const RowDraggingExtender = {
                     togglePointerEventsStyle(false);
                     rowDragging.onDragEnd?.(e);
                 },
+                onAdd: (e) => {
+                    togglePointerEventsStyle(false);
+                    rowDragging.onAdd?.(e);
+                },
                 dropFeedbackMode: browser.msie ? 'indicate' : rowDragging.dropFeedbackMode,
                 onOptionChanged: (e) => {
                     const hasFixedSortable = this[sortableFixedName];

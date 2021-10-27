@@ -537,7 +537,7 @@ QUnit.module('DataBinding', {
     test('reloadContent should update data correctly (external update)', function(assert) {
         const nodes = [
             {
-                id: '1',
+                id: 0,
                 text: 'text1'
             }
         ];
@@ -557,7 +557,7 @@ QUnit.module('DataBinding', {
         assert.equal(this.instance._diagramInstance.model.items[0].styleText['font-family'], 'Arial');
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle, undefined);
 
-        nodeStore.push([{ type: 'update', key: '1', data: { 'textStyle': 'font-family: Arial Black' } }]);
+        nodeStore.push([{ type: 'update', key: 0, data: { 'textStyle': 'font-family: Arial Black' } }]);
         this.clock.tick(100);
         assert.equal(this.instance._diagramInstance.model.items[0].styleText['font-family'], 'Arial Black');
         assert.equal(this.instance._diagramInstance.documentDataSource.nodeDataSource[0].textStyle, 'font-family: Arial Black');

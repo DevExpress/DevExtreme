@@ -1,3 +1,4 @@
+@use "sass:math";
 @use "sass:color";
 @use "../sizes" as *;
 @use "sizes" as *;
@@ -30,7 +31,7 @@ $material-normal-button-focused-state-shadow: $material-button-box-shadow-size $
 }
 
 @mixin dx-button-withtext-sizing() {
-  @include dx-button-sizing($material-button-padding, $material-button-icon-size - 6, $material-button-icon-size / 2);
+  @include dx-button-sizing($material-button-padding, $material-button-icon-size - 6, math.div($material-button-icon-size, 2));
 }
 
 @mixin dx-button-text-and-icon-sizing() {

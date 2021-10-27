@@ -732,19 +732,19 @@ function dateGenerator(options) {
         value = correctDateWithUnitBeginning(value);
 
         if('years' in intervalObject) {
-            value.setFullYear(floorNumber(value.getFullYear(), intervalObject.years, 0));
+            value.setFullYear(floorNumber(value.getFullYear(), intervalObject.years));
         } else if('quarters' in intervalObject) {
             value = correctDateWithUnitBeginning(floorAtStartDate(value));
         } else if('months' in intervalObject) {
-            value.setMonth(floorNumber(value.getMonth(), intervalObject.months, 0));
+            value.setMonth(floorNumber(value.getMonth(), intervalObject.months));
         } else if('weeks' in intervalObject || 'days' in intervalObject) {
             value = correctDateWithUnitBeginning(floorAtStartDate(value));
         } else if('hours' in intervalObject) {
-            value.setHours(floorNumber(value.getHours(), intervalObject.hours, 0));
+            value.setHours(floorNumber(value.getHours(), intervalObject.hours));
         } else if('minutes' in intervalObject) {
-            value.setMinutes(floorNumber(value.getMinutes(), intervalObject.minutes, 0));
+            value.setMinutes(floorNumber(value.getMinutes(), intervalObject.minutes));
         } else if('seconds' in intervalObject) {
-            value.setSeconds(floorNumber(value.getSeconds(), intervalObject.seconds, 0));
+            value.setSeconds(floorNumber(value.getSeconds(), intervalObject.seconds));
         } else if('milliseconds' in intervalObject) {
             value = floorAtStartDate(value);
         }

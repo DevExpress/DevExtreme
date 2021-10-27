@@ -163,11 +163,7 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
     _createStrategy: function() {
         const strategyName = this.option('useNative') ? this.option('refreshStrategy') : 'simulated';
-
         const strategyClass = refreshStrategies[strategyName];
-        if(!strategyClass) {
-            throw Error('E1030', this.option('refreshStrategy'));
-        }
 
         this._strategy = new strategyClass(this);
         this._strategy.pullDownCallbacks.add(this._pullDownHandler.bind(this));

@@ -57,7 +57,7 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
     const allArguments = [];
     const seriesInStacks = {};
     const barGroupWidth = options.barGroupWidth;
-    const interval = series[0] && series[0].getArgumentAxis().getTranslator().getInterval();
+    const interval = series[0]?.getArgumentAxis().getTranslator().getInterval();
     const barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
 
     series.forEach(function(s, i) {

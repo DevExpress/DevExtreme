@@ -296,6 +296,12 @@ define(function(require, exports, module) {
         QUnit.test('format: { time: \'medium\' }', function(assert) {
             assert.equal(dateLocalization.format(new Date(2015, 1, 2, 3, 4, 5, 6), { time: 'medium' }), '3:04:05 AM', 'with object format');
         });
+
+        QUnit.test('Parse custom format', function(assert) {
+            const expected = new Date(2010, 2, 2).toString();
+            assert.equal(dateLocalization.parse('20100302', 'yyyyMMdd'), expected, 'Format \'yyyyMMdd\' parse ok');
+            assert.equal(dateLocalization.parse('02mar10', 'dMyyyy'), expected, 'Format \'dMyyyy\' parse ok');
+        });
     });
 
     QUnit.module('Localization message (custom locales)', {
