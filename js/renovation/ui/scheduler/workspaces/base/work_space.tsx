@@ -36,7 +36,7 @@ import { getViewRenderConfigByType } from './work_space_config';
 import { HeaderPanelLayoutProps } from './header_panel/layout';
 import { DateTableLayoutProps } from './date_table/layout';
 import { TimePanelLayoutProps } from './time_panel/layout';
-import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
+import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 import { CrossScrollingLayout } from './cross_scrolling_layout';
 import { MainLayoutProps } from './main_layout_props';
 import { GroupOrientation } from '../../types';
@@ -116,6 +116,7 @@ export const viewFunction = ({
   layoutRef,
 
   isVerticalGrouping,
+  isGroupedByDate,
   isStandaloneAllDayPanel,
   groupOrientation,
 
@@ -131,7 +132,6 @@ export const viewFunction = ({
     resourceCellTemplate,
 
     groups,
-    groupByDate,
     allDayPanelExpanded,
     intervalCount,
 
@@ -161,7 +161,7 @@ export const viewFunction = ({
     resourceCellTemplate={resourceCellTemplate}
 
     groups={groups}
-    groupByDate={groupByDate}
+    groupByDate={isGroupedByDate}
     groupOrientation={groupOrientation}
     groupPanelClassName={groupPanelClassName}
 
@@ -248,6 +248,14 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
   get isHorizontalGrouping(): boolean {
     return isHorizontalGroupingApplied(this.props.groups, this.groupOrientation);
+  }
+
+  get isGroupedByDate(): boolean {
+    return isGroupingByDate(
+      this.props.groups,
+      this.groupOrientation,
+      this.props.groupByDate,
+    );
   }
 
   get layout(): JSXTemplate<
@@ -338,7 +346,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       groupOrientation: this.groupOrientation,
       isVerticalGrouping: this.isVerticalGrouping,
       isHorizontalGrouping: this.isHorizontalGrouping,
-      isGroupedByDate: groupByDate, // TODO: validate grouping by date
+      isGroupedByDate: this.isGroupedByDate,
       isAllDayPanelVisible: this.isAllDayPanelVisible,
       viewType: type,
       interval: this.viewDataGenerator.getInterval(hoursInterval),
@@ -382,7 +390,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
   get completeDateHeaderData(): DateHeaderCellData[][] {
     const {
-      groupByDate,
       groups,
       startDayHour,
       endDayHour,
@@ -395,7 +402,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return this.dateHeaderDataGenerator.getCompleteDateHeaderMap(
       {
         isGenerateWeekDaysHeaderData: this.renderConfig.isGenerateWeekDaysHeaderData,
-        isGroupedByDate: groupByDate, // TODO: validate grouping by date
+        isGroupedByDate: this.isGroupedByDate, // TODO: validate grouping by date
         groups,
         groupOrientation: this.groupOrientation,
         isHorizontalGrouping: this.isHorizontalGrouping,
@@ -422,7 +429,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       endDayHour,
       hoursInterval,
       groups,
-      groupByDate,
     } = this.props;
     return this.dateHeaderDataGenerator.generateDateHeaderData(
       this.completeDateHeaderData,
@@ -438,7 +444,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         // cellCount: TODO: add virtual scrolling
         groups,
         groupOrientation: this.groupOrientation,
-        isGroupedByDate: groupByDate, // TODO :validate grouping by date
+        isGroupedByDate: this.isGroupedByDate,
       },
     );
   }
@@ -499,7 +505,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     const {
       intervalCount,
       groups,
-      groupByDate, // TODO: validate grouping by date
       startDayHour,
       endDayHour,
       currentDate,
@@ -519,7 +524,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       {
         intervalCount,
         groups,
-        groupByDate,
+        groupByDate: this.isGroupedByDate,
         groupOrientation: this.groupOrientation,
         startDayHour,
         endDayHour,
@@ -544,7 +549,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     const {
       intervalCount,
       groups,
-      groupByDate,
       startDayHour,
       endDayHour,
       currentDate,
@@ -564,8 +568,8 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     const groupPanelData = getGroupPanelData(
       groups,
       columnCountPerGroup,
-      groupByDate,
-      groupByDate ? 1 : columnCountPerGroup,
+      this.isGroupedByDate,
+      this.isGroupedByDate ? 1 : columnCountPerGroup,
     );
 
     return groupPanelData;
@@ -599,7 +603,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     const {
       intervalCount,
       allDayPanelExpanded,
-      groupByDate,
       groups,
     } = this.props;
 
@@ -609,7 +612,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       'dx-scheduler-work-space-odd-cells': !!this.isWorkSpaceWithOddCells,
       'dx-scheduler-work-space-all-day-collapsed': !allDayPanelExpanded && this.isAllDayPanelVisible,
       'dx-scheduler-work-space-all-day': this.isAllDayPanelVisible,
-      'dx-scheduler-work-space-group-by-date': groupByDate,
+      'dx-scheduler-work-space-group-by-date': this.isGroupedByDate,
       'dx-scheduler-work-space-grouped': groups.length > 0,
       'dx-scheduler-work-space-vertical-grouped': this.isVerticalGrouping
         && this.renderConfig.defaultGroupOrientation !== 'vertical',

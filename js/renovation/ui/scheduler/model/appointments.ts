@@ -94,7 +94,7 @@ export const getAppointmentsConfig = (
     viewType: viewConfig.type,
     cellDurationInMinutes: viewConfig.cellDuration,
     isVerticalGroupOrientation: viewDataProvider.getViewOptions().isVerticalGrouping,
-    groupByDate: viewConfig.groupByDate,
+    groupByDate: viewDataProvider.getViewOptions().isGroupedByDate,
     startViewDate,
     loadedResources,
     appointmentCountPerCell: 2, // TODO default
