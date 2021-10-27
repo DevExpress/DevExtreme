@@ -1,7 +1,6 @@
 import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
-    DxElement,
 } from '../core/element';
 
 import {
@@ -9,7 +8,6 @@ import {
 } from '../core/utils/deferred';
 
 import {
-    DxEvent,
     Cancelable,
     EventInfo,
     NativeEventInfo,
@@ -23,38 +21,44 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
-/** @public */
-export type CancelClickEvent = Cancelable & EventInfo<dxActionSheet>;
+type ItemLike<TKey> = string | Item<TKey> | any;
 
 /** @public */
-export type ContentReadyEvent = EventInfo<dxActionSheet>;
+export type CancelClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Cancelable & EventInfo<dxActionSheet<TItem, TKey>>;
 
 /** @public */
-export type DisposingEvent = EventInfo<dxActionSheet>;
+export type ContentReadyEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxActionSheet>;
+export type DisposingEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
+export type InitializedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = InitializedEventInfo<dxActionSheet<TItem, TKey>>;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
+export type ItemClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
+export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
+export type ItemHoldEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxActionSheet> & ChangedOptionInfo;
+export type ItemRenderedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxActionSheet<TItem, TKey>> & ItemInfo<TItem>;
+
+/** @public */
+export type OptionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxActionSheet<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
-export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
+export interface dxActionSheetOptions<
+    TItem extends ItemLike<TKey> = any,
+    TKey = any,
+> extends CollectionWidgetOptions<dxActionSheet<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @default "Cancel"
@@ -67,14 +71,14 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<string | Item | any>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @type Array<string | dxActionSheetItem | any>
      * @fires dxActionSheetOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | Item | any>;
+    items?: Array<TItem>;
     /**
      * @docid
      * @default null
@@ -87,7 +91,7 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
      * @action
      * @public
      */
-    onCancelClick?: ((e: CancelClickEvent) => void) | string;
+    onCancelClick?: ((e: CancelClickEvent<TItem, TKey>) => void) | string;
     /**
      * @docid
      * @default true
@@ -132,7 +136,10 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxActionSheet extends CollectionWidget<dxActionSheetOptions> {
+export default class dxActionSheet<
+    TItem extends ItemLike<TKey> = any,
+    TKey = any,
+> extends CollectionWidget<dxActionSheetOptions<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
      * @publicName hide()
@@ -160,13 +167,13 @@ export default class dxActionSheet extends CollectionWidget<dxActionSheetOptions
  * @public
  * @namespace DevExpress.ui.dxActionSheet
  */
-export type Item = dxActionSheetItem;
+export type Item<TKey = any> = dxActionSheetItem<TKey>;
 
 /**
  * @deprecated Use Item instead
  * @namespace DevExpress.ui
  */
-export interface dxActionSheetItem extends CollectionWidgetItem {
+export interface dxActionSheetItem<TKey = any> extends CollectionWidgetItem {
     /**
      * @docid
      * @public
@@ -175,12 +182,14 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
     /**
      * @docid
      * @default null
-     * @type function
+     * @type_function_param1_field1 component:dxActionSheet
+     * @type_function_param1_field2 element:DxElement
      * @type_function_param1_field3 model:object
      * @type_function_param1_field4 event:event
+     * @type function
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet; element?: DxElement; model?: any; event?: DxEvent }) => void) | string;
+    onClick?: ((e: NativeEventInfo<dxActionSheet<this, TKey>>) => void) | string;
     /**
      * @docid
      * @type Enums.ButtonType
@@ -198,7 +207,30 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
 }
 
 /** @public */
-export type Properties = dxActionSheetOptions;
+export type ExplicitTypes<
+    TItem extends ItemLike<TKey>,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    CancelClickEvent: CancelClickEvent<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+};
+
+/** @public */
+export type Properties<
+    TItem extends ItemLike<TKey> = any,
+    TKey = any,
+> = dxActionSheetOptions<TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = dxActionSheetOptions;
+export type Options<
+    TItem extends ItemLike<TKey> = any,
+    TKey = any,
+> = Properties<TItem, TKey>;

@@ -15,6 +15,7 @@ export const viewFunction = ({
     viewData,
     dataCellTemplate,
     allDayAppointments,
+    width,
   },
 }: AllDayPanelLayout): JSX.Element => (
   <div
@@ -24,6 +25,7 @@ export const viewFunction = ({
     <Table
       className="dx-scheduler-all-day-table"
       height={emptyTableHeight}
+      width={width}
       tableRef={tableRef}
     >
       <AllDayPanelTableBody

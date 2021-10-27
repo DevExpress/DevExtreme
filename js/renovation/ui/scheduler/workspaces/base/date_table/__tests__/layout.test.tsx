@@ -70,6 +70,7 @@ describe('DateTableLayoutBase', () => {
           dataCellTemplate,
           tableRef: 'tableRef',
           addVerticalSizesClassToRows: false,
+          width: 234,
         },
         topVirtualRowHeight: 100,
         bottomVirtualRowHeight: 200,
@@ -96,6 +97,7 @@ describe('DateTableLayoutBase', () => {
           rightVirtualCellCount: 44,
           tableRef: 'tableRef',
           className: 'some-class',
+          width: 234,
           children: expect.anything(),
         });
 

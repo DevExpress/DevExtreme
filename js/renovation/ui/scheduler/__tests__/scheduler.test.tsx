@@ -37,7 +37,9 @@ const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
 describe('Scheduler', () => {
   const defaultAppointmentViewModel = {
     regular: [],
+    regularCompact: [],
     allDay: [],
+    allDayCompact: [],
   };
 
   describe('Render', () => {
@@ -122,6 +124,7 @@ describe('Scheduler', () => {
     it('should render work space and pass to it correct props', () => {
       const tree = renderComponent({
         onViewRendered: () => {},
+        workSpaceKey: 'workSpaceKey',
       });
 
       const workSpace = tree.find(WorkSpace);
@@ -135,6 +138,8 @@ describe('Scheduler', () => {
           appointments: expect.anything(),
           allDayAppointments: expect.anything(),
         });
+      expect(workSpace.key())
+        .toBe('workSpaceKey');
     });
 
     it('should render toolbar and pass to it correct props', () => {
@@ -183,6 +188,7 @@ describe('Scheduler', () => {
           onCurrentViewUpdate: setCurrentView,
           onCurrentDateUpdate: setCurrentDate,
           startViewDate,
+          viewType: 'week',
         });
     });
 
@@ -204,7 +210,9 @@ describe('Scheduler', () => {
 
         const appointmentsViewModel = {
           regular: [{}],
-          allDay: [{}, {}],
+          regularCompact: [{}, {}],
+          allDay: [{}, {}, {}],
+          allDayCompact: [{}, {}, {}, {}],
         };
 
         const scheduler = renderComponent({
@@ -222,6 +230,7 @@ describe('Scheduler', () => {
         expect(appointments.props)
           .toEqual({
             appointments: appointmentsViewModel.regular,
+            overflowIndicators: appointmentsViewModel.regularCompact,
           });
 
         expect(allDayAppointments.type)
@@ -230,6 +239,7 @@ describe('Scheduler', () => {
         expect(allDayAppointments.props)
           .toEqual({
             appointments: appointmentsViewModel.allDay,
+            overflowIndicators: appointmentsViewModel.allDayCompact,
           });
       });
     });
@@ -657,6 +667,21 @@ describe('Scheduler', () => {
           expect(scheduler.startViewDate.getTime())
             .toBe(new Date(2021, 7, 15).getTime());
         });
+
+        it('should return correct startViewDate if view name is specified', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            views: [{
+              type: 'week',
+              name: 'Week',
+            }],
+            currentView: 'Week',
+            currentDate: new Date(2021, 7, 19),
+          });
+
+          expect(scheduler.startViewDate.getTime())
+            .toBe(new Date(2021, 7, 15).getTime());
+        });
       });
 
       describe('dataAccessors', () => {
@@ -887,6 +912,63 @@ describe('Scheduler', () => {
 
           expect(getAppointmentsViewModel)
             .toHaveBeenCalledTimes(0);
+        });
+      });
+
+      describe('workSpaceKey', () => {
+        it('should return empty string if cross-scrolling is not used', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+          });
+
+          expect(scheduler.workSpaceKey)
+            .toBe('');
+        });
+
+        it('should generate correct key if cross-scrolling is used', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            currentView: 'week',
+            views: [{
+              type: 'week',
+              groupOrientation: 'vertical',
+              intervalCount: 3,
+            }],
+            crossScrollingEnabled: true,
+          });
+
+          scheduler.loadedResources = [
+            {
+              name: 'priorityId',
+              items: [
+                {
+                  id: 1,
+                  text: 'Low Priority',
+                  color: '#1e90ff',
+                },
+                {
+                  id: 2,
+                  text: 'High Priority',
+                  color: '#ff9747',
+                },
+              ],
+              data: [
+                {
+                  text: 'Low Priority',
+                  id: 1,
+                  color: '#1e90ff',
+                },
+                {
+                  text: 'High Priority',
+                  id: 2,
+                  color: '#ff9747',
+                },
+              ],
+            },
+          ];
+
+          expect(scheduler.workSpaceKey)
+            .toBe('week_vertical_3_2');
         });
       });
     });

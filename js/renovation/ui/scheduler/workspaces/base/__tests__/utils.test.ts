@@ -1,8 +1,9 @@
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../consts';
-import { Group } from '../../types';
+import { Group, TableWidthWorkSpaceConfig } from '../../types';
 import {
   createCellElementMetaData,
   getDateForHeaderText,
+  getDateTableWidth,
   getHiddenInterval,
   getRowCountWithAllDayRow,
   getTotalCellCount,
@@ -136,6 +137,107 @@ describe('Workspace base utils', () => {
 
       expect(getDateForHeaderText(1, date, {} as any))
         .toBe(date);
+    });
+  });
+
+  describe('getDateTableWidth', () => {
+    const dateTableMockBase: any = {
+      querySelector: () => ({ getBoundingClientRect: () => ({ width: 100 }) }),
+    };
+    const viewDataProviderMock: any = {
+      getCellCount: () => 7,
+    };
+
+    it('should calculate width based on cells\' width and count', () => {
+      const workSpaceConfig: TableWidthWorkSpaceConfig = {
+        groups,
+        groupOrientation: 'vertical',
+        intervalCount: 1,
+        currentDate: new Date(),
+        viewType: 'week',
+        hoursInterval: 0.5,
+        startDayHour: 0,
+        endDayHour: 24,
+      };
+      const result = getDateTableWidth(
+        200,
+        dateTableMockBase,
+        viewDataProviderMock,
+        workSpaceConfig,
+      );
+
+      expect(result)
+        .toBe(700);
+    });
+
+    it('should use scrollable width if there are not enough cells', () => {
+      const workSpaceConfig: TableWidthWorkSpaceConfig = {
+        groups,
+        groupOrientation: 'vertical',
+        intervalCount: 1,
+        currentDate: new Date(),
+        viewType: 'week',
+        hoursInterval: 0.5,
+        startDayHour: 0,
+        endDayHour: 24,
+      };
+      const result = getDateTableWidth(
+        2000,
+        dateTableMockBase,
+        viewDataProviderMock,
+        workSpaceConfig,
+      );
+
+      expect(result)
+        .toBe(2000);
+    });
+
+    it('should calculate width based on cells\' min-width and count', () => {
+      const dateTableMock: any = {
+        querySelector: () => ({ getBoundingClientRect: () => ({ width: 10 }) }),
+      };
+      const workSpaceConfig: TableWidthWorkSpaceConfig = {
+        groups,
+        groupOrientation: 'vertical',
+        intervalCount: 1,
+        currentDate: new Date(),
+        viewType: 'week',
+        hoursInterval: 0.5,
+        startDayHour: 0,
+        endDayHour: 24,
+      };
+
+      const result = getDateTableWidth(
+        200,
+        dateTableMock,
+        viewDataProviderMock,
+        workSpaceConfig,
+      );
+
+      expect(result)
+        .toBe(525);
+    });
+
+    it('should take into account groups', () => {
+      const workSpaceConfig: TableWidthWorkSpaceConfig = {
+        groups,
+        groupOrientation: 'horizontal',
+        intervalCount: 1,
+        currentDate: new Date(),
+        viewType: 'week',
+        hoursInterval: 0.5,
+        startDayHour: 0,
+        endDayHour: 24,
+      };
+      const result = getDateTableWidth(
+        200,
+        dateTableMockBase,
+        viewDataProviderMock,
+        workSpaceConfig,
+      );
+
+      expect(result)
+        .toBe(1400);
     });
   });
 });

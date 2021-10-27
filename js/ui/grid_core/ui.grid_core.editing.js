@@ -212,6 +212,24 @@ const EditingController = modules.ViewController.inherit((function() {
             };
         },
 
+        _getNewRowPosition: function() {
+            const newRowPosition = this.option('editing.newRowPosition');
+            const scrollingMode = this.option('scrolling.mode');
+
+            if(scrollingMode === 'virtual') {
+                switch(newRowPosition) {
+                    case PAGE_TOP_NEW_ROW_POSITION:
+                        return VIEWPORT_TOP_NEW_ROW_POSITION;
+                    case PAGE_BOTTOM_NEW_ROW_POSITION:
+                        return VIEWPORT_BOTTOM_NEW_ROW_POSITION;
+                    default:
+                        return newRowPosition;
+                }
+            }
+
+            return newRowPosition;
+        },
+
         getChanges: function() {
             return this.option(EDITING_CHANGES_OPTION_NAME);
         },
@@ -641,7 +659,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const dataController = this._dataController;
 
             if(loadedRowIndex < 0) {
-                const newRowPosition = this.option('editing.newRowPosition');
+                const newRowPosition = this._getNewRowPosition();
                 const pageIndex = dataController.pageIndex();
                 const pageCount = dataController.pageCount();
                 const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
@@ -773,7 +791,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const dataController = this._dataController;
             const allItems = dataController.items(true);
             const rowsView = this.getView('rowsView');
-            const newRowPosition = this.option('editing.newRowPosition');
+            const newRowPosition = this._getNewRowPosition();
 
             switch(newRowPosition) {
                 case FIRST_NEW_ROW_POSITION:
@@ -820,7 +838,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _getPageIndexToInsertRow: function() {
-            const newRowPosition = this.option('editing.newRowPosition');
+            const newRowPosition = this._getNewRowPosition();
             const dataController = this._dataController;
             const pageIndex = dataController.pageIndex();
             const pageCount = dataController.pageCount();
@@ -858,7 +876,8 @@ const EditingController = modules.ViewController.inherit((function() {
             this.refresh();
 
             if(!this._allowRowAdding()) {
-                return deferred.reject('cancel');
+                when(this._navigateToNewRow(oldEditRowIndex)).done(deferred.resolve).fail(deferred.reject);
+                return deferred.promise();
             }
 
             if(!key) {
@@ -887,38 +906,62 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _addRowCore: function(data, parentKey, initialOldEditRowIndex) {
-            const dataController = this._dataController;
             const change = { data, type: DATA_EDIT_DATA_INSERT_TYPE };
-            const d = new Deferred();
-            const oldEditRowIndex = this._getVisibleEditRowIndex();
+            const editRowIndex = this._getVisibleEditRowIndex();
             const insertInfo = this._addInsertInfo(change, parentKey);
             const key = insertInfo.key;
-            const pageIndexToInsertRow = this._getPageIndexToInsertRow();
-
-            let rowIndex = this._getLoadedRowIndex(dataController.items(), change, true);
 
             this._setEditRowKey(key, true);
             this._addChange(change);
 
+            return this._navigateToNewRow(initialOldEditRowIndex, change, editRowIndex);
+        },
+
+        _navigateToNewRow: function(oldEditRowIndex, change, editRowIndex) {
+            const d = new Deferred();
+            const dataController = this._dataController;
+            const focusController = this.getController('focus');
+            editRowIndex = editRowIndex ?? -1;
+            change = change ?? this.getChanges().filter(c => c.type === DATA_EDIT_DATA_INSERT_TYPE)[0];
+
+            if(!change) {
+                return d.reject('cancel').promise();
+            }
+
+            const pageIndexToInsertRow = this._getPageIndexToInsertRow();
+            let rowIndex = this._getLoadedRowIndex(dataController.items(), change, true);
+            const navigateToRowByKey = (key) => {
+                when(focusController?.navigateToRow(key)).done(() => {
+                    rowIndex = dataController.getRowIndexByKey(change.key);
+                    d.resolve();
+                });
+            };
+            const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
+
             if(pageIndexToInsertRow >= 0) {
                 dataController.pageIndex(pageIndexToInsertRow).done(() => {
-                    const focusController = this.getController('focus');
-                    when(focusController?.navigateToRow(change.key)).done(() => {
-                        rowIndex = dataController.getRowIndexByKey(key);
-                        d.resolve();
-                    });
+                    navigateToRowByKey(change.key);
                 }).fail(d.reject);
+            } else if(rowIndex < 0 && isDefined(insertAfterOrBeforeKey)) {
+                navigateToRowByKey(insertAfterOrBeforeKey);
             } else {
                 dataController.updateItems({
                     changeType: 'update',
-                    rowIndices: [initialOldEditRowIndex, oldEditRowIndex, rowIndex]
+                    rowIndices: [oldEditRowIndex, editRowIndex, rowIndex]
                 });
-                d.resolve();
+
+                rowIndex = dataController.getRowIndexByKey(change.key);
+
+                if(rowIndex < 0) {
+                    navigateToRowByKey(change.key);
+                } else {
+                    d.resolve();
+                }
             }
 
             d.done(() => {
                 this._showAddedRow(rowIndex);
-                this._afterInsertRow(key);
+                this._afterInsertRow(change.key);
             });
 
             return d.promise();
@@ -1981,7 +2024,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 this._rowsView.renderTemplate($container, button.template, options, true);
             } else {
                 if(button.template) {
-                    $button = $('<div>').addClass('dx-link').addClass(button.cssClass);
+                    $button = $('<span>').addClass(button.cssClass);
                 } else if(useIcons && icon || button.icon) {
                     icon = button.icon || icon;
                     const iconType = iconUtils.getImageSourceType(icon);

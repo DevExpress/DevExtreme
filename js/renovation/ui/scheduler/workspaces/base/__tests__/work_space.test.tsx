@@ -1,5 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { ViewDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/view_data_generator';
+import { DateHeaderDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/date_header_data_generator';
+import { TimePanelDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
 import { formatWeekdayAndDay } from '../../../view_model/to_test/views/utils/base';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 import { OrdinaryLayout } from '../ordinary_layout';
@@ -16,18 +19,26 @@ import { TimePanelTableLayout } from '../time_panel/layout';
 import { combineClasses } from '../../../../../utils/combine_classes';
 import * as Utils from '../../utils';
 import { CrossScrollingLayout } from '../cross_scrolling_layout';
+import { getDateTableWidth } from '../utils';
 
 jest.mock('../../../../../utils/combine_classes', () => ({
   combineClasses: jest.fn(),
 }));
+jest.mock('../utils', () => ({
+  ...jest.requireActual('../utils'),
+  getDateTableWidth: jest.fn(() => 1000),
+}));
 const isVerticalGroupingApplied = jest.spyOn(Utils, 'isVerticalGroupingApplied');
+const isHorizontalGroupingApplied = jest.spyOn(Utils, 'isHorizontalGroupingApplied');
 
-const mockUpdate = jest.fn();
+const mockSetViewOptions = jest.fn();
+const mockCreateGroupedDataMapProvider = jest.fn();
 const mockGetGroupPanelData = jest.fn().mockImplementation(() => ({}));
 const mockViewDataProvider = {
-  update: mockUpdate,
   getGroupPanelData: mockGetGroupPanelData,
   getCellCount: () => 7,
+  setViewOptions: mockSetViewOptions,
+  createGroupedDataMapProvider: mockCreateGroupedDataMapProvider,
 };
 jest.mock('../../../../../../ui/scheduler/workspaces/view_model/view_data_provider', () => jest.fn().mockImplementation(() => mockViewDataProvider));
 
@@ -129,16 +140,13 @@ describe('WorkSpace', () => {
 
         groups,
         groupByDate: false,
-        groupOrientation: VERTICAL_GROUP_ORIENTATION,
         intervalCount: 1,
       };
-      const viewDataProvider = {
+
+      const viewModel = {
         dateHeaderData,
         viewData,
         timePanelData,
-      };
-      const viewModel = {
-        viewDataProvider,
         isAllDayPanelVisible: true,
         isRenderHeaderEmptyCell: true,
         groupPanelData: {
@@ -148,11 +156,13 @@ describe('WorkSpace', () => {
         classes: 'custom-classes',
         groupPanelHeight: 500,
         headerEmptyCellWidth: 300,
+        tablesWidth: 1900,
 
         timePanelRef: 'timePanelRef',
         groupPanelRef: 'groupPanelRef',
         dateTableRef: 'dateTableRef',
         allDayPanelRef: 'allDayPanelRef',
+        groupOrientation: VERTICAL_GROUP_ORIENTATION,
       };
 
       const workSpace = renderComponent({
@@ -188,6 +198,8 @@ describe('WorkSpace', () => {
           groupPanelRef: 'groupPanelRef',
           dateTableRef: 'dateTableRef',
           allDayPanelRef: 'allDayPanelRef',
+          groupOrientation: VERTICAL_GROUP_ORIENTATION,
+          tablesWidth: 1900,
         });
     });
   });
@@ -311,6 +323,11 @@ describe('WorkSpace', () => {
 
           workSpace.dateTableRef = dateTableRefMock;
           workSpace.allDayPanelRef = { current: null } as any;
+          workSpace.layoutRef = {
+            current: {
+              getScrollableWidth: () => 1000,
+            },
+          } as any;
 
           workSpace.onViewRendered();
 
@@ -368,6 +385,11 @@ describe('WorkSpace', () => {
 
           workSpace.dateTableRef = dateTableRefMock;
           workSpace.allDayPanelRef = allDayPanelRefMock;
+          workSpace.layoutRef = {
+            current: {
+              getScrollableWidth: () => 1000,
+            },
+          } as any;
 
           workSpace.onViewRendered();
 
@@ -423,6 +445,64 @@ describe('WorkSpace', () => {
                 }],
               },
             });
+        });
+
+        it('should not call onViewRendered when crossScrolling is used and tablesWidth is not equal to real width', () => {
+          const onViewRendered = jest.fn();
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            onViewRendered,
+            currentDate: new Date(),
+            startDayHour: 0,
+            endDayHour: 1,
+            showAllDayPanel: false,
+            crossScrollingEnabled: true,
+            type: 'week',
+          });
+
+          workSpace.tablesWidth = 500;
+          workSpace.dateTableRef = dateTableRefMock;
+          workSpace.allDayPanelRef = allDayPanelRefMock;
+          workSpace.layoutRef = {
+            current: {
+              getScrollableWidth: () => 1000,
+            },
+          } as any;
+
+          workSpace.onViewRendered();
+
+          expect(onViewRendered)
+            .toBeCalledTimes(0);
+        });
+
+        it('should call onViewRendered when crossScrolling is used and tablesWidth is not equal to real width', () => {
+          const onViewRendered = jest.fn();
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            onViewRendered,
+            currentDate: new Date(),
+            startDayHour: 0,
+            endDayHour: 1,
+            showAllDayPanel: false,
+            crossScrollingEnabled: true,
+            type: 'week',
+          });
+
+          workSpace.tablesWidth = 1000;
+          workSpace.dateTableRef = dateTableRefMock;
+          workSpace.allDayPanelRef = allDayPanelRefMock;
+          workSpace.layoutRef = {
+            current: {
+              getScrollableWidth: () => 1200,
+            },
+          } as any;
+
+          workSpace.onViewRendered();
+
+          expect(onViewRendered)
+            .toBeCalledTimes(1);
         });
       });
 
@@ -521,6 +601,81 @@ describe('WorkSpace', () => {
 
           expect(workSpace.headerEmptyCellWidth)
             .toBe(260);
+        });
+      });
+
+      describe('tablesWidthEffect', () => {
+        it('should save tablesWidth into the state', () => {
+          const currentDate = new Date();
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            crossScrollingEnabled: true,
+            type: 'week',
+            currentDate,
+            groups,
+          } as any);
+
+          workSpace.layoutRef = { current: { getScrollableWidth: () => 1500 } } as any;
+          workSpace.dateTableRef = { current: {} } as any;
+
+          workSpace.tablesWidthEffect();
+
+          expect(workSpace.tablesWidth)
+            .toBe(1000);
+          expect(getDateTableWidth)
+            .toHaveBeenCalledWith(
+              1500,
+              workSpace.dateTableRef.current,
+              expect.anything(),
+              {
+                intervalCount: 1,
+                currentDate,
+                viewType: 'week',
+                hoursInterval: 0.5,
+                startDayHour: 0,
+                endDayHour: 24,
+                groups,
+                groupOrientation: 'horizontal',
+              },
+            );
+        });
+
+        it('should not save tablesWidth into the state when cross-scrolling is not used', () => {
+          const currentDate = new Date();
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            crossScrollingEnabled: false,
+            type: 'week',
+            currentDate,
+            groups,
+          } as any);
+
+          workSpace.layoutRef = { current: { getScrollableWidth: () => 1500 } } as any;
+          workSpace.dateTableRef = { current: {} } as any;
+
+          workSpace.tablesWidthEffect();
+
+          expect(workSpace.tablesWidth)
+            .toBe(undefined);
+        });
+
+        it('should not save tablesWidth into the state when timeline view is used', () => {
+          const currentDate = new Date();
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            crossScrollingEnabled: true,
+            type: 'timelineMonth',
+            currentDate,
+            groups,
+          } as any);
+
+          workSpace.layoutRef = { current: { getScrollableWidth: () => 1500 } } as any;
+          workSpace.dateTableRef = { current: {} } as any;
+
+          workSpace.tablesWidthEffect();
+
+          expect(workSpace.tablesWidth)
+            .toBe(undefined);
         });
       });
     });
@@ -643,39 +798,517 @@ describe('WorkSpace', () => {
         });
       });
 
-      describe('viewData', () => {
-        it('should return correct viewData', () => {
+      describe('completeViewDataMap', () => {
+        it('should create completeViewDataMap', () => {
           const workSpace = new WorkSpace({
-            currentDate: new Date(),
-            type: 'week',
-          } as any);
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 26),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
+            showAllDayPanel: true,
+          });
 
-          expect(!!workSpace.viewData)
-            .toBe(true);
+          expect(workSpace.completeViewDataMap)
+            .toEqual([[{
+              startDate: new Date(2021, 9, 26),
+              endDate: new Date(2021, 9, 26),
+              groupIndex: 0,
+              index: 0,
+              allDay: true,
+              isFirstGroupCell: true,
+              isLastGroupCell: true,
+              key: 0,
+            }], [{
+              startDate: new Date(2021, 9, 26),
+              endDate: new Date(2021, 9, 26, 0, 30),
+              groupIndex: 0,
+              index: 0,
+              allDay: false,
+              isFirstGroupCell: true,
+              isLastGroupCell: true,
+              key: 0,
+            }], [{
+              startDate: new Date(2021, 9, 26, 0, 30),
+              endDate: new Date(2021, 9, 26, 1),
+              groupIndex: 0,
+              index: 1,
+              allDay: false,
+              isFirstGroupCell: true,
+              isLastGroupCell: true,
+              key: 1,
+            }]]);
+        });
+      });
+
+      describe('viewDataMap', () => {
+        it('should create viewDataMap', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 26),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
+            showAllDayPanel: true,
+          });
+
+          expect(workSpace.viewDataMap)
+            .toEqual({
+              allDayPanelMap: [{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 0,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26),
+                  endDate: new Date(2021, 9, 26),
+                  groupIndex: 0,
+                  index: 0,
+                  allDay: true,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 0,
+                },
+              }],
+              dateTableMap: [[{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 0,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26),
+                  endDate: new Date(2021, 9, 26, 0, 30),
+                  groupIndex: 0,
+                  index: 0,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 0,
+                },
+              }], [{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 1,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26, 0, 30),
+                  endDate: new Date(2021, 9, 26, 1),
+                  groupIndex: 0,
+                  index: 1,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 1,
+                },
+              }]],
+            });
+        });
+      });
+
+      describe('viewData', () => {
+        it('should create viewData', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 26),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
+            showAllDayPanel: true,
+          });
+
+          expect(workSpace.viewData)
+            .toEqual({
+              groupedData: [{
+                allDayPanel: [{
+                  startDate: new Date(2021, 9, 26),
+                  endDate: new Date(2021, 9, 26),
+                  groupIndex: 0,
+                  index: 0,
+                  allDay: true,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 0,
+                }],
+                dateTable: [[{
+                  startDate: new Date(2021, 9, 26),
+                  endDate: new Date(2021, 9, 26, 0, 30),
+                  groupIndex: 0,
+                  index: 0,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 0,
+                }], [{
+                  startDate: new Date(2021, 9, 26, 0, 30),
+                  endDate: new Date(2021, 9, 26, 1),
+                  groupIndex: 0,
+                  index: 1,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 1,
+                }]],
+                groupIndex: 0,
+                isGroupedAllDayPanel: false,
+              }],
+              topVirtualRowCount: 0,
+              bottomVirtualRowCount: 0,
+              leftVirtualCellCount: 0,
+              rightVirtualCellCount: 0,
+              bottomVirtualRowHeight: 0,
+              topVirtualRowHeight: 0,
+              leftVirtualCellWidth: undefined,
+              rightVirtualCellWidth: undefined,
+              isGroupedAllDayPanel: false,
+            });
+        });
+      });
+
+      describe('completeDateHeaderData', () => {
+        it('should generate complete dateHeaderData', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 25),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
+          });
+
+          expect(workSpace.completeDateHeaderData)
+            .toEqual([[{
+              startDate: new Date(2021, 9, 25),
+              allDay: false,
+              groupIndex: 0,
+              text: 'Mon 25',
+              today: false,
+              index: 0,
+              key: 0,
+              colSpan: 1,
+              isFirstGroupCell: true,
+              isLastGroupCell: true,
+            }]]);
+        });
+
+        it('should generate complete dateHeaderData in case of timeline views', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 24),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'timelineDay',
+            intervalCount: 2,
+          });
+
+          expect(workSpace.completeDateHeaderData)
+            .toEqual([[{
+              startDate: new Date(2021, 9, 24),
+              endDate: new Date(2021, 9, 24, 0, 30),
+              allDay: false,
+              groupIndex: 0,
+              index: 0,
+              key: 0,
+              colSpan: 2,
+              text: 'Sun 24',
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+            }, {
+              startDate: new Date(2021, 9, 25),
+              endDate: new Date(2021, 9, 25, 0, 30),
+              allDay: false,
+              groupIndex: 0,
+              index: 2,
+              key: 2,
+              colSpan: 2,
+              text: 'Mon 25',
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+            }], [{
+              startDate: new Date(2021, 9, 24),
+              allDay: false,
+              groupIndex: 0,
+              text: '12:00 AM',
+              index: 0,
+              key: 0,
+              colSpan: 1,
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              today: false,
+            }, {
+              startDate: new Date(2021, 9, 24, 0, 30),
+              allDay: false,
+              groupIndex: 0,
+              text: '12:30 AM',
+              index: 1,
+              key: 1,
+              colSpan: 1,
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              today: false,
+            }, {
+              startDate: new Date(2021, 9, 25),
+              allDay: false,
+              groupIndex: 0,
+              text: '12:00 AM',
+              index: 2,
+              key: 2,
+              colSpan: 1,
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              today: false,
+            }, {
+              startDate: new Date(2021, 9, 25, 0, 30),
+              allDay: false,
+              groupIndex: 0,
+              text: '12:30 AM',
+              index: 3,
+              key: 3,
+              colSpan: 1,
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              today: false,
+            }]]);
         });
       });
 
       describe('dateHeaderData', () => {
-        it('should return correct dateHeaderData', () => {
+        it('should generate dateHeaderData', () => {
           const workSpace = new WorkSpace({
-            currentDate: new Date(),
-            type: 'week',
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 25),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
+          });
+
+          expect(workSpace.dateHeaderData)
+            .toEqual({
+              dataMap: [[{
+                startDate: new Date(2021, 9, 25),
+                allDay: false,
+                groupIndex: 0,
+                text: 'Mon 25',
+                today: false,
+                index: 0,
+                key: 0,
+                colSpan: 1,
+                isFirstGroupCell: true,
+                isLastGroupCell: true,
+              }]],
+              leftVirtualCellCount: 0,
+              rightVirtualCellCount: 0,
+              leftVirtualCellWidth: undefined,
+              rightVirtualCellWidth: undefined,
+              weekDayLeftVirtualCellCount: undefined,
+              weekDayLeftVirtualCellWidth: undefined,
+              weekDayRightVirtualCellCount: undefined,
+              weekDayRightVirtualCellWidth: undefined,
+            });
+        });
+
+        it('should generate dateHeaderData for timeline views', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 24),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'timelineDay',
+            intervalCount: 2,
+          });
+
+          expect(workSpace.dateHeaderData)
+            .toEqual({
+              dataMap: [[{
+                startDate: new Date(2021, 9, 24),
+                endDate: new Date(2021, 9, 24, 0, 30),
+                allDay: false,
+                groupIndex: 0,
+                index: 0,
+                key: 0,
+                colSpan: 2,
+                text: 'Sun 24',
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+              }, {
+                startDate: new Date(2021, 9, 25),
+                endDate: new Date(2021, 9, 25, 0, 30),
+                allDay: false,
+                groupIndex: 0,
+                index: 2,
+                key: 2,
+                colSpan: 2,
+                text: 'Mon 25',
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+              }], [{
+                startDate: new Date(2021, 9, 24),
+                allDay: false,
+                groupIndex: 0,
+                text: '12:00 AM',
+                index: 0,
+                key: 0,
+                colSpan: 1,
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+                today: false,
+              }, {
+                startDate: new Date(2021, 9, 24, 0, 30),
+                allDay: false,
+                groupIndex: 0,
+                text: '12:30 AM',
+                index: 1,
+                key: 1,
+                colSpan: 1,
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+                today: false,
+              }, {
+                startDate: new Date(2021, 9, 25),
+                allDay: false,
+                groupIndex: 0,
+                text: '12:00 AM',
+                index: 2,
+                key: 2,
+                colSpan: 1,
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+                today: false,
+              }, {
+                startDate: new Date(2021, 9, 25, 0, 30),
+                allDay: false,
+                groupIndex: 0,
+                text: '12:30 AM',
+                index: 3,
+                key: 3,
+                colSpan: 1,
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+                today: false,
+              }]],
+              leftVirtualCellCount: 0,
+              rightVirtualCellCount: 0,
+              leftVirtualCellWidth: 0,
+              rightVirtualCellWidth: 0,
+              weekDayLeftVirtualCellCount: 0,
+              weekDayLeftVirtualCellWidth: 0,
+              weekDayRightVirtualCellCount: 0,
+              weekDayRightVirtualCellWidth: 0,
+            });
+        });
+      });
+
+      describe('completeTimePanelData', () => {
+        it('should return correct completeTimePanelData', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 25),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
           } as any);
 
-          expect(!!workSpace.dateHeaderData)
-            .toBe(true);
+          expect(workSpace.completeTimePanelData)
+            .toEqual([{
+              startDate: new Date(2021, 9, 25),
+              groupIndex: undefined,
+              index: 0,
+              allDay: false,
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              key: 0,
+              text: '12:00 AM',
+              groups: undefined,
+            }, {
+              startDate: new Date(2021, 9, 25, 0, 30),
+              groupIndex: undefined,
+              index: 1,
+              allDay: false,
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              key: 1,
+              text: '',
+              groups: undefined,
+            }]);
+        });
+
+        it('should not generate completeTimePanelData when it is not necessary', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 25),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'month',
+          } as any);
+
+          expect(workSpace.completeTimePanelData)
+            .toBe(undefined);
         });
       });
 
       describe('timePanelData', () => {
         it('should return correct timePanelData', () => {
           const workSpace = new WorkSpace({
-            currentDate: new Date(),
-            type: 'week',
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 25),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
           } as any);
 
-          expect(!!workSpace.timePanelData)
-            .toBe(true);
+          expect(workSpace.timePanelData)
+            .toEqual({
+              groupedData: [{
+                dateTable: [{
+                  startDate: new Date(2021, 9, 25),
+                  groupIndex: undefined,
+                  index: 0,
+                  allDay: false,
+                  isFirstGroupCell: false,
+                  isLastGroupCell: false,
+                  key: 0,
+                  text: '12:00 AM',
+                  groups: undefined,
+                }, {
+                  startDate: new Date(2021, 9, 25, 0, 30),
+                  groupIndex: undefined,
+                  index: 1,
+                  allDay: false,
+                  isFirstGroupCell: false,
+                  isLastGroupCell: false,
+                  key: 1,
+                  text: '',
+                  groups: undefined,
+                }],
+                groupIndex: undefined,
+                isGroupedAllDayPanel: false,
+              }],
+              isGroupedAllDayPanel: false,
+              bottomVirtualRowHeight: 0,
+              topVirtualRowHeight: 0,
+            });
+        });
+
+        it('should not generate timePanelData when it is not necessary', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 25),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'month',
+          } as any);
+
+          expect(workSpace.timePanelData)
+            .toBe(undefined);
         });
       });
 
@@ -710,7 +1343,7 @@ describe('WorkSpace', () => {
           expect(workSpace.viewDataProvider)
             .toBe(mockViewDataProvider);
 
-          expect(mockUpdate)
+          expect(mockSetViewOptions)
             .toHaveBeenCalledWith({
               ...props,
               startRowIndex: 0,
@@ -722,7 +1355,9 @@ describe('WorkSpace', () => {
               isGenerateTimePanelData: true,
               isGenerateWeekDaysHeaderData: false,
               isProvideVirtualCellsWidth: false,
-            }, true);
+            });
+          expect(mockCreateGroupedDataMapProvider)
+            .toBeCalledTimes(1);
         });
       });
 
@@ -806,7 +1441,7 @@ describe('WorkSpace', () => {
             });
 
           expect(getViewRenderConfigByType)
-            .toBeCalledWith('week', true, 3, true);
+            .toBeCalledWith('week', true, 3, groups, 'vertical');
         });
       });
 
@@ -851,6 +1486,7 @@ describe('WorkSpace', () => {
           const workSpace = new WorkSpace({
             groups,
             groupOrientation: 'vertical',
+            type: 'day',
           } as any);
 
           const result = workSpace.isVerticalGrouping;
@@ -859,6 +1495,23 @@ describe('WorkSpace', () => {
             .toBe(true);
           expect(isVerticalGroupingApplied)
             .toBeCalledWith(groups, 'vertical');
+        });
+      });
+
+      describe('isHorizontalGrouping', () => {
+        it('should call isHorizontalGroupingApplied', () => {
+          const workSpace = new WorkSpace({
+            groups,
+            groupOrientation: 'horizontal',
+            type: 'day',
+          } as any);
+
+          const result = workSpace.isHorizontalGrouping;
+
+          expect(result)
+            .toBe(true);
+          expect(isHorizontalGroupingApplied)
+            .toBeCalledWith(groups, 'horizontal');
         });
       });
 
@@ -895,6 +1548,77 @@ describe('WorkSpace', () => {
             .toBeCalledWith(groups, 'horizontal');
         });
       });
+
+      describe('groupOrientation', () => {
+        [{
+          view: 'day',
+          expectedGroupOrientation: 'horizontal',
+        }, {
+          view: 'week',
+          expectedGroupOrientation: 'horizontal',
+        }, {
+          view: 'month',
+          expectedGroupOrientation: 'horizontal',
+        }, {
+          view: 'timelineDay',
+          expectedGroupOrientation: 'vertical',
+        }, {
+          view: 'timelineWeek',
+          expectedGroupOrientation: 'vertical',
+        }, {
+          view: 'timelineMonth',
+          expectedGroupOrientation: 'vertical',
+        }].forEach(({ view, expectedGroupOrientation }) => {
+          it(`should return correct groupOrientation for ${view} view`, () => {
+            const workSpace = new WorkSpace({
+              ...new WorkSpaceProps(),
+              type: view,
+            } as any);
+
+            expect(workSpace.groupOrientation)
+              .toBe(expectedGroupOrientation);
+          });
+        });
+      });
+    });
+
+    describe('dataGenerators', () => {
+      it('should create data generators', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+        } as any);
+
+        expect(workSpace.viewDataGenerator instanceof ViewDataGenerator)
+          .toBe(true);
+        expect(workSpace.dateHeaderDataGenerator instanceof DateHeaderDataGenerator)
+          .toBe(true);
+        expect(workSpace.timePanelDataGenerator instanceof TimePanelDataGenerator)
+          .toBe(true);
+      });
+    });
+
+    describe('startViewDate', () => {
+      it('should return correct startViewDate if view is day', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          currentDate: new Date(2021, 1, 1),
+          type: 'day',
+        } as any);
+
+        expect(workSpace.startViewDate.getTime())
+          .toBe(new Date(2021, 1, 1).getTime());
+      });
+
+      it('should return correct startViewDate if view is week', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          currentDate: new Date(2021, 7, 19),
+          type: 'week',
+        } as any);
+
+        expect(workSpace.startViewDate.getTime())
+          .toBe(new Date(2021, 7, 15).getTime());
+      });
     });
 
     describe('classes', () => {
@@ -924,6 +1648,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': true,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': true,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -955,6 +1680,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': true,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': true,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -985,6 +1711,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': true,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': true,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -1015,6 +1742,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': false,
             'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': false,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -1045,6 +1773,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': false,
             'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': false,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -1111,6 +1840,7 @@ describe('WorkSpace', () => {
               'dx-scheduler-work-space-group-by-date': false,
               'dx-scheduler-work-space-grouped': true,
               'dx-scheduler-work-space-vertical-grouped': groupOrientation === 'vertical',
+              'dx-scheduler-work-space-horizontal-grouped': false,
               'dx-scheduler-group-column-count-one': false,
               'dx-scheduler-group-column-count-two': false,
               'dx-scheduler-group-column-count-three': false,
@@ -1141,6 +1871,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': false,
             'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': false,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
@@ -1171,12 +1902,90 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-work-space-horizontal-grouped': false,
             'dx-scheduler-group-column-count-one': true,
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
             'dx-scheduler-work-space-both-scrollbar': true,
           });
+      });
+
+      it('should assign horizontal-grouped class when default group orientation is "vertical" and horizontal grouping is used', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'timelineDay',
+          crossScrollingEnabled: true,
+          groups,
+          groupOrientation: 'horizontal',
+        } as any);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        workSpace.classes;
+
+        expect(combineClasses)
+          .toBeCalledWith({
+            'dx-scheduler-timeline-day dx-scheduler-timeline': true,
+            'dx-scheduler-work-space-count': false,
+            'dx-scheduler-work-space-odd-cells': false,
+            'dx-scheduler-work-space-all-day-collapsed': false,
+            'dx-scheduler-work-space-all-day': false,
+            'dx-scheduler-work-space-group-by-date': false,
+            'dx-scheduler-work-space-grouped': true,
+            'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-work-space-horizontal-grouped': true,
+            'dx-scheduler-group-column-count-one': false,
+            'dx-scheduler-group-column-count-two': false,
+            'dx-scheduler-group-column-count-three': false,
+            'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-both-scrollbar': true,
+          });
+      });
+    });
+
+    describe('isCalculateTablesWidth', () => {
+      it('should return true for ordinary views with cross-scrolling', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'day',
+          crossScrollingEnabled: true,
+        } as any);
+
+        expect(workSpace.isCalculateTablesWidth)
+          .toBe(true);
+      });
+
+      it('should return false for timeline views with cross-scrolling', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'timelineWeek',
+          crossScrollingEnabled: true,
+        } as any);
+
+        expect(workSpace.isCalculateTablesWidth)
+          .toBe(false);
+      });
+
+      it('should return false for ordinary views without cross-scrolling', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'week',
+          crossScrollingEnabled: false,
+        } as any);
+
+        expect(workSpace.isCalculateTablesWidth)
+          .toBe(false);
+      });
+
+      it('should return false for timeline views without cross-scrolling', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'timelineWeek',
+          crossScrollingEnabled: false,
+        } as any);
+
+        expect(workSpace.isCalculateTablesWidth)
+          .toBe(false);
       });
     });
   });

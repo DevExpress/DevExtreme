@@ -54,7 +54,7 @@ describe('Workspaces utils', () => {
   });
 
   describe('addHeightToStyle', () => {
-    it('should return an empty obbject if height is undefined', () => {
+    it('should return an empty object if height is undefined', () => {
       expect(addHeightToStyle(undefined))
         .toEqual({});
     });

@@ -14,105 +14,126 @@ import CollectionWidget, {
     SelectionChangedInfo,
 } from './collection/ui.collection_widget.base';
 
-/** @public */
-export type ContentReadyEvent = EventInfo<dxTabs>;
+export type ItemLike = string | Item | any;
 
 /** @public */
-export type DisposingEvent = EventInfo<dxTabs>;
+export type ContentReadyEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxTabs>;
+export type DisposingEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxTabs> & ItemInfo;
+export type InitializedEvent<TItem extends ItemLike = any, TKey = any> = InitializedEventInfo<TabsInstance<TItem, TKey>>;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxTabs> & ItemInfo;
+export type ItemClickEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxTabs> & ItemInfo;
+export type ItemContextMenuEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxTabs> & ItemInfo;
+export type ItemHoldEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxTabs> & ChangedOptionInfo;
+export type ItemRenderedEvent<TItem extends ItemLike = any, TKey = any> = NativeEventInfo<TabsInstance<TItem, TKey>> & ItemInfo<TItem>;
 
 /** @public */
-export type SelectionChangedEvent = EventInfo<dxTabs> & SelectionChangedInfo;
+export type OptionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & ChangedOptionInfo;
+
+/** @public */
+export type SelectionChangedEvent<TItem extends ItemLike = any, TKey = any> = EventInfo<TabsInstance<TItem, TKey>> & SelectionChangedInfo<TItem>;
+
+/**
+ * @deprecated use Properties instead
+ * @namespace DevExpress.ui
+ * @public
+ */
+export interface dxTabsOptions<
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends Properties<TItem, TKey> {}
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxTabsOptions<TComponent> extends CollectionWidgetOptions<TComponent> {
+export interface dxTabsBaseOptions<
+    TComponent extends dxTabs<any, TItem, TKey> = dxTabs<any, any, any>,
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidgetOptions<TComponent, TItem, TKey> {
     /**
-     * @docid
+     * @docid dxTabsOptions.dataSource
      * @type string | Array<string | dxTabsItem | any> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: DataSourceLike<string | Item | any>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
-     * @docid
+     * @docid dxTabsOptions.focusStateEnabled
      * @default true &for(desktop)
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.hoverStateEnabled
      * @default true
      * @public
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.items
      * @type Array<string | dxTabsItem | any>
      * @fires dxTabsOptions.onOptionChanged
      * @public
      */
-    items?: Array<string | Item | any>;
+    items?: Array<TItem>;
     /**
-     * @docid
+     * @docid dxTabsOptions.repaintChangesOnly
      * @default false
      * @public
      */
     repaintChangesOnly?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.scrollByContent
      * @default true
      * @default false &for(desktop)
      * @public
      */
     scrollByContent?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.scrollingEnabled
      * @default true
      * @public
      */
     scrollingEnabled?: boolean;
     /**
-     * @docid
+     * @docid dxTabsOptions.selectionMode
      * @type Enums.NavSelectionMode
      * @default 'single'
      * @public
      */
     selectionMode?: 'multiple' | 'single';
     /**
-     * @docid
+     * @docid dxTabsOptions.showNavButtons
      * @default true
      * @default false &for(mobile_devices)
      * @public
      */
     showNavButtons?: boolean;
 }
+
 /**
  * @docid
  * @inherits CollectionWidget
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxTabs<TProperties = Properties> extends CollectionWidget<TProperties> { }
+export default class dxTabs<
+    TProperties extends dxTabsOptions<TItem, TKey> = dxTabsOptions<any, any>,
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidget<TProperties, TItem, TKey> { }
 
 /**
  * @public
@@ -137,10 +158,33 @@ export interface dxTabsItem extends CollectionWidgetItem {
     icon?: string;
 }
 
-interface TabsInstance extends dxTabs<Properties> { }
+/** @public */
+export type ExplicitTypes<
+    TItem extends ItemLike,
+    TKey,
+> = {
+    Properties: Properties<TItem, TKey>;
+    ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
+    DisposingEvent: DisposingEvent<TItem, TKey>;
+    InitializedEvent: InitializedEvent<TItem, TKey>;
+    ItemClickEvent: ItemClickEvent<TItem, TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TItem, TKey>;
+    ItemHoldEvent: ItemHoldEvent<TItem, TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TItem, TKey>;
+    OptionChangedEvent: OptionChangedEvent<TItem, TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TItem, TKey>;
+};
+
+interface TabsInstance<TItem, TKey> extends dxTabs<Properties<TItem, TKey>, TItem, TKey> { }
 
 /** @public */
-export type Properties = dxTabsOptions<TabsInstance>;
+export type Properties<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = dxTabsBaseOptions<TabsInstance<TItem, TKey>, TItem, TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = Properties;
+export type Options<
+    TItem extends ItemLike = any,
+    TKey = any,
+> = Properties<TItem, TKey>;

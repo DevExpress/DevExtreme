@@ -21,16 +21,16 @@ import { TimeZoneCalculator } from '../timeZoneCalculator/utils';
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 const toMs = (name: string): number => dateUtils.dateToMilliseconds(name);
 
-const getAppointmentRenderingStrategyName = (viewType: ViewType): string => {
+export const getAppointmentRenderingStrategyName = (viewType: ViewType): string => {
   const appointmentRenderingStrategyMap: Record<ViewType, { renderingStrategy: string }> = {
     day: {
       renderingStrategy: 'vertical',
     },
     week: {
-      renderingStrategy: 'vertical',
+      renderingStrategy: 'week',
     },
     workWeek: {
-      renderingStrategy: 'vertical',
+      renderingStrategy: 'week',
     },
     month: {
       renderingStrategy: 'horizontalMonth',
@@ -51,6 +51,7 @@ const getAppointmentRenderingStrategyName = (viewType: ViewType): string => {
       renderingStrategy: 'agenda',
     },
   };
+
   const { renderingStrategy } = appointmentRenderingStrategyMap[viewType];
 
   return renderingStrategy;
@@ -88,11 +89,11 @@ export const getAppointmentsConfig = (
     hoursInterval: viewConfig.hoursInterval,
     showAllDayPanel: viewConfig.showAllDayPanel,
     supportAllDayRow: isAllDayPanelSupported, // ?
-    groupOrientation: viewConfig.groupOrientation,
+    groupOrientation: viewDataProvider.getViewOptions().groupOrientation,
     firstDayOfWeek: viewConfig.firstDayOfWeek,
     viewType: viewConfig.type,
     cellDurationInMinutes: viewConfig.cellDuration,
-    isVerticalGroupOrientation: viewConfig.groupOrientation === 'vertical',
+    isVerticalGroupOrientation: viewDataProvider.getViewOptions().isVerticalGrouping,
     groupByDate: viewConfig.groupByDate,
     startViewDate,
     loadedResources,
@@ -119,11 +120,13 @@ export const getAppointmentsModel = (
     appointmentsConfig.groupByDate,
   );
 
+  const { groupCount, isVerticalGroupOrientation } = appointmentsConfig;
   const positionHelper = new PositionHelper({
     viewDataProvider,
     groupedByDate,
     rtlEnabled: appointmentsConfig.rtlEnabled,
-    groupCount: appointmentsConfig.groupCount,
+    groupCount,
+    isVerticalGrouping: groupCount && isVerticalGroupOrientation,
     getDOMMetaDataCallback: (): CellsMetaData => cellsMetaData,
   });
 
@@ -155,8 +158,6 @@ export const getAppointmentsModel = (
     appointmentsConfig.hoursInterval,
   );
 
-  const intervalDuration = viewDataProvider.getIntervalDuration(appointmentsConfig.intervalCount);
-  const allDayIntervalDuration = toMs('day') * 3600000;
   const { leftVirtualCellCount, topVirtualRowCount } = viewDataProvider.viewData;
   const cellDuration = getCellDuration(
     appointmentsConfig.viewType,
@@ -180,7 +181,7 @@ export const getAppointmentsModel = (
   return {
     ...appointmentsConfig,
     appointmentRenderingStrategyName,
-    loadedResources: [],
+    loadedResources: appointmentsConfig.loadedResources,
     dataAccessors,
     timeZoneCalculator,
     viewDataProvider,
@@ -193,8 +194,8 @@ export const getAppointmentsModel = (
     isGroupedByDate: groupedByDate,
     endViewDate,
     visibleDayDuration,
-    intervalDuration,
-    allDayIntervalDuration,
+    intervalDuration: cellDuration,
+    allDayIntervalDuration: toMs('day'),
     leftVirtualCellCount,
     topVirtualCellCount: topVirtualRowCount,
     cellDuration,

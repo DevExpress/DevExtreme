@@ -13,7 +13,11 @@ import {
 } from '../menu';
 
 /** @namespace DevExpress.ui */
-export interface dxMenuBaseOptions<TComponent> extends Skip<HierarchicalCollectionWidgetOptions<TComponent>, 'dataSource'> {
+export interface dxMenuBaseOptions<
+  TComponent extends dxMenuBase<any, TItem, TKey>,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
+  TKey = any,
+> extends Skip<HierarchicalCollectionWidgetOptions<TComponent, TItem, TKey>, 'dataSource'> {
     /**
      * @docid
      * @default true
@@ -47,15 +51,17 @@ export interface dxMenuBaseOptions<TComponent> extends Skip<HierarchicalCollecti
     /**
      * @docid
      * @default null
+     * @type string | Array<dxMenuBaseItem> | Store | DataSource | DataSourceOptions
      * @public
      * @type Store|DataSource|DataSourceOptions|string|Array<dxMenuBaseItem>
      */
-    dataSource?: DataSourceLike<dxMenuBaseItem>;
+    dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
      * @public
+     * @type Array<dxMenuBaseItem>
      */
-    items?: Array<dxMenuBaseItem>;
+    items?: Array<TItem>;
     /**
      * @docid
      * @default false
@@ -106,7 +112,11 @@ export interface dxMenuBaseOptions<TComponent> extends Skip<HierarchicalCollecti
  * @hidden
  * @namespace DevExpress.ui
  */
-export default class dxMenuBase<TProperties> extends HierarchicalCollectionWidget<TProperties> {
+export default class dxMenuBase<
+  TProperties extends dxMenuBaseOptions<any, TItem, TKey>,
+  TItem extends dxMenuBaseItem = dxMenuBaseItem,
+  TKey = any,
+> extends HierarchicalCollectionWidget<TProperties, TItem, TKey> {
     /**
      * @docid
      * @publicName selectItem(itemElement)

@@ -2,7 +2,7 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import cloneTest from '../../helpers/check-all-platforms';
 
-const multiPlatformTest = cloneTest('button');
+const multiPlatformTest = cloneTest('button', ['react']);
 
 fixture('Button');
 

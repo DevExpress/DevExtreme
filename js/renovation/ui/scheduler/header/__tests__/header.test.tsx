@@ -288,25 +288,26 @@ describe('Scheduler Toolbar', () => {
           location: 'after',
         },
       ],
+      viewType: 'day',
       ...options,
     });
 
     describe('Getters', () => {
       describe('Step', () => {
         it('should return correct step for week view', () => {
-          const toolbar = createToolbar({ currentView: 'week' });
+          const toolbar = createToolbar({ viewType: 'week' });
 
           expect(toolbar.step).toBe('week');
         });
 
         it('should return correct step for week agenda view', () => {
-          const toolbar = createToolbar({ currentView: 'agenda' });
+          const toolbar = createToolbar({ viewType: 'agenda' });
 
           expect(toolbar.step).toBe('agenda');
         });
 
         it('should return correct step for week timelineMonth view', () => {
-          const toolbar = createToolbar({ currentView: 'timelineMonth' });
+          const toolbar = createToolbar({ viewType: 'timelineMonth' });
 
           expect(toolbar.step).toBe('month');
         });
@@ -325,7 +326,7 @@ describe('Scheduler Toolbar', () => {
 
         it('should retun next week of startViewDate if view is month', () => {
           const toolbar = createToolbar({
-            currentView: 'month',
+            viewType: 'month',
             startViewDate: new Date(2021, 5, 10),
           });
 
@@ -346,7 +347,7 @@ describe('Scheduler Toolbar', () => {
         });
 
         it('should return correct caption for week view', () => {
-          const toolbar = createToolbar({ currentView: 'week' });
+          const toolbar = createToolbar({ viewType: 'week' });
 
           expect(toolbar.caption).toEqual({
             startDate: new Date(2021, 7, 1),
@@ -356,7 +357,7 @@ describe('Scheduler Toolbar', () => {
         });
 
         it('should return correct caption for agenda view', () => {
-          const toolbar = createToolbar({ currentView: 'agenda' });
+          const toolbar = createToolbar({ viewType: 'agenda' });
 
           expect(toolbar.caption).toEqual({
             startDate: new Date(2021, 7, 7),

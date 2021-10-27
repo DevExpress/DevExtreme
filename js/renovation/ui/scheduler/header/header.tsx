@@ -86,6 +86,8 @@ export class SchedulerToolbarBaseProps {
   @OneWay() useShortDateFormat = !devices.real().generic || devices.isSimulator();
 
   @OneWay() customizationFunction?: (caption: DateNavigatorTextInfo) => string;
+
+  @OneWay() viewType: ViewType = 'day';
 }
 
 export type SchedulerToolbarProps = SchedulerToolbarBaseProps
@@ -97,13 +99,13 @@ export class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items
   @InternalState() calendarVisible = false;
 
   get step(): string {
-    return getStep(this.props.currentView) as string;
+    return getStep(this.props.viewType) as string;
   }
 
   get displayedDate(): Date {
     const startViewDate = new Date(this.props.startViewDate);
 
-    if (isMonthView(this.props.currentView)) {
+    if (isMonthView(this.props.viewType)) {
       return nextWeek(startViewDate);
     }
 

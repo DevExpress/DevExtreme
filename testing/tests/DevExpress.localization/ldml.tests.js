@@ -384,6 +384,28 @@ QUnit.module('number formatter', () => {
         ]);
     });
 
+    QUnit.test('getRegExpInfo should return correct regexp for the single time separator (for special locals)', function(assert) {
+        const parts = extend({}, defaultDateNames, {
+            getTimeSeparator: function() {
+                return 'h';
+            }
+        });
+
+        let regExpInfo = getRegExpInfo('HH \'h\' mm', parts);
+        assert.deepEqual(regExpInfo.patterns, [
+            'HH', '\' h \'', 'mm'
+        ]);
+        // eslint-disable-next-line no-useless-escape
+        assert.deepEqual(regExpInfo.regexp, /^(2[0-3]|1[0-9]|0?[0-9])(\ h\ )([1-5][0-9]|0?[0-9])$/i);
+
+        regExpInfo = getRegExpInfo('HH:mm', parts);
+        assert.deepEqual(regExpInfo.patterns, [
+            'HH', ':', 'mm'
+        ]);
+        // eslint-disable-next-line no-useless-escape
+        assert.deepEqual(regExpInfo.regexp, /^(2[0-3]|1[0-9]|0?[0-9])(\h|\:)([1-5][0-9]|0?[0-9])$/i);
+    });
+
     QUnit.test('getRegExpInfo should return correct regex for multiple adjacent time separators', function(assert) {
         const regExpInfo = getRegExpInfo('HH:::mm', dateParts);
         assert.deepEqual(regExpInfo.patterns, [

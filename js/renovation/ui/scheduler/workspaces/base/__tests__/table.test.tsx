@@ -109,10 +109,10 @@ describe('LayoutBase', () => {
   describe('Logic', () => {
     describe('Getters', () => {
       it('style', () => {
-        const layout = new Table({ height: 100 });
+        const layout = new Table({ height: 100, width: 300 });
 
         expect(layout.style)
-          .toStrictEqual({ height: '100px' });
+          .toStrictEqual({ height: '100px', width: '300px' });
       });
 
       describe('hasTopVirtualRow,  hasBottomVirtualRow', () => {

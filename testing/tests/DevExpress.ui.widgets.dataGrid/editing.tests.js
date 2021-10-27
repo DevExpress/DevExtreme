@@ -20068,6 +20068,7 @@ QUnit.module('Async validation', {
 
 QUnit.module('Editing - new row position', {
     beforeEach: function() {
+        this.contentReadyCallbacks = $.Callbacks();
         this.clock = sinon.useFakeTimers();
 
         this.$element = () => $('#container');
@@ -20078,6 +20079,7 @@ QUnit.module('Editing - new row position', {
         this.options = {
             tabIndex: 0,
             loadingTimeout: 0,
+            autoNavigateToFocusedRow: true,
             editing: {
                 mode: 'row',
                 allowUpdating: true,
@@ -20108,13 +20110,20 @@ QUnit.module('Editing - new row position', {
         };
 
         this.setupModules = () => {
-            setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'virtualScrolling'], {
+            setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'editorFactory', 'virtualScrolling', 'focus'], {
                 initViews: true
             });
+
+            this.on = (name, callBack) => {
+                if(name === 'contentReady') {
+                    this.contentReadyCallbacks.add(callBack);
+                }
+            };
         };
     },
     afterEach: function() {
         this.dispose();
+        this.contentReadyCallbacks.empty();
         this.clock.restore();
     }
 }, () => {
@@ -20131,7 +20140,10 @@ QUnit.module('Editing - new row position', {
         name: 'virtual scrolling',
         options: {
             scrolling: {
-                mode: 'virtual'
+                mode: 'virtual',
+                legacyMode: false,
+                rowPageSize: 5,
+                prerenderedRowCount: 1
             }
         }
     };
@@ -20178,29 +20190,38 @@ QUnit.module('Editing - new row position', {
 
             QUnit.test('newRowPosition = first when pageIndex = 2', function(assert) {
                 // arrange
-                const $testElement = $('#container');
+                const $testElement = $('#container').height(200);
 
+                this.options.height = 200;
                 this.options.paging.pageIndex = 2;
                 this.options.editing.newRowPosition = 'first';
                 this.setupModules();
                 this.clock.tick();
 
                 this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+                $(this.rowsView.getScrollable().container()).trigger('scroll');
                 this.clock.tick();
 
                 // assert
                 let rows = this.getVisibleRows();
-                assert.strictEqual(rows.length, 10, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 7 : 10, 'row count');
                 assert.strictEqual(this.pageIndex(), 2, 'pageIndex');
 
                 // act
                 this.addRow();
                 this.clock.tick();
+                $(this.rowsView.getScrollable().container()).trigger('scroll');
+                this.clock.tick();
+                this.contentReadyCallbacks.fire();
+                this.clock.tick();
 
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-                assert.strictEqual(rows.length, 11, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 6 : 11, 'row count');
                 assert.ok(rows[0].isNewRow, 'new row');
 
                 const $insertRow = $testElement.find('tbody > .dx-data-row').first();
@@ -20216,6 +20237,7 @@ QUnit.module('Editing - new row position', {
 
                 this.options.editing.newRowPosition = 'last';
                 this.setupModules();
+                this.clock.tick();
                 this.rowsView.render($testElement);
                 this.clock.tick();
 
@@ -20236,44 +20258,59 @@ QUnit.module('Editing - new row position', {
 
             QUnit.test('newRowPosition = last when page is last', function(assert) {
                 // arrange
-                const $testElement = $('#container');
+                const $testElement = $('#container').height(200);
 
+                this.options.height = 200;
                 this.options.paging.pageIndex = 9;
                 this.options.editing.newRowPosition = 'last';
                 this.setupModules();
+                this.clock.tick();
                 this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+                $(this.rowsView.getScrollable().container()).trigger('scroll');
                 this.clock.tick();
 
                 // assert
                 let rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 9, 'pageIndex');
-                assert.strictEqual(rows.length, 10, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 7 : 10, 'row count');
 
                 // act
                 this.addRow();
+                this.clock.tick();
+                $(this.rowsView.getScrollable().container()).trigger('scroll');
                 this.clock.tick();
 
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 9, 'pageIndex');
-                assert.strictEqual(rows.length, 11, 'row count');
-                assert.ok(rows[10].isNewRow, 'new row');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 6 : 11, 'row count');
+                assert.ok(rows[rows.length - 1].isNewRow, 'new row');
             });
 
             QUnit.test('newRowPosition = pageBottom', function(assert) {
                 // arrange
-                const $testElement = $('#container');
+                const $testElement = $('#container').height(200);
 
+                this.options.height = 200;
                 this.options.editing.newRowPosition = 'pageBottom';
                 this.options.paging.pageIndex = 2;
                 this.setupModules();
+                this.clock.tick();
                 this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+                $(this.rowsView.getScrollable().container()).trigger('scroll');
                 this.clock.tick();
 
                 // assert
+                const rowCount = config.name === 'virtual scrolling' ? 7 : 10;
                 let rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 2, 'pageIndex');
-                assert.strictEqual(rows.length, 10, 'row count');
+                assert.strictEqual(rows.length, rowCount, 'row count');
 
                 // act
                 this.addRow();
@@ -20282,24 +20319,36 @@ QUnit.module('Editing - new row position', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 2, 'pageIndex');
-                assert.strictEqual(rows.length, 11, 'row count');
-                assert.ok(rows[10].isNewRow, 'new row');
+                assert.strictEqual(rows.length, rowCount + 1, 'row count');
+
+                if(config.name === 'virtual scrolling') {
+                    assert.ok(rows[5].isNewRow, 'new row');
+                } else {
+                    assert.ok(rows[10].isNewRow, 'new row');
+                }
             });
 
             QUnit.test('newRowPosition = pageTop', function(assert) {
                 // arrange
-                const $testElement = $('#container');
+                const $testElement = $('#container').height(200);
 
+                this.options.height = 200;
                 this.options.editing.newRowPosition = 'pageTop';
                 this.options.paging.pageIndex = 2;
                 this.setupModules();
+                this.clock.tick();
                 this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+                $(this.rowsView.getScrollable().container()).trigger('scroll');
                 this.clock.tick();
 
                 // assert
+                const rowCount = config.name === 'virtual scrolling' ? 7 : 10;
                 let rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 2, 'pageIndex');
-                assert.strictEqual(rows.length, 10, 'row count');
+                assert.strictEqual(rows.length, rowCount, 'row count');
 
                 // act
                 this.addRow();
@@ -20308,17 +20357,18 @@ QUnit.module('Editing - new row position', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 2, 'pageIndex');
-                assert.strictEqual(rows.length, 11, 'row count');
+                assert.strictEqual(rows.length, rowCount + 1, 'row count');
                 assert.ok(rows[0].isNewRow, 'new row');
             });
 
             QUnit.test('newRowPosition = viewportBottom', function(assert) {
                 // arrange
-                const $testElement = $('#container');
+                const $testElement = $('#container').height(200);
 
                 this.options.height = 200;
                 this.options.editing.newRowPosition = 'viewportBottom';
                 this.setupModules();
+                this.clock.tick();
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
@@ -20341,11 +20391,13 @@ QUnit.module('Editing - new row position', {
 
             QUnit.test('newRowPosition = viewportTop', function(assert) {
                 // arrange
-                const $testElement = $('#container');
+                const $testElement = $('#container').height(200);
+                const isVirtualScrolling = config.name === 'virtual scrolling';
 
                 this.options.height = 200;
                 this.options.editing.newRowPosition = 'viewportTop';
                 this.setupModules();
+                this.clock.tick();
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
@@ -20362,7 +20414,7 @@ QUnit.module('Editing - new row position', {
                 this.clock.tick();
 
                 // assert
-                assert.strictEqual(this.rowsView.getTopVisibleItemIndex(), 1, 'top visible item index');
+                assert.strictEqual(this.rowsView.getTopVisibleItemIndex(), isVirtualScrolling ? 0 : 1, 'top visible item index');
 
                 // act
                 this.addRow();
@@ -20371,8 +20423,8 @@ QUnit.module('Editing - new row position', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-                assert.strictEqual(rows.length, 11, 'row count');
-                assert.ok(rows[1].isNewRow, 'new row');
+                assert.strictEqual(rows.length, isVirtualScrolling ? 9 : 11, 'row count');
+                assert.ok(rows[isVirtualScrolling ? 0 : 1].isNewRow, 'new row');
             });
         });
     });
@@ -20390,6 +20442,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
         this.options = {
             tabIndex: 0,
             loadingTimeout: 0,
+            autoNavigateToFocusedRow: true,
             editing: {
                 mode: 'row',
                 allowUpdating: true,
@@ -20443,7 +20496,10 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
         name: 'virtual scrolling',
         options: {
             scrolling: {
-                mode: 'virtual'
+                mode: 'virtual',
+                legacyMode: false,
+                rowPageSize: 5,
+                prerenderedRowCount: 1
             }
         }
     };
@@ -20514,12 +20570,15 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
             QUnit.test('Go to the page with the inserted row when specified insertAfterKey', function(assert) {
                 // arrange
-                const $testElement = $('#container');
+                const $testElement = $('#container').height(200);
 
+                this.options.height = 200;
                 this.setupModules();
                 this.clock.tick();
 
                 this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
                 this.clock.tick();
 
                 // assert
@@ -20528,13 +20587,13 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 assert.strictEqual(rows.length, 10, 'row count');
 
                 // act
-                this.option('editing.changes', [{ type: 'insert', insertAfterKey: 15 }]);
+                this.option('editing.changes', [{ type: 'insert', insertAfterKey: 13 }]);
                 this.clock.tick();
 
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-                assert.strictEqual(rows.length, 10, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 7 : 10, 'row count');
 
                 // act
                 this.pageIndex(1);
@@ -20543,23 +20602,25 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
-                // TODO remove condition with config.name when the pageIndex method is fixed in newMode of the virtual scrolling
-                assert.strictEqual(rows[config.name === 'virtual scrolling' ? 14 : 4].key, 15, 'key of the fifth row');
-                assert.ok(rows[config.name === 'virtual scrolling' ? 15 : 5].isNewRow, 'new row');
+                assert.strictEqual(rows[2].key, 13, 'key of the fifth row');
+                assert.ok(rows[3].isNewRow, 'new row');
 
-                const $insertRow = $testElement.find('tbody > .dx-data-row').eq(config.name === 'virtual scrolling' ? 15 : 5);
+                const $insertRow = $testElement.find('tbody > .dx-data-row').eq(3);
                 assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
                 assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
             });
 
             QUnit.test('Go to the page with the inserted row when specified insertBeforeKey', function(assert) {
                 // arrange
-                const $testElement = $('#container');
+                const $testElement = $('#container').height(200);
 
+                this.options.height = 200;
                 this.setupModules();
                 this.clock.tick();
 
                 this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
                 this.clock.tick();
 
                 // assert
@@ -20568,13 +20629,13 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 assert.strictEqual(rows.length, 10, 'row count');
 
                 // act
-                this.option('editing.changes', [{ type: 'insert', insertBeforeKey: 15 }]);
+                this.option('editing.changes', [{ type: 'insert', insertBeforeKey: 13 }]);
                 this.clock.tick();
 
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-                assert.strictEqual(rows.length, 10, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 7 : 10, 'row count');
                 // act
                 this.pageIndex(1);
                 this.clock.tick();
@@ -20582,22 +20643,22 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
-                // TODO remove condition with config.name when the pageIndex method is fixed in newMode of the virtual scrolling
-                assert.ok(rows[config.name === 'virtual scrolling' ? 14 : 4].isNewRow, 'new row');
-                assert.strictEqual(rows[config.name === 'virtual scrolling' ? 15 : 5].key, 15, 'key of the fifth row');
+                assert.ok(rows[2].isNewRow, 'new row');
+                assert.strictEqual(rows[3].key, 13, 'key of the fifth row');
 
-                const $insertRow = $testElement.find('tbody > .dx-data-row').eq(config.name === 'virtual scrolling' ? 14 : 4);
+                const $insertRow = $testElement.find('tbody > .dx-data-row').eq(2);
                 assert.ok($insertRow.hasClass('dx-row-inserted'), 'row is inserted');
                 assert.notOk($insertRow.hasClass('dx-edit-row'), 'inserted row is not edited');
             });
 
             QUnit.test('The insertAfterKey should not be ignored when newRowPosition = \'last\'', function(assert) {
                 // arrange
-                const $testElement = $('#container');
+                const $testElement = $('#container').height(200);
 
                 this.options.height = 200;
                 this.options.editing.newRowPosition = 'last';
                 this.setupModules();
+                this.clock.tick();
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
@@ -20614,7 +20675,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-                assert.strictEqual(rows.length, 11, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 8 : 11, 'row count');
                 assert.strictEqual(rows[4].key, 5, 'key of the fifth row');
                 assert.ok(rows[5].isNewRow, 'new row');
 
@@ -20625,21 +20686,24 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
             QUnit.test('The insertAfterKey should not be ignored when newRowPosition = \'first\'', function(assert) {
                 // arrange
-                const $testElement = $('#container');
+                const $testElement = $('#container').height(200);
 
                 this.options.height = 200;
                 this.options.paging.pageIndex = 1;
                 this.options.editing.newRowPosition = 'first';
                 this.setupModules();
+                this.clock.tick();
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
+                this.clock.tick();
+                $(this.rowsView.getScrollable().container()).trigger('scroll');
                 this.clock.tick();
 
                 // assert
                 let rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
-                assert.strictEqual(rows.length, 10, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 7 : 10, 'row count');
 
                 // act
                 this.option('editing.changes', [{ type: 'insert', insertAfterKey: 15 }]);
@@ -20648,7 +20712,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
-                assert.strictEqual(rows.length, 11, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 8 : 11, 'row count');
                 assert.strictEqual(rows[4].key, 15, 'key of the fifth row');
                 assert.ok(rows[5].isNewRow, 'new row');
 
@@ -20659,11 +20723,12 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
             QUnit.test('The insertBeforeKey should not be ignored when newRowPosition = \'last\'', function(assert) {
                 // arrange
-                const $testElement = $('#container');
+                const $testElement = $('#container').height(200);
 
                 this.options.height = 200;
                 this.options.editing.newRowPosition = 'last';
                 this.setupModules();
+                this.clock.tick();
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
@@ -20680,7 +20745,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
-                assert.strictEqual(rows.length, 11, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 8 : 11, 'row count');
                 assert.ok(rows[4].isNewRow, 'new row');
                 assert.strictEqual(rows[5].key, 5, 'key of the fifth row');
 
@@ -20691,21 +20756,24 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
 
             QUnit.test('The insertBeforeKey should not be ignored when newRowPosition = \'first\'', function(assert) {
                 // arrange
-                const $testElement = $('#container');
+                const $testElement = $('#container').height(200);
 
                 this.options.height = 200;
                 this.options.paging.pageIndex = 1;
                 this.options.editing.newRowPosition = 'first';
                 this.setupModules();
+                this.clock.tick();
                 this.rowsView.render($testElement);
                 this.rowsView.height(200);
                 this.rowsView.resize();
+                this.clock.tick();
+                $(this.rowsView.getScrollable().container()).trigger('scroll');
                 this.clock.tick();
 
                 // assert
                 let rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
-                assert.strictEqual(rows.length, 10, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 7 : 10, 'row count');
 
                 // act
                 this.option('editing.changes', [{ type: 'insert', insertBeforeKey: 15 }]);
@@ -20714,7 +20782,7 @@ QUnit.module('Editing - changes with insertBeforeKey/insertAfterKey', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 1, 'pageIndex');
-                assert.strictEqual(rows.length, 11, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 8 : 11, 'row count');
                 assert.ok(rows[4].isNewRow, 'new row');
                 assert.strictEqual(rows[5].key, 15, 'key of the fifth row');
 

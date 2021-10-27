@@ -3669,25 +3669,6 @@ testModule('focus policy', {
 
         assert.strictEqual(contentFocusHandler.callCount, 1, 'focus has been triggered once from keyboardMock');
     });
-
-    test('focusin event should not be propagated (T342292)', function(assert) {
-        assert.expect(0);
-
-        const overlay = new Overlay($('<div>').appendTo('#qunit-fixture'), {
-            visible: true,
-            shading: true,
-            contentTemplate: $('#focusableTemplate')
-        });
-        const $content = overlay.$content();
-
-        $(document).on('focusin.test', function() {
-            assert.ok(false, 'focusin bubbled');
-        });
-
-        $($content).trigger('focusin');
-
-        $(document).off('.test');
-    });
 });
 
 

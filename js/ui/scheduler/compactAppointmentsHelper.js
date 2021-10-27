@@ -184,14 +184,13 @@ export class CompactAppointmentsHelper {
         });
     }
 
-    _createCompactButtonElement({ isCompact, $container, width, coordinates, applyOffset, cellWidth }) {
+    _createCompactButtonElement({ isCompact, $container, coordinates }) {
         const result = $('<div>')
             .addClass(APPOINTMENT_COLLECTOR_CLASS)
             .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
             .appendTo($container);
 
-        const offset = applyOffset ? this._getCollectorOffset(width, cellWidth) : 0;
-        this._setPosition(result, { top: coordinates.top, left: coordinates.left + offset });
+        this._setPosition(result, coordinates);
 
         return result;
     }

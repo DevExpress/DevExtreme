@@ -28,14 +28,13 @@ import { DataAccessorType, DataSourcePromise } from './types';
 import {
   createDataAccessors, createTimeZoneCalculator, filterAppointments,
 } from './common';
-import { loadResources } from '../../../ui/scheduler/resources/utils';
+import { getGroupCount, loadResources } from '../../../ui/scheduler/resources/utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
 import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
 import { AppointmentsViewModelType } from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
-import { isVerticalGroupingApplied } from './workspaces/utils';
 
 export const viewFunction = ({
   restAttributes,
@@ -46,6 +45,8 @@ export const viewFunction = ({
   setCurrentView,
   startViewDate,
   appointmentsViewModel,
+  workSpaceKey,
+
   props: {
     accessKey,
     activeStateEnabled,
@@ -126,6 +127,7 @@ export const viewFunction = ({
             firstDayOfWeek={firstDayOfWeek}
             useDropDownViewSwitcher={useDropDownViewSwitcher}
             customizationFunction={customizeDateNavigatorText}
+            viewType={type}
           />
         )}
         <WorkSpace
@@ -153,17 +155,21 @@ export const viewFunction = ({
           allDayPanelExpanded={allDayPanelExpanded}
           onViewRendered={onViewRendered}
 
-          appointments={(
-            <AppointmentLayout
-              appointments={appointmentsViewModel.regular}
-            />
-          )}
-
           allDayAppointments={(
             <AppointmentLayout
               appointments={appointmentsViewModel.allDay}
+              overflowIndicators={appointmentsViewModel.allDayCompact}
             />
           )}
+
+          appointments={(
+            <AppointmentLayout
+              appointments={appointmentsViewModel.regular}
+              overflowIndicators={appointmentsViewModel.regularCompact}
+            />
+          )}
+
+          key={workSpaceKey}
         />
       </div>
     </Widget>
@@ -203,13 +209,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get startViewDate(): Date {
-    const type = this.props.currentView;
     const {
       currentDate,
       startDayHour,
       startDate,
       intervalCount,
       firstDayOfWeek,
+      type,
     } = this.currentViewConfig;
 
     const options = {
@@ -258,16 +264,12 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       return undefined;
     }
 
-    const isVerticalGrouping = isVerticalGroupingApplied(
-      this.loadedResources,
-      this.currentViewConfig.groupOrientation,
-    );
-
     const renderConfig = getViewRenderConfigByType(
       this.currentViewConfig.type,
       this.currentViewConfig.crossScrollingEnabled,
       this.currentViewConfig.intervalCount,
-      isVerticalGrouping,
+      this.loadedResources,
+      this.currentViewConfig.groupOrientation,
     );
 
     return getAppointmentsConfig(
@@ -293,8 +295,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   get appointmentsViewModel(): AppointmentsViewModelType {
     if (!this.appointmentsConfig || this.filteredItems.length === 0) {
       return {
-        regular: [],
         allDay: [],
+        allDayCompact: [],
+        regular: [],
+        regularCompact: [],
       };
     }
 
@@ -310,6 +314,21 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       model,
       this.filteredItems,
     );
+  }
+
+  // TODO: This is a WA because we need to clean workspace completely to set table sizes correctly
+  // We need to remove this after we refactor crossScrolling to set table sizes through CSS, not JS
+  get workSpaceKey(): string {
+    const { currentView, crossScrollingEnabled } = this.props;
+    const { groupOrientation, intervalCount } = this.currentViewConfig;
+
+    if (!crossScrollingEnabled) {
+      return '';
+    }
+
+    const groupCount = getGroupCount(this.loadedResources);
+
+    return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
   }
 
   @Method()

@@ -166,7 +166,7 @@ export default class ResizingModule extends BaseModule {
 
     option(option, value) {
         if(option === 'mediaResizing') {
-            Object.keys(value).forEach((optionName) => this.option(optionName, value[optionName]));
+            this.handleOptionChangeValue(value);
             return;
         }
 

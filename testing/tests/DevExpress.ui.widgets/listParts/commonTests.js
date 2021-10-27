@@ -1916,6 +1916,22 @@ QUnit.module('events', moduleSetup, () => {
         assert.strictEqual(itemRenderedSpy.callCount, 2);
     });
 
+    QUnit.test('onItemRendered should have correct itemIndex parameter when data is grouped (T989015)', function(assert) {
+        const itemRenderedStub = sinon.stub();
+
+        $('#list').dxList({
+            dataSource: [{
+                key: 'a',
+                items: ['1']
+            }],
+            grouped: true,
+            onItemRendered: itemRenderedStub
+        }).dxList('instance');
+
+        const { itemIndex } = itemRenderedStub.getCall(0).args[0];
+        assert.deepEqual(itemIndex, { group: 0, item: 0 });
+    });
+
     QUnit.test('itemRendered event', function(assert) {
         const itemRenderedSpy = sinon.spy();
 

@@ -6,18 +6,23 @@ describe('AppointmentLayout', () => {
     const render = (viewModel): ShallowWrapper => shallow(viewFunction({
       ...viewModel,
       props: {
+        appointments: [],
+        overflowIndicators: [],
         ...viewModel.props,
       },
     }));
 
-    it('it should be rendered correctly with empty items', () => {
-      const layout = render({ props: { appointments: [] } });
+    it('it should be rendered correctly without items', () => {
+      const layout = render({ });
 
       expect(layout.hasClass('dx-scheduler-appointments'))
         .toEqual(true);
+
+      expect(layout.children())
+        .toHaveLength(0);
     });
 
-    it('it should be rendered correctly with items', () => {
+    it('it should have correct render props with reqular appointments', () => {
       const defaultViewModel = {
         geometry: {
           left: 1,
@@ -41,6 +46,7 @@ describe('AppointmentLayout', () => {
       const appointmentTemplate = '<div class="test-template">Some template</div>';
       const viewModel0 = {
         ...defaultViewModel,
+        key: '1-2-10-20',
         geometry: {
           ...defaultViewModel.geometry,
           left: 10,
@@ -48,6 +54,7 @@ describe('AppointmentLayout', () => {
       };
       const viewModel1 = {
         ...defaultViewModel,
+        key: '100-200-10-20',
         info: {
           ...defaultViewModel.info,
           sourceAppointment: {
@@ -73,17 +80,48 @@ describe('AppointmentLayout', () => {
 
       let appointment = layout.childAt(0);
       expect(appointment.key())
-        .toEqual('1-1628157600000-1628164800000_11-4-10-20');
+        .toEqual('1-2-10-20');
       expect(appointment.prop('viewModel'))
         .toBe(viewModel0);
 
       appointment = layout.childAt(1);
       expect(appointment.key())
-        .toEqual('11-1628157600000-1628164800000_2-4-10-20');
+        .toEqual('100-200-10-20');
       expect(appointment.prop('viewModel'))
         .toBe(viewModel1);
       expect(appointment.prop('appointmentTemplate'))
         .toBe(appointmentTemplate);
+    });
+
+    it('it should have correct props with overflow indicators', () => {
+      const viewModel = {
+        key: 'key-01',
+        geometry: {
+          top: 50,
+          left: 100,
+        },
+      };
+      const overflowIndicatorTemplate = '<div class="test-template">Some template</div>';
+      const layout = render({
+        props: {
+          overflowIndicators: [viewModel],
+          overflowIndicatorTemplate,
+        },
+      });
+
+      expect(layout.hasClass('dx-scheduler-appointments'))
+        .toEqual(true);
+
+      expect(layout.children().length)
+        .toEqual(1);
+
+      const overflowIndicator = layout.childAt(0);
+      expect(overflowIndicator.key())
+        .toEqual('key-01');
+      expect(overflowIndicator.prop('viewModel'))
+        .toBe(viewModel);
+      expect(overflowIndicator.prop('overflowIndicatorTemplate'))
+        .toBe(overflowIndicatorTemplate);
     });
   });
 });
