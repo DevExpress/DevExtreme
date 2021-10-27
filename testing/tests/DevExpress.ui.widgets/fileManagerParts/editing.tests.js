@@ -97,6 +97,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         $input.val('TestFolder 1').trigger('change');
 
+        $input.trigger($.Event('keydown', { key: 'enter' }));
         $input.trigger($.Event('keyup', { key: 'enter' }));
         this.clock.tick(400);
 
@@ -167,6 +168,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         $input.val('Test 4').trigger('change');
 
+        $input.trigger($.Event('keydown', { key: 'enter' }));
         $input.trigger($.Event('keyup', { key: 'enter' }));
         this.clock.tick(400);
 
