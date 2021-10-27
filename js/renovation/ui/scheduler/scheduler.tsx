@@ -91,6 +91,11 @@ export const viewFunction = ({
     allowMultipleCellSelection,
     allDayPanelExpanded,
     type,
+
+    dataCellTemplate,
+    dateCellTemplate,
+    timeCellTemplate,
+    resourceCellTemplate,
   } = currentViewConfig;
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -154,6 +159,11 @@ export const viewFunction = ({
           allowMultipleCellSelection={allowMultipleCellSelection}
           allDayPanelExpanded={allDayPanelExpanded}
           onViewRendered={onViewRendered}
+
+          dataCellTemplate={dataCellTemplate}
+          timeCellTemplate={timeCellTemplate}
+          dateCellTemplate={dateCellTemplate}
+          resourceCellTemplate={resourceCellTemplate}
 
           allDayAppointments={(
             <AppointmentLayout
