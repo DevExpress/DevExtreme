@@ -1,6 +1,6 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import Scheduler from '../../../model/scheduler';
-import cloneTest from '../../../helpers/check-all-platforms';
+import Scheduler from '../../../../model/scheduler';
+import cloneTest from '../../../../helpers/check-all-platforms';
 
 const SCHEDULER_SELECTOR = '.test-scheduler';
 
@@ -154,7 +154,7 @@ const test = (options?: any): any => cloneTest(
   options,
 );
 
-fixture('Renovated scheduler - Day view');
+fixture('Renovated scheduler - Base');
 
 [
   { currentView: 'day', expected: 2 },
