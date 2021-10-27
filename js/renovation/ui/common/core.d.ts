@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
-
 import '../../../core/component';
 
 declare module '../../../core/component' {
