@@ -1688,7 +1688,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // assert
-        assert.equal(dataGrid.getScrollable().scrollTop(), 0, 'scroll top is not changed');
+        assert.equal(dataGrid.getScrollable().scrollTop(), devices.real().android ? 1 : 0, 'scroll top is not changed');
     });
 
     // T838096
