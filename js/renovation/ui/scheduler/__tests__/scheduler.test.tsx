@@ -65,11 +65,6 @@ describe('Scheduler', () => {
       allowMultipleCellSelection: true,
       allDayPanelExpanded: false,
       type: 'week',
-
-      dateCellTemplate: jest.fn(),
-      dataCellTemplate: jest.fn(),
-      timeCellTemplate: jest.fn(),
-      resourceCellTemplate: jest.fn(),
     };
     const renderComponent = (viewModel) => shallow(
       <ViewFunction
@@ -127,9 +122,16 @@ describe('Scheduler', () => {
     });
 
     it('should render work space and pass to it correct props', () => {
+      const templates = {
+        dateCellTemplate: jest.fn(),
+        dataCellTemplate: jest.fn(),
+        timeCellTemplate: jest.fn(),
+        resourceCellTemplate: jest.fn(),
+      };
       const tree = renderComponent({
         onViewRendered: () => {},
         workSpaceKey: 'workSpaceKey',
+        ...templates,
       });
 
       const workSpace = tree.find(WorkSpace);
@@ -139,6 +141,7 @@ describe('Scheduler', () => {
       expect(workSpace.props())
         .toEqual({
           ...defaultCurrentViewConfig,
+          ...templates,
           onViewRendered: expect.any(Function),
           appointments: expect.anything(),
           allDayAppointments: expect.anything(),
@@ -974,6 +977,31 @@ describe('Scheduler', () => {
 
           expect(scheduler.workSpaceKey)
             .toBe('week_vertical_3_2');
+        });
+      });
+
+      describe('Cell Templates', () => {
+        it('should return cell templates', () => {
+          const templates = {
+            dateCellTemplate: jest.fn(),
+            dataCellTemplate: jest.fn(),
+            timeCellTemplate: jest.fn(),
+            resourceCellTemplate: jest.fn(),
+          };
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            ...templates,
+          });
+
+          expect(scheduler.dateCellTemplate)
+            .toBe(templates.dateCellTemplate);
+          expect(scheduler.dataCellTemplate)
+            .toBe(templates.dataCellTemplate);
+          expect(scheduler.timeCellTemplate)
+            .toBe(templates.timeCellTemplate);
+          expect(scheduler.resourceCellTemplate)
+            .toBe(templates.resourceCellTemplate);
         });
       });
     });
