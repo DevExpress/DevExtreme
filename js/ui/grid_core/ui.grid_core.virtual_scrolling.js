@@ -855,7 +855,7 @@ export const virtualScrollingModule = {
                                 return that._itemCount + insertRowCount;
                             },
                             totalItemsCount: function() {
-                                if(isVirtualMode(that)) {
+                                if(isVirtualPaging(that)) {
                                     const insertRowCount = that.getController('editing')?.getInsertRowCount() ?? 0;
                                     return that.totalItemsCount() + insertRowCount;
                                 }
