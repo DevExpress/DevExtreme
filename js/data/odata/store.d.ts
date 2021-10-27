@@ -70,12 +70,7 @@ export interface ODataStoreOptions<
      * @public
      */
     keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
-    /**
-     * @docid
-     * @type_function_param1 loadOptions:LoadOptions
-     * @action
-     * @public
-     */
+
     onLoading?: ((loadOptions: LoadOptions<TItem>) => void);
     /**
      * @docid
@@ -123,12 +118,5 @@ export default class ODataStore<
      */
     createQuery(loadOptions?: { expand?: string | Array<string>; requireTotalCount?: boolean; customQueryParams?: any }): Query;
 
-    /**
-     * @docid
-     * @publicName insert(values)
-     * @param1 values:object
-     * @return Promise<any>
-     * @public
-     */
     insert(values: TItem): DxPromise<TItem> & PromiseExtension<TItem>;
 }
