@@ -260,6 +260,15 @@ interface ViewDataGenerationOptions {
   isGroupedAllDayPanel: boolean;
 }
 
+interface GetCellCountOptions {
+  intervalCount: number;
+  viewType: ViewType;
+  startDayHour: number;
+  endDayHour: number;
+  hoursInterval: number;
+  currentDate: Date;
+}
+
 type GenerateViewDataMap = (
   completeViewDateMap: ViewCellData[][],
   options: ViewDataMapGenerationOptions,
@@ -277,6 +286,7 @@ export interface ViewDataGeneratorType {
   generateViewDataMap: GenerateViewDataMap;
   getViewDataFromMap: GetViewDataFromMap;
   getInterval: (hoursInterval: number) => number;
+  getCellCount: (options: GetCellCountOptions) => number;
 }
 
 interface CompleteDateHeaderMapGenerationOptions {
