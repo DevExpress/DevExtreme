@@ -585,8 +585,7 @@ export class AppointmentSettingsGenerator {
 
         cellPositions.forEach(({ coordinates, dateSettingIndex }) => {
             const dateSetting = dateSettings[dateSettingIndex];
-            const sourceAppointment = dateSetting.source;
-            const dateText = this._getAppointmentDateText(sourceAppointment);
+            const dateText = this._getAppointmentDateText(dateSetting);
 
             const info = {
                 appointment: dateSetting,
