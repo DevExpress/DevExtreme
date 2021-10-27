@@ -10,7 +10,7 @@ import {
   GetTextAndFormatDateFn,
   CheckAndDeleteAppointmentFn,
   AppointmentTooltipTemplate,
-} from './types';
+} from './types.d';
 import { Marker } from './marker';
 import { Button } from '../../button';
 import { TooltipItemContent } from './item_content';

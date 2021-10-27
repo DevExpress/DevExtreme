@@ -17,7 +17,7 @@ import { SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE } from '../common/consts';
 
 import { getWindow, setWindow } from '../../../../core/utils/window';
 import { Widget } from '../../common/widget';
-import { ScrollableDirection } from '../common/types';
+import { ScrollableDirection } from '../common/types.d';
 import { ScrollViewProps } from '../common/scrollview_props';
 
 interface Mock extends jest.Mock {}

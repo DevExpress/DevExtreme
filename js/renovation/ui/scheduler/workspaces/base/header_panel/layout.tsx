@@ -9,7 +9,7 @@ import {
 import {
   DateHeaderData,
   DateTimeCellTemplateProps,
-} from '../../types';
+} from '../../types.d';
 import { isHorizontalGroupingApplied } from '../../utils';
 import { GroupPanel, GroupPanelProps } from '../group_panel/group_panel';
 import { DateHeaderLayout, DateHeaderLayoutProps } from './date_header/layout';

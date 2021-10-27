@@ -8,7 +8,7 @@ import {
   LabelAlignment,
   ExtraProps,
   Segment,
-} from './types';
+} from './types.d';
 import { isDefined } from '../../../../core/utils/type';
 import domAdapter from '../../../../core/dom_adapter';
 import { normalizeEnum } from '../../../../viz/core/utils';

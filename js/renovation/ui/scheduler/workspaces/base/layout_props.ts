@@ -4,8 +4,8 @@ import {
   Template,
   JSXTemplate,
 } from '@devextreme-generator/declarations';
-import { GroupedViewData, DataCellTemplateProps } from '../types';
-import { GroupOrientation } from '../../types';
+import { GroupedViewData, DataCellTemplateProps } from '../types.d';
+import { GroupOrientation } from '../../types.d';
 
 @ComponentBindings()
 export class LayoutProps {

@@ -7,7 +7,7 @@ import {
   DateTableCellBase,
   DateTableCellBaseProps,
 } from '../../base/date_table/cell';
-import { ContentTemplateProps } from '../../types';
+import { ContentTemplateProps } from '../../types.d';
 
 export const viewFunction = ({
   props: {

@@ -3,7 +3,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { Table } from '../../table';
 import { AllDayPanelTableBody } from './table_body';
-import { ViewCellData } from '../../../types';
+import { ViewCellData } from '../../../types.d';
 import { LayoutProps } from '../../layout_props';
 import { DefaultSizes } from '../../../const';
 

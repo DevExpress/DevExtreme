@@ -37,7 +37,9 @@ const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
 describe('Scheduler', () => {
   const defaultAppointmentViewModel = {
     regular: [],
+    regularCompact: [],
     allDay: [],
+    allDayCompact: [],
   };
 
   describe('Render', () => {
@@ -186,6 +188,7 @@ describe('Scheduler', () => {
           onCurrentViewUpdate: setCurrentView,
           onCurrentDateUpdate: setCurrentDate,
           startViewDate,
+          viewType: 'week',
         });
     });
 
@@ -207,7 +210,9 @@ describe('Scheduler', () => {
 
         const appointmentsViewModel = {
           regular: [{}],
-          allDay: [{}, {}],
+          regularCompact: [{}, {}],
+          allDay: [{}, {}, {}],
+          allDayCompact: [{}, {}, {}, {}],
         };
 
         const scheduler = renderComponent({
@@ -225,6 +230,7 @@ describe('Scheduler', () => {
         expect(appointments.props)
           .toEqual({
             appointments: appointmentsViewModel.regular,
+            overflowIndicators: appointmentsViewModel.regularCompact,
           });
 
         expect(allDayAppointments.type)
@@ -233,6 +239,7 @@ describe('Scheduler', () => {
         expect(allDayAppointments.props)
           .toEqual({
             appointments: appointmentsViewModel.allDay,
+            overflowIndicators: appointmentsViewModel.allDayCompact,
           });
       });
     });
@@ -655,6 +662,21 @@ describe('Scheduler', () => {
             ...new SchedulerProps(),
             currentDate: new Date(2021, 7, 19),
             currentView: 'week',
+          });
+
+          expect(scheduler.startViewDate.getTime())
+            .toBe(new Date(2021, 7, 15).getTime());
+        });
+
+        it('should return correct startViewDate if view name is specified', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            views: [{
+              type: 'week',
+              name: 'Week',
+            }],
+            currentView: 'Week',
+            currentDate: new Date(2021, 7, 19),
           });
 
           expect(scheduler.startViewDate.getTime())

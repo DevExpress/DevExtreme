@@ -1,6 +1,6 @@
 import {
   ScrollOffset,
-} from '../common/types';
+} from '../common/types.d';
 import { ensureDefined } from '../../../../core/utils/common';
 
 export function getOffsetDistance(

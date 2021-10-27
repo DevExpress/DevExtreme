@@ -3,7 +3,7 @@ import each from 'jest-each';
 import {
   RefObject,
 } from '@devextreme-generator/declarations';
-import { DisposeEffectReturn } from '../../../../utils/effect_return';
+import { DisposeEffectReturn } from '../../../../utils/effect_return.d';
 import {
   clear as clearEventHandlers, emit, getEventHandlers, defaultEvent,
 } from '../../../../test_utils/events_mock';
@@ -38,7 +38,7 @@ import {
   getElementOverflowX,
   getElementOverflowY,
 } from '../../utils/get_element_style';
-import { DxMouseEvent, ScrollableDirection } from '../../common/types';
+import { DxMouseEvent, ScrollableDirection } from '../../common/types.d';
 
 jest.mock('../../utils/get_element_style', () => ({
   ...jest.requireActual('../../utils/get_element_style'),

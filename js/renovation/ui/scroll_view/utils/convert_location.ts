@@ -5,7 +5,7 @@ import {
 import {
   ScrollableDirection,
   ScrollOffset,
-} from '../common/types';
+} from '../common/types.d';
 import { ensureDefined } from '../../../../core/utils/common';
 import {
   ScrollDirection,

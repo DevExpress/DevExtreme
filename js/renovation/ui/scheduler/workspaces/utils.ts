@@ -1,7 +1,7 @@
 import { CSSAttributes } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../utils/combine_classes';
-import { Group, GroupedViewData, TimePanelData } from './types';
-import { GroupOrientation } from '../types';
+import { Group, GroupedViewData, TimePanelData } from './types.d';
+import { GroupOrientation } from '../types.d';
 import {
   HORIZONTAL_GROUP_ORIENTATION,
   VERTICAL_GROUP_ORIENTATION,

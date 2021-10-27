@@ -11,11 +11,19 @@ import {
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../utils/combine_classes';
 import {
+  DateHeaderCellData,
   DateHeaderData,
+  DateHeaderDataGeneratorType,
   GroupedViewData,
   GroupPanelData,
   TimePanelData,
+  TimePanelDataGeneratorType,
+  ViewCellData,
+  ViewDataGeneratorType,
+  ViewDataMap,
+  ViewDataProviderOptions,
   ViewDataProviderType,
+  WorkSpaceGenerationOptions,
 } from '../types';
 import { OrdinaryLayout } from './ordinary_layout';
 
@@ -32,12 +40,16 @@ import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils
 import { CrossScrollingLayout } from './cross_scrolling_layout';
 import { MainLayoutProps } from './main_layout_props';
 import { GroupOrientation } from '../../types';
+import { getViewDataGeneratorByViewType } from '../../../../../ui/scheduler/workspaces/view_model/utils';
+import { calculateIsGroupedAllDayPanel } from '../../view_model/to_test/views/utils/base';
+import { DateHeaderDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/date_header_data_generator';
+import { TimePanelDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
 
 export const prepareGenerationOptions = (
-  workSpaceProps: Partial<WorkSpaceProps>,
+  workSpaceProps: WorkSpaceGenerationOptions,
   renderConfig: ViewRenderConfig,
   isAllDayPanelVisible: boolean,
-): unknown => {
+): ViewDataProviderOptions => {
   const {
     intervalCount,
     groups,
@@ -88,14 +100,13 @@ export const prepareGenerationOptions = (
 };
 
 export const viewFunction = ({
-  // dateHeaderData,
-  // viewData,
-  // timePanelData,
+  dateHeaderData,
+  viewData,
+  timePanelData,
   groupPanelData,
   layout: Layout,
   isAllDayPanelVisible,
   isRenderHeaderEmptyCell,
-  viewDataProvider,
 
   dateTableRef,
   allDayPanelRef,
@@ -139,9 +150,9 @@ export const viewFunction = ({
   <Layout
     ref={layoutRef}
 
-    viewData={viewDataProvider.viewData}
-    dateHeaderData={viewDataProvider.dateHeaderData}
-    timePanelData={viewDataProvider.timePanelData}
+    viewData={viewData}
+    dateHeaderData={dateHeaderData}
+    timePanelData={timePanelData}
     groupPanelData={groupPanelData}
     dataCellTemplate={dataCellTemplate}
     dateCellTemplate={dateCellTemplate}
@@ -234,6 +245,10 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return isVerticalGroupingApplied(this.props.groups, this.groupOrientation);
   }
 
+  get isHorizontalGrouping(): boolean {
+    return isHorizontalGroupingApplied(this.props.groups, this.groupOrientation);
+  }
+
   get layout(): JSXTemplate<
   MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
   > {
@@ -249,59 +264,241 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return isAllDayPanelSupported && showAllDayPanel;
   }
 
-  // TODO: implement using ViewDataGenerator, now it returns fake data
-  // eslint-disable-next-line class-methods-use-this
+  get viewDataGenerator(): ViewDataGeneratorType {
+    // TODO: convert to TS
+    return getViewDataGeneratorByViewType(this.props.type) as ViewDataGeneratorType;
+  }
+
+  get dateHeaderDataGenerator(): DateHeaderDataGeneratorType {
+    // TODO: convert to TS
+    return new DateHeaderDataGenerator(this.viewDataGenerator) as DateHeaderDataGeneratorType;
+  }
+
+  get timePanelDataGenerator(): TimePanelDataGeneratorType {
+    // TODO: convert to TS
+    return (
+      (new TimePanelDataGenerator(this.viewDataGenerator) as unknown) as TimePanelDataGeneratorType
+    );
+  }
+
+  // TODO: WA because memoization does not work in React.
+  // It should be inside Scheduler.tsx (and already is)
+  get startViewDate(): Date {
+    const {
+      currentDate,
+      startDayHour,
+      startDate,
+      intervalCount,
+      firstDayOfWeek,
+      type,
+    } = this.props;
+
+    const options = {
+      currentDate,
+      startDayHour,
+      startDate,
+      intervalCount,
+      firstDayOfWeek,
+    };
+
+    const viewDataGenerator = getViewDataGeneratorByViewType(type);
+    const startViewDate = viewDataGenerator.getStartViewDate(options) as Date;
+
+    return startViewDate;
+  }
+
+  get completeViewDataMap(): ViewCellData[][] {
+    const {
+      currentDate,
+      startDate,
+      startDayHour,
+      endDayHour,
+      groupByDate,
+      groups,
+      intervalCount,
+      firstDayOfWeek,
+      hoursInterval,
+      cellDuration,
+      type,
+    } = this.props;
+
+    return this.viewDataGenerator.getCompleteViewDataMap({
+      currentDate,
+      startDate,
+      startDayHour,
+      endDayHour,
+      groupByDate,
+      groups,
+      intervalCount,
+      firstDayOfWeek,
+      hoursInterval,
+      cellDuration,
+      startViewDate: this.startViewDate,
+      groupOrientation: this.groupOrientation,
+      isVerticalGrouping: this.isVerticalGrouping,
+      isHorizontalGrouping: this.isHorizontalGrouping,
+      isGroupedByDate: groupByDate, // TODO: validate grouping by date
+      isAllDayPanelVisible: this.isAllDayPanelVisible,
+      viewType: type,
+      interval: this.viewDataGenerator.getInterval(hoursInterval),
+    });
+  }
+
+  get viewDataMap(): ViewDataMap {
+    return this.viewDataGenerator.generateViewDataMap(
+      this.completeViewDataMap,
+      {
+        startRowIndex: 0,
+        startCellIndex: 0,
+        isVerticalGrouping: this.isVerticalGrouping,
+        isAllDayPanelVisible: this.isAllDayPanelVisible,
+      },
+    );
+  }
+
   get viewData(): GroupedViewData {
-    return {
-      groupedData: [{
-        dateTable: [[{
-          startDate: new Date(),
-          endDate: new Date(),
-          index: 0,
-          isFirstGroupCell: true,
-          isLastGroupCell: true,
-          key: 0,
-          groupIndex: 0,
-        }]],
-        groupIndex: 0,
-      }],
-      leftVirtualCellCount: 0,
-      rightVirtualCellCount: 0,
-      topVirtualRowCount: 0,
-      bottomVirtualRowCount: 0,
-    };
+    const { groups } = this.props;
+
+    return this.viewDataGenerator.getViewDataFromMap(
+      this.completeViewDataMap,
+      this.viewDataMap,
+      {
+        topVirtualRowHeight: 0,
+        bottomVirtualRowHeight: 0,
+        leftVirtualCellWidth: 0,
+        rightVirtualCellWidth: 0,
+        startRowIndex: 0,
+        startCellIndex: 0,
+        isProvideVirtualCellsWidth: this.renderConfig.isProvideVirtualCellsWidth,
+        isVerticalGrouping: this.isVerticalGrouping,
+        isAllDayPanelVisible: this.isAllDayPanelVisible,
+        isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(
+          groups, this.groupOrientation, this.isAllDayPanelVisible,
+        ),
+      },
+    );
   }
 
-  // TODO: implement using ViewDataGenerator, now it returns fake data
-  // eslint-disable-next-line class-methods-use-this
+  get completeDateHeaderData(): DateHeaderCellData[][] {
+    const {
+      groupByDate,
+      groups,
+      startDayHour,
+      endDayHour,
+      hoursInterval,
+      intervalCount,
+      currentDate,
+      type: viewType,
+    } = this.props;
+
+    return this.dateHeaderDataGenerator.getCompleteDateHeaderMap(
+      {
+        isGenerateWeekDaysHeaderData: this.renderConfig.isGenerateWeekDaysHeaderData,
+        isGroupedByDate: groupByDate, // TODO: validate grouping by date
+        groups,
+        groupOrientation: this.groupOrientation,
+        isHorizontalGrouping: this.isHorizontalGrouping,
+        startDayHour,
+        endDayHour,
+        hoursInterval,
+        intervalCount,
+        headerCellTextFormat: this.renderConfig.headerCellTextFormat,
+        getDateForHeaderText: this.renderConfig.getDateForHeaderText,
+        interval: this.viewDataGenerator.getInterval(hoursInterval),
+        startViewDate: this.startViewDate,
+        currentDate,
+        viewType,
+
+        today: new Date(), // TODO
+      },
+      this.completeViewDataMap,
+    );
+  }
+
   get dateHeaderData(): DateHeaderData {
-    return {
-      dataMap: [[]],
-      leftVirtualCellCount: 0,
-      rightVirtualCellCount: 0,
-      leftVirtualCellWidth: 0,
-      rightVirtualCellWidth: 0,
-    };
+    const {
+      startDayHour,
+      endDayHour,
+      hoursInterval,
+      groups,
+      groupByDate,
+    } = this.props;
+    return this.dateHeaderDataGenerator.generateDateHeaderData(
+      this.completeDateHeaderData,
+      this.completeViewDataMap,
+      {
+        isGenerateWeekDaysHeaderData: this.renderConfig.isGenerateWeekDaysHeaderData,
+        cellWidth: 0, // TODO: implement virtual scrolling
+        isProvideVirtualCellsWidth: this.renderConfig.isProvideVirtualCellsWidth,
+        startDayHour,
+        endDayHour,
+        hoursInterval,
+        startCellIndex: 0,
+        // cellCount: TODO: add virtual scrolling
+        groups,
+        groupOrientation: this.groupOrientation,
+        isGroupedByDate: groupByDate, // TODO :validate grouping by date
+      },
+    );
   }
 
-  // TODO: implement using ViewDataGenerator, now it returns fake data
-  // eslint-disable-next-line class-methods-use-this
-  get timePanelData(): TimePanelData {
-    return {
-      groupedData: [],
-      leftVirtualCellCount: 0,
-      rightVirtualCellCount: 0,
-      topVirtualRowCount: 0,
-      bottomVirtualRowCount: 0,
-    };
+  get completeTimePanelData(): ViewCellData[] | undefined {
+    if (!this.renderConfig.isRenderTimePanel) {
+      return undefined;
+    }
+
+    const {
+      cellDuration,
+      startDayHour,
+      endDayHour,
+      intervalCount,
+      currentDate,
+      type,
+      hoursInterval,
+    } = this.props;
+
+    return this.timePanelDataGenerator.getCompleteTimePanelMap(
+      {
+        startViewDate: this.startViewDate,
+        cellDuration,
+        startDayHour,
+        endDayHour,
+        isVerticalGrouping: this.isVerticalGrouping,
+        intervalCount,
+        currentDate,
+        viewType: type,
+        hoursInterval,
+      },
+      this.completeViewDataMap,
+    );
   }
 
-  // TODO: rework
+  get timePanelData(): TimePanelData | undefined {
+    if (!this.completeTimePanelData) {
+      return undefined;
+    }
+
+    return this.timePanelDataGenerator.generateTimePanelData(
+      this.completeTimePanelData,
+      {
+        startRowIndex: 0,
+        // rowCount?: TODO: add virtualization
+        topVirtualRowHeight: 0,
+        bottomVirtualRowHeight: 0,
+        isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(
+          this.props.groups, this.groupOrientation, this.isAllDayPanelVisible,
+        ),
+        isVerticalGrouping: this.isVerticalGrouping,
+        isAllDayPanelVisible: this.isAllDayPanelVisible,
+      },
+    );
+  }
+
   get viewDataProvider(): ViewDataProviderType {
     const {
       intervalCount,
       groups,
-      groupByDate,
+      groupByDate, // TODO: validate grouping by date
       startDayHour,
       endDayHour,
       currentDate,
@@ -311,9 +508,11 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       type,
       cellDuration,
     } = this.props;
-
-    // TODO: convert ViewdataProvider to TS
     const viewDataProvider = (new ViewDataProvider(type) as unknown) as ViewDataProviderType;
+
+    viewDataProvider.completeViewDataMap = this.completeViewDataMap;
+    viewDataProvider.viewDataMap = this.viewDataMap;
+    viewDataProvider.viewData = this.viewData;
 
     const generationOptions = prepareGenerationOptions(
       {
@@ -333,14 +532,45 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       this.renderConfig,
       this.isAllDayPanelVisible,
     );
-    viewDataProvider.update(generationOptions, true);
+
+    viewDataProvider.setViewOptions(generationOptions);
+    viewDataProvider.createGroupedDataMapProvider();
 
     return viewDataProvider;
   }
 
   get groupPanelData(): GroupPanelData {
+    const {
+      intervalCount,
+      groups,
+      groupByDate,
+      startDayHour,
+      endDayHour,
+      currentDate,
+      startDate,
+      firstDayOfWeek,
+      hoursInterval,
+      type,
+      cellDuration,
+    } = this.props;
+
     const generationOptions = prepareGenerationOptions(
-      this.props, this.renderConfig, this.isAllDayPanelVisible,
+      {
+        intervalCount,
+        groups,
+        groupByDate,
+        groupOrientation: this.groupOrientation,
+        startDayHour,
+        endDayHour,
+        currentDate,
+        startDate,
+        firstDayOfWeek,
+        hoursInterval,
+        type,
+        cellDuration,
+      },
+      this.renderConfig,
+      this.isAllDayPanelVisible,
     );
 
     return this.viewDataProvider.getGroupPanelData(generationOptions);

@@ -3,7 +3,7 @@ import {
 } from '@devextreme-generator/declarations';
 import {
   GroupRenderItem,
-} from '../../../types';
+} from '../../../types.d';
 import { Row } from './row';
 import { addHeightToStyle } from '../../../utils';
 import { GroupPanelLayoutProps } from '../group_panel_layout_props';

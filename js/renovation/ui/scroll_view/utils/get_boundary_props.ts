@@ -4,7 +4,7 @@ import {
   ScrollOffset,
   ScrollableBoundary,
   ScrollableDirection,
-} from '../common/types';
+} from '../common/types.d';
 
 import {
   ScrollDirection,

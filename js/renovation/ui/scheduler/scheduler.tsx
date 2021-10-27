@@ -7,7 +7,7 @@ import {
   Method,
 } from '@devextreme-generator/declarations';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
-import { DisposeEffectReturn } from '../../utils/effect_return';
+import { DisposeEffectReturn } from '../../utils/effect_return.d';
 // eslint-disable-next-line import/named
 import dxScheduler, { Appointment } from '../../../ui/scheduler';
 import { ViewProps, SchedulerProps } from './props';
@@ -24,7 +24,7 @@ import {
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import type { DataAccessorType, DataSourcePromise } from './types';
+import { DataAccessorType, DataSourcePromise } from './types';
 import {
   createDataAccessors, createTimeZoneCalculator, filterAppointments,
 } from './common';
@@ -127,6 +127,7 @@ export const viewFunction = ({
             firstDayOfWeek={firstDayOfWeek}
             useDropDownViewSwitcher={useDropDownViewSwitcher}
             customizationFunction={customizeDateNavigatorText}
+            viewType={type}
           />
         )}
         <WorkSpace
@@ -154,15 +155,17 @@ export const viewFunction = ({
           allDayPanelExpanded={allDayPanelExpanded}
           onViewRendered={onViewRendered}
 
-          appointments={(
-            <AppointmentLayout
-              appointments={appointmentsViewModel.regular}
-            />
-          )}
-
           allDayAppointments={(
             <AppointmentLayout
               appointments={appointmentsViewModel.allDay}
+              overflowIndicators={appointmentsViewModel.allDayCompact}
+            />
+          )}
+
+          appointments={(
+            <AppointmentLayout
+              appointments={appointmentsViewModel.regular}
+              overflowIndicators={appointmentsViewModel.regularCompact}
             />
           )}
 
@@ -206,13 +209,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get startViewDate(): Date {
-    const type = this.props.currentView;
     const {
       currentDate,
       startDayHour,
       startDate,
       intervalCount,
       firstDayOfWeek,
+      type,
     } = this.currentViewConfig;
 
     const options = {
@@ -292,8 +295,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   get appointmentsViewModel(): AppointmentsViewModelType {
     if (!this.appointmentsConfig || this.filteredItems.length === 0) {
       return {
-        regular: [],
         allDay: [],
+        allDayCompact: [],
+        regular: [],
+        regularCompact: [],
       };
     }
 

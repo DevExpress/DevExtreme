@@ -1,4 +1,4 @@
-import { ScrollableDirection } from '../common/types';
+import { ScrollableDirection } from '../common/types.d';
 
 export function getScrollbarSize(element: HTMLElement, direction: Omit<ScrollableDirection, 'horizontal' | 'vertical'>): number {
   if (direction === 'vertical') {
