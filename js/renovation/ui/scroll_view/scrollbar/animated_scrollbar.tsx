@@ -181,8 +181,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  endHandler(velocity: number, needRiseEnd: boolean): void {
-    this.velocity = this.props.inertiaEnabled && !this.thumbScrolling ? velocity : 0;
+  endHandler(receivedVelocity: number, needRiseEnd: boolean): void {
+    this.velocity = this.props.inertiaEnabled && !this.thumbScrolling ? receivedVelocity : 0;
 
     this.needRiseEnd = needRiseEnd;
     this.resetThumbScrolling();
