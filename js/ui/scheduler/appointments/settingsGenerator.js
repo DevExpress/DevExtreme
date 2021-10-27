@@ -2,7 +2,7 @@ import dateUtils from '../../../core/utils/date';
 import { isEmptyObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { getRecurrenceProcessor } from '../recurrence';
-import timeZoneUtils from '../utils.timeZone.js';
+import timeZoneUtils from '../utils.timeZone';
 import { createResourcesTree, getDataAccessors, getGroupCount, getResourcesFromItem, getResourceTreeLeaves } from '../resources/utils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { CellPositionCalculator } from './cellPositionCalculator';

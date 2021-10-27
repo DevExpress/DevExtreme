@@ -574,11 +574,15 @@ class BaseRenderingStrategy {
         const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
         if((coordinates.count - countFullWidthAppointmentInCell) > 0) {
             const { top, left } = coordinates;
+            const compactRender = !isAllDay && this.supportCompactDropDownAppointments();
             coordinates.virtual = {
-                top,
                 left: left + this._getCollectorLeftOffset(isAllDay),
+                top,
+                width: this.getDropDownAppointmentWidth(this.intervalCount, isAllDay),
+                height: this.getDropDownAppointmentHeight(),
                 index: this._generateAppointmentCollectorIndex(coordinates, isAllDay),
                 isAllDay,
+                isCompact: compactRender,
             };
         }
     }

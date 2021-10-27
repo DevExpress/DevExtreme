@@ -1,5 +1,8 @@
 import React from 'react';
 import { shallow } from 'enzyme';
+import { ViewDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/view_data_generator';
+import { DateHeaderDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/date_header_data_generator';
+import { TimePanelDataGenerator } from '../../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
 import { formatWeekdayAndDay } from '../../../view_model/to_test/views/utils/base';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 import { OrdinaryLayout } from '../ordinary_layout';
@@ -26,13 +29,16 @@ jest.mock('../utils', () => ({
   getDateTableWidth: jest.fn(() => 1000),
 }));
 const isVerticalGroupingApplied = jest.spyOn(Utils, 'isVerticalGroupingApplied');
+const isHorizontalGroupingApplied = jest.spyOn(Utils, 'isHorizontalGroupingApplied');
 
-const mockUpdate = jest.fn();
+const mockSetViewOptions = jest.fn();
+const mockCreateGroupedDataMapProvider = jest.fn();
 const mockGetGroupPanelData = jest.fn().mockImplementation(() => ({}));
 const mockViewDataProvider = {
-  update: mockUpdate,
   getGroupPanelData: mockGetGroupPanelData,
   getCellCount: () => 7,
+  setViewOptions: mockSetViewOptions,
+  createGroupedDataMapProvider: mockCreateGroupedDataMapProvider,
 };
 jest.mock('../../../../../../ui/scheduler/workspaces/view_model/view_data_provider', () => jest.fn().mockImplementation(() => mockViewDataProvider));
 
@@ -136,13 +142,11 @@ describe('WorkSpace', () => {
         groupByDate: false,
         intervalCount: 1,
       };
-      const viewDataProvider = {
+
+      const viewModel = {
         dateHeaderData,
         viewData,
         timePanelData,
-      };
-      const viewModel = {
-        viewDataProvider,
         isAllDayPanelVisible: true,
         isRenderHeaderEmptyCell: true,
         groupPanelData: {
@@ -794,39 +798,517 @@ describe('WorkSpace', () => {
         });
       });
 
-      describe('viewData', () => {
-        it('should return correct viewData', () => {
+      describe('completeViewDataMap', () => {
+        it('should create completeViewDataMap', () => {
           const workSpace = new WorkSpace({
-            currentDate: new Date(),
-            type: 'week',
-          } as any);
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 26),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
+            showAllDayPanel: true,
+          });
 
-          expect(!!workSpace.viewData)
-            .toBe(true);
+          expect(workSpace.completeViewDataMap)
+            .toEqual([[{
+              startDate: new Date(2021, 9, 26),
+              endDate: new Date(2021, 9, 26),
+              groupIndex: 0,
+              index: 0,
+              allDay: true,
+              isFirstGroupCell: true,
+              isLastGroupCell: true,
+              key: 0,
+            }], [{
+              startDate: new Date(2021, 9, 26),
+              endDate: new Date(2021, 9, 26, 0, 30),
+              groupIndex: 0,
+              index: 0,
+              allDay: false,
+              isFirstGroupCell: true,
+              isLastGroupCell: true,
+              key: 0,
+            }], [{
+              startDate: new Date(2021, 9, 26, 0, 30),
+              endDate: new Date(2021, 9, 26, 1),
+              groupIndex: 0,
+              index: 1,
+              allDay: false,
+              isFirstGroupCell: true,
+              isLastGroupCell: true,
+              key: 1,
+            }]]);
+        });
+      });
+
+      describe('viewDataMap', () => {
+        it('should create viewDataMap', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 26),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
+            showAllDayPanel: true,
+          });
+
+          expect(workSpace.viewDataMap)
+            .toEqual({
+              allDayPanelMap: [{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 0,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26),
+                  endDate: new Date(2021, 9, 26),
+                  groupIndex: 0,
+                  index: 0,
+                  allDay: true,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 0,
+                },
+              }],
+              dateTableMap: [[{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 0,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26),
+                  endDate: new Date(2021, 9, 26, 0, 30),
+                  groupIndex: 0,
+                  index: 0,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 0,
+                },
+              }], [{
+                position: {
+                  columnIndex: 0,
+                  rowIndex: 1,
+                },
+                cellData: {
+                  startDate: new Date(2021, 9, 26, 0, 30),
+                  endDate: new Date(2021, 9, 26, 1),
+                  groupIndex: 0,
+                  index: 1,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 1,
+                },
+              }]],
+            });
+        });
+      });
+
+      describe('viewData', () => {
+        it('should create viewData', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 26),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
+            showAllDayPanel: true,
+          });
+
+          expect(workSpace.viewData)
+            .toEqual({
+              groupedData: [{
+                allDayPanel: [{
+                  startDate: new Date(2021, 9, 26),
+                  endDate: new Date(2021, 9, 26),
+                  groupIndex: 0,
+                  index: 0,
+                  allDay: true,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 0,
+                }],
+                dateTable: [[{
+                  startDate: new Date(2021, 9, 26),
+                  endDate: new Date(2021, 9, 26, 0, 30),
+                  groupIndex: 0,
+                  index: 0,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 0,
+                }], [{
+                  startDate: new Date(2021, 9, 26, 0, 30),
+                  endDate: new Date(2021, 9, 26, 1),
+                  groupIndex: 0,
+                  index: 1,
+                  allDay: false,
+                  isFirstGroupCell: true,
+                  isLastGroupCell: true,
+                  key: 1,
+                }]],
+                groupIndex: 0,
+                isGroupedAllDayPanel: false,
+              }],
+              topVirtualRowCount: 0,
+              bottomVirtualRowCount: 0,
+              leftVirtualCellCount: 0,
+              rightVirtualCellCount: 0,
+              bottomVirtualRowHeight: 0,
+              topVirtualRowHeight: 0,
+              leftVirtualCellWidth: undefined,
+              rightVirtualCellWidth: undefined,
+              isGroupedAllDayPanel: false,
+            });
+        });
+      });
+
+      describe('completeDateHeaderData', () => {
+        it('should generate complete dateHeaderData', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 25),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
+          });
+
+          expect(workSpace.completeDateHeaderData)
+            .toEqual([[{
+              startDate: new Date(2021, 9, 25),
+              allDay: false,
+              groupIndex: 0,
+              text: 'Mon 25',
+              today: false,
+              index: 0,
+              key: 0,
+              colSpan: 1,
+              isFirstGroupCell: true,
+              isLastGroupCell: true,
+            }]]);
+        });
+
+        it('should generate complete dateHeaderData in case of timeline views', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 24),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'timelineDay',
+            intervalCount: 2,
+          });
+
+          expect(workSpace.completeDateHeaderData)
+            .toEqual([[{
+              startDate: new Date(2021, 9, 24),
+              endDate: new Date(2021, 9, 24, 0, 30),
+              allDay: false,
+              groupIndex: 0,
+              index: 0,
+              key: 0,
+              colSpan: 2,
+              text: 'Sun 24',
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+            }, {
+              startDate: new Date(2021, 9, 25),
+              endDate: new Date(2021, 9, 25, 0, 30),
+              allDay: false,
+              groupIndex: 0,
+              index: 2,
+              key: 2,
+              colSpan: 2,
+              text: 'Mon 25',
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+            }], [{
+              startDate: new Date(2021, 9, 24),
+              allDay: false,
+              groupIndex: 0,
+              text: '12:00 AM',
+              index: 0,
+              key: 0,
+              colSpan: 1,
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              today: false,
+            }, {
+              startDate: new Date(2021, 9, 24, 0, 30),
+              allDay: false,
+              groupIndex: 0,
+              text: '12:30 AM',
+              index: 1,
+              key: 1,
+              colSpan: 1,
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              today: false,
+            }, {
+              startDate: new Date(2021, 9, 25),
+              allDay: false,
+              groupIndex: 0,
+              text: '12:00 AM',
+              index: 2,
+              key: 2,
+              colSpan: 1,
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              today: false,
+            }, {
+              startDate: new Date(2021, 9, 25, 0, 30),
+              allDay: false,
+              groupIndex: 0,
+              text: '12:30 AM',
+              index: 3,
+              key: 3,
+              colSpan: 1,
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              today: false,
+            }]]);
         });
       });
 
       describe('dateHeaderData', () => {
-        it('should return correct dateHeaderData', () => {
+        it('should generate dateHeaderData', () => {
           const workSpace = new WorkSpace({
-            currentDate: new Date(),
-            type: 'week',
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 25),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
+          });
+
+          expect(workSpace.dateHeaderData)
+            .toEqual({
+              dataMap: [[{
+                startDate: new Date(2021, 9, 25),
+                allDay: false,
+                groupIndex: 0,
+                text: 'Mon 25',
+                today: false,
+                index: 0,
+                key: 0,
+                colSpan: 1,
+                isFirstGroupCell: true,
+                isLastGroupCell: true,
+              }]],
+              leftVirtualCellCount: 0,
+              rightVirtualCellCount: 0,
+              leftVirtualCellWidth: undefined,
+              rightVirtualCellWidth: undefined,
+              weekDayLeftVirtualCellCount: undefined,
+              weekDayLeftVirtualCellWidth: undefined,
+              weekDayRightVirtualCellCount: undefined,
+              weekDayRightVirtualCellWidth: undefined,
+            });
+        });
+
+        it('should generate dateHeaderData for timeline views', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 24),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'timelineDay',
+            intervalCount: 2,
+          });
+
+          expect(workSpace.dateHeaderData)
+            .toEqual({
+              dataMap: [[{
+                startDate: new Date(2021, 9, 24),
+                endDate: new Date(2021, 9, 24, 0, 30),
+                allDay: false,
+                groupIndex: 0,
+                index: 0,
+                key: 0,
+                colSpan: 2,
+                text: 'Sun 24',
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+              }, {
+                startDate: new Date(2021, 9, 25),
+                endDate: new Date(2021, 9, 25, 0, 30),
+                allDay: false,
+                groupIndex: 0,
+                index: 2,
+                key: 2,
+                colSpan: 2,
+                text: 'Mon 25',
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+              }], [{
+                startDate: new Date(2021, 9, 24),
+                allDay: false,
+                groupIndex: 0,
+                text: '12:00 AM',
+                index: 0,
+                key: 0,
+                colSpan: 1,
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+                today: false,
+              }, {
+                startDate: new Date(2021, 9, 24, 0, 30),
+                allDay: false,
+                groupIndex: 0,
+                text: '12:30 AM',
+                index: 1,
+                key: 1,
+                colSpan: 1,
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+                today: false,
+              }, {
+                startDate: new Date(2021, 9, 25),
+                allDay: false,
+                groupIndex: 0,
+                text: '12:00 AM',
+                index: 2,
+                key: 2,
+                colSpan: 1,
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+                today: false,
+              }, {
+                startDate: new Date(2021, 9, 25, 0, 30),
+                allDay: false,
+                groupIndex: 0,
+                text: '12:30 AM',
+                index: 3,
+                key: 3,
+                colSpan: 1,
+                isFirstGroupCell: false,
+                isLastGroupCell: false,
+                today: false,
+              }]],
+              leftVirtualCellCount: 0,
+              rightVirtualCellCount: 0,
+              leftVirtualCellWidth: 0,
+              rightVirtualCellWidth: 0,
+              weekDayLeftVirtualCellCount: 0,
+              weekDayLeftVirtualCellWidth: 0,
+              weekDayRightVirtualCellCount: 0,
+              weekDayRightVirtualCellWidth: 0,
+            });
+        });
+      });
+
+      describe('completeTimePanelData', () => {
+        it('should return correct completeTimePanelData', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 25),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
           } as any);
 
-          expect(!!workSpace.dateHeaderData)
-            .toBe(true);
+          expect(workSpace.completeTimePanelData)
+            .toEqual([{
+              startDate: new Date(2021, 9, 25),
+              groupIndex: undefined,
+              index: 0,
+              allDay: false,
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              key: 0,
+              text: '12:00 AM',
+              groups: undefined,
+            }, {
+              startDate: new Date(2021, 9, 25, 0, 30),
+              groupIndex: undefined,
+              index: 1,
+              allDay: false,
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              key: 1,
+              text: '',
+              groups: undefined,
+            }]);
+        });
+
+        it('should not generate completeTimePanelData when it is not necessary', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 25),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'month',
+          } as any);
+
+          expect(workSpace.completeTimePanelData)
+            .toBe(undefined);
         });
       });
 
       describe('timePanelData', () => {
         it('should return correct timePanelData', () => {
           const workSpace = new WorkSpace({
-            currentDate: new Date(),
-            type: 'week',
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 25),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'day',
           } as any);
 
-          expect(!!workSpace.timePanelData)
-            .toBe(true);
+          expect(workSpace.timePanelData)
+            .toEqual({
+              groupedData: [{
+                dateTable: [{
+                  startDate: new Date(2021, 9, 25),
+                  groupIndex: undefined,
+                  index: 0,
+                  allDay: false,
+                  isFirstGroupCell: false,
+                  isLastGroupCell: false,
+                  key: 0,
+                  text: '12:00 AM',
+                  groups: undefined,
+                }, {
+                  startDate: new Date(2021, 9, 25, 0, 30),
+                  groupIndex: undefined,
+                  index: 1,
+                  allDay: false,
+                  isFirstGroupCell: false,
+                  isLastGroupCell: false,
+                  key: 1,
+                  text: '',
+                  groups: undefined,
+                }],
+                groupIndex: undefined,
+                isGroupedAllDayPanel: false,
+              }],
+              isGroupedAllDayPanel: false,
+              bottomVirtualRowHeight: 0,
+              topVirtualRowHeight: 0,
+            });
+        });
+
+        it('should not generate timePanelData when it is not necessary', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 9, 25),
+            startDayHour: 0,
+            endDayHour: 1,
+            onViewRendered: () => {},
+            type: 'month',
+          } as any);
+
+          expect(workSpace.timePanelData)
+            .toBe(undefined);
         });
       });
 
@@ -861,7 +1343,7 @@ describe('WorkSpace', () => {
           expect(workSpace.viewDataProvider)
             .toBe(mockViewDataProvider);
 
-          expect(mockUpdate)
+          expect(mockSetViewOptions)
             .toHaveBeenCalledWith({
               ...props,
               startRowIndex: 0,
@@ -873,7 +1355,9 @@ describe('WorkSpace', () => {
               isGenerateTimePanelData: true,
               isGenerateWeekDaysHeaderData: false,
               isProvideVirtualCellsWidth: false,
-            }, true);
+            });
+          expect(mockCreateGroupedDataMapProvider)
+            .toBeCalledTimes(1);
         });
       });
 
@@ -1014,6 +1498,23 @@ describe('WorkSpace', () => {
         });
       });
 
+      describe('isHorizontalGrouping', () => {
+        it('should call isHorizontalGroupingApplied', () => {
+          const workSpace = new WorkSpace({
+            groups,
+            groupOrientation: 'horizontal',
+            type: 'day',
+          } as any);
+
+          const result = workSpace.isHorizontalGrouping;
+
+          expect(result)
+            .toBe(true);
+          expect(isHorizontalGroupingApplied)
+            .toBeCalledWith(groups, 'horizontal');
+        });
+      });
+
       describe('isStandaloneAllDayPanel', () => {
         it('should return true when vertical group orientation is not used and all day panel is visible', () => {
           const workSpace = new WorkSpace({
@@ -1078,6 +1579,45 @@ describe('WorkSpace', () => {
               .toBe(expectedGroupOrientation);
           });
         });
+      });
+    });
+
+    describe('dataGenerators', () => {
+      it('should create data generators', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+        } as any);
+
+        expect(workSpace.viewDataGenerator instanceof ViewDataGenerator)
+          .toBe(true);
+        expect(workSpace.dateHeaderDataGenerator instanceof DateHeaderDataGenerator)
+          .toBe(true);
+        expect(workSpace.timePanelDataGenerator instanceof TimePanelDataGenerator)
+          .toBe(true);
+      });
+    });
+
+    describe('startViewDate', () => {
+      it('should return correct startViewDate if view is day', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          currentDate: new Date(2021, 1, 1),
+          type: 'day',
+        } as any);
+
+        expect(workSpace.startViewDate.getTime())
+          .toBe(new Date(2021, 1, 1).getTime());
+      });
+
+      it('should return correct startViewDate if view is week', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          currentDate: new Date(2021, 7, 19),
+          type: 'week',
+        } as any);
+
+        expect(workSpace.startViewDate.getTime())
+          .toBe(new Date(2021, 7, 15).getTime());
       });
     });
 
