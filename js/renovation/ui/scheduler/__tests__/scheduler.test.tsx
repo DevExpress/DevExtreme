@@ -65,6 +65,11 @@ describe('Scheduler', () => {
       allowMultipleCellSelection: true,
       allDayPanelExpanded: false,
       type: 'week',
+
+      dateCellTemplate: jest.fn(),
+      dataCellTemplate: jest.fn(),
+      timeCellTemplate: jest.fn(),
+      resourceCellTemplate: jest.fn(),
     };
     const renderComponent = (viewModel) => shallow(
       <ViewFunction
