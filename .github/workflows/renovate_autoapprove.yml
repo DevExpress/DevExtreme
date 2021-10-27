@@ -5,7 +5,7 @@ on:
 
 jobs:
   auto-approve:
-    runs-on: INVALID_RUNNER_NAME
+    runs-on: ubuntu-self-hosted
     steps:
     - uses: hmarr/auto-approve-action@v2
       if: github.actor == 'renovate-bot' || github.actor == 'renovate[bot]'

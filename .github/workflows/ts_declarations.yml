@@ -11,7 +11,7 @@ on:
 
 jobs:
   check-ts-bundle:
-    runs-on: INVALID_RUNNER_NAME
+    runs-on: ubuntu-self-hosted
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -48,7 +48,7 @@ jobs:
         fi
   
   validate-declarations:
-    runs-on: INVALID_RUNNER_NAME
+    runs-on: ubuntu-self-hosted
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -75,7 +75,7 @@ jobs:
         npm run validate-declarations
 
   notify:
-    runs-on: INVALID_RUNNER_NAME
+    runs-on: ubuntu-self-hosted
     name: Send notifications
     needs: [check-ts-bundle, validate-declarations]
     if: always() && contains(needs.*.result, 'failure')

@@ -54,7 +54,7 @@ jobs:
 
   qunit-tests:
     needs: build
-    runs-on: INVALID_RUNNER_NAME
+    runs-on: ubuntu-self-hosted
     name: Constel ${{ matrix.CONSTEL }}
     timeout-minutes: 60
     strategy:
@@ -86,11 +86,6 @@ jobs:
     - name: Get sources
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/checkout@v2
-
-    - name: Setup utils
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: |
-        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
 
     - name: Use Node.js
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -135,7 +130,7 @@ jobs:
       run: echo "::set-output name=last_run_status::success" > last_run_status
 
   notify:
-    runs-on: INVALID_RUNNER_NAME
+    runs-on: ubuntu-self-hosted
     name: Send notifications
     needs: [build, qunit-tests]
     if: always() && contains(needs.*.result, 'failure')
