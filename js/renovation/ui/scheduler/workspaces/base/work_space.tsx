@@ -44,6 +44,7 @@ import { getViewDataGeneratorByViewType } from '../../../../../ui/scheduler/work
 import { calculateIsGroupedAllDayPanel } from '../../view_model/to_test/views/utils/base';
 import { DateHeaderDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/date_header_data_generator';
 import { TimePanelDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
+import { getGroupPanelData } from '../../view_model/group_panel/utils';
 
 export const prepareGenerationOptions = (
   workSpaceProps: WorkSpaceGenerationOptions,
@@ -547,33 +548,27 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       startDayHour,
       endDayHour,
       currentDate,
-      startDate,
-      firstDayOfWeek,
       hoursInterval,
       type,
-      cellDuration,
     } = this.props;
 
-    const generationOptions = prepareGenerationOptions(
-      {
-        intervalCount,
-        groups,
-        groupByDate,
-        groupOrientation: this.groupOrientation,
-        startDayHour,
-        endDayHour,
-        currentDate,
-        startDate,
-        firstDayOfWeek,
-        hoursInterval,
-        type,
-        cellDuration,
-      },
-      this.renderConfig,
-      this.isAllDayPanelVisible,
+    const columnCountPerGroup = this.viewDataGenerator.getCellCount({
+      intervalCount,
+      hoursInterval,
+      currentDate,
+      startDayHour,
+      endDayHour,
+      viewType: type,
+    });
+
+    const groupPanelData = getGroupPanelData(
+      groups,
+      columnCountPerGroup,
+      groupByDate,
+      groupByDate ? 1 : columnCountPerGroup,
     );
 
-    return this.viewDataProvider.getGroupPanelData(generationOptions);
+    return groupPanelData;
   }
 
   get headerPanelTemplate(): JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'> {

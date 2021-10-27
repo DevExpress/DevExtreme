@@ -33,9 +33,7 @@ const isHorizontalGroupingApplied = jest.spyOn(Utils, 'isHorizontalGroupingAppli
 
 const mockSetViewOptions = jest.fn();
 const mockCreateGroupedDataMapProvider = jest.fn();
-const mockGetGroupPanelData = jest.fn().mockImplementation(() => ({}));
 const mockViewDataProvider = {
-  getGroupPanelData: mockGetGroupPanelData,
   getCellCount: () => 7,
   setViewOptions: mockSetViewOptions,
   createGroupedDataMapProvider: mockCreateGroupedDataMapProvider,
@@ -97,16 +95,20 @@ describe('WorkSpace', () => {
     data: [{
       text: 'Resource 1',
       id: 0,
+      color: 'red',
     }, {
       text: 'Resource 2',
       id: 1,
+      color: 'green',
     }],
     items: [{
       text: 'Resource 1',
       id: 0,
+      color: 'red',
     }, {
       text: 'Resource 2',
       id: 1,
+      color: 'green',
     }],
   }];
 
@@ -1369,8 +1371,8 @@ describe('WorkSpace', () => {
         it('should return correct group panel data', () => {
           const props: any = {
             groupOrientation: 'horizontal',
-            groupByDate: true,
-            groups: [],
+            groupByDate: false,
+            groups,
             selectedCells: undefined,
             focusedCell: undefined,
             startDayHour: 0,
@@ -1389,20 +1391,103 @@ describe('WorkSpace', () => {
           });
 
           expect(workSpace.groupPanelData)
-            .toEqual({});
+            .toEqual({
+              baseColSpan: 7,
+              groupPanelItems: [[{
+                color: 'red',
+                id: 0,
+                resourceName: 'resourceId',
+                text: 'Resource 1',
+                key: '0_resourceId_0',
+                data: {
+                  color: 'red',
+                  id: 0,
+                  text: 'Resource 1',
+                },
+              }, {
+                color: 'green',
+                id: 1,
+                resourceName: 'resourceId',
+                text: 'Resource 2',
+                key: '0_resourceId_1',
+                data: {
+                  color: 'green',
+                  id: 1,
+                  text: 'Resource 2',
+                },
+              }]],
+            });
+        });
 
-          expect(mockGetGroupPanelData)
-            .toHaveBeenCalledWith({
-              ...props,
-              startRowIndex: 0,
-              startCellIndex: 0,
-              isAllDayPanelVisible: undefined,
-              viewType: 'week',
-              getDateForHeaderText: expect.any(Function),
-              headerCellTextFormat: expect.any(Function),
-              isGenerateTimePanelData: true,
-              isGenerateWeekDaysHeaderData: false,
-              isProvideVirtualCellsWidth: false,
+        it('should return correct group panel data when grouping by date is enabled', () => {
+          const props: any = {
+            ...new WorkSpaceProps(),
+            groupOrientation: 'horizontal',
+            groupByDate: true,
+            groups,
+            intervalCount: 2,
+            currentDate: new Date(2021, 8, 11),
+            type: 'day',
+          };
+
+          const workSpace = new WorkSpace(props);
+
+          expect(workSpace.groupPanelData)
+            .toEqual({
+              baseColSpan: 1,
+              groupPanelItems: [[{
+                color: 'red',
+                id: 0,
+                resourceName: 'resourceId',
+                text: 'Resource 1',
+                key: '0_resourceId_0_group_by_date_0',
+                isFirstGroupCell: true,
+                isLastGroupCell: false,
+                data: {
+                  color: 'red',
+                  id: 0,
+                  text: 'Resource 1',
+                },
+              }, {
+                color: 'green',
+                id: 1,
+                resourceName: 'resourceId',
+                text: 'Resource 2',
+                key: '0_resourceId_1_group_by_date_0',
+                isFirstGroupCell: false,
+                isLastGroupCell: true,
+                data: {
+                  color: 'green',
+                  id: 1,
+                  text: 'Resource 2',
+                },
+              }, {
+                color: 'red',
+                id: 0,
+                resourceName: 'resourceId',
+                text: 'Resource 1',
+                key: '0_resourceId_0_group_by_date_1',
+                isFirstGroupCell: true,
+                isLastGroupCell: false,
+                data: {
+                  color: 'red',
+                  id: 0,
+                  text: 'Resource 1',
+                },
+              }, {
+                color: 'green',
+                id: 1,
+                resourceName: 'resourceId',
+                text: 'Resource 2',
+                key: '0_resourceId_1_group_by_date_1',
+                isFirstGroupCell: false,
+                isLastGroupCell: true,
+                data: {
+                  color: 'green',
+                  id: 1,
+                  text: 'Resource 2',
+                },
+              }]],
             });
         });
       });
