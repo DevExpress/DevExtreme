@@ -104,6 +104,16 @@ function getFormatHandlers(module) {
     };
 }
 
+function resetFormDialogOptions(editorInstance, { contentTemplate, title, minHeight, minWidth, maxWidth }) {
+    editorInstance.formDialogOption({
+        contentTemplate,
+        title,
+        minHeight: minHeight ?? 0,
+        minWidth: minWidth ?? 0,
+        maxWidth: maxWidth ?? 'none'
+    });
+}
+
 function prepareShowFormProperties(module, type) {
     return ($element) => {
         if(!$element?.length) {
@@ -114,6 +124,9 @@ function prepareShowFormProperties(module, type) {
         const formats = module.quill.getFormat(module.editorInstance.getSelection(true));
 
         const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, { $element, formats, tableBlot, rowBlot });
+
+        const { contentTemplate, title, minHeight, minWidth, maxWidth } = module.editorInstance._formDialog._popup.option();
+        const savedOptions = { contentTemplate, title, minHeight, minWidth, maxWidth };
 
         let formInstance;
 
@@ -138,12 +151,12 @@ function prepareShowFormProperties(module, type) {
         promise.done((formData, event) => {
             module.saveValueChangeEvent(event);
             tablePropertiesFormConfig.applyHandler(formInstance);
-            formInstance.dispose();
+            resetFormDialogOptions(module.editorInstance, savedOptions);
         });
 
         promise.fail(() => {
             module.quill.focus();
-            formInstance.dispose();
+            resetFormDialogOptions(module.editorInstance, savedOptions);
         });
     };
 }

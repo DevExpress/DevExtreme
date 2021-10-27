@@ -537,7 +537,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setAria(name: string, value: string): void {
     this._aria[name] = value;
-    this.repaint();
+    this._initMarkup();
   }
 }
 

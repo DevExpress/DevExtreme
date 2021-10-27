@@ -167,7 +167,10 @@ describe('Scheduler common', () => {
         workspaceProps.groupOrientation,
       );
       const generationOptions = prepareGenerationOptions(
-        workspaceProps,
+        {
+          ...workspaceProps,
+          groupOrientation: 'horizontal',
+        },
         viewRenderConfig,
         false,
       );

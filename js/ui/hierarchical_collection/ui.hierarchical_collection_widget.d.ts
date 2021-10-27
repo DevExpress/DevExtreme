@@ -1,9 +1,14 @@
 import CollectionWidget, {
     CollectionWidgetOptions,
+    ItemLike,
 } from '../collection/ui.collection_widget.base';
 
 /** @namespace DevExpress.ui */
-export interface HierarchicalCollectionWidgetOptions<TComponent> extends CollectionWidgetOptions<TComponent> {
+export interface HierarchicalCollectionWidgetOptions<
+    TComponent extends HierarchicalCollectionWidget<any, TItem, TKey>,
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidgetOptions<TComponent, TItem, TKey> {
     /**
      * @docid
      * @default 'disabled'
@@ -16,7 +21,7 @@ export interface HierarchicalCollectionWidgetOptions<TComponent> extends Collect
      * @type_function_param1 item:object
      * @public
      */
-    displayExpr?: string | ((item: any) => string);
+    displayExpr?: string | ((item: TItem) => string);
     /**
      * @docid
      * @default true &for(desktop)
@@ -54,4 +59,8 @@ export interface HierarchicalCollectionWidgetOptions<TComponent> extends Collect
  * @hidden
  * @namespace DevExpress.ui
  */
-export default class HierarchicalCollectionWidget<TProperties> extends CollectionWidget<TProperties> { }
+export default class HierarchicalCollectionWidget<
+    TProperties extends HierarchicalCollectionWidgetOptions<any, TItem, TKey>,
+    TItem extends ItemLike = any,
+    TKey = any,
+> extends CollectionWidget<TProperties, TItem, TKey> { }

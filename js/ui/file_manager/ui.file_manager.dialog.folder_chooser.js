@@ -4,7 +4,7 @@ import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 import { getMapFromObject } from './ui.file_manager.common';
 
-import FileManagerDialogBase from './ui.file_manager.dialog.js';
+import FileManagerDialogBase from './ui.file_manager.dialog';
 import FileManagerFilesTreeView from './ui.file_manager.files_tree_view';
 
 const FILE_MANAGER_DIALOG_FOLDER_CHOOSER = 'dx-filemanager-dialog-folder-chooser';

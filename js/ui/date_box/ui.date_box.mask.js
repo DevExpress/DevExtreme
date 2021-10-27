@@ -137,6 +137,14 @@ const DateBoxMask = DateBoxBase.inherit({
         return device.android && device.version[0] > 4;
     },
 
+    _keyInputHandler(e, key) {
+        const oldInputValue = this._input().val();
+        this._processInputKey(key);
+        e.preventDefault();
+        const isValueChanged = oldInputValue !== this._input().val();
+        isValueChanged && eventsEngine.trigger(this._input(), 'input');
+    },
+
     _keyboardHandler(e) {
         let key = e.originalEvent.key;
 
@@ -153,8 +161,7 @@ const DateBoxMask = DateBoxBase.inherit({
                 this._renderSelectedPart();
             };
         } else if(this._isSingleCharKey(e)) {
-            this._processInputKey(key);
-            e.originalEvent.preventDefault();
+            this._keyInputHandler(e.originalEvent, key);
         }
 
         return result;
@@ -186,8 +193,8 @@ const DateBoxMask = DateBoxBase.inherit({
         }
 
         const key = e.originalEvent.data;
-        this._processInputKey(key);
-        e.preventDefault();
+        this._keyInputHandler(e, key);
+
         return true;
     },
 

@@ -31,5 +31,7 @@ export class LayoutProps {
 
   @OneWay() addVerticalSizesClassToRows = true;
 
+  @OneWay() width?: number;
+
   @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }

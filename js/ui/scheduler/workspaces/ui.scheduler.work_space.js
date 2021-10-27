@@ -1665,14 +1665,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return false;
     }
 
-    _isApplyCompactAppointmentOffset() {
-        return this._supportCompactDropDownAppointments();
-    }
-
-    _supportCompactDropDownAppointments() {
-        return true;
-    }
-
     removeDroppableCellClass($cellElement) {
         ($cellElement || this._getDroppableCell()).removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
     }

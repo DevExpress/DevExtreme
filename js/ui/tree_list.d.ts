@@ -851,10 +851,11 @@ export interface dxTreeListOptions<TRowData = any, TKey = any> extends GridBaseO
     selection?: Selection;
     /**
      * @docid
+     * @type dxTreeListToolbar
      * @default undefined
      * @public
      */
-    toolbar?: dxTreeListToolbar;
+    toolbar?: Toolbar;
 }
 
 /**
@@ -1182,19 +1183,23 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
     updateDimensions(): void;
 }
 
+type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'revertButton' | 'saveButton' | 'searchPanel';
+export type dxTreeListToolbar = Toolbar;
+export type dxTreeListToolbarItem = ToolbarItem;
+
 /**
- * @docid
+ * @docid dxTreeListToolbarItem
  * @inherits dxToolbarItem
- * @namespace DevExpress.ui
+ * @namespace DevExpress.ui.dxTreeList
  */
-export interface dxTreeListToolbarItem extends dxToolbarItem {
+export interface ToolbarItem extends dxToolbarItem {
     /**
      * @docid
      * @public
      */
     name?: TreeListToolbarItem | string;
     /**
-     * @docid
+     * @docid dxTreeListToolbarItem.location
      * @type Enums.ToolbarItemLocation
      * @default 'after'
      * @public
@@ -1203,32 +1208,33 @@ export interface dxTreeListToolbarItem extends dxToolbarItem {
 }
 
 /**
- * @docid
+ * @public
+ * @docid dxTreeListToolbar
  * @type object
- * @namespace DevExpress.ui
+ * @namespace DevExpress.ui.dxTreeList
  */
-export interface dxTreeListToolbar {
+export type Toolbar = {
     /**
-     * @docid
+     * @docid dxTreeListToolbar.items
      * @type Array<dxTreeListToolbarItem,Enums.TreeListToolbarItem>
      * @public
      */
-    items?: Array<TreeListToolbarItem | dxTreeListToolbarItem>;
+    items?: Array<TreeListToolbarItem | ToolbarItem>;
     /**
-     * @docid
+     * @docid dxTreeListToolbar.visible
      * @type boolean
      * @default undefined
      * @public
      */
-     visible?: boolean;
-     /**
-      * @docid
-      * @type boolean
-      * @default false
-      * @public
-      */
-     disabled?: boolean;
-}
+    visible?: boolean;
+    /**
+     * @docid dxTreeListToolbar.disabled
+     * @type boolean
+     * @default false
+     * @public
+     */
+    disabled?: boolean;
+};
 
 /**
  * @public
@@ -1383,7 +1389,7 @@ export type dxTreeListNode<TRowData = any, TKey = any> = Node<TRowData, TKey>;
  * @docid dxTreeListNode
  * @type object
  */
-export interface Node<TRowData = any, TKey = any> {
+export type Node<TRowData = any, TKey = any> = {
     /**
      * @docid dxTreeListNode.children
      * @type  Array<dxTreeListNode>
@@ -1421,7 +1427,7 @@ export interface Node<TRowData = any, TKey = any> {
      * @public
      */
     visible?: boolean;
-}
+};
 
 /**
  * @namespace DevExpress.ui
@@ -1434,7 +1440,7 @@ export type dxTreeListRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey
  * @docid dxTreeListRowObject
  * @type object
  */
-export interface Row<TRowData = any, TKey = any> {
+export type Row<TRowData = any, TKey = any> = {
     /**
      * @docid dxTreeListRowObject.isEditing
      * @public
@@ -1491,7 +1497,7 @@ export interface Row<TRowData = any, TKey = any> {
      * @public
      */
     readonly data: TRowData;
-}
+};
 
 /** @public */
 export type ExplicitTypes<TRowData, TKey> = {
@@ -1551,6 +1557,8 @@ export type ExplicitTypes<TRowData, TKey> = {
   Scrolling: Scrolling;
   Selection: Selection;
   SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
+  Toolbar: Toolbar;
+  ToolbarItem: ToolbarItem;
   ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
 };
 

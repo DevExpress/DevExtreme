@@ -3,6 +3,7 @@ import React from 'react';
 import { Scrollable } from '../../../../scroll_view/scrollable';
 import { Widget } from '../../../../common/widget';
 import {
+  OrdinaryLayout,
   viewFunction as LayoutView,
 } from '../ordinary_layout';
 import { GroupPanel } from '../group_panel/group_panel';
@@ -374,6 +375,25 @@ describe('OrdinaryLayout', () => {
 
       expect(layout.find('.appointments').exists())
         .toBe(true);
+    });
+  });
+
+  describe('Behaviour', () => {
+    describe('getScrollableWidth', () => {
+      it('should return date-table scrollable\'s width', () => {
+        const layout = new OrdinaryLayout({} as any);
+
+        layout.dateTableScrollableRef = {
+          current: {
+            container: () => ({
+              getBoundingClientRect: () => ({ width: 324 }),
+            }),
+          },
+        } as any;
+
+        expect(layout.getScrollableWidth())
+          .toBe(324);
+      });
     });
   });
 });

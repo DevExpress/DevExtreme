@@ -1,4 +1,5 @@
 import VerticalAppointmentsStrategy from './rendering_strategies/strategy_vertical';
+import WeekAppointmentRenderingStrategy from './rendering_strategies/strategy_week';
 import HorizontalAppointmentsStrategy from './rendering_strategies/strategy_horizontal';
 import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/strategy_horizontal_month_line';
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/strategy_horizontal_month';
@@ -10,6 +11,7 @@ const RENDERING_STRATEGIES = {
     'horizontalMonth': HorizontalMonthAppointmentsStrategy,
     'horizontalMonthLine': HorizontalMonthLineAppointmentsStrategy,
     'vertical': VerticalAppointmentsStrategy,
+    'week': WeekAppointmentRenderingStrategy,
     'agenda': AgendaAppointmentsStrategy
 };
 
@@ -21,8 +23,7 @@ export class AppointmentViewModelGenerator {
 
     generate(filteredItems, options) {
         const {
-            isRenovatedAppointments,
-            appointmentRenderingStrategyName
+            isRenovatedAppointments
         } = options;
         const appointments = filteredItems
             ? filteredItems.slice()
@@ -32,11 +33,11 @@ export class AppointmentViewModelGenerator {
 
         const renderingStrategy = this.getRenderingStrategy();
         const positionMap = renderingStrategy.createTaskPositionMap(appointments); // TODO - appointments are mutated inside!
-        const viewModel = this.postProcess(appointments, positionMap, appointmentRenderingStrategyName, isRenovatedAppointments);
+        const viewModel = this.postProcess(appointments, positionMap, isRenovatedAppointments);
 
         if(isRenovatedAppointments) {
             // TODO this structure should be by default after remove old render
-            return this.makeRenovatedViewModel(viewModel);
+            return this.makeRenovatedViewModels(viewModel);
         }
 
         return {
@@ -44,17 +45,19 @@ export class AppointmentViewModelGenerator {
             viewModel
         };
     }
-    postProcess(filteredItems, positionMap, appointmentRenderingStrategyName, isRenovatedAppointments) {
+    postProcess(filteredItems, positionMap, isRenovatedAppointments) {
+        const renderingStrategy = this.getRenderingStrategy();
+
         return filteredItems.map((data, index) => {
             // TODO research do we need this code
-            if(!this.getRenderingStrategy().keepAppointmentSettings()) {
+            if(!renderingStrategy.keepAppointmentSettings()) {
                 delete data.settings;
             }
 
             // TODO Seems we can analize direction in the rendering strategies
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach((item) => {
-                item.direction = appointmentRenderingStrategyName === 'vertical' && !item.allDay
+                item.direction = renderingStrategy.getDirection() === 'vertical' && !item.allDay
                     ? 'vertical'
                     : 'horizontal';
             });
@@ -72,41 +75,110 @@ export class AppointmentViewModelGenerator {
             return item;
         });
     }
-    makeRenovatedViewModel(viewModel) {
+    makeRenovatedViewModels(viewModel) {
         const strategy = this.getRenderingStrategy();
-        const regularViewModel = [];
-        const allDayViewModel = [];
+        const regularViewModels = [];
+        const allDayViewModels = [];
+        const compactOptions = [];
 
         viewModel.forEach(({ itemData, settings }) => {
             settings.forEach((options) => {
-                const geometry = strategy.getAppointmentGeometry(options);
-
-                const item = {
-                    key: getAppointmentKey(geometry),
-                    appointment: itemData,
-                    geometry: {
-                        ...geometry,
-                        // TODO move to the rendering strategies
-                        leftVirtualWidth: options.leftVirtualWidth,
-                        topVirtualHeight: options.topVirtualHeight
-                    },
-                    info: {
-                        ...options.info,
-                        allDay: options.allDay
-                    },
-                };
-
-                if(options.allDay) {
-                    allDayViewModel.push(item);
+                const item = this.prepareViewModel(options, strategy, itemData);
+                if(options.isCompact) {
+                    compactOptions.push({
+                        compactViewModel: options.virtual,
+                        appointmentViewModel: item
+                    });
+                } else if(options.allDay) {
+                    allDayViewModels.push(item);
                 } else {
-                    regularViewModel.push(item);
+                    regularViewModels.push(item);
                 }
             });
         });
 
+        const compactViewModels = this.prepareCompactViewModels(compactOptions);
+
+        const result = {
+            allDay: allDayViewModels,
+            regular: regularViewModels,
+            ...compactViewModels,
+        };
+
+        return result;
+    }
+
+    prepareViewModel(options, strategy, itemData) {
+        const geometry = strategy.getAppointmentGeometry(options);
+
+        const viewModel = {
+            key: getAppointmentKey(geometry),
+            appointment: itemData,
+            geometry: {
+                ...geometry,
+                // TODO move to the rendering strategies
+                leftVirtualWidth: options.leftVirtualWidth,
+                topVirtualHeight: options.topVirtualHeight
+            },
+            info: {
+                ...options.info,
+                allDay: options.allDay
+            },
+        };
+
+        return viewModel;
+    }
+
+    getCompactViewModelFrame(compactViewModel) {
         return {
-            allDay: allDayViewModel,
-            regular: regularViewModel
+            isAllDay: !!compactViewModel.isAllDay,
+            isCompact: compactViewModel.isCompact,
+            geometry: {
+                left: compactViewModel.left,
+                top: compactViewModel.top,
+                width: compactViewModel.width,
+                height: compactViewModel.height,
+            },
+            items: {
+                colors: [],
+                data: [],
+                settings: [],
+            },
+        };
+    }
+    prepareCompactViewModels(compactOptions) {
+        const regularCompact = {};
+        const allDayCompact = {};
+
+        compactOptions.forEach(({ compactViewModel, appointmentViewModel }) => {
+            const {
+                index,
+                isAllDay,
+            } = compactViewModel;
+            const viewModel = isAllDay
+                ? allDayCompact
+                : regularCompact;
+
+            if(!viewModel[index]) {
+                viewModel[index] = this.getCompactViewModelFrame(compactViewModel);
+            }
+
+            const {
+                settings,
+                data
+            } = viewModel[index].items;
+
+            settings.push(appointmentViewModel);
+            data.push(appointmentViewModel.appointment);
+        });
+
+        const toArray = (items) => Object
+            .keys(items)
+            .map((key) => ({ key, ...items[key] }));
+
+        return {
+            allDayCompact: toArray(allDayCompact),
+            regularCompact: toArray(regularCompact)
         };
     }
 

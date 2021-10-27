@@ -339,8 +339,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // assert
         const $commandCell = $(dataGrid.getCellElement(0, 1));
-        assert.ok($commandCell.width() > buttonWidth, 'command cell width is correct');
-        assert.ok($commandCell.width() < buttonWidth + 5, 'command cell width is correct');
+        assert.roughEqual($commandCell.width(), buttonWidth, 1.1, 'command cell width is correct');
     });
 
 

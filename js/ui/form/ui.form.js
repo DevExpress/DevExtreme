@@ -34,7 +34,7 @@ import {
     getItemPath,
 } from './ui.form.utils';
 
-import { convertToLabelMarkOptions } from './ui.form.layout_manager.utils.js'; // TODO: remove reference to 'ui.form.layout_manager.utils.js'
+import { convertToLabelMarkOptions } from './ui.form.layout_manager.utils'; // TODO: remove reference to 'ui.form.layout_manager.utils.js'
 import {
     setLabelWidthByMaxLabelWidth
 } from './components/label';

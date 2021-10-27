@@ -78,6 +78,8 @@ export class MainLayoutProps extends LayoutProps {
 
   @OneWay() groupPanelHeight?: number;
 
+  @OneWay() tablesWidth?: number;
+
   @OneWay() headerEmptyCellWidth?: number;
 
   @OneWay() scrollingDirection?: ScrollableDirection;

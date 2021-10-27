@@ -143,6 +143,24 @@ export interface KeyDownInfo {
   handled: boolean;
 }
 
+type GroupKey = any[];
+
+/** @public */
+export type GroupData<TRowData> = {
+  key: any;
+  items: Array<TRowData> | Array<GroupData<TRowData>> | null;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  collapsedItems?: Array<TRowData> | Array<GroupData<TRowData>>;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  aggregates?: Array<any>;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  summary?: Array<any>;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  isContinuation?: boolean;
+  /** @deprecated Attention! This property is for internal purposes only. */
+  isContinuationOnNextPage?: boolean;
+};
+
 export interface RowKeyInfo<TKey = any> {
   readonly key: TKey;
 }
@@ -1645,7 +1663,7 @@ export interface EditingBase<TRowData = any, TKey = any> {
 
 /**
  * @docid
- * @namespace DevExpress.ui
+ * @namespace DevExpress.ui.dxDataGrid
  */
 export interface DataChange<TRowData = any, TKey = any> {
     /**
@@ -3144,7 +3162,7 @@ export type ColumnEditCellTemplateData<TRowData = any, TKey = any> = {
 
 /** @public */
 export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
-  readonly data?: TRowData;
+  readonly data?: GroupData<TRowData>;
   readonly component: dxDataGrid<TRowData, TKey>;
   readonly value?: any;
   readonly text: string;
@@ -3152,7 +3170,7 @@ export type ColumnGroupCellTemplateData<TRowData = any, TKey = any> = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column<TRowData, TKey>;
-  readonly row: Row<TRowData, TKey>;
+  readonly row: Row<GroupData<TRowData>, GroupKey>;
   readonly summaryItems: Array<any>;
   readonly groupContinuesMessage?: string;
   readonly groupContinuedMessage?: string;
@@ -3719,13 +3737,15 @@ export interface dxDataGridOptions<TRowData = any, TKey = any> extends GridBaseO
     summary?: Summary<TRowData, TKey>;
     /**
      * @docid
+     * @type dxDataGridToolbar
      * @default undefined
      * @public
      */
-    toolbar?: dxDataGridToolbar;
+    toolbar?: Toolbar;
 }
 
-export interface ExcelCellInfo<TRowData = any, TKey = any> {
+/** @public */
+export type ExcelCellInfo<TRowData = any, TKey = any> = {
   readonly component: dxDataGrid<TRowData, TKey>;
   horizontalAlignment?: ExcelCellHorizontalAlignment;
   verticalAlignment?: ExcelCellVerticalAlignment;
@@ -3737,7 +3757,7 @@ export interface ExcelCellInfo<TRowData = any, TKey = any> {
   readonly value?: string | number | Date;
   numberFormat?: string;
   gridCell?: ExcelCell;
-}
+};
 
 /** @public */
 export type Export<TRowData = any, TKey = any> = {
@@ -3805,7 +3825,8 @@ export type Export<TRowData = any, TKey = any> = {
   texts?: ExportTexts;
 };
 
-export interface ExportTexts {
+/** @public */
+export type ExportTexts = {
   /**
    * @docid dxDataGridOptions.export.texts.exportAll
    * @default "Export all data"
@@ -3821,9 +3842,10 @@ export interface ExportTexts {
    * @default "Export"
    */
   exportTo?: string;
-}
+};
 
-export interface GroupPanel {
+/** @public */
+export type GroupPanel = {
   /**
    * @docid dxDataGridOptions.groupPanel.allowColumnDragging
    * @default true
@@ -3839,9 +3861,10 @@ export interface GroupPanel {
    * @default false
    */
   visible?: boolean | Mode;
-}
+};
 
-export interface Grouping {
+/** @public */
+export type Grouping = {
   /**
    * @docid dxDataGridOptions.grouping.allowCollapsing
    * @default true
@@ -3868,9 +3891,10 @@ export interface Grouping {
    * @type object
    */
   texts?: GroupingTexts;
-}
+};
 
-export interface GroupingTexts {
+/** @public */
+export type GroupingTexts = {
   /**
    * @docid dxDataGridOptions.grouping.texts.groupByThisColumn
    * @default "Group by This Column"
@@ -3896,9 +3920,10 @@ export interface GroupingTexts {
    * @default "Ungroup All"
    */
   ungroupAll?: string;
-}
+};
 
-export interface MasterDetail<TRowData = any, TKey = any> {
+/** @public */
+export type MasterDetail<TRowData = any, TKey = any> = {
   /**
    * @docid dxDataGridOptions.masterDetail.autoExpandAll
    * @default false
@@ -3917,7 +3942,7 @@ export interface MasterDetail<TRowData = any, TKey = any> {
    * @type_function_param2_field3 watch:function
    */
   template?: template | ((detailElement: DxElement, detailInfo: MasterDetailTemplateData<TRowData, TKey>) => any);
-}
+};
 
 export interface dxDataGridSortByGroupSummaryInfoItem {
     /**
@@ -3938,17 +3963,18 @@ export interface dxDataGridSortByGroupSummaryInfoItem {
     summaryItem?: string | number;
 }
 
-export interface CustomSummaryInfo<TRowData = any, TKey = any> {
+/** @public */
+export type CustomSummaryInfo<TRowData = any, TKey = any> = {
   readonly component: dxDataGrid<TRowData, TKey>;
   readonly name?: string;
   readonly summaryProcess: string;
   readonly value?: any;
   totalValue?: any;
   readonly groupIndex?: number;
-}
+};
 
 /** @public */
-export interface Summary<TRowData = any, TKey = any> {
+export type Summary<TRowData = any, TKey = any> = {
   /**
    * @docid dxDataGridOptions.summary.calculateCustomSummary
    * @type_function_param1 options:object
@@ -3987,14 +4013,16 @@ export interface Summary<TRowData = any, TKey = any> {
    * @default undefined
    */
   totalItems?: Array<SummaryTotalItem>;
-}
+};
 
-export interface SummaryItemTextInfo {
+/** @public */
+export type SummaryItemTextInfo = {
   readonly value?: string | number | Date;
   readonly valueText: string;
-}
+};
 
-export interface SummaryGroupItem {
+/** @public */
+export type SummaryGroupItem = {
     /**
      * @docid dxDataGridOptions.summary.groupItems.alignByColumn
      * @default false
@@ -4046,9 +4074,10 @@ export interface SummaryGroupItem {
      * @default undefined
      */
     valueFormat?: Format;
-}
+};
 
-export interface SummaryTotalItem {
+/** @public */
+export type SummaryTotalItem = {
   /**
    * @docid dxDataGridOptions.summary.totalItems.alignment
    * @default undefined
@@ -4100,9 +4129,10 @@ export interface SummaryTotalItem {
    * @default undefined
    */
   valueFormat?: Format;
-}
+};
 
-export interface SummaryTexts {
+/** @public */
+export type SummaryTexts = {
     /**
      * @docid dxDataGridOptions.summary.texts.avg
      * @default "Avg={0}"
@@ -4148,21 +4178,26 @@ export interface SummaryTexts {
      * @default "Sum of {1} is {0}"
      */
     sumOtherColumn?: string;
-}
+};
+
+type DefaultToolbarItemName = 'addRowButton' | 'applyFilterButton' | 'columnChooserButton' | 'exportButton' | 'groupPanel' | 'revertButton' | 'saveButton' | 'searchPanel';
+
+export type dxDataGridToolbar = Toolbar;
+export type dxDataGridToolbarItem = ToolbarItem;
 
 /**
- * @docid
+ * @docid dxDataGridToolbarItem
  * @inherits dxToolbarItem
- * @namespace DevExpress.ui
+ * @namespace DevExpress.ui.dxDataGrid
  */
-export interface dxDataGridToolbarItem extends dxToolbarItem {
+export interface ToolbarItem extends dxToolbarItem {
   /**
    * @docid
    * @public
    */
   name?: DataGridToolbarItem | string;
   /**
-   * @docid
+   * @docid dxDataGridToolbarItem.location
    * @type Enums.ToolbarItemLocation
    * @default 'after'
    * @public
@@ -4171,32 +4206,33 @@ export interface dxDataGridToolbarItem extends dxToolbarItem {
 }
 
 /**
- * @docid
+ * @public
+ * @docid dxDataGridToolbar
  * @type object
- * @namespace DevExpress.ui
+ * @namespace DevExpress.ui.dxDataGrid
  */
-export interface dxDataGridToolbar {
+export type Toolbar = {
   /**
-   * @docid
+   * @docid dxDataGridToolbar.items
    * @type Array<dxDataGridToolbarItem,Enums.DataGridToolbarItem>
    * @public
    */
-  items?: Array<DataGridToolbarItem | dxDataGridToolbarItem>;
+  items?: Array<DataGridToolbarItem | ToolbarItem>;
   /**
-   * @docid
+   * @docid dxDataGridToolbar.visible
    * @type boolean
    * @default undefined
    * @public
    */
   visible?: boolean;
   /**
-   * @docid
+   * @docid dxDataGridToolbar.disabled
    * @type boolean
    * @default false
    * @public
    */
   disabled?: boolean;
-}
+};
 
 /**
  * @public
@@ -4691,7 +4727,7 @@ export type dxDataGridRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey
  * @docid dxDataGridRowObject
  * @type object
  */
-export interface Row<TRowData = any, TKey = any> {
+export type Row<TRowData = any, TKey = any> = {
     /**
      * @docid dxDataGridRowObject.data
      * @public
@@ -4742,7 +4778,7 @@ export interface Row<TRowData = any, TKey = any> {
      * @public
      */
     readonly values: Array<any>;
-}
+};
 
 /** @public */
 export type ExplicitTypes<TRowData, TKey> = {
@@ -4761,7 +4797,9 @@ export type ExplicitTypes<TRowData, TKey> = {
   ColumnHeaderCellTemplateData: ColumnHeaderCellTemplateData<TRowData, TKey>;
   ContentReadyEvent: ContentReadyEvent<TRowData, TKey>;
   ContextMenuPreparingEvent: ContextMenuPreparingEvent<TRowData, TKey>;
+  CustomSummaryInfo: CustomSummaryInfo<TRowData, TKey>;
   DataErrorOccurredEvent: DataErrorOccurredEvent<TRowData, TKey>;
+  DataRowTemplateData: DataRowTemplateData<TRowData, TKey>;
   DisposingEvent: DisposingEvent<TRowData, TKey>;
   EditCanceledEvent: EditCanceledEvent<TRowData, TKey>;
   EditCancelingEvent: EditCancelingEvent<TRowData, TKey>;
@@ -4769,17 +4807,24 @@ export type ExplicitTypes<TRowData, TKey> = {
   EditingStartEvent: EditingStartEvent<TRowData, TKey>;
   EditorPreparedEvent: EditorPreparedEvent<TRowData, TKey>;
   EditorPreparingEvent: EditorPreparingEvent<TRowData, TKey>;
+  ExcelCellInfo: ExcelCellInfo<TRowData, TKey>;
   Export: Export<TRowData, TKey>;
   ExportedEvent: ExportedEvent<TRowData, TKey>;
   ExportingEvent: ExportingEvent<TRowData, TKey>;
+  ExportTexts: ExportTexts;
   FileSavingEvent: FileSavingEvent<TRowData, TKey>;
   FocusedCellChangedEvent: FocusedCellChangedEvent<TRowData, TKey>;
   FocusedCellChangingEvent: FocusedCellChangingEvent<TRowData, TKey>;
   FocusedRowChangedEvent: FocusedRowChangedEvent<TRowData, TKey>;
   FocusedRowChangingEvent: FocusedRowChangingEvent<TRowData, TKey>;
+  GroupData: GroupData<TRowData>;
+  Grouping: Grouping;
+  GroupingTexts: GroupingTexts;
+  GroupPanel: GroupPanel;
   InitializedEvent: InitializedEvent<TRowData, TKey>;
   InitNewRowEvent: InitNewRowEvent<TRowData, TKey>;
   KeyDownEvent: KeyDownEvent<TRowData, TKey>;
+  MasterDetail: MasterDetail<TRowData, TKey>;
   MasterDetailTemplateData: MasterDetailTemplateData<TRowData, TKey>;
   OptionChangedEvent: OptionChangedEvent<TRowData, TKey>;
   Properties: Properties<TRowData, TKey>;
@@ -4804,7 +4849,6 @@ export type ExplicitTypes<TRowData, TKey> = {
   RowRemovedEvent: RowRemovedEvent<TRowData, TKey>;
   RowRemovingEvent: RowRemovingEvent<TRowData, TKey>;
   RowTemplateData: RowTemplateData<TRowData, TKey>;
-  DataRowTemplateData: DataRowTemplateData<TRowData, TKey>;
   RowUpdatedEvent: RowUpdatedEvent<TRowData, TKey>;
   RowUpdatingEvent: RowUpdatingEvent<TRowData, TKey>;
   RowValidatingEvent: RowValidatingEvent<TRowData, TKey>;
@@ -4814,6 +4858,12 @@ export type ExplicitTypes<TRowData, TKey> = {
   Selection: Selection;
   SelectionChangedEvent: SelectionChangedEvent<TRowData, TKey>;
   Summary: Summary<TRowData, TKey>;
+  SummaryGroupItem: SummaryGroupItem;
+  SummaryItemTextInfo: SummaryItemTextInfo;
+  SummaryTexts: SummaryTexts;
+  SummaryTotalItem: SummaryTotalItem;
+  Toolbar: Toolbar;
+  ToolbarItem: ToolbarItem;
   ToolbarPreparingEvent: ToolbarPreparingEvent<TRowData, TKey>;
 };
 
