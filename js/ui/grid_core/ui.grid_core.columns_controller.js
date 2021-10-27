@@ -2088,7 +2088,7 @@ export default {
                         const columnsGroupParameters = that.getGroupDataSourceParameters();
                         const columnsSortParameters = that.getSortDataSourceParameters();
                         const groupingChanged = !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters, true);
-                        const groupExpandingChanged = !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters);
+                        const groupExpandingChanged = !groupingChanged && !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters);
 
                         if(!that._columns.length) {
                             each(groupParameters, function(index, group) {
