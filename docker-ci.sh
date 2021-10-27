@@ -34,8 +34,8 @@ function run_test {
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
 
     if [ -n "$TZ" ]; then
-        cp -f "/usr/share/zoneinfo/$TZ" /etc/localtime
-        dpkg-reconfigure --frontend noninteractive tzdata
+        sudo cp -f "/usr/share/zoneinfo/$TZ" /etc/localtime
+        sudo dpkg-reconfigure --frontend noninteractive tzdata
     fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
