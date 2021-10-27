@@ -166,6 +166,7 @@ interface CountGenerationConfig {
 interface ViewOptions {
   isVerticalGrouping: boolean;
   groupOrientation: GroupOrientation;
+  isGroupedByDate: boolean;
 }
 
 export interface ViewDataProviderOptions {
