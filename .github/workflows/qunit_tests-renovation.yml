@@ -87,11 +87,6 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/checkout@v2
 
-    - name: Setup utils
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: |
-        sudo apt-get install -y dbus-x11 httping x11vnc xvfb
-
     - name: Use Node.js
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/setup-node@v2
