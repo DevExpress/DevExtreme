@@ -188,6 +188,7 @@ describe('Scheduler', () => {
           onCurrentViewUpdate: setCurrentView,
           onCurrentDateUpdate: setCurrentDate,
           startViewDate,
+          viewType: 'week',
         });
     });
 
@@ -661,6 +662,21 @@ describe('Scheduler', () => {
             ...new SchedulerProps(),
             currentDate: new Date(2021, 7, 19),
             currentView: 'week',
+          });
+
+          expect(scheduler.startViewDate.getTime())
+            .toBe(new Date(2021, 7, 15).getTime());
+        });
+
+        it('should return correct startViewDate if view name is specified', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            views: [{
+              type: 'week',
+              name: 'Week',
+            }],
+            currentView: 'Week',
+            currentDate: new Date(2021, 7, 19),
           });
 
           expect(scheduler.startViewDate.getTime())

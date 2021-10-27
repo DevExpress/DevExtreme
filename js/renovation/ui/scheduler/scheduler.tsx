@@ -127,6 +127,7 @@ export const viewFunction = ({
             firstDayOfWeek={firstDayOfWeek}
             useDropDownViewSwitcher={useDropDownViewSwitcher}
             customizationFunction={customizeDateNavigatorText}
+            viewType={type}
           />
         )}
         <WorkSpace
@@ -208,13 +209,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get startViewDate(): Date {
-    const type = this.props.currentView;
     const {
       currentDate,
       startDayHour,
       startDate,
       intervalCount,
       firstDayOfWeek,
+      type,
     } = this.currentViewConfig;
 
     const options = {
