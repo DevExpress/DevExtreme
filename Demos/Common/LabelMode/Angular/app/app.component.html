@@ -1,0 +1,136 @@
+<div class="title">Edit Profile</div>
+<div class="editors">
+  <div class="editors-container">
+    <div class="left">
+      <dx-text-box
+        value="Olivia Peyton"
+        width="100%"
+        label="Name"
+        placeholder="Type..."
+        [stylingMode]="stylingMode"
+        [labelMode]="labelMode"
+      >
+        <dx-validator>
+          <dxi-validation-rule type="required"> </dxi-validation-rule>
+        </dx-validator>
+      </dx-text-box>
+      <dx-text-box
+        width="100%"
+        label="Address"
+        placeholder="Type..."
+        [stylingMode]="stylingMode"
+        [labelMode]="labelMode"
+      >
+        <dx-validator>
+          <dxi-validation-rule type="required"> </dxi-validation-rule>
+        </dx-validator>
+      </dx-text-box>
+    </div>
+    <div class="right">
+      <dx-date-box
+        [value]="birthDate"
+        width="100%"
+        label="Birth Date"
+        placeholder="Select..."
+        [stylingMode]="stylingMode"
+        [labelMode]="labelMode"
+      >
+        <dx-validator>
+          <dxi-validation-rule type="required"> </dxi-validation-rule>
+        </dx-validator>
+      </dx-date-box>
+      <dx-select-box
+        [items]="states"
+        width="100%"
+        placeholder="Select..."
+        label="State"
+        [stylingMode]="stylingMode"
+        [labelMode]="labelMode"
+      >
+        <dx-validator>
+          <dxi-validation-rule type="required"> </dxi-validation-rule>
+        </dx-validator>
+      </dx-select-box>
+    </div>
+  </div>
+  <div class="center">
+    <dx-tag-box
+      [items]="positions"
+      [value]="['Support Manager']"
+      [multiline]="false"
+      width="100%"
+      placeholder="Select..."
+      label="Position"
+      [stylingMode]="stylingMode"
+      [labelMode]="labelMode"
+    >
+      <dx-validator>
+        <dxi-validation-rule type="required"> </dxi-validation-rule>
+      </dx-validator>
+    </dx-tag-box>
+  </div>
+  <div class="editors-container">
+    <div class="left">
+      <dx-text-box
+        width="100%"
+        label="Phone"
+        mask="+1 (000) 000-0000"
+        [maskRules]="phoneRules"
+        [stylingMode]="stylingMode"
+        [labelMode]="labelMode"
+      >
+        <dx-validator>
+          <dxi-validation-rule type="required"> </dxi-validation-rule>
+        </dx-validator>
+      </dx-text-box>
+    </div>
+    <div class="right">
+      <dx-date-box
+        width="100%"
+        label="Hire Date"
+        placeholder="Select..."
+        [stylingMode]="stylingMode"
+        [labelMode]="labelMode"
+      >
+        <dx-validator>
+          <dxi-validation-rule type="required"> </dxi-validation-rule>
+        </dx-validator>
+      </dx-date-box>
+    </div>
+  </div>
+  <div class="center">
+    <dx-text-area
+      value="Olivia loves to sell. She has been selling DevAV products since 2012."
+      width="100%"
+      placeholder="Type..."
+      label="Notes"
+      [stylingMode]="stylingMode"
+      [labelMode]="labelMode"
+    ></dx-text-area>
+  </div>
+  <div class="center">
+    <dx-button
+      text="Save"
+      type="default"
+      (onClick)="validateClick($event)"
+      class="validate"
+    ></dx-button>
+  </div>
+</div>
+<div class="options">
+  <div class="caption">Options</div>
+  <div class="option">
+    <label>Styling Mode</label>
+    <dx-select-box
+      [items]="['outlined', 'filled', 'underlined']"
+      [(value)]="stylingMode"
+    ></dx-select-box>
+  </div>
+  <div class="option">
+    <label>Label Mode</label>
+    <dx-select-box
+      [items]="['floating', 'static', 'hidden']"
+      [(value)]="labelMode"
+    ></dx-select-box>
+  </div>
+</div>
