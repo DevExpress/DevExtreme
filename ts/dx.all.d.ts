@@ -4258,7 +4258,7 @@ declare module DevExpress.types {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type ChartSingleValueSeriesAggregationMethodType =
+  export type ChartSingleValueSeriesAggregationMethod =
     | 'avg'
     | 'count'
     | 'max'
@@ -15343,12 +15343,12 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorToolbarItem.name]
      */
-    name?: DevExpress.types.HtmlEditorToolbarItem;
+    name?: DevExpress.types.HtmlEditorToolbarItem | string;
     /**
      * [descr:dxHtmlEditorToolbarItem.formatName]
      * @deprecated [depNote:dxHtmlEditorToolbarItem.formatName]
      */
-    formatName?: DevExpress.types.HtmlEditorToolbarItem;
+    formatName?: DevExpress.types.HtmlEditorToolbarItem | string;
     /**
      * [descr:dxHtmlEditorToolbarItem.acceptedValues]
      */
@@ -24549,7 +24549,7 @@ declare module DevExpress.ui.dxDataGrid {
    */
   export interface ToolbarItem extends dxToolbarItem {
     /**
-     * [descr:ToolbarItem.name]
+     * [descr:dxDataGridToolbarItem.name]
      */
     name?: DevExpress.types.DataGridToolbarItem | string;
     /**
@@ -24658,7 +24658,7 @@ declare module DevExpress.ui.dxTreeList {
    */
   export interface ToolbarItem extends dxToolbarItem {
     /**
-     * [descr:ToolbarItem.name]
+     * [descr:dxTreeListToolbarItem.name]
      */
     name?: DevExpress.types.TreeListToolbarItem | string;
     /**
@@ -28399,7 +28399,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.AreaSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28455,7 +28455,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.BarSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29268,7 +29268,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedAreaSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29324,7 +29324,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedBarSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29370,7 +29370,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedLineSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29416,7 +29416,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29468,7 +29468,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29510,7 +29510,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.LineSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29646,7 +29646,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.ScatterSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29692,7 +29692,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.SplineAreaSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29744,7 +29744,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.SplineSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29790,7 +29790,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedAreaSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29846,7 +29846,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedBarSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29892,7 +29892,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedLineSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29938,7 +29938,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29990,7 +29990,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30048,7 +30048,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30150,7 +30150,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StepLineSeries.aggregation.method]
      */
-    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.

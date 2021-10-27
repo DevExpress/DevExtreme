@@ -76,7 +76,7 @@ import {
     ValueErrorBarDisplayMode,
     ValueErrorBarType,
     ChartSeriesAggregationMethod,
-    ChartSingleValueSeriesAggregationMethodType,
+    ChartSingleValueSeriesAggregationMethod,
     ChartFinancialSeriesAggregationMethod,
     ChartRangeSeriesAggregationMethod,
     ChartBubbleSeriesAggregationMethod,
@@ -1201,7 +1201,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
        * @docid
        * @default 'shift'
        */
-      panKey?: EventKeyModifier ;
+      panKey?: EventKeyModifier;
       /**
        * @docid
        * @default 'none'
@@ -2893,7 +2893,7 @@ export interface dxChartSeriesTypesAreaSeriesAggregation extends dxChartSeriesTy
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -2950,7 +2950,7 @@ export interface dxChartSeriesTypesBarSeriesAggregation extends dxChartSeriesTyp
      * @default 'sum'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4050,7 +4050,7 @@ export interface dxChartSeriesTypesFullStackedAreaSeriesAggregation extends dxCh
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesFullStackedAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4107,7 +4107,7 @@ export interface dxChartSeriesTypesFullStackedBarSeriesAggregation extends dxCha
      * @default 'sum'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesFullStackedBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4161,7 +4161,7 @@ export interface dxChartSeriesTypesFullStackedLineSeriesAggregation extends dxCh
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesFullStackedLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4215,7 +4215,7 @@ export interface dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation extend
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesFullStackedSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4272,7 +4272,7 @@ export interface dxChartSeriesTypesFullStackedSplineSeriesAggregation extends dx
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesFullStackedSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4320,7 +4320,7 @@ export interface dxChartSeriesTypesLineSeriesAggregation extends dxChartSeriesTy
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4465,7 +4465,7 @@ export interface dxChartSeriesTypesScatterSeriesAggregation extends dxChartSerie
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesScatterSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4519,7 +4519,7 @@ export interface dxChartSeriesTypesSplineAreaSeriesAggregation extends dxChartSe
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4576,7 +4576,7 @@ export interface dxChartSeriesTypesSplineSeriesAggregation extends dxChartSeries
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4630,7 +4630,7 @@ export interface dxChartSeriesTypesStackedAreaSeriesAggregation extends dxChartS
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesStackedAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4687,7 +4687,7 @@ export interface dxChartSeriesTypesStackedBarSeriesAggregation extends dxChartSe
      * @default 'sum'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesStackedBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4741,7 +4741,7 @@ export interface dxChartSeriesTypesStackedLineSeriesAggregation extends dxChartS
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesStackedLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4795,7 +4795,7 @@ export interface dxChartSeriesTypesStackedSplineAreaSeriesAggregation extends dx
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesStackedSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4852,7 +4852,7 @@ export interface dxChartSeriesTypesStackedSplineSeriesAggregation extends dxChar
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesStackedSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
@@ -4924,7 +4924,7 @@ export interface dxChartSeriesTypesStepAreaSeriesAggregation extends dxChartSeri
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesStepAreaSeriesBorder extends dxChartSeriesTypesCommonSeriesBorder {
@@ -5026,7 +5026,7 @@ export interface dxChartSeriesTypesStepLineSeriesAggregation extends dxChartSeri
      * @default 'avg'
      * @public
      */
-    method?: ChartSingleValueSeriesAggregationMethodType;
+    method?: ChartSingleValueSeriesAggregationMethod;
 }
 /** @namespace DevExpress.viz */
 export interface dxChartSeriesTypesStepLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {

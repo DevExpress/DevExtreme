@@ -30,13 +30,7 @@ export function exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void
 /**
  * @docid viz.exportWidgets
  * @publicName exportWidgets(widgetInstances, options)
- * @param1 widgetInstances:Array<Array<DOMComponent>>
- * @param2 options:object
- * @param2_field1 fileName:string
  * @param2_field2 format:Enums.ExportFormat
- * @param2_field3 backgroundColor:string
- * @param2_field4 margin:number
- * @param2_field5 gridLayout:boolean
  * @param2_field6 verticalAlignment:Enums.VerticalAlignment
  * @param2_field7 horizontalAlignment:Enums.HorizontalAlignment
  * @param2_field8 proxyUrl:string:deprecated

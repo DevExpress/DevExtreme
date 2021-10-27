@@ -1194,7 +1194,7 @@ export type dxTreeListToolbarItem = ToolbarItem;
  */
 export interface ToolbarItem extends dxToolbarItem {
     /**
-     * @docid
+     * @docid dxTreeListToolbarItem.name
      * @public
      */
     name?: TreeListToolbarItem | string;

@@ -356,8 +356,8 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
       aggregationGroupWidth?: number;
       /**
        * @docid
-       * @type number|object|Enums.VizTimeInterval
        * @inherits VizTimeInterval
+       * @type number|object|Enums.VizTimeInterval
        */
       aggregationInterval?: VizTimeInterval;
       /**

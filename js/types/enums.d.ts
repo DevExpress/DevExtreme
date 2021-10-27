@@ -372,7 +372,7 @@ export type PositionResolveCollision = 'fit' | 'flip' | 'flipfit' | 'none';
 
 export type ChartSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'ohlc' | 'range' | 'sum' | 'custom';
 
-export type ChartSingleValueSeriesAggregationMethodType = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
+export type ChartSingleValueSeriesAggregationMethod = 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
 
 export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
 

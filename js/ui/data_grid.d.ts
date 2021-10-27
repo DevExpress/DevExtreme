@@ -4192,7 +4192,7 @@ export type dxDataGridToolbarItem = ToolbarItem;
  */
 export interface ToolbarItem extends dxToolbarItem {
   /**
-   * @docid
+   * @docid dxDataGridToolbarItem.name
    * @public
    */
   name?: DataGridToolbarItem | string;

@@ -203,17 +203,13 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
      * @docid
      * @publicName format(formatName, formatValue)
      * @param1 formatName:Enums.HtmlEditorFormat|string
-     * @param2 formatValue:any
      * @public
      */
     format(formatName: HtmlEditorFormat | string, formatValue: any): void;
     /**
      * @docid
      * @publicName formatLine(index, length, formatName, formatValue)
-     * @param1 index:number
-     * @param2 length:number
      * @param3 formatName:Enums.HtmlEditorFormat|string
-     * @param4 formatValue:any
      * @public
      */
     formatLine(index: number, length: number, formatName: HtmlEditorFormat | string, formatValue: any): void;
@@ -227,10 +223,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
     /**
      * @docid
      * @publicName formatText(index, length, formatName, formatValue)
-     * @param1 index:number
-     * @param2 length:number
      * @param3 formatName:Enums.HtmlEditorFormat|string
-     * @param4 formatValue:any
      * @public
      */
     formatText(index: number, length: number, formatName: HtmlEditorFormat | string, formatValue: any): void;
@@ -311,10 +304,7 @@ export default class dxHtmlEditor extends Editor<dxHtmlEditorOptions> {
     /**
      * @docid
      * @publicName insertText(index, text, formatName, formatValue)
-     * @param1 index:number
-     * @param2 text:string
      * @param3 formatName:Enums.HtmlEditorFormat|string
-     * @param4 formatValue:any
      * @public
      */
     insertText(index: number, text: string, formatName: HtmlEditorFormat | string, formatValue: any): void;
@@ -562,12 +552,12 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
      * @docid
      * @public
      */
-    name?: HtmlEditorToolbarItem;
+    name?: HtmlEditorToolbarItem | string;
     /**
      * @docid
      * @deprecated dxHtmlEditorToolbarItem.name
      */
-    formatName?: HtmlEditorToolbarItem;
+    formatName?: HtmlEditorToolbarItem | string;
     /**
      * @docid
      * @public

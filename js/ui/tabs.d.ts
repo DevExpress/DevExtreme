@@ -113,7 +113,6 @@ export interface dxTabsBaseOptions<
     scrollingEnabled?: boolean;
     /**
      * @docid dxTabsOptions.selectionMode
-     * @type Enums.NavSelectionMode
      * @default 'single'
      * @public
      */
