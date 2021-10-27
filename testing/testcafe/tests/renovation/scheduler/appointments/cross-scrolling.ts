@@ -194,6 +194,7 @@ fixture('Renovated scheduler - Cross-scrolling');
     ],
     showCurrentTimeIndicator: false,
     crossScrollingEnabled: true,
+    height: 800,
   })(`it should render appointments correctly if currentView is ${currentView} and cross-scrolling is enabled`, async (t, { screenshotComparerOptions }) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
