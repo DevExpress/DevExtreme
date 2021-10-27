@@ -117,7 +117,7 @@ const prepareInstances = (
 
 describe('Appointments view model', () => {
   describe('getAppointmentsViewModel', () => {
-    it('should generate regular appoitments correctly', () => {
+    it('should generate regular appointments correctly', () => {
       const instances = prepareInstances(
         'week',
         new Date(2021, 8, 22),
@@ -308,7 +308,7 @@ describe('Appointments view model', () => {
         });
     });
 
-    it('should generate all day appoitments correctly', () => {
+    it('should generate all day appointments correctly', () => {
       const instances = prepareInstances(
         'week',
         new Date(2021, 8, 22),
@@ -363,6 +363,7 @@ describe('Appointments view model', () => {
           },
           info: {
             allDay: true,
+            direction: 'horizontal',
             appointment: {
               startDate: new Date(2021, 8, 23),
               endDate: new Date(2021, 8, 24),

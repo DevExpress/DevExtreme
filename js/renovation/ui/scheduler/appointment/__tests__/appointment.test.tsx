@@ -1,9 +1,10 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction, Appointment, AppointmentProps } from '../appointment';
 import { AppointmentContent } from '../content';
+import { AppointmentViewModel } from '../types';
 
 describe('Appointment', () => {
-  const defaultViewModel = {
+  const defaultViewModel: AppointmentViewModel = {
     key: '1-2-10-20',
 
     appointment: {
@@ -23,6 +24,7 @@ describe('Appointment', () => {
     },
 
     info: {
+      direction: 'vertical',
       appointment: {
         startDate: new Date('2021-08-05T10:00:00.000Z'),
         endDate: new Date('2021-08-05T12:00:00.000Z'),
@@ -47,9 +49,10 @@ describe('Appointment', () => {
     it('it should has correct render', () => {
       const appointment = render({
         styles: 'some-styles',
+        classes: 'some-classes',
       });
 
-      expect(appointment.hasClass('dx-scheduler-appointment'))
+      expect(appointment.hasClass('some-classes'))
         .toBe(true);
 
       expect(appointment.is('div'))
@@ -67,16 +70,17 @@ describe('Appointment', () => {
       const template = '<div class="some-template">Some Template</div>';
       const appointment = render({
         styles: 'some-styles',
+        classes: 'some-classes',
         ...templateProps,
         props: {
           appointmentTemplate: template,
         },
       });
 
-      expect(appointment.hasClass('dx-scheduler-appointment'))
+      expect(appointment.is('div'))
         .toBe(true);
 
-      expect(appointment.is('div'))
+      expect(appointment.hasClass('some-classes'))
         .toBe(true);
 
       expect(appointment.prop('style'))
@@ -118,6 +122,38 @@ describe('Appointment', () => {
               top: '2px',
               width: '10px',
             });
+        });
+      });
+
+      describe('classes', () => {
+        it('should return correct class names if vertical appointment direction', () => {
+          const appointment = new Appointment({
+            viewModel: {
+              ...defaultViewModel,
+              info: {
+                ...defaultViewModel.info,
+                direction: 'vertical',
+              },
+            },
+          });
+
+          expect(appointment.classes)
+            .toBe('dx-scheduler-appointment dx-scheduler-appointment-vertical');
+        });
+
+        it('should return correct class names if horizontal appointment direction', () => {
+          const appointment = new Appointment({
+            viewModel: {
+              ...defaultViewModel,
+              info: {
+                ...defaultViewModel.info,
+                direction: 'horizontal',
+              },
+            },
+          });
+
+          expect(appointment.classes)
+            .toBe('dx-scheduler-appointment dx-scheduler-appointment-horizontal');
         });
       });
 

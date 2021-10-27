@@ -1,5 +1,5 @@
 import type { AppointmentTemplateData } from '../../../../ui/scheduler';
-import { BaseTemplateProps } from '../types';
+import { BaseTemplateProps, Direction } from '../types';
 
 export interface AppointmentGeometry {
   empty: boolean; // TODO
@@ -22,6 +22,7 @@ export interface AppointmentViewModel {
   appointment: AppointmentData;
   geometry: AppointmentGeometry;
   info: {
+    direction: Direction;
     appointment: {
       startDate: Date;
       endDate: Date;

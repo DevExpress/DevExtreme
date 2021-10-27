@@ -6,6 +6,7 @@ import type { AppointmentTemplateData } from '../../../../ui/scheduler';
 import { AppointmentTemplateProps, AppointmentViewModel } from './types';
 import { getAppointmentStyles } from './utils';
 import { AppointmentContent } from './content';
+import { combineClasses } from '../../../utils/combine_classes';
 
 export const viewFunction = ({
   text,
@@ -13,6 +14,7 @@ export const viewFunction = ({
   styles,
   data,
   index,
+  classes,
   props: {
     appointmentTemplate,
   },
@@ -20,10 +22,7 @@ export const viewFunction = ({
   const AppointmentTemplate = appointmentTemplate;
 
   return (
-    <div
-      className="dx-scheduler-appointment"
-      style={styles}
-    >
+    <div className={classes} style={styles}>
       {
         !!AppointmentTemplate && (
           <AppointmentTemplate data={data} index={index} />
@@ -67,5 +66,16 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel'>() {
 
   get index(): number {
     return this.props.index;
+  }
+
+  get classes(): string {
+    const { direction } = this.props.viewModel.info;
+    const isVerticalDirection = direction === 'vertical';
+
+    return combineClasses({
+      'dx-scheduler-appointment': true,
+      'dx-scheduler-appointment-horizontal': !isVerticalDirection,
+      'dx-scheduler-appointment-vertical': isVerticalDirection,
+    });
   }
 }
