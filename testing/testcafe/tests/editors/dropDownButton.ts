@@ -33,6 +33,9 @@ fixture`Drop Down Button's Popup`
 
 test('Popup should have correct postion when DropDownButton is placed in the right bottom(T1034931)', async (t) => {
   const dropDownButton = new DropDownButton('#dropDownButton');
+
+  await t.click(dropDownButton.element);
+
   const dropDownButtonRect = {
     top: await dropDownButton.element.getBoundingClientRectProperty('top'),
     left: await dropDownButton.element.getBoundingClientRectProperty('left'),
