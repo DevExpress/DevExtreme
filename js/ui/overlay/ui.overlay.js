@@ -1213,8 +1213,11 @@ const Overlay = Widget.inherit({
 
             resetPosition(this._$content);
 
+            const wrapperOverflow = this._$wrapper.css('overflow');
+            this._$wrapper.css('overflow', 'hidden');
             const position = this._transformStringPosition(this._position, POSITION_ALIASES);
             const resultPosition = positionUtils.setup(this._$content, position);
+            this._$wrapper.css('overflow', wrapperOverflow);
 
             forceRepaint(this._$content);
 
