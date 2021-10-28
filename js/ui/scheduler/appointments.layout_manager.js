@@ -1,22 +1,24 @@
 import { equalByValue } from '../../core/utils/common';
 import {
     getModelProvider,
-    getTimeZoneCalculator,
-    getAppointmentDataProvider
+    getTimeZoneCalculator
 } from './instanceFactory';
-import { AppointmentViewModel } from './appointments/viewModelGenerator';
+import { AppointmentViewModelGenerator } from './appointments/viewModelGenerator';
 import { getGroupCount } from './resources/utils';
 import { getCellWidth, getCellHeight, getAllDayHeight } from './workspaces/helpers/positionHelper';
 import { getCellDuration } from '../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { getAppointmentRenderingStrategyName } from '../../renovation/ui/scheduler/model/appointments';
 
 class AppointmentLayoutManager {
     constructor(instance) {
         this.instance = instance;
-        this.appointmentViewModel = new AppointmentViewModel();
+        this.appointmentViewModel = new AppointmentViewModelGenerator();
     }
 
     get modelProvider() { return getModelProvider(this.instance.key); }
-    get appointmentRenderingStrategyName() { return this.modelProvider.getAppointmentRenderingStrategyName(); }
+    get appointmentRenderingStrategyName() {
+        return getAppointmentRenderingStrategyName(this.modelProvider.currentViewType);
+    }
 
     getCellDimensions(options) {
         if(this.instance._workSpace) {
@@ -94,7 +96,6 @@ class AppointmentLayoutManager {
             visibleDayDuration,
             // appointment settings
             timeZoneCalculator: getTimeZoneCalculator(key),
-            appointmentDataProvider: getAppointmentDataProvider(key),
             timeZone: this.modelProvider.timeZone,
             firstDayOfWeek: this.instance.getFirstDayOfWeek(),
             viewStartDayHour: this.modelProvider.getCurrentViewOption('startDayHour'),
@@ -132,7 +133,7 @@ class AppointmentLayoutManager {
     }
 
     _isDataChanged(data) {
-        const appointmentDataProvider = this.instance.fire('getAppointmentDataProvider');
+        const appointmentDataProvider = this.instance.appointmentDataProvider;
 
         const updatedData = appointmentDataProvider.getUpdatedAppointment();
         return updatedData === data || appointmentDataProvider.getUpdatedAppointmentKeys().some(item => data[item.key] === item.value);

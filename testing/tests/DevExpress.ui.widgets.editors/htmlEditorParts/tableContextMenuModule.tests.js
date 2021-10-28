@@ -23,7 +23,8 @@ const moduleConfig = {
         this.quillMock = {
             root: this.$element.get(0),
             on: (e) => {},
-            off: (e) => {}
+            off: (e) => {},
+            getModule: (moduleName) => this.quillMock[moduleName]
         };
 
         this.options = {

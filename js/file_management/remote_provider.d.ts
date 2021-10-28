@@ -2,7 +2,13 @@ import FileSystemProviderBase, {
     FileSystemProviderBaseOptions,
 } from './provider_base';
 
-/** @namespace DevExpress.fileManagement */
+/** @public */
+export type Options = RemoteFileSystemProviderOptions;
+
+/**
+ * @deprecated Use Options instead
+ * @namespace DevExpress.fileManagement
+ */
 export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
     /**
      * @docid
@@ -44,5 +50,5 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
  * @public
  */
 export default class RemoteFileSystemProvider extends FileSystemProviderBase {
-    constructor(options?: RemoteFileSystemProviderOptions)
+    constructor(options?: Options)
 }

@@ -1,5 +1,5 @@
 import { createContext } from '@devextreme-generator/declarations';
-import { DisposeEffectReturn } from '../../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../../utils/effect_return';
 import { EventCallback } from '../../common/event_callback';
 
 export interface KeyboardActionContextType {

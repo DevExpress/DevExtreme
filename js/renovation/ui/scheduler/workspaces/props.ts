@@ -47,7 +47,7 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() groupByDate = false;
 
-  @OneWay() groupOrientation: GroupOrientation = 'horizontal';
+  @OneWay() groupOrientation?: GroupOrientation;
 
   @OneWay() crossScrollingEnabled = false;
 
@@ -128,6 +128,10 @@ WorkSpaceProps,
 | 'hoursInterval'
 | 'selectedCellData'
 | 'type'
+| 'dataCellTemplate'
+| 'dateCellTemplate'
+| 'timeCellTemplate'
+| 'resourceCellTemplate'
 >;
 
 export interface ViewRenderConfig {
@@ -144,4 +148,6 @@ export interface ViewRenderConfig {
   isRenderDateHeader: boolean;
   isGenerateWeekDaysHeaderData: boolean;
   scrollingDirection: ScrollableDirection;
+  isCreateCrossScrolling: boolean;
+  defaultGroupOrientation: GroupOrientation;
 }

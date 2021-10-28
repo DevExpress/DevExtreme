@@ -2,7 +2,7 @@ import dateUtils from '../../../core/utils/date';
 import { isEmptyObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { getRecurrenceProcessor } from '../recurrence';
-import timeZoneUtils from '../utils.timeZone.js';
+import timeZoneUtils from '../utils.timeZone';
 import { createResourcesTree, getDataAccessors, getGroupCount, getResourcesFromItem, getResourceTreeLeaves } from '../resources/utils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { CellPositionCalculator } from './cellPositionCalculator';
@@ -34,6 +34,7 @@ export class DateGeneratorBaseStrategy {
     get viewType() { return this.options.viewType; }
     get isGroupedByDate() { return this.options.isGroupedByDate; }
     get isVerticalOrientation() { return this.options.isVerticalOrientation; }
+    get dataAccessors() { return this.options.dataAccessors; }
 
     get loadedResources() { return this.options.loadedResources; }
 
@@ -46,7 +47,7 @@ export class DateGeneratorBaseStrategy {
     generate(appointmentAdapter) {
         const itemResources = getResourcesFromItem(
             this.options.resources,
-            this.options.dataAccessors.resources,
+            this.dataAccessors.resources,
             this.rawAppointment
         );
 
@@ -79,7 +80,7 @@ export class DateGeneratorBaseStrategy {
     _getProcessedByAppointmentTimeZone(appointmentList, appointment) {
         const hasAppointmentTimeZone = !isEmptyObject(appointment.startDateTimeZone) || !isEmptyObject(appointment.endDateTimeZone);
 
-        if(appointmentList.length > 1 && hasAppointmentTimeZone) {
+        if(hasAppointmentTimeZone) {
             const appointmentOffsets = {
                 startDate: this.timeZoneCalculator.getOffsets(appointment.startDate, appointment.startDateTimeZone),
                 endDate: this.timeZoneCalculator.getOffsets(appointment.endDate, appointment.endDateTimeZone),
@@ -219,7 +220,7 @@ export class DateGeneratorBaseStrategy {
         }
 
         const endDayHour = this.viewEndDayHour;
-        const allDay = ExpressionUtils.getField(this.key, 'allDay', rawAppointment);
+        const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', rawAppointment);
         const currentViewEndTime = new Date(new Date(endDate.getTime()).setHours(endDayHour, 0, 0, 0));
 
         if(result.getTime() > currentViewEndTime.getTime() || (allDay && result.getHours() < endDayHour)) {
@@ -526,10 +527,16 @@ export class DateGeneratorVirtualStrategy extends DateGeneratorBaseStrategy {
 export class AppointmentSettingsGenerator {
     constructor(options) {
         this.options = options;
-        this.appointmentAdapter = createAppointmentAdapter(this.options.key, this.rawAppointment);
+        this.appointmentAdapter = createAppointmentAdapter(
+            this.rawAppointment,
+            this.dataAccessors,
+            this.timeZoneCalculator
+        );
     }
 
     get rawAppointment() { return this.options.rawAppointment; }
+    get dataAccessors() { return this.options.dataAccessors; }
+    get timeZoneCalculator() { return this.options.timeZoneCalculator; }
     get isAllDayRowAppointment() { return this.options.appointmentTakesAllDay && this.options.supportAllDayRow; }
     get modelGroups() { return this.options.modelGroups; }
     get dateSettingsStrategy() {
@@ -578,8 +585,7 @@ export class AppointmentSettingsGenerator {
 
         cellPositions.forEach(({ coordinates, dateSettingIndex }) => {
             const dateSetting = dateSettings[dateSettingIndex];
-            const sourceAppointment = dateSetting.source;
-            const dateText = this._getAppointmentDateText(sourceAppointment);
+            const dateText = this._getAppointmentDateText(dateSetting);
 
             const info = {
                 appointment: dateSetting,

@@ -1792,3 +1792,128 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
     },
   }));
 });
+
+test('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  // act
+  await t
+    .click(dataGrid.getDataCell(0, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 0).getEditor().element.focused)
+    .ok();
+
+  // act
+  await t
+    .typeText(dataGrid.getDataCell(0, 0).getEditor().element, '1')
+    .click(dataGrid.getDataCell(1, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(0, 0))
+    .eql('Name 11')
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(1, 0).getEditor().element.focused)
+    .ok();
+
+  // act
+  await t
+    .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
+    .click(dataGrid.getDataCell(2, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(1, 0))
+    .eql('Name 22')
+    .expect(dataGrid.getDataCell(2, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(2, 0).getEditor().element.focused)
+    .ok();
+
+  // act
+  await t
+    .typeText(dataGrid.getDataCell(2, 0).getEditor().element, '3')
+    .click(dataGrid.getDataCell(1, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(2, 0))
+    .eql('Name 33')
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(1, 0).getEditor().element.focused)
+    .ok();
+
+  // act
+  await t
+    .typeText(dataGrid.getDataCell(1, 0).getEditor().element, '2')
+    .click(dataGrid.getDataCell(0, 0).getEditor().element);
+
+  // assert
+  await t
+    .expect(dataGrid.apiGetCellValue(1, 0))
+    .eql('Name 222')
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(0, 0).getEditor().element.focused)
+    .ok();
+}).before(async () => {
+  const initStore = ClientFunction(() => {
+    (window as any).myStore = new (window as any).DevExpress.data.ArrayStore({
+      key: 'ID',
+      data: [
+        { ID: 1, Name: 'Name 1' },
+        { ID: 2, Name: 'Name 2' },
+        { ID: 3, Name: 'Name 3' },
+      ],
+    });
+  });
+
+  await initStore();
+
+  return createWidget('dxDataGrid', {
+    dataSource: {
+      key: 'ID',
+      load(loadOptions) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            (window as any).myStore.load(loadOptions).done((data) => {
+              resolve(data);
+            });
+          }, 100);
+        });
+      },
+      update(key, values) {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            (window as any).myStore.update(key, values).done(() => {
+              resolve(key);
+            });
+          }, 100);
+        });
+      },
+      totalCount(loadOptions) {
+        return (window as any).myStore.totalCount(loadOptions);
+      },
+    },
+    keyExpr: 'ID',
+    editing: {
+      mode: 'cell',
+      allowUpdating: true,
+    },
+    columns: [{
+      dataField: 'Name',
+      showEditorAlways: true,
+    }],
+  });
+}).after(async () => {
+  await disposeWidgets();
+  await ClientFunction(() => {
+    delete (window as any).myStore;
+  })();
+});

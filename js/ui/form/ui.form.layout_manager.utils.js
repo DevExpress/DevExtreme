@@ -28,7 +28,8 @@ export function convertToRenderFieldItemOptions({
     showColonAfterLabel,
     managerLabelLocation,
     itemId,
-    managerMarkOptions
+    managerMarkOptions,
+    labelMode
 }) {
     const isRequired = isDefined(item.isRequired) ? item.isRequired : !!_hasRequiredRuleInSet(item.validationRules);
     const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
@@ -41,8 +42,8 @@ export function convertToRenderFieldItemOptions({
         labelLocation: managerLabelLocation,
     });
 
-
-    const needRenderLabel = labelOptions.visible && labelOptions.text;
+    const isOutsideLabelMode = labelMode === 'outside';
+    const needRenderLabel = labelOptions.visible && labelOptions.text && isOutsideLabelMode;
     const { location: labelLocation, labelID } = labelOptions;
     const labelNeedBaselineAlign =
         labelLocation !== 'top'
@@ -73,21 +74,42 @@ export function convertToRenderFieldItemOptions({
             editorInputId: itemId,
             editorValidationBoundary,
             editorStylingMode,
+            labelMode: isOutsideLabelMode ? 'hidden' : labelMode,
+            labelText: isOutsideLabelMode ? undefined : labelOptions.text,
+            labelMark: getLabelMarkText(labelOptions.markOptions),
         })
     };
 }
 
+export function getLabelMarkText({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }) {
+    if(!showRequiredMark && !showOptionalMark) {
+        return '';
+    }
+
+    return String.fromCharCode(160) + (showRequiredMark ? requiredMark : optionalMark);
+}
+
 export function convertToLabelMarkOptions({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }, isRequired) {
     return {
-        isRequiredMark: showRequiredMark && isRequired,
+        showRequiredMark: showRequiredMark && isRequired,
         requiredMark,
-        isOptionalMark: showOptionalMark && !isRequired,
+        showOptionalMark: showOptionalMark && !isRequired,
         optionalMark
     };
 }
 
 function _convertToEditorOptions({
-    editorType, defaultEditorName, editorValue, canAssignUndefinedValueToEditor, externalEditorOptions, editorInputId, editorValidationBoundary, editorStylingMode
+    editorType,
+    defaultEditorName,
+    editorValue,
+    canAssignUndefinedValueToEditor,
+    externalEditorOptions,
+    editorInputId,
+    editorValidationBoundary,
+    editorStylingMode,
+    labelMode,
+    labelText,
+    labelMark,
 }) {
     const editorOptionsWithValue = {};
     if(editorValue !== undefined || canAssignUndefinedValueToEditor) {
@@ -102,7 +124,10 @@ function _convertToEditorOptions({
         {
             inputAttr: { id: editorInputId },
             validationBoundary: editorValidationBoundary,
-            stylingMode: editorStylingMode
+            stylingMode: editorStylingMode,
+            label: labelText,
+            labelMode: labelMode,
+            labelMark,
         },
     );
 

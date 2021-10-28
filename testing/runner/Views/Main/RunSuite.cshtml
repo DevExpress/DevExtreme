@@ -42,7 +42,6 @@
 }
 <!DOCTYPE html>
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=@Model.IEMode">
     <title>@Model.Title - QUnit test page</title>
     <link rel="stylesheet" href="@Url.ContentWithCacheBuster("~/node_modules/qunitjs/qunit/qunit.css")" />
     <script src="@Url.ContentWithCacheBuster("~/node_modules/qunitjs/qunit/qunit.js")"></script>
@@ -148,8 +147,7 @@
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery.2/node_modules/jquery/dist/jquery.js")"></script>
 
-    <script src="@Url.ContentWithCacheBuster("~/testing/helpers/sinon/sinon.js")"></script>
-    <script src="@Url.ContentWithCacheBuster("~/testing/helpers/sinon/sinon-timers-ie.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/node_modules/sinon/pkg/sinon.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
     <script>
@@ -190,7 +188,12 @@
                     'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
                     'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
                     'jszip': '@Url.Content("~/artifacts/js/jszip.js")',
+                    '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
                     '@@devextreme/runtime/inferno': '@Url.Content("~/node_modules/@devextreme/runtime/inferno")',
+                    '@@devextreme/runtime/declarations': '@Url.Content("~/node_modules/@devextreme/runtime/declarations")',
+                    '@@devextreme/runtime/angular': '@Url.Content("~/node_modules/@devextreme/runtime/angular")',
+                    '@@devextreme/runtime/vue': '@Url.Content("~/node_modules/@devextreme/runtime/vue")',
+                    '@@devextreme/runtime/react': '@Url.Content("~/node_modules/@devextreme/runtime/react")',
                     'devextreme-quill': '@Url.Content("~/node_modules/devextreme-quill/dist/dx-quill.js")',
                     'devexpress-diagram': '@Url.Content("~/artifacts/js/dx-diagram.js")',
                     'devexpress-gantt': '@Url.Content("~/artifacts/js/dx-gantt.js")',
@@ -199,7 +202,7 @@
                     'jspdf': '@Url.Content("~/node_modules/jspdf/dist/jspdf.es.js")',
                     'jspdf-autotable': '@Url.Content("~/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js")',
                     'turndown': '@Url.Content("~/node_modules/turndown/lib/turndown.browser.umd.js")',
-                    'showdown': '@Url.Content("~/node_modules/showdown/dist/showdown.js")',
+                    'devextreme-showdown': '@Url.Content("~/node_modules/devextreme-showdown/dist/showdown.js")',
                     'rrule': '@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")',
 
                     // Global CSS
@@ -221,6 +224,26 @@
                     },
                     '@@devextreme/runtime/inferno': {
                         main: '../cjs/inferno/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/angular': {
+                        main: '../cjs/angular/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/react': {
+                        main: '../cjs/react/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/vue': {
+                        main: '../cjs/vue/index.js',
+                        defaultExtension: 'js',
+                        format: 'cjs'
+                    },
+                    '@@devextreme/runtime/declarations': {
+                        main: '../cjs/declarations/index.js',
                         defaultExtension: 'js',
                         format: 'cjs'
                     },

@@ -197,7 +197,7 @@ export const editingFormBasedModule = {
 
                         this._$popupContent = scrollable.$content();
 
-                        formTemplate(this._$popupContent, templateOptions, true);
+                        formTemplate(this._$popupContent, templateOptions, { renderFormOnly: true });
                     };
                 },
 
@@ -382,7 +382,7 @@ export const editingFormBasedModule = {
                 },
 
                 getEditFormTemplate: function() {
-                    return ($container, detailOptions, renderFormOnly) => {
+                    return ($container, detailOptions, options) => {
                         const editFormOptions = this.option(EDITING_FORM_OPTION_NAME);
                         const baseEditFormOptions = this.getEditFormOptions(detailOptions);
 
@@ -390,7 +390,7 @@ export const editingFormBasedModule = {
 
                         this._editForm = this._createComponent($('<div>').appendTo($container), Form, extend({}, editFormOptions, baseEditFormOptions));
 
-                        if(!renderFormOnly) {
+                        if(!options?.renderFormOnly) {
                             const $buttonsContainer = $('<div>').addClass(this.addWidgetPrefix(FORM_BUTTONS_CONTAINER_CLASS)).appendTo($container);
                             this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getSaveButtonConfig());
                             this._createComponent($('<div>').appendTo($buttonsContainer), Button, this._getCancelButtonConfig());

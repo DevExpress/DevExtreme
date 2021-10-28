@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "strict": false,
+    "esModuleInterop": false,
+    "moduleResolution": "node",
+    "typeRoots": ["node_modules/@types"],
+    "experimentalDecorators": true,
+    "noEmitOnError": false,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react",
+    "declaration": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": ["node_modules"]
+}

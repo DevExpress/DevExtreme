@@ -17,7 +17,7 @@ import { SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE } from '../common/consts';
 
 import { getWindow, setWindow } from '../../../../core/utils/window';
 import { Widget } from '../../common/widget';
-import { ScrollableDirection } from '../common/types.d';
+import { ScrollableDirection } from '../common/types';
 import { ScrollViewProps } from '../common/scrollview_props';
 
 interface Mock extends jest.Mock {}
@@ -229,7 +229,6 @@ describe('ScrollView', () => {
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
                 expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
-                expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
               }
             });
           });

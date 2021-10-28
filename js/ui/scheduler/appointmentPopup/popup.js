@@ -190,7 +190,11 @@ export class AppointmentPopup {
     }
 
     _createAppointmentAdapter(rawAppointment) {
-        return createAppointmentAdapter(this.key, rawAppointment);
+        return createAppointmentAdapter(
+            rawAppointment,
+            this.scheduler.getDataAccessors(),
+            this.scheduler.getTimeZoneCalculator()
+        );
     }
 
     _updateForm() {

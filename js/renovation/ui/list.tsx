@@ -1,8 +1,8 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Event,
+  Component, ComponentBindings, JSXComponent, OneWay, Event, Template,
 } from '@devextreme-generator/declarations';
 /* eslint-disable import/named */
-import DataSource, { DataSourceOptions } from '../../data/data_source';
+import DataSource, { Options as DataSourceOptions } from '../../data/data_source';
 import Store from '../../data/abstract_store';
 import LegacyList, { dxListItem } from '../../ui/list';
 import { DxElement } from '../../core/element';
@@ -34,6 +34,7 @@ export const viewFunction = ({
   <DomComponentWrapper
     componentType={LegacyList}
     componentProps={props}
+    templateNames={['itemTemplate']}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
@@ -61,6 +62,8 @@ export class ListProps extends BaseWidgetProps {
   | DataSourceOptions;
 
   //   @OneWay() displayExpr?: string | ((item: any) => string);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @Template() itemTemplate?: any;
 
   @OneWay() focusStateEnabled?: boolean;
 
@@ -172,9 +175,6 @@ export class ListProps extends BaseWidgetProps {
   // @OneWay()showSelectionControls?: boolean;
 
   // @OneWay()useNativeScrolling?: boolean;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  @OneWay() itemTemplate?: any;
 
 //   @Event() onItemClick?: (e: any) => any = (() => {});
 }

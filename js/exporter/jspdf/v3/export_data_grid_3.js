@@ -1,11 +1,19 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { normalizeOptions } from './normalizeOptions';
+import { normalizeRowsInfo } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
 
+// TODO: check names with techwritters
+// IPDFExportOptions: {
+//    topLeft: {x: number, y: number},
+//    indent: number,
+//    margin: { top:number, left:number, right:number, bottom:number } | number
+//    customizeCell: (IPdfRowInfo): void
+//    customDrawCell: (rect, pdfCell, gridCell, cancel): void (similar to the https://docs.devexpress.com/WindowsForms/DevExpress.XtraGrid.Views.Grid.GridView.CustomDrawCell)
+// }
 function _getFullOptions(options) {
     const fullOptions = extend({}, options);
     if(!isDefined(fullOptions.topLeft)) {
@@ -24,6 +32,7 @@ function exportDataGrid(doc, dataGrid, options) {
     const dataProvider = dataGrid.getDataProvider();
     return new Promise((resolve) => {
         dataProvider.ready().done(() => {
+
             // TODO: pass rowOptions: { headerStyles: { backgroundColor }, groupStyles: {...}, totalStyles: {...} }
             const rowsInfo = generateRowsInfo(dataProvider, dataGrid, options.rowOptions?.headerStyles?.backgroundColor);
 
@@ -44,7 +53,7 @@ function exportDataGrid(doc, dataGrid, options) {
                 ));
             }
 
-            normalizeOptions(rowsInfo);
+            normalizeRowsInfo(rowsInfo);
 
             // computes withs of the cells depending of the options
             initializeCellsWidth(doc, dataProvider, rowsInfo, options);
@@ -87,7 +96,7 @@ function exportDataGrid(doc, dataGrid, options) {
             );
 
             const docStyles = getDocumentStyles(doc);
-            drawCellsContent(doc, pdfCellsInfo, docStyles);
+            drawCellsContent(doc, options.customDrawCell, pdfCellsInfo, docStyles);
             drawCellsLines(doc, pdfCellsInfo, docStyles);
 
             const isDrawTableBorderSpecified = options.drawTableBorder === true;

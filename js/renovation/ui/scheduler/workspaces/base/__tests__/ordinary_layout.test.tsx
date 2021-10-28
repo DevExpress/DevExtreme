@@ -3,12 +3,14 @@ import React from 'react';
 import { Scrollable } from '../../../../scroll_view/scrollable';
 import { Widget } from '../../../../common/widget';
 import {
+  OrdinaryLayout,
   viewFunction as LayoutView,
 } from '../ordinary_layout';
 import { GroupPanel } from '../group_panel/group_panel';
 import { AllDayPanelLayout, AllDayPanelLayoutProps } from '../date_table/all_day_panel/layout';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { HeaderPanelEmptyCell } from '../header_panel_empty_cell';
+import { MainLayoutProps } from '../main_layout_props';
 
 describe('OrdinaryLayout', () => {
   const viewData = {
@@ -293,15 +295,10 @@ describe('OrdinaryLayout', () => {
       const groupPanelRef = React.createRef();
       const resourceCellTemplate = () => null;
       const props = {
+        ...new MainLayoutProps(),
         groupOrientation: 'vertical',
-        groupByDate: false,
         groups,
         resourceCellTemplate,
-        groupPanelClassName: 'groupPanelClassName',
-        groupPanelData: {
-          groupPanelItems: [],
-          baseColSpan: 34,
-        },
         isRenderGroupPanel: true,
         groupPanelHeight: 497,
         groupPanelRef,
@@ -327,10 +324,10 @@ describe('OrdinaryLayout', () => {
           groups,
           resourceCellTemplate,
           height: 497,
-          className: 'groupPanelClassName',
+          className: 'dx-scheduler-work-space-vertical-group-table',
           groupPanelData: {
             groupPanelItems: [],
-            baseColSpan: 34,
+            baseColSpan: 1,
           },
           elementRef: groupPanelRef,
         });
@@ -378,6 +375,25 @@ describe('OrdinaryLayout', () => {
 
       expect(layout.find('.appointments').exists())
         .toBe(true);
+    });
+  });
+
+  describe('Behaviour', () => {
+    describe('getScrollableWidth', () => {
+      it('should return date-table scrollable\'s width', () => {
+        const layout = new OrdinaryLayout({} as any);
+
+        layout.dateTableScrollableRef = {
+          current: {
+            container: () => ({
+              getBoundingClientRect: () => ({ width: 324 }),
+            }),
+          },
+        } as any;
+
+        expect(layout.getScrollableWidth())
+          .toBe(324);
+      });
     });
   });
 });

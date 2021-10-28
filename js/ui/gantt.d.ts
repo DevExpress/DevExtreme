@@ -1,3 +1,4 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     UserDefinedElement,
     DxElement,
@@ -11,12 +12,6 @@ import {
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     Column,
@@ -263,8 +258,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: DataSourceLike<any>;
       /**
        * @docid
        * @default "id"
@@ -738,8 +734,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: DataSourceLike<any>;
       /**
        * @docid
        * @default "id"
@@ -770,8 +767,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: DataSourceLike<any>;
       /**
        * @docid
        * @default "id"
@@ -800,13 +798,13 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
          * @type Enums.GanttScaleType
          * @default "minutes"
          */
-        start?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        min?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
         /**
          * @docid
          * @type Enums.GanttScaleType
          * @default "years"
          */
-        end?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
+        max?: 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
     };
     /**
      * @docid
@@ -866,8 +864,9 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
       /**
        * @docid
        * @default null
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: DataSourceLike<any>;
       /**
        * @docid
        * @default "end"
@@ -1382,7 +1381,6 @@ export interface dxGanttFilterRow {
     betweenStartText?: string;
     /**
      * @docid
-     * @type object
      */
     operationDescriptions?: dxGanttFilterRowOperationDescriptions;
     /**
@@ -1494,7 +1492,6 @@ export interface dxGanttHeaderFilter {
     searchTimeout?: number;
     /**
      * @docid
-     * @type object
      */
     texts?: dxGanttHeaderFilterTexts;
     /**
@@ -1537,6 +1534,3 @@ export type Properties = dxGanttOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxGanttOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxGanttOptions;

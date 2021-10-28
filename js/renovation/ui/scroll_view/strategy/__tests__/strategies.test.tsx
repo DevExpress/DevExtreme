@@ -13,6 +13,8 @@ import {
 } from '../../__tests__/utils';
 
 import {
+  DIRECTION_HORIZONTAL,
+  DIRECTION_VERTICAL,
   SCROLLABLE_DISABLED_CLASS, SCROLLABLE_SCROLLBARS_ALWAYSVISIBLE,
 } from '../../common/consts';
 
@@ -36,6 +38,7 @@ import {
   getElementOverflowX,
   getElementOverflowY,
 } from '../../utils/get_element_style';
+import { DxMouseEvent, ScrollableDirection } from '../../common/types';
 
 jest.mock('../../utils/get_element_style', () => ({
   ...jest.requireActual('../../utils/get_element_style'),
@@ -283,7 +286,11 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
             each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
               each([true, false]).describe('PullDownEnabled: %o', (pullDownEnabled) => {
                 each([true, false]).describe('ReachBottomEnabled: %o', (reachBottomEnabled) => {
-                  each([{ decreasing: true, positive: false }, { decreasing: true, positive: true }, { decreasing: false, positive: true }]).describe('rtlBehavior: %o', (rtlBehavior) => {
+                  each([
+                    { decreasing: true, positive: false },
+                    { decreasing: true, positive: true },
+                    { decreasing: false, positive: true },
+                  ]).describe('rtlBehavior: %o', (rtlBehavior) => {
                     const isNativeINChrome86 = Scrollable === ScrollableNative && rtlEnabled
                       && rtlBehavior.decreasing && !rtlBehavior.positive;
                     const isNativeINIE11 = Scrollable === ScrollableNative && rtlEnabled
@@ -492,6 +499,31 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
     });
 
     describe('Methods', () => {
+      it('initEventData()', () => {
+        const containerRef = {
+          current: {
+            clientWidth: 10,
+            clientHeight: 20,
+          },
+        } as RefObject;
+
+        const viewModel = new Scrollable({});
+        viewModel.containerRef = containerRef;
+
+        const validateMock = () => true;
+        const tryGetAllowedDirectionMock = () => 'horizontal' as ScrollableDirection;
+
+        viewModel.tryGetAllowedDirection = tryGetAllowedDirectionMock;
+        viewModel.validate = validateMock;
+
+        const initEventData = viewModel.getInitEventData();
+
+        expect(initEventData.getDirection({} as any)).toEqual('horizontal');
+        expect(initEventData.validate({} as DxMouseEvent)).toEqual(true);
+        expect(initEventData.isNative).toEqual(Scrollable === ScrollableNative);
+        expect(initEventData.scrollTarget).toEqual(containerRef.current);
+      });
+
       it('validate(event), locked: false, disabled: true', () => {
         const event = { ...defaultEvent } as any;
         const viewModel = new Scrollable({ disabled: true });
@@ -500,8 +532,7 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
         viewModel.updateHandler = jest.fn();
 
         expect(viewModel.validate(event)).toEqual(false);
-        expect(viewModel.updateHandler)
-          .toHaveBeenCalledTimes(1);
+        expect(viewModel.updateHandler).toHaveBeenCalledTimes(1);
       });
 
       it('validate(event), locked: true, disabled: false', () => {
@@ -541,6 +572,36 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
         });
       });
 
+      each([
+        { expected: -100 },
+        { contentSize: 190, containerSize: 200, expected: -0 },
+        { contentSize: 200, containerSize: 200, expected: -0 },
+        { contentSize: 200.49, containerSize: 200, expected: -0.4900000000000091 },
+        { contentSize: 200.50, containerSize: 200, expected: -0.5 },
+        { contentSize: 200.52, containerSize: 200, expected: -0.5200000000000102 },
+        { contentSize: 400, containerSize: 125, expected: -275 },
+      ]).describe('Dimensions: %o', ({ contentSize, containerSize, expected }) => {
+        it('vScrollOffsetMax()', () => {
+          const helper = new ScrollableTestHelper({
+            direction: DIRECTION_VERTICAL,
+            contentSize,
+            containerSize,
+          });
+
+          expect(helper.viewModel.vScrollOffsetMax).toEqual(expected);
+        });
+
+        it('hScrollOffsetMax()', () => {
+          const helper = new ScrollableTestHelper({
+            direction: DIRECTION_HORIZONTAL,
+            contentSize,
+            containerSize,
+          });
+
+          expect(helper.viewModel.hScrollOffsetMax).toEqual(expected);
+        });
+      });
+
       describe('cssClasses', () => {
         each(optionValues.direction).describe('Direction: %o', (direction) => {
           each(['onScroll', 'onHover', 'always', 'never']).describe('showScrollbar: %o', (showScrollbar) => {
@@ -570,7 +631,6 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-scrollbars-hidden'));
                 expect(rootClasses).toEqual(expect.not.stringMatching('dx-scrollable-native'));
                 expect(rootClasses).toEqual(expect.stringMatching('dx-scrollable-simulated'));
-                expect(rootClasses).toEqual(expect.stringMatching('dx-visibility-change-handler'));
               }
             });
           });

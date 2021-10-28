@@ -2,11 +2,15 @@ import dateUtils from '../../../../../core/utils/date';
 import { getGroupCount } from '../../../../../ui/scheduler/resources/utils';
 import { GroupOrientation } from '../../types';
 import { GetDateForHeaderText } from '../../view_model/to_test/views/types';
-import { Group } from '../types';
+import {
+  Group, TableWidthWorkSpaceConfig, ViewDataProviderType,
+} from '../types';
 import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 
 const DAY_MS = dateUtils.dateToMilliseconds('day');
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');
+
+const DATE_TABLE_MIN_CELL_WIDTH = 75;
 
 export const getTotalRowCount = (
   rowCount: number,
@@ -54,12 +58,48 @@ export const getHiddenInterval = (
 };
 
 export const createCellElementMetaData = (
-  tableRect: ClientRect,
-  cellRect: ClientRect,
-): ClientRect => ({
-  ...cellRect,
-  left: cellRect.left - tableRect.left,
-  top: cellRect.top - tableRect.top,
-});
+  tableRect: DOMRect,
+  cellRect: DOMRect,
+): DOMRect => {
+  const {
+    top, right, bottom, left, width, height, x, y,
+  } = cellRect;
+
+  return {
+    right,
+    bottom,
+    left: left - tableRect.left,
+    top: top - tableRect.top,
+    width,
+    height,
+    x,
+    y,
+  } as DOMRect;
+};
 
 export const getDateForHeaderText: GetDateForHeaderText = (_, date) => date;
+
+export const getDateTableWidth = (
+  scrollableWidth: number,
+  dateTable: HTMLTableElement,
+  viewDataProvider: ViewDataProviderType,
+  workSpaceConfig: TableWidthWorkSpaceConfig,
+): number => {
+  const dateTableCell = dateTable.querySelector('td');
+
+  // eslint-disable-next-line rulesdir/no-non-null-assertion
+  let cellWidth = dateTableCell!.getBoundingClientRect().width;
+
+  if (cellWidth < DATE_TABLE_MIN_CELL_WIDTH) {
+    cellWidth = DATE_TABLE_MIN_CELL_WIDTH;
+  }
+
+  const cellCount = viewDataProvider.getCellCount(workSpaceConfig);
+  const totalCellCount = getTotalCellCount(
+    cellCount, workSpaceConfig.groupOrientation, workSpaceConfig.groups,
+  );
+
+  const minTablesWidth = totalCellCount * cellWidth;
+
+  return scrollableWidth < minTablesWidth ? minTablesWidth : scrollableWidth;
+};

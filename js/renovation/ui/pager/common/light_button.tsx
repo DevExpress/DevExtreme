@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Slot, Event, Ref, Effect, Consumer, RefObject,
 } from '@devextreme-generator/declarations';
 import { subscribeToClickEvent } from '../../../utils/subscribe_to_event';
-import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return.d';
+import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return';
 import { EventCallback } from '../../common/event_callback';
 import { KeyboardActionContext, KeyboardActionContextType } from './keyboard_action_context';
 

@@ -4,9 +4,9 @@ import { isFunction } from '../../../core/utils/type';
 import {
   CustomizeTooltipFn, Font, CustomizedOptions, TooltipData,
   Translator,
-} from '../common/types.d';
+} from '../common/types';
 
-import { ArgumentAxisRange, ValueAxisRange } from './types.d';
+import { ArgumentAxisRange, ValueAxisRange } from './types';
 
 const DEFAULT_LINE_SPACING = 2;
 

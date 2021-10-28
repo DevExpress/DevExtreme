@@ -45,7 +45,6 @@ import {
     GROUP_ROW_CLASS,
     GROUP_HEADER_CONTENT_CLASS,
     VERTICAL_GROUP_COUNT_CLASSES,
-    HORIZONTAL_GROUP_COUNT_CLASSES,
 } from '../classes';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
@@ -74,7 +73,7 @@ import {
     getCellDuration
 } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray, getGroupCount } from '../resources/utils';
-import Semaphore from '../semaphore';
+import { Semaphore } from '../../../renovation/ui/scheduler/semaphore';
 import {
     getCellWidth,
     getCellHeight,
@@ -1353,7 +1352,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getRoundedCellWidth(groupIndex, startIndex, cellCount) {
-        if(groupIndex < 0) {
+        if(groupIndex < 0 || !hasWindow()) {
             return 0;
         }
 
@@ -1370,7 +1369,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         for(let i = startIndex; i < totalCellCount + cellCount; i++) {
             const element = $($cells).eq(i).get(0);
-            width = element ? width + getBoundingRect(element).width : width;
+            const elementWidth = element ? getBoundingRect(element).width : 0;
+            width = width + elementWidth;
         }
 
         return width / (totalCellCount + cellCount - startIndex);
@@ -1665,14 +1665,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return false;
     }
 
-    _isApplyCompactAppointmentOffset() {
-        return this._supportCompactDropDownAppointments();
-    }
-
-    _supportCompactDropDownAppointments() {
-        return true;
-    }
-
     removeDroppableCellClass($cellElement) {
         ($cellElement || this._getDroppableCell()).removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
     }
@@ -1704,6 +1696,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             dataCellTemplate: this.option('dataCellTemplate'),
             addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
             groupOrientation: this.option('groupOrientation'),
+            addVerticalSizesClassToRows: false,
         });
     }
 
@@ -1758,13 +1751,13 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
     _getDateTableDOMElementsInfo() {
         const dateTableCells = this._getAllCells(false);
-        if(!dateTableCells.length) {
+        if(!dateTableCells.length || !hasWindow()) {
             return [[{}]];
         }
 
         const dateTable = this._getDateTable();
         // We should use getBoundingClientRect in renovation
-        const dateTableRect = dateTable.get(0) ? getBoundingRect(dateTable.get(0)) : 0;
+        const dateTableRect = getBoundingRect(dateTable.get(0));
 
         const columnsCount = this.viewDataProvider.getColumnsCount();
 
@@ -1785,7 +1778,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getAllDayPanelDOMElementsInfo() {
         const result = [];
 
-        if(this.isAllDayPanelVisible && !this._isVerticalGroupedWorkSpace()) {
+        if(this.isAllDayPanelVisible && !this._isVerticalGroupedWorkSpace() && hasWindow()) {
             const allDayCells = this._getAllCells(true);
 
             if(!allDayCells.length) {
@@ -2532,7 +2525,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _detachGroupCountClass() {
         [
             ...VERTICAL_GROUP_COUNT_CLASSES,
-            ...HORIZONTAL_GROUP_COUNT_CLASSES,
         ].forEach((className) => {
             this.$element().removeClass(className);
         });

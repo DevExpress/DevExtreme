@@ -30,11 +30,10 @@ import '../check_box';
 import '../date_box';
 import '../button';
 
-import { getLabelWidthByInnerHTML } from './components/label';
-import { renderFieldItem } from './components/field_item.js';
-import { renderButtonItem } from './components/button_item.js';
-import { renderEmptyItem } from './components/empty_item.js';
-import { convertToLabelMarkOptions, convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils.js';
+import { renderFieldItem } from './components/field_item';
+import { renderButtonItem } from './components/button_item';
+import { renderEmptyItem } from './components/empty_item';
+import { convertToRenderFieldItemOptions } from './ui.form.layout_manager.utils';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
 
@@ -63,6 +62,7 @@ const LayoutManager = Widget.inherit({
             screenByWidth: null,
             showOptionalMark: false,
             requiredMark: '*',
+            labelMode: 'outside',
             optionalMark: messageLocalization.format('dxForm-optionalMark'),
             requiredMessage: messageLocalization.getFormatter('dxForm-requiredMessage')
         });
@@ -568,6 +568,7 @@ const LayoutManager = Widget.inherit({
             template: item.template ? this._getTemplate(item.template) : null,
             itemId: this.option('form') && this.option('form').getItemID(name),
             managerMarkOptions: this._getMarkOptions(),
+            labelMode: this.option('labelMode'),
         }));
 
         if(widgetInstance && item.dataField) {
@@ -579,12 +580,6 @@ const LayoutManager = Widget.inherit({
             widgetInstance,
             guid: item.guid,
             $itemContainer: $rootElement
-        });
-    },
-
-    _getLabelWidthByInnerHTML: function({ innerHTML, location }) {
-        return getLabelWidthByInnerHTML({
-            innerHTML, location, markOptions: convertToLabelMarkOptions(this._getMarkOptions())
         });
     },
 
@@ -753,6 +748,7 @@ const LayoutManager = Widget.inherit({
                 break;
             case 'alignItemLabels':
             case 'labelLocation':
+            case 'labelMode':
             case 'requiredMessage':
                 this._invalidate();
                 break;

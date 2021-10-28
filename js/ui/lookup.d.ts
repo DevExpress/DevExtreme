@@ -325,6 +325,3 @@ export type Properties = dxLookupOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxLookupOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxLookupOptions;

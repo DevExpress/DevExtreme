@@ -1,13 +1,9 @@
+import DataSource, { DataSourceLike } from '../data/data_source';
+
 import {
     PaletteType,
     PaletteExtensionModeType,
 } from './palette';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -299,8 +295,9 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
      * @docid
      * @notUsedInTheme
      * @public
+     * @type Store|DataSource|DataSourceOptions|string|Array<any>
      */
-    dataSource?: Array<any> | Store | DataSource | DataSourceOptions | string;
+    dataSource?: DataSourceLike<any>;
     /**
      * @docid
      * @default 'arg'
@@ -780,6 +777,3 @@ export type Properties = dxRangeSelectorOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxRangeSelectorOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxRangeSelectorOptions;

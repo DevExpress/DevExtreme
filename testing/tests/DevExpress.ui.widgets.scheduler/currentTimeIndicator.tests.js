@@ -18,7 +18,7 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_work_week';
 import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
 
 QUnit.testStart(function() {
-    $('#qunit-fixture').html('</div><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space">');
+    $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space"></div></div>');
 });
 
 QUnit.module('DateTime indicator on Day View', {

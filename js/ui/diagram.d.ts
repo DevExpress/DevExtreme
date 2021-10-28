@@ -1,3 +1,5 @@
+import DataSource, { DataSourceLike } from '../data/data_source';
+
 import {
     DxElement,
 } from '../core/element';
@@ -5,12 +7,6 @@ import {
 import {
     template,
 } from '../core/templates/template';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
   EventInfo,
@@ -471,8 +467,9 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        * @default null
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: DataSourceLike<any>;
       /**
        * @docid
        * @default "from"
@@ -611,15 +608,15 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       autoSizeEnabled?: boolean;
       /**
        * @docid
-       * @default "children"
+       * @default "containerKey"
        */
-      containerChildrenExpr?: string | ((data: any, value?: any) => any);
+      containerKeyExpr?: string | ((data: any, value?: any) => any);
       /**
        * @docid
        * @default undefined
        */
-      containerKeyExpr?: string | ((data: any, value?: any) => any);
-      /**
+       containerChildrenExpr?: string | ((data: any, value?: any) => any);
+       /**
        * @docid
        * @default undefined
        */
@@ -627,8 +624,9 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        * @default null
+       * @type Store|DataSource|DataSourceOptions|string|Array<any>
        */
-      dataSource?: Array<any> | Store | DataSource | DataSourceOptions;
+      dataSource?: DataSourceLike<any>;
       /**
        * @docid
        * @default undefined
@@ -1120,6 +1118,18 @@ export default class dxDiagram extends Widget<dxDiagramOptions> {
      * @public
      */
     updateToolbox(): void;
+    /**
+     * @docid
+     * @publicName fitToContent()
+     * @public
+     */
+     fitToContent(): void;
+    /**
+     * @docid
+     * @publicName fitToWidth()
+     * @public
+     */
+     fitToWidth(): void;
 }
 
 /**
@@ -1594,6 +1604,3 @@ export type Properties = dxDiagramOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxDiagramOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxDiagramOptions;

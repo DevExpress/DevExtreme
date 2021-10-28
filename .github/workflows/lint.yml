@@ -60,6 +60,9 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
+    - name: Build
+      run: npm run build
+
     - name: Lint TS
       run: npm run lint-ts
 
@@ -88,7 +91,10 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
-    - name: Lint TS
+    - name: Build
+      run: npm run build
+
+    - name: Lint JS
       run: npm run lint-js
 
   CSS:

@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { SchedulerToolbar, viewFunction as ViewFunction, SchedulerToolbarBaseProps } from '../header';
 import { Toolbar } from '../../../toolbar/toolbar';
 import { ToolbarButtonGroupProps } from '../../../toolbar/toolbar_props';
+import * as themes from '../../../../../ui/themes';
 
 const HEADER_CLASS = 'dx-scheduler-header';
 const DATE_NAVIGATOR_CLASS = 'dx-scheduler-navigator';
@@ -166,6 +167,23 @@ describe('Scheduler Toolbar', () => {
           expect(toolbar.calendarVisible).toBe(false);
         });
       });
+
+      describe('Date Navigator', () => {
+        describe('Button styling mode', () => {
+          it('should use "text" styling mode in material theme', () => {
+            const spy = jest.spyOn(themes, 'isMaterial').mockReturnValue(true);
+
+            const toolbar = createToolbar();
+
+            const dateNavigator = toolbar.items[0];
+            const options = dateNavigator.options as ToolbarButtonGroupProps;
+
+            expect(options.stylingMode).toBe('text');
+
+            spy.mockRestore();
+          });
+        });
+      });
     });
 
     describe('Events', () => {
@@ -173,6 +191,22 @@ describe('Scheduler Toolbar', () => {
         it('should call onCurrentViewUpdate', () => {
           const mockCallback = jest.fn();
           const toolbar = createToolbar({ onCurrentViewUpdate: mockCallback });
+
+          const viewSwitcher = toolbar.items[1];
+          const options = viewSwitcher.options as ToolbarButtonGroupProps;
+          const view = { name: 'week' };
+          options.onItemClick!({ itemData: view } as any);
+
+          expect(mockCallback).toBeCalledTimes(1);
+          expect(mockCallback).toHaveBeenCalledWith(view.name);
+        });
+
+        it('should call onCurrentViewUpdate if useDropDownViewSwitcher=true', () => {
+          const mockCallback = jest.fn();
+          const toolbar = createToolbar({
+            onCurrentViewUpdate: mockCallback,
+            useDropDownViewSwitcher: true,
+          });
 
           const viewSwitcher = toolbar.items[1];
           const options = viewSwitcher.options as ToolbarButtonGroupProps;
@@ -218,6 +252,16 @@ describe('Scheduler Toolbar', () => {
 
           expect(toolbar.calendarVisible).toBe(true);
         });
+
+        it('should not throw an error after unknown button click', () => {
+          const toolbar = createToolbar();
+
+          const dateNavigator = toolbar.items[0];
+          const options = dateNavigator.options as ToolbarButtonGroupProps;
+          options.onItemClick!({ itemIndex: -1 } as any);
+
+          expect(() => toolbar.items).not.toThrow();
+        });
       });
     });
   });
@@ -244,25 +288,26 @@ describe('Scheduler Toolbar', () => {
           location: 'after',
         },
       ],
+      viewType: 'day',
       ...options,
     });
 
     describe('Getters', () => {
       describe('Step', () => {
         it('should return correct step for week view', () => {
-          const toolbar = createToolbar({ currentView: 'week' });
+          const toolbar = createToolbar({ viewType: 'week' });
 
           expect(toolbar.step).toBe('week');
         });
 
         it('should return correct step for week agenda view', () => {
-          const toolbar = createToolbar({ currentView: 'agenda' });
+          const toolbar = createToolbar({ viewType: 'agenda' });
 
           expect(toolbar.step).toBe('agenda');
         });
 
         it('should return correct step for week timelineMonth view', () => {
-          const toolbar = createToolbar({ currentView: 'timelineMonth' });
+          const toolbar = createToolbar({ viewType: 'timelineMonth' });
 
           expect(toolbar.step).toBe('month');
         });
@@ -281,7 +326,7 @@ describe('Scheduler Toolbar', () => {
 
         it('should retun next week of startViewDate if view is month', () => {
           const toolbar = createToolbar({
-            currentView: 'month',
+            viewType: 'month',
             startViewDate: new Date(2021, 5, 10),
           });
 
@@ -302,7 +347,7 @@ describe('Scheduler Toolbar', () => {
         });
 
         it('should return correct caption for week view', () => {
-          const toolbar = createToolbar({ currentView: 'week' });
+          const toolbar = createToolbar({ viewType: 'week' });
 
           expect(toolbar.caption).toEqual({
             startDate: new Date(2021, 7, 1),
@@ -312,7 +357,7 @@ describe('Scheduler Toolbar', () => {
         });
 
         it('should return correct caption for agenda view', () => {
-          const toolbar = createToolbar({ currentView: 'agenda' });
+          const toolbar = createToolbar({ viewType: 'agenda' });
 
           expect(toolbar.caption).toEqual({
             startDate: new Date(2021, 7, 7),
@@ -472,6 +517,16 @@ describe('Scheduler Toolbar', () => {
           const toolbar = createToolbar({ items });
 
           expect(toolbar.items).toEqual(items);
+        });
+
+        it('schould throw an error if defualtElement is unknown', () => {
+          const items = [{
+            defaultElement: 'unknownElement',
+          }];
+
+          const toolbar = createToolbar({ items });
+
+          expect(() => toolbar.items).toThrow();
         });
       });
     });

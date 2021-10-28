@@ -5,6 +5,8 @@ import Popup from '../../popup';
 import Form from '../../form';
 import { Deferred } from '../../../core/utils/deferred';
 import localizationMessage from '../../../localization/message';
+import { getCurrentScreenFactor, hasWindow } from '../../../core/utils/window';
+import devices from '../../../core/devices';
 
 const DIALOG_CLASS = 'dx-formdialog';
 const FORM_CLASS = 'dx-formdialog-form';
@@ -48,6 +50,11 @@ class FormDialog {
         e.component.registerKeyHandler('escape', this._escKeyHandler.bind(this));
     }
 
+    _isSmallScreen() {
+        const screenFactor = hasWindow() ? getCurrentScreenFactor() : null;
+        return devices.real().deviceType === 'phone' || screenFactor === 'xs';
+    }
+
     _getPopupConfig() {
         return extend({
             onInitialized: (e) => {
@@ -59,6 +66,7 @@ class FormDialog {
             focusStateEnabled: false,
             showCloseButton: false,
             wrapperAttr: { class: 'dx-formdialog' },
+            fullScreen: this._isSmallScreen(),
             contentTemplate: (contentElem) => {
                 const $formContainer = $('<div>').appendTo(contentElem);
 

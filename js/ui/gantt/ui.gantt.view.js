@@ -81,15 +81,7 @@ export class GanttView extends Widget {
         this._ganttViewCore.selectTaskById(id);
     }
     _update(keepExpandState) {
-        const core = this._ganttViewCore;
-        const state = keepExpandState && core.getTasksExpandedState();
-        core.loadOptionsFromGanttOwner();
-
-        if(keepExpandState) {
-            core.applyTasksExpandedState(state);
-        } else {
-            core.resetAndUpdate();
-        }
+        this._ganttViewCore?.updateWithDataReload(keepExpandState);
     }
 
     _getCultureInfo() {
@@ -162,8 +154,8 @@ export class GanttView extends Widget {
 
     _parseViewTypeRangeSettings(value) {
         return {
-            start: this._getViewTypeByScaleType(value.start),
-            end: this._getViewTypeByScaleType(value.end)
+            min: this._getViewTypeByScaleType(value.min),
+            max: this._getViewTypeByScaleType(value.max)
         };
     }
 
@@ -221,7 +213,7 @@ export class GanttView extends Widget {
                 this._ganttViewCore.setViewType(this._getViewTypeByScaleType(args.value));
                 break;
             case 'scaleTypeRange':
-                this._ganttViewCore.setViewTypeRange(this._getViewTypeByScaleType(args.value.start), this._getViewTypeByScaleType(args.value.end));
+                this._ganttViewCore.setViewTypeRange(this._getViewTypeByScaleType(args.value.min), this._getViewTypeByScaleType(args.value.max));
                 break;
             case 'stripLines':
                 this._ganttViewCore.setStripLines({ stripLines: args.value });

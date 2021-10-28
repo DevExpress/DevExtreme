@@ -648,6 +648,31 @@ QUnit.module('Rows view', {
         assert.equal(getNormalizeMarkup(cells.eq(1)), '11', 'cell 1');
         assert.equal(getNormalizeMarkup(cells.eq(2)), '1/01/2001', 'cell 2');
     });
+
+    QUnit.test('Highlight searchText for non-first text node if encodeHtml is false (T1037909)', function(assert) {
+        this.items = [
+            { data: { name: 'test1a<br>test1b' }, values: ['test1a<br>test1b'], rowType: 'data', dataIndex: 0 },
+            { data: { name: 'test2' }, values: ['test2'], rowType: 'data', dataIndex: 1 },
+            { data: { name: 'test3' }, values: ['test3'], rowType: 'data', dataIndex: 2 }
+        ];
+        const columns = [
+            { allowFiltering: true, dataType: 'string', encodeHtml: false }
+        ];
+        const dataController = new MockDataController({ items: this.items });
+        const rowsView = this.createRowsView(this.items, dataController, columns);
+        const $testElement = $('#container');
+        const searchTextClass = 'dx-datagrid-search-text';
+
+        // act
+        this.options.searchPanel = { highlightSearchText: true, text: '1b' };
+
+        rowsView.render($testElement);
+        const cells = $testElement.find('td');
+
+        // assert
+        assert.equal(getNormalizeMarkup(cells.eq(0)), 'test1a<br>test<span class=' + searchTextClass + '>1b</span>', 'cell 0');
+    });
+
     function getNormalizeMarkup($element) {
         const quoteRE = new RegExp('"', 'g');
         const spanRE = new RegExp('span', 'gi');
@@ -698,6 +723,35 @@ QUnit.module('Rows view', {
         };
 
         this.options.rowTemplate = function(container, options) {
+            const data = options.data;
+
+            $(container).append('<tr class=\'dx-row\'><td>' + data.name + '</td><td>' + data.id + '</td></tr>');
+        };
+
+        // act
+        rowsView.render(testElement);
+        const cells = testElement.find('td');
+
+        // assert
+        assert.equal(getNormalizeMarkup(cells.eq(0)), 'test<span class=' + searchTextClass + '>1</span>', 'cell 1');
+        assert.equal(getNormalizeMarkup(cells.eq(1)), '<span class=' + searchTextClass + '>1</span>', 'cell 2');
+    });
+
+    // T103538
+    QUnit.test('Highlight searchText with dataRowTemplate', function(assert) {
+        // arrange
+        const columns = [{ allowFiltering: true, dataType: 'string' }, { allowFiltering: true, dataType: 'number' }, { allowFiltering: true, dataType: 'date' }];
+        const dataController = new MockDataController({ items: this.items });
+        const rowsView = this.createRowsView(this.items, dataController, columns);
+        const testElement = $('#container');
+        const searchTextClass = 'dx-datagrid-search-text';
+
+        this.options.searchPanel = {
+            highlightSearchText: true,
+            text: '1'
+        };
+
+        this.options.dataRowTemplate = function(container, options) {
             const data = options.data;
 
             $(container).append('<tr class=\'dx-row\'><td>' + data.name + '</td><td>' + data.id + '</td></tr>');

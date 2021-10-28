@@ -4,8 +4,8 @@ import {
   Template,
   JSXTemplate,
 } from '@devextreme-generator/declarations';
-import { GroupedViewData, DataCellTemplateProps } from '../types.d';
-import { GroupOrientation } from '../../types.d';
+import { GroupedViewData, DataCellTemplateProps } from '../types';
+import { GroupOrientation } from '../../types';
 
 @ComponentBindings()
 export class LayoutProps {
@@ -28,6 +28,10 @@ export class LayoutProps {
   @OneWay() bottomVirtualRowHeight = 0;
 
   @OneWay() addDateTableClass = true;
+
+  @OneWay() addVerticalSizesClassToRows = true;
+
+  @OneWay() width?: number;
 
   @Template() dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }

@@ -2,7 +2,6 @@ import { extend } from '../../core/utils/extend';
 import errors from '../widget/ui.errors';
 import { deepExtendArraySafe } from '../../core/utils/object';
 import { getRecurrenceProcessor } from './recurrence';
-import { getTimeZoneCalculator } from './instanceFactory';
 import { ExpressionUtils } from './expressionUtils';
 
 const PROPERTY_NAMES = {
@@ -18,9 +17,10 @@ const PROPERTY_NAMES = {
     disabled: 'disabled'
 };
 class AppointmentAdapter {
-    constructor(key, rawAppointment, options) {
-        this.key = key;
+    constructor(rawAppointment, dataAccessors, timeZoneCalculator, options) {
         this.rawAppointment = rawAppointment;
+        this.dataAccessors = dataAccessors;
+        this.timeZoneCalculator = timeZoneCalculator;
         this.options = options;
     }
 
@@ -98,20 +98,25 @@ class AppointmentAdapter {
         return !!this.getField(PROPERTY_NAMES.disabled);
     }
 
-    get timeZoneCalculator() {
-        return getTimeZoneCalculator(this.key);
-    }
-
     get isRecurrent() {
         return getRecurrenceProcessor().isValidRecurrenceRule(this.recurrenceRule);
     }
 
     getField(property) {
-        return ExpressionUtils.getField(this.key, property, this.rawAppointment);
+        return ExpressionUtils.getField(
+            this.dataAccessors,
+            property,
+            this.rawAppointment
+        );
     }
 
     setField(property, value) {
-        return ExpressionUtils.setField(this.key, property, this.rawAppointment, value);
+        return ExpressionUtils.setField(
+            this.dataAccessors,
+            property,
+            this.rawAppointment,
+            value
+        );
     }
 
     calculateStartDate(pathTimeZoneConversion) {
@@ -139,8 +144,9 @@ class AppointmentAdapter {
 
     clone(options = undefined) {
         const result = new AppointmentAdapter(
-            this.key,
             deepExtendArraySafe({}, this.rawAppointment),
+            this.dataAccessors,
+            this.timeZoneCalculator,
             options
         );
 
@@ -168,6 +174,6 @@ class AppointmentAdapter {
 
 export default AppointmentAdapter;
 
-export const createAppointmentAdapter = (key, rawAppointment, options) => {
-    return new AppointmentAdapter(key, rawAppointment, options);
+export const createAppointmentAdapter = (rawAppointment, dataAccessors, timeZoneCalculator, options) => {
+    return new AppointmentAdapter(rawAppointment, dataAccessors, timeZoneCalculator, options);
 };

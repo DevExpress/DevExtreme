@@ -290,7 +290,7 @@ export const masterDetailModule = {
                     },
 
                     _createRow: function(row) {
-                        const $row = this.callBase(row);
+                        const $row = this.callBase.apply(this, arguments);
 
                         if(row && this._isDetailRow(row)) {
                             this.option('showRowLines') && $row.addClass(ROW_LINES_CLASS);

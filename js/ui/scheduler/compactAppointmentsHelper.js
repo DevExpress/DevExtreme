@@ -9,6 +9,7 @@ import { getBoundingRect } from '../../core/utils/position';
 import { AppointmentTooltipInfo } from './dataStructures';
 import { LIST_ITEM_DATA_KEY, LIST_ITEM_CLASS } from './constants';
 import { createAppointmentAdapter } from './appointmentAdapter';
+import { getTimeZoneCalculator } from './instanceFactory';
 
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
@@ -51,7 +52,11 @@ export class CompactAppointmentsHelper {
 
     _createTooltipInfos(items) {
         return items.data.map((appointment, index) => {
-            const targetedAdapter = createAppointmentAdapter(this.key, appointment).clone();
+            const targetedAdapter = createAppointmentAdapter(
+                appointment,
+                this.instance._dataAccessors,
+                getTimeZoneCalculator(this.key)
+            ).clone();
 
             if(items.settings?.length > 0) {
                 const { info } = items.settings[index];
@@ -76,6 +81,7 @@ export class CompactAppointmentsHelper {
         return {
             clickEvent: this._clickEvent(options.onAppointmentClick).bind(this),
             dragBehavior: options.allowDrag && this._createTooltipDragBehavior($appointmentCollector).bind(this),
+            dropDownAppointmentTemplate: this.instance.option().dropDownAppointmentTemplate, // TODO deprecated option
             isButtonClick: true
         };
     }
@@ -178,14 +184,13 @@ export class CompactAppointmentsHelper {
         });
     }
 
-    _createCompactButtonElement({ isCompact, $container, width, coordinates, applyOffset, cellWidth }) {
+    _createCompactButtonElement({ isCompact, $container, coordinates }) {
         const result = $('<div>')
             .addClass(APPOINTMENT_COLLECTOR_CLASS)
             .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
             .appendTo($container);
 
-        const offset = applyOffset ? this._getCollectorOffset(width, cellWidth) : 0;
-        this._setPosition(result, { top: coordinates.top, left: coordinates.left + offset });
+        this._setPosition(result, coordinates);
 
         return result;
     }

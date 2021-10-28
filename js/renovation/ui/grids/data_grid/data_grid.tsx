@@ -10,7 +10,7 @@ import {
 import '../../../../ui/data_grid/ui.data_grid';
 
 import { Widget } from '../../common/widget';
-import { DataGridComponent } from './datagrid_component';
+import { DataGridComponent } from '../../../component_wrapper/data_grid/datagrid_component';
 import { DataGridViews } from './data_grid_views';
 import { GridInstance, DataGridForComponentWrapper } from './common/types';
 import { getUpdatedOptions } from '../../common/utils/get_updated_options';
@@ -18,7 +18,7 @@ import { DxPromise } from '../../../../core/utils/deferred'; // eslint-disable-l
 import { hasWindow } from '../../../../core/utils/window';
 import { UserDefinedElement, UserDefinedElementsArray } from '../../../../core/element'; // eslint-disable-line import/named
 import DataGridBaseComponent from '../../../component_wrapper/data_grid';
-import { DisposeEffectReturn } from '../../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../../utils/effect_return';
 import type { OptionChangedEvent } from '../../../../ui/data_grid';
 
 const aria = { role: 'presentation' };
@@ -461,7 +461,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  getVisibleRows(): any /* dxDataGridRowObject[] */ {
+  getVisibleRows(): any /* Row[] */ {
     return this.instance?.getVisibleRows();
   }
 

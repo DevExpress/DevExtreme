@@ -211,6 +211,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
      * @docid
      * @default null
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxPieChart
      * @type_function_param1_field2 element:DxElement
@@ -880,6 +881,3 @@ export type Properties = dxPieChartOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxPieChartOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxPieChartOptions;

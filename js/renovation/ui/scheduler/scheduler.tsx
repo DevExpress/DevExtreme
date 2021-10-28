@@ -4,9 +4,11 @@ import {
   Effect,
   InternalState,
   JSXComponent,
+  JSXTemplate,
   Method,
 } from '@devextreme-generator/declarations';
-import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { TimeZoneCalculator } from './timeZoneCalculator/utils';
+import { DisposeEffectReturn } from '../../utils/effect_return';
 // eslint-disable-next-line import/named
 import dxScheduler, { Appointment } from '../../../ui/scheduler';
 import { ViewProps, SchedulerProps } from './props';
@@ -14,18 +16,32 @@ import { ViewProps, SchedulerProps } from './props';
 import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
+import type { Options as DataSourceOptions } from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import {
-  CellsMetaData, Group, ViewDataProviderType, ViewMetaData,
+  CellsMetaData,
+  DataCellTemplateProps,
+  DateTimeCellTemplateProps,
+  Group,
+  ResourceCellTemplateProps,
+  ViewDataProviderType,
+  ViewMetaData,
 } from './workspaces/types';
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import { createFactoryInstances, generateKey } from '../../../ui/scheduler/instanceFactory';
-import { DataAccessorType } from './types';
-import { createDataAccessors } from './common';
-import { loadResources } from '../../../ui/scheduler/resources/utils';
+import type { DataAccessorType, DataSourcePromise } from './types';
+import {
+  createDataAccessors, createTimeZoneCalculator, filterAppointments,
+} from './common';
+import { getGroupCount, loadResources } from '../../../ui/scheduler/resources/utils';
+import { getAppointmentsViewModel } from './view_model/appointments/appointments';
+import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
+import { AppointmentsViewModelType } from './appointment/types';
+import { AppointmentLayout } from './appointment/layout';
+import { AppointmentsConfigType } from './model/types';
+import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
 
 export const viewFunction = ({
   restAttributes,
@@ -35,6 +51,14 @@ export const viewFunction = ({
   setCurrentDate,
   setCurrentView,
   startViewDate,
+  appointmentsViewModel,
+  workSpaceKey,
+
+  dataCellTemplate,
+  dateCellTemplate,
+  timeCellTemplate,
+  resourceCellTemplate,
+
   props: {
     accessKey,
     activeStateEnabled,
@@ -54,6 +78,7 @@ export const viewFunction = ({
     customizeDateNavigatorText,
     min,
     max,
+    focusStateEnabled,
   },
 }: Scheduler): JSX.Element => {
   const {
@@ -81,11 +106,11 @@ export const viewFunction = ({
   } = currentViewConfig;
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
-      classes="dx-scheduler"
+      classes="dx-scheduler dx-scheduler-native"
       accessKey={accessKey}
       activeStateEnabled={activeStateEnabled}
       disabled={disabled}
-      focusStateEnabled={false}// TODO: waiting for a toolbar wrapper rerender fix
+      focusStateEnabled={focusStateEnabled}
       height={height}
       hint={hint}
       hoverStateEnabled={hoverStateEnabled}
@@ -114,6 +139,7 @@ export const viewFunction = ({
             firstDayOfWeek={firstDayOfWeek}
             useDropDownViewSwitcher={useDropDownViewSwitcher}
             customizationFunction={customizeDateNavigatorText}
+            viewType={type}
           />
         )}
         <WorkSpace
@@ -141,8 +167,26 @@ export const viewFunction = ({
           allDayPanelExpanded={allDayPanelExpanded}
           onViewRendered={onViewRendered}
 
-          appointments={<div className="appointments" />} // Appointments go here
-          allDayAppointments={<div className="all-day-appointments" />}
+          dataCellTemplate={dataCellTemplate}
+          timeCellTemplate={timeCellTemplate}
+          dateCellTemplate={dateCellTemplate}
+          resourceCellTemplate={resourceCellTemplate}
+
+          allDayAppointments={(
+            <AppointmentLayout
+              appointments={appointmentsViewModel.allDay}
+              overflowIndicators={appointmentsViewModel.allDayCompact}
+            />
+          )}
+
+          appointments={(
+            <AppointmentLayout
+              appointments={appointmentsViewModel.regular}
+              overflowIndicators={appointmentsViewModel.regularCompact}
+            />
+          )}
+
+          key={workSpaceKey}
         />
       </div>
     </Widget>
@@ -160,11 +204,11 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() cellsMetaData!: CellsMetaData;
 
-  @InternalState() key = generateKey();
-
   @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
 
   @InternalState() loadedResources: Group[] = [];
+
+  @InternalState() dataItems: Appointment[] = [];
 
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
@@ -182,13 +226,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get startViewDate(): Date {
-    const type = this.props.currentView;
     const {
       currentDate,
       startDayHour,
       startDate,
       intervalCount,
       firstDayOfWeek,
+      type,
     } = this.currentViewConfig;
 
     const options = {
@@ -208,6 +252,117 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   get isVirtualScrolling(): boolean {
     return this.props.scrolling.mode === 'virtual'
       || this.currentViewProps.scrolling?.mode === 'virtual';
+  }
+
+  get timeZoneCalculator(): TimeZoneCalculator {
+    return createTimeZoneCalculator(this.props.timeZone);
+  }
+
+  get internalDataSource(): DataSource { // TODO make helper function
+    if (this.props.dataSource instanceof DataSource) {
+      return this.props.dataSource;
+    }
+
+    if (this.props.dataSource instanceof Array) {
+      return new DataSource({
+        store: {
+          type: 'array',
+          data: this.props.dataSource,
+        },
+        paginate: false,
+      } as DataSourceOptions);
+    }
+
+    return new DataSource(this.props.dataSource as DataSourceOptions);
+  }
+
+  get appointmentsConfig(): AppointmentsConfigType | undefined {
+    if (!this.viewDataProvider || !this.cellsMetaData) {
+      return undefined;
+    }
+
+    const renderConfig = getViewRenderConfigByType(
+      this.currentViewConfig.type,
+      this.currentViewConfig.crossScrollingEnabled,
+      this.currentViewConfig.intervalCount,
+      this.loadedResources,
+      this.currentViewConfig.groupOrientation,
+    );
+
+    return getAppointmentsConfig(
+      this.props, // TODO extract props for performace
+      this.currentViewConfig, // TODO extract props for performace
+      this.loadedResources,
+      this.viewDataProvider,
+      renderConfig.isAllDayPanelSupported,
+    );
+  }
+
+  get filteredItems(): Appointment[] {
+    return filterAppointments(
+      this.appointmentsConfig,
+      this.dataItems,
+      this.dataAccessors,
+      this.timeZoneCalculator,
+      this.loadedResources,
+      this.viewDataProvider,
+    );
+  }
+
+  get appointmentsViewModel(): AppointmentsViewModelType {
+    if (!this.appointmentsConfig || this.filteredItems.length === 0) {
+      return {
+        allDay: [],
+        allDayCompact: [],
+        regular: [],
+        regularCompact: [],
+      };
+    }
+
+    const model = getAppointmentsModel(
+      this.appointmentsConfig,
+      this.viewDataProvider,
+      this.timeZoneCalculator,
+      this.dataAccessors,
+      this.cellsMetaData,
+    );
+
+    return getAppointmentsViewModel(
+      model,
+      this.filteredItems,
+    );
+  }
+
+  // TODO: This is a WA because we need to clean workspace completely to set table sizes correctly
+  // We need to remove this after we refactor crossScrolling to set table sizes through CSS, not JS
+  get workSpaceKey(): string {
+    const { currentView, crossScrollingEnabled } = this.props;
+    const { groupOrientation, intervalCount } = this.currentViewConfig;
+
+    if (!crossScrollingEnabled) {
+      return '';
+    }
+
+    const groupCount = getGroupCount(this.loadedResources);
+
+    return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
+  }
+
+  // TODO: 4 getters below are a WA for Vue generator
+  get dataCellTemplate(): JSXTemplate<DataCellTemplateProps> | undefined {
+    return this.currentViewConfig.dataCellTemplate;
+  }
+
+  get dateCellTemplate(): JSXTemplate<DateTimeCellTemplateProps> | undefined {
+    return this.currentViewConfig.dateCellTemplate;
+  }
+
+  get timeCellTemplate(): JSXTemplate<DateTimeCellTemplateProps> | undefined {
+    return this.currentViewConfig.timeCellTemplate;
+  }
+
+  get resourceCellTemplate(): JSXTemplate<ResourceCellTemplateProps> | undefined {
+    return this.currentViewConfig.resourceCellTemplate;
   }
 
   @Method()
@@ -284,23 +439,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return () => { this.instance.dispose(); };
   }
 
-  @Effect({ run: 'once' })
-  initialization(): void {
-    createFactoryInstances({
-      key: this.key,
-      resources: this.props.resources,
-      dataSource: this.props.dataSource,
-      startDayHour: this.currentViewConfig.startDayHour,
-      endDayHour: this.currentViewConfig.endDayHour,
-      appointmentDuration: this.currentViewConfig.cellDuration,
-      firstDayOfWeek: this.currentViewConfig.firstDayOfWeek,
-      showAllDayPanel: this.props.showAllDayPanel,
-      timeZone: this.props.timeZone,
-      getIsVirtualScrolling: () => this.isVirtualScrolling,
-      getDataAccessors: (): DataAccessorType => this.dataAccessors,
-    });
-  }
-
   @Effect()
   loadGroupResources(): void {
     const { groups, resources } = this.props;
@@ -310,6 +448,16 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       .then((loadedResources) => {
         this.loadedResources = loadedResources;
       });
+  }
+
+  @Effect()
+  loadDataSource(): void {
+    if (!this.internalDataSource.isLoaded() && !this.internalDataSource.isLoading()) {
+      (this.internalDataSource.load() as DataSourcePromise)
+        .done((items: Appointment[]) => {
+          this.dataItems = items;
+        });
+    }
   }
 
   onViewRendered(viewMetaData: ViewMetaData): void {

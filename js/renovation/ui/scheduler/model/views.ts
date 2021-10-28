@@ -1,7 +1,7 @@
-import dateUtils from '../../../../core/utils/date';
+// import dateUtils from '../../../../core/utils/date';
 import { isObject, isString } from '../../../../core/utils/type';
 import { SchedulerProps, ViewProps } from '../props';
-import { ViewType } from '../types.d';
+import { ViewType } from '../types';
 import { CurrentViewConfigType } from '../workspaces/props';
 
 const VIEW_TYPES = [
@@ -72,6 +72,10 @@ export const getCurrentViewConfig = (
     startDate,
     type,
     scrolling,
+    dataCellTemplate,
+    timeCellTemplate,
+    resourceCellTemplate,
+    dateCellTemplate,
   } = currentViewProps;
 
   const isVirtualScrolling = schedulerScrolling.mode === 'virtual'
@@ -86,7 +90,16 @@ export const getCurrentViewConfig = (
     cellDuration: getViewConfigProp(schedulerProps.cellDuration, cellDuration),
     groupByDate: getViewConfigProp(schedulerProps.groupByDate, groupByDate),
     scrolling: getViewConfigProp(schedulerScrolling, scrolling),
-    currentDate: dateUtils.trimTime(new Date(schedulerProps.currentDate)),
+
+    dataCellTemplate: getViewConfigProp(schedulerProps.dataCellTemplate, dataCellTemplate),
+    timeCellTemplate: getViewConfigProp(schedulerProps.timeCellTemplate, timeCellTemplate),
+    resourceCellTemplate: getViewConfigProp(
+      schedulerProps.resourceCellTemplate, resourceCellTemplate,
+    ),
+    dateCellTemplate: getViewConfigProp(schedulerProps.dateCellTemplate, dateCellTemplate),
+
+    // currentDate: dateUtils.trimTime(new Date(schedulerProps.currentDate)), // TODO
+    currentDate: schedulerProps.currentDate,
     intervalCount,
     groupOrientation,
     startDate,
@@ -103,15 +116,11 @@ export const getCurrentViewConfig = (
     accessKey: schedulerProps.accessKey,
     focusStateEnabled: schedulerProps.focusStateEnabled,
 
-    indicatorTime: new Date(), // TODO
+    // indicatorTime: new Date(), // TODO
     allowMultipleCellSelection: true, // TODO
-    allDayPanelExpanded: false, // TODO
+    allDayPanelExpanded: true, // TODO
 
     // noDataText: this.props.noDataText, // TODO: necessary for agenda
-    // dataCellTemplate: this.props.dataCellTemplate, // TODO
-    // timeCellTemplate: this.props.timeCellTemplate, // TODO
-    // resourceCellTemplate: this.props.resourceCellTemplate, // TODO
-    // dateCellTemplate: this.props.dateCellTemplate,
     // selectedCellData: this.props.selectedCellData,
     // onSelectionChanged: (args) => { TODO
     //   this.option('selectedCellData', args.selectedCellData);
@@ -128,6 +137,6 @@ export const getCurrentViewConfig = (
   return {
     ...result,
     hoursInterval: result.cellDuration / 60,
-    selectedCellData: [], // TODO
+    // selectedCellData: [], // TODO
   } as CurrentViewConfigType;
 };

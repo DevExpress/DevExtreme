@@ -116,6 +116,3 @@ export type Properties = dxSlideOutViewOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxSlideOutViewOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxSlideOutViewOptions;

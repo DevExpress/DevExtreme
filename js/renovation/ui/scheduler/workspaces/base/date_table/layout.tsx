@@ -19,6 +19,8 @@ export const viewFunction = ({
     cellTemplate,
     dataCellTemplate,
     tableRef,
+    addVerticalSizesClassToRows,
+    width,
   },
   topVirtualRowHeight,
   bottomVirtualRowHeight,
@@ -40,6 +42,7 @@ export const viewFunction = ({
     rightVirtualCellCount={viewData.rightVirtualCellCount}
     virtualCellsCount={virtualCellsCount}
     className={classes}
+    width={width}
   >
     <DateTableBody
       cellTemplate={cellTemplate}
@@ -48,6 +51,7 @@ export const viewFunction = ({
       leftVirtualCellWidth={leftVirtualCellWidth}
       rightVirtualCellWidth={rightVirtualCellWidth}
       groupOrientation={groupOrientation}
+      addVerticalSizesClassToRows={addVerticalSizesClassToRows}
     />
   </Table>
 );

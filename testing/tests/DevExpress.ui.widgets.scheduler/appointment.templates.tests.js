@@ -38,11 +38,9 @@ const createInstance = (options, clock) => {
 module('Integration: Appointment templates', {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 }, () => {
     let eventCallCount = 0;
@@ -67,10 +65,14 @@ module('Integration: Appointment templates', {
         return (model, index, container) => {
             const { appointmentData, targetedAppointmentData } = model;
 
+            const newTargetedAppointmentData = { ...targetedAppointmentData };
+            delete newTargetedAppointmentData.displayStartDate;
+            delete newTargetedAppointmentData.displayEndDate;
+
             if(!skipCallCount) {
                 assert.equal(index, eventCallCount, 'index argument should be equal current index of appointment');
             }
-            assert.deepEqual(appointmentData, targetedAppointmentData, 'appointmentData and targetedAppointmentData should be equivalents');
+            assert.deepEqual(appointmentData, newTargetedAppointmentData, 'appointmentData and targetedAppointmentData should be equivalents');
 
             eventCallCount++;
         };

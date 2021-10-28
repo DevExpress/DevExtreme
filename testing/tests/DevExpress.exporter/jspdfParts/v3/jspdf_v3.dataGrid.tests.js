@@ -2,6 +2,7 @@ import $ from 'jquery';
 import { jsPDF } from 'jspdf';
 
 import { isFunction, isObject, isDefined } from 'core/utils/type';
+import { extend } from 'core/utils//extend';
 
 import 'ui/data_grid';
 import { exportDataGrid } from 'exporter/jspdf/v3/export_data_grid_3';
@@ -18,6 +19,7 @@ import { JSPdfVerticalAlignTests } from './jspdf_v3.dataGrid.verticalAlign.tests
 import { JSPdfHorizontalAlignTests } from './jspdf_v3.dataGrid.horizontalAlign.tests.js';
 import { JSPdfPageMarginsTests } from './jspdf_v3.dataGrid.pageMargin.tests.js';
 import { JSPdfColumnWidthsTests } from './jspdf_v3.dataGrid.columnAutoWidth.tests.js';
+import { JSPdfCustomDrawCellTests } from './jspdf_v3.dataGrid.customDrawCell.tests.js';
 
 import 'generic_light.css!';
 
@@ -55,9 +57,10 @@ function argumentsToString() {
     return items.toString();
 }
 
-function createMockPdfDoc() {
+function createMockPdfDoc(options) {
     const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
-    const result = _jsPDF({ unit: 'pt' });
+    const pdfOptions = extend(options || {}, { unit: 'pt' });
+    const result = _jsPDF(pdfOptions);
     result.__log = [];
 
     result.__logOptions = { textOptions: {} };
@@ -1268,3 +1271,4 @@ JSPdfVerticalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid)
 JSPdfHorizontalAlignTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfColumnWidthsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
 JSPdfPageMarginsTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);
+JSPdfCustomDrawCellTests.runTests(moduleConfig, createMockPdfDoc, createDataGrid);

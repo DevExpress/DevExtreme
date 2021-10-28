@@ -94,6 +94,3 @@ export type Properties = dxCheckBoxOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxCheckBoxOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxCheckBoxOptions;

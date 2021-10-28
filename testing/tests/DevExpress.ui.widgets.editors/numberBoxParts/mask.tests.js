@@ -2061,7 +2061,7 @@ QUnit.module('format: custom parser and formatter', moduleConfig, () => {
     QUnit.test('editor should not try to create a related LDML pattern for custom formatter and parser', function(assert) {
         let counter = 0;
         this.instance.option({
-            value: null,
+            value: 1,
             format: {
                 formatter: (val) => {
                     counter++;

@@ -1025,6 +1025,22 @@ module('View Data Provider', {
                 });
             });
         });
+
+        module('createGroupedDataMapProvider', () => {
+            test('it should create groupedDataMapProvider', function(assert) {
+                const viewDataProvider = new ViewDataProvider('day');
+
+                viewDataProvider.completeViewDataMap = testViewDataMap.verticalGrouping;
+
+                viewDataProvider.viewDataMap = viewDataProvider.viewDataGenerator
+                    .generateViewDataMap(testViewDataMap.verticalGrouping, verticalGroupingRenderOptions);
+                viewDataProvider.setViewOptions(verticalGroupingRenderOptions);
+
+                viewDataProvider.createGroupedDataMapProvider();
+
+                assert.ok(viewDataProvider.groupedDataMap, 'GroupedDataMap was created');
+            });
+        });
     });
 
     function createCellInfo(groupIndex, startDate, isAllDay, index) {

@@ -1,3 +1,5 @@
+import { Skip } from '../core';
+import { DataSourceLike } from '../data/data_source';
 import {
     DxElement,
 } from '../core/element';
@@ -5,12 +7,6 @@ import {
 import {
     DxPromise,
 } from '../core/utils/deferred';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     EventInfo,
@@ -44,8 +40,8 @@ export type InitializedEvent = InitializedEventInfo<dxTreeView>;
 export type ItemClickEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-    readonly itemIndex?: number | any;
-    readonly node?: dxTreeViewNode;
+    readonly itemIndex?: number;
+    readonly node?: Node;
 };
 
 /** @public */
@@ -53,15 +49,15 @@ export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
-    readonly node?: dxTreeViewNode;
+    readonly node?: Node;
 };
 
 /** @public */
 export type ItemContextMenuEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
-    readonly itemIndex?: number | any;
-    readonly node?: dxTreeViewNode;
+    readonly itemIndex?: number;
+    readonly node?: Node;
 };
 
 /** @public */
@@ -69,7 +65,7 @@ export type ItemExpandedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
-    readonly node?: dxTreeViewNode;
+    readonly node?: Node;
 };
 
 /** @public */
@@ -77,7 +73,7 @@ export type ItemHoldEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
-    readonly node?: dxTreeViewNode;
+    readonly node?: Node;
 };
 
 /** @public */
@@ -85,12 +81,12 @@ export type ItemRenderedEvent = NativeEventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
-    readonly node?: dxTreeViewNode;
+    readonly node?: Node;
 };
 
 /** @public */
 export type ItemSelectionChangedEvent = EventInfo<dxTreeView> & {
-    readonly node?: dxTreeViewNode;
+    readonly node?: Node;
     readonly itemElement?: DxElement;
     readonly itemData?: any;
     readonly itemIndex?: number;
@@ -111,7 +107,7 @@ export type SelectionChangedEvent = EventInfo<dxTreeView>;
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
  */
-export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions {
+export interface dxTreeViewOptions extends Skip<HierarchicalCollectionWidgetOptions<dxTreeView>, 'dataSource'>, SearchBoxMixinOptions {
     /**
      * @docid
      * @default true
@@ -120,17 +116,18 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     animationEnabled?: boolean;
     /**
      * @docid
+     * @type_function_param1 parentNode:dxTreeViewNode
      * @type_function_return Promise<any>|Array<Object>
      * @public
      */
-    createChildren?: ((parentNode: dxTreeViewNode) => PromiseLike<any> | Array<any>);
+    createChildren?: ((parentNode: Node) => PromiseLike<any> | Array<any>);
     /**
      * @docid
      * @type string | Array<dxTreeViewItem> | Store | DataSource | DataSourceOptions
      * @default null
      * @public
      */
-    dataSource?: string | Array<Item> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<Item>;
     /**
      * @docid
      * @type Enums.TreeViewDataStructure
@@ -182,7 +179,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number | object
+     * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
@@ -214,7 +211,7 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:DxElement
-     * @type_function_param1_field6 itemIndex:number | object
+     * @type_function_param1_field6 itemIndex:number
      * @type_function_param1_field7 event:event
      * @type_function_param1_field8 node:dxTreeViewNode
      * @type_function_param1_field1 component:dxTreeView
@@ -443,14 +440,16 @@ export default class dxTreeView extends HierarchicalCollectionWidget<dxTreeViewO
      * @docid
      * @publicName getNodes()
      * @public
+     * @return Array<dxTreeViewNode>
      */
-    getNodes(): Array<dxTreeViewNode>;
+    getNodes(): Array<Node>;
     /**
      * @docid
      * @publicName getSelectedNodes()
      * @public
+     * @return Array<dxTreeViewNode>
      */
-    getSelectedNodes(): Array<dxTreeViewNode>;
+    getSelectedNodes(): Array<Node>;
     /**
      * @docid
      * @publicName getSelectedNodeKeys()
@@ -592,8 +591,12 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
     selected?: boolean;
 }
 
+/** @public */
+export type Node = dxTreeViewNode;
+
 /**
  * @docid
+ * @deprecated {ui/tree_view.Node}
  * @type object
  * @namespace DevExpress.ui
  */
@@ -645,6 +648,3 @@ export type Properties = dxTreeViewOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxTreeViewOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxTreeViewOptions;

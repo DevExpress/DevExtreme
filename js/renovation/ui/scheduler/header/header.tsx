@@ -26,7 +26,7 @@ import type { DateNavigatorTextInfo } from '../../../../ui/scheduler';
 import {
   ItemOptions, Direction, ItemView,
 } from './types';
-import { ViewType } from '../types.d';
+import { ViewType } from '../types';
 
 import { SchedulerProps, ViewProps } from '../props';
 import { SchedulerToolbarItem } from './props';
@@ -86,6 +86,8 @@ export class SchedulerToolbarBaseProps {
   @OneWay() useShortDateFormat = !devices.real().generic || devices.isSimulator();
 
   @OneWay() customizationFunction?: (caption: DateNavigatorTextInfo) => string;
+
+  @OneWay() viewType: ViewType = 'day';
 }
 
 export type SchedulerToolbarProps = SchedulerToolbarBaseProps
@@ -97,13 +99,13 @@ export class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items
   @InternalState() calendarVisible = false;
 
   get step(): string {
-    return getStep(this.props.currentView) as string;
+    return getStep(this.props.viewType) as string;
   }
 
   get displayedDate(): Date {
     const startViewDate = new Date(this.props.startViewDate);
 
-    if (isMonthView(this.props.currentView)) {
+    if (isMonthView(this.props.viewType)) {
       return nextWeek(startViewDate);
     }
 
@@ -185,9 +187,9 @@ export class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items
 
     const min = trimTime(new Date(this.props.min));
 
-    const { startDate } = this.caption;
+    const { endDate } = this.caption;
 
-    const previousDate = this.getNextDate(-1, startDate);
+    const previousDate = this.getNextDate(-1, endDate);
     return previousDate < min;
   }
 
@@ -198,9 +200,9 @@ export class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items
 
     const max = new Date(new Date(this.props.max).setHours(23, 59, 59));
 
-    const { endDate } = this.caption;
+    const { startDate } = this.caption;
 
-    const nextDate = this.getNextDate(1, endDate);
+    const nextDate = this.getNextDate(1, startDate);
     return nextDate > max;
   }
 

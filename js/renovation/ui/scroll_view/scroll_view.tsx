@@ -17,7 +17,7 @@ import {
 import {
   ElementOffset,
   ScrollOffset,
-} from './common/types.d';
+} from './common/types';
 
 import { ScrollViewProps } from './common/scrollview_props';
 
@@ -172,14 +172,6 @@ export class ScrollView extends JSXComponent<ScrollViewProps>() {
   @Method()
   toggleLoading(showOrHide: boolean): void {
     this.forceReachBottom = showOrHide;
-  }
-
-  @Method()
-  /* istanbul ignore next */
-  // TODO: avoid using this method in List
-  isFull(): boolean {
-    return this.content().clientHeight > this.clientHeight();
-    // TODO: this.clientHeight() should be containerRef.current.clientHeight
   }
 
   @Method()

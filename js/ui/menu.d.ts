@@ -1,12 +1,7 @@
+import { DataSourceLike } from '../data/data_source';
 import {
     DxElement,
 } from '../core/element';
-
-import DataSource, {
-    DataSourceOptions,
-} from '../data/data_source';
-
-import Store from '../data/abstract_store';
 
 import {
     Cancelable,
@@ -27,54 +22,57 @@ import dxMenuBase, {
 } from './context_menu/ui.menu_base';
 
 /** @public */
-export type ContentReadyEvent = EventInfo<dxMenu>;
+export type ContentReadyEvent<TKey = any> = EventInfo<dxMenu<TKey>>;
 
 /** @public */
-export type DisposingEvent = EventInfo<dxMenu>;
+export type DisposingEvent<TKey = any> = EventInfo<dxMenu<TKey>>;
 
 /** @public */
-export type InitializedEvent = InitializedEventInfo<dxMenu>;
+export type InitializedEvent<TKey = any> = InitializedEventInfo<dxMenu<TKey>>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxMenu> & ItemInfo;
+export type ItemClickEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>> & ItemInfo<Item>;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxMenu> & ItemInfo;
+export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>> & ItemInfo<Item>;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxMenu> & ItemInfo;
+export type ItemRenderedEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>> & ItemInfo<Item>;
 
 /** @public */
-export type OptionChangedEvent = EventInfo<dxMenu> & ChangedOptionInfo;
+export type OptionChangedEvent<TKey = any> = EventInfo<dxMenu<TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = EventInfo<dxMenu> & SelectionChangedInfo;
+export type SelectionChangedEvent<TKey = any> = EventInfo<dxMenu<TKey>> & SelectionChangedInfo<Item>;
 
 /** @public */
-export type SubmenuHiddenEvent = EventInfo<dxMenu> & {
+export type SubmenuHiddenEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
     readonly rootItem?: DxElement;
 };
 
 /** @public */
-export type SubmenuHidingEvent = Cancelable & EventInfo<dxMenu> & {
+export type SubmenuHidingEvent<TKey = any> = Cancelable & EventInfo<dxMenu<TKey>> & {
     readonly rootItem?: DxElement;
 };
 
 /** @public */
-export type SubmenuShowingEvent = EventInfo<dxMenu> & {
+export type SubmenuShowingEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
     readonly rootItem?: DxElement;
 };
 
 /** @public */
-export type SubmenuShownEvent = EventInfo<dxMenu> & {
+export type SubmenuShownEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
     readonly rootItem?: DxElement;
 };
 
 /**
  * @deprecated use Properties instead
  * @namespace DevExpress.ui
+ * @public
  */
-export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
+export interface dxMenuOptions<
+    TKey = any,
+> extends dxMenuBaseOptions<dxMenu<TKey>, dxMenuItem, TKey> {
     /**
      * @docid
      * @default false
@@ -87,7 +85,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @default null
      * @public
      */
-    dataSource?: string | Array<Item> | Store | DataSource | DataSourceOptions;
+    dataSource?: DataSourceLike<Item, TKey>;
     /**
      * @docid
      * @default false
@@ -111,7 +109,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @action
      * @public
      */
-    onSubmenuHidden?: ((e: SubmenuHiddenEvent) => void);
+    onSubmenuHidden?: ((e: SubmenuHiddenEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -124,7 +122,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @action
      * @public
      */
-    onSubmenuHiding?: ((e: SubmenuHidingEvent) => void);
+    onSubmenuHiding?: ((e: SubmenuHidingEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -136,7 +134,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @action
      * @public
      */
-    onSubmenuShowing?: ((e: SubmenuShowingEvent) => void);
+    onSubmenuShowing?: ((e: SubmenuShowingEvent<TKey>) => void);
     /**
      * @docid
      * @default null
@@ -148,7 +146,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      * @action
      * @public
      */
-    onSubmenuShown?: ((e: SubmenuShownEvent) => void);
+    onSubmenuShown?: ((e: SubmenuShownEvent<TKey>) => void);
     /**
      * @docid
      * @type Enums.Orientation
@@ -200,7 +198,57 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxMenu extends dxMenuBase<dxMenuOptions> { }
+export default class dxMenu<
+    TKey = any,
+> extends dxMenuBase<dxMenuOptions<TKey>, dxMenuItem, TKey> { }
+
+export interface MenuBasePlainItem extends CollectionWidgetItem {
+  /**
+   * @docid dxMenuBaseItem.beginGroup
+   * @public
+   */
+  beginGroup?: boolean;
+  /**
+   * @docid dxMenuBaseItem.closeMenuOnClick
+   * @default true
+   * @public
+   */
+  closeMenuOnClick?: boolean;
+  /**
+   * @docid dxMenuBaseItem.disabled
+   * @default false
+   * @public
+   */
+  disabled?: boolean;
+  /**
+   * @docid dxMenuBaseItem.icon
+   * @public
+   */
+  icon?: string;
+  /**
+   * @docid dxMenuBaseItem.selectable
+   * @default false
+   * @public
+   */
+  selectable?: boolean;
+  /**
+   * @docid dxMenuBaseItem.selected
+   * @default false
+   * @public
+   */
+  selected?: boolean;
+  /**
+   * @docid dxMenuBaseItem.text
+   * @public
+   */
+  text?: string;
+  /**
+   * @docid dxMenuBaseItem.visible
+   * @default true
+   * @public
+   */
+  visible?: boolean;
+}
 
 /**
  * @docid
@@ -208,57 +256,13 @@ export default class dxMenu extends dxMenuBase<dxMenuOptions> { }
  * @type object
  * @namespace DevExpress.ui
  */
-export interface dxMenuBaseItem extends CollectionWidgetItem {
+export interface dxMenuBaseItem extends MenuBasePlainItem {
     /**
      * @docid
-     * @public
-     */
-    beginGroup?: boolean;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    closeMenuOnClick?: boolean;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    disabled?: boolean;
-    /**
-     * @docid
-     * @public
-     */
-    icon?: string;
-    /**
-     * @docid
+     * @type Array<dxMenuBaseItem>
      * @public
      */
     items?: Array<dxMenuBaseItem>;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    selectable?: boolean;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    selected?: boolean;
-    /**
-     * @docid
-     * @public
-     */
-    text?: string;
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    visible?: boolean;
 }
 
 /**
@@ -281,10 +285,24 @@ export interface dxMenuItem extends dxMenuBaseItem {
 }
 
 /** @public */
-export type Properties = dxMenuOptions;
+export type ExplicitTypes<TKey = any> = {
+    Properties: Properties<TKey>;
+    ContentReadyEvent: ContentReadyEvent<TKey>;
+    DisposingEvent: DisposingEvent<TKey>;
+    InitializedEvent: InitializedEvent<TKey>;
+    ItemClickEvent: ItemClickEvent<TKey>;
+    ItemContextMenuEvent: ItemContextMenuEvent<TKey>;
+    ItemRenderedEvent: ItemRenderedEvent<TKey>;
+    OptionChangedEvent: OptionChangedEvent<TKey>;
+    SelectionChangedEvent: SelectionChangedEvent<TKey>;
+    SubmenuHiddenEvent: SubmenuHiddenEvent<TKey>;
+    SubmenuHidingEvent: SubmenuHidingEvent<TKey>;
+    SubmenuShowingEvent: SubmenuShowingEvent<TKey>;
+    SubmenuShownEvent: SubmenuShownEvent<TKey>;
+};
+
+/** @public */
+export type Properties<TKey = any> = dxMenuOptions<TKey>;
 
 /** @deprecated use Properties instead */
-export type Options = dxMenuOptions;
-
-/** @deprecated use Properties instead */
-export type IOptions = dxMenuOptions;
+export type Options<TKey = any> = Properties<TKey>;

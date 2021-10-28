@@ -27,6 +27,7 @@ require('./build/gulp/localization');
 require('./build/gulp/generator/gulpfile');
 require('./build/gulp/check_licenses');
 require('./build/gulp/qunit-in-docker');
+require('./build/gulp/renovation-testing-playground');
 
 if(!env.TEST_CI && !env.DOCKER_CI) {
     require('./build/gulp/create_timezones_data');
