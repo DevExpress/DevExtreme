@@ -32,7 +32,7 @@ import { getOffsetDistance } from '../utils/get_offset_distance';
 import { getBoundaryProps } from '../utils/get_boundary_props';
 import { permissibleWheelDirection } from '../utils/get_permissible_wheel_direction';
 
-import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return.d';
+import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return';
 import {
   isDxMouseWheelEvent, normalizeKeyName, isCommandKeyPressed,
 } from '../../../../events/utils/index';
@@ -70,7 +70,7 @@ import {
   DxMouseWheelEvent,
   DxKeyboardEvent,
   ScrollLocationChangeArgs,
-} from '../common/types.d';
+} from '../common/types';
 
 import { getElementOffset } from '../../../utils/get_element_offset';
 import {

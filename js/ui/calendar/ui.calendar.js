@@ -1235,6 +1235,11 @@ const Calendar = Editor.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+
+    getContouredDate: function() {
+        return this._view.option('contouredDate');
     }
 });
 
