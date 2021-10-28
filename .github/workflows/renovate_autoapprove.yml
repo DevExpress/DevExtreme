@@ -5,7 +5,7 @@ on:
 
 jobs:
   auto-approve:
-    runs-on: shr-ubuntu-m5-cpu1ram4
+    runs-on: shr-ubuntu-m5-docker-cpu1ram4
     steps:
     - uses: hmarr/auto-approve-action@v2
       if: github.actor == 'renovate-bot' || github.actor == 'renovate[bot]'
