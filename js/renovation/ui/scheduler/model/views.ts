@@ -72,6 +72,10 @@ export const getCurrentViewConfig = (
     startDate,
     type,
     scrolling,
+    dataCellTemplate,
+    timeCellTemplate,
+    resourceCellTemplate,
+    dateCellTemplate,
   } = currentViewProps;
 
   const isVirtualScrolling = schedulerScrolling.mode === 'virtual'
@@ -86,6 +90,14 @@ export const getCurrentViewConfig = (
     cellDuration: getViewConfigProp(schedulerProps.cellDuration, cellDuration),
     groupByDate: getViewConfigProp(schedulerProps.groupByDate, groupByDate),
     scrolling: getViewConfigProp(schedulerScrolling, scrolling),
+
+    dataCellTemplate: getViewConfigProp(schedulerProps.dataCellTemplate, dataCellTemplate),
+    timeCellTemplate: getViewConfigProp(schedulerProps.timeCellTemplate, timeCellTemplate),
+    resourceCellTemplate: getViewConfigProp(
+      schedulerProps.resourceCellTemplate, resourceCellTemplate,
+    ),
+    dateCellTemplate: getViewConfigProp(schedulerProps.dateCellTemplate, dateCellTemplate),
+
     // currentDate: dateUtils.trimTime(new Date(schedulerProps.currentDate)), // TODO
     currentDate: schedulerProps.currentDate,
     intervalCount,
@@ -109,10 +121,6 @@ export const getCurrentViewConfig = (
     allDayPanelExpanded: true, // TODO
 
     // noDataText: this.props.noDataText, // TODO: necessary for agenda
-    // dataCellTemplate: this.props.dataCellTemplate, // TODO
-    // timeCellTemplate: this.props.timeCellTemplate, // TODO
-    // resourceCellTemplate: this.props.resourceCellTemplate, // TODO
-    // dateCellTemplate: this.props.dateCellTemplate,
     // selectedCellData: this.props.selectedCellData,
     // onSelectionChanged: (args) => { TODO
     //   this.option('selectedCellData', args.selectedCellData);

@@ -4,6 +4,7 @@ import {
   Effect,
   InternalState,
   JSXComponent,
+  JSXTemplate,
   Method,
 } from '@devextreme-generator/declarations';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
@@ -19,7 +20,13 @@ import type { Options as DataSourceOptions } from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import {
-  CellsMetaData, Group, ViewDataProviderType, ViewMetaData,
+  CellsMetaData,
+  DataCellTemplateProps,
+  DateTimeCellTemplateProps,
+  Group,
+  ResourceCellTemplateProps,
+  ViewDataProviderType,
+  ViewMetaData,
 } from './workspaces/types';
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
@@ -46,6 +53,11 @@ export const viewFunction = ({
   startViewDate,
   appointmentsViewModel,
   workSpaceKey,
+
+  dataCellTemplate,
+  dateCellTemplate,
+  timeCellTemplate,
+  resourceCellTemplate,
 
   props: {
     accessKey,
@@ -154,6 +166,11 @@ export const viewFunction = ({
           allowMultipleCellSelection={allowMultipleCellSelection}
           allDayPanelExpanded={allDayPanelExpanded}
           onViewRendered={onViewRendered}
+
+          dataCellTemplate={dataCellTemplate}
+          timeCellTemplate={timeCellTemplate}
+          dateCellTemplate={dateCellTemplate}
+          resourceCellTemplate={resourceCellTemplate}
 
           allDayAppointments={(
             <AppointmentLayout
@@ -329,6 +346,23 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     const groupCount = getGroupCount(this.loadedResources);
 
     return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
+  }
+
+  // TODO: 4 getters below are a WA for Vue generator
+  get dataCellTemplate(): JSXTemplate<DataCellTemplateProps> | undefined {
+    return this.currentViewConfig.dataCellTemplate;
+  }
+
+  get dateCellTemplate(): JSXTemplate<DateTimeCellTemplateProps> | undefined {
+    return this.currentViewConfig.dateCellTemplate;
+  }
+
+  get timeCellTemplate(): JSXTemplate<DateTimeCellTemplateProps> | undefined {
+    return this.currentViewConfig.timeCellTemplate;
+  }
+
+  get resourceCellTemplate(): JSXTemplate<ResourceCellTemplateProps> | undefined {
+    return this.currentViewConfig.resourceCellTemplate;
   }
 
   @Method()

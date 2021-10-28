@@ -128,6 +128,10 @@ WorkSpaceProps,
 | 'hoursInterval'
 | 'selectedCellData'
 | 'type'
+| 'dataCellTemplate'
+| 'dateCellTemplate'
+| 'timeCellTemplate'
+| 'resourceCellTemplate'
 >;
 
 export interface ViewRenderConfig {
