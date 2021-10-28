@@ -186,7 +186,7 @@ export interface ToolbarPreparingInfo {
 
 export interface RowDraggingEventInfo<T extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> {
   readonly component: T;
-  readonly event: DxEvent;
+  readonly event: DxEvent<MouseEvent | TouchEvent>;
   readonly itemData?: TRowData;
   readonly itemElement: DxElement;
   readonly fromIndex: number;
@@ -199,7 +199,7 @@ export interface RowDraggingEventInfo<T extends GridBase<TRowData, TKey>, TRowDa
 
 export interface DragStartEventInfo<T extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> {
   readonly component: T;
-  readonly event: DxEvent;
+  readonly event: DxEvent<MouseEvent | TouchEvent>;
   itemData?: TRowData;
   readonly itemElement: DxElement;
   readonly fromIndex: number;
@@ -746,7 +746,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @action
      * @public
      */
-    onKeyDown?: ((e: NativeEventInfo<TComponent> & KeyDownInfo) => void);
+    onKeyDown?: ((e: NativeEventInfo<TComponent, KeyboardEvent> & KeyDownInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -2792,7 +2792,7 @@ export interface ColumnButtonBase {
 export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, MouseEvent> & {
   readonly data: TRowData;
   readonly key: TKey;
   readonly value?: any;
@@ -2807,7 +2807,7 @@ export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataG
 };
 
 /** @public */
-export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, MouseEvent> & {
   readonly data: TRowData;
   readonly key: TKey;
   readonly value?: any;
@@ -2950,7 +2950,7 @@ export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDa
 };
 
 /** @public */
-export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent | MouseEvent | TouchEvent> & {
   readonly cellElement: DxElement;
   readonly prevColumnIndex: number;
   readonly prevRowIndex: number;
@@ -2969,7 +2969,7 @@ export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDat
 };
 
 /** @public */
-export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent | MouseEvent | TouchEvent> & {
   readonly rowElement: DxElement;
   readonly prevRowIndex: number;
   newRowIndex: number;
@@ -2983,13 +2983,13 @@ export type InitializedEvent<TRowData = any, TKey = any> = InitializedEventInfo<
 export type InitNewRowEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & NewRowInfo<TRowData>;
 
 /** @public */
-export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & KeyDownInfo;
+export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent> & KeyDownInfo;
 
 /** @public */
 export type OptionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, MouseEvent> & {
   readonly data: TRowData;
   readonly key: TKey;
   readonly values: Array<any>;
@@ -3011,7 +3011,7 @@ export type RowCollapsedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid
 export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxDataGrid<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, MouseEvent> & {
   readonly data: TRowData;
   readonly key: TKey;
   readonly values: Array<any>;
@@ -3101,7 +3101,7 @@ export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = RowDraggingEven
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> & DragReorderInfo;
 
 /** @public */
-export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, MouseEvent> & {
   row?: Row<TRowData, TKey>;
   column?: Column<TRowData, TKey>;
 };

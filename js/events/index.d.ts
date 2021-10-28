@@ -10,27 +10,27 @@ export interface EventType { }
  * @docid
  * @type EventObject|jQuery.Event
  */
-export type DxEvent = {} extends EventType ? EventObject : EventType;
+export type DxEvent<TNativeEvents = Event> = {} extends EventType ? (EventObject & TNativeEvents) : EventType;
 
 /** @public */
-export interface InitializedEventInfo<T> {
-    readonly component?: T;
+export interface InitializedEventInfo<TComponent> {
+    readonly component?: TComponent;
     readonly element?: DxElement;
 }
 
 /** @public */
-export interface EventInfo<T> {
-    readonly component: T;
+export interface EventInfo<TComponent> {
+    readonly component: TComponent;
     readonly element: DxElement;
     readonly model?: any;
 }
 
 /** @public */
-export interface NativeEventInfo<T> {
-    readonly component: T;
+export interface NativeEventInfo<TComponent, TNativeEvents = Event> {
+    readonly component: TComponent;
     readonly element: DxElement;
     readonly model?: any;
-    readonly event?: DxEvent;
+    readonly event?: DxEvent<TNativeEvents>;
 }
 
 /** @public */
