@@ -16,14 +16,17 @@ const defaultDataAccessors: DataAccessorType = {
   getter: {
     startDate: compileGetter('startDate') as any,
     endDate: compileGetter('endDate') as any,
+    recurrenceRule: compileGetter('recurrenceRule') as any,
   },
   setter: {
     startDate: compileSetter('startDate') as any,
     endDate: compileSetter('endDate') as any,
+    recurrenceRule: compileSetter('recurrenceRule') as any,
   },
   expr: {
     startDateExpr: 'startDate',
     endDateExpr: 'endDate',
+    recurrenceRuleExpr: 'recurrenceRuleExpr',
   },
 };
 
@@ -364,6 +367,7 @@ describe('Appointments view model', () => {
           info: {
             allDay: true,
             direction: 'horizontal',
+            isRecurrent: false,
             appointment: {
               startDate: new Date(2021, 8, 23),
               endDate: new Date(2021, 8, 24),
@@ -478,6 +482,186 @@ describe('Appointments view model', () => {
                 dateText: '11:00 AM - 12:00 PM',
               },
             }],
+          },
+        });
+    });
+
+    it('should generate recurrent appoitments correctly', () => {
+      const instances = prepareInstances(
+        'week',
+        new Date(2021, 8, 22),
+        7,
+        false,
+        false,
+      );
+
+      const appointmentsModel = getAppointmentsModel(
+        instances.appointmentsConfig,
+        instances.viewDataProvider,
+        instances.timeZoneCalculator,
+        defaultDataAccessors,
+        instances.DOMMetaData,
+      );
+
+      const viewModel = getAppointmentsViewModel(
+        appointmentsModel,
+        [{
+          startDate: new Date(2021, 8, 24, 11),
+          endDate: new Date(2021, 8, 24, 12),
+          recurrenceRule: 'FREQ=DAILY;COUNT=3',
+        }],
+      );
+
+      const {
+        regular,
+        allDay,
+        regularCompact,
+        allDayCompact,
+      } = viewModel;
+
+      expect(regular)
+        .toHaveLength(4);
+
+      expect(regularCompact)
+        .toHaveLength(0);
+
+      expect(allDay)
+        .toHaveLength(0);
+
+      expect(allDayCompact)
+        .toHaveLength(0);
+
+      expect(regular[0])
+        .toMatchObject({
+          appointment: {
+            startDate: new Date(2021, 8, 24, 11),
+            endDate: new Date(2021, 8, 24, 12),
+          },
+          geometry: {
+            empty: true,
+          },
+          info: {
+            isRecurrent: true,
+            appointment: {
+              startDate: new Date(2021, 8, 24, 11),
+              endDate: new Date(2021, 8, 24, 12),
+              source: {
+                startDate: new Date(2021, 8, 24, 11),
+                endDate: new Date(2021, 8, 24, 12),
+                exceptionDate: new Date(2021, 8, 24, 11),
+              },
+              normalizedEndDate: new Date(2021, 8, 24, 12),
+            },
+            sourceAppointment: {
+              startDate: new Date(2021, 8, 24, 11),
+              endDate: new Date(2021, 8, 24, 12),
+              exceptionDate: new Date(2021, 8, 24, 11),
+            },
+            dateText: '11:00 AM - 12:00 PM',
+          },
+        });
+
+      expect(regular[1])
+        .toMatchObject({
+          appointment: {
+            startDate: new Date(2021, 8, 24, 11),
+            endDate: new Date(2021, 8, 24, 12),
+          },
+          geometry: {
+            empty: false,
+            height: 700,
+            left: 200,
+            leftVirtualWidth: 0,
+            top: 0,
+            topVirtualHeight: 0,
+            width: 74,
+          },
+          info: {
+            isRecurrent: true,
+            appointment: {
+              startDate: new Date(2021, 8, 24, 11),
+              endDate: new Date(2021, 8, 24, 12),
+              source: {
+                startDate: new Date(2021, 8, 24, 11),
+                endDate: new Date(2021, 8, 24, 12),
+                exceptionDate: new Date(2021, 8, 24, 11),
+              },
+              normalizedEndDate: new Date(2021, 8, 24, 12),
+            },
+            sourceAppointment: {
+              startDate: new Date(2021, 8, 24, 11),
+              endDate: new Date(2021, 8, 24, 12),
+              exceptionDate: new Date(2021, 8, 24, 11),
+            },
+            dateText: '11:00 AM - 12:00 PM',
+          },
+        });
+
+      expect(regular[2])
+        .toMatchObject({
+          appointment: {
+            startDate: new Date(2021, 8, 24, 11),
+            endDate: new Date(2021, 8, 24, 12),
+          },
+          geometry: {
+            empty: false,
+            height: 400,
+            leftVirtualWidth: 0,
+            topVirtualHeight: 0,
+            width: 74,
+          },
+          info: {
+            isRecurrent: true,
+            appointment: {
+              startDate: new Date(2021, 8, 25, 11),
+              endDate: new Date(2021, 8, 25, 12),
+              source: {
+                startDate: new Date(2021, 8, 25, 11),
+                endDate: new Date(2021, 8, 25, 12),
+                exceptionDate: new Date(2021, 8, 25, 11),
+              },
+              normalizedEndDate: new Date(2021, 8, 25, 12),
+            },
+            sourceAppointment: {
+              startDate: new Date(2021, 8, 25, 11),
+              endDate: new Date(2021, 8, 25, 12),
+              exceptionDate: new Date(2021, 8, 25, 11),
+            },
+            dateText: '11:00 AM - 12:00 PM',
+          },
+        });
+
+      expect(regular[3])
+        .toMatchObject({
+          appointment: {
+            startDate: new Date(2021, 8, 24, 11),
+            endDate: new Date(2021, 8, 24, 12),
+          },
+          geometry: {
+            empty: false,
+            height: 400,
+            leftVirtualWidth: 0,
+            topVirtualHeight: 0,
+            width: 74,
+          },
+          info: {
+            isRecurrent: true,
+            appointment: {
+              startDate: new Date(2021, 8, 26, 11),
+              endDate: new Date(2021, 8, 26, 12),
+              source: {
+                startDate: new Date(2021, 8, 26, 11),
+                endDate: new Date(2021, 8, 26, 12),
+                exceptionDate: new Date(2021, 8, 26, 11),
+              },
+              normalizedEndDate: new Date(2021, 8, 26, 12),
+            },
+            sourceAppointment: {
+              startDate: new Date(2021, 8, 26, 11),
+              endDate: new Date(2021, 8, 26, 12),
+              exceptionDate: new Date(2021, 8, 26, 11),
+            },
+            dateText: '11:00 AM - 12:00 PM',
           },
         });
     });

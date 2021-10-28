@@ -23,6 +23,7 @@ export interface AppointmentViewModel {
   geometry: AppointmentGeometry;
   info: {
     direction: Direction;
+    isRecurrent: boolean;
     appointment: {
       startDate: Date;
       endDate: Date;

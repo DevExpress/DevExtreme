@@ -6,6 +6,7 @@ export const viewFunction = ({
   props: {
     text,
     dateText,
+    isRecurrent,
   },
 }: AppointmentContent): JSX.Element => (
   <div className="dx-scheduler-appointment-content">
@@ -17,6 +18,11 @@ export const viewFunction = ({
         {dateText}
       </div>
     </div>
+    {
+      isRecurrent && (
+        <span className="dx-scheduler-appointment-recurrence-icon dx-icon-repeat" />
+      )
+    }
   </div>
 );
 
@@ -25,6 +31,8 @@ export class AppointmentContentProps {
   @OneWay() text = '';
 
   @OneWay() dateText = '';
+
+  @OneWay() isRecurrent = false;
 }
 
 @Component({

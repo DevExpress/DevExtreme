@@ -24,6 +24,7 @@ describe('Appointment', () => {
     },
 
     info: {
+      isRecurrent: false,
       direction: 'vertical',
       appointment: {
         startDate: new Date('2021-08-05T10:00:00.000Z'),
@@ -41,8 +42,8 @@ describe('Appointment', () => {
     const render = (viewModel): ShallowWrapper => shallow(viewFunction({
       ...viewModel,
       props: {
-        ...viewModel.props,
         viewModel: defaultViewModel,
+        ...viewModel.props,
       },
     }));
 
@@ -98,11 +99,30 @@ describe('Appointment', () => {
         .toEqual(templateProps);
     });
 
-    it('it should has correct content container', () => {
-      const appointment = render({});
+    it('content should have correct props', () => {
+      const appointment = render({
+        text: 'some-text',
+        dateText: 'some-dateText',
+        props: {
+          viewModel: {
+            info: {
+              isRecurrent: true,
+            },
+          },
+        },
+      });
 
-      expect(appointment.children().type())
-        .toBe(AppointmentContent);
+      const appointmentContent = appointment.childAt(0);
+
+      expect(appointmentContent.is(AppointmentContent))
+        .toBe(true);
+
+      expect(appointmentContent.props())
+        .toEqual({
+          text: 'some-text',
+          dateText: 'some-dateText',
+          isRecurrent: true,
+        });
     });
   });
 
@@ -126,7 +146,7 @@ describe('Appointment', () => {
       });
 
       describe('classes', () => {
-        it('should return correct class names if vertical appointment direction', () => {
+        it('should return correct class names with vertical appointment direction', () => {
           const appointment = new Appointment({
             viewModel: {
               ...defaultViewModel,
@@ -141,7 +161,7 @@ describe('Appointment', () => {
             .toBe('dx-scheduler-appointment dx-scheduler-appointment-vertical');
         });
 
-        it('should return correct class names if horizontal appointment direction', () => {
+        it('should return correct class names with horizontal appointment direction', () => {
           const appointment = new Appointment({
             viewModel: {
               ...defaultViewModel,
@@ -154,6 +174,21 @@ describe('Appointment', () => {
 
           expect(appointment.classes)
             .toBe('dx-scheduler-appointment dx-scheduler-appointment-horizontal');
+        });
+
+        it('should return correct class with recurrence', () => {
+          const appointment = new Appointment({
+            viewModel: {
+              ...defaultViewModel,
+              info: {
+                ...defaultViewModel.info,
+                isRecurrent: true,
+              },
+            },
+          });
+
+          expect(appointment.classes.search('dx-scheduler-appointment-recurrence') >= 0)
+            .toBe(true);
         });
       });
 

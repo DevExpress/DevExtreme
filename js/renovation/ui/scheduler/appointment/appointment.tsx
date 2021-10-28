@@ -16,6 +16,11 @@ export const viewFunction = ({
   index,
   classes,
   props: {
+    viewModel: {
+      info: {
+        isRecurrent,
+      },
+    },
     appointmentTemplate,
   },
 }: Appointment): JSX.Element => {
@@ -30,7 +35,7 @@ export const viewFunction = ({
       }
       {
         !AppointmentTemplate && (
-          <AppointmentContent text={text} dateText={dateText} />
+          <AppointmentContent text={text} dateText={dateText} isRecurrent={isRecurrent} />
         )
       }
     </div>
@@ -69,13 +74,17 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel'>() {
   }
 
   get classes(): string {
-    const { direction } = this.props.viewModel.info;
+    const {
+      direction,
+      isRecurrent,
+    } = this.props.viewModel.info;
     const isVerticalDirection = direction === 'vertical';
 
     return combineClasses({
       'dx-scheduler-appointment': true,
       'dx-scheduler-appointment-horizontal': !isVerticalDirection,
       'dx-scheduler-appointment-vertical': isVerticalDirection,
+      'dx-scheduler-appointment-recurrence': isRecurrent,
     });
   }
 }

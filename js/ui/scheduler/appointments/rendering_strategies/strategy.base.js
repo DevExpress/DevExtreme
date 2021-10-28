@@ -209,7 +209,7 @@ class BaseRenderingStrategy {
             extend(position[j], {
                 height: height,
                 width: resultWidth,
-                allDay: allDay,
+                allDay,
                 rowIndex: initialRowIndex,
                 columnIndex: initialColumnIndex,
                 appointmentReduced: appointmentReduced,
