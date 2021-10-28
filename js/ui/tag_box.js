@@ -777,7 +777,6 @@ const TagBox = SelectBox.inherit({
 
     _getFilteredItems: function(values) {
         // console.log('_getFilteredItems');
-        // console.log(values);
         this._loadFilteredItemsPromise?.reject();
         const creator = new FilterCreator(values);
 
@@ -823,6 +822,8 @@ const TagBox = SelectBox.inherit({
         const cache = {};
         const isValueExprSpecified = this._valueGetterExpr() === 'this';
         const filteredValues = {};
+
+        // console.log('_createTagsData');
 
         filteredItems.forEach((filteredItem) => {
             const filteredItemValue = isValueExprSpecified ? JSON.stringify(filteredItem) : this._valueGetter(filteredItem);
@@ -905,6 +906,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _loadTagsData: function() {
+
         // console.log('_loadTagsData');
         const values = this._getValue();
         const tagData = new Deferred();

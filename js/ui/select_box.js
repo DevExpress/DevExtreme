@@ -645,6 +645,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _loadItem: function(value, cache) {
+        // console.log('_loadItem deferred');
         const that = this;
         const deferred = new Deferred();
 
@@ -669,6 +670,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _loadInputValue: function(value, callback) {
+        // console.log('_loadInputValue deferred');
         this._loadItemDeferred = this._loadItem(value).always(callback);
 
         return this._loadItemDeferred;
