@@ -4989,7 +4989,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxBoxItem.box]
      */
-    box?: dxBoxOptions<this, TKey>;
+    box?: dxBoxOptions<any, TKey>;
     /**
      * [descr:dxBoxItem.ratio]
      */

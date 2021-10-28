@@ -119,7 +119,7 @@ export interface dxBoxItem<TKey = any> extends CollectionWidgetItem {
      * @public
      * @type dxBoxOptions
      */
-    box?: dxBoxOptions<this, TKey>;
+    box?: dxBoxOptions<any, TKey>;
     /**
      * @docid
      * @default 0
