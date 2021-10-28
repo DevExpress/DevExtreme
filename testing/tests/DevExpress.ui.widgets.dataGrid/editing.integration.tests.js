@@ -4820,6 +4820,36 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.notOk($('.dx-datagrid-edit-popup').is(':visible'), 'editor popup is hidden');
     });
 
+    QUnit.test('Remove button click should remove correct row after cancelEditData if repaintChangesOnly is true', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1 },
+                { id: 2 }
+            ],
+            keyExpr: 'id',
+            loadingTimeout: null,
+            repaintChangesOnly: true,
+            editing: {
+                mode: 'batch',
+                allowAdding: true,
+                allowDeleting: true
+            }
+        });
+
+        dataGrid.addRow();
+        this.clock.tick();
+        dataGrid.cancelEditData();
+        this.clock.tick();
+        dataGrid.addRow();
+        this.clock.tick();
+        $(dataGrid.getCellElement(2, 1)).find('.dx-link-delete').trigger('dxpointerdown').trigger('click');
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows()[2].removed, true, 'row 2 is marked as removed');
+    });
+
     // T851082
     QUnit.test('Row deleting should works if recalculateWhileEditing is enabled and refreshMode is repaint', function(assert) {
         // arrange
