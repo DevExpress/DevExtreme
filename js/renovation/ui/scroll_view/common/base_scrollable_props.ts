@@ -2,7 +2,7 @@ import {
   ComponentBindings, OneWay, Event, Slot,
 } from '@devextreme-generator/declarations';
 import { EventCallback } from '../../common/event_callback';
-import { ScrollableDirection, ScrollEventArgs, RefreshStrategy } from './types.d';
+import { ScrollableDirection, ScrollEventArgs, RefreshStrategy } from './types';
 import { touch } from '../../../../core/utils/support';
 import { getDefaultBounceEnabled, isDesktop } from '../utils/get_default_option_value';
 import { current, isMaterial } from '../../../../ui/themes';

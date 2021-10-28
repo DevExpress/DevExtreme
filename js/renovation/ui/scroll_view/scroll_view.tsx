@@ -17,7 +17,7 @@ import {
 import {
   ElementOffset,
   ScrollOffset,
-} from './common/types.d';
+} from './common/types';
 
 import { ScrollViewProps } from './common/scrollview_props';
 

@@ -29,7 +29,7 @@ import {
   getElementOverflowY,
 } from '../utils/get_element_style';
 
-import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return.d';
+import { DisposeEffectReturn, EffectReturn } from '../../../utils/effect_return';
 import devices from '../../../../core/devices';
 import { isDefined } from '../../../../core/utils/type';
 
@@ -40,7 +40,7 @@ import {
   ScrollEventArgs,
   ScrollOffset, ScrollableDirection, DxMouseEvent,
   DxMouseWheelEvent,
-} from '../common/types.d';
+} from '../common/types';
 
 import { isDxMouseWheelEvent } from '../../../../events/utils/index';
 

@@ -40,7 +40,7 @@ import {
 import { ScrollableTestHelper } from './simulated_test_helper';
 import {
   DxKeyboardEvent, DxMouseEvent, DxMouseWheelEvent, ScrollEventArgs,
-} from '../../common/types.d';
+} from '../../common/types';
 import { AnimatedScrollbar } from '../../scrollbar/animated_scrollbar';
 import { getElementOffset } from '../../../../utils/get_element_offset';
 import { permissibleWheelDirection } from '../../utils/get_permissible_wheel_direction';
