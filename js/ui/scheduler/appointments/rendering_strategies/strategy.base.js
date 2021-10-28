@@ -212,7 +212,7 @@ class BaseRenderingStrategy {
                 allDay,
                 rowIndex: initialRowIndex,
                 columnIndex: initialColumnIndex,
-                appointmentReduced: appointmentReduced,
+                appointmentReduced
             });
             result = this._getAppointmentPartsPosition(multiWeekAppointmentParts, position[j], result);
         }

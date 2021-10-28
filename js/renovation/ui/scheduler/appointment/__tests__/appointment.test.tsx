@@ -1,7 +1,7 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction, Appointment, AppointmentProps } from '../appointment';
 import { AppointmentContent } from '../content';
-import { AppointmentViewModel } from '../types';
+import { AppointmentViewModel, ReduceType } from '../types';
 
 describe('Appointment', () => {
   const defaultViewModel: AppointmentViewModel = {
@@ -24,6 +24,7 @@ describe('Appointment', () => {
     },
 
     info: {
+      allDay: false,
       isRecurrent: false,
       direction: 'vertical',
       appointment: {
@@ -103,6 +104,7 @@ describe('Appointment', () => {
       const appointment = render({
         text: 'some-text',
         dateText: 'some-dateText',
+        isReduced: true,
         props: {
           viewModel: {
             info: {
@@ -122,6 +124,7 @@ describe('Appointment', () => {
           text: 'some-text',
           dateText: 'some-dateText',
           isRecurrent: true,
+          isReduced: true,
         });
     });
   });
@@ -187,8 +190,46 @@ describe('Appointment', () => {
             },
           });
 
-          expect(appointment.classes.search('dx-scheduler-appointment-recurrence') >= 0)
+          const defaultClasses = 'dx-scheduler-appointment dx-scheduler-appointment-vertical';
+
+          expect(appointment.classes.search(`${defaultClasses} dx-scheduler-appointment-recurrence`) >= 0)
             .toBe(true);
+        });
+
+        it('should return correct class with allDay', () => {
+          const appointment = new Appointment({
+            viewModel: {
+              ...defaultViewModel,
+              info: {
+                ...defaultViewModel.info,
+                allDay: true,
+              },
+            },
+          });
+
+          const defaultClasses = 'dx-scheduler-appointment dx-scheduler-appointment-vertical';
+
+          expect(appointment.classes)
+            .toBe(`${defaultClasses} dx-scheduler-all-day-appointment`);
+        });
+
+        (['head', 'body', 'tail'] as ReduceType[]).forEach((appointmentReduced) => {
+          it(`should return correct class if ${appointmentReduced} is reduced`, () => {
+            const appointment = new Appointment({
+              viewModel: {
+                ...defaultViewModel,
+                info: {
+                  ...defaultViewModel.info,
+                  appointmentReduced,
+                },
+              },
+            });
+
+            const defaultClasses = 'dx-scheduler-appointment dx-scheduler-appointment-vertical';
+
+            expect(appointment.classes)
+              .toBe(`${defaultClasses} dx-scheduler-appointment-reduced dx-scheduler-appointment-${appointmentReduced}`);
+          });
         });
       });
 
@@ -251,6 +292,34 @@ describe('Appointment', () => {
 
           expect(appointment.index)
             .toEqual(1234);
+        });
+      });
+
+      describe('isReduced', () => {
+        it('should be false by default', () => {
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+          });
+
+          expect(appointment.isReduced)
+            .toBe(false);
+        });
+
+        (['head', 'body', 'tail'] as ReduceType[]).forEach((appointmentReduced) => {
+          it(`shoud have correct value if appointment ${appointmentReduced} is reduced`, () => {
+            const appointment = new Appointment({
+              viewModel: {
+                ...defaultViewModel,
+                info: {
+                  ...defaultViewModel.info,
+                  appointmentReduced,
+                },
+              },
+            });
+
+            expect(appointment.isReduced)
+              .toBe(true);
+          });
         });
       });
     });

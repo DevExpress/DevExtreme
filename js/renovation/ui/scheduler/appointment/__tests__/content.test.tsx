@@ -9,6 +9,7 @@ const CLASSES = {
     icon: 'dx-scheduler-appointment-recurrence-icon',
     iconRepeat: 'dx-icon-repeat',
   },
+  reducedIcon: 'dx-scheduler-appointment-reduced-icon',
 };
 
 describe('AppointmentContent', () => {
@@ -64,7 +65,19 @@ describe('AppointmentContent', () => {
         .toBe('Date Text');
     });
 
-    it('should render recurrent icon if isRecurrent', () => {
+    it('should not render recurrent and reduced icons', () => {
+      const appointmentContent = render({ });
+
+      const recurrentIcon = appointmentContent.find(`.${CLASSES.recurrence.icon}.${CLASSES.recurrence.iconRepeat}`);
+      expect(recurrentIcon)
+        .toHaveLength(0);
+
+      const reducedIcon = appointmentContent.find(`.${CLASSES.reducedIcon}`);
+      expect(reducedIcon)
+        .toHaveLength(0);
+    });
+
+    it('should render recurrent icon', () => {
       const appointmentContent = render({
         props: {
           isRecurrent: true,
@@ -74,6 +87,19 @@ describe('AppointmentContent', () => {
       const recurrentIcon = appointmentContent.find(`.${CLASSES.recurrence.icon}.${CLASSES.recurrence.iconRepeat}`);
 
       expect(recurrentIcon)
+        .toHaveLength(1);
+    });
+
+    it('should render reduced icon', () => {
+      const appointmentContent = render({
+        props: {
+          isReduced: true,
+        },
+      });
+
+      const reducedIcon = appointmentContent.find(`.${CLASSES.reducedIcon}`);
+
+      expect(reducedIcon)
         .toHaveLength(1);
     });
   });
@@ -88,6 +114,7 @@ describe('AppointmentContent', () => {
             text: '',
             dateText: '',
             isRecurrent: false,
+            isReduced: false,
           });
       });
     });

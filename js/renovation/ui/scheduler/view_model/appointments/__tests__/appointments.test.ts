@@ -378,6 +378,7 @@ describe('Appointments view model', () => {
                 exceptionDate: new Date(2021, 8, 23),
               },
             },
+            appointmentReduced: 'head',
             dateText: '12:00 AM - 12:00 AM',
             resourceColor: undefined,
             sourceAppointment: {

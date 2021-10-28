@@ -123,7 +123,8 @@ export class AppointmentViewModelGenerator {
             info: {
                 ...options.info,
                 allDay: options.allDay,
-                direction: options.direction
+                direction: options.direction,
+                appointmentReduced: options.appointmentReduced,
             },
         };
 

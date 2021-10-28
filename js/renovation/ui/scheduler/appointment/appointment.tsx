@@ -15,6 +15,7 @@ export const viewFunction = ({
   data,
   index,
   classes,
+  isReduced,
   props: {
     viewModel: {
       info: {
@@ -35,7 +36,12 @@ export const viewFunction = ({
       }
       {
         !AppointmentTemplate && (
-          <AppointmentContent text={text} dateText={dateText} isRecurrent={isRecurrent} />
+          <AppointmentContent
+            text={text}
+            dateText={dateText}
+            isRecurrent={isRecurrent}
+            isReduced={isReduced}
+          />
         )
       }
     </div>
@@ -73,10 +79,17 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel'>() {
     return this.props.index;
   }
 
+  get isReduced(): boolean {
+    const { appointmentReduced } = this.props.viewModel.info;
+    return !!appointmentReduced;
+  }
+
   get classes(): string {
     const {
       direction,
       isRecurrent,
+      allDay,
+      appointmentReduced,
     } = this.props.viewModel.info;
     const isVerticalDirection = direction === 'vertical';
 
@@ -85,6 +98,11 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel'>() {
       'dx-scheduler-appointment-horizontal': !isVerticalDirection,
       'dx-scheduler-appointment-vertical': isVerticalDirection,
       'dx-scheduler-appointment-recurrence': isRecurrent,
+      'dx-scheduler-all-day-appointment': allDay,
+      'dx-scheduler-appointment-reduced': this.isReduced,
+      'dx-scheduler-appointment-head': appointmentReduced === 'head',
+      'dx-scheduler-appointment-body': appointmentReduced === 'body',
+      'dx-scheduler-appointment-tail': appointmentReduced === 'tail',
     });
   }
 }
