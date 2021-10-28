@@ -10,7 +10,7 @@ export interface EventType { }
  * @docid
  * @type EventObject|jQuery.Event
  */
-export type DxEvent<TNativeEvents = Event> = {} extends EventType ? (EventObject & TNativeEvents) : EventType;
+export type DxEvent<TNativeEvent = Event> = {} extends EventType ? (EventObject & TNativeEvent) : EventType;
 
 /** @public */
 export interface InitializedEventInfo<TComponent> {
