@@ -403,7 +403,17 @@ QUnit.module('number formatter', () => {
             'HH', ':', 'mm'
         ]);
         // eslint-disable-next-line no-useless-escape
-        assert.deepEqual(regExpInfo.regexp, /^(2[0-3]|1[0-9]|0?[0-9])(\h|\:)([1-5][0-9]|0?[0-9])$/i);
+        assert.deepEqual(regExpInfo.regexp, /^(2[0-3]|1[0-9]|0?[0-9])(h|:)([1-5][0-9]|0?[0-9])$/i);
+
+        parts.getTimeSeparator = function() {
+            return '[.]';
+        };
+        regExpInfo = getRegExpInfo('HH:mm', parts);
+        assert.deepEqual(regExpInfo.patterns, [
+            'HH', ':', 'mm'
+        ]);
+        // eslint-disable-next-line no-useless-escape
+        assert.deepEqual(regExpInfo.regexp, /^(2[0-3]|1[0-9]|0?[0-9])(\[\.\]|:)([1-5][0-9]|0?[0-9])$/i);
     });
 
     QUnit.test('getRegExpInfo should return correct regex for multiple adjacent time separators', function(assert) {
