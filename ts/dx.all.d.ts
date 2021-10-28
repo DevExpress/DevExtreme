@@ -3265,11 +3265,11 @@ declare module DevExpress.events {
     readonly itemElement: DevExpress.core.DxElement;
     readonly itemIndex: number;
   }
-  export interface NativeEventInfo<TComponent, TNativeEvents = Event> {
+  export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
     readonly component: TComponent;
     readonly element: DevExpress.core.DxElement;
     readonly model?: any;
-    readonly event?: DxEvent<TNativeEvents>;
+    readonly event?: DxEvent<TNativeEvent>;
   }
   /**
    * [descr:events.off(element)]

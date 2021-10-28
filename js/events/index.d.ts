@@ -26,11 +26,11 @@ export interface EventInfo<TComponent> {
 }
 
 /** @public */
-export interface NativeEventInfo<TComponent, TNativeEvents = Event> {
+export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
     readonly component: TComponent;
     readonly element: DxElement;
     readonly model?: any;
-    readonly event?: DxEvent<TNativeEvents>;
+    readonly event?: DxEvent<TNativeEvent>;
 }
 
 /** @public */
