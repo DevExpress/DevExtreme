@@ -99,8 +99,8 @@ class FileManagerDialogBase extends Widget {
         return null;
     }
 
-    _applyDialogChanges(e) {
-        const result = this._getDialogResult(e);
+    _applyDialogChanges() {
+        const result = this._getDialogResult();
         if(result) {
             this._dialogResult = result;
             this._closeDialog();
