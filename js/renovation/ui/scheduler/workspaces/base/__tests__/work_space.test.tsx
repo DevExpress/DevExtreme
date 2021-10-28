@@ -314,14 +314,15 @@ describe('WorkSpace', () => {
 
         it('should call onViewRendered with correct parameters when all-day panel is not visible', () => {
           const onViewRendered = jest.fn();
+          const currentDate = new Date();
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
-            currentDate: new Date(),
             startDayHour: 0,
             endDayHour: 1,
             showAllDayPanel: false,
+            currentDate,
           });
 
           workSpace.dateTableRef = dateTableRefMock;
@@ -371,19 +372,38 @@ describe('WorkSpace', () => {
                 }]],
                 allDayPanelCellsMeta: [],
               },
+              viewDataProviderValidationOptions: {
+                intervalCount: 1,
+                currentDate,
+                type: 'week',
+                hoursInterval: 0.5,
+                startDayHour: 0,
+                endDayHour: 1,
+                groups: [],
+                groupOrientation: undefined,
+                groupByDate: false,
+                crossScrollingEnabled: false,
+                firstDayOfWeek: 0,
+                startDate: undefined,
+                showAllDayPanel: false,
+                allDayPanelExpanded: false,
+                scrolling: { mode: 'standard' },
+                cellDuration: 30,
+              },
             });
         });
 
         it('should call onViewRendered with correct parameters when all-day panel is visible', () => {
           const onViewRendered = jest.fn();
+          const currentDate = new Date();
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
-            currentDate: new Date(),
+            currentDate,
             startDayHour: 0,
             endDayHour: 1,
-            showAllDayPanel: false,
+            showAllDayPanel: true,
           });
 
           workSpace.dateTableRef = dateTableRefMock;
@@ -446,6 +466,24 @@ describe('WorkSpace', () => {
                 }, {
                   left: 300, top: 0,
                 }],
+              },
+              viewDataProviderValidationOptions: {
+                intervalCount: 1,
+                currentDate,
+                type: 'week',
+                hoursInterval: 0.5,
+                startDayHour: 0,
+                endDayHour: 1,
+                groups: [],
+                groupOrientation: undefined,
+                groupByDate: false,
+                crossScrollingEnabled: false,
+                firstDayOfWeek: 0,
+                startDate: undefined,
+                showAllDayPanel: true,
+                allDayPanelExpanded: false,
+                scrolling: { mode: 'standard' },
+                cellDuration: 30,
               },
             });
         });

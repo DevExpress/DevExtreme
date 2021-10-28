@@ -1,7 +1,7 @@
 import { compileGetter, compileSetter } from '../../../../core/utils/data';
 import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import {
-  createDataAccessors, createTimeZoneCalculator, filterAppointments,
+  createDataAccessors, createTimeZoneCalculator, filterAppointments, isViewDataProviderConfigValid,
 } from '../common';
 import { getAppointmentsConfig } from '../model/appointments';
 import { AppointmentsConfigType } from '../model/types';
@@ -305,6 +305,110 @@ describe('Scheduler common', () => {
 
       expect(filteredItems)
         .toHaveLength(0);
+    });
+  });
+
+  describe('isViewDataProviderConfigValid', () => {
+    it('should return false when view config is undefined', () => {
+      expect(isViewDataProviderConfigValid(undefined, {} as any))
+        .toBe(false);
+    });
+
+    it('should return true if configs are identical', () => {
+      const config = {
+        intervalCount: 1,
+        currentDate: new Date(),
+        type: 'day' as any,
+        hoursInterval: 0.5,
+        startDayHour: 0,
+        endDayHour: 24,
+        groupOrientation: undefined,
+        groupByDate: false,
+        crossScrollingEnabled: false,
+        firstDayOfWeek: 0,
+        startDate: undefined,
+        showAllDayPanel: true,
+        allDayPanelExpanded: true,
+        scrolling: { mode: 'virtual' } as any,
+        cellDuration: 30,
+        groups: [],
+      };
+      expect(isViewDataProviderConfigValid(
+        { ...config },
+        { ...config },
+      ))
+        .toBe(true);
+    });
+
+    it('should return false if some of the confi props are not identical by reference', () => {
+      const workSpaceConfig = {
+        intervalCount: 1,
+        currentDate: new Date(),
+        type: 'day' as any,
+        hoursInterval: 0.5,
+        startDayHour: 0,
+        endDayHour: 24,
+        groupOrientation: undefined,
+        groupByDate: false,
+        crossScrollingEnabled: false,
+        firstDayOfWeek: 0,
+        startDate: undefined,
+        showAllDayPanel: true,
+        allDayPanelExpanded: true,
+        scrolling: { mode: 'virtual' } as any,
+        cellDuration: 30,
+        groups: [],
+      };
+      const schedulerConfig = {
+        intervalCount: 1,
+        currentDate: new Date(),
+        type: 'day' as any,
+        hoursInterval: 0.5,
+        startDayHour: 0,
+        endDayHour: 24,
+        groupOrientation: undefined,
+        groupByDate: false,
+        crossScrollingEnabled: false,
+        firstDayOfWeek: 0,
+        startDate: undefined,
+        showAllDayPanel: true,
+        allDayPanelExpanded: true,
+        scrolling: { mode: 'virtual' } as any,
+        cellDuration: 30,
+        groups: [],
+      };
+
+      expect(isViewDataProviderConfigValid(
+        workSpaceConfig,
+        schedulerConfig,
+      ))
+        .toBe(false);
+    });
+
+    it('should return true if configs are not identical by value', () => {
+      const config = {
+        intervalCount: 1,
+        currentDate: new Date(),
+        type: 'day' as any,
+        hoursInterval: 0.5,
+        startDayHour: 0,
+        endDayHour: 24,
+        groupOrientation: undefined,
+        groupByDate: false,
+        crossScrollingEnabled: false,
+        firstDayOfWeek: 0,
+        startDate: undefined,
+        showAllDayPanel: true,
+        allDayPanelExpanded: true,
+        scrolling: { mode: 'virtual' } as any,
+        cellDuration: 30,
+        groups: [],
+      };
+      expect(isViewDataProviderConfigValid(
+        { ...config },
+        { ...config, type: 'week' },
+      ))
+        .toBe(false);
     });
   });
 });
