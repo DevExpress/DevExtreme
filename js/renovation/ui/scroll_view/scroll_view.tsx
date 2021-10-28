@@ -120,6 +120,11 @@ export class ScrollView extends JSXComponent<ScrollViewProps>() {
   }
 
   @Method()
+  container(): HTMLDivElement {
+    return this.scrollableRef.current!.container();
+  }
+
+  @Method()
   scrollBy(distance: number | Partial<ScrollOffset>): void {
     this.scrollableRef.current!.scrollBy(distance);
   }
