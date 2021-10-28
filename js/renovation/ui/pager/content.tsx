@@ -21,7 +21,7 @@ import { DisplayMode } from './common/base_pager_props';
 import { InternalPagerProps } from './common/pager_props';
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
-import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../utils/effect_return';
 import { registerKeyboardAction } from '../../../ui/shared/accessibility';
 import { EventCallback } from '../common/event_callback';
 import { KeyboardActionContext, KeyboardActionContextType } from './common/keyboard_action_context';

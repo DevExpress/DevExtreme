@@ -18,8 +18,8 @@ import {
 } from '../../utils';
 import { Table } from '../table';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
-import { DateTimeCellTemplateProps, TimePanelData } from '../../types.d';
-import { GroupOrientation } from '../../../types.d';
+import { DateTimeCellTemplateProps, TimePanelData } from '../../types';
+import { GroupOrientation } from '../../../types';
 
 export const viewFunction = ({
   props: {
