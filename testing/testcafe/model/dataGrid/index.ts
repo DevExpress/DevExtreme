@@ -28,24 +28,26 @@ const CLASS = {
   revertButton: 'dx-revert-button',
 };
 
-const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean) => {
+const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
   if ($element?.length) {
     const offset = $element.offset();
 
-    if (isStart) {
-      $element
-        .trigger($.Event('dxpointerdown', {
-          pageX: offset.left,
-          pageY: offset.top,
-          pointers: [{ pointerId: 1 }],
-        }));
-    }
+    if (offset) {
+      if (isStart) {
+        $element
+          .trigger($.Event('dxpointerdown', {
+            pageX: offset.left,
+            pageY: offset.top,
+            pointers: [{ pointerId: 1 }],
+          }));
+      }
 
-    $element.trigger($.Event('dxpointermove', {
-      pageX: offset.left + x,
-      pageY: offset.top + y,
-      pointers: [{ pointerId: 1 }],
-    }));
+      $element.trigger($.Event('dxpointermove', {
+        pageX: offset.left + x,
+        pageY: offset.top + y,
+        pointers: [{ pointerId: 1 }],
+      }));
+    }
   }
 };
 
