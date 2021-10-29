@@ -237,6 +237,7 @@ describe('Scheduler', () => {
 
         expect(appointments.props)
           .toEqual({
+            isAllDay: false,
             appointments: appointmentsViewModel.regular,
             overflowIndicators: appointmentsViewModel.regularCompact,
           });
@@ -246,6 +247,7 @@ describe('Scheduler', () => {
 
         expect(allDayAppointments.props)
           .toEqual({
+            isAllDay: true,
             appointments: appointmentsViewModel.allDay,
             overflowIndicators: appointmentsViewModel.allDayCompact,
           });
