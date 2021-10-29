@@ -147,7 +147,7 @@ const HeaderPanel = ColumnsView.inherit({
 
     updateToolbarDimensions: function() {
         if(this._toolbar) {
-            triggerResizeEvent(this.getHeaderPanel());
+        // triggerResizeEvent(this.getHeaderPanel());
         }
     },
 
