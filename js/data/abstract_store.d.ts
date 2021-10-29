@@ -4,7 +4,7 @@ import {
 
 import {
     LoadOptions,
-} from './load_options';
+} from './index';
 
 export type Options = StoreOptions;
 

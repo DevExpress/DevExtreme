@@ -8,7 +8,7 @@ import Store, {
 
 import {
     LoadOptions,
-} from '../load_options';
+} from '../index';
 
 interface PromiseExtension<T> {
     then<TResult1 = T, TResult2 = never>(
