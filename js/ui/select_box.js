@@ -8,11 +8,14 @@ import { Deferred, fromPromise } from '../core/utils/deferred';
 import { getPublicElement } from '../core/element';
 import errors from '../core/errors';
 import domAdapter from '../core/dom_adapter';
+import browser from '../core/utils/browser';
 import messageLocalization from '../localization/message';
 import registerComponent from '../core/component_registrator';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 import './list/modules/selection';
 import { normalizeKeyName } from '../events/utils/index';
+
+const IS_FF = browser.mozilla;
 
 // STYLE selectBox
 
@@ -765,6 +768,13 @@ const SelectBox = DropDownList.inherit({
         }
 
         this.callBase(arguments);
+
+        // Note: T1035997
+        if(IS_FF) {
+            setTimeout(() => {
+                this._input().scrollLeft(0);
+            }, 0);
+        }
     },
 
     _dataSourceFiltered: function(searchValue) {

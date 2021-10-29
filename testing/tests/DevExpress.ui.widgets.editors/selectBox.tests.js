@@ -3410,6 +3410,32 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal(instance.option('value'), instance.option('text'), 'text option should be correct');
         assert.equal($input.val(), instance.option('value'), 'input should show correct value');
     });
+
+    QUnit.test('Input should be displayed from its start when searching value is bigger than input width (T1035997)', function(assert) {
+        this.clock.restore();
+        const done = assert.async();
+
+        const $selectBox = $('#selectBox').dxSelectBox({
+            items: ['1st long-long value', '2nd long-long value', '3rd long-long value'],
+            searchMode: 'startswith',
+            searchTimeout: 0,
+            searchEnabled: true,
+            width: 100,
+        });
+        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        keyboardMock($input)
+            .focus()
+            .type('2')
+            .input();
+
+        setTimeout(() => {
+            const scrollLeft = $input.scrollLeft();
+
+            assert.equal(scrollLeft, 0, 'scrollLeft equals 0');
+            done();
+        }, 0);
+    });
 });
 
 QUnit.module('search should be canceled only after popup hide animation completion after', {
