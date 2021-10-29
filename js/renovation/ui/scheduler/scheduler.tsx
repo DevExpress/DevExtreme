@@ -171,12 +171,12 @@ export const viewFunction = ({
           dateCellTemplate={dateCellTemplate}
           resourceCellTemplate={resourceCellTemplate}
 
-          // allDayAppointments={(
-          //   <AppointmentLayout
-          //     appointments={appointmentsViewModel.allDay}
-          //     overflowIndicators={appointmentsViewModel.allDayCompact}
-          //   />
-          // )}
+          allDayAppointments={(
+            <AppointmentLayout
+              appointments={appointmentsViewModel.allDay}
+              overflowIndicators={appointmentsViewModel.allDayCompact}
+            />
+          )}
 
           appointments={(
             <AppointmentLayout
