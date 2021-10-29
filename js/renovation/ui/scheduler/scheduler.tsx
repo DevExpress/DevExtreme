@@ -173,6 +173,7 @@ export const viewFunction = ({
 
           allDayAppointments={(
             <AppointmentLayout
+              isAllDay
               appointments={appointmentsViewModel.allDay}
               overflowIndicators={appointmentsViewModel.allDayCompact}
             />

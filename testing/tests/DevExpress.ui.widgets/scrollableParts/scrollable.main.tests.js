@@ -100,6 +100,7 @@ QUnit.test('horizontal moving scrollable moves content', function(assert) {
 
 
 QUnit.test('horizontal inertia calc distance', function(assert) {
+    const done = assert.async();
     assert.expect(1);
 
     const contentWidth = 9000;
@@ -116,6 +117,7 @@ QUnit.test('horizontal inertia calc distance', function(assert) {
         onEnd: function() {
             const location = getScrollOffset($scrollable);
             assert.equal(Math.round(location.left), Math.round(distance), 'distance was calculated correctly');
+            done();
         }
     });
 
@@ -126,6 +128,8 @@ QUnit.test('horizontal inertia calc distance', function(assert) {
         .wait(moveDuration)
         .move(moveDistance, 0)
         .up();
+
+    this.clock.tick();
 });
 
 QUnit.test('reset unused position after change direction', function(assert) {

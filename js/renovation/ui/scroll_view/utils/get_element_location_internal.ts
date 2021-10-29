@@ -11,6 +11,7 @@ import {
   SCROLLABLE_CONTENT_CLASS,
 } from '../common/consts';
 
+// this function tested by testcafe
 /* istanbul ignore next */
 export function getElementLocationInternal(
   targetElement: HTMLElement,
@@ -38,11 +39,9 @@ export function getElementLocationInternal(
   const containerSize = containerElement.getBoundingClientRect()[dimension];
   const elementSize = targetElement.getBoundingClientRect()[dimension];
 
-  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   let scale = 1;
 
   // For support zooming using styles: transform = scale(0.33) or zoom = 0.33
-  // eslint-disable-next-line @typescript-eslint/no-magic-numbers
   if (Math.abs(containerSize - containerOffsetSize) > 1) {
     scale = containerSize / containerOffsetSize;
   }

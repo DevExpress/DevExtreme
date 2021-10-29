@@ -71,9 +71,12 @@ export class DateGeneratorBaseStrategy {
             dateSettings = this._separateLongParts(dateSettings, appointmentAdapter);
         }
 
+        const { isRecurrent } = appointmentAdapter;
+
         return {
             dateSettings,
-            itemGroupIndices
+            itemGroupIndices,
+            isRecurrent
         };
     }
 
@@ -553,12 +556,13 @@ export class AppointmentSettingsGenerator {
     create() {
         const {
             dateSettings,
-            itemGroupIndices
+            itemGroupIndices,
+            isRecurrent
         } = this._generateDateSettings();
 
         const cellPositions = this._calculateCellPositions(dateSettings, itemGroupIndices);
 
-        const result = this._prepareAppointmentInfos(dateSettings, cellPositions);
+        const result = this._prepareAppointmentInfos(dateSettings, cellPositions, isRecurrent);
 
         return result;
     }
@@ -580,7 +584,7 @@ export class AppointmentSettingsGenerator {
         );
     }
 
-    _prepareAppointmentInfos(dateSettings, cellPositions) {
+    _prepareAppointmentInfos(dateSettings, cellPositions, isRecurrent) {
         const infos = [];
 
         cellPositions.forEach(({ coordinates, dateSettingIndex }) => {
@@ -591,6 +595,7 @@ export class AppointmentSettingsGenerator {
                 appointment: dateSetting,
                 sourceAppointment: dateSetting.source,
                 dateText,
+                isRecurrent,
             };
 
             this._setResourceColor(info, coordinates.groupIndex);
