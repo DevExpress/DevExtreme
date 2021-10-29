@@ -560,12 +560,10 @@ describe('Scheduler', () => {
       });
 
       describe('onViewRendered', () => {
-        it('should save viewDataProvider and cells meta data to the state', () => {
+        it('should save workSpace viewModel into the state', () => {
           const scheduler = new Scheduler(new SchedulerProps());
 
-          expect(scheduler.viewDataProvider)
-            .toBe(undefined);
-          expect(scheduler.cellsMetaData)
+          expect(scheduler.workSpaceViewModel)
             .toBe(undefined);
 
           const viewDataProvider = new ViewDataProvider('week') as any;
@@ -573,16 +571,18 @@ describe('Scheduler', () => {
             dateTableCellsMeta: [],
             allDayPanelCellsMeta: [],
           };
+          const viewDataProviderValidationOptions: any = {};
 
-          scheduler.onViewRendered({
+          const workSpaceViewModel = {
             viewDataProvider,
             cellsMetaData,
-          });
+            viewDataProviderValidationOptions,
+          };
 
-          expect(scheduler.viewDataProvider)
-            .toBe(viewDataProvider);
-          expect(scheduler.cellsMetaData)
-            .toBe(cellsMetaData);
+          scheduler.onViewRendered(workSpaceViewModel);
+
+          expect(scheduler.workSpaceViewModel)
+            .toBe(workSpaceViewModel);
         });
       });
 
@@ -777,12 +777,153 @@ describe('Scheduler', () => {
         });
       });
 
+      describe('isValidViewDataProvider', () => {
+        it('should return true when workSpaceViewModel is equal to scheduler\'s props', () => {
+          const scrolling: any = { mode: 'standard' };
+          const currentDate = new Date();
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            currentDate,
+            scrolling,
+            views: [{
+              type: 'day',
+              intervalCount: 1,
+            }],
+            currentView: 'day',
+          });
+
+          const loadedResources = [];
+
+          scheduler.loadedResources = loadedResources;
+
+          scheduler.workSpaceViewModel = {
+            cellsMetaData: {},
+            viewDataProvider: new ViewDataProvider('day'),
+            viewDataProviderValidationOptions: {
+              intervalCount: 1,
+              currentDate,
+              type: 'day',
+              hoursInterval: 0.5,
+              startDayHour: 0,
+              endDayHour: 24,
+              groupOrientation: undefined,
+              groupByDate: false,
+              crossScrollingEnabled: false,
+              firstDayOfWeek: 0,
+              startDate: undefined,
+              showAllDayPanel: true,
+              allDayPanelExpanded: true,
+              scrolling,
+              cellDuration: 30,
+              groups: loadedResources,
+            },
+          } as any;
+
+          expect(scheduler.isValidViewDataProvider)
+            .toBe(true);
+        });
+
+        it('should return true when workSpaceViewModel is equal to scheduler\'s props but intervalCount is undefined', () => {
+          const scrolling: any = { mode: 'standard' };
+          const currentDate = new Date();
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            currentDate,
+            scrolling,
+            views: [{
+              type: 'day',
+            }],
+            currentView: 'day',
+          });
+
+          const loadedResources = [];
+
+          scheduler.loadedResources = loadedResources;
+
+          scheduler.workSpaceViewModel = {
+            cellsMetaData: {},
+            viewDataProvider: new ViewDataProvider('day'),
+            viewDataProviderValidationOptions: {
+              intervalCount: 1,
+              currentDate,
+              type: 'day',
+              hoursInterval: 0.5,
+              startDayHour: 0,
+              endDayHour: 24,
+              groupOrientation: undefined,
+              groupByDate: false,
+              crossScrollingEnabled: false,
+              firstDayOfWeek: 0,
+              startDate: undefined,
+              showAllDayPanel: true,
+              allDayPanelExpanded: true,
+              scrolling,
+              cellDuration: 30,
+              groups: loadedResources,
+            },
+          } as any;
+
+          expect(scheduler.isValidViewDataProvider)
+            .toBe(true);
+        });
+
+        it('should return false when workSpaceViewModel is not equal to scheduler\'s props', () => {
+          const scrolling: any = { mode: 'standard' };
+          const currentDate = new Date();
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            currentDate,
+            scrolling,
+            views: [{
+              type: 'day',
+            }],
+            currentView: 'day',
+          });
+
+          const loadedResources = [];
+
+          scheduler.loadedResources = loadedResources;
+
+          scheduler.workSpaceViewModel = {
+            cellsMetaData: {},
+            viewDataProvider: new ViewDataProvider('day'),
+            viewDataProviderValidationOptions: {
+              intervalCount: 1,
+              currentDate: new Date(2020, 10, 15),
+              type: 'day',
+              hoursInterval: 0.5,
+              startDayHour: 0,
+              endDayHour: 24,
+              groupOrientation: undefined,
+              groupByDate: false,
+              crossScrollingEnabled: false,
+              firstDayOfWeek: 0,
+              startDate: undefined,
+              showAllDayPanel: true,
+              allDayPanelExpanded: true,
+              scrolling,
+              cellDuration: 30,
+              groups: loadedResources,
+            },
+          } as any;
+
+          expect(scheduler.isValidViewDataProvider)
+            .toBe(false);
+        });
+      });
+
       describe('appointmentsConfig', () => {
         it('should be created correctly if viewDataProvider and cellsMetaData exists', () => {
           const scheduler = new Scheduler(new SchedulerProps());
 
-          scheduler.cellsMetaData = { } as any;
-          scheduler.viewDataProvider = new ViewDataProvider('day') as any;
+          scheduler.workSpaceViewModel = {
+            cellsMetaData: {},
+            viewDataProvider: new ViewDataProvider('day'),
+            viewDataProviderValidationOptions: {},
+          } as any;
 
           expect(scheduler.appointmentsConfig)
             .toBe('Test_getAppointmentsConfig');
@@ -791,7 +932,7 @@ describe('Scheduler', () => {
             .toHaveBeenCalledTimes(1);
         });
 
-        it('should not been created if viewDataProvider is not exists', () => {
+        it('should not be created if workSpaceViewModel does not exist', () => {
           const scheduler = new Scheduler(new SchedulerProps());
 
           expect(scheduler.appointmentsConfig)
@@ -801,10 +942,17 @@ describe('Scheduler', () => {
             .toHaveBeenCalledTimes(0);
         });
 
-        it('should not been created if cellsMetaData is not exists', () => {
+        it('should not be created if workSpaceViewModel is different from scheduler props', () => {
           const scheduler = new Scheduler(new SchedulerProps());
 
-          scheduler.viewDataProvider = new ViewDataProvider('day') as any;
+          scheduler.workSpaceViewModel = {
+            cellsMetaData: {},
+            viewDataProvider: new ViewDataProvider('day'),
+            viewDataProviderValidationOptions: {
+              intervalCount: 3,
+              currentDate: new Date(2017, 4, 5),
+            },
+          } as any;
 
           expect(scheduler.appointmentsConfig)
             .toBe(undefined);
@@ -862,6 +1010,7 @@ describe('Scheduler', () => {
 
           jest.spyOn(scheduler, 'appointmentsConfig', 'get')
             .mockReturnValue('appointmentsConfig_test' as any);
+          scheduler.workSpaceViewModel = {} as any;
 
           expect(scheduler.appointmentsViewModel)
             .toBe('Test_getAppointmentsViewModel');

@@ -692,6 +692,16 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       startDayHour,
       endDayHour,
       groups,
+      groupOrientation,
+      groupByDate,
+      crossScrollingEnabled,
+      firstDayOfWeek,
+      startDate,
+      showAllDayPanel,
+      allDayPanelExpanded,
+      scrolling,
+      cellDuration,
+
       onViewRendered,
     } = this.props;
 
@@ -730,6 +740,24 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         cellsMetaData: {
           dateTableCellsMeta,
           allDayPanelCellsMeta,
+        },
+        viewDataProviderValidationOptions: {
+          intervalCount,
+          currentDate,
+          type: viewType,
+          hoursInterval,
+          startDayHour,
+          endDayHour,
+          groups,
+          groupOrientation,
+          groupByDate,
+          crossScrollingEnabled,
+          firstDayOfWeek,
+          startDate,
+          showAllDayPanel,
+          allDayPanelExpanded,
+          scrolling,
+          cellDuration,
         },
       });
     }

@@ -1,3 +1,4 @@
+/* eslint-disable rulesdir/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   Component,
@@ -20,12 +21,10 @@ import type { Options as DataSourceOptions } from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import {
-  CellsMetaData,
   DataCellTemplateProps,
   DateTimeCellTemplateProps,
   Group,
   ResourceCellTemplateProps,
-  ViewDataProviderType,
   ViewMetaData,
 } from './workspaces/types';
 import { WorkSpace } from './workspaces/base/work_space';
@@ -33,7 +32,7 @@ import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
 import type { DataAccessorType, DataSourcePromise } from './types';
 import {
-  createDataAccessors, createTimeZoneCalculator, filterAppointments,
+  createDataAccessors, createTimeZoneCalculator, filterAppointments, isViewDataProviderConfigValid,
 } from './common';
 import { getGroupCount, loadResources } from '../../../ui/scheduler/resources/utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
@@ -200,9 +199,7 @@ export const viewFunction = ({
 export class Scheduler extends JSXComponent(SchedulerProps) {
   @InternalState() instance!: dxScheduler;
 
-  @InternalState() viewDataProvider!: ViewDataProviderType;
-
-  @InternalState() cellsMetaData!: CellsMetaData;
+  @InternalState() workSpaceViewModel?: ViewMetaData;
 
   @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
 
@@ -219,6 +216,48 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   get currentViewConfig(): CurrentViewConfigType {
     return getCurrentViewConfig(this.currentViewProps, this.props);
+  }
+
+  get isValidViewDataProvider(): boolean {
+    const {
+      intervalCount,
+      currentDate,
+      type,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      groupOrientation,
+      groupByDate,
+      crossScrollingEnabled,
+      firstDayOfWeek,
+      startDate,
+      showAllDayPanel,
+      allDayPanelExpanded,
+      scrolling,
+      cellDuration,
+    } = this.currentViewConfig;
+
+    return isViewDataProviderConfigValid(
+      this.workSpaceViewModel?.viewDataProviderValidationOptions,
+      {
+        intervalCount: intervalCount ?? 1,
+        currentDate,
+        type,
+        hoursInterval,
+        startDayHour,
+        endDayHour,
+        groupOrientation,
+        groupByDate,
+        crossScrollingEnabled,
+        firstDayOfWeek,
+        startDate,
+        showAllDayPanel,
+        allDayPanelExpanded,
+        scrolling,
+        cellDuration,
+        groups: this.loadedResources,
+      },
+    );
   }
 
   get dataAccessors(): DataAccessorType {
@@ -277,7 +316,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get appointmentsConfig(): AppointmentsConfigType | undefined {
-    if (!this.viewDataProvider || !this.cellsMetaData) {
+    if (!this.isValidViewDataProvider) {
       return undefined;
     }
 
@@ -293,7 +332,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.props, // TODO extract props for performace
       this.currentViewConfig, // TODO extract props for performace
       this.loadedResources,
-      this.viewDataProvider,
+      this.workSpaceViewModel!.viewDataProvider,
       renderConfig.isAllDayPanelSupported,
     );
   }
@@ -305,7 +344,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.dataAccessors,
       this.timeZoneCalculator,
       this.loadedResources,
-      this.viewDataProvider,
+      this.workSpaceViewModel?.viewDataProvider,
     );
   }
 
@@ -321,10 +360,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
     const model = getAppointmentsModel(
       this.appointmentsConfig,
-      this.viewDataProvider,
+      this.workSpaceViewModel!.viewDataProvider,
       this.timeZoneCalculator,
       this.dataAccessors,
-      this.cellsMetaData,
+      this.workSpaceViewModel!.cellsMetaData,
     );
 
     return getAppointmentsViewModel(
@@ -461,8 +500,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   onViewRendered(viewMetaData: ViewMetaData): void {
-    this.viewDataProvider = viewMetaData.viewDataProvider;
-    this.cellsMetaData = viewMetaData.cellsMetaData;
+    this.workSpaceViewModel = viewMetaData;
   }
 
   setCurrentView(view: string): void {
