@@ -6,6 +6,8 @@ export const viewFunction = ({
   props: {
     text,
     dateText,
+    isRecurrent,
+    isReduced,
   },
 }: AppointmentContent): JSX.Element => (
   <div className="dx-scheduler-appointment-content">
@@ -17,6 +19,16 @@ export const viewFunction = ({
         {dateText}
       </div>
     </div>
+    {
+      isRecurrent && (
+        <div className="dx-scheduler-appointment-recurrence-icon dx-icon-repeat" />
+      )
+    }
+    {
+      isReduced && (
+        <div className="dx-scheduler-appointment-reduced-icon" />
+      )
+    }
   </div>
 );
 
@@ -25,6 +37,10 @@ export class AppointmentContentProps {
   @OneWay() text = '';
 
   @OneWay() dateText = '';
+
+  @OneWay() isRecurrent = false;
+
+  @OneWay() isReduced = false;
 }
 
 @Component({

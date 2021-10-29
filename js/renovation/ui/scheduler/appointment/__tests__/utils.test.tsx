@@ -37,7 +37,7 @@ describe('Appointment utils', () => {
 
   describe('getAppointmentStyles', () => {
     it('generate styles for the full model', () => {
-      expect(getAppointmentStyles(testViewModel))
+      expect(getAppointmentStyles(testViewModel as any))
         .toEqual({
           backgroundColor: '#1A2BC',
           height: '20px',
@@ -51,7 +51,7 @@ describe('Appointment utils', () => {
       expect(getAppointmentStyles({
         ...testViewModel,
         info: {
-          ...testViewModel.info,
+          ...testViewModel.info as any,
           resourceColor: undefined,
         },
       }))
@@ -65,7 +65,7 @@ describe('Appointment utils', () => {
 
     it('should return default height if it is not provided', () => {
       expect(getAppointmentStyles({
-        ...testViewModel,
+        ...testViewModel as any,
         geometry: {
           ...testViewModel.geometry,
           height: 0,
@@ -82,7 +82,7 @@ describe('Appointment utils', () => {
 
     it('should return default width if it is not provided', () => {
       expect(getAppointmentStyles({
-        ...testViewModel,
+        ...testViewModel as any,
         geometry: {
           ...testViewModel.geometry,
           width: 0,

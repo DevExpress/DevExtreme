@@ -9,8 +9,10 @@ import {
 } from './types';
 import { Appointment } from './appointment';
 import { OverflowIndicator } from './overflow_indicator/layout';
+import { combineClasses } from '../../../utils/combine_classes';
 
 export const viewFunction = ({
+  classes,
   props: {
     appointments,
     overflowIndicators,
@@ -18,7 +20,7 @@ export const viewFunction = ({
     overflowIndicatorTemplate,
   },
 }: AppointmentLayout): JSX.Element => (
-  <div className="dx-scheduler-appointments">
+  <div className={classes}>
     {
       appointments.map((item: AppointmentViewModel, index: number) => (
         <Appointment
@@ -43,6 +45,8 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class AppointmentLayoutProps {
+  @OneWay() isAllDay = false;
+
   @OneWay() appointments: AppointmentViewModel[] = [];
 
   @OneWay() overflowIndicators: OverflowIndicatorViewModel[] = [];
@@ -58,4 +62,12 @@ export class AppointmentLayoutProps {
   jQuery: { register: true },
 })
 export class AppointmentLayout extends JSXComponent(AppointmentLayoutProps) {
+  get classes(): string {
+    const { isAllDay } = this.props;
+
+    return combineClasses({
+      'dx-scheduler-scrollable-appointments': !isAllDay,
+      'dx-scheduler-all-day-appointments': isAllDay,
+    });
+  }
 }
