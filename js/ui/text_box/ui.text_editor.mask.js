@@ -324,7 +324,12 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _getPreparedValue: function() {
-        return this._convertToValue().replace(/\s+$/, '');
+        let value = this._convertToValue();
+
+        const suffixEmptyCharacters = new RegExp(`(${EMPTY_CHAR})+$`);
+        value = value.replace(suffixEmptyCharacters, '');
+
+        return value.replaceAll(EMPTY_CHAR, ' ');
     },
 
     _valueChangeEventHandler: function(e) {
