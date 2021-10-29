@@ -21,9 +21,9 @@ const monthRegExpGenerator = function(count, dateParts) {
 const PATTERN_REGEXPS = {
     ':': function(count, dateParts) {
         const countSuffix = count > 1 ? `{${count}}` : '';
-        let timeSeparator = dateParts.getTimeSeparator();
-        timeSeparator !== ':' && (timeSeparator = `${timeSeparator}|\\:`);
-        return `\\${timeSeparator}${countSuffix}`;
+        let timeSeparator = escapeRegExp(dateParts.getTimeSeparator());
+        timeSeparator !== ':' && (timeSeparator = `${timeSeparator}|:`);
+        return `${timeSeparator}${countSuffix}`;
     },
     y: function(count) {
         return count === 2 ? `[0-9]{${count}}` : '[0-9]+?';
