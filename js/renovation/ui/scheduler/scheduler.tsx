@@ -171,12 +171,12 @@ export const viewFunction = ({
           dateCellTemplate={dateCellTemplate}
           resourceCellTemplate={resourceCellTemplate}
 
-          allDayAppointments={(
-            <AppointmentLayout
-              appointments={appointmentsViewModel.allDay}
-              overflowIndicators={appointmentsViewModel.allDayCompact}
-            />
-          )}
+          // allDayAppointments={(
+          //   <AppointmentLayout
+          //     appointments={appointmentsViewModel.allDay}
+          //     overflowIndicators={appointmentsViewModel.allDayCompact}
+          //   />
+          // )}
 
           appointments={(
             <AppointmentLayout
@@ -203,7 +203,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
 
-  @InternalState() loadedResources: Group[] = [];
+  @InternalState() loadedResources!: Group[];
 
   @InternalState() dataItems: Appointment[] = [];
 
@@ -316,7 +316,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get appointmentsConfig(): AppointmentsConfigType | undefined {
-    if (!this.isValidViewDataProvider) {
+    if (!this.isValidViewDataProvider || !this.loadedResources) {
       return undefined;
     }
 
