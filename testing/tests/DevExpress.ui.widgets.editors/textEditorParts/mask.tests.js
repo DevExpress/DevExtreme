@@ -71,6 +71,20 @@ QUnit.module('rendering', {}, () => {
 });
 
 QUnit.module('typing', moduleConfig, () => {
+    QUnit.test('space should not be accepted if it is not allowed (T1014875)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '0',
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        caretWorkaround($input);
+
+        keyboard.type(' ');
+        assert.strictEqual(keyboard.caret().start, 0);
+    });
+
     QUnit.test('accept only allowed chars', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: 'X',

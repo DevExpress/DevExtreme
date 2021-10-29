@@ -22,7 +22,7 @@ const stubCaret = function() {
 
 let caret = caretUtils;
 
-const EMPTY_CHAR = ' ';
+const EMPTY_CHAR = '_empty_';
 const ESCAPED_CHAR = '\\';
 
 const TEXTEDITOR_MASKED_CLASS = 'dx-texteditor-masked';
