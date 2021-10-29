@@ -1146,6 +1146,22 @@ describe('Scheduler', () => {
           expect(scheduler.workSpaceKey)
             .toBe('week_vertical_3_2');
         });
+
+        it('should work when resources aer not loaded', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            crossScrollingEnabled: true,
+            currentView: 'day',
+            views: [{
+              type: 'day',
+              intervalCount: 3,
+              groupOrientation: 'horizontal',
+            }],
+          });
+
+          expect(scheduler.workSpaceKey)
+            .toBe('day_horizontal_3_0');
+        });
       });
 
       describe('Cell Templates', () => {
