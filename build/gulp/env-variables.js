@@ -3,7 +3,7 @@
 const TEST_CI = Boolean(process.env['DEVEXTREME_TEST_CI']);
 const BUILD_ESM_PACKAGE = Boolean(process.env['BUILD_ESM_PACKAGE']);
 const SKIP_THEMEBUILDER = Boolean(process.env['SKIP_THEMEBUILDER']);
-const BUILD_INPROGRESS_RENOVATION = Boolean(process.env['BUILD_INPROGRESS_RENOVATION']);
+const BUILD_INPROGRESS_RENOVATION = String(process.env['BUILD_INPROGRESS_RENOVATION']).toLowerCase() ==='true';
 
 module.exports = {
     TEST_CI: TEST_CI,
