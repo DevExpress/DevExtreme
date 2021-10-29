@@ -445,10 +445,12 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
     _itemClickHandler: function(e) {
 
-        let d;
+        let d; // = new Deferred();
+        const callBase = this.callBase;
 
         this._createAction((function(e) {
             d = this._itemSelectHandler(e.event);
+            // d.resolve();
         }).bind(this), {
             validatingTargetName: 'itemElement'
         })({
@@ -456,13 +458,19 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             event: e
         });
 
-        d?.done(() => {
-            this.callBase.apply(this, arguments);
-        });
+        if(d) {
+            d.done(() => {
+                callBase.apply(this, arguments);
+            });
+        } else {
+            callBase.apply(this, arguments);
+        }
 
+        // d.resolve();
     },
 
     _itemSelectHandler: function(e) {
+        // console.log('_itemSelectHandler');
         let d = new Deferred();
 
         if(!this.option('selectionByClick')) {
@@ -739,17 +747,18 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     selectItem: function(itemElement) {
 
         // ///////////////////////////
+        // console.log('selectItem!');
         if(this.option('selectionMode') === 'none') return;
 
         const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
         if(!indexExists(itemIndex)) {
-            return;
+            return new Deferred().resolve();
         }
 
         const key = this._getKeyByIndex(itemIndex);
 
         if(this._selection.isItemSelected(key)) {
-            return;
+            return new Deferred().resolve();
         }
 
         if(this.option('selectionMode') === 'single') {
