@@ -43,7 +43,7 @@
     </dxi-item>
     <dxi-item location="before">
       <dx-button
-        text="Collapse All"
+        [text]="this.expanded ? 'Collapse All' : 'Expand All'"
         width="136"
         (onClick)="collapseAllClick($event)"
       >

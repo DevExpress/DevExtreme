@@ -48,7 +48,7 @@
       </DxItem>
       <DxItem location="before">
         <DxButton
-          text="Collapse All"
+          :text="expanded ? 'Collapse All' : 'Expand All'"
           width="136"
           @click="collapseAllClick"
         />
@@ -121,11 +121,8 @@ export default {
       this.$refs[this.gridRefName].instance.columnOption(e.value, 'groupIndex', 0);
       this.totalCount = this.getGroupCount(e.value);
     },
-    collapseAllClick(e) {
+    collapseAllClick() {
       this.expanded = !this.expanded;
-      e.component.option({
-        text: this.expanded ? 'Collapse All' : 'Expand All',
-      });
     },
     refreshDataGrid() {
       this.$refs[this.gridRefName].instance.refresh();

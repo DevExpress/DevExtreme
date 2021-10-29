@@ -59,11 +59,8 @@ export class AppComponent {
     this.totalCount = this.getGroupCount(e.value);
   }
 
-  collapseAllClick(e) {
+  collapseAllClick() {
     this.expanded = !this.expanded;
-    e.component.option({
-      text: this.expanded ? 'Collapse All' : 'Expand All',
-    });
   }
 
   refreshDataGrid() {

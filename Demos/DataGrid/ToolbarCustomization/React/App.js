@@ -48,9 +48,8 @@ class App extends React.Component {
     });
   }
 
-  collapseAllClick(e) {
+  collapseAllClick() {
     const newValue = !this.state.expanded;
-    e.component.option('text', newValue ? 'Collapse All' : 'Expand All');
     this.setState({
       expanded: newValue,
     });
@@ -99,7 +98,7 @@ class App extends React.Component {
           </Item>
           <Item location="before">
             <Button
-              text='Collapse All'
+              text={this.state.expanded ? 'Collapse All' : 'Expand All'}
               width='136'
               onClick={this.collapseAllClick} />
           </Item>
