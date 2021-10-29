@@ -90,6 +90,7 @@ const getAsyncLoad = () => {
 
     return (loadOptions) => {
         const deferred = $.Deferred();
+        // console.log(loadOptions);
         setTimeout(() => {
             if(loadOptions.take && !loadOptions.searchValue) {
                 deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
@@ -119,6 +120,7 @@ const getAsyncLoad = () => {
                     }
                 });
 
+                //  console.log(result.splice(loadOptions.skip, loadOptions.take));
                 deferred.resolve(result.splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
             } else {
                 deferred.resolve(data, { totalCount: 9 });
@@ -4337,13 +4339,15 @@ QUnit.module('searchEnabled', moduleSetup, () => {
             selectAllMode: 'allPages',
             searchEnabled: true,
             searchExpr: 'id',
+            dropDownOptions: {
+                height: 120,
+            },
             searchTimeout: TIME_TO_WAIT,
             opened: true
         });
         const tagBox = $tagBox.dxTagBox('instance');
 
         this.clock.tick(TIME_TO_WAIT * 3);
-
 
         const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
 
@@ -4352,16 +4356,22 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         let $listItems = getListItems(tagBox);
 
         $listItems.eq(0).trigger('dxclick');
-        this.clock.tick(TIME_TO_WAIT * 2);
+        this.clock.tick(TIME_TO_WAIT * 3);
 
-        $input.trigger('dxclick');
+        // $input.trigger('dxclick');
+
+        tagBox.option('opened', false);
+        tagBox.option('opened', true);
+
         keyboardMock($input).type('search');
-        this.clock.tick(TIME_TO_WAIT * 2);
+        // keyboardMock($input).keyDown('enter');;
+
+        this.clock.tick(TIME_TO_WAIT * 3);
 
         $listItems = getListItems(tagBox);
 
         $listItems.eq(0).trigger('dxclick');
-        this.clock.tick(TIME_TO_WAIT * 2);
+        this.clock.tick(TIME_TO_WAIT * 3);
 
         assert.strictEqual(loadSpy.callCount, 3, 'correct count of ds load');
     });
