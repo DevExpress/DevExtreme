@@ -437,7 +437,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   @Effect({ run: 'once' })
-  /* istanbul ignore next */
   subscribeContainerToResize(): EffectReturn {
     return subscribeToResize(
       this.containerRef.current,
@@ -446,7 +445,6 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   @Effect({ run: 'once' })
-  /* istanbul ignore next */
   subscribeContentToResize(): EffectReturn {
     return subscribeToResize(
       this.content(),
@@ -482,7 +480,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
   }
 
   startLoading(): void {
-    if (this.loadingIndicatorEnabled && isElementVisible(this.scrollableRef.current!)) {
+    if (this.loadingIndicatorEnabled && isElementVisible(this.scrollableRef.current)) {
       this.isLoadPanelVisible = true;
     }
     this.lock();
@@ -610,10 +608,8 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     this.contentScrollHeight = contentEl.scrollHeight;
 
     if (this.props.forceGeneratePockets) {
-      /* istanbul ignore next */
-      this.topPocketHeight = this.topPocketRef?.current!.clientHeight; // ?. for angular
-      /* istanbul ignore next */ // it is not used more
-      this.bottomPocketHeight = this.bottomPocketRef?.current!.clientHeight; // ?. for angular
+      this.topPocketHeight = this.topPocketRef?.current!.clientHeight || 0; // ?. for angular
+      this.bottomPocketHeight = this.bottomPocketRef?.current!.clientHeight || 0; // ?. for angular
     }
   }
 
@@ -843,8 +839,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     return this.props.pullDownEnabled && devices.real().platform !== 'generic';
   }
 
-  /* istanbul ignore next */
-  get contentStyles(): { [key: string]: string | number } | undefined {
+  get contentStyles(): { transform: string } | undefined {
     if (this.props.forceGeneratePockets && this.isPullDownStrategy) {
       return {
         transform: `translate(0px, ${this.contentTranslateTop}px)`,

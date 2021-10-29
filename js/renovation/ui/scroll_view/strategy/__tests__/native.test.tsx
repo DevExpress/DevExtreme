@@ -698,7 +698,27 @@ describe('Getters', () => {
     });
   });
 
-  // TODO: useSimulatedScrollbars
+  each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+    each(optionValues.nativeRefreshStrategy).describe('refreshStrategy: %o', (refreshStrategy) => {
+      it('contentStyles()', () => {
+        const viewModel = new Scrollable({
+          direction: 'vertical',
+          forceGeneratePockets,
+          refreshStrategy,
+        });
+
+        const contentTranslateTopValue = 100;
+        viewModel.contentTranslateTop = contentTranslateTopValue;
+
+        if (forceGeneratePockets && refreshStrategy === 'pullDown') {
+          expect(viewModel.contentStyles).toEqual({ transform: `translate(0px, ${contentTranslateTopValue}px)` });
+        } else {
+          expect(viewModel.contentStyles).toEqual(undefined);
+        }
+      });
+    });
+  });
+
   test.each([true, false])('setContentDimensions(), forceGeneratePockets: %o', (forceGeneratePockets) => {
     const viewModel = new Scrollable({ direction: 'vertical', forceGeneratePockets });
 
@@ -709,6 +729,18 @@ describe('Getters', () => {
 
     expect(viewModel.topPocketHeight).toEqual(forceGeneratePockets ? 80 : 0);
     expect(viewModel.bottomPocketHeight).toEqual(forceGeneratePockets ? 50 : 0);
+  });
+
+  test.each([true, false])('setContentDimensions(), pockets are not defined, forceGeneratePockets: %o', (forceGeneratePockets) => {
+    const viewModel = new Scrollable({ direction: 'vertical', forceGeneratePockets });
+
+    viewModel.topPocketRef = undefined as any;
+    viewModel.bottomPocketRef = undefined as any;
+
+    viewModel.setContentDimensions({} as HTMLDivElement);
+
+    expect(viewModel.topPocketHeight).toEqual(0);
+    expect(viewModel.bottomPocketHeight).toEqual(0);
   });
 
   test.each(getPermutations([
@@ -1147,23 +1179,4 @@ describe('Scrollbar integration', () => {
       }
     });
   });
-
-  // test.each(getPermutations([
-  //   optionValues.direction,
-  //   optionValues.useSimulatedScrollbar,
-  //   optionValues.platforms,
-  //   ['desktop', 'phone', 'tablet'],
-  // ]))('Should assign swipeDown, pullDown strategy,
-  // direction: %o, useSimulatedScrollbar: %o, platform: %o, deviceType: %o',
-  //   (direction, useSimulatedScrollbar, platform, deviceType) => {
-  //     (devices.real as Mock).mockImplementation(() => ({ platform, deviceType }));
-  //     (devices.current as Mock).mockImplementation(() => ({ platform }));
-
-  //     const viewModel = new Scrollable({
-  //       useSimulatedScrollbar,
-  //       direction,
-  //     });
-
-  //     expect(true).toEqual(true);
-  //   });
 });

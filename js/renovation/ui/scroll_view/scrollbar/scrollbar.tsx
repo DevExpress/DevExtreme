@@ -29,13 +29,10 @@ import {
 } from '../../../utils/subscribe_to_event';
 
 import { BaseWidgetProps } from '../../common/base_props';
-import { inRange } from '../../../../core/utils/math';
 import { DxMouseEvent } from '../common/types';
-import { clampIntoRange } from '../utils/clamp_into_range';
 import { ScrollbarProps } from '../common/scrollbar_props';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
 
-const OUT_BOUNDS_ACCELERATION = 0.5;
 export const THUMB_MIN_SIZE = 15;
 
 export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
@@ -72,11 +69,11 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Mutable() prevScrollLocation = 0;
 
-  @InternalState() pendingPointerUp = false;
+  @Mutable() prevMaxOffset = 0;
 
   @InternalState() hovered = false;
 
-  @InternalState() expanded = false;
+  @InternalState() active = false;
 
   @Ref() thumbRef!: RefObject<HTMLDivElement>;
 
@@ -84,8 +81,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   pointerDownEffect(): EffectReturn {
     return subscribeToDXPointerDownEvent(
       this.thumbRef.current, () => {
-        this.pendingPointerUp = true;
-        this.expanded = true;
+        this.active = true;
       },
     );
   }
@@ -94,8 +90,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   pointerUpEffect(): EffectReturn {
     return subscribeToDXPointerUpEvent(
       domAdapter.getDocument(), () => {
-        this.expanded = false;
-        this.pendingPointerUp = false;
+        this.active = false;
       },
     );
   }
@@ -138,46 +133,16 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  initHandler(
-    event: DxMouseEvent,
-    thumbScrolling: boolean,
-    offset: number,
-  ): void {
-    const { target } = event.originalEvent;
-    const scrollbarClicked = this.props.scrollByThumb && this.isScrollbar(target);
-
-    if (scrollbarClicked) {
-      this.moveToMouseLocation(event, offset);
-    }
-
-    if (thumbScrolling) {
-      this.expanded = true;
-    }
+  setActiveState(): void {
+    this.active = true;
   }
 
   @Method()
-  moveHandler(delta: number, minOffset: number, maxOffset: number, thumbScrolling: boolean): void {
-    let resultDelta = delta;
+  moveToMouseLocation(event: DxMouseEvent, offset: number): void {
+    const mouseLocation = event[`page${this.axis.toUpperCase()}`] - offset;
+    const delta = mouseLocation / this.containerToContentRatio - this.props.containerSize / 2;
 
-    if (thumbScrolling) {
-      resultDelta = -Math.round(delta / this.containerToContentRatio);
-    }
-
-    const isOutBounds = !inRange(this.props.scrollLocation, maxOffset, minOffset);
-    if (isOutBounds) {
-      resultDelta *= OUT_BOUNDS_ACCELERATION;
-    }
-
-    this.scrollStep(resultDelta, minOffset, maxOffset);
-  }
-
-  @Method()
-  scrollStep(delta: number, minOffset: number, maxOffset: number): void {
-    const moveToValue = this.props.scrollLocation + delta;
-
-    this.moveTo(this.props.bounceEnabled
-      ? moveToValue
-      : clampIntoRange(moveToValue, minOffset, maxOffset));
+    this.moveTo(Math.round(-delta));
   }
 
   @Method()
@@ -195,10 +160,12 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Effect()
   syncScrollLocation(): void {
-    if (this.props.containerHasSizes) {
+    if (this.containerHasSizes) {
       let newScrollLocation = this.props.scrollLocation;
 
-      if (this.isHorizontal && this.props.rtlEnabled) {
+      const maxOffsetChanged = Math.abs(this.props.maxOffset - this.prevMaxOffset) > 0;
+      this.prevMaxOffset = this.props.maxOffset;
+      if (maxOffsetChanged && this.isHorizontal && this.props.rtlEnabled) {
         if (this.props.maxOffset === 0) {
           this.rightScrollLocation = 0;
         }
@@ -210,6 +177,10 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
         this.moveTo(newScrollLocation);
       }
     }
+  }
+
+  get containerHasSizes(): boolean {
+    return this.props.containerSize > 0 && this.props.contentSize > 0;
   }
 
   get axis(): 'x' | 'y' {
@@ -226,13 +197,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   get isHorizontal(): boolean {
     return this.props.direction === DIRECTION_HORIZONTAL;
-  }
-
-  moveToMouseLocation(event: DxMouseEvent, offset: number): void {
-    const mouseLocation = event[`page${this.axis.toUpperCase()}`] - offset;
-    const delta = mouseLocation / this.containerToContentRatio - this.props.containerSize / 2;
-
-    this.moveTo(Math.round(-delta));
   }
 
   get scrollSize(): number {
@@ -259,7 +223,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     const classesMap = {
       [SCROLLABLE_SCROLLBAR_CLASS]: true,
       [`dx-scrollbar-${this.props.direction}`]: true,
-      [SCROLLABLE_SCROLLBAR_ACTIVE_CLASS]: this.expanded,
+      [SCROLLABLE_SCROLLBAR_ACTIVE_CLASS]: this.active,
       [HOVER_ENABLED_STATE]: this.isExpandable,
       'dx-state-invisible': this.hidden,
       'dx-state-hover': this.isExpandable && this.hovered,
@@ -300,7 +264,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       return false;
     }
     if (this.isHoverMode) {
-      return this.props.visible || this.hovered || this.pendingPointerUp;
+      return this.props.visible || this.hovered || this.active;
     }
     if (this.isAlwaysMode) {
       return true;
