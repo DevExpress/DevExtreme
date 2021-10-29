@@ -4435,25 +4435,12 @@
         ]
       },
       {
-        "Name": "Styling Mode",
-        "Equivalents": "stylingMode, filled, outlined, underlined",
+        "Name": "Editor Appearance Variants",
+        "Equivalents": "editor, label, labelMode, floating, static, hidden, stylingMode, filled, outlined, underlined",
         "Demos": [
           {
-            "Title": "Styling Mode",
-            "Name": "StylingMode",
-            "DocUrl": "",
-            "Widget": "Common",
-            "DemoType": "Web"
-          }
-        ]
-      },
-      {
-        "Name": "Label Mode",
-        "Equivalents": "label, floating, static, hidden",
-        "Demos": [
-          {
-            "Title": "Label Mode",
-            "Name": "LabelMode",
+            "Title": "Editor Appearance Variants",
+            "Name": "EditorAppearanceVariants",
             "Badge": "New",
             "DocUrl": "",
             "Widget": "Common",
