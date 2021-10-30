@@ -28,7 +28,7 @@ export const viewFunction = ({
   const AppointmentTemplate = appointmentTemplate;
 
   return (
-    <div className={classes} style={styles}>
+    <div className={classes} style={styles} title={text} role="button">
       {
         !!AppointmentTemplate && (
           <AppointmentTemplate data={data} index={index} />
