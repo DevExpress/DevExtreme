@@ -1,5 +1,4 @@
 import { ClientFunction } from 'testcafe';
-import { hasClasses } from '../../../helpers/hasClasses';
 
 const CLASS = {
   appointment: 'dx-scheduler-appointment',
@@ -32,6 +31,8 @@ export default class Appointment {
 
   isAllDay: Promise<boolean>;
 
+  isReduced: Promise<boolean>;
+
   isReducedHead: Promise<boolean>;
 
   isReducedBody: Promise<boolean>;
@@ -62,9 +63,11 @@ export default class Appointment {
 
     this.isFocused = this.element.hasClass(CLASS.stateFocused);
     this.isAllDay = this.element.hasClass(CLASS.allDay);
-    this.isReducedHead = hasClasses(this.element, [CLASS.reduced.appointment, CLASS.reduced.head]);
-    this.isReducedBody = hasClasses(this.element, [CLASS.reduced.appointment, CLASS.reduced.body]);
-    this.isReducedTail = hasClasses(this.element, [CLASS.reduced.appointment, CLASS.reduced.tail]);
+
+    this.isReduced = this.element.hasClass(CLASS.reduced.appointment);
+    this.isReducedHead = this.element.hasClass(CLASS.reduced.head);
+    this.isReducedBody = this.element.hasClass(CLASS.reduced.body);
+    this.isReducedTail = this.element.hasClass(CLASS.reduced.tail);
   }
 
   getColor(): Promise<string> {
