@@ -11,7 +11,6 @@ const Widget = {
   on: (event: string, handler: (e: any) => void): void => {
     eventHandlers[event] = handler;
   },
-  off: jest.fn(),
   dispose: jest.fn(),
 };
 
