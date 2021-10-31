@@ -2109,7 +2109,7 @@ export interface GridBase {
      * @return dxScrollable
      * @public
      */
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     /**
      * @docid
      * @publicName getVisibleColumnIndex(id)
@@ -2742,6 +2742,9 @@ export interface ColumnButtonBase {
      */
     text?: string;
 }
+
+/** @public */
+export type Scrollable = dxScrollable;
 
 /** @public */
 export type AdaptiveDetailRowPreparingEvent = EventInfo<dxDataGrid> & AdaptiveDetailRowPreparingInfo;
@@ -4338,7 +4341,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     getKeyByRowIndex(rowIndex: number): any;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: any | string | number): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;

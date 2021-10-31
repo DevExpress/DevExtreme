@@ -74,6 +74,9 @@ interface CellInfo {
 }
 
 /** @public */
+export type Scrollable = dxScrollable;
+
+/** @public */
 export type AdaptiveDetailRowPreparingEvent = EventInfo<dxTreeList> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
@@ -1133,7 +1136,7 @@ export default class dxTreeList extends Widget implements GridBase {
     getKeyByRowIndex(rowIndex: number): any;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: any | string | number): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;

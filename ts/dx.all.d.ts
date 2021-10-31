@@ -5222,7 +5222,7 @@ declare module DevExpress.ui {
       rowIndex: number
     ): DevExpress.core.UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: any | string | number): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): DevExpress.ui.dxDataGrid.Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
@@ -7006,6 +7006,7 @@ declare module DevExpress.ui {
       promise?: PromiseLike<void>;
       cancel: boolean;
     }
+    export type Scrollable = dxScrollable;
     export interface Scrolling extends ScrollingBase {
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
@@ -19488,7 +19489,7 @@ declare module DevExpress.ui {
       rowIndex: number
     ): DevExpress.core.UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: any | string | number): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): DevExpress.ui.dxTreeList.Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
@@ -19934,6 +19935,7 @@ declare module DevExpress.ui {
       DevExpress.ui.dxDataGrid.DataChangeInfo;
     export type SavingEvent = DevExpress.events.EventInfo<dxTreeList> &
       DevExpress.ui.dxDataGrid.SavingInfo;
+    export type Scrollable = dxScrollable;
     export interface Scrolling extends DevExpress.ui.dxDataGrid.ScrollingBase {
       /**
        * [descr:dxTreeListOptions.scrolling.mode]
@@ -21216,7 +21218,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBase.getScrollable()]
      */
-    getScrollable(): dxScrollable;
+    getScrollable(): DevExpress.ui.dxDataGrid.Scrollable;
     /**
      * [descr:GridBase.getVisibleColumnIndex(id)]
      */
