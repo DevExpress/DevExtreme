@@ -120,6 +120,8 @@ jobs:
     - name: Setup firefox profile
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
+        Xvfb -ac $DISPLAY -screen 0 1200x600x24 > /dev/null 2>&1 &
+        x11vnc -display $DISPLAY 2>/dev/null &
         firefox -CreateProfile testprofile
         FIREFOX_PROFILE_LOCATION=$(find ~/.cache/mozilla/ -name *stub*)
         for p in \
