@@ -8,11 +8,17 @@
   margin-right: 320px;
 }
 
+.editors .left {
+  padding: 0 10px 0 0;
+}
+
+.editors .right {
+  padding: 0 0 0 10px;
+}
+
 .editors .left,
 .editors .right {
-  display: inline-block;
-  width: 49%;
-  box-sizing: border-box;
+  flex-grow: 1;
 }
 
 .editors .left > div,
@@ -22,7 +28,7 @@
 }
 
 .editors .center {
-  padding: 20px 27px 0 0;
+  padding: 0 27px 0 0;
 }
 
 .validate {

@@ -1,7 +1,7 @@
 const DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', ($scope) => {
-  $scope.date = new Date(1981, 6, 3);
+  $scope.date = new Date(1981, 5, 3);
 
   $scope.validateClick = function (e) {
     const result = e.validationGroup.validate();

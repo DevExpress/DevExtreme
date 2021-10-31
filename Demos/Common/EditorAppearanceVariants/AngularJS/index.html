@@ -182,8 +182,11 @@
           <label>Styling Mode</label>
           <div
             dx-select-box="{
-                    items: [ 'outlined', 'filled', 'underlined' ],
-                    bindingOptions: { value: 'stylingMode' }
+                    items: [ 'filled', 'outlined', 'underlined' ],
+                    bindingOptions: {
+                      stylingMode: 'stylingMode',
+                      value: 'stylingMode'
+                    }
                 }"
           ></div>
         </div>
@@ -192,7 +195,10 @@
           <div
             dx-select-box="{
                     items: [ 'static', 'floating', 'hidden' ],
-                    bindingOptions: { value: 'labelMode' }
+                    bindingOptions: {
+                      stylingMode: 'stylingMode',
+                      value: 'labelMode'
+                    }
                 }"
           ></div>
         </div>
