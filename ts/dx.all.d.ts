@@ -1010,7 +1010,7 @@ declare module DevExpress {
         | 'right bottom'
         | 'right top'
         | 'top'
-        | positionConfig
+        | DevExpress.animation.PositionConfig
         | Function;
       /**
        * [descr:globalConfig.floatingActionButtonConfig.shading]
@@ -1268,6 +1268,9 @@ declare module DevExpress {
      */
     static validateModel(model: any): any;
   }
+}
+declare module DevExpress.animation {
+  export type PositionConfig = positionConfig;
 }
 declare module DevExpress.core {
   /**
@@ -4993,7 +4996,7 @@ declare module DevExpress.ui {
         DevExpress.events.ChangedOptionInfo;
     export type PositioningEvent =
       DevExpress.events.NativeEventInfo<dxContextMenu> & {
-        readonly position: positionConfig;
+        readonly position: DevExpress.animation.PositionConfig;
       };
     export type Properties = dxContextMenuOptions;
     export type SelectionChangedEvent =
@@ -5061,7 +5064,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxContextMenuOptions.position]
      */
-    position?: positionConfig;
+    position?: DevExpress.animation.PositionConfig;
     /**
      * [descr:dxContextMenuOptions.showEvent]
      */
@@ -14014,7 +14017,7 @@ declare module DevExpress.ui {
       | 'right bottom'
       | 'right top'
       | 'top'
-      | positionConfig
+      | DevExpress.animation.PositionConfig
       | Function;
     /**
      * [descr:dxLoadPanelOptions.shadingColor]
@@ -15959,7 +15962,12 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopoverOptions.position]
      */
-    position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
+    position?:
+      | 'bottom'
+      | 'left'
+      | 'right'
+      | 'top'
+      | DevExpress.animation.PositionConfig;
     /**
      * [descr:dxPopoverOptions.shading]
      */
@@ -16100,7 +16108,7 @@ declare module DevExpress.ui {
       | 'right bottom'
       | 'right top'
       | 'top'
-      | positionConfig
+      | DevExpress.animation.PositionConfig
       | Function;
     /**
      * [descr:dxPopupOptions.resizeEnabled]

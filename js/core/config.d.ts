@@ -1,5 +1,5 @@
 import {
-    positionConfig,
+    PositionConfig,
 } from '../animation/position';
 
 /**
@@ -83,7 +83,7 @@ export interface globalConfig {
        * @type Enums.PositionAlignment|positionConfig|function
        * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
        */
-      position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
+      position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
       /**
        * @docid
        * @default false

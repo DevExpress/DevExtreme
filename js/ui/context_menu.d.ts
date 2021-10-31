@@ -1,5 +1,5 @@
 import {
-    positionConfig,
+    PositionConfig,
 } from '../animation/position';
 
 import {
@@ -67,7 +67,7 @@ export type OptionChangedEvent = EventInfo<dxContextMenu> & ChangedOptionInfo;
 
 /** @public */
 export type PositioningEvent = NativeEventInfo<dxContextMenu> & {
-    readonly position: positionConfig;
+    readonly position: PositionConfig;
 };
 
 /** @public */
@@ -170,7 +170,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @ref
      * @public
      */
-    position?: positionConfig;
+    position?: PositionConfig;
     /**
      * @docid
      * @default "dxcontextmenu"
