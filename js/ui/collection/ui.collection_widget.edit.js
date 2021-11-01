@@ -444,13 +444,11 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _itemClickHandler: function(e) {
-
-        let d; // = new Deferred();
+        let itemSelectPromise;
         const callBase = this.callBase;
 
         this._createAction((function(e) {
-            d = this._itemSelectHandler(e.event);
-            // d.resolve();
+            itemSelectPromise = this._itemSelectHandler(e.event);
         }).bind(this), {
             validatingTargetName: 'itemElement'
         })({
@@ -458,19 +456,16 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             event: e
         });
 
-        if(d) {
-            d.done(() => {
+        if(itemSelectPromise) {
+            itemSelectPromise.always(() => {
                 callBase.apply(this, arguments);
             });
         } else {
             callBase.apply(this, arguments);
         }
-
-        // d.resolve();
     },
 
     _itemSelectHandler: function(e) {
-        // console.log('_itemSelectHandler');
         let d = new Deferred();
 
         if(!this.option('selectionByClick')) {
@@ -745,20 +740,17 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     * @hidden
     */
     selectItem: function(itemElement) {
-
-        // ///////////////////////////
-        // console.log('selectItem!');
         if(this.option('selectionMode') === 'none') return;
 
         const itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
         if(!indexExists(itemIndex)) {
-            return new Deferred().resolve();
+            return;
         }
 
         const key = this._getKeyByIndex(itemIndex);
 
         if(this._selection.isItemSelected(key)) {
-            return new Deferred().resolve();
+            return;
         }
 
         if(this.option('selectionMode') === 'single') {
