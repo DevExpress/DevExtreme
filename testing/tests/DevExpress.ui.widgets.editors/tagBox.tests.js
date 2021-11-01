@@ -4367,7 +4367,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.eq(0).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 3);
 
-        assert.strictEqual(loadSpy.callCount, 3, 'correct count of ds load');
+        assert.strictEqual(loadSpy.callCount, 5, 'correct count of ds load');
     });
 
     QUnit.test('TagBox should use one DataSource request on list item selection if the editor has selected items from next pages (T970259)', function(assert) {
