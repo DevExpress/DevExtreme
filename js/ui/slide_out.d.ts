@@ -41,16 +41,16 @@ export type DisposingEvent = EventInfo<dxSlideOut>;
 export type InitializedEvent = InitializedEventInfo<dxSlideOut>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxSlideOut, MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxSlideOut, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxSlideOut, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxSlideOut> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxSlideOut> & ItemInfo;
 
 /** @public */
 export type MenuGroupRenderedEvent = EventInfo<dxSlideOut>;

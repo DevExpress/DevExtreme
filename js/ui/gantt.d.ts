@@ -49,7 +49,7 @@ export type ContentReadyEvent = EventInfo<dxGantt>;
 export type ContextMenuPreparingEvent = Cancelable & {
     readonly component?: dxGantt;
     readonly element?: DxElement;
-    readonly event?: DxEvent;
+    readonly event?: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
     readonly targetKey?: any;
     readonly targetType?: string;
     readonly data?: any;
@@ -148,13 +148,13 @@ export type SelectionChangedEvent = EventInfo<dxGantt> & {
 };
 
 /** @public */
-export type TaskClickEvent = NativeEventInfo<dxGantt> & {
+export type TaskClickEvent = NativeEventInfo<dxGantt, PointerEvent | MouseEvent> & {
     readonly key?: any;
     readonly data?: any;
 };
 
 /** @public */
-export type TaskDblClickEvent = Cancelable & NativeEventInfo<dxGantt> & {
+export type TaskDblClickEvent = Cancelable & NativeEventInfo<dxGantt, PointerEvent | MouseEvent> & {
     readonly key?: any;
     readonly data?: any;
 };

@@ -37,13 +37,13 @@ export type DisposingEvent = EventInfo<dxMenu>;
 export type InitializedEvent = InitializedEventInfo<dxMenu>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxMenu> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxMenu, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxMenu> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxMenu, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxMenu> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxMenu> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxMenu> & ChangedOptionInfo;
