@@ -55,6 +55,7 @@ describe('OverflowIndicator', () => {
           className: 'some-class',
           type: 'default',
           stylingMode: 'contained',
+          role: 'button',
         });
     });
 

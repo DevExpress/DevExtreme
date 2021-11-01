@@ -23,6 +23,7 @@ export const viewFunction = ({
     className={classes}
     type="default"
     stylingMode="contained"
+    role="button"
   >
     {
       OverflowIndicatorTemplate && (
