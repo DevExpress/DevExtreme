@@ -1118,45 +1118,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
             'done rowCount: 2, groupRow: true, dataRow: true'
         ]);
     });
-
-    QUnit.test('Updating toolbar dimensions do not breaks overlay position (T1037975)', function(assert) {
-        // to display grid and overlay in the same area
-        $('#container').css({ position: 'absolute', left: 10000, top: 10000, width: 1000 });
-
-        const dataGrid = createDataGrid({
-            width: 300,
-            dataSource: [],
-            loadPanel: { enabled: true },
-            columns: [
-                { groupIndex: 0, dataField: 'field1', },
-                { dataField: 'field2', }
-            ],
-            onToolbarPreparing: function(e) {
-                e.toolbarOptions.items.unshift({
-                    location: 'before',
-                    locateInMenu: 'always',
-                    widget: 'dxSelectBox',
-                    options: {
-                        width: 200,
-                        items: [{ id: 1, text: 'Grouping by State' }]
-                    }
-                });
-            }
-        });
-        this.clock.tick();
-
-        const $menuButton = $(dataGrid.$element()).find('.dx-toolbar .dx-dropdownmenu');
-        $menuButton.click();
-        this.clock.tick();
-
-        dataGrid.clearGrouping();
-        this.clock.tick();
-
-        const menuButtonRect = $menuButton.get(0).getBoundingClientRect();
-        const overlayRect = $('.dx-popup-content:visible').get(0).getBoundingClientRect();
-
-        assert.roughEqual(menuButtonRect.left + menuButtonRect.width, overlayRect.left + overlayRect.width, 2);
-    });
 });
 
 
