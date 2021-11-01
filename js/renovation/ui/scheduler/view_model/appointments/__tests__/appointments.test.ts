@@ -445,7 +445,7 @@ describe('Appointments view model', () => {
           },
           isAllDay: false,
           items: {
-            colors: [],
+            colors: [undefined],
             data: [{
               startDate: new Date(2021, 8, 24, 11),
               endDate: new Date(2021, 8, 24, 12),
