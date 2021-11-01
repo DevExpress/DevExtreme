@@ -137,7 +137,7 @@ jobs:
     - name: Check package-lock
       run: |
         npm install --no-audit --no-fund --ignore-scripts
-        git diff --exit-code --name-status package-lock.json
+        git diff --exit-code package-lock.json
 
   notify:
     runs-on: ubuntu-latest
