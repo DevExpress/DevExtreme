@@ -11290,16 +11290,21 @@ declare module DevExpress.ui {
       cancel: boolean | PromiseLike<void>;
     }
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxFileManager>;
-    export type ContextMenuItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxFileManager> & {
-        readonly itemData: any;
-        readonly itemElement: DevExpress.core.DxElement;
-        readonly itemIndex: number;
-        readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
-        readonly viewArea: 'navPane' | 'itemView';
-      };
+    export type ContextMenuItemClickEvent = DevExpress.events.NativeEventInfo<
+      dxFileManager,
+      KeyboardEvent | MouseEvent | PointerEvent
+    > & {
+      readonly itemData: any;
+      readonly itemElement: DevExpress.core.DxElement;
+      readonly itemIndex: number;
+      readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
+      readonly viewArea: 'navPane' | 'itemView';
+    };
     export type ContextMenuShowingEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxFileManager> & {
+      DevExpress.events.NativeEventInfo<
+        dxFileManager,
+        KeyboardEvent | MouseEvent | PointerEvent
+      > & {
         readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
         readonly targetElement?: DevExpress.core.DxElement;
         readonly viewArea: 'navPane' | 'itemView';
@@ -11404,12 +11409,14 @@ declare module DevExpress.ui {
         readonly selectedItems: Array<DevExpress.fileManagement.FileSystemItem>;
         readonly selectedItemKeys: Array<string>;
       };
-    export type ToolbarItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxFileManager> & {
-        readonly itemData: any;
-        readonly itemElement: DevExpress.core.DxElement;
-        readonly itemIndex: number;
-      };
+    export type ToolbarItemClickEvent = DevExpress.events.NativeEventInfo<
+      dxFileManager,
+      MouseEvent | PointerEvent
+    > & {
+      readonly itemData: any;
+      readonly itemElement: DevExpress.core.DxElement;
+      readonly itemIndex: number;
+    };
   }
   /**
    * [descr:dxFileManagerContextMenu]
@@ -11906,14 +11913,18 @@ declare module DevExpress.ui {
       };
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxFileUploader>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxFileUploader>;
-    export type DropZoneEnterEvent =
-      DevExpress.events.NativeEventInfo<dxFileUploader> & {
-        readonly dropZoneElement: DevExpress.core.DxElement;
-      };
-    export type DropZoneLeaveEvent =
-      DevExpress.events.NativeEventInfo<dxFileUploader> & {
-        readonly dropZoneElement: DevExpress.core.DxElement;
-      };
+    export type DropZoneEnterEvent = DevExpress.events.NativeEventInfo<
+      dxFileUploader,
+      MouseEvent
+    > & {
+      readonly dropZoneElement: DevExpress.core.DxElement;
+    };
+    export type DropZoneLeaveEvent = DevExpress.events.NativeEventInfo<
+      dxFileUploader,
+      MouseEvent
+    > & {
+      readonly dropZoneElement: DevExpress.core.DxElement;
+    };
     export type FilesUploadedEvent =
       DevExpress.events.EventInfo<dxFileUploader>;
     export type InitializedEvent =
