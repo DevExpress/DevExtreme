@@ -752,7 +752,7 @@ export default {
                             item1.update && item1.update(item2);
                             item1.cells.forEach(function(cell) {
                                 if(cell && cell.update) {
-                                    cell.update(item2);
+                                    cell.update(item2, true);
                                 }
                             });
                         }
