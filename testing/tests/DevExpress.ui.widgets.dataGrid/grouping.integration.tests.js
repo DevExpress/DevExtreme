@@ -1124,7 +1124,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         $('#container').css({ position: 'absolute', left: 10000, top: 10000, width: 1000 });
 
         const dataGrid = createDataGrid({
-            width: 1000,
+            width: 300,
             dataSource: [],
             loadPanel: { enabled: true },
             columns: [
@@ -1155,7 +1155,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         const menuButtonRect = $menuButton.get(0).getBoundingClientRect();
         const overlayRect = $('.dx-popup-content:visible').get(0).getBoundingClientRect();
 
-        assert.roughEqual(menuButtonRect.right, overlayRect.right, 2);
+        assert.roughEqual(menuButtonRect.left + menuButtonRect.width, overlayRect.left + overlayRect.width, 2);
     });
 });
 
