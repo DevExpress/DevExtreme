@@ -19878,10 +19878,12 @@ declare module DevExpress.ui {
    */
   export class dxSpeedDialAction extends Widget<dxSpeedDialActionOptions> {}
   module dxSpeedDialAction {
-    export type ClickEvent =
-      DevExpress.events.NativeEventInfo<dxSpeedDialAction> & {
-        actionElement?: DevExpress.core.DxElement;
-      };
+    export type ClickEvent = DevExpress.events.NativeEventInfo<
+      dxSpeedDialAction,
+      MouseEvent | PointerEvent
+    > & {
+      actionElement?: DevExpress.core.DxElement;
+    };
     export type ContentReadyEvent =
       DevExpress.events.EventInfo<dxSpeedDialAction> & {
         actionElement?: DevExpress.core.DxElement;
