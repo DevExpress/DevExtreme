@@ -1124,6 +1124,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         $('#container').css({ position: 'absolute', left: 10000, top: 10000, width: 1000 });
 
         const dataGrid = createDataGrid({
+            width: 1000,
             dataSource: [],
             loadPanel: { enabled: true },
             columns: [
