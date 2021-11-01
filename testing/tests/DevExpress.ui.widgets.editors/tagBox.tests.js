@@ -4358,15 +4358,9 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         $listItems.eq(0).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT * 3);
 
-        // $input.trigger('dxclick');
-
-        tagBox.option('opened', false);
-        tagBox.option('opened', true);
-
         keyboardMock($input).type('search');
-        // keyboardMock($input).keyDown('enter');;
 
-        this.clock.tick(TIME_TO_WAIT * 3);
+        this.clock.tick(TIME_TO_WAIT * 5);
 
         $listItems = getListItems(tagBox);
 
