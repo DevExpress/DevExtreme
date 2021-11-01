@@ -90,7 +90,6 @@ const getAsyncLoad = () => {
 
     return (loadOptions) => {
         const deferred = $.Deferred();
-        // console.log(loadOptions);
         setTimeout(() => {
             if(loadOptions.take && !loadOptions.searchValue) {
                 deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
@@ -120,7 +119,6 @@ const getAsyncLoad = () => {
                     }
                 });
 
-                //  console.log(result.splice(loadOptions.skip, loadOptions.take));
                 deferred.resolve(result.splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
             } else {
                 deferred.resolve(data, { totalCount: 9 });

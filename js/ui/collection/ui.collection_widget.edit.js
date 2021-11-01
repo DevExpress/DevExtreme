@@ -462,22 +462,21 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _itemSelectHandler: function(e) {
-        let d = new Deferred();
+        let itemSelectPromise;
 
         if(!this.option('selectionByClick')) {
-            return d.resolve();
+            return;
         }
 
         const $itemElement = e.currentTarget;
 
         if(this.isItemSelected($itemElement)) {
             this.unselectItem(e.currentTarget);
-            d.resolve();
         } else {
-            d = this.selectItem(e.currentTarget);
+            itemSelectPromise = this.selectItem(e.currentTarget);
         }
 
-        return d;
+        return itemSelectPromise?.promise();
     },
 
     _selectedItemElement: function(index) {
