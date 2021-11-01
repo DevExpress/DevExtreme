@@ -221,8 +221,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             key: that.key.bind(that),
             keyOf: that.keyOf.bind(that),
             load: function(options) {
-                // console.log('collection widget edit load');
-                // console.log(options);
                 if(that._dataSource) {
                     const loadOptions = that._dataSource.loadOptions();
                     options.customQueryParams = loadOptions.customQueryParams;
@@ -235,8 +233,6 @@ const CollectionWidget = BaseCollectionWidget.inherit({
                         if(that._disposed) {
                             return;
                         }
-
-                        // console.log('collection widget edit loaded');
 
                         const items = normalizeLoadResult(loadResult).data;
 
