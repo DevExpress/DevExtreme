@@ -46,9 +46,9 @@ export const dataControllerModule = {
                             that._skipProcessingPagingChange = true;
                             that.option('paging.' + optionName, value);
                             that._skipProcessingPagingChange = false;
-
+                            const pageIndex = dataSource.pageIndex();
                             return dataSource[optionName === 'pageIndex' ? 'load' : 'reload']()
-                                .done(that.pageChanged.fire.bind(that.pageChanged));
+                                .done(() => that.pageChanged.fire(pageIndex));
                         }
                         return Deferred().resolve().promise();
                     }
@@ -167,7 +167,8 @@ export const dataControllerModule = {
                         case 'paging':
                             dataSource = that.dataSource();
                             if(dataSource && that._setPagingOptions(dataSource)) {
-                                dataSource.load().done(that.pageChanged.fire.bind(that.pageChanged));
+                                const pageIndex = dataSource.pageIndex();
+                                dataSource.load().done(() =>that.pageChanged.fire(pageIndex));
                             }
                             handled();
                             break;
@@ -717,7 +718,7 @@ export const dataControllerModule = {
                             item1.update && item1.update(item2);
                             item1.cells.forEach(function(cell) {
                                 if(cell && cell.update) {
-                                    cell.update(item2);
+                                    cell.update(item2, true);
                                 }
                             });
                         }

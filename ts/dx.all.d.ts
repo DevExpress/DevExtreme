@@ -3176,15 +3176,17 @@ declare module DevExpress.events {
    * [descr:DxEvent]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type DxEvent = {} extends EventType ? EventObject : EventType;
+  export type DxEvent<TNativeEvent = Event> = {} extends EventType
+    ? EventObject & TNativeEvent
+    : EventType;
   /**
    * [descr:event]
    * @deprecated [depNote:event]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type event = DxEvent;
-  export interface EventInfo<T> {
-    readonly component: T;
+  export interface EventInfo<TComponent> {
+    readonly component: TComponent;
     readonly element: DevExpress.core.DxElement;
     readonly model?: any;
   }
@@ -3251,8 +3253,8 @@ declare module DevExpress.events {
   interface EventType extends JQueryEventObject {
     cancel?: boolean;
   }
-  export interface InitializedEventInfo<T> {
-    readonly component?: T;
+  export interface InitializedEventInfo<TComponent> {
+    readonly component?: TComponent;
     readonly element?: DevExpress.core.DxElement;
   }
   /**
@@ -3263,11 +3265,11 @@ declare module DevExpress.events {
     readonly itemElement: DevExpress.core.DxElement;
     readonly itemIndex: number;
   }
-  export interface NativeEventInfo<T> {
-    readonly component: T;
+  export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
+    readonly component: TComponent;
     readonly element: DevExpress.core.DxElement;
     readonly model?: any;
-    readonly event?: DxEvent;
+    readonly event?: DxEvent<TNativeEvent>;
   }
   /**
    * [descr:events.off(element)]

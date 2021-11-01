@@ -406,7 +406,7 @@ export interface ViewDataProviderValidationOptions {
   hoursInterval: number;
   startDayHour: number;
   endDayHour: number;
-  groups: Group[];
+  groups?: Group[];
   groupOrientation?: GroupOrientation;
   groupByDate: boolean;
   crossScrollingEnabled: boolean;

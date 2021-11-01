@@ -926,6 +926,7 @@ describe('Scheduler', () => {
             viewDataProvider: new ViewDataProvider('day'),
             viewDataProviderValidationOptions: {},
           } as any;
+          scheduler.loadedResources = [];
 
           expect(scheduler.appointmentsConfig)
             .toBe('Test_getAppointmentsConfig');
@@ -954,6 +955,22 @@ describe('Scheduler', () => {
               intervalCount: 3,
               currentDate: new Date(2017, 4, 5),
             },
+          } as any;
+
+          expect(scheduler.appointmentsConfig)
+            .toBe(undefined);
+
+          expect(getAppointmentsConfig)
+            .toHaveBeenCalledTimes(0);
+        });
+
+        it('should not be created if resources were not loaded', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          scheduler.workSpaceViewModel = {
+            cellsMetaData: {},
+            viewDataProvider: new ViewDataProvider('day'),
+            viewDataProviderValidationOptions: {},
           } as any;
 
           expect(scheduler.appointmentsConfig)
@@ -1128,6 +1145,22 @@ describe('Scheduler', () => {
 
           expect(scheduler.workSpaceKey)
             .toBe('week_vertical_3_2');
+        });
+
+        it('should work when resources aer not loaded', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            crossScrollingEnabled: true,
+            currentView: 'day',
+            views: [{
+              type: 'day',
+              intervalCount: 3,
+              groupOrientation: 'horizontal',
+            }],
+          });
+
+          expect(scheduler.workSpaceKey)
+            .toBe('day_horizontal_3_0');
         });
       });
 

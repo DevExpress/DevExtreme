@@ -1688,7 +1688,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // assert
-        assert.equal(dataGrid.getScrollable().scrollTop(), 0, 'scroll top is not changed');
+        assert.equal(dataGrid.getScrollable().scrollTop(), devices.real().android ? 1 : 0, 'scroll top is not changed');
     });
 
     // T838096
@@ -4575,6 +4575,46 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.strictEqual($virtualRowElement.length, 2, 'virtual rows are rendered after scrolling to top');
         assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($($virtualRowElement.get(0))), 'top virtual row is rendered outside viewport after scrolling to top');
         assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($($virtualRowElement.get(1))), 'bottom virtual row is rendered outside viewport after scrolling to top');
+    });
+
+    ['method', 'option'].forEach(type => {
+        QUnit.test(`Paging using pageIndex ${type} to last page should work`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1 },
+                    { id: 2 },
+                    { id: 3 },
+                    { id: 4 },
+                    { id: 5 },
+                ],
+                keyExpr: 'id',
+                height: 150,
+                paging: {
+                    pageSize: 2
+                },
+                pager: {
+                    visible: true
+                },
+                scrolling: {
+                    mode: 'virtual',
+                    useNative: false
+                }
+            });
+
+            this.clock.tick(300);
+
+            if(type === 'method') {
+                dataGrid.pageIndex(2);
+            } else {
+                dataGrid.option('paging.pageIndex', 2);
+            }
+
+            // assert
+            assert.strictEqual(dataGrid.pageIndex(), 1, 'pageIndex is normalized to previous');
+            assert.strictEqual(dataGrid.option('paging.pageIndex'), 1, 'pageIndex option');
+            assert.deepEqual(dataGrid.getVisibleRows().map(row => row.key), [4, 5], 'visible rows');
+        });
     });
 });
 
