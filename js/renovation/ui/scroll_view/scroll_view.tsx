@@ -17,7 +17,7 @@ import {
 import {
   ElementOffset,
   ScrollOffset,
-} from './common/types.d';
+} from './common/types';
 
 import { ScrollViewProps } from './common/scrollview_props';
 
@@ -117,6 +117,11 @@ export class ScrollView extends JSXComponent<ScrollViewProps>() {
   @Method()
   content(): HTMLDivElement {
     return this.scrollableRef.current!.content();
+  }
+
+  @Method()
+  container(): HTMLDivElement {
+    return this.scrollableRef.current!.container();
   }
 
   @Method()

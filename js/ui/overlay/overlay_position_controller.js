@@ -192,7 +192,10 @@ class OverlayPositionController {
     _renderContentInitialPosition() {
         this._renderBoundaryOffset();
         resetPosition(this._$content);
+        const wrapperOverflow = this._$wrapper.css('overflow');
+        this._$wrapper.css('overflow', 'hidden');
         const resultPosition = positionUtils.setup(this._$content, this._position);
+        this._$wrapper.css('overflow', wrapperOverflow);
         this._initialPosition = resultPosition;
         this.detectVisualPositionChange();
     }

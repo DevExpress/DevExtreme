@@ -11,7 +11,7 @@ import {
   Point,
   LineCap,
   Segment,
-} from './types.d';
+} from './types';
 import SvgGraphicsProps from './base_graphics_props';
 import {
   combinePathParam,

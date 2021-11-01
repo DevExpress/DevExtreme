@@ -29,7 +29,7 @@
         }
     ],
     "reviewers": [
-        "team:@DevExpress/devextreme-core"
+        "team:devextreme-core"
     ],
     "ignorePaths": [
         ".github"

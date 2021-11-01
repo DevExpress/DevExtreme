@@ -1,13 +1,15 @@
+/* eslint-disable rulesdir/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
   Component,
   Effect,
   InternalState,
   JSXComponent,
+  JSXTemplate,
   Method,
 } from '@devextreme-generator/declarations';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
-import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../utils/effect_return';
 // eslint-disable-next-line import/named
 import dxScheduler, { Appointment } from '../../../ui/scheduler';
 import { ViewProps, SchedulerProps } from './props';
@@ -19,14 +21,18 @@ import type { Options as DataSourceOptions } from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import {
-  CellsMetaData, Group, ViewDataProviderType, ViewMetaData,
+  DataCellTemplateProps,
+  DateTimeCellTemplateProps,
+  Group,
+  ResourceCellTemplateProps,
+  ViewMetaData,
 } from './workspaces/types';
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import { DataAccessorType, DataSourcePromise } from './types';
+import type { DataAccessorType, DataSourcePromise } from './types';
 import {
-  createDataAccessors, createTimeZoneCalculator, filterAppointments,
+  createDataAccessors, createTimeZoneCalculator, filterAppointments, isViewDataProviderConfigValid,
 } from './common';
 import { getGroupCount, loadResources } from '../../../ui/scheduler/resources/utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
@@ -46,6 +52,11 @@ export const viewFunction = ({
   startViewDate,
   appointmentsViewModel,
   workSpaceKey,
+
+  dataCellTemplate,
+  dateCellTemplate,
+  timeCellTemplate,
+  resourceCellTemplate,
 
   props: {
     accessKey,
@@ -155,8 +166,14 @@ export const viewFunction = ({
           allDayPanelExpanded={allDayPanelExpanded}
           onViewRendered={onViewRendered}
 
+          dataCellTemplate={dataCellTemplate}
+          timeCellTemplate={timeCellTemplate}
+          dateCellTemplate={dateCellTemplate}
+          resourceCellTemplate={resourceCellTemplate}
+
           allDayAppointments={(
             <AppointmentLayout
+              isAllDay
               appointments={appointmentsViewModel.allDay}
               overflowIndicators={appointmentsViewModel.allDayCompact}
             />
@@ -183,13 +200,11 @@ export const viewFunction = ({
 export class Scheduler extends JSXComponent(SchedulerProps) {
   @InternalState() instance!: dxScheduler;
 
-  @InternalState() viewDataProvider!: ViewDataProviderType;
-
-  @InternalState() cellsMetaData!: CellsMetaData;
+  @InternalState() workSpaceViewModel?: ViewMetaData;
 
   @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
 
-  @InternalState() loadedResources: Group[] = [];
+  @InternalState() loadedResources?: Group[];
 
   @InternalState() dataItems: Appointment[] = [];
 
@@ -202,6 +217,48 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   get currentViewConfig(): CurrentViewConfigType {
     return getCurrentViewConfig(this.currentViewProps, this.props);
+  }
+
+  get isValidViewDataProvider(): boolean {
+    const {
+      intervalCount,
+      currentDate,
+      type,
+      hoursInterval,
+      startDayHour,
+      endDayHour,
+      groupOrientation,
+      groupByDate,
+      crossScrollingEnabled,
+      firstDayOfWeek,
+      startDate,
+      showAllDayPanel,
+      allDayPanelExpanded,
+      scrolling,
+      cellDuration,
+    } = this.currentViewConfig;
+
+    return isViewDataProviderConfigValid(
+      this.workSpaceViewModel?.viewDataProviderValidationOptions,
+      {
+        intervalCount: intervalCount ?? 1,
+        currentDate,
+        type,
+        hoursInterval,
+        startDayHour,
+        endDayHour,
+        groupOrientation,
+        groupByDate,
+        crossScrollingEnabled,
+        firstDayOfWeek,
+        startDate,
+        showAllDayPanel,
+        allDayPanelExpanded,
+        scrolling,
+        cellDuration,
+        groups: this.loadedResources,
+      },
+    );
   }
 
   get dataAccessors(): DataAccessorType {
@@ -260,7 +317,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get appointmentsConfig(): AppointmentsConfigType | undefined {
-    if (!this.viewDataProvider || !this.cellsMetaData) {
+    if (!this.isValidViewDataProvider || !this.loadedResources) {
       return undefined;
     }
 
@@ -276,7 +333,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.props, // TODO extract props for performace
       this.currentViewConfig, // TODO extract props for performace
       this.loadedResources,
-      this.viewDataProvider,
+      this.workSpaceViewModel!.viewDataProvider,
       renderConfig.isAllDayPanelSupported,
     );
   }
@@ -287,8 +344,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.dataItems,
       this.dataAccessors,
       this.timeZoneCalculator,
-      this.loadedResources,
-      this.viewDataProvider,
+      this.loadedResources!,
+      this.workSpaceViewModel?.viewDataProvider,
     );
   }
 
@@ -304,10 +361,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
     const model = getAppointmentsModel(
       this.appointmentsConfig,
-      this.viewDataProvider,
+      this.workSpaceViewModel!.viewDataProvider,
       this.timeZoneCalculator,
       this.dataAccessors,
-      this.cellsMetaData,
+      this.workSpaceViewModel!.cellsMetaData,
     );
 
     return getAppointmentsViewModel(
@@ -326,9 +383,26 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       return '';
     }
 
-    const groupCount = getGroupCount(this.loadedResources);
+    const groupCount = getGroupCount(this.loadedResources ?? []);
 
     return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
+  }
+
+  // TODO: 4 getters below are a WA for Vue generator
+  get dataCellTemplate(): JSXTemplate<DataCellTemplateProps> | undefined {
+    return this.currentViewConfig.dataCellTemplate;
+  }
+
+  get dateCellTemplate(): JSXTemplate<DateTimeCellTemplateProps> | undefined {
+    return this.currentViewConfig.dateCellTemplate;
+  }
+
+  get timeCellTemplate(): JSXTemplate<DateTimeCellTemplateProps> | undefined {
+    return this.currentViewConfig.timeCellTemplate;
+  }
+
+  get resourceCellTemplate(): JSXTemplate<ResourceCellTemplateProps> | undefined {
+    return this.currentViewConfig.resourceCellTemplate;
   }
 
   @Method()
@@ -427,8 +501,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   onViewRendered(viewMetaData: ViewMetaData): void {
-    this.viewDataProvider = viewMetaData.viewDataProvider;
-    this.cellsMetaData = viewMetaData.cellsMetaData;
+    this.workSpaceViewModel = viewMetaData;
   }
 
   setCurrentView(view: string): void {

@@ -33,9 +33,7 @@ const isHorizontalGroupingApplied = jest.spyOn(Utils, 'isHorizontalGroupingAppli
 
 const mockSetViewOptions = jest.fn();
 const mockCreateGroupedDataMapProvider = jest.fn();
-const mockGetGroupPanelData = jest.fn().mockImplementation(() => ({}));
 const mockViewDataProvider = {
-  getGroupPanelData: mockGetGroupPanelData,
   getCellCount: () => 7,
   setViewOptions: mockSetViewOptions,
   createGroupedDataMapProvider: mockCreateGroupedDataMapProvider,
@@ -97,16 +95,20 @@ describe('WorkSpace', () => {
     data: [{
       text: 'Resource 1',
       id: 0,
+      color: 'red',
     }, {
       text: 'Resource 2',
       id: 1,
+      color: 'green',
     }],
     items: [{
       text: 'Resource 1',
       id: 0,
+      color: 'red',
     }, {
       text: 'Resource 2',
       id: 1,
+      color: 'green',
     }],
   }];
 
@@ -139,7 +141,6 @@ describe('WorkSpace', () => {
         resourceCellTemplate: () => null,
 
         groups,
-        groupByDate: false,
         intervalCount: 1,
       };
 
@@ -163,6 +164,7 @@ describe('WorkSpace', () => {
         dateTableRef: 'dateTableRef',
         allDayPanelRef: 'allDayPanelRef',
         groupOrientation: VERTICAL_GROUP_ORIENTATION,
+        isGroupedByDate: false,
       };
 
       const workSpace = renderComponent({
@@ -200,6 +202,7 @@ describe('WorkSpace', () => {
           allDayPanelRef: 'allDayPanelRef',
           groupOrientation: VERTICAL_GROUP_ORIENTATION,
           tablesWidth: 1900,
+          groupByDate: false,
         });
     });
   });
@@ -311,14 +314,15 @@ describe('WorkSpace', () => {
 
         it('should call onViewRendered with correct parameters when all-day panel is not visible', () => {
           const onViewRendered = jest.fn();
+          const currentDate = new Date();
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
-            currentDate: new Date(),
             startDayHour: 0,
             endDayHour: 1,
             showAllDayPanel: false,
+            currentDate,
           });
 
           workSpace.dateTableRef = dateTableRefMock;
@@ -368,19 +372,38 @@ describe('WorkSpace', () => {
                 }]],
                 allDayPanelCellsMeta: [],
               },
+              viewDataProviderValidationOptions: {
+                intervalCount: 1,
+                currentDate,
+                type: 'week',
+                hoursInterval: 0.5,
+                startDayHour: 0,
+                endDayHour: 1,
+                groups: [],
+                groupOrientation: undefined,
+                groupByDate: false,
+                crossScrollingEnabled: false,
+                firstDayOfWeek: 0,
+                startDate: undefined,
+                showAllDayPanel: false,
+                allDayPanelExpanded: false,
+                scrolling: { mode: 'standard' },
+                cellDuration: 30,
+              },
             });
         });
 
         it('should call onViewRendered with correct parameters when all-day panel is visible', () => {
           const onViewRendered = jest.fn();
+          const currentDate = new Date();
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
-            currentDate: new Date(),
+            currentDate,
             startDayHour: 0,
             endDayHour: 1,
-            showAllDayPanel: false,
+            showAllDayPanel: true,
           });
 
           workSpace.dateTableRef = dateTableRefMock;
@@ -443,6 +466,24 @@ describe('WorkSpace', () => {
                 }, {
                   left: 300, top: 0,
                 }],
+              },
+              viewDataProviderValidationOptions: {
+                intervalCount: 1,
+                currentDate,
+                type: 'week',
+                hoursInterval: 0.5,
+                startDayHour: 0,
+                endDayHour: 1,
+                groups: [],
+                groupOrientation: undefined,
+                groupByDate: false,
+                crossScrollingEnabled: false,
+                firstDayOfWeek: 0,
+                startDate: undefined,
+                showAllDayPanel: true,
+                allDayPanelExpanded: false,
+                scrolling: { mode: 'standard' },
+                cellDuration: 30,
               },
             });
         });
@@ -1355,6 +1396,7 @@ describe('WorkSpace', () => {
               isGenerateTimePanelData: true,
               isGenerateWeekDaysHeaderData: false,
               isProvideVirtualCellsWidth: false,
+              groupByDate: false,
             });
           expect(mockCreateGroupedDataMapProvider)
             .toBeCalledTimes(1);
@@ -1369,8 +1411,8 @@ describe('WorkSpace', () => {
         it('should return correct group panel data', () => {
           const props: any = {
             groupOrientation: 'horizontal',
-            groupByDate: true,
-            groups: [],
+            groupByDate: false,
+            groups,
             selectedCells: undefined,
             focusedCell: undefined,
             startDayHour: 0,
@@ -1389,20 +1431,103 @@ describe('WorkSpace', () => {
           });
 
           expect(workSpace.groupPanelData)
-            .toEqual({});
+            .toEqual({
+              baseColSpan: 7,
+              groupPanelItems: [[{
+                color: 'red',
+                id: 0,
+                resourceName: 'resourceId',
+                text: 'Resource 1',
+                key: '0_resourceId_0',
+                data: {
+                  color: 'red',
+                  id: 0,
+                  text: 'Resource 1',
+                },
+              }, {
+                color: 'green',
+                id: 1,
+                resourceName: 'resourceId',
+                text: 'Resource 2',
+                key: '0_resourceId_1',
+                data: {
+                  color: 'green',
+                  id: 1,
+                  text: 'Resource 2',
+                },
+              }]],
+            });
+        });
 
-          expect(mockGetGroupPanelData)
-            .toHaveBeenCalledWith({
-              ...props,
-              startRowIndex: 0,
-              startCellIndex: 0,
-              isAllDayPanelVisible: undefined,
-              viewType: 'week',
-              getDateForHeaderText: expect.any(Function),
-              headerCellTextFormat: expect.any(Function),
-              isGenerateTimePanelData: true,
-              isGenerateWeekDaysHeaderData: false,
-              isProvideVirtualCellsWidth: false,
+        it('should return correct group panel data when grouping by date is enabled', () => {
+          const props: any = {
+            ...new WorkSpaceProps(),
+            groupOrientation: 'horizontal',
+            groupByDate: true,
+            groups,
+            intervalCount: 2,
+            currentDate: new Date(2021, 8, 11),
+            type: 'day',
+          };
+
+          const workSpace = new WorkSpace(props);
+
+          expect(workSpace.groupPanelData)
+            .toEqual({
+              baseColSpan: 1,
+              groupPanelItems: [[{
+                color: 'red',
+                id: 0,
+                resourceName: 'resourceId',
+                text: 'Resource 1',
+                key: '0_resourceId_0_group_by_date_0',
+                isFirstGroupCell: true,
+                isLastGroupCell: false,
+                data: {
+                  color: 'red',
+                  id: 0,
+                  text: 'Resource 1',
+                },
+              }, {
+                color: 'green',
+                id: 1,
+                resourceName: 'resourceId',
+                text: 'Resource 2',
+                key: '0_resourceId_1_group_by_date_0',
+                isFirstGroupCell: false,
+                isLastGroupCell: true,
+                data: {
+                  color: 'green',
+                  id: 1,
+                  text: 'Resource 2',
+                },
+              }, {
+                color: 'red',
+                id: 0,
+                resourceName: 'resourceId',
+                text: 'Resource 1',
+                key: '0_resourceId_0_group_by_date_1',
+                isFirstGroupCell: true,
+                isLastGroupCell: false,
+                data: {
+                  color: 'red',
+                  id: 0,
+                  text: 'Resource 1',
+                },
+              }, {
+                color: 'green',
+                id: 1,
+                resourceName: 'resourceId',
+                text: 'Resource 2',
+                key: '0_resourceId_1_group_by_date_1',
+                isFirstGroupCell: false,
+                isLastGroupCell: true,
+                data: {
+                  color: 'green',
+                  id: 1,
+                  text: 'Resource 2',
+                },
+              }]],
             });
         });
       });
@@ -1515,6 +1640,56 @@ describe('WorkSpace', () => {
         });
       });
 
+      describe('isGroupedByDate', () => {
+        it('should return false in basic case', () => {
+          const workSpace = new WorkSpace({
+            groups: [],
+            groupOrientation: 'horizontal',
+            type: 'day',
+            groupByDate: false,
+          } as any);
+
+          expect(workSpace.isGroupedByDate)
+            .toBe(false);
+        });
+
+        it('should return false when vertical grouping is used', () => {
+          const workSpace = new WorkSpace({
+            groups,
+            groupOrientation: 'vertical',
+            type: 'day',
+            groupByDate: true,
+          } as any);
+
+          expect(workSpace.isGroupedByDate)
+            .toBe(false);
+        });
+
+        it('should return true when grouping by date is used', () => {
+          const workSpace = new WorkSpace({
+            groups,
+            groupOrientation: 'horizontal',
+            type: 'day',
+            groupByDate: true,
+          } as any);
+
+          expect(workSpace.isGroupedByDate)
+            .toBe(true);
+        });
+
+        it('should return false when grouping is not used', () => {
+          const workSpace = new WorkSpace({
+            groups: [],
+            groupOrientation: 'horizontal',
+            type: 'day',
+            groupByDate: true,
+          } as any);
+
+          expect(workSpace.isGroupedByDate)
+            .toBe(false);
+        });
+      });
+
       describe('isStandaloneAllDayPanel', () => {
         it('should return true when vertical group orientation is not used and all day panel is visible', () => {
           const workSpace = new WorkSpace({
@@ -1622,8 +1797,6 @@ describe('WorkSpace', () => {
     });
 
     describe('classes', () => {
-      // afterEach(jest.resetAllMocks);
-
       it('should call combineClasses with correct parameters', () => {
         const workSpace = new WorkSpace({
           intervalCount: 35,
@@ -1645,7 +1818,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-odd-cells': false,
             'dx-scheduler-work-space-all-day-collapsed': true,
             'dx-scheduler-work-space-all-day': true,
-            'dx-scheduler-work-space-group-by-date': true,
+            'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
             'dx-scheduler-work-space-horizontal-grouped': false,
@@ -1677,7 +1850,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-odd-cells': false,
             'dx-scheduler-work-space-all-day-collapsed': false,
             'dx-scheduler-work-space-all-day': true,
-            'dx-scheduler-work-space-group-by-date': true,
+            'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
             'dx-scheduler-work-space-horizontal-grouped': false,
@@ -1708,7 +1881,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-odd-cells': false,
             'dx-scheduler-work-space-all-day-collapsed': false,
             'dx-scheduler-work-space-all-day': false,
-            'dx-scheduler-work-space-group-by-date': true,
+            'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
             'dx-scheduler-work-space-horizontal-grouped': false,

@@ -1554,9 +1554,13 @@ const EditingController = modules.ViewController.inherit((function() {
                         return;
                     }
                     this._saving = true;
-                    this._saveEditDataInner()
+
+                    const options = {};
+
+                    this._saveEditDataInner(options)
                         .always(() => {
                             this._saving = false;
+                            options.needFocusEditCell && this._focusEditingCell();
                         })
                         .done(deferred.resolve)
                         .fail(deferred.reject);
@@ -1571,7 +1575,7 @@ const EditingController = modules.ViewController.inherit((function() {
             }).fail(deferred.reject);
         },
 
-        _saveEditDataInner: function() {
+        _saveEditDataInner: function(options) {
             const results = [];
             const deferreds = [];
             const dataChanges = [];
@@ -1602,7 +1606,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     });
 
                     return result.always(() => {
-                        this._focusEditingCell();
+                        options.needFocusEditCell = true;
                     }).promise();
                 }
 

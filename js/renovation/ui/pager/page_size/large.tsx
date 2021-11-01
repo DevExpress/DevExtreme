@@ -8,7 +8,7 @@ import {
 } from '@devextreme-generator/declarations';
 
 import { LightButton } from '../common/light_button';
-import { FullPageSize } from '../common/types.d';
+import { FullPageSize } from '../common/types';
 import { InternalPagerProps } from '../common/pager_props';
 import { PAGER_SELECTED_PAGE_SIZE_CLASS, PAGER_PAGE_SIZE_CLASS } from '../common/consts';
 

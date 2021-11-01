@@ -7,7 +7,7 @@ import {
 } from './base_scrollable_props';
 import {
   ScrollEventArgs, ScrollableShowScrollbar, RefreshStrategy, ScrollLocationChangeArgs,
-} from './types.d';
+} from './types';
 import { isDesktop } from '../utils/get_default_option_value';
 
 @ComponentBindings()

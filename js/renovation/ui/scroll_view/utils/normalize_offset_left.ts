@@ -3,7 +3,6 @@ import getScrollRtlBehavior from '../../../../core/utils/scroll_rtl_behavior';
 function isScrollInverted(rtlEnabled: boolean): boolean {
   const { decreasing, positive } = getScrollRtlBehavior();
 
-  // eslint-disable-next-line no-bitwise
   return rtlEnabled && (decreasing !== positive);
 }
 

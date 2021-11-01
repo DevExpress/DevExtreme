@@ -1,6 +1,6 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import Scheduler from '../../../model/scheduler';
-import cloneTest from '../../../helpers/check-all-platforms';
+import Scheduler from '../../../../model/scheduler';
+import cloneTest from '../../../../helpers/check-all-platforms';
 
 const SCHEDULER_SELECTOR = '.test-scheduler';
 
@@ -154,25 +154,22 @@ const test = (options?: any): any => cloneTest(
   options,
 );
 
-fixture('Renovated scheduler - Day view');
+fixture('Renovated scheduler - Cross-scrolling');
 
-[
-  { currentView: 'day', expected: 2 },
-  { currentView: 'week', expected: 14 },
-  { currentView: 'month', expected: 27 },
-].forEach(({ currentView, expected }) => {
+['day', 'week', 'workWeek', 'month'].forEach((currentView) => {
   test({
     timeZone: 'America/Los_Angeles',
     dataSource: data,
     views: [{
       type: 'day',
-      groupOrientation: 'vertical',
     }, {
       type: 'week',
-      groupOrientation: 'vertical',
+      intervalCount: 4,
+    }, {
+      type: 'workWeek',
+      intervalCount: 4,
     }, {
       type: 'month',
-      groupOrientation: 'vertical',
     }],
     currentView,
     currentDate: new Date(2021, 3, 21),
@@ -196,16 +193,15 @@ fixture('Renovated scheduler - Day view');
       },
     ],
     showCurrentTimeIndicator: false,
-  })(`it should render appointments correctly if currentView is ${currentView}`, async (t, { screenshotComparerOptions }) => {
+    crossScrollingEnabled: true,
+    height: 800,
+  })(`it should render appointments correctly if currentView is ${currentView} and cross-scrolling is enabled`, async (t, { screenshotComparerOptions }) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-    const appointmentCount = scheduler.getAppointmentCount();
 
     await t
-      .expect(appointmentCount)
-      .eql(expected)
       .expect(await compareScreenshot(
         t,
-        `scheduler-appointments-${currentView}.png`,
+        `scheduler-appointments-cross-scrolling-${currentView}.png`,
         scheduler.element,
         screenshotComparerOptions,
       ))

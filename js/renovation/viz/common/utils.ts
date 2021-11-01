@@ -1,4 +1,4 @@
-import { Format, FormatObject } from './types.d';
+import { Format, FormatObject } from './types';
 import formatHelper from '../../../format_helper';
 import { isDefined } from '../../../core/utils/type';
 import getElementComputedStyle from '../../utils/get_computed_style';

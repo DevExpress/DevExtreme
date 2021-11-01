@@ -4,7 +4,7 @@ import { DataAccessorType } from './types';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
 import timeZoneUtils from '../../../ui/scheduler/utils.timeZone';
 import { AppointmentsConfigType } from './model/types';
-import { Group, ViewDataProviderType } from './workspaces/types';
+import { Group, ViewDataProviderType, ViewDataProviderValidationOptions } from './workspaces/types';
 import {
   AppointmentFilterBaseStrategy,
   AppointmentFilterVirtualStrategy,
@@ -64,7 +64,7 @@ export const filterAppointments = (
   dataAccessors: DataAccessorType,
   timeZoneCalculator: TimeZoneCalculator,
   loadedResources: Group[],
-  viewDataProvider: ViewDataProviderType,
+  viewDataProvider?: ViewDataProviderType,
 ): Appointment[] => {
   if (!appointmentsConfig) {
     return [] as Appointment[];
@@ -99,4 +99,23 @@ export const filterAppointments = (
   const filteredItems = filterStrategy.filter(preparedDataItems);
 
   return filteredItems as Appointment[];
+};
+
+export const isViewDataProviderConfigValid = (
+  viewDataProviderConfig: ViewDataProviderValidationOptions | undefined,
+  currentViewOptions: ViewDataProviderValidationOptions,
+): boolean => {
+  if (!viewDataProviderConfig) {
+    return false;
+  }
+
+  let result = true;
+
+  Object.entries(viewDataProviderConfig).forEach(([key, value]) => {
+    if (value !== currentViewOptions[key]) {
+      result = false;
+    }
+  });
+
+  return result;
 };

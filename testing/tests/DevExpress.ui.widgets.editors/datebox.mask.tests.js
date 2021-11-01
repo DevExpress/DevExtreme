@@ -1397,6 +1397,17 @@ module('Caret moving', setupModule, () => {
         this.keyboard.type('01');
         assert.deepEqual(this.keyboard.caret(), { start: 3, end: 5 }, 'caret was moved to month');
     });
+
+    test('Click on input should not change caret position to select date part if all text is selected (T988726)', function(assert) {
+        const text = this.instance.option('text');
+        const allSelectedCaret = { start: 0, end: text.length };
+
+        this.keyboard.caret(allSelectedCaret);
+
+        this.$input.trigger('dxclick');
+
+        assert.deepEqual(this.keyboard.caret(), allSelectedCaret, 'no date part is selected');
+    });
 });
 
 module('Using beforeInput event', {
