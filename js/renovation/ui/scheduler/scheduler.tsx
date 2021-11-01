@@ -204,7 +204,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
 
-  @InternalState() loadedResources: Group[] = [];
+  @InternalState() loadedResources?: Group[];
 
   @InternalState() dataItems: Appointment[] = [];
 
@@ -317,7 +317,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get appointmentsConfig(): AppointmentsConfigType | undefined {
-    if (!this.isValidViewDataProvider) {
+    if (!this.isValidViewDataProvider || !this.loadedResources) {
       return undefined;
     }
 
@@ -344,7 +344,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.dataItems,
       this.dataAccessors,
       this.timeZoneCalculator,
-      this.loadedResources,
+      this.loadedResources!,
       this.workSpaceViewModel?.viewDataProvider,
     );
   }
@@ -383,7 +383,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       return '';
     }
 
-    const groupCount = getGroupCount(this.loadedResources);
+    const groupCount = getGroupCount(this.loadedResources ?? []);
 
     return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
   }

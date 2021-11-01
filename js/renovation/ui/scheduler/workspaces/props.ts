@@ -23,6 +23,9 @@ import { TimePanelLayoutProps } from './base/time_panel/layout';
 import { GetDateForHeaderText } from '../view_model/to_test/views/types';
 import { ScrollableDirection } from '../../scroll_view/common/types';
 
+// TODO: WA for bug in generators: they use getters for default props
+const DEFAULT_GROUPS = [];
+
 @ComponentBindings()
 export class WorkSpaceProps extends BaseWidgetProps {
   // -------------------
@@ -43,7 +46,7 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() intervalCount = 1;
 
-  @OneWay() groups: Group[] = [];
+  @OneWay() groups: Group[] = DEFAULT_GROUPS;
 
   @OneWay() groupByDate = false;
 
