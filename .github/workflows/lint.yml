@@ -137,9 +137,7 @@ jobs:
     - name: Check package-lock
       run: |
         npm install --no-audit --no-fund --ignore-scripts
-        if [[ git diff-index --quiet HEAD -- package-lock.json ]]; then
-          echo 'ERROR: package.json and package-lock.json are not compatible'
-        fi
+        git diff --exit-code --name-status package-lock.json
 
   notify:
     runs-on: ubuntu-latest
