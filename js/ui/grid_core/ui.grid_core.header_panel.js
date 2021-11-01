@@ -5,6 +5,7 @@ import { noop } from '../../core/utils/common';
 import { isDefined, isString } from '../../core/utils/type';
 import { triggerResizeEvent } from '../../events/visibility_change';
 import messageLocalization from '../../localization/message';
+
 import '../drop_down_menu';
 import { extend } from '../../core/utils/extend';
 import { getPathParts } from '../../core/utils/data';
