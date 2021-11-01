@@ -117,20 +117,6 @@ jobs:
         name: devextreme-artifacts
     # Prepare fast re-run end
 
-    - name: Setup firefox profile
-      if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: |
-        Xvfb -ac $DISPLAY -screen 0 1200x600x24 > /dev/null 2>&1 &
-        x11vnc -display $DISPLAY 2>/dev/null &
-        firefox -CreateProfile testprofile
-        FIREFOX_PROFILE_LOCATION=$(find ~/.cache/mozilla/ -name *stub*)
-        for p in \
-        '"browser.shell.checkDefaultBrowser", false' \
-        '"datareporting.policy.dataSubmissionEnabled", false' \
-        '"font.name-list.monospace.x-western", "Liberation Mono"' \
-        '"font.name-list.sans-serif.x-western", "Liberation Sans"' \
-        '"font.name-list.serif.x-western", "Liberation Serif"' ; do echo "user_pref($p);" >> $FIREFOX_PROFILE_LOCATION/prefs.js; done
-
     - name: Get sources
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/checkout@v2

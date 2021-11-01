@@ -38,6 +38,11 @@ function run_test {
         sudo dpkg-reconfigure --frontend noninteractive tzdata
     fi
 
+    if [ "$NO_HEADLESS" == "true" ]; then
+        Xvfb -ac :99 -screen 0 1200x600x24 > /dev/null 2>&1 &
+        x11vnc -display :99 2>/dev/null &
+    fi
+
     if [ "$LOCAL" != "true" ]; then
         if [ "$GITHUBACTION" != "true" ]; then
         npm i
@@ -69,7 +74,7 @@ function run_test {
     case "$BROWSER" in
 
         "firefox")
-            local firefox_args="-profile testprofile $url"
+            local firefox_args="-profile firefox-profile $url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 
             firefox --version
