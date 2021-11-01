@@ -97,6 +97,10 @@ const Toolbar = ToolbarBase.inherit({
 
     },
 
+    updateDimensions: function() {
+        this._dimensionChanged();
+    },
+
     _dimensionChanged: function(dimension) {
         if(dimension === 'height') {
             return;
