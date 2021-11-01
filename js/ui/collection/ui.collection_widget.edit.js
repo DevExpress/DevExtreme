@@ -440,11 +440,11 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _itemClickHandler: function(e) {
-        let itemSelectPromise;
+        let itemSelectPromise = new Deferred().resolve();
         const callBase = this.callBase;
 
         this._createAction((function(e) {
-            itemSelectPromise = this._itemSelectHandler(e.event);
+            itemSelectPromise = this._itemSelectHandler(e.event) ?? itemSelectPromise;
         }).bind(this), {
             validatingTargetName: 'itemElement'
         })({
@@ -452,13 +452,9 @@ const CollectionWidget = BaseCollectionWidget.inherit({
             event: e
         });
 
-        if(itemSelectPromise) {
-            itemSelectPromise.always(() => {
-                callBase.apply(this, arguments);
-            });
-        } else {
+        itemSelectPromise.always(() => {
             callBase.apply(this, arguments);
-        }
+        });
     },
 
     _itemSelectHandler: function(e) {
