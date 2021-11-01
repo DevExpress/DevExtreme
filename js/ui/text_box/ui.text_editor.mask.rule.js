@@ -4,7 +4,7 @@ import { inArray } from '../../core/utils/array';
 import { isFunction } from '../../core/utils/type';
 import { noop } from '../../core/utils/common';
 
-const EMPTY_CHAR = '(_empty_)';
+const EMPTY_CHAR = '\u058D';
 
 const BaseMaskRule = Class.inherit({
 
@@ -118,7 +118,8 @@ export const MaskRule = BaseMaskRule.inherit({
             return this.next().handle(this._prepareHandlingArgs(args, { start: args.start - 1 }));
         }
 
-        const { char, rest } = this._splitString(str);
+        const char = str[0];
+        const rest = str.substring(1);
         this._tryAcceptChar(char, args);
 
         return this._accepted()
@@ -134,20 +135,6 @@ export const MaskRule = BaseMaskRule.inherit({
     reset: function() {
         this._accepted(false);
         this.next().reset();
-    },
-
-    _splitString(str) {
-        if(str === EMPTY_CHAR) {
-            return {
-                char: str,
-                rest: ''
-            };
-        }
-
-        return {
-            char: str[0],
-            rest: str.substring(1)
-        };
     },
 
     _tryAcceptChar: function(char, args) {

@@ -6,7 +6,7 @@ import { clipboardText as getClipboardText } from '../../core/utils/dom';
 
 const MASK_EVENT_NAMESPACE = 'dxMask';
 const BLUR_EVENT = 'blur beforedeactivate';
-const EMPTY_CHAR = '(_empty_)';
+const EMPTY_CHAR = '\u058D';
 
 export default class BaseMaskStrategy {
     constructor(editor) {
