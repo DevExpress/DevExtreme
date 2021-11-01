@@ -10651,7 +10651,10 @@ declare module DevExpress.ui {
   module dxDraggable {
     export type DisposingEvent = DevExpress.events.EventInfo<dxDraggable>;
     export type DragEndEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDraggable> & {
+      DevExpress.events.NativeEventInfo<
+        dxDraggable,
+        MouseEvent | TouchEvent
+      > & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly fromComponent: dxSortable | dxDraggable;
@@ -10660,7 +10663,10 @@ declare module DevExpress.ui {
         readonly toData?: any;
       };
     export type DragMoveEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDraggable> & {
+      DevExpress.events.NativeEventInfo<
+        dxDraggable,
+        MouseEvent | TouchEvent
+      > & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly fromComponent: dxSortable | dxDraggable;
@@ -10669,7 +10675,10 @@ declare module DevExpress.ui {
         readonly toData?: any;
       };
     export type DragStartEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDraggable> & {
+      DevExpress.events.NativeEventInfo<
+        dxDraggable,
+        MouseEvent | TouchEvent
+      > & {
         itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly fromData?: any;
@@ -19759,7 +19768,7 @@ declare module DevExpress.ui {
     }
     export type DisposingEvent = DevExpress.events.EventInfo<dxSortable>;
     export type DragChangeEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxSortable> & {
+      DevExpress.events.NativeEventInfo<dxSortable, MouseEvent | TouchEvent> & {
         readonly itemData?: any;
         readonly itemElement: DevExpress.core.DxElement;
         readonly fromIndex?: number;
@@ -19771,7 +19780,7 @@ declare module DevExpress.ui {
         readonly dropInsideItem?: boolean;
       };
     export type DragEndEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxSortable> & {
+      DevExpress.events.NativeEventInfo<dxSortable, MouseEvent | TouchEvent> & {
         readonly itemData?: any;
         readonly itemElement: DevExpress.core.DxElement;
         readonly fromIndex: number;
@@ -19783,7 +19792,7 @@ declare module DevExpress.ui {
         readonly dropInsideItem: boolean;
       };
     export type DragMoveEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxSortable> & {
+      DevExpress.events.NativeEventInfo<dxSortable, MouseEvent | TouchEvent> & {
         readonly itemData?: any;
         readonly itemElement: DevExpress.core.DxElement;
         readonly fromIndex: number;
@@ -19795,7 +19804,7 @@ declare module DevExpress.ui {
         readonly dropInsideItem: boolean;
       };
     export type DragStartEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxSortable> & {
+      DevExpress.events.NativeEventInfo<dxSortable, MouseEvent | TouchEvent> & {
         itemData?: any;
         readonly itemElement: DevExpress.core.DxElement;
         readonly fromIndex: number;
