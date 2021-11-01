@@ -18,7 +18,7 @@ import ButtonGroup from '../../button_group';
 import ColorBox from '../../color_box';
 import ScrollView from '../../scroll_view';
 
-import { getOuterHeight, getOuterWidth } from '../../../core/utils/size';
+import { getOuterHeight, getWidth, getOuterWidth } from '../../../core/utils/size';
 
 import { getWindow } from '../../../core/utils/window';
 
@@ -104,6 +104,16 @@ function getFormatHandlers(module) {
     };
 }
 
+function resetFormDialogOptions(editorInstance, { contentTemplate, title, minHeight, minWidth, maxWidth }) {
+    editorInstance.formDialogOption({
+        contentTemplate,
+        title,
+        minHeight: minHeight ?? 0,
+        minWidth: minWidth ?? 0,
+        maxWidth: maxWidth ?? 'none'
+    });
+}
+
 function prepareShowFormProperties(module, type) {
     return ($element) => {
         if(!$element?.length) {
@@ -114,6 +124,9 @@ function prepareShowFormProperties(module, type) {
         const formats = module.quill.getFormat(module.editorInstance.getSelection(true));
 
         const tablePropertiesFormConfig = getFormConfigConstructor(type)(module, { $element, formats, tableBlot, rowBlot });
+
+        const { contentTemplate, title, minHeight, minWidth, maxWidth } = module.editorInstance._formDialog._popup.option();
+        const savedOptions = { contentTemplate, title, minHeight, minWidth, maxWidth };
 
         let formInstance;
 
@@ -129,7 +142,8 @@ function prepareShowFormProperties(module, type) {
             },
             title: localizationMessage.format(`dxHtmlEditor-${type}Properties`),
             minHeight: MIN_HEIGHT,
-            minWidth: 800
+            minWidth: Math.min(800, getWidth(getWindow()) * 0.9 - 1),
+            maxWidth: getWidth(getWindow()) * 0.9
         });
 
         const promise = module.editorInstance.showFormDialog();
@@ -137,12 +151,12 @@ function prepareShowFormProperties(module, type) {
         promise.done((formData, event) => {
             module.saveValueChangeEvent(event);
             tablePropertiesFormConfig.applyHandler(formInstance);
-            formInstance.dispose();
+            resetFormDialogOptions(module.editorInstance, savedOptions);
         });
 
         promise.fail(() => {
             module.quill.focus();
-            formInstance.dispose();
+            resetFormDialogOptions(module.editorInstance, savedOptions);
         });
     };
 }
@@ -538,7 +552,7 @@ function getTablePropertiesFormConfig(module, { $element, formats, tableBlot }) 
         }],
         showColonAfterLabel: true,
         labelLocation: 'top',
-        minColWidth: 300
+        minColWidth: 400
     };
 
     const applyHandler = (formInstance) => {
@@ -728,7 +742,7 @@ function getCellPropertiesFormConfig(module, { $element, formats, tableBlot, row
         }],
         showColonAfterLabel: true,
         labelLocation: 'top',
-        minColWidth: 300
+        minColWidth: 400
     };
 
     const applyHandler = (formInstance) => {

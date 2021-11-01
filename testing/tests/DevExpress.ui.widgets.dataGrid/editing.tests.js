@@ -7774,12 +7774,13 @@ QUnit.module('Editing with real dataController', {
         assert.strictEqual(window.getComputedStyle(svgIcon.find('svg')[0]).pointerEvents, 'none', 'dx-svg-icon svg does not allow pointer events');
     });
 
-    QUnit.test('Add a custom command column', function(assert) {
+    QUnit.test('Add a custom command column with useLegacyColumnButtonTemplate', function(assert) {
         // arrange
         const that = this;
         const rowsView = that.rowsView;
         const $testElement = $('#container');
 
+        this.options.useLegacyColumnButtonTemplate = true;
         $.extend(that.options.editing, {
             mode: 'row',
             allowUpdating: true,
@@ -7817,6 +7818,83 @@ QUnit.module('Editing with real dataController', {
         assert.strictEqual($customCommandCell.children('.mylink').text(), 'My link', 'text of the custom link');
         assert.strictEqual($customCommandCell.children('.mybutton').length, 1, 'has custom button');
         assert.strictEqual($customCommandCell.children('.mybutton').text(), 'My button', 'text of the custom button');
+    });
+
+    QUnit.test('Add a custom command column', function(assert) {
+        // arrange
+        const that = this;
+        const rowsView = that.rowsView;
+        const $testElement = $('#container');
+
+        $.extend(that.options.editing, {
+            mode: 'row',
+            allowUpdating: true,
+            allowDeleting: true
+        });
+        that.options.columns.push({ type: 'buttons' }, {
+            type: 'buttons',
+            cssClass: 'mybuttons',
+            buttons: [
+                {
+                    text: 'My link',
+                    cssClass: 'mylink'
+                },
+                {
+                    cssClass: 'mybutton',
+                    template: function($cellElement, options) {
+                        return $('<div/>').addClass('mybuttontext').text('My button');
+                    }
+                }
+            ]
+        });
+        that.columnsController.reset();
+
+        // act
+        rowsView.render($testElement);
+
+        // assert
+        const $linkElements = $testElement.find('.dx-command-edit').first().find('.dx-link');
+        assert.strictEqual($linkElements.length, 2, 'link count');
+        assert.ok($linkElements.eq(0).hasClass('dx-link-edit'), 'the edit link');
+        assert.ok($linkElements.eq(1).hasClass('dx-link-delete'), 'the delete link');
+
+        const $customCommandCell = $testElement.find('.mybuttons').first();
+        assert.strictEqual($customCommandCell.length, 1, 'has custom command cell');
+        assert.strictEqual($customCommandCell.children('.mylink').length, 1, 'has custom link');
+        assert.strictEqual($customCommandCell.children('.mylink').text(), 'My link', 'text of the custom link');
+        assert.strictEqual($customCommandCell.children('.mybutton').length, 1, 'has custom button cssClass');
+        assert.strictEqual($customCommandCell.children('.mybutton').children('.mybuttontext').length, 1, 'has custom button content');
+        assert.strictEqual($customCommandCell.children('.mybutton').text(), 'My button', 'text of the custom button');
+    });
+
+    QUnit.test('Add a custom command column click handler', function(assert) {
+        // arrange
+        const that = this;
+        const rowsView = that.rowsView;
+        const $testElement = $('#container');
+        const clickSpy = sinon.spy();
+        that.options.columns.push({
+            type: 'buttons',
+            cssClass: 'mybuttons',
+            buttons: [
+                {
+                    cssClass: 'mybutton',
+                    onClick: clickSpy,
+                    template: function($cellElement, options) {
+                        return $('<div/>').addClass('mybuttontext').text('My button');
+                    }
+                }
+            ]
+        });
+        that.columnsController.reset();
+
+        // act
+        rowsView.render($testElement);
+
+        $('.mybuttontext').first().trigger('click');
+
+        // assert
+        assert.strictEqual(clickSpy.callCount, 1, 'click is fired once');
     });
 
     QUnit.test('Changing edit icon in the \'buttons\' command column', function(assert) {

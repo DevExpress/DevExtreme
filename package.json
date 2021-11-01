@@ -30,7 +30,7 @@
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "@devextreme/runtime": "2.3.8",
-    "devexpress-diagram": "2.1.35",
+    "devexpress-diagram": "2.1.37",
     "devexpress-gantt": "3.1.24",
     "devextreme-quill": "~1.5.5",
     "inferno": "^7.4.9",
@@ -39,7 +39,7 @@
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.7.1",
     "rrule": "2.6.6",
-    "showdown": "^1.9.1",
+    "devextreme-showdown": "^1.0.0",
     "turndown": "~7.0.0"
   },
   "devDependencies": {
@@ -80,7 +80,7 @@
     "cssom": "^0.4.4",
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
-    "devextreme-internal-tools": "7.2.3",
+    "devextreme-internal-tools": "7.3.3",
     "devextreme-screenshot-comparer": "^2.0.9",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
