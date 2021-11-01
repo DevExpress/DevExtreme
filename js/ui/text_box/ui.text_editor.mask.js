@@ -251,7 +251,7 @@ const TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        const value = this.option('value') || '';
+        const value = this._value || '';
         this._maskRulesChain.clear(this._normalizeChainArguments());
 
         const chainArgs = { length: value.length };
@@ -324,12 +324,12 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _getPreparedValue: function() {
-        let value = this._convertToValue();
+        const preparedValue = this
+            ._convertToValue()
+            .replaceAll(EMPTY_CHAR, ' ')
+            .replace(/\s+$/, '');
 
-        const suffixEmptyCharacters = new RegExp(`(${EMPTY_CHAR})+$`);
-        value = value.replace(suffixEmptyCharacters, '');
-
-        return value.replaceAll(EMPTY_CHAR, ' ');
+        return preparedValue;
     },
 
     _valueChangeEventHandler: function(e) {
