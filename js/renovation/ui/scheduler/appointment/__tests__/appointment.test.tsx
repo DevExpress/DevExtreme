@@ -52,6 +52,7 @@ describe('Appointment', () => {
       const appointment = render({
         styles: 'some-styles',
         classes: 'some-classes',
+        text: 'some-text',
       });
 
       expect(appointment.hasClass('some-classes'))
@@ -62,6 +63,12 @@ describe('Appointment', () => {
 
       expect(appointment.prop('style'))
         .toEqual('some-styles');
+
+      expect(appointment.prop('title'))
+        .toBe('some-text');
+
+      expect(appointment.prop('role'))
+        .toBe('button');
     });
 
     it('it should has correct render with template', () => {
