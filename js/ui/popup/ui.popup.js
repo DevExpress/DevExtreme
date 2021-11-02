@@ -527,11 +527,11 @@ const Popup = Overlay.inherit({
     _renderResize: function() {
         this.callBase();
 
-        this._resizable.option('onResize', (function() {
+        this._resizable.option('onResize', ((e) => {
             this._setContentHeight();
 
-            this._actions.onResize(arguments);
-        }).bind(this));
+            this._actions.onResize(e);
+        }));
     },
 
     _setContentHeight: function() {
