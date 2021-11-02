@@ -763,7 +763,7 @@ const Sortable = Draggable.inherit({
         return left;
     },
 
-    _movePlaceholder: function(_isFromHandler) {
+    _movePlaceholder: function() {
         const that = this;
         const $placeholderElement = that._$placeholderElement || that._createPlaceholder();
         if(!$placeholderElement) {
