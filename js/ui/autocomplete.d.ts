@@ -81,7 +81,7 @@ export type PasteEvent = NativeEventInfo<dxAutocomplete, ClipboardEvent>;
 export type SelectionChangedEvent = EventInfo<dxAutocomplete> & SelectionChangedInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent | MouseEvent | PointerEvent | UIEvent> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;
