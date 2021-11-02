@@ -21,8 +21,7 @@ describe('Calendar', () => {
 
   describe('Render', () => {
     it('should render Popover if desktop layout', () => {
-      const tree = renderComponent({ isMobile: false });
-      const popover = tree.childAt(0);
+      const popover = renderComponent({ isMobile: false });
 
       expect(popover.is(Popover)).toBe(true);
     });
@@ -34,13 +33,12 @@ describe('Calendar', () => {
       const focusCalendar = () => { };
       const updateVisible = () => { };
 
-      const tree = renderComponent({
+      const popover = renderComponent({
         isMobile: false,
         props,
         updateVisible,
         focusCalendar,
       });
-      const popover = tree.childAt(0);
 
       expect(popover.props()).toEqual({
         ...new PopoverProps(),
@@ -56,8 +54,7 @@ describe('Calendar', () => {
     });
 
     it('should render Popup if mobile layout', () => {
-      const tree = renderComponent({ isMobile: true });
-      const popup = tree.childAt(0);
+      const popup = renderComponent({ isMobile: true });
 
       expect(popup.is(Popup)).toBe(true);
     });
@@ -69,13 +66,12 @@ describe('Calendar', () => {
       const focusCalendar = () => { };
       const updateVisible = () => { };
 
-      const tree = renderComponent({
+      const popup = renderComponent({
         isMobile: true,
         props,
         focusCalendar,
         updateVisible,
       });
-      const popup = tree.childAt(0);
 
       expect(popup.props()).toEqual({
         ...new PopupProps(),
@@ -93,8 +89,7 @@ describe('Calendar', () => {
     });
 
     it('should render overlay child with correct className', () => {
-      const tree = renderComponent({});
-      const overlay = tree.childAt(0);
+      const overlay = renderComponent({});
       const child = overlay.childAt(0);
 
       expect(child.prop('className')).toBe('dx-scheduler-navigator-calendar');
@@ -109,8 +104,7 @@ describe('Calendar', () => {
       };
       const updateDate = () => { };
 
-      const tree = renderComponent({ props, updateDate });
-      const overlay = tree.childAt(0);
+      const overlay = renderComponent({ props, updateDate });
       const calendar = overlay.childAt(0).childAt(0);
 
       expect(calendar.props()).toEqual({

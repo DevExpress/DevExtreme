@@ -11,32 +11,6 @@ const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
 });
 
-async function moveRow(grid: any, rowIndex: number, x: number, y: number): Promise<void> {
-  return ClientFunction(() => {
-    const gridInstance = grid.getGridInstance();
-    const $row = $(gridInstance.getRowElement(rowIndex));
-    const $cell = $row.children('.dx-command-drag');
-    const cellOffset = $cell.offset();
-
-    $cell
-      .trigger($.Event('dxpointerdown', {
-        pageX: cellOffset.left,
-        pageY: cellOffset.top,
-        pointers: [{ pointerId: 1 }],
-      }))
-      .trigger($.Event('dxpointermove', {
-        pageX: cellOffset.left + x,
-        pageY: cellOffset.top + y,
-        pointers: [{ pointerId: 1 }],
-      }));
-  },
-  {
-    dependencies: {
-      grid, rowIndex, x, y,
-    },
-  })();
-}
-
 fixture`Row dragging`
   .page(url(__dirname, '../container.html'))
   .afterEach(async () => disposeWidgets());
@@ -46,8 +20,8 @@ test('The placeholder should appear when a cross-component dragging rows after s
   const dataGrid = new DataGrid('#container');
 
   await scrollTo(0, 10000);
-  await moveRow(dataGrid, 6, 500, 0);
-  await moveRow(dataGrid, 6, 550, 0);
+  await dataGrid.moveRow(6, 500, 0, true);
+  await dataGrid.moveRow(6, 550, 0);
 
   await t.expect(isPlaceholderVisible()).ok();
 }).before(async (t) => {
@@ -136,8 +110,8 @@ test('The placeholder should appear when a cross-component dragging rows after s
 test('The cross-component drag and drop rows should work when there are fixed columns', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await moveRow(dataGrid, 0, 500, 0);
-  await moveRow(dataGrid, 0, 550, 0);
+  await dataGrid.moveRow(0, 500, 0, true);
+  await dataGrid.moveRow(0, 550, 0);
 
   await t
     .expect(isPlaceholderVisible())

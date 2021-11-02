@@ -29,7 +29,7 @@ const priorityData = [{
 fixture`Appointment resources`
   .page(url(__dirname, '../../container.html'));
 
-test('Reosurce color should be correct if group is set in "views"', async (t) => {
+test('Resource color should be correct if group is set in "views"', async (t) => {
   const scheduler = new Scheduler('#container');
   const appointment1 = scheduler.getAppointment('test-appt-1');
   const appointment2 = scheduler.getAppointment('test-appt-2');

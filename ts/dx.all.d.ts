@@ -3176,15 +3176,17 @@ declare module DevExpress.events {
    * [descr:DxEvent]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type DxEvent = {} extends EventType ? EventObject : EventType;
+  export type DxEvent<TNativeEvent = Event> = {} extends EventType
+    ? EventObject & TNativeEvent
+    : EventType;
   /**
    * [descr:event]
    * @deprecated [depNote:event]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export type event = DxEvent;
-  export interface EventInfo<T> {
-    readonly component: T;
+  export interface EventInfo<TComponent> {
+    readonly component: TComponent;
     readonly element: DevExpress.core.DxElement;
     readonly model?: any;
   }
@@ -3251,8 +3253,8 @@ declare module DevExpress.events {
   interface EventType extends JQueryEventObject {
     cancel?: boolean;
   }
-  export interface InitializedEventInfo<T> {
-    readonly component?: T;
+  export interface InitializedEventInfo<TComponent> {
+    readonly component?: TComponent;
     readonly element?: DevExpress.core.DxElement;
   }
   /**
@@ -3263,11 +3265,11 @@ declare module DevExpress.events {
     readonly itemElement: DevExpress.core.DxElement;
     readonly itemIndex: number;
   }
-  export interface NativeEventInfo<T> {
-    readonly component: T;
+  export interface NativeEventInfo<TComponent, TNativeEvent = Event> {
+    readonly component: TComponent;
     readonly element: DevExpress.core.DxElement;
     readonly model?: any;
-    readonly event?: DxEvent;
+    readonly event?: DxEvent<TNativeEvent>;
   }
   /**
    * [descr:events.off(element)]
@@ -18269,7 +18271,10 @@ declare module DevExpress.ui {
         cancel: boolean | PromiseLike<boolean>;
       };
     export type AppointmentClickEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxScheduler> &
+      DevExpress.events.NativeEventInfo<
+        dxScheduler,
+        KeyboardEvent | MouseEvent | PointerEvent
+      > &
       TargetedAppointmentInfo & {
         readonly appointmentElement: DevExpress.core.DxElement;
       };
@@ -18277,13 +18282,18 @@ declare module DevExpress.ui {
       readonly appointmentCount: number;
       readonly isCompact: boolean;
     };
-    export type AppointmentContextMenuEvent =
-      DevExpress.events.NativeEventInfo<dxScheduler> &
-        TargetedAppointmentInfo & {
-          readonly appointmentElement: DevExpress.core.DxElement;
-        };
+    export type AppointmentContextMenuEvent = DevExpress.events.NativeEventInfo<
+      dxScheduler,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
+      TargetedAppointmentInfo & {
+        readonly appointmentElement: DevExpress.core.DxElement;
+      };
     export type AppointmentDblClickEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxScheduler> &
+      DevExpress.events.NativeEventInfo<
+        dxScheduler,
+        MouseEvent | PointerEvent
+      > &
       TargetedAppointmentInfo & {
         readonly appointmentElement: DevExpress.core.DxElement;
       };
@@ -18313,7 +18323,7 @@ declare module DevExpress.ui {
      */
     interface AppointmentDraggingEvent {
       readonly component: dxScheduler;
-      readonly event?: DevExpress.events.DxEvent;
+      readonly event?: DevExpress.events.DxEvent<MouseEvent | TouchEvent>;
       readonly itemData?: any;
       readonly itemElement?: DevExpress.core.DxElement;
       readonly fromData?: any;
@@ -18355,15 +18365,20 @@ declare module DevExpress.ui {
         cancel?: boolean | PromiseLike<boolean>;
       };
     export type CellClickEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxScheduler> & {
+      DevExpress.events.NativeEventInfo<
+        dxScheduler,
+        KeyboardEvent | MouseEvent | PointerEvent
+      > & {
         readonly cellData: any;
         readonly cellElement: DevExpress.core.DxElement;
       };
-    export type CellContextMenuEvent =
-      DevExpress.events.NativeEventInfo<dxScheduler> & {
-        readonly cellData: any;
-        readonly cellElement: DevExpress.core.DxElement;
-      };
+    export type CellContextMenuEvent = DevExpress.events.NativeEventInfo<
+      dxScheduler,
+      MouseEvent | PointerEvent | TouchEvent
+    > & {
+      readonly cellData: any;
+      readonly cellElement: DevExpress.core.DxElement;
+    };
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxScheduler>;
     export type DateNavigatorTextInfo = {
       readonly startDate: Date;
@@ -19876,10 +19891,12 @@ declare module DevExpress.ui {
    */
   export class dxSpeedDialAction extends Widget<dxSpeedDialActionOptions> {}
   module dxSpeedDialAction {
-    export type ClickEvent =
-      DevExpress.events.NativeEventInfo<dxSpeedDialAction> & {
-        actionElement?: DevExpress.core.DxElement;
-      };
+    export type ClickEvent = DevExpress.events.NativeEventInfo<
+      dxSpeedDialAction,
+      MouseEvent | PointerEvent
+    > & {
+      actionElement?: DevExpress.core.DxElement;
+    };
     export type ContentReadyEvent =
       DevExpress.events.EventInfo<dxSpeedDialAction> & {
         actionElement?: DevExpress.core.DxElement;
