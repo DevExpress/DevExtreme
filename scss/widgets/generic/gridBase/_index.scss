@@ -287,6 +287,8 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
 
     &.dx-checkbox-indeterminate {
       .dx-checkbox-icon {
+        font-size: $generic-grid-base-checkbox-indeterminate-icon-size;
+
         &::before {
           border-radius: 0;
         }
