@@ -77,6 +77,7 @@ export interface animationConfig {
 }
 
 /**
+ * @public
  * @docid
  * @section utils
  * @namespace DevExpress
