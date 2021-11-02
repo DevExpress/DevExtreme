@@ -17858,7 +17858,7 @@ declare module DevExpress.ui {
     export type Properties = dxRadioGroupOptions;
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxRadioGroup,
-      MouseEvent | PointerEvent
+      MouseEvent | PointerEvent | KeyboardEvent
     > &
       DevExpress.ui.Editor.ValueChangedInfo;
   }
