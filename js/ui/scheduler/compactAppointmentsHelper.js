@@ -141,7 +141,7 @@ export class CompactAppointmentsHelper {
 
     _makeBackgroundColor($button, colors, color) {
         when.apply(null, colors).done(function() {
-            this._makeBackgroundColorCore($button, color, arguments);
+            this._makeBackgroundColorCore($button, color, [...arguments]);
         }.bind(this));
     }
 

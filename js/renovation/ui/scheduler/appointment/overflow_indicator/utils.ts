@@ -43,7 +43,7 @@ export const getOverflowIndicatorStyles = (
 };
 
 export const getOverflowIndicatorColor = (color: string, colors: string[]): string | undefined => (
-  !colors.length || [...colors].filter((item) => item !== color).length === 0
+  !colors.length || colors.filter((item) => item !== color).length === 0
     ? color
     : undefined
 );
