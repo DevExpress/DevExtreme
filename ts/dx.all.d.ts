@@ -20760,7 +20760,7 @@ declare module DevExpress.ui {
     export type Properties = dxTextAreaOptions;
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxTextArea,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event
+      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event
     > &
       DevExpress.ui.Editor.ValueChangedInfo;
   }

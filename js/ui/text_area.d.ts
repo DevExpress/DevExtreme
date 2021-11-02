@@ -59,7 +59,7 @@ export type OptionChangedEvent = EventInfo<dxTextArea> & ChangedOptionInfo;
 export type PasteEvent = NativeEventInfo<dxTextArea, ClipboardEvent>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxTextArea, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxTextArea, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
