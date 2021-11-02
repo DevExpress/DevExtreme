@@ -23063,7 +23063,7 @@ declare module DevExpress.ui {
     onValueChanged?: (
       e: DevExpress.events.NativeEventInfo<
         TComponent,
-        KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent
+        KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event
       > &
         DevExpress.ui.Editor.ValueChangedInfo
     ) => void;
