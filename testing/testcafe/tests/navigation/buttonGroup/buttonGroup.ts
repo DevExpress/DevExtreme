@@ -15,7 +15,7 @@ fixture`ButtonGroup_Styles`
 
 ['generic.light', 'generic.dark', 'generic.contrast'].forEach((theme) => {
   ['text', 'outlined', 'contained'].forEach((stylingMode) => {
-    test(`ButtonGroup styling, theme: ${theme},  stylingMode: ${stylingMode}`, async (t) => {
+    test(`ButtonGroup-styling,theme=${theme},stylingMode=${stylingMode}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await changeTheme(theme);
 
@@ -73,7 +73,7 @@ fixture`ButtonGroup_Styles`
       }
 
       await t
-        .expect(await takeScreenshot(`buttonGroupStates-${theme},mode:${stylingMode}.png`, Selector('#container')))
+        .expect(await takeScreenshot(`buttonGroupStates-${theme},mode=${stylingMode}.png`, Selector('#container')))
         .ok()
         .expect(compareResults.isValid())
         .ok(compareResults.errorMessages());
