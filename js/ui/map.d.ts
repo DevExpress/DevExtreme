@@ -14,7 +14,7 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ClickEvent = NativeEventInfo<dxMap>;
+export type ClickEvent = NativeEventInfo<dxMap, Event>;
 
 /** @public */
 export type DisposingEvent = EventInfo<dxMap>;
