@@ -4,6 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
 fixture`Scheduler: long appointments in month view`
+  .meta({ renovation: true })
   .page(url(__dirname, '../../container.html'));
 
 [false, true].forEach((rtlEnabled) => {
@@ -25,19 +26,17 @@ fixture`Scheduler: long appointments in month view`
     test(`Long appointment should display valid on month view(rtl='${rtlEnabled}', text='${appointment.text}')`, async (t) => {
       const scheduler = new Scheduler('#container');
       await t.expect(await compareScreenshot(t, `month-long-appointment(rtl=${rtlEnabled}, text=${appointment.text}).png`, scheduler.workSpace)).ok();
-    })
-      .meta({ renovation: true })
-      .before(async (t) => {
-        await t.resizeWindow(1200, 800);
+    }).before(async (t) => {
+      await t.resizeWindow(1200, 800);
 
-        return createWidget('dxScheduler', {
-          dataSource: [appointment],
-          views: ['month'],
-          currentView: 'month',
-          rtlEnabled,
-          currentDate: new Date(2020, 0, 1),
-        });
+      return createWidget('dxScheduler', {
+        dataSource: [appointment],
+        views: ['month'],
+        currentView: 'month',
+        rtlEnabled,
+        currentDate: new Date(2020, 0, 1),
       });
+    });
   });
 });
 
