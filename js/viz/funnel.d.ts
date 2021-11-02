@@ -91,10 +91,10 @@ export type IncidentOccurredEvent = EventInfo<dxFunnel> & IncidentInfo;
 export type InitializedEvent = InitializedEventInfo<dxFunnel>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxFunnel> & FunnelItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxFunnel, MouseEvent | PointerEvent> & FunnelItemInfo;
 
 /** @public */
-export type LegendClickEvent = NativeEventInfo<dxFunnel> & FunnelItemInfo;
+export type LegendClickEvent = NativeEventInfo<dxFunnel, MouseEvent | PointerEvent> & FunnelItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxFunnel> & ChangedOptionInfo;

@@ -24518,7 +24518,10 @@ declare module DevExpress.viz {
      */
     onPointClick?:
       | ((
-          e: DevExpress.events.NativeEventInfo<TComponent> &
+          e: DevExpress.events.NativeEventInfo<
+            TComponent,
+            MouseEvent | PointerEvent
+          > &
             DevExpress.viz.BaseChart.PointInteractionInfo
         ) => void)
       | string;
@@ -26602,10 +26605,12 @@ declare module DevExpress.viz {
     ): void;
   }
   module dxChart {
-    export type ArgumentAxisClickEvent =
-      DevExpress.events.NativeEventInfo<dxChart> & {
-        readonly argument: Date | number | string;
-      };
+    export type ArgumentAxisClickEvent = DevExpress.events.NativeEventInfo<
+      dxChart,
+      MouseEvent | PointerEvent
+    > & {
+      readonly argument: Date | number | string;
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -26628,13 +26633,18 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxChart>;
-    export type LegendClickEvent =
-      DevExpress.events.NativeEventInfo<dxChart> & {
-        readonly target: chartSeriesObject;
-      };
+    export type LegendClickEvent = DevExpress.events.NativeEventInfo<
+      dxChart,
+      MouseEvent | PointerEvent
+    > & {
+      readonly target: chartSeriesObject;
+    };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.events.ChangedOptionInfo;
-    export type PointClickEvent = DevExpress.events.NativeEventInfo<dxChart> &
+    export type PointClickEvent = DevExpress.events.NativeEventInfo<
+      dxChart,
+      MouseEvent | PointerEvent
+    > &
       DevExpress.viz.BaseChart.PointInteractionInfo;
     export type PointHoverChangedEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseChart.PointInteractionInfo;
@@ -26642,10 +26652,12 @@ declare module DevExpress.viz {
       DevExpress.events.EventInfo<dxChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo;
     export type Properties = dxChartOptions;
-    export type SeriesClickEvent =
-      DevExpress.events.NativeEventInfo<dxChart> & {
-        readonly target: chartSeriesObject;
-      };
+    export type SeriesClickEvent = DevExpress.events.NativeEventInfo<
+      dxChart,
+      MouseEvent | PointerEvent
+    > & {
+      readonly target: chartSeriesObject;
+    };
     export type SeriesHoverChangedEvent = DevExpress.events.EventInfo<dxChart> &
       SeriesInteractionInfo;
     /**
@@ -26661,7 +26673,7 @@ declare module DevExpress.viz {
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxChart> &
       DevExpress.viz.BaseChart.TooltipInfo;
     export type ZoomEndEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxChart> & {
+      DevExpress.events.NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
         readonly rangeStart: Date | number;
         readonly rangeEnd: Date | number;
         readonly axis: chartAxisObject;
@@ -26672,7 +26684,7 @@ declare module DevExpress.viz {
         readonly shift: number;
       };
     export type ZoomStartEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxChart> & {
+      DevExpress.events.NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
         readonly axis: chartAxisObject;
         readonly range: VizRange;
         readonly actionType?: 'zoom' | 'pan';
@@ -30335,9 +30347,15 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxFunnel>;
-    export type ItemClickEvent = DevExpress.events.NativeEventInfo<dxFunnel> &
+    export type ItemClickEvent = DevExpress.events.NativeEventInfo<
+      dxFunnel,
+      MouseEvent | PointerEvent
+    > &
       FunnelItemInfo;
-    export type LegendClickEvent = DevExpress.events.NativeEventInfo<dxFunnel> &
+    export type LegendClickEvent = DevExpress.events.NativeEventInfo<
+      dxFunnel,
+      MouseEvent | PointerEvent
+    > &
       FunnelItemInfo;
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxFunnel> &
       DevExpress.events.ChangedOptionInfo;
@@ -30913,20 +30931,24 @@ declare module DevExpress.viz {
         DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxPieChart>;
-    export type LegendClickEvent =
-      DevExpress.events.NativeEventInfo<dxPieChart> & {
-        readonly target: string | number;
-        readonly points: Array<piePointObject>;
-      };
+    export type LegendClickEvent = DevExpress.events.NativeEventInfo<
+      dxPieChart,
+      MouseEvent | PointerEvent
+    > & {
+      readonly target: string | number;
+      readonly points: Array<piePointObject>;
+    };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.events.ChangedOptionInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export type PieSeriesType = 'donut' | 'doughnut' | 'pie';
-    export type PointClickEvent =
-      DevExpress.events.NativeEventInfo<dxPieChart> &
-        DevExpress.viz.BaseChart.PointInteractionInfo;
+    export type PointClickEvent = DevExpress.events.NativeEventInfo<
+      dxPieChart,
+      MouseEvent | PointerEvent
+    > &
+      DevExpress.viz.BaseChart.PointInteractionInfo;
     export type PointHoverChangedEvent =
       DevExpress.events.EventInfo<dxPieChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo;
@@ -31448,10 +31470,12 @@ declare module DevExpress.viz {
     resetVisualRange(): void;
   }
   module dxPolarChart {
-    export type ArgumentAxisClickEvent =
-      DevExpress.events.NativeEventInfo<dxPolarChart> & {
-        readonly argument: Date | number | string;
-      };
+    export type ArgumentAxisClickEvent = DevExpress.events.NativeEventInfo<
+      dxPolarChart,
+      MouseEvent | PointerEvent
+    > & {
+      readonly argument: Date | number | string;
+    };
     export type DisposingEvent = DevExpress.events.EventInfo<dxPolarChart>;
     export type DoneEvent = DevExpress.events.EventInfo<dxPolarChart>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxPolarChart>;
@@ -31465,15 +31489,19 @@ declare module DevExpress.viz {
         DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxPolarChart>;
-    export type LegendClickEvent =
-      DevExpress.events.NativeEventInfo<dxPolarChart> & {
-        readonly target: polarChartSeriesObject;
-      };
+    export type LegendClickEvent = DevExpress.events.NativeEventInfo<
+      dxPolarChart,
+      MouseEvent | PointerEvent
+    > & {
+      readonly target: polarChartSeriesObject;
+    };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPolarChart> &
       DevExpress.events.ChangedOptionInfo;
-    export type PointClickEvent =
-      DevExpress.events.NativeEventInfo<dxPolarChart> &
-        DevExpress.viz.BaseChart.PointInteractionInfo;
+    export type PointClickEvent = DevExpress.events.NativeEventInfo<
+      dxPolarChart,
+      MouseEvent | PointerEvent
+    > &
+      DevExpress.viz.BaseChart.PointInteractionInfo;
     export type PointHoverChangedEvent =
       DevExpress.events.EventInfo<dxPolarChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo;
@@ -31490,10 +31518,12 @@ declare module DevExpress.viz {
       | 'scatter'
       | 'stackedbar';
     export type Properties = dxPolarChartOptions;
-    export type SeriesClickEvent =
-      DevExpress.events.NativeEventInfo<dxPolarChart> & {
-        readonly target: polarChartSeriesObject;
-      };
+    export type SeriesClickEvent = DevExpress.events.NativeEventInfo<
+      dxPolarChart,
+      MouseEvent | PointerEvent
+    > & {
+      readonly target: polarChartSeriesObject;
+    };
     export type SeriesHoverChangedEvent =
       DevExpress.events.EventInfo<dxPolarChart> & SeriesInteractionInfo;
     /**
@@ -31509,7 +31539,10 @@ declare module DevExpress.viz {
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxPolarChart> &
       DevExpress.viz.BaseChart.TooltipInfo;
     export type ZoomEndEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxPolarChart> & {
+      DevExpress.events.NativeEventInfo<
+        dxPolarChart,
+        MouseEvent | TouchEvent
+      > & {
         readonly axis: chartAxisObject;
         readonly range: VizRange;
         readonly previousRange: VizRange;
@@ -31518,7 +31551,10 @@ declare module DevExpress.viz {
         readonly shift: number;
       };
     export type ZoomStartEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxPolarChart> & {
+      DevExpress.events.NativeEventInfo<
+        dxPolarChart,
+        MouseEvent | TouchEvent
+      > & {
         readonly axis: chartAxisObject;
         readonly range: VizRange;
         readonly actionType: 'zoom' | 'pan';
@@ -33056,11 +33092,13 @@ declare module DevExpress.viz {
       DevExpress.events.EventInfo<dxRangeSelector> &
         DevExpress.events.ChangedOptionInfo;
     export type Properties = dxRangeSelectorOptions;
-    export type ValueChangedEvent =
-      DevExpress.events.NativeEventInfo<dxRangeSelector> & {
-        readonly value: Array<number | string | Date>;
-        readonly previousValue: Array<number | string | Date>;
-      };
+    export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
+      dxRangeSelector,
+      MouseEvent | TouchEvent
+    > & {
+      readonly value: Array<number | string | Date>;
+      readonly previousValue: Array<number | string | Date>;
+    };
   }
   /**
    * @deprecated use Properties instead
@@ -33627,13 +33665,19 @@ declare module DevExpress.viz {
       DevExpress.viz.BaseWidget.IncidentInfo;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxSankey>;
-    export type LinkClickEvent = DevExpress.events.NativeEventInfo<dxSankey> & {
+    export type LinkClickEvent = DevExpress.events.NativeEventInfo<
+      dxSankey,
+      MouseEvent | PointerEvent
+    > & {
       readonly target: dxSankeyLink;
     };
     export type LinkHoverEvent = DevExpress.events.EventInfo<dxSankey> & {
       readonly target: dxSankeyLink;
     };
-    export type NodeClickEvent = DevExpress.events.NativeEventInfo<dxSankey> & {
+    export type NodeClickEvent = DevExpress.events.NativeEventInfo<
+      dxSankey,
+      MouseEvent | PointerEvent
+    > & {
       readonly target: dxSankeyNode;
     };
     export type NodeHoverEvent = DevExpress.events.EventInfo<dxSankey> & {
@@ -34265,7 +34309,10 @@ declare module DevExpress.viz {
     resetDrillDown(): void;
   }
   module dxTreeMap {
-    export type ClickEvent = DevExpress.events.NativeEventInfo<dxTreeMap> & {
+    export type ClickEvent = DevExpress.events.NativeEventInfo<
+      dxTreeMap,
+      MouseEvent | PointerEvent
+    > & {
       readonly node: dxTreeMapNode;
     };
     export type DisposingEvent = DevExpress.events.EventInfo<dxTreeMap>;
@@ -34793,7 +34840,10 @@ declare module DevExpress.viz {
       DevExpress.events.EventInfo<dxVectorMap> & {
         readonly center: Array<number>;
       };
-    export type ClickEvent = DevExpress.events.NativeEventInfo<dxVectorMap> & {
+    export type ClickEvent = DevExpress.events.NativeEventInfo<
+      dxVectorMap,
+      MouseEvent | PointerEvent
+    > & {
       readonly target: MapLayerElement;
     };
     export type DisposingEvent = DevExpress.events.EventInfo<dxVectorMap>;
