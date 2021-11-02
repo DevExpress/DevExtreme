@@ -18,6 +18,7 @@ import {
 import {
     Cancelable,
     EventInfo,
+    NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
@@ -54,13 +55,13 @@ export type InitializedEvent = InitializedEventInfo<dxPopup>;
 export type ShownEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type ResizeEvent = EventInfo<dxPopup> & ResizeInfo;
+export type ResizeEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
-export type ResizeStartEvent = EventInfo<dxPopup> & ResizeInfo;
+export type ResizeStartEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
-export type ResizeEndEvent = EventInfo<dxPopup> & ResizeInfo;
+export type ResizeEndEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;

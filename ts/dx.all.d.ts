@@ -17619,11 +17619,20 @@ declare module DevExpress.ui {
      */
     interface PopupInstance extends dxPopup<Properties> {}
     export type Properties = dxPopupOptions<PopupInstance>;
-    export type ResizeEndEvent = DevExpress.events.EventInfo<dxPopup> &
+    export type ResizeEndEvent = DevExpress.events.NativeEventInfo<
+      dxPopup,
+      MouseEvent | TouchEvent
+    > &
       DevExpress.ui.dxResizable.ResizeInfo;
-    export type ResizeEvent = DevExpress.events.EventInfo<dxPopup> &
+    export type ResizeEvent = DevExpress.events.NativeEventInfo<
+      dxPopup,
+      MouseEvent | TouchEvent
+    > &
       DevExpress.ui.dxResizable.ResizeInfo;
-    export type ResizeStartEvent = DevExpress.events.EventInfo<dxPopup> &
+    export type ResizeStartEvent = DevExpress.events.NativeEventInfo<
+      dxPopup,
+      MouseEvent | TouchEvent
+    > &
       DevExpress.ui.dxResizable.ResizeInfo;
     export type ShowingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxPopup>;
