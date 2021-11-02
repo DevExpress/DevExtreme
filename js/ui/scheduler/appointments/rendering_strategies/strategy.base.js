@@ -582,7 +582,7 @@ class BaseRenderingStrategy {
                 height: this.getDropDownAppointmentHeight(),
                 index: this._generateAppointmentCollectorIndex(coordinates, isAllDay),
                 isAllDay,
-                isCompact: compactRender,
+                isCompact: compactRender
             };
         }
     }

@@ -6,6 +6,7 @@ export const getOverflowIndicatorStyles = (
   viewModel: OverflowIndicatorViewModel,
 ): CSSAttributes => {
   const {
+    color,
     geometry: {
       left,
       top,
@@ -14,7 +15,7 @@ export const getOverflowIndicatorStyles = (
     },
   } = viewModel;
 
-  const result = addToStyles([{
+  let result = addToStyles([{
     attr: 'left',
     value: `${left}px`,
   }, {
@@ -28,5 +29,21 @@ export const getOverflowIndicatorStyles = (
     value: `${height}px`,
   }]);
 
+  if (color) {
+    result = addToStyles([{
+      attr: 'backgroundColor',
+      value: color,
+    }, {
+      attr: 'boxShadow',
+      value: `inset ${width}px 0 0 0 rgba(0, 0, 0, 0.3)`,
+    }], result);
+  }
+
   return result;
 };
+
+export const getOverflowIndicatorColor = (color: string, colors: string[]): string | undefined => (
+  !colors.length || colors.filter((item) => item !== color).length === 0
+    ? color
+    : undefined
+);
