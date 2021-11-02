@@ -440,11 +440,11 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _itemClickHandler: function(e) {
-        let itemSelectPromise;
+        let itemSelectPromise = new Deferred().resolve();
         const callBase = this.callBase;
 
         this._createAction((function(e) {
-            itemSelectPromise = this._itemSelectHandler(e.event);
+            itemSelectPromise = this._itemSelectHandler(e.event) ?? itemSelectPromise;
         }).bind(this), {
             validatingTargetName: 'itemElement'
         })({
@@ -458,7 +458,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _itemSelectHandler: function(e) {
-        let itemSelectPromise = new Deferred().resolve();
+        let itemSelectPromise;
 
         if(!this.option('selectionByClick')) {
             return;
@@ -469,7 +469,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
         if(this.isItemSelected($itemElement)) {
             this.unselectItem(e.currentTarget);
         } else {
-            itemSelectPromise = this.selectItem(e.currentTarget) ?? itemSelectPromise;
+            itemSelectPromise = this.selectItem(e.currentTarget);
         }
 
         return itemSelectPromise?.promise();
