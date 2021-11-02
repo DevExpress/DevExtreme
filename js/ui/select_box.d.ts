@@ -70,7 +70,7 @@ export type FocusOutEvent = NativeEventInfo<dxSelectBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxSelectBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxSelectBox, InputEvent>;
+export type InputEvent = NativeEventInfo<dxSelectBox, UIEvent>;
 
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxSelectBox, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;

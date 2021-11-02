@@ -164,7 +164,7 @@ export interface dxTextEditorOptions<TComponent> extends EditorOptions<TComponen
      * @action
      * @public
      */
-    onInput?: ((e: NativeEventInfo<TComponent, InputEvent>) => void);
+    onInput?: ((e: NativeEventInfo<TComponent, UIEvent>) => void);
     /**
      * @docid
      * @type_function_param1 e:object

@@ -4942,7 +4942,7 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxAutocomplete>;
     export type InputEvent = DevExpress.events.NativeEventInfo<
       dxAutocomplete,
-      InputEvent
+      UIEvent
     >;
     export type ItemClickEvent = DevExpress.events.NativeEventInfo<
       dxAutocomplete,
@@ -5444,7 +5444,7 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxColorBox>;
     export type InputEvent = DevExpress.events.NativeEventInfo<
       dxColorBox,
-      InputEvent
+      UIEvent
     >;
     export type KeyDownEvent = DevExpress.events.NativeEventInfo<
       dxColorBox,
@@ -8704,7 +8704,7 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxDateBox>;
     export type InputEvent = DevExpress.events.NativeEventInfo<
       dxDateBox,
-      InputEvent
+      UIEvent
     >;
     export type KeyDownEvent = DevExpress.events.NativeEventInfo<
       dxDateBox,
@@ -10921,7 +10921,7 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxDropDownBox>;
     export type InputEvent = DevExpress.events.NativeEventInfo<
       dxDropDownBox,
-      InputEvent
+      UIEvent
     >;
     export type KeyDownEvent = DevExpress.events.NativeEventInfo<
       dxDropDownBox,
@@ -16626,7 +16626,7 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxNumberBox>;
     export type InputEvent = DevExpress.events.NativeEventInfo<
       dxNumberBox,
-      InputEvent
+      UIEvent
     >;
     export type KeyDownEvent = DevExpress.events.NativeEventInfo<
       dxNumberBox,
@@ -19488,7 +19488,7 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxSelectBox>;
     export type InputEvent = DevExpress.events.NativeEventInfo<
       dxSelectBox,
-      InputEvent
+      UIEvent
     >;
     export type ItemClickEvent = DevExpress.events.NativeEventInfo<
       dxSelectBox,
@@ -20581,7 +20581,7 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxTagBox>;
     export type InputEvent = DevExpress.events.NativeEventInfo<
       dxTagBox,
-      InputEvent
+      UIEvent
     >;
     export type ItemClickEvent = DevExpress.events.NativeEventInfo<dxTagBox> &
       DevExpress.events.ItemInfo;
@@ -20737,7 +20737,7 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxTextArea>;
     export type InputEvent = DevExpress.events.NativeEventInfo<
       dxTextArea,
-      InputEvent
+      UIEvent
     >;
     export type KeyDownEvent = DevExpress.events.NativeEventInfo<
       dxTextArea,
@@ -20823,7 +20823,7 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxTextBox>;
     export type InputEvent = DevExpress.events.NativeEventInfo<
       dxTextBox,
-      InputEvent
+      UIEvent
     >;
     export type KeyDownEvent = DevExpress.events.NativeEventInfo<
       dxTextBox,
@@ -21010,7 +21010,7 @@ declare module DevExpress.ui {
      * [descr:dxTextEditorOptions.onInput]
      */
     onInput?: (
-      e: DevExpress.events.NativeEventInfo<TComponent, InputEvent>
+      e: DevExpress.events.NativeEventInfo<TComponent, UIEvent>
     ) => void;
     /**
      * [descr:dxTextEditorOptions.onKeyDown]

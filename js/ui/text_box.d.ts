@@ -41,7 +41,7 @@ export type FocusOutEvent = NativeEventInfo<dxTextBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxTextBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxTextBox, InputEvent>;
+export type InputEvent = NativeEventInfo<dxTextBox, UIEvent>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;

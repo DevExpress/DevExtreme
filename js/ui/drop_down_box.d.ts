@@ -61,7 +61,7 @@ export type FocusOutEvent = NativeEventInfo<dxDropDownBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxDropDownBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxDropDownBox, InputEvent>;
+export type InputEvent = NativeEventInfo<dxDropDownBox, UIEvent>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;

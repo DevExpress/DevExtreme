@@ -54,7 +54,7 @@ export type FocusOutEvent = NativeEventInfo<dxAutocomplete, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxAutocomplete>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxAutocomplete, InputEvent>;
+export type InputEvent = NativeEventInfo<dxAutocomplete, UIEvent>;
 
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxAutocomplete, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
