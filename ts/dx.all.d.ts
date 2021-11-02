@@ -15754,7 +15754,10 @@ declare module DevExpress.ui {
     ): DevExpress.core.utils.DxPromise<void>;
   }
   module dxMap {
-    export type ClickEvent = DevExpress.events.NativeEventInfo<dxMap, Event>;
+    export type ClickEvent = DevExpress.events.NativeEventInfo<
+      dxMap,
+      MouseEvent | PointerEvent
+    >;
     export type DisposingEvent = DevExpress.events.EventInfo<dxMap>;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxMap>;
