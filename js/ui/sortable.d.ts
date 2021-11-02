@@ -28,7 +28,7 @@ export interface AddEvent {
     readonly component: dxSortable;
     readonly element: DxElement;
     readonly model?: any;
-    readonly event: DxEvent;
+    readonly event: DxEvent<MouseEvent | TouchEvent>;
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -97,7 +97,7 @@ export type InitializedEvent = InitializedEventInfo<dxSortable>;
 export type OptionChangedEvent = EventInfo<dxSortable> & ChangedOptionInfo;
 
 /** @public */
-export type RemoveEvent = NativeEventInfo<dxSortable> & {
+export type RemoveEvent = NativeEventInfo<dxSortable, MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -109,7 +109,7 @@ export type RemoveEvent = NativeEventInfo<dxSortable> & {
 };
 
 /** @public */
-export type ReorderEvent = NativeEventInfo<dxSortable> & {
+export type ReorderEvent = NativeEventInfo<dxSortable, MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;

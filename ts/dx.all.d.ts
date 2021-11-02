@@ -19755,7 +19755,7 @@ declare module DevExpress.ui {
       readonly component: dxSortable;
       readonly element: DevExpress.core.DxElement;
       readonly model?: any;
-      readonly event: DevExpress.events.DxEvent;
+      readonly event: DevExpress.events.DxEvent<MouseEvent | TouchEvent>;
       readonly itemData?: any;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
@@ -19820,7 +19820,10 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxSortable> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSortableOptions;
-    export type RemoveEvent = DevExpress.events.NativeEventInfo<dxSortable> & {
+    export type RemoveEvent = DevExpress.events.NativeEventInfo<
+      dxSortable,
+      MouseEvent | TouchEvent
+    > & {
       readonly itemData?: any;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
@@ -19830,7 +19833,10 @@ declare module DevExpress.ui {
       readonly fromData?: any;
       readonly toData?: any;
     };
-    export type ReorderEvent = DevExpress.events.NativeEventInfo<dxSortable> & {
+    export type ReorderEvent = DevExpress.events.NativeEventInfo<
+      dxSortable,
+      MouseEvent | TouchEvent
+    > & {
       readonly itemData?: any;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
