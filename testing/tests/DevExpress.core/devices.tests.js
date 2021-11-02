@@ -16,8 +16,6 @@ const userAgents = {
     iphone_12: 'Mozilla/5.0 (iPhone; CPU iPhone OS 12_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.1.1 Mobile/15E148 Safari/604.1',
     ipad_10: 'Mozilla/5.0 (iPad; CPU OS 10_3_3 like Mac OS X) AppleWebKit/603.3.8 (KHTML, like Gecko) Version/10.0 Mobile/14G60 Safari/602.1',
     android_9: 'Mozilla/5.0 (Linux; Android 9; Mi A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.143 Mobile Safari/537.36',
-    android_4_3_4: 'Mozilla/5.0 (Linux; Android 4.3.4; Galaxy Nexus Build/IMM76B)AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19',
-    android_4_4_0: 'Mozilla/5.0 (Linux; Android 4.4.0; Galaxy Nexus Build/IMM76B)AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19',
     android_tablet_7_1_1: 'Mozilla/5.0 (Linux; Android 7.1.1; SM-T555 Build/NMF26X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Safari/537.36',
     win_phone_10: 'Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; NOKIA; Lumia 920) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Mobile Safari/537.36 Edge/12.0',
     win_arm_8: 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; ARM; Tablet PC; Trident/6.0)',
@@ -50,21 +48,7 @@ QUnit.test('ios by userAgent', function(assert) {
 });
 
 QUnit.test('android by userAgent', function(assert) {
-    let device = fromUA(userAgents.android_4_3_4);
-
-    assert.equal(device.platform, 'android', 'platform is android');
-    assert.equal(device.version.toString(), '4,3,4', 'correct version');
-    assert.equal(device.deviceType, 'phone', 'deviceType is phone');
-    assert.equal(device.grade, 'B', 'grade is B');
-
-    device = fromUA(userAgents.android_4_4_0);
-
-    assert.equal(device.platform, 'android', 'platform is android');
-    assert.equal(device.version.toString(), '4,4,0', 'correct version');
-    assert.equal(device.deviceType, 'phone', 'deviceType is phone');
-    assert.equal(device.grade, 'A', 'grade is A');
-
-    device = fromUA(userAgents.android_tablet_7_1_1);
+    let device = fromUA(userAgents.android_tablet_7_1_1);
 
     assert.equal(device.platform, 'android', 'platform is android');
     assert.equal(device.version.toString(), '7,1,1', 'correct version');
