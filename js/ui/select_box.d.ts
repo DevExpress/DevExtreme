@@ -70,7 +70,7 @@ export type FocusOutEvent = NativeEventInfo<dxSelectBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxSelectBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxSelectBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxSelectBox, InputEvent>;
 
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxSelectBox, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
@@ -97,7 +97,7 @@ export type PasteEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
 export type SelectionChangedEvent = EventInfo<dxSelectBox> & SelectionChangedInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxSelectBox, KeyboardEvent | MouseEvent | UIEvent> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSelectBox, KeyboardEvent | MouseEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;

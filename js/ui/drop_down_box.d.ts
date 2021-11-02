@@ -61,7 +61,7 @@ export type FocusOutEvent = NativeEventInfo<dxDropDownBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxDropDownBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxDropDownBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxDropDownBox, InputEvent>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent>;
@@ -82,7 +82,7 @@ export type OptionChangedEvent = EventInfo<dxDropDownBox> & ChangedOptionInfo;
 export type PasteEvent = NativeEventInfo<dxDropDownBox, ClipboardEvent>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent | MouseEvent | PointerEvent | UIEvent> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxDropDownBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type ContentTemplateData = {

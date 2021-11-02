@@ -58,7 +58,7 @@ export type FocusOutEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxDateBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxDateBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxDateBox, InputEvent>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
@@ -79,7 +79,7 @@ export type OptionChangedEvent = EventInfo<dxDateBox> & ChangedOptionInfo;
 export type PasteEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxDateBox, KeyboardEvent | MouseEvent | PointerEvent | UIEvent> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxDateBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type DisabledDate = ComponentDisabledDate<dxDateBox>;

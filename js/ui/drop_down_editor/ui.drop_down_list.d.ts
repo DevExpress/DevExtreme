@@ -107,7 +107,7 @@ export interface dxDropDownListOptions<TComponent> extends DataExpressionMixinOp
      * @action
      * @public
      */
-    onValueChanged?: ((e: NativeEventInfo<TComponent, KeyboardEvent | MouseEvent | PointerEvent | UIEvent> & ValueChangedInfo) => void);
+    onValueChanged?: ((e: NativeEventInfo<TComponent, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false

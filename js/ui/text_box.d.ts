@@ -41,7 +41,7 @@ export type FocusOutEvent = NativeEventInfo<dxTextBox, FocusEvent>;
 export type InitializedEvent = InitializedEventInfo<dxTextBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxTextBox, UIEvent>;
+export type InputEvent = NativeEventInfo<dxTextBox, InputEvent>;
 
 /** @public */
 export type KeyDownEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
@@ -59,7 +59,7 @@ export type OptionChangedEvent = EventInfo<dxTextBox> & ChangedOptionInfo;
 export type PasteEvent = NativeEventInfo<dxTextBox, ClipboardEvent>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxTextBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxTextBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead

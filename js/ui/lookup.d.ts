@@ -76,7 +76,7 @@ export type SelectionChangedEvent = EventInfo<dxLookup> & SelectionChangedInfo;
 export type TitleRenderedEvent = EventInfo<dxLookup> & TitleRenderedInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseEvent | PointerEvent | UIEvent> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
