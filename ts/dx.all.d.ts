@@ -20553,7 +20553,10 @@ declare module DevExpress.ui {
    */
   export class dxTagBox extends dxSelectBox<dxTagBoxOptions> {}
   module dxTagBox {
-    export type ChangeEvent = DevExpress.events.NativeEventInfo<dxTagBox>;
+    export type ChangeEvent = DevExpress.events.NativeEventInfo<
+      dxTagBox,
+      Event
+    >;
     export type ClosedEvent = DevExpress.events.EventInfo<dxTagBox>;
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxTagBox>;
     export type CustomItemCreatingEvent =
@@ -20562,17 +20565,38 @@ declare module DevExpress.ui {
     export type DisposingEvent = DevExpress.events.EventInfo<dxTagBox>;
     export type DropDownButtonTemplateData =
       DevExpress.ui.dxDropDownEditor.DropDownButtonTemplateDataModel;
-    export type EnterKeyEvent = DevExpress.events.NativeEventInfo<dxTagBox>;
-    export type FocusInEvent = DevExpress.events.NativeEventInfo<dxTagBox>;
-    export type FocusOutEvent = DevExpress.events.NativeEventInfo<dxTagBox>;
+    export type EnterKeyEvent = DevExpress.events.NativeEventInfo<
+      dxTagBox,
+      KeyboardEvent
+    >;
+    export type FocusInEvent = DevExpress.events.NativeEventInfo<
+      dxTagBox,
+      FocusEvent
+    >;
+    export type FocusOutEvent = DevExpress.events.NativeEventInfo<
+      dxTagBox,
+      FocusEvent
+    >;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxTagBox>;
-    export type InputEvent = DevExpress.events.NativeEventInfo<dxTagBox>;
+    export type InputEvent = DevExpress.events.NativeEventInfo<
+      dxTagBox,
+      UIEvent
+    >;
     export type ItemClickEvent = DevExpress.events.NativeEventInfo<dxTagBox> &
       DevExpress.events.ItemInfo;
-    export type KeyDownEvent = DevExpress.events.NativeEventInfo<dxTagBox>;
-    export type KeyPressEvent = DevExpress.events.NativeEventInfo<dxTagBox>;
-    export type KeyUpEvent = DevExpress.events.NativeEventInfo<dxTagBox>;
+    export type KeyDownEvent = DevExpress.events.NativeEventInfo<
+      dxTagBox,
+      KeyboardEvent
+    >;
+    export type KeyPressEvent = DevExpress.events.NativeEventInfo<
+      dxTagBox,
+      KeyboardEvent
+    >;
+    export type KeyUpEvent = DevExpress.events.NativeEventInfo<
+      dxTagBox,
+      KeyboardEvent
+    >;
     export type MultiTagPreparingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxTagBox> & {
         readonly multiTagElement: DevExpress.core.DxElement;
@@ -20591,9 +20615,11 @@ declare module DevExpress.ui {
       DevExpress.ui.CollectionWidget.SelectionChangedInfo<
         string | number | any
       >;
-    export type ValueChangedEvent =
-      DevExpress.events.NativeEventInfo<dxTagBox> &
-        DevExpress.ui.Editor.ValueChangedInfo;
+    export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
+      dxTagBox,
+      KeyboardEvent | MouseEvent | PointerEvent | UIEvent | Event
+    > &
+      DevExpress.ui.Editor.ValueChangedInfo;
   }
   /**
    * @deprecated use Properties instead
