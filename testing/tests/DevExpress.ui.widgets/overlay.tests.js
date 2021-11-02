@@ -454,6 +454,12 @@ testModule('option', moduleConfig, () => {
         const onResizeStartFired = sinon.stub();
         const onResizeFired = sinon.stub();
         const onResizeEndFired = sinon.stub();
+        const checkExtraFields = (args, eventType) => {
+            ['event', 'height', 'width'].forEach((field) => {
+                assert.ok(field in args, `${field} field is existed`);
+            });
+            assert.strictEqual(args.event.type, eventType, 'correct event type');
+        };
 
         const instance = $('#overlay').dxOverlay({
             resizeEnabled: true,
@@ -470,8 +476,13 @@ testModule('option', moduleConfig, () => {
         pointer.start().dragStart().drag(0, 50).dragEnd();
 
         assert.strictEqual(onResizeStartFired.callCount, 1, 'onResizeStart fired');
+        checkExtraFields(onResizeStartFired.lastCall.args[0], 'dxdragstart');
+
         assert.strictEqual(onResizeFired.callCount, 1, 'onResize fired');
+        checkExtraFields(onResizeFired.lastCall.args[0], 'dxdrag');
+
         assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
+        checkExtraFields(onResizeEndFired.lastCall.args[0], 'dxdragend');
     });
 });
 
