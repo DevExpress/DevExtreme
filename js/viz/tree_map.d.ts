@@ -38,7 +38,7 @@ export interface InteractionInfo {
 }
 
 /** @public */
-export type ClickEvent = NativeEventInfo<dxTreeMap> & {
+export type ClickEvent = NativeEventInfo<dxTreeMap, MouseEvent | PointerEvent> & {
   readonly node: dxTreeMapNode;
 };
 

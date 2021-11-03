@@ -8,6 +8,7 @@ import { getBoundingRect } from '../../../core/utils/position';
 import { hasWindow } from '../../../core/utils/window';
 import { HEADER_CURRENT_TIME_CELL_CLASS } from '../classes';
 import { getToday } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import timezoneUtils from '../utils.timeZone';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -148,7 +149,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     getIndicationHeight() {
-        const today = this._getToday();
+        const today = timezoneUtils.getDateWithoutTimezoneChange(this._getToday());
         const cellHeight = this.getCellHeight();
         const date = new Date(this.getStartViewDate());
 

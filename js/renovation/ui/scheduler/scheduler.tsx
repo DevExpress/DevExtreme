@@ -196,6 +196,7 @@ export const viewFunction = ({
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  jQuery: { register: true },
 })
 export class Scheduler extends JSXComponent(SchedulerProps) {
   @InternalState() instance!: dxScheduler;

@@ -23,7 +23,7 @@ export type InitializedEvent = InitializedEventInfo<dxCheckBox>;
 export type OptionChangedEvent = EventInfo<dxCheckBox> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxCheckBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxCheckBox, KeyboardEvent | MouseEvent | PointerEvent> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
