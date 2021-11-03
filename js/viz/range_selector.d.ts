@@ -61,7 +61,7 @@ export type InitializedEvent = InitializedEventInfo<dxRangeSelector>;
 export type OptionChangedEvent = EventInfo<dxRangeSelector> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxRangeSelector> & {
+export type ValueChangedEvent = NativeEventInfo<dxRangeSelector, MouseEvent | TouchEvent> & {
   readonly value: Array<number | string | Date>;
   readonly previousValue: Array<number | string | Date>;
 };
