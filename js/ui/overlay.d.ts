@@ -43,7 +43,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @type_function_return Boolean
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @default "content"

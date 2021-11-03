@@ -28,7 +28,7 @@ export type InitializedEvent = InitializedEventInfo<dxRangeSlider>;
 export type OptionChangedEvent = EventInfo<dxRangeSlider> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxRangeSlider> & ValueChangedInfo & {
+export type ValueChangedEvent = NativeEventInfo<dxRangeSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent> & ValueChangedInfo & {
     readonly start?: number;
     readonly end?: number;
     readonly value?: Array<number>;
