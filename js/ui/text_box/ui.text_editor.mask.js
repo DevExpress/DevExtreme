@@ -565,6 +565,7 @@ const TextEditorMask = TextEditorBase.inherit({
             case 'maskChar':
             case 'maskRules':
             case 'useMaskedValue':
+            case 'emptyChar':
                 this._updateMaskOption();
                 break;
             case 'value':
