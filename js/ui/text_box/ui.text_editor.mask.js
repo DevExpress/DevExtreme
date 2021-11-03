@@ -22,7 +22,6 @@ const stubCaret = function() {
 
 let caret = caretUtils;
 
-const EMPTY_CHAR = '\u2205';
 const ESCAPED_CHAR = '\\';
 
 const TEXTEDITOR_MASKED_CLASS = 'dx-texteditor-masked';
@@ -76,7 +75,9 @@ const TextEditorMask = TextEditorBase.inherit({
 
             useMaskedValue: false,
 
-            showMaskMode: 'always'
+            showMaskMode: 'always',
+
+            emptyChar: ' '
         });
     },
 
@@ -213,15 +214,15 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _parseMaskRule: function(index) {
-        const mask = this.option('mask');
+        const { mask, emptyChar } = this.option();
         if(index >= mask.length) {
-            return new EmptyMaskRule();
+            return new EmptyMaskRule({ emptyChar });
         }
 
         const currentMaskChar = mask[index];
         const isEscapedChar = currentMaskChar === ESCAPED_CHAR;
         const result = isEscapedChar
-            ? new StubMaskRule({ maskChar: mask[index + 1] })
+            ? new StubMaskRule({ maskChar: mask[index + 1], emptyChar })
             : this._getMaskRule(currentMaskChar);
 
         result.next(this._parseMaskRule(index + 1 + isEscapedChar));
@@ -229,6 +230,8 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _getMaskRule: function(pattern) {
+        const { maskChar, emptyChar } = this.option();
+
         let ruleConfig;
 
         each(this._maskRules, function(rulePattern, allowedChars) {
@@ -242,8 +245,8 @@ const TextEditorMask = TextEditorBase.inherit({
         });
 
         return isDefined(ruleConfig)
-            ? new MaskRule(extend({ maskChar: this.option('maskChar') }, ruleConfig))
-            : new StubMaskRule({ maskChar: pattern });
+            ? new MaskRule(extend({ maskChar, emptyChar }, ruleConfig))
+            : new StubMaskRule({ maskChar: pattern, emptyChar });
     },
 
     _renderMaskedValue: function() {
@@ -284,7 +287,9 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _isValueEmpty: function() {
-        const emptinessRegExp = new RegExp(`^${EMPTY_CHAR}*$`);
+        const { emptyChar } = this.option();
+
+        const emptinessRegExp = new RegExp(`^${emptyChar}*$`);
         return emptinessRegExp.test(this._value);
     },
 
@@ -325,10 +330,11 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _getPreparedValue: function() {
-        const preparedValue = this
-            ._convertToValue()
-            .replaceAll(EMPTY_CHAR, ' ')
-            .replace(/\s+$/, '');
+        let preparedValue = this._convertToValue();
+
+        if(this.option('emptyChar') === ' ') {
+            preparedValue = preparedValue.replace(/\s+$/, '');
+        }
 
         return preparedValue;
     },
@@ -373,7 +379,8 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _replaceMaskCharWithEmpty: function(text) {
-        return text.replace(new RegExp(this.option('maskChar'), 'g'), EMPTY_CHAR);
+        const { emptyChar } = this.option();
+        return text.replace(new RegExp(this.option('maskChar'), 'g'), emptyChar);
     },
 
     _maskKeyHandler: function(e, keyHandler) {
@@ -421,7 +428,8 @@ const TextEditorMask = TextEditorBase.inherit({
         }
 
         const caret = this._caret();
-        const emptyChars = new Array(caret.end - caret.start + 1).join(EMPTY_CHAR);
+        const { emptyChar } = this.option();
+        const emptyChars = new Array(caret.end - caret.start + 1).join(emptyChar);
         this._handleKeyChain(emptyChars);
     },
 

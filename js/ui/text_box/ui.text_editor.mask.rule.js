@@ -4,13 +4,11 @@ import { inArray } from '../../core/utils/array';
 import { isFunction } from '../../core/utils/type';
 import { noop } from '../../core/utils/common';
 
-const EMPTY_CHAR = '\u2205';
-
 const BaseMaskRule = Class.inherit({
 
     ctor: function(config) {
-        this._value = EMPTY_CHAR;
         extend(this, config);
+        this._value = this.emptyChar;
     },
 
     next: function(rule) {
@@ -97,7 +95,7 @@ export const EmptyMaskRule = BaseMaskRule.inherit({
 export const MaskRule = BaseMaskRule.inherit({
 
     text: function() {
-        return (this._value !== EMPTY_CHAR ? this._value : this.maskChar) + this.next().text();
+        return (this._value !== this.emptyChar ? this._value : this.maskChar) + this.next().text();
     },
 
     value: function() {
@@ -128,7 +126,7 @@ export const MaskRule = BaseMaskRule.inherit({
     },
 
     clear: function(args) {
-        this._tryAcceptChar(EMPTY_CHAR, args);
+        this._tryAcceptChar(this.emptyChar, args);
         this.next().clear(this._prepareHandlingArgs(args));
     },
 
@@ -143,7 +141,7 @@ export const MaskRule = BaseMaskRule.inherit({
         if(!this._isAllowed(char, args)) {
             return;
         }
-        const acceptedChar = char === EMPTY_CHAR ? this.maskChar : char;
+        const acceptedChar = char === this.emptyChar ? this.maskChar : char;
         args.fullText = args.fullText.substring(0, args.index) + acceptedChar + args.fullText.substring(args.index + 1);
         this._accepted(true);
         this._value = char;
@@ -157,13 +155,13 @@ export const MaskRule = BaseMaskRule.inherit({
     },
 
     first: function(index) {
-        return this._value === EMPTY_CHAR
+        return this._value === this.emptyChar
             ? index || 0
             : this.callBase(index);
     },
 
     _isAllowed: function(char, args) {
-        if(char === EMPTY_CHAR) {
+        if(char === this.emptyChar) {
             return true;
         }
 

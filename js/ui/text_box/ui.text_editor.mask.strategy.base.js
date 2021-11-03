@@ -6,7 +6,6 @@ import { clipboardText as getClipboardText } from '../../core/utils/dom';
 
 const MASK_EVENT_NAMESPACE = 'dxMask';
 const BLUR_EVENT = 'blur beforedeactivate';
-const EMPTY_CHAR = '\u2205';
 
 export default class BaseMaskStrategy {
     constructor(editor) {
@@ -181,10 +180,11 @@ export default class BaseMaskStrategy {
 
     _delHandler(event) {
         const { editor } = this;
+        const emptyChar = editor.option('emptyChar');
 
         this._keyPressHandled = true;
         editor._maskKeyHandler(event, () =>
-            !editor._hasSelection() && editor._handleKey(EMPTY_CHAR));
+            !editor._hasSelection() && editor._handleKey(emptyChar));
     }
 
     clean() {

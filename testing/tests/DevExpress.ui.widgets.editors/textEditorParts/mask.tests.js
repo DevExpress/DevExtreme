@@ -72,22 +72,6 @@ QUnit.module('rendering', {}, () => {
 });
 
 QUnit.module('typing', moduleConfig, () => {
-    QUnit.test('space should not be accepted if it is not allowed (T1014875)', function(assert) {
-        const $textEditor = $('#texteditor').dxTextEditor({
-            mask: '0',
-        });
-
-        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
-        caretWorkaround($input);
-
-        keyboard
-            .focus()
-            .type(' ');
-
-        assert.strictEqual(keyboard.caret().start, 0);
-    });
-
     QUnit.test('accept only allowed chars', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: 'X',
@@ -2201,5 +2185,29 @@ QUnit.module('Strategies', () => {
         const expectedMaskStrategy = isInputEventsL2Supported() ? 'inputEvents' : 'default';
 
         assert.strictEqual(instance._maskStrategy.NAME, expectedMaskStrategy, 'strategy name is correct');
+    });
+});
+
+QUnit.module('emptyChar option', {
+    beforeEach: function() {
+        this.emptyChar = '\u2205';
+    }
+}, () => {
+    QUnit.test('space should not be accepted if it is not allowed (T1014875)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '0',
+            emptyChar: this.emptyChar
+        });
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+        caretWorkaround($input);
+        keyboard.caret(0);
+
+        keyboard
+            .focus()
+            .type(' ');
+
+        assert.strictEqual(keyboard.caret().start, 0);
     });
 });

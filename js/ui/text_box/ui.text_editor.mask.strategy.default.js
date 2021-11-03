@@ -3,7 +3,6 @@ import { getChar } from '../../events/utils/index';
 import Promise from '../../core/polyfills/promise';
 
 const BACKSPACE_INPUT_TYPE = 'deleteContentBackward';
-const EMPTY_CHAR = '\u2205';
 
 class DefaultMaskStrategy extends BaseMaskStrategy {
     _getStrategyName() {
@@ -95,7 +94,8 @@ class DefaultMaskStrategy extends BaseMaskStrategy {
                 });
             }
 
-            editor._handleKey(EMPTY_CHAR, this.DIRECTION.BACKWARD);
+            const emptyChar = editor.option('emptyChar');
+            editor._handleKey(emptyChar, this.DIRECTION.BACKWARD);
 
             return afterBackspaceHandler(true, (currentCaret) => {
                 editor._displayMask(currentCaret);
