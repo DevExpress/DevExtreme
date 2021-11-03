@@ -1,4 +1,8 @@
 import {
+  Skip,
+} from '../core/index';
+
+import {
   UserDefinedElement,
   DxElement,
   UserDefinedElementsArray,
@@ -2744,7 +2748,7 @@ export interface ColumnButtonBase {
 }
 
 /** @public */
-export type Scrollable = dxScrollable;
+export type Scrollable = Skip<dxScrollable, '_templateManager' | '_getTemplate' | '_invalidate' | '_refresh'>;
 
 /** @public */
 export type AdaptiveDetailRowPreparingEvent = EventInfo<dxDataGrid> & AdaptiveDetailRowPreparingInfo;

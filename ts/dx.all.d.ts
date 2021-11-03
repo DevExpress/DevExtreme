@@ -1381,6 +1381,10 @@ declare module DevExpress.core {
    */
   interface PromiseType<T> extends JQueryPromise<T> {}
   /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type Skip<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+  /**
    * [descr:template]
    */
   export type template = string | Function | UserDefinedElement;
@@ -7008,7 +7012,10 @@ declare module DevExpress.ui {
       promise?: PromiseLike<void>;
       cancel: boolean;
     }
-    export type Scrollable = dxScrollable;
+    export type Scrollable = DevExpress.core.Skip<
+      dxScrollable,
+      '_templateManager' | '_getTemplate' | '_invalidate' | '_refresh'
+    >;
     export interface Scrolling extends ScrollingBase {
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
@@ -19942,7 +19949,10 @@ declare module DevExpress.ui {
       DevExpress.ui.dxDataGrid.DataChangeInfo;
     export type SavingEvent = DevExpress.events.EventInfo<dxTreeList> &
       DevExpress.ui.dxDataGrid.SavingInfo;
-    export type Scrollable = dxScrollable;
+    export type Scrollable = DevExpress.core.Skip<
+      dxScrollable,
+      '_templateManager' | '_getTemplate' | '_invalidate' | '_refresh'
+    >;
     export interface Scrolling extends DevExpress.ui.dxDataGrid.ScrollingBase {
       /**
        * [descr:dxTreeListOptions.scrolling.mode]
