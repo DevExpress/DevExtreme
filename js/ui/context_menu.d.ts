@@ -169,6 +169,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default { my: 'top left', at: 'top left' }
      * @ref
      * @public
+     * @type positionConfig
      */
     position?: PositionConfig;
     /**
