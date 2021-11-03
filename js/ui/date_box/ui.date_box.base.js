@@ -1,6 +1,5 @@
 import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
-import registerComponent from '../../core/component_registrator';
 import { isDate as isDateType, isString, isNumeric } from '../../core/utils/type';
 import { createTextElementHiddenCopy } from '../../core/utils/dom';
 import { each } from '../../core/utils/iterator';
@@ -777,7 +776,5 @@ const DateBox = DropDownEditor.inherit({
         }
     }
 });
-
-registerComponent('dxDateBox', DateBox);
 
 export default DateBox;
