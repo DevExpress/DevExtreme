@@ -3,6 +3,7 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
 fixture`Timeline Appointments`
+  .meta({ renovation: true })
   .page(url(__dirname, '../../container.html'));
 
 test('all-day and ordinary appointments should overlap each other correctly in timeline views (T1017889)', async (t) => {

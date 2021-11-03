@@ -49,23 +49,25 @@ test('Appointments in DST should not have offset when '
 
     .expect(scheduler.getAppointmentByIndex(1).date.time)
     .eql('2:00 PM - 2:30 PM');
-}).before(async () => createScheduler({
-  timeZone: 'America/New_York',
-  dataSource: [
-    {
-      text: 'Recurrence',
-      startDate: new Date('2021-03-13T19:00:00.000Z'),
-      endDate: new Date('2021-03-13T19:30:00.000Z'),
-      recurrenceRule: 'FREQ=DAILY;COUNT=1000',
-      startDateTimeZone: 'America/New_York',
-      endDateTimeZone: 'America/New_York',
-    },
-  ],
-  views: ['week'],
-  currentView: 'week',
-  currentDate: new Date(2021, 2, 13),
-  firstDayOfWeek: 1,
-}));
+})
+  .meta({ renovation: true })
+  .before(async () => createScheduler({
+    timeZone: 'America/New_York',
+    dataSource: [
+      {
+        text: 'Recurrence',
+        startDate: new Date('2021-03-13T19:00:00.000Z'),
+        endDate: new Date('2021-03-13T19:30:00.000Z'),
+        recurrenceRule: 'FREQ=DAILY;COUNT=1000',
+        startDateTimeZone: 'America/New_York',
+        endDateTimeZone: 'America/New_York',
+      },
+    ],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2021, 2, 13),
+    firstDayOfWeek: 1,
+  }));
 
 test('Appointments in end of DST should have correct offset', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -76,23 +78,25 @@ test('Appointments in end of DST should have correct offset', async (t) => {
 
     .expect(scheduler.getAppointmentByIndex(6).date.time)
     .eql('12:00 PM - 12:30 PM');
-}).before(async () => createScheduler({
-  timeZone: 'America/Phoenix',
-  dataSource: [
-    {
-      text: 'Recurrence',
-      startDate: new Date('2021-03-13T19:00:00.000Z'),
-      endDate: new Date('2021-03-13T19:30:00.000Z'),
-      recurrenceRule: 'FREQ=DAILY;COUNT=1000',
-      startDateTimeZone: 'America/New_York',
-      endDateTimeZone: 'America/New_York',
-    },
-  ],
-  views: ['week'],
-  currentView: 'week',
-  currentDate: new Date(2021, 10, 1),
-  firstDayOfWeek: 1,
-}));
+})
+  .meta({ renovation: true })
+  .before(async () => createScheduler({
+    timeZone: 'America/Phoenix',
+    dataSource: [
+      {
+        text: 'Recurrence',
+        startDate: new Date('2021-03-13T19:00:00.000Z'),
+        endDate: new Date('2021-03-13T19:30:00.000Z'),
+        recurrenceRule: 'FREQ=DAILY;COUNT=1000',
+        startDateTimeZone: 'America/New_York',
+        endDateTimeZone: 'America/New_York',
+      },
+    ],
+    views: ['week'],
+    currentView: 'week',
+    currentDate: new Date(2021, 10, 1),
+    firstDayOfWeek: 1,
+  }));
 
 test('Appointment displayed without errors if it was only one DST in year(T1037853)', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -100,16 +104,18 @@ test('Appointment displayed without errors if it was only one DST in year(T10378
   await t
     .expect(scheduler.getAppointmentByIndex(0).element.exists)
     .eql(true);
-}).before(async () => createScheduler({
-  timeZone: 'America/Los_Angeles',
-  dataSource: [{
-    text: 'Recurrence',
-    startDate: new Date(1942, 3, 29, 0),
-    endDate: new Date(1942, 3, 29, 1),
-    recurrenceRule: 'FREQ=DAILY;COUNT=2',
-  }],
-  views: ['day'],
-  currentView: 'day',
-  currentDate: new Date(1942, 3, 29),
-  height: 600,
-}));
+})
+  .meta({ renovation: true })
+  .before(async () => createScheduler({
+    timeZone: 'America/Los_Angeles',
+    dataSource: [{
+      text: 'Recurrence',
+      startDate: new Date(1942, 3, 29, 0),
+      endDate: new Date(1942, 3, 29, 1),
+      recurrenceRule: 'FREQ=DAILY;COUNT=2',
+    }],
+    views: ['day'],
+    currentView: 'day',
+    currentDate: new Date(1942, 3, 29),
+    height: 600,
+  }));

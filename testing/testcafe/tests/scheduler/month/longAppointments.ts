@@ -4,6 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
 
 fixture`Scheduler: long appointments in month view`
+  .meta({ renovation: true })
   .page(url(__dirname, '../../container.html'));
 
 [false, true].forEach((rtlEnabled) => {
@@ -26,7 +27,6 @@ fixture`Scheduler: long appointments in month view`
       const scheduler = new Scheduler('#container');
       await t.expect(await compareScreenshot(t, `month-long-appointment(rtl=${rtlEnabled}, text=${appointment.text}).png`, scheduler.workSpace)).ok();
     })
-      .meta({ renovation: true })
       .before(async (t) => {
         await t.resizeWindow(1200, 800);
 

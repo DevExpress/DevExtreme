@@ -27,6 +27,7 @@ const priorityData = [{
 }];
 
 fixture`Appointment resources`
+  .meta({ renovation: true })
   .page(url(__dirname, '../../container.html'));
 
 test('Resource color should be correct if group is set in "views"', async (t) => {
