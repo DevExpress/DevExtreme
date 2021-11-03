@@ -19,52 +19,52 @@ import {
   } from '../localization';
 
 /** @public */
-export type ChangeEvent = NativeEventInfo<dxNumberBox>;
+export type ChangeEvent = NativeEventInfo<dxNumberBox, Event>;
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxNumberBox>;
 
 /** @public */
-export type CopyEvent = NativeEventInfo<dxNumberBox>;
+export type CopyEvent = NativeEventInfo<dxNumberBox, ClipboardEvent>;
 
 /** @public */
-export type CutEvent = NativeEventInfo<dxNumberBox>;
+export type CutEvent = NativeEventInfo<dxNumberBox, ClipboardEvent>;
 
 /** @public */
 export type DisposingEvent = EventInfo<dxNumberBox>;
 
 /** @public */
-export type EnterKeyEvent = NativeEventInfo<dxNumberBox>;
+export type EnterKeyEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
 
 /** @public */
-export type FocusInEvent = NativeEventInfo<dxNumberBox>;
+export type FocusInEvent = NativeEventInfo<dxNumberBox, FocusEvent>;
 
 /** @public */
-export type FocusOutEvent = NativeEventInfo<dxNumberBox>;
+export type FocusOutEvent = NativeEventInfo<dxNumberBox, FocusEvent>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxNumberBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxNumberBox>;
+export type InputEvent = NativeEventInfo<dxNumberBox, UIEvent>;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxNumberBox>;
+export type KeyDownEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
 
 /** @public */
-export type KeyPressEvent = NativeEventInfo<dxNumberBox>;
+export type KeyPressEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
 
 /** @public */
-export type KeyUpEvent = NativeEventInfo<dxNumberBox>;
+export type KeyUpEvent = NativeEventInfo<dxNumberBox, KeyboardEvent>;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxNumberBox> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = NativeEventInfo<dxNumberBox>;
+export type PasteEvent = NativeEventInfo<dxNumberBox, ClipboardEvent>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxNumberBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxNumberBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead

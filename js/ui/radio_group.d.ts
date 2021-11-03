@@ -29,7 +29,7 @@ export type InitializedEvent = InitializedEventInfo<dxRadioGroup>;
 export type OptionChangedEvent = EventInfo<dxRadioGroup> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxRadioGroup> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxRadioGroup, MouseEvent | PointerEvent | KeyboardEvent> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead

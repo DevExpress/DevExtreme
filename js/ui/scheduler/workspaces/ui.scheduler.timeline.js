@@ -15,6 +15,7 @@ import {
     GROUP_HEADER_CONTENT_CLASS,
 } from '../classes';
 import { getDateForHeaderText } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/timeline_week';
+import timezoneUtils from '../utils.timeZone';
 
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
 import { formatWeekdayAndDay } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
@@ -115,8 +116,16 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getTimeDiff() {
-        const today = this._getToday();
+        let today = this._getToday();
         const date = this._getIndicationFirstViewDate();
+
+        const startViewDate = this.getStartViewDate();
+        const dayLightOffset = timezoneUtils.getDaylightOffsetInMs(startViewDate, today);
+
+        if(dayLightOffset) {
+            today = new Date(today.getTime() + dayLightOffset);
+        }
+
         return today.getTime() - date.getTime();
     }
 

@@ -10,7 +10,8 @@ const test = (options?: any): any => cloneTest(
   options,
 );
 
-fixture('Renovated scheduler - Reduced appointment');
+fixture('Renovated scheduler - Reduced appointment')
+  .beforeEach((t) => t.resizeWindow(1200, 800));
 
 test({
   dataSource: [{

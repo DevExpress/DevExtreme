@@ -67,7 +67,7 @@ const getListItems = (tagBox) => {
     return $((instance).content()).find(`.${LIST_ITEM_CLASS}`);
 };
 
-const getDSWithAsyncSearch = () => {
+const getAsyncLoad = () => {
     const data = [{
         'id': 'item 1'
     }, {
@@ -88,50 +88,55 @@ const getDSWithAsyncSearch = () => {
         'id': 'item for search 4'
     }];
 
+    return (loadOptions) => {
+        const deferred = $.Deferred();
+        setTimeout(() => {
+            if(loadOptions.take && !loadOptions.searchValue) {
+                deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
+            } else if(loadOptions.filter) {
+                const result = data.filter((item) => {
+                    if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].id === loadOptions.filter[2].id) {
+                        return item[2];
+                    } else if(item.id === loadOptions.filter[2].id) {
+                        return item;
+                    } else if(Array.isArray(loadOptions.filter) && loadOptions.filter.length > 2) {
+                        for(let i = 0; i < loadOptions.filter.length; i++) {
+                            const element = loadOptions.filter[i];
+                            if(Array.isArray(element) && element[2] === item.id) {
+                                return item;
+                            }
+                        }
+                    } else {
+                        deferred.reject();
+                    }
+                });
+
+                deferred.resolve(result, { totalCount: 9 });
+            } else if(loadOptions.searchValue) {
+                const result = data.filter((item) => {
+                    if(item.id.indexOf(loadOptions.searchValue) >= 0) {
+                        return item;
+                    }
+                });
+
+                deferred.resolve(result.splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
+            } else {
+                deferred.resolve(data, { totalCount: 9 });
+            }
+        }, TIME_TO_WAIT * 2);
+
+        return deferred.promise();
+    };
+};
+
+const getDSWithAsyncSearch = (asyncLoad = getAsyncLoad()) => {
+
     return new DataSource({
         paginate: true,
         pageSize: 5,
         store: new CustomStore({
             key: 'id',
-            load: function(loadOptions) {
-                const deferred = $.Deferred();
-                setTimeout(() => {
-                    if(loadOptions.take && !loadOptions.searchValue) {
-                        deferred.resolve(data.slice().splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
-                    } else if(loadOptions.filter) {
-                        const result = data.filter((item) => {
-                            if(Array.isArray(loadOptions.filter[0]) && item[2] && item[2].id === loadOptions.filter[2].id) {
-                                return item[2];
-                            } else if(item.id === loadOptions.filter[2].id) {
-                                return item;
-                            } else if(Array.isArray(loadOptions.filter) && loadOptions.filter.length > 2) {
-                                for(let i = 0; i < loadOptions.filter.length; i++) {
-                                    const element = loadOptions.filter[i];
-                                    if(Array.isArray(element) && element[2] === item.id) {
-                                        return item;
-                                    }
-                                }
-                            } else {
-                                deferred.reject();
-                            }
-                        });
-
-                        deferred.resolve(result, { totalCount: 9 });
-                    } else if(loadOptions.searchValue) {
-                        const result = data.filter((item) => {
-                            if(item.id.indexOf(loadOptions.searchValue) >= 0) {
-                                return item;
-                            }
-                        });
-
-                        deferred.resolve(result.splice(loadOptions.skip, loadOptions.take), { totalCount: 9 });
-                    } else {
-                        deferred.resolve(data, { totalCount: 9 });
-                    }
-                }, TIME_TO_WAIT * 2);
-
-                return deferred.promise();
-            }
+            load: asyncLoad
         })
     });
 };
@@ -4051,9 +4056,14 @@ QUnit.module('searchEnabled', moduleSetup, () => {
                     const d = $.Deferred();
 
                     setTimeout(function() {
-                        const data = loadOptions && loadOptions.searchValue ?
-                            ['test1'] :
-                            ['test1', 'test2', 'test3'];
+                        let data;
+                        if(loadOptions && loadOptions.searchValue) {
+                            data = ['test1'];
+                        } else if(loadOptions && loadOptions.filter) {
+                            data = ['test2'];
+                        } else {
+                            data = ['test1', 'test2', 'test3'];
+                        }
 
                         d.resolve(data);
                     }, TIME_TO_WAIT);
@@ -4083,12 +4093,12 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
 
         keyboardMock(instance._input()).type('te');
-        this.clock.tick(TIME_TO_WAIT);
+        this.clock.tick(TIME_TO_WAIT * 2);
 
         const $listItems = getListItems(instance);
 
         $listItems.first().trigger('dxclick');
-        this.clock.tick(TIME_TO_WAIT);
+        this.clock.tick(TIME_TO_WAIT * 2);
     });
 
     QUnit.test('TagBox should not request dataSource after item selecting using search when all selected items are available (T944099)', function(assert) {
@@ -4315,6 +4325,47 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
         assert.strictEqual($tagContainer.find(`.${TAGBOX_TAG_CONTENT_CLASS}`).length, 0, 'no tags');
         assert.deepEqual(tagBox.option('value'), [], 'all items are deselected');
+    });
+
+    QUnit.test('TagBox should send one request if we select second item after search (T1029049)', function(assert) {
+        const loadSpy = sinon.spy(getAsyncLoad());
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: getDSWithAsyncSearch(loadSpy),
+            valueExpr: 'id',
+            displayExpr: 'id',
+            selectAllMode: 'allPages',
+            searchEnabled: true,
+            searchExpr: 'id',
+            dropDownOptions: {
+                height: 120,
+            },
+            searchTimeout: TIME_TO_WAIT,
+            opened: true
+        });
+        const tagBox = $tagBox.dxTagBox('instance');
+
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+
+        keyboardMock($input).type('item');
+
+        let $listItems = getListItems(tagBox);
+
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        keyboardMock($input).type('search');
+
+        this.clock.tick(TIME_TO_WAIT * 5);
+
+        $listItems = getListItems(tagBox);
+
+        $listItems.eq(0).trigger('dxclick');
+        this.clock.tick(TIME_TO_WAIT * 3);
+
+        assert.strictEqual(loadSpy.callCount, 5, 'correct count of ds load');
     });
 
     QUnit.test('TagBox should use one DataSource request on list item selection if the editor has selected items from next pages (T970259)', function(assert) {
