@@ -284,7 +284,8 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _isValueEmpty: function() {
-        return isEmpty(this._value);
+        const emptinessRegExp = new RegExp(`^${EMPTY_CHAR}*$`);
+        return emptinessRegExp.test(this._value);
     },
 
     _shouldShowMask: function() {
