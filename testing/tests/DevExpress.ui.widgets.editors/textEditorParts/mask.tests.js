@@ -2191,23 +2191,102 @@ QUnit.module('Strategies', () => {
 QUnit.module('emptyChar option', {
     beforeEach: function() {
         this.emptyChar = '\u2205';
+        this.valueChangedStub = sinon.stub();
+        this.$textEditor = $('#texteditor').dxTextEditor({
+            emptyChar: this.emptyChar,
+            mask: '0',
+            onValueChanged: this.valueChangedStub
+        });
+        this.textEditor = this.$textEditor.dxTextEditor('instance');
+        this.$input = this.$textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        this.keyboard = keyboardMock(this.$input, true);
+        caretWorkaround(this.$input);
+        this.keyboard.caret(0);
     }
 }, () => {
     QUnit.test('space should not be accepted if it is not allowed (T1014875)', function(assert) {
-        const $textEditor = $('#texteditor').dxTextEditor({
-            mask: '0',
-            emptyChar: this.emptyChar
-        });
-
-        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input, true);
-        caretWorkaround($input);
-        keyboard.caret(0);
-
-        keyboard
+        this.keyboard
             .focus()
             .type(' ');
 
-        assert.strictEqual(keyboard.caret().start, 0);
+        assert.strictEqual(this.keyboard.caret().start, 0);
+    });
+
+    QUnit.test('empty value should consist of empty chars and have length equal to mask length', function(assert) {
+        this.keyboard.change();
+
+        assert.strictEqual(this.textEditor.option('value'), this.emptyChar);
+    });
+
+    QUnit.test('empty chars should not be removed if useMaskedValue=true', function(assert) {
+        this.textEditor.option('useMaskedValue', true);
+
+        this.keyboard.change();
+
+        assert.strictEqual(this.textEditor.option('value'), this.emptyChar);
+    });
+
+    QUnit.test('backspace key press should change char to empty char', function(assert) {
+        this.keyboard
+            .type('1')
+            .change();
+
+        this.keyboard
+            .press('backspace')
+            .change();
+
+        assert.strictEqual(this.textEditor.option('value'), this.emptyChar);
+    });
+
+    QUnit.test('delete key press should change char to empty char', function(assert) {
+        this.keyboard
+            .type('1')
+            .change();
+
+        this.keyboard
+            .caret(0)
+            .press('delete')
+            .change();
+
+        assert.strictEqual(this.textEditor.option('value'), this.emptyChar);
+    });
+
+    QUnit.test('mask should not be visible if showMaskMode="onFocus"', function(assert) {
+        this.textEditor.option('showMaskMode', 'onFocus');
+
+        this.$input.blur();
+
+        assert.strictEqual(this.textEditor.option('text'), '');
+    });
+
+    QUnit.test('selection removing with stub mask', function(assert) {
+        this.textEditor.option('mask', '( 0) 0');
+
+        this.keyboard.type('22');
+
+        this.keyboard
+            .caret({ start: 0, end: 3 })
+            .press('backspace')
+            .change();
+
+        assert.strictEqual(this.$input.val(), '( _) 2');
+        assert.strictEqual(this.textEditor.option('value'), `${this.emptyChar}2`);
+    });
+
+    QUnit.test('selection removing with stub mask when useMaskedValue=true', function(assert) {
+        this.textEditor.option({
+            mask: '( 0) 0',
+            useMaskedValue: true
+        });
+
+        this.keyboard.type('22');
+
+        this.keyboard
+            .caret({ start: 0, end: 3 })
+            .press('backspace')
+            .change();
+
+        assert.strictEqual(this.$input.val(), '( _) 2');
+        assert.strictEqual(this.textEditor.option('value'), `( ${this.emptyChar}) 2`);
     });
 });

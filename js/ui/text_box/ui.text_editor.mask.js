@@ -330,9 +330,10 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _getPreparedValue: function() {
+        const { emptyChar } = this.option();
         let preparedValue = this._convertToValue();
 
-        if(this.option('emptyChar') === ' ') {
+        if(emptyChar === ' ') {
             preparedValue = preparedValue.replace(/\s+$/, '');
         }
 
