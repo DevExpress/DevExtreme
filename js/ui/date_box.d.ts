@@ -28,7 +28,7 @@ import {
 } from './popup';
 
 /** @public */
-export type ChangeEvent = NativeEventInfo<dxDateBox>;
+export type ChangeEvent = NativeEventInfo<dxDateBox, Event>;
 
 /** @public */
 export type ClosedEvent = EventInfo<dxDateBox>;
@@ -37,37 +37,37 @@ export type ClosedEvent = EventInfo<dxDateBox>;
 export type ContentReadyEvent = EventInfo<dxDateBox>;
 
 /** @public */
-export type CopyEvent = NativeEventInfo<dxDateBox>;
+export type CopyEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
 /** @public */
-export type CutEvent = NativeEventInfo<dxDateBox>;
+export type CutEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
 /** @public */
 export type DisposingEvent = EventInfo<dxDateBox>;
 
 /** @public */
-export type EnterKeyEvent = NativeEventInfo<dxDateBox>;
+export type EnterKeyEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /** @public */
-export type FocusInEvent = NativeEventInfo<dxDateBox>;
+export type FocusInEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 
 /** @public */
-export type FocusOutEvent = NativeEventInfo<dxDateBox>;
+export type FocusOutEvent = NativeEventInfo<dxDateBox, FocusEvent>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxDateBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxDateBox>;
+export type InputEvent = NativeEventInfo<dxDateBox, UIEvent>;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxDateBox>;
+export type KeyDownEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /** @public */
-export type KeyPressEvent = NativeEventInfo<dxDateBox>;
+export type KeyPressEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /** @public */
-export type KeyUpEvent = NativeEventInfo<dxDateBox>;
+export type KeyUpEvent = NativeEventInfo<dxDateBox, KeyboardEvent>;
 
 /** @public */
 export type OpenedEvent = EventInfo<dxDateBox>;
@@ -76,10 +76,10 @@ export type OpenedEvent = EventInfo<dxDateBox>;
 export type OptionChangedEvent = EventInfo<dxDateBox> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = NativeEventInfo<dxDateBox>;
+export type PasteEvent = NativeEventInfo<dxDateBox, ClipboardEvent>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxDateBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxDateBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type DisabledDate = ComponentDisabledDate<dxDateBox>;

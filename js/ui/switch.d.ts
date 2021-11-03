@@ -23,7 +23,7 @@ export type InitializedEvent = InitializedEventInfo<dxSwitch>;
 export type OptionChangedEvent = EventInfo<dxSwitch> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxSwitch> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSwitch, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead

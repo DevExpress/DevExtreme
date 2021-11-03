@@ -8,7 +8,7 @@ import {
   Fragment,
 } from '@devextreme-generator/declarations';
 import { CellBaseProps } from '../../cell';
-import { DateTimeCellTemplateProps } from '../../../types.d';
+import { DateTimeCellTemplateProps } from '../../../types';
 import { combineClasses } from '../../../../../../utils/combine_classes';
 import { getGroupCellClasses } from '../../../utils';
 

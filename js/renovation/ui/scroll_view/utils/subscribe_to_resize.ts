@@ -1,5 +1,5 @@
 import resizeObserverSingleton from '../../../../core/resize_observer';
-import { EffectReturn } from '../../../utils/effect_return.d';
+import { EffectReturn } from '../../../utils/effect_return';
 import { hasWindow } from '../../../../core/utils/window';
 
 export function subscribeToResize(

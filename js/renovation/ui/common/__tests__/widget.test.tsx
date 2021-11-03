@@ -3,7 +3,7 @@ import React, { createRef } from 'react';
 import { mount } from 'enzyme';
 // import { create as mount } from 'react-test-renderer';
 import { RefObject } from '@devextreme-generator/declarations';
-import { DisposeEffectReturn } from '../../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../../utils/effect_return';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
   emitKeyboard, getEventHandlers, EVENT, KEY,

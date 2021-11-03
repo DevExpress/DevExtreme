@@ -88,7 +88,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onItemClick?: ((e: NativeEventInfo<TComponent> & ItemInfo<TItem>) => void) | string;
+    onItemClick?: ((e: NativeEventInfo<TComponent, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TItem>) => void) | string;
     /**
      * @docid
      * @default null
@@ -103,7 +103,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onItemContextMenu?: ((e: NativeEventInfo<TComponent> & ItemInfo<TItem>) => void);
+    onItemContextMenu?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>) => void);
     /**
      * @docid
      * @default null
@@ -118,7 +118,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onItemHold?: ((e: NativeEventInfo<TComponent> & ItemInfo<TItem>) => void);
+    onItemHold?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>) => void);
     /**
      * @docid
      * @default null
@@ -132,7 +132,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onItemRendered?: ((e: NativeEventInfo<TComponent> & ItemInfo<TItem>) => void);
+    onItemRendered?: ((e: EventInfo<TComponent> & ItemInfo<TItem>) => void);
     /**
      * @docid
      * @default null

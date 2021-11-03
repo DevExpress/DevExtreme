@@ -18,6 +18,7 @@ import {
   defaultEvent,
 } from '../../../../test_utils/events_mock';
 import { AnimatedScrollbarProps } from '../../common/animated_scrollbar_props';
+import * as AnimationFrameModule from '../../../../../animation/frame';
 
 interface Mock extends jest.Mock {}
 
@@ -34,7 +35,6 @@ describe('AnimatedScrollbar', () => {
     expect({ ...viewModel.props() }).toEqual({
       direction: 'vertical',
       bottomPocketSize: 0,
-      containerHasSizes: false,
       containerSize: 0,
       contentPaddingBottom: 0,
       contentSize: 0,
@@ -47,10 +47,11 @@ describe('AnimatedScrollbar', () => {
   });
 
   each([
-    { name: 'scrollStep', calledWith: ['arg1', 'arg2', 'arg3'] },
-    { name: 'moveTo', calledWith: ['arg1'] },
     { name: 'isScrollbar', calledWith: ['arg1'] },
     { name: 'isThumb', calledWith: ['arg1'] },
+    { name: 'setActiveState', calledWith: [] },
+    { name: 'moveTo', calledWith: ['arg1'] },
+    { name: 'moveToMouseLocation', calledWith: ['arg1', 'arg2'] },
   ]).describe('Method: %o', (methodInfo) => {
     it(`${methodInfo.name}() method should call according scrollbar method`, () => {
       const viewModel = new AnimatedScrollbar({});
@@ -60,7 +61,7 @@ describe('AnimatedScrollbar', () => {
       viewModel[methodInfo.name](...methodInfo.calledWith);
 
       expect(handlerMock).toBeCalledTimes(1);
-      expect(handlerMock).toHaveBeenCalledWith(...methodInfo.expected || methodInfo.calledWith);
+      expect(handlerMock).toHaveBeenCalledWith(...methodInfo.calledWith);
     });
   });
 
@@ -72,101 +73,6 @@ describe('AnimatedScrollbar', () => {
     viewModel.disposeAnimationFrame()();
 
     expect(viewModel.cancel).toHaveBeenCalledTimes(1);
-  });
-
-  each([-1000, -700]).describe('scrollLocation: %o', (scrollLocation) => {
-    each(['bounce', 'inertia']).describe('animator: %o', (animator) => {
-      it('animator should call stopAnimator during step if was finished', () => {
-        const scrollbarMoveToHandler = jest.fn();
-
-        const viewModel = new AnimatedScrollbar({
-          scrollLocation,
-          maxOffset: -700,
-          minOffset: 0,
-        });
-        (viewModel as any).scrollbarRef = {
-          current: {
-            moveTo: scrollbarMoveToHandler,
-          },
-        };
-
-        viewModel.animator = animator;
-        Object.defineProperties(viewModel, {
-          isFinished: { get() { return true; } },
-        });
-
-        viewModel.stepCore();
-
-        expect(viewModel.finished).toBe(true);
-        if (animator === 'bounce') {
-          expect(scrollbarMoveToHandler).toHaveBeenCalledTimes(1);
-          expect(scrollbarMoveToHandler).toHaveBeenCalledWith(-700);
-        }
-
-        expect(viewModel.pendingBounceAnimator).toEqual(false);
-        expect(viewModel.pendingInertiaAnimator).toEqual(false);
-      });
-    });
-  });
-
-  each([true, false]).describe('Stopped: %o', (stopped) => {
-    each([true, false]).describe('Finished: %o', (isFinished) => {
-      it('animator should do the next step if it was not stopped or finished', () => {
-        const viewModel = new AnimatedScrollbar({ });
-        viewModel.stopped = stopped;
-
-        Object.defineProperties(viewModel, { isFinished: { get() { return isFinished; } } });
-        viewModel.getStepAnimationFrame = jest.fn();
-        viewModel.step = jest.fn();
-        viewModel.complete = jest.fn();
-
-        viewModel.stepCore();
-
-        if (isFinished || stopped) {
-          expect(viewModel.step).not.toBeCalled();
-          expect(viewModel.getStepAnimationFrame).not.toBeCalled();
-        } else {
-          expect(viewModel.step).toHaveBeenCalledTimes(1);
-          expect(viewModel.getStepAnimationFrame).toHaveBeenCalledTimes(1);
-        }
-      });
-    });
-  });
-
-  each([true, false]).describe('BounceEnabled: %o', (bounceEnabled) => {
-    const maxOffset = -100;
-    const minOffset = 0;
-    each([10, minOffset, 0, -1, -99, maxOffset, -101]).describe('scrollLocation: %o', (scrollLocation) => {
-      it('animator on the step should scrolls scrollbar on correct value', () => {
-        const viewModel = new AnimatedScrollbar({
-          bounceEnabled,
-          scrollLocation,
-          maxOffset,
-          minOffset,
-        });
-        const scrollStepHandler = jest.fn();
-
-        viewModel.velocity = -5;
-        const acceleration = 0.5;
-
-        Object.defineProperties(viewModel, { acceleration: { get() { return acceleration; } } });
-
-        (viewModel as any).scrollbarRef = {
-          current: { scrollStep: scrollStepHandler },
-        };
-        viewModel.step();
-
-        let expectedVelocity = -5;
-        if (!bounceEnabled && (scrollLocation >= minOffset || scrollLocation <= maxOffset)) {
-          expectedVelocity = 0;
-        }
-
-        expect(scrollStepHandler).toHaveBeenCalledTimes(1);
-        expect(scrollStepHandler).toHaveBeenCalledWith(expectedVelocity, minOffset, maxOffset);
-
-        expect(viewModel.velocity).toEqual(expectedVelocity * acceleration);
-      });
-    });
   });
 
   each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('direction: %o', (direction) => {
@@ -217,7 +123,7 @@ describe('Handlers', () => {
     each([true, false]).describe('crossThumbScrolling: %o', (crossThumbScrolling) => {
       each([true, false]).describe('scrollByThumb: %o', (scrollByThumb) => {
         each(['dx-scrollable-scroll', 'dx-scrollable-scrollbar']).describe('targetClass: %o', (targetClass) => {
-          it('initHandler(event, crossThumbScrolling), isDxWheelEvent: %o, crossThumbScrolling: %o, scrollByThumb: %o, targetClass: %, showScrollbar: %o',
+          it('initHandler(event, crossThumbScrolling), isDxWheelEvent: %o, crossThumbScrolling: %o, scrollByThumb: %o, targetClass: %',
             () => {
               const event = { ...defaultEvent, originalEvent: {} } as any;
               if (isDxWheelEvent) {
@@ -240,6 +146,9 @@ describe('Handlers', () => {
                 },
               } as Partial<ScrollbarProps>;
 
+              viewModel.moveToMouseLocation = jest.fn();
+              viewModel.setActiveState = jest.fn();
+
               viewModel.thumbScrolling = false;
 
               event.originalEvent.target = scrollbar.find(`.${targetClass}`).getDOMNode();
@@ -248,9 +157,7 @@ describe('Handlers', () => {
 
               expect(viewModel.pendingBounceAnimator).toEqual(false);
               expect(viewModel.pendingInertiaAnimator).toEqual(false);
-              expect(viewModel.stopped).toEqual(true);
-              // TODO: check cancelAnimationFrame call
-
+              expect(viewModel.canceled).toEqual(true);
               expect(viewModel.refreshing).toEqual(false);
               expect(viewModel.loading).toEqual(false);
 
@@ -263,12 +170,23 @@ describe('Handlers', () => {
                 expectedThumbScrolling = isScrollbarClicked || (scrollByThumb && targetClass === 'dx-scrollable-scroll');
                 expectedCrossThumbScrolling = !expectedThumbScrolling && crossThumbScrolling;
 
-                expect(initHandler).toHaveBeenCalledTimes(1);
-                expect(initHandler).toHaveBeenCalledWith(event, expectedThumbScrolling, 30);
+                if (isScrollbarClicked) {
+                  expect(viewModel.moveToMouseLocation).toBeCalledTimes(1);
+                  expect(viewModel.moveToMouseLocation).toHaveBeenCalledWith(event, 30);
+                } else {
+                  expect(viewModel.moveToMouseLocation).toBeCalledTimes(0);
+                }
+
+                if (expectedThumbScrolling) {
+                  expect(viewModel.setActiveState).toBeCalledTimes(1);
+                }
               } else {
-                expect(initHandler).toHaveBeenCalledTimes(0);
+                expect(viewModel.setActiveState).toBeCalledTimes(0);
+                expect(viewModel.moveToMouseLocation).toBeCalledTimes(0);
               }
 
+              expect(viewModel.setActiveState)
+                .toHaveBeenCalledTimes(!isDxWheelEvent && expectedThumbScrolling ? 1 : 0);
               expect(viewModel.thumbScrolling).toEqual(expectedThumbScrolling);
               expect(viewModel.crossThumbScrolling).toEqual(expectedCrossThumbScrolling);
             });
@@ -278,32 +196,73 @@ describe('Handlers', () => {
   });
 
   each([true, false]).describe('crossThumbScrolling: %o', (crossThumbScrolling) => {
-    it('moveHandler(delta), crossThumbScrolling: true', () => {
-      const delta = 17;
-      const viewModel = new AnimatedScrollbar({
-        direction: 'vertical',
-        minOffset: 0,
+    each([true, false]).describe('thumbScrolling: %o', (thumbScrolling) => {
+      each([true, false]).describe('inRange: %o', (inRangeMockValue) => {
+        each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
+          each([80, 10, 0, -50, -90, -100, -140]).describe('scrollLocation: %o', (scrollLocation) => {
+            each([10, 30, 40]).describe('Delta: %o', (delta) => {
+              each([500, 100, 75]).describe('contentSize: %o', (contentSize) => {
+                afterEach(() => {
+                  jest.clearAllMocks();
+                });
+
+                it('moveHandler(delta)', () => {
+                  (inRange as Mock).mockReturnValue(inRangeMockValue);
+                  const containerSize = 100;
+                  const viewModel = new AnimatedScrollbar({
+                    direction: 'vertical',
+                    minOffset: 0,
+                    bounceEnabled,
+                    scrollLocation,
+                    containerSize,
+                    contentSize,
+                  });
+
+                  viewModel.moveTo = jest.fn();
+
+                  Object.defineProperties(viewModel, {
+                    maxOffset: { get() { return -100; } },
+                  });
+
+                  viewModel.crossThumbScrolling = crossThumbScrolling;
+                  viewModel.thumbScrolling = thumbScrolling;
+
+                  viewModel.moveHandler(delta);
+
+                  let resultDelta = delta;
+
+                  if (thumbScrolling) {
+                    resultDelta = -Math.round(delta / (containerSize / contentSize));
+                  }
+
+                  const isOutBounds = !inRangeMockValue;
+                  if (isOutBounds) {
+                    resultDelta *= OUT_BOUNDS_ACCELERATION;
+                  }
+
+                  // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+                  resultDelta += scrollLocation as number;
+
+                  if (!bounceEnabled) {
+                    if (resultDelta >= 0) {
+                      resultDelta = 0;
+                    } else if (resultDelta <= -100) {
+                      resultDelta = -100;
+                    }
+                  }
+
+                  if (crossThumbScrolling) {
+                    expect(viewModel.moveTo).toBeCalledTimes(0);
+                  } else {
+                    expect(viewModel.moveTo).toBeCalledTimes(1);
+                    expect(viewModel.moveTo).toHaveBeenCalledWith(resultDelta);
+                  }
+                });
+              });
+            });
+          });
+        });
       });
-
-      const moveHandler = jest.fn();
-      (viewModel as any).scrollbarRef = {
-        current: {
-          moveHandler,
-        },
-      } as Partial<ScrollbarProps>;
-      Object.defineProperties(viewModel, { maxOffset: { get() { return -100; } } });
-
-      viewModel.crossThumbScrolling = crossThumbScrolling;
-      viewModel.thumbScrolling = true;
-
-      viewModel.moveHandler(delta);
-
-      if (crossThumbScrolling) {
-        expect(moveHandler).toBeCalledTimes(0);
-      } else {
-        expect(moveHandler).toHaveBeenCalled();
-        expect(moveHandler).toHaveBeenCalledWith(delta, 0, -100, true);
-      }
     });
   });
 
@@ -322,26 +281,143 @@ describe('Handlers', () => {
       expect(viewModel.crossThumbScrolling).toEqual(false);
     });
 
+    it('scrollToNextStep()', () => {
+      try {
+        const cancelAnimationFrameHandler = jest.fn();
+        const requestAnimationFrameHandler = jest.fn(() => 14);
+
+        jest.spyOn(AnimationFrameModule, 'cancelAnimationFrame').mockImplementation(cancelAnimationFrameHandler);
+        jest.spyOn(AnimationFrameModule, 'requestAnimationFrame').mockImplementation(requestAnimationFrameHandler);
+
+        const viewModel = new AnimatedScrollbar({
+          direction: 'vertical',
+          scrollLocation: -100,
+        });
+
+        viewModel.velocity = -7;
+        Object.defineProperties(viewModel, {
+          acceleration: { get() { return 0.92; } },
+        });
+
+        viewModel.stepAnimationFrame = 13;
+
+        viewModel.scrollToNextStep();
+
+        expect(cancelAnimationFrameHandler).toBeCalledTimes(1);
+        expect(cancelAnimationFrameHandler).toBeCalledWith(13);
+
+        expect(requestAnimationFrameHandler).toBeCalledTimes(1);
+        const requestHandler = requestAnimationFrameHandler.mock.calls[0];
+        (requestHandler as any)[0]();
+
+        expect(viewModel.stepAnimationFrame).toEqual(14);
+        expect(viewModel.newScrollLocation).toEqual(-107);
+        expect(viewModel.velocity).toEqual(-6.44);
+      } finally {
+        jest.restoreAllMocks();
+      }
+    });
+
+    each([
+      {
+        scrollLocation: 100, minOffset: 80, maxOffset: -200, velocity: -10, expectedVelocity: -10,
+      },
+      {
+        scrollLocation: 89, minOffset: 80, maxOffset: -200, velocity: -10, expectedVelocity: -9,
+      },
+      {
+        scrollLocation: 70.5, minOffset: 80, maxOffset: -200, velocity: 10, expectedVelocity: 9.5,
+      },
+      {
+        scrollLocation: 69.9, minOffset: 80, maxOffset: -200, velocity: 10, expectedVelocity: 10,
+      },
+      {
+        scrollLocation: 69.9, minOffset: 0, maxOffset: -200, velocity: -10, expectedVelocity: -10,
+      },
+      {
+        scrollLocation: 9.8, minOffset: 0, maxOffset: -200, velocity: -10, expectedVelocity: -9.8,
+      },
+      {
+        scrollLocation: 1, minOffset: 0, maxOffset: -200, velocity: -10, expectedVelocity: -1,
+      },
+      {
+        scrollLocation: -1, minOffset: 0, maxOffset: -200, velocity: 10, expectedVelocity: 1,
+      },
+      {
+        scrollLocation: -9, minOffset: 0, maxOffset: -200, velocity: 10, expectedVelocity: 9,
+      },
+      {
+        scrollLocation: -11, minOffset: 0, maxOffset: -200, velocity: 10, expectedVelocity: 10,
+      },
+      {
+        scrollLocation: -189, minOffset: 0, maxOffset: -200, velocity: -10, expectedVelocity: -10,
+      },
+      {
+        scrollLocation: -190, minOffset: 0, maxOffset: -200, velocity: -10, expectedVelocity: -10,
+      },
+      {
+        scrollLocation: -191, minOffset: 0, maxOffset: -200, velocity: -10, expectedVelocity: -9,
+      },
+      {
+        scrollLocation: -199, minOffset: 0, maxOffset: -200, velocity: -10, expectedVelocity: -1,
+      },
+      {
+        scrollLocation: -200, minOffset: 0, maxOffset: -200, velocity: -10, expectedVelocity: 0,
+      },
+      {
+        scrollLocation: -201, minOffset: 0, maxOffset: -200, velocity: 10, expectedVelocity: 1,
+      },
+      {
+        scrollLocation: -209, minOffset: 0, maxOffset: -200, velocity: 10, expectedVelocity: 9,
+      },
+      {
+        scrollLocation: -210, minOffset: 0, maxOffset: -200, velocity: 10, expectedVelocity: 10,
+      },
+      {
+        scrollLocation: -211, minOffset: 0, maxOffset: -200, velocity: 10, expectedVelocity: 10,
+      },
+    ]).describe('suppressVelocityBeforeBoundary', ({
+      scrollLocation, minOffset, maxOffset, velocity, expectedVelocity,
+    }) => {
+      it(`scrollLocation: ${scrollLocation}, min: ${minOffset}, max: ${maxOffset}, velocity: ${velocity}`, () => {
+        const viewModel = new AnimatedScrollbar({
+          direction: 'vertical',
+          scrollLocation,
+          minOffset,
+        });
+
+        viewModel.velocity = velocity;
+
+        Object.defineProperties(viewModel, {
+          maxOffset: { get() { return maxOffset; } },
+        });
+
+        viewModel.suppressVelocityBeforeBoundary();
+
+        expect(viewModel.velocity).toEqual(expectedVelocity);
+      });
+    });
+
     each([true, false]).describe('needRiseEnd: %o', (needRiseEnd) => {
-      it('endHandler(), should start inertia animator on end', () => {
-        const velocityDelta = 10;
-        const viewModel = new AnimatedScrollbar({ direction: 'vertical' });
+      each([true, false]).describe('inertiaEnabled: %o', (inertiaEnabled) => {
+        it('endHandler(), should start inertia animator on end', () => {
+          const velocityDelta = 10;
+          const viewModel = new AnimatedScrollbar({
+            direction: 'vertical',
+            inertiaEnabled,
+          });
 
-        viewModel.start = jest.fn();
+          viewModel.thumbScrolling = thumbScrolling;
+          viewModel.crossThumbScrolling = true;
+          viewModel.needRiseEnd = !needRiseEnd;
 
-        viewModel.thumbScrolling = thumbScrolling;
-        viewModel.crossThumbScrolling = true;
-        viewModel.needRiseEnd = !needRiseEnd;
+          viewModel.endHandler(velocityDelta, needRiseEnd);
 
-        viewModel.endHandler(velocityDelta, needRiseEnd);
-
-        viewModel.needRiseEnd = needRiseEnd;
-        viewModel.needRiseEnd = false;
-
-        expect(viewModel.start).toHaveBeenCalledTimes(1);
-        expect(viewModel.start).toHaveBeenCalledWith('inertia', velocityDelta, thumbScrolling, true);
-        expect(viewModel.thumbScrolling).toEqual(false);
-        expect(viewModel.crossThumbScrolling).toEqual(false);
+          expect(viewModel.velocity).toEqual(inertiaEnabled && !thumbScrolling ? velocityDelta : 0);
+          expect(viewModel.needRiseEnd).toEqual(needRiseEnd);
+          expect(viewModel.thumbScrolling).toEqual(false);
+          expect(viewModel.crossThumbScrolling).toEqual(false);
+        });
       });
     });
   });
@@ -349,25 +425,368 @@ describe('Handlers', () => {
 
 describe('Effects', () => {
   each([undefined, jest.fn()]).describe('lockHandler: %o', (lockHandler) => {
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
+    each([undefined, jest.fn()]).describe('unLockHandler: %o', (unLockHandler) => {
+      afterEach(() => {
+        jest.clearAllMocks();
+      });
 
-    each([true, false]).describe('pendingBounceAnimator: %o', (pendingBounceAnimator) => {
-      each([true, false]).describe('pendingRefreshing: %o', (pendingRefreshing) => {
-        each([true, false]).describe('pendingLoading: %o', (pendingLoading) => {
-          it('updateLockState()', () => {
-            const viewModel = new AnimatedScrollbar({ direction: 'vertical', onLock: lockHandler });
+      each([true, false]).describe('pendingBounceAnimator: %o', (pendingBounceAnimator) => {
+        each([true, false]).describe('pendingRefreshing: %o', (pendingRefreshing) => {
+          each([true, false]).describe('pendingLoading: %o', (pendingLoading) => {
+            it('updateLockState()', () => {
+              const viewModel = new AnimatedScrollbar({
+                direction: 'vertical',
+                onLock: lockHandler,
+                onUnlock: unLockHandler,
+              });
 
-            viewModel.pendingBounceAnimator = pendingBounceAnimator;
-            viewModel.pendingRefreshing = pendingRefreshing;
-            viewModel.pendingLoading = pendingLoading;
+              viewModel.pendingBounceAnimator = pendingBounceAnimator;
+              viewModel.pendingRefreshing = pendingRefreshing;
+              viewModel.pendingLoading = pendingLoading;
 
-            viewModel.updateLockedState();
+              viewModel.updateLockedState();
 
-            if (lockHandler && (pendingBounceAnimator || pendingRefreshing || pendingLoading)) {
-              expect(lockHandler).toBeCalled();
-            }
+              if (pendingBounceAnimator || pendingRefreshing || pendingLoading) {
+                if (lockHandler) {
+                  expect(lockHandler).toBeCalled();
+                }
+              } else if (unLockHandler) {
+                expect(unLockHandler).toBeCalled();
+              }
+            });
+          });
+        });
+      });
+
+      it('performAnimation(), pendingBounceAnimation: false, pendingInertiaAnimator: false', () => {
+        const viewModel = new AnimatedScrollbar({
+          direction: 'vertical',
+        });
+
+        viewModel.pendingBounceAnimator = false;
+        viewModel.pendingBounceAnimator = false;
+        viewModel.canceled = true;
+
+        viewModel.stop = jest.fn();
+        viewModel.suppressVelocityBeforeBoundary = jest.fn();
+        viewModel.scrollToNextStep = jest.fn();
+
+        Object.defineProperties(viewModel, {
+          finished: { get() { return false; } },
+        });
+
+        viewModel.updateLockedState();
+
+        expect(viewModel.stop).toBeCalledTimes(0);
+        expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(0);
+        expect(viewModel.scrollToNextStep).toBeCalledTimes(0);
+      });
+
+      each([0, 10, -10]).describe('distanceToNearestBoundary: %o', (distanceToNearestBoundary) => {
+        it('performAnimation(), pendingBounceAnimation: true, pendingInertiaAnimator: false', () => {
+          const viewModel = new AnimatedScrollbar({
+            direction: 'vertical',
+          });
+
+          viewModel.pendingBounceAnimator = true;
+          viewModel.pendingInertiaAnimator = false;
+          viewModel.canceled = true;
+
+          viewModel.stop = jest.fn();
+          viewModel.suppressVelocityBeforeBoundary = jest.fn();
+          viewModel.scrollToNextStep = jest.fn();
+
+          Object.defineProperties(viewModel, {
+            finished: { get() { return false; } },
+            distanceToNearestBoundary: { get() { return distanceToNearestBoundary; } },
+          });
+
+          viewModel.performAnimation();
+
+          if (distanceToNearestBoundary === 0) {
+            expect(viewModel.stop).toBeCalledTimes(1);
+            expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(0);
+            expect(viewModel.scrollToNextStep).toBeCalledTimes(0);
+          } else {
+            expect(viewModel.stop).toBeCalledTimes(0);
+            expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(1);
+            expect(viewModel.scrollToNextStep).toBeCalledTimes(1);
+          }
+        });
+      });
+
+      each([0, 10, -10]).describe('distanceToNearestBoundary: %o', (distanceToNearestBoundary) => {
+        each([true, false]).describe('canceled: %o', (canceled) => {
+          each([true, false]).describe('finished: %o', (finished) => {
+            each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
+              it('performAnimation(), pendingBounceAnimation: false, pendingInertiaAnimator: true', () => {
+                const viewModel = new AnimatedScrollbar({
+                  direction: 'vertical',
+                  bounceEnabled,
+                });
+
+                viewModel.pendingBounceAnimator = false;
+                viewModel.pendingInertiaAnimator = true;
+                viewModel.canceled = canceled;
+                viewModel.needRiseEnd = true;
+
+                viewModel.stop = jest.fn();
+                viewModel.suppressVelocityBeforeBoundary = jest.fn();
+                viewModel.scrollToNextStep = jest.fn();
+
+                Object.defineProperties(viewModel, {
+                  finished: { get() { return finished; } },
+                  distanceToNearestBoundary: { get() { return distanceToNearestBoundary; } },
+                });
+
+                viewModel.performAnimation();
+
+                if (canceled) {
+                  expect(viewModel.needRiseEnd).toEqual(false);
+                  expect(viewModel.stop).toBeCalledTimes(1);
+                  expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(0);
+                  expect(viewModel.scrollToNextStep).toBeCalledTimes(0);
+                  return;
+                }
+
+                if (finished || (!bounceEnabled && distanceToNearestBoundary === 0)) {
+                  expect(viewModel.needRiseEnd).toEqual(true);
+                  expect(viewModel.stop).toBeCalledTimes(1);
+                  expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(0);
+                  expect(viewModel.scrollToNextStep).toBeCalledTimes(0);
+                  return;
+                }
+
+                if (!bounceEnabled) {
+                  expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(1);
+                } else {
+                  expect(viewModel.suppressVelocityBeforeBoundary).toBeCalledTimes(0);
+                }
+
+                expect(viewModel.needRiseEnd).toEqual(true);
+                expect(viewModel.stop).toBeCalledTimes(0);
+                expect(viewModel.scrollToNextStep).toBeCalledTimes(1);
+              });
+            });
+          });
+        });
+      });
+
+      each([true, false]).describe('inProgress: %o', (inProgress) => {
+        it('syncScrollLocation()', () => {
+          const scrollLocation = -50;
+          const viewModel = new AnimatedScrollbar({
+            direction: 'vertical',
+            scrollLocation,
+          });
+
+          Object.defineProperties(viewModel, {
+            inProgress: { get() { return inProgress; } },
+          });
+
+          viewModel.syncScrollLocation();
+
+          expect(viewModel.newScrollLocation)
+            .toEqual(!inProgress ? -50 : 0);
+        });
+      });
+
+      each([undefined, jest.fn()]).describe('eventHandler: %o', (eventHandler) => {
+        afterEach(() => {
+          jest.clearAllMocks();
+        });
+
+        each([true, false]).describe('isReadyToStart: %o', (isReadyToStart) => {
+          each([true, false]).describe('inRange: %o', (inRangeValue) => {
+            each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+              each([true, false]).describe('pulledDown: %o', (pulledDown) => {
+                each([true, false]).describe('refreshing: %o', (refreshing) => {
+                  it('risePullDown()', () => {
+                    const viewModel = new AnimatedScrollbar({
+                      direction: 'vertical',
+                      forceGeneratePockets,
+                      pulledDown,
+                      onPullDown: eventHandler,
+                    });
+
+                    viewModel.refreshing = refreshing;
+                    Object.defineProperties(viewModel, {
+                      isReadyToStart: { get() { return isReadyToStart; } },
+                      inRange: { get() { return inRangeValue; } },
+                    });
+
+                    viewModel.risePullDown();
+
+                    let expectedRefreshing = refreshing;
+                    let expectedPendingRefreshing = false;
+                    let needRisePullDown = false;
+
+                    if (forceGeneratePockets && isReadyToStart
+                      && inRangeValue && pulledDown && !refreshing) {
+                      expectedRefreshing = true;
+                      expectedPendingRefreshing = true;
+                      needRisePullDown = true;
+                    }
+
+                    expect(viewModel.refreshing).toEqual(expectedRefreshing);
+                    expect(viewModel.pendingRefreshing).toEqual(expectedPendingRefreshing);
+                    if (eventHandler) {
+                      expect(eventHandler).toHaveBeenCalledTimes(needRisePullDown ? 1 : 0);
+                    }
+                  });
+                });
+              });
+            });
+
+            each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+              each([true, false]).describe('isReachBottom: %o', (isReachBottom) => {
+                each([true, false]).describe('loading: %o', (loading) => {
+                  each([true, false]).describe('finished: %o', (finished) => {
+                    it('riseReachBottom()', () => {
+                      const viewModel = new AnimatedScrollbar({
+                        direction: 'vertical',
+                        forceGeneratePockets,
+                        onReachBottom: eventHandler,
+                      });
+
+                      viewModel.loading = loading;
+                      Object.defineProperties(viewModel, {
+                        isReadyToStart: { get() { return isReadyToStart; } },
+                        inRange: { get() { return inRangeValue; } },
+                        isReachBottom: { get() { return isReachBottom; } },
+                        finished: { get() { return finished; } },
+                      });
+
+                      viewModel.riseReachBottom();
+
+                      let expectedLoading = loading;
+                      let expectedPendingLoading = false;
+                      let needRiseReachBottom = false;
+
+                      if (forceGeneratePockets && isReadyToStart
+                      && inRangeValue && isReachBottom && !loading && finished) {
+                        expectedLoading = true;
+                        expectedPendingLoading = true;
+                        needRiseReachBottom = true;
+                      }
+
+                      expect(viewModel.loading).toEqual(expectedLoading);
+                      expect(viewModel.pendingLoading).toEqual(expectedPendingLoading);
+                      if (eventHandler) {
+                        expect(eventHandler).toHaveBeenCalledTimes(needRiseReachBottom ? 1 : 0);
+                      }
+                    });
+                  });
+                });
+              });
+            });
+
+            each([true, false]).describe('finished: %o', (finished) => {
+              each([true, false]).describe('pendingRelease: %o', (pendingRelease) => {
+                it('riseEnd()', () => {
+                  (inRange as Mock).mockReturnValue(inRangeValue);
+                  const viewModel = new AnimatedScrollbar({
+                    direction: 'vertical',
+                    onEnd: eventHandler,
+                  });
+
+                  Object.defineProperties(viewModel, {
+                    isReadyToStart: { get() { return isReadyToStart; } },
+                    pendingRelease: { get() { return pendingRelease; } },
+                    finished: { get() { return finished; } },
+                  });
+
+                  viewModel.needRiseEnd = true;
+                  viewModel.wasRelease = true;
+                  viewModel.forceAnimationToBottomBound = true;
+
+                  viewModel.riseEnd();
+
+                  let expectedNeedRiseEnd = true;
+                  let expectedWasRelease = true;
+                  let expectedForceAnimationToBottomBound = true;
+                  let needRiseEnd = false;
+
+                  if (isReadyToStart && inRangeValue && finished && !pendingRelease) {
+                    expectedNeedRiseEnd = false;
+                    expectedWasRelease = false;
+                    expectedForceAnimationToBottomBound = false;
+                    needRiseEnd = true;
+                  }
+
+                  expect(viewModel.needRiseEnd).toEqual(expectedNeedRiseEnd);
+                  expect(viewModel.wasRelease).toEqual(expectedWasRelease);
+                  expect(viewModel.forceAnimationToBottomBound)
+                    .toEqual(expectedForceAnimationToBottomBound);
+
+                  if (eventHandler) {
+                    expect(eventHandler).toHaveBeenCalledTimes(needRiseEnd ? 1 : 0);
+                  }
+                });
+              });
+            });
+
+            each([true, false]).describe('inertiaEnabled: %o', (inertiaEnabled) => {
+              each([true, false]).describe('thumbScrolling: %o', (thumbScrolling) => {
+                each([true, false]).describe('crossThumbScrolling: %o', (crossThumbScrolling) => {
+                  it('startAnimator()', () => {
+                    (inRange as Mock).mockReturnValue(inRangeValue);
+                    const viewModel = new AnimatedScrollbar({
+                      direction: 'vertical',
+                      inertiaEnabled,
+                      onBounce: eventHandler,
+                      scrollLocation: -1500,
+                      maxOffset: -700,
+                      minOffset: 0,
+                    });
+
+                    viewModel.thumbScrolling = thumbScrolling;
+                    viewModel.crossThumbScrolling = crossThumbScrolling;
+                    Object.defineProperties(viewModel, {
+                      isReadyToStart: { get() { return isReadyToStart; } },
+                    });
+                    viewModel.canceled = true;
+                    viewModel.velocity = -10;
+
+                    viewModel.startAnimator();
+
+                    let expectedCanceled = true;
+                    let expectedVelocity = -10;
+                    let expectedPendingInertiaAnimator = false;
+                    let needRiseBounce = false;
+                    let expectedPendingBounceAnimator = false;
+
+                    if (isReadyToStart) {
+                      expectedCanceled = false;
+
+                      if (inRangeValue && inertiaEnabled) {
+                        if (thumbScrolling || (!thumbScrolling && crossThumbScrolling)) {
+                          expectedVelocity = 0;
+                        }
+                        expectedPendingInertiaAnimator = true;
+                      }
+
+                      if (!inRangeValue) {
+                        expectedVelocity = 800 / BOUNCE_ACCELERATION_SUM;
+                        expectedPendingBounceAnimator = true;
+                        needRiseBounce = true;
+                      }
+                    }
+
+                    expect(viewModel.canceled).toEqual(expectedCanceled);
+                    expect(viewModel.velocity).toEqual(expectedVelocity);
+                    expect(viewModel.pendingInertiaAnimator)
+                      .toEqual(expectedPendingInertiaAnimator);
+                    expect(viewModel.pendingBounceAnimator)
+                      .toEqual(expectedPendingBounceAnimator);
+
+                    if (eventHandler) {
+                      expect(eventHandler).toHaveBeenCalledTimes(needRiseBounce ? 1 : 0);
+                    }
+                  });
+                });
+              });
+            });
           });
         });
       });
@@ -411,72 +830,14 @@ describe('Action handlers', () => {
 });
 
 describe('Animator', () => {
-  describe('Inertia', () => {
-    each([true, false]).describe('ThumbScrolling: %o', (thumbScrolling) => {
-      each([true, false]).describe('CrossThumbScrolling: %o', (crossThumbScrolling) => {
-        each([true, false]).describe('InertiaEnabled: %o', (inertiaEnabled) => {
-          each([undefined, -25]).describe('Recieved velocity: %o', (velocity) => {
-            it('should suppress inertia on animator start()', () => {
-              const viewModel = new AnimatedScrollbar({ inertiaEnabled });
-
-              viewModel.stepCore = jest.fn();
-              viewModel.start('inertia', velocity, thumbScrolling, crossThumbScrolling);
-
-              if ((!inertiaEnabled || thumbScrolling) || (!thumbScrolling && crossThumbScrolling)
-              || velocity === undefined) {
-                expect(viewModel.velocity).toEqual(0);
-              } else {
-                expect(viewModel.velocity).toEqual(velocity);
-              }
-
-              expect(viewModel.stopped).toBe(false);
-              expect(viewModel.finished).toBe(false);
-            });
-          });
-        });
-      });
-    });
-  });
-
-  describe('Bounce', () => {
-    it('should setup bounce on animator start()', () => {
-      const viewModel = new AnimatedScrollbar({
-        scrollLocation: -1500,
-        maxOffset: -700,
-        minOffset: 0,
-      });
-      viewModel.stepCore = jest.fn();
-
-      viewModel.start('bounce');
-
-      expect(viewModel.velocity).toEqual(800 / BOUNCE_ACCELERATION_SUM);
-
-      expect(viewModel.stopped).toBe(false);
-      expect(viewModel.finished).toBe(false);
-    });
-
-    each([undefined, jest.fn()]).describe('onBounce: %o', (onBounceHandler) => {
-      it('should fire onBounce action on animator start()', () => {
-        const viewModel = new AnimatedScrollbar({ onBounce: onBounceHandler });
-
-        viewModel.setupBounce = jest.fn();
-        viewModel.stepCore = jest.fn();
-
-        viewModel.start('bounce');
-
-        if (onBounceHandler) {
-          expect(onBounceHandler).toHaveBeenCalledTimes(1);
-        }
-      });
-    });
-  });
-
   it('should set correct stopped state on animator cancel()', () => {
     const viewModel = new AnimatedScrollbar({ });
 
     viewModel.cancel();
 
-    expect(viewModel.stopped).toBe(true);
+    expect(viewModel.canceled).toBe(true);
+    expect(viewModel.pendingBounceAnimator).toBe(false);
+    expect(viewModel.pendingBounceAnimator).toBe(false);
   });
 
   describe('Getters', () => {
@@ -495,6 +856,107 @@ describe('Animator', () => {
         const viewModel = new AnimatedScrollbar({ scrollLocation, minOffset });
 
         expect(viewModel.reachedMax()).toEqual(scrollLocation >= minOffset);
+      });
+    });
+
+    each([
+      {
+        scrollLocation: 100, minOffset: 80, maxOffset: -200, expected: 20,
+      },
+      {
+        scrollLocation: 90, minOffset: 80, maxOffset: -200, expected: 10,
+      },
+      {
+        scrollLocation: 75, minOffset: 80, maxOffset: -200, expected: 5,
+      },
+      {
+        scrollLocation: -20, minOffset: 0, maxOffset: -200, expected: 20,
+      },
+      {
+        scrollLocation: -99, minOffset: 0, maxOffset: -200, expected: 99,
+      },
+      {
+        scrollLocation: -130, minOffset: 0, maxOffset: -200, expected: 70,
+      },
+      {
+        scrollLocation: -185, minOffset: 0, maxOffset: -200, expected: 15,
+      },
+      {
+        scrollLocation: -210, minOffset: 0, maxOffset: -200, expected: 10,
+      },
+    ]).describe('distanceToNearestBoundary', ({
+      scrollLocation, minOffset, maxOffset, expected,
+    }) => {
+      it(`scrollLocation: ${scrollLocation}, min: ${minOffset}, max: ${maxOffset}`, () => {
+        const viewModel = new AnimatedScrollbar({
+          direction: 'vertical',
+          scrollLocation,
+          minOffset,
+        });
+
+        Object.defineProperties(viewModel, {
+          maxOffset: { get() { return maxOffset; } },
+        });
+
+        expect(viewModel.distanceToNearestBoundary).toEqual(expected);
+      });
+    });
+
+    each([true, false]).describe('pendingBounceAnimator: %o', (pendingBounceAnimator) => {
+      each([true, false]).describe('pendingInertiaAnimator: %o', (pendingInertiaAnimator) => {
+        it('inProgress', () => {
+          const viewModel = new AnimatedScrollbar({ direction: 'vertical' });
+
+          viewModel.pendingBounceAnimator = pendingBounceAnimator;
+          viewModel.pendingInertiaAnimator = pendingInertiaAnimator;
+
+          expect(viewModel.inProgress).toEqual(pendingInertiaAnimator || pendingBounceAnimator);
+        });
+      });
+    });
+
+    each([true, false]).describe('needRiseEnd: %o', (needRiseEnd) => {
+      each([true, false]).describe('inProgress: %o', (inProgress) => {
+        each([true, false]).describe('pendingRefreshing: %o', (pendingRefreshing) => {
+          each([true, false]).describe('pendingLoading: %o', (pendingLoading) => {
+            each([0, -500]).describe('maxOffset: %o', (maxOffset) => {
+              it('isReadyToStart', () => {
+                const viewModel = new AnimatedScrollbar({
+                  direction: 'vertical',
+                  maxOffset,
+                });
+
+                viewModel.needRiseEnd = needRiseEnd;
+                viewModel.pendingRefreshing = pendingRefreshing;
+                viewModel.pendingLoading = pendingLoading;
+
+                Object.defineProperties(viewModel, {
+                  inProgress: { get() { return inProgress; } },
+                });
+
+                expect(viewModel.isReadyToStart)
+                  .toEqual(needRiseEnd && !inProgress
+                    && !(pendingRefreshing || pendingLoading) && maxOffset < 0);
+              });
+            });
+          });
+        });
+      });
+    });
+
+    each([true, false]).describe('pendingBounceAnimator: %o', (pendingBounceAnimator) => {
+      each([0.1, -0.2, -0.6, 1, 1.3, 5]).describe('Velocity: %o', (velocity) => {
+        it('finished', () => {
+          const viewModel = new AnimatedScrollbar({ });
+
+          viewModel.velocity = velocity;
+          viewModel.pendingBounceAnimator = pendingBounceAnimator;
+
+          expect(viewModel.finished)
+            .toEqual(pendingBounceAnimator
+              ? Math.abs(velocity) <= BOUNCE_MIN_VELOCITY_LIMIT
+              : Math.abs(velocity) <= MIN_VELOCITY_LIMIT);
+        });
       });
     });
 
@@ -553,55 +1015,15 @@ describe('Animator', () => {
     });
 
     each([() => true, () => false]).describe('inRange: %o', (inRangeFn) => {
-      each([true, false]).describe('isBounceAnimator: %o', (isBounceAnimator) => {
+      each([true, false]).describe('pendingBounceAnimator: %o', (pendingBounceAnimator) => {
         it('acceleration', () => {
           const viewModel = new AnimatedScrollbar({ minOffset: 0 });
           (inRange as Mock).mockImplementation(inRangeFn);
+          viewModel.pendingBounceAnimator = pendingBounceAnimator;
 
-          Object.defineProperties(viewModel, {
-            isBounceAnimator: { get() { return isBounceAnimator; } },
-          });
-
-          if (inRange() || isBounceAnimator) {
-            expect(viewModel.acceleration).toEqual(ACCELERATION);
-          } else {
-            expect(viewModel.acceleration).toEqual(OUT_BOUNDS_ACCELERATION);
-          }
-        });
-      });
-    });
-
-    each([true, false]).describe('Stopped: %o', (stopped) => {
-      each([true, false]).describe('Finished: %o', (finished) => {
-        it('inProgress', () => {
-          const viewModel = new AnimatedScrollbar({ });
-          viewModel.stopped = stopped;
-          viewModel.finished = finished;
-
-          expect(viewModel.inProgress).toEqual(!(stopped || finished));
-        });
-      });
-    });
-
-    each([true, false]).describe('isBounceAnimator: %o', (isBounceAnimator) => {
-      each([true, false]).describe('crossBoundOnNextStep: %o', (crossBoundOnNextStep) => {
-        each([0.1, -0.2, -0.6, 1, 1.3, 5]).describe('Velocity: %o', (velocity) => {
-          it('isFinished', () => {
-            const viewModel = new AnimatedScrollbar({ });
-
-            Object.defineProperties(viewModel, {
-              isBounceAnimator: { get() { return isBounceAnimator; } },
-            });
-            viewModel.velocity = velocity;
-            viewModel.crossBoundOnNextStep = () => crossBoundOnNextStep;
-
-            if (isBounceAnimator) {
-              expect(viewModel.isFinished)
-                .toEqual(crossBoundOnNextStep || Math.abs(velocity) <= BOUNCE_MIN_VELOCITY_LIMIT);
-            } else {
-              expect(viewModel.isFinished).toEqual(Math.abs(velocity) <= MIN_VELOCITY_LIMIT);
-            }
-          });
+          expect(viewModel.acceleration).toEqual(inRange() || pendingBounceAnimator
+            ? ACCELERATION
+            : OUT_BOUNDS_ACCELERATION);
         });
       });
     });

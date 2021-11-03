@@ -1,5 +1,7 @@
 import type { AppointmentTemplateData } from '../../../../ui/scheduler';
-import { BaseTemplateProps } from '../types';
+import { BaseTemplateProps, Direction } from '../types';
+
+export type ReduceType = 'head' | 'body' | 'tail';
 
 export interface AppointmentGeometry {
   empty: boolean; // TODO
@@ -22,6 +24,10 @@ export interface AppointmentViewModel {
   appointment: AppointmentData;
   geometry: AppointmentGeometry;
   info: {
+    allDay: boolean;
+    direction: Direction;
+    isRecurrent: boolean;
+    appointmentReduced?: ReduceType;
     appointment: {
       startDate: Date;
       endDate: Date;
@@ -38,6 +44,7 @@ export interface OverflowIndicatorViewModel {
   key: string;
   isAllDay: boolean;
   isCompact: boolean;
+  color: string;
   geometry: {
     top: number;
     left: number;

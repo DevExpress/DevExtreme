@@ -543,6 +543,21 @@ export default {
                     return buttonItems;
                 },
 
+                _saveEditDataInner: function() {
+                    const editRow = this._dataController.getVisibleRows()[this.getEditRowIndex()];
+                    const editColumn = this._getEditColumn();
+                    const showEditorAlways = editColumn?.showEditorAlways;
+                    const isUpdateInCellMode = this.isCellEditMode() && !editRow?.isNewRow;
+                    let deferred;
+
+                    if(isUpdateInCellMode && showEditorAlways) {
+                        deferred = new Deferred();
+                        this.addDeferred(deferred);
+                    }
+
+                    return this.callBase.apply(this, arguments).always(deferred?.resolve);
+                },
+
                 _applyChange: function(options, params, forceUpdateRow) {
                     const isUpdateInCellMode = this.isCellEditMode() && options.row && !options.row.isNewRow;
                     const showEditorAlways = options.column.showEditorAlways;

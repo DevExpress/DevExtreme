@@ -274,8 +274,10 @@ export const columnHeadersModule = {
                     const changeTypes = e.changeTypes;
                     const optionNames = e.optionNames;
 
-                    if(changeTypes.grouping) {
-                        this._isGroupingChanged = true;
+                    if(changeTypes.grouping || changeTypes.groupExpanding) {
+                        if(changeTypes.grouping) {
+                            this._isGroupingChanged = true;
+                        }
                         return;
                     }
 

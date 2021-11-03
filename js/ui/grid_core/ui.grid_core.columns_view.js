@@ -701,14 +701,14 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             return stopWatch;
         };
 
-        source.update = source.update || function(row) {
+        source.update = source.update || function(row, keepRow) {
             if(row) {
                 this.data = options.data = row.data;
                 this.rowIndex = options.rowIndex = row.rowIndex;
                 this.dataIndex = options.dataIndex = row.dataIndex;
                 this.isExpanded = options.isExpanded = row.isExpanded;
 
-                if(options.row) {
+                if(options.row && !keepRow) {
                     options.row = row;
                 }
             }

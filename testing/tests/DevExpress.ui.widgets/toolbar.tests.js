@@ -1062,6 +1062,30 @@ QUnit.module('adaptivity', {
         assert.equal(itemCenter, elementCenter, 'item has correct position');
     });
 
+    QUnit.test('Resize container: 1000px -> 100px, 100px -> 1000px', function(assert) {
+        const $container = $('<div />')
+            .width(1000)
+            .appendTo($('#widget'));
+
+        const $toolbar = $('<div />').appendTo($container).dxToolbar({
+            items: [
+                { location: 'before', widget: 'dxButton', locateInMenu: 'auto', options: { text: 'button 1', width: 100 } },
+                { location: 'center', widget: 'dxButton', locateInMenu: 'auto', options: { text: 'button 1', width: 100 } },
+                { location: 'after', widget: 'dxButton', locateInMenu: 'auto', options: { text: 'button 1', width: 100 } },
+            ],
+        });
+        const getVisibleItemsCount = () => $toolbar.find('.' + TOOLBAR_ITEM_CLASS + ':visible').length;
+        assert.equal(getVisibleItemsCount(), 3, 'all items are visible');
+
+        $container.width(100);
+        $toolbar.dxToolbar('instance').updateDimensions();
+        assert.equal(getVisibleItemsCount(), 0, 'all items are invisible, because there is no free space');
+
+        $container.width(1000);
+        $toolbar.dxToolbar('instance').updateDimensions();
+        assert.equal(getVisibleItemsCount(), 3, 'all items became visible');
+    });
+
     QUnit.test('center section should be at correct position for huge before section', function(assert) {
         const $element = $('#widget').dxToolbar({
             items: [
