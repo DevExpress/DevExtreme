@@ -44,6 +44,7 @@ export interface OverflowIndicatorViewModel {
   key: string;
   isAllDay: boolean;
   isCompact: boolean;
+  color: string;
   geometry: {
     top: number;
     left: number;

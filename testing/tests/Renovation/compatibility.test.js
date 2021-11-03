@@ -17,10 +17,11 @@ const PRIVATE_JQUERY_WIDGETS = [
     'GridPager', 'Scrollable', 'DraggableContainer', 'Droppable',
     'Editor'
 ];
-const INPROGRESS_WIDGETS = ['Button', 'CheckBox', 'ScrollView', 'DataGrid', 'Bullet', 'Form', 'LayoutManager', 'ResponsiveBox', 'Box'];
 const CUSTOM_ROOT_WIDGET_CLASS = { 'dxGridPager': 'datagrid-pager', 'dxDataGrid': 'widget' };
 
-const widgetsInBundle = publicWidgets.map(widget => widget.name);
+const widgetsInBundle = publicWidgets
+    .filter((item) => !item.inProgress)
+    .map(widget => widget.name);
 const isRenovation = !!Button.IS_RENOVATED_WIDGET;
 
 const widgets = isRenovation ? widgetsMeta
@@ -30,9 +31,7 @@ const widgets = isRenovation ? widgetsMeta
     }) : [];
 
 QUnit.module('Check components registration', () => {
-    widgetsMeta
-        .filter(meta => PRIVATE_JQUERY_WIDGETS.indexOf(meta.name) === -1)
-        .filter(meta => INPROGRESS_WIDGETS.indexOf(meta.name) === -1)
+    widgets
         .forEach((meta) => {
             QUnit.test(`${`dx${meta.name}`} is in bundle`, function(assert) {
                 const message = 'You should add your widget to the bundle.'
@@ -130,7 +129,7 @@ QUnit.module('Mandatory component setup', {
         });
 
     widgets
-        .filter((m) => m.props.template.length && INPROGRESS_WIDGETS.indexOf(m.name) === -1)
+        .filter((m) => m.props.template.length)
         .forEach((meta) => {
             QUnit.test(`${`dx${meta.name}`} - pass right props to template`, function(assert) {
                 const message = 'For templates that jQuery users set.\n'

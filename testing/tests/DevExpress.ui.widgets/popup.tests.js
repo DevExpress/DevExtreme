@@ -1411,6 +1411,12 @@ QUnit.module('resize', {
         const onResizeStartStub = sinon.stub();
         const onResizeStub = sinon.stub();
         const onResizeEndStub = sinon.stub();
+        const checkExtraFields = (args, eventType) => {
+            ['event', 'height', 'width'].forEach((field) => {
+                assert.ok(field in args, `${field} field is existed`);
+            });
+            assert.strictEqual(args.event.type, eventType, 'correct event type');
+        };
 
         const instance = $('#popup').dxPopup({
             resizeEnabled: true,
@@ -1427,8 +1433,11 @@ QUnit.module('resize', {
         pointer.start().dragStart().drag(0, 50).dragEnd();
 
         assert.ok(onResizeStartStub.calledOnce, 'onResizeStart fired');
+        checkExtraFields(onResizeStartStub.lastCall.args[0], 'dxdragstart');
         assert.ok(onResizeStub.calledOnce, 'onResize fired');
+        checkExtraFields(onResizeStub.lastCall.args[0], 'dxdrag');
         assert.ok(onResizeEndStub.calledOnce, 'onResizeEnd fired');
+        checkExtraFields(onResizeEndStub.lastCall.args[0], 'dxdragend');
     });
 
     QUnit.test('resize event handlers should correctly added via "on" method', function(assert) {

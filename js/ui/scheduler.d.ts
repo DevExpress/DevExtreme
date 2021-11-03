@@ -35,7 +35,7 @@ import Widget, {
 
 interface AppointmentDraggingEvent {
   readonly component: dxScheduler;
-  readonly event?: DxEvent;
+  readonly event?: DxEvent<MouseEvent | TouchEvent>;
   readonly itemData?: any;
   readonly itemElement?: DxElement;
   readonly fromData?: any;
@@ -59,17 +59,17 @@ export type AppointmentAddingEvent = EventInfo<dxScheduler> & {
 };
 
 /** @public */
-export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler> & TargetedAppointmentInfo & {
+export type AppointmentClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardEvent | MouseEvent | PointerEvent> & TargetedAppointmentInfo & {
   readonly appointmentElement: DxElement;
 };
 
 /** @public */
-export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler> & TargetedAppointmentInfo & {
+export type AppointmentContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & TargetedAppointmentInfo & {
   readonly appointmentElement: DxElement;
 };
 
 /** @public */
-export type AppointmentDblClickEvent = Cancelable & NativeEventInfo<dxScheduler> & TargetedAppointmentInfo & {
+export type AppointmentDblClickEvent = Cancelable & NativeEventInfo<dxScheduler, MouseEvent | PointerEvent> & TargetedAppointmentInfo & {
   readonly appointmentElement: DxElement;
 };
 
@@ -111,13 +111,13 @@ export type AppointmentUpdatingEvent = EventInfo<dxScheduler> & {
 };
 
 /** @public */
-export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler> & {
+export type CellClickEvent = Cancelable & NativeEventInfo<dxScheduler, KeyboardEvent | MouseEvent | PointerEvent> & {
   readonly cellData: any;
   readonly cellElement: DxElement;
 };
 
 /** @public */
-export type CellContextMenuEvent = NativeEventInfo<dxScheduler> & {
+export type CellContextMenuEvent = NativeEventInfo<dxScheduler, MouseEvent | PointerEvent | TouchEvent> & {
   readonly cellData: any;
   readonly cellElement: DxElement;
 };

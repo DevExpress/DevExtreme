@@ -11,9 +11,9 @@ createTestCafe('localhost', 1437, 1438)
 
         const args = getArgs();
         const testName = args.test.trim();
+        const meta = args.meta.trim();
         let componentFolder = args.componentFolder.trim();
         const file = args.file.trim();
-
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
@@ -30,6 +30,11 @@ createTestCafe('localhost', 1437, 1438)
         }
         if(testName) {
             runner.filter(name => name === testName);
+        }
+        if(meta) {
+            runner.filter((testName, fixtureName, fixturePath, testMeta, fixtureMeta) => {
+                return testMeta[meta] || fixtureMeta[meta];
+            });
         }
         if(args.cache) {
             runner.cache = args.cache;
@@ -51,6 +56,7 @@ function getArgs() {
             concurrency: 0,
             browsers: 'chrome',
             test: '',
+            meta: '',
             componentFolder: '',
             file: '*',
             cache: true,
