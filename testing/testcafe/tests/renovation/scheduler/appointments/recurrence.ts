@@ -10,7 +10,8 @@ const test = (options?: any): any => cloneTest(
   options,
 );
 
-fixture('Renovated scheduler - Recurrent appointments');
+fixture('Renovated scheduler - Recurrent appointments')
+  .beforeEach((t) => t.resizeWindow(1200, 800));
 
 [
   { currentView: 'day', expected: 2 },
