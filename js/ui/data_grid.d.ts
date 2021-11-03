@@ -3663,7 +3663,8 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     summary?: Summary;
 }
 
-export interface ExcelCellInfo {
+/** @public */
+export type ExcelCellInfo = {
   readonly component: dxDataGrid;
   horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right';
   verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
@@ -3675,7 +3676,7 @@ export interface ExcelCellInfo {
   readonly value?: string | number | Date;
   numberFormat?: string;
   gridCell?: ExcelCell;
-}
+};
 
 /** @public */
 export interface Export {
@@ -3743,7 +3744,8 @@ export interface Export {
   texts?: ExportTexts;
 }
 
-export interface ExportTexts {
+/** @public */
+export type ExportTexts = {
   /**
    * @docid dxDataGridOptions.export.texts.exportAll
    * @default "Export all data"
@@ -3759,9 +3761,10 @@ export interface ExportTexts {
    * @default "Export"
    */
   exportTo?: string;
-}
+};
 
-export interface GroupPanel {
+/** @public */
+export type GroupPanel = {
   /**
    * @docid dxDataGridOptions.groupPanel.allowColumnDragging
    * @default true
@@ -3778,9 +3781,10 @@ export interface GroupPanel {
    * @default false
    */
   visible?: boolean | 'auto';
-}
+};
 
-export interface Grouping {
+/** @public */
+export type Grouping = {
   /**
    * @docid dxDataGridOptions.grouping.allowCollapsing
    * @default true
@@ -3808,9 +3812,10 @@ export interface Grouping {
    * @type object
    */
   texts?: GroupingTexts;
-}
+};
 
-export interface GroupingTexts {
+/** @public */
+export type GroupingTexts = {
   /**
    * @docid dxDataGridOptions.grouping.texts.groupByThisColumn
    * @default "Group by This Column"
@@ -3836,9 +3841,10 @@ export interface GroupingTexts {
    * @default "Ungroup All"
    */
   ungroupAll?: string;
-}
+};
 
-export interface MasterDetail {
+/** @public */
+export type MasterDetail = {
   /**
    * @docid dxDataGridOptions.masterDetail.autoExpandAll
    * @default false
@@ -3857,7 +3863,7 @@ export interface MasterDetail {
    * @type_function_param2_field3 watch:function
    */
   template?: template | ((detailElement: DxElement, detailInfo: MasterDetailTemplateData) => any);
-}
+};
 
 export interface dxDataGridSortByGroupSummaryInfoItem {
     /**
@@ -3879,17 +3885,18 @@ export interface dxDataGridSortByGroupSummaryInfoItem {
     summaryItem?: string | number;
 }
 
-export interface CustomSummaryInfo {
+/** @public */
+export type CustomSummaryInfo = {
   readonly component: dxDataGrid;
   readonly name?: string;
   readonly summaryProcess: string;
   readonly value?: any;
   totalValue?: any;
   readonly groupIndex?: number;
-}
+};
 
 /** @public */
-export interface Summary {
+export type Summary = {
   /**
    * @docid dxDataGridOptions.summary.calculateCustomSummary
    * @type_function_param1 options:object
@@ -3928,14 +3935,16 @@ export interface Summary {
    * @default undefined
    */
   totalItems?: Array<SummaryTotalItem>;
-}
+};
 
-export interface SummaryItemTextInfo {
+/** @public */
+export type SummaryItemTextInfo = {
   readonly value?: string | number | Date;
   readonly valueText: string;
-}
+};
 
-export interface SummaryGroupItem {
+/** @public */
+export type SummaryGroupItem = {
     /**
      * @docid dxDataGridOptions.summary.groupItems.alignByColumn
      * @default false
@@ -3988,9 +3997,10 @@ export interface SummaryGroupItem {
      * @default undefined
      */
     valueFormat?: format;
-}
+};
 
-export interface SummaryTotalItem {
+/** @public */
+export type SummaryTotalItem = {
   /**
    * @docid dxDataGridOptions.summary.totalItems.alignment
    * @type Enums.HorizontalAlignment
@@ -4044,9 +4054,10 @@ export interface SummaryTotalItem {
    * @default undefined
    */
   valueFormat?: format;
-}
+};
 
-export interface SummaryTexts {
+/** @public */
+export type SummaryTexts = {
     /**
      * @docid dxDataGridOptions.summary.texts.avg
      * @default "Avg={0}"
@@ -4092,7 +4103,7 @@ export interface SummaryTexts {
      * @default "Sum of {1} is {0}"
      */
     sumOtherColumn?: string;
-}
+};
 
 /**
  * @public
@@ -4102,7 +4113,7 @@ export interface SummaryTexts {
 export type dxDataGridEditing = Editing;
 
 /** @public */
-export interface Editing extends EditingBase {
+export type Editing = EditingBase & {
     /**
      * @docid dxDataGridOptions.editing.allowAdding
      * @default false
@@ -4130,7 +4141,7 @@ export interface Editing extends EditingBase {
      * @public
      */
     texts?: any;
-}
+};
 
 /**
  * @public
@@ -4140,7 +4151,7 @@ export interface Editing extends EditingBase {
 export type dxDataGridScrolling = Scrolling;
 
 /** @public */
-export interface Scrolling extends ScrollingBase {
+export type Scrolling = ScrollingBase & {
     /**
      * @docid dxDataGridOptions.scrolling.mode
      * @type Enums.GridScrollingMode
@@ -4148,7 +4159,7 @@ export interface Scrolling extends ScrollingBase {
      * @public
      */
     mode?: 'infinite' | 'standard' | 'virtual';
-}
+};
 
 /**
  * @public
@@ -4158,7 +4169,7 @@ export interface Scrolling extends ScrollingBase {
 export type dxDataGridSelection = Selection;
 
 /** @public */
-export interface Selection extends SelectionBase {
+export type Selection = SelectionBase & {
     /**
      * @docid dxDataGridOptions.selection.deferred
      * @default false
@@ -4179,7 +4190,7 @@ export interface Selection extends SelectionBase {
      * @public
      */
     showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';
-}
+};
 /**
  * @docid
  * @inherits GridBase
@@ -4569,7 +4580,7 @@ export type dxDataGridRowObject = Row;
  * @docid dxDataGridRowObject
  * @type object
  */
-export interface Row {
+export type Row = {
     /**
      * @docid dxDataGridRowObject.data
      * @public
@@ -4620,7 +4631,7 @@ export interface Row {
      * @public
      */
     readonly values: Array<any>;
-}
+};
 
 /** @public */
 export type Properties = dxDataGridOptions;

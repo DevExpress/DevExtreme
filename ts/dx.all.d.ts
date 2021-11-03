@@ -5843,17 +5843,14 @@ declare module DevExpress.ui {
         readonly rowIndex: number;
         readonly row?: Row;
       };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface CustomSummaryInfo {
+    export type CustomSummaryInfo = {
       readonly component: dxDataGrid;
       readonly name?: string;
       readonly summaryProcess: string;
       readonly value?: any;
       totalValue?: any;
       readonly groupIndex?: number;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -5915,7 +5912,7 @@ declare module DevExpress.ui {
     export type EditCancelingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxDataGrid> &
       DataChangeInfo;
-    export interface Editing extends EditingBase {
+    export type Editing = EditingBase & {
       /**
        * [descr:dxDataGridOptions.editing.allowAdding]
        */
@@ -5936,7 +5933,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.editing.texts]
        */
       texts?: any;
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6076,10 +6073,7 @@ declare module DevExpress.ui {
         readonly dataField?: string;
         readonly row?: Row;
       };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ExcelCellInfo {
+    export type ExcelCellInfo = {
       readonly component: dxDataGrid;
       horizontalAlignment?:
         | 'center'
@@ -6123,7 +6117,7 @@ declare module DevExpress.ui {
       readonly value?: string | number | Date;
       numberFormat?: string;
       gridCell?: DevExpress.excelExporter.DataGridCell;
-    }
+    };
     export interface Export {
       /**
        * [descr:dxDataGridOptions.export.allowExportSelectedData]
@@ -6173,10 +6167,7 @@ declare module DevExpress.ui {
       DevExpress.events.EventInfo<dxDataGrid> & {
         fileName?: string;
       };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface ExportTexts {
+    export type ExportTexts = {
       /**
        * [descr:dxDataGridOptions.export.texts.exportAll]
        */
@@ -6189,7 +6180,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.export.texts.exportTo]
        */
       exportTo?: string;
-    }
+    };
     export type FileSavingEvent = DevExpress.events.Cancelable & {
       readonly component: dxDataGrid;
       readonly element: DevExpress.core.DxElement;
@@ -6365,10 +6356,7 @@ declare module DevExpress.ui {
         newRowIndex: number;
         readonly rows: Array<Row>;
       };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface Grouping {
+    export type Grouping = {
       /**
        * [descr:dxDataGridOptions.grouping.allowCollapsing]
        */
@@ -6389,11 +6377,8 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.grouping.texts]
        */
       texts?: GroupingTexts;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface GroupingTexts {
+    };
+    export type GroupingTexts = {
       /**
        * [descr:dxDataGridOptions.grouping.texts.groupByThisColumn]
        */
@@ -6414,11 +6399,8 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.grouping.texts.ungroupAll]
        */
       ungroupAll?: string;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface GroupPanel {
+    };
+    export type GroupPanel = {
       /**
        * [descr:dxDataGridOptions.groupPanel.allowColumnDragging]
        */
@@ -6431,7 +6413,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.groupPanel.visible]
        */
       visible?: boolean | 'auto';
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -6552,10 +6534,7 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface MasterDetail {
+    export type MasterDetail = {
       /**
        * [descr:dxDataGridOptions.masterDetail.autoExpandAll]
        */
@@ -6573,7 +6552,7 @@ declare module DevExpress.ui {
             detailElement: DevExpress.core.DxElement,
             detailInfo: MasterDetailTemplateData
           ) => any);
-    }
+    };
     export type MasterDetailTemplateData = {
       readonly key: any;
       readonly data: any;
@@ -6642,7 +6621,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridRowObject]
      */
-    export interface Row {
+    export type Row = {
       /**
        * [descr:dxDataGridRowObject.data]
        */
@@ -6683,7 +6662,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridRowObject.values]
        */
       readonly values: Array<any>;
-    }
+    };
     export type RowClickEvent =
       DevExpress.events.NativeEventInfo<dxDataGrid> & {
         readonly data: any;
@@ -7016,12 +6995,12 @@ declare module DevExpress.ui {
       dxScrollable,
       '_templateManager' | '_getTemplate' | '_invalidate' | '_refresh'
     >;
-    export interface Scrolling extends ScrollingBase {
+    export type Scrolling = ScrollingBase & {
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
        */
       mode?: 'infinite' | 'standard' | 'virtual';
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7088,7 +7067,7 @@ declare module DevExpress.ui {
        */
       width?: number;
     }
-    export interface Selection extends SelectionBase {
+    export type Selection = SelectionBase & {
       /**
        * [descr:dxDataGridOptions.selection.deferred]
        */
@@ -7101,7 +7080,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.selection.showCheckBoxesMode]
        */
       showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';
-    }
+    };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -7180,7 +7159,7 @@ declare module DevExpress.ui {
        */
       type?: 'custom' | 'localStorage' | 'sessionStorage';
     }
-    export interface Summary {
+    export type Summary = {
       /**
        * [descr:dxDataGridOptions.summary.calculateCustomSummary]
        */
@@ -7205,11 +7184,8 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.totalItems]
        */
       totalItems?: Array<SummaryTotalItem>;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface SummaryGroupItem {
+    };
+    export type SummaryGroupItem = {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.alignByColumn]
        */
@@ -7250,18 +7226,12 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.groupItems.valueFormat]
        */
       valueFormat?: format;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface SummaryItemTextInfo {
+    };
+    export type SummaryItemTextInfo = {
       readonly value?: string | number | Date;
       readonly valueText: string;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface SummaryTexts {
+    };
+    export type SummaryTexts = {
       /**
        * [descr:dxDataGridOptions.summary.texts.avg]
        */
@@ -7298,11 +7268,8 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.texts.sumOtherColumn]
        */
       sumOtherColumn?: string;
-    }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export interface SummaryTotalItem {
+    };
+    export type SummaryTotalItem = {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.alignment]
        */
@@ -7343,7 +7310,7 @@ declare module DevExpress.ui {
        * [descr:dxDataGridOptions.summary.totalItems.valueFormat]
        */
       valueFormat?: format;
-    }
+    };
     export type ToolbarPreparingEvent =
       DevExpress.events.EventInfo<dxDataGrid> & ToolbarPreparingInfo;
     /**
