@@ -251,7 +251,7 @@ const TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        const value = this._value ?? this.option('value') ?? '';
+        const value = this.option('value') || '';
         this._maskRulesChain.clear(this._normalizeChainArguments());
 
         const chainArgs = { length: value.length };
