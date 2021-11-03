@@ -1638,6 +1638,7 @@ QUnit.module('paste', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        keyboard.caret(0);
         const event = $.Event('keypress', {
             ctrlKey: true,
             keyCode: 0,
