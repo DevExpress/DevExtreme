@@ -296,6 +296,36 @@ describe('option control', () => {
     expect(Widget.option.mock.calls[0]).toEqual(['complexOption.a', 123]);
   });
 
+  it('extra option call for check changes', () => {
+    const { rerender } = render(
+      <ControlledComponent everyOption={123} anotherOption="const" />,
+    );
+
+    Widget.option.mockImplementation((name: string) => {
+      if (name === 'everyOption') {
+        Widget.option('anotherOption', 'changed');
+        return undefined;
+      }
+      if (name === undefined) {
+        return {
+          everyOption: 234,
+          abotherOption: 'changed',
+        };
+      }
+      return undefined;
+    });
+
+    rerender(
+      <ControlledComponent everyOption={234} anotherOption="const" />,
+    );
+
+    jest.runAllTimers();
+
+    expect(Widget.option.mock.calls.length).toBe(2);
+    expect(Widget.option.mock.calls[0]).toEqual(['everyOption', 234]);
+    expect(Widget.option.mock.calls[1]).toEqual(['anotherOption', 'changed']);
+  });
+
   it('should not rolls back complex option if shallow equals', () => {
     render(
       <ControlledComponent complexOption={{ a: 123, b: 234 }} />,
