@@ -4,7 +4,7 @@ import { inArray } from '../../core/utils/array';
 import { isFunction } from '../../core/utils/type';
 import { noop } from '../../core/utils/common';
 
-const EMPTY_CHAR = '\u058D';
+const EMPTY_CHAR = '\u2205';
 
 const BaseMaskRule = Class.inherit({
 

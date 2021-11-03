@@ -3,7 +3,7 @@ import { getChar } from '../../events/utils/index';
 import Promise from '../../core/polyfills/promise';
 
 const BACKSPACE_INPUT_TYPE = 'deleteContentBackward';
-const EMPTY_CHAR = '\u058D';
+const EMPTY_CHAR = '\u2205';
 
 class DefaultMaskStrategy extends BaseMaskStrategy {
     _getStrategyName() {
