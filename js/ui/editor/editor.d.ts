@@ -32,7 +32,7 @@ export interface EditorOptions<TComponent> extends WidgetOptions<TComponent> {
      * @action
      * @public
      */
-    onValueChanged?: ((e: NativeEventInfo<TComponent> & ValueChangedInfo) => void);
+    onValueChanged?: ((e: NativeEventInfo<TComponent, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false
