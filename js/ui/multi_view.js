@@ -283,8 +283,6 @@ const MultiView = CollectionWidget.inherit({
             _translator.move(this._$itemContainer, 0);
             this._updateItems(newIndex);
 
-            // NOTE: force layout recalculation on iOS 6 & iOS 7.0 (B254713)
-            getWidth(this._$itemContainer);
         }).bind(this));
     },
 

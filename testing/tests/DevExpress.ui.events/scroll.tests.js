@@ -544,7 +544,7 @@ QUnit.test('dxscrollwheel did not prevent event', function(assert) {
 
     const realDevice = devices.real();
 
-    if(realDevice.ios && compareVersions(realDevice.version, [8]) >= 0 ||
+    if(realDevice.ios && compareVersions(realDevice.version, [10]) >= 0 ||
         realDevice.android && compareVersions(realDevice.version, [5]) >= 0) {
 
         QUnit.test('lock should not be released on if scroll stopped (before frame)', function(assert) {

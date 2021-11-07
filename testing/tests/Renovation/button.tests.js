@@ -384,7 +384,6 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         let clickFired = 0;
 
         const element = this.Button({
-            focusStateEnabled: true, // NOTE: for ios 9 testing
             onClick: () => clickFired++
         });
 
@@ -402,7 +401,6 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
         const clickHandler = sinon.spy();
 
         const element = this.Button({
-            focusStateEnabled: true, // NOTE: for ios 9 testing
             onClick: clickHandler
         });
 
