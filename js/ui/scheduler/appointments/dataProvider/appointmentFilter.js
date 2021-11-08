@@ -9,24 +9,22 @@ import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
 
-import { createAppointmentAdapter } from '../../appointmentAdapter';
 import { isDateAndTimeView as calculateIsDateAndTimeView } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { getResourcesDataByGroups } from '../../resources/utils';
 import {
     compareDateWithStartDayHour,
     compareDateWithEndDayHour,
     getTrimDates,
-    replaceWrongEndDate,
     getAppointmentTakesSeveralDays,
     _appointmentPartInInterval,
     getRecurrenceException,
     getAppointmentTakesAllDay
 } from './utils';
+import getPreparedDataItems from '../../../../renovation/ui/scheduler/utils/data';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
 const USER_FILTER_POSITION = 1;
-const RECURRENCE_FREQ = 'freq';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -216,7 +214,12 @@ export class AppointmentFilterBaseStrategy {
     }
 
     _updatePreparedDataItems() {
-        const updateItems = (items) => this.preparedItems = this.getPreparedDataItems(items);
+        const updateItems = (items) => this.preparedItems = getPreparedDataItems(
+            items,
+            this.dataAccessors,
+            this.appointmentDuration,
+            this.timeZoneCalculator
+        );
 
         if(this.dataSource) {
             const store = this.dataSource.store();
@@ -485,41 +488,6 @@ export class AppointmentFilterBaseStrategy {
                 firstDayOfWeek: firstDayOfWeek
             });
         }
-
-        return result;
-    }
-
-    getPreparedDataItems(dataItems) {
-        const result = [];
-        dataItems?.forEach((rawAppointment) => {
-            const startDate = new Date(this.dataAccessors.getter.startDate(rawAppointment));
-            const endDate = new Date(this.dataAccessors.getter.endDate(rawAppointment));
-
-            replaceWrongEndDate(rawAppointment, startDate, endDate, this.appointmentDuration, this.dataAccessors);
-
-            const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
-
-            const comparableStartDate = adapter.startDate && adapter.calculateStartDate('toGrid');
-            const comparableEndDate = adapter.endDate && adapter.calculateEndDate('toGrid') || comparableStartDate;
-            const regex = new RegExp(RECURRENCE_FREQ, 'gi');
-            const recurrenceRule = adapter.recurrenceRule;
-            const hasRecurrenceRule = !!recurrenceRule?.match(regex).length;
-
-            const item = {
-                startDate: comparableStartDate,
-                endDate: comparableEndDate,
-                recurrenceRule: adapter.recurrenceRule,
-                recurrenceException: adapter.recurrenceException,
-                hasRecurrenceRule,
-                allDay: adapter.allDay,
-                visible: rawAppointment.visible,
-                rawAppointment
-            };
-
-            if(item.startDate && item.endDate) {
-                result.push(item);
-            }
-        });
 
         return result;
     }
