@@ -107,7 +107,7 @@ namespace Runner.Controllers
         [HttpPost]
         public void NotifyTestStarted(string name) {
             lock (IO_SYNC) {
-                ConsoleHelper.Logger.Write($"       [ run] {name}");
+                ConsoleHelper.Logger.WriteLine($"       [ run] {name}");
             }
         }
         [HttpPost]
