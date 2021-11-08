@@ -74,14 +74,7 @@ function run_test {
     case "$BROWSER" in
 
         "firefox")
-            firefox --headless & sleep 10 && for p in $(pidof firefox); do sudo kill $p; done
-            echo 'user_pref("browser.shell.checkDefaultBrowser", false)' >> $(find ~/.cache/mozilla/ -name *default-release)/prefs.js
-            echo 'user_pref("datareporting.policy.dataSubmissionEnabled", false)' >> $(find ~/.cache/mozilla/ -name *default-release)/prefs.js
-            echo 'user_pref("font.name-list.monospace.x-western", "Liberation Mono")' >> $(find ~/.cache/mozilla/ -name *default-release)/prefs.js
-            echo 'user_pref("font.name-list.sans-serif.x-western", "Liberation Sans")' >> $(find ~/.cache/mozilla/ -name *default-release)/prefs.js
-            echo 'user_pref("font.name-list.serif.x-western", "Liberation Serif")' >> $(find ~/.cache/mozilla/ -name *default-release)/prefs.js
-            cp $(find ~/.cache/mozilla/ -name *default-release)/prefs.js $(find ~/.cache/mozilla/ -name *default)
-            local firefox_args="-profile firefox-profile $url"
+            local firefox_args="$url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 
             firefox --version
