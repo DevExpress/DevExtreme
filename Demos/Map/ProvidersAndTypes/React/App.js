@@ -41,7 +41,7 @@ class App extends React.Component {
         <div className="options">
           <div className="caption">Options</div>
           <div className="option">
-            <span>Map Type</span>&nbsp;
+            <span>Map Type</span>
             <SelectBox
               value={this.state.mapTypeValue}
               onValueChanged={this.onMapTypeChanged}

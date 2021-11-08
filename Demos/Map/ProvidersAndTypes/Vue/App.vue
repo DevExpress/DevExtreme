@@ -62,11 +62,13 @@ export default {
 
 .option {
   margin-top: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .option > span {
   display: inline-block;
-  width: 104px;
+  width: 100px;
 }
 
 .option > .dx-selectbox {
