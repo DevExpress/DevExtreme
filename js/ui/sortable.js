@@ -160,11 +160,6 @@ const Sortable = Draggable.inherit({
         this.option('fromIndexOffset', this.option('offset'));
     },
 
-    _dragEndHandler: function() {
-        this.callBase.apply(this, arguments);
-        this._unsubscribeFromSourceScroll();
-    },
-
     _subscribeToSourceScroll: function(e) {
         const $scrollable = this._getScrollable($(e.target));
         if($scrollable) {
@@ -247,10 +242,10 @@ const Sortable = Draggable.inherit({
         }
     },
 
-    _dragLeaveHandler: function(e) {
+    _dragLeaveHandler: function() {
         this.callBase.apply(this, arguments);
 
-        this._unsubscribeFromSourceScroll(e);
+        this._unsubscribeFromSourceScroll();
     },
 
     dragEnter: function() {
@@ -290,6 +285,9 @@ const Sortable = Draggable.inherit({
     },
 
     dragEnd: function(sourceEvent) {
+        sourceEvent.fromComponent._unsubscribeFromSourceScroll();
+        sourceEvent.toComponent._unsubscribeFromSourceScroll();
+
         const $sourceElement = this._getSourceElement();
         const sourceDraggable = this._getSourceDraggable();
         const isSourceDraggable = sourceDraggable.NAME !== this.NAME;
