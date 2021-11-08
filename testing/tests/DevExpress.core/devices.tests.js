@@ -207,9 +207,11 @@ QUnit.test('attach css classes', function(assert) {
     try {
         const $element = $('<div>');
 
-        devices.real({ platform: 'ios', version: [10, 1] });
+        devices.real({ platform: 'ios', version: [7, 1] });
         devices.attachCssClasses($element);
         assert.ok($element.hasClass('dx-device-ios'), 'real device platform class added');
+        assert.ok($element.hasClass('dx-device-ios-7'), 'real device platform with version class added');
+
     } finally {
         devices.real(originalRealDevice);
     }
@@ -252,12 +254,13 @@ QUnit.test('detach css classes', function(assert) {
     const originalRealDevice = devices.real();
     try {
         const $element = $('<div>');
-        devices.real({ platform: 'ios', version: [10, 1] });
+        devices.real({ platform: 'ios', version: [7, 1] });
 
         devices.attachCssClasses($element);
         devices.detachCssClasses($element);
 
         assert.equal($element.hasClass('dx-device-ios'), false, 'platform class removed');
+        assert.equal($element.hasClass('dx-device-ios-7'), false, 'version class removed');
     } finally {
         devices.real(originalRealDevice);
     }
@@ -267,13 +270,14 @@ QUnit.test('detach only attached classes', function(assert) {
     const originalRealDevice = devices.real();
     try {
         const $element = $('<div>');
-        devices.real({ platform: 'ios', version: [10, 1] });
+        devices.real({ platform: 'ios', version: [7, 1] });
 
         devices.attachCssClasses($element);
         devices.real({ platform: 'generic', version: [] });
         devices.detachCssClasses($element);
 
         assert.equal($element.hasClass('dx-device-ios'), false, 'platform class removed');
+        assert.equal($element.hasClass('dx-device-ios-7'), false, 'version class removed');
     } finally {
         devices.real(originalRealDevice);
     }
@@ -283,7 +287,7 @@ QUnit.test('move classes from previous viewport to new viewport', function(asser
     const originalRealDevice = devices.real();
     try {
         const $element = $('<div>');
-        devices.real({ platform: 'ios', version: [10, 1] });
+        devices.real({ platform: 'ios', version: [7, 1] });
         devices.attachCssClasses($element);
 
         const $newElement = $('<div>');
@@ -291,7 +295,10 @@ QUnit.test('move classes from previous viewport to new viewport', function(asser
         viewPortChanged.fire($newElement, $element);
 
         assert.equal($element.hasClass('dx-device-ios'), false, 'platform class removed');
+        assert.equal($element.hasClass('dx-device-ios-7'), false, 'version class removed');
+
         assert.ok($newElement.hasClass('dx-device-ios'), 'real device platform class added');
+        assert.ok($newElement.hasClass('dx-device-ios-7'), 'real device platform with version class added');
     } finally {
         devices.real(originalRealDevice);
     }
