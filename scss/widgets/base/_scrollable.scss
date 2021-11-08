@@ -221,6 +221,12 @@
   }
 }
 
+.dx-device-ios-6 {
+  .dx-scrollable-content {
+    backface-visibility: hidden;
+  }
+}
+
 .dx-device-android {
   .dx-scrollable-native.dx-scrollable-scrollbars-hidden {
     ::-webkit-scrollbar {

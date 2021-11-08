@@ -148,3 +148,13 @@
     backface-visibility: hidden;
   }
 }
+
+.dx-device-ios-6 { /* NOTE: fix blinking on ios (B254535) */
+  .dx-gallery,
+  .dx-gallery-item,
+  .dx-gallery-indicator,
+  .dx-gallery-nav-button-prev,
+  .dx-gallery-nav-button-next {
+    backface-visibility: hidden;
+  }
+}
