@@ -11,19 +11,19 @@ namespace Runner.Tools {
             this.header = header;
         }
 
-        void WriteCore(string message, ConsoleColor? foreground, bool line = false) {
+        void WriteCore(string message, ConsoleColor? foreground, bool line) {
             if (foreground.HasValue) {
                 Console.ForegroundColor = foreground.Value;
             }
 
-            if (!String.IsNullOrEmpty(message)) {
+            if (!String.IsNullOrEmpty(message) || line) {
                 var msg = $"{this.header}{message}";
                 if (line) {
                     ConsoleHelper.Logger.WriteLine(msg);
-                    target.Write(msg);
+                    target.WriteLine(msg);
                 } else {
                     ConsoleHelper.Logger.Write(msg);
-                    target.WriteLine(msg);
+                    target.Write(msg);
                 }
             }
 

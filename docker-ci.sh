@@ -4,7 +4,7 @@
 
 trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
-export DEVEXTREME_DOCKER_CI=true
+export DEVEXTREME_TEST_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
 
 function run_lint {
@@ -19,8 +19,6 @@ function run_ts {
 }
 
 function run_test {
-    export DEVEXTREME_TEST_CI=true
-
     local port=`node -e "console.log(require('./ports.json').qunit)"`
     local url="http://localhost:$port/run?notimers=true"
     local runner_pid
@@ -34,13 +32,15 @@ function run_test {
     [ "$NORENOVATION" == "true" ] && url="$url&norenovation=true"
 
     if [ -n "$TZ" ]; then
-        sudo cp -f "/usr/share/zoneinfo/$TZ" /etc/localtime
+        sudo ln -sf "/usr/share/zoneinfo/$TZ" /etc/localtime
         sudo dpkg-reconfigure --frontend noninteractive tzdata
     fi
 
     if [ "$NO_HEADLESS" == "true" ]; then
         Xvfb -ac :99 -screen 0 1200x600x24 > /dev/null 2>&1 &
-        x11vnc -display :99 2>/dev/null &
+        if [ "$GITHUBACTION" != "true" ]; then
+            x11vnc -display :99 2>/dev/null &
+        fi
     fi
 
     if [ "$LOCAL" != "true" ]; then

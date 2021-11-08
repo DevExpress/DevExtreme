@@ -46,9 +46,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
-      env:
-        DEVEXTREME_TEST_CI: "true"
-      run: BUILD_INPROGRESS_RENOVATION="${{ matrix.ARGS.inProgressRenovation == true }}" npm run build
+      run: BUILD_INPROGRESS_RENOVATION="${{ matrix.ARGS.inProgressRenovation == true }}" npm run build:dev
 
     - name: Prepare renovation playground
       if: matrix.ARGS.componentFolder == 'renovation'
