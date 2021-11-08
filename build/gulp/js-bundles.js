@@ -77,7 +77,7 @@ function createDebugBundlesStream(watch, displayName) {
             errorHandler: notify.onError('Error: <%= error.message %>').bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
         })))
         .on('end', ()=>log('.pipe(gulpIf(watch, plumber({'))
-        .pipe(webpackStream(debugConfig, webpack, muteWebPack))
+        .pipe(webpackStream(debugConfig, webpack))
         .on('end', ()=>log('.pipe(webpackStream(debugConfig, webpack, muteWebPack))'))
         .pipe(headerPipes.useStrict())
         .on('end', ()=>log('.pipe(headerPipes.useStrict())'))
