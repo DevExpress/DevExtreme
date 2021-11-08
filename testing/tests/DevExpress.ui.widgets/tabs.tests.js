@@ -548,8 +548,8 @@ QUnit.module('Horizontal scrolling', () => {
                 QUnit.test(`Left button should be disabled in boundary value: ${JSON.stringify(cssStyles)}, rtlEnabled: ${rtlEnabled}`, function(assert) {
                     assert.expect(6);
 
-                    $('#scrollableTabs').css(cssStyles);
-                    const $element = $('#scrollableTabs').dxTabs({
+                    $('#tabs').css(cssStyles);
+                    const $element = $('#tabs').dxTabs({
                         items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
                         showNavButtons: true,
                         scrollingEnabled: true,
@@ -575,8 +575,8 @@ QUnit.module('Horizontal scrolling', () => {
                 QUnit.test(`Right button should be disabled in boundary value: ${JSON.stringify(cssStyles)}, rtlEnabled: ${rtlEnabled}`, function(assert) {
                     assert.expect(6);
 
-                    $('#scrollableTabs').css(cssStyles);
-                    const $element = $('#scrollableTabs').dxTabs({
+                    $('#tabs').css(cssStyles);
+                    const $element = $('#tabs').dxTabs({
                         items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
                         showNavButtons: true,
                         scrollingEnabled: true,
@@ -585,7 +585,7 @@ QUnit.module('Horizontal scrolling', () => {
                     });
                     const leftButton = $element.find(`.${TABS_LEFT_NAV_BUTTON_CLASS}`).dxButton('instance');
                     const rightButton = $element.find(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`).dxButton('instance');
-                    const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
+                    const scrollable = $element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
 
                     assert.strictEqual(leftButton.option('disabled'), rtlEnabled ? false : true);
                     assert.strictEqual(rightButton.option('disabled'), rtlEnabled ? true : false);

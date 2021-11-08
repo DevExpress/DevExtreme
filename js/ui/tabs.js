@@ -20,6 +20,7 @@ import { getImageContainer } from '../core/utils/icon';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred, when } from '../core/utils/deferred';
 import { isReachedLeft, isReachedRight } from '../renovation/ui/scroll_view/utils/get_boundary_props';
+import { getScrollLeftMax } from '../renovation/ui/scroll_view/utils/get_scroll_left_max';
 
 // STYLE tabs
 
@@ -199,10 +200,12 @@ const Tabs = CollectionWidget.inherit({
                 this._renderNavButtons();
             }
 
-            this._scrollable.update();
+            const scrollable = this.getScrollable();
+            scrollable.update();
 
             if(this.option('rtlEnabled')) {
-                this._scrollable.scrollTo({ left: this._scrollable.scrollWidth() - this._scrollable.clientWidth() });
+                const maxLeftOffset = getScrollLeftMax($(this.getScrollable().container()).get(0));
+                scrollable.scrollTo({ left: maxLeftOffset });
             }
             this._updateNavButtonsVisibility();
 
