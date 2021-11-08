@@ -75,18 +75,6 @@ export default class ButtonWrapper extends Component {
     this._addAction('onSubmit', this._getSubmitAction());
   }
 
-  _initMarkup(): void {
-    super._initMarkup();
-
-    const $content = (this.$element() as unknown as dxElementWrapper).find('.dx-button-content');
-    const $template = $content.children().filter('.dx-template-wrapper');
-
-    if ($template.length) {
-      $template.addClass('dx-button-content');
-      $content.replaceWith($template);
-    }
-  }
-
   _patchOptionValues(options: Record<string, unknown>): Record<string, unknown> {
     return super._patchOptionValues({ ...options, templateData: options._templateData });
   }
