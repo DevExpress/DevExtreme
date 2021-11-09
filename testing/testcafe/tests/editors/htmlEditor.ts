@@ -3,10 +3,10 @@ import { Selector } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 
 fixture`HtmlEditor`
-  .page(url(__dirname, './pages/T1025549.html'));
+  .page(url(__dirname, './pages/t1025549.html'));
 
 [false, true].forEach((toolbar) => {
-  const selector = `${toolbar ? '#htmleditor-toolbar' : '#htmleditor-simple'}.dx-htmleditor`;
+  const selector = toolbar ? '#htmleditor-toolbar' : '#htmleditor-simple';
   const baseScreenName = toolbar ? 'htmleditor-with-toolbar' : 'htmleditor-without-toolbar';
 
   test(`T1025549 - ${baseScreenName}`, async (t) => {
