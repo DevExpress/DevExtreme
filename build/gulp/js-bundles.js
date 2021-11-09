@@ -9,7 +9,6 @@ const path = require('path');
 const plumber = require('gulp-plumber');
 const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
-const log = require('fancy-log');
 
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
@@ -58,7 +57,6 @@ function prepareDebugMeta(watch) {
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
     debugConfig.mode = watch ? "development" : "production";
-    debugConfig.stats = 'detailed';
 
     if(!ctx.uglify) {
         debugConfig.devtool = 'eval-source-map';
@@ -73,21 +71,14 @@ function createDebugBundlesStream(watch, displayName) {
 
     const task = () => gulp.src(bundles)
         .pipe(namedDebug())
-        .on('end', ()=>log('.pipe(namedDebug())'))
         .pipe(gulpIf(watch, plumber({
             errorHandler: notify.onError('Error: <%= error.message %>').bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
         })))
-        .on('end', ()=>log('.pipe(gulpIf(watch, plumber({'))
-        .pipe(webpackStream(debugConfig, webpack))
-        .on('end', ()=>log('.pipe(webpackStream(debugConfig, webpack, muteWebPack))'))
+        .pipe(webpackStream(debugConfig, webpack, muteWebPack))
         .pipe(headerPipes.useStrict())
-        .on('end', ()=>log('.pipe(headerPipes.useStrict())'))
         .pipe(headerPipes.bangLicense())
-        .on('end', ()=>log('.pipe(headerPipes.bangLicense())'))
         .pipe(gulpIf(!watch, compressionPipes.beautify()))
-        .on('end', ()=>log('.pipe(gulpIf(!watch, compressionPipes.beautify()))'))
-        .pipe(gulp.dest(destination))
-        .on('end', ()=>log('.pipe(gulp.dest(destination))'));
+        .pipe(gulp.dest(destination));
 
     task.displayName = `${displayName}-worker`;
 
