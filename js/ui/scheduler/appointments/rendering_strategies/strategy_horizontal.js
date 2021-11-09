@@ -1,6 +1,7 @@
 import BaseAppointmentsStrategy from './strategy.base';
 import dateUtils from '../../../../core/utils/date';
 import { ExpressionUtils } from '../../expressionUtils';
+import getSkippedHoursInRange from '../../../../renovation/ui/scheduler/view_model/appointments/utils/getSkippedHoursInRange';
 
 const DEFAULT_APPOINTMENT_HEIGHT = 60;
 const MIN_APPOINTMENT_HEIGHT = 35;
@@ -24,7 +25,12 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         duration = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate);
 
         const cellDuration = this.cellDurationInMinutes * toMs('minute');
-        const durationInCells = duration / cellDuration;
+        const skippedHours = getSkippedHoursInRange(
+            startDate,
+            normalizedEndDate,
+            this.viewDataProvider
+        );
+        const durationInCells = (duration - skippedHours * toMs('hour')) / cellDuration;
         const width = this.cropAppointmentWidth(durationInCells * cellWidth, cellWidth);
 
         return width;
