@@ -75,7 +75,7 @@ jobs:
         npm run validate-declarations
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu0_5ram1
+    runs-on: shr-ubuntu-c5-docker-cpu0-5ram1
     name: Send notifications
     needs: [check-ts-bundle, validate-declarations]
     if: always() && contains(needs.*.result, 'failure')

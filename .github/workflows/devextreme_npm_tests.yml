@@ -319,7 +319,7 @@ jobs:
       run: echo "::set-output name=last_run_status::success" > last_run_status
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu0_5ram1
+    runs-on: shr-ubuntu-c5-docker-cpu0-5ram1
     name: Send notifications
     needs: [build, test_angular, test_bundlers, test_demos]
     if: always() && contains(needs.*.result, 'failure')

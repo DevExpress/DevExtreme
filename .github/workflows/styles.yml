@@ -36,7 +36,7 @@ jobs:
       run: npm run test-styles
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu0_5ram1
+    runs-on: shr-ubuntu-c5-docker-cpu0-5ram1
     name: Send notifications
     needs: [Tests]
     if: always() && contains(needs.*.result, 'failure')
