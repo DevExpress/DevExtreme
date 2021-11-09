@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // eslint-disable-next-line import/named
-import { dxElementWrapper } from '../../core/renderer';
 import ValidationEngine from '../../ui/validation_engine';
 import Component from './common/component';
 import type { Button } from '../ui/button';
