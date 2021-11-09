@@ -137,8 +137,6 @@
     "jest": "^24.9.0",
     "jest-each": "^26.1.0",
     "jquery": "^3.5.1",
-    "jquery.1": "^1.0.0",
-    "jquery.2": "^1.0.0",
     "jquery.tmpl": "0.0.2",
     "jspdf": "2.3.1",
     "jspdf-autotable": "3.5.14",
