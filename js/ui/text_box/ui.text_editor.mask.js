@@ -87,7 +87,7 @@ const TextEditorMask = TextEditorBase.inherit({
         const keyHandlerMap = {
             backspace: that._maskStrategy.getHandler('backspace'),
             del: that._maskStrategy.getHandler('del'),
-            enter: that._changeHandler
+            enter: that._enterPressHandler
         };
 
         const result = that.callBase();
@@ -195,7 +195,7 @@ const TextEditorMask = TextEditorBase.inherit({
         }
     },
 
-    _changeHandler: function(e) {
+    _enterPressHandler: function(e) {
         const $input = this._input();
         const inputValue = $input.val();
 
