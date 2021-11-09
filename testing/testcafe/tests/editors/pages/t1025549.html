@@ -3,13 +3,14 @@
     <head>
         <title>T1025549</title>
 
-        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.material.blue.light.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.material.blue.light.css" />
 
         <script type="text/javascript" src="../../../../../artifacts/js/jquery.min.js"></script>
         <script type="text/javascript" src="../../../../../artifacts/js/dx-quill.min.js"></script>
         <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
     </head>
     <body>
+        <div id="d" style="height: 200px;width: 200px;background: blue;" class="dx-card"></div>
         <div id="htmleditor-simple"></div>
         <br>
         <div id="htmleditor-toolbar"></div>
@@ -20,6 +21,8 @@
                     width: 200,
                     value: Array(100).fill('string').join('\n')
                 };
+
+                //$("#d").remove();
 
                 $('#htmleditor-simple').dxHtmlEditor(baseConfig);
 
