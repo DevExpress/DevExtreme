@@ -938,8 +938,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 }
 
 .dx-editor-underlined {
-  $input-vertical-diff: 4px;
-  $input-top-padding: $material-standard-texteditor-input-top-padding + $input-vertical-diff;
+  $input-top-padding: $material-standard-texteditor-with-label-input-top-padding;
   $label-transform: translate(0, 0);
 
   &.dx-texteditor-with-label,
@@ -959,7 +958,7 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     .dx-texteditor-input,
     &.dx-lookup .dx-lookup-field {
       padding-top: $input-top-padding;
-      padding-bottom: $material-standard-texteditor-input-bottom-padding - $input-vertical-diff;
+      padding-bottom: $material-standard-texteditor-with-label-input-bottom-padding;
     }
 
     &.dx-textarea {

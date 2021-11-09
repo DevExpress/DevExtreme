@@ -28,43 +28,43 @@ import {
 } from './popup';
 
 /** @public */
-export type ChangeEvent = NativeEventInfo<dxColorBox>;
+export type ChangeEvent = NativeEventInfo<dxColorBox, Event>;
 
 /** @public */
 export type ClosedEvent = EventInfo<dxColorBox>;
 
 /** @public */
-export type CopyEvent = NativeEventInfo<dxColorBox>;
+export type CopyEvent = NativeEventInfo<dxColorBox, ClipboardEvent>;
 
 /** @public */
-export type CutEvent = NativeEventInfo<dxColorBox>;
+export type CutEvent = NativeEventInfo<dxColorBox, ClipboardEvent>;
 
 /** @public */
 export type DisposingEvent = EventInfo<dxColorBox>;
 
 /** @public */
-export type EnterKeyEvent = NativeEventInfo<dxColorBox>;
+export type EnterKeyEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
 
 /** @public */
-export type FocusInEvent = NativeEventInfo<dxColorBox>;
+export type FocusInEvent = NativeEventInfo<dxColorBox, FocusEvent>;
 
 /** @public */
-export type FocusOutEvent = NativeEventInfo<dxColorBox>;
+export type FocusOutEvent = NativeEventInfo<dxColorBox, FocusEvent>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxColorBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxColorBox>;
+export type InputEvent = NativeEventInfo<dxColorBox, UIEvent>;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxColorBox>;
+export type KeyDownEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
 
 /** @public */
-export type KeyPressEvent = NativeEventInfo<dxColorBox>;
+export type KeyPressEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
 
 /** @public */
-export type KeyUpEvent = NativeEventInfo<dxColorBox>;
+export type KeyUpEvent = NativeEventInfo<dxColorBox, KeyboardEvent>;
 
 /** @public */
 export type OpenedEvent = EventInfo<dxColorBox>;
@@ -73,10 +73,10 @@ export type OpenedEvent = EventInfo<dxColorBox>;
 export type OptionChangedEvent = EventInfo<dxColorBox> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = NativeEventInfo<dxColorBox>;
+export type PasteEvent = NativeEventInfo<dxColorBox, ClipboardEvent>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxColorBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxColorBox, KeyboardEvent | MouseEvent | PointerEvent | UIEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;

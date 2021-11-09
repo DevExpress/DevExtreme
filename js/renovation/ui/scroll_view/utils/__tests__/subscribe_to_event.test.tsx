@@ -1,4 +1,4 @@
-import { DisposeEffectReturn } from '../../../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../../../utils/effect_return';
 import resizeObserverSingleton from '../../../../../core/resize_observer';
 import { getWindow, setWindow } from '../../../../../core/utils/window';
 

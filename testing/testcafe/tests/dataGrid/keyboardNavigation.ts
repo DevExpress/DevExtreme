@@ -2857,3 +2857,97 @@ test('Lookup editor should update cell value on down or up key when cell is focu
     allowUpdating: true,
   },
 }));
+
+[false, true].forEach((repaintChangesOnly) => {
+  test(`Editor in the filter row should not lose focus when groups are expanded after the filtering (repaintChangesOnly is ${repaintChangesOnly}) (T1038332)`, async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const filterRowCell = dataGrid.getHeaders().getFilterRow().getFilterCell(1);
+    const filterRowEditor = filterRowCell.getEditor();
+
+    // act
+    await t
+      .click(filterRowEditor.element);
+
+    // assert
+    await t
+      .expect(filterRowEditor.element.focused)
+      .ok()
+      .expect(filterRowCell.isFocused)
+      .ok();
+
+    // act
+    await t
+      .typeText(filterRowEditor.element, 'Name')
+      .wait(1000);
+
+    let visibleRows = await dataGrid.apiGetVisibleRows();
+
+    // assert
+    await t
+      .expect(visibleRows.length)
+      .eql(5)
+      .expect(filterRowEditor.element.focused)
+      .ok()
+      .expect(filterRowCell.isFocused)
+      .ok();
+
+    // act
+    await t
+      .typeText(filterRowEditor.element, '_1')
+      .wait(1000);
+
+    visibleRows = await dataGrid.apiGetVisibleRows();
+
+    // assert
+    await t
+      .expect(visibleRows.length)
+      .eql(2)
+      .expect(filterRowEditor.element.focused)
+      .ok()
+      .expect(filterRowCell.isFocused)
+      .ok();
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: [
+      {
+        ID: 1,
+        Name: 'Name_1',
+        Category: 'Category_1',
+      },
+      {
+        ID: 2,
+        Name: 'Name_2',
+        Category: 'Category_1',
+      },
+      {
+        ID: 3,
+        Name: 'Name_3',
+        Category: 'Category_2',
+      },
+    ],
+    keyExpr: 'ID',
+    repaintChangesOnly,
+    filterRow: {
+      visible: true,
+    },
+    grouping: {
+      autoExpandAll: false,
+    },
+    onContentReady(e) {
+      if (e.component.getCombinedFilter()) {
+        if (e.component.myAllExpand) {
+          e.component.myAllExpand = false;
+          return;
+        }
+        e.component.myAllExpand = true;
+        e.component.expandAll(0);
+      }
+    },
+    columns: [
+      'Name',
+      {
+        dataField: 'Category',
+        groupIndex: 0,
+      },
+    ],
+  }));
+});

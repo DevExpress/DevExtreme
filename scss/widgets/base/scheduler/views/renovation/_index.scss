@@ -62,8 +62,10 @@ $scheduler-timeline-cell-height: null !default;
   .dx-scheduler-header-panel-cell {
     flex-shrink: 0;
   }
+}
 
-  .dx-scheduler-timeline:not(.dx-scheduler-work-space-both-scrollbar) {
+.dx-scheduler.dx-scheduler-native .dx-scheduler-timeline {
+  &:not(.dx-scheduler-work-space-both-scrollbar) {
     .dx-scheduler-date-table .dx-scheduler-date-table-row {
       flex: 1;
     }

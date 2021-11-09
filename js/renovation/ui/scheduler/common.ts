@@ -4,13 +4,14 @@ import { DataAccessorType } from './types';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
 import timeZoneUtils from '../../../ui/scheduler/utils.timeZone';
 import { AppointmentsConfigType } from './model/types';
-import { Group, ViewDataProviderType } from './workspaces/types';
+import { Group, ViewDataProviderType, ViewDataProviderValidationOptions } from './workspaces/types';
 import {
   AppointmentFilterBaseStrategy,
   AppointmentFilterVirtualStrategy,
 } from '../../../ui/scheduler/appointments/dataProvider/appointmentFilter';
 import type { Appointment } from '../../../ui/scheduler';
 import { createExpressions } from '../../../ui/scheduler/resources/utils';
+import getPreparedDataItems from './utils/data';
 
 export const createDataAccessors = (
   props: SchedulerProps,
@@ -64,7 +65,7 @@ export const filterAppointments = (
   dataAccessors: DataAccessorType,
   timeZoneCalculator: TimeZoneCalculator,
   loadedResources: Group[],
-  viewDataProvider: ViewDataProviderType,
+  viewDataProvider?: ViewDataProviderType,
 ): Appointment[] => {
   if (!appointmentsConfig) {
     return [] as Appointment[];
@@ -90,13 +91,37 @@ export const filterAppointments = (
     viewDataProvider,
   };
 
+  const preparedDataItems = getPreparedDataItems(
+    dataItems,
+    dataAccessors,
+    appointmentsConfig.cellDurationInMinutes,
+    timeZoneCalculator,
+  );
+
   const filterStrategy = appointmentsConfig.isVirtualScrolling
     ? new AppointmentFilterVirtualStrategy(filterOptions)
     : new AppointmentFilterBaseStrategy(filterOptions);
 
-  const preparedDataItems = filterStrategy.getPreparedDataItems(dataItems);
-
   const filteredItems = filterStrategy.filter(preparedDataItems);
 
   return filteredItems as Appointment[];
+};
+
+export const isViewDataProviderConfigValid = (
+  viewDataProviderConfig: ViewDataProviderValidationOptions | undefined,
+  currentViewOptions: ViewDataProviderValidationOptions,
+): boolean => {
+  if (!viewDataProviderConfig) {
+    return false;
+  }
+
+  let result = true;
+
+  Object.entries(viewDataProviderConfig).forEach(([key, value]) => {
+    if (value !== currentViewOptions[key]) {
+      result = false;
+    }
+  });
+
+  return result;
 };

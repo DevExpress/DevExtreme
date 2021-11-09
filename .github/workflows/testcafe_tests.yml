@@ -11,17 +11,18 @@ on:
 
 jobs:
   testcafe:
-    name: ${{ matrix.ARGS.componentFolder }}
+    name: ${{ matrix.ARGS.name }}
     strategy:
       fail-fast: false
       matrix:
-        ARGS: [ 
-          { componentFolder: "dataGrid", quarantineMode: true }, 
-          { componentFolder: "scheduler", quarantineMode: true }, 
-          { componentFolder: "editors", quarantineMode: false }, 
-          { componentFolder: "navigation", quarantineMode: false }, 
-          { componentFolder: "renovation", quarantineMode: false } 
-        ] 
+        ARGS: [
+          { componentFolder: "dataGrid", name: "dataGrid", quarantineMode: true },
+          { componentFolder: "scheduler", name: "scheduler", quarantineMode: true },
+          { componentFolder: "scheduler", name: "scheduler renovation", quarantineMode: true, inProgressRenovation: true },
+          { componentFolder: "editors", name: "editors", quarantineMode: false },
+          { componentFolder: "navigation", name: "navigation", quarantineMode: false },
+          { componentFolder: "renovation", name: "renovation", quarantineMode: false }
+        ]
     runs-on: ubuntu-latest
     timeout-minutes: 90
 
@@ -47,7 +48,7 @@ jobs:
     - name: Build
       env:
         DEVEXTREME_TEST_CI: "true"
-      run: npm run build
+      run: BUILD_INPROGRESS_RENOVATION="${{ matrix.ARGS.inProgressRenovation == true }}" npm run build
 
     - name: Prepare renovation playground
       if: matrix.ARGS.componentFolder == 'renovation'
@@ -62,7 +63,8 @@ jobs:
 
     - name: Run TestCafe tests
       run: |
-        all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}}"
+        [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
+        all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION"
         echo "$all_args"
         npm run test-testcafe -- $all_args
 

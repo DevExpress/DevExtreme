@@ -2,7 +2,7 @@ import dateUtils from '../../../core/utils/date';
 import { isEmptyObject } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { getRecurrenceProcessor } from '../recurrence';
-import timeZoneUtils from '../utils.timeZone.js';
+import timeZoneUtils from '../utils.timeZone';
 import { createResourcesTree, getDataAccessors, getGroupCount, getResourcesFromItem, getResourceTreeLeaves } from '../resources/utils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
 import { CellPositionCalculator } from './cellPositionCalculator';
@@ -71,9 +71,12 @@ export class DateGeneratorBaseStrategy {
             dateSettings = this._separateLongParts(dateSettings, appointmentAdapter);
         }
 
+        const { isRecurrent } = appointmentAdapter;
+
         return {
             dateSettings,
-            itemGroupIndices
+            itemGroupIndices,
+            isRecurrent
         };
     }
 
@@ -553,12 +556,13 @@ export class AppointmentSettingsGenerator {
     create() {
         const {
             dateSettings,
-            itemGroupIndices
+            itemGroupIndices,
+            isRecurrent
         } = this._generateDateSettings();
 
         const cellPositions = this._calculateCellPositions(dateSettings, itemGroupIndices);
 
-        const result = this._prepareAppointmentInfos(dateSettings, cellPositions);
+        const result = this._prepareAppointmentInfos(dateSettings, cellPositions, isRecurrent);
 
         return result;
     }
@@ -580,18 +584,18 @@ export class AppointmentSettingsGenerator {
         );
     }
 
-    _prepareAppointmentInfos(dateSettings, cellPositions) {
+    _prepareAppointmentInfos(dateSettings, cellPositions, isRecurrent) {
         const infos = [];
 
         cellPositions.forEach(({ coordinates, dateSettingIndex }) => {
             const dateSetting = dateSettings[dateSettingIndex];
-            const sourceAppointment = dateSetting.source;
-            const dateText = this._getAppointmentDateText(sourceAppointment);
+            const dateText = this._getAppointmentDateText(dateSetting);
 
             const info = {
                 appointment: dateSetting,
                 sourceAppointment: dateSetting.source,
                 dateText,
+                isRecurrent,
             };
 
             this._setResourceColor(info, coordinates.groupIndex);

@@ -10,7 +10,7 @@ import { AppointmentTooltipInfo } from './dataStructures';
 import { LIST_ITEM_DATA_KEY, LIST_ITEM_CLASS } from './constants';
 import { createAppointmentAdapter } from './appointmentAdapter';
 import { getTimeZoneCalculator } from './instanceFactory';
-
+import { getOverflowIndicatorColor } from '../../renovation/ui/scheduler/appointment/overflow_indicator/utils';
 
 const APPOINTMENT_COLLECTOR_CLASS = 'dx-scheduler-appointment-collector';
 const COMPACT_APPOINTMENT_COLLECTOR_CLASS = APPOINTMENT_COLLECTOR_CLASS + '-compact';
@@ -141,28 +141,17 @@ export class CompactAppointmentsHelper {
 
     _makeBackgroundColor($button, colors, color) {
         when.apply(null, colors).done(function() {
-            this._makeBackgroundColorCore($button, color, arguments);
+            this._makeBackgroundColorCore($button, color, [...arguments]);
         }.bind(this));
     }
 
-    _makeBackgroundColorCore($button, color, itemsColors) {
-        let paintButton = true;
-        let currentItemColor;
-
-        color && color.done(function(color) {
-            if(itemsColors.length) {
-                currentItemColor = itemsColors[0];
-
-                for(let i = 1; i < itemsColors.length; i++) {
-                    if(currentItemColor !== itemsColors[i]) {
-                        paintButton = false;
-                        break;
-                    }
-                    currentItemColor = color;
-                }
+    _makeBackgroundColorCore($button, color, itemColors) {
+        color && color.done((color) => {
+            const backgroundColor = getOverflowIndicatorColor(color, itemColors);
+            if(backgroundColor) {
+                $button.css('backgroundColor', backgroundColor);
             }
-            color && paintButton && $button.css('backgroundColor', color);
-        }.bind(this));
+        });
     }
 
     _setPosition(element, position) {
@@ -184,14 +173,13 @@ export class CompactAppointmentsHelper {
         });
     }
 
-    _createCompactButtonElement({ isCompact, $container, width, coordinates, applyOffset, cellWidth }) {
+    _createCompactButtonElement({ isCompact, $container, coordinates }) {
         const result = $('<div>')
             .addClass(APPOINTMENT_COLLECTOR_CLASS)
             .toggleClass(COMPACT_APPOINTMENT_COLLECTOR_CLASS, isCompact)
             .appendTo($container);
 
-        const offset = applyOffset ? this._getCollectorOffset(width, cellWidth) : 0;
-        this._setPosition(result, { top: coordinates.top, left: coordinates.left + offset });
+        this._setPosition(result, coordinates);
 
         return result;
     }

@@ -44,14 +44,12 @@ $scheduler-popup-scrollable-content-padding: 20px;
   cursor: pointer;
   margin: $scheduler-appointment-collector-margin 0 0 $scheduler-appointment-collector-margin;
 
-  .dx-scheduler-appointment-collector-content {
+  .dx-scheduler-appointment-collector-content,
+  .dx-button-content {
     @include dx-overflow();
 
     margin: 0 2 * ($scheduler-appointment-collector-margin - 1);
-
-    &.dx-button-content {
-      padding: 0;
-    }
+    padding: 0;
 
     span:last-child {
       display: inline-block;
@@ -104,7 +102,8 @@ $scheduler-popup-scrollable-content-padding: 20px;
   .dx-scheduler-appointment-collector {
     margin: 0;
 
-    .dx-scheduler-appointment-collector-content {
+    .dx-scheduler-appointment-collector-content,
+    .dx-button-content {
       span:last-child {
         line-height: $scheduler-appointment-collector-height;
       }

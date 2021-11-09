@@ -491,12 +491,13 @@ export const focusModule = {
                     const keyboardController = this.getController('keyboardNavigation');
                     const focusedRowEnabled = this.option('focusedRowEnabled');
                     const editingController = this.getController('editing');
-                    const isRowElement = keyboardController._getElementType($element) === 'row';
                     let $cell;
 
-                    if(!focusedRowEnabled || !keyboardController.isRowFocusType() || editingController.isEditing()) {
+                    if(!focusedRowEnabled || !keyboardController?.isRowFocusType() || editingController.isEditing()) {
                         this.callBase($element, hideBorder);
                     } else if(focusedRowEnabled) {
+                        const isRowElement = keyboardController._getElementType($element) === 'row';
+
                         if(isRowElement && !$element.hasClass(ROW_FOCUSED_CLASS)) {
                             $cell = keyboardController.getFirstValidCellInRow($element);
                             keyboardController.focus($cell);

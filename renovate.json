@@ -28,8 +28,9 @@
             "enabled": false
         }
     ],
+    "assignAutomerge": true,
     "reviewers": [
-        "team:@DevExpress/devextreme-core"
+        "team:devextreme-core"
     ],
     "ignorePaths": [
         ".github"

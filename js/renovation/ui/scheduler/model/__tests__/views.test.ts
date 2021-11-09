@@ -94,6 +94,11 @@ describe('Model views', () => {
         tabIndex: 3,
         accessKey: undefined,
         focusStateEnabled: true,
+
+        dateCellTemplate: jest.fn(),
+        dataCellTemplate: jest.fn(),
+        timeCellTemplate: jest.fn(),
+        resourceCellTemplate: jest.fn(),
       } as any;
 
       const { height, width, ...viewProps } = schedulerProps;
@@ -133,6 +138,11 @@ describe('Model views', () => {
         tabIndex: 3,
         accessKey: undefined,
         focusStateEnabled: true,
+
+        dateCellTemplate: jest.fn(),
+        dataCellTemplate: jest.fn(),
+        timeCellTemplate: jest.fn(),
+        resourceCellTemplate: jest.fn(),
       } as any;
       const currentViewProps = {
         firstDayOfWeek: 1,
@@ -145,6 +155,11 @@ describe('Model views', () => {
         startDate: new Date(2021, 8, 10),
         type: 'month',
         scrolling: { mode: 'virtual' },
+
+        dateCellTemplate: jest.fn(),
+        dataCellTemplate: jest.fn(),
+        timeCellTemplate: jest.fn(),
+        resourceCellTemplate: jest.fn(),
       } as any;
 
       const { height, width, ...viewProps } = schedulerProps;

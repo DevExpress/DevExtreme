@@ -1,23 +1,30 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction } from '../layout';
+import { AppointmentLayout, viewFunction } from '../layout';
 
 describe('AppointmentLayout', () => {
   describe('Render', () => {
     const render = (viewModel): ShallowWrapper => shallow(viewFunction({
       ...viewModel,
       props: {
+        appointments: [],
+        overflowIndicators: [],
         ...viewModel.props,
       },
     }));
 
-    it('it should be rendered correctly with empty items', () => {
-      const layout = render({ props: { appointments: [] } });
+    it('it should be rendered correctly without items', () => {
+      const layout = render({
+        classes: 'some-classes',
+      });
 
-      expect(layout.hasClass('dx-scheduler-appointments'))
+      expect(layout.hasClass('some-classes'))
         .toEqual(true);
+
+      expect(layout.children())
+        .toHaveLength(0);
     });
 
-    it('it should be rendered correctly with items', () => {
+    it('it should have correct render props with reqular appointments', () => {
       const defaultViewModel = {
         geometry: {
           left: 1,
@@ -67,9 +74,6 @@ describe('AppointmentLayout', () => {
         },
       });
 
-      expect(layout.hasClass('dx-scheduler-appointments'))
-        .toEqual(true);
-
       expect(layout.children().length)
         .toEqual(2);
 
@@ -86,6 +90,56 @@ describe('AppointmentLayout', () => {
         .toBe(viewModel1);
       expect(appointment.prop('appointmentTemplate'))
         .toBe(appointmentTemplate);
+    });
+
+    it('it should have correct props with overflow indicators', () => {
+      const viewModel = {
+        key: 'key-01',
+        geometry: {
+          top: 50,
+          left: 100,
+        },
+      };
+      const overflowIndicatorTemplate = '<div class="test-template">Some template</div>';
+      const layout = render({
+        props: {
+          overflowIndicators: [viewModel],
+          overflowIndicatorTemplate,
+        },
+      });
+
+      expect(layout.children().length)
+        .toEqual(1);
+
+      const overflowIndicator = layout.childAt(0);
+      expect(overflowIndicator.key())
+        .toEqual('key-01');
+      expect(overflowIndicator.prop('viewModel'))
+        .toBe(viewModel);
+      expect(overflowIndicator.prop('overflowIndicatorTemplate'))
+        .toBe(overflowIndicatorTemplate);
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('classes', () => {
+        it('should return correct classes by default', () => {
+          const layout = new AppointmentLayout({});
+
+          expect(layout.classes)
+            .toBe('dx-scheduler-scrollable-appointments');
+        });
+
+        it('should return correct classes for the allDay appointments', () => {
+          const layout = new AppointmentLayout({
+            isAllDay: true,
+          });
+
+          expect(layout.classes)
+            .toBe('dx-scheduler-all-day-appointments');
+        });
+      });
     });
   });
 });

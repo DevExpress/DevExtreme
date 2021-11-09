@@ -30,13 +30,13 @@ export type InitializedEvent = InitializedEventInfo<dxResizable>;
 export type OptionChangedEvent = EventInfo<dxResizable> & ChangedOptionInfo;
 
 /** @public */
-export type ResizeEvent = NativeEventInfo<dxResizable> & ResizeInfo;
+export type ResizeEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
-export type ResizeStartEvent = NativeEventInfo<dxResizable> & ResizeInfo;
+export type ResizeStartEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
-export type ResizeEndEvent = NativeEventInfo<dxResizable> & ResizeInfo;
+export type ResizeEndEvent = NativeEventInfo<dxResizable, MouseEvent | TouchEvent> & ResizeInfo;
 
 /**
  * @deprecated use Properties instead

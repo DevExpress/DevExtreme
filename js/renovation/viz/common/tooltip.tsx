@@ -16,7 +16,7 @@ import {
   Font, TooltipCoordinates, Container,
 
   Format, EventData, OnTooltipHiddenFn, OnTooltipShownFn,
-} from './types.d';
+} from './types';
 
 import {
   getCloudPoints, recalculateCoordinates, getCloudAngle, prepareData, getCanvas, isTextEmpty,

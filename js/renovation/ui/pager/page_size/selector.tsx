@@ -3,7 +3,7 @@ import {
   ComponentBindings, JSXComponent, OneWay, Component, Ref, ForwardRef, Effect, RefObject,
 } from '@devextreme-generator/declarations';
 
-import { FullPageSize } from '../common/types.d';
+import { FullPageSize } from '../common/types';
 import { PageSizeSmall } from './small';
 import { PageSizeLarge } from './large';
 import { InternalPagerProps } from '../common/pager_props';

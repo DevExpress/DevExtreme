@@ -9,14 +9,14 @@ import {
   InternalState,
 } from '@devextreme-generator/declarations';
 
-import { DisposeEffectReturn } from '../../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../../utils/effect_return';
 import { BaseWidgetProps } from '../../common/base_props';
 
 import { Scrollbar } from './scrollbar';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../../../animation/frame';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
 import { inRange } from '../../../../core/utils/math';
-import { DxMouseEvent } from '../common/types.d';
+import { DxMouseEvent } from '../common/types';
 import { clampIntoRange } from '../utils/clamp_into_range';
 import { AnimatedScrollbarProps } from '../common/animated_scrollbar_props';
 import { isDxMouseWheelEvent } from '../../../../events/utils/index';

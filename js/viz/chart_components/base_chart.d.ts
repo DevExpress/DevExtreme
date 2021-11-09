@@ -140,7 +140,7 @@ export interface BaseChartOptions<TComponent> extends BaseWidgetOptions<TCompone
      * @action
      * @public
      */
-    onPointClick?: ((e: NativeEventInfo<TComponent> & PointInteractionInfo) => void) | string;
+    onPointClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & PointInteractionInfo) => void) | string;
     /**
      * @docid
      * @type_function_param1 e:object

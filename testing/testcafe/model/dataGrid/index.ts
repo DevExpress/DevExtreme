@@ -28,6 +28,29 @@ const CLASS = {
   revertButton: 'dx-revert-button',
 };
 
+const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
+  if ($element?.length) {
+    const offset = $element.offset();
+
+    if (offset) {
+      if (isStart) {
+        $element
+          .trigger($.Event('dxpointerdown', {
+            pageX: offset.left,
+            pageY: offset.top,
+            pointers: [{ pointerId: 1 }],
+          }));
+      }
+
+      $element.trigger($.Event('dxpointermove', {
+        pageX: offset.left + x,
+        pageY: offset.top + y,
+        pointers: [{ pointerId: 1 }],
+      }));
+    }
+  }
+};
+
 export default class DataGrid extends Widget {
   dataRows: Selector;
 
@@ -322,5 +345,39 @@ export default class DataGrid extends Widget {
       const dataGrid = getGridInstance() as any;
       return dataGrid.getTopVisibleRowData();
     }, { dependencies: { getGridInstance } })();
+  }
+
+  moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(() => {
+      const gridInstance = getGridInstance() as any;
+      const $row = $(gridInstance.getRowElement(rowIndex));
+      const $cell = $row.children('.dx-command-drag');
+
+      moveElement($cell, x, y, isStart);
+    },
+    {
+      dependencies: {
+        getGridInstance, rowIndex, x, y, isStart, moveElement,
+      },
+    })();
+  }
+
+  moveHeader(columnIndex: number, x: number, y: number, isStart = false): Promise<void> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(() => {
+      const gridInstance = getGridInstance() as any;
+      const columnHeadersView = gridInstance.getView('columnHeadersView');
+      const $header = $(columnHeadersView.getHeaderElement(columnIndex));
+
+      moveElement($header, x, y, isStart);
+    },
+    {
+      dependencies: {
+        getGridInstance, columnIndex, x, y, isStart, moveElement,
+      },
+    })();
   }
 }
