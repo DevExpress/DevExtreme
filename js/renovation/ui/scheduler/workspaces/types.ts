@@ -219,6 +219,7 @@ export interface ViewDataProviderType {
   getViewOptions: () => ViewOptions;
   setViewOptions: (options: ViewDataProviderOptions) => void;
   createGroupedDataMapProvider: () => void;
+  isSkippedDate: (date: Date) => boolean;
 }
 
 interface CompleteViewDataGenerationOptions {
