@@ -38,7 +38,13 @@ window.config = {
   map: {
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
-    '@angular': 'npm:@angular',
+    '@angular/core': 'npm:@angular/core',
+    '@angular/platform-browser': 'npm:@angular/platform-browser',
+    '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic',
+    '@angular/forms': 'npm:@angular/forms',
+    // '@angular/common/http': 'npm:@angular/common/bundles/common-http.umd.js',
+    '@angular/common': 'npm:@angular/common',
+    '@angular/compiler': 'npm:@angular/compiler',
     'tslib': 'npm:tslib/tslib.js',
     'rxjs': 'npm:rxjs',
 
