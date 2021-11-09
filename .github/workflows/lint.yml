@@ -39,7 +39,7 @@ jobs:
       run: npm run lint-renovation
 
   TS:
-    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 60
     steps:
     - name: Get sources
@@ -70,7 +70,7 @@ jobs:
       run: npm run lint-dts
 
   JS:
-    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 60
     steps:
     - name: Get sources
