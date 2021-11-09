@@ -5,7 +5,7 @@ import {
 import {
   PositionAlignment,
   EditorStylingMode,
-  floatingActionButtonDirection,
+  FloatingActionButtonDirection,
 } from '../types/enums';
 
 /**
@@ -66,7 +66,7 @@ export interface globalConfig {
        * @docid
        * @default "auto"
        */
-      direction?: floatingActionButtonDirection;
+      direction?: FloatingActionButtonDirection;
       /**
        * @docid
        * @default "add"

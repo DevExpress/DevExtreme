@@ -101,7 +101,7 @@ export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
 
 export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
 
-export type ChartZoomPanActionType = 'zoom' | 'pan';
+export type ChartZoomPanAction = 'zoom' | 'pan';
 
 export type AxisScaleType = 'continuous' | 'discrete' | 'logarithmic';
 
@@ -237,7 +237,7 @@ export type PivotGridTotalsDisplayMode = 'both' | 'columns' | 'none' | 'rows';
 
 export type PivotGridRowHeadersLayout = 'standard' | 'tree';
 
-export type Toolbar = 'bottom' | 'top';
+export type ToolbarLocation = 'bottom' | 'top';
 
 export type ToolbarItemWidget = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
 
@@ -478,8 +478,7 @@ export type LegendMarkerState = 'normal' | 'hovered' | 'selected';
 
 export type ValidationStatus = 'valid' | 'invalid' | 'pending';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export type floatingActionButtonDirection = 'auto' | 'up' | 'down';
+export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
 
 export type GridPagerDisplayMode = 'adaptive' | 'compact' | 'full';
 

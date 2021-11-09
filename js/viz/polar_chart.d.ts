@@ -58,7 +58,7 @@ import {
     RelativePosition,
     DiscreteAxisDivisionMode,
     ValueAxisVisualRangeUpdateMode,
-    ChartZoomPanActionType,
+    ChartZoomPanAction,
     AxisScaleType,
     ChartDataType,
     ArgumentAxisHoverMode,
@@ -144,7 +144,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxPolarChart> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly previousRange: VizRange;
-    readonly actionType: ChartZoomPanActionType;
+    readonly actionType: ChartZoomPanAction;
     readonly zoomFactor: number;
     readonly shift: number;
 };
@@ -152,7 +152,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxPolarChart> & {
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxPolarChart> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
-    readonly actionType: ChartZoomPanActionType;
+    readonly actionType: ChartZoomPanAction;
 };
 
 /**
@@ -371,7 +371,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1_field6 range:VizRange
      * @type_function_param1_field7 previousRange:VizRange
      * @type_function_param1_field8 cancel:boolean
-     * @type_function_param1_field9 actionType:Enums.ChartZoomPanActionType
+     * @type_function_param1_field9 actionType:Enums.ChartZoomPanAction
      * @type_function_param1_field10 zoomFactor:Number
      * @type_function_param1_field11 shift:Number
      * @notUsedInTheme
@@ -390,7 +390,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @type_function_param1_field5 axis:chartAxisObject
      * @type_function_param1_field6 range:VizRange
      * @type_function_param1_field7 cancel:boolean
-     * @type_function_param1_field8 actionType:Enums.ChartZoomPanActionType
+     * @type_function_param1_field8 actionType:Enums.ChartZoomPanAction
      * @notUsedInTheme
      * @action
      * @public

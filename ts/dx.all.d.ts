@@ -1046,7 +1046,7 @@ declare module DevExpress {
       /**
        * [descr:globalConfig.floatingActionButtonConfig.direction]
        */
-      direction?: DevExpress.types.floatingActionButtonDirection;
+      direction?: DevExpress.types.FloatingActionButtonDirection;
       /**
        * [descr:globalConfig.floatingActionButtonConfig.icon]
        */
@@ -4276,7 +4276,7 @@ declare module DevExpress.types {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type ChartZoomPanActionType = 'zoom' | 'pan';
+  export type ChartZoomPanAction = 'zoom' | 'pan';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -4724,7 +4724,7 @@ declare module DevExpress.types {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type floatingActionButtonDirection = 'auto' | 'up' | 'down';
+  export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -5519,10 +5519,6 @@ declare module DevExpress.types {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export type Toolbar = 'bottom' | 'top';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   export type ToolbarItemLocateInMenuMode = 'always' | 'auto' | 'never';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -5546,6 +5542,10 @@ declare module DevExpress.types {
     | 'dxTextBox'
     | 'dxButtonGroup'
     | 'dxDropDownButton';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ToolbarLocation = 'bottom' | 'top';
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -18193,7 +18193,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.toolbarItems.toolbar]
      */
-    toolbar?: DevExpress.types.Toolbar;
+    toolbar?: DevExpress.types.ToolbarLocation;
     /**
      * [descr:dxPopupOptions.toolbarItems.visible]
      */
@@ -26981,7 +26981,7 @@ declare module DevExpress.viz {
         readonly axis: chartAxisObject;
         readonly range: VizRange;
         readonly previousRange: VizRange;
-        readonly actionType: DevExpress.types.ChartZoomPanActionType;
+        readonly actionType: DevExpress.types.ChartZoomPanAction;
         readonly zoomFactor: number;
         readonly shift: number;
       };
@@ -26989,7 +26989,7 @@ declare module DevExpress.viz {
       DevExpress.events.NativeEventInfo<dxChart> & {
         readonly axis: chartAxisObject;
         readonly range: VizRange;
-        readonly actionType?: DevExpress.types.ChartZoomPanActionType;
+        readonly actionType?: DevExpress.types.ChartZoomPanAction;
       };
   }
   /**
@@ -31779,7 +31779,7 @@ declare module DevExpress.viz {
         readonly axis: chartAxisObject;
         readonly range: VizRange;
         readonly previousRange: VizRange;
-        readonly actionType: DevExpress.types.ChartZoomPanActionType;
+        readonly actionType: DevExpress.types.ChartZoomPanAction;
         readonly zoomFactor: number;
         readonly shift: number;
       };
@@ -31787,7 +31787,7 @@ declare module DevExpress.viz {
       DevExpress.events.NativeEventInfo<dxPolarChart> & {
         readonly axis: chartAxisObject;
         readonly range: VizRange;
-        readonly actionType: DevExpress.types.ChartZoomPanActionType;
+        readonly actionType: DevExpress.types.ChartZoomPanAction;
       };
   }
   /**

@@ -62,7 +62,7 @@ import {
     ScaleBreakLineStyle,
     ChartLabelDisplayMode,
     VisualRangeUpdateMode,
-    ChartZoomPanActionType,
+    ChartZoomPanAction,
     AxisScaleType,
     ChartDataType,
     ArgumentAxisHoverMode,
@@ -156,7 +156,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly previousRange: VizRange;
-    readonly actionType: ChartZoomPanActionType;
+    readonly actionType: ChartZoomPanAction;
     readonly zoomFactor: number;
     readonly shift: number;
 };
@@ -165,7 +165,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart> & {
 export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
-    readonly actionType?: ChartZoomPanActionType;
+    readonly actionType?: ChartZoomPanAction;
 };
 
 /**
@@ -1013,7 +1013,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @type_function_param1_field8 range:VizRange
      * @type_function_param1_field9 previousRange:VizRange
      * @type_function_param1_field10 cancel:boolean
-     * @type_function_param1_field11 actionType:Enums.ChartZoomPanActionType
+     * @type_function_param1_field11 actionType:Enums.ChartZoomPanAction
      * @type_function_param1_field12 zoomFactor:Number
      * @type_function_param1_field13 shift:Number
      * @notUsedInTheme
@@ -1032,7 +1032,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
      * @type_function_param1_field5 axis:chartAxisObject
      * @type_function_param1_field6 range:VizRange
      * @type_function_param1_field7 cancel:boolean
-     * @type_function_param1_field8 actionType:Enums.ChartZoomPanActionType
+     * @type_function_param1_field8 actionType:Enums.ChartZoomPanAction
      * @notUsedInTheme
      * @action
      * @public
