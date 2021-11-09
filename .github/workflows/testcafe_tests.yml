@@ -23,7 +23,7 @@ jobs:
           { componentFolder: "navigation", name: "navigation", quarantineMode: false },
           { componentFolder: "renovation", name: "renovation", quarantineMode: false }
         ]
-    runs-on: shr-ubuntu-c5-docker-cpu2ram4
+    runs-on: shr-ubuntu-c5-instance-cpu2ram4
     timeout-minutes: 90
 
     steps:
