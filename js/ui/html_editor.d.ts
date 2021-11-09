@@ -35,10 +35,10 @@ export type ContentReadyEvent = EventInfo<dxHtmlEditor>;
 export type DisposingEvent = EventInfo<dxHtmlEditor>;
 
 /** @public */
-export type FocusInEvent = NativeEventInfo<dxHtmlEditor>;
+export type FocusInEvent = NativeEventInfo<dxHtmlEditor, FocusEvent>;
 
 /** @public */
-export type FocusOutEvent = NativeEventInfo<dxHtmlEditor>;
+export type FocusOutEvent = NativeEventInfo<dxHtmlEditor, FocusEvent>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxHtmlEditor>;
@@ -47,7 +47,7 @@ export type InitializedEvent = InitializedEventInfo<dxHtmlEditor>;
 export type OptionChangedEvent = EventInfo<dxHtmlEditor> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxHtmlEditor> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxHtmlEditor, KeyboardEvent | ClipboardEvent> & ValueChangedInfo;
 
 /** @public */
 export interface MentionTemplateData {

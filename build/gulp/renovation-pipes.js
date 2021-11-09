@@ -1,5 +1,6 @@
 'use strict';
 
+const env = require('./env-variables');
 const path = require('path');
 const lazyPipe = require('lazypipe');
 const gulpEach = require('gulp-each');
@@ -7,7 +8,6 @@ const gulpIf = require('gulp-if');
 
 const renovatedComponentsPath = 'js/renovation/components';
 const fullRenovatedComponentsPath = '../../' + renovatedComponentsPath;
-
 
 const overwriteWidgetTemplate = require('./overwrite-renovation-widget.js');
 const overwriteQUnitWidgetTemplate = require('./overwrite-qunit-renovation-widget.js');
@@ -23,6 +23,10 @@ function loadConfig() {
     const renovatedComponents = requireWithoutCache(fullRenovatedComponentsPath);
     fileToComponentMap = {};
     renovatedComponents.forEach((component) => {
+        if(component.inProgress && !env.BUILD_INPROGRESS_RENOVATION) {
+            return;
+        }
+
         const oldComponentFileName = path.join('./js/', component.pathInJSFolder);
         fileToComponentMap[path.resolve(oldComponentFileName)] = {
             ...component,

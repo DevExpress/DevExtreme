@@ -166,6 +166,11 @@
           background-color: $button-group-normal-selected-bg;
 
           @include dx-buttongroup-item-states($button-group-normal-selected-bg-hover, $button-group-normal-selected-bg-focused);
+
+          &,
+          & .dx-icon {
+            color: $button-group-normal-selected-color;
+          }
         }
 
         &.dx-button-success {

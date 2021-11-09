@@ -80,7 +80,7 @@ export type IncidentOccurredEvent = EventInfo<dxPieChart> & IncidentInfo;
 export type InitializedEvent = InitializedEventInfo<dxPieChart>;
 
 /** @public */
-export type LegendClickEvent = NativeEventInfo<dxPieChart> & {
+export type LegendClickEvent = NativeEventInfo<dxPieChart, MouseEvent | PointerEvent> & {
   readonly target: string | number;
   readonly points: Array<piePointObject>;
 };
@@ -89,7 +89,7 @@ export type LegendClickEvent = NativeEventInfo<dxPieChart> & {
 export type OptionChangedEvent = EventInfo<dxPieChart> & ChangedOptionInfo;
 
 /** @public */
-export type PointClickEvent = NativeEventInfo<dxPieChart> & PointInteractionInfo;
+export type PointClickEvent = NativeEventInfo<dxPieChart, MouseEvent | PointerEvent> & PointInteractionInfo;
 
 /** @public */
 export type PointHoverChangedEvent = EventInfo<dxPieChart> & PointInteractionInfo;

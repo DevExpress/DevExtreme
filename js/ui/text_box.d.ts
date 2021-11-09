@@ -14,52 +14,52 @@ import dxTextEditor, {
 } from './text_box/ui.text_editor.base';
 
 /** @public */
-export type ChangeEvent = NativeEventInfo<dxTextBox>;
+export type ChangeEvent = NativeEventInfo<dxTextBox, Event>;
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxTextBox>;
 
 /** @public */
-export type CopyEvent = NativeEventInfo<dxTextBox>;
+export type CopyEvent = NativeEventInfo<dxTextBox, ClipboardEvent>;
 
 /** @public */
-export type CutEvent = NativeEventInfo<dxTextBox>;
+export type CutEvent = NativeEventInfo<dxTextBox, ClipboardEvent>;
 
 /** @public */
 export type DisposingEvent = EventInfo<dxTextBox>;
 
 /** @public */
-export type EnterKeyEvent = NativeEventInfo<dxTextBox>;
+export type EnterKeyEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
 
 /** @public */
-export type FocusInEvent = NativeEventInfo<dxTextBox>;
+export type FocusInEvent = NativeEventInfo<dxTextBox, FocusEvent>;
 
 /** @public */
-export type FocusOutEvent = NativeEventInfo<dxTextBox>;
+export type FocusOutEvent = NativeEventInfo<dxTextBox, FocusEvent>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxTextBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxTextBox>;
+export type InputEvent = NativeEventInfo<dxTextBox, UIEvent>;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxTextBox>;
+export type KeyDownEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
 
 /** @public */
-export type KeyPressEvent = NativeEventInfo<dxTextBox>;
+export type KeyPressEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
 
 /** @public */
-export type KeyUpEvent = NativeEventInfo<dxTextBox>;
+export type KeyUpEvent = NativeEventInfo<dxTextBox, KeyboardEvent>;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxTextBox> & ChangedOptionInfo;
 
 /** @public */
-export type PasteEvent = NativeEventInfo<dxTextBox>;
+export type PasteEvent = NativeEventInfo<dxTextBox, ClipboardEvent>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxTextBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxTextBox, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead

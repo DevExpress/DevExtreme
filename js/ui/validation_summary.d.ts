@@ -33,7 +33,7 @@ export type InitializedEvent<
 export type ItemClickEvent<
     TItem extends ItemLike = any,
     TKey = any,
-> = NativeEventInfo<dxValidationSummary<TItem, TKey>> & ItemInfo<TItem>;
+> = NativeEventInfo<dxValidationSummary<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /** @public */
 export type OptionChangedEvent<

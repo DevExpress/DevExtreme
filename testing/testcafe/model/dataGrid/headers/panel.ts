@@ -5,6 +5,7 @@ const CLASS = {
   addRowButton: 'addrow-button',
   saveButton: 'save-button',
   cancelButton: 'cancel-button',
+  dropDownMenuButton: 'dx-dropdownmenu-button',
 };
 
 export default class HeaderPanel extends FocusableElement {
@@ -25,5 +26,9 @@ export default class HeaderPanel extends FocusableElement {
 
   getCancelButton(): Selector {
     return this.element.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.cancelButton)}`);
+  }
+
+  getDropDownMenuButton(): Selector {
+    return this.element.find(`.${CLASS.dropDownMenuButton}`);
   }
 }

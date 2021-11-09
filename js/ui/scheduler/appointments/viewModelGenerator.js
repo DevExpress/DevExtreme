@@ -5,6 +5,7 @@ import HorizontalMonthLineAppointmentsStrategy from './rendering_strategies/stra
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/strategy_horizontal_month';
 import AgendaAppointmentsStrategy from './rendering_strategies/strategy_agenda';
 import { getAppointmentKey } from '../../../renovation/ui/scheduler/appointment/utils';
+import { getOverflowIndicatorColor } from '../../../renovation/ui/scheduler/appointment/overflow_indicator/utils';
 
 const RENDERING_STRATEGIES = {
     'horizontal': HorizontalAppointmentsStrategy,
@@ -167,20 +168,33 @@ export class AppointmentViewModelGenerator {
 
             const {
                 settings,
-                data
+                data,
+                colors
             } = viewModel[index].items;
 
             settings.push(appointmentViewModel);
             data.push(appointmentViewModel.appointment);
+            colors.push(appointmentViewModel.info.resourceColor);
         });
 
         const toArray = (items) => Object
             .keys(items)
             .map((key) => ({ key, ...items[key] }));
 
+        const allDayViewModels = toArray(allDayCompact);
+        const regularViewModels = toArray(regularCompact);
+
+        [
+            ...allDayViewModels,
+            ...regularViewModels
+        ].forEach((viewModel) => {
+            const { colors } = viewModel.items;
+            viewModel.color = getOverflowIndicatorColor(colors[0], colors);
+        });
+
         return {
-            allDayCompact: toArray(allDayCompact),
-            regularCompact: toArray(regularCompact)
+            allDayCompact: allDayViewModels,
+            regularCompact: regularViewModels
         };
     }
 

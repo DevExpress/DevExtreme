@@ -154,7 +154,7 @@ const test = (options?: any): any => cloneTest(
   options,
 );
 
-fixture('Renovated scheduler - Base');
+fixture('Renovated scheduler - Regular appointments');
 
 [
   { currentView: 'day', expected: 2 },

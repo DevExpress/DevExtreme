@@ -478,7 +478,7 @@ gridCore.registerModule('summary', {
                                 } else {
                                     return groupColumnIndex;
                                 }
-                            });
+                            }, true);
                         }
                         if(groupItem.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE) {
                             groupItem.summaryCells = this._calculateSummaryCells(options.summaryGroupItems, getGroupAggregates(groupItem.data), options.visibleColumns, function(summaryItem, column) {
@@ -489,7 +489,7 @@ gridCore.registerModule('summary', {
                         return groupItem;
                     },
 
-                    _calculateSummaryCells: function(summaryItems, aggregates, visibleColumns, calculateTargetColumnIndex) {
+                    _calculateSummaryCells: function(summaryItems, aggregates, visibleColumns, calculateTargetColumnIndex, isGroupRow) {
                         const that = this;
                         const summaryCells = [];
                         const summaryCellsByColumns = {};
@@ -521,8 +521,10 @@ gridCore.registerModule('summary', {
                             }
                         });
                         if(!isEmptyObject(summaryCellsByColumns)) {
-                            each(visibleColumns, function() {
-                                summaryCells.push(summaryCellsByColumns[this.index] || []);
+                            visibleColumns.forEach((column, visibleIndex) => {
+                                const prevColumn = visibleColumns[visibleIndex - 1];
+                                const columnIndex = isGroupRow && (prevColumn?.command === 'expand' || column.command === 'expand') ? prevColumn?.index : column.index;
+                                summaryCells.push(summaryCellsByColumns[columnIndex] || []);
                             });
                         }
 

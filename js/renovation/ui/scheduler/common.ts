@@ -11,6 +11,7 @@ import {
 } from '../../../ui/scheduler/appointments/dataProvider/appointmentFilter';
 import type { Appointment } from '../../../ui/scheduler';
 import { createExpressions } from '../../../ui/scheduler/resources/utils';
+import getPreparedDataItems from './utils/data';
 
 export const createDataAccessors = (
   props: SchedulerProps,
@@ -90,11 +91,16 @@ export const filterAppointments = (
     viewDataProvider,
   };
 
+  const preparedDataItems = getPreparedDataItems(
+    dataItems,
+    dataAccessors,
+    appointmentsConfig.cellDurationInMinutes,
+    timeZoneCalculator,
+  );
+
   const filterStrategy = appointmentsConfig.isVirtualScrolling
     ? new AppointmentFilterVirtualStrategy(filterOptions)
     : new AppointmentFilterBaseStrategy(filterOptions);
-
-  const preparedDataItems = filterStrategy.getPreparedDataItems(dataItems);
 
   const filteredItems = filterStrategy.filter(preparedDataItems);
 

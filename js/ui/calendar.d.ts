@@ -27,7 +27,7 @@ export interface ComponentDisabledDate<T> {
 export type ContentReadyEvent = EventInfo<dxCalendar>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxCalendar> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxCalendar, KeyboardEvent | MouseEvent | PointerEvent> & ValueChangedInfo;
 
 /** @public */
 export type CellTemplateData = {
