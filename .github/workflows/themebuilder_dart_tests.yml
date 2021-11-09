@@ -61,7 +61,7 @@ jobs:
       run: npx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.material.blue.light.css"
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu0-5ram1
+    runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
     name: Send notifications
     needs: [dart-test]
     if: always() && contains(needs.*.result, 'failure')
