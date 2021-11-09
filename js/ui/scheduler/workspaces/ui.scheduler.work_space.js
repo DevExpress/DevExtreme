@@ -458,7 +458,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             bounceEnabled: false,
             updateManually: true,
             onScroll: () => {
-                this._groupedStrategy.cache.clear();
+                this._groupedStrategy.cache?.clear();
             },
         };
         if(this._needCreateCrossScrolling()) {
