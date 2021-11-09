@@ -73,8 +73,8 @@ export default class BaseMaskStrategy {
 
         EventsEngine.on(this.editorInput(), addNamespace(BLUR_EVENT, MASK_EVENT_NAMESPACE), (function(e) {
             // NOTE: input is focused on caret changing in IE(T304159)
-            this._suppressCaretChanging(this._changeHandler, [e]);
-            this._changeHandler(e);
+            this._suppressCaretChanging(this._enterPressHandler, [e]);
+            this._enterPressHandler(e);
         }).bind(this.editor));
     }
 
@@ -93,7 +93,7 @@ export default class BaseMaskStrategy {
     }
 
     _focusOutHandler(event) {
-        this.editor._changeHandler(event);
+        this.editor._enterPressHandler(event);
 
         if(this.editorOption('showMaskMode') === 'onFocus' && this.editor._isValueEmpty()) {
             this.editorOption('text', '');

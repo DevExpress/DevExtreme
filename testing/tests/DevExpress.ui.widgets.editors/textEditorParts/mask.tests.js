@@ -1859,15 +1859,13 @@ QUnit.module('validation', {}, () => {
         assert.equal($('.dx-invalid-message').eq(0).text(), 'test', 'validation message');
     });
 
-    QUnit.test('mask should be validated before valueChangeEvent is fired', function(assert) {
-        let maskIsValidOnValueChange;
+    QUnit.test('value should not be changed is value is invalid', function(assert) {
+        const valueChangedStub = sinon.stub();
         const $textEditor = $('#texteditor').dxTextEditor({
             mask: '90',
-            valueChangeEvent: 'change',
-            onValueChanged(e) {
-                maskIsValidOnValueChange = e.component.option('isValid');
-            }
+            onValueChanged: valueChangedStub
         });
+        const textEditor = $textEditor.dxTextEditor('instance');
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
 
@@ -1877,7 +1875,8 @@ QUnit.module('validation', {}, () => {
         keyboard.type('1');
         $input.trigger('change');
 
-        assert.strictEqual(maskIsValidOnValueChange, false, 'input is validated before valueChangeEvent was fired');
+        assert.notOk(valueChangedStub.called, 'value was not changed');
+        assert.strictEqual(textEditor.option('isValid'), false, 'validation is failed');
     });
 
     QUnit.test('reset should not request validation', function(assert) {

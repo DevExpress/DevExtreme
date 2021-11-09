@@ -346,9 +346,13 @@ const TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        this._saveValueChangeEvent(e);
+        const newValue = this._getPreparedValue();
+        const isValid = this._validateMask(newValue);
 
-        this.option('value', this._getPreparedValue());
+        if(isValid) {
+            this._saveValueChangeEvent(e);
+            this.option('value', newValue);
+        }
     },
 
     _isControlKeyFired: function(e) {
@@ -512,16 +516,18 @@ const TextEditorMask = TextEditorBase.inherit({
         this.callBase();
     },
 
-    _validateMask: function() {
+    _validateMask: function(value = this.option('value')) {
         if(!this._maskRulesChain) {
             return;
         }
-        const isValid = isEmpty(this.option('value')) || this._maskRulesChain.isValid(this._normalizeChainArguments());
+        const isValid = isEmpty(value) || this._maskRulesChain.isValid(this._normalizeChainArguments());
 
         this.option({
             isValid: isValid,
             validationError: isValid ? null : { editorSpecific: true, message: this.option('maskInvalidMessage') }
         });
+
+        return isValid;
     },
 
     _updateHiddenElement: function() {
