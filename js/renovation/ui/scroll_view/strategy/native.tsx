@@ -572,7 +572,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
     return {
       event: this.eventForUserAction,
       scrollOffset,
-      ...getBoundaryProps(this.props.direction, scrollOffset, this.containerRef.current!, 0),
+      ...getBoundaryProps(this.props.direction, scrollOffset, this.containerRef.current!),
     };
   }
 
