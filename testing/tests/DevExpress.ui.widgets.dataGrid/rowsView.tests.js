@@ -3338,7 +3338,7 @@ QUnit.module('Rows view', {
         this.options.onCellPrepared = function(options) {
             countCallCellPrepared++;
 
-            if(options.rowIndex === 0 && options.rowType === 'group' && options.columnIndex === 0) {
+            if(options.rowIndex === 0 && options.rowType === 'group' && options.columnIndex === 1) {
                 resultOptions = options;
             }
         };
@@ -3351,14 +3351,14 @@ QUnit.module('Rows view', {
         // assert
         assert.equal(countCallCellPrepared, 8, 'countCallCellPrepared');
         assert.equal(resultOptions.rowIndex, 0, 'rowIndex');
-        assert.equal(resultOptions.columnIndex, 0, 'columnIndex');
+        assert.equal(resultOptions.columnIndex, 1, 'columnIndex');
         assert.deepEqual(resultOptions.values, [1], 'values');
         assert.strictEqual(resultOptions.value, 1, 'value');
         assert.strictEqual(resultOptions.text, '1', 'text');
         assert.strictEqual(resultOptions.displayValue, 1, 'displayValue');
         assert.deepEqual(resultOptions.data, { isContinuationOnNextPage: true }, 'data');
         assert.strictEqual(resultOptions.rowType, 'group', 'rowType');
-        assert.deepEqual(resultOptions.column, { groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: null, width: null, colspan: 2, 'alignment': 'left', 'index': 0, 'cssClass': null, showWhenGrouped: false }, 'column');
+        assert.deepEqual(resultOptions.column, { groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: null, width: null, colspan: 2, 'alignment': 'left', 'index': 0, 'cssClass': null, showWhenGrouped: false, type: null }, 'column');
     });
 
     QUnit.test('onCellPrepared for group rows (RTL)', function(assert) {
@@ -3374,7 +3374,7 @@ QUnit.module('Rows view', {
         this.options.onCellPrepared = function(options) {
             countCallCellPrepared++;
 
-            if(options.rowIndex === 0 && options.rowType === 'group' && options.columnIndex === 0) {
+            if(options.rowIndex === 0 && options.rowType === 'group' && options.columnIndex === 1) {
                 resultOptions = options;
             }
         };
@@ -3387,14 +3387,14 @@ QUnit.module('Rows view', {
         // assert
         assert.equal(countCallCellPrepared, 8, 'countCallCellPrepared');
         assert.equal(resultOptions.rowIndex, 0, 'rowIndex');
-        assert.equal(resultOptions.columnIndex, 0, 'columnIndex');
+        assert.equal(resultOptions.columnIndex, 1, 'columnIndex');
         assert.deepEqual(resultOptions.values, [1], 'values');
         assert.strictEqual(resultOptions.value, 1, 'value');
         assert.strictEqual(resultOptions.text, '1', 'text');
         assert.strictEqual(resultOptions.displayValue, 1, 'displayValue');
         assert.deepEqual(resultOptions.data, { isContinuationOnNextPage: true }, 'data');
         assert.strictEqual(resultOptions.rowType, 'group', 'rowType');
-        assert.deepEqual(resultOptions.column, { groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: null, width: null, colspan: 2, 'alignment': 'right', 'index': 0, 'cssClass': null, showWhenGrouped: false }, 'column');
+        assert.deepEqual(resultOptions.column, { groupIndex: 0, caption: 'column 1', allowCollapsing: true, command: null, width: null, colspan: 2, 'alignment': 'right', 'index': 0, 'cssClass': null, showWhenGrouped: false, type: null }, 'column');
     });
 
     QUnit.test('onCellPrepared for called for command columns', function(assert) {
@@ -3585,7 +3585,7 @@ QUnit.module('Rows view', {
 
     QUnit.test('Show summary items in a group row', function(assert) {
     // arrange
-        const items = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [
+        const items = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [[],
             [{
                 column: 'Column1',
                 summaryType: 'sum',
@@ -3615,7 +3615,7 @@ QUnit.module('Rows view', {
 
     QUnit.test('Show only one summary item in a group row', function(assert) {
     // arrange
-        const items = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [
+        const items = [{ rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [[],
             [{
                 column: 'Column1',
                 summaryType: 'sum',
@@ -3638,7 +3638,7 @@ QUnit.module('Rows view', {
     QUnit.test('Show summary in a group row when alignByColumn', function(assert) {
     // arrange
         const items = [{
-            rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [
+            rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [[],
                 [{
                     column: 'Column1',
                     summaryType: 'sum',
@@ -3646,7 +3646,7 @@ QUnit.module('Rows view', {
                     customizeText: function(itemInfo) {
                         return 'Column1 ' + itemInfo.valueText;
                     }
-                }], [], [], [{
+                }], [], [{
                     column: 'Column3',
                     summaryType: 'sum',
                     alignByColumn: true,
@@ -3670,7 +3670,7 @@ QUnit.module('Rows view', {
     QUnit.test('Show summary in a group row when two alignByColumn summary items', function(assert) {
     // arrange
         const items = [{
-            rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [
+            rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [[],
                 [{
                     column: 'Column1',
                     summaryType: 'sum',
@@ -3678,7 +3678,7 @@ QUnit.module('Rows view', {
                     customizeText: function(itemInfo) {
                         return 'Column1 ' + itemInfo.valueText;
                     }
-                }], [], [{
+                }], [{
                     column: 'Column2',
                     summaryType: 'sum',
                     alignByColumn: true,
@@ -3709,7 +3709,7 @@ QUnit.module('Rows view', {
     QUnit.test('Show summary in a group row when two alignByColumn summary items and groupIndex is null for all non-grouped columns', function(assert) {
     // arrange
         const items = [{
-            rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [
+            rowType: 'group', groupIndex: 0, isExpanded: true, values: [1], summaryCells: [[],
                 [{
                     column: 'Column1',
                     summaryType: 'sum',
@@ -3717,7 +3717,7 @@ QUnit.module('Rows view', {
                     customizeText: function(itemInfo) {
                         return 'Column1 ' + itemInfo.valueText;
                     }
-                }], [], [{
+                }], [{
                     column: 'Column2',
                     summaryType: 'sum',
                     alignByColumn: true,
