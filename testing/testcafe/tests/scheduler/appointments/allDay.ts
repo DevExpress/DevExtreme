@@ -3,7 +3,6 @@ import createWidget from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
 fixture`Scheduler - All day appointments`
-  .meta({ renovation: true })
   .page(url(__dirname, './containerAllDay.html'));
 
 test('it should skip weekend days in workWeek', async (t) => {
