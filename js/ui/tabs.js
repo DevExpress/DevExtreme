@@ -18,6 +18,8 @@ import { default as CollectionWidget } from './collection/ui.collection_widget.l
 import { getImageContainer } from '../core/utils/icon';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { Deferred, when } from '../core/utils/deferred';
+import { isReachedLeft, isReachedRight } from '../renovation/ui/scroll_view/utils/get_boundary_props';
+import { getScrollLeftMax } from '../renovation/ui/scroll_view/utils/get_scroll_left_max';
 
 // STYLE tabs
 
@@ -56,16 +58,10 @@ const Tabs = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-
-
             hoverStateEnabled: true,
-
             showNavButtons: true,
-
             scrollByContent: true,
-
             scrollingEnabled: true,
-
             selectionMode: 'single',
 
             /**
@@ -73,7 +69,6 @@ const Tabs = CollectionWidget.inherit({
              * @hidden
              * @default true
             */
-
 
             activeStateEnabled: true,
             selectionRequired: false,
@@ -204,12 +199,15 @@ const Tabs = CollectionWidget.inherit({
                 this._renderNavButtons();
             }
 
-            this._scrollable.update();
-            this._updateNavButtonsVisibility();
+            const scrollable = this.getScrollable();
+            scrollable.update();
 
             if(this.option('rtlEnabled')) {
-                this._scrollable.scrollTo({ left: this._scrollable.scrollWidth() - this._scrollable.clientWidth() });
+                const maxLeftOffset = getScrollLeftMax($(this.getScrollable().container()).get(0));
+                scrollable.scrollTo({ left: maxLeftOffset });
             }
+            this._updateNavButtonsVisibility();
+
             this._scrollToItem(this.option('selectedItem'));
         }
 
@@ -314,7 +312,9 @@ const Tabs = CollectionWidget.inherit({
             useKeyboard: false,
             useNative: false,
             scrollByContent: this.option('scrollByContent'),
-            onScroll: this._updateNavButtonsVisibility.bind(this)
+            onScroll: () => {
+                this._updateNavButtonsVisibility();
+            },
         });
 
         this.$element().append(this._scrollable.$element());
@@ -347,8 +347,10 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _updateNavButtonsVisibility: function() {
-        this._leftButton && this._leftButton.option('disabled', this._scrollable.scrollLeft() <= 0);
-        this._rightButton && this._rightButton.option('disabled', this._scrollable.scrollLeft() >= Math.round(this._scrollable.scrollWidth() - this._scrollable.clientWidth()));
+        const scrollable = this.getScrollable();
+
+        this._leftButton && this._leftButton.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
+        this._rightButton && this._rightButton.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
     },
 
     _updateScrollPosition: function(offset, duration) {
@@ -457,8 +459,11 @@ const Tabs = CollectionWidget.inherit({
     _afterItemElementDeleted($item, deletedActionArgs) {
         this.callBase($item, deletedActionArgs);
         this._renderScrolling();
-    }
+    },
 
+    getScrollable() {
+        return this._scrollable;
+    }
 });
 
 Tabs.ItemClass = TabsItem;
