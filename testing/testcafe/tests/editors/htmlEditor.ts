@@ -6,7 +6,7 @@ fixture`HtmlEditor`
   .page(url(__dirname, './pages/T1025549.html'));
 
 [false, true].forEach((toolbar) => {
-  const selector = toolbar ? '#htmleditor-toolbar' : '#htmleditor-simple';
+  const selector = `${toolbar ? '#htmleditor-toolbar' : '#htmleditor-simple'}.dx-htmleditor`;
   const baseScreenName = toolbar ? 'htmleditor-with-toolbar' : 'htmleditor-without-toolbar';
 
   test(`T1025549 - ${baseScreenName}`, async (t) => {
