@@ -1671,6 +1671,7 @@ QUnit.module('paste', moduleConfig, () => {
         });
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         $input.trigger(event);
         keyboard.paste('00');
