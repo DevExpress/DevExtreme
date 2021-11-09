@@ -13,7 +13,7 @@ test('it should skip weekend days in workWeek', async (t) => {
   } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('workweek-all-day-appointments-skip-weekend.png'))
+    .expect(await takeScreenshot('workweek_all-day_appointments_skip_weekend.png'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -45,7 +45,7 @@ test('it should skip weekend days in timelineWorkWeek', async (t) => {
   } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('workweek-all-day-appointments-skip-weekend.png'))
+    .expect(await takeScreenshot('timeline-work-week_all-day_appointments_skip_weekend.png'))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
