@@ -6,6 +6,7 @@ const isFunction = require('core/utils/type').isFunction;
 const imageCreator = require('exporter/image_creator').imageCreator;
 const getWindow = require('core/utils/window').getWindow;
 const window = getWindow();
+const browser = require('core/utils/browser');
 
 const contentTestEnv = {
     beforeEach: function() {
@@ -100,34 +101,36 @@ QUnit.test('PDF \'xref\' populated with correct blocks offset', function(assert)
     });
 });
 
-QUnit.module('PDF content size. Scaled screen', {
-    beforeEach() {
-        contentTestEnv.beforeEach.apply(this, arguments);
-        this.srcDevicePixelRatio = window.devicePixelRatio;
-        window.devicePixelRatio = 2;
-    },
-    afterEach() {
-        contentTestEnv.afterEach.apply(this, arguments);
-        window.devicePixelRatio = this.srcDevicePixelRatio;
-    }
-});
-
-QUnit.test('PDF \'main page\' populated with correct size in pt', function(assert) {
-    const done = assert.async();
-
-    getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
-        assert.notStrictEqual(data.indexOf('/MediaBox[0 0 915.15 615.30]/'), -1);
-    }).done(done);
-});
-
-QUnit.test('PDF \'content stream\' populated with correct size in pt', function(assert) {
-    const done = assert.async();
-
-    getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
-        assert.notStrictEqual(data.indexOf('q 915.15 0 0 615.30 0.00 0.00 cm /I0 Do Q'), -1);
-        done();
+if(!browser.msie) {
+    QUnit.module('PDF content size. Scaled screen', {
+        beforeEach() {
+            contentTestEnv.beforeEach.apply(this, arguments);
+            this.srcDevicePixelRatio = window.devicePixelRatio;
+            window.devicePixelRatio = 2;
+        },
+        afterEach() {
+            contentTestEnv.afterEach.apply(this, arguments);
+            window.devicePixelRatio = this.srcDevicePixelRatio;
+        }
     });
-});
+
+    QUnit.test('PDF \'main page\' populated with correct size in pt', function(assert) {
+        const done = assert.async();
+
+        getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
+            assert.notStrictEqual(data.indexOf('/MediaBox[0 0 915.15 615.30]/'), -1);
+        }).done(done);
+    });
+
+    QUnit.test('PDF \'content stream\' populated with correct size in pt', function(assert) {
+        const done = assert.async();
+
+        getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
+            assert.notStrictEqual(data.indexOf('q 915.15 0 0 615.30 0.00 0.00 cm /I0 Do Q'), -1);
+            done();
+        });
+    });
+}
 
 QUnit.module('Export', {
     beforeEach: function() {

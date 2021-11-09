@@ -388,6 +388,10 @@ QUnit.test('Canvas size', function(assert) {
 });
 
 QUnit.test('Canvas size. Scaled screen', function(assert) {
+    if(browser.msie) {
+        assert.ok(true, 'This test is not for IE/Edge');
+        return;
+    }
     const done = assert.async();
     const srcPixelRatio = window.devicePixelRatio;
     window.devicePixelRatio = 2;
