@@ -82,7 +82,7 @@ jobs:
         if-no-files-found: ignore
 
   notify:
-    runs-on: shr-ubuntu-c5-docker-cpu0.5ram1
+    runs-on: shr-ubuntu-c5-docker-cpu0_5ram1
     name: Send notifications
     needs: [testcafe]
     if: always() && contains(needs.*.result, 'failure')
