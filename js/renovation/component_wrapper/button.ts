@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 // eslint-disable-next-line import/named
+import { dxElementWrapper } from '../../core/renderer';
 import ValidationEngine from '../../ui/validation_engine';
 import Component from './common/component';
 import type { Button } from '../ui/button';
@@ -72,6 +73,21 @@ export default class ButtonWrapper extends Component {
   _init(): void {
     super._init();
     this._addAction('onSubmit', this._getSubmitAction());
+  }
+
+  _initMarkup(): void {
+    super._initMarkup();
+
+    const $content = (this.$element() as unknown as dxElementWrapper).find('.dx-button-content');
+    const $template = $content.children().filter('.dx-template-wrapper');
+    const $input = $content.children().filter('.dx-button-submit-input');
+    const $inkRipple = $content.children().filter('.dx-inkripple');
+
+    if ($template.length) {
+      $template.addClass('dx-button-content');
+      $template.append($input).append($inkRipple);
+      $content.replaceWith($template);
+    }
   }
 
   _patchOptionValues(options: Record<string, unknown>): Record<string, unknown> {
