@@ -944,19 +944,26 @@ class SchedulerWorkSpace extends WidgetObserver {
             useKeyboard: false,
             bounceEnabled: false,
             updateManually: true,
+            onScroll: () => {
+                this._groupedStrategy.cache?.clear();
+            },
         };
         if(this._needCreateCrossScrolling()) {
-            config = extend(config, this._createCrossScrollingConfig());
+            config = extend(config, this._createCrossScrollingConfig(config));
         }
 
         return config;
     }
 
-    _createCrossScrollingConfig() {
+    _createCrossScrollingConfig(currentConfig) {
         const config = {};
         config.direction = 'both';
 
+        const currentOnScroll = currentConfig.onScroll;
+
         config.onScroll = e => {
+            currentOnScroll();
+
             this._dataTableSemaphore.take();
 
             this._sideBarSemaphore.isFree() && this._sidebarScrollable && this._sidebarScrollable.scrollTo({
