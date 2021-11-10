@@ -80,7 +80,7 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       uses: actions/setup-node@v2
       with:
-        node-version: '15'
+        node-version: '14'
 
     - name: Restore npm cache
       if: steps.last_run_status.outputs.last_run_status != 'success'
