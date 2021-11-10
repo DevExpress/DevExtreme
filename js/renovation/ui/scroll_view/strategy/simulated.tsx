@@ -724,11 +724,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.containerRef.current![fullScrollProp] = location;
 
     if (fullScrollProp === 'scrollLeft') {
-      this.hScrollLocation = this.scrolling
-        ? -location : clampIntoRange(-location, 0, this.hScrollOffsetMax);
+      this.hScrollLocation = -location;
     } else {
-      this.vScrollLocation = this.scrolling
-        ? -location : clampIntoRange(-location, 0, this.vScrollOffsetMax);
+      this.vScrollLocation = -location;
     }
 
     const scrollDelta = Math.abs(this.savedScrollOffset[fullScrollProp] - location);
@@ -950,10 +948,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   syncScrollbarsWithContent(): void {
     const { scrollLeft, scrollTop } = this.containerRef.current!;
 
-    this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: scrollTop, needFireScroll: false });
+    this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: -clampIntoRange(-scrollTop, 0, this.vScrollOffsetMax), needFireScroll: false });
 
     if (!this.props.rtlEnabled) { // TODO: support native rtl mode
-      this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: scrollLeft, needFireScroll: false });
+      this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: -clampIntoRange(-scrollLeft, 0, this.hScrollOffsetMax), needFireScroll: false });
     }
   }
 
