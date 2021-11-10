@@ -1,33 +1,36 @@
-import {
-  DxElement,
-} from './element';
-
 /** @namespace DevExpress */
-export interface ComponentOptions<TComponent> {
+export interface ComponentOptions<TDisposingEventArg, TInitializedEventArg, TOptionChangedEventArg> {
   /**
    * @docid
+   * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
    * @default null
    * @action
    * @public
    */
-  onDisposing?: ((e: { component: TComponent }) => void);
+  onDisposing?: ((e: TDisposingEventArg) => void);
   /**
    * @docid
+   * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
+   * @type_function_param1_field2 element:DxElement
    * @default null
    * @action
    * @public
    */
-  onInitialized?: ((e: { component?: TComponent; element?: DxElement }) => void);
+  onInitialized?: ((e: TInitializedEventArg) => void);
   /**
    * @docid
+   * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
+   * @type_function_param1_field2 name:string
+   * @type_function_param1_field3 fullName:string
+   * @type_function_param1_field4 value:any
    * @default null
    * @action
    * @public
    */
-  onOptionChanged?: ((e: { component?: TComponent; name?: string; fullName?: string; value?: any }) => void);
+  onOptionChanged?: ((e: TOptionChangedEventArg) => void);
 }
 /**
  * @docid Component
