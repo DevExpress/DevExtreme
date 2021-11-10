@@ -18,8 +18,6 @@ const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 let speedDialMainItem = null;
 
 const modifyActionOptions = (action) => {
-    // delete action._options.silent('elementAttr');
-
     const {
         icon,
         onClick,
