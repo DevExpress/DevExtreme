@@ -107,13 +107,13 @@ namespace Runner.Controllers
         [HttpPost]
         public void NotifyTestStarted(string name) {
             lock (IO_SYNC) {
-                ConsoleHelper.Logger.Write($"       [ run] {name}");
+                ConsoleHelper.Write($"       [ run] {name}");
             }
         }
         [HttpPost]
         public void NotifyTestCompleted(string name, bool passed) {
             lock (IO_SYNC) {
-                ConsoleHelper.Logger.WriteLine($"       [{(passed ? "  ok" : "fail")}] {name}");
+                ConsoleHelper.WriteLine($"       [{(passed ? "  ok" : "fail")}] {name}");
             }
         }
         [HttpPost]
