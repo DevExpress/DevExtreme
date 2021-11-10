@@ -10,21 +10,17 @@ on:
     branches: [21_2]
 
 jobs:
-  testcafe:
-    name: ${{ matrix.ARGS.name }}
+  build:
+    name: build-${{ matrix.ARGS.name }}
     strategy:
       fail-fast: false
       matrix:
         ARGS: [
-          { componentFolder: "dataGrid", name: "dataGrid", quarantineMode: true },
-          { componentFolder: "scheduler", name: "scheduler", quarantineMode: true },
-          { componentFolder: "scheduler", name: "scheduler renovation", quarantineMode: true, inProgressRenovation: true },
-          { componentFolder: "editors", name: "editors", quarantineMode: false },
-          { componentFolder: "navigation", name: "navigation", quarantineMode: false },
-          { componentFolder: "renovation", name: "renovation", quarantineMode: false }
+          { name: "wip-renovation", inProgressRenovation: true },
+          { name: "default" },
         ]
     runs-on: shr-ubuntu-m5a-instance-cpu2ram8
-    timeout-minutes: 90
+    timeout-minutes: 15
 
     steps:
     - name: Get sources
@@ -47,6 +43,61 @@ jobs:
 
     - name: Build
       run: BUILD_INPROGRESS_RENOVATION="${{ matrix.ARGS.inProgressRenovation == true }}" npm run build:dev
+      
+    - name: Zip artifacts 
+      run: |
+        7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: devextreme-artifacts-renovation-${{ matrix.ARGS.inProgressRenovation == true }}
+        path: artifacts.zip
+        retention-days: 1
+
+  testcafe:
+    name: ${{ matrix.ARGS.name }}
+    needs: [build]
+    strategy:
+      fail-fast: false
+      matrix:
+        ARGS: [
+          { componentFolder: "dataGrid", name: "dataGrid", quarantineMode: true },
+          { componentFolder: "scheduler", name: "scheduler (1/3)", quarantineMode: true, indices: "1/3" },
+          { componentFolder: "scheduler", name: "scheduler (2/3)", quarantineMode: true, indices: "2/3" },
+          { componentFolder: "scheduler", name: "scheduler (3/3)", quarantineMode: true, indices: "3/3" },
+          { componentFolder: "scheduler", name: "scheduler renovation", quarantineMode: true, inProgressRenovation: true },
+          { componentFolder: "editors", name: "editors", quarantineMode: false },
+          { componentFolder: "navigation", name: "navigation (1/2)", quarantineMode: false, indices: "1/2" },
+          { componentFolder: "navigation", name: "navigation (2/2)", quarantineMode: false, indices: "2/2" },
+          { componentFolder: "renovation", name: "renovation", quarantineMode: false }
+        ]
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    timeout-minutes: 90
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '15'
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+        
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: devextreme-artifacts-renovation-${{ matrix.ARGS.inProgressRenovation == true }}
+
+    - name: Unpack artifacts
+      run: 7z x artifacts.zip
 
     - name: Prepare renovation playground
       if: matrix.ARGS.componentFolder == 'renovation'
@@ -62,6 +113,7 @@ jobs:
     - name: Run TestCafe tests
       run: |
         [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
+        [ "${{ matrix.ARGS.indices }}" == "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION"
         echo "$all_args"
         npm run test-testcafe -- $all_args
@@ -84,7 +136,7 @@ jobs:
   notify:
     runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
     name: Send notifications
-    needs: [testcafe]
+    needs: [build, testcafe]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:

@@ -12,6 +12,7 @@ createTestCafe('localhost', 1437, 1438)
         const args = getArgs();
         const testName = args.test.trim();
         const meta = args.meta.trim();
+        const indices = args.indices.trim();
         let componentFolder = args.componentFolder.trim();
         const file = args.file.trim();
 
@@ -27,6 +28,15 @@ createTestCafe('localhost', 1437, 1438)
 
         if(args.concurrency > 0) {
             runner.concurrency(args.concurrency);
+        }
+        if(indices) {
+            const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
+            let testIndex = 0;
+            runner.filter(() => {
+                const result = (testIndex % total) === (current - 1);
+                testIndex += 1;
+                return result;
+            });
         }
         if(testName) {
             runner.filter(name => name === testName);
@@ -60,7 +70,8 @@ function getArgs() {
             componentFolder: '',
             file: '*',
             cache: true,
-            quarantineMode: false
+            quarantineMode: false,
+            indices: ''
         }
     });
 }
