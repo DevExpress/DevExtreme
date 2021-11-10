@@ -92,7 +92,7 @@ jobs:
 
     - name: Install packages in devextreme repo
       if: steps.last_run_status.outputs.last_run_status != 'success'
-      run: npm install --no-audit --no-fund
+      run: npm install --no-audit --no-fund --force
 
     - name: Clone devextreme-angular repo from PR author fork
       continue-on-error: true
