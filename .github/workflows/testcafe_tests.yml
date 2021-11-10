@@ -103,7 +103,7 @@ jobs:
       run: npx gulp localization
 
     - name: Unpack artifacts
-      run: 7z x artifacts.zip
+      run: 7z x artifacts.zip -aoa
 
     - name: Prepare renovation playground
       if: matrix.ARGS.componentFolder == 'renovation'
