@@ -6,6 +6,7 @@ import timeZoneUtils from '../../utils.timeZone';
 import { ExpressionUtils } from '../../expressionUtils';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
 import { getAppointmentTakesAllDay } from '../dataProvider/utils';
+import getSkippedHoursInRange from '../../../../renovation/ui/scheduler/view_model/appointments/utils/getSkippedHoursInRange';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
 const ALLDAY_APPOINTMENT_MAX_VERTICAL_OFFSET = 20;
@@ -306,12 +307,19 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         }
 
         const startDate = dateUtils.trimTime(position.info.appointment.startDate);
+        const endDate = dateUtils.trimTime(position.info.appointment.endDate);
         const { normalizedEndDate } = position.info.appointment;
 
         const cellWidth = this.cellWidth || this.getAppointmentMinSize();
         const durationInHours = (normalizedEndDate.getTime() - startDate.getTime()) / toMs('hour');
 
-        let width = Math.ceil(durationInHours / 24) * cellWidth;
+        const skippedHours = getSkippedHoursInRange(
+            startDate,
+            endDate,
+            this.viewDataProvider
+        );
+
+        let width = Math.ceil((durationInHours - skippedHours) / 24) * cellWidth;
 
         width = this.cropAppointmentWidth(width, cellWidth);
         return width;
