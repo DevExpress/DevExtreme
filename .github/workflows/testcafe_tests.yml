@@ -84,6 +84,13 @@ jobs:
       with:
         node-version: '15'
 
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
     - name: Run npm install
       run: npm install --no-audit --no-fund
         
@@ -91,6 +98,9 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: devextreme-artifacts-renovation-${{ matrix.ARGS.inProgressRenovation == true }}
+
+    - name: Prepare localization
+      run: npx gulp localization
 
     - name: Unpack artifacts
       run: 7z x artifacts.zip
@@ -109,7 +119,7 @@ jobs:
     - name: Run TestCafe tests
       run: |
         [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
-        [ "${{ matrix.ARGS.indices }}" == "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
+        [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION"
         echo "$all_args"
         npm run test-testcafe -- $all_args
