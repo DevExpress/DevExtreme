@@ -1,3 +1,4 @@
+import type { dxSchedulerScrolling } from '../../../../ui/scheduler';
 import { BaseTemplateProps, GroupOrientation, ViewType } from '../types';
 import { GetDateForHeaderText } from '../view_model/to_test/views/types';
 
@@ -166,6 +167,7 @@ interface CountGenerationConfig {
 interface ViewOptions {
   isVerticalGrouping: boolean;
   groupOrientation: GroupOrientation;
+  isGroupedByDate: boolean;
 }
 
 export interface ViewDataProviderOptions {
@@ -397,9 +399,29 @@ export interface CellsMetaData {
   allDayPanelCellsMeta: DOMRect[];
 }
 
+export interface ViewDataProviderValidationOptions {
+  intervalCount: number;
+  currentDate: Date;
+  type: ViewType;
+  hoursInterval: number;
+  startDayHour: number;
+  endDayHour: number;
+  groups?: Group[];
+  groupOrientation?: GroupOrientation;
+  groupByDate: boolean;
+  crossScrollingEnabled: boolean;
+  firstDayOfWeek: number;
+  startDate?: Date;
+  showAllDayPanel: boolean;
+  allDayPanelExpanded: boolean;
+  scrolling: dxSchedulerScrolling;
+  cellDuration: number;
+}
+
 export interface ViewMetaData {
   viewDataProvider: ViewDataProviderType;
   cellsMetaData: CellsMetaData;
+  viewDataProviderValidationOptions: ViewDataProviderValidationOptions;
 }
 
 export interface TableWidthWorkSpaceConfig extends CountGenerationConfig {

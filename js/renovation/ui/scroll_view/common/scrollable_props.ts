@@ -8,7 +8,7 @@ import {
   getDefaultNativeRefreshStrategy,
   getDefaultUseSimulatedScrollbar,
 } from '../utils/get_default_option_value';
-import { RefreshStrategy } from './types.d';
+import { RefreshStrategy } from './types';
 
 @ComponentBindings()
 export class ScrollableProps extends ScrollableSimulatedProps {

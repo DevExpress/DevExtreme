@@ -1,6 +1,7 @@
 export const CLASS = {
   appointmentCollector: 'dx-scheduler-appointment-collector',
   stateFocused: 'dx-state-focused',
+  compact: 'dx-scheduler-appointment-collector-compact',
 };
 
 export default class AppointmentCollector {
@@ -13,5 +14,9 @@ export default class AppointmentCollector {
 
   get isFocused(): Promise<boolean> {
     return this.element.hasClass(CLASS.stateFocused);
+  }
+
+  get isCompact(): Promise<boolean> {
+    return this.element.hasClass(CLASS.compact);
   }
 }

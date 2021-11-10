@@ -630,6 +630,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         const eventData = getEventData(e);
         const rtlEnabled = that.option('rtlEnabled');
         const isRtlParentStyle = this._isRtlParentStyle();
+        const isDragging = that._draggingHeaderView?.isDragging();
 
         if(that._isResizing && that._resizingInfo) {
             if((parentOffsetLeft <= eventData.x || !isNextColumnMode && isRtlParentStyle) && (!isNextColumnMode || eventData.x <= parentOffsetLeft + getWidth(that._$parentContainer))) {
@@ -644,7 +645,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
                     }
                 }
             }
-        } else {
+        } else if(!isDragging) {
             if(that._isHeadersRowArea(eventData.y)) {
                 if(that._previousParentOffset) {
                     if(that._previousParentOffset.left !== parentOffset.left || that._previousParentOffset.top !== parentOffset.top) {
@@ -955,6 +956,7 @@ const ColumnsResizerViewController = modules.ViewController.inherit({
         that._columnsController = that.getController('columns');
         that._tablePositionController = that.getController('tablePosition');
         that._$parentContainer = that.component.$element();
+        that._draggingHeaderView = that.component.getView('draggingHeaderView');
 
         that._subscribeToCallback(that._columnHeadersView.renderCompleted, generatePointsByColumnsHandler);
         that._subscribeToCallback(that._columnHeadersView.resizeCompleted, generatePointsByColumnsHandler);

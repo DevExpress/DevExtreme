@@ -1,5 +1,5 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction } from '../layout';
+import { AppointmentLayout, viewFunction } from '../layout';
 
 describe('AppointmentLayout', () => {
   describe('Render', () => {
@@ -13,9 +13,11 @@ describe('AppointmentLayout', () => {
     }));
 
     it('it should be rendered correctly without items', () => {
-      const layout = render({ });
+      const layout = render({
+        classes: 'some-classes',
+      });
 
-      expect(layout.hasClass('dx-scheduler-appointments'))
+      expect(layout.hasClass('some-classes'))
         .toEqual(true);
 
       expect(layout.children())
@@ -72,9 +74,6 @@ describe('AppointmentLayout', () => {
         },
       });
 
-      expect(layout.hasClass('dx-scheduler-appointments'))
-        .toEqual(true);
-
       expect(layout.children().length)
         .toEqual(2);
 
@@ -109,9 +108,6 @@ describe('AppointmentLayout', () => {
         },
       });
 
-      expect(layout.hasClass('dx-scheduler-appointments'))
-        .toEqual(true);
-
       expect(layout.children().length)
         .toEqual(1);
 
@@ -122,6 +118,28 @@ describe('AppointmentLayout', () => {
         .toBe(viewModel);
       expect(overflowIndicator.prop('overflowIndicatorTemplate'))
         .toBe(overflowIndicatorTemplate);
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('classes', () => {
+        it('should return correct classes by default', () => {
+          const layout = new AppointmentLayout({});
+
+          expect(layout.classes)
+            .toBe('dx-scheduler-scrollable-appointments');
+        });
+
+        it('should return correct classes for the allDay appointments', () => {
+          const layout = new AppointmentLayout({
+            isAllDay: true,
+          });
+
+          expect(layout.classes)
+            .toBe('dx-scheduler-all-day-appointments');
+        });
+      });
     });
   });
 });

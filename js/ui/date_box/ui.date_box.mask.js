@@ -560,10 +560,12 @@ const DateBoxMask = DateBoxBase.inherit({
         if(this.option('text')) {
             this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
 
-            if(isDefined(this._activePartIndex)) {
-                this._caret(this._getActivePartProp('caret'));
-            } else {
-                this._selectLastPart();
+            if(!this._isAllSelected()) {
+                if(isDefined(this._activePartIndex)) {
+                    this._caret(this._getActivePartProp('caret'));
+                } else {
+                    this._selectLastPart();
+                }
             }
         }
     },

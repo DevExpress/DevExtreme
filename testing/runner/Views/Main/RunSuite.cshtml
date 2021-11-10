@@ -14,10 +14,6 @@
         if(isNoJQueryTest)
             return Url.Content("~/testing/helpers/noJQuery.js");
 
-        switch(Model.JQueryVersion) {
-            case "1": return Url.Content("~/node_modules/jquery.1/node_modules/jquery/dist/jquery.js");
-            case "2": return Url.Content("~/node_modules/jquery.2/node_modules/jquery/dist/jquery.js");
-        }
         return Url.Content("~/artifacts/js/jquery.js");
     }
 
@@ -112,16 +108,6 @@
             });
 
             QUnit.config.urlConfig.push({
-                id: "jquery",
-                label: "jQuery",
-                tooltip: "Select jQuery version.",
-                value: {
-                    "2": "2.x",
-                    "1": "1.x"
-                }
-            });
-
-            QUnit.config.urlConfig.push({
                 id: "nojquery",
                 label: "No jQuery",
                 tooltip: "Don't use jQuery for widget rendering"
@@ -145,7 +131,7 @@
         })();
     </script>
 
-    <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery.2/node_modules/jquery/dist/jquery.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery/dist/jquery.js")"></script>
 
     <script src="@Url.ContentWithCacheBuster("~/node_modules/sinon/pkg/sinon.js")"></script>
 
@@ -305,10 +291,9 @@
 
         Promise.all(imports)
         .then(function() {
-            var isNotWebkitBrowser = window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0,
-                isOldJQuery = !!@Json.Serialize(Model.JQueryVersion);
+            var isNotWebkitBrowser = window.navigator.userAgent.toLowerCase().indexOf("webkit") < 0;
 
-            if(@Json.Serialize(isServerSideTest) && (isNotWebkitBrowser || isOldJQuery)) {
+            if(@Json.Serialize(isServerSideTest) && isNotWebkitBrowser) {
                 return;
             }
 

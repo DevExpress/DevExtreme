@@ -209,10 +209,10 @@ class BaseRenderingStrategy {
             extend(position[j], {
                 height: height,
                 width: resultWidth,
-                allDay: allDay,
+                allDay,
                 rowIndex: initialRowIndex,
                 columnIndex: initialColumnIndex,
-                appointmentReduced: appointmentReduced,
+                appointmentReduced
             });
             result = this._getAppointmentPartsPosition(multiWeekAppointmentParts, position[j], result);
         }
@@ -574,7 +574,7 @@ class BaseRenderingStrategy {
         const countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCellByType(isAllDay);
         if((coordinates.count - countFullWidthAppointmentInCell) > 0) {
             const { top, left } = coordinates;
-            const compactRender = !isAllDay && this.supportCompactDropDownAppointments();
+            const compactRender = this.isAdaptive || !isAllDay && this.supportCompactDropDownAppointments();
             coordinates.virtual = {
                 left: left + this._getCollectorLeftOffset(isAllDay),
                 top,
@@ -582,7 +582,7 @@ class BaseRenderingStrategy {
                 height: this.getDropDownAppointmentHeight(),
                 index: this._generateAppointmentCollectorIndex(coordinates, isAllDay),
                 isAllDay,
-                isCompact: compactRender,
+                isCompact: compactRender
             };
         }
     }

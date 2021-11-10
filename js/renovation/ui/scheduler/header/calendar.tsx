@@ -1,9 +1,9 @@
+/* eslint-disable react/prop-types */
 import {
   Component,
   ComponentBindings,
   JSXComponent,
   OneWay,
-  Fragment,
   RefObject,
   Ref,
 } from '@devextreme-generator/declarations';
@@ -12,20 +12,23 @@ import { Popup } from '../../overlays/popup';
 import { Popover } from '../../overlays/popover';
 import { Calendar } from '../../editors/calendar';
 
-export const viewFunction = ({
-  props: {
+export const viewFunction = (viewModel: SchedulerCalendar): JSX.Element => {
+  const {
+    props,
+    updateDate,
+    updateVisible,
+    isMobile,
+    calendarRef,
+    focusCalendar,
+  } = viewModel;
+  const {
     currentDate,
     min,
     max,
     firstDayOfWeek,
     visible,
-  },
-  updateDate,
-  updateVisible,
-  isMobile,
-  calendarRef,
-  focusCalendar,
-}: SchedulerCalendar): JSX.Element => {
+  } = props;
+
   const calendar = (
     <div
       className="dx-scheduler-navigator-calendar"
@@ -44,39 +47,35 @@ export const viewFunction = ({
     </div>
   );
 
-  return (
-    <Fragment>
-      {isMobile
-        ? (
-          <Popup
-            className="dx-scheduler-navigator-calendar-popup"
-            showTitle={false}
-            closeOnOutsideClick
-            visible={visible}
-            visibleChange={updateVisible}
-            showCloseButton
-            fullScreen
-            toolbarItems={[{ shortcut: 'cancel' }]}
-            onShown={focusCalendar}
-          >
-            {calendar}
-          </Popup>
-        )
-        : (
-          <Popover
-            target=".dx-scheduler-navigator-caption"
-            className="dx-scheduler-navigator-calendar-popover"
-            showTitle={false}
-            closeOnOutsideClick
-            visible={visible}
-            visibleChange={updateVisible}
-            onShown={focusCalendar}
-          >
-            {calendar}
-          </Popover>
-        )}
-    </Fragment>
-  );
+  return isMobile
+    ? (
+      <Popup
+        className="dx-scheduler-navigator-calendar-popup"
+        showTitle={false}
+        closeOnOutsideClick
+        visible={visible}
+        visibleChange={updateVisible}
+        showCloseButton
+        fullScreen
+        toolbarItems={[{ shortcut: 'cancel' }]}
+        onShown={focusCalendar}
+      >
+        {calendar}
+      </Popup>
+    )
+    : (
+      <Popover
+        target=".dx-scheduler-navigator-caption"
+        className="dx-scheduler-navigator-calendar-popover"
+        showTitle={false}
+        closeOnOutsideClick
+        visible={visible}
+        visibleChange={updateVisible}
+        onShown={focusCalendar}
+      >
+        {calendar}
+      </Popover>
+    );
 };
 
 @ComponentBindings()
@@ -99,8 +98,10 @@ export class SchedulerCalendarProps {
 }
 
 @Component({ view: viewFunction })
-export class SchedulerCalendar extends JSXComponent<SchedulerCalendarProps,
-'currentDate' | 'onCurrentDateUpdate' | 'firstDayOfWeek' | 'visible' | 'onVisibleUpdate'>() {
+export class SchedulerCalendar extends JSXComponent<
+SchedulerCalendarProps,
+'currentDate' | 'onCurrentDateUpdate' | 'firstDayOfWeek' | 'visible' | 'onVisibleUpdate'
+>() {
   @Ref() calendarRef!: RefObject<Calendar>;
 
   get isMobile(): boolean {

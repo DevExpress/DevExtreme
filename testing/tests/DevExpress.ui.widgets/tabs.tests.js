@@ -8,7 +8,7 @@ import 'ui/responsive_box';
 import 'ui/tabs';
 import pointerMock from '../../helpers/pointerMock.js';
 import { TestAsyncTabsWrapper, TestTabsWrapper } from '../../helpers/wrappers/tabsWrappers.js';
-
+import { getScrollLeftMax } from 'renovation/ui/scroll_view/utils/get_scroll_left_max';
 
 QUnit.testStart(function() {
     const markup =
@@ -535,6 +535,73 @@ QUnit.module('Horizontal scrolling', () => {
 
         scrollable.scrollTo(0);
         assert.ok(!$button.dxButton('instance').option('disabled'));
+    });
+
+    QUnit.module('Disabled state of navigation buttons', () => {
+        [0.33, 0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.2, 1.25, 1.34, 1.5, 1.875, 2.25, 2.65].forEach((browserZoom) => {
+            [true, false].forEach((rtlEnabled) => {
+                const cssStyles = {
+                    transform: `scale(${browserZoom})`,
+                    transformOrigin: '0 0',
+                };
+                // T1037332
+                QUnit.test(`Left button should be disabled in boundary value: ${JSON.stringify(cssStyles)}, rtlEnabled: ${rtlEnabled}`, function(assert) {
+                    assert.expect(6);
+
+                    $('#tabs').css(cssStyles);
+                    const $element = $('#tabs').dxTabs({
+                        items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
+                        showNavButtons: true,
+                        scrollingEnabled: true,
+                        rtlEnabled,
+                        width: 100
+                    });
+                    const leftButton = $element.find(`.${TABS_LEFT_NAV_BUTTON_CLASS}`).dxButton('instance');
+                    const rightButton = $element.find(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`).dxButton('instance');
+                    const scrollable = $element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
+
+                    assert.strictEqual(leftButton.option('disabled'), rtlEnabled ? false : true);
+                    assert.strictEqual(rightButton.option('disabled'), rtlEnabled ? true : false);
+
+                    scrollable.scrollTo({ left: 10 });
+                    assert.strictEqual(leftButton.option('disabled'), false);
+                    assert.strictEqual(rightButton.option('disabled'), false);
+
+                    scrollable.scrollTo({ left: 0 });
+                    assert.strictEqual(leftButton.option('disabled'), true);
+                    assert.strictEqual(rightButton.option('disabled'), false);
+                });
+
+                QUnit.test(`Right button should be disabled in boundary value: ${JSON.stringify(cssStyles)}, rtlEnabled: ${rtlEnabled}`, function(assert) {
+                    assert.expect(6);
+
+                    $('#tabs').css(cssStyles);
+                    const $element = $('#tabs').dxTabs({
+                        items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }],
+                        showNavButtons: true,
+                        scrollingEnabled: true,
+                        rtlEnabled,
+                        width: 100
+                    });
+                    const leftButton = $element.find(`.${TABS_LEFT_NAV_BUTTON_CLASS}`).dxButton('instance');
+                    const rightButton = $element.find(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`).dxButton('instance');
+                    const scrollable = $element.find(`.${SCROLLABLE_CLASS}`).dxScrollable('instance');
+
+                    assert.strictEqual(leftButton.option('disabled'), rtlEnabled ? false : true);
+                    assert.strictEqual(rightButton.option('disabled'), rtlEnabled ? true : false);
+
+                    const maxLeftOffset = getScrollLeftMax($(scrollable.container()).get(0));
+                    scrollable.scrollTo({ left: maxLeftOffset });
+
+                    assert.strictEqual(leftButton.option('disabled'), false);
+                    assert.strictEqual(rightButton.option('disabled'), true);
+
+                    scrollable.scrollTo({ left: 10 });
+                    assert.strictEqual(leftButton.option('disabled'), false);
+                    assert.strictEqual(rightButton.option('disabled'), false);
+                });
+            });
+        });
     });
 
     QUnit.test('button should update disabled state after dxresize', function(assert) {

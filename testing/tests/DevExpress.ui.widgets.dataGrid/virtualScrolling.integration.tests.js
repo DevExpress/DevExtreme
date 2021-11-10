@@ -1688,7 +1688,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         this.clock.tick(300);
 
         // assert
-        assert.equal(dataGrid.getScrollable().scrollTop(), 0, 'scroll top is not changed');
+        assert.equal(dataGrid.getScrollable().scrollTop(), devices.real().android ? 1 : 0, 'scroll top is not changed');
     });
 
     // T838096
@@ -4576,6 +4576,46 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($($virtualRowElement.get(0))), 'top virtual row is rendered outside viewport after scrolling to top');
         assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($($virtualRowElement.get(1))), 'bottom virtual row is rendered outside viewport after scrolling to top');
     });
+
+    ['method', 'option'].forEach(type => {
+        QUnit.test(`Paging using pageIndex ${type} to last page should work`, function(assert) {
+            // arrange
+            const dataGrid = createDataGrid({
+                dataSource: [
+                    { id: 1 },
+                    { id: 2 },
+                    { id: 3 },
+                    { id: 4 },
+                    { id: 5 },
+                ],
+                keyExpr: 'id',
+                height: 150,
+                paging: {
+                    pageSize: 2
+                },
+                pager: {
+                    visible: true
+                },
+                scrolling: {
+                    mode: 'virtual',
+                    useNative: false
+                }
+            });
+
+            this.clock.tick(300);
+
+            if(type === 'method') {
+                dataGrid.pageIndex(2);
+            } else {
+                dataGrid.option('paging.pageIndex', 2);
+            }
+
+            // assert
+            assert.strictEqual(dataGrid.pageIndex(), 1, 'pageIndex is normalized to previous');
+            assert.strictEqual(dataGrid.option('paging.pageIndex'), 1, 'pageIndex option');
+            assert.deepEqual(dataGrid.getVisibleRows().map(row => row.key), [4, 5], 'visible rows');
+        });
+    });
 });
 
 
@@ -4831,6 +4871,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo(10000);
+        $(dataGrid.getScrollable().content()).trigger('scroll');
 
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 16, 'visible rows');
@@ -4839,10 +4880,11 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.getScrollable().scrollTo(10000);
+        $(dataGrid.getScrollable().content()).trigger('scroll');
 
         // assert
-        assert.equal(dataGrid.getVisibleRows().length, 16, 'visible rows');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 28, 'top visible row');
+        assert.equal(dataGrid.getVisibleRows().length, 15, 'visible rows');
+        assert.equal(dataGrid.getVisibleRows()[0].data.id, 36, 'top visible row');
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 0, 'no bottom loading');
     });
 
@@ -5527,5 +5569,57 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         for(let i = 0; i < customizeLoadResultSpy.callCount; i++) {
             assert.notOk(customizeLoadResultSpy.args[i][0].delay, `${i} call without a delay`);
         }
+    });
+
+    QUnit.test('Scrollbar height should not be changed on scrolling back to top', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const dataGrid = createDataGrid({
+            height: 400,
+            dataSource: getData(100),
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'infinite',
+                useNative: false
+            }
+        });
+        const getScrollBarHeight = () => {
+            return $(dataGrid.element()).find('.dx-scrollbar-vertical .dx-scrollable-scroll-content').outerHeight();
+        };
+
+        this.clock.tick(300);
+        let previousScrollbarHeight;
+        let previousScrollTop;
+
+        for(let i = 0; i < 3; i++) {
+            // act
+            previousScrollbarHeight = getScrollBarHeight();
+            previousScrollTop = dataGrid.getScrollable().scrollTop();
+            dataGrid.getScrollable().scrollTo({ top: 10000 });
+            this.clock.tick(300);
+
+            // assert
+            assert.ok(previousScrollbarHeight > getScrollBarHeight(), `scrollbar height is reduced (scroll down, ${i} step)`);
+            assert.ok(previousScrollTop < dataGrid.getScrollable().scrollTop(), `scroll position is increased (scroll down, ${i} step)`);
+        }
+
+        // act
+        previousScrollbarHeight = getScrollBarHeight();
+        previousScrollTop = dataGrid.getScrollable().scrollTop();
+        dataGrid.getScrollable().scrollTo({ top: 0 });
+        this.clock.tick(300);
+
+        // assert
+        assert.strictEqual(getScrollBarHeight(), previousScrollbarHeight, 'scrollbar height is not changed on scroll top');
+        assert.strictEqual(dataGrid.getScrollable().scrollTop(), 0, 'scroll position is changed on scroll top');
     });
 });

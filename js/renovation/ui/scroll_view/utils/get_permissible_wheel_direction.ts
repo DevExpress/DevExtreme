@@ -1,5 +1,5 @@
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../common/consts';
-import { ScrollableDirection } from '../common/types.d';
+import { ScrollableDirection } from '../common/types';
 
 export function permissibleWheelDirection(
   direction: ScrollableDirection,

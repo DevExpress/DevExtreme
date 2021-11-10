@@ -56,7 +56,7 @@ export type IncidentOccurredEvent = EventInfo<dxSankey> & IncidentInfo;
 export type InitializedEvent = InitializedEventInfo<dxSankey>;
 
 /** @public */
-export type LinkClickEvent = NativeEventInfo<dxSankey> & {
+export type LinkClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
     readonly target: dxSankeyLink;
 };
 /** @public */
@@ -64,7 +64,7 @@ export type LinkHoverEvent = EventInfo<dxSankey> & {
     readonly target: dxSankeyLink;
 };
 /** @public */
-export type NodeClickEvent = NativeEventInfo<dxSankey> & {
+export type NodeClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
     readonly target: dxSankeyNode;
 };
 /** @public */

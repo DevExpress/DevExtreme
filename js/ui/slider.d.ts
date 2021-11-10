@@ -35,7 +35,7 @@ export type InitializedEvent = InitializedEventInfo<dxSlider>;
 export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxSlider> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead

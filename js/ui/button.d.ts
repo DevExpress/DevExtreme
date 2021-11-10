@@ -24,7 +24,7 @@ import {
 } from '../types/enums';
 
 /** @public */
-export type ClickEvent = NativeEventInfo<dxButton> & {
+export type ClickEvent = NativeEventInfo<dxButton, KeyboardEvent | MouseEvent | PointerEvent> & {
     validationGroup?: any;
 };
 

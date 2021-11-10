@@ -16,7 +16,7 @@ import type DomComponent from '../../../core/dom_component';
 import { ComponentClass } from '../../../core/dom_component'; // eslint-disable-line import/named
 import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 import { EventCallback } from './event_callback';
-import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { DisposeEffectReturn } from '../../utils/effect_return';
 import { getUpdatedOptions } from './utils/get_updated_options';
 
 export const viewFunction = ({

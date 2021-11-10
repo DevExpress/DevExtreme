@@ -20,7 +20,7 @@ import {
 } from '../types/enums';
 
 /** @public */
-export type ClickEvent = NativeEventInfo<dxMap>;
+export type ClickEvent = NativeEventInfo<dxMap, MouseEvent | PointerEvent>;
 
 /** @public */
 export type DisposingEvent = EventInfo<dxMap>;

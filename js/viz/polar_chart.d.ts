@@ -77,7 +77,7 @@ interface SeriesInteractionInfo {
 }
 
 /** @public */
-export type ArgumentAxisClickEvent = NativeEventInfo<dxPolarChart> & {
+export type ArgumentAxisClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
     readonly argument: Date | number | string;
 };
 
@@ -106,7 +106,7 @@ export type IncidentOccurredEvent = EventInfo<dxPolarChart> & IncidentInfo;
 export type InitializedEvent = InitializedEventInfo<dxPolarChart>;
 
 /** @public */
-export type LegendClickEvent = NativeEventInfo<dxPolarChart> & {
+export type LegendClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
     readonly target: polarChartSeriesObject;
 };
 
@@ -114,7 +114,7 @@ export type LegendClickEvent = NativeEventInfo<dxPolarChart> & {
 export type OptionChangedEvent = EventInfo<dxPolarChart> & ChangedOptionInfo;
 
 /** @public */
-export type PointClickEvent = NativeEventInfo<dxPolarChart> & PointInteractionInfo;
+export type PointClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & PointInteractionInfo;
 
 /** @public */
 export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
@@ -123,7 +123,7 @@ export type PointHoverChangedEvent = EventInfo<dxPolarChart> & PointInteractionI
 export type PointSelectionChangedEvent = EventInfo<dxPolarChart> & PointInteractionInfo;
 
 /** @public */
-export type SeriesClickEvent = NativeEventInfo<dxPolarChart> & {
+export type SeriesClickEvent = NativeEventInfo<dxPolarChart, MouseEvent | PointerEvent> & {
     readonly target: polarChartSeriesObject;
 };
 
@@ -140,7 +140,7 @@ export type TooltipHiddenEvent = EventInfo<dxPolarChart> & TooltipInfo;
 export type TooltipShownEvent = EventInfo<dxPolarChart> & TooltipInfo;
 
 /** @public */
-export type ZoomEndEvent = Cancelable & NativeEventInfo<dxPolarChart> & {
+export type ZoomEndEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | TouchEvent> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly previousRange: VizRange;
@@ -149,7 +149,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxPolarChart> & {
     readonly shift: number;
 };
 /** @public */
-export type ZoomStartEvent = Cancelable & NativeEventInfo<dxPolarChart> & {
+export type ZoomStartEvent = Cancelable & NativeEventInfo<dxPolarChart, MouseEvent | TouchEvent> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly actionType: ChartZoomPanAction;

@@ -141,7 +141,6 @@ describe('WorkSpace', () => {
         resourceCellTemplate: () => null,
 
         groups,
-        groupByDate: false,
         intervalCount: 1,
       };
 
@@ -165,6 +164,7 @@ describe('WorkSpace', () => {
         dateTableRef: 'dateTableRef',
         allDayPanelRef: 'allDayPanelRef',
         groupOrientation: VERTICAL_GROUP_ORIENTATION,
+        isGroupedByDate: false,
       };
 
       const workSpace = renderComponent({
@@ -202,6 +202,7 @@ describe('WorkSpace', () => {
           allDayPanelRef: 'allDayPanelRef',
           groupOrientation: VERTICAL_GROUP_ORIENTATION,
           tablesWidth: 1900,
+          groupByDate: false,
         });
     });
   });
@@ -313,14 +314,15 @@ describe('WorkSpace', () => {
 
         it('should call onViewRendered with correct parameters when all-day panel is not visible', () => {
           const onViewRendered = jest.fn();
+          const currentDate = new Date();
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
-            currentDate: new Date(),
             startDayHour: 0,
             endDayHour: 1,
             showAllDayPanel: false,
+            currentDate,
           });
 
           workSpace.dateTableRef = dateTableRefMock;
@@ -370,19 +372,38 @@ describe('WorkSpace', () => {
                 }]],
                 allDayPanelCellsMeta: [],
               },
+              viewDataProviderValidationOptions: {
+                intervalCount: 1,
+                currentDate,
+                type: 'week',
+                hoursInterval: 0.5,
+                startDayHour: 0,
+                endDayHour: 1,
+                groups: [],
+                groupOrientation: undefined,
+                groupByDate: false,
+                crossScrollingEnabled: false,
+                firstDayOfWeek: 0,
+                startDate: undefined,
+                showAllDayPanel: false,
+                allDayPanelExpanded: false,
+                scrolling: { mode: 'standard' },
+                cellDuration: 30,
+              },
             });
         });
 
         it('should call onViewRendered with correct parameters when all-day panel is visible', () => {
           const onViewRendered = jest.fn();
+          const currentDate = new Date();
 
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
             onViewRendered,
-            currentDate: new Date(),
+            currentDate,
             startDayHour: 0,
             endDayHour: 1,
-            showAllDayPanel: false,
+            showAllDayPanel: true,
           });
 
           workSpace.dateTableRef = dateTableRefMock;
@@ -445,6 +466,24 @@ describe('WorkSpace', () => {
                 }, {
                   left: 300, top: 0,
                 }],
+              },
+              viewDataProviderValidationOptions: {
+                intervalCount: 1,
+                currentDate,
+                type: 'week',
+                hoursInterval: 0.5,
+                startDayHour: 0,
+                endDayHour: 1,
+                groups: [],
+                groupOrientation: undefined,
+                groupByDate: false,
+                crossScrollingEnabled: false,
+                firstDayOfWeek: 0,
+                startDate: undefined,
+                showAllDayPanel: true,
+                allDayPanelExpanded: false,
+                scrolling: { mode: 'standard' },
+                cellDuration: 30,
               },
             });
         });
@@ -1357,6 +1396,7 @@ describe('WorkSpace', () => {
               isGenerateTimePanelData: true,
               isGenerateWeekDaysHeaderData: false,
               isProvideVirtualCellsWidth: false,
+              groupByDate: false,
             });
           expect(mockCreateGroupedDataMapProvider)
             .toBeCalledTimes(1);
@@ -1600,6 +1640,56 @@ describe('WorkSpace', () => {
         });
       });
 
+      describe('isGroupedByDate', () => {
+        it('should return false in basic case', () => {
+          const workSpace = new WorkSpace({
+            groups: [],
+            groupOrientation: 'horizontal',
+            type: 'day',
+            groupByDate: false,
+          } as any);
+
+          expect(workSpace.isGroupedByDate)
+            .toBe(false);
+        });
+
+        it('should return false when vertical grouping is used', () => {
+          const workSpace = new WorkSpace({
+            groups,
+            groupOrientation: 'vertical',
+            type: 'day',
+            groupByDate: true,
+          } as any);
+
+          expect(workSpace.isGroupedByDate)
+            .toBe(false);
+        });
+
+        it('should return true when grouping by date is used', () => {
+          const workSpace = new WorkSpace({
+            groups,
+            groupOrientation: 'horizontal',
+            type: 'day',
+            groupByDate: true,
+          } as any);
+
+          expect(workSpace.isGroupedByDate)
+            .toBe(true);
+        });
+
+        it('should return false when grouping is not used', () => {
+          const workSpace = new WorkSpace({
+            groups: [],
+            groupOrientation: 'horizontal',
+            type: 'day',
+            groupByDate: true,
+          } as any);
+
+          expect(workSpace.isGroupedByDate)
+            .toBe(false);
+        });
+      });
+
       describe('isStandaloneAllDayPanel', () => {
         it('should return true when vertical group orientation is not used and all day panel is visible', () => {
           const workSpace = new WorkSpace({
@@ -1707,8 +1797,6 @@ describe('WorkSpace', () => {
     });
 
     describe('classes', () => {
-      // afterEach(jest.resetAllMocks);
-
       it('should call combineClasses with correct parameters', () => {
         const workSpace = new WorkSpace({
           intervalCount: 35,
@@ -1730,7 +1818,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-odd-cells': false,
             'dx-scheduler-work-space-all-day-collapsed': true,
             'dx-scheduler-work-space-all-day': true,
-            'dx-scheduler-work-space-group-by-date': true,
+            'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
             'dx-scheduler-work-space-horizontal-grouped': false,
@@ -1762,7 +1850,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-odd-cells': false,
             'dx-scheduler-work-space-all-day-collapsed': false,
             'dx-scheduler-work-space-all-day': true,
-            'dx-scheduler-work-space-group-by-date': true,
+            'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
             'dx-scheduler-work-space-horizontal-grouped': false,
@@ -1793,7 +1881,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-work-space-odd-cells': false,
             'dx-scheduler-work-space-all-day-collapsed': false,
             'dx-scheduler-work-space-all-day': false,
-            'dx-scheduler-work-space-group-by-date': true,
+            'dx-scheduler-work-space-group-by-date': false,
             'dx-scheduler-work-space-grouped': true,
             'dx-scheduler-work-space-vertical-grouped': true,
             'dx-scheduler-work-space-horizontal-grouped': false,

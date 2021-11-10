@@ -76,7 +76,7 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @default true
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @default "auto"

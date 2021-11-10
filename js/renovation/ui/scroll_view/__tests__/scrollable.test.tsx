@@ -17,7 +17,7 @@ import { ScrollableNative } from '../strategy/native';
 import { ScrollableSimulated } from '../strategy/simulated';
 
 import { Widget } from '../../common/widget';
-import { ScrollableDirection, ScrollOffset } from '../common/types.d';
+import { ScrollableDirection, ScrollOffset } from '../common/types';
 
 import { getWindow, setWindow } from '../../../../core/utils/window';
 import * as ElementLocationModule from '../utils/get_element_location_internal';

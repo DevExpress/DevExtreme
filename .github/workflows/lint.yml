@@ -30,7 +30,7 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-audit --no-fund
+      run: npm install --no-audit --no-fund --legacy-peer-deps
 
     - name: Compile renovation
       run: npm run compile:r
@@ -132,10 +132,12 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '15'
 
     - name: Check package-lock
-      run: npm ci --no-audit --no-fund --ignore-scripts
+      run: |
+        npm install --no-audit --no-fund --ignore-scripts --legacy-peer-deps
+        git diff --exit-code package-lock.json
 
   notify:
     runs-on: ubuntu-latest

@@ -781,4 +781,40 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             });
         }
     });
+
+    module('Current Time Indicator', () => {
+        test('Current time indicator should have correct top in week view when DST is present (T1040849)', function(assert) {
+            const clock = sinon.useFakeTimers((new Date(2021, 10, 7, 10)).getTime());
+
+            const scheduler = createWrapper({
+                views: ['week'],
+                currentView: 'week',
+                currentDate: new Date(),
+                height: 580,
+            });
+
+            const currentTimeIndicator = scheduler.workSpace.getCurrentTimeIndicator();
+
+            assert.roughEqual(currentTimeIndicator.eq(0).position().top, 1000, 1.5, 'Current time indicator has correct top');
+
+            clock.restore();
+        });
+
+        test('Current time indicator should have correct left in timeline-week view when DST is present (T1040849)', function(assert) {
+            const clock = sinon.useFakeTimers((new Date(2021, 10, 7, 10)).getTime());
+
+            const scheduler = createWrapper({
+                views: ['timelineWeek'],
+                currentView: 'timelineWeek',
+                currentDate: new Date(),
+                height: 580,
+            });
+
+            const currentTimeIndicator = scheduler.workSpace.getCurrentTimeIndicator();
+
+            assert.roughEqual(currentTimeIndicator.eq(0).position().left, 4000, 1.5, 'Current time indicator has correct left');
+
+            clock.restore();
+        });
+    });
 }

@@ -39,7 +39,7 @@ import {
 } from '../types/enums';
 
 /** @public */
-export type ChangeEvent = NativeEventInfo<dxTagBox>;
+export type ChangeEvent = NativeEventInfo<dxTagBox, Event>;
 
 /** @public */
 export type ClosedEvent = EventInfo<dxTagBox>;
@@ -54,31 +54,31 @@ export type CustomItemCreatingEvent = EventInfo<dxTagBox> & CustomItemCreatingIn
 export type DisposingEvent = EventInfo<dxTagBox>;
 
 /** @public */
-export type EnterKeyEvent = NativeEventInfo<dxTagBox>;
+export type EnterKeyEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
 
 /** @public */
-export type FocusInEvent = NativeEventInfo<dxTagBox>;
+export type FocusInEvent = NativeEventInfo<dxTagBox, FocusEvent>;
 
 /** @public */
-export type FocusOutEvent = NativeEventInfo<dxTagBox>;
+export type FocusOutEvent = NativeEventInfo<dxTagBox, FocusEvent>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxTagBox>;
 
 /** @public */
-export type InputEvent = NativeEventInfo<dxTagBox>;
+export type InputEvent = NativeEventInfo<dxTagBox, UIEvent>;
 
 /** @public */
 export type ItemClickEvent = NativeEventInfo<dxTagBox> & ItemInfo;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxTagBox>;
+export type KeyDownEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
 
 /** @public */
-export type KeyPressEvent = NativeEventInfo<dxTagBox>;
+export type KeyPressEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
 
 /** @public */
-export type KeyUpEvent = NativeEventInfo<dxTagBox>;
+export type KeyUpEvent = NativeEventInfo<dxTagBox, KeyboardEvent>;
 
 /** @public */
 export type MultiTagPreparingEvent = Cancelable & EventInfo<dxTagBox> & {
@@ -102,7 +102,7 @@ export type SelectAllValueChangedEvent = EventInfo<dxTagBox> & {
 export type SelectionChangedEvent = EventInfo<dxTagBox> & SelectionChangedInfo<string | number | any>;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxTagBox> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxTagBox, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type DropDownButtonTemplateData = DropDownButtonTemplateDataModel;

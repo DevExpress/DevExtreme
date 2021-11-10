@@ -16,7 +16,7 @@ import {
   ShowAppointmentPopupFn,
   AppointmentItem,
   AppointmentTooltipTemplate,
-} from './types.d';
+} from './types';
 import getCurrentAppointment from './utils/get_current_appointment';
 import {
   defaultGetTextAndFormatDate, defaultGetSingleAppointment,

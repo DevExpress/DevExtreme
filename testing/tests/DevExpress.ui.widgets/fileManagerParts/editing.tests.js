@@ -97,6 +97,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         $input.val('TestFolder 1').trigger('change');
 
+        $input.trigger($.Event('keydown', { key: 'enter' }));
         $input.trigger($.Event('keyup', { key: 'enter' }));
         this.clock.tick(400);
 
@@ -167,6 +168,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         $input.val('Test 4').trigger('change');
 
+        $input.trigger($.Event('keydown', { key: 'enter' }));
         $input.trigger($.Event('keyup', { key: 'enter' }));
         this.clock.tick(400);
 
@@ -1756,5 +1758,30 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         this.wrapper.getDialogButton('Cancel').trigger('dxclick');
         implementationsMap.getWidth = originalFunc;
+    });
+
+    test('create folder by Enter in dialog input - issue with IME compositionEnd for Chinese (T1024643)', function(assert) {
+        this.wrapper.getToolbarButton('New directory').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $input = this.wrapper.getDialogTextInput();
+        assert.ok($input.has(':focus'), 'dialog\'s input element should be focused');
+        assert.strictEqual($input.val(), 'Untitled directory', 'input has default value');
+
+        $input.val('Test 4').trigger('change');
+
+        const fileManager = this.wrapper.getInstance();
+        const createItemDialog = fileManager._editing._dialogManager._createItemDialog;
+        assert.strictEqual(createItemDialog._hasCompositionJustEnded, undefined, 'composition not yet started');
+
+        $input.trigger($.Event('keydown', { key: 'enter' }));
+        $input.trigger($.Event('keyup', { key: 'enter' }));
+        this.clock.tick(400);
+
+        assert.strictEqual(createItemDialog._hasCompositionJustEnded, true, 'compositionEnded successfully');
+
+        const $folderNode = this.wrapper.getFolderNode(4);
+        assert.strictEqual($folderNode.find('span').text(), 'Test 4', 'folder created');
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
     });
 });

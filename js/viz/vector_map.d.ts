@@ -61,7 +61,7 @@ export type CenterChangedEvent = EventInfo<dxVectorMap> & {
 };
 
 /** @public */
-export type ClickEvent = NativeEventInfo<dxVectorMap> & {
+export type ClickEvent = NativeEventInfo<dxVectorMap, MouseEvent | PointerEvent> & {
     readonly target: MapLayerElement;
 };
 
