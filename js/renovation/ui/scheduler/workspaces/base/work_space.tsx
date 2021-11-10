@@ -1,3 +1,4 @@
+/* eslint-disable rulesdir/no-non-null-assertion */
 /* eslint-disable class-methods-use-this */
 import {
   Component,
@@ -11,6 +12,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../../utils/combine_classes';
 import {
+  CorrectedVirtualScrollingState,
   DateHeaderCellData,
   DateHeaderData,
   DateHeaderDataGeneratorType,
@@ -23,13 +25,18 @@ import {
   ViewDataMap,
   ViewDataProviderOptions,
   ViewDataProviderType,
+  VirtualScrollingDispatcherType,
+  VirtualScrollingState,
   WorkSpaceGenerationOptions,
 } from '../types';
 import { OrdinaryLayout } from './ordinary_layout';
-
+import { VirtualScrollingDispatcher } from '../../../../../ui/scheduler/workspaces/ui.scheduler.virtual_scrolling';
 import ViewDataProvider from '../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
 import {
-  createCellElementMetaData, getDateTableWidth, getTotalCellCount,
+  createCellElementMetaData,
+  createVirtualScrollingOptions,
+  DATE_TABLE_MIN_CELL_WIDTH,
+  getDateTableWidth,
 } from './utils';
 import { ViewRenderConfig, WorkSpaceProps } from '../props';
 import { getViewRenderConfigByType } from './work_space_config';
@@ -45,11 +52,34 @@ import { calculateIsGroupedAllDayPanel } from '../../view_model/to_test/views/ut
 import { DateHeaderDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/date_header_data_generator';
 import { TimePanelDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
 import { getGroupPanelData } from '../../view_model/group_panel/utils';
+import { ScrollEventArgs } from '../../../scroll_view/common/types';
+
+interface VirtualScrollingSizes {
+  cellHeight: number;
+  cellWidth: number;
+  viewWidth: number;
+  viewHeight: number;
+  scrollableWidth: number;
+}
+
+interface VirtualScrollingData {
+  sizes: VirtualScrollingSizes;
+  state: VirtualScrollingState;
+}
+
+const defaultVirtualScrollingMetaData = {
+  cellHeight: 50,
+  cellWidth: DATE_TABLE_MIN_CELL_WIDTH,
+  viewWidth: 300,
+  viewHeight: 300,
+  scrollableWidth: 300,
+};
 
 export const prepareGenerationOptions = (
   workSpaceProps: WorkSpaceGenerationOptions,
   renderConfig: ViewRenderConfig,
   isAllDayPanelVisible: boolean,
+  virtualStartIndices: CorrectedVirtualScrollingState,
 ): ViewDataProviderOptions => {
   const {
     intervalCount,
@@ -74,8 +104,8 @@ export const prepareGenerationOptions = (
   } = renderConfig;
 
   return {
-    startRowIndex: 0,
-    startCellIndex: 0,
+    startRowIndex: virtualStartIndices.startRowIndex,
+    startCellIndex: virtualStartIndices.startCellIndex,
     groupOrientation,
     groupByDate,
     groups,
@@ -114,6 +144,7 @@ export const viewFunction = ({
   timePanelRef,
   groupPanelRef,
   layoutRef,
+  widgetElementRef,
 
   isVerticalGrouping,
   isGroupedByDate,
@@ -124,6 +155,8 @@ export const viewFunction = ({
   headerEmptyCellWidth,
   tablesWidth,
   classes,
+
+  onScroll,
 
   props: {
     dataCellTemplate,
@@ -183,11 +216,14 @@ export const viewFunction = ({
     headerEmptyCellWidth={headerEmptyCellWidth}
     tablesWidth={tablesWidth}
 
+    onScroll={onScroll}
+
     className={classes}
     dateTableRef={dateTableRef}
     allDayPanelRef={allDayPanelRef}
     timePanelRef={timePanelRef}
     groupPanelRef={groupPanelRef}
+    widgetElementRef={widgetElementRef}
 
     appointments={appointments}
     allDayAppointments={allDayAppointments}
@@ -208,6 +244,13 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   @InternalState()
   tablesWidth: number | undefined;
 
+  @InternalState()
+  virtualScrolling: VirtualScrollingDispatcherType =
+  (new VirtualScrollingDispatcher()) as unknown as VirtualScrollingDispatcherType;
+
+  @InternalState()
+  virtualScrollingData?: VirtualScrollingData;
+
   @ForwardRef()
   dateTableRef!: RefObject<HTMLTableElement>;
 
@@ -224,6 +267,9 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   // We should use RefObject<CrossScrollingLayout | OrdinaryLayout> here
   @Ref()
   layoutRef!: RefObject<CrossScrollingLayout>;
+
+  @ForwardRef()
+  widgetElementRef!: RefObject<HTMLDivElement>;
 
   get renderConfig(): ViewRenderConfig {
     return getViewRenderConfigByType(
@@ -259,7 +305,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   }
 
   get layout(): JSXTemplate<
-  MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
+  MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef' | 'onScroll'
   > {
     return this.renderConfig.isCreateCrossScrolling
       ? CrossScrollingLayout
@@ -353,12 +399,51 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     });
   }
 
+  get correctedVirtualScrollingState(): CorrectedVirtualScrollingState {
+    let result = this.virtualScrollingData?.state;
+
+    if (!result) {
+      const {
+        scrolling,
+        schedulerHeight,
+        schedulerWidth,
+        groups,
+      } = this.props;
+      const completeColumnCount = this.completeViewDataMap[0].length;
+      const completeRowCount = this.completeViewDataMap.length;
+
+      this.virtualScrolling.setViewOptions(createVirtualScrollingOptions({
+        cellHeight: defaultVirtualScrollingMetaData.cellHeight,
+        cellWidth: defaultVirtualScrollingMetaData.cellWidth,
+        schedulerHeight,
+        schedulerWidth,
+        viewHeight: defaultVirtualScrollingMetaData.viewHeight,
+        viewWidth: defaultVirtualScrollingMetaData.viewWidth,
+        scrolling,
+        scrollableWidth: defaultVirtualScrollingMetaData.scrollableWidth,
+        groups,
+        isVerticalGrouping: this.isVerticalGrouping,
+        completeRowCount,
+        completeColumnCount,
+      }));
+      this.virtualScrolling.createVirtualScrolling();
+      this.virtualScrolling.updateDimensions(true);
+
+      result = this.virtualScrolling.getRenderState();
+    }
+
+    return {
+      startCellIndex: 0,
+      startRowIndex: 0,
+      ...result,
+    };
+  }
+
   get viewDataMap(): ViewDataMap {
     return this.viewDataGenerator.generateViewDataMap(
       this.completeViewDataMap,
       {
-        startRowIndex: 0,
-        startCellIndex: 0,
+        ...this.correctedVirtualScrollingState,
         isVerticalGrouping: this.isVerticalGrouping,
         isAllDayPanelVisible: this.isAllDayPanelVisible,
       },
@@ -367,17 +452,11 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
   get viewData(): GroupedViewData {
     const { groups } = this.props;
-
-    return this.viewDataGenerator.getViewDataFromMap(
+    const result = this.viewDataGenerator.getViewDataFromMap(
       this.completeViewDataMap,
       this.viewDataMap,
       {
-        topVirtualRowHeight: 0,
-        bottomVirtualRowHeight: 0,
-        leftVirtualCellWidth: 0,
-        rightVirtualCellWidth: 0,
-        startRowIndex: 0,
-        startCellIndex: 0,
+        ...this.correctedVirtualScrollingState,
         isProvideVirtualCellsWidth: this.renderConfig.isProvideVirtualCellsWidth,
         isVerticalGrouping: this.isVerticalGrouping,
         isAllDayPanelVisible: this.isAllDayPanelVisible,
@@ -386,6 +465,8 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         ),
       },
     );
+
+    return result;
   }
 
   get completeDateHeaderData(): DateHeaderCellData[][] {
@@ -402,7 +483,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return this.dateHeaderDataGenerator.getCompleteDateHeaderMap(
       {
         isGenerateWeekDaysHeaderData: this.renderConfig.isGenerateWeekDaysHeaderData,
-        isGroupedByDate: this.isGroupedByDate, // TODO: validate grouping by date
+        isGroupedByDate: this.isGroupedByDate,
         groups,
         groupOrientation: this.groupOrientation,
         isHorizontalGrouping: this.isHorizontalGrouping,
@@ -435,16 +516,14 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       this.completeViewDataMap,
       {
         isGenerateWeekDaysHeaderData: this.renderConfig.isGenerateWeekDaysHeaderData,
-        cellWidth: 0, // TODO: implement virtual scrolling
         isProvideVirtualCellsWidth: this.renderConfig.isProvideVirtualCellsWidth,
         startDayHour,
         endDayHour,
         hoursInterval,
-        startCellIndex: 0,
-        // cellCount: TODO: add virtual scrolling
         groups,
         groupOrientation: this.groupOrientation,
         isGroupedByDate: this.isGroupedByDate,
+        ...this.correctedVirtualScrollingState,
       },
     );
   }
@@ -488,15 +567,12 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return this.timePanelDataGenerator.generateTimePanelData(
       this.completeTimePanelData,
       {
-        startRowIndex: 0,
-        // rowCount?: TODO: add virtualization
-        topVirtualRowHeight: 0,
-        bottomVirtualRowHeight: 0,
         isGroupedAllDayPanel: calculateIsGroupedAllDayPanel(
           this.props.groups, this.groupOrientation, this.isAllDayPanelVisible,
         ),
         isVerticalGrouping: this.isVerticalGrouping,
         isAllDayPanelVisible: this.isAllDayPanelVisible,
+        ...this.correctedVirtualScrollingState,
       },
     );
   }
@@ -537,6 +613,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       },
       this.renderConfig,
       this.isAllDayPanelVisible,
+      this.correctedVirtualScrollingState,
     );
 
     viewDataProvider.setViewOptions(generationOptions);
@@ -682,6 +759,64 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     }
   }
 
+  @Effect({ run: 'always' })
+  virtualScrollingMetaDataEffect(): void {
+    const dateTableCell = this.dateTableRef.current!.querySelector('td:not(.dx-scheduler-virtual-cell)');
+    const cellRect = dateTableCell!.getBoundingClientRect();
+    const cellHeight = Math.floor(cellRect.height);
+    const cellWidth = Math.floor(cellRect.width);
+
+    const scrollableWidth = this.layoutRef.current!.getScrollableWidth();
+
+    const widgetRect = this.widgetElementRef.current!.getBoundingClientRect();
+    const viewHeight = widgetRect.height;
+    const viewWidth = widgetRect.width;
+
+    const nextSizes = {
+      cellHeight,
+      cellWidth,
+      scrollableWidth,
+      viewWidth,
+      viewHeight,
+    };
+
+    const isNextMetaDataNotEqualToCurrent = !this.virtualScrollingData || Object.entries(nextSizes)
+      .some(([key, value]) => value !== this.virtualScrollingData!.sizes[key]);
+
+    if (isNextMetaDataNotEqualToCurrent) {
+      const {
+        scrolling,
+        schedulerHeight,
+        schedulerWidth,
+        groups,
+      } = this.props;
+      const completeColumnCount = this.completeViewDataMap[0].length;
+      const completeRowCount = this.completeViewDataMap.length;
+
+      this.virtualScrolling.setViewOptions(createVirtualScrollingOptions({
+        cellHeight: nextSizes.cellHeight,
+        cellWidth: nextSizes.cellWidth,
+        schedulerHeight,
+        schedulerWidth,
+        viewHeight: nextSizes.viewHeight,
+        viewWidth: nextSizes.viewWidth,
+        scrolling,
+        scrollableWidth: nextSizes.scrollableWidth,
+        groups,
+        isVerticalGrouping: this.isVerticalGrouping,
+        completeRowCount,
+        completeColumnCount,
+      }));
+      this.virtualScrolling.createVirtualScrolling();
+      this.virtualScrolling.updateDimensions(true);
+
+      this.virtualScrollingData = {
+        state: this.virtualScrolling.getRenderState(),
+        sizes: nextSizes,
+      };
+    }
+  }
+
   @Effect()
   onViewRendered(): void {
     const {
@@ -722,17 +857,9 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     );
 
     if (!this.isCalculateTablesWidth || tableWidths === this.tablesWidth) {
-      const cellCount = this.viewDataProvider.getCellCount({
-        intervalCount,
-        currentDate,
-        viewType,
-        hoursInterval,
-        startDayHour,
-        endDayHour,
-      });
-      const totalCellCount = getTotalCellCount(cellCount, this.groupOrientation, groups);
+      const columnCount = this.viewDataMap.dateTableMap[0].length;
 
-      const dateTableCellsMeta = this.createDateTableElementsMeta(totalCellCount);
+      const dateTableCellsMeta = this.createDateTableElementsMeta(columnCount);
       const allDayPanelCellsMeta = this.createAllDayPanelElementsMeta();
 
       onViewRendered({
@@ -764,7 +891,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   }
 
   createDateTableElementsMeta(totalCellCount: number): DOMRect[][] {
-    const dateTableCells = this.dateTableRef.current!.querySelectorAll('td');
+    const dateTableCells = this.dateTableRef.current!.querySelectorAll('td:not(.dx-scheduler-virtual-cell)');
     const dateTableRect = this.dateTableRef.current!.getBoundingClientRect();
     const dateTableCellsMeta: DOMRect[][] = [];
 
@@ -804,5 +931,22 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     });
 
     return allDayPanelCellsMeta;
+  }
+
+  onScroll(event: ScrollEventArgs): void {
+    if (this.props.scrolling.mode === 'virtual') {
+      this.virtualScrolling.handleOnScrollEvent(event.scrollOffset);
+      const nextState = this.virtualScrolling.getRenderState();
+
+      const isUpdateState = Object.entries(nextState)
+        .some(([key, value]) => value !== this.virtualScrollingData!.state[key]);
+
+      if (isUpdateState) {
+        this.virtualScrollingData = {
+          state: nextState,
+          sizes: this.virtualScrollingData!.sizes,
+        };
+      }
+    }
   }
 }

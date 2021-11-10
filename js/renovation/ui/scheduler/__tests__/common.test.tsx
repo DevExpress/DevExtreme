@@ -173,6 +173,10 @@ describe('Scheduler common', () => {
         },
         viewRenderConfig,
         false,
+        {
+          startCellIndex: 0,
+          startRowIndex: 0,
+        },
       );
       viewDataProvider.update(generationOptions, true);
       const DOMMetaData = {
@@ -276,7 +280,7 @@ describe('Scheduler common', () => {
       );
 
       expect(filteredItems)
-        .toHaveLength(0);
+        .toHaveLength(1);
     });
 
     it('should return empty array if appointmentsConfig is not exists', () => {

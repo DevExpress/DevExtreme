@@ -131,6 +131,10 @@ describe('Scheduler', () => {
       const tree = renderComponent({
         onViewRendered: () => {},
         workSpaceKey: 'workSpaceKey',
+        props: {
+          height: 500,
+          width: 600,
+        },
         ...templates,
       });
 
@@ -145,6 +149,8 @@ describe('Scheduler', () => {
           onViewRendered: expect.any(Function),
           appointments: expect.anything(),
           allDayAppointments: expect.anything(),
+          schedulerHeight: 500,
+          schedulerWidth: 600,
         });
       expect(workSpace.key())
         .toBe('workSpaceKey');

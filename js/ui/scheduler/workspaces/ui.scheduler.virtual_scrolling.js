@@ -21,10 +21,13 @@ const DefaultScrollingOrientation = scrollingOrientations.both;
 export class VirtualScrollingDispatcher {
     constructor(options) {
         this.options = options;
-        this._rowHeight = this.getCellHeight();
-        this._cellWidth = this.getCellWidth();
+        if(options) {
+            this._rowHeight = this.getCellHeight();
+            this._cellWidth = this.getCellWidth();
 
-        this._createVirtualScrolling();
+            this._createVirtualScrollingBase();
+        }
+
     }
 
     get isRTL() { return this.options.isRTL(); }
@@ -53,7 +56,7 @@ export class VirtualScrollingDispatcher {
     get viewportHeight() {
         return this.height
             ? this.options.getViewHeight()
-            : getWindow().innerHeight;
+            : getWindow().innerHeight; // TODO: refactor, we can't use it here
     }
 
     get cellWidth() { return this._cellWidth; }
@@ -62,7 +65,7 @@ export class VirtualScrollingDispatcher {
     get viewportWidth() {
         return this.width
             ? this.options.getViewWidth()
-            : getWindow().innerWidth;
+            : getWindow().innerWidth; // TODO: refactor, we can't use it here
     }
 
     get cellCountInsideTopVirtualRow() { return this.verticalScrollingState?.virtualItemCountBefore || 0; }
@@ -120,6 +123,10 @@ export class VirtualScrollingDispatcher {
     get horizontalScrollingAllowed() {
         return this.scrollingOrientation === scrollingOrientations.horizontal ||
             this.scrollingOrientation === scrollingOrientations.both;
+    }
+
+    setViewOptions(options) {
+        this.options = options;
     }
 
     getRenderState() {
@@ -197,7 +204,19 @@ export class VirtualScrollingDispatcher {
         }
     }
 
-    _createVirtualScrolling() {
+    createVirtualScrolling() {
+        const isVerticalVirtualScrollingCreated = !!this.verticalVirtualScrolling;
+        const isHorizontalVirtualScrollingCreated = !!this.horizontalVirtualScrolling;
+
+        if(this.verticalScrollingAllowed !== isVerticalVirtualScrollingCreated
+            || this.horizontalScrollingAllowed !== isHorizontalVirtualScrollingCreated) {
+            this._rowHeight = this.getCellHeight();
+            this._cellWidth = this.getCellWidth();
+            this._createVirtualScrollingBase();
+        }
+    }
+
+    _createVirtualScrollingBase() {
         if(this.verticalScrollingAllowed) {
             this.verticalVirtualScrolling = new VerticalVirtualScrolling({
                 ...this.options,
@@ -254,7 +273,7 @@ export class VirtualScrollingDispatcher {
             const horizontalStateChanged = isDefined(left) && this.horizontalVirtualScrolling?.updateState(left);
 
             if(verticalStateChanged || horizontalStateChanged) {
-                this.options.updateRender();
+                this.options.updateRender?.();
             }
         }
     }
@@ -262,22 +281,24 @@ export class VirtualScrollingDispatcher {
     updateDimensions(isForce) {
         const cellHeight = this.getCellHeight();
         const needUpdateVertical = this.verticalScrollingAllowed && cellHeight !== this.rowHeight;
-        if(needUpdateVertical || isForce) {
+        if((needUpdateVertical || isForce) && this.verticalVirtualScrolling) {
             this.rowHeight = cellHeight;
 
-            this.verticalVirtualScrolling?.reinitState(cellHeight, isForce);
+            this.verticalVirtualScrolling.viewportSize = this.viewportHeight;
+            this.verticalVirtualScrolling.reinitState(cellHeight, isForce);
         }
 
         const cellWidth = this.getCellWidth();
         const needUpdateHorizontal = this.horizontalScrollingAllowed && cellWidth !== this.cellWidth;
-        if(needUpdateHorizontal || isForce) {
+        if((needUpdateHorizontal || isForce) && this.horizontalVirtualScrolling) {
             this.cellWidth = cellWidth;
 
-            this.horizontalVirtualScrolling?.reinitState(cellWidth, isForce);
+            this.horizontalVirtualScrolling.viewportSize = this.viewportWidth;
+            this.horizontalVirtualScrolling.reinitState(cellWidth, isForce);
         }
 
         if(needUpdateVertical || needUpdateHorizontal) {
-            this.options.updateGrid();
+            this.options.updateGrid?.();
         }
     }
 }
@@ -286,7 +307,7 @@ class VirtualScrollingBase {
     constructor(options) {
         this.options = options;
         this._state = this.defaultState;
-        this._viewportSize = options.viewportSize;
+        this.viewportSize = options.viewportSize;
         this._itemSize = options.itemSize;
 
         this._position = -1;
@@ -295,7 +316,6 @@ class VirtualScrollingBase {
         this.updateState(0);
     }
 
-    get viewportSize() { return this._viewportSize; }
     get itemSize() { return this._itemSize; }
     set itemSize(value) {
         this._itemSizeChanged = this._itemSize !== value;
