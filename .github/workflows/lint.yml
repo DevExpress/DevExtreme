@@ -156,9 +156,7 @@ jobs:
       run: |
         node -v
         npm -v
-        npm install --no-audit --no-fund --ignore-scripts --legacy-peer-deps
-        jq "del(..|select(.=={}))" package-lock.json > package-lock-normalized.json
-        mv -fv package-lock-normalized.json package-lock.json
+        npm install --no-audit --no-fund --ignore-scripts
         git diff --exit-code package-lock.json
 
   notify:
