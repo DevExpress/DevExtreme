@@ -1,5 +1,5 @@
-import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
+import { createScreenshotsComparer } from '../../helpers/screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 
 fixture`HtmlEditor`
