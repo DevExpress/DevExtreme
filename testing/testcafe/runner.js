@@ -29,21 +29,32 @@ createTestCafe('localhost', 1437, 1438)
         if(args.concurrency > 0) {
             runner.concurrency(args.concurrency);
         }
+        const filters = [];
         if(indices) {
             const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
             let testIndex = 0;
-            runner.filter(() => {
+            filters.push(() => {
                 const result = (testIndex % total) === (current - 1);
                 testIndex += 1;
                 return result;
             });
         }
         if(testName) {
-            runner.filter(name => name === testName);
+            filters.push(name => name === testName);
         }
         if(meta) {
-            runner.filter((testName, fixtureName, fixturePath, testMeta, fixtureMeta) => {
+            filters.push((testName, fixtureName, fixturePath, testMeta, fixtureMeta) => {
                 return testMeta[meta] || fixtureMeta[meta];
+            });
+        }
+        if(filters.length) {
+            runner.filter((...args) => {
+                for(let i = 0; i < filters.length; i++) {
+                    if(!filters[i](...args)) {
+                        return false;
+                    }
+                }
+                return true;
             });
         }
         if(args.cache) {
