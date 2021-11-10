@@ -15,7 +15,7 @@ import {
     NativeEventInfo,
 } from '../../events/index';
 
-export interface ScrollEventInfo<T> extends NativeEventInfo<T, MouseEvent | Event> {
+export interface ScrollEventInfo<T> extends NativeEventInfo<T, WheelEvent | MouseEvent | Event> {
     readonly scrollOffset?: any;
     readonly reachedLeft?: boolean;
     readonly reachedRight?: boolean;
