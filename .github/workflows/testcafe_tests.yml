@@ -120,7 +120,7 @@ jobs:
       run: |
         [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
-        all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION"
+        all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION $INDICES"
         echo "$all_args"
         npm run test-testcafe -- $all_args
 
