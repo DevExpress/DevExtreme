@@ -80,9 +80,12 @@ export default class ButtonWrapper extends Component {
 
     const $content = (this.$element() as unknown as dxElementWrapper).find('.dx-button-content');
     const $template = $content.children().filter('.dx-template-wrapper');
+    const $input = $content.children().filter('.dx-button-submit-input');
+    const $inkRipple = $content.children().filter('.dx-inkripple');
 
     if ($template.length) {
       $template.addClass('dx-button-content');
+      $template.append($input).append($inkRipple);
       $content.replaceWith($template);
     }
   }
