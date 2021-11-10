@@ -139,6 +139,7 @@ const createScheduler = async (
 [false, true].forEach((rtlEnabled) => {
   [undefined, resourcesData].forEach((resources) => {
     test(`Agenda test layout(rtl=${rtlEnabled}, resources=${!!resources}`, async (t) => {
+      await t.resizeWindow(1200, 800);
       await t.expect(await compareScreenshot(t, `agenda-layout-rtl=${rtlEnabled}-resources=${!!resources}.png`)).ok();
     }).before(async () => createScheduler(rtlEnabled, resources, undefined));
   });
@@ -146,6 +147,7 @@ const createScheduler = async (
 
 [false, true].forEach((rtlEnabled) => {
   test(`Agenda test layout with groups(rtl=${rtlEnabled}`, async (t) => {
+    await t.resizeWindow(1200, 800);
     await t.expect(await compareScreenshot(t, `agenda-layout-groups-rtl=${rtlEnabled}.png`)).ok();
   }).before(async () => createScheduler(rtlEnabled, resourcesData, ['roomId']));
 });

@@ -163,6 +163,7 @@ test('Basic drag-n-drop movements from tooltip in month view', async (t) => {
   }],
 }].forEach(({ currentView, dataSource }) => {
   test(`Basic drag-n-drop movements in ${currentView} view`, async (t) => {
+    await t.resizeWindow(1200, 800);
     const scheduler = new Scheduler('#container');
     const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 
@@ -230,6 +231,7 @@ test('Basic drag-n-drop movements', async (t) => {
 }));
 
 test('Basic drag-n-drop movements with mouse offset', async (t) => {
+  await t.resizeWindow(1200, 800);
   const scheduler = new Scheduler('#container');
   const draggableAppointment = scheduler.getAppointment('Website Re-Design Plan');
 

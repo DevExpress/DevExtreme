@@ -7,6 +7,7 @@ fixture`Outlook dragging, for case scheduler in container with transform style`
   .page(url(__dirname, './containerWithTransform.html'));
 
 test('Dragging should be work right in case dxScheduler placed in container with transform style', async (t) => {
+  await t.resizeWindow(1200, 800);
   const scheduler = new Scheduler('.dx-scheduler');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
