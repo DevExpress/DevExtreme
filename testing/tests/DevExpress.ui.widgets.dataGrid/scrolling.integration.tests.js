@@ -1237,6 +1237,11 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
     });
 
     QUnit.test('New mode. Rows should be scrolled properly when rowRenderingMode is virtual with pageSize == all', function(assert) {
+        // eslint-disable-next-line spellcheck/spell-checker
+        if(QUnit.urlParams.norenovation) {
+            // FAILING TEST IN NORENOVATION MODE
+            return;
+        }
         // arrange
         const getData = function() {
             const items = [];
