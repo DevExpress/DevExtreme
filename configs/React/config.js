@@ -98,7 +98,6 @@ window.config = {
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',
     'devexpress-gantt': 'npm:devexpress-gantt/dist/dx-gantt.js',
-    '@devextreme/vdom': 'npm:@devextreme/vdom',
     '@devextreme/runtime': 'npm:@devextreme/runtime',
     'inferno': 'npm:inferno/dist/inferno.min.js',
     'inferno-compat': 'npm:inferno-compat/dist/inferno-compat.min.js',
@@ -115,9 +114,6 @@ window.config = {
   },
   packages: {
     'devextreme': {
-      defaultExtension: 'js',
-    },
-    '@devextreme/vdom': {
       defaultExtension: 'js',
     },
     'devextreme-react': {

@@ -103,7 +103,6 @@ window.config = {
     'devexpress-diagram': 'npm:devexpress-diagram',
     'devexpress-gantt': 'npm:devexpress-gantt',
     'devextreme-angular': 'npm:devextreme-angular',
-    '@devextreme/vdom': 'npm:@devextreme/vdom',
     '@devextreme/runtime': 'npm:@devextreme/runtime',
     'inferno': 'npm:inferno/dist/inferno.min.js',
     'inferno-compat': 'npm:inferno-compat/dist/inferno-compat.min.js',
@@ -120,9 +119,6 @@ window.config = {
       defaultExtension: 'ts',
     },
     'devextreme': {
-      defaultExtension: 'js',
-    },
-    '@devextreme/vdom': {
       defaultExtension: 'js',
     },
     'devextreme/events/utils': {
