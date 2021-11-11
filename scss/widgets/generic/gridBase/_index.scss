@@ -287,11 +287,9 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
 
     &.dx-checkbox-indeterminate {
       .dx-checkbox-icon {
+        font-size: $generic-grid-base-checkbox-indeterminate-icon-size;
+
         &::before {
-          height: $generic-grid-base-checkbox-indeterminate-icon-size;
-          width: $generic-grid-base-checkbox-indeterminate-icon-size;
-          margin-top: math.div(-$generic-grid-base-checkbox-indeterminate-icon-size, 2);
-          margin-left: math.div(-$generic-grid-base-checkbox-indeterminate-icon-size, 2);
           border-radius: 0;
         }
       }
