@@ -11,6 +11,7 @@ import { Table } from '../table';
 import { CellTemplateProps, DateTableBody } from './table_body';
 import { LayoutProps } from '../layout_props';
 import { DateTableCellBase } from './cell';
+import DateTable from '../../../../../component_wrapper/scheduler/date_table';
 
 export const viewFunction = ({
   props: {
@@ -66,7 +67,10 @@ export class DateTableLayoutProps extends LayoutProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: { register: true },
+  jQuery: {
+    register: true,
+    component: DateTable,
+  },
 })
 export class DateTableLayoutBase extends JSXComponent(DateTableLayoutProps) {
   get classes(): string | undefined {

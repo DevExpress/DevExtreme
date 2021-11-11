@@ -20,6 +20,7 @@ import { Table } from '../table';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { DateTimeCellTemplateProps, TimePanelData } from '../../types';
 import { GroupOrientation } from '../../../types';
+import TimePanel from '../../../../../component_wrapper/scheduler/time_panel';
 
 export const viewFunction = ({
   props: {
@@ -107,6 +108,7 @@ export class TimePanelLayoutProps {
   view: viewFunction,
   jQuery: {
     register: true,
+    component: TimePanel,
   },
 })
 export class TimePanelTableLayout extends JSXComponent(TimePanelLayoutProps) {
