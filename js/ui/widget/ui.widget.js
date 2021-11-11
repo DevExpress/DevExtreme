@@ -93,8 +93,7 @@ const Widget = DOMComponent.inherit({
                 const device = devices.real();
                 const platform = device.platform;
                 const version = device.version;
-                return platform === 'ios' && compareVersions(version, '13.3') <= 0
-                    || platform === 'android' && compareVersions(version, '4.4.4') <= 0;
+                return platform === 'ios' && compareVersions(version, '13.3') <= 0;
             },
             options: {
                 useResizeObserver: false

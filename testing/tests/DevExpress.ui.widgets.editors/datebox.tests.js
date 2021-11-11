@@ -1244,25 +1244,6 @@ QUnit.module('dateView integration', {
         assert.equal($element.dxDateBox('instance')._strategy.NAME, 'Native', 'correct strategy is chosen');
     });
 
-    QUnit.test('pickerType should be \'rollers\' on android < 4.4 (Q588373, Q588012)', function(assert) {
-        support.inputType = () => {
-            return true;
-        };
-
-        let originalDevice;
-
-        try {
-            originalDevice = devices.real();
-            devices.real({ platform: 'android', version: [4, 3], android: true });
-
-            const dateBox = $('#dateBox').dxDateBox().dxDateBox('instance');
-            assert.notStrictEqual(dateBox.option('pickerType'), 'native');
-        } finally {
-            support.inputType = this.originalInputType;
-            devices.real(originalDevice);
-        }
-    });
-
     QUnit.test('pickerType should be \'native\' on android >= 4.4 (Q588373, Q588012)', function(assert) {
         support.inputType = () => {
             return true;

@@ -589,23 +589,6 @@ testComponentDefaults(Widget,
     }
 );
 
-testComponentDefaults(Widget,
-    {},
-    {
-        useResizeObserver: false
-    },
-    function() {
-        this.originalRealDevice = devices.real();
-        devices.real({
-            platform: 'android',
-            version: '4.4.4'
-        });
-    },
-    function() {
-        devices.real(this.originalRealDevice);
-    }
-);
-
 testComponentDefaults(Popover,
     {},
     {
