@@ -4,7 +4,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { HeaderPanelLayout, HeaderPanelLayoutProps } from '../../base/header_panel/layout';
 import { TimelineDateHeaderLayout } from './date_header/layout';
-import HeaderPanel from '../../../../../component_wrapper/scheduler_header_panel';
+import { HeaderPanel } from '../../../../../component_wrapper/scheduler/header_panel';
 
 export const viewFunction = ({
   props: {
