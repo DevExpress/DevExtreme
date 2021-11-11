@@ -151,6 +151,8 @@ const DropDownBox = DropDownEditor.inherit({
                     const displayValue = this._displayGetter(item);
                     if(isDefined(displayValue)) {
                         values.push(displayValue);
+                    } else if(this.option('acceptCustomValue')) {
+                        values.push(key);
                     }
                     deferred.resolve();
                 });
