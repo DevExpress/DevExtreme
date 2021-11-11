@@ -57,7 +57,7 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-audit --no-fund
+      run: npm install --no-audit --no-fund --legacy-peer-deps
 
     - name: Check components generation
       run: |
