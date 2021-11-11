@@ -4,6 +4,10 @@ const abstract = Class.abstract;
 import { addNamespace, isDxMouseWheelEvent, isMouseEvent, eventData, eventDelta } from '../../events/utils/index';
 import GestureEmitter from '../../events/gesture/emitter.gesture';
 import registerEmitter from '../../events/core/emitter_registrator';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
+import devices from '../../core/devices';
+
+const realDevice = devices.real();
 
 const SCROLL_EVENT = 'scroll';
 const SCROLL_INIT_EVENT = 'dxscrollinit';
@@ -134,7 +138,7 @@ const WheelLocker = TimeoutLocker.inherit((function() {
 })());
 
 
-const PointerLocker = TimeoutLocker.inherit((function() {
+let PointerLocker = TimeoutLocker.inherit((function() {
 
     const POINTER_UNLOCK_TIMEOUT = 400;
 
@@ -147,6 +151,55 @@ const PointerLocker = TimeoutLocker.inherit((function() {
     };
 
 })());
+
+(function() {
+    const iosDevice = realDevice.ios;
+    const androidDevice = realDevice.android;
+
+    if(!(iosDevice || androidDevice)) {
+        return;
+    }
+
+    PointerLocker = Locker.inherit((function() {
+
+        return {
+
+            _scroll: function() {
+                this._locked = true;
+
+                const that = this;
+                cancelAnimationFrame(this._scrollFrame);
+                this._scrollFrame = requestAnimationFrame(function() {
+                    that._locked = false;
+                });
+            },
+
+            check: function(e, callback) {
+                cancelAnimationFrame(this._scrollFrame);
+                cancelAnimationFrame(this._checkFrame);
+
+                const that = this;
+                const callBase = this.callBase;
+                this._checkFrame = requestAnimationFrame(function() {
+                    callBase.call(that, e, callback);
+
+                    that._locked = false;
+                });
+            },
+
+            dispose: function() {
+                this.callBase();
+
+                cancelAnimationFrame(this._scrollFrame);
+                cancelAnimationFrame(this._checkFrame);
+            }
+
+        };
+
+    })());
+
+})();
+
 
 const ScrollEmitter = GestureEmitter.inherit((function() {
 

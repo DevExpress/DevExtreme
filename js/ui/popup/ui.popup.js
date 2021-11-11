@@ -84,7 +84,7 @@ const getButtonPlace = name => {
                 location = 'after';
                 break;
         }
-    } else if(platform === 'android' && device.version && parseInt(device.version[0]) > 4) {
+    } else if(platform === 'android') {
         switch(name) {
             case 'cancel':
                 location = 'after';
