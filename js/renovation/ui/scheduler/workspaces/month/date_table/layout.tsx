@@ -14,23 +14,20 @@ export const viewFunction = ({
     addVerticalSizesClassToRows,
     width,
   },
-}: MonthDateTableLayout): JSX.Element => {
-  console.log('Date table month layout changed');
-  return (
-    <DateTableLayoutBase
-      viewData={viewData}
-      groupOrientation={groupOrientation}
-      addDateTableClass={addDateTableClass}
-      dataCellTemplate={dataCellTemplate}
-      cellTemplate={MonthDateTableCell}
-      tableRef={tableRef}
-      addVerticalSizesClassToRows={addVerticalSizesClassToRows}
-      width={width}
+}: MonthDateTableLayout): JSX.Element => (
+  <DateTableLayoutBase
+    viewData={viewData}
+    groupOrientation={groupOrientation}
+    addDateTableClass={addDateTableClass}
+    dataCellTemplate={dataCellTemplate}
+    cellTemplate={MonthDateTableCell}
+    tableRef={tableRef}
+    addVerticalSizesClassToRows={addVerticalSizesClassToRows}
+    width={width}
     // eslint-disable-next-line react/jsx-props-no-spreading
-      {...restAttributes}
-    />
-  );
-};
+    {...restAttributes}
+  />
+);
 
 @Component({
   defaultOptionRules: null,
