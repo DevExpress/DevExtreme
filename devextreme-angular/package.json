@@ -7,7 +7,7 @@
     "url": "https://github.com/DevExpress/devextreme-angular.git"
   },
   "scripts": {
-    "gulp": "npx --node-arg=--max_old_space_size=8048 gulp",
+    "gulp": "npx --node-arg=--max_old_space_size=8192 gulp",
     "build": "npm run gulp -- build",
     "test": "npm run gulp -- test",
     "pack": "npm run gulp -- npm.pack",
