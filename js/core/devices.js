@@ -72,7 +72,8 @@ const uaParsers = {
         const isPhone = /ip(hone|od)/i.test(userAgent);
         const matches = userAgent.match(/os (\d+)_(\d+)_?(\d+)?/i);
         const version = matches ? [parseInt(matches[1], 10), parseInt(matches[2], 10), parseInt(matches[3] || 0, 10)] : [];
-        const grade = 'A';
+        const isIPhone4 = (window.screen.height === (960 / 2));
+        const grade = isIPhone4 ? 'B' : 'A';
 
         return {
             deviceType: isPhone ? 'phone' : 'tablet',
@@ -90,8 +91,7 @@ const uaParsers = {
         const isPhone = /mobile/i.test(userAgent);
         const matches = userAgent.match(/android (\d+)\.?(\d+)?\.?(\d+)?/i);
         const version = matches ? [parseInt(matches[1], 10), parseInt(matches[2] || 0, 10), parseInt(matches[3] || 0, 10)] : [];
-        const worseThan4_4 = version.length > 1 && (version[0] < 4 || version[0] === 4 && version[1] < 4);
-        const grade = worseThan4_4 ? 'B' : 'A';
+        const grade = 'A';
 
         return {
             deviceType: isPhone ? 'phone' : 'tablet',

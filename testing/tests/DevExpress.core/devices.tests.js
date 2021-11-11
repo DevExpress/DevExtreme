@@ -18,8 +18,6 @@ const userAgents = {
     android_9: 'Mozilla/5.0 (Linux; Android 9; Mi A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.143 Mobile Safari/537.36',
     android_tablet_7_1_1: 'Mozilla/5.0 (Linux; Android 7.1.1; SM-T555 Build/NMF26X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Safari/537.36',
     win_phone_10: 'Mozilla/5.0 (Windows Phone 10.0; Android 4.2.1; NOKIA; Lumia 920) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Mobile Safari/537.36 Edge/12.0',
-    win_arm_8: 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; ARM; Tablet PC; Trident/6.0)',
-    win8_1_ie11: 'Mozilla/5.0 (Windows NT 6.3; WOW64; Trident/7.0; .NET4.0E; .NET4.0C; .NET CLR 3.5.30729; .NET CLR 2.0.50727; .NET CLR 3.0.30729; Tablet PC 2.0; rv:11.0) like Gecko'
 };
 
 QUnit.module('devices', {
@@ -59,20 +57,6 @@ QUnit.test('android by userAgent', function(assert) {
     assert.equal(device.platform, 'android', 'platform is android');
     assert.equal(device.version.toString(), '9,0,0', 'correct version');
     assert.equal(device.deviceType, 'phone', 'deviceType is phone');
-});
-
-QUnit.test('win8 tablet by userAgent', function(assert) {
-    const device = fromUA(userAgents.win_arm_8);
-
-    assert.equal(device.platform, 'generic', 'platform is generic');
-    assert.equal(device.deviceType, 'tablet', 'deviceType is tablet');
-});
-
-QUnit.test('win8.1 IE11 by userAgent', function(assert) {
-    const device = fromUA(userAgents.win8_1_ie11);
-
-    assert.equal(device.platform, 'generic', 'platform is generic');
-    assert.equal(device.deviceType, 'desktop', 'deviceType is desktop');
 });
 
 QUnit.test('iphone by device name', function(assert) {
