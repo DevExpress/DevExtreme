@@ -78,17 +78,8 @@ let ClickEmitter = Emitter.inherit({
 
 });
 
-
-const realDevice = devices.real();
-const useNativeClick =
-        realDevice.generic || realDevice.ios || realDevice.android;
-
 (function() {
     const NATIVE_CLICK_CLASS = 'dx-native-click';
-    const isNativeClickEvent = function(target) {
-        return useNativeClick || $(target).closest('.' + NATIVE_CLICK_CLASS).length;
-    };
-
 
     let prevented = null;
     let lastFiredEvent = null;
@@ -102,7 +93,7 @@ const useNativeClick =
         const eventAlreadyFired = lastFiredEvent === originalEvent || originalEvent && originalEvent.DXCLICK_FIRED;
         const leftButton = !e.which || e.which === 1;
 
-        if(leftButton && !prevented && isNativeClickEvent(e.target) && !eventAlreadyFired) {
+        if(leftButton && !prevented && !eventAlreadyFired) {
             if(originalEvent) {
                 originalEvent.DXCLICK_FIRED = true;
             }
@@ -122,10 +113,6 @@ const useNativeClick =
 
     ClickEmitter = ClickEmitter.inherit({
         _makeElementClickable: function($element) {
-            if(!isNativeClickEvent($element)) {
-                this.callBase($element);
-            }
-
             eventsEngine.on($element, 'click', clickHandler);
         },
 
@@ -138,16 +125,6 @@ const useNativeClick =
 
         start: function(e) {
             prevented = null;
-
-            if(!isNativeClickEvent(e.target)) {
-                this.callBase(e);
-            }
-        },
-
-        end: function(e) {
-            if(!isNativeClickEvent(e.target)) {
-                this.callBase(e);
-            }
         },
 
         cancel: function() {
@@ -213,6 +190,5 @@ export { CLICK_EVENT_NAME as name };
 ///#DEBUG
 export {
     misc,
-    useNativeClick
 };
 ///#ENDDEBUG
