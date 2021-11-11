@@ -9,7 +9,6 @@ import { subscribeNodesDisposing, unsubscribeNodesDisposing } from './utils/even
 import pointerEvents from './pointer';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
-import { compare as compareVersions } from '../core/utils/version';
 
 const CLICK_EVENT_NAME = 'dxclick';
 const TOUCH_BOUNDARY = 10;
@@ -80,12 +79,9 @@ let ClickEmitter = Emitter.inherit({
 });
 
 
-// NOTE: native strategy for desktop, iOS 9.3+, Android 5+
 const realDevice = devices.real();
 const useNativeClick =
-        realDevice.generic ||
-        realDevice.ios && compareVersions(realDevice.version, [9, 3]) >= 0 ||
-        realDevice.android && compareVersions(realDevice.version, [5]) >= 0;
+        realDevice.generic || realDevice.ios || realDevice.android;
 
 (function() {
     const NATIVE_CLICK_CLASS = 'dx-native-click';
