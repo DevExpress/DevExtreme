@@ -147,7 +147,7 @@ class OptionsManager {
         && e.value instanceof Object
         && shallowEquals(value as Record<string, unknown>, e.value as Record<string, unknown>);
 
-      if (valuesAreEqual || valuesAreEqualObjects) {
+      if (valuesAreEqual || valuesAreEqualObjects || this.instance.skipOptionsRollBack) {
         return;
       }
 
