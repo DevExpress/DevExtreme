@@ -2,7 +2,6 @@ import {
   ComponentBindings,
   OneWay,
   TwoWay,
-  Event,
 } from '@devextreme-generator/declarations';
 import { BasePagerProps } from './base_pager_props';
 
@@ -21,7 +20,7 @@ export class InternalPagerProps extends BasePagerProps {
 
   @OneWay() pageIndex = 1;
 
-  @Event() pageIndexChange!: EventCallback<number>;
+  @OneWay() pageIndexChange!: EventCallback<number>;
 
-  @Event() pageSizeChange!: EventCallback<number>;
+  @OneWay() pageSizeChange!: EventCallback<number>;
 }
