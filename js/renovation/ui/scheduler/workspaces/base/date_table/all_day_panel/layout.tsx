@@ -6,7 +6,7 @@ import { AllDayPanelTableBody } from './table_body';
 import { ViewCellData } from '../../../types';
 import { LayoutProps } from '../../layout_props';
 import { DefaultSizes } from '../../../const';
-import DateTable from '../../../../../../component_wrapper/scheduler/date_table';
+import { DateTable } from '../../../../../../component_wrapper/scheduler/date_table';
 
 export const viewFunction = ({
   emptyTableHeight,

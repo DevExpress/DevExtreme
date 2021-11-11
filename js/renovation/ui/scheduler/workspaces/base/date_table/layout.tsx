@@ -11,7 +11,7 @@ import { Table } from '../table';
 import { CellTemplateProps, DateTableBody } from './table_body';
 import { LayoutProps } from '../layout_props';
 import { DateTableCellBase } from './cell';
-import DateTable from '../../../../../component_wrapper/scheduler/date_table';
+import { DateTable } from '../../../../../component_wrapper/scheduler/date_table';
 
 export const viewFunction = ({
   props: {

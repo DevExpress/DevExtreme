@@ -14,7 +14,7 @@ import { GroupPanelHorizontalLayout, HorizontalGroupPanelLayoutProps } from './h
 import { Group } from '../../types';
 import { GroupOrientation } from '../../../types';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
-import GroupPanelWrapper from '../../../../../component_wrapper/scheduler/group_panel';
+import { GroupPanelWrapper } from '../../../../../component_wrapper/scheduler/group_panel';
 
 export const viewFunction = ({
   layout: Layout,

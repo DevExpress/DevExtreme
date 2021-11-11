@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import Component from '../common/component';
 
-export default class TimePanel extends Component {
+export class TimePanel extends Component {
   _setOptionsByReference(): void {
     super._setOptionsByReference();
 

@@ -1,5 +1,5 @@
 import { Component, JSXComponent } from '@devextreme-generator/declarations';
-import DateTable from '../../../../../component_wrapper/scheduler/date_table';
+import { DateTable } from '../../../../../component_wrapper/scheduler/date_table';
 import { DateTableLayoutBase, DateTableLayoutProps } from '../../base/date_table/layout';
 import { MonthDateTableCell } from './cell';
 

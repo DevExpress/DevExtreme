@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import Component from '../common/component';
 
-export default class DateTable extends Component {
+export class DateTable extends Component {
   _setOptionsByReference(): void {
     super._setOptionsByReference();
 
