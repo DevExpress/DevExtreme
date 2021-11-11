@@ -31,7 +31,6 @@ test('Full size pager', async (t, { screenshotComparerOptions }) => {
   const pagerElement = Selector(PAGER_SELECTOR);
   const pager = new Pager(pagerElement);
   await t
-    .debug()
     .resizeWindow(750, 600)
     .expect(pager.getPageSize(0).selected)
     .ok('page size 5 selected')

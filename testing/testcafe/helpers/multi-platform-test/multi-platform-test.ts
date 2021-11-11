@@ -24,11 +24,12 @@ export class MultiPlatformTest {
 
 function getPageFilePath(platform: PlatformType, page: string): string {
   if (platform === 'jquery') {
-    const jqueryPageName = page.lastIndexOf('/') === -1 ? page : page.slice(0, page.lastIndexOf('/') + 1);
-    if (existsSync(`${platformsSiteRootPath}/jquery/${jqueryPageName}.html`)) {
-      return `${platformsSiteRootPath}/${platform}/${jqueryPageName}.html`;
+    const jqueryPageName = page.lastIndexOf('/') === -1 ? page : page.slice(page.lastIndexOf('/') + 1);
+    const pathToSpecialPage = `${platformsSiteRootPath}/jquery/${jqueryPageName}.html`;
+    if (existsSync(pathToSpecialPage)) {
+      return `${platformsSiteRootPath}/jquery/${jqueryPageName}.html`;
     }
-    return `${platformsSiteRootPath}/${platform}/container.html`;
+    return `${platformsSiteRootPath}/jquery/container.html`;
   }
   return `${platformsSiteRootPath}/${platform}/dist/${page}.html`;
 }
@@ -49,9 +50,14 @@ export const multiPlatformTest = ({
   const wrappedTest = new MultiPlatformTest();
   platforms.forEach((platform) => {
     const pageUrl = getPageFilePath(platform, page);
-    const testOptions = {
+    const testOptions: {
+      platform: string; screenshotComparerOptions: Partial<IComparerOptions>;
+    } = {
       platform,
-      screenshotComparerOptions: { screenshotsRelativePath: `/screenshots/${platform}` },
+      screenshotComparerOptions: {
+        screenshotsRelativePath: `/screenshots/${platform}`,
+        destinationRelativePath: `/artifacts/compared-screenshots/${platform}`,
+      },
     };
     test
       .meta({ renovation: true })
