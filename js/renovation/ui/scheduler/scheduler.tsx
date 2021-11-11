@@ -482,10 +482,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadGroupResources(): void {
-    const { groups, resources } = this.props;
+    const { groups: schedulerGroups, resources } = this.props;
+    const { groups: currentViewProps } = this.currentViewProps;
+
+    const validGroups = currentViewProps ?? schedulerGroups;
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    (loadResources(groups, resources, this.resourcePromisesMap) as Promise<Group[]>)
+    (loadResources(validGroups, resources, this.resourcePromisesMap) as Promise<Group[]>)
       .then((loadedResources) => {
         this.loadedResources = loadedResources;
       });

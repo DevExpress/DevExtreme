@@ -775,7 +775,9 @@ export const AdvancedChart = BaseChart.inherit({
         this._axesReinitialized = false;
 
         if(this.option('disableTwoWayBinding') !== true) { // for dashboards T732396
+            this.skipOptionsRollBack = true;// T1037806
             this._notifyVisualRange();
+            this.skipOptionsRollBack = false;
         }
     },
 
