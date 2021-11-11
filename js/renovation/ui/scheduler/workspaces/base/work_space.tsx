@@ -16,6 +16,7 @@ import {
   DateHeaderCellData,
   DateHeaderData,
   DateHeaderDataGeneratorType,
+  Group,
   GroupedViewData,
   GroupPanelData,
   TimePanelData,
@@ -53,6 +54,7 @@ import { DateHeaderDataGenerator } from '../../../../../ui/scheduler/workspaces/
 import { TimePanelDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
 import { getGroupPanelData } from '../../view_model/group_panel/utils';
 import { ScrollEventArgs } from '../../../scroll_view/common/types';
+import type { dxSchedulerScrolling } from '../../../../../ui/scheduler';
 
 interface VirtualScrollingSizes {
   cellHeight: number;
@@ -73,6 +75,40 @@ const defaultVirtualScrollingMetaData = {
   viewWidth: 300,
   viewHeight: 300,
   scrollableWidth: 300,
+};
+
+const calculateDefaultVirtualScrollingState = (
+  options: {
+    virtualScrollingDispatcher: VirtualScrollingDispatcherType;
+    scrolling: dxSchedulerScrolling;
+    groups: Group[];
+    completeViewDataMap: ViewCellData[][];
+    isVerticalGrouping: boolean;
+    schedulerHeight?: number | string | (() => number | string);
+    schedulerWidth?: number | string | (() => number | string);
+  },
+): VirtualScrollingState => {
+  const completeColumnCount = options.completeViewDataMap[0].length;
+  const completeRowCount = options.completeViewDataMap.length;
+
+  options.virtualScrollingDispatcher.setViewOptions(createVirtualScrollingOptions({
+    cellHeight: defaultVirtualScrollingMetaData.cellHeight,
+    cellWidth: defaultVirtualScrollingMetaData.cellWidth,
+    schedulerHeight: options.schedulerHeight,
+    schedulerWidth: options.schedulerWidth,
+    viewHeight: defaultVirtualScrollingMetaData.viewHeight,
+    viewWidth: defaultVirtualScrollingMetaData.viewWidth,
+    scrolling: options.scrolling,
+    scrollableWidth: defaultVirtualScrollingMetaData.scrollableWidth,
+    groups: options.groups,
+    isVerticalGrouping: options.isVerticalGrouping,
+    completeRowCount,
+    completeColumnCount,
+  }));
+  options.virtualScrollingDispatcher.createVirtualScrolling();
+  options.virtualScrollingDispatcher.updateDimensions(true);
+
+  return options.virtualScrollingDispatcher.getRenderState();
 };
 
 export const prepareGenerationOptions = (
@@ -409,27 +445,16 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         schedulerWidth,
         groups,
       } = this.props;
-      const completeColumnCount = this.completeViewDataMap[0].length;
-      const completeRowCount = this.completeViewDataMap.length;
 
-      this.virtualScrolling.setViewOptions(createVirtualScrollingOptions({
-        cellHeight: defaultVirtualScrollingMetaData.cellHeight,
-        cellWidth: defaultVirtualScrollingMetaData.cellWidth,
+      result = calculateDefaultVirtualScrollingState({
+        virtualScrollingDispatcher: this.virtualScrolling,
+        scrolling,
+        groups,
+        completeViewDataMap: this.completeViewDataMap,
+        isVerticalGrouping: this.isVerticalGrouping,
         schedulerHeight,
         schedulerWidth,
-        viewHeight: defaultVirtualScrollingMetaData.viewHeight,
-        viewWidth: defaultVirtualScrollingMetaData.viewWidth,
-        scrolling,
-        scrollableWidth: defaultVirtualScrollingMetaData.scrollableWidth,
-        groups,
-        isVerticalGrouping: this.isVerticalGrouping,
-        completeRowCount,
-        completeColumnCount,
-      }));
-      this.virtualScrolling.createVirtualScrolling();
-      this.virtualScrolling.updateDimensions(true);
-
-      result = this.virtualScrolling.getRenderState();
+      });
     }
 
     return {
