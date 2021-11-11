@@ -442,6 +442,11 @@ export const AdvancedChart = BaseChart.inherit({
         that._scaleBreaksGroup.linkAppend();
     },
 
+    _cleanGroups() {
+        this.callBase();
+        this._labelsAxesGroup.linkRemove().clear();
+    },
+
     _populateMarginOptions() {
         const that = this;
         const bubbleSize = estimateBubbleSize(that.getSize(), that.panes.length, that._themeManager.getOptions('maxBubbleSize'), that._isRotated());
