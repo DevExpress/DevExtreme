@@ -1,29 +1,17 @@
+/* eslint-disable no-restricted-globals */
 import {
-  Component, ComponentBindings, JSXComponent, Fragment, InternalState, Ref, RefObject, Effect,
+  Component, ComponentBindings, JSXComponent, InternalState, Effect,
 } from '@devextreme-generator/declarations';
 import React from 'react';
-import { PagerProps } from '../../../../js/renovation/ui/pager/common/pager_props';
 import { Pager } from '../../../../js/renovation/ui/pager/pager';
+import { InternalPagerProps } from '../../../../js/renovation/ui/pager/common/pager_props';
 
-const defaultProps: Partial<PagerProps> = {
-  totalCount: 100,
-  gridCompatibility: false,
-  showPageSizes: true,
-  pageSizes: [5, 10, 20],
-  showInfo: true,
-  showNavigationButtons: true,
-};
-const v = JSON.stringify({ showNavigationButtons: false });
-export const viewFunction = ({ buttonRef, valueInputRef, componentProps }: App): JSX.Element => (
-  <Fragment>
-    <textarea id="jsonProps" ref={valueInputRef} />
-    <input id="apply" ref={buttonRef} type="button" value="Apply" />
-    <Pager
-      className="pager"
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...componentProps}
-    />
-  </Fragment>
+export const viewFunction = ({ componentProps }: App): JSX.Element => (
+  <Pager
+    id="container"
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...componentProps}
+  />
 );
 
 @ComponentBindings()
@@ -34,9 +22,7 @@ class AppProps { }
   view: viewFunction,
 })
 export class App extends JSXComponent<AppProps>() {
-  @Ref() valueInputRef: RefObject<HTMLTextAreaElement>;
-
-  @Ref() buttonRef: RefObject<HTMLInputElement>;
+  @InternalState() options: Partial<InternalPagerProps> = { totalCount: 100 };
 
   @InternalState() pageCount = 20;
 
@@ -44,30 +30,37 @@ export class App extends JSXComponent<AppProps>() {
 
   @InternalState() pageIndex = 5;
 
-  @InternalState() pagerProps: { [key: string]: unknown };
-
-  applyProps(): void {
-    this.pagerProps = JSON.parse(this.valueInputRef.current.value);
-  }
-
-  @Effect({ run: 'once' }) onClickSubscribe(): void {
-    this.valueInputRef.current.value = v;
-    this.buttonRef.current.addEventListener('click', () => this.applyProps());
-  }
-
   pageIndexChange(index: number): void {
     this.pageIndex = index;
   }
 
   pageSizeChange(size: number): void {
-    this.pageCount = defaultProps.totalCount / size;
+    this.pageCount = this.options.totalCount / size;
     this.pageSize = size;
   }
 
-  get componentProps() {
+  @Effect({ run: 'once' })
+  optionsUpdated(): void {
+    (window as unknown as { onOptionsUpdated: (unknown) => void })
+      .onOptionsUpdated = (newOptions: InternalPagerProps) => {
+        // Emulate defaultXXX option behaviour
+        const { pageIndex, pageSize, ...restProps } = newOptions;
+        if (pageIndex) {
+          this.pageIndex = pageIndex;
+        }
+        if (pageSize) {
+          this.pageSize = pageSize;
+        }
+        this.options = {
+          ...this.options,
+          ...restProps,
+        };
+      };
+  }
+
+  get componentProps(): Partial<InternalPagerProps> {
     return {
-      ...defaultProps,
-      ...this.pagerProps,
+      ...this.options,
       pageSize: this.pageSize,
       pageIndex: this.pageIndex,
       pageCount: this.pageCount,

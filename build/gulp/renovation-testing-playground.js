@@ -9,6 +9,14 @@ const webpack = require('webpack');
 const webpackStream = require('webpack-stream');
 const template = require('gulp-template');
 const lazypipe = require('lazypipe');
+const parseArguments = require('minimist');
+
+function getPlaygroundName() {
+    process.env.BABEL_ENV = 'development';
+    const args = parseArguments(process.argv, { string: ['playgroundName'] });
+    const playgroundName = args['playgroundName'];
+    return playgroundName;
+}
 
 const cssLightFileName = 'css/dx.light.css';
 const renovationRoot = 'testing/renovation/platforms/';
@@ -17,13 +25,11 @@ const platforms = {
         pattern: '*.jsx', entryName: (fn) => path.basename(fn, '.jsx'),
         getDeclarationFile: (basenameFilename) => basenameFilename + '.jsx'
     },
-    //
-    // TODO uncomment after fix Ng, Vue generators
-    //
-    // 'angular': {
-    //     pattern: '!(declaration)**/app.component.ts', entryName: (fn) => path.basename(path.dirname(fn)),
-    //     getDeclarationFile: (basenameFilename) => path.join(basenameFilename, 'app.component.ts')
-    // },
+    'angular': {
+        pattern: '!(declaration)**/app.component.ts', entryName: (fn) => path.basename(path.dirname(fn)),
+        getDeclarationFile: (basenameFilename) => path.join(basenameFilename, 'app.component.ts')
+    },
+    // TODO uncomment after Vue generators
     // 'vue': {
     //     pattern: '*.vue', entryName: (fn) => path.basename(fn, '.vue'),
     //     getEntyPoint: (fn) => path.join(path.dirname(fn), path.basename(fn, '.vue') + '-app.js'),
@@ -40,7 +46,7 @@ const templatePipe = (dest, data) => (
             p.extname = '';
         })()
 );
-function namedTask(task, name) {
+function namedTask(name, task) {
     task.displayName = name;
     return task;
 }
@@ -52,23 +58,26 @@ const tasks = ({ isWatch }) => Object.entries(platforms)
         const platformDeclarationSrc = path.join(platformRootSrc, 'declaration');
         const platformRootDest = path.join(platformRoot, 'dist');
         const platformDeclarationDest = path.join(platformRootDest, 'declaration');
+        const playgroundName = getPlaygroundName();
+        const fileFilter = playgroundName ? (fn) => entryName(fn) === playgroundName : () => true;
         const platformDeclarationFiles = declarationFiles
             .map(fn => path.join(platformRootSrc, 'declaration', path.basename(fn, '.tsx')))
-            .map(getDeclarationFile || ((basenameFilename) => basenameFilename + '.js'));
-        const nativeFiles = glob.sync(path.join(platformRootSrc, pattern));
+            .map(getDeclarationFile || ((basenameFilename) => basenameFilename + '.js'))
+            .filter(fileFilter);
+        const nativeFiles = glob.sync(path.join(platformRootSrc, pattern))
+            .filter(fileFilter);
 
         const htmlFileGeneratorTask = destDir => fileName => {
             const dest = path.join(destDir, path.basename(entryName(fileName) + '.html'));
             const entryPointJS = entryName(fileName) + '.js';
             const pathToArtifacts = path.relative(destDir, 'artifacts').replace(/\\/g, '/');
             const style = path.join(pathToArtifacts, cssLightFileName);
-            return namedTask(() => gulp
-                .src('build/gulp/templates/playground-html-bootstrap.jst')
-                .pipe(templatePipe(dest, {
-                    style,
-                    entryPointJS
-                }))
-                .pipe(gulp.dest(destDir)), `${platform}-html`);
+            return namedTask(`${platform}-html`,
+                () => gulp
+                    .src('build/gulp/templates/playground-html-bootstrap.jst')
+                    .pipe(templatePipe(dest, { style, entryPointJS }))
+                    .pipe(gulp.dest(destDir)),
+            );
         };
 
         let generateHtmlFiles = [
@@ -81,10 +90,12 @@ const tasks = ({ isWatch }) => Object.entries(platforms)
                     .slice(0, -4)
                     .replace(/\\/g, '/');
                 const destFileName = path.basename(getEntyPoint(fileName));
-                return namedTask(() => gulp
-                    .src('build/gulp/templates/playground-vue-application.jst')
-                    .pipe(templatePipe(destFileName, { appComponentModule }))
-                    .pipe(gulp.dest(destDir)), `${platform}-vue-app`)
+                return namedTask(`${platform}-vue-app`,
+                    () => gulp
+                        .src('build/gulp/templates/playground-vue-application.jst')
+                        .pipe(templatePipe(destFileName, { appComponentModule }))
+                        .pipe(gulp.dest(destDir)),
+                );
             };
             generateHtmlFiles = [
                 ...generateHtmlFiles,
@@ -96,10 +107,12 @@ const tasks = ({ isWatch }) => Object.entries(platforms)
             const angularTemplateGenerationTask = fileName => {
                 const destFileName = path.basename(fileName, '.ts') + '.html';
                 const destDir = path.join(platformDeclarationSrc, entryName(fileName))
-                return namedTask(() => gulp
-                    .src('build/gulp/templates/playground-angular-declaration-template.jst')
-                    .pipe(templatePipe(destFileName, {}))
-                    .pipe(gulp.dest(destDir)), `${platform}-angular-app`)
+                return namedTask(`${platform}-angular-app`,
+                    () => gulp
+                        .src('build/gulp/templates/playground-angular-declaration-template.jst')
+                        .pipe(templatePipe(destFileName, {}))
+                        .pipe(gulp.dest(destDir))
+                );
             };
             generateHtmlFiles = [
                 ...generateHtmlFiles,
@@ -110,10 +123,12 @@ const tasks = ({ isWatch }) => Object.entries(platforms)
             const relativePathToDeclationComponent = path.relative(path.dirname(fileName), path.join(renovationRoot, 'declaration'));
             const componentModule = path.join(relativePathToDeclationComponent, entryName(fileName))
                 .replace(/\\/g, '/');
-            return namedTask(() => gulp
-                .src(`build/gulp/templates/playground-${platform}-declaration-application.jst`)
-                .pipe(templatePipe(path.basename(fileName), { componentModule }))
-                .pipe(gulp.dest(path.dirname(fileName))), `${platform}-declaration-app`);
+            return namedTask(`${platform}-declaration-app`,
+                () => gulp
+                    .src(`build/gulp/templates/playground-${platform}-declaration-application.jst`)
+                    .pipe(templatePipe(path.basename(fileName), { componentModule }))
+                    .pipe(gulp.dest(path.dirname(fileName)))
+            );
         };
         const generateDeclarationFiles = platformDeclarationFiles.map(declarationAppFileGeneratorTask);
         const compileSourceGeneratorTask = (fileEntries, dest) => {
@@ -144,10 +159,12 @@ const tasks = ({ isWatch }) => Object.entries(platforms)
             };
             // use lazypipe to prevent resolve webpack require dependencies
             const webpackPipe = (config) => lazypipe().pipe(webpackStream, config, webpack)();
-            return namedTask(() => gulp
-                .src(path.resolve(platformRootSrc))
-                .pipe(webpackPipe(getConfig()))
-                .pipe(gulp.dest(dest)), `${platform}-compile-source`);
+            return namedTask(`${platform}-compile-source`,
+                () => gulp
+                    .src(path.resolve(platformRootSrc))
+                    .pipe(webpackPipe(getConfig()))
+                    .pipe(gulp.dest(dest))
+            );
         }
         const compileSourceFiles = [
             compileSourceGeneratorTask(nativeFiles, platformRootDest),
@@ -165,8 +182,14 @@ gulp.task('build-renovation-testing', gulp.series(
 ));
 
 gulp.task('build-renovation-testing:watch', gulp.series(
-    (done) => { process.env.BABEL_ENV = 'development'; done(); },
-    gulp.parallel(tasks({ iswatch: true }))
+    (done) => {
+        const playgroundName = getPlaygroundName();
+        if(!playgroundName) {
+            console.log('\x1b[1mYou can use task with playground name for speedup: \x1b[32mnpm run build-renovation-testing -- playgroundName\x1b[0m')
+        }
+        done();
+    },
+    gulp.parallel(tasks({ isWatch: true }))
 ));
 
 const foldersToCleanup = [
@@ -174,11 +197,8 @@ const foldersToCleanup = [
     ...(glob.sync(renovationRoot + '/**/src/declaration')),
     ...(glob.sync(renovationRoot + '/vue/src/**/*-app.js')),
 ]
-    .map(f => {
-        return () => {
-            return del(f)
-        }
-    });
+    .map(f => () => del(f));
 gulp.task('clean-renovation-testing',
     gulp.parallel([...foldersToCleanup, (cb) => { cb(); }])
 );
+

@@ -3,18 +3,35 @@ import { Selector } from 'testcafe';
 import Pager from '../../model/dataGrid/pager';
 import SelectBox from '../../model/selectBox';
 import TextBox from '../../model/textBox';
-import cloneTest from '../../helpers/check-all-platforms';
+import { PagerProps } from '../../../../js/renovation/ui/pager/common/pager_props';
+import { multiPlatformTest, updateComponentOptions } from '../../helpers/multi-platform-test';
 
-const multiPlatformTest = cloneTest('declaration/pager', ['react']);
+const defaultProps: Partial<PagerProps> = {
+  totalCount: 100,
+  gridCompatibility: false,
+  showPageSizes: true,
+  pageSizes: [5, 10, 20],
+  pageSize: 5,
+  pageCount: 20,
+  pageIndex: 5,
+  showInfo: true,
+  showNavigationButtons: true,
+};
 
-const PAGER_SELECTOR = '.pager';
+const test = multiPlatformTest({
+  page: 'declaration/pager',
+  platforms: ['jquery', 'react'],
+});
+
+const PAGER_SELECTOR = '#container';
 
 fixture('Renovated pager');
 
-multiPlatformTest('Full size pager', async (t, { screenshotComparerOptions }) => {
+test('Full size pager', async (t, { screenshotComparerOptions }) => {
   const pagerElement = Selector(PAGER_SELECTOR);
   const pager = new Pager(pagerElement);
   await t
+    .debug()
     .resizeWindow(750, 600)
     .expect(pager.getPageSize(0).selected)
     .ok('page size 5 selected')
@@ -42,8 +59,9 @@ multiPlatformTest('Full size pager', async (t, { screenshotComparerOptions }) =>
     .eql('Page 7 of 10 (100 items)')
     .expect(await compareScreenshot(t, 'pager-full-allpages.png', pagerElement, screenshotComparerOptions))
     .ok();
-});
-multiPlatformTest('Compact pager', async (t, { screenshotComparerOptions }) => {
+}).before(async (_, { platform }) => updateComponentOptions(platform, defaultProps));
+
+test('Compact pager', async (t, { screenshotComparerOptions }) => {
   const pagerElement = Selector(PAGER_SELECTOR);
   const pager = new Pager(pagerElement);
   await t
@@ -59,8 +77,9 @@ multiPlatformTest('Compact pager', async (t, { screenshotComparerOptions }) => {
     .eql('10')
     .expect(await compareScreenshot(t, 'pager-compact.png', pagerElement, screenshotComparerOptions))
     .ok();
-});
-multiPlatformTest('Resize', async (t, { screenshotComparerOptions }) => {
+}).before(async (_, { platform }) => updateComponentOptions(platform, defaultProps));
+
+test('Resize', async (t, { screenshotComparerOptions }) => {
   const pagerElement = Selector(PAGER_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
@@ -81,14 +100,13 @@ multiPlatformTest('Resize', async (t, { screenshotComparerOptions }) => {
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-});
-multiPlatformTest('Resize without navigation buttons', async (t, { screenshotComparerOptions }) => {
+}).before(async (_, { platform }) => updateComponentOptions(platform, defaultProps));
+
+test('Resize without navigation buttons', async (t, { screenshotComparerOptions }) => {
   const pagerElement = Selector(PAGER_SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   await t
     // hide navigation button
-    .typeText('#jsonProps', JSON.stringify({ showNavigationButtons: false }), { replace: true })
-    .click('#apply')
     .resizeWindow(700, 600)
     .expect(await takeScreenshot('pager-resize-nobutton-large.png', pagerElement, screenshotComparerOptions))
     .ok()
@@ -106,4 +124,6 @@ multiPlatformTest('Resize without navigation buttons', async (t, { screenshotCom
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-});
+}).before(async (_, { platform }) => updateComponentOptions(platform, {
+  ...defaultProps, showNavigationButtons: false,
+}));
