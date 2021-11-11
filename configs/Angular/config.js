@@ -42,7 +42,6 @@ window.config = {
     '@angular/platform-browser': 'npm:@angular/platform-browser',
     '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic',
     '@angular/forms': 'npm:@angular/forms',
-    // '@angular/common/http': 'npm:@angular/common/bundles/common-http.umd.js',
     '@angular/common': 'npm:@angular/common',
     '@angular/compiler': 'npm:@angular/compiler',
     'tslib': 'npm:tslib/tslib.js',
