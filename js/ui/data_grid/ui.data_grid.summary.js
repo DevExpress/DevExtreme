@@ -356,12 +356,12 @@ const SummaryDataSourceAdapterClientExtender = (function() {
                 } else if(!remoteOperations.paging) {
                     const operationTypes = options.operationTypes || {};
                     const hasOperations = Object.keys(operationTypes).some(type => operationTypes[type]);
-                    if(!hasOperations || !options.cachedData?.extra?.summary) {
+                    if(!hasOperations || !options.cachedPagesData?.extra?.summary) {
                         const totalAggregates = calculateAggregates(that, summary, options.data, groups.length);
                         options.extra = isPlainObject(options.extra) ? options.extra : {};
                         options.extra.summary = totalAggregates;
-                        if(options.cachedData) {
-                            options.cachedData.extra = options.extra;
+                        if(options.cachedPagesData) {
+                            options.cachedPagesData.extra = options.extra;
                         }
                     }
                     options.data = sortGroupsBySummary(options.data, groups, summary);
