@@ -2,7 +2,7 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
-const SCHEDULER_SELECTOR = '.test-scheduler';
+const SCHEDULER_SELECTOR = '.container';
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
@@ -23,6 +23,7 @@ test('it should render reduced appointment correctly if currentView is month', a
   const tailReduced1 = scheduler.getAppointmentByIndex(5);
 
   await t
+    .debug()
     .expect(appointmentCount)
     .eql(6)
 

@@ -1,19 +1,33 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable no-restricted-globals */
 import {
-  Component, ComponentBindings, JSXComponent, InternalState, Effect,
+  Component, ComponentBindings, JSXComponent, InternalState, Effect, Fragment,
 } from '@devextreme-generator/declarations';
 import React from 'react';
 import { Pager } from '../../../../js/renovation/ui/pager/pager';
 import { InternalPagerProps } from '../../../../js/renovation/ui/pager/common/pager_props';
 
-export const viewFunction = ({ componentProps }: App): JSX.Element => (
-  <Pager
-    id="container"
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...componentProps}
-  />
+const message = 'Click here to show pager and copy to clipboard "onOptionsUpdated({ totalCount: 100 })"';
+function click() {
+  (window as unknown as { onOptionsUpdated: (unknown) => void })
+    .onOptionsUpdated({ totalCount: 100 });
+  navigator.clipboard.writeText('onOptionsUpdated({ totalCount: 100 })');
+}
+export const viewFunction = ({ options, componentProps }: App): JSX.Element => (
+  <Fragment>
+    {options && (
+      <Pager
+        id="container"
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...componentProps}
+      />
+    )}
+    {!options && (
+      <div onClick={click}>{message}</div>
+    )}
+  </Fragment>
 );
-
 @ComponentBindings()
 class AppProps { }
 
@@ -22,7 +36,7 @@ class AppProps { }
   view: viewFunction,
 })
 export class App extends JSXComponent<AppProps>() {
-  @InternalState() options: Partial<InternalPagerProps> = { totalCount: 100 };
+  @InternalState() options?: Partial<InternalPagerProps>;
 
   @InternalState() pageCount = 20;
 

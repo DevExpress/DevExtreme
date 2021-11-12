@@ -2,7 +2,7 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
 import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
-const SCHEDULER_SELECTOR = '.test-scheduler';
+const SCHEDULER_SELECTOR = '.container';
 
 const data = [
   {

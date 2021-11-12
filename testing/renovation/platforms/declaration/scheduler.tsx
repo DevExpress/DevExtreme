@@ -7,7 +7,7 @@ import { Scheduler } from '../../../../js/renovation/ui/scheduler/scheduler';
 
 export const viewFunction = ({ options }: App): JSX.Element => (
   <Scheduler
-    className="test-scheduler"
+    id="container"
     // eslint-disable-next-line react/jsx-props-no-spreading
     {...options}
   />
