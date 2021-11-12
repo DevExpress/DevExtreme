@@ -2163,6 +2163,31 @@ QUnit.module('Multiple selection. DataSource with key', { beforeEach: setupSelec
         assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 3]);
         assert.deepEqual(this.selectionController.getSelectedRowsData(), [{ id: 2, name: 'Dan', age: 16 }, { id: 3, name: 'Vadim', age: 17 }]);
     });
+
+    QUnit.test('Select all state should be correct after removing a selected row via the push API', function(assert) {
+        // arrange
+        this.applyOptions({
+            selection: {
+                mode: 'multiple',
+                allowSelectAll: true
+            }
+        });
+        const store = this.dataController.dataSource().store();
+
+        this.selectionController.selectRows([2]);
+
+        // assert
+        assert.deepEqual(this.option('selectedRowKeys'), [2]);
+        assert.strictEqual(this.selectionController.isSelectAll(), undefined, 'select all state is indeterminate');
+
+        // act
+        store.push([{ type: 'remove', key: 2 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(this.selectionController.isSelectAll(), false, 'nothing is selected');
+        assert.deepEqual(this.option('selectedRowKeys'), [], 'selectedRowKeys is empty');
+    });
 });
 
 QUnit.module('Start/Stop selection with checkboxes', { beforeEach: setupSelectionModule, afterEach: teardownSelectionModule }, () => {

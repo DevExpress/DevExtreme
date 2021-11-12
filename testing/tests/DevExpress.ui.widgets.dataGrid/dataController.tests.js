@@ -195,6 +195,64 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.ok(lastArgs.items[0].values);
     });
 
+    QUnit.test('The pushed callback on initialize', function(assert) {
+        // arrange
+        const pushedSpy = sinon.spy();
+        const array = [
+            { id: 0, name: 'Alex', phone: '55-55-55' },
+            { id: 1, name: 'Dan', phone: '98-75-21' }
+        ];
+        const dataSource = createDataSource(array, { key: 'id' });
+
+        this.dataController.pushed.add(pushedSpy);
+
+        // assert
+        assert.strictEqual(pushedSpy.callCount, 0, 'the pushed callback was not called');
+
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        // act
+        dataSource.store().push([{ type: 'remove', key: 1 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(pushedSpy.callCount, 1, 'the pushed callback was called only once');
+        assert.deepEqual(pushedSpy.getCall(0).args[0], [{ type: 'remove', key: 1 }], 'the pushed callback args');
+    });
+
+    QUnit.test('The handler of the dataSource pushed callback should be removed after disposing dataSource', function(assert) {
+        // arrange
+        const dataPushedHandlerSpy = sinon.spy();
+        const array = [
+            { id: 0, name: 'Alex', phone: '55-55-55' },
+            { id: 1, name: 'Dan', phone: '98-75-21' }
+        ];
+        let dataSource = createDataSource(array, { key: 'id' });
+
+        this.dataController._dataPushedHandler = dataPushedHandlerSpy;
+        this.dataController.setDataSource(dataSource);
+        dataSource = this.dataController.dataSource();
+        dataSource.load();
+
+        // assert
+        assert.ok(dataSource.pushed.has(dataPushedHandlerSpy), 'the pushed callback has handler');
+        assert.strictEqual(dataPushedHandlerSpy.callCount, 0);
+
+        // act
+        dataSource.store().push([{ type: 'remove', key: 1 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataPushedHandlerSpy.callCount, 1, 'the handler of the pushed callback was called only once');
+
+        // act
+        this.dataController.dispose();
+
+        // assert
+        assert.notOk(dataSource.pushed.has(dataPushedHandlerSpy), 'the pushed callback has no handler');
+    });
+
     // B255430
     QUnit.test('Call changed after all columnsChanged', function(assert) {
     // arrange
