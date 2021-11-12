@@ -9,6 +9,8 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
+fixture('Renovated scheduler - Adaptive appointments');
+
 [
   { groupOrientation: 'vertical', rtlEnabled: false },
   { groupOrientation: 'horizontal', rtlEnabled: false },
