@@ -357,7 +357,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get filteredItems(): Appointment[] {
-    if (!this.appointmentsConfig || !this.workSpaceViewModel || !this.loadedResources) {
+    if (!this.appointmentsConfig) {
       return [];
     }
 
@@ -376,7 +376,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.appointmentsConfig.isVirtualScrolling,
       this.timeZoneCalculator,
       this.dataAccessors,
-      this.workSpaceViewModel.viewDataProvider,
+      this.workSpaceViewModel!.viewDataProvider,
     );
 
     return filterStrategy.filter(this.preparedDataItems);

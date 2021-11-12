@@ -1189,36 +1189,6 @@ describe('Scheduler', () => {
           expect(getFilterStrategy)
             .toHaveBeenCalledTimes(0);
         });
-
-        it('should return empty array if workSpaceViewModel is not exists', () => {
-          const schedulerProps = new SchedulerProps();
-          const scheduler = new Scheduler(schedulerProps);
-
-          jest.spyOn(scheduler, 'appointmentsConfig', 'get')
-            .mockReturnValue('appointmentsConfig_test' as any);
-          scheduler.loadedResources = [];
-
-          expect(scheduler.filteredItems)
-            .toEqual([]);
-
-          expect(getFilterStrategy)
-            .toHaveBeenCalledTimes(0);
-        });
-
-        it('should return empty array if loadedResources is not exists', () => {
-          const schedulerProps = new SchedulerProps();
-          const scheduler = new Scheduler(schedulerProps);
-
-          jest.spyOn(scheduler, 'appointmentsConfig', 'get')
-            .mockReturnValue('appointmentsConfig_test' as any);
-          scheduler.workSpaceViewModel = {} as any;
-
-          expect(scheduler.filteredItems)
-            .toEqual([]);
-
-          expect(getFilterStrategy)
-            .toHaveBeenCalledTimes(0);
-        });
       });
 
       describe('appointmentsViewModel', () => {
