@@ -30,9 +30,9 @@ import {
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import type { DataAccessorType, DataSourcePromise } from './types';
+import type { AppointmentDataItem, DataAccessorType, DataSourcePromise } from './types';
 import {
-  createDataAccessors, createTimeZoneCalculator, filterAppointments, isViewDataProviderConfigValid,
+  createDataAccessors, createTimeZoneCalculator, isViewDataProviderConfigValid,
 } from './common';
 import { getGroupCount, loadResources } from '../../../ui/scheduler/resources/utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
@@ -41,6 +41,8 @@ import { AppointmentsViewModelType } from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
+import { getPreparedDataItems } from './utils/data';
+import { getFilterStrategy } from './utils/filter';
 
 export const viewFunction = ({
   restAttributes,
@@ -341,15 +343,43 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     );
   }
 
-  get filteredItems(): Appointment[] {
-    return filterAppointments(
-      this.appointmentsConfig,
+  get preparedDataItems(): AppointmentDataItem[] {
+    if (!this.appointmentsConfig) {
+      return [];
+    }
+
+    return getPreparedDataItems(
       this.dataItems,
       this.dataAccessors,
+      this.appointmentsConfig.cellDurationInMinutes,
       this.timeZoneCalculator,
-      this.loadedResources!,
-      this.workSpaceViewModel?.viewDataProvider,
     );
+  }
+
+  get filteredItems(): Appointment[] {
+    if (!this.appointmentsConfig || !this.workSpaceViewModel || !this.loadedResources) {
+      return [];
+    }
+
+    const filterStrategy = getFilterStrategy(
+      this.appointmentsConfig.resources,
+      this.appointmentsConfig.startDayHour,
+      this.appointmentsConfig.endDayHour,
+      this.appointmentsConfig.cellDurationInMinutes,
+      this.appointmentsConfig.showAllDayPanel,
+      this.appointmentsConfig.supportAllDayRow,
+      this.appointmentsConfig.firstDayOfWeek,
+      this.appointmentsConfig.viewType,
+      this.appointmentsConfig.dateRange,
+      this.appointmentsConfig.groupCount,
+      this.appointmentsConfig.loadedResources,
+      this.appointmentsConfig.isVirtualScrolling,
+      this.timeZoneCalculator,
+      this.dataAccessors,
+      this.workSpaceViewModel.viewDataProvider,
+    );
+
+    return filterStrategy.filter(this.preparedDataItems);
   }
 
   get appointmentsViewModel(): AppointmentsViewModelType {
