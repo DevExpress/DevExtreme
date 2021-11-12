@@ -45,6 +45,7 @@ export const viewFunction = ({
     allDayPanelRef,
     timePanelRef,
     groupPanelRef,
+    widgetElementRef,
 
     appointments,
     allDayAppointments,
@@ -52,6 +53,7 @@ export const viewFunction = ({
 }: OrdinaryLayout): JSX.Element => (
   <Widget
     className={className}
+    rootElementRef={widgetElementRef}
   >
     <div className="dx-scheduler-header-panel-container">
       {isRenderHeaderEmptyCell && (
@@ -133,7 +135,7 @@ export const viewFunction = ({
   view: viewFunction,
 })
 export class OrdinaryLayout extends JSXComponent<
-MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
+MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef' | 'onScroll'
 >() {
   @Ref() dateTableScrollableRef!: RefObject<Scrollable>;
 
