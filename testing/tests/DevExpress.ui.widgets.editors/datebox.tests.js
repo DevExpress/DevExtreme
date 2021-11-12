@@ -404,24 +404,6 @@ QUnit.module('datebox tests', moduleConfig, () => {
         });
     });
 
-    QUnit.test('T278148 - picker type should be \'rollers\' if the real device is phone in generic theme', function(assert) {
-        const realDevice = devices.real();
-        const currentDevice = devices.current();
-
-        devices.real({ deviceType: 'phone', platform: 'android', version: [4, 3] });
-        devices.current({ platform: 'generic' });
-
-        try {
-            const dateBox = $('<div>').dxDateBox({
-                type: 'date'
-            }).dxDateBox('instance');
-            assert.equal(dateBox.option('pickerType'), 'rollers', 'the \'pickerType\' option is correct');
-        } finally {
-            devices.real(realDevice);
-            devices.current(currentDevice);
-        }
-    });
-
     QUnit.test('Customize \'Done\' and \'Cancel\' buttons', function(assert) {
         const expectedDoneText = 'newDoneText';
         const expectedCancelText = 'newCancelText';

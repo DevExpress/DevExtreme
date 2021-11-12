@@ -3,7 +3,6 @@ const window = getWindow();
 import { isDate as isDateType, isString, isNumeric } from '../../core/utils/type';
 import { createTextElementHiddenCopy } from '../../core/utils/dom';
 import { each } from '../../core/utils/iterator';
-import { compare as compareVersions } from '../../core/utils/version';
 import { extend } from '../../core/utils/extend';
 import { inputType } from '../../core/utils/support';
 import devices from '../../core/devices';
@@ -127,17 +126,6 @@ const DateBox = DropDownEditor.inherit({
                 },
                 options: {
                     pickerType: PICKER_TYPE.native
-                }
-            },
-            {
-                device: function(currentDevice) {
-                    const realDevice = devices.real();
-                    const platform = realDevice.platform;
-                    const version = realDevice.version;
-                    return platform === 'generic' && currentDevice.deviceType !== 'desktop' || (platform === 'android' && compareVersions(version, [4, 4]) < 0);
-                },
-                options: {
-                    pickerType: PICKER_TYPE.rollers
                 }
             },
             {
