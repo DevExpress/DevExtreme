@@ -31,7 +31,7 @@ export type DisposingEvent<TKey = any> = EventInfo<dxMenu<TKey>>;
 export type InitializedEvent<TKey = any> = InitializedEventInfo<dxMenu<TKey>>;
 
 /** @public */
-export type ItemClickEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<Item>;
+export type ItemClickEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent> & ItemInfo<Item>;
 
 /** @public */
 export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<Item>;

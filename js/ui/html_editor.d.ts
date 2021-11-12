@@ -47,7 +47,7 @@ export type InitializedEvent = InitializedEventInfo<dxHtmlEditor>;
 export type OptionChangedEvent = EventInfo<dxHtmlEditor> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxHtmlEditor, KeyboardEvent | ClipboardEvent> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxHtmlEditor, KeyboardEvent | ClipboardEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export interface MentionTemplateData {

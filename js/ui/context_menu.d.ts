@@ -49,7 +49,7 @@ export type HidingEvent<TKey = any> = Cancelable & EventInfo<dxContextMenu<TKey>
 export type InitializedEvent<TKey = any> = InitializedEventInfo<dxContextMenu<TKey>>;
 
 /** @public */
-export type ItemClickEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<Item>;
+export type ItemClickEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent> & ItemInfo<Item>;
 
 /** @public */
 export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<Item>;
