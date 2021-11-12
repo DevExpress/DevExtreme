@@ -483,6 +483,32 @@ module('Table resizing integration', {
             assert.roughEqual(columnBorderOffsets[1], 200, 2.01);
         });
 
+        test('The widget raise valueChange event after resizing', function(assert) {
+            const valueChangedSpy = sinon.spy();
+            this.createWidget({ onValueChanged: valueChangedSpy, width: 430 });
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
+            const initialEditorValue = this.instance.option('value');
+
+            $columnResizerElements.eq(0)
+                .trigger('dxpointerdown');
+
+            const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+            PointerMock($draggableElements.eq(0))
+                .start()
+                .dragStart()
+                .drag(50, 10)
+                .dragEnd();
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            assert.strictEqual(valueChangedSpy.callCount, 1, 'value change event is raised');
+            assert.ok(valueChangedSpy.getCall(0).args[0].event, 'event is saved');
+            assert.notStrictEqual(this.instance.option('value'), initialEditorValue, 'value was changed');
+        });
+
         test('Check column resizers elements and border positions after drag if the table has a header row (T1028207)', function(assert) {
             this.createWidget({ width: 430, value: tableMarkupWithHeaderRow });
             this.clock.tick(TIME_TO_WAIT);

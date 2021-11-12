@@ -63,6 +63,14 @@ function setLineElementsFormat(module, { elements, property, value }) {
         const cellBlot = module.quill.scroll.find(element);
         const fullPropertyName = `cell${camelize(property, true)}`;
         cellBlot?.format(fullPropertyName, value + 'px');
+
+
+        // const fullPropertyName = `cell${camelize(property, true)}`;
+        // const index = module.quill.getIndex(module.quill.scroll.find(element));
+        // module.editorInstance.getQuillInstance().setSelection(index, 0);
+
+        // module.editorInstance.format(fullPropertyName, value + 'px');
+
     });
 }
 
