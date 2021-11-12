@@ -357,6 +357,19 @@ describe('Button', () => {
             });
           });
 
+          it('should get validation group by getValidationGroup function prop calling (T1041957)', () => {
+            const onClick = jest.fn();
+            const validationGroup = jest.fn();
+            const button = new Button({ onClick, getValidationGroup: () => validationGroup });
+
+            button.onWidgetClick({} as Event);
+
+            const clickParameters = onClick.mock.calls[0][0];
+            expect(clickParameters).toMatchObject({
+              validationGroup,
+            });
+          });
+
           it('should force form submit by Widget click if the "useSubmitBehavior" is true', () => {
             const event = {} as Event;
             const button = new Button({ useSubmitBehavior: true });

@@ -22,7 +22,7 @@ export default class ButtonWrapper extends Component {
 
   getProps(): Record<string, unknown> {
     const props = super.getProps();
-    props.validationGroup = this._validationGroupConfig;
+    props.getValidationGroup = (): unknown => this._validationGroupConfig as unknown;
     return props;
   }
 
