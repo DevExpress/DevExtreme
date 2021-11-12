@@ -3,11 +3,11 @@
         "config:base"
     ],
     "baseBranches": [
-        "21_2"
+        "22_1"
     ],
     "labels": [
         "dependencies",
-        "21_2"
+        "22_1"
     ],
     "lockFileMaintenance": {
         "enabled": true,
