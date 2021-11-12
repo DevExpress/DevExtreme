@@ -3,7 +3,6 @@
  * @docid
  * @section commonObjectStructures
  * @namespace DevExpress
- * @export default
  */
 export type Device = {
     /**
