@@ -109,7 +109,7 @@ QUnit.test('bubbling', function(assert) {
     this.element.trigger('dxclick');
 });
 
-QUnit.test('regression: dxclick should triggers only on left mouse button click', function(assert) {
+QUnit.skip('regression: dxclick should triggers only on left mouse button click', function(assert) {
     if(clickEvent.useNativeClick) {
         assert.expect(0);
         return;
@@ -134,7 +134,7 @@ QUnit.test('regression: dxclick should triggers only on left mouse button click'
     assert.equal(triggered, 1, 'right button click');
 });
 
-QUnit.test('click subscription should make element clickable (Q559654)', function(assert) {
+QUnit.skip('click subscription should make element clickable (Q559654)', function(assert) {
     if(clickEvent.useNativeClick) {
         assert.expect(0);
         return;
@@ -145,18 +145,13 @@ QUnit.test('click subscription should make element clickable (Q559654)', functio
 });
 
 QUnit.test('click subscription should not add onclick attr for native strategy (T527293)', function(assert) {
-    if(!clickEvent.useNativeClick) {
-        assert.expect(0);
-        return;
-    }
-
     this.element.on('dxclick', noop);
     assert.equal(this.element.attr('onclick'), undefined);
 });
 
 QUnit.module('hacks', moduleConfig);
 
-QUnit.test('dxpointer events on iOS7 with alert', function(assert) {
+QUnit.skip('dxpointer events on iOS7 with alert', function(assert) {
     if(clickEvent.useNativeClick || !support.touchEvents || !(devices.real().tablet || devices.real().phone)) {
         assert.expect(0);
         return;
@@ -214,7 +209,7 @@ QUnit.test('dxpointer events on iOS7 with alert', function(assert) {
     }
 });
 
-QUnit.test('fast click should be fired on next frame after pointerup', function(assert) {
+QUnit.skip('fast click should be fired on next frame after pointerup', function(assert) {
     if(clickEvent.useNativeClick) {
         assert.expect(0);
         return;
@@ -243,7 +238,7 @@ QUnit.test('fast click should be fired on next frame after pointerup', function(
     }
 });
 
-QUnit.test('click should not be fired on pointercancel (Win8 parasitic click)', function(assert) {
+QUnit.skip('click should not be fired on pointercancel (Win8 parasitic click)', function(assert) {
     assert.expect(0);
 
     if(clickEvent.useNativeClick) {
@@ -296,7 +291,7 @@ QUnit.test('click should not be prevented (T131440, T131837)', function(assert) 
 
 QUnit.module('reset active element', moduleConfig);
 
-QUnit.test('click should reset active element (B253127)', function(assert) {
+QUnit.skip('click should reset active element (B253127)', function(assert) {
     if(clickEvent.useNativeClick) {
         assert.expect(0);
         return;
@@ -328,7 +323,7 @@ QUnit.test('click should reset active element (B253127)', function(assert) {
     }
 });
 
-QUnit.test('click should not reset active element if down default action prevented (B253127)', function(assert) {
+QUnit.skip('click should not reset active element if down default action prevented (B253127)', function(assert) {
     if(clickEvent.useNativeClick) {
         assert.expect(0);
         return;
@@ -364,7 +359,7 @@ QUnit.test('click should not reset active element if down default action prevent
 });
 
 $.each(['<input>', '<textarea>', '<select>', '<button>', '<div tabindex=\'0\'>', '<div tabindex=\'0\'><div></div></div>'], function(_, focusable) {
-    QUnit.test(focusable + ' should get focus on click', function(assert) {
+    QUnit.skip(focusable + ' should get focus on click', function(assert) {
         if(clickEvent.useNativeClick) {
             assert.expect(0);
             return;
@@ -553,7 +548,7 @@ QUnit.test('click on element should not prevent focus on mousedown if used nativ
 
 QUnit.module('target and currentTarget', moduleConfig);
 
-QUnit.test('dxclick should be prevented if 10px bound is exceeded', function(assert) {
+QUnit.skip('dxclick should be prevented if 10px bound is exceeded', function(assert) {
     assert.expect(0);
 
     if(clickEvent.useNativeClick) {
@@ -571,7 +566,7 @@ QUnit.test('dxclick should be prevented if 10px bound is exceeded', function(ass
     pointer.start().touchStart().touchMove(11).touchEnd();
 });
 
-QUnit.test('dxclick should have correct target', function(assert) {
+QUnit.skip('dxclick should have correct target', function(assert) {
     if(clickEvent.useNativeClick) {
         assert.expect(0);
         return;
@@ -594,7 +589,7 @@ QUnit.test('dxclick should have correct target', function(assert) {
     assert.ok($element.is(clickTarget));
 });
 
-QUnit.test('dxclick should have correct currentTarget', function(assert) {
+QUnit.skip('dxclick should have correct currentTarget', function(assert) {
     if(clickEvent.useNativeClick) {
         assert.expect(0);
         return;
@@ -615,7 +610,7 @@ QUnit.test('dxclick should have correct currentTarget', function(assert) {
     pointer.start().down().up();
 });
 
-QUnit.test('dxclick should have correct target with delegated handlers', function(assert) {
+QUnit.skip('dxclick should have correct target with delegated handlers', function(assert) {
     assert.expect(1);
 
     if(clickEvent.useNativeClick) {
@@ -633,7 +628,7 @@ QUnit.test('dxclick should have correct target with delegated handlers', functio
     $('#second').trigger({ type: 'dxpointerup', pointers: [] });
 });
 
-QUnit.test('dxclick should not be fired if target is child of element', function(assert) {
+QUnit.skip('dxclick should not be fired if target is child of element', function(assert) {
     assert.expect(0);
 
     if(clickEvent.useNativeClick) {
@@ -655,7 +650,7 @@ QUnit.test('dxclick should not be fired if target is child of element', function
 
 QUnit.module('several subscriptions');
 
-QUnit.test('dxclick should not be fired if target is child of element', function(assert) {
+QUnit.skip('dxclick should not be fired if target is child of element', function(assert) {
     if(clickEvent.useNativeClick) {
         assert.expect(0);
         return;
@@ -680,11 +675,6 @@ QUnit.module('native click support');
 
 QUnit.test('dxclick should be based on native click', function(assert) {
     assert.expect(1);
-
-    if(!clickEvent.useNativeClick) {
-        assert.expect(0);
-        return;
-    }
 
     const $element = $('#element');
 
@@ -718,11 +708,6 @@ QUnit.test('dxclick should be based on native click for all devices when useNati
 });
 
 QUnit.test('dxclick should triggers only on left mouse button click', function(assert) {
-    if(!clickEvent.useNativeClick) {
-        assert.expect(0);
-        return;
-    }
-
     let triggered = 0;
     const $element = $('#element').on('dxclick', function(e) { triggered++; });
 
@@ -740,11 +725,6 @@ QUnit.test('dxclick should triggers only on left mouse button click', function(a
 QUnit.test('dxclick should not be fired twice after pointerdown, pointerup and click', function(assert) {
     assert.expect(1);
 
-    if(!clickEvent.useNativeClick) {
-        assert.expect(0);
-        return;
-    }
-
     const $element = $('#element');
     const pointer = pointerMock($element);
 
@@ -757,11 +737,6 @@ QUnit.test('dxclick should not be fired twice after pointerdown, pointerup and c
 
 QUnit.test('dxclick should be fired even if propagation was stopped', function(assert) {
     assert.expect(1);
-
-    if(!clickEvent.useNativeClick) {
-        assert.expect(0);
-        return;
-    }
 
     const $element = $('#element');
     const pointer = nativePointerMock($element);
@@ -779,11 +754,6 @@ QUnit.test('dxclick should be fired even if propagation was stopped', function(a
 
 QUnit.test('dxclick should not be fired twice when \'click\' is triggered from its handler (T503035)', function(assert) {
     assert.expect(1);
-
-    if(!clickEvent.useNativeClick) {
-        assert.expect(0);
-        return;
-    }
 
     const $element = $('#element');
     const pointer = nativePointerMock($element);
