@@ -13,6 +13,13 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+import {
+    BoxAlign,
+    BoxDirection,
+    BoxCrossAlign,
+    Mode,
+} from '../types/enums';
+
 type ItemLike<TKey> = string | Item<TKey> | any;
 
 /** @public */
@@ -50,18 +57,16 @@ export interface dxBoxOptions<
 > extends CollectionWidgetOptions<dxBox<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
-     * @type Enums.BoxAlign
      * @default 'start'
      * @public
      */
-    align?: 'center' | 'end' | 'space-around' | 'space-between' | 'start';
+    align?: BoxAlign;
     /**
      * @docid
-     * @type Enums.BoxCrossAlign
      * @default 'start'
      * @public
      */
-    crossAlign?: 'center' | 'end' | 'start' | 'stretch';
+    crossAlign?: BoxCrossAlign;
     /**
      * @docid
      * @type string | Array<string | dxBoxItem | any> | Store | DataSource | DataSourceOptions
@@ -71,11 +76,10 @@ export interface dxBoxOptions<
     dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
-     * @type Enums.BoxDirection
      * @default 'row'
      * @public
      */
-    direction?: 'col' | 'row';
+    direction?: BoxDirection;
     /**
      * @docid
      * @type Array<string | dxBoxItem | any>
@@ -108,11 +112,10 @@ export type Item<TKey = any> = dxBoxItem<TKey>;
 export interface dxBoxItem<TKey = any> extends CollectionWidgetItem {
     /**
      * @docid
-     * @type number | Enums.Mode
      * @default 0
      * @public
      */
-    baseSize?: number | 'auto';
+    baseSize?: number | Mode;
     /**
      * @docid
      * @default undefined

@@ -39,6 +39,11 @@ import {
     TitleRenderedInfo,
 } from './popup';
 
+import {
+    EditorApplyValueMode,
+    ListPageLoadMode,
+} from '../types/enums';
+
 /** @public */
 export type ClosedEvent = EventInfo<dxLookup>;
 
@@ -91,11 +96,10 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     applyButtonText?: string;
     /**
      * @docid
-     * @type Enums.EditorApplyValueMode
      * @hidden false
      * @public
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: EditorApplyValueMode;
     /**
      * @docid
      * @default "Cancel"
@@ -212,11 +216,10 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     onValueChanged?: ((e: ValueChangedEvent) => void);
     /**
      * @docid
-     * @type Enums.ListPageLoadMode
      * @default "scrollBottom"
      * @public
      */
-    pageLoadMode?: 'nextButton' | 'scrollBottom';
+    pageLoadMode?: ListPageLoadMode;
     /**
      * @docid
      * @default "Loading..."

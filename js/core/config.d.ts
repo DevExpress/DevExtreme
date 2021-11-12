@@ -2,6 +2,12 @@ import {
     PositionConfig,
 } from '../animation/position';
 
+import {
+  PositionAlignment,
+  EditorStylingMode,
+  FloatingActionButtonDirection,
+} from '../types/enums';
+
 /**
  * @docid
  * @publicName config()
@@ -42,11 +48,10 @@ export interface globalConfig {
     defaultCurrency?: string;
     /**
      * @docid
-     * @type Enums.EditorStylingMode
      * @default undefined
      * @public
      */
-    editorStylingMode?: 'outlined' | 'underlined' | 'filled';
+    editorStylingMode?: EditorStylingMode;
     /**
      * @docid
      * @public
@@ -59,10 +64,9 @@ export interface globalConfig {
       closeIcon?: string;
       /**
        * @docid
-       * @type Enums.floatingActionButtonDirection
        * @default "auto"
        */
-      direction?: 'auto' | 'up' | 'down';
+      direction?: FloatingActionButtonDirection;
       /**
        * @docid
        * @default "add"
@@ -80,10 +84,9 @@ export interface globalConfig {
       maxSpeedDialActionCount?: number;
       /**
        * @docid
-       * @type Enums.PositionAlignment|PositionConfig|function
        * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
        */
-      position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
+      position?: PositionAlignment | PositionConfig | Function;
       /**
        * @docid
        * @default false

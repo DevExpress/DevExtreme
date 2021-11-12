@@ -6,11 +6,6 @@ import {
 } from '../core/element';
 
 import {
-    PaletteType,
-    PaletteExtensionModeType,
-} from './palette';
-
-import {
     template,
 } from '../core/templates/template';
 
@@ -30,7 +25,14 @@ import BaseWidget, {
     IncidentInfo,
 } from './core/base_widget';
 
-import { HatchingDirectionType } from './common';
+import {
+  VizPalette,
+  VizPaletteExtensionMode,
+  VerticalAlignment,
+  HatchingDirection,
+  SankeyLabelOverlappingBehavior,
+  SankeyColorMode,
+} from '../types/enums';
 
 /** @public */
 export type DisposingEvent = EventInfo<dxSankey>;
@@ -101,11 +103,10 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     };
     /**
      * @docid
-     * @type Enums.VerticalAlignment|Array<Enums.VerticalAlignment>
      * @default 'center'
      * @public
      */
-    alignment?: 'bottom' | 'center' | 'top' | Array<'bottom' | 'center' | 'top'>;
+    alignment?: VerticalAlignment | Array<VerticalAlignment>;
     /**
      * @docid
      * @notUsedInTheme
@@ -162,10 +163,9 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
       horizontalOffset?: number;
       /**
        * @docid
-       * @type Enums.SankeyLabelOverlappingBehavior
        * @default 'ellipsis'
        */
-      overlappingBehavior?: 'ellipsis' | 'hide' | 'none';
+      overlappingBehavior?: SankeyLabelOverlappingBehavior;
       /**
        * @docid
        */
@@ -244,10 +244,9 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
       color?: string;
       /**
        * @docid
-       * @type Enums.SankeyColorMode
        * @default 'none'
        */
-      colorMode?: 'none' | 'source' | 'target' | 'gradient';
+      colorMode?: SankeyColorMode;
       /**
        * @docid
        */
@@ -283,10 +282,9 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
         hatching?: {
           /**
            * @docid
-           * @type Enums.HatchingDirection
            * @default 'right'
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * @docid
            * @default 0.75
@@ -380,10 +378,9 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
         hatching?: {
           /**
            * @docid
-           * @type Enums.HatchingDirection
            * @default 'right'
            */
-          direction?: HatchingDirectionType;
+          direction?: HatchingDirection;
           /**
            * @docid
            * @default 0.75
@@ -481,17 +478,15 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid
      * @default "Material"
-     * @type Array<string>|Enums.VizPalette
      * @public
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | VizPalette;
     /**
      * @docid
-     * @type Enums.VizPaletteExtensionMode
      * @default 'blend'
      * @public
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: VizPaletteExtensionMode;
     /**
      * @docid
      * @default undefined

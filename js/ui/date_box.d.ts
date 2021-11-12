@@ -27,6 +27,11 @@ import {
     Properties as PopupProperties,
 } from './popup';
 
+import {
+    DateBoxType,
+    DateBoxPickerType,
+} from '../types/enums';
+
 /** @public */
 export type ChangeEvent = NativeEventInfo<dxDateBox, Event>;
 
@@ -170,7 +175,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     min?: Date | number | string;
     /**
      * @docid
-     * @type Enums.DateBoxPickerType
      * @default 'calendar'
      * @default 'native' &for(iOS)
      * @default 'native' &for(Android)
@@ -178,7 +182,7 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
      * @default 'rollers' &for(mobile_devices)
      * @public
      */
-    pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
+    pickerType?: DateBoxPickerType;
     /**
      * @docid
      * @default ""
@@ -193,11 +197,10 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     showAnalogClock?: boolean;
     /**
      * @docid
-     * @type Enums.DateBoxType
      * @default "date"
      * @public
      */
-    type?: 'date' | 'datetime' | 'time';
+    type?: DateBoxType;
     /**
      * @docid
      * @default false

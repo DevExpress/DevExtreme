@@ -1,5 +1,9 @@
-export type PaletteType = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
-export type PaletteExtensionModeType = 'alternate' | 'blend' | 'extrapolate';
+import {
+    VizPalette,
+    VizPaletteExtensionMode,
+    VizPaletteColorSet,
+} from '../types/enums';
+
 /**
  * @docid viz.currentPalette
  * @publicName currentPalette()
@@ -25,7 +29,7 @@ export function currentPalette(paletteName: string): void;
  * @static
  * @public
  */
-export function generateColors(palette: PaletteType | Array<string>, count: number, options: { paletteExtensionMode?: PaletteExtensionModeType; baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
+export function generateColors(palette: VizPalette | Array<string>, count: number, options: { paletteExtensionMode?: VizPaletteExtensionMode; baseColorSet?: VizPaletteColorSet }): Array<string>;
 
 /**
  * @docid viz.getPalette

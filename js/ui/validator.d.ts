@@ -17,6 +17,10 @@ import {
     ValidationRule,
 } from './validation_rules';
 
+import {
+    ValidationStatus,
+} from '../types/enums';
+
 /** @public */
 export type DisposingEvent = EventInfo<dxValidator>;
 
@@ -34,7 +38,7 @@ export type ValidatedEvent = {
     validationRules?: Array<ValidationRule>;
     brokenRule?: ValidationRule;
     brokenRules?: ValidationRule;
-    status?: 'valid' | 'invalid' | 'pending';
+    status?: ValidationStatus;
 };
 
 /**
@@ -173,10 +177,9 @@ export interface dxValidatorResult {
     pendingRules?: Array<AsyncRule>;
     /**
      * @docid
-     * @type Enums.ValidationStatus
      * @public
      */
-    status?: 'valid' | 'invalid' | 'pending';
+    status?: ValidationStatus;
     /**
      * @docid
      * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>

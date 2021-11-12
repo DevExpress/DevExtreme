@@ -47,6 +47,16 @@ import Widget, {
     WidgetOptions,
 } from './widget/ui.widget';
 
+import {
+    VerticalAlignment,
+    HorizontalAlignment,
+    Mode,
+    FormLabelLocation,
+    FormItemEditorType,
+    FormItemType,
+    FormLabelMode,
+} from '../types/enums';
+
 /** @public */
 export type ContentReadyEvent = EventInfo<dxForm>;
 
@@ -104,11 +114,10 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     alignItemLabelsInAllGroups?: boolean;
     /**
      * @docid
-     * @type number|Enums.Mode
      * @default 1
      * @public
      */
-    colCount?: number | 'auto';
+    colCount?: number | Mode;
     /**
      * @docid
      * @type object
@@ -139,19 +148,17 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     items?: Array<Item>;
     /**
      * @docid
-     * @type Enums.FormLabelLocation
      * @default "left"
      * @default "top" &for(Material)
      * @public
      */
-    labelLocation?: 'left' | 'right' | 'top';
+    labelLocation?: FormLabelLocation;
     /**
      * @docid
-     * @type Enums.FormLabelMode
      * @default "outside"
      * @public
      */
-     labelMode?: 'outside' | 'floating' | 'static' | 'hidden';
+     labelMode?: FormLabelMode;
     /**
      * @docid
      * @default 200
@@ -364,18 +371,16 @@ export interface dxFormButtonItem {
     cssClass?: string;
     /**
      * @docid
-     * @type Enums.HorizontalAlignment
      * @default "right"
      * @public
      */
-    horizontalAlignment?: 'center' | 'left' | 'right';
+    horizontalAlignment?: HorizontalAlignment;
     /**
      * @docid
-     * @type Enums.FormItemType
      * @default "simple"
      * @public
      */
-    itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+    itemType?: FormItemType;
     /**
      * @docid
      * @default undefined
@@ -384,11 +389,10 @@ export interface dxFormButtonItem {
     name?: string;
     /**
      * @docid
-     * @type Enums.VerticalAlignment
      * @default "top"
      * @public
      */
-    verticalAlignment?: 'bottom' | 'center' | 'top';
+    verticalAlignment?: VerticalAlignment;
     /**
      * @docid
      * @default true
@@ -428,11 +432,10 @@ export interface dxFormEmptyItem {
     cssClass?: string;
     /**
      * @docid
-     * @type Enums.FormItemType
      * @default "simple"
      * @public
      */
-    itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+    itemType?: FormItemType;
     /**
      * @docid
      * @default undefined
@@ -504,11 +507,10 @@ export interface dxFormGroupItem {
     cssClass?: string;
     /**
      * @docid
-     * @type Enums.FormItemType
      * @default "simple"
      * @public
      */
-    itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+    itemType?: FormItemType;
     /**
      * @docid
      * @type Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>
@@ -582,10 +584,9 @@ export interface dxFormSimpleItem {
     editorOptions?: any;
     /**
      * @docid
-     * @type Enums.FormItemEditorType
      * @public
      */
-    editorType?: 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxHtmlEditor' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
+    editorType?: FormItemEditorType;
     /**
      * @docid
      * @default undefined
@@ -600,11 +601,10 @@ export interface dxFormSimpleItem {
     isRequired?: boolean;
     /**
      * @docid
-     * @type Enums.FormItemType
      * @default "simple"
      * @public
      */
-    itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+    itemType?: FormItemType;
     /**
      * @docid
      * @default undefined
@@ -613,16 +613,14 @@ export interface dxFormSimpleItem {
     label?: {
       /**
        * @docid
-       * @type Enums.HorizontalAlignment
        * @default "left"
        */
-      alignment?: 'center' | 'left' | 'right';
+      alignment?: HorizontalAlignment;
       /**
        * @docid
-       * @type Enums.FormLabelLocation
        * @default "left"
        */
-      location?: 'left' | 'right' | 'top';
+      location?: FormLabelLocation;
       /**
        * @docid
        * @default from showColonAfterLabel
@@ -702,11 +700,10 @@ export interface dxFormTabbedItem {
     cssClass?: string;
     /**
      * @docid
-     * @type Enums.FormItemType
      * @default "simple"
      * @public
      */
-    itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+    itemType?: FormItemType;
     /**
      * @docid
      * @default undefined

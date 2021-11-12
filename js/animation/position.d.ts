@@ -2,6 +2,14 @@ import {
     UserDefinedElement,
 } from '../core/element';
 
+import {
+  VerticalAlignment,
+  HorizontalAlignment,
+  PositionAlignment,
+  PositionResolveCollisionXY,
+  PositionResolveCollision,
+} from '../types/enums';
+
 /**
  * @docid
  * @namespace DevExpress
@@ -11,20 +19,17 @@ import {
 export interface PositionConfig {
     /**
      * @docid
-     * @type Enums.PositionAlignment|object
      * @public
      */
-    at?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | {
+    at?: PositionAlignment | {
       /**
        * @docid
-       * @type Enums.HorizontalAlignment
        */
-      x?: 'center' | 'left' | 'right';
+      x?: HorizontalAlignment;
       /**
        * @docid
-       * @type Enums.VerticalAlignment
        */
-      y?: 'bottom' | 'center' | 'top';
+      y?: VerticalAlignment;
     };
     /**
      * @docid
@@ -49,39 +54,33 @@ export interface PositionConfig {
     };
     /**
      * @docid
-     * @type Enums.PositionResolveCollisionXY|object
      * @public
      */
-    collision?: 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit' | {
+    collision?: PositionResolveCollisionXY | {
       /**
        * @docid
-       * @type Enums.PositionResolveCollision
        * @default 'none'
        */
-      x?: 'fit' | 'flip' | 'flipfit' | 'none';
+      x?: PositionResolveCollision;
       /**
        * @docid
-       * @type Enums.PositionResolveCollision
        * @default 'none'
        */
-      y?: 'fit' | 'flip' | 'flipfit' | 'none';
+      y?: PositionResolveCollision;
     };
     /**
      * @docid
-     * @type Enums.PositionAlignment|object
      * @public
      */
-    my?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | {
+    my?: PositionAlignment | {
       /**
        * @docid
-       * @type Enums.HorizontalAlignment
        */
-      x?: 'center' | 'left' | 'right';
+      x?: HorizontalAlignment;
       /**
        * @docid
-       * @type Enums.VerticalAlignment
        */
-      y?: 'bottom' | 'center' | 'top';
+      y?: VerticalAlignment;
     };
     /**
      * @docid

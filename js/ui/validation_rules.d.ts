@@ -1,3 +1,7 @@
+import {
+    ComparisonOperator,
+} from '../types/enums';
+
 /**
  * @public
  */
@@ -71,11 +75,10 @@ export interface CompareRule {
     comparisonTarget?: (() => any);
     /**
      * @docid
-     * @type Enums.ComparisonOperator
      * @default '=='
      * @public
      */
-    comparisonType?: '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
+    comparisonType?: ComparisonOperator;
     /**
      * @docid
      * @default false

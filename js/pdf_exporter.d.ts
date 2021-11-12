@@ -2,6 +2,7 @@ import { DxPromise } from './core/utils/deferred';
 import dxDataGrid, { Column } from './ui/data_grid';
 import { ExportLoadPanel } from './exporter/export_load_panel';
 import dxGantt from './ui/gantt';
+import { GanttPdfExportMode, GanttPdfExportDateRange } from './types/enums';
 
 /**
  * @docid
@@ -164,16 +165,14 @@ export function exportDataGrid(options: PdfExportDataGridProps): DxPromise<void>
   margins?: object;
    /**
    * @docid
-   * @type Enums.GanttPdfExportMode
    * @public
    */
-  exportMode?: 'all' | 'treeList' | 'chart';
+  exportMode?: GanttPdfExportMode;
    /**
    * @docid
-   * @type Enums.GanttPdfExportDateRange|object
    * @public
    */
-  dateRange?: 'all' | 'visible' | object;
+  dateRange?: GanttPdfExportDateRange | object;
 }
 
 /**

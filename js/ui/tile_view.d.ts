@@ -13,6 +13,8 @@ import CollectionWidget, {
     CollectionWidgetOptions,
 } from './collection/ui.collection_widget.base';
 
+import { Orientation } from '../types/enums';
+
 type ItemLike = string | Item | any;
 
 /** @public */
@@ -75,11 +77,10 @@ export interface dxTileViewOptions<
     dataSource?: DataSourceLike<TItem, TKey>;
     /**
      * @docid
-     * @type Enums.Orientation
      * @default 'horizontal'
      * @public
      */
-    direction?: 'horizontal' | 'vertical';
+    direction?: Orientation;
     /**
      * @docid
      * @default true &for(desktop)

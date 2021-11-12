@@ -527,7 +527,7 @@ declare module DevExpress {
     /**
      * [descr:AnimationConfig.direction]
      */
-    direction?: 'bottom' | 'left' | 'right' | 'top';
+    direction?: DevExpress.types.Direction;
     /**
      * [descr:AnimationConfig.duration]
      */
@@ -558,15 +558,7 @@ declare module DevExpress {
     /**
      * [descr:AnimationConfig.type]
      */
-    type?:
-      | 'css'
-      | 'fade'
-      | 'fadeIn'
-      | 'fadeOut'
-      | 'pop'
-      | 'slide'
-      | 'slideIn'
-      | 'slideOut';
+    type?: DevExpress.types.AnimationType;
   };
   /**
    * [descr:animationPresets]
@@ -1000,7 +992,7 @@ declare module DevExpress {
     /**
      * [descr:Format.type]
      */
-    type?: PredefinedFormat | string;
+    type?: DevExpress.types.Format | string;
   }
   /**
    * [descr:fx]
@@ -1042,7 +1034,7 @@ declare module DevExpress {
     /**
      * [descr:globalConfig.editorStylingMode]
      */
-    editorStylingMode?: 'outlined' | 'underlined' | 'filled';
+    editorStylingMode?: DevExpress.types.EditorStylingMode;
     /**
      * [descr:globalConfig.floatingActionButtonConfig]
      */
@@ -1054,7 +1046,7 @@ declare module DevExpress {
       /**
        * [descr:globalConfig.floatingActionButtonConfig.direction]
        */
-      direction?: 'auto' | 'up' | 'down';
+      direction?: DevExpress.types.FloatingActionButtonDirection;
       /**
        * [descr:globalConfig.floatingActionButtonConfig.icon]
        */
@@ -1070,18 +1062,7 @@ declare module DevExpress {
       /**
        * [descr:globalConfig.floatingActionButtonConfig.position]
        */
-      position?:
-        | 'bottom'
-        | 'center'
-        | 'left'
-        | 'left bottom'
-        | 'left top'
-        | 'right'
-        | 'right bottom'
-        | 'right top'
-        | 'top'
-        | PositionConfig
-        | Function;
+      position?: DevExpress.types.PositionAlignment | PositionConfig | Function;
       /**
        * [descr:globalConfig.floatingActionButtonConfig.shading]
        */
@@ -1129,24 +1110,16 @@ declare module DevExpress {
      * [descr:PositionConfig.at]
      */
     at?:
-      | 'bottom'
-      | 'center'
-      | 'left'
-      | 'left bottom'
-      | 'left top'
-      | 'right'
-      | 'right bottom'
-      | 'right top'
-      | 'top'
+      | DevExpress.types.PositionAlignment
       | {
           /**
            * [descr:PositionConfig.at.x]
            */
-          x?: 'center' | 'left' | 'right';
+          x?: DevExpress.types.HorizontalAlignment;
           /**
            * [descr:PositionConfig.at.y]
            */
-          y?: 'bottom' | 'center' | 'top';
+          y?: DevExpress.types.VerticalAlignment;
         };
     /**
      * [descr:PositionConfig.boundary]
@@ -1171,52 +1144,31 @@ declare module DevExpress {
      * [descr:PositionConfig.collision]
      */
     collision?:
-      | 'fit'
-      | 'fit flip'
-      | 'fit flipfit'
-      | 'fit none'
-      | 'flip'
-      | 'flip fit'
-      | 'flip none'
-      | 'flipfit'
-      | 'flipfit fit'
-      | 'flipfit none'
-      | 'none'
-      | 'none fit'
-      | 'none flip'
-      | 'none flipfit'
+      | DevExpress.types.PositionResolveCollisionXY
       | {
           /**
            * [descr:PositionConfig.collision.x]
            */
-          x?: 'fit' | 'flip' | 'flipfit' | 'none';
+          x?: DevExpress.types.PositionResolveCollision;
           /**
            * [descr:PositionConfig.collision.y]
            */
-          y?: 'fit' | 'flip' | 'flipfit' | 'none';
+          y?: DevExpress.types.PositionResolveCollision;
         };
     /**
      * [descr:PositionConfig.my]
      */
     my?:
-      | 'bottom'
-      | 'center'
-      | 'left'
-      | 'left bottom'
-      | 'left top'
-      | 'right'
-      | 'right bottom'
-      | 'right top'
-      | 'top'
+      | DevExpress.types.PositionAlignment
       | {
           /**
            * [descr:PositionConfig.my.x]
            */
-          x?: 'center' | 'left' | 'right';
+          x?: DevExpress.types.HorizontalAlignment;
           /**
            * [descr:PositionConfig.my.y]
            */
-          y?: 'bottom' | 'center' | 'top';
+          y?: DevExpress.types.VerticalAlignment;
         };
     /**
      * [descr:PositionConfig.of]
@@ -1238,38 +1190,6 @@ declare module DevExpress {
           y?: number;
         };
   }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  type PredefinedFormat =
-    | 'billions'
-    | 'currency'
-    | 'day'
-    | 'decimal'
-    | 'exponential'
-    | 'fixedPoint'
-    | 'largeNumber'
-    | 'longDate'
-    | 'longTime'
-    | 'millions'
-    | 'millisecond'
-    | 'month'
-    | 'monthAndDay'
-    | 'monthAndYear'
-    | 'percent'
-    | 'quarter'
-    | 'quarterAndYear'
-    | 'shortDate'
-    | 'shortTime'
-    | 'thousands'
-    | 'trillions'
-    | 'year'
-    | 'dayOfWeek'
-    | 'hour'
-    | 'longDateLongTime'
-    | 'minute'
-    | 'second'
-    | 'shortDateShortTime';
   /**
    * [descr:registerComponent(name, componentClass)]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -2583,7 +2503,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.area]
      */
-    area?: 'column' | 'data' | 'filter' | 'row' | undefined;
+    area?: DevExpress.types.PivotGridArea | undefined;
     /**
      * [descr:PivotGridDataSourceOptions.fields.areaIndex]
      */
@@ -2618,7 +2538,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.dataType]
      */
-    dataType?: 'date' | 'number' | 'string';
+    dataType?: DevExpress.types.PivotGridDataType;
     /**
      * [descr:PivotGridDataSourceOptions.fields.displayFolder]
      */
@@ -2630,7 +2550,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.filterType]
      */
-    filterType?: 'exclude' | 'include';
+    filterType?: DevExpress.types.FilterType;
     /**
      * [descr:PivotGridDataSourceOptions.fields.filterValues]
      */
@@ -2646,7 +2566,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.groupInterval]
      */
-    groupInterval?: 'day' | 'dayOfWeek' | 'month' | 'quarter' | 'year' | number;
+    groupInterval?: DevExpress.types.PivotGridGroupInterval | number;
     /**
      * [descr:PivotGridDataSourceOptions.fields.groupName]
      */
@@ -2666,7 +2586,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.runningTotal]
      */
-    runningTotal?: 'column' | 'row';
+    runningTotal?: DevExpress.types.PivotGridRunningTotalMode;
     /**
      * [descr:PivotGridDataSourceOptions.fields.selector]
      */
@@ -2686,7 +2606,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.sortBy]
      */
-    sortBy?: 'displayText' | 'value' | 'none';
+    sortBy?: DevExpress.types.PivotGridSortBy;
     /**
      * [descr:PivotGridDataSourceOptions.fields.sortBySummaryField]
      */
@@ -2698,7 +2618,7 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.sortOrder]
      */
-    sortOrder?: 'asc' | 'desc';
+    sortOrder?: DevExpress.types.SortOrder;
     /**
      * [descr:PivotGridDataSourceOptions.fields.sortingMethod]
      */
@@ -2709,18 +2629,11 @@ declare module DevExpress.data {
     /**
      * [descr:PivotGridDataSourceOptions.fields.summaryDisplayMode]
      */
-    summaryDisplayMode?:
-      | 'absoluteVariation'
-      | 'percentOfColumnGrandTotal'
-      | 'percentOfColumnTotal'
-      | 'percentOfGrandTotal'
-      | 'percentOfRowGrandTotal'
-      | 'percentOfRowTotal'
-      | 'percentVariation';
+    summaryDisplayMode?: DevExpress.types.PivotGridSummaryDisplayMode;
     /**
      * [descr:PivotGridDataSourceOptions.fields.summaryType]
      */
-    summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
+    summaryType?: DevExpress.types.SummaryType | string;
     /**
      * [descr:PivotGridDataSourceOptions.fields.visible]
      */
@@ -2789,13 +2702,13 @@ declare module DevExpress.data {
           /**
            * [descr:PivotGridDataSourceOptions.store.type]
            */
-          type?: 'array' | 'local' | 'odata' | 'xmla';
+          type?: DevExpress.types.PivotGridStoreType;
         }>
       | {
           /**
            * [descr:PivotGridDataSourceOptions.store.type]
            */
-          type?: 'array' | 'local' | 'odata' | 'xmla';
+          type?: DevExpress.types.PivotGridStoreType;
         };
   }
   /**
@@ -3619,12 +3532,7 @@ declare module DevExpress.exporter {
     /**
      * [descr:ExcelFont.underline]
      */
-    underline?:
-      | 'double'
-      | 'doubleAccounting'
-      | 'none'
-      | 'single'
-      | 'singleAccounting';
+    underline?: DevExpress.types.ExcelFontUnderlineType;
   }
 }
 declare module DevExpress.fileManagement {
@@ -4189,12 +4097,1667 @@ declare module DevExpress.pdfExporter {
     /**
      * [descr:PdfExportGanttProps.exportMode]
      */
-    exportMode?: 'all' | 'treeList' | 'chart';
+    exportMode?: DevExpress.types.GanttPdfExportMode;
     /**
      * [descr:PdfExportGanttProps.dateRange]
      */
-    dateRange?: 'all' | 'visible' | object;
+    dateRange?: DevExpress.types.GanttPdfExportDateRange | object;
   }
+}
+declare module DevExpress.types {
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type AnimationType =
+    | 'css'
+    | 'fade'
+    | 'fadeIn'
+    | 'fadeOut'
+    | 'pop'
+    | 'slide'
+    | 'slideIn'
+    | 'slideOut';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type AnnotationType = 'text' | 'image' | 'custom';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ApplyChangesMode = 'instantly' | 'onDemand';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ArgumentAxisHoverMode = 'allArgumentPoints' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type AxisScaleType = 'continuous' | 'discrete' | 'logarithmic';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type BackgroundImageLocation =
+    | 'center'
+    | 'centerBottom'
+    | 'centerTop'
+    | 'full'
+    | 'leftBottom'
+    | 'leftCenter'
+    | 'leftTop'
+    | 'rightBottom'
+    | 'rightCenter'
+    | 'rightTop';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type BarGaugeResolveLabelOverlapping = 'hide' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type BoxAlign =
+    | 'center'
+    | 'end'
+    | 'space-around'
+    | 'space-between'
+    | 'start';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type BoxCrossAlign = 'center' | 'end' | 'start' | 'stretch';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type BoxDirection = 'col' | 'row';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ButtonGroupSelectionMode = 'multiple' | 'single' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ButtonStylingMode = 'text' | 'outlined' | 'contained';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ButtonType = 'back' | 'danger' | 'default' | 'normal' | 'success';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartBubbleSeriesAggregationMethod = 'avg' | 'custom';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartDataType = 'datetime' | 'numeric' | 'string';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartElementSelectionMode = 'multiple' | 'single';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartFinancialSeriesAggregationMethod = 'ohlc' | 'custom';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartLabelDisplayMode = 'rotate' | 'stagger' | 'standard';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartLegendHoverMode = 'excludePoints' | 'includePoints' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartPointInteractionMode =
+    | 'allArgumentPoints'
+    | 'allSeriesPoints'
+    | 'none'
+    | 'onlyPoint';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartRangeSeriesAggregationMethod = 'range' | 'custom';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartResolveLabelOverlapping = 'hide' | 'none' | 'stack';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartSeriesAggregationMethod =
+    | 'avg'
+    | 'count'
+    | 'max'
+    | 'min'
+    | 'ohlc'
+    | 'range'
+    | 'sum'
+    | 'custom';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartSeriesHoverMode =
+    | 'allArgumentPoints'
+    | 'allSeriesPoints'
+    | 'excludePoints'
+    | 'includePoints'
+    | 'nearestPoint'
+    | 'none'
+    | 'onlyPoint';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartSeriesSelectionMode =
+    | 'allArgumentPoints'
+    | 'allSeriesPoints'
+    | 'excludePoints'
+    | 'includePoints'
+    | 'none'
+    | 'onlyPoint';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartSingleValueSeriesAggregationMethod =
+    | 'avg'
+    | 'count'
+    | 'max'
+    | 'min'
+    | 'sum'
+    | 'custom';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartTooltipLocation = 'center' | 'edge';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartZoomAndPanMode = 'both' | 'none' | 'pan' | 'zoom';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ChartZoomPanAction = 'zoom' | 'pan';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type CircularGaugeElementOrientation = 'center' | 'inside' | 'outside';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type CollectionSearchMode = 'contains' | 'startswith' | 'equals';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ColumnResizingMode = 'nextColumn' | 'widget';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ComparisonOperator =
+    | '!='
+    | '!=='
+    | '<'
+    | '<='
+    | '=='
+    | '==='
+    | '>'
+    | '>=';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ContextMenuSubmenuDirection = 'auto' | 'left' | 'right';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DashStyle = 'dash' | 'dot' | 'longDash' | 'solid';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DataGridToolbarItem =
+    | 'addRowButton'
+    | 'applyFilterButton'
+    | 'columnChooserButton'
+    | 'exportButton'
+    | 'groupPanel'
+    | 'revertButton'
+    | 'saveButton'
+    | 'searchPanel';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DateBoxPickerType = 'calendar' | 'list' | 'native' | 'rollers';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DateBoxType = 'date' | 'datetime' | 'time';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramAutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramCommand =
+    | 'separator'
+    | 'exportSvg'
+    | 'exportPng'
+    | 'exportJpg'
+    | 'undo'
+    | 'redo'
+    | 'cut'
+    | 'copy'
+    | 'paste'
+    | 'selectAll'
+    | 'delete'
+    | 'fontName'
+    | 'fontSize'
+    | 'bold'
+    | 'italic'
+    | 'underline'
+    | 'fontColor'
+    | 'lineStyle'
+    | 'lineWidth'
+    | 'lineColor'
+    | 'fillColor'
+    | 'textAlignLeft'
+    | 'textAlignCenter'
+    | 'textAlignRight'
+    | 'lock'
+    | 'unlock'
+    | 'sendToBack'
+    | 'bringToFront'
+    | 'insertShapeImage'
+    | 'editShapeImage'
+    | 'deleteShapeImage'
+    | 'connectorLineType'
+    | 'connectorLineStart'
+    | 'connectorLineEnd'
+    | 'layoutTreeTopToBottom'
+    | 'layoutTreeBottomToTop'
+    | 'layoutTreeLeftToRight'
+    | 'layoutTreeRightToLeft'
+    | 'layoutLayeredTopToBottom'
+    | 'layoutLayeredBottomToTop'
+    | 'layoutLayeredLeftToRight'
+    | 'layoutLayeredRightToLeft'
+    | 'fullScreen'
+    | 'zoomLevel'
+    | 'showGrid'
+    | 'snapToGrid'
+    | 'gridSize'
+    | 'units'
+    | 'pageSize'
+    | 'pageOrientation'
+    | 'pageColor'
+    | 'simpleView'
+    | 'toolbox';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramConnectorLineEnd =
+    | 'none'
+    | 'arrow'
+    | 'outlinedTriangle'
+    | 'filledTriangle';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramConnectorLineType = 'straight' | 'orthogonal';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramConnectorPosition = 'start' | 'end';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramDataLayoutOrientation = 'vertical' | 'horizontal';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramItemType = 'shape' | 'connector';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramPageOrientation = 'portrait' | 'landscape';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramPanelVisibility =
+    | 'auto'
+    | 'visible'
+    | 'collapsed'
+    | 'disabled';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramRequestEditOperationReason =
+    | 'checkUIElementAvailability'
+    | 'modelModification';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramShapeCategory =
+    | 'general'
+    | 'flowchart'
+    | 'orgChart'
+    | 'containers'
+    | 'custom';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramShapeType =
+    | 'text'
+    | 'rectangle'
+    | 'ellipse'
+    | 'cross'
+    | 'triangle'
+    | 'diamond'
+    | 'heart'
+    | 'pentagon'
+    | 'hexagon'
+    | 'octagon'
+    | 'star'
+    | 'arrowLeft'
+    | 'arrowTop'
+    | 'arrowRight'
+    | 'arrowBottom'
+    | 'arrowNorthSouth'
+    | 'arrowEastWest'
+    | 'process'
+    | 'decision'
+    | 'terminator'
+    | 'predefinedProcess'
+    | 'document'
+    | 'multipleDocuments'
+    | 'manualInput'
+    | 'preparation'
+    | 'data'
+    | 'database'
+    | 'hardDisk'
+    | 'internalStorage'
+    | 'paperTape'
+    | 'manualOperation'
+    | 'delay'
+    | 'storedData'
+    | 'display'
+    | 'merge'
+    | 'connector'
+    | 'or'
+    | 'summingJunction'
+    | 'verticalContainer'
+    | 'horizontalContainer'
+    | 'cardWithImageOnLeft'
+    | 'cardWithImageOnTop'
+    | 'cardWithImageOnRight';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramToolboxDisplayMode = 'icons' | 'texts';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiagramUnits = 'in' | 'cm' | 'px';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type Direction = 'bottom' | 'left' | 'right' | 'top';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DiscreteAxisDivisionMode = 'betweenLabels' | 'crossLabels';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DragDirection = 'both' | 'horizontal' | 'vertical';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DrawerOpenedStateMode = 'overlap' | 'shrink' | 'push';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DrawerPosition =
+    | 'left'
+    | 'right'
+    | 'top'
+    | 'bottom'
+    | 'before'
+    | 'after';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DrawerRevealMode = 'slide' | 'expand';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DropDownEditorButtonName = 'clear' | 'dropDown';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DropDownSearchMode = 'contains' | 'startswith';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type DropFeedbackMode = 'push' | 'indicate';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type EditorApplyValueMode = 'instantly' | 'useButtons';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type EditorLabelMode = 'static' | 'floating' | 'hidden';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type EditorStylingMode = 'outlined' | 'underlined' | 'filled';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type EventKeyModifier = 'alt' | 'ctrl' | 'meta' | 'shift';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ExcelCellHorizontalAlignment =
+    | 'center'
+    | 'centerContinuous'
+    | 'distributed'
+    | 'fill'
+    | 'general'
+    | 'justify'
+    | 'left'
+    | 'right';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ExcelCellPatternType =
+    | 'darkDown'
+    | 'darkGray'
+    | 'darkGrid'
+    | 'darkHorizontal'
+    | 'darkTrellis'
+    | 'darkUp'
+    | 'darkVertical'
+    | 'gray0625'
+    | 'gray125'
+    | 'lightDown'
+    | 'lightGray'
+    | 'lightGrid'
+    | 'lightHorizontal'
+    | 'lightTrellis'
+    | 'lightUp'
+    | 'lightVertical'
+    | 'mediumGray'
+    | 'none'
+    | 'solid';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ExcelCellVerticalAlignment =
+    | 'bottom'
+    | 'center'
+    | 'distributed'
+    | 'justify'
+    | 'top';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ExcelFontUnderlineType =
+    | 'double'
+    | 'doubleAccounting'
+    | 'none'
+    | 'single'
+    | 'singleAccounting';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ExportFormat = 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FileManagerContextMenuItem =
+    | 'create'
+    | 'upload'
+    | 'refresh'
+    | 'download'
+    | 'move'
+    | 'copy'
+    | 'rename'
+    | 'delete';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FileManagerItemViewMode = 'details' | 'thumbnails';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FileManagerSelectionMode = 'multiple' | 'single';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FileManagerToolbarItem =
+    | 'showNavPane'
+    | 'create'
+    | 'upload'
+    | 'refresh'
+    | 'switchView'
+    | 'download'
+    | 'move'
+    | 'copy'
+    | 'rename'
+    | 'delete'
+    | 'clearSelection'
+    | 'separator';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FileManagerViewArea = 'navPane' | 'itemView';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FileUploadMode = 'instantly' | 'useButtons' | 'useForm';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FilterBuilderFieldDataType =
+    | 'string'
+    | 'number'
+    | 'date'
+    | 'boolean'
+    | 'object'
+    | 'datetime';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FilterBuilderFieldFilterOperations =
+    | '='
+    | '<>'
+    | '<'
+    | '<='
+    | '>'
+    | '>='
+    | 'contains'
+    | 'endswith'
+    | 'isblank'
+    | 'isnotblank'
+    | 'notcontains'
+    | 'startswith'
+    | 'between';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FilterBuilderGroupOperations = 'and' | 'or' | 'notAnd' | 'notOr';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FilterOperations =
+    | '<'
+    | '<='
+    | '<>'
+    | '='
+    | '>'
+    | '>='
+    | 'between'
+    | 'contains'
+    | 'endswith'
+    | 'notcontains'
+    | 'startswith';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FilterType = 'exclude' | 'include';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FinancialChartReductionLevel = 'close' | 'high' | 'low' | 'open';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FirstDayOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FloatingActionButtonDirection = 'auto' | 'up' | 'down';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type Format =
+    | 'billions'
+    | 'currency'
+    | 'day'
+    | 'decimal'
+    | 'exponential'
+    | 'fixedPoint'
+    | 'largeNumber'
+    | 'longDate'
+    | 'longTime'
+    | 'millions'
+    | 'millisecond'
+    | 'month'
+    | 'monthAndDay'
+    | 'monthAndYear'
+    | 'percent'
+    | 'quarter'
+    | 'quarterAndYear'
+    | 'shortDate'
+    | 'shortTime'
+    | 'thousands'
+    | 'trillions'
+    | 'year'
+    | 'dayOfWeek'
+    | 'hour'
+    | 'longDateLongTime'
+    | 'minute'
+    | 'second'
+    | 'shortDateShortTime';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FormItemEditorType =
+    | 'dxAutocomplete'
+    | 'dxCalendar'
+    | 'dxCheckBox'
+    | 'dxColorBox'
+    | 'dxDateBox'
+    | 'dxDropDownBox'
+    | 'dxHtmlEditor'
+    | 'dxLookup'
+    | 'dxNumberBox'
+    | 'dxRadioGroup'
+    | 'dxRangeSlider'
+    | 'dxSelectBox'
+    | 'dxSlider'
+    | 'dxSwitch'
+    | 'dxTagBox'
+    | 'dxTextArea'
+    | 'dxTextBox';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FormItemType = 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FormLabelLocation = 'left' | 'right' | 'top';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FormLabelMode = 'static' | 'floating' | 'hidden' | 'outside';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FunnelAlgorithm = 'dynamicHeight' | 'dynamicSlope';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FunnelLabelPosition = 'columns' | 'inside' | 'outside';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type FunnelResolveLabelOverlapping = 'hide' | 'none' | 'shift';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GanttContextMenuItem =
+    | 'undo'
+    | 'redo'
+    | 'expandAll'
+    | 'collapseAll'
+    | 'addTask'
+    | 'deleteTask'
+    | 'zoomIn'
+    | 'zoomOut'
+    | 'deleteDependency'
+    | 'taskDetails';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GanttPdfExportDateRange = 'all' | 'visible';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GanttPdfExportMode = 'all' | 'treeList' | 'chart';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GanttScaleType =
+    | 'auto'
+    | 'minutes'
+    | 'hours'
+    | 'days'
+    | 'weeks'
+    | 'months'
+    | 'quarters'
+    | 'years';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GanttSortingMode = 'multiple' | 'none' | 'single';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GanttTaskTitlePosition = 'inside' | 'outside' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GanttToolbarItem =
+    | 'separator'
+    | 'undo'
+    | 'redo'
+    | 'expandAll'
+    | 'collapseAll'
+    | 'addTask'
+    | 'deleteTask'
+    | 'zoomIn'
+    | 'zoomOut'
+    | 'taskDetails'
+    | 'fullScreen'
+    | 'resourceManager'
+    | 'showResources'
+    | 'showDependencies';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GaugeOverlappingBehavior = 'first' | 'last';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GeoMapProvider = 'bing' | 'google' | 'googleStatic';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GeoMapRouteMode = 'driving' | 'walking';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GeoMapType = 'hybrid' | 'roadmap' | 'satellite';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridApplyFilterMode = 'auto' | 'onClick';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridColumnButtonName =
+    | 'cancel'
+    | 'delete'
+    | 'edit'
+    | 'save'
+    | 'undelete';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridColumnChooserMode = 'dragAndDrop' | 'select';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridColumnDataType =
+    | 'string'
+    | 'number'
+    | 'date'
+    | 'boolean'
+    | 'object'
+    | 'datetime';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridColumnRenderingMode = 'standard' | 'virtual';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridCommandColumnType =
+    | 'adaptive'
+    | 'buttons'
+    | 'detailExpand'
+    | 'groupExpand'
+    | 'selection'
+    | 'drag';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridDataChangeType = 'insert' | 'update' | 'remove';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridEditMode = 'batch' | 'cell' | 'row' | 'form' | 'popup';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridEditRefreshMode = 'full' | 'reshape' | 'repaint';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridEnterKeyAction = 'startEdit' | 'moveFocus';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridEnterKeyDirection = 'none' | 'column' | 'row';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridFilterOperations =
+    | '='
+    | '<>'
+    | '<'
+    | '<='
+    | '>'
+    | '>='
+    | 'contains'
+    | 'endswith'
+    | 'isblank'
+    | 'isnotblank'
+    | 'notcontains'
+    | 'startswith'
+    | 'between'
+    | 'anyof'
+    | 'noneof';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridGroupingExpandMode = 'buttonClick' | 'rowClick';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridNewRowPosition =
+    | 'first'
+    | 'last'
+    | 'pageBottom'
+    | 'pageTop'
+    | 'viewportBottom'
+    | 'viewportTop';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridPagerDisplayMode = 'adaptive' | 'compact' | 'full';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridPagerPageSize = 'all';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridRowRenderingMode = 'standard' | 'virtual';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridScrollingMode = 'infinite' | 'standard' | 'virtual';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridSelectionShowCheckBoxesMode =
+    | 'always'
+    | 'none'
+    | 'onClick'
+    | 'onLongTap';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridSortingMode = 'multiple' | 'none' | 'single';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type GridStartEditAction = 'click' | 'dblClick';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type HatchingDirection = 'left' | 'none' | 'right';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type HeaderFilterGroupInterval =
+    | 'day'
+    | 'hour'
+    | 'minute'
+    | 'month'
+    | 'quarter'
+    | 'second'
+    | 'year';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type HorizontalAlignment = 'center' | 'left' | 'right';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type HorizontalEdge = 'left' | 'right';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type HtmlEditorContextMenuItem =
+    | 'background'
+    | 'bold'
+    | 'color'
+    | 'font'
+    | 'italic'
+    | 'link'
+    | 'image'
+    | 'strike'
+    | 'subscript'
+    | 'superscript'
+    | 'underline'
+    | 'blockquote'
+    | 'increaseIndent'
+    | 'decreaseIndent'
+    | 'orderedList'
+    | 'bulletList'
+    | 'alignLeft'
+    | 'alignCenter'
+    | 'alignRight'
+    | 'alignJustify'
+    | 'codeBlock'
+    | 'variable'
+    | 'undo'
+    | 'redo'
+    | 'clear'
+    | 'insertTable'
+    | 'insertHeaderRow'
+    | 'insertRowAbove'
+    | 'insertRowBelow'
+    | 'insertColumnLeft'
+    | 'insertColumnRight'
+    | 'deleteColumn'
+    | 'deleteRow'
+    | 'deleteTable'
+    | 'cellProperties'
+    | 'tableProperties';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type HtmlEditorFormat =
+    | 'background'
+    | 'bold'
+    | 'color'
+    | 'font'
+    | 'italic'
+    | 'link'
+    | 'size'
+    | 'strike'
+    | 'script'
+    | 'underline'
+    | 'blockquote'
+    | 'header'
+    | 'indent'
+    | 'list'
+    | 'align'
+    | 'code-block';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type HtmlEditorToolbarItem =
+    | 'background'
+    | 'bold'
+    | 'color'
+    | 'font'
+    | 'italic'
+    | 'link'
+    | 'image'
+    | 'size'
+    | 'strike'
+    | 'subscript'
+    | 'superscript'
+    | 'underline'
+    | 'blockquote'
+    | 'header'
+    | 'increaseIndent'
+    | 'decreaseIndent'
+    | 'orderedList'
+    | 'bulletList'
+    | 'alignLeft'
+    | 'alignCenter'
+    | 'alignRight'
+    | 'alignJustify'
+    | 'codeBlock'
+    | 'variable'
+    | 'separator'
+    | 'undo'
+    | 'redo'
+    | 'clear'
+    | 'cellProperties'
+    | 'tableProperties'
+    | 'insertTable'
+    | 'insertHeaderRow'
+    | 'insertRowAbove'
+    | 'insertRowBelow'
+    | 'insertColumnLeft'
+    | 'insertColumnRight'
+    | 'deleteColumn'
+    | 'deleteRow'
+    | 'deleteTable';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type HtmlEditorValueType = 'html' | 'markdown';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type LegendMarkerState = 'normal' | 'hovered' | 'selected';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ListItemDeleteMode =
+    | 'context'
+    | 'slideButton'
+    | 'slideItem'
+    | 'static'
+    | 'swipe'
+    | 'toggle';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ListMenuMode = 'context' | 'slide';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ListPageLoadMode = 'nextButton' | 'scrollBottom';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ListSelectionMode = 'all' | 'multiple' | 'none' | 'single';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type MaxAppointmentsPerCell = 'auto' | 'unlimited';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type MenuSelectionMode = 'none' | 'single';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type Mode = 'auto';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type NavSelectionMode = 'multiple' | 'single';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type NumberBoxButtonName = 'clear' | 'spins';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type NumberBoxMode = 'number' | 'text' | 'tel';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type Orientation = 'horizontal' | 'vertical';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type OverlappingBehavior = 'rotate' | 'stagger' | 'none' | 'hide';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PieChartAnnotationLocation = 'center' | 'edge';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PieChartLabelPosition = 'columns' | 'inside' | 'outside';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PieChartLegendHoverMode = 'none' | 'allArgumentPoints';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PieChartResolveLabelOverlapping = 'hide' | 'none' | 'shift';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PieChartSegmentsDirection = 'anticlockwise' | 'clockwise';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PieChartSeriesInteractionMode = 'none' | 'onlyPoint';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PieChartType = 'donut' | 'doughnut' | 'pie';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PivotGridArea = 'column' | 'data' | 'filter' | 'row';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PivotGridDataFieldArea = 'column' | 'row';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PivotGridDataType = 'date' | 'number' | 'string';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PivotGridFieldChooserLayout = 0 | 1 | 2;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PivotGridGroupInterval =
+    | 'day'
+    | 'dayOfWeek'
+    | 'month'
+    | 'quarter'
+    | 'year';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PivotGridRowHeadersLayout = 'standard' | 'tree';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PivotGridRunningTotalMode = 'column' | 'row';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PivotGridScrollingMode = 'standard' | 'virtual';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PivotGridSortBy = 'displayText' | 'value' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PivotGridStoreType = 'array' | 'local' | 'odata' | 'xmla';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PivotGridSummaryDisplayMode =
+    | 'absoluteVariation'
+    | 'percentOfColumnGrandTotal'
+    | 'percentOfColumnTotal'
+    | 'percentOfGrandTotal'
+    | 'percentOfRowGrandTotal'
+    | 'percentOfRowTotal'
+    | 'percentVariation';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PivotGridTotalsDisplayMode = 'both' | 'columns' | 'none' | 'rows';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PointSymbol =
+    | 'circle'
+    | 'cross'
+    | 'polygon'
+    | 'square'
+    | 'triangleDown'
+    | 'triangleUp';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PolarChartOverlappingBehavior = 'none' | 'hide';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PolarChartResolveLabelOverlapping = 'hide' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PolarChartSeriesType =
+    | 'area'
+    | 'bar'
+    | 'line'
+    | 'scatter'
+    | 'stackedbar';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type Position = 'bottom' | 'left' | 'right' | 'top';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PositionAlignment =
+    | 'bottom'
+    | 'center'
+    | 'left'
+    | 'left bottom'
+    | 'left top'
+    | 'right'
+    | 'right bottom'
+    | 'right top'
+    | 'top';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PositionResolveCollision = 'fit' | 'flip' | 'flipfit' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type PositionResolveCollisionXY =
+    | 'fit'
+    | 'fit flip'
+    | 'fit flipfit'
+    | 'fit none'
+    | 'flip'
+    | 'flip fit'
+    | 'flip none'
+    | 'flipfit'
+    | 'flipfit fit'
+    | 'flipfit none'
+    | 'none'
+    | 'none fit'
+    | 'none flip'
+    | 'none flipfit';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type RangeSelectorAxisScaleType =
+    | 'continuous'
+    | 'discrete'
+    | 'logarithmic'
+    | 'semidiscrete';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type RangeSelectorChartAxisScaleType = 'continuous' | 'logarithmic';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type RelativePosition = 'inside' | 'outside';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ResizeHandle = 'bottom' | 'left' | 'right' | 'top' | 'all';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SankeyColorMode = 'none' | 'source' | 'target' | 'gradient';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SankeyLabelOverlappingBehavior = 'ellipsis' | 'hide' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ScaleBreakLineStyle = 'straight' | 'waved';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ScaleLabelOverlappingBehavior = 'hide' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SchedulerRecurrenceEditMode = 'dialog' | 'occurrence' | 'series';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SchedulerScrollingMode = 'standard' | 'virtual';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SchedulerViewType =
+    | 'agenda'
+    | 'day'
+    | 'month'
+    | 'timelineDay'
+    | 'timelineMonth'
+    | 'timelineWeek'
+    | 'timelineWorkWeek'
+    | 'week'
+    | 'workWeek';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ScrollDirection = 'both' | 'horizontal' | 'vertical';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SelectAllMode = 'allPages' | 'page';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SelectionMode = 'multiple' | 'none' | 'single';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SeriesType =
+    | 'area'
+    | 'bar'
+    | 'bubble'
+    | 'candlestick'
+    | 'fullstackedarea'
+    | 'fullstackedbar'
+    | 'fullstackedline'
+    | 'fullstackedspline'
+    | 'fullstackedsplinearea'
+    | 'line'
+    | 'rangearea'
+    | 'rangebar'
+    | 'scatter'
+    | 'spline'
+    | 'splinearea'
+    | 'stackedarea'
+    | 'stackedbar'
+    | 'stackedline'
+    | 'stackedspline'
+    | 'stackedsplinearea'
+    | 'steparea'
+    | 'stepline'
+    | 'stock';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ShowMaskMode = 'always' | 'onFocus';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ShowScrollbarMode = 'always' | 'never' | 'onHover' | 'onScroll';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ShowSubmenuMode = 'onClick' | 'onHover';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SlideOutMenuPosition = 'inverted' | 'normal';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SliderTooltipShowMode = 'always' | 'onHover';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SmallValuesGroupingMode = 'none' | 'smallValueThreshold' | 'topN';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SortOrder = 'asc' | 'desc';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SparklineType =
+    | 'area'
+    | 'bar'
+    | 'line'
+    | 'spline'
+    | 'splinearea'
+    | 'steparea'
+    | 'stepline'
+    | 'winloss';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type StateStoringType = 'custom' | 'localStorage' | 'sessionStorage';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SubmenuDirection = 'auto' | 'leftOrTop' | 'rightOrBottom';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type SummaryType = 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TextBoxButtonName = 'clear';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TextBoxMode =
+    | 'email'
+    | 'password'
+    | 'search'
+    | 'tel'
+    | 'text'
+    | 'url';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TextEditorButtonLocation = 'after' | 'before';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ToastType = 'custom' | 'error' | 'info' | 'success' | 'warning';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ToolbarItemLocateInMenuMode = 'always' | 'auto' | 'never';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ToolbarItemLocation = 'after' | 'before' | 'center';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ToolbarItemShowTextMode = 'always' | 'inMenu';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ToolbarItemWidget =
+    | 'dxAutocomplete'
+    | 'dxButton'
+    | 'dxCheckBox'
+    | 'dxDateBox'
+    | 'dxMenu'
+    | 'dxSelectBox'
+    | 'dxTabs'
+    | 'dxTextBox'
+    | 'dxButtonGroup'
+    | 'dxDropDownButton';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ToolbarLocation = 'bottom' | 'top';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TreeListColumnButtonName =
+    | 'add'
+    | 'cancel'
+    | 'delete'
+    | 'edit'
+    | 'save'
+    | 'undelete';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TreeListCommandColumnType = 'adaptive' | 'buttons' | 'drag';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TreeListDataStructure = 'plain' | 'tree';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TreeListFilterMode = 'fullBranch' | 'withAncestors' | 'matchOnly';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TreeListScrollingMode = 'standard' | 'virtual';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TreeListToolbarItem =
+    | 'addRowButton'
+    | 'applyFilterButton'
+    | 'columnChooserButton'
+    | 'revertButton'
+    | 'saveButton'
+    | 'searchPanel';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TreeMapColorizerType = 'discrete' | 'gradient' | 'none' | 'range';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TreeMapLayoutAlgorithm = 'sliceanddice' | 'squarified' | 'strip';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TreeMapLayoutDirection =
+    | 'leftBottomRightTop'
+    | 'leftTopRightBottom'
+    | 'rightBottomLeftTop'
+    | 'rightTopLeftBottom';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TreeViewCheckBoxMode = 'none' | 'normal' | 'selectAll';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TreeViewDataStructure = 'plain' | 'tree';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type TreeViewExpandEvent = 'dblclick' | 'click';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type UploadHttpMethod = 'POST' | 'PUT';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ValidationMessageMode = 'always' | 'auto';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ValidationStatus = 'valid' | 'invalid' | 'pending';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ValueAxisVisualRangeUpdateMode = 'auto' | 'keep' | 'reset';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ValueChangedCallMode = 'onMoving' | 'onMovingComplete';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ValueErrorBarDisplayMode = 'auto' | 'high' | 'low' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type ValueErrorBarType =
+    | 'fixed'
+    | 'percent'
+    | 'stdDeviation'
+    | 'stdError'
+    | 'variance';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VectorMapLayerType = 'area' | 'line' | 'marker';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VectorMapMarkerShape = 'circle' | 'square';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VectorMapMarkerType = 'bubble' | 'dot' | 'image' | 'pie';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VectorMapProjection =
+    | 'equirectangular'
+    | 'lambert'
+    | 'mercator'
+    | 'miller';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VerticalAlignment = 'bottom' | 'center' | 'top';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VerticalEdge = 'bottom' | 'top';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VisualRangeUpdateMode = 'auto' | 'keep' | 'reset' | 'shift';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizAnimationEasing = 'easeOutCubic' | 'linear';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizPalette =
+    | 'Bright'
+    | 'Harmony Light'
+    | 'Ocean'
+    | 'Pastel'
+    | 'Soft'
+    | 'Soft Pastel'
+    | 'Vintage'
+    | 'Violet'
+    | 'Carmine'
+    | 'Dark Moon'
+    | 'Dark Violet'
+    | 'Green Mist'
+    | 'Soft Blue'
+    | 'Material'
+    | 'Office';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizPaletteColorSet =
+    | 'simpleSet'
+    | 'indicatingSet'
+    | 'gradientSet';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizPaletteExtensionMode = 'alternate' | 'blend' | 'extrapolate';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizPointSymbol =
+    | 'circle'
+    | 'cross'
+    | 'polygon'
+    | 'square'
+    | 'triangle';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizTextOverflow = 'ellipsis' | 'hide' | 'none';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizTheme =
+    | 'generic.dark'
+    | 'generic.light'
+    | 'generic.contrast'
+    | 'generic.carmine'
+    | 'generic.darkmoon'
+    | 'generic.darkviolet'
+    | 'generic.greenmist'
+    | 'generic.softblue'
+    | 'material.blue.light'
+    | 'material.lime.light'
+    | 'material.orange.light'
+    | 'material.purple.light'
+    | 'material.teal.light';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizTimeInterval =
+    | 'day'
+    | 'hour'
+    | 'millisecond'
+    | 'minute'
+    | 'month'
+    | 'quarter'
+    | 'second'
+    | 'week'
+    | 'year';
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+   */
+  export type VizWordWrap = 'normal' | 'breakWord' | 'none';
 }
 declare module DevExpress.ui {
   /**
@@ -4414,7 +5977,7 @@ declare module DevExpress.ui {
     /**
      * [descr:CompareRule.comparisonType]
      */
-    comparisonType?: '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
+    comparisonType?: DevExpress.types.ComparisonOperator;
     /**
      * [descr:CompareRule.ignoreEmptyValue]
      */
@@ -4551,7 +6114,7 @@ declare module DevExpress.ui {
     /**
      * [descr:DraggableBaseOptions.dragDirection]
      */
-    dragDirection?: 'both' | 'horizontal' | 'vertical';
+    dragDirection?: DevExpress.types.DragDirection;
     /**
      * [descr:DraggableBaseOptions.group]
      */
@@ -4869,11 +6432,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxActionSheetItem.type]
      */
-    type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    type?: DevExpress.types.ButtonType;
     /**
      * [descr:dxActionSheetItem.stylingMode]
      */
-    stylingMode?: 'text' | 'outlined' | 'contained';
+    stylingMode?: DevExpress.types.ButtonStylingMode;
   }
   /**
    * @deprecated use Properties instead
@@ -5101,7 +6664,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxBoxItem.baseSize]
      */
-    baseSize?: number | 'auto';
+    baseSize?: number | DevExpress.types.Mode;
     /**
      * [descr:dxBoxItem.box]
      */
@@ -5125,11 +6688,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxBoxOptions.align]
      */
-    align?: 'center' | 'end' | 'space-around' | 'space-between' | 'start';
+    align?: DevExpress.types.BoxAlign;
     /**
      * [descr:dxBoxOptions.crossAlign]
      */
-    crossAlign?: 'center' | 'end' | 'start' | 'stretch';
+    crossAlign?: DevExpress.types.BoxCrossAlign;
     /**
      * [descr:dxBoxOptions.dataSource]
      */
@@ -5137,7 +6700,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxBoxOptions.direction]
      */
-    direction?: 'col' | 'row';
+    direction?: DevExpress.types.BoxDirection;
     /**
      * [descr:dxBoxOptions.items]
      */
@@ -5202,7 +6765,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupItem.type]
      */
-    type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    type?: DevExpress.types.ButtonType;
 
     /**
      * [descr:dxButtonGroupItem.elementAttr]
@@ -5260,11 +6823,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonGroupOptions.selectionMode]
      */
-    selectionMode?: 'multiple' | 'single' | 'none';
+    selectionMode?: DevExpress.types.ButtonGroupSelectionMode;
     /**
      * [descr:dxButtonGroupOptions.stylingMode]
      */
-    stylingMode?: 'text' | 'outlined' | 'contained';
+    stylingMode?: DevExpress.types.ButtonStylingMode;
   }
   /**
    * @deprecated use Properties instead
@@ -5294,7 +6857,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonOptions.stylingMode]
      */
-    stylingMode?: 'text' | 'outlined' | 'contained';
+    stylingMode?: DevExpress.types.ButtonStylingMode;
     /**
      * [descr:dxButtonOptions.template]
      */
@@ -5311,7 +6874,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxButtonOptions.type]
      */
-    type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
+    type?: DevExpress.types.ButtonType;
     /**
      * [descr:dxButtonOptions.useSubmitBehavior]
      */
@@ -5380,7 +6943,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    firstDayOfWeek?: DevExpress.types.FirstDayOfWeek;
     /**
      * [descr:dxCalendarOptions.focusStateEnabled]
      */
@@ -5396,7 +6959,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.maxZoomLevel]
      */
-    maxZoomLevel?: 'century' | 'decade' | 'month' | 'year';
+    maxZoomLevel?: DevExpress.types.CalendarZoomLevel;
     /**
      * [descr:dxCalendarOptions.min]
      */
@@ -5404,7 +6967,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.minZoomLevel]
      */
-    minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
+    minZoomLevel?: DevExpress.types.CalendarZoomLevel;
     /**
      * [descr:dxCalendarOptions.name]
      */
@@ -5420,7 +6983,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxCalendarOptions.zoomLevel]
      */
-    zoomLevel?: 'century' | 'decade' | 'month' | 'year';
+    zoomLevel?: DevExpress.types.CalendarZoomLevel;
   }
   /**
    * [descr:dxCheckBox]
@@ -5557,7 +7120,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxColorBoxOptions.applyValueMode]
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: DevExpress.types.EditorApplyValueMode;
     /**
      * [descr:dxColorBoxOptions.cancelButtonText]
      */
@@ -5745,7 +7308,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxContextMenuOptions.submenuDirection]
      */
-    submenuDirection?: 'auto' | 'left' | 'right';
+    submenuDirection?: DevExpress.types.ContextMenuSubmenuDirection;
     /**
      * [descr:dxContextMenuOptions.target]
      */
@@ -6018,7 +7581,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.alignment]
        */
-      alignment?: 'center' | 'left' | 'right';
+      alignment?: DevExpress.types.HorizontalAlignment;
       /**
        * [descr:GridBaseColumn.allowEditing]
        */
@@ -6094,13 +7657,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.dataType]
        */
-      dataType?:
-        | 'string'
-        | 'number'
-        | 'date'
-        | 'boolean'
-        | 'object'
-        | 'datetime';
+      dataType?: DevExpress.types.GridColumnDataType;
       /**
        * [descr:GridBaseColumn.editorOptions]
        */
@@ -6116,27 +7673,11 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.filterOperations]
        */
-      filterOperations?: Array<
-        | '='
-        | '<>'
-        | '<'
-        | '<='
-        | '>'
-        | '>='
-        | 'contains'
-        | 'endswith'
-        | 'isblank'
-        | 'isnotblank'
-        | 'notcontains'
-        | 'startswith'
-        | 'between'
-        | 'anyof'
-        | 'noneof'
-      >;
+      filterOperations?: Array<DevExpress.types.GridFilterOperations>;
       /**
        * [descr:GridBaseColumn.filterType]
        */
-      filterType?: 'exclude' | 'include';
+      filterType?: DevExpress.types.FilterType;
       /**
        * [descr:GridBaseColumn.filterValue]
        */
@@ -6152,7 +7693,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.fixedPosition]
        */
-      fixedPosition?: 'left' | 'right';
+      fixedPosition?: DevExpress.types.HorizontalEdge;
       /**
        * [descr:GridBaseColumn.formItem]
        */
@@ -6196,18 +7737,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.selectedFilterOperation]
        */
-      selectedFilterOperation?:
-        | '<'
-        | '<='
-        | '<>'
-        | '='
-        | '>'
-        | '>='
-        | 'between'
-        | 'contains'
-        | 'endswith'
-        | 'notcontains'
-        | 'startswith';
+      selectedFilterOperation?: DevExpress.types.FilterOperations;
       /**
        * [descr:GridBaseColumn.setCellValue]
        */
@@ -6231,7 +7761,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.sortOrder]
        */
-      sortOrder?: 'asc' | 'desc';
+      sortOrder?: DevExpress.types.SortOrder;
       /**
        * [descr:GridBaseColumn.sortingMethod]
        */
@@ -6347,7 +7877,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.columnChooser.mode]
        */
-      mode?: 'dragAndDrop' | 'select';
+      mode?: DevExpress.types.GridColumnChooserMode;
       /**
        * [descr:GridBaseOptions.columnChooser.searchTimeout]
        */
@@ -6363,7 +7893,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.columnChooser.sortOrder]
        */
-      sortOrder?: 'asc' | 'desc';
+      sortOrder?: DevExpress.types.SortOrder;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -6461,15 +7991,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.headerFilter.groupInterval]
        */
-      groupInterval?:
-        | 'day'
-        | 'hour'
-        | 'minute'
-        | 'month'
-        | 'quarter'
-        | 'second'
-        | 'year'
-        | number;
+      groupInterval?: DevExpress.types.HeaderFilterGroupInterval | number;
       /**
        * [descr:GridBaseColumn.headerFilter.height]
        */
@@ -6477,7 +7999,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseColumn.headerFilter.searchMode]
        */
-      searchMode?: 'contains' | 'startswith' | 'equals';
+      searchMode?: DevExpress.types.CollectionSearchMode;
       /**
        * [descr:GridBaseColumn.headerFilter.width]
        */
@@ -6564,18 +8086,6 @@ declare module DevExpress.ui {
       readonly isSelected?: boolean;
       readonly isExpanded?: boolean;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    type DefaultToolbarItemName =
-      | 'addRowButton'
-      | 'applyFilterButton'
-      | 'columnChooserButton'
-      | 'exportButton'
-      | 'groupPanel'
-      | 'revertButton'
-      | 'saveButton'
-      | 'searchPanel';
     export type DisposingEvent<
       TRowData = any,
       TKey = any
@@ -6619,7 +8129,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.sortByGroupSummaryInfo.sortOrder]
        */
-      sortOrder?: 'asc' | 'desc';
+      sortOrder?: DevExpress.types.SortOrder;
       /**
        * [descr:dxDataGridOptions.sortByGroupSummaryInfo.summaryItem]
        */
@@ -6677,13 +8187,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.editing.newRowPosition]
        */
-      newRowPosition?:
-        | 'first'
-        | 'last'
-        | 'pageBottom'
-        | 'pageTop'
-        | 'viewportBottom'
-        | 'viewportTop';
+      newRowPosition?: DevExpress.types.GridNewRowPosition;
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -6712,7 +8216,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.mode]
        */
-      mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
+      mode?: DevExpress.types.GridEditMode;
       /**
        * [descr:GridBaseOptions.editing.popup]
        */
@@ -6720,7 +8224,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.refreshMode]
        */
-      refreshMode?: 'full' | 'reshape' | 'repaint';
+      refreshMode?: DevExpress.types.GridEditRefreshMode;
       /**
        * [descr:GridBaseOptions.editing.selectTextOnEditStart]
        */
@@ -6728,7 +8232,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.editing.startEditAction]
        */
-      startEditAction?: 'click' | 'dblClick';
+      startEditAction?: DevExpress.types.GridStartEditAction;
       /**
        * [descr:GridBaseOptions.editing.texts]
        */
@@ -6833,43 +8337,11 @@ declare module DevExpress.ui {
     };
     export type ExcelCellInfo<TRowData = any, TKey = any> = {
       readonly component: dxDataGrid<TRowData, TKey>;
-      horizontalAlignment?:
-        | 'center'
-        | 'centerContinuous'
-        | 'distributed'
-        | 'fill'
-        | 'general'
-        | 'justify'
-        | 'left'
-        | 'right';
-      verticalAlignment?:
-        | 'bottom'
-        | 'center'
-        | 'distributed'
-        | 'justify'
-        | 'top';
+      horizontalAlignment?: DevExpress.types.ExcelCellHorizontalAlignment;
+      verticalAlignment?: DevExpress.types.ExcelCellVerticalAlignment;
       wrapTextEnabled?: boolean;
       backgroundColor?: string;
-      fillPatternType?:
-        | 'darkDown'
-        | 'darkGray'
-        | 'darkGrid'
-        | 'darkHorizontal'
-        | 'darkTrellis'
-        | 'darkUp'
-        | 'darkVertical'
-        | 'gray0625'
-        | 'gray125'
-        | 'lightDown'
-        | 'lightGray'
-        | 'lightGrid'
-        | 'lightHorizontal'
-        | 'lightTrellis'
-        | 'lightUp'
-        | 'lightVertical'
-        | 'mediumGray'
-        | 'none'
-        | 'solid';
+      fillPatternType?: DevExpress.types.ExcelCellPatternType;
       fillPatternColor?: string;
       font?: DevExpress.exporter.ExcelFont;
       readonly value?: string | number | Date;
@@ -7103,7 +8575,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.filterRow.applyFilter]
        */
-      applyFilter?: 'auto' | 'onClick';
+      applyFilter?: DevExpress.types.GridApplyFilterMode;
       /**
        * [descr:GridBaseOptions.filterRow.applyFilterText]
        */
@@ -7268,7 +8740,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.grouping.expandMode]
        */
-      expandMode?: 'buttonClick' | 'rowClick';
+      expandMode?: DevExpress.types.GridGroupingExpandMode;
       /**
        * [descr:dxDataGridOptions.grouping.texts]
        */
@@ -7312,7 +8784,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.groupPanel.visible]
        */
-      visible?: boolean | 'auto';
+      visible?: boolean | DevExpress.types.Mode;
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7384,11 +8856,11 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.keyboardNavigation.enterKeyAction]
        */
-      enterKeyAction?: 'startEdit' | 'moveFocus';
+      enterKeyAction?: DevExpress.types.GridEnterKeyAction;
       /**
        * [descr:GridBaseOptions.keyboardNavigation.enterKeyDirection]
        */
-      enterKeyDirection?: 'none' | 'column' | 'row';
+      enterKeyDirection?: DevExpress.types.GridEnterKeyDirection;
     }
     export type KeyDownEvent<
       TRowData = any,
@@ -7408,7 +8880,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.loadPanel.enabled]
        */
-      enabled?: boolean | 'auto';
+      enabled?: boolean | DevExpress.types.Mode;
       /**
        * [descr:GridBaseOptions.loadPanel.height]
        */
@@ -7485,11 +8957,13 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.pager.allowedPageSizes]
        */
-      allowedPageSizes?: Array<number | 'all'> | 'auto';
+      allowedPageSizes?:
+        | Array<number | DevExpress.types.GridPagerPageSize>
+        | DevExpress.types.Mode;
       /**
        * [descr:GridBaseOptions.pager.displayMode]
        */
-      displayMode?: 'adaptive' | 'compact' | 'full';
+      displayMode?: DevExpress.types.GridPagerDisplayMode;
       /**
        * [descr:GridBaseOptions.pager.infoText]
        */
@@ -7509,7 +8983,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.pager.visible]
        */
-      visible?: boolean | 'auto';
+      visible?: boolean | DevExpress.types.Mode;
     }
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7671,7 +9145,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.rowDragging.dragDirection]
        */
-      dragDirection?: 'both' | 'horizontal' | 'vertical';
+      dragDirection?: DevExpress.types.DragDirection;
       /**
        * [descr:GridBaseOptions.rowDragging.dragTemplate]
        */
@@ -7684,7 +9158,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.rowDragging.dropFeedbackMode]
        */
-      dropFeedbackMode?: 'push' | 'indicate';
+      dropFeedbackMode?: DevExpress.types.DropFeedbackMode;
       /**
        * [descr:GridBaseOptions.rowDragging.filter]
        */
@@ -7994,7 +9468,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
        */
-      mode?: 'infinite' | 'standard' | 'virtual';
+      mode?: DevExpress.types.GridScrollingMode;
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -8003,7 +9477,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.scrolling.columnRenderingMode]
        */
-      columnRenderingMode?: 'standard' | 'virtual';
+      columnRenderingMode?: DevExpress.types.GridColumnRenderingMode;
       /**
        * [descr:GridBaseOptions.scrolling.preloadEnabled]
        */
@@ -8011,7 +9485,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.scrolling.rowRenderingMode]
        */
-      rowRenderingMode?: 'standard' | 'virtual';
+      rowRenderingMode?: DevExpress.types.GridRowRenderingMode;
       /**
        * [descr:GridBaseOptions.scrolling.scrollByContent]
        */
@@ -8023,11 +9497,11 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.scrolling.showScrollbar]
        */
-      showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
+      showScrollbar?: DevExpress.types.ShowScrollbarMode;
       /**
        * [descr:GridBaseOptions.scrolling.useNative]
        */
-      useNative?: boolean | 'auto';
+      useNative?: boolean | DevExpress.types.Mode;
       /**
        * [descr:GridBaseOptions.scrolling.renderAsync]
        */
@@ -8074,11 +9548,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.selection.selectAllMode]
        */
-      selectAllMode?: 'allPages' | 'page';
+      selectAllMode?: DevExpress.types.SelectAllMode;
       /**
        * [descr:dxDataGridOptions.selection.showCheckBoxesMode]
        */
-      showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';
+      showCheckBoxesMode?: DevExpress.types.GridSelectionShowCheckBoxesMode;
     };
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -8091,7 +9565,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.selection.mode]
        */
-      mode?: 'multiple' | 'none' | 'single';
+      mode?: DevExpress.types.SelectionMode;
     }
     export type SelectionChangedEvent<
       TRowData = any,
@@ -8126,7 +9600,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.sorting.mode]
        */
-      mode?: 'multiple' | 'none' | 'single';
+      mode?: DevExpress.types.GridSortingMode;
       /**
        * [descr:GridBaseOptions.sorting.showSortIndexes]
        */
@@ -8159,7 +9633,7 @@ declare module DevExpress.ui {
       /**
        * [descr:GridBaseOptions.stateStoring.type]
        */
-      type?: 'custom' | 'localStorage' | 'sessionStorage';
+      type?: DevExpress.types.StateStoringType;
     }
     export type Summary<TRowData = any, TKey = any> = {
       /**
@@ -8225,7 +9699,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.groupItems.summaryType]
        */
-      summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
+      summaryType?: DevExpress.types.SummaryType | string;
       /**
        * [descr:dxDataGridOptions.summary.groupItems.valueFormat]
        */
@@ -8277,7 +9751,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.alignment]
        */
-      alignment?: 'center' | 'left' | 'right';
+      alignment?: DevExpress.types.HorizontalAlignment;
       /**
        * [descr:dxDataGridOptions.summary.totalItems.column]
        */
@@ -8309,7 +9783,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDataGridOptions.summary.totalItems.summaryType]
        */
-      summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
+      summaryType?: DevExpress.types.SummaryType | string;
       /**
        * [descr:dxDataGridOptions.summary.totalItems.valueFormat]
        */
@@ -8349,11 +9823,7 @@ declare module DevExpress.ui {
      * [descr:dxDataGridColumn.buttons]
      */
     buttons?: Array<
-      | 'cancel'
-      | 'delete'
-      | 'edit'
-      | 'save'
-      | 'undelete'
+      | DevExpress.types.GridColumnButtonName
       | DevExpress.ui.dxDataGrid.ColumnButton<TRowData, TKey>
     >;
     /**
@@ -8423,13 +9893,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumn.type]
      */
-    type?:
-      | 'adaptive'
-      | 'buttons'
-      | 'detailExpand'
-      | 'groupExpand'
-      | 'selection'
-      | 'drag';
+    type?: DevExpress.types.GridCommandColumnType;
   }
   /**
    * @deprecated Use the DataGrid's ColumnButton type instead
@@ -8440,7 +9904,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDataGridColumnButton.name]
      */
-    name?: 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+    name?: DevExpress.types.GridColumnButtonName | string;
     /**
      * [descr:dxDataGridColumnButton.onClick]
      */
@@ -8675,7 +10139,7 @@ declare module DevExpress.ui {
            */
           summary?: boolean;
         }
-      | 'auto';
+      | DevExpress.types.Mode;
     /**
      * [descr:dxDataGridOptions.rowTemplate]
      */
@@ -8862,7 +10326,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBoxOptions.pickerType]
      */
-    pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
+    pickerType?: DevExpress.types.DateBoxPickerType;
     /**
      * [descr:dxDateBoxOptions.placeholder]
      */
@@ -8874,7 +10338,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDateBoxOptions.type]
      */
-    type?: 'date' | 'datetime' | 'time';
+    type?: DevExpress.types.DateBoxType;
     /**
      * [descr:dxDateBoxOptions.useMaskBehavior]
      */
@@ -8988,7 +10452,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagram.exportTo(format, callback)]
      */
-    exportTo(format: 'svg' | 'png' | 'jpg', callback: Function): void;
+    exportTo(
+      format: DevExpress.types.DiagramExportFormat,
+      callback: Function
+    ): void;
     /**
      * [descr:dxDiagram.import(data, updateExistingItemsOnly)]
      */
@@ -9053,7 +10520,7 @@ declare module DevExpress.ui {
           | dxDiagramChangeConnectorTextArgs
           | dxDiagramResizeShapeArgs
           | dxDiagramMoveShapeArgs;
-        readonly reason: 'checkUIElementAvailability' | 'modelModification';
+        readonly reason: DevExpress.types.DiagramRequestEditOperationReason;
         allowed?: boolean;
       };
     export type RequestLayoutUpdateEvent =
@@ -9097,51 +10564,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramAddShapeFromToolboxArgs.shapeType]
      */
-    shapeType?:
-      | 'text'
-      | 'rectangle'
-      | 'ellipse'
-      | 'cross'
-      | 'triangle'
-      | 'diamond'
-      | 'heart'
-      | 'pentagon'
-      | 'hexagon'
-      | 'octagon'
-      | 'star'
-      | 'arrowLeft'
-      | 'arrowTop'
-      | 'arrowRight'
-      | 'arrowBottom'
-      | 'arrowNorthSouth'
-      | 'arrowEastWest'
-      | 'process'
-      | 'decision'
-      | 'terminator'
-      | 'predefinedProcess'
-      | 'document'
-      | 'multipleDocuments'
-      | 'manualInput'
-      | 'preparation'
-      | 'data'
-      | 'database'
-      | 'hardDisk'
-      | 'internalStorage'
-      | 'paperTape'
-      | 'manualOperation'
-      | 'delay'
-      | 'storedData'
-      | 'display'
-      | 'merge'
-      | 'connector'
-      | 'or'
-      | 'summingJunction'
-      | 'verticalContainer'
-      | 'horizontalContainer'
-      | 'cardWithImageOnLeft'
-      | 'cardWithImageOnTop'
-      | 'cardWithImageOnRight'
-      | string;
+    shapeType?: DevExpress.types.DiagramShapeType | string;
   }
   /**
    * [descr:dxDiagramBeforeChangeConnectorTextArgs]
@@ -9191,7 +10614,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramChangeConnectionArgs.connectorPosition]
      */
-    connectorPosition?: 'start' | 'end';
+    connectorPosition?: DevExpress.types.DiagramConnectorPosition;
   }
   /**
    * [descr:dxDiagramChangeConnectorPointsArgs]
@@ -9371,7 +10794,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramItem.itemType]
      */
-    itemType?: 'shape' | 'connector';
+    itemType?: DevExpress.types.DiagramItemType;
   }
   /**
    * [descr:dxDiagramMoveShapeArgs]
@@ -9417,7 +10840,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramOptions.autoZoomMode]
      */
-    autoZoomMode?: 'fitContent' | 'fitWidth' | 'disabled';
+    autoZoomMode?: DevExpress.types.DiagramAutoZoomMode;
     /**
      * [descr:dxDiagramOptions.contextMenu]
      */
@@ -9425,58 +10848,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextMenu.commands]
        */
-      commands?: Array<
-        | 'separator'
-        | 'exportSvg'
-        | 'exportPng'
-        | 'exportJpg'
-        | 'undo'
-        | 'redo'
-        | 'cut'
-        | 'copy'
-        | 'paste'
-        | 'selectAll'
-        | 'delete'
-        | 'fontName'
-        | 'fontSize'
-        | 'bold'
-        | 'italic'
-        | 'underline'
-        | 'lineStyle'
-        | 'lineWidth'
-        | 'textAlignLeft'
-        | 'textAlignCenter'
-        | 'textAlignRight'
-        | 'lock'
-        | 'unlock'
-        | 'sendToBack'
-        | 'bringToFront'
-        | 'insertShapeImage'
-        | 'editShapeImage'
-        | 'deleteShapeImage'
-        | 'connectorLineType'
-        | 'connectorLineStart'
-        | 'connectorLineEnd'
-        | 'layoutTreeTopToBottom'
-        | 'layoutTreeBottomToTop'
-        | 'layoutTreeLeftToRight'
-        | 'layoutTreeRightToLeft'
-        | 'layoutLayeredTopToBottom'
-        | 'layoutLayeredBottomToTop'
-        | 'layoutLayeredLeftToRight'
-        | 'layoutLayeredRightToLeft'
-        | 'fullScreen'
-        | 'zoomLevel'
-        | 'showGrid'
-        | 'snapToGrid'
-        | 'gridSize'
-        | 'units'
-        | 'pageSize'
-        | 'pageOrientation'
-        | 'pageColor'
-        | 'simpleView'
-        | 'toolbox'
-      >;
+      commands?: Array<DevExpress.types.DiagramCommand>;
       /**
        * [descr:dxDiagramOptions.contextMenu.enabled]
        */
@@ -9489,17 +10861,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextToolbox.category]
        */
-      category?:
-        | 'general'
-        | 'flowchart'
-        | 'orgChart'
-        | 'containers'
-        | 'custom'
-        | string;
+      category?: DevExpress.types.DiagramShapeCategory | string;
       /**
        * [descr:dxDiagramOptions.contextToolbox.displayMode]
        */
-      displayMode?: 'icons' | 'texts';
+      displayMode?: DevExpress.types.DiagramToolboxDisplayMode;
       /**
        * [descr:dxDiagramOptions.contextToolbox.enabled]
        */
@@ -9511,53 +10877,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextToolbox.shapes]
        */
-      shapes?:
-        | Array<
-            | 'text'
-            | 'rectangle'
-            | 'ellipse'
-            | 'cross'
-            | 'triangle'
-            | 'diamond'
-            | 'heart'
-            | 'pentagon'
-            | 'hexagon'
-            | 'octagon'
-            | 'star'
-            | 'arrowLeft'
-            | 'arrowTop'
-            | 'arrowRight'
-            | 'arrowBottom'
-            | 'arrowNorthSouth'
-            | 'arrowEastWest'
-            | 'process'
-            | 'decision'
-            | 'terminator'
-            | 'predefinedProcess'
-            | 'document'
-            | 'multipleDocuments'
-            | 'manualInput'
-            | 'preparation'
-            | 'data'
-            | 'database'
-            | 'hardDisk'
-            | 'internalStorage'
-            | 'paperTape'
-            | 'manualOperation'
-            | 'delay'
-            | 'storedData'
-            | 'display'
-            | 'merge'
-            | 'connector'
-            | 'or'
-            | 'summingJunction'
-            | 'verticalContainer'
-            | 'horizontalContainer'
-            | 'cardWithImageOnLeft'
-            | 'cardWithImageOnTop'
-            | 'cardWithImageOnRight'
-          >
-        | Array<string>;
+      shapes?: Array<DevExpress.types.DiagramShapeType> | Array<string>;
       /**
        * [descr:dxDiagramOptions.contextToolbox.width]
        */
@@ -9628,51 +10948,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.customShapes.baseType]
        */
-      baseType?:
-        | 'text'
-        | 'rectangle'
-        | 'ellipse'
-        | 'cross'
-        | 'triangle'
-        | 'diamond'
-        | 'heart'
-        | 'pentagon'
-        | 'hexagon'
-        | 'octagon'
-        | 'star'
-        | 'arrowLeft'
-        | 'arrowTop'
-        | 'arrowRight'
-        | 'arrowBottom'
-        | 'arrowNorthSouth'
-        | 'arrowEastWest'
-        | 'process'
-        | 'decision'
-        | 'terminator'
-        | 'predefinedProcess'
-        | 'document'
-        | 'multipleDocuments'
-        | 'manualInput'
-        | 'preparation'
-        | 'data'
-        | 'database'
-        | 'hardDisk'
-        | 'internalStorage'
-        | 'paperTape'
-        | 'manualOperation'
-        | 'delay'
-        | 'storedData'
-        | 'display'
-        | 'merge'
-        | 'connector'
-        | 'or'
-        | 'summingJunction'
-        | 'verticalContainer'
-        | 'horizontalContainer'
-        | 'cardWithImageOnLeft'
-        | 'cardWithImageOnTop'
-        | 'cardWithImageOnRight'
-        | string;
+      baseType?: DevExpress.types.DiagramShapeType | string;
       /**
        * [descr:dxDiagramOptions.customShapes.category]
        */
@@ -9820,23 +11096,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.connectorLineType]
        */
-      connectorLineType?: 'straight' | 'orthogonal';
+      connectorLineType?: DevExpress.types.DiagramConnectorLineType;
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.connectorLineStart]
        */
-      connectorLineStart?:
-        | 'none'
-        | 'arrow'
-        | 'outlinedTriangle'
-        | 'filledTriangle';
+      connectorLineStart?: DevExpress.types.DiagramConnectorLineEnd;
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.connectorLineEnd]
        */
-      connectorLineEnd?:
-        | 'none'
-        | 'arrow'
-        | 'outlinedTriangle'
-        | 'filledTriangle';
+      connectorLineEnd?: DevExpress.types.DiagramConnectorLineEnd;
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.shapeMinWidth]
        */
@@ -10005,18 +11273,16 @@ declare module DevExpress.ui {
        * [descr:dxDiagramOptions.nodes.autoLayout]
        */
       autoLayout?:
-        | 'off'
-        | 'tree'
-        | 'layered'
+        | DevExpress.types.DiagramDataLayoutType
         | {
             /**
              * [descr:dxDiagramOptions.nodes.autoLayout.orientation]
              */
-            orientation?: 'vertical' | 'horizontal';
+            orientation?: DevExpress.types.DiagramDataLayoutOrientation;
             /**
              * [descr:dxDiagramOptions.nodes.autoLayout.type]
              */
-            type?: 'off' | 'tree' | 'layered';
+            type?: DevExpress.types.DiagramDataLayoutType;
           };
       /**
        * [descr:dxDiagramOptions.nodes.autoSizeEnabled]
@@ -10132,7 +11398,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramOptions.pageOrientation]
      */
-    pageOrientation?: 'portrait' | 'landscape';
+    pageOrientation?: DevExpress.types.DiagramPageOrientation;
     /**
      * [descr:dxDiagramOptions.pageSize]
      */
@@ -10174,61 +11440,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramOptions.propertiesPanel.tabs.commands]
          */
-        commands?: Array<
-          | 'separator'
-          | 'exportSvg'
-          | 'exportPng'
-          | 'exportJpg'
-          | 'undo'
-          | 'redo'
-          | 'cut'
-          | 'copy'
-          | 'paste'
-          | 'selectAll'
-          | 'delete'
-          | 'fontName'
-          | 'fontSize'
-          | 'bold'
-          | 'italic'
-          | 'underline'
-          | 'fontColor'
-          | 'lineStyle'
-          | 'lineWidth'
-          | 'lineColor'
-          | 'fillColor'
-          | 'textAlignLeft'
-          | 'textAlignCenter'
-          | 'textAlignRight'
-          | 'lock'
-          | 'unlock'
-          | 'sendToBack'
-          | 'bringToFront'
-          | 'insertShapeImage'
-          | 'editShapeImage'
-          | 'deleteShapeImage'
-          | 'connectorLineType'
-          | 'connectorLineStart'
-          | 'connectorLineEnd'
-          | 'layoutTreeTopToBottom'
-          | 'layoutTreeBottomToTop'
-          | 'layoutTreeLeftToRight'
-          | 'layoutTreeRightToLeft'
-          | 'layoutLayeredTopToBottom'
-          | 'layoutLayeredBottomToTop'
-          | 'layoutLayeredLeftToRight'
-          | 'layoutLayeredRightToLeft'
-          | 'fullScreen'
-          | 'zoomLevel'
-          | 'showGrid'
-          | 'snapToGrid'
-          | 'gridSize'
-          | 'units'
-          | 'pageSize'
-          | 'pageOrientation'
-          | 'pageColor'
-          | 'simpleView'
-          | 'toolbox'
-        >;
+        commands?: Array<DevExpress.types.DiagramCommand>;
         /**
          * [descr:dxDiagramOptions.propertiesPanel.tabs.groups]
          */
@@ -10236,61 +11448,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxDiagramOptions.propertiesPanel.tabs.groups.commands]
            */
-          commands?: Array<
-            | 'separator'
-            | 'exportSvg'
-            | 'exportPng'
-            | 'exportJpg'
-            | 'undo'
-            | 'redo'
-            | 'cut'
-            | 'copy'
-            | 'paste'
-            | 'selectAll'
-            | 'delete'
-            | 'fontName'
-            | 'fontSize'
-            | 'bold'
-            | 'italic'
-            | 'underline'
-            | 'fontColor'
-            | 'lineStyle'
-            | 'lineWidth'
-            | 'lineColor'
-            | 'fillColor'
-            | 'textAlignLeft'
-            | 'textAlignCenter'
-            | 'textAlignRight'
-            | 'lock'
-            | 'unlock'
-            | 'sendToBack'
-            | 'bringToFront'
-            | 'insertShapeImage'
-            | 'editShapeImage'
-            | 'deleteShapeImage'
-            | 'connectorLineType'
-            | 'connectorLineStart'
-            | 'connectorLineEnd'
-            | 'layoutTreeTopToBottom'
-            | 'layoutTreeBottomToTop'
-            | 'layoutTreeLeftToRight'
-            | 'layoutTreeRightToLeft'
-            | 'layoutLayeredTopToBottom'
-            | 'layoutLayeredBottomToTop'
-            | 'layoutLayeredLeftToRight'
-            | 'layoutLayeredRightToLeft'
-            | 'fullScreen'
-            | 'zoomLevel'
-            | 'showGrid'
-            | 'snapToGrid'
-            | 'gridSize'
-            | 'units'
-            | 'pageSize'
-            | 'pageOrientation'
-            | 'pageColor'
-            | 'simpleView'
-            | 'toolbox'
-          >;
+          commands?: Array<DevExpress.types.DiagramCommand>;
           /**
            * [descr:dxDiagramOptions.propertiesPanel.tabs.groups.title]
            */
@@ -10304,7 +11462,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.propertiesPanel.visibility]
        */
-      visibility?: 'auto' | 'visible' | 'collapsed' | 'disabled';
+      visibility?: DevExpress.types.DiagramPanelVisibility;
     };
     /**
      * [descr:dxDiagramOptions.readOnly]
@@ -10333,61 +11491,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.mainToolbar.commands]
        */
-      commands?: Array<
-        | 'separator'
-        | 'exportSvg'
-        | 'exportPng'
-        | 'exportJpg'
-        | 'undo'
-        | 'redo'
-        | 'cut'
-        | 'copy'
-        | 'paste'
-        | 'selectAll'
-        | 'delete'
-        | 'fontName'
-        | 'fontSize'
-        | 'bold'
-        | 'italic'
-        | 'underline'
-        | 'fontColor'
-        | 'lineStyle'
-        | 'lineWidth'
-        | 'lineColor'
-        | 'fillColor'
-        | 'textAlignLeft'
-        | 'textAlignCenter'
-        | 'textAlignRight'
-        | 'lock'
-        | 'unlock'
-        | 'sendToBack'
-        | 'bringToFront'
-        | 'insertShapeImage'
-        | 'editShapeImage'
-        | 'deleteShapeImage'
-        | 'connectorLineType'
-        | 'connectorLineStart'
-        | 'connectorLineEnd'
-        | 'layoutTreeTopToBottom'
-        | 'layoutTreeBottomToTop'
-        | 'layoutTreeLeftToRight'
-        | 'layoutTreeRightToLeft'
-        | 'layoutLayeredTopToBottom'
-        | 'layoutLayeredBottomToTop'
-        | 'layoutLayeredLeftToRight'
-        | 'layoutLayeredRightToLeft'
-        | 'fullScreen'
-        | 'zoomLevel'
-        | 'showGrid'
-        | 'snapToGrid'
-        | 'gridSize'
-        | 'units'
-        | 'pageSize'
-        | 'pageOrientation'
-        | 'pageColor'
-        | 'simpleView'
-        | 'toolbox'
-      >;
+      commands?: Array<DevExpress.types.DiagramCommand>;
       /**
        * [descr:dxDiagramOptions.mainToolbar.visible]
        */
@@ -10400,61 +11504,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.historyToolbar.commands]
        */
-      commands?: Array<
-        | 'separator'
-        | 'exportSvg'
-        | 'exportPng'
-        | 'exportJpg'
-        | 'undo'
-        | 'redo'
-        | 'cut'
-        | 'copy'
-        | 'paste'
-        | 'selectAll'
-        | 'delete'
-        | 'fontName'
-        | 'fontSize'
-        | 'bold'
-        | 'italic'
-        | 'underline'
-        | 'fontColor'
-        | 'lineStyle'
-        | 'lineWidth'
-        | 'lineColor'
-        | 'fillColor'
-        | 'textAlignLeft'
-        | 'textAlignCenter'
-        | 'textAlignRight'
-        | 'lock'
-        | 'unlock'
-        | 'sendToBack'
-        | 'bringToFront'
-        | 'insertShapeImage'
-        | 'editShapeImage'
-        | 'deleteShapeImage'
-        | 'connectorLineType'
-        | 'connectorLineStart'
-        | 'connectorLineEnd'
-        | 'layoutTreeTopToBottom'
-        | 'layoutTreeBottomToTop'
-        | 'layoutTreeLeftToRight'
-        | 'layoutTreeRightToLeft'
-        | 'layoutLayeredTopToBottom'
-        | 'layoutLayeredBottomToTop'
-        | 'layoutLayeredLeftToRight'
-        | 'layoutLayeredRightToLeft'
-        | 'fullScreen'
-        | 'zoomLevel'
-        | 'showGrid'
-        | 'snapToGrid'
-        | 'gridSize'
-        | 'units'
-        | 'pageSize'
-        | 'pageOrientation'
-        | 'pageColor'
-        | 'simpleView'
-        | 'toolbox'
-      >;
+      commands?: Array<DevExpress.types.DiagramCommand>;
       /**
        * [descr:dxDiagramOptions.historyToolbar.visible]
        */
@@ -10467,61 +11517,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.viewToolbar.commands]
        */
-      commands?: Array<
-        | 'separator'
-        | 'exportSvg'
-        | 'exportPng'
-        | 'exportJpg'
-        | 'undo'
-        | 'redo'
-        | 'cut'
-        | 'copy'
-        | 'paste'
-        | 'selectAll'
-        | 'delete'
-        | 'fontName'
-        | 'fontSize'
-        | 'bold'
-        | 'italic'
-        | 'underline'
-        | 'fontColor'
-        | 'lineStyle'
-        | 'lineWidth'
-        | 'lineColor'
-        | 'fillColor'
-        | 'textAlignLeft'
-        | 'textAlignCenter'
-        | 'textAlignRight'
-        | 'lock'
-        | 'unlock'
-        | 'sendToBack'
-        | 'bringToFront'
-        | 'insertShapeImage'
-        | 'editShapeImage'
-        | 'deleteShapeImage'
-        | 'connectorLineType'
-        | 'connectorLineStart'
-        | 'connectorLineEnd'
-        | 'layoutTreeTopToBottom'
-        | 'layoutTreeBottomToTop'
-        | 'layoutTreeLeftToRight'
-        | 'layoutTreeRightToLeft'
-        | 'layoutLayeredTopToBottom'
-        | 'layoutLayeredBottomToTop'
-        | 'layoutLayeredLeftToRight'
-        | 'layoutLayeredRightToLeft'
-        | 'fullScreen'
-        | 'zoomLevel'
-        | 'showGrid'
-        | 'snapToGrid'
-        | 'gridSize'
-        | 'units'
-        | 'pageSize'
-        | 'pageOrientation'
-        | 'pageColor'
-        | 'simpleView'
-        | 'toolbox'
-      >;
+      commands?: Array<DevExpress.types.DiagramCommand>;
       /**
        * [descr:dxDiagramOptions.viewToolbar.visible]
        */
@@ -10539,17 +11535,11 @@ declare module DevExpress.ui {
             /**
              * [descr:dxDiagramOptions.toolbox.groups.category]
              */
-            category?:
-              | 'general'
-              | 'flowchart'
-              | 'orgChart'
-              | 'containers'
-              | 'custom'
-              | string;
+            category?: DevExpress.types.DiagramShapeCategory | string;
             /**
              * [descr:dxDiagramOptions.toolbox.groups.displayMode]
              */
-            displayMode?: 'icons' | 'texts';
+            displayMode?: DevExpress.types.DiagramToolboxDisplayMode;
             /**
              * [descr:dxDiagramOptions.toolbox.groups.expanded]
              */
@@ -10557,59 +11547,13 @@ declare module DevExpress.ui {
             /**
              * [descr:dxDiagramOptions.toolbox.groups.shapes]
              */
-            shapes?:
-              | Array<
-                  | 'text'
-                  | 'rectangle'
-                  | 'ellipse'
-                  | 'cross'
-                  | 'triangle'
-                  | 'diamond'
-                  | 'heart'
-                  | 'pentagon'
-                  | 'hexagon'
-                  | 'octagon'
-                  | 'star'
-                  | 'arrowLeft'
-                  | 'arrowTop'
-                  | 'arrowRight'
-                  | 'arrowBottom'
-                  | 'arrowNorthSouth'
-                  | 'arrowEastWest'
-                  | 'process'
-                  | 'decision'
-                  | 'terminator'
-                  | 'predefinedProcess'
-                  | 'document'
-                  | 'multipleDocuments'
-                  | 'manualInput'
-                  | 'preparation'
-                  | 'data'
-                  | 'database'
-                  | 'hardDisk'
-                  | 'internalStorage'
-                  | 'paperTape'
-                  | 'manualOperation'
-                  | 'delay'
-                  | 'storedData'
-                  | 'display'
-                  | 'merge'
-                  | 'connector'
-                  | 'or'
-                  | 'summingJunction'
-                  | 'verticalContainer'
-                  | 'horizontalContainer'
-                  | 'cardWithImageOnLeft'
-                  | 'cardWithImageOnTop'
-                  | 'cardWithImageOnRight'
-                >
-              | Array<string>;
+            shapes?: Array<DevExpress.types.DiagramShapeType> | Array<string>;
             /**
              * [descr:dxDiagramOptions.toolbox.groups.title]
              */
             title?: string;
           }>
-        | Array<'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom'>;
+        | Array<DevExpress.types.DiagramShapeCategory>;
       /**
        * [descr:dxDiagramOptions.toolbox.shapeIconsPerRow]
        */
@@ -10621,7 +11565,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.toolbox.visibility]
        */
-      visibility?: 'auto' | 'visible' | 'collapsed' | 'disabled';
+      visibility?: DevExpress.types.DiagramPanelVisibility;
       /**
        * [descr:dxDiagramOptions.toolbox.width]
        */
@@ -10630,11 +11574,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramOptions.units]
      */
-    units?: 'in' | 'cm' | 'px';
+    units?: DevExpress.types.DiagramUnits;
     /**
      * [descr:dxDiagramOptions.viewUnits]
      */
-    viewUnits?: 'in' | 'cm' | 'px';
+    viewUnits?: DevExpress.types.DiagramUnits;
     /**
      * [descr:dxDiagramOptions.zoomLevel]
      */
@@ -10699,51 +11643,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramShape.type]
      */
-    type?:
-      | 'text'
-      | 'rectangle'
-      | 'ellipse'
-      | 'cross'
-      | 'triangle'
-      | 'diamond'
-      | 'heart'
-      | 'pentagon'
-      | 'hexagon'
-      | 'octagon'
-      | 'star'
-      | 'arrowLeft'
-      | 'arrowTop'
-      | 'arrowRight'
-      | 'arrowBottom'
-      | 'arrowNorthSouth'
-      | 'arrowEastWest'
-      | 'process'
-      | 'decision'
-      | 'terminator'
-      | 'predefinedProcess'
-      | 'document'
-      | 'multipleDocuments'
-      | 'manualInput'
-      | 'preparation'
-      | 'data'
-      | 'database'
-      | 'hardDisk'
-      | 'internalStorage'
-      | 'paperTape'
-      | 'manualOperation'
-      | 'delay'
-      | 'storedData'
-      | 'display'
-      | 'merge'
-      | 'connector'
-      | 'or'
-      | 'summingJunction'
-      | 'verticalContainer'
-      | 'horizontalContainer'
-      | 'cardWithImageOnLeft'
-      | 'cardWithImageOnTop'
-      | 'cardWithImageOnRight'
-      | string;
+    type?: DevExpress.types.DiagramShapeType | string;
     /**
      * [descr:dxDiagramShape.position]
      */
@@ -10925,15 +11825,15 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDrawerOptions.openedStateMode]
      */
-    openedStateMode?: 'overlap' | 'shrink' | 'push';
+    openedStateMode?: DevExpress.types.DrawerOpenedStateMode;
     /**
      * [descr:dxDrawerOptions.position]
      */
-    position?: 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
+    position?: DevExpress.types.DrawerPosition;
     /**
      * [descr:dxDrawerOptions.revealMode]
      */
-    revealMode?: 'slide' | 'expand';
+    revealMode?: DevExpress.types.DrawerRevealMode;
     /**
      * [descr:dxDrawerOptions.shading]
      */
@@ -11248,7 +12148,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownButtonOptions.stylingMode]
      */
-    stylingMode?: 'text' | 'outlined' | 'contained';
+    stylingMode?: DevExpress.types.ButtonStylingMode;
     /**
      * [descr:dxDropDownButtonOptions.text]
      */
@@ -11313,7 +12213,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownEditorOptions.applyValueMode]
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: DevExpress.types.EditorApplyValueMode;
     /**
      * [descr:dxDropDownEditorOptions.dropDownOptions]
      */
@@ -11323,7 +12223,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownEditorOptions.buttons]
      */
-    buttons?: Array<'clear' | 'dropDown' | dxTextEditorButton>;
+    buttons?: Array<
+      DevExpress.types.DropDownEditorButtonName | dxTextEditorButton
+    >;
     /**
      * [descr:dxDropDownEditorOptions.deferRendering]
      */
@@ -11449,7 +12351,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDropDownListOptions.searchMode]
      */
-    searchMode?: 'contains' | 'startswith';
+    searchMode?: DevExpress.types.DropDownSearchMode;
     /**
      * [descr:dxDropDownListOptions.searchTimeout]
      */
@@ -11512,13 +12414,13 @@ declare module DevExpress.ui {
         readonly itemElement: DevExpress.core.DxElement;
         readonly itemIndex: number;
         readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
-        readonly viewArea: 'navPane' | 'itemView';
+        readonly viewArea: DevExpress.types.FileManagerViewArea;
       };
     export type ContextMenuShowingEvent = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<dxFileManager> & {
         readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
         readonly targetElement?: DevExpress.core.DxElement;
-        readonly viewArea: 'navPane' | 'itemView';
+        readonly viewArea: DevExpress.types.FileManagerViewArea;
       };
     export type CurrentDirectoryChangedEvent =
       DevExpress.events.EventInfo<dxFileManager> & {
@@ -11637,14 +12539,7 @@ declare module DevExpress.ui {
      */
     items?: Array<
       | DevExpress.ui.dxFileManager.ContextMenuItem
-      | 'create'
-      | 'upload'
-      | 'refresh'
-      | 'download'
-      | 'move'
-      | 'copy'
-      | 'rename'
-      | 'delete'
+      | DevExpress.types.FileManagerContextMenuItem
     >;
   }
   /**
@@ -11660,16 +12555,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerContextMenuItem.name]
      */
-    name?:
-      | 'create'
-      | 'upload'
-      | 'refresh'
-      | 'download'
-      | 'move'
-      | 'copy'
-      | 'rename'
-      | 'delete'
-      | string;
+    name?: DevExpress.types.FileManagerContextMenuItem | string;
     /**
      * [descr:dxFileManagerContextMenuItem.visible]
      */
@@ -11689,7 +12575,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerDetailsColumn.alignment]
      */
-    alignment?: 'center' | 'left' | 'right' | undefined;
+    alignment?: DevExpress.types.HorizontalAlignment | undefined;
     /**
      * [descr:dxFileManagerDetailsColumn.caption]
      */
@@ -11705,7 +12591,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerDetailsColumn.dataType]
      */
-    dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
+    dataType?: DevExpress.types.GridColumnDataType;
     /**
      * [descr:dxFileManagerDetailsColumn.hidingPriority]
      */
@@ -11717,7 +12603,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerDetailsColumn.sortOrder]
      */
-    sortOrder?: 'asc' | 'desc' | undefined;
+    sortOrder?: DevExpress.types.SortOrder | undefined;
     /**
      * [descr:dxFileManagerDetailsColumn.visible]
      */
@@ -11784,7 +12670,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxFileManagerOptions.itemView.mode]
        */
-      mode?: 'details' | 'thumbnails';
+      mode?: DevExpress.types.FileManagerItemViewMode;
       /**
        * [descr:dxFileManagerOptions.itemView.showFolders]
        */
@@ -11955,7 +12841,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerOptions.selectionMode]
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: DevExpress.types.FileManagerSelectionMode;
     /**
      * [descr:dxFileManagerOptions.selectedItemKeys]
      */
@@ -11992,36 +12878,14 @@ declare module DevExpress.ui {
      */
     fileSelectionItems?: Array<
       | DevExpress.ui.dxFileManager.ToolbarItem
-      | 'showNavPane'
-      | 'create'
-      | 'upload'
-      | 'refresh'
-      | 'switchView'
-      | 'download'
-      | 'move'
-      | 'copy'
-      | 'rename'
-      | 'delete'
-      | 'clearSelection'
-      | 'separator'
+      | DevExpress.types.FileManagerToolbarItem
     >;
     /**
      * [descr:dxFileManagerToolbar.items]
      */
     items?: Array<
       | DevExpress.ui.dxFileManager.ToolbarItem
-      | 'showNavPane'
-      | 'create'
-      | 'upload'
-      | 'refresh'
-      | 'switchView'
-      | 'download'
-      | 'move'
-      | 'copy'
-      | 'rename'
-      | 'delete'
-      | 'clearSelection'
-      | 'separator'
+      | DevExpress.types.FileManagerToolbarItem
     >;
   }
   /**
@@ -12037,24 +12901,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileManagerToolbarItem.location]
      */
-    location?: 'after' | 'before' | 'center';
+    location?: DevExpress.types.ToolbarItemLocation;
     /**
      * [descr:dxFileManagerToolbarItem.name]
      */
-    name?:
-      | 'showNavPane'
-      | 'create'
-      | 'upload'
-      | 'refresh'
-      | 'switchView'
-      | 'download'
-      | 'move'
-      | 'copy'
-      | 'rename'
-      | 'delete'
-      | 'clearSelection'
-      | 'separator'
-      | string;
+    name?: DevExpress.types.FileManagerToolbarItem | string;
     /**
      * [descr:dxFileManagerToolbarItem.visible]
      */
@@ -12361,11 +13212,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFileUploaderOptions.uploadMethod]
      */
-    uploadMethod?: 'POST' | 'PUT';
+    uploadMethod?: DevExpress.types.UploadHttpMethod;
     /**
      * [descr:dxFileUploaderOptions.uploadMode]
      */
-    uploadMode?: 'instantly' | 'useButtons' | 'useForm';
+    uploadMode?: DevExpress.types.FileUploadMode;
     /**
      * [descr:dxFileUploaderOptions.uploadUrl]
      */
@@ -12478,9 +13329,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderCustomOperation.dataTypes]
      */
-    dataTypes?: Array<
-      'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime'
-    >;
+    dataTypes?: Array<DevExpress.types.FilterBuilderFieldDataType>;
     /**
      * [descr:dxFilterBuilderCustomOperation.editorTemplate]
      */
@@ -12533,7 +13382,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderField.dataType]
      */
-    dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
+    dataType?: DevExpress.types.FilterBuilderFieldDataType;
     /**
      * [descr:dxFilterBuilderField.editorOptions]
      */
@@ -12555,20 +13404,7 @@ declare module DevExpress.ui {
      * [descr:dxFilterBuilderField.filterOperations]
      */
     filterOperations?: Array<
-      | '='
-      | '<>'
-      | '<'
-      | '<='
-      | '>'
-      | '>='
-      | 'contains'
-      | 'endswith'
-      | 'isblank'
-      | 'isnotblank'
-      | 'notcontains'
-      | 'startswith'
-      | 'between'
-      | string
+      DevExpress.types.FilterBuilderFieldFilterOperations | string
     >;
     /**
      * [descr:dxFilterBuilderField.format]
@@ -12703,7 +13539,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderOptions.groupOperations]
      */
-    groupOperations?: Array<'and' | 'or' | 'notAnd' | 'notOr'>;
+    groupOperations?: Array<DevExpress.types.FilterBuilderGroupOperations>;
     /**
      * [descr:dxFilterBuilderOptions.maxGroupLevel]
      */
@@ -12823,11 +13659,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormButtonItem.horizontalAlignment]
      */
-    horizontalAlignment?: 'center' | 'left' | 'right';
+    horizontalAlignment?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:dxFormButtonItem.itemType]
      */
-    itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+    itemType?: DevExpress.types.FormItemType;
     /**
      * [descr:dxFormButtonItem.name]
      */
@@ -12835,7 +13671,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormButtonItem.verticalAlignment]
      */
-    verticalAlignment?: 'bottom' | 'center' | 'top';
+    verticalAlignment?: DevExpress.types.VerticalAlignment;
     /**
      * [descr:dxFormButtonItem.visible]
      */
@@ -12861,7 +13697,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormEmptyItem.itemType]
      */
-    itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+    itemType?: DevExpress.types.FormItemType;
     /**
      * [descr:dxFormEmptyItem.name]
      */
@@ -12907,7 +13743,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormGroupItem.itemType]
      */
-    itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+    itemType?: DevExpress.types.FormItemType;
     /**
      * [descr:dxFormGroupItem.items]
      */
@@ -12950,7 +13786,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.colCount]
      */
-    colCount?: number | 'auto';
+    colCount?: number | DevExpress.types.Mode;
     /**
      * [descr:dxFormOptions.colCountByScreen]
      */
@@ -12970,11 +13806,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormOptions.labelLocation]
      */
-    labelLocation?: 'left' | 'right' | 'top';
+    labelLocation?: DevExpress.types.FormLabelLocation;
     /**
      * [descr:dxFormOptions.labelMode]
      */
-    labelMode?: 'outside' | 'floating' | 'static' | 'hidden';
+    labelMode?: DevExpress.types.FormLabelMode;
     /**
      * [descr:dxFormOptions.minColWidth]
      */
@@ -13058,24 +13894,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormSimpleItem.editorType]
      */
-    editorType?:
-      | 'dxAutocomplete'
-      | 'dxCalendar'
-      | 'dxCheckBox'
-      | 'dxColorBox'
-      | 'dxDateBox'
-      | 'dxDropDownBox'
-      | 'dxHtmlEditor'
-      | 'dxLookup'
-      | 'dxNumberBox'
-      | 'dxRadioGroup'
-      | 'dxRangeSlider'
-      | 'dxSelectBox'
-      | 'dxSlider'
-      | 'dxSwitch'
-      | 'dxTagBox'
-      | 'dxTextArea'
-      | 'dxTextBox';
+    editorType?: DevExpress.types.FormItemEditorType;
     /**
      * [descr:dxFormSimpleItem.helpText]
      */
@@ -13087,7 +13906,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormSimpleItem.itemType]
      */
-    itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+    itemType?: DevExpress.types.FormItemType;
     /**
      * [descr:dxFormSimpleItem.label]
      */
@@ -13095,11 +13914,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxFormSimpleItem.label.alignment]
        */
-      alignment?: 'center' | 'left' | 'right';
+      alignment?: DevExpress.types.HorizontalAlignment;
       /**
        * [descr:dxFormSimpleItem.label.location]
        */
-      location?: 'left' | 'right' | 'top';
+      location?: DevExpress.types.FormLabelLocation;
       /**
        * [descr:dxFormSimpleItem.label.showColon]
        */
@@ -13165,7 +13984,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFormTabbedItem.itemType]
      */
-    itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
+    itemType?: DevExpress.types.FormItemType;
     /**
      * [descr:dxFormTabbedItem.name]
      */
@@ -13727,16 +14546,7 @@ declare module DevExpress.ui {
      */
     items?: Array<
       | DevExpress.ui.dxGantt.ContextMenuItem
-      | 'undo'
-      | 'redo'
-      | 'expandAll'
-      | 'collapseAll'
-      | 'addTask'
-      | 'deleteTask'
-      | 'zoomIn'
-      | 'zoomOut'
-      | 'deleteDependency'
-      | 'taskDetails'
+      | DevExpress.types.GanttContextMenuItem
       | 'resourceManager'
     >;
   }
@@ -13749,19 +14559,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttContextMenuItem.name]
      */
-    name?:
-      | 'undo'
-      | 'redo'
-      | 'expandAll'
-      | 'collapseAll'
-      | 'addTask'
-      | 'deleteTask'
-      | 'zoomIn'
-      | 'zoomOut'
-      | 'deleteDependency'
-      | 'taskDetails'
-      | 'resourceManager'
-      | string;
+    name?: DevExpress.types.GanttContextMenuItem | 'resourceManager' | string;
   }
   /**
    * [descr:dxGanttFilterRow]
@@ -14186,15 +14984,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.scaleType]
      */
-    scaleType?:
-      | 'auto'
-      | 'minutes'
-      | 'hours'
-      | 'days'
-      | 'weeks'
-      | 'months'
-      | 'quarters'
-      | 'years';
+    scaleType?: DevExpress.types.GanttScaleType;
     /**
      * [descr:dxGanttOptions.scaleTypeRange]
      */
@@ -14245,11 +15035,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttOptions.taskTitlePosition]
      */
-    taskTitlePosition?: 'inside' | 'outside' | 'none';
+    taskTitlePosition?: DevExpress.types.GanttTaskTitlePosition;
     /**
      * [descr:dxGanttOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    firstDayOfWeek?: DevExpress.types.FirstDayOfWeek;
     /**
      * [descr:dxGanttOptions.tasks]
      */
@@ -14368,7 +15158,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttSorting.mode]
      */
-    mode?: 'multiple' | 'none' | 'single';
+    mode?: DevExpress.types.GanttSortingMode;
     /**
      * [descr:dxGanttSorting.showSortIndexes]
      */
@@ -14405,21 +15195,7 @@ declare module DevExpress.ui {
      * [descr:dxGanttToolbar.items]
      */
     items?: Array<
-      | DevExpress.ui.dxGantt.ToolbarItem
-      | 'separator'
-      | 'undo'
-      | 'redo'
-      | 'expandAll'
-      | 'collapseAll'
-      | 'addTask'
-      | 'deleteTask'
-      | 'zoomIn'
-      | 'zoomOut'
-      | 'taskDetails'
-      | 'fullScreen'
-      | 'resourceManager'
-      | 'showResources'
-      | 'showDependencies'
+      DevExpress.ui.dxGantt.ToolbarItem | DevExpress.types.GanttToolbarItem
     >;
   }
   /**
@@ -14430,26 +15206,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxGanttToolbarItem.name]
      */
-    name?:
-      | 'separator'
-      | 'undo'
-      | 'redo'
-      | 'expandAll'
-      | 'collapseAll'
-      | 'addTask'
-      | 'deleteTask'
-      | 'zoomIn'
-      | 'zoomOut'
-      | 'taskDetails'
-      | 'fullScreen'
-      | 'resourceManager'
-      | 'toggleResources'
-      | 'toggleDependencies'
-      | string;
+    name?: DevExpress.types.GanttToolbarItem | string;
     /**
      * [descr:dxGanttToolbarItem.location]
      */
-    location?: 'after' | 'before' | 'center';
+    location?: DevExpress.types.ToolbarItemLocation;
   }
   /**
    * [descr:dxHtmlEditor]
@@ -14471,24 +15232,7 @@ declare module DevExpress.ui {
      * [descr:dxHtmlEditor.format(formatName, formatValue)]
      */
     format(
-      formatName:
-        | 'background'
-        | 'bold'
-        | 'color'
-        | 'font'
-        | 'italic'
-        | 'link'
-        | 'size'
-        | 'strike'
-        | 'script'
-        | 'underline'
-        | 'blockquote'
-        | 'header'
-        | 'indent'
-        | 'list'
-        | 'align'
-        | 'code-block'
-        | string,
+      formatName: DevExpress.types.HtmlEditorFormat | string,
       formatValue: any
     ): void;
     /**
@@ -14497,24 +15241,7 @@ declare module DevExpress.ui {
     formatLine(
       index: number,
       length: number,
-      formatName:
-        | 'background'
-        | 'bold'
-        | 'color'
-        | 'font'
-        | 'italic'
-        | 'link'
-        | 'size'
-        | 'strike'
-        | 'script'
-        | 'underline'
-        | 'blockquote'
-        | 'header'
-        | 'indent'
-        | 'list'
-        | 'align'
-        | 'code-block'
-        | string,
+      formatName: DevExpress.types.HtmlEditorFormat | string,
       formatValue: any
     ): void;
     /**
@@ -14527,24 +15254,7 @@ declare module DevExpress.ui {
     formatText(
       index: number,
       length: number,
-      formatName:
-        | 'background'
-        | 'bold'
-        | 'color'
-        | 'font'
-        | 'italic'
-        | 'link'
-        | 'size'
-        | 'strike'
-        | 'script'
-        | 'underline'
-        | 'blockquote'
-        | 'header'
-        | 'indent'
-        | 'list'
-        | 'align'
-        | 'code-block'
-        | string,
+      formatName: DevExpress.types.HtmlEditorFormat | string,
       formatValue: any
     ): void;
     /**
@@ -14597,24 +15307,7 @@ declare module DevExpress.ui {
     insertText(
       index: number,
       text: string,
-      formatName:
-        | 'background'
-        | 'bold'
-        | 'color'
-        | 'font'
-        | 'italic'
-        | 'link'
-        | 'size'
-        | 'strike'
-        | 'script'
-        | 'underline'
-        | 'blockquote'
-        | 'header'
-        | 'indent'
-        | 'list'
-        | 'align'
-        | 'code-block'
-        | string,
+      formatName: DevExpress.types.HtmlEditorFormat | string,
       formatValue: any
     ): void;
     /**
@@ -14792,7 +15485,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorOptions.valueType]
      */
-    valueType?: 'html' | 'markdown';
+    valueType?: DevExpress.types.HtmlEditorValueType;
     /**
      * [descr:dxHtmlEditorOptions.variables]
      */
@@ -14800,7 +15493,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorOptions.stylingMode]
      */
-    stylingMode?: 'outlined' | 'underlined' | 'filled';
+    stylingMode?: DevExpress.types.EditorStylingMode;
   }
   /**
    * [descr:dxHtmlEditorTableContextMenu]
@@ -14816,41 +15509,7 @@ declare module DevExpress.ui {
      */
     items?: Array<
       | DevExpress.ui.dxHtmlEditor.ContextMenuItem
-      | 'background'
-      | 'bold'
-      | 'color'
-      | 'font'
-      | 'italic'
-      | 'link'
-      | 'image'
-      | 'strike'
-      | 'subscript'
-      | 'superscript'
-      | 'underline'
-      | 'blockquote'
-      | 'header'
-      | 'increaseIndent'
-      | 'decreaseIndent'
-      | 'orderedList'
-      | 'bulletList'
-      | 'alignLeft'
-      | 'alignCenter'
-      | 'alignRight'
-      | 'alignJustify'
-      | 'codeBlock'
-      | 'variable'
-      | 'separator'
-      | 'undo'
-      | 'redo'
-      | 'clear'
-      | 'insertTable'
-      | 'insertRowAbove'
-      | 'insertRowBelow'
-      | 'insertColumnLeft'
-      | 'insertColumnRight'
-      | 'deleteColumn'
-      | 'deleteRow'
-      | 'deleteTable'
+      | DevExpress.types.HtmlEditorContextMenuItem
     >;
   }
   /**
@@ -14862,82 +15521,13 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorTableContextMenuItem.name]
      */
-    name?:
-      | 'background'
-      | 'bold'
-      | 'color'
-      | 'font'
-      | 'italic'
-      | 'link'
-      | 'image'
-      | 'strike'
-      | 'subscript'
-      | 'superscript'
-      | 'underline'
-      | 'blockquote'
-      | 'header'
-      | 'increaseIndent'
-      | 'decreaseIndent'
-      | 'orderedList'
-      | 'bulletList'
-      | 'alignLeft'
-      | 'alignCenter'
-      | 'alignRight'
-      | 'alignJustify'
-      | 'codeBlock'
-      | 'variable'
-      | 'separator'
-      | 'undo'
-      | 'redo'
-      | 'clear'
-      | 'insertTable'
-      | 'insertRowAbove'
-      | 'insertRowBelow'
-      | 'insertColumnLeft'
-      | 'insertColumnRight'
-      | 'deleteColumn'
-      | 'deleteRow'
-      | 'deleteTable';
+    name?: DevExpress.types.HtmlEditorContextMenuItem;
     /**
      * [descr:dxHtmlEditorTableContextMenuItem.items]
      */
     items?: Array<
       | DevExpress.ui.dxHtmlEditor.ContextMenuItem
-      | 'background'
-      | 'bold'
-      | 'color'
-      | 'font'
-      | 'italic'
-      | 'link'
-      | 'image'
-      | 'strike'
-      | 'subscript'
-      | 'superscript'
-      | 'underline'
-      | 'blockquote'
-      | 'header'
-      | 'increaseIndent'
-      | 'decreaseIndent'
-      | 'orderedList'
-      | 'bulletList'
-      | 'alignLeft'
-      | 'alignCenter'
-      | 'alignRight'
-      | 'alignJustify'
-      | 'codeBlock'
-      | 'variable'
-      | 'separator'
-      | 'undo'
-      | 'redo'
-      | 'clear'
-      | 'insertTable'
-      | 'insertRowAbove'
-      | 'insertRowBelow'
-      | 'insertColumnLeft'
-      | 'insertColumnRight'
-      | 'deleteColumn'
-      | 'deleteRow'
-      | 'deleteTable'
+      | DevExpress.types.HtmlEditorContextMenuItem
     >;
   }
   /**
@@ -14972,45 +15562,7 @@ declare module DevExpress.ui {
      */
     items?: Array<
       | DevExpress.ui.dxHtmlEditor.ToolbarItem
-      | 'background'
-      | 'bold'
-      | 'color'
-      | 'font'
-      | 'italic'
-      | 'link'
-      | 'image'
-      | 'size'
-      | 'strike'
-      | 'subscript'
-      | 'superscript'
-      | 'underline'
-      | 'blockquote'
-      | 'header'
-      | 'increaseIndent'
-      | 'decreaseIndent'
-      | 'orderedList'
-      | 'bulletList'
-      | 'alignLeft'
-      | 'alignCenter'
-      | 'alignRight'
-      | 'alignJustify'
-      | 'codeBlock'
-      | 'variable'
-      | 'separator'
-      | 'undo'
-      | 'redo'
-      | 'clear'
-      | 'insertTable'
-      | 'insertHeaderRow'
-      | 'insertRowAbove'
-      | 'insertRowBelow'
-      | 'insertColumnLeft'
-      | 'insertColumnRight'
-      | 'deleteColumn'
-      | 'deleteRow'
-      | 'deleteTable'
-      | 'cellProperties'
-      | 'tableProperties'
+      | DevExpress.types.HtmlEditorToolbarItem
     >;
     /**
      * [descr:dxHtmlEditorToolbar.multiline]
@@ -15026,92 +15578,12 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorToolbarItem.name]
      */
-    name?:
-      | 'background'
-      | 'bold'
-      | 'color'
-      | 'font'
-      | 'italic'
-      | 'link'
-      | 'image'
-      | 'size'
-      | 'strike'
-      | 'subscript'
-      | 'superscript'
-      | 'underline'
-      | 'blockquote'
-      | 'header'
-      | 'increaseIndent'
-      | 'decreaseIndent'
-      | 'orderedList'
-      | 'bulletList'
-      | 'alignLeft'
-      | 'alignCenter'
-      | 'alignRight'
-      | 'alignJustify'
-      | 'codeBlock'
-      | 'variable'
-      | 'separator'
-      | 'undo'
-      | 'redo'
-      | 'clear'
-      | 'insertTable'
-      | 'insertHeaderRow'
-      | 'insertRowAbove'
-      | 'insertRowBelow'
-      | 'insertColumnLeft'
-      | 'insertColumnRight'
-      | 'deleteColumn'
-      | 'deleteRow'
-      | 'deleteTable'
-      | 'cellProperties'
-      | 'tableProperties'
-      | string;
+    name?: DevExpress.types.HtmlEditorToolbarItem | string;
     /**
      * [descr:dxHtmlEditorToolbarItem.formatName]
      * @deprecated [depNote:dxHtmlEditorToolbarItem.formatName]
      */
-    formatName?:
-      | 'background'
-      | 'bold'
-      | 'color'
-      | 'font'
-      | 'italic'
-      | 'link'
-      | 'image'
-      | 'size'
-      | 'strike'
-      | 'subscript'
-      | 'superscript'
-      | 'underline'
-      | 'blockquote'
-      | 'header'
-      | 'increaseIndent'
-      | 'decreaseIndent'
-      | 'orderedList'
-      | 'bulletList'
-      | 'alignLeft'
-      | 'alignCenter'
-      | 'alignRight'
-      | 'alignJustify'
-      | 'codeBlock'
-      | 'variable'
-      | 'separator'
-      | 'undo'
-      | 'redo'
-      | 'clear'
-      | 'insertTable'
-      | 'insertHeaderRow'
-      | 'insertRowAbove'
-      | 'insertRowBelow'
-      | 'insertColumnLeft'
-      | 'insertColumnRight'
-      | 'deleteColumn'
-      | 'deleteRow'
-      | 'deleteTable'
-      | 'cellProperties'
-      | 'tableProperties'
-      | string;
+    formatName?: DevExpress.types.HtmlEditorToolbarItem | string;
     /**
      * [descr:dxHtmlEditorToolbarItem.acceptedValues]
      */
@@ -15124,7 +15596,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorToolbarItem.location]
      */
-    location?: 'after' | 'before' | 'center';
+    location?: DevExpress.types.ToolbarItemLocation;
   }
   /**
    * [descr:dxHtmlEditorVariables]
@@ -15489,13 +15961,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.itemDeleteMode]
      */
-    itemDeleteMode?:
-      | 'context'
-      | 'slideButton'
-      | 'slideItem'
-      | 'static'
-      | 'swipe'
-      | 'toggle';
+    itemDeleteMode?: DevExpress.types.ListItemDeleteMode;
     /**
      * [descr:dxListOptions.itemDragging]
      */
@@ -15520,7 +15986,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.menuMode]
      */
-    menuMode?: 'context' | 'slide';
+    menuMode?: DevExpress.types.ListMenuMode;
     /**
      * [descr:dxListOptions.nextButtonText]
      */
@@ -15594,7 +16060,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.pageLoadMode]
      */
-    pageLoadMode?: 'nextButton' | 'scrollBottom';
+    pageLoadMode?: DevExpress.types.ListPageLoadMode;
     /**
      * [descr:dxListOptions.pageLoadingText]
      */
@@ -15634,15 +16100,15 @@ declare module DevExpress.ui {
     /**
      * [descr:dxListOptions.selectAllMode]
      */
-    selectAllMode?: 'allPages' | 'page';
+    selectAllMode?: DevExpress.types.SelectAllMode;
     /**
      * [descr:dxListOptions.selectionMode]
      */
-    selectionMode?: 'all' | 'multiple' | 'none' | 'single';
+    selectionMode?: DevExpress.types.ListSelectionMode;
     /**
      * [descr:dxListOptions.showScrollbar]
      */
-    showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
+    showScrollbar?: DevExpress.types.ShowScrollbarMode;
     /**
      * [descr:dxListOptions.showSelectionControls]
      */
@@ -15758,18 +16224,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLoadPanelOptions.position]
      */
-    position?:
-      | 'bottom'
-      | 'center'
-      | 'left'
-      | 'left bottom'
-      | 'left top'
-      | 'right'
-      | 'right bottom'
-      | 'right top'
-      | 'top'
-      | PositionConfig
-      | Function;
+    position?: DevExpress.types.PositionAlignment | PositionConfig | Function;
     /**
      * [descr:dxLoadPanelOptions.shadingColor]
      */
@@ -15835,7 +16290,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLookupOptions.applyValueMode]
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: DevExpress.types.EditorApplyValueMode;
     /**
      * [descr:dxLookupOptions.cancelButtonText]
      */
@@ -15903,7 +16358,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxLookupOptions.pageLoadMode]
      */
-    pageLoadMode?: 'nextButton' | 'scrollBottom';
+    pageLoadMode?: DevExpress.types.ListPageLoadMode;
     /**
      * [descr:dxLookupOptions.pageLoadingText]
      */
@@ -16124,7 +16579,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMapOptions.provider]
      */
-    provider?: 'bing' | 'google' | 'googleStatic';
+    provider?: DevExpress.types.GeoMapProvider;
     /**
      * [descr:dxMapOptions.routes]
      */
@@ -16140,7 +16595,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxMapOptions.routes.mode]
        */
-      mode?: 'driving' | 'walking';
+      mode?: DevExpress.types.GeoMapRouteMode;
       /**
        * [descr:dxMapOptions.routes.opacity]
        */
@@ -16153,7 +16608,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMapOptions.type]
      */
-    type?: 'hybrid' | 'roadmap' | 'satellite';
+    type?: DevExpress.types.GeoMapType;
     /**
      * [descr:dxMapOptions.width]
      */
@@ -16347,7 +16802,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuBaseOptions.selectionMode]
      */
-    selectionMode?: 'none' | 'single';
+    selectionMode?: DevExpress.types.MenuSelectionMode;
     /**
      * [descr:dxMenuBaseOptions.showSubmenuMode]
      */
@@ -16371,10 +16826,9 @@ declare module DevExpress.ui {
           /**
            * [descr:dxMenuBaseOptions.showSubmenuMode.name]
            */
-          name?: 'onClick' | 'onHover';
+          name?: DevExpress.types.ShowSubmenuMode;
         }
-      | 'onClick'
-      | 'onHover';
+      | DevExpress.types.ShowSubmenuMode;
   }
   /**
    * @deprecated Use DevExpress.ui.dxMenu.Item instead
@@ -16435,7 +16889,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxMenuOptions.orientation]
      */
-    orientation?: 'horizontal' | 'vertical';
+    orientation?: DevExpress.types.Orientation;
     /**
      * [descr:dxMenuOptions.showFirstSubmenuMode]
      */
@@ -16459,14 +16913,13 @@ declare module DevExpress.ui {
           /**
            * [descr:dxMenuOptions.showFirstSubmenuMode.name]
            */
-          name?: 'onClick' | 'onHover';
+          name?: DevExpress.types.ShowSubmenuMode;
         }
-      | 'onClick'
-      | 'onHover';
+      | DevExpress.types.ShowSubmenuMode;
     /**
      * [descr:dxMenuOptions.submenuDirection]
      */
-    submenuDirection?: 'auto' | 'leftOrTop' | 'rightOrBottom';
+    submenuDirection?: DevExpress.types.SubmenuDirection;
   }
   /**
    * [descr:dxMultiView]
@@ -16770,7 +17223,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxNumberBoxOptions.buttons]
      */
-    buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
+    buttons?: Array<DevExpress.types.NumberBoxButtonName | dxTextEditorButton>;
     /**
      * [descr:dxNumberBoxOptions.format]
      */
@@ -16790,7 +17243,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxNumberBoxOptions.mode]
      */
-    mode?: 'number' | 'text' | 'tel';
+    mode?: DevExpress.types.NumberBoxMode;
     /**
      * [descr:dxNumberBoxOptions.showSpinButtons]
      */
@@ -17111,7 +17564,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridFieldChooserOptions.applyChangesMode]
      */
-    applyChangesMode?: 'instantly' | 'onDemand';
+    applyChangesMode?: DevExpress.types.ApplyChangesMode;
     /**
      * [descr:dxPivotGridFieldChooserOptions.dataSource]
      */
@@ -17165,7 +17618,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridFieldChooserOptions.layout]
      */
-    layout?: 0 | 1 | 2;
+    layout?: DevExpress.types.PivotGridFieldChooserLayout;
     /**
      * [descr:dxPivotGridFieldChooserOptions.onContextMenuPreparing]
      */
@@ -17230,7 +17683,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridOptions.dataFieldArea]
      */
-    dataFieldArea?: 'column' | 'row';
+    dataFieldArea?: DevExpress.types.PivotGridDataFieldArea;
     /**
      * [descr:dxPivotGridOptions.dataSource]
      */
@@ -17277,7 +17730,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.fieldChooser.applyChangesMode]
        */
-      applyChangesMode?: 'instantly' | 'onDemand';
+      applyChangesMode?: DevExpress.types.ApplyChangesMode;
       /**
        * [descr:dxPivotGridOptions.fieldChooser.enabled]
        */
@@ -17289,7 +17742,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.fieldChooser.layout]
        */
-      layout?: 0 | 1 | 2;
+      layout?: DevExpress.types.PivotGridFieldChooserLayout;
       /**
        * [descr:dxPivotGridOptions.fieldChooser.searchTimeout]
        */
@@ -17496,7 +17949,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridOptions.rowHeaderLayout]
      */
-    rowHeaderLayout?: 'standard' | 'tree';
+    rowHeaderLayout?: DevExpress.types.PivotGridRowHeadersLayout;
     /**
      * [descr:dxPivotGridOptions.scrolling]
      */
@@ -17504,11 +17957,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.scrolling.mode]
        */
-      mode?: 'standard' | 'virtual';
+      mode?: DevExpress.types.PivotGridScrollingMode;
       /**
        * [descr:dxPivotGridOptions.scrolling.useNative]
        */
-      useNative?: boolean | 'auto';
+      useNative?: boolean | DevExpress.types.Mode;
     };
     /**
      * [descr:dxPivotGridOptions.showBorders]
@@ -17533,7 +17986,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPivotGridOptions.showTotalsPrior]
      */
-    showTotalsPrior?: 'both' | 'columns' | 'none' | 'rows';
+    showTotalsPrior?: DevExpress.types.PivotGridTotalsDisplayMode;
     /**
      * [descr:dxPivotGridOptions.stateStoring]
      */
@@ -17561,7 +18014,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxPivotGridOptions.stateStoring.type]
        */
-      type?: 'custom' | 'localStorage' | 'sessionStorage';
+      type?: DevExpress.types.StateStoringType;
     };
     /**
      * [descr:dxPivotGridOptions.texts]
@@ -17834,7 +18287,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopoverOptions.position]
      */
-    position?: 'bottom' | 'left' | 'right' | 'top' | PositionConfig;
+    position?: DevExpress.types.Position | PositionConfig;
     /**
      * [descr:dxPopoverOptions.shading]
      */
@@ -17981,18 +18434,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.position]
      */
-    position?:
-      | 'bottom'
-      | 'center'
-      | 'left'
-      | 'left bottom'
-      | 'left top'
-      | 'right'
-      | 'right bottom'
-      | 'right top'
-      | 'top'
-      | PositionConfig
-      | Function;
+    position?: DevExpress.types.PositionAlignment | PositionConfig | Function;
     /**
      * [descr:dxPopupOptions.resizeEnabled]
      */
@@ -18046,7 +18488,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.toolbarItems.location]
      */
-    location?: 'after' | 'before' | 'center';
+    location?: DevExpress.types.ToolbarItemLocation;
     /**
      * [descr:dxPopupOptions.toolbarItems.options]
      */
@@ -18062,7 +18504,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.toolbarItems.toolbar]
      */
-    toolbar?: 'bottom' | 'top';
+    toolbar?: DevExpress.types.ToolbarLocation;
     /**
      * [descr:dxPopupOptions.toolbarItems.visible]
      */
@@ -18070,17 +18512,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.toolbarItems.widget]
      */
-    widget?:
-      | 'dxAutocomplete'
-      | 'dxButton'
-      | 'dxCheckBox'
-      | 'dxDateBox'
-      | 'dxMenu'
-      | 'dxSelectBox'
-      | 'dxTabs'
-      | 'dxTextBox'
-      | 'dxButtonGroup'
-      | 'dxDropDownButton';
+    widget?: DevExpress.types.ToolbarItemWidget;
   }
   /**
    * [descr:dxProgressBar]
@@ -18166,7 +18598,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxRadioGroupOptions.layout]
      */
-    layout?: 'horizontal' | 'vertical';
+    layout?: DevExpress.types.Orientation;
     /**
      * [descr:dxRadioGroupOptions.name]
      */
@@ -18298,7 +18730,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxResizableOptions.handles]
      */
-    handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
+    handles?: DevExpress.types.ResizeHandle | string;
     /**
      * [descr:dxResizableOptions.height]
      */
@@ -18458,7 +18890,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxResponsiveBoxOptions.cols.baseSize]
        */
-      baseSize?: number | 'auto';
+      baseSize?: number | DevExpress.types.Mode;
       /**
        * [descr:dxResponsiveBoxOptions.cols.ratio]
        */
@@ -18491,7 +18923,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxResponsiveBoxOptions.rows.baseSize]
        */
-      baseSize?: number | 'auto';
+      baseSize?: number | DevExpress.types.Mode;
       /**
        * [descr:dxResponsiveBoxOptions.rows.ratio]
        */
@@ -18891,16 +19323,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.currentView]
      */
-    currentView?:
-      | 'agenda'
-      | 'day'
-      | 'month'
-      | 'timelineDay'
-      | 'timelineMonth'
-      | 'timelineWeek'
-      | 'timelineWorkWeek'
-      | 'week'
-      | 'workWeek';
+    currentView?: DevExpress.types.SchedulerViewType;
     /**
      * [descr:dxSchedulerOptions.customizeDateNavigatorText]
      */
@@ -18996,7 +19419,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.firstDayOfWeek]
      */
-    firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    firstDayOfWeek?: DevExpress.types.FirstDayOfWeek;
     /**
      * [descr:dxSchedulerOptions.focusStateEnabled]
      */
@@ -19020,7 +19443,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.maxAppointmentsPerCell]
      */
-    maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+    maxAppointmentsPerCell?: number | DevExpress.types.MaxAppointmentsPerCell;
     /**
      * [descr:dxSchedulerOptions.min]
      */
@@ -19110,7 +19533,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerOptions.recurrenceEditMode]
      */
-    recurrenceEditMode?: 'dialog' | 'occurrence' | 'series';
+    recurrenceEditMode?: DevExpress.types.SchedulerRecurrenceEditMode;
     /**
      * [descr:dxSchedulerOptions.recurrenceExceptionExpr]
      */
@@ -19313,7 +19736,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.firstDayOfWeek]
            */
-          firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+          firstDayOfWeek?: DevExpress.types.FirstDayOfWeek;
           /**
            * [descr:dxSchedulerOptions.views.groupByDate]
            */
@@ -19321,7 +19744,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.groupOrientation]
            */
-          groupOrientation?: 'horizontal' | 'vertical';
+          groupOrientation?: DevExpress.types.Orientation;
           /**
            * [descr:dxSchedulerOptions.views.groups]
            */
@@ -19333,7 +19756,9 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.maxAppointmentsPerCell]
            */
-          maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+          maxAppointmentsPerCell?:
+            | number
+            | DevExpress.types.MaxAppointmentsPerCell;
           /**
            * [descr:dxSchedulerOptions.views.name]
            */
@@ -19369,16 +19794,7 @@ declare module DevExpress.ui {
           /**
            * [descr:dxSchedulerOptions.views.type]
            */
-          type?:
-            | 'agenda'
-            | 'day'
-            | 'month'
-            | 'timelineDay'
-            | 'timelineMonth'
-            | 'timelineWeek'
-            | 'timelineWorkWeek'
-            | 'week'
-            | 'workWeek';
+          type?: DevExpress.types.SchedulerViewType;
           /**
            * [descr:dxSchedulerOptions.views.scrolling]
            */
@@ -19393,7 +19809,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSchedulerScrolling.mode]
      */
-    mode?: 'standard' | 'virtual';
+    mode?: DevExpress.types.SchedulerScrollingMode;
   }
   /**
    * [descr:dxScrollable]
@@ -19484,7 +19900,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxScrollableOptions.direction]
      */
-    direction?: 'both' | 'horizontal' | 'vertical';
+    direction?: DevExpress.types.ScrollDirection;
     /**
      * [descr:dxScrollableOptions.disabled]
      */
@@ -19881,7 +20297,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSlideOutOptions.menuPosition]
      */
-    menuPosition?: 'inverted' | 'normal';
+    menuPosition?: DevExpress.types.SlideOutMenuPosition;
     /**
      * [descr:dxSlideOutOptions.menuVisible]
      */
@@ -19958,7 +20374,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSlideOutViewOptions.menuPosition]
      */
-    menuPosition?: 'inverted' | 'normal';
+    menuPosition?: DevExpress.types.SlideOutMenuPosition;
     /**
      * [descr:dxSlideOutViewOptions.menuTemplate]
      */
@@ -20025,7 +20441,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxSliderBaseOptions.label.position]
        */
-      position?: 'bottom' | 'top';
+      position?: DevExpress.types.VerticalEdge;
       /**
        * [descr:dxSliderBaseOptions.label.visible]
        */
@@ -20058,11 +20474,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxSliderBaseOptions.tooltip.position]
        */
-      position?: 'bottom' | 'top';
+      position?: DevExpress.types.VerticalEdge;
       /**
        * [descr:dxSliderBaseOptions.tooltip.showMode]
        */
-      showMode?: 'always' | 'onHover';
+      showMode?: DevExpress.types.SliderTooltipShowMode;
     };
   }
   /**
@@ -20205,7 +20621,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSortableOptions.dropFeedbackMode]
      */
-    dropFeedbackMode?: 'push' | 'indicate';
+    dropFeedbackMode?: DevExpress.types.DropFeedbackMode;
     /**
      * [descr:dxSortableOptions.filter]
      */
@@ -20213,7 +20629,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSortableOptions.itemOrientation]
      */
-    itemOrientation?: 'horizontal' | 'vertical';
+    itemOrientation?: DevExpress.types.Orientation;
     /**
      * [descr:dxSortableOptions.moveItemOnDrop]
      */
@@ -20664,7 +21080,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTabsOptions.selectionMode]
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: DevExpress.types.NavSelectionMode;
     /**
      * [descr:dxTabsOptions.showNavButtons]
      */
@@ -20776,7 +21192,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTagBoxOptions.applyValueMode]
      */
-    applyValueMode?: 'instantly' | 'useButtons';
+    applyValueMode?: DevExpress.types.EditorApplyValueMode;
     /**
      * [descr:dxTagBoxOptions.hideSelectedItems]
      */
@@ -20810,7 +21226,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTagBoxOptions.selectAllMode]
      */
-    selectAllMode?: 'allPages' | 'page';
+    selectAllMode?: DevExpress.types.SelectAllMode;
     /**
      * [descr:dxTagBoxOptions.selectedItems]
      */
@@ -21010,7 +21426,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTextBoxOptions.mode]
      */
-    mode?: 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
+    mode?: DevExpress.types.TextBoxMode;
     /**
      * [descr:dxTextBoxOptions.value]
      */
@@ -21054,7 +21470,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTextEditorButton.location]
      */
-    location?: 'after' | 'before';
+    location?: DevExpress.types.TextEditorButtonLocation;
     /**
      * [descr:dxTextEditorButton.name]
      */
@@ -21072,7 +21488,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTextEditorOptions.buttons]
      */
-    buttons?: Array<string | 'clear' | dxTextEditorButton>;
+    buttons?: Array<
+      string | DevExpress.types.TextBoxButtonName | dxTextEditorButton
+    >;
     /**
      * [descr:dxTextEditorOptions.focusStateEnabled]
      */
@@ -21092,7 +21510,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTextEditorOptions.labelMode]
      */
-    labelMode?: 'static' | 'floating' | 'hidden';
+    labelMode?: DevExpress.types.EditorLabelMode;
     /**
      * [descr:dxTextEditorOptions.mask]
      */
@@ -21184,7 +21602,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTextEditorOptions.showMaskMode]
      */
-    showMaskMode?: 'always' | 'onFocus';
+    showMaskMode?: DevExpress.types.ShowMaskMode;
     /**
      * [descr:dxTextEditorOptions.spellcheck]
      */
@@ -21192,7 +21610,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTextEditorOptions.stylingMode]
      */
-    stylingMode?: 'outlined' | 'underlined' | 'filled';
+    stylingMode?: DevExpress.types.EditorStylingMode;
     /**
      * [descr:dxTextEditorOptions.text]
      */
@@ -21320,7 +21738,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTileViewOptions.direction]
      */
-    direction?: 'horizontal' | 'vertical';
+    direction?: DevExpress.types.Orientation;
     /**
      * [descr:dxTileViewOptions.focusStateEnabled]
      */
@@ -21436,7 +21854,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToastOptions.type]
      */
-    type?: 'custom' | 'error' | 'info' | 'success' | 'warning';
+    type?: DevExpress.types.ToastType;
     /**
      * [descr:dxToastOptions.width]
      */
@@ -21528,11 +21946,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToolbarItem.locateInMenu]
      */
-    locateInMenu?: 'always' | 'auto' | 'never';
+    locateInMenu?: DevExpress.types.ToolbarItemLocateInMenuMode;
     /**
      * [descr:dxToolbarItem.location]
      */
-    location?: 'after' | 'before' | 'center';
+    location?: DevExpress.types.ToolbarItemLocation;
     /**
      * [descr:dxToolbarItem.menuItemTemplate]
      */
@@ -21546,21 +21964,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxToolbarItem.showText]
      */
-    showText?: 'always' | 'inMenu';
+    showText?: DevExpress.types.ToolbarItemShowTextMode;
     /**
      * [descr:dxToolbarItem.widget]
      */
-    widget?:
-      | 'dxAutocomplete'
-      | 'dxButton'
-      | 'dxCheckBox'
-      | 'dxDateBox'
-      | 'dxMenu'
-      | 'dxSelectBox'
-      | 'dxTabs'
-      | 'dxTextBox'
-      | 'dxButtonGroup'
-      | 'dxDropDownButton';
+    widget?: DevExpress.types.ToolbarItemWidget;
   }
   /**
    * @deprecated use Properties instead
@@ -21952,16 +22360,6 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.ui.dxDataGrid.DataErrorOccurredInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    type DefaultToolbarItemName =
-      | 'addRowButton'
-      | 'applyFilterButton'
-      | 'columnChooserButton'
-      | 'revertButton'
-      | 'saveButton'
-      | 'searchPanel';
     export type DisposingEvent<
       TRowData = any,
       TKey = any
@@ -22486,7 +22884,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxTreeListOptions.scrolling.mode]
        */
-      mode?: 'standard' | 'virtual';
+      mode?: DevExpress.types.TreeListScrollingMode;
     }
     export interface Selection extends DevExpress.ui.dxDataGrid.SelectionBase {
       /**
@@ -22515,12 +22913,7 @@ declare module DevExpress.ui {
      * [descr:dxTreeListColumn.buttons]
      */
     buttons?: Array<
-      | 'add'
-      | 'cancel'
-      | 'delete'
-      | 'edit'
-      | 'save'
-      | 'undelete'
+      | DevExpress.types.TreeListColumnButtonName
       | DevExpress.ui.dxTreeList.ColumnButton<TRowData, TKey>
     >;
     /**
@@ -22566,7 +22959,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListColumn.type]
      */
-    type?: 'adaptive' | 'buttons' | 'drag';
+    type?: DevExpress.types.TreeListCommandColumnType;
   }
   /**
    * @deprecated Use the TreeList's ColumnButton type instead
@@ -22577,7 +22970,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListColumnButton.name]
      */
-    name?: 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
+    name?: DevExpress.types.TreeListColumnButtonName | string;
     /**
      * [descr:dxTreeListColumnButton.onClick]
      */
@@ -22658,7 +23051,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.dataStructure]
      */
-    dataStructure?: 'plain' | 'tree';
+    dataStructure?: DevExpress.types.TreeListDataStructure;
     /**
      * [descr:dxTreeListOptions.editing]
      */
@@ -22674,7 +23067,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeListOptions.filterMode]
      */
-    filterMode?: 'fullBranch' | 'withAncestors' | 'matchOnly';
+    filterMode?: DevExpress.types.TreeListFilterMode;
     /**
      * [descr:dxTreeListOptions.hasItemsExpr]
      */
@@ -22809,7 +23202,7 @@ declare module DevExpress.ui {
            */
           sorting?: boolean;
         }
-      | 'auto';
+      | DevExpress.types.Mode;
     /**
      * [descr:dxTreeListOptions.rootValue]
      */
@@ -23119,7 +23512,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.dataStructure]
      */
-    dataStructure?: 'plain' | 'tree';
+    dataStructure?: DevExpress.types.TreeViewDataStructure;
     /**
      * [descr:dxTreeViewOptions.expandAllEnabled]
      */
@@ -23127,7 +23520,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.expandEvent]
      */
-    expandEvent?: 'dblclick' | 'click';
+    expandEvent?: DevExpress.types.TreeViewExpandEvent;
     /**
      * [descr:dxTreeViewOptions.expandNodesRecursive]
      */
@@ -23205,7 +23598,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.scrollDirection]
      */
-    scrollDirection?: 'both' | 'horizontal' | 'vertical';
+    scrollDirection?: DevExpress.types.ScrollDirection;
     /**
      * [descr:dxTreeViewOptions.selectAllText]
      */
@@ -23221,11 +23614,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxTreeViewOptions.selectionMode]
      */
-    selectionMode?: 'multiple' | 'single';
+    selectionMode?: DevExpress.types.NavSelectionMode;
     /**
      * [descr:dxTreeViewOptions.showCheckBoxesMode]
      */
-    showCheckBoxesMode?: 'none' | 'normal' | 'selectAll';
+    showCheckBoxesMode?: DevExpress.types.TreeViewCheckBoxMode;
     /**
      * [descr:dxTreeViewOptions.virtualModeEnabled]
      */
@@ -23295,7 +23688,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidationGroupResult.status]
      */
-    status?: 'valid' | 'invalid' | 'pending';
+    status?: DevExpress.types.ValidationStatus;
     /**
      * [descr:dxValidationGroupResult.validators]
      */
@@ -23425,7 +23818,7 @@ declare module DevExpress.ui {
       validationRules?: Array<ValidationRule>;
       brokenRule?: ValidationRule;
       brokenRules?: ValidationRule;
-      status?: 'valid' | 'invalid' | 'pending';
+      status?: DevExpress.types.ValidationStatus;
     };
     export type ValidationResult = dxValidatorResult;
   }
@@ -23511,7 +23904,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxValidatorResult.status]
      */
-    status?: 'valid' | 'invalid' | 'pending';
+    status?: DevExpress.types.ValidationStatus;
     /**
      * [descr:dxValidatorResult.validationRules]
      */
@@ -23583,11 +23976,11 @@ declare module DevExpress.ui {
     /**
      * [descr:EditorOptions.validationMessageMode]
      */
-    validationMessageMode?: 'always' | 'auto';
+    validationMessageMode?: DevExpress.types.ValidationMessageMode;
     /**
      * [descr:EditorOptions.validationStatus]
      */
-    validationStatus?: 'valid' | 'invalid' | 'pending';
+    validationStatus?: DevExpress.types.ValidationStatus;
     /**
      * [descr:EditorOptions.value]
      */
@@ -23595,7 +23988,7 @@ declare module DevExpress.ui {
     /**
      * [descr:EditorOptions.stylingMode]
      */
-    stylingMode?: 'outlined' | 'underlined' | 'filled';
+    stylingMode?: DevExpress.types.EditorStylingMode;
   }
   /**
    * [descr:EmailRule]
@@ -23620,7 +24013,7 @@ declare module DevExpress.ui {
    */
   export type Format =
     | FormatObject
-    | PredefinedFormat
+    | DevExpress.types.Format
     | string
     | ((value: number | Date) => string)
     | ExternalFormat;
@@ -23976,11 +24369,11 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.columnResizingMode]
      */
-    columnResizingMode?: 'nextColumn' | 'widget';
+    columnResizingMode?: DevExpress.types.ColumnResizingMode;
     /**
      * [descr:GridBaseOptions.columnWidth]
      */
-    columnWidth?: number | 'auto';
+    columnWidth?: number | DevExpress.types.Mode;
     /**
      * [descr:GridBaseOptions.columns]
      */
@@ -24024,7 +24417,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBaseOptions.filterSyncEnabled]
      */
-    filterSyncEnabled?: boolean | 'auto';
+    filterSyncEnabled?: boolean | DevExpress.types.Mode;
     /**
      * [descr:GridBaseOptions.filterValue]
      */
@@ -24495,7 +24888,7 @@ declare module DevExpress.ui {
     /**
      * [descr:SearchBoxMixinOptions.searchMode]
      */
-    searchMode?: 'contains' | 'startswith' | 'equals';
+    searchMode?: DevExpress.types.CollectionSearchMode;
     /**
      * [descr:SearchBoxMixinOptions.searchTimeout]
      */
@@ -24700,7 +25093,7 @@ declare module DevExpress.ui.dxDataGrid {
     /**
      * [descr:DataChange.type]
      */
-    type: 'insert' | 'update' | 'remove';
+    type: DevExpress.types.GridDataChangeType;
     /**
      * [descr:DataChange.data]
      */
@@ -24721,7 +25114,7 @@ declare module DevExpress.ui.dxDataGrid {
     /**
      * [descr:dxDataGridToolbar.items]
      */
-    items?: Array<DefaultToolbarItemName | ToolbarItem>;
+    items?: Array<DevExpress.types.DataGridToolbarItem | ToolbarItem>;
     /**
      * [descr:dxDataGridToolbar.visible]
      */
@@ -24739,7 +25132,7 @@ declare module DevExpress.ui.dxDataGrid {
     /**
      * [descr:dxDataGridToolbarItem.name]
      */
-    name?: DefaultToolbarItemName | string;
+    name?: DevExpress.types.DataGridToolbarItem | string;
     /**
      * [descr:dxDataGridToolbarItem.location]
      */
@@ -24830,7 +25223,7 @@ declare module DevExpress.ui.dxTreeList {
     /**
      * [descr:dxTreeListToolbar.items]
      */
-    items?: (DefaultToolbarItemName | ToolbarItem)[];
+    items?: Array<DevExpress.types.TreeListToolbarItem | ToolbarItem>;
     /**
      * [descr:dxTreeListToolbar.visible]
      */
@@ -24848,7 +25241,7 @@ declare module DevExpress.ui.dxTreeList {
     /**
      * [descr:dxTreeListToolbarItem.name]
      */
-    name?: DefaultToolbarItemName | string;
+    name?: DevExpress.types.TreeListToolbarItem | string;
     /**
      * [descr:dxTreeListToolbarItem.location]
      */
@@ -25046,7 +25439,7 @@ declare module DevExpress.viz {
           /**
            * [descr:BaseChartOptions.animation.easing]
            */
-          easing?: 'easeOutCubic' | 'linear';
+          easing?: DevExpress.types.VizAnimationEasing;
           /**
            * [descr:BaseChartOptions.animation.enabled]
            */
@@ -25120,15 +25513,15 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseChartOptions.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | DevExpress.types.VizPalette;
     /**
      * [descr:BaseChartOptions.paletteExtensionMode]
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: DevExpress.types.VizPaletteExtensionMode;
     /**
      * [descr:BaseChartOptions.pointSelectionMode]
      */
-    pointSelectionMode?: 'multiple' | 'single';
+    pointSelectionMode?: DevExpress.types.ChartElementSelectionMode;
     /**
      * [descr:BaseChartOptions.series]
      */
@@ -25222,7 +25615,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.animation.easing]
      */
-    easing?: 'easeOutCubic' | 'linear';
+    easing?: DevExpress.types.VizAnimationEasing;
     /**
      * [descr:BaseGaugeOptions.animation.enabled]
      */
@@ -25305,11 +25698,11 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.rangeContainer.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | DevExpress.types.VizPalette;
     /**
      * [descr:BaseGaugeOptions.rangeContainer.paletteExtensionMode]
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: DevExpress.types.VizPaletteExtensionMode;
     /**
      * [descr:BaseGaugeOptions.rangeContainer.ranges]
      */
@@ -25441,7 +25834,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseGaugeOptions.scale.label.overlappingBehavior]
      */
-    overlappingBehavior?: 'hide' | 'none';
+    overlappingBehavior?: DevExpress.types.ScaleLabelOverlappingBehavior;
     /**
      * [descr:BaseGaugeOptions.scale.label.useRangeColors]
      */
@@ -25530,7 +25923,7 @@ declare module DevExpress.viz {
       /**
        * [descr:BaseLegend.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DevExpress.types.DashStyle;
       /**
        * [descr:BaseLegend.border.opacity]
        */
@@ -25559,15 +25952,15 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseLegend.horizontalAlignment]
      */
-    horizontalAlignment?: 'center' | 'left' | 'right';
+    horizontalAlignment?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:BaseLegend.itemTextPosition]
      */
-    itemTextPosition?: 'bottom' | 'left' | 'right' | 'top';
+    itemTextPosition?: DevExpress.types.Position;
     /**
      * [descr:BaseLegend.itemsAlignment]
      */
-    itemsAlignment?: 'center' | 'left' | 'right';
+    itemsAlignment?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:BaseLegend.margin]
      */
@@ -25598,7 +25991,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseLegend.orientation]
      */
-    orientation?: 'horizontal' | 'vertical';
+    orientation?: DevExpress.types.Orientation;
     /**
      * [descr:BaseLegend.paddingLeftRight]
      */
@@ -25627,7 +26020,7 @@ declare module DevExpress.viz {
           /**
            * [descr:BaseLegend.title.horizontalAlignment]
            */
-          horizontalAlignment?: 'center' | 'left' | 'right';
+          horizontalAlignment?: DevExpress.types.HorizontalAlignment;
           /**
            * [descr:BaseLegend.title.margin]
            */
@@ -25679,13 +26072,13 @@ declare module DevExpress.viz {
           /**
            * [descr:BaseLegend.title.verticalAlignment]
            */
-          verticalAlignment?: 'bottom' | 'top';
+          verticalAlignment?: DevExpress.types.VerticalEdge;
         }
       | string;
     /**
      * [descr:BaseLegend.verticalAlignment]
      */
-    verticalAlignment?: 'bottom' | 'top';
+    verticalAlignment?: DevExpress.types.VerticalEdge;
     /**
      * [descr:BaseLegend.visible]
      */
@@ -25715,7 +26108,7 @@ declare module DevExpress.viz {
       /**
        * [descr:BaseLegendItem.marker.state]
        */
-      state?: 'normal' | 'hovered' | 'selected';
+      state?: DevExpress.types.LegendMarkerState;
     };
     /**
      * [descr:BaseLegendItem.text]
@@ -26021,14 +26414,6 @@ declare module DevExpress.viz {
     export interface IncidentInfo {
       readonly target: any;
     }
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type VizTextOverflowType = 'ellipsis' | 'hide' | 'none';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type WordWrapType = 'normal' | 'breakWord' | 'none';
   }
   /**
    * [descr:BaseWidgetAnnotationConfig]
@@ -26062,7 +26447,7 @@ declare module DevExpress.viz {
       /**
        * [descr:BaseWidgetAnnotationConfig.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DevExpress.types.DashStyle;
       /**
        * [descr:BaseWidgetAnnotationConfig.border.opacity]
        */
@@ -26167,7 +26552,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.textOverflow]
      */
-    textOverflow?: DevExpress.viz.BaseWidget.VizTextOverflowType;
+    textOverflow?: DevExpress.types.VizTextOverflow;
     /**
      * [descr:BaseWidgetAnnotationConfig.tooltipEnabled]
      */
@@ -26175,7 +26560,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.type]
      */
-    type?: 'text' | 'image' | 'custom';
+    type?: DevExpress.types.AnnotationType;
     /**
      * [descr:BaseWidgetAnnotationConfig.width]
      */
@@ -26183,7 +26568,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetAnnotationConfig.wordWrap]
      */
-    wordWrap?: DevExpress.viz.BaseWidget.WordWrapType;
+    wordWrap?: DevExpress.types.VizWordWrap;
     /**
      * [descr:BaseWidgetAnnotationConfig.x]
      */
@@ -26212,7 +26597,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.export.formats]
      */
-    formats?: Array<'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG'>;
+    formats?: Array<DevExpress.types.ExportFormat>;
     /**
      * [descr:BaseWidgetOptions.export.margin]
      */
@@ -26352,20 +26737,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.theme]
      */
-    theme?:
-      | 'generic.dark'
-      | 'generic.light'
-      | 'generic.contrast'
-      | 'generic.carmine'
-      | 'generic.darkmoon'
-      | 'generic.darkviolet'
-      | 'generic.greenmist'
-      | 'generic.softblue'
-      | 'material.blue.light'
-      | 'material.lime.light'
-      | 'material.orange.light'
-      | 'material.purple.light'
-      | 'material.teal.light';
+    theme?: DevExpress.types.VizTheme;
     /**
      * [descr:BaseWidgetOptions.title]
      */
@@ -26403,7 +26775,7 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.title.horizontalAlignment]
      */
-    horizontalAlignment?: 'center' | 'left' | 'right';
+    horizontalAlignment?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:BaseWidgetOptions.title.margin]
      */
@@ -26451,11 +26823,11 @@ declare module DevExpress.viz {
           /**
            * [descr:BaseWidgetOptions.title.subtitle.textOverflow]
            */
-          textOverflow?: DevExpress.viz.BaseWidget.VizTextOverflowType;
+          textOverflow?: DevExpress.types.VizTextOverflow;
           /**
            * [descr:BaseWidgetOptions.title.subtitle.wordWrap]
            */
-          wordWrap?: DevExpress.viz.BaseWidget.WordWrapType;
+          wordWrap?: DevExpress.types.VizWordWrap;
         }
       | string;
     /**
@@ -26465,15 +26837,15 @@ declare module DevExpress.viz {
     /**
      * [descr:BaseWidgetOptions.title.textOverflow]
      */
-    textOverflow?: DevExpress.viz.BaseWidget.VizTextOverflowType;
+    textOverflow?: DevExpress.types.VizTextOverflow;
     /**
      * [descr:BaseWidgetOptions.title.verticalAlignment]
      */
-    verticalAlignment?: 'bottom' | 'top';
+    verticalAlignment?: DevExpress.types.VerticalEdge;
     /**
      * [descr:BaseWidgetOptions.title.wordWrap]
      */
-    wordWrap?: DevExpress.viz.BaseWidget.WordWrapType;
+    wordWrap?: DevExpress.types.VizWordWrap;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -26494,7 +26866,7 @@ declare module DevExpress.viz {
       /**
        * [descr:BaseWidgetOptions.tooltip.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DevExpress.types.DashStyle;
       /**
        * [descr:BaseWidgetOptions.tooltip.border.opacity]
        */
@@ -26664,7 +27036,7 @@ declare module DevExpress.viz {
     /**
      * [descr:ChartSeries.type]
      */
-    type?: ChartSeriesType;
+    type?: DevExpress.types.SeriesType;
   }
   /**
    * [descr:chartSeriesObject]
@@ -26697,33 +27069,6 @@ declare module DevExpress.viz {
     stack?: string;
   }
   /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type ChartSeriesType =
-    | 'area'
-    | 'bar'
-    | 'bubble'
-    | 'candlestick'
-    | 'fullstackedarea'
-    | 'fullstackedbar'
-    | 'fullstackedline'
-    | 'fullstackedspline'
-    | 'fullstackedsplinearea'
-    | 'line'
-    | 'rangearea'
-    | 'rangebar'
-    | 'scatter'
-    | 'spline'
-    | 'splinearea'
-    | 'stackedarea'
-    | 'stackedbar'
-    | 'stackedline'
-    | 'stackedspline'
-    | 'stackedsplinearea'
-    | 'steparea'
-    | 'stepline'
-    | 'stock';
-  /**
    * [descr:CommonIndicator]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -26751,7 +27096,7 @@ declare module DevExpress.viz {
     /**
      * [descr:CommonIndicator.horizontalOrientation]
      */
-    horizontalOrientation?: 'left' | 'right';
+    horizontalOrientation?: DevExpress.types.HorizontalEdge;
     /**
      * [descr:CommonIndicator.indentFromCenter]
      */
@@ -26767,7 +27112,7 @@ declare module DevExpress.viz {
     /**
      * [descr:CommonIndicator.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | DevExpress.types.VizPalette;
     /**
      * [descr:CommonIndicator.secondColor]
      */
@@ -26815,7 +27160,7 @@ declare module DevExpress.viz {
     /**
      * [descr:CommonIndicator.verticalOrientation]
      */
-    verticalOrientation?: 'bottom' | 'top';
+    verticalOrientation?: DevExpress.types.VerticalEdge;
     /**
      * [descr:CommonIndicator.width]
      */
@@ -26841,10 +27186,6 @@ declare module DevExpress.viz {
    * [descr:viz.currentTheme(theme)]
    */
   export function currentTheme(theme: string): void;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type DashStyleType = 'dash' | 'dot' | 'longDash' | 'solid';
   /**
    * [descr:dxBarGauge]
    */
@@ -27024,11 +27365,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | DevExpress.types.VizPalette;
     /**
      * [descr:dxBarGaugeOptions.paletteExtensionMode]
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: DevExpress.types.VizPaletteExtensionMode;
     /**
      * [descr:dxBarGaugeOptions.relativeInnerRadius]
      */
@@ -27036,7 +27377,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxBarGaugeOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: 'hide' | 'none';
+    resolveLabelOverlapping?: DevExpress.types.BarGaugeResolveLabelOverlapping;
     /**
      * [descr:dxBarGaugeOptions.startValue]
      */
@@ -27175,16 +27516,6 @@ declare module DevExpress.viz {
     > & {
       readonly argument: Date | number | string;
     };
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type ChartSingleValueSeriesAggregationMethodType =
-      | 'avg'
-      | 'count'
-      | 'max'
-      | 'min'
-      | 'sum'
-      | 'custom';
     export type DisposingEvent = DevExpress.events.EventInfo<dxChart>;
     export type DoneEvent = DevExpress.events.EventInfo<dxChart>;
     export type DrawnEvent = DevExpress.events.EventInfo<dxChart>;
@@ -27243,7 +27574,7 @@ declare module DevExpress.viz {
         readonly axis: chartAxisObject;
         readonly range: VizRange;
         readonly previousRange: VizRange;
-        readonly actionType: 'zoom' | 'pan';
+        readonly actionType: DevExpress.types.ChartZoomPanAction;
         readonly zoomFactor: number;
         readonly shift: number;
       };
@@ -27251,7 +27582,7 @@ declare module DevExpress.viz {
       DevExpress.events.NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
         readonly axis: chartAxisObject;
         readonly range: VizRange;
-        readonly actionType?: 'zoom' | 'pan';
+        readonly actionType?: DevExpress.types.ChartZoomPanAction;
       };
   }
   /**
@@ -27284,7 +27615,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.argumentType]
      */
-    argumentType?: 'datetime' | 'numeric' | 'string';
+    argumentType?: DevExpress.types.ChartDataType;
     /**
      * [descr:dxChartOptions.argumentAxis.axisDivisionFactor]
      */
@@ -27316,7 +27647,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.hoverMode]
      */
-    hoverMode?: 'allArgumentPoints' | 'none';
+    hoverMode?: DevExpress.types.ArgumentAxisHoverMode;
     /**
      * [descr:dxChartOptions.argumentAxis.label]
      */
@@ -27344,7 +27675,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.position]
      */
-    position?: 'bottom' | 'left' | 'right' | 'top';
+    position?: DevExpress.types.Position;
     /**
      * [descr:dxChartOptions.argumentAxis.customPosition]
      */
@@ -27376,7 +27707,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.type]
      */
-    type?: 'continuous' | 'discrete' | 'logarithmic';
+    type?: DevExpress.types.AxisScaleType;
     /**
      * [descr:dxChartOptions.argumentAxis.visualRange]
      */
@@ -27384,7 +27715,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.visualRangeUpdateMode]
      */
-    visualRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
+    visualRangeUpdateMode?: DevExpress.types.VisualRangeUpdateMode;
     /**
      * [descr:dxChartOptions.argumentAxis.wholeRange]
      */
@@ -27428,7 +27759,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.constantLines.label.horizontalAlignment]
      */
-    horizontalAlignment?: 'center' | 'left' | 'right';
+    horizontalAlignment?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:dxChartOptions.argumentAxis.constantLines.label.text]
      */
@@ -27436,7 +27767,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.constantLines.label.verticalAlignment]
      */
-    verticalAlignment?: 'bottom' | 'center' | 'top';
+    verticalAlignment?: DevExpress.types.VerticalAlignment;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -27456,11 +27787,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.argumentAxis.constantLineStyle.label.horizontalAlignment]
      */
-    horizontalAlignment?: 'center' | 'left' | 'right';
+    horizontalAlignment?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:dxChartOptions.argumentAxis.constantLineStyle.label.verticalAlignment]
      */
-    verticalAlignment?: 'bottom' | 'center' | 'top';
+    verticalAlignment?: DevExpress.types.VerticalAlignment;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -27580,7 +27911,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.commonAxisSettings.breakStyle.line]
        */
-      line?: 'straight' | 'waved';
+      line?: DevExpress.types.ScaleBreakLineStyle;
       /**
        * [descr:dxChartOptions.commonAxisSettings.breakStyle.width]
        */
@@ -27597,7 +27928,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.discreteAxisDivisionMode]
      */
-    discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
+    discreteAxisDivisionMode?: DevExpress.types.DiscreteAxisDivisionMode;
     /**
      * [descr:dxChartOptions.commonAxisSettings.endOnTick]
      */
@@ -27758,7 +28089,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DevExpress.types.DashStyle;
     /**
      * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.label]
      */
@@ -27787,7 +28118,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.label.position]
      */
-    position?: 'inside' | 'outside';
+    position?: DevExpress.types.RelativePosition;
     /**
      * [descr:dxChartOptions.commonAxisSettings.constantLineStyle.label.visible]
      */
@@ -27809,11 +28140,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.alignment]
      */
-    alignment?: 'center' | 'left' | 'right';
+    alignment?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.displayMode]
      */
-    displayMode?: 'rotate' | 'stagger' | 'standard';
+    displayMode?: DevExpress.types.ChartLabelDisplayMode;
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.font]
      */
@@ -27825,11 +28156,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.overlappingBehavior]
      */
-    overlappingBehavior?: 'rotate' | 'stagger' | 'none' | 'hide';
+    overlappingBehavior?: DevExpress.types.OverlappingBehavior;
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.position]
      */
-    position?: 'inside' | 'outside' | 'bottom' | 'left' | 'right' | 'top';
+    position?: DevExpress.types.RelativePosition | DevExpress.types.Position;
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.rotationAngle]
      */
@@ -27841,7 +28172,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.textOverflow]
      */
-    textOverflow?: DevExpress.viz.BaseWidget.VizTextOverflowType;
+    textOverflow?: DevExpress.types.VizTextOverflow;
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.visible]
      */
@@ -27849,7 +28180,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.label.wordWrap]
      */
-    wordWrap?: DevExpress.viz.BaseWidget.WordWrapType;
+    wordWrap?: DevExpress.types.VizWordWrap;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -27879,11 +28210,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.stripStyle.label.horizontalAlignment]
      */
-    horizontalAlignment?: 'center' | 'left' | 'right';
+    horizontalAlignment?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:dxChartOptions.commonAxisSettings.stripStyle.label.verticalAlignment]
      */
-    verticalAlignment?: 'bottom' | 'center' | 'top';
+    verticalAlignment?: DevExpress.types.VerticalAlignment;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -27892,7 +28223,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.title.alignment]
      */
-    alignment?: 'center' | 'left' | 'right';
+    alignment?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:dxChartOptions.commonAxisSettings.title.font]
      */
@@ -27904,11 +28235,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonAxisSettings.title.textOverflow]
      */
-    textOverflow?: DevExpress.viz.BaseWidget.VizTextOverflowType;
+    textOverflow?: DevExpress.types.VizTextOverflow;
     /**
      * [descr:dxChartOptions.commonAxisSettings.title.wordWrap]
      */
-    wordWrap?: DevExpress.viz.BaseWidget.WordWrapType;
+    wordWrap?: DevExpress.types.VizWordWrap;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -27933,7 +28264,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.commonPaneSettings.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DevExpress.types.DashStyle;
       /**
        * [descr:dxChartOptions.commonPaneSettings.border.left]
        */
@@ -28060,7 +28391,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.commonSeriesSettings.type]
      */
-    type?: ChartSeriesType;
+    type?: DevExpress.types.SeriesType;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28085,11 +28416,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.legend.hoverMode]
      */
-    hoverMode?: 'excludePoints' | 'includePoints' | 'none';
+    hoverMode?: DevExpress.types.ChartLegendHoverMode;
     /**
      * [descr:dxChartOptions.legend.position]
      */
-    position?: 'inside' | 'outside';
+    position?: DevExpress.types.RelativePosition;
   }
   /**
    * @deprecated use Properties instead
@@ -28151,7 +28482,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.crosshair.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DevExpress.types.DashStyle;
       /**
        * [descr:dxChartOptions.crosshair.enabled]
        */
@@ -28168,7 +28499,7 @@ declare module DevExpress.viz {
             /**
              * [descr:dxChartOptions.crosshair.horizontalLine.dashStyle]
              */
-            dashStyle?: DashStyleType;
+            dashStyle?: DevExpress.types.DashStyle;
             /**
              * [descr:dxChartOptions.crosshair.horizontalLine.label]
              */
@@ -28257,7 +28588,7 @@ declare module DevExpress.viz {
             /**
              * [descr:dxChartOptions.crosshair.verticalLine.dashStyle]
              */
-            dashStyle?: DashStyleType;
+            dashStyle?: DevExpress.types.DashStyle;
             /**
              * [descr:dxChartOptions.crosshair.verticalLine.label]
              */
@@ -28398,7 +28729,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: 'hide' | 'none' | 'stack';
+    resolveLabelOverlapping?: DevExpress.types.ChartResolveLabelOverlapping;
     /**
      * [descr:dxChartOptions.rotated]
      */
@@ -28422,7 +28753,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.scrollBar.position]
        */
-      position?: 'bottom' | 'left' | 'right' | 'top';
+      position?: DevExpress.types.Position;
       /**
        * [descr:dxChartOptions.scrollBar.visible]
        */
@@ -28439,7 +28770,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.seriesSelectionMode]
      */
-    seriesSelectionMode?: 'multiple' | 'single';
+    seriesSelectionMode?: DevExpress.types.ChartElementSelectionMode;
     /**
      * [descr:dxChartOptions.seriesTemplate]
      */
@@ -28484,7 +28815,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.zoomAndPan.argumentAxis]
        */
-      argumentAxis?: 'both' | 'none' | 'pan' | 'zoom';
+      argumentAxis?: DevExpress.types.ChartZoomAndPanMode;
       /**
        * [descr:dxChartOptions.zoomAndPan.dragBoxStyle]
        */
@@ -28505,11 +28836,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartOptions.zoomAndPan.panKey]
        */
-      panKey?: 'alt' | 'ctrl' | 'meta' | 'shift';
+      panKey?: DevExpress.types.EventKeyModifier;
       /**
        * [descr:dxChartOptions.zoomAndPan.valueAxis]
        */
-      valueAxis?: 'both' | 'none' | 'pan' | 'zoom';
+      valueAxis?: DevExpress.types.ChartZoomAndPanMode;
     };
   }
   /**
@@ -28661,7 +28992,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.AreaSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28717,7 +29048,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.BarSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28763,7 +29094,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.BubbleSeries.aggregation.method]
      */
-    method?: 'avg' | 'custom';
+    method?: DevExpress.types.ChartBubbleSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28821,7 +29152,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.aggregation.method]
      */
-    method?: 'ohlc' | 'custom';
+    method?: DevExpress.types.ChartFinancialSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28841,7 +29172,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching.direction]
      */
-    direction?: HatchingDirectionType;
+    direction?: DevExpress.types.HatchingDirection;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28871,7 +29202,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching.direction]
      */
-    direction?: HatchingDirectionType;
+    direction?: DevExpress.types.HatchingDirection;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -28920,7 +29251,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DevExpress.types.DashStyle;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.highValueField]
      */
@@ -28928,14 +29259,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverMode]
      */
-    hoverMode?:
-      | 'allArgumentPoints'
-      | 'allSeriesPoints'
-      | 'excludePoints'
-      | 'includePoints'
-      | 'nearestPoint'
-      | 'none'
-      | 'onlyPoint';
+    hoverMode?: DevExpress.types.ChartSeriesHoverMode;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle]
      */
@@ -28999,18 +29323,12 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.reduction.level]
        */
-      level?: 'close' | 'high' | 'low' | 'open';
+      level?: DevExpress.types.FinancialChartReductionLevel;
     };
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionMode]
      */
-    selectionMode?:
-      | 'allArgumentPoints'
-      | 'allSeriesPoints'
-      | 'excludePoints'
-      | 'includePoints'
-      | 'none'
-      | 'onlyPoint';
+    selectionMode?: DevExpress.types.ChartSeriesSelectionMode;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle]
      */
@@ -29042,7 +29360,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.valueErrorBar.displayMode]
        */
-      displayMode?: 'auto' | 'high' | 'low' | 'none';
+      displayMode?: DevExpress.types.ValueErrorBarDisplayMode;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.valueErrorBar.edgeLength]
        */
@@ -29066,7 +29384,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.valueErrorBar.type]
        */
-      type?: 'fixed' | 'percent' | 'stdDeviation' | 'stdError' | 'variance';
+      type?: DevExpress.types.ValueErrorBarType;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.valueErrorBar.value]
        */
@@ -29103,15 +29421,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.aggregation.method]
      */
-    method?:
-      | 'avg'
-      | 'count'
-      | 'max'
-      | 'min'
-      | 'ohlc'
-      | 'range'
-      | 'sum'
-      | 'custom';
+    method?: DevExpress.types.ChartSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29124,7 +29434,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.border.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DevExpress.types.DashStyle;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.border.visible]
      */
@@ -29149,7 +29459,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DevExpress.types.DashStyle;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching]
      */
@@ -29170,7 +29480,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DevExpress.types.DashStyle;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible]
      */
@@ -29187,7 +29497,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.direction]
      */
-    direction?: HatchingDirectionType;
+    direction?: DevExpress.types.HatchingDirection;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.opacity]
      */
@@ -29208,7 +29518,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.alignment]
      */
-    alignment?: 'center' | 'left' | 'right';
+    alignment?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.argumentFormat]
      */
@@ -29228,7 +29538,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.label.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DevExpress.types.DashStyle;
       /**
        * [descr:dxChartSeriesTypes.CommonSeries.label.border.visible]
        */
@@ -29274,7 +29584,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.position]
      */
-    position?: 'inside' | 'outside';
+    position?: DevExpress.types.RelativePosition;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.label.rotationAngle]
      */
@@ -29320,7 +29630,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.hoverMode]
      */
-    hoverMode?: 'allArgumentPoints' | 'allSeriesPoints' | 'none' | 'onlyPoint';
+    hoverMode?: DevExpress.types.ChartPointInteractionMode;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle]
      */
@@ -29406,11 +29716,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.selectionMode]
      */
-    selectionMode?:
-      | 'allArgumentPoints'
-      | 'allSeriesPoints'
-      | 'none'
-      | 'onlyPoint';
+    selectionMode?: DevExpress.types.ChartPointInteractionMode;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle]
      */
@@ -29448,13 +29754,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.symbol]
      */
-    symbol?:
-      | 'circle'
-      | 'cross'
-      | 'polygon'
-      | 'square'
-      | 'triangleDown'
-      | 'triangleUp';
+    symbol?: DevExpress.types.PointSymbol;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.point.visible]
      */
@@ -29475,7 +29775,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DevExpress.types.DashStyle;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching]
      */
@@ -29496,7 +29796,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DevExpress.types.DashStyle;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible]
      */
@@ -29513,7 +29813,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.direction]
      */
-    direction?: HatchingDirectionType;
+    direction?: DevExpress.types.HatchingDirection;
     /**
      * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.opacity]
      */
@@ -29561,7 +29861,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedAreaSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29617,7 +29917,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedBarSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29631,7 +29931,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedBarSeries.label.position]
      */
-    position?: 'inside' | 'outside';
+    position?: DevExpress.types.RelativePosition;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29663,7 +29963,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedLineSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29709,7 +30009,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29761,7 +30061,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.FullStackedSplineSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29803,7 +30103,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.LineSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29849,7 +30149,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.RangeAreaSeries.aggregation.method]
      */
-    method?: 'range' | 'custom';
+    method?: DevExpress.types.ChartRangeSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29905,7 +30205,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.RangeBarSeries.aggregation.method]
      */
-    method?: 'range' | 'custom';
+    method?: DevExpress.types.ChartRangeSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29939,7 +30239,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.ScatterSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -29985,7 +30285,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.SplineAreaSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30037,7 +30337,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.SplineSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30083,7 +30383,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedAreaSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30139,7 +30439,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedBarSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30153,7 +30453,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedBarSeries.label.position]
      */
-    position?: 'inside' | 'outside';
+    position?: DevExpress.types.RelativePosition;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30185,7 +30485,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedLineSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30231,7 +30531,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30283,7 +30583,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StackedSplineSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30341,7 +30641,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StepAreaSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30443,7 +30743,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StepLineSeries.aggregation.method]
      */
-    method?: DevExpress.viz.dxChart.ChartSingleValueSeriesAggregationMethodType;
+    method?: DevExpress.types.ChartSingleValueSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30493,7 +30793,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartSeriesTypes.StockSeries.aggregation.method]
      */
-    method?: 'ohlc' | 'custom';
+    method?: DevExpress.types.ChartFinancialSeriesAggregationMethod;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30512,7 +30812,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.tooltip.location]
      */
-    location?: 'center' | 'edge';
+    location?: DevExpress.types.ChartTooltipLocation;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30589,7 +30889,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.position]
      */
-    position?: 'bottom' | 'left' | 'right' | 'top';
+    position?: DevExpress.types.Position;
     /**
      * [descr:dxChartOptions.valueAxis.customPosition]
      */
@@ -30621,11 +30921,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.type]
      */
-    type?: 'continuous' | 'discrete' | 'logarithmic';
+    type?: DevExpress.types.AxisScaleType;
     /**
      * [descr:dxChartOptions.valueAxis.valueType]
      */
-    valueType?: 'datetime' | 'numeric' | 'string';
+    valueType?: DevExpress.types.ChartDataType;
     /**
      * [descr:dxChartOptions.valueAxis.visualRange]
      */
@@ -30633,7 +30933,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.visualRangeUpdateMode]
      */
-    visualRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
+    visualRangeUpdateMode?: DevExpress.types.VisualRangeUpdateMode;
     /**
      * [descr:dxChartOptions.valueAxis.wholeRange]
      */
@@ -30669,7 +30969,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.constantLines.label.horizontalAlignment]
      */
-    horizontalAlignment?: 'center' | 'left' | 'right';
+    horizontalAlignment?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:dxChartOptions.valueAxis.constantLines.label.text]
      */
@@ -30677,7 +30977,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.constantLines.label.verticalAlignment]
      */
-    verticalAlignment?: 'bottom' | 'center' | 'top';
+    verticalAlignment?: DevExpress.types.VerticalAlignment;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30697,11 +30997,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxChartOptions.valueAxis.constantLineStyle.label.horizontalAlignment]
      */
-    horizontalAlignment?: 'center' | 'left' | 'right';
+    horizontalAlignment?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:dxChartOptions.valueAxis.constantLineStyle.label.verticalAlignment]
      */
-    verticalAlignment?: 'bottom' | 'center' | 'top';
+    verticalAlignment?: DevExpress.types.VerticalAlignment;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30841,7 +31141,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxCircularGaugeOptions.rangeContainer.orientation]
      */
-    orientation?: 'center' | 'inside' | 'outside';
+    orientation?: DevExpress.types.CircularGaugeElementOrientation;
     /**
      * [descr:dxCircularGaugeOptions.rangeContainer.width]
      */
@@ -30858,7 +31158,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxCircularGaugeOptions.scale.orientation]
      */
-    orientation?: 'center' | 'inside' | 'outside';
+    orientation?: DevExpress.types.CircularGaugeElementOrientation;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -30867,7 +31167,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxCircularGaugeOptions.scale.label.hideFirstOrLast]
      */
-    hideFirstOrLast?: 'first' | 'last';
+    hideFirstOrLast?: DevExpress.types.GaugeOverlappingBehavior;
     /**
      * [descr:dxCircularGaugeOptions.scale.label.indentFromTick]
      */
@@ -31036,7 +31336,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.algorithm]
      */
-    algorithm?: 'dynamicHeight' | 'dynamicSlope';
+    algorithm?: DevExpress.types.FunnelAlgorithm;
     /**
      * [descr:dxFunnelOptions.argumentField]
      */
@@ -31106,7 +31406,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxFunnelOptions.item.hoverStyle.hatching.direction]
            */
-          direction?: HatchingDirectionType;
+          direction?: DevExpress.types.HatchingDirection;
           /**
            * [descr:dxFunnelOptions.item.hoverStyle.hatching.opacity]
            */
@@ -31149,7 +31449,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxFunnelOptions.item.selectionStyle.hatching.direction]
            */
-          direction?: HatchingDirectionType;
+          direction?: DevExpress.types.HatchingDirection;
           /**
            * [descr:dxFunnelOptions.item.selectionStyle.hatching.opacity]
            */
@@ -31184,7 +31484,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxFunnelOptions.label.border.dashStyle]
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DevExpress.types.DashStyle;
         /**
          * [descr:dxFunnelOptions.label.border.visible]
          */
@@ -31236,7 +31536,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxFunnelOptions.label.horizontalAlignment]
        */
-      horizontalAlignment?: 'left' | 'right';
+      horizontalAlignment?: DevExpress.types.HorizontalEdge;
       /**
        * [descr:dxFunnelOptions.label.horizontalOffset]
        */
@@ -31244,7 +31544,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxFunnelOptions.label.position]
        */
-      position?: 'columns' | 'inside' | 'outside';
+      position?: DevExpress.types.FunnelLabelPosition;
       /**
        * [descr:dxFunnelOptions.label.showForZeroValues]
        */
@@ -31252,7 +31552,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxFunnelOptions.label.textOverflow]
        */
-      textOverflow?: DevExpress.viz.BaseWidget.VizTextOverflowType;
+      textOverflow?: DevExpress.types.VizTextOverflow;
       /**
        * [descr:dxFunnelOptions.label.visible]
        */
@@ -31260,7 +31560,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxFunnelOptions.label.wordWrap]
        */
-      wordWrap?: DevExpress.viz.BaseWidget.WordWrapType;
+      wordWrap?: DevExpress.types.VizWordWrap;
     };
     /**
      * [descr:dxFunnelOptions.legend]
@@ -31299,19 +31599,19 @@ declare module DevExpress.viz {
     /**
      * [descr:dxFunnelOptions.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | DevExpress.types.VizPalette;
     /**
      * [descr:dxFunnelOptions.paletteExtensionMode]
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: DevExpress.types.VizPaletteExtensionMode;
     /**
      * [descr:dxFunnelOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: 'hide' | 'none' | 'shift';
+    resolveLabelOverlapping?: DevExpress.types.FunnelResolveLabelOverlapping;
     /**
      * [descr:dxFunnelOptions.selectionMode]
      */
-    selectionMode?: 'multiple' | 'none' | 'single';
+    selectionMode?: DevExpress.types.SelectionMode;
     /**
      * [descr:dxFunnelOptions.sortData]
      */
@@ -31395,7 +31695,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxLinearGaugeOptions.geometry.orientation]
        */
-      orientation?: 'horizontal' | 'vertical';
+      orientation?: DevExpress.types.Orientation;
     };
     /**
      * [descr:dxLinearGaugeOptions.rangeContainer]
@@ -31421,11 +31721,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxLinearGaugeOptions.rangeContainer.horizontalOrientation]
      */
-    horizontalOrientation?: 'center' | 'left' | 'right';
+    horizontalOrientation?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:dxLinearGaugeOptions.rangeContainer.verticalOrientation]
      */
-    verticalOrientation?: 'bottom' | 'center' | 'top';
+    verticalOrientation?: DevExpress.types.VerticalAlignment;
     /**
      * [descr:dxLinearGaugeOptions.rangeContainer.width]
      */
@@ -31449,7 +31749,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxLinearGaugeOptions.scale.horizontalOrientation]
      */
-    horizontalOrientation?: 'center' | 'left' | 'right';
+    horizontalOrientation?: DevExpress.types.HorizontalAlignment;
     /**
      * [descr:dxLinearGaugeOptions.scale.label]
      */
@@ -31461,7 +31761,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxLinearGaugeOptions.scale.verticalOrientation]
      */
-    verticalOrientation?: 'bottom' | 'center' | 'top';
+    verticalOrientation?: DevExpress.types.VerticalAlignment;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -31504,10 +31804,6 @@ declare module DevExpress.viz {
     };
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.events.ChangedOptionInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type PieSeriesType = 'donut' | 'doughnut' | 'pie';
     export type PointClickEvent = DevExpress.events.NativeEventInfo<
       dxPieChart,
       MouseEvent | PointerEvent
@@ -31520,10 +31816,6 @@ declare module DevExpress.viz {
       DevExpress.events.EventInfo<dxPieChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo;
     export type Properties = dxPieChartOptions;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type SegmentsDirectionType = 'anticlockwise' | 'clockwise';
     export type TooltipHiddenEvent = DevExpress.events.EventInfo<dxPieChart> &
       DevExpress.viz.BaseChart.TooltipInfo;
     export type TooltipShownEvent = DevExpress.events.EventInfo<dxPieChart> &
@@ -31558,7 +31850,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartCommonAnnotationConfig.location]
      */
-    location?: 'center' | 'edge';
+    location?: DevExpress.types.PieChartAnnotationLocation;
     /**
      * [descr:dxPieChartCommonAnnotationConfig.argument]
      */
@@ -31619,7 +31911,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.legend.hoverMode]
      */
-    hoverMode?: 'none' | 'allArgumentPoints';
+    hoverMode?: DevExpress.types.PieChartLegendHoverMode;
     /**
      * [descr:dxPieChartOptions.legend.markerTemplate]
      */
@@ -31677,15 +31969,15 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | DevExpress.types.VizPalette;
     /**
      * [descr:dxPieChartOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: 'hide' | 'none' | 'shift';
+    resolveLabelOverlapping?: DevExpress.types.PieChartResolveLabelOverlapping;
     /**
      * [descr:dxPieChartOptions.segmentsDirection]
      */
-    segmentsDirection?: DevExpress.viz.dxPieChart.SegmentsDirectionType;
+    segmentsDirection?: DevExpress.types.PieChartSegmentsDirection;
     /**
      * [descr:dxPieChartOptions.series]
      */
@@ -31714,7 +32006,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartOptions.type]
      */
-    type?: DevExpress.viz.dxPieChart.PieSeriesType;
+    type?: DevExpress.types.PieChartType;
     /**
      * [descr:dxPieChartOptions.annotations]
      */
@@ -31759,7 +32051,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.argumentType]
      */
-    argumentType?: 'datetime' | 'numeric' | 'string';
+    argumentType?: DevExpress.types.ChartDataType;
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.border]
      */
@@ -31771,7 +32063,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DevExpress.types.DashStyle;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.border.visible]
        */
@@ -31788,7 +32080,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode]
      */
-    hoverMode?: 'none' | 'onlyPoint';
+    hoverMode?: DevExpress.types.PieChartSeriesInteractionMode;
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle]
      */
@@ -31804,7 +32096,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.dashStyle]
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DevExpress.types.DashStyle;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.border.visible]
          */
@@ -31825,7 +32117,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.direction]
          */
-        direction?: HatchingDirectionType;
+        direction?: DevExpress.types.HatchingDirection;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle.hatching.opacity]
          */
@@ -31863,7 +32155,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.border.dashStyle]
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DevExpress.types.DashStyle;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.border.visible]
          */
@@ -31905,7 +32197,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.position]
        */
-      position?: 'columns' | 'inside' | 'outside';
+      position?: DevExpress.types.PieChartLabelPosition;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.radialOffset]
        */
@@ -31917,7 +32209,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.textOverflow]
        */
-      textOverflow?: DevExpress.viz.BaseWidget.VizTextOverflowType;
+      textOverflow?: DevExpress.types.VizTextOverflow;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.visible]
        */
@@ -31925,7 +32217,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label.wordWrap]
        */
-      wordWrap?: DevExpress.viz.BaseWidget.WordWrapType;
+      wordWrap?: DevExpress.types.VizWordWrap;
     };
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount]
@@ -31938,7 +32230,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionMode]
      */
-    selectionMode?: 'none' | 'onlyPoint';
+    selectionMode?: DevExpress.types.PieChartSeriesInteractionMode;
     /**
      * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle]
      */
@@ -31954,7 +32246,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.dashStyle]
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DevExpress.types.DashStyle;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.border.visible]
          */
@@ -31975,7 +32267,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.direction]
          */
-        direction?: HatchingDirectionType;
+        direction?: DevExpress.types.HatchingDirection;
         /**
          * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle.hatching.opacity]
          */
@@ -32001,7 +32293,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.mode]
        */
-      mode?: 'none' | 'smallValueThreshold' | 'topN';
+      mode?: DevExpress.types.SmallValuesGroupingMode;
       /**
        * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping.threshold]
        */
@@ -32072,15 +32364,6 @@ declare module DevExpress.viz {
     export type PointSelectionChangedEvent =
       DevExpress.events.EventInfo<dxPolarChart> &
         DevExpress.viz.BaseChart.PointInteractionInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type PolarChartSeriesType =
-      | 'area'
-      | 'bar'
-      | 'line'
-      | 'scatter'
-      | 'stackedbar';
     export type Properties = dxPolarChartOptions;
     export type SeriesClickEvent = DevExpress.events.NativeEventInfo<
       dxPolarChart,
@@ -32110,7 +32393,7 @@ declare module DevExpress.viz {
         readonly axis: chartAxisObject;
         readonly range: VizRange;
         readonly previousRange: VizRange;
-        readonly actionType: 'zoom' | 'pan';
+        readonly actionType: DevExpress.types.ChartZoomPanAction;
         readonly zoomFactor: number;
         readonly shift: number;
       };
@@ -32121,7 +32404,7 @@ declare module DevExpress.viz {
       > & {
         readonly axis: chartAxisObject;
         readonly range: VizRange;
-        readonly actionType: 'zoom' | 'pan';
+        readonly actionType: DevExpress.types.ChartZoomPanAction;
       };
   }
   /**
@@ -32156,7 +32439,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.argumentType]
      */
-    argumentType?: 'datetime' | 'numeric' | 'string';
+    argumentType?: DevExpress.types.ChartDataType;
     /**
      * [descr:dxPolarChartOptions.argumentAxis.axisDivisionFactor]
      */
@@ -32176,7 +32459,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.hoverMode]
      */
-    hoverMode?: 'allArgumentPoints' | 'none';
+    hoverMode?: DevExpress.types.ArgumentAxisHoverMode;
     /**
      * [descr:dxPolarChartOptions.argumentAxis.label]
      */
@@ -32228,7 +32511,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.argumentAxis.type]
      */
-    type?: 'continuous' | 'discrete' | 'logarithmic';
+    type?: DevExpress.types.AxisScaleType;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -32394,7 +32677,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.discreteAxisDivisionMode]
      */
-    discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
+    discreteAxisDivisionMode?: DevExpress.types.DiscreteAxisDivisionMode;
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.endOnTick]
      */
@@ -32485,7 +32768,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DevExpress.types.DashStyle;
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.constantLineStyle.label]
      */
@@ -32523,7 +32806,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.label.overlappingBehavior]
      */
-    overlappingBehavior?: 'none' | 'hide';
+    overlappingBehavior?: DevExpress.types.PolarChartOverlappingBehavior;
     /**
      * [descr:dxPolarChartOptions.commonAxisSettings.label.visible]
      */
@@ -32625,7 +32908,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.commonSeriesSettings.type]
      */
-    type?: DevExpress.viz.dxPolarChart.PolarChartSeriesType;
+    type?: DevExpress.types.PolarChartSeriesType;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -32650,7 +32933,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.legend.hoverMode]
      */
-    hoverMode?: 'excludePoints' | 'includePoints' | 'none';
+    hoverMode?: DevExpress.types.ChartLegendHoverMode;
   }
   /**
    * @deprecated use Properties instead
@@ -32776,7 +33059,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.resolveLabelOverlapping]
      */
-    resolveLabelOverlapping?: 'hide' | 'none';
+    resolveLabelOverlapping?: DevExpress.types.PolarChartResolveLabelOverlapping;
     /**
      * [descr:dxPolarChartOptions.series]
      */
@@ -32784,7 +33067,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.seriesSelectionMode]
      */
-    seriesSelectionMode?: 'multiple' | 'single';
+    seriesSelectionMode?: DevExpress.types.ChartElementSelectionMode;
     /**
      * [descr:dxPolarChartOptions.seriesTemplate]
      */
@@ -32914,7 +33197,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DevExpress.types.DashStyle;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.border.visible]
        */
@@ -32935,18 +33218,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle]
      */
-    dashStyle?: DashStyleType;
+    dashStyle?: DevExpress.types.DashStyle;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverMode]
      */
-    hoverMode?:
-      | 'allArgumentPoints'
-      | 'allSeriesPoints'
-      | 'excludePoints'
-      | 'includePoints'
-      | 'nearestPoint'
-      | 'none'
-      | 'onlyPoint';
+    hoverMode?: DevExpress.types.ChartSeriesHoverMode;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle]
      */
@@ -32962,7 +33238,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.dashStyle]
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DevExpress.types.DashStyle;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.border.visible]
          */
@@ -32979,7 +33255,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DevExpress.types.DashStyle;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching]
        */
@@ -32987,7 +33263,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.direction]
          */
-        direction?: HatchingDirectionType;
+        direction?: DevExpress.types.HatchingDirection;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle.hatching.opacity]
          */
@@ -33033,13 +33309,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionMode]
      */
-    selectionMode?:
-      | 'allArgumentPoints'
-      | 'allSeriesPoints'
-      | 'excludePoints'
-      | 'includePoints'
-      | 'none'
-      | 'onlyPoint';
+    selectionMode?: DevExpress.types.ChartSeriesSelectionMode;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle]
      */
@@ -33055,7 +33325,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.dashStyle]
          */
-        dashStyle?: DashStyleType;
+        dashStyle?: DevExpress.types.DashStyle;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.border.visible]
          */
@@ -33072,7 +33342,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DevExpress.types.DashStyle;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching]
        */
@@ -33080,7 +33350,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.direction]
          */
-        direction?: HatchingDirectionType;
+        direction?: DevExpress.types.HatchingDirection;
         /**
          * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle.hatching.opacity]
          */
@@ -33122,7 +33392,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.displayMode]
        */
-      displayMode?: 'auto' | 'high' | 'low' | 'none';
+      displayMode?: DevExpress.types.ValueErrorBarDisplayMode;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.edgeLength]
        */
@@ -33146,7 +33416,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.type]
        */
-      type?: 'fixed' | 'percent' | 'stdDeviation' | 'stdError' | 'variance';
+      type?: DevExpress.types.ValueErrorBarType;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar.value]
        */
@@ -33188,7 +33458,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.dashStyle]
        */
-      dashStyle?: DashStyleType;
+      dashStyle?: DevExpress.types.DashStyle;
       /**
        * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border.visible]
        */
@@ -33230,7 +33500,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position]
      */
-    position?: 'inside' | 'outside';
+    position?: DevExpress.types.RelativePosition;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.rotationAngle]
      */
@@ -33272,7 +33542,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverMode]
      */
-    hoverMode?: 'allArgumentPoints' | 'allSeriesPoints' | 'none' | 'onlyPoint';
+    hoverMode?: DevExpress.types.ChartPointInteractionMode;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle]
      */
@@ -33325,11 +33595,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionMode]
      */
-    selectionMode?:
-      | 'allArgumentPoints'
-      | 'allSeriesPoints'
-      | 'none'
-      | 'onlyPoint';
+    selectionMode?: DevExpress.types.ChartPointInteractionMode;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle]
      */
@@ -33367,7 +33633,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.symbol]
      */
-    symbol?: 'circle' | 'cross' | 'polygon' | 'square' | 'triangle';
+    symbol?: DevExpress.types.VizPointSymbol;
     /**
      * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.visible]
      */
@@ -33417,7 +33683,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartSeriesTypes.stackedbarpolarseries.label.position]
      */
-    position?: 'inside' | 'outside';
+    position?: DevExpress.types.RelativePosition;
   }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -33500,7 +33766,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.type]
      */
-    type?: 'continuous' | 'discrete' | 'logarithmic';
+    type?: DevExpress.types.AxisScaleType;
     /**
      * [descr:dxPolarChartOptions.valueAxis.valueMarginsEnabled]
      */
@@ -33508,7 +33774,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.valueType]
      */
-    valueType?: 'datetime' | 'numeric' | 'string';
+    valueType?: DevExpress.types.ChartDataType;
     /**
      * [descr:dxPolarChartOptions.valueAxis.visualRange]
      */
@@ -33516,7 +33782,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxPolarChartOptions.valueAxis.visualRangeUpdateMode]
      */
-    visualRangeUpdateMode?: 'auto' | 'keep' | 'reset';
+    visualRangeUpdateMode?: DevExpress.types.ValueAxisVisualRangeUpdateMode;
     /**
      * [descr:dxPolarChartOptions.valueAxis.wholeRange]
      */
@@ -33685,17 +33951,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxRangeSelectorOptions.background.image.location]
          */
-        location?:
-          | 'center'
-          | 'centerBottom'
-          | 'centerTop'
-          | 'full'
-          | 'leftBottom'
-          | 'leftCenter'
-          | 'leftTop'
-          | 'rightBottom'
-          | 'rightCenter'
-          | 'rightTop';
+        location?: DevExpress.types.BackgroundImageLocation;
         /**
          * [descr:dxRangeSelectorOptions.background.image.url]
          */
@@ -33721,7 +33977,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.behavior.callValueChanged]
        */
-      callValueChanged?: 'onMoving' | 'onMovingComplete';
+      callValueChanged?: DevExpress.types.ValueChangedCallMode;
       /**
        * [descr:dxRangeSelectorOptions.behavior.manualRangeSelectionEnabled]
        */
@@ -33792,11 +34048,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.chart.palette]
        */
-      palette?: Array<string> | PaletteType;
+      palette?: Array<string> | DevExpress.types.VizPalette;
       /**
        * [descr:dxRangeSelectorOptions.chart.paletteExtensionMode]
        */
-      paletteExtensionMode?: PaletteExtensionModeType;
+      paletteExtensionMode?: DevExpress.types.VizPaletteExtensionMode;
       /**
        * [descr:dxRangeSelectorOptions.chart.series]
        */
@@ -33841,11 +34097,11 @@ declare module DevExpress.viz {
         /**
          * [descr:dxRangeSelectorOptions.chart.valueAxis.type]
          */
-        type?: 'continuous' | 'logarithmic';
+        type?: DevExpress.types.RangeSelectorChartAxisScaleType;
         /**
          * [descr:dxRangeSelectorOptions.chart.valueAxis.valueType]
          */
-        valueType?: 'datetime' | 'numeric' | 'string';
+        valueType?: DevExpress.types.ChartDataType;
       };
     };
     /**
@@ -33910,7 +34166,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxRangeSelectorOptions.scale.breakStyle.line]
          */
-        line?: 'straight' | 'waved';
+        line?: DevExpress.types.ScaleBreakLineStyle;
         /**
          * [descr:dxRangeSelectorOptions.scale.breakStyle.width]
          */
@@ -33958,7 +34214,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxRangeSelectorOptions.scale.label.overlappingBehavior]
          */
-        overlappingBehavior?: 'hide' | 'none';
+        overlappingBehavior?: DevExpress.types.ScaleLabelOverlappingBehavior;
         /**
          * [descr:dxRangeSelectorOptions.scale.label.topIndent]
          */
@@ -34094,11 +34350,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxRangeSelectorOptions.scale.type]
        */
-      type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete';
+      type?: DevExpress.types.RangeSelectorAxisScaleType;
       /**
        * [descr:dxRangeSelectorOptions.scale.valueType]
        */
-      valueType?: 'datetime' | 'numeric' | 'string';
+      valueType?: DevExpress.types.ChartDataType;
       /**
        * [descr:dxRangeSelectorOptions.scale.workWeek]
        */
@@ -34115,7 +34371,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxRangeSelectorOptions.selectedRangeUpdateMode]
      */
-    selectedRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
+    selectedRangeUpdateMode?: DevExpress.types.VisualRangeUpdateMode;
     /**
      * [descr:dxRangeSelectorOptions.shutter]
      */
@@ -34360,10 +34616,8 @@ declare module DevExpress.viz {
      * [descr:dxSankeyOptions.alignment]
      */
     alignment?:
-      | 'bottom'
-      | 'center'
-      | 'top'
-      | Array<'bottom' | 'center' | 'top'>;
+      | DevExpress.types.VerticalAlignment
+      | Array<DevExpress.types.VerticalAlignment>;
     /**
      * [descr:dxSankeyOptions.dataSource]
      */
@@ -34408,7 +34662,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxSankeyOptions.label.overlappingBehavior]
        */
-      overlappingBehavior?: 'ellipsis' | 'hide' | 'none';
+      overlappingBehavior?: DevExpress.types.SankeyLabelOverlappingBehavior;
       /**
        * [descr:dxSankeyOptions.label.shadow]
        */
@@ -34475,7 +34729,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxSankeyOptions.link.colorMode]
        */
-      colorMode?: 'none' | 'source' | 'target' | 'gradient';
+      colorMode?: DevExpress.types.SankeyColorMode;
       /**
        * [descr:dxSankeyOptions.link.hoverStyle]
        */
@@ -34508,7 +34762,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxSankeyOptions.link.hoverStyle.hatching.direction]
            */
-          direction?: HatchingDirectionType;
+          direction?: DevExpress.types.HatchingDirection;
           /**
            * [descr:dxSankeyOptions.link.hoverStyle.hatching.opacity]
            */
@@ -34589,7 +34843,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxSankeyOptions.node.hoverStyle.hatching.direction]
            */
-          direction?: HatchingDirectionType;
+          direction?: DevExpress.types.HatchingDirection;
           /**
            * [descr:dxSankeyOptions.node.hoverStyle.hatching.opacity]
            */
@@ -34644,11 +34898,11 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSankeyOptions.palette]
      */
-    palette?: Array<string> | PaletteType;
+    palette?: Array<string> | DevExpress.types.VizPalette;
     /**
      * [descr:dxSankeyOptions.paletteExtensionMode]
      */
-    paletteExtensionMode?: PaletteExtensionModeType;
+    paletteExtensionMode?: DevExpress.types.VizPaletteExtensionMode;
     /**
      * [descr:dxSankeyOptions.sortData]
      */
@@ -34808,7 +35062,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSparklineOptions.pointSymbol]
      */
-    pointSymbol?: 'circle' | 'cross' | 'polygon' | 'square' | 'triangle';
+    pointSymbol?: DevExpress.types.VizPointSymbol;
     /**
      * [descr:dxSparklineOptions.showFirstLast]
      */
@@ -34820,15 +35074,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxSparklineOptions.type]
      */
-    type?:
-      | 'area'
-      | 'bar'
-      | 'line'
-      | 'spline'
-      | 'splinearea'
-      | 'steparea'
-      | 'stepline'
-      | 'winloss';
+    type?: DevExpress.types.SparklineType;
     /**
      * [descr:dxSparklineOptions.valueField]
      */
@@ -35028,11 +35274,11 @@ declare module DevExpress.viz {
       /**
        * [descr:dxTreeMapOptions.colorizer.palette]
        */
-      palette?: Array<string> | PaletteType;
+      palette?: Array<string> | DevExpress.types.VizPalette;
       /**
        * [descr:dxTreeMapOptions.colorizer.paletteExtensionMode]
        */
-      paletteExtensionMode?: PaletteExtensionModeType;
+      paletteExtensionMode?: DevExpress.types.VizPaletteExtensionMode;
       /**
        * [descr:dxTreeMapOptions.colorizer.range]
        */
@@ -35040,7 +35286,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxTreeMapOptions.colorizer.type]
        */
-      type?: 'discrete' | 'gradient' | 'none' | 'range';
+      type?: DevExpress.types.TreeMapColorizerType;
     };
     /**
      * [descr:dxTreeMapOptions.dataSource]
@@ -35112,7 +35358,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.group.label.textOverflow]
          */
-        textOverflow?: DevExpress.viz.BaseWidget.VizTextOverflowType;
+        textOverflow?: DevExpress.types.VizTextOverflow;
         /**
          * [descr:dxTreeMapOptions.group.label.visible]
          */
@@ -35161,9 +35407,7 @@ declare module DevExpress.viz {
      * [descr:dxTreeMapOptions.layoutAlgorithm]
      */
     layoutAlgorithm?:
-      | 'sliceanddice'
-      | 'squarified'
-      | 'strip'
+      | DevExpress.types.TreeMapLayoutAlgorithm
       | ((e: {
           rect?: Array<number>;
           sum?: number;
@@ -35172,11 +35416,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxTreeMapOptions.layoutDirection]
      */
-    layoutDirection?:
-      | 'leftBottomRightTop'
-      | 'leftTopRightBottom'
-      | 'rightBottomLeftTop'
-      | 'rightTopLeftBottom';
+    layoutDirection?: DevExpress.types.TreeMapLayoutDirection;
     /**
      * [descr:dxTreeMapOptions.margin]
      */
@@ -35222,7 +35462,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxTreeMapOptions.selectionMode]
      */
-    selectionMode?: 'multiple' | 'none' | 'single';
+    selectionMode?: DevExpress.types.SelectionMode;
     /**
      * [descr:dxTreeMapOptions.tile]
      */
@@ -35277,7 +35517,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.tile.label.textOverflow]
          */
-        textOverflow?: DevExpress.viz.BaseWidget.VizTextOverflowType;
+        textOverflow?: DevExpress.types.VizTextOverflow;
         /**
          * [descr:dxTreeMapOptions.tile.label.visible]
          */
@@ -35285,7 +35525,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxTreeMapOptions.tile.label.wordWrap]
          */
-        wordWrap?: DevExpress.viz.BaseWidget.WordWrapType;
+        wordWrap?: DevExpress.types.VizWordWrap;
       };
       /**
        * [descr:dxTreeMapOptions.tile.selectionStyle]
@@ -35529,7 +35769,7 @@ declare module DevExpress.viz {
     /**
      * [descr:dxVectorMapOptions.legends.markerShape]
      */
-    markerShape?: 'circle' | 'square';
+    markerShape?: DevExpress.types.VectorMapMarkerShape;
     /**
      * [descr:dxVectorMapOptions.legends.markerSize]
      */
@@ -35602,7 +35842,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxVectorMapOptions.controlBar.horizontalAlignment]
        */
-      horizontalAlignment?: 'center' | 'left' | 'right';
+      horizontalAlignment?: DevExpress.types.HorizontalAlignment;
       /**
        * [descr:dxVectorMapOptions.controlBar.margin]
        */
@@ -35614,7 +35854,7 @@ declare module DevExpress.viz {
       /**
        * [descr:dxVectorMapOptions.controlBar.verticalAlignment]
        */
-      verticalAlignment?: 'bottom' | 'top';
+      verticalAlignment?: DevExpress.types.VerticalEdge;
     };
     /**
      * [descr:dxVectorMapOptions.layers]
@@ -35656,7 +35896,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.elementType]
            */
-          elementType?: 'bubble' | 'dot' | 'image' | 'pie';
+          elementType?: DevExpress.types.VectorMapMarkerType;
           /**
            * [descr:dxVectorMapOptions.layers.hoverEnabled]
            */
@@ -35709,7 +35949,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.palette]
            */
-          palette?: Array<string> | PaletteType;
+          palette?: Array<string> | DevExpress.types.VizPalette;
           /**
            * [descr:dxVectorMapOptions.layers.paletteSize]
            */
@@ -35733,7 +35973,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.selectionMode]
            */
-          selectionMode?: 'multiple' | 'none' | 'single';
+          selectionMode?: DevExpress.types.SelectionMode;
           /**
            * [descr:dxVectorMapOptions.layers.size]
            */
@@ -35749,7 +35989,7 @@ declare module DevExpress.viz {
           /**
            * [descr:dxVectorMapOptions.layers.type]
            */
-          type?: 'area' | 'line' | 'marker';
+          type?: DevExpress.types.VectorMapLayerType;
         }>
       | {
           borderColor?: string;
@@ -35770,7 +36010,7 @@ declare module DevExpress.viz {
           minSize?: number;
           name?: string;
           opacity?: number;
-          palette?: Array<string> | PaletteType;
+          palette?: Array<string> | DevExpress.types.VizPalette;
           paletteSize?: number;
           selectedBorderColor?: string;
           selectedBorderWidth?: number;
@@ -35833,10 +36073,7 @@ declare module DevExpress.viz {
      * [descr:dxVectorMapOptions.projection]
      */
     projection?:
-      | 'equirectangular'
-      | 'lambert'
-      | 'mercator'
-      | 'miller'
+      | DevExpress.types.VectorMapProjection
       | VectorMapProjectionConfig
       | string
       | any;
@@ -35929,12 +36166,12 @@ declare module DevExpress.viz {
     widgetInstances: Array<Array<DOMComponent>>,
     options: {
       fileName?: string;
-      format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG';
+      format?: DevExpress.types.ExportFormat;
       backgroundColor?: string;
       margin?: number;
       gridLayout?: boolean;
-      verticalAlignment?: 'bottom' | 'center' | 'top';
-      horizontalAlignment?: 'center' | 'left' | 'right';
+      verticalAlignment?: DevExpress.types.VerticalAlignment;
+      horizontalAlignment?: DevExpress.types.HorizontalAlignment;
       proxyUrl?: string;
       onExporting?: Function;
       onExported?: Function;
@@ -35992,11 +36229,11 @@ declare module DevExpress.viz {
    * [descr:viz.generateColors(palette, count, options)]
    */
   export function generateColors(
-    palette: PaletteType | Array<string>,
+    palette: DevExpress.types.VizPalette | Array<string>,
     count: number,
     options: {
-      paletteExtensionMode?: PaletteExtensionModeType;
-      baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet';
+      paletteExtensionMode?: DevExpress.types.VizPaletteExtensionMode;
+      baseColorSet?: DevExpress.types.VizPaletteColorSet;
     }
   ): Array<string>;
   /**
@@ -36011,10 +36248,6 @@ declare module DevExpress.viz {
    * [descr:viz.getTheme(theme)]
    */
   export function getTheme(theme: string): any;
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type HatchingDirectionType = 'left' | 'none' | 'right';
   /**
    * [descr:MapLayer]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -36083,29 +36316,6 @@ declare module DevExpress.viz {
      */
     selected(state: boolean): void;
   }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PaletteExtensionModeType = 'alternate' | 'blend' | 'extrapolate';
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type PaletteType =
-    | 'Bright'
-    | 'Harmony Light'
-    | 'Ocean'
-    | 'Pastel'
-    | 'Soft'
-    | 'Soft Pastel'
-    | 'Vintage'
-    | 'Violet'
-    | 'Carmine'
-    | 'Dark Moon'
-    | 'Dark Violet'
-    | 'Green Mist'
-    | 'Soft Blue'
-    | 'Material'
-    | 'Office';
   /**
    * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -36200,7 +36410,7 @@ declare module DevExpress.viz {
     /**
      * [descr:PolarChartSeries.type]
      */
-    type?: DevExpress.viz.dxPolarChart.PolarChartSeriesType;
+    type?: DevExpress.types.PolarChartSeriesType;
   }
   /**
    * [descr:polarChartSeriesObject]
@@ -36242,19 +36452,6 @@ declare module DevExpress.viz {
      */
     startValue?: number | Date | string;
   }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
-  export type TimeIntervalType =
-    | 'day'
-    | 'hour'
-    | 'millisecond'
-    | 'minute'
-    | 'month'
-    | 'quarter'
-    | 'second'
-    | 'week'
-    | 'year';
   /**
    * @deprecated Use LegendItem instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -36357,7 +36554,7 @@ declare module DevExpress.viz {
          */
         years?: number;
       }
-    | TimeIntervalType;
+    | DevExpress.types.VizTimeInterval;
 }
 declare module DevExpress.viz.dxBarGauge {
   export type LegendItem = BarGaugeLegendItem;
@@ -36386,9 +36583,7 @@ declare module DevExpress.viz.map {
     /**
      * [descr:viz.map.projection.get(name)]
      */
-    get(
-      name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string
-    ): any;
+    get(name: DevExpress.types.VectorMapProjection | string): any;
 
     (data: VectorMapProjectionConfig): any;
   };
