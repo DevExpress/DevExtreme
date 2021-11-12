@@ -116,12 +116,14 @@ export const Export = {
         const initialLoadPanelEnabledOption = internalComponent.option('loadPanel').enabled;
 
         component.option('loadPanel.enabled', false);
+
+        let exportLoadPanel;
         if(loadPanel.enabled && hasWindow()) {
             const $targetElement = helpers._getLoadPanelTargetElement(component);
             const $container = helpers._getLoadPanelContainer(component);
 
-            this._loadPanel = new ExportLoadPanel(component, $targetElement, $container, loadPanel);
-            this._loadPanel.show();
+            exportLoadPanel = new ExportLoadPanel(component, $targetElement, $container, loadPanel);
+            exportLoadPanel.show();
         }
 
         const wrapText = !!component.option('wordWrapEnabled');
@@ -187,7 +189,7 @@ export const Export = {
                 component.option('loadPanel.enabled', initialLoadPanelEnabledOption);
 
                 if(loadPanel.enabled && hasWindow()) {
-                    this._loadPanel.dispose();
+                    exportLoadPanel.dispose();
                 }
             });
         });
