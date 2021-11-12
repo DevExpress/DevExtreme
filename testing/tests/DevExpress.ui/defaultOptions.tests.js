@@ -165,19 +165,6 @@ testComponentDefaults(DateBox,
 );
 
 testComponentDefaults(DateBox,
-    { platform: 'android' },
-    { pickerType: 'rollers' },
-    function() {
-        this._origDevice = devices.real();
-        const deviceConfig = { platform: 'android', android: true, version: [4, 3] };
-        devices.real(deviceConfig);
-    },
-    function() {
-        devices.real(this._origDevice);
-    }
-);
-
-testComponentDefaults(DateBox,
     [
         { platform: 'generic', deviceType: 'desktop' },
     ],
