@@ -645,19 +645,19 @@ declare module DevExpress {
     /**
      * [descr:Component.option(optionName)]
      */
-    option<TPropertyName extends string>(
+    option<TPropertyName extends string, TValue = unknown>(
       optionName: TPropertyName
     ): TPropertyName extends keyof TProperties
       ? TProperties[TPropertyName]
-      : unknown;
+      : TValue;
     /**
      * [descr:Component.option(optionName, optionValue)]
      */
-    option<TPropertyName extends string>(
+    option<TPropertyName extends string, TValue = unknown>(
       optionName: TPropertyName,
       optionValue: TPropertyName extends keyof TProperties
         ? TProperties[TPropertyName]
-        : unknown
+        : TValue
     ): void;
     /**
      * [descr:Component.option(options)]
