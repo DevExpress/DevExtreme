@@ -9,9 +9,6 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Renovated scheduler - Overflow indicator')
-  .beforeEach((t) => t.resizeWindow(1200, 800));
-
 [
   'week',
   'month',
@@ -38,61 +35,64 @@ fixture('Renovated scheduler - Overflow indicator')
           ))
           .ok();
       }).before(
-      async (_, { platform }) => createWidget(platform, 'dxScheduler', {
-        dataSource: [
-          {
-            text: 'Appt-0-1-2',
-            groupId: [1, 2],
-            startDate: new Date(2021, 3, 5, 9, 30),
-            endDate: new Date(2021, 3, 5, 11, 30),
-          },
-          {
-            text: 'Appt-0-1',
-            groupId: 1,
-            startDate: new Date(2021, 3, 5, 9, 30),
-            endDate: new Date(2021, 3, 5, 11, 30),
-          },
-          {
-            text: 'Appt-1-2-1',
-            groupId: [2, 1],
-            startDate: new Date(2021, 3, 6, 9, 30),
-            endDate: new Date(2021, 3, 6, 11, 30),
-          },
-          {
-            text: 'Appt-1-2',
-            groupId: 2,
-            startDate: new Date(2021, 3, 6, 9, 30),
-            endDate: new Date(2021, 3, 6, 11, 30),
-          },
-        ],
-        maxAppointmentsPerCell: 1,
-        rtlEnabled,
-        views: [{
-          type: currentView,
-          groupOrientation,
-        }],
-        currentView,
-        currentDate: new Date(2021, 3, 4),
-        startDayHour: 9,
-        endDayHour: 14,
-        groups: ['groupId'],
-        resources: [
-          {
-            fieldExpr: 'groupId',
-            dataSource: [{
-              text: 'Group-0',
-              id: 1,
-              color: '#1e90ff',
-            }, {
-              text: 'Group-1',
-              id: 2,
-              color: '#ff9747',
-            }],
-            label: 'Priority',
-          },
-        ],
-        showCurrentTimeIndicator: false,
-      }),
+      async (t, { platform }) => {
+        await t.resizeWindow(1200, 800);
+        await createWidget(platform, 'dxScheduler', {
+          dataSource: [
+            {
+              text: 'Appt-0-1-2',
+              groupId: [1, 2],
+              startDate: new Date(2021, 3, 5, 9, 30),
+              endDate: new Date(2021, 3, 5, 11, 30),
+            },
+            {
+              text: 'Appt-0-1',
+              groupId: 1,
+              startDate: new Date(2021, 3, 5, 9, 30),
+              endDate: new Date(2021, 3, 5, 11, 30),
+            },
+            {
+              text: 'Appt-1-2-1',
+              groupId: [2, 1],
+              startDate: new Date(2021, 3, 6, 9, 30),
+              endDate: new Date(2021, 3, 6, 11, 30),
+            },
+            {
+              text: 'Appt-1-2',
+              groupId: 2,
+              startDate: new Date(2021, 3, 6, 9, 30),
+              endDate: new Date(2021, 3, 6, 11, 30),
+            },
+          ],
+          maxAppointmentsPerCell: 1,
+          rtlEnabled,
+          views: [{
+            type: currentView,
+            groupOrientation,
+          }],
+          currentView,
+          currentDate: new Date(2021, 3, 4),
+          startDayHour: 9,
+          endDayHour: 14,
+          groups: ['groupId'],
+          resources: [
+            {
+              fieldExpr: 'groupId',
+              dataSource: [{
+                text: 'Group-0',
+                id: 1,
+                color: '#1e90ff',
+              }, {
+                text: 'Group-1',
+                id: 2,
+                color: '#ff9747',
+              }],
+              label: 'Priority',
+            },
+          ],
+          showCurrentTimeIndicator: false,
+        });
+      },
     );
   });
 });
