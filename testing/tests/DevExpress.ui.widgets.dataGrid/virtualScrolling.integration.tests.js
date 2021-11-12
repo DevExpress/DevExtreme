@@ -2063,6 +2063,48 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getVisibleRows()[5].key, 6, 'added row key is correct');
     });
 
+    QUnit.test('Push several insert with reshape and repaintChangesOnly (T1043891)', function(assert) {
+        // arrange
+        const data = [
+            { id: 1 },
+            { id: 2 },
+            { id: 3 },
+            { id: 4 },
+            { id: 5 }
+        ];
+
+        const dataSource = new DataSource({
+            store: {
+                type: 'array',
+                key: 'id',
+                data: data
+            },
+            reshapeOnPush: true,
+            pushAggregationTimeout: 0
+        });
+        const dataGrid = createDataGrid({
+            height: 200,
+            repaintChangesOnly: true,
+            scrolling: {
+                mode: 'virtual',
+                updateTimeout: 0
+            },
+            dataSource: dataSource,
+            columns: [{ dataField: 'id', sortOrder: 'desc' }]
+        });
+
+        this.clock.tick();
+
+        // act
+        for(let id = 6; id <= 10; id++) {
+            dataSource.store().push([{ type: 'insert', data: { id } }]);
+        }
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows()[0].key, 10, 'first row key is correct');
+        assert.strictEqual(dataGrid.getVisibleRows().length, 6, 'visible row count');
+    });
+
     QUnit.test('Push without reshape should not force load if scrolling mode is virtual', function(assert) {
         // arrange
         const data = [
