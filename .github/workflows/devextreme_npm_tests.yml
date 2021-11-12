@@ -7,7 +7,7 @@ concurrency:
 on:
   pull_request:
   push:
-    branches: [21_2]
+    branches: [22_1]
 
 jobs:
   build:
@@ -118,7 +118,7 @@ jobs:
     - name: Update angular metadata
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
-        npm run internal-tool -- update-meta --output-path ./devextreme-angular-repo/packages/devextreme-angular/metadata/NGMetaData.json --version 21_2 --js-scripts ./js
+        npm run internal-tool -- update-meta --output-path ./devextreme-angular-repo/packages/devextreme-angular/metadata/NGMetaData.json --version 22_1 --js-scripts ./js
 
     - name: Build with Angular 7
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -332,4 +332,4 @@ jobs:
           run_id: ${{github.run_id}}
           bearer_token: ${{secrets.GITHUB_TOKEN}}
           specific_repo: DevExpress/DevExtreme
-          specific_branch: 21_2
+          specific_branch: 22_1
