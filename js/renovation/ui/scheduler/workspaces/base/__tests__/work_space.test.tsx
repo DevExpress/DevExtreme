@@ -21,6 +21,10 @@ import * as Utils from '../../utils';
 import { CrossScrollingLayout } from '../cross_scrolling_layout';
 import { getDateTableWidth } from '../utils';
 
+import { getWindow, setWindow } from '../../../../../../core/utils/window';
+import * as subscribeUtils from '../../../../../utils/subscribe_to_event';
+import domAdapter from '../../../../../../core/dom_adapter';
+
 jest.mock('../../../../../utils/combine_classes', () => ({
   combineClasses: jest.fn(),
 }));
@@ -30,6 +34,7 @@ jest.mock('../utils', () => ({
 }));
 const isVerticalGroupingApplied = jest.spyOn(Utils, 'isVerticalGroupingApplied');
 const isHorizontalGroupingApplied = jest.spyOn(Utils, 'isHorizontalGroupingApplied');
+const subscribeToScrollEvent = jest.spyOn(subscribeUtils, 'subscribeToScrollEvent');
 
 const mockSetViewOptions = jest.fn();
 const mockCreateGroupedDataMapProvider = jest.fn();
@@ -143,7 +148,7 @@ describe('WorkSpace', () => {
         groups,
         intervalCount: 1,
       };
-      const onScroll = jest.fn();
+      const onScrollableScroll = jest.fn();
 
       const viewModel = {
         dateHeaderData,
@@ -166,7 +171,7 @@ describe('WorkSpace', () => {
         allDayPanelRef: 'allDayPanelRef',
         groupOrientation: VERTICAL_GROUP_ORIENTATION,
         isGroupedByDate: false,
-        onScroll,
+        onScrollableScroll,
         widgetElementRef: 'widgetElementRef',
       };
 
@@ -206,7 +211,7 @@ describe('WorkSpace', () => {
           groupOrientation: VERTICAL_GROUP_ORIENTATION,
           tablesWidth: 1900,
           groupByDate: false,
-          onScroll,
+          onScroll: onScrollableScroll,
           widgetElementRef: 'widgetElementRef',
         });
     });
@@ -214,7 +219,7 @@ describe('WorkSpace', () => {
 
   describe('Behaviour', () => {
     describe('methods', () => {
-      describe('onScroll', () => {
+      describe('onScrollableScroll', () => {
         it('should update virtual scrolling data', () => {
           const workSpace = new WorkSpace({
             ...new WorkSpaceProps(),
@@ -222,6 +227,8 @@ describe('WorkSpace', () => {
             currentDate: new Date(2021, 10, 9),
             scrolling: { mode: 'virtual' },
             intervalCount: 25,
+            schedulerHeight: 500,
+            schedulerWidth: 500,
           } as any);
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -235,7 +242,7 @@ describe('WorkSpace', () => {
             sizes: {},
           } as any;
 
-          workSpace.onScroll({
+          workSpace.onScrollableScroll({
             scrollOffset: {
               top: 1000,
               left: 2000,
@@ -246,16 +253,16 @@ describe('WorkSpace', () => {
             .toEqual({
               sizes: {},
               state: {
-                bottomVirtualRowHeight: 200,
-                cellCount: 28,
+                bottomVirtualRowHeight: 950,
+                cellCount: 8,
                 cellWidth: 75,
-                leftVirtualCellWidth: 1425,
-                rightVirtualCellWidth: 9600,
-                rowCount: 32,
-                startCellIndex: 19,
-                startIndex: 12,
-                startRowIndex: 12,
-                topVirtualRowHeight: 600,
+                leftVirtualCellWidth: 1800,
+                rightVirtualCellWidth: 10725,
+                rowCount: 12,
+                startCellIndex: 24,
+                startIndex: 17,
+                startRowIndex: 17,
+                topVirtualRowHeight: 850,
               },
             });
         });
@@ -275,22 +282,22 @@ describe('WorkSpace', () => {
           const data: any = {
             sizes: {},
             state: {
-              bottomVirtualRowHeight: 200,
-              cellCount: 28,
+              bottomVirtualRowHeight: 950,
+              cellCount: 8,
               cellWidth: 75,
-              leftVirtualCellWidth: 1425,
-              rightVirtualCellWidth: 9600,
-              rowCount: 32,
-              startCellIndex: 19,
-              startIndex: 12,
-              startRowIndex: 12,
-              topVirtualRowHeight: 600,
+              leftVirtualCellWidth: 1800,
+              rightVirtualCellWidth: 10725,
+              rowCount: 12,
+              startCellIndex: 24,
+              startIndex: 17,
+              startRowIndex: 17,
+              topVirtualRowHeight: 850,
             },
           };
 
           workSpace.virtualScrollingData = data;
 
-          workSpace.onScroll({
+          workSpace.onScrollableScroll({
             scrollOffset: {
               top: 1000,
               left: 2000,
@@ -310,7 +317,7 @@ describe('WorkSpace', () => {
             intervalCount: 25,
           } as any);
 
-          workSpace.onScroll({
+          workSpace.onScrollableScroll({
             scrollOffset: {
               top: 1000,
               left: 2000,
@@ -319,6 +326,122 @@ describe('WorkSpace', () => {
 
           expect(workSpace.virtualScrollingData)
             .toBe(undefined);
+        });
+      });
+
+      describe('onWindowScroll', () => {
+        it('should update virtual scrolling data', () => {
+          const originalWindow = getWindow();
+
+          try {
+            setWindow({
+              innerHeight: 500,
+              innerWidth: 500,
+            }, true);
+
+            const workSpace = new WorkSpace({
+              ...new WorkSpaceProps(),
+              type: 'week',
+              currentDate: new Date(2021, 10, 9),
+              scrolling: { mode: 'virtual' },
+              intervalCount: 25,
+              schedulerHeight: 500,
+              schedulerWidth: 500,
+            } as any);
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+            workSpace.correctedVirtualScrollingState;
+
+            workSpace.virtualScrollingData = {
+              state: {
+                startCellIndex: 0,
+                startRowIndex: 0,
+              },
+              sizes: {},
+            } as any;
+
+            setWindow({
+              innerHeight: 500,
+              innerWidth: 500,
+              scrollX: 2000,
+              scrollY: 1000,
+            }, true);
+
+            workSpace.onWindowScroll();
+
+            expect(workSpace.virtualScrollingData)
+              .toEqual({
+                sizes: {},
+                state: {
+                  bottomVirtualRowHeight: 950,
+                  cellCount: 8,
+                  cellWidth: 75,
+                  leftVirtualCellWidth: 1800,
+                  rightVirtualCellWidth: 10725,
+                  rowCount: 12,
+                  startCellIndex: 24,
+                  startIndex: 17,
+                  startRowIndex: 17,
+                  topVirtualRowHeight: 850,
+                },
+              });
+          } finally {
+            setWindow(originalWindow, true);
+          }
+        });
+
+        it('should not update virtual scrolling data when it is not necessary', () => {
+          const originalWindow = getWindow();
+
+          try {
+            setWindow({
+              innerHeight: 500,
+              innerWidth: 500,
+            }, true);
+
+            const workSpace = new WorkSpace({
+              ...new WorkSpaceProps(),
+              type: 'week',
+              currentDate: new Date(2021, 10, 9),
+              scrolling: { mode: 'virtual' },
+              intervalCount: 25,
+            } as any);
+
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+            workSpace.correctedVirtualScrollingState;
+
+            const data: any = {
+              sizes: {},
+              state: {
+                bottomVirtualRowHeight: 950,
+                cellCount: 8,
+                cellWidth: 75,
+                leftVirtualCellWidth: 1800,
+                rightVirtualCellWidth: 10725,
+                rowCount: 12,
+                startCellIndex: 24,
+                startIndex: 17,
+                startRowIndex: 17,
+                topVirtualRowHeight: 850,
+              },
+            };
+
+            workSpace.virtualScrollingData = data;
+
+            setWindow({
+              innerHeight: 500,
+              innerWidth: 500,
+              scrollX: 2000,
+              scrollY: 1000,
+            }, true);
+
+            workSpace.onWindowScroll();
+
+            expect(workSpace.virtualScrollingData)
+              .toBe(data);
+          } finally {
+            setWindow(originalWindow, true);
+          }
         });
       });
     });
@@ -662,6 +785,62 @@ describe('WorkSpace', () => {
         });
       });
 
+      describe('onWindowScrollEffect', () => {
+        it('shoud subscribe to window onScroll if height is not defined and virtual scrolling is used', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            scrolling: { mode: 'virtual' },
+          });
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          workSpace.correctedVirtualScrollingState;
+
+          const onWindowScroll = jest.fn();
+          workSpace.onWindowScroll = onWindowScroll;
+
+          expect(workSpace.onWindowScrollEffect())
+            .toStrictEqual(expect.any(Function));
+          expect(subscribeToScrollEvent)
+            .toBeCalledWith(
+              domAdapter.getDocument(),
+              onWindowScroll,
+            );
+        });
+
+        it('shoud not subscribe to window onScroll if height is defined and virtual scrolling is used', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            scrolling: { mode: 'virtual' },
+            schedulerHeight: 500,
+          });
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          workSpace.correctedVirtualScrollingState;
+
+          const onWindowScroll = jest.fn();
+          workSpace.onWindowScroll = onWindowScroll;
+
+          expect(workSpace.onWindowScrollEffect())
+            .toBe(undefined);
+        });
+
+        it('shoud not subscribe to window onScroll if irtual scrolling is not used', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            scrolling: { mode: 'standard' },
+          });
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          workSpace.correctedVirtualScrollingState;
+
+          const onWindowScroll = jest.fn();
+          workSpace.onWindowScroll = onWindowScroll;
+
+          expect(workSpace.onWindowScrollEffect())
+            .toBe(undefined);
+        });
+      });
+
       describe('groupPanelHeightEffect', () => {
         it('should set groupPanelHeight', () => {
           const workSpace = new WorkSpace({} as any);
@@ -861,142 +1040,149 @@ describe('WorkSpace', () => {
         };
 
         it('should calculate virtual scrolling state', () => {
-          const workSpace = new WorkSpace({
-            ...new WorkSpaceProps(),
-            type: 'week',
-            currentDate: new Date(2021, 10, 9),
-            scrolling: { mode: 'virtual' },
-            intervalCount: 2,
-            schedulerHeight: 1000,
-            schedulerWidth: 800,
-          } as any);
+          const originalWindow = getWindow();
 
-          workSpace.layoutRef = layoutRefMock;
-          workSpace.dateTableRef = dateTableRefMock;
-          workSpace.widgetElementRef = widgetElementRefMock;
+          try {
+            setWindow({
+              innerHeight: 500,
+              innerWidth: 500,
+            }, true);
 
-          workSpace.virtualScrollingMetaDataEffect();
+            const workSpace = new WorkSpace({
+              ...new WorkSpaceProps(),
+              type: 'week',
+              currentDate: new Date(2021, 10, 9),
+              scrolling: { mode: 'virtual' },
+              intervalCount: 2,
+              schedulerHeight: 1000,
+              schedulerWidth: 800,
+            } as any);
 
-          expect(workSpace.virtualScrollingData)
-            .toEqual({
-              sizes: {
-                cellHeight: 50,
-                cellWidth: 75,
-                scrollableWidth: 700,
-                viewHeight: 1000,
-                viewWidth: 800,
-              },
-              state: {
-                bottomVirtualRowHeight: 900,
-                cellCount: 14,
-                cellWidth: 75,
-                leftVirtualCellWidth: 0,
-                rightVirtualCellWidth: 0,
-                rowCount: 30,
-                startCellIndex: 0,
-                startIndex: 0,
-                startRowIndex: 0,
-                topVirtualRowHeight: 0,
-              },
-            });
+            workSpace.layoutRef = layoutRefMock;
+            workSpace.dateTableRef = dateTableRefMock;
+            workSpace.widgetElementRef = widgetElementRefMock;
+
+            workSpace.virtualScrollingMetaDataEffect();
+
+            expect(workSpace.virtualScrollingData)
+              .toEqual({
+                sizes: {
+                  cellHeight: 50,
+                  cellWidth: 75,
+                  scrollableWidth: 700,
+                  viewHeight: 1000,
+                  viewWidth: 800,
+                  windowHeight: 500,
+                  windowWidth: 500,
+                },
+                state: {
+                  bottomVirtualRowHeight: 900,
+                  cellCount: 14,
+                  cellWidth: 75,
+                  leftVirtualCellWidth: 0,
+                  rightVirtualCellWidth: 0,
+                  rowCount: 30,
+                  startCellIndex: 0,
+                  startIndex: 0,
+                  startRowIndex: 0,
+                  topVirtualRowHeight: 0,
+                },
+              });
+          } finally {
+            setWindow(originalWindow, true);
+          }
         });
 
         it('should not recalculate virtual scrolling state', () => {
-          const workSpace = new WorkSpace({
-            ...new WorkSpaceProps(),
-            type: 'week',
-            currentDate: new Date(2021, 10, 9),
-            scrolling: { mode: 'virtual' },
-            intervalCount: 2,
-            schedulerHeight: 1000,
-            schedulerWidth: 800,
-          } as any);
+          const originalWindow = getWindow();
 
-          workSpace.layoutRef = layoutRefMock;
-          workSpace.dateTableRef = dateTableRefMock;
-          workSpace.widgetElementRef = widgetElementRefMock;
+          try {
+            setWindow({
+              innerHeight: 500,
+              innerWidth: 500,
+            }, true);
 
-          const data = {
-            sizes: {
-              cellHeight: 50,
-              cellWidth: 75,
-              scrollableWidth: 700,
-              viewHeight: 1000,
-              viewWidth: 800,
-            },
-            state: {
-              bottomVirtualRowHeight: 900,
-              cellCount: 14,
-              cellWidth: 75,
-              leftVirtualCellWidth: 0,
-              rightVirtualCellWidth: 0,
-              rowCount: 30,
-              startCellIndex: 0,
-              startIndex: 0,
-              startRowIndex: 0,
-              topVirtualRowHeight: 0,
-            },
-          };
+            const workSpace = new WorkSpace({
+              ...new WorkSpaceProps(),
+              type: 'week',
+              currentDate: new Date(2021, 10, 9),
+              scrolling: { mode: 'virtual' },
+              intervalCount: 2,
+              schedulerHeight: 1000,
+              schedulerWidth: 800,
+            } as any);
 
-          workSpace.virtualScrollingData = data;
+            workSpace.layoutRef = layoutRefMock;
+            workSpace.dateTableRef = dateTableRefMock;
+            workSpace.widgetElementRef = widgetElementRefMock;
 
-          workSpace.virtualScrollingMetaDataEffect();
+            const data = {
+              sizes: {
+                cellHeight: 50,
+                cellWidth: 75,
+                scrollableWidth: 700,
+                viewHeight: 1000,
+                viewWidth: 800,
+                windowHeight: 500,
+                windowWidth: 500,
+              },
+              state: {
+                bottomVirtualRowHeight: 900,
+                cellCount: 14,
+                cellWidth: 75,
+                leftVirtualCellWidth: 0,
+                rightVirtualCellWidth: 0,
+                rowCount: 30,
+                startCellIndex: 0,
+                startIndex: 0,
+                startRowIndex: 0,
+                topVirtualRowHeight: 0,
+              },
+            };
 
-          expect(workSpace.virtualScrollingData)
-            .toBe(data);
+            workSpace.virtualScrollingData = data;
+
+            workSpace.virtualScrollingMetaDataEffect();
+
+            expect(workSpace.virtualScrollingData)
+              .toBe(data);
+          } finally {
+            setWindow(originalWindow, true);
+          }
         });
 
         it('should recalculate virtual scrolling state when sizes are different', () => {
-          const workSpace = new WorkSpace({
-            ...new WorkSpaceProps(),
-            type: 'week',
-            currentDate: new Date(2021, 10, 9),
-            scrolling: { mode: 'virtual' },
-            intervalCount: 2,
-            schedulerHeight: 1000,
-            schedulerWidth: 800,
-          } as any);
+          const originalWindow = getWindow();
 
-          workSpace.layoutRef = layoutRefMock;
-          workSpace.dateTableRef = dateTableRefMock;
-          workSpace.widgetElementRef = widgetElementRefMock;
+          try {
+            setWindow({
+              innerHeight: 500,
+              innerWidth: 500,
+            }, true);
 
-          const data = {
-            sizes: {
-              cellHeight: 150,
-              cellWidth: 100,
-              scrollableWidth: 1700,
-              viewHeight: 21000,
-              viewWidth: 1800,
-            },
-            state: {
-              bottomVirtualRowHeight: 900,
-              cellCount: 14,
-              cellWidth: 75,
-              leftVirtualCellWidth: 0,
-              rightVirtualCellWidth: 0,
-              rowCount: 30,
-              startCellIndex: 0,
-              startIndex: 0,
-              startRowIndex: 0,
-              topVirtualRowHeight: 0,
-            },
-          };
+            const workSpace = new WorkSpace({
+              ...new WorkSpaceProps(),
+              type: 'week',
+              currentDate: new Date(2021, 10, 9),
+              scrolling: { mode: 'virtual' },
+              intervalCount: 2,
+              schedulerHeight: 1000,
+              schedulerWidth: 800,
+            } as any);
 
-          workSpace.virtualScrollingData = data;
+            workSpace.layoutRef = layoutRefMock;
+            workSpace.dateTableRef = dateTableRefMock;
+            workSpace.widgetElementRef = widgetElementRefMock;
 
-          workSpace.virtualScrollingMetaDataEffect();
-
-          expect(workSpace.virtualScrollingData)
-            .not.toBe(data);
-          expect(workSpace.virtualScrollingData)
-            .toEqual({
+            const data = {
               sizes: {
-                cellHeight: 50,
-                cellWidth: 75,
-                scrollableWidth: 700,
-                viewHeight: 1000,
-                viewWidth: 800,
+                cellHeight: 150,
+                cellWidth: 100,
+                scrollableWidth: 1700,
+                viewHeight: 21000,
+                viewWidth: 1800,
+                windowHeight: 500,
+                windowWidth: 500,
               },
               state: {
                 bottomVirtualRowHeight: 900,
@@ -1010,63 +1196,77 @@ describe('WorkSpace', () => {
                 startRowIndex: 0,
                 topVirtualRowHeight: 0,
               },
-            });
+            };
+
+            workSpace.virtualScrollingData = data;
+
+            workSpace.virtualScrollingMetaDataEffect();
+
+            expect(workSpace.virtualScrollingData)
+              .not.toBe(data);
+            expect(workSpace.virtualScrollingData)
+              .toEqual({
+                sizes: {
+                  cellHeight: 50,
+                  cellWidth: 75,
+                  scrollableWidth: 700,
+                  viewHeight: 1000,
+                  viewWidth: 800,
+                  windowHeight: 500,
+                  windowWidth: 500,
+                },
+                state: {
+                  bottomVirtualRowHeight: 900,
+                  cellCount: 14,
+                  cellWidth: 75,
+                  leftVirtualCellWidth: 0,
+                  rightVirtualCellWidth: 0,
+                  rowCount: 30,
+                  startCellIndex: 0,
+                  startIndex: 0,
+                  startRowIndex: 0,
+                  topVirtualRowHeight: 0,
+                },
+              });
+          } finally {
+            setWindow(originalWindow, true);
+          }
         });
 
         it('should recalculate virtual scrolling state when state changes', () => {
-          const workSpace = new WorkSpace({
-            ...new WorkSpaceProps(),
-            type: 'week',
-            currentDate: new Date(2021, 10, 9),
-            scrolling: { mode: 'virtual' },
-            intervalCount: 2,
-            schedulerHeight: 1000,
-            schedulerWidth: 800,
-          } as any);
+          const originalWindow = getWindow();
 
-          workSpace.layoutRef = layoutRefMock;
-          workSpace.dateTableRef = dateTableRefMock;
-          workSpace.widgetElementRef = widgetElementRefMock;
+          try {
+            setWindow({
+              innerHeight: 500,
+              innerWidth: 500,
+            }, true);
+            const workSpace = new WorkSpace({
+              ...new WorkSpaceProps(),
+              type: 'week',
+              currentDate: new Date(2021, 10, 9),
+              scrolling: { mode: 'virtual' },
+              intervalCount: 2,
+              schedulerHeight: 1000,
+              schedulerWidth: 800,
+            } as any);
 
-          const data = {
-            sizes: {
-              cellHeight: 150,
-              cellWidth: 100,
-              scrollableWidth: 1700,
-              viewHeight: 21000,
-              viewWidth: 1800,
-            },
-            state: {
-              bottomVirtualRowHeight: 1900,
-              cellCount: 14,
-              cellWidth: 75,
-              leftVirtualCellWidth: 0,
-              rightVirtualCellWidth: 0,
-              rowCount: 30,
-              startCellIndex: 0,
-              startIndex: 0,
-              startRowIndex: 0,
-              topVirtualRowHeight: 0,
-            },
-          };
+            workSpace.layoutRef = layoutRefMock;
+            workSpace.dateTableRef = dateTableRefMock;
+            workSpace.widgetElementRef = widgetElementRefMock;
 
-          workSpace.virtualScrollingData = data;
-
-          workSpace.virtualScrollingMetaDataEffect();
-
-          expect(workSpace.virtualScrollingData)
-            .not.toBe(data);
-          expect(workSpace.virtualScrollingData)
-            .toEqual({
+            const data = {
               sizes: {
-                cellHeight: 50,
-                cellWidth: 75,
-                scrollableWidth: 700,
-                viewHeight: 1000,
-                viewWidth: 800,
+                cellHeight: 150,
+                cellWidth: 100,
+                scrollableWidth: 1700,
+                viewHeight: 21000,
+                viewWidth: 1800,
+                windowHeight: 500,
+                windowWidth: 500,
               },
               state: {
-                bottomVirtualRowHeight: 900,
+                bottomVirtualRowHeight: 1900,
                 cellCount: 14,
                 cellWidth: 75,
                 leftVirtualCellWidth: 0,
@@ -1077,7 +1277,41 @@ describe('WorkSpace', () => {
                 startRowIndex: 0,
                 topVirtualRowHeight: 0,
               },
-            });
+            };
+
+            workSpace.virtualScrollingData = data;
+
+            workSpace.virtualScrollingMetaDataEffect();
+
+            expect(workSpace.virtualScrollingData)
+              .not.toBe(data);
+            expect(workSpace.virtualScrollingData)
+              .toEqual({
+                sizes: {
+                  cellHeight: 50,
+                  cellWidth: 75,
+                  scrollableWidth: 700,
+                  viewHeight: 1000,
+                  viewWidth: 800,
+                  windowHeight: 500,
+                  windowWidth: 500,
+                },
+                state: {
+                  bottomVirtualRowHeight: 900,
+                  cellCount: 14,
+                  cellWidth: 75,
+                  leftVirtualCellWidth: 0,
+                  rightVirtualCellWidth: 0,
+                  rowCount: 30,
+                  startCellIndex: 0,
+                  startIndex: 0,
+                  startRowIndex: 0,
+                  topVirtualRowHeight: 0,
+                },
+              });
+          } finally {
+            setWindow(originalWindow, true);
+          }
         });
       });
     });
@@ -2118,6 +2352,8 @@ describe('WorkSpace', () => {
             type: 'day',
             currentDate: new Date(2021, 10, 9),
             scrolling: { mode: 'virtual' },
+            schedulerHeight: 300,
+            schedulerWidth: 300,
           } as any);
 
           const state = {
@@ -2139,6 +2375,8 @@ describe('WorkSpace', () => {
             type: 'day',
             currentDate: new Date(2021, 10, 9),
             scrolling: { mode: 'virtual' },
+            schedulerHeight: 300,
+            schedulerWidth: 300,
           } as any);
 
           const state = {
@@ -2162,16 +2400,18 @@ describe('WorkSpace', () => {
             type: 'day',
             currentDate: new Date(2021, 10, 9),
             scrolling: { mode: 'virtual' },
+            schedulerHeight: 300,
+            schedulerWidth: 300,
           } as any);
 
           expect(workSpace.correctedVirtualScrollingState)
             .toEqual({
-              bottomVirtualRowHeight: 1200,
+              bottomVirtualRowHeight: 1950,
               cellCount: 1,
               cellWidth: 75,
               leftVirtualCellWidth: 0,
               rightVirtualCellWidth: 0,
-              rowCount: 24,
+              rowCount: 9,
               startCellIndex: 0,
               startIndex: 0,
               startRowIndex: 0,
