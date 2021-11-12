@@ -103,12 +103,21 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: devextreme-npm
-        path: ./devextreme-angular-repo/packages/devextreme-angular
+        path: ./devextreme-angular-repo/devextreme-setup
    
     - name: Install devextreme package
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-angular-repo/packages/devextreme-angular
-      run: npm install --save-dev $(ls *.tgz)
+      run: |
+        pushd devextreme-setup
+        installerName=$(realpath .)/$(ls *.tgz)
+        popd
+        cd ./packages/devextreme-angular
+        npm install --save-dev $installerName
+        cd ../sandbox
+        npm install --save-dev $installerName
+        cd ../../
+        npm install --save-dev $installerName
 
     - name: Install packages for devextreme-angular
       if: steps.last_run_status.outputs.last_run_status != 'success'
