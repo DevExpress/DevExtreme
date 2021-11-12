@@ -1365,21 +1365,23 @@ describe('Simulated > Behavior', () => {
       expect(scrollByLocationHandler).toBeCalledTimes(0);
     });
 
-    test.each([true, false])('handleScroll(), should synchronize scrollbars with content offset after trigger scroll, scrolling: %o', (scrolling) => {
-      const helper = new ScrollableTestHelper({ });
+    each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
+      test.each([true, false])('handleScroll(), syncScrollbarsWithContent, should synchronize scrollbars with content offset after trigger scroll, scrolling: %o', (scrolling) => {
+        const helper = new ScrollableTestHelper({ rtlEnabled });
 
-      helper.viewModel.containerRef.current!.scrollTop = 50;
-      helper.viewModel.containerRef.current!.scrollLeft = 30;
+        helper.viewModel.containerRef.current!.scrollTop = 50;
+        helper.viewModel.containerRef.current!.scrollLeft = 30;
 
-      helper.viewModel.vScrollLocation = 0;
-      helper.viewModel.hScrollLocation = 0;
+        helper.viewModel.vScrollLocation = 0;
+        helper.viewModel.hScrollLocation = 0;
 
-      helper.viewModel.scrolling = scrolling;
+        helper.viewModel.scrolling = scrolling;
 
-      helper.viewModel.handleScroll();
+        helper.viewModel.handleScroll();
 
-      expect(helper.viewModel.vScrollLocation).toEqual(!scrolling ? -50 : 0);
-      expect(helper.viewModel.hScrollLocation).toEqual(!scrolling ? -30 : 0);
+        expect(helper.viewModel.vScrollLocation).toEqual(!scrolling ? -50 : 0);
+        expect(helper.viewModel.hScrollLocation).toEqual(!scrolling && !rtlEnabled ? -30 : 0);
+      });
     });
   });
 

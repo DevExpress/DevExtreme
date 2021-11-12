@@ -96,7 +96,7 @@ describe('ResizableContainer', () => {
         const outsideMinRef = { current: {} };
         const insideMainRefEl = {};
         const container = new ResizableContainer({ mainRef: outsideMinRef } as any);
-        container.mainRef = { current: insideMainRefEl } as any;
+        container.mainContainerRef = { current: insideMainRefEl } as any;
 
         container.forwardRefInitEffect();
         expect(outsideMinRef.current).toBe(insideMainRefEl);
@@ -104,7 +104,7 @@ describe('ResizableContainer', () => {
 
       it('should ignore undefined mainRef', () => {
         const container = new ResizableContainer({} as any);
-        container.mainRef = { current: {} } as any;
+        container.mainContainerRef = { current: {} } as any;
 
         expect(() => container.forwardRefInitEffect()).not.toThrow();
       });
@@ -155,7 +155,7 @@ describe('ResizableContainer', () => {
           } as any);
           const event = { dragEvent: true };
 
-          container.mainRef = { current: mainEl } as any;
+          container.mainContainerRef = { current: mainEl } as any;
           container.onHandleResize(event as any, 'top');
 
           expect(onResize).toHaveBeenCalledTimes(1);
@@ -171,7 +171,7 @@ describe('ResizableContainer', () => {
           const container = new ResizableContainer({ onResize });
           container.startX = 10;
           container.startY = 50;
-          container.mainRef = { current: {} } as any;
+          container.mainContainerRef = { current: {} } as any;
           const event = { dragEvent: true, clientX: 33, clientY: 44 };
 
           container.onHandleResize(event as any, 'top');
@@ -183,7 +183,7 @@ describe('ResizableContainer', () => {
 
         it('should ignore empty handlers', () => {
           const container = new ResizableContainer({});
-          container.mainRef = { current: {} } as any;
+          container.mainContainerRef = { current: {} } as any;
 
           expect(() => container.onHandleResize(defaultEvent as any, 'top')).not.toThrow();
           expect(() => container.onHandleResizeEnd(defaultEvent as any, 'top')).not.toThrow();

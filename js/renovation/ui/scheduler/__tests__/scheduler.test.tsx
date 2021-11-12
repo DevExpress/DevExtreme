@@ -10,7 +10,6 @@ import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/vie
 import { WorkSpace } from '../workspaces/base/work_space';
 import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
-import { Group } from '../workspaces/types';
 import { filterAppointments } from '../common';
 import { getAppointmentsConfig, getAppointmentsModel } from '../model/appointments';
 import { getAppointmentsViewModel } from '../view_model/appointments/appointments';
@@ -131,6 +130,10 @@ describe('Scheduler', () => {
       const tree = renderComponent({
         onViewRendered: () => {},
         workSpaceKey: 'workSpaceKey',
+        props: {
+          height: 500,
+          width: 600,
+        },
         ...templates,
       });
 
@@ -145,6 +148,8 @@ describe('Scheduler', () => {
           onViewRendered: expect.any(Function),
           appointments: expect.anything(),
           allDayAppointments: expect.anything(),
+          schedulerHeight: 500,
+          schedulerWidth: 600,
         });
       expect(workSpace.key())
         .toBe('workSpaceKey');
@@ -257,64 +262,123 @@ describe('Scheduler', () => {
 
   describe('Behaviour', () => {
     describe('Effects', () => {
-      it('loadResources should be call with valid arguments', () => {
-        const loadResources = jest.spyOn(resourceUtils, 'loadResources');
+      describe('loadGroupResources', () => {
+        it('loadGroupResources should load resources necessary for grouping', () => {
+          const loadResources = jest.spyOn(resourceUtils, 'loadResources');
 
-        const groupsValue = ['priorityId'];
-        const resourcesValue = [{
-          fieldExpr: 'priorityId',
-          dataSource: [{
-            text: 'Low Priority',
-            id: 1,
-            color: '#1e90ff',
-          }, {
-            text: 'High Priority',
-            id: 2,
-            color: '#ff9747',
-          }],
-          label: 'Priority',
-        }];
+          const groupsValue = ['priorityId'];
+          const resourcesValue = [{
+            fieldExpr: 'priorityId',
+            dataSource: [{
+              text: 'Low Priority',
+              id: 1,
+              color: '#1e90ff',
+            }, {
+              text: 'High Priority',
+              id: 2,
+              color: '#ff9747',
+            }],
+            label: 'Priority',
+          }];
 
-        const scheduler = new Scheduler({
-          groups: groupsValue,
-          resources: resourcesValue,
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            groups: groupsValue,
+            resources: resourcesValue,
+          });
+
+          scheduler.loadGroupResources();
+
+          expect(loadResources)
+            .toBeCalledWith(groupsValue, resourcesValue, scheduler.resourcePromisesMap);
+
+          expect(scheduler.loadedResources)
+            .toEqual([
+              {
+                name: 'priorityId',
+                items: [
+                  {
+                    id: 1,
+                    text: 'Low Priority',
+                    color: '#1e90ff',
+                  },
+                  {
+                    id: 2,
+                    text: 'High Priority',
+                    color: '#ff9747',
+                  },
+                ],
+                data: [
+                  {
+                    text: 'Low Priority',
+                    id: 1,
+                    color: '#1e90ff',
+                  },
+                  {
+                    text: 'High Priority',
+                    id: 2,
+                    color: '#ff9747',
+                  },
+                ],
+              },
+            ]);
         });
 
-        scheduler.loadGroupResources();
+        it('loadGroupResources should work when "groups" is a part of view config', () => {
+          const loadResources = jest.spyOn(resourceUtils, 'loadResources');
 
-        expect(loadResources)
-          .toBeCalledWith(groupsValue, resourcesValue, scheduler.resourcePromisesMap);
+          const groupsValue = ['priorityId'];
+          const resourcesValue = [{
+            fieldExpr: 'priorityId',
+            dataSource: [{
+              text: 'Low Priority',
+              id: 1,
+              color: '#1e90ff',
+            }, {
+              text: 'High Priority',
+              id: 2,
+              color: '#ff9747',
+            }],
+            label: 'Priority',
+          }];
 
-        expect(scheduler.loadedResources)
-          .toEqual([
-            {
+          const scheduler = new Scheduler({
+            resources: resourcesValue,
+            views: [{
+              type: 'week',
+              groups: groupsValue,
+            }],
+            currentView: 'week',
+          });
+
+          scheduler.loadGroupResources();
+
+          expect(loadResources)
+            .toBeCalledWith(groupsValue, resourcesValue, scheduler.resourcePromisesMap);
+
+          expect(scheduler.loadedResources)
+            .toEqual([{
               name: 'priorityId',
-              items: [
-                {
-                  id: 1,
-                  text: 'Low Priority',
-                  color: '#1e90ff',
-                },
-                {
-                  id: 2,
-                  text: 'High Priority',
-                  color: '#ff9747',
-                },
-              ],
-              data: [
-                {
-                  text: 'Low Priority',
-                  id: 1,
-                  color: '#1e90ff',
-                },
-                {
-                  text: 'High Priority',
-                  id: 2,
-                  color: '#ff9747',
-                },
-              ],
-            } as Group,
-          ]);
+              items: [{
+                id: 1,
+                text: 'Low Priority',
+                color: '#1e90ff',
+              }, {
+                id: 2,
+                text: 'High Priority',
+                color: '#ff9747',
+              }],
+              data: [{
+                text: 'Low Priority',
+                id: 1,
+                color: '#1e90ff',
+              }, {
+                text: 'High Priority',
+                id: 2,
+                color: '#ff9747',
+              }],
+            }]);
+        });
       });
 
       describe('loadDataSource', () => {

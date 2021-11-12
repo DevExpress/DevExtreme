@@ -568,10 +568,10 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         }, preparedItems);
     }
 
-    filterPreparedItems({ filterOptions, groupCount }) {
+    filterPreparedItems({ filterOptions, groupCount }, preparedItems) {
         const combinedFilters = [];
 
-        let itemsToFilter = this.preparedItems;
+        let itemsToFilter = preparedItems || this.preparedItems;
         const needPreFilter = groupCount > 0;
         if(needPreFilter) {
             itemsToFilter = itemsToFilter.filter(({ rawAppointment }) => {

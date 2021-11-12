@@ -584,16 +584,14 @@ function getExportOptions(widget, exportOptions, fileName, format) {
         format = validateFormat(format || exportOptions.format, widget._incidentOccurred);
     }
     const { width, height } = widget.getSize();
-    const pixelRatio = getWindow().devicePixelRatio || 1;
 
     return {
         format: format || DEFAULT_EXPORT_FORMAT,
         fileName: fileName || exportOptions.fileName || 'file',
         proxyUrl: exportOptions.proxyUrl,
         backgroundColor: exportOptions.backgroundColor,
-        width: width * pixelRatio,
-        height: height * pixelRatio,
-        pixelRatio,
+        width,
+        height,
         margin: exportOptions.margin,
         svgToCanvas: exportOptions.svgToCanvas,
         forceProxy: exportOptions.forceProxy,

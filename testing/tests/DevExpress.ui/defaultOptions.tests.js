@@ -216,14 +216,6 @@ testComponentDefaults(FakeDialogComponent,
     { width: 276 }
 );
 
-testComponentDefaults(FakeDialogComponent,
-    { platform: 'android' },
-    {
-        lWidth: '60%',
-        pWidth: '80%'
-    }
-);
-
 testComponentDefaults(DropDownMenu,
     {},
     {
