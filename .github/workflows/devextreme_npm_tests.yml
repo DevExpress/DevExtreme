@@ -62,6 +62,11 @@ jobs:
     - name: Set default run status
       run: echo "default" > last_run_status
 
+    - name: Use Node.js v14
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
     - name: Restore last run status
       uses: actions/cache@v2
       with:
