@@ -59,12 +59,6 @@ describe('DataGridLight', () => {
           expect(new DataGridLight({}).aria).toEqual({ role: 'presentation' });
         });
       });
-
-      describe('cssClasses', () => {
-        it('should have empty cssClasses', () => {
-          expect(new DataGridLight({}).cssClasses).toEqual('');
-        });
-      });
     });
   });
 });

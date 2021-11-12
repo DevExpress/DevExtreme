@@ -10,7 +10,6 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
     accessKey={viewModel.props.accessKey}
     activeStateEnabled={viewModel.props.activeStateEnabled}
     aria={viewModel.aria}
-    classes={viewModel.cssClasses}
     disabled={viewModel.props.disabled}
     focusStateEnabled={viewModel.props.focusStateEnabled}
     height={viewModel.props.height}
@@ -89,15 +88,18 @@ export class DataGridLightProps extends BaseWidgetProps {
   columns: string[] = [];
 }
 
+const aria = {
+  role: 'presentation',
+};
+
 @Component({
   defaultOptionRules: null,
   jQuery: { register: false },
   view: viewFunction,
 })
 export class DataGridLight extends JSXComponent(DataGridLightProps) {
-  readonly aria = {
-    role: 'presentation',
-  };
-
-  readonly cssClasses = '';
+  // eslint-disable-next-line class-methods-use-this
+  get aria(): Record<string, string> {
+    return aria;
+  }
 }
