@@ -159,14 +159,12 @@ export interface baseLabelObject {
     /**
      * @docid
      * @publicName hide(holdInvisible)
-     * @param1 holdInvisible:boolean
      * @public
      */
     hide(holdInvisible: boolean): void;
     /**
      * @docid
      * @publicName isVisible()
-     * @return boolean
      * @public
      */
     isVisible(): boolean;
@@ -179,7 +177,6 @@ export interface baseLabelObject {
     /**
      * @docid
      * @publicName show(holdVisible)
-     * @param1 holdVisible:boolean
      * @public
      */
     show(holdVisible: boolean): void;
@@ -217,14 +214,12 @@ export interface basePointObject {
     /**
      * @docid
      * @publicName getColor()
-     * @return string
      * @public
      */
     getColor(): string;
     /**
      * @docid
      * @publicName getLabel()
-     * @return baseLabelObject|Array<baseLabelObject>
      * @public
      */
     getLabel(): baseLabelObject & Array<baseLabelObject>;
@@ -243,14 +238,12 @@ export interface basePointObject {
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;
     /**
      * @docid
      * @publicName isSelected()
-     * @return boolean
      * @public
      */
     isSelected(): boolean;
@@ -310,7 +303,6 @@ export interface baseSeriesObject {
     /**
      * @docid
      * @publicName deselectPoint(point)
-     * @param1 point:basePointObject
      * @public
      */
     deselectPoint(point: basePointObject): void;
@@ -322,22 +314,18 @@ export interface baseSeriesObject {
     /**
      * @docid
      * @publicName getAllPoints()
-     * @return Array<basePointObject>
      * @public
      */
     getAllPoints(): Array<basePointObject>;
     /**
      * @docid
      * @publicName getColor()
-     * @return string
      * @public
      */
     getColor(): string;
     /**
      * @docid
      * @publicName getPointByPos(positionIndex)
-     * @param1 positionIndex:number
-     * @return basePointObject
      * @public
      */
     getPointByPos(positionIndex: number): basePointObject;
@@ -345,14 +333,12 @@ export interface baseSeriesObject {
      * @docid
      * @publicName getPointsByArg(pointArg)
      * @param1 pointArg:number|string|date
-     * @return Array<basePointObject>
      * @public
      */
     getPointsByArg(pointArg: number | string | Date): Array<basePointObject>;
     /**
      * @docid
      * @publicName getVisiblePoints()
-     * @return Array<basePointObject>
      * @public
      */
     getVisiblePoints(): Array<basePointObject>;
@@ -371,21 +357,18 @@ export interface baseSeriesObject {
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;
     /**
      * @docid
      * @publicName isSelected()
-     * @return boolean
      * @public
      */
     isSelected(): boolean;
     /**
      * @docid
      * @publicName isVisible()
-     * @return boolean
      * @public
      */
     isVisible(): boolean;
@@ -403,7 +386,6 @@ export interface baseSeriesObject {
     /**
      * @docid
      * @publicName selectPoint(point)
-     * @param1 point:basePointObject
      * @public
      */
     selectPoint(point: basePointObject): void;
@@ -434,7 +416,6 @@ export interface chartAxisObject {
     /**
      * @docid
      * @publicName visualRange()
-     * @return VizRange
      * @public
      */
     visualRange(): VizRange;
@@ -548,14 +529,12 @@ export interface chartSeriesObject extends baseSeriesObject {
     /**
      * @docid
      * @publicName getArgumentAxis()
-     * @return chartAxisObject
      * @public
      */
     getArgumentAxis(): chartAxisObject;
     /**
      * @docid
      * @publicName getValueAxis()
-     * @return chartAxisObject
      * @public
      */
     getValueAxis(): chartAxisObject;

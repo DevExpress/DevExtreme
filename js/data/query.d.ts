@@ -57,8 +57,6 @@ export interface Query {
     /**
      * @docid
      * @publicName filter(criteria)
-     * @param1 criteria:Array<any>
-     * @return Query
      * @public
      */
     filter(criteria: Array<any>): Query;
@@ -66,7 +64,6 @@ export interface Query {
      * @docid
      * @publicName filter(predicate)
      * @param1 predicate:function
-     * @return Query
      * @public
      */
     filter(predicate: Function): Query;
@@ -74,7 +71,6 @@ export interface Query {
      * @docid
      * @publicName groupBy(getter)
      * @param1 getter:object
-     * @return Query
      * @public
      */
     groupBy(getter: any): Query;
@@ -112,16 +108,13 @@ export interface Query {
      * @docid
      * @publicName select(getter)
      * @param1 getter:object
-     * @return Query
      * @public
      */
     select(getter: any): Query;
     /**
      * @docid
      * @publicName slice(skip, take)
-     * @param1 skip:number
      * @param2 take:number|undefined
-     * @return Query
      * @public
      */
     slice(skip: number, take?: number): Query;
@@ -129,7 +122,6 @@ export interface Query {
      * @docid
      * @publicName sortBy(getter)
      * @param1 getter:object
-     * @return Query
      * @public
      */
     sortBy(getter: any): Query;
@@ -137,8 +129,6 @@ export interface Query {
      * @docid
      * @publicName sortBy(getter, desc)
      * @param1 getter:object
-     * @param2 desc:boolean
-     * @return Query
      * @public
      */
     sortBy(getter: any, desc: boolean): Query;
@@ -161,7 +151,6 @@ export interface Query {
      * @docid
      * @publicName thenBy(getter)
      * @param1 getter:object
-     * @return Query
      * @public
      */
     thenBy(getter: any): Query;
@@ -169,15 +158,12 @@ export interface Query {
      * @docid
      * @publicName thenBy(getter, desc)
      * @param1 getter:object
-     * @param2 desc:boolean
-     * @return Query
      * @public
      */
     thenBy(getter: any, desc: boolean): Query;
     /**
      * @docid
      * @publicName toArray()
-     * @return Array<any>
      * @public
      */
     toArray(): Array<any>;

@@ -1826,7 +1826,6 @@ export interface ScrollingBase {
     useNative?: boolean | 'auto';
     /**
      * @docid GridBaseOptions.scrolling.renderAsync
-     * @type boolean
      * @default undefined
      * @public
      */
@@ -1867,7 +1866,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName beginCustomLoading(messageText)
-     * @param1 messageText:string
      * @public
      */
     beginCustomLoading(messageText: string): void;
@@ -1888,36 +1886,24 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName cellValue(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @return any
      * @public
      */
     cellValue(rowIndex: number, dataField: string): any;
     /**
      * @docid
      * @publicName cellValue(rowIndex, dataField, value)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @param3 value:any
      * @public
      */
     cellValue(rowIndex: number, dataField: string, value: any): void;
     /**
      * @docid
      * @publicName cellValue(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @return any
      * @public
      */
     cellValue(rowIndex: number, visibleColumnIndex: number): any;
     /**
      * @docid
      * @publicName cellValue(rowIndex, visibleColumnIndex, value)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @param3 value:any
      * @public
      */
     cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
@@ -1930,7 +1916,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName clearFilter(filterName)
-     * @param1 filterName:string
      * @public
      */
     clearFilter(filterName: string): void;
@@ -1961,14 +1946,12 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName columnCount()
-     * @return number
      * @public
      */
     columnCount(): number;
     /**
      * @docid
      * @publicName columnOption(id)
-     * @param1 id:number|string
      * @return object
      * @public
      */
@@ -1976,25 +1959,18 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName columnOption(id, optionName)
-     * @param1 id:number|string
-     * @param2 optionName:string
-     * @return any
      * @public
      */
     columnOption(id: number | string, optionName: string): any;
     /**
      * @docid
      * @publicName columnOption(id, optionName, optionValue)
-     * @param1 id:number|string
-     * @param2 optionName:string
-     * @param3 optionValue:any
      * @public
      */
     columnOption(id: number | string, optionName: string, optionValue: any): void;
     /**
      * @docid
      * @publicName columnOption(id, options)
-     * @param1 id:number|string
      * @param2 options:object
      * @public
      */
@@ -2002,14 +1978,12 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName deleteColumn(id)
-     * @param1 id:number|string
      * @public
      */
     deleteColumn(id: number | string): void;
     /**
      * @docid
      * @publicName deleteRow(rowIndex)
-     * @param1 rowIndex:number
      * @public
      */
     deleteRow(rowIndex: number): void;
@@ -2023,7 +1997,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName deselectRows(keys)
-     * @param1 keys:Array<any>
      * @return Promise<any>
      * @public
      */
@@ -2031,23 +2004,18 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName editCell(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
      * @public
      */
     editCell(rowIndex: number, dataField: string): void;
     /**
      * @docid
      * @publicName editCell(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
      * @public
      */
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     /**
      * @docid
      * @publicName editRow(rowIndex)
-     * @param1 rowIndex:number
      * @public
      */
     editRow(rowIndex: number): void;
@@ -2060,21 +2028,18 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName expandAdaptiveDetailRow(key)
-     * @param1 key:any
      * @public
      */
     expandAdaptiveDetailRow(key: TKey): void;
     /**
      * @docid
      * @publicName filter()
-     * @return any
      * @public
      */
     filter(): any;
     /**
      * @docid
      * @publicName filter(filterExpr)
-     * @param1 filterExpr:any
      * @public
      */
     filter(filterExpr: any): void;
@@ -2089,33 +2054,24 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName getCellElement(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @return DxElement|undefined
      * @public
      */
     getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
     /**
      * @docid
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @return DxElement|undefined
      * @public
      */
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     /**
      * @docid
      * @publicName getCombinedFilter()
-     * @return any
      * @public
      */
     getCombinedFilter(): any;
     /**
      * @docid
      * @publicName getCombinedFilter(returnDataField)
-     * @param1 returnDataField:boolean
-     * @return any
      * @public
      */
     getCombinedFilter(returnDataField: boolean): any;
@@ -2131,7 +2087,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName getRowElement(rowIndex)
-     * @param1 rowIndex:number
      * @return Array<Element>|jQuery|undefined
      * @public
      */
@@ -2147,22 +2102,18 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName getScrollable()
-     * @return dxScrollable
      * @public
      */
     getScrollable(): dxScrollable;
     /**
      * @docid
      * @publicName getVisibleColumnIndex(id)
-     * @param1 id:number|string
-     * @return number
      * @public
      */
     getVisibleColumnIndex(id: number | string): number;
     /**
      * @docid
      * @publicName hasEditData()
-     * @return boolean
      * @public
      */
     hasEditData(): boolean;
@@ -2175,24 +2126,18 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName isAdaptiveDetailRowExpanded(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isAdaptiveDetailRowExpanded(key: TKey): boolean;
     /**
      * @docid
      * @publicName isRowFocused(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isRowFocused(key: TKey): boolean;
     /**
      * @docid
      * @publicName isRowSelected(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isRowSelected(key: TKey): boolean;
@@ -2200,14 +2145,12 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @docid
      * @publicName keyOf(obj)
      * @param1 obj:object
-     * @return any
      * @public
      */
     keyOf(obj: TRowData): TKey;
     /**
      * @docid
      * @publicName navigateToRow(key)
-     * @param1 key:any
      * @public
      * @return Promise<void>
      */
@@ -2258,7 +2201,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName refresh(changesOnly)
-     * @param1 changesOnly:boolean
      * @return Promise<void>
      * @public
      */
@@ -2266,7 +2208,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName repaintRows(rowIndexes)
-     * @param1 rowIndexes:Array<number>
      * @public
      */
     repaintRows(rowIndexes: Array<number>): void;
@@ -2280,7 +2221,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName searchByText(text)
-     * @param1 text:string
      * @public
      */
     searchByText(text: string): void;
@@ -2294,8 +2234,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName selectRows(keys, preserve)
-     * @param1 keys:Array<any>
-     * @param2 preserve:boolean
      * @return Promise<any>
      * @public
      */
@@ -2303,7 +2241,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName selectRowsByIndexes(indexes)
-     * @param1 indexes:Array<number>
      * @return Promise<any>
      * @public
      */
@@ -2331,7 +2268,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName undeleteRow(rowIndex)
-     * @param1 rowIndex:number
      * @public
      */
     undeleteRow(rowIndex: number): void;
@@ -4206,7 +4142,6 @@ export interface ToolbarItem extends dxToolbarItem {
 /**
  * @public
  * @docid dxDataGridToolbar
- * @type object
  * @namespace DevExpress.ui.dxDataGrid
  */
 export type Toolbar = {
@@ -4218,14 +4153,12 @@ export type Toolbar = {
   items?: Array<DefaultToolbarItemName | ToolbarItem>;
   /**
    * @docid dxDataGridToolbar.visible
-   * @type boolean
    * @default undefined
    * @public
    */
   visible?: boolean;
   /**
    * @docid dxDataGridToolbar.disabled
-   * @type boolean
    * @default false
    * @public
    */
@@ -4728,7 +4661,6 @@ export type dxDataGridRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey
 /**
  * @public
  * @docid dxDataGridRowObject
- * @type object
  */
 export type Row<TRowData = any, TKey = any> = {
     /**

@@ -259,7 +259,6 @@ export interface MenuBasePlainItem extends CollectionWidgetItem {
 export interface dxMenuBaseItem extends MenuBasePlainItem {
     /**
      * @docid
-     * @type Array<dxMenuBaseItem>
      * @public
      */
     items?: Array<dxMenuBaseItem>;

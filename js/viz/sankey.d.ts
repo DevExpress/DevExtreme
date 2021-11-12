@@ -639,14 +639,12 @@ export interface dxSankeyLink {
     /**
      * @docid
      * @publicName hover(state)
-     * @param1 state:boolean
      * @public
      */
     hover(state: boolean): void;
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;
@@ -673,14 +671,12 @@ export interface dxSankeyNode {
     /**
      * @docid
      * @publicName hover(state)
-     * @param1 state:boolean
      * @public
      */
     hover(state: boolean): void;
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;

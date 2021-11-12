@@ -2,7 +2,6 @@
  * @public
  * @docid
  * @section commonObjectStructures
- * @type object
  * @namespace DevExpress
  * @export default
  */

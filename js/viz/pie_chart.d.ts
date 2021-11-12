@@ -831,7 +831,6 @@ export interface piePointObject extends basePointObject {
     /**
      * @docid
      * @publicName isVisible()
-     * @return boolean
      * @public
      */
     isVisible(): boolean;
