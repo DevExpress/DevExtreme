@@ -107,7 +107,7 @@ jobs:
    
     - name: Install devextreme package
       if: steps.last_run_status.outputs.last_run_status != 'success'
-      working-directory: ./devextreme-angular-repo/packages/devextreme-angular
+      working-directory: ./devextreme-angular-repo
       run: |
         pushd devextreme-setup
         installerName=$(realpath .)/$(ls *.tgz)
