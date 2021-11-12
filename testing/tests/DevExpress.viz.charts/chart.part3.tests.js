@@ -138,6 +138,31 @@ QUnit.test('Value axis is empty array', function(assert) {
     assert.ok(chart.getValueAxis().gridGroup);
 });
 
+// T1042940
+QUnit.test('Clear axis labels group before rendering', function(assert) {
+    const stubSeries = new MockSeries({
+        range: { minY: 1, maxY: 3 }
+    });
+    chartMocks.seriesMockData.series.push(stubSeries);
+
+    const chart = this.createChart({
+        argumentAxis: [],
+        series: [],
+        valueAxis: []
+    });
+    chart._doRender({
+        force: true,
+        drawTitle: false,
+        drawLegend: false,
+        adjustAxes: false,
+        animate: false
+    });
+
+
+    assert.ok(chart._labelsAxesGroup);
+    assert.equal(chart._labelsAxesGroup.clear.callCount, 2);
+});
+
 QUnit.test('create axes with crosshair', function(assert) {
     // Arrange
     const stubSeries = new MockSeries({

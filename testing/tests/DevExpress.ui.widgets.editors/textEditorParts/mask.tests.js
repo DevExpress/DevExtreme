@@ -20,6 +20,7 @@ const testMaskRule = (title, config) => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input, true);
+        keyboard.caret(0);
 
         keyboard.type(config.text);
 
@@ -83,6 +84,7 @@ QUnit.module('typing', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard.type('y');
         assert.equal($input.val(), '_');
@@ -101,6 +103,7 @@ QUnit.module('typing', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        keyboard.caret(0);
 
         caretWorkaround($input);
 
@@ -121,6 +124,7 @@ QUnit.module('typing', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard.type('x').type('y');
         assert.equal($input.val(), 'xy');
@@ -139,6 +143,7 @@ QUnit.module('typing', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         this.focusAndTick($input);
 
@@ -158,6 +163,7 @@ QUnit.module('typing', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard.type('x');
         assert.equal($input.val(), 'x_', 'first char is typed');
@@ -191,6 +197,7 @@ QUnit.module('typing', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard.type('x');
         assert.equal(keyboard.caret().start, 3, 'cursor set after fixed mask letters');
@@ -413,6 +420,7 @@ QUnit.module('typing', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         $input.triggerHandler('focus');
         clock.tick();
@@ -484,6 +492,7 @@ QUnit.module('typing', moduleConfig, () => {
         const $input = $('#texteditor .dx-texteditor-input');
         const keyboard = keyboardMock($input, true);
         caretWorkaround($input);
+        keyboard.caret(0);
         keyboard.type('1');
     });
 });
@@ -517,6 +526,7 @@ QUnit.module('backspace key', moduleConfig, () => {
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
+        keyboard.caret(0);
 
         caretWorkaround($input);
 
@@ -576,6 +586,7 @@ QUnit.module('backspace key', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard
             .type('x')
@@ -651,6 +662,7 @@ QUnit.module('delete key', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard.type('xx')
             .caret({ start: 0, end: 3 })
@@ -699,6 +711,7 @@ QUnit.module('selection', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard
             .type('x')
@@ -728,6 +741,7 @@ QUnit.module('selection', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard
             .type('x')
@@ -1023,6 +1037,7 @@ QUnit.module('value', moduleConfig, () => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard.type('x');
 
@@ -1132,9 +1147,10 @@ QUnit.module('value', moduleConfig, () => {
         });
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
+        const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard.type('x');
 
@@ -1158,9 +1174,10 @@ QUnit.module('value', moduleConfig, () => {
         valueChangedHandler.reset();
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
+        const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard.press('del');
 
@@ -1184,9 +1201,10 @@ QUnit.module('value', moduleConfig, () => {
         });
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
+        const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard.type('x');
 
@@ -1213,7 +1231,9 @@ QUnit.module('value', moduleConfig, () => {
 
         caretWorkaround($input);
 
-        const keyboard = keyboardMock($input);
+        const keyboard = keyboardMock($input, true);
+        keyboard.caret(0);
+
         keyboard
             .type('x')
             .press('enter');
@@ -1612,6 +1632,7 @@ QUnit.module('paste', moduleConfig, () => {
         });
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         $input.trigger(event);
         keyboard.paste('00');
@@ -1830,6 +1851,7 @@ QUnit.module('validation', {}, () => {
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard.type('1');
         $input.trigger('change');
@@ -1850,6 +1872,7 @@ QUnit.module('validation', {}, () => {
         const keyboard = keyboardMock($input, true);
 
         caretWorkaround($input);
+        keyboard.caret(0);
 
         keyboard.type('1');
         $input.trigger('change');
