@@ -138,7 +138,7 @@ jobs:
       run: |
         node -v
         npm -v
-        npm ci
+        npm install --no-audit --no-fund
 
     - name: Check build
       run: npm run build:dev
