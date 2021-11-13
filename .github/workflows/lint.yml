@@ -138,7 +138,10 @@ jobs:
       run: |
         node -v
         npm -v
-        npm install --no-audit --no-fund
+        npm ci
+
+    - name: Check build
+      run: npm run build:dev
 
   package_lock:
     runs-on: ubuntu-latest
