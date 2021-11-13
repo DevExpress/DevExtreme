@@ -35,6 +35,7 @@ describe('AnimatedScrollbar', () => {
     expect({ ...viewModel.props() }).toEqual({
       direction: 'vertical',
       bottomPocketSize: 0,
+      containerHasSizes: false,
       containerSize: 0,
       contentPaddingBottom: 0,
       contentSize: 0,
