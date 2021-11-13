@@ -244,76 +244,6 @@ const LoadPanelTests = {
                 });
             });
 
-            QUnit.test('loadPanel: { enabled: true }, use unical instance of exportLoadPanel for each exportDataGrid`s function call', function(assert) {
-                assert.expect(9);
-                const done = assert.async();
-                const clock = sinon.useFakeTimers();
-
-                const $secondGrid = $('<div>');
-                $('#qunit-fixture').append($secondGrid);
-
-                const loadingTimeout = 30;
-                componentOptions.loadingTimeout = loadingTimeout;
-
-                const component = getComponent(componentOptions);
-                const secondComponent = $secondGrid.dxDataGrid(componentOptions).dxDataGrid('instance');
-
-                const initialComponentLoadPanelEnabledValue = component.option('loadPanel').enabled;
-
-                let isFirstGridFirstCall = true;
-                let isSecondGridFirstCall = true;
-
-                clock.tick(300);
-
-                try {
-                    const firstExportPromise = exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
-                        if(isFirstGridFirstCall) {
-                            const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
-                            assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
-
-                            const $exportLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`);
-                            assert.strictEqual($exportLoadPanel.length, 1, 'export loadpanel exist');
-
-                            const exportLoadPanel = $exportLoadPanel.dxLoadPanel('instance');
-                            assert.strictEqual(exportLoadPanel.option('visible'), true, 'export loadpanel is visible');
-
-                            isFirstGridFirstCall = false;
-                        }
-                    } });
-
-                    const secondExportPromise = exportFunc({ component: secondComponent, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
-                        if(isSecondGridFirstCall) {
-                            const $builtInLoadPanel = secondComponent.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
-                            assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
-
-                            const $exportLoadPanel = secondComponent.$element().find(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`);
-                            assert.strictEqual($exportLoadPanel.length, 1, 'export loadpanel exist');
-
-                            const exportLoadPanel = $exportLoadPanel.dxLoadPanel('instance');
-                            assert.strictEqual(exportLoadPanel.option('visible'), true, 'export loadpanel is visible');
-
-                            isSecondGridFirstCall = false;
-                        }
-                    } });
-
-                    Promise.all([firstExportPromise, secondExportPromise]).then(values => {
-                        const $exportLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`);
-                        assert.strictEqual($exportLoadPanel.length, 0, 'export loadpanel not exist');
-
-                        const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
-                        assert.strictEqual($builtInLoadPanel.length, componentLoadPanelEnabledOption ? 1 : 0, 'builtin loadpanel exist');
-                        assert.strictEqual(component.option('loadPanel').enabled, initialComponentLoadPanelEnabledValue, 'component.loadPanel.enabled');
-
-                        $secondGrid.remove();
-                        done();
-                    });
-
-                    clock.tick(300);
-                } finally {
-                    clock.restore();
-                }
-            });
-
             [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
                 QUnit.test(`${localizationText.type} localization text, locale('ja')`, function(assert) {
                     assert.expect(7);
@@ -368,6 +298,73 @@ const LoadPanelTests = {
                         localization.locale(locale);
                     }
                 });
+            });
+
+            QUnit.test('loadPanel: { enabled: true }, use unical instance of exportLoadPanel for each exportDataGrid`s function call', function(assert) {
+                assert.expect(9);
+                const done = assert.async();
+                const clock = sinon.useFakeTimers();
+
+                const $secondGrid = $('<div>');
+                $('#qunit-fixture').append($secondGrid);
+
+                const component = getComponent(componentOptions);
+
+                const loadingTimeout = 30;
+                componentOptions.loadingTimeout = loadingTimeout;
+                const secondComponent = $secondGrid[component.NAME](componentOptions)[component.NAME]('instance');
+
+                const initialComponentLoadPanelEnabledValue = component.option('loadPanel').enabled;
+
+                let isFirstGridFirstCall = true;
+                let isSecondGridFirstCall = true;
+
+                clock.tick(300);
+
+                const firstExportPromise = exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
+                    if(isFirstGridFirstCall) {
+                        const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
+                        assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
+
+                        const $exportLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`);
+                        assert.strictEqual($exportLoadPanel.length, 1, 'export loadpanel exist');
+
+                        const exportLoadPanel = $exportLoadPanel.dxLoadPanel('instance');
+                        assert.strictEqual(exportLoadPanel.option('visible'), true, 'export loadpanel is visible');
+
+                        isFirstGridFirstCall = false;
+                    }
+                } });
+
+                const secondExportPromise = exportFunc({ component: secondComponent, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
+                    if(isSecondGridFirstCall) {
+                        const $builtInLoadPanel = secondComponent.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
+                        assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
+
+                        const $exportLoadPanel = secondComponent.$element().find(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`);
+                        assert.strictEqual($exportLoadPanel.length, 1, 'export loadpanel exist');
+
+                        const exportLoadPanel = $exportLoadPanel.dxLoadPanel('instance');
+                        assert.strictEqual(exportLoadPanel.option('visible'), true, 'export loadpanel is visible');
+
+                        isSecondGridFirstCall = false;
+                    }
+                } });
+
+                Promise.all([firstExportPromise, secondExportPromise]).then(values => {
+                    const $exportLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`);
+                    assert.strictEqual($exportLoadPanel.length, 0, 'export loadpanel not exist');
+
+                    const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`);
+                    assert.strictEqual($builtInLoadPanel.length, componentLoadPanelEnabledOption ? 1 : 0, 'builtin loadpanel exist');
+                    assert.strictEqual(component.option('loadPanel').enabled, initialComponentLoadPanelEnabledValue, 'component.loadPanel.enabled');
+
+                    $secondGrid.remove();
+                    clock.restore();
+                    done();
+                });
+
+                clock.tick(300);
             });
         });
     }
