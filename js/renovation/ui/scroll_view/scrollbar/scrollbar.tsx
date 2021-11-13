@@ -229,7 +229,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   get thumbStyles(): { [key: string]: string | number } {
     return {
-      [this.dimension]: this.scrollSize || THUMB_MIN_SIZE, // TODO: remove ||
+      [this.dimension]: Math.round(this.scrollSize) || THUMB_MIN_SIZE,
       transform: this.isNeverMode ? 'none' : this.thumbTransform,
     };
   }
