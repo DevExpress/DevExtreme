@@ -6,7 +6,7 @@ const SCHEDULER_SELECTOR = '#container';
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery', 'react'],
+  platforms: [/* 'jquery', */'react'],
 });
 
 fixture('Renovated scheduler - Adaptive appointments');
