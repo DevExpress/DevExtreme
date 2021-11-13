@@ -96,7 +96,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     hScrollbarRef, vScrollbarRef,
     topPocketRef, bottomPocketRef, bottomPocketHeight,
     hovered, pulledDown, scrollLocationChange,
-    contentWidth, containerClientWidth, contentHeight, containerClientHeight,
+    containerHasSizes, contentWidth, containerClientWidth, contentHeight, containerClientHeight,
     scrollableRef, contentStyles, containerStyles, onBounce,
     onReachBottom, onPullDown, onEnd, direction, topPocketState,
     isLoadPanelVisible, scrollViewContentRef,
@@ -181,6 +181,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
               onEnd={onEnd}
+              containerHasSizes={containerHasSizes}
 
               rtlEnabled={rtlEnabled}
             />
@@ -202,6 +203,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
               onEnd={onEnd}
+              containerHasSizes={containerHasSizes}
 
               forceGeneratePockets={forceGeneratePockets}
               bottomPocketSize={bottomPocketHeight}
@@ -1106,6 +1108,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       ? this.contentClientWidth
       // for position absolute elements inside content
       : Math.max(this.contentScrollWidth, this.contentClientWidth);
+  }
+
+  get containerHasSizes(): boolean {
+    return this.containerClientHeight > 0 && this.containerClientWidth > 0;
   }
 
   get contentStyles(): { [key: string]: string } {

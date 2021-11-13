@@ -41,6 +41,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       showScrollbar, scrollByThumb, bounceEnabled, scrollLocationChange,
       visible, rtlEnabled,
       minOffset, maxOffset,
+      containerHasSizes,
     },
   } = viewModel;
 
@@ -58,6 +59,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       scrollByThumb={scrollByThumb}
       bounceEnabled={bounceEnabled}
       showScrollbar={showScrollbar}
+      containerHasSizes={containerHasSizes}
       // Horizontal
       rtlEnabled={rtlEnabled}
     />

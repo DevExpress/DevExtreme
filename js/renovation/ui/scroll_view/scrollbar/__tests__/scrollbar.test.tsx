@@ -33,6 +33,7 @@ describe('Scrollbar', () => {
 
     expect({ ...viewModel.props() }).toEqual({
       direction: 'vertical',
+      containerHasSizes: false,
       containerSize: 0,
       contentSize: 0,
       visible: false,
@@ -263,11 +264,8 @@ describe('Scrollbar', () => {
                   direction,
                   rtlEnabled,
                   scrollLocation,
+                  containerHasSizes,
                   maxOffset,
-                });
-
-                Object.defineProperties(viewModel, {
-                  containerHasSizes: { get() { return containerHasSizes; } },
                 });
 
                 [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
@@ -501,21 +499,6 @@ describe('Scrollbar', () => {
         const viewModel = new Scrollbar({ direction });
 
         expect((viewModel as any).dimension).toBe(direction === 'horizontal' ? 'width' : 'height');
-      });
-
-      each([0, 100]).describe('contentSize: %o', (contentSize) => {
-        each([0, 100]).describe('containerSize: %o', (containerSize) => {
-          test('containerHasSizes()', () => {
-            const viewModel = new Scrollbar({
-              direction,
-              containerSize,
-              contentSize,
-            });
-
-            expect(viewModel.containerHasSizes)
-              .toEqual(contentSize > 0 && containerSize > 0);
-          });
-        });
       });
 
       each([0, 50, 200]).describe('containerSize: %o', (containerSize) => {

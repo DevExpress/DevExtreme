@@ -160,7 +160,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Effect()
   syncScrollLocation(): void {
-    if (this.containerHasSizes) {
+    if (this.props.containerHasSizes) {
       let newScrollLocation = this.props.scrollLocation;
 
       const maxOffsetChanged = Math.abs(this.props.maxOffset - this.prevMaxOffset) > 0;
@@ -177,10 +177,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
         this.moveTo(newScrollLocation);
       }
     }
-  }
-
-  get containerHasSizes(): boolean {
-    return this.props.containerSize > 0 && this.props.contentSize > 0;
   }
 
   get axis(): 'x' | 'y' {

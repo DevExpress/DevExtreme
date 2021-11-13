@@ -171,6 +171,20 @@ describe('Simulated > Render', () => {
       });
     });
 
+    each([0, 100]).describe('containerClientWidth: %o', (containerClientWidth) => {
+      each([0, 100]).describe('containerClientHeight: %o', (containerClientHeight) => {
+        test('containerHasSizes()', () => {
+          const viewModel = new Scrollable({ direction });
+
+          viewModel.containerClientHeight = containerClientHeight;
+          viewModel.containerClientWidth = containerClientWidth;
+
+          expect(viewModel.containerHasSizes)
+            .toEqual(containerClientWidth > 0 && containerClientHeight > 0);
+        });
+      });
+    });
+
     each([{ top: 120, left: -200 }, { top: -60, left: 40 }]).describe('contentTranslateOffset: %o', (contentTranslateOffset) => {
       it('contentStyles()', () => {
         const helper = new ScrollableTestHelper({ direction });
