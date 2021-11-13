@@ -47,18 +47,27 @@ describe('Scrollbar', () => {
     each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
       each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
         each([
-          { scrollLocation: 50.145623, expectedTranslate: -25.0728115 },
-          { scrollLocation: 0, expectedTranslate: 0 },
-          { scrollLocation: -50, expectedTranslate: 25 },
-          { scrollLocation: -100, expectedTranslate: 50 },
-          { scrollLocation: -150, expectedTranslate: 75 },
-        ]).describe('testData: %o', ({ scrollLocation, expectedTranslate }) => {
-          it('thumb styles, containerSize: 100, contentSize: 200, maxOffset: -100', () => {
+          {
+            contentSize: 300,
+            scrollLocation: 50.145623,
+            expected: { translate: -33.430415333333336, height: 33 },
+          },
+          {
+            contentSize: 200,
+            scrollLocation: 50.145623,
+            expected: { translate: -25.0728115, height: 50 },
+          },
+          { contentSize: 200, scrollLocation: 0, expected: { translate: 0, height: 50 } },
+          { contentSize: 200, scrollLocation: -50, expected: { translate: 25, height: 50 } },
+          { contentSize: 200, scrollLocation: -100, expected: { translate: 50, height: 50 } },
+          { contentSize: 200, scrollLocation: -150, expected: { translate: 75, height: 50 } },
+        ]).describe('testData: %o', ({ contentSize, scrollLocation, expected }) => {
+          it(`thumb styles, containerSize: 100, contentSize: ${contentSize}, maxOffset: -100`, () => {
             const viewModel = new Scrollbar({
               direction,
               showScrollbar,
               containerSize: 100,
-              contentSize: 200,
+              contentSize,
               maxOffset: -100,
               scrollLocation,
             });
@@ -71,17 +80,17 @@ describe('Scrollbar', () => {
               expectedThumbTransform = 'none';
             } else {
               if (direction === DIRECTION_HORIZONTAL) {
-                expectedThumbTransform = `translate(${expectedTranslate}px, 0px)`;
+                expectedThumbTransform = `translate(${expected.translate}px, 0px)`;
               }
               if (direction === DIRECTION_VERTICAL) {
-                expectedThumbTransform = `translate(0px, ${expectedTranslate}px)`;
+                expectedThumbTransform = `translate(0px, ${expected.translate}px)`;
               }
             }
 
             const thumbElement = scrollbar.find('.dx-scrollable-scroll');
 
             expect(thumbElement.prop('style')).toHaveProperty('transform', expectedThumbTransform);
-            expect(thumbElement.prop('style')).toHaveProperty(direction === 'vertical' ? 'height' : 'width', 50);
+            expect(thumbElement.prop('style')).toHaveProperty(direction === 'vertical' ? 'height' : 'width', expected.height);
             expect(thumbElement.prop('style')).not.toHaveProperty(direction === 'vertical' ? 'width' : 'height');
           });
         });
