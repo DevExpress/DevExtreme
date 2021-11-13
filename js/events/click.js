@@ -9,6 +9,7 @@ import { subscribeNodesDisposing, unsubscribeNodesDisposing } from './utils/even
 import pointerEvents from './pointer';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
+import { noop } from '../core/utils/common';
 
 const CLICK_EVENT_NAME = 'dxclick';
 const TOUCH_BOUNDARY = 10;
@@ -127,7 +128,7 @@ let ClickEmitter = Emitter.inherit({
             prevented = null;
         },
 
-        end: function(e) {},
+        end: noop,
 
         cancel: function() {
             prevented = true;
