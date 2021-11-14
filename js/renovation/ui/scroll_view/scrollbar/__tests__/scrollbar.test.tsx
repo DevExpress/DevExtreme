@@ -397,18 +397,14 @@ describe('Scrollbar', () => {
 
         viewModel.moveTo(scrollLocation);
 
-        if (expected.needFireScroll) {
-          expect(scrollLocationChange).toHaveBeenCalledTimes(1);
-          expect(scrollLocationChange).toHaveBeenCalledWith(
-            {
-              fullScrollProp: viewModel.fullScrollProp,
-              location: -scrollLocation,
-              needFireScroll: expected.needFireScroll,
-            },
-          );
-        } else {
-          expect(scrollLocationChange).toBeCalledTimes(0);
-        }
+        expect(scrollLocationChange).toHaveBeenCalledTimes(1);
+        expect(scrollLocationChange).toHaveBeenCalledWith(
+          {
+            fullScrollProp: viewModel.fullScrollProp,
+            location: -scrollLocation,
+            needFireScroll: expected.needFireScroll,
+          },
+        );
       });
 
       each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
