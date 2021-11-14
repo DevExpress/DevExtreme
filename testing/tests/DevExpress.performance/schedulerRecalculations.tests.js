@@ -5,7 +5,6 @@ require('../../helpers/qunitPerformanceExtension.js');
 require('generic_light.css!');
 
 const $ = require('jquery');
-const Scrollable = require('ui/scroll_view/ui.scrollable');
 const resizeCallbacks = require('core/utils/resize_callbacks');
 const data = [
     { startDate: new Date(2016, 2, 9, 1), endDate: new Date(2016, 2, 9, 2), text: 'Meeting' },
@@ -163,7 +162,7 @@ QUnit.testStart(function() {
             });
         };
 
-        assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 8 : 9);
+        assert.measureStyleRecalculation(measureFunction, 9);
     });
 
     QUnit.performanceTest(`dxScheduler timelineDay view should force minimum relayout count on creation with appointments when renovateRender is ${renovateRender}`, function(assert) {
