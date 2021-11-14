@@ -948,12 +948,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   syncScrollbarsWithContent(): void {
-    const { scrollLeft, scrollTop } = this.containerRef.current!;
+    const { left, top } = this.scrollOffset();
 
-    this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: -clampIntoRange(-scrollTop, 0, this.vScrollOffsetMax), needFireScroll: false });
+    this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: -clampIntoRange(-top, 0, this.vScrollOffsetMax), needFireScroll: false });
 
     if (!this.props.rtlEnabled) { // TODO: support native rtl mode
-      this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: -clampIntoRange(-scrollLeft, 0, this.hScrollOffsetMax), needFireScroll: false });
+      this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: -clampIntoRange(-left, 0, this.hScrollOffsetMax), needFireScroll: false });
     }
   }
 
