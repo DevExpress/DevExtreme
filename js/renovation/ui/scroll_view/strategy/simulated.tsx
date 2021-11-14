@@ -606,8 +606,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const { scrollLeft, scrollTop } = this.containerRef.current!;
     const { top, left } = location;
 
-    left && this.hScrollbarRef.current?.scrollTo(scrollLeft + left);
-    top && this.vScrollbarRef.current?.scrollTo(scrollTop + top);
+    this.hScrollbarRef.current?.scrollTo(scrollLeft + left);
+    this.vScrollbarRef.current?.scrollTo(scrollTop + top);
 
     this.scrolling = false;
   }

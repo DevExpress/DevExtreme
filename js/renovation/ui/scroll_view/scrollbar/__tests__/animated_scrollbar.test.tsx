@@ -935,9 +935,8 @@ describe('Animator', () => {
                   inProgress: { get() { return inProgress; } },
                 });
 
-                expect(viewModel.isReadyToStart)
-                  .toEqual(needRiseEnd && !inProgress
-                    && !(pendingRefreshing || pendingLoading) && maxOffset < 0);
+                expect(viewModel.isReadyToStart).toEqual(needRiseEnd && !inProgress
+                    && !(pendingRefreshing || pendingLoading) /* && maxOffset < 0 */);
               });
             });
           });

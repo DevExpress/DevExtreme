@@ -151,11 +151,15 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.prevScrollLocation = location;
     this.rightScrollLocation = this.props.maxOffset - location;
 
-    this.props.scrollLocationChange?.({
-      fullScrollProp: this.fullScrollProp,
-      location: -location,
-      needFireScroll: scrollDelta >= 1,
-    });
+    const scrollLocationChanged = scrollDelta > 0;
+
+    if (scrollLocationChanged) {
+      this.props.scrollLocationChange?.({
+        fullScrollProp: this.fullScrollProp,
+        location: -location,
+        needFireScroll: scrollLocationChanged,
+      });
+    }
   }
 
   @Effect()

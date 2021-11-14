@@ -355,8 +355,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   get isReadyToStart(): boolean {
     return this.needRiseEnd
       && !this.inProgress
-      && !(this.pendingRefreshing || this.pendingLoading)
-      && this.props.maxOffset < 0;
+      && !(this.pendingRefreshing || this.pendingLoading);
+    // && this.props.maxOffset < 0; // TODO: try without it
   }
 
   get distanceToNearestBoundary(): number {
