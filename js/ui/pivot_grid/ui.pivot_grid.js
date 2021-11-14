@@ -1083,9 +1083,9 @@ const PivotGrid = Widget.inherit({
             that._renderLoadPanel(dataArea.groupElement().parent(), that.$element());
             that._renderDescriptionArea();
 
+            const dataAreaScrollable = dataArea.renderScrollable();
+            columnsArea.renderScrollable(dataAreaScrollable?.isRenovated() ? this.option('rtlEnabled') : false);
             rowsArea.renderScrollable();
-            columnsArea.renderScrollable();
-            dataArea.renderScrollable();
         }
 
         [dataArea, rowsArea, columnsArea].forEach(function(area) {
