@@ -23,7 +23,6 @@ fixture('Renovated scheduler - Adaptive appointments');
       const { collectors } = scheduler;
 
       await t
-        .debug()
         .expect(collectors.count)
         .eql(4)
         .expect(collectors.get(0).isCompact)

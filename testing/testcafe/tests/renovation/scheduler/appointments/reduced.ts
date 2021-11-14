@@ -6,7 +6,7 @@ const SCHEDULER_SELECTOR = '#container';
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery', 'react'],
+  platforms: [/* 'jquery', */'react'],
 });
 
 fixture('Renovated scheduler - Reduced appointment')
@@ -23,7 +23,6 @@ test('it should render reduced appointment correctly if currentView is month', a
   const tailReduced1 = scheduler.getAppointmentByIndex(5);
 
   await t
-    .debug()
     .expect(appointmentCount)
     .eql(6)
 
