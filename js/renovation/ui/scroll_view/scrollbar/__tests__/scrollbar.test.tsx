@@ -375,30 +375,40 @@ describe('Scrollbar', () => {
         });
       });
 
-      each([-500.25, -400, -100.25, -55.75, 0.25, 100.25, 500.25]).describe('scrollLocation: %o', (scrollLocation) => {
-        it('moveTo(location) should pass to scrollable correct newScrollLocation with delta', () => {
-          const scrollLocationChange = jest.fn();
+      test.each([
+        { prevScrollLocation: -499, scrollLocation: -500.25, expected: { needFireScroll: true } },
+        { prevScrollLocation: -399, scrollLocation: -400, expected: { needFireScroll: true } },
+        { prevScrollLocation: -100, scrollLocation: -100.25, expected: { needFireScroll: true } },
+        { prevScrollLocation: -55, scrollLocation: -55.75, expected: { needFireScroll: true } },
+        { prevScrollLocation: 0, scrollLocation: 0.25, expected: { needFireScroll: true } },
+        { prevScrollLocation: 100, scrollLocation: 100.25, expected: { needFireScroll: true } },
+        { prevScrollLocation: 500.24, scrollLocation: 500.25, expected: { needFireScroll: true } },
+        { prevScrollLocation: 480, scrollLocation: 480, expected: { needFireScroll: false } },
+      ])('moveTo(location), pass correct arguments to scrollLocationChange event: %o', ({ prevScrollLocation, scrollLocation, expected }) => {
+        const scrollLocationChange = jest.fn();
 
-          const viewModel = new Scrollbar({
-            direction,
-            scrollLocationChange,
-            scrollLocation,
-          });
+        const viewModel = new Scrollbar({
+          direction,
+          scrollLocationChange,
+          scrollLocation,
+        });
 
-          const prevScrollLocation = Math.floor(Math.random() * 10) - 5;
-          viewModel.prevScrollLocation = prevScrollLocation;
+        viewModel.prevScrollLocation = prevScrollLocation;
 
-          viewModel.moveTo(scrollLocation);
+        viewModel.moveTo(scrollLocation);
 
+        if (expected.needFireScroll) {
           expect(scrollLocationChange).toHaveBeenCalledTimes(1);
           expect(scrollLocationChange).toHaveBeenCalledWith(
             {
               fullScrollProp: viewModel.fullScrollProp,
               location: -scrollLocation,
-              needFireScroll: Math.abs(prevScrollLocation - scrollLocation) >= 1,
+              needFireScroll: expected.needFireScroll,
             },
           );
-        });
+        } else {
+          expect(scrollLocationChange).toBeCalledTimes(0);
+        }
       });
 
       each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
