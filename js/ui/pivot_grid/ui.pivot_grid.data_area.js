@@ -49,13 +49,13 @@ export const DataArea = AreaItem.inherit({
     },
 
     renderScrollable: function() {
-        this._groupElement.dxScrollable({
+        return this._groupElement.dxScrollable({
             useNative: this.getUseNativeValue(),
             useSimulatedScrollbar: false,
             rtlEnabled: this.component.option('rtlEnabled'),
             bounceEnabled: false,
             updateManually: true,
-        });
+        }).dxScrollable('instance');
     },
 
     getUseNativeValue: function() {
