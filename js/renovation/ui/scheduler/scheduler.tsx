@@ -160,6 +160,8 @@ export const viewFunction = ({
           hoursInterval={hoursInterval}
           groups={loadedResources}
           type={type}
+          schedulerHeight={height}
+          schedulerWidth={width}
 
           indicatorTime={indicatorTime}
           allowMultipleCellSelection={allowMultipleCellSelection}

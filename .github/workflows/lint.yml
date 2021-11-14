@@ -30,7 +30,7 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-audit --no-fund --legacy-peer-deps
+      run: npm install --no-audit --no-fund 
 
     - name: Compile renovation
       run: npm run compile:r
@@ -139,6 +139,9 @@ jobs:
         node -v
         npm -v
         npm install --no-audit --no-fund
+
+    - name: Check build
+      run: npm run build:dev
 
   package_lock:
     runs-on: ubuntu-latest
