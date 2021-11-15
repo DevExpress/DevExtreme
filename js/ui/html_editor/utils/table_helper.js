@@ -58,14 +58,14 @@ function getAutoSizedElements($table, direction = 'horizontal') {
     return result;
 }
 
-function setLineElementsFormat(module, { elements, property, value }) {
+function setLineElementsFormat(module, { elements, property, value, ignoreValueChange }) {
     const elementsCount = elements.length;
 
     each(elements, (i, element) => {
         const fullPropertyName = `cell${camelize(property, true)}`;
         const isLastElement = i === elementsCount - 1;
         // console.log(isLastElement);
-        if(isLastElement) {
+        if(!ignoreValueChange && isLastElement) {
 
             setElementFormat(module, { element, fullPropertyName, value });
         } else {
