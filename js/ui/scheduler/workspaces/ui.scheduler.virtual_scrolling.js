@@ -56,7 +56,7 @@ export class VirtualScrollingDispatcher {
     get viewportHeight() {
         return this.height
             ? this.options.getViewHeight()
-            : getWindow().innerHeight; // TODO: refactor, we can't use it here
+            : this.options.getWindowHeight();
     }
 
     get cellWidth() { return this._cellWidth; }
@@ -65,7 +65,7 @@ export class VirtualScrollingDispatcher {
     get viewportWidth() {
         return this.width
             ? this.options.getViewWidth()
-            : getWindow().innerWidth; // TODO: refactor, we can't use it here
+            : this.options.getWindowWidth();
     }
 
     get cellCountInsideTopVirtualRow() { return this.verticalScrollingState?.virtualItemCountBefore || 0; }
@@ -236,8 +236,12 @@ export class VirtualScrollingDispatcher {
         }
     }
 
+    isAttachWindowScrollEvent() {
+        return (this.horizontalScrollingAllowed || this.verticalScrollingAllowed) && !this.height;
+    }
+
     attachScrollableEvents() {
-        if((this.horizontalScrollingAllowed || this.verticalScrollingAllowed) && !this.height) {
+        if(this.isAttachWindowScrollEvent()) {
             this._attachWindowScroll();
         }
     }
