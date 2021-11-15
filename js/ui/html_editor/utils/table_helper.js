@@ -59,11 +59,19 @@ function getAutoSizedElements($table, direction = 'horizontal') {
 }
 
 function setLineElementsFormat(module, { elements, property, value }) {
-    each(elements, (i, element) => {
-        const cellBlot = module.quill.scroll.find(element);
-        const fullPropertyName = `cell${camelize(property, true)}`;
-        cellBlot?.format(fullPropertyName, value + 'px');
+    const elementsCount = elements.length;
 
+    each(elements, (i, element) => {
+        const fullPropertyName = `cell${camelize(property, true)}`;
+        const isLastElement = i === elementsCount - 1;
+        // console.log(isLastElement);
+        if(isLastElement) {
+
+            setElementFormat(module, { element, fullPropertyName, value });
+        } else {
+            const cellBlot = module.quill.scroll.find(element);
+            cellBlot?.format(fullPropertyName, value + 'px');
+        }
 
         // const fullPropertyName = `cell${camelize(property, true)}`;
         // const index = module.quill.getIndex(module.quill.scroll.find(element));
@@ -72,6 +80,18 @@ function setLineElementsFormat(module, { elements, property, value }) {
         // module.editorInstance.format(fullPropertyName, value + 'px');
 
     });
+}
+
+function setElementFormat(module, { element, fullPropertyName, value }) {
+    const startSelection = module.editorInstance.getSelection();
+
+    const elementIndex = module.quill.getIndex(module.quill.scroll.find(element));
+    module.editorInstance.getQuillInstance().setSelection(elementIndex, 0);
+    module.editorInstance.format(fullPropertyName, value + 'px');
+
+    if(startSelection?.index) {
+        module.editorInstance.setSelection(startSelection.index, startSelection.length);
+    }
 }
 
 function getLineElements($table, index, direction = 'horizontal') {
