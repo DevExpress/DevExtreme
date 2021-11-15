@@ -57,7 +57,6 @@ describe('Appointment', () => {
         styles: 'some-styles',
         classes: 'some-classes',
         text: 'some-text',
-        onClick: 'some-onclick',
       });
 
       expect(appointment.is(Widget))
@@ -84,6 +83,9 @@ describe('Appointment', () => {
           appointmentTemplate: template,
         },
       });
+
+      expect(appointment.is(Widget))
+        .toBe(true);
 
       expect(appointment.prop('classes'))
         .toBe('some-classes');
