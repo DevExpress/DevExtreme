@@ -39,10 +39,10 @@ export interface CustomStoreOptions<
     /**
      * @docid
      * @type_function_param1 options:LoadOptions
-     * @type_function_return Promise<any>
+     * @type_function_return Promise<Array>|Array
      * @public
      */
-    load: ((options: LoadOptions<TItem>) => DxPromise<Array<TItem>>);
+    load: ((options: LoadOptions<TItem>) => DxPromise<Array<TItem>> | Array<TItem>);
     /**
      * @docid
      * @default 'processed'

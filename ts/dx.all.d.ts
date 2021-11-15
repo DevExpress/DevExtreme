@@ -1676,7 +1676,7 @@ declare module DevExpress.data {
      */
     load: (
       options: LoadOptions<TItem>
-    ) => DevExpress.core.utils.DxPromise<Array<TItem>>;
+    ) => DevExpress.core.utils.DxPromise<Array<TItem>> | Array<TItem>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
