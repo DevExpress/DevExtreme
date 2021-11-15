@@ -1,5 +1,6 @@
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
 import Store, { Options as StoreOptions } from './abstract_store';
+import { DxPromise } from '../core/utils/deferred';
 
 /** @public */
 export type Options<
@@ -38,10 +39,10 @@ export interface CustomStoreOptions<
     /**
      * @docid
      * @type_function_param1 options:LoadOptions
-     * @type_function_return Promise<any>|Array<any>
+     * @type_function_return Promise<any>
      * @public
      */
-    load: ((options: LoadOptions<TItem>) => PromiseLike<TItem> | Array<TItem>);
+    load: ((options: LoadOptions<TItem>) => DxPromise<Array<TItem>>);
     /**
      * @docid
      * @default 'processed'
