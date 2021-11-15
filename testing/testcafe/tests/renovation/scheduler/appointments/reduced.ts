@@ -9,8 +9,7 @@ const test = multiPlatformTest({
   platforms: [/* 'jquery', */'react'],
 });
 
-fixture('Renovated scheduler - Reduced appointment')
-  .beforeEach((t) => t.resizeWindow(1200, 800));
+fixture('Renovated scheduler - Reduced appointment');
 
 test('it should render reduced appointment correctly if currentView is month', async (t, { screenshotComparerOptions }) => {
   const scheduler = new Scheduler(SCHEDULER_SELECTOR);
@@ -88,40 +87,43 @@ test('it should render reduced appointment correctly if currentView is month', a
     ))
     .ok();
 }).before(
-  async (_, { platform }) => createWidget(platform, 'dxScheduler', {
-    dataSource: [{
-      text: 'Reduced',
-      priorityId: [1, 2],
-      startDate: new Date(2021, 3, 4, 12),
-      endDate: new Date(2021, 3, 19, 12),
-    }],
-    views: [{
-      type: 'month',
-      groupOrientation: 'vertical',
-    }],
-    currentView: 'month',
-    currentDate: new Date(2021, 3, 21),
-    startDayHour: 10,
-    endDayHour: 14,
-    groups: ['priorityId'],
-    resources: [
-      {
-        fieldExpr: 'priorityId',
-        allowMultiple: true,
-        dataSource: [{
-          text: 'Low Priority',
-          id: 1,
-          color: '#1e90ff',
-        }, {
-          text: 'High Priority',
-          id: 2,
-          color: '#ff9747',
-        }],
-        label: 'Priority',
-      },
-    ],
-    showCurrentTimeIndicator: false,
-  }),
+  async (t, { platform }) => {
+    await t.resizeWindow(1200, 800);
+    await createWidget(platform, 'dxScheduler', {
+      dataSource: [{
+        text: 'Reduced',
+        priorityId: [1, 2],
+        startDate: new Date(2021, 3, 4, 12),
+        endDate: new Date(2021, 3, 19, 12),
+      }],
+      views: [{
+        type: 'month',
+        groupOrientation: 'vertical',
+      }],
+      currentView: 'month',
+      currentDate: new Date(2021, 3, 21),
+      startDayHour: 10,
+      endDayHour: 14,
+      groups: ['priorityId'],
+      resources: [
+        {
+          fieldExpr: 'priorityId',
+          allowMultiple: true,
+          dataSource: [{
+            text: 'Low Priority',
+            id: 1,
+            color: '#1e90ff',
+          }, {
+            text: 'High Priority',
+            id: 2,
+            color: '#ff9747',
+          }],
+          label: 'Priority',
+        },
+      ],
+      showCurrentTimeIndicator: false,
+    });
+  },
 );
 
 test('it should render reduced appointment correctly if currentView is timelineDay', async (t, { screenshotComparerOptions }) => {
@@ -160,38 +162,41 @@ test('it should render reduced appointment correctly if currentView is timelineD
     ))
     .ok();
 }).before(
-  async (_, { platform }) => createWidget(platform, 'dxScheduler', {
-    dataSource: [{
-      text: 'Reduced',
-      priorityId: [1, 2],
-      startDate: new Date(2021, 3, 4, 12),
-      endDate: new Date(2021, 3, 19, 12),
-    }],
-    views: [{
-      type: 'timelineDay',
-      groupOrientation: 'vertical',
-    }],
-    currentView: 'timelineDay',
-    currentDate: new Date(2021, 3, 10),
-    startDayHour: 10,
-    endDayHour: 14,
-    groups: ['priorityId'],
-    resources: [
-      {
-        fieldExpr: 'priorityId',
-        allowMultiple: true,
-        dataSource: [{
-          text: 'Low Priority',
-          id: 1,
-          color: '#1e90ff',
-        }, {
-          text: 'High Priority',
-          id: 2,
-          color: '#ff9747',
-        }],
-        label: 'Priority',
-      },
-    ],
-    showCurrentTimeIndicator: false,
-  }),
+  async (t, { platform }) => {
+    await t.resizeWindow(1200, 800);
+    await createWidget(platform, 'dxScheduler', {
+      dataSource: [{
+        text: 'Reduced',
+        priorityId: [1, 2],
+        startDate: new Date(2021, 3, 4, 12),
+        endDate: new Date(2021, 3, 19, 12),
+      }],
+      views: [{
+        type: 'timelineDay',
+        groupOrientation: 'vertical',
+      }],
+      currentView: 'timelineDay',
+      currentDate: new Date(2021, 3, 10),
+      startDayHour: 10,
+      endDayHour: 14,
+      groups: ['priorityId'],
+      resources: [
+        {
+          fieldExpr: 'priorityId',
+          allowMultiple: true,
+          dataSource: [{
+            text: 'Low Priority',
+            id: 1,
+            color: '#1e90ff',
+          }, {
+            text: 'High Priority',
+            id: 2,
+            color: '#ff9747',
+          }],
+          label: 'Priority',
+        },
+      ],
+      showCurrentTimeIndicator: false,
+    });
+  },
 );

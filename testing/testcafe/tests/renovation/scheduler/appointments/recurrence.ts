@@ -9,8 +9,7 @@ const test = multiPlatformTest({
   platforms: [/* 'jquery', */'react'],
 });
 
-fixture('Renovated scheduler - Recurrent appointments')
-  .beforeEach((t) => t.resizeWindow(1200, 800));
+fixture('Renovated scheduler - Recurrent appointments');
 
 [
   { currentView: 'day', expected: 2 },
@@ -32,46 +31,49 @@ fixture('Renovated scheduler - Recurrent appointments')
       ))
       .ok();
   }).before(
-    async (_, { platform }) => createWidget(platform, 'dxScheduler', {
-      dataSource: [{
-        text: 'Recurrence-1',
-        priorityId: [1, 2],
-        startDate: new Date(2021, 3, 21, 12),
-        endDate: new Date(2021, 3, 22, 10),
-        recurrenceRule: 'FREQ=DAILY;COUNT=3',
-      }],
-      views: [{
-        type: 'day',
-        groupOrientation: 'vertical',
-      }, {
-        type: 'week',
-        groupOrientation: 'vertical',
-      }, {
-        type: 'month',
-        groupOrientation: 'vertical',
-      }],
-      currentView,
-      currentDate: new Date(2021, 3, 21),
-      startDayHour: 10,
-      endDayHour: 14,
-      groups: ['priorityId'],
-      resources: [
-        {
-          fieldExpr: 'priorityId',
-          allowMultiple: true,
-          dataSource: [{
-            text: 'Low Priority',
-            id: 1,
-            color: '#1e90ff',
-          }, {
-            text: 'High Priority',
-            id: 2,
-            color: '#ff9747',
-          }],
-          label: 'Priority',
-        },
-      ],
-      showCurrentTimeIndicator: false,
-    }),
+    async (t, { platform }) => {
+      await t.resizeWindow(1200, 800);
+      await createWidget(platform, 'dxScheduler', {
+        dataSource: [{
+          text: 'Recurrence-1',
+          priorityId: [1, 2],
+          startDate: new Date(2021, 3, 21, 12),
+          endDate: new Date(2021, 3, 22, 10),
+          recurrenceRule: 'FREQ=DAILY;COUNT=3',
+        }],
+        views: [{
+          type: 'day',
+          groupOrientation: 'vertical',
+        }, {
+          type: 'week',
+          groupOrientation: 'vertical',
+        }, {
+          type: 'month',
+          groupOrientation: 'vertical',
+        }],
+        currentView,
+        currentDate: new Date(2021, 3, 21),
+        startDayHour: 10,
+        endDayHour: 14,
+        groups: ['priorityId'],
+        resources: [
+          {
+            fieldExpr: 'priorityId',
+            allowMultiple: true,
+            dataSource: [{
+              text: 'Low Priority',
+              id: 1,
+              color: '#1e90ff',
+            }, {
+              text: 'High Priority',
+              id: 2,
+              color: '#ff9747',
+            }],
+            label: 'Priority',
+          },
+        ],
+        showCurrentTimeIndicator: false,
+      });
+    },
   );
 });
