@@ -76,19 +76,21 @@
       height: $material-list-item-height;
       padding: 0;
 
+      .dx-button-text {
+        text-transform: none;
+        font-weight: 400;
+        font-size: $material-list-main-font-size;
+      }
+
       .dx-button-content {
         padding: 0 $material-list-item-horizontal-padding;
+
+        .dx-icon {
+          margin-right: $material-list-item-horizontal-padding;
+
+          @include dx-icon-sizing($material-button-icon-size);
+        }
       }
-    }
-  }
-
-  .dx-button-content {
-    padding: 4px;
-
-    .dx-icon {
-      color: $toolbar-color;
-
-      @include dx-icon-sizing($material-button-icon-size);
     }
   }
 
