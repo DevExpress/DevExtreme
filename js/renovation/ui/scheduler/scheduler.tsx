@@ -344,14 +344,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get preparedDataItems(): AppointmentDataItem[] {
-    if (!this.appointmentsConfig) {
-      return [];
-    }
-
     return getPreparedDataItems(
       this.dataItems,
       this.dataAccessors,
-      this.appointmentsConfig.cellDurationInMinutes,
+      this.currentViewConfig.cellDuration,
       this.timeZoneCalculator,
     );
   }

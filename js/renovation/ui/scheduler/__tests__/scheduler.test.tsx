@@ -1085,10 +1085,10 @@ describe('Scheduler', () => {
           scheduler.dataItems = 'Test_dataItems' as any;
 
           expect(scheduler.preparedDataItems)
-            .toEqual([]);
+            .toEqual('Prepared_Test_dataItems');
 
           expect(getPreparedDataItems)
-            .toHaveBeenCalledTimes(0);
+            .toHaveBeenCalledTimes(1);
         });
 
         it('should return empty array if appointmentsConfig is not exists', () => {
@@ -1099,8 +1099,8 @@ describe('Scheduler', () => {
           jest.spyOn(scheduler, 'dataAccessors', 'get')
             .mockReturnValue('dataAccessors_test' as any);
 
-          jest.spyOn(scheduler, 'appointmentsConfig', 'get')
-            .mockReturnValue({ cellDurationInMinutes: 60 } as any);
+          jest.spyOn(scheduler, 'currentViewConfig', 'get')
+            .mockReturnValue({ cellDuration: 60 } as any);
 
           jest.spyOn(scheduler, 'timeZoneCalculator', 'get')
             .mockReturnValue('timeZoneCalculator_test' as any);
