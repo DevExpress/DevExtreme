@@ -67,6 +67,12 @@ describe('Appointment', () => {
 
       expect(appointment.prop('style'))
         .toEqual('some-styles');
+
+      expect(appointment.prop('hint'))
+        .toEqual('some-text');
+
+      expect(appointment.props('restAttributes').role)
+        .toEqual('button');
     });
 
     it('it should has correct render with template', () => {
@@ -177,8 +183,6 @@ describe('Appointment', () => {
               left: '1px',
               top: '2px',
               width: '10px',
-              role: 'button',
-              title: 'Some text',
             });
         });
       });

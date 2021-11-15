@@ -8,8 +8,11 @@ import { Tooltip } from '../../../overlays/tooltip';
 import { AppointmentList } from './appointment_list';
 import { AppointmentViewModel } from '../types';
 
+const wrapperAttr = {
+  class: 'dx-scheduler-appointment-tooltip-wrapper',
+};
+
 export const viewFunction = ({
-  wrapperAttr,
   props: {
     onVisibleChange,
     visible,
@@ -36,7 +39,7 @@ export class AppointmentTooltipProps {
 
   @OneWay() onVisibleChange!: (value: boolean) => void;
 
-  @OneWay() target!: HTMLElement | undefined;
+  @OneWay() target!: HTMLElement;
 
   @OneWay() dataList!: AppointmentViewModel[];
 }
@@ -44,7 +47,4 @@ export class AppointmentTooltipProps {
 @Component({ view: viewFunction })
 export class AppointmentTooltip extends
   JSXComponent<AppointmentTooltipProps, 'visible' | 'onVisibleChange' | 'target' | 'dataList'>() {
-  wrapperAttr = {
-    class: 'dx-scheduler-appointment-tooltip-wrapper',
-  };
 }

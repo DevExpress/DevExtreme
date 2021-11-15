@@ -4,7 +4,11 @@ import {
   Ref, RefObject, Event,
 } from '@devextreme-generator/declarations';
 import type { AppointmentTemplateData } from '../../../../ui/scheduler';
-import { AppointmentTemplateProps, AppointmentViewModel } from './types';
+import {
+  AppointmentTemplateProps,
+  AppointmentViewModel,
+  AppointmentClickData,
+} from './types';
 import { getAppointmentStyles } from './utils';
 import { AppointmentContent } from './content';
 import { Widget } from '../../common/widget';
@@ -36,6 +40,8 @@ export const viewFunction = ({
       rootElementRef={ref}
       style={styles}
       classes={classes}
+      hint={text}
+      {...{ role: 'button' }}
     >
       {
         !!AppointmentTemplate && (
@@ -64,11 +70,7 @@ export class AppointmentProps {
 
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
-  @Event() onItemClick!: (e: {
-    data: AppointmentViewModel[];
-    target: HTMLElement | undefined;
-    index: number;
-  }) => void;
+  @Event() onItemClick!: (e: AppointmentClickData) => void;
 }
 
 @Component({
@@ -100,7 +102,7 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'o
   onItemClick(): void {
     const e = {
       data: [this.props.viewModel],
-      target: this.ref.current!,
+      target: this.ref.current as HTMLDivElement,
       index: this.props.index,
     };
 

@@ -6,6 +6,7 @@ import {
   AppointmentViewModel,
   OverflowIndicatorTemplateProps,
   OverflowIndicatorViewModel,
+  AppointmentClickData,
 } from './types';
 import { Appointment } from './appointment';
 import { OverflowIndicator } from './overflow_indicator/layout';
@@ -55,11 +56,7 @@ export class AppointmentLayoutProps {
 
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
-  @Event() onAppointmentClick?: (e: {
-    data: AppointmentViewModel[];
-    target: HTMLElement | undefined;
-    index: number;
-  }) => void;
+  @Event() onAppointmentClick?: (e: AppointmentClickData) => void;
 
   @Template() overflowIndicatorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
 }

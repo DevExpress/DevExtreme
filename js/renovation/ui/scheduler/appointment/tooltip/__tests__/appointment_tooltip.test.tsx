@@ -1,5 +1,5 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction, AppointmentTooltip } from '../appointment_tooltip';
+import { viewFunction } from '../appointment_tooltip';
 
 describe('Appointment tooltip', () => {
   describe('Render', () => {
@@ -15,20 +15,6 @@ describe('Appointment tooltip', () => {
 
     it('should be correct rendered without errors', () => {
       expect(() => render()).not.toThrow();
-    });
-  });
-
-  describe('Logic', () => {
-    describe('Fields', () => {
-      describe('wrapperAttr', () => {
-        it('should have correct class', () => {
-          const tooltip = new AppointmentTooltip({} as any);
-
-          expect(tooltip.wrapperAttr).toEqual({
-            class: 'dx-scheduler-appointment-tooltip-wrapper',
-          });
-        });
-      });
     });
   });
 });

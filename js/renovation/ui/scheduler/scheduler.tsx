@@ -37,7 +37,11 @@ import {
 import { getGroupCount, loadResources } from '../../../ui/scheduler/resources/utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
 import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
-import { AppointmentsViewModelType, AppointmentViewModel } from './appointment/types';
+import {
+  AppointmentsViewModelType,
+  AppointmentViewModel,
+  AppointmentClickData,
+} from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
@@ -225,7 +229,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() dataItems: Appointment[] = [];
 
-  @InternalState() tooltipTarget: HTMLElement | undefined;
+  @InternalState() tooltipTarget!: HTMLElement;
 
   @InternalState() tooltipVisible = false;
 
@@ -538,11 +542,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     this.props.currentDate = date;
   }
 
-  showTooltip(e: {
-    data: AppointmentViewModel[];
-    target: HTMLElement | undefined;
-    index: number;
-  }): void {
+  showTooltip(e: AppointmentClickData): void {
     this.tooltipData = e.data;
     this.tooltipTarget = e.target;
     this.changeTooltipVisible(true);
