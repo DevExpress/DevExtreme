@@ -77,11 +77,12 @@ export const Export = {
         const initialLoadPanelEnabledOption = component.option('loadPanel').enabled;
 
         component.option('loadPanel.enabled', false);
+        let exportLoadPanel;
         if(loadPanel.enabled && hasWindow()) {
             const rowsView = component.getView('rowsView');
 
-            this._loadPanel = new ExportLoadPanel(component, rowsView.element(), rowsView.element().parent(), loadPanel);
-            this._loadPanel.show();
+            exportLoadPanel = new ExportLoadPanel(component, rowsView.element(), rowsView.element().parent(), loadPanel);
+            exportLoadPanel.show();
         }
 
         const dataProvider = component.getDataProvider(selectedRowsOnly);
@@ -160,7 +161,7 @@ export const Export = {
                 component.option('loadPanel.enabled', initialLoadPanelEnabledOption);
 
                 if(loadPanel.enabled && hasWindow()) {
-                    this._loadPanel.dispose();
+                    exportLoadPanel.dispose();
                 }
             });
         });
