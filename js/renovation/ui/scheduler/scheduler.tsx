@@ -30,9 +30,9 @@ import {
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import type { DataAccessorType, DataSourcePromise } from './types';
+import type { AppointmentDataItem, DataAccessorType, DataSourcePromise } from './types';
 import {
-  createDataAccessors, createTimeZoneCalculator, filterAppointments, isViewDataProviderConfigValid,
+  createDataAccessors, createTimeZoneCalculator, isViewDataProviderConfigValid,
 } from './common';
 import { getGroupCount, loadResources } from '../../../ui/scheduler/resources/utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
@@ -41,6 +41,8 @@ import { AppointmentsViewModelType } from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
+import { getPreparedDataItems } from './utils/data';
+import { getFilterStrategy } from './utils/filter';
 
 export const viewFunction = ({
   restAttributes,
@@ -160,6 +162,8 @@ export const viewFunction = ({
           hoursInterval={hoursInterval}
           groups={loadedResources}
           type={type}
+          schedulerHeight={height}
+          schedulerWidth={width}
 
           indicatorTime={indicatorTime}
           allowMultipleCellSelection={allowMultipleCellSelection}
@@ -339,15 +343,39 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     );
   }
 
-  get filteredItems(): Appointment[] {
-    return filterAppointments(
-      this.appointmentsConfig,
+  get preparedDataItems(): AppointmentDataItem[] {
+    return getPreparedDataItems(
       this.dataItems,
       this.dataAccessors,
+      this.currentViewConfig.cellDuration,
       this.timeZoneCalculator,
-      this.loadedResources!,
-      this.workSpaceViewModel?.viewDataProvider,
     );
+  }
+
+  get filteredItems(): Appointment[] {
+    if (!this.appointmentsConfig) {
+      return [];
+    }
+
+    const filterStrategy = getFilterStrategy(
+      this.appointmentsConfig.resources,
+      this.appointmentsConfig.startDayHour,
+      this.appointmentsConfig.endDayHour,
+      this.appointmentsConfig.cellDurationInMinutes,
+      this.appointmentsConfig.showAllDayPanel,
+      this.appointmentsConfig.supportAllDayRow,
+      this.appointmentsConfig.firstDayOfWeek,
+      this.appointmentsConfig.viewType,
+      this.appointmentsConfig.dateRange,
+      this.appointmentsConfig.groupCount,
+      this.appointmentsConfig.loadedResources,
+      this.appointmentsConfig.isVirtualScrolling,
+      this.timeZoneCalculator,
+      this.dataAccessors,
+      this.workSpaceViewModel!.viewDataProvider,
+    );
+
+    return filterStrategy.filter(this.preparedDataItems);
   }
 
   get appointmentsViewModel(): AppointmentsViewModelType {
@@ -482,10 +510,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadGroupResources(): void {
-    const { groups, resources } = this.props;
+    const { groups: schedulerGroups, resources } = this.props;
+    const { groups: currentViewProps } = this.currentViewProps;
+
+    const validGroups = currentViewProps ?? schedulerGroups;
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    (loadResources(groups, resources, this.resourcePromisesMap) as Promise<Group[]>)
+    (loadResources(validGroups, resources, this.resourcePromisesMap) as Promise<Group[]>)
       .then((loadedResources) => {
         this.loadedResources = loadedResources;
       });

@@ -521,7 +521,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
                         if(item.rowType === 'group' && !summaryCells.length) {
                             const index = j - groupColumns.length + item.groupIndex;
 
-                            summaryCells.push(item.summaryCells[isDetailExpandColumn ? index - 1 : index]);
+                            summaryCells.push(item.summaryCells[isDetailExpandColumn ? index : index + 1]);
                         } else {
                             summaryCells.push(item.summaryCells[j]);
                         }

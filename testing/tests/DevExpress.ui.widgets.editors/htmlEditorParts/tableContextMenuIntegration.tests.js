@@ -1,5 +1,7 @@
 import $ from 'jquery';
 import 'ui/html_editor';
+import { createEvent } from 'events/utils/index';
+import eventsEngine from 'events/core/events_engine';
 
 const tableMarkup = '\
     before table text<br>\
@@ -95,6 +97,23 @@ module('Table context menu integration', {
             const $contextMenu = $(CONTEXT_MENU_OVERLAY_SELECTOR);
 
             assert.strictEqual($contextMenu.length, 0);
+        });
+
+        test('Context menu has correct position config (T1042722)', function(assert) {
+            this.createWidget({ height: 500 });
+            const clickCoordinates = { clientX: 100, clientY: 20 };
+
+            const $tableElement = this.$element.find('td').eq(5);
+            eventsEngine.trigger($tableElement, createEvent('dxcontextmenu', clickCoordinates));
+
+            this.clock.tick();
+
+            const startPosition = this.instance._getQuillContainer().get(0).getBoundingClientRect();
+            const contextMenuPosition = this.instance.getModule('tableContextMenu')._contextMenu.option('position');
+
+            assert.strictEqual(contextMenuPosition.collision, 'fit fit', 'collision is correct');
+            assert.strictEqual(contextMenuPosition.offset.x, clickCoordinates.clientX - startPosition.left, 'horizontal offset is correct');
+            assert.strictEqual(contextMenuPosition.offset.y, clickCoordinates.clientY - startPosition.top, 'vertical offset is correct');
         });
 
         test('Context menu should be created on table click if tableContextMenu enabled option is enabled at runtime', function(assert) {

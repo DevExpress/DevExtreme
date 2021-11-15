@@ -344,7 +344,6 @@ const SummaryDataSourceAdapterClientExtender = (function() {
             const groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
             const remoteOperations = options.remoteOperations || {};
             const summary = that.summaryGetter()(remoteOperations);
-            let totalAggregates;
 
             if(!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
                 if(remoteOperations.summary) {
@@ -355,11 +354,17 @@ const SummaryDataSourceAdapterClientExtender = (function() {
                         options.data = sortGroupsBySummary(options.data, groups, summary);
                     }
                 } else if(!remoteOperations.paging) {
-                    totalAggregates = calculateAggregates(that, summary, options.data, groups.length);
-
+                    const operationTypes = options.operationTypes || {};
+                    const hasOperations = Object.keys(operationTypes).some(type => operationTypes[type]);
+                    if(!hasOperations || !options.cachedData?.extra?.summary) {
+                        const totalAggregates = calculateAggregates(that, summary, options.data, groups.length);
+                        options.extra = isPlainObject(options.extra) ? options.extra : {};
+                        options.extra.summary = totalAggregates;
+                        if(options.cachedData) {
+                            options.cachedData.extra = options.extra;
+                        }
+                    }
                     options.data = sortGroupsBySummary(options.data, groups, summary);
-                    options.extra = isPlainObject(options.extra) ? options.extra : {};
-                    options.extra.summary = totalAggregates;
                 }
             }
 
@@ -478,7 +483,7 @@ gridCore.registerModule('summary', {
                                 } else {
                                     return groupColumnIndex;
                                 }
-                            });
+                            }, true);
                         }
                         if(groupItem.rowType === DATAGRID_GROUP_FOOTER_ROW_TYPE) {
                             groupItem.summaryCells = this._calculateSummaryCells(options.summaryGroupItems, getGroupAggregates(groupItem.data), options.visibleColumns, function(summaryItem, column) {
@@ -489,7 +494,7 @@ gridCore.registerModule('summary', {
                         return groupItem;
                     },
 
-                    _calculateSummaryCells: function(summaryItems, aggregates, visibleColumns, calculateTargetColumnIndex) {
+                    _calculateSummaryCells: function(summaryItems, aggregates, visibleColumns, calculateTargetColumnIndex, isGroupRow) {
                         const that = this;
                         const summaryCells = [];
                         const summaryCellsByColumns = {};
@@ -521,8 +526,10 @@ gridCore.registerModule('summary', {
                             }
                         });
                         if(!isEmptyObject(summaryCellsByColumns)) {
-                            each(visibleColumns, function() {
-                                summaryCells.push(summaryCellsByColumns[this.index] || []);
+                            visibleColumns.forEach((column, visibleIndex) => {
+                                const prevColumn = visibleColumns[visibleIndex - 1];
+                                const columnIndex = isGroupRow && (prevColumn?.command === 'expand' || column.command === 'expand') ? prevColumn?.index : column.index;
+                                summaryCells.push(summaryCellsByColumns[columnIndex] || []);
                             });
                         }
 

@@ -5,7 +5,7 @@ import {
   Consumer,
   Mutable,
 } from '@devextreme-generator/declarations';
-import { Page, PageProps } from './page';
+import { Page, PagePropsInterface } from './page';
 import { InternalPagerProps } from '../common/pager_props';
 import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
@@ -28,9 +28,10 @@ export const viewFunction = ({ pages }: PagesLarge): JSX.Element => {
 };
 
 const PAGES_LIMITER = 4;
+
 interface PageType {
   key: string;
-  pageProps: Partial<PageProps> | null;
+  pageProps: PagePropsInterface | null;
 }
 interface SlidingWindowState {
   indexesForReuse: number[];
