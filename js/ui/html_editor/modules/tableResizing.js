@@ -16,7 +16,8 @@ import {
     getLineElements,
     getAutoSizedElements,
     getColumnElements,
-    unfixTableWidth
+    unfixTableWidth,
+    setElementFormat
 } from '../utils/table_helper';
 
 
@@ -412,6 +413,7 @@ export default class TableResizingModule extends BaseModule {
 
     _horizontalDragHandler({ currentLineNewSize, directionInfo, eventOffset, $determinantElements, index, frame }) {
         let nextColumnNewSize = this._nextLineSize && this._nextLineSize - eventOffset;
+        let currentLineRealNewSize;
         const isCurrentColumnWidthEnough = currentLineNewSize >= this._minColumnWidth;
         const $lineElements = getLineElements(frame.$table, index);
         const $nextLineElements = getLineElements(frame.$table, index + 1);
@@ -424,6 +426,8 @@ export default class TableResizingModule extends BaseModule {
                     property: directionInfo.positionStyleProperty,
                     value: currentLineNewSize
                 });
+
+                currentLineRealNewSize = currentLineNewSize;
 
                 if(this._shouldSetNextColumnWidth(nextColumnNewSize)) {
                     setLineElementsFormat(this, {
@@ -438,10 +442,11 @@ export default class TableResizingModule extends BaseModule {
                 const shouldRevertNewValue = Math.abs(realWidthDiff) > ROUGH_OFFSET || (!this._nextLineSize && isTableWidthChanged);
 
                 if(shouldRevertNewValue) {
+                    currentLineRealNewSize = $lineElements.eq(0);
                     setLineElementsFormat(this, {
                         elements: $lineElements,
                         property: directionInfo.positionStyleProperty,
-                        value: getOuterWidth($lineElements.eq(0))
+                        value: getOuterWidth(currentLineRealNewSize)
                     });
 
                     nextColumnNewSize += currentLineNewSize - getOuterWidth($lineElements.eq(0));
@@ -459,7 +464,10 @@ export default class TableResizingModule extends BaseModule {
             }
         }
 
+
         this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset + realWidthDiff) + 'px');
+
+        setElementFormat(this, { element: $lineElements[0], propertyName: 'cellWidth', value: currentLineRealNewSize });
     }
 
     _verticalDragHandler({ currentLineNewSize, directionInfo, eventOffset, $determinantElements, index, frame }) {
@@ -475,11 +483,14 @@ export default class TableResizingModule extends BaseModule {
         const rowHeightDiff = getOuterHeight($determinantElements.eq(index)) - currentLineNewSize;
 
         this._$highlightedElement.css(directionInfo.positionCoordinate, (this._startLineSeparatorPosition + eventOffset + rowHeightDiff) + 'px');
+        setElementFormat(this, { element: $lineElements[0], propertyName: 'cellHeight', value: currentLineNewSize });
     }
 
     _dragMoveHandler(event, { $determinantElements, index, frame, direction }) {
         const directionInfo = this._getDirectionInfo(direction);
         let eventOffset = event.offset[directionInfo.positionCoordinateName];
+
+        this.editorInstance._saveValueChangeEvent(event);
 
         if(this._shouldRevertOffset(direction)) {
             eventOffset = -eventOffset;

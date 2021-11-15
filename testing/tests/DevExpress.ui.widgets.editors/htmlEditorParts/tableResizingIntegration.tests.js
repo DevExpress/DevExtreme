@@ -89,6 +89,17 @@ const tableMarkupWidth = '\
     </table>\
     <br><br>';
 
+const tableMarkupWidthWithContent = '\
+    <table>\
+        <tr>\
+            <td style="width: 50px">0_0</td>\
+            <td style="width: 100px">text0_1</td>\
+            <td style="width: 50px">0_2</td>\
+            <td style="width: 50px">text0_3</td>\
+        </tr>\
+    </table>\
+    <br><br>';
+
 const tableMarkupAutoWidth = '\
     <table>\
         <tr>\
@@ -563,13 +574,12 @@ module('Table resizing integration', {
         });
 
         test('Table should not change on non-last column resizing if next column has content', function(assert) {
-            this.createWidget({ width: 630, value: tableMarkupWidth });
+            this.createWidget({ width: 630, value: tableMarkupWidthWithContent });
             this.clock.tick(TIME_TO_WAIT);
 
             const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
             const $table = this.$element.find('table');
             const startTableWidth = $table.outerWidth();
-            $table.find('td').eq(3).text('text12');
 
             $columnResizerElements.eq(2)
                 .trigger('dxpointerdown');
@@ -588,13 +598,13 @@ module('Table resizing integration', {
         });
 
         test('Table should not change on non-last column resizing if previous column has content', function(assert) {
-            this.createWidget({ width: 630, value: tableMarkupWidth });
+
+            this.createWidget({ width: 630, value: tableMarkupWidthWithContent });
             this.clock.tick(TIME_TO_WAIT);
 
             const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
             const $table = this.$element.find('table');
             const startTableWidth = $table.outerWidth();
-            $table.find('td').eq(1).text('text12');
 
             $columnResizerElements.eq(1)
                 .trigger('dxpointerdown');
