@@ -101,7 +101,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     onReachBottom, onPullDown, onEnd, direction, topPocketState,
     isLoadPanelVisible, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom, active,
-    scrolling, lock, unlock,
+    onVisibilityChangeHandler, scrolling, lock, unlock,
     hScrollOffsetMax, vScrollOffsetMax, vScrollOffsetMin,
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
@@ -109,7 +109,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       needRenderScrollbars, needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
       reachBottomText, useKeyboard, bounceEnabled, inertiaEnabled,
-      pullDownEnabled, reachBottomEnabled, refreshStrategy, onVisibilityChange,
+      pullDownEnabled, reachBottomEnabled, refreshStrategy,
     },
     restAttributes,
   } = viewModel;
@@ -126,7 +126,8 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       height={height}
       width={width}
       visible={visible}
-      onVisibilityChange={onVisibilityChange}
+      // onVisibilityChange uses for date_view_roller purposes only
+      onVisibilityChange={onVisibilityChangeHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
       // onKeyDown exist in restAttributes and has undefined value
       onKeyDown={useKeyboard ? handleKeyDown : undefined}
@@ -1055,6 +1056,20 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     if (!this.props.disabled) {
       this.locked = false;
     }
+  }
+
+  // onVisibilityChangeHandler uses for date_view_roller purposes only
+  onVisibilityChangeHandler(visible: boolean): void {
+    if (visible) {
+      this.updateHandler();
+
+      const { scrollTop, scrollLeft } = this.savedScrollOffset;
+      // restore scrollLocation on second and next opening of popup with data_view rollers
+      this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: scrollTop, needFireScroll: false });
+      this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: scrollLeft, needFireScroll: false });
+    }
+
+    this.props.onVisibilityChange?.(visible);
   }
 
   updateElementDimensions(): void {
