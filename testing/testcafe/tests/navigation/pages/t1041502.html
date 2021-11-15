@@ -28,11 +28,33 @@
                     toolbar: {
                         items: [
                             {
+                                location: 'before',
+                                locateInMenu: "always",
+                                widget: 'dxButtonGroup',
+                                options: {
+                                    keyExpr: "alignment",
+                                    items: [
+                                        { icon: "alignleft", alignment: "left", text: "Align left" },
+                                        { icon: "aligncenter", alignment: "center", text: "Center" },
+                                        { icon: "alignright", alignment: "right", text: 'Right' },
+                                        { icon: "alignjustify", alignment: "justify", text: "Justify" }
+                                    ]
+                                }
+                            },
+                            {
                                 locateInMenu: "always",
                                 widget: "dxButton",
                                 options: {
                                     text: "comment",
                                     icon: "comment"
+                                }
+                            },
+                            {
+                                locateInMenu: "always",
+                                widget: "dxButton",
+                                options: {
+                                    text: "comment",
+                                    icon: "back"
                                 }
                             },
                             {
