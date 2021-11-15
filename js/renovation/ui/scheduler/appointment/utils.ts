@@ -14,6 +14,9 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
     info: {
       resourceColor,
     },
+    appointment: {
+      text,
+    },
   } = item;
 
   let result = addToStyles([{
@@ -28,6 +31,12 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
   }, {
     attr: 'left',
     value: `${left}px`,
+  }, {
+    attr: 'role',
+    value: 'button',
+  }, {
+    attr: 'text',
+    value: text,
   }]);
 
   if (resourceColor) {

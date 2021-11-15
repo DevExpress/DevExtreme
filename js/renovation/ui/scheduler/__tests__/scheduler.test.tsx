@@ -679,6 +679,41 @@ describe('Scheduler', () => {
             .toBe(new Date(2021, 1, 2).getTime());
         });
       });
+
+      describe('showTooltip', () => {
+        it('should correctly change component state', () => {
+          const data = 'data';
+          const target = 'target';
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+          });
+
+          scheduler.tooltipVisible = false;
+          scheduler.tooltipTarget = null as any;
+          scheduler.tooltipData = null as any;
+
+          scheduler.showTooltip({ data, target } as any);
+
+          expect(scheduler.tooltipVisible).toBe(true);
+          expect(scheduler.tooltipTarget).toBe(target);
+          expect(scheduler.tooltipData).toBe(data);
+        });
+      });
+
+      describe('hideTooltip', () => {
+        it('should change visible to false', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+          });
+
+          scheduler.tooltipVisible = true;
+
+          scheduler.hideTooltip();
+
+          expect(scheduler.tooltipVisible).toBe(false);
+        });
+      });
     });
   });
 
