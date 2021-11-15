@@ -8,7 +8,6 @@ const JSPdfStylesTests = {
             pdfCell.drawRightBorder = false;
             pdfCell.drawTopBorder = false;
             pdfCell.drawBottomBorder = false;
-            pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
         };
 
         QUnit.module('Styles - Background color', moduleConfig, () => {
@@ -21,6 +20,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - HEX color', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -53,6 +53,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - GRAY color', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -89,6 +90,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - RGB color', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -125,6 +127,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - SMYC color', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -161,6 +164,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [f1, f2] - custom HEX color in Header', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -200,6 +204,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [f1, f2] - custom GRAY color in Header', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -239,6 +244,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [f1, f2] - custom RGB color in Header', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -278,6 +284,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [f1, f2] - custom SMYC color in Header', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -317,6 +324,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [f1, f2] - custom HEX color in data row', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -358,6 +366,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [f1, f2] - custom GRAY color in data row', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -399,6 +408,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [f1, f2] - custom RGB color in data row', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -440,6 +450,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [f1, f2] - custom SMYC color in data row', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -485,6 +496,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - Custom HEX color for first table cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -522,6 +534,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - Custom GRAY color for first table cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -559,6 +572,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - Custom RGB color for first table cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -596,6 +610,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - Custom SMYC color for first table cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -633,6 +648,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - Custom HEX color for last table cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -670,6 +686,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - Custom GRAY color for last table cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -707,6 +724,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - Custom RGB color for last table cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -744,6 +762,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - Custom SMYC color for last table cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -781,6 +800,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - Custom colors for first and last table cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -823,6 +843,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - Custom colors for header row', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -861,6 +882,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - Different HEX colors in header cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -904,6 +926,7 @@ const JSPdfStylesTests = {
             QUnit.test('Simple - [{f1, f2] - Custom colors for data rows', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [

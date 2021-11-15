@@ -39,7 +39,7 @@ function getLineHeightShift(doc) {
     return (doc.getLineHeightFactor() - DEFAULT_LINE_HEIGHT) * doc.getFontSize();
 }
 
-function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWrapEnabled, jsPdfTextOptions) {
+function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWrapEnabled) {
     const textArray = getTextLines(doc, text, doc.getFont(), { wordWrapEnabled, targetRectWidth: rect.w });
     const linesCount = textArray.length;
 
@@ -58,8 +58,7 @@ function drawTextInRect(doc, text, rect, verticalAlign, horizontalAlign, wordWra
     const x = rect.x
         + (rect.w * horizontalAlignMap[hAlign]);
 
-    const textOptions = extend({ baseline: vAlign, align: hAlign }, jsPdfTextOptions);
-    doc.text(textArray.join('\n'), round(x), round(y), textOptions);
+    doc.text(textArray.join('\n'), round(x), round(y), { baseline: vAlign, align: hAlign });
 }
 
 function drawCellBackground(doc, cell) {
@@ -81,7 +80,7 @@ function drawCellText(doc, cell, docStyles) {
             w: _rect.w - (padding.left + padding.right),
             h: _rect.h - (padding.top + padding.bottom)
         };
-        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign, cell.wordWrapEnabled, cell.jsPdfTextOptions);
+        drawTextInRect(doc, cell.text, textRect, cell.verticalAlign, cell.horizontalAlign, cell.wordWrapEnabled);
     }
 }
 

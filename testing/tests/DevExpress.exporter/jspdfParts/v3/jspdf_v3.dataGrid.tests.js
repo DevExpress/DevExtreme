@@ -121,10 +121,9 @@ function createMockPdfDoc(options) {
 
     result.__text = result.text;
     result.text = function() {
-        if(arguments.length >= 3 && arguments[3].baseline === 'alphabetic') {
+        if(this.__logOptions.textOptions === false) {
             arguments[3] = undefined;
-        }
-        if(this.__logOptions.textOptions.hAlign !== true && arguments.length >= 3 && isDefined(arguments[3]) && arguments[3].align === 'left') {
+        } else if(this.__logOptions.textOptions.hAlign !== true && arguments.length >= 3 && isDefined(arguments[3]) && arguments[3].align === 'left') {
             delete arguments[3].align;
         }
         this.__log.push('text,' + argumentsToString.apply(null, arguments));
