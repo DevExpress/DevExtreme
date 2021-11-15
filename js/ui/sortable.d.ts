@@ -28,7 +28,7 @@ export interface AddEvent {
     readonly component: dxSortable;
     readonly element: DxElement;
     readonly model?: any;
-    readonly event: DxEvent<MouseEvent | TouchEvent>;
+    readonly event: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -44,7 +44,7 @@ export interface AddEvent {
 export type DisposingEvent = EventInfo<dxSortable>;
 
 /** @public */
-export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable, MouseEvent | TouchEvent> & {
+export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex?: number;
@@ -57,7 +57,7 @@ export type DragChangeEvent = Cancelable & NativeEventInfo<dxSortable, MouseEven
 };
 
 /** @public */
-export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable, MouseEvent | TouchEvent> & {
+export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -70,7 +70,7 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxSortable, MouseEvent |
 };
 
 /** @public */
-export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable, MouseEvent | TouchEvent> & {
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -83,7 +83,7 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxSortable, MouseEvent 
 };
 
 /** @public */
-export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable, MouseEvent | TouchEvent> & {
+export type DragStartEvent = Cancelable & NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
     itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -97,7 +97,7 @@ export type InitializedEvent = InitializedEventInfo<dxSortable>;
 export type OptionChangedEvent = EventInfo<dxSortable> & ChangedOptionInfo;
 
 /** @public */
-export type RemoveEvent = NativeEventInfo<dxSortable, MouseEvent | TouchEvent> & {
+export type RemoveEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;
@@ -109,7 +109,7 @@ export type RemoveEvent = NativeEventInfo<dxSortable, MouseEvent | TouchEvent> &
 };
 
 /** @public */
-export type ReorderEvent = NativeEventInfo<dxSortable, MouseEvent | TouchEvent> & {
+export type ReorderEvent = NativeEventInfo<dxSortable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
     readonly fromIndex: number;

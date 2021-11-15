@@ -111,7 +111,7 @@ export interface DraggableBase { }
 export type DisposingEvent = EventInfo<dxDraggable>;
 
 /** @public */
-export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable, MouseEvent | TouchEvent> & {
+export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -121,7 +121,7 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable, MouseEvent 
 };
 
 /** @public */
-export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable, MouseEvent | TouchEvent> & {
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -131,7 +131,7 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable, MouseEvent
 };
 
 /** @public */
-export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable, MouseEvent | TouchEvent> & {
+export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
     itemData?: any;
     readonly itemElement?: DxElement;
     readonly fromData?: any;
