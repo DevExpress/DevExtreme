@@ -35,7 +35,7 @@ export const getAppointmentStyles = (item: AppointmentViewModel): CSSAttributes 
     attr: 'role',
     value: 'button',
   }, {
-    attr: 'text',
+    attr: 'title',
     value: text,
   }]);
 

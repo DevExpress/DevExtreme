@@ -1,7 +1,8 @@
+import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction, Appointment, AppointmentProps } from '../appointment';
-import { AppointmentContent } from '../content';
 import { Widget } from '../../../common/widget';
+import { viewFunction as ViewFunction, Appointment, AppointmentProps } from '../appointment';
+import { AppointmentContent } from '../content';
 import { AppointmentViewModel, ReduceType } from '../types';
 
 describe('Appointment', () => {
@@ -41,38 +42,32 @@ describe('Appointment', () => {
   };
 
   describe('Render', () => {
-    const render = (viewModel): ShallowWrapper => shallow(viewFunction({
-      ...viewModel,
-      props: {
-        viewModel: defaultViewModel,
-        ...viewModel.props,
-      },
-    }));
+    const render = (viewModel): ShallowWrapper => shallow(
+      <ViewFunction
+        {...viewModel}
+        props={{
+          viewModel: defaultViewModel,
+          ...viewModel.props,
+        }}
+      />,
+    );
 
     it('it should has correct render', () => {
       const appointment = render({
         styles: 'some-styles',
         classes: 'some-classes',
         text: 'some-text',
+        onClick: 'some-onclick',
       });
 
       expect(appointment.is(Widget))
         .toBe(true);
 
-      expect(appointment.hasClass('some-classes'))
-        .toBe(true);
-
-      expect(appointment.prop('className'))
-        .toEqual('dx-scheduler-appointment');
+      expect(appointment.prop('classes'))
+        .toBe('some-classes');
 
       expect(appointment.prop('style'))
         .toEqual('some-styles');
-
-      expect(appointment.prop('title'))
-        .toBe('some-text');
-
-      expect(appointment.prop('role'))
-        .toBe('button');
     });
 
     it('it should has correct render with template', () => {
@@ -90,14 +85,8 @@ describe('Appointment', () => {
         },
       });
 
-      expect(appointment.prop('className'))
-        .toEqual('dx-scheduler-appointment');
-
-      expect(appointment.is(Widget))
-        .toBe(true);
-
-      expect(appointment.hasClass('some-classes'))
-        .toBe(true);
+      expect(appointment.prop('classes'))
+        .toBe('some-classes');
 
       expect(appointment.prop('style'))
         .toEqual('some-styles');
@@ -186,6 +175,8 @@ describe('Appointment', () => {
               left: '1px',
               top: '2px',
               width: '10px',
+              role: 'button',
+              title: 'Some text',
             });
         });
       });

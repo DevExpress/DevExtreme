@@ -44,6 +44,8 @@ describe('Appointment utils', () => {
           left: '1px',
           top: '2px',
           width: '10px',
+          role: 'button',
+          title: 'Some text',
         });
     });
 
@@ -60,6 +62,8 @@ describe('Appointment utils', () => {
           left: '1px',
           top: '2px',
           width: '10px',
+          role: 'button',
+          title: 'Some text',
         });
     });
 
@@ -77,6 +81,8 @@ describe('Appointment utils', () => {
           left: '1px',
           top: '2px',
           width: '10px',
+          role: 'button',
+          title: 'Some text',
         });
     });
 
@@ -94,6 +100,8 @@ describe('Appointment utils', () => {
           left: '1px',
           top: '2px',
           width: '50px',
+          role: 'button',
+          title: 'Some text',
         });
     });
   });
