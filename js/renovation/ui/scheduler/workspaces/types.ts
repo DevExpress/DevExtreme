@@ -459,6 +459,8 @@ export interface VirtualScrollingOptions {
   getSchedulerWidth: () => (number | string | (() => string | number) | undefined);
   getViewHeight: () => number;
   getViewWidth: () => number;
+  getWindowHeight: () => number;
+  getWindowWidth: () => number;
   getScrolling: () => dxSchedulerScrolling;
   getScrollableOuterWidth: () => number;
   getGroupCount: () => number;
@@ -473,4 +475,8 @@ export interface VirtualScrollingDispatcherType {
   getRenderState: () => VirtualScrollingState;
   updateDimensions: (isForce?: boolean) => void;
   handleOnScrollEvent: (scrollOffset: ScrollOffset) => void;
+  verticalScrollingAllowed: boolean;
+  horizontalScrollingAllowed: boolean;
+  height: number;
+  isAttachWindowScrollEvent: () => boolean;
 }
