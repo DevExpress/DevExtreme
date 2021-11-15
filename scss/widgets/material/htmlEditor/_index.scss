@@ -58,6 +58,22 @@
     border-color: transparent;
     border-radius: $texteditor-input-border-radius;
 
+    .dx-htmleditor-content {
+      margin: 1px 1px 1px 0;
+    }
+
+    &.dx-rtl,
+    .dx-rtl & {
+      .dx-htmleditor-content {
+        margin-right: 0;
+        margin-left: 1px;
+      }
+    }
+
+    .dx-htmleditor-toolbar-wrapper + .dx-quill-container .dx-htmleditor-content {
+      margin-top: 0;
+    }
+
     &.dx-state-disabled,
     &.dx-state-readonly,
     &.dx-state-readonly.dx-state-hover {
@@ -70,7 +86,8 @@
 
     &.dx-state-focused,
     &.dx-state-active {
-      box-shadow: inset 0 0 0 2px $texteditor-focused-border-color;
+      box-shadow: inset 0 0 0 1px $texteditor-focused-border-color;
+      border-color: $texteditor-focused-border-color;
     }
 
     &.dx-invalid {
@@ -79,7 +96,8 @@
 
       &.dx-state-focused,
       &.dx-state-active {
-        box-shadow: inset 0 0 0 2px $texteditor-invalid-focused-border-color;
+        box-shadow: inset 0 0 0 1px $texteditor-invalid-focused-border-color;
+        border-color: $texteditor-invalid-focused-border-color;
       }
     }
   }

@@ -28,6 +28,7 @@
             "enabled": false
         }
     ],
+    "assignAutomerge": true,
     "reviewers": [
         "team:devextreme-core"
     ],
