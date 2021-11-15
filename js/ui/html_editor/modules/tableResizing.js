@@ -586,8 +586,7 @@ export default class TableResizingModule extends BaseModule {
             setLineElementsFormat(this, {
                 elements: $lineElements,
                 property: 'width',
-                value: Math.max(columnWidth, this._minColumnWidth),
-                // ignoreValueChange: true
+                value: Math.max(columnWidth, this._minColumnWidth)
             });
         });
     }
@@ -620,12 +619,10 @@ export default class TableResizingModule extends BaseModule {
                 resultWidth = this._minColumnWidth;
             }
 
-            console.log(resultWidth);
             setLineElementsFormat(this, {
                 elements: $lineElements,
                 property: 'width',
-                value: resultWidth,
-                // ignoreValueChange: true
+                value: resultWidth
             });
         });
     }
