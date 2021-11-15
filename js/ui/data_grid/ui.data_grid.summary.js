@@ -344,7 +344,6 @@ const SummaryDataSourceAdapterClientExtender = (function() {
             const groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
             const remoteOperations = options.remoteOperations || {};
             const summary = that.summaryGetter()(remoteOperations);
-            let totalAggregates;
 
             if(!options.isCustomLoading || options.storeLoadOptions.isLoadingAll) {
                 if(remoteOperations.summary) {
@@ -355,11 +354,17 @@ const SummaryDataSourceAdapterClientExtender = (function() {
                         options.data = sortGroupsBySummary(options.data, groups, summary);
                     }
                 } else if(!remoteOperations.paging) {
-                    totalAggregates = calculateAggregates(that, summary, options.data, groups.length);
-
+                    const operationTypes = options.operationTypes || {};
+                    const hasOperations = Object.keys(operationTypes).some(type => operationTypes[type]);
+                    if(!hasOperations || !options.cachedPagesData?.extra?.summary) {
+                        const totalAggregates = calculateAggregates(that, summary, options.data, groups.length);
+                        options.extra = isPlainObject(options.extra) ? options.extra : {};
+                        options.extra.summary = totalAggregates;
+                        if(options.cachedPagesData) {
+                            options.cachedPagesData.extra = options.extra;
+                        }
+                    }
                     options.data = sortGroupsBySummary(options.data, groups, summary);
-                    options.extra = isPlainObject(options.extra) ? options.extra : {};
-                    options.extra.summary = totalAggregates;
                 }
             }
 
