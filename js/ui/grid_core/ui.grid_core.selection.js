@@ -111,6 +111,12 @@ const SelectionController = gridCore.Controller.inherit((function() {
             this._selection = this._createSelection();
             this._updateSelectColumn();
             this.createAction('onSelectionChanged', { excludeValidators: ['disabled', 'readOnly'] });
+            this._dataController && this._dataController.pushed.add(this._handleDataPushed.bind(this));
+        },
+
+        _handleDataPushed: function(changes) {
+            const removedKeys = changes.filter(change => change.type === 'remove').map(change => change.key);
+            removedKeys.length && this.deselectRows(removedKeys);
         },
 
         _getSelectionConfig: function() {
@@ -585,12 +591,6 @@ export const selectionModule = {
                         this._changes = [{ changeType: 'updateSelection', itemIndexes }];
                     }
                     this.callBase.apply(this, arguments);
-                },
-
-                push: function(changes) {
-                    this.callBase.apply(this, arguments);
-                    const removedKeys = changes.filter(change => change.type === 'remove').map(change => change.key);
-                    removedKeys.length && this.getController('selection').deselectRows(removedKeys);
                 }
             },
             contextMenu: {

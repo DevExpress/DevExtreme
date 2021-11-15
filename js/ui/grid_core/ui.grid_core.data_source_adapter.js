@@ -97,6 +97,7 @@ export default gridCore.Controller.inherit((function() {
             that.loadError = Callbacks();
             that.customizeStoreLoadOptions = Callbacks();
             that.changing = Callbacks();
+            that.pushed = Callbacks();
 
             that._dataChangedHandler = that._handleDataChanged.bind(that);
             that._dataLoadingHandler = that._handleDataLoading.bind(that);
@@ -192,6 +193,8 @@ export default gridCore.Controller.inherit((function() {
             if(!fromStore) {
                 this._applyBatch(changes);
             }
+
+            this.pushed.fire(changes);
         },
         getDataIndexGetter: function() {
             if(!this._dataIndexGetter) {
