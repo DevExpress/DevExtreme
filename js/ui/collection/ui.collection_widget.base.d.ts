@@ -88,7 +88,7 @@ export interface CollectionWidgetOptions<
      * @action
      * @public
      */
-    onItemClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>) => void) | string;
+    onItemClick?: ((e: NativeEventInfo<TComponent, MouseEvent | PointerEvent> & ItemInfo<TItem>) => void) | string;
     /**
      * @docid
      * @default null

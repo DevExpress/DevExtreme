@@ -4346,7 +4346,7 @@ declare module DevExpress.ui {
       | ((
           e: DevExpress.events.NativeEventInfo<
             TComponent,
-            MouseEvent | PointerEvent | TouchEvent
+            MouseEvent | PointerEvent
           > &
             DevExpress.events.ItemInfo<TItem>
         ) => void)
@@ -4620,7 +4620,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxAccordion<TItem, TKey>,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
@@ -4653,7 +4653,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxAccordion<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<TItem>;
     export type OptionChangedEvent<
@@ -5076,7 +5076,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxBox<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
@@ -5670,7 +5670,7 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxContextMenu<TKey>>;
     export type ItemClickEvent<TKey = any> = DevExpress.events.NativeEventInfo<
       dxContextMenu<TKey>,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<Item>;
     export type ItemContextMenuEvent<TKey = any> =
@@ -13337,7 +13337,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxGallery<TItem, TKey>,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
@@ -15341,7 +15341,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxList<TItem, TKey>,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       ListItemInfo<TItem>;
     export type ItemContextMenuEvent<
@@ -16241,7 +16241,7 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxMenu<TKey>>;
     export type ItemClickEvent<TKey = any> = DevExpress.events.NativeEventInfo<
       dxMenu<TKey>,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<Item>;
     export type ItemContextMenuEvent<TKey = any> =
@@ -16702,7 +16702,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxNavBar<TItem, TKey>,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
@@ -18448,7 +18448,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxResponsiveBox<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
@@ -19857,7 +19857,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxSlideOut<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
@@ -20488,7 +20488,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxTabPanel<TItem, TKey>,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
@@ -20542,7 +20542,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxTabPanel<TItem, TKey>,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       TabPanelItemInfo<TItem>;
     export type TitleHoldEvent<
@@ -20693,7 +20693,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       TabsInstance<TItem, TKey>,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
@@ -21368,7 +21368,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxTileView<TItem, TKey>,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
@@ -21604,7 +21604,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxToolbar<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
@@ -23100,13 +23100,13 @@ declare module DevExpress.ui {
       DevExpress.events.InitializedEventInfo<dxTreeView<TKey>>;
     export type ItemClickEvent<TKey = any> = DevExpress.events.NativeEventInfo<
       dxTreeView<TKey>,
-      KeyboardEvent | MouseEvent | PointerEvent | TouchEvent
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       ItemInfo<TKey>;
     export type ItemCollapsedEvent<TKey = any> =
       DevExpress.events.NativeEventInfo<
         dxTreeView<TKey>,
-        MouseEvent | PointerEvent | TouchEvent
+        MouseEvent | PointerEvent
       > &
         ItemInfo<TKey>;
     export type ItemContextMenuEvent<TKey = any> =
@@ -23118,7 +23118,7 @@ declare module DevExpress.ui {
     export type ItemExpandedEvent<TKey = any> =
       DevExpress.events.NativeEventInfo<
         dxTreeView<TKey>,
-        MouseEvent | PointerEvent | TouchEvent
+        MouseEvent | PointerEvent
       > &
         ItemInfo<TKey>;
     export type ItemHoldEvent<TKey = any> = DevExpress.events.NativeEventInfo<
@@ -23507,7 +23507,7 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxValidationSummary<TItem, TKey>,
-      MouseEvent | PointerEvent | TouchEvent
+      MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<TItem>;
     export type OptionChangedEvent<
