@@ -75,10 +75,10 @@
     .dx-button {
       height: $material-list-item-height;
       padding: 0;
-    }
 
-    .dx-button-content {
-      padding: 0 $material-list-item-horizontal-padding;
+      .dx-button-content {
+        padding: 0 $material-list-item-horizontal-padding;
+      }
     }
   }
 
