@@ -10,6 +10,7 @@ import {
   Ref,
   RefObject,
 } from '@devextreme-generator/declarations';
+import { subscribeToScrollEvent } from '../../../../utils/subscribe_to_event';
 import { combineClasses } from '../../../../utils/combine_classes';
 import {
   CorrectedVirtualScrollingState,
@@ -53,8 +54,11 @@ import { calculateIsGroupedAllDayPanel } from '../../view_model/to_test/views/ut
 import { DateHeaderDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/date_header_data_generator';
 import { TimePanelDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
 import { getGroupPanelData } from '../../view_model/group_panel/utils';
-import { ScrollEventArgs } from '../../../scroll_view/common/types';
+import { ScrollEventArgs, ScrollOffset } from '../../../scroll_view/common/types';
 import type { dxSchedulerScrolling } from '../../../../../ui/scheduler';
+import { getWindow } from '../../../../../core/utils/window';
+import domAdapter from '../../../../../core/dom_adapter';
+import { EffectReturn } from '../../../../utils/effect_return';
 
 interface VirtualScrollingSizes {
   cellHeight: number;
@@ -62,6 +66,8 @@ interface VirtualScrollingSizes {
   viewWidth: number;
   viewHeight: number;
   scrollableWidth: number;
+  windowHeight: number;
+  windowWidth: number;
 }
 
 interface VirtualScrollingData {
@@ -75,6 +81,8 @@ const defaultVirtualScrollingMetaData = {
   viewWidth: 300,
   viewHeight: 300,
   scrollableWidth: 300,
+  windowHeight: 300,
+  windowWidth: 300,
 };
 
 const calculateDefaultVirtualScrollingState = (
@@ -104,6 +112,8 @@ const calculateDefaultVirtualScrollingState = (
     isVerticalGrouping: options.isVerticalGrouping,
     completeRowCount,
     completeColumnCount,
+    windowHeight: defaultVirtualScrollingMetaData.windowHeight,
+    windowWidth: defaultVirtualScrollingMetaData.windowWidth,
   }));
   options.virtualScrollingDispatcher.createVirtualScrolling();
   options.virtualScrollingDispatcher.updateDimensions(true);
@@ -192,7 +202,7 @@ export const viewFunction = ({
   tablesWidth,
   classes,
 
-  onScroll,
+  onScrollableScroll,
 
   props: {
     dataCellTemplate,
@@ -252,7 +262,7 @@ export const viewFunction = ({
     headerEmptyCellWidth={headerEmptyCellWidth}
     tablesWidth={tablesWidth}
 
-    onScroll={onScroll}
+    onScroll={onScrollableScroll}
 
     className={classes}
     dateTableRef={dateTableRef}
@@ -797,12 +807,17 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     const viewHeight = widgetRect.height;
     const viewWidth = widgetRect.width;
 
+    const windowHeight = getWindow().innerHeight;
+    const windowWidth = getWindow().innerWidth;
+
     const nextSizes = {
       cellHeight,
       cellWidth,
       scrollableWidth,
-      viewWidth,
       viewHeight,
+      viewWidth,
+      windowHeight,
+      windowWidth,
     };
 
     const isNextMetaDataNotEqualToCurrent = !this.virtualScrollingData || Object.entries(nextSizes)
@@ -831,6 +846,8 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         isVerticalGrouping: this.isVerticalGrouping,
         completeRowCount,
         completeColumnCount,
+        windowHeight: nextSizes.windowHeight,
+        windowWidth: nextSizes.windowWidth,
       }));
       this.virtualScrolling.createVirtualScrolling();
       this.virtualScrolling.updateDimensions(true);
@@ -840,6 +857,18 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         sizes: nextSizes,
       };
     }
+  }
+
+  @Effect()
+  onWindowScrollEffect(): EffectReturn {
+    if (this.virtualScrolling.isAttachWindowScrollEvent()) {
+      return subscribeToScrollEvent(
+        domAdapter.getDocument(),
+        this.onWindowScroll,
+      );
+    }
+
+    return undefined;
   }
 
   @Effect()
@@ -958,20 +987,33 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return allDayPanelCellsMeta;
   }
 
-  onScroll(event: ScrollEventArgs): void {
+  onWindowScroll(): void {
+    const { scrollX, scrollY } = getWindow();
+
+    this.onScroll({
+      top: scrollY,
+      left: scrollX,
+    });
+  }
+
+  onScrollableScroll(event: ScrollEventArgs): void {
     if (this.props.scrolling.mode === 'virtual') {
-      this.virtualScrolling.handleOnScrollEvent(event.scrollOffset);
-      const nextState = this.virtualScrolling.getRenderState();
+      this.onScroll(event.scrollOffset);
+    }
+  }
 
-      const isUpdateState = Object.entries(nextState)
-        .some(([key, value]) => value !== this.virtualScrollingData!.state[key]);
+  onScroll(scrollOffset: ScrollOffset): void {
+    this.virtualScrolling.handleOnScrollEvent(scrollOffset);
+    const nextState = this.virtualScrolling.getRenderState();
 
-      if (isUpdateState) {
-        this.virtualScrollingData = {
-          state: nextState,
-          sizes: this.virtualScrollingData!.sizes,
-        };
-      }
+    const isUpdateState = Object.entries(nextState)
+      .some(([key, value]) => value !== this.virtualScrollingData!.state[key]);
+
+    if (isUpdateState) {
+      this.virtualScrollingData = {
+        state: nextState,
+        sizes: this.virtualScrollingData!.sizes,
+      };
     }
   }
 }

@@ -70,6 +70,26 @@ QUnit.module('Button', function() {
             assert.ok(params.validationGroup, 'validationGroup should be passed');
         });
 
+        QUnit.test('onClick should have validationGroup parameter even if validationGroup is inited on another element (T1041957)', function(assert) {
+            const clickHandler = sinon.stub();
+
+            this.instance.option({
+                onClick: clickHandler,
+                validationGroup: 'group'
+            });
+
+            try {
+                ValidationEngine.registerValidatorInGroup('group', sinon.stub());
+
+                this.element.trigger('dxclick');
+
+                const params = clickHandler.getCall(0).args[0];
+                assert.ok(params.validationGroup, 'validationGroup should be passed');
+            } finally {
+                ValidationEngine.initGroups();
+            }
+        });
+
         QUnit.test('icon', function(assert) {
             this.instance.option('icon', 'home');
             assert.equal(this.element.find('.dx-icon-home').length, 1);
