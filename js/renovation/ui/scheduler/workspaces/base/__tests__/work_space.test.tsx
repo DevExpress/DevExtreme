@@ -1313,6 +1313,88 @@ describe('WorkSpace', () => {
             setWindow(originalWindow, true);
           }
         });
+
+        it('should work with rtlEnabled', () => {
+          const originalWindow = getWindow();
+
+          try {
+            setWindow({
+              innerHeight: 500,
+              innerWidth: 500,
+            }, true);
+            const workSpace = new WorkSpace({
+              ...new WorkSpaceProps(),
+              type: 'week',
+              currentDate: new Date(2021, 10, 9),
+              scrolling: { mode: 'virtual' },
+              intervalCount: 2,
+              schedulerHeight: 1000,
+              schedulerWidth: 800,
+            } as any);
+
+            workSpace.layoutRef = layoutRefMock;
+            workSpace.dateTableRef = dateTableRefMock;
+            workSpace.widgetElementRef = widgetElementRefMock;
+            workSpace.config = { rtlEnabled: true };
+
+            const data = {
+              sizes: {
+                cellHeight: 150,
+                cellWidth: 100,
+                scrollableWidth: 1700,
+                viewHeight: 21000,
+                viewWidth: 1800,
+                windowHeight: 500,
+                windowWidth: 500,
+              },
+              state: {
+                bottomVirtualRowHeight: 1900,
+                cellCount: 14,
+                cellWidth: 75,
+                leftVirtualCellWidth: 0,
+                rightVirtualCellWidth: 0,
+                rowCount: 30,
+                startCellIndex: 0,
+                startIndex: 0,
+                startRowIndex: 0,
+                topVirtualRowHeight: 0,
+              },
+            };
+
+            workSpace.virtualScrollingData = data;
+
+            workSpace.virtualScrollingMetaDataEffect();
+
+            expect(workSpace.virtualScrollingData)
+              .not.toBe(data);
+            expect(workSpace.virtualScrollingData)
+              .toEqual({
+                sizes: {
+                  cellHeight: 50,
+                  cellWidth: 75,
+                  scrollableWidth: 700,
+                  viewHeight: 1000,
+                  viewWidth: 800,
+                  windowHeight: 500,
+                  windowWidth: 500,
+                },
+                state: {
+                  bottomVirtualRowHeight: 900,
+                  cellCount: 14,
+                  cellWidth: 75,
+                  leftVirtualCellWidth: 0,
+                  rightVirtualCellWidth: 0,
+                  rowCount: 30,
+                  startCellIndex: 0,
+                  startIndex: 0,
+                  startRowIndex: 0,
+                  topVirtualRowHeight: 0,
+                },
+              });
+          } finally {
+            setWindow(originalWindow, true);
+          }
+        });
       });
     });
   });
