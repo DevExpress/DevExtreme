@@ -30,12 +30,12 @@ export type ContentReadyEvent = EventInfo<dxFileUploader>;
 export type DisposingEvent = EventInfo<dxFileUploader>;
 
 /** @public */
-export type DropZoneEnterEvent = NativeEventInfo<dxFileUploader, MouseEvent> & {
+export type DropZoneEnterEvent = NativeEventInfo<dxFileUploader, PointerEvent | MouseEvent | TouchEvent> & {
     readonly dropZoneElement: DxElement;
 };
 
 /** @public */
-export type DropZoneLeaveEvent = NativeEventInfo<dxFileUploader, MouseEvent> & {
+export type DropZoneLeaveEvent = NativeEventInfo<dxFileUploader, PointerEvent | MouseEvent | TouchEvent> & {
     readonly dropZoneElement: DxElement;
 };
 
