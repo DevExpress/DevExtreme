@@ -40,7 +40,7 @@ export type DisposingEvent = EventInfo<dxButtonGroup>;
 export type InitializedEvent = InitializedEventInfo<dxButtonGroup>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxButtonGroup> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxButtonGroup, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxButtonGroup> & ChangedOptionInfo;

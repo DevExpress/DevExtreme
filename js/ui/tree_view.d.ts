@@ -52,22 +52,22 @@ export type DisposingEvent<TKey = any> = EventInfo<dxTreeView<TKey>>;
 export type InitializedEvent<TKey = any> = InitializedEventInfo<dxTreeView<TKey>>;
 
 /** @public */
-export type ItemClickEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+export type ItemClickEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<TKey>;
 
 /** @public */
-export type ItemCollapsedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+export type ItemCollapsedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent> & ItemInfo<TKey>;
 
 /** @public */
-export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TKey>;
 
 /** @public */
-export type ItemExpandedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+export type ItemExpandedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent> & ItemInfo<TKey>;
 
 /** @public */
-export type ItemHoldEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+export type ItemHoldEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TKey>;
 
 /** @public */
-export type ItemRenderedEvent<TKey = any> = NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+export type ItemRenderedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
 
 /** @public */
 export type ItemSelectionChangedEvent<TKey = any> = EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;

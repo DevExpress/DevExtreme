@@ -53,19 +53,19 @@ export type HidingEvent<TKey = any> = Cancelable & EventInfo<dxContextMenu<TKey>
 export type InitializedEvent<TKey = any> = InitializedEventInfo<dxContextMenu<TKey>>;
 
 /** @public */
-export type ItemClickEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>> & ItemInfo<Item>;
+export type ItemClickEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<Item>;
 
 /** @public */
-export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>> & ItemInfo<Item>;
+export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<Item>;
 
 /** @public */
-export type ItemRenderedEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>> & ItemInfo<Item>;
+export type ItemRenderedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & ItemInfo<Item>;
 
 /** @public */
 export type OptionChangedEvent<TKey = any> = EventInfo<dxContextMenu<TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type PositioningEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>> & {
+export type PositioningEvent<TKey = any> = NativeEventInfo<dxContextMenu<TKey>, MouseEvent | PointerEvent | TouchEvent> & {
     readonly position: PositionConfig;
 };
 
@@ -93,7 +93,7 @@ export interface dxContextMenuOptions<
      * @type_function_return Boolean
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @type string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions

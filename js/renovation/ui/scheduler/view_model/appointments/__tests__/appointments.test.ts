@@ -63,6 +63,10 @@ const prepareInstances = (
     workspaceProps as any,
     viewRenderConfig,
     isAllDayPanelVisible,
+    {
+      startCellIndex: 0,
+      startRowIndex: 0,
+    },
   );
   viewDataProvider.update(generationOptions, true);
 

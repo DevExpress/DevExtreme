@@ -221,7 +221,7 @@ export class DataGridColumn {
   @Event()
   calculateDisplayValue?: string | ((rowData: any) => any);
 
-  @Event()
+  @OneWay()
   calculateFilterExpression?: (
     filterValue: any,
     selectedFilterOperation: string,
@@ -332,7 +332,7 @@ export class DataGridColumn {
   | 'notcontains'
   | 'startswith';
 
-  @Event()
+  @OneWay()
   setCellValue?: (
     newData: any,
     value: any,
@@ -351,7 +351,7 @@ export class DataGridColumn {
   @OneWay()
   sortOrder?: 'asc' | 'desc';
 
-  @Event()
+  @OneWay()
   sortingMethod?: (value1: any, value2: any) => number;
 
   @OneWay()

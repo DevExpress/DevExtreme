@@ -327,18 +327,18 @@ describe('Button', () => {
               which: 'enter',
               originalEvent,
             };
-            const button = new Button({ onClick, validationGroup: 'vGroup' });
+            const button = new Button({ onClick });
             button.keyDown(options);
             expect(options.originalEvent.preventDefault).toBeCalled();
             expect(onClick).toHaveBeenCalledTimes(1);
             expect(onClick).toHaveBeenCalledWith({
-              event: options.originalEvent, validationGroup: 'vGroup',
+              event: options.originalEvent,
             });
           });
 
           it('should not simulate click by common keys down', () => {
             const onClick = jest.fn();
-            const button = new Button({ onClick, validationGroup: 'vGroup' });
+            const button = new Button({ onClick });
             const originalEvent = {} as Event & { cancel: boolean };
             button.keyDown({ keyName: 'A', which: 'A', originalEvent });
             expect(onClick).not.toBeCalled();
@@ -349,11 +349,11 @@ describe('Button', () => {
           it('should call onClick callback by Widget click', () => {
             const onClick = jest.fn();
             const event = {} as Event;
-            const button = new Button({ onClick, validationGroup: 'vGroup' });
+            const button = new Button({ onClick });
             button.onWidgetClick(event);
             expect(onClick).toHaveBeenCalledTimes(1);
             expect(onClick).toHaveBeenCalledWith({
-              event, validationGroup: 'vGroup',
+              event,
             });
           });
 

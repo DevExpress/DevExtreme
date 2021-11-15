@@ -19,7 +19,7 @@ import {
     ScrollDirection,
 } from '../../types/enums';
 
-export interface ScrollEventInfo<T> extends NativeEventInfo<T> {
+export interface ScrollEventInfo<T> extends NativeEventInfo<T, WheelEvent | MouseEvent | Event> {
     readonly scrollOffset?: any;
     readonly reachedLeft?: boolean;
     readonly reachedRight?: boolean;
