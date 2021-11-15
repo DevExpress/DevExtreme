@@ -150,7 +150,7 @@ const data = [
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery', 'react'],
+  platforms: [/* 'jquery', */'react'],
 });
 
 fixture('Renovated scheduler - Cross-scrolling');
