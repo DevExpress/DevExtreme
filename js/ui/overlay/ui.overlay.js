@@ -500,7 +500,7 @@ const Overlay = Widget.inherit({
 
                 completeShowAnimation.call(this, ...args);
                 this._showAnimationProcessing = false;
-                this._isShown = true;
+                this._isHidden = false;
                 this._actions.onShown();
                 this._toggleSafariScrolling();
                 this._showingDeferred.resolve();
@@ -531,7 +531,6 @@ const Overlay = Widget.inherit({
             return new Deferred().resolve().promise();
         }
         this._currentVisible = true;
-        this._isShown = false;
 
         if(this._isHidingActionCanceled) {
             delete this._isHidingActionCanceled;

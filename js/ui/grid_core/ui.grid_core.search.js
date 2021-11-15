@@ -2,7 +2,6 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import { isDefined } from '../../core/utils/type';
 import { compileGetter } from '../../core/utils/data';
-import { each } from '../../core/utils/iterator';
 import gridCoreUtils from './ui.grid_core.utils';
 import messageLocalization from '../../localization/message';
 import dataQuery from '../../data/query';
@@ -239,6 +238,7 @@ export const searchModule = {
                     let $items;
                     const stringNormalizer = this._getStringNormalizer();
                     const normalizedSearchText = stringNormalizer(searchText);
+                    const resultTextNodes = [];
 
                     if(!$parent.length) {
                         $parent = $('<div>').append(cellElement);
@@ -251,22 +251,20 @@ export const searchModule = {
                         }
                     }
                     $items = $items?.length ? $items : $parent.find('*');
-
-                    $items = $items.filter(function(_, element) {
+                    $items.each(function(_, element) {
                         const $contents = $(element).contents();
                         for(let i = 0; i < $contents.length; i++) {
                             const node = $contents.get(i);
                             if(node.nodeType === 3) {
                                 const normalizedText = stringNormalizer(node.textContent || node.nodeValue);
                                 if(normalizedText.indexOf(normalizedSearchText) > -1) {
-                                    return true;
+                                    resultTextNodes.push(node);
                                 }
                             }
                         }
-                        return false;
                     });
 
-                    return $items;
+                    return resultTextNodes;
                 },
 
                 _highlightSearchTextCore: function($textNode, searchText) {
@@ -302,16 +300,14 @@ export const searchModule = {
 
                     if(searchText && that.option('searchPanel.highlightSearchText')) {
                         const textNodes = that._findHighlightingTextNodes(column, cellElement, searchText);
-                        each(textNodes, function(_, element) {
-                            each($(element).contents(), function(_, textNode) {
-                                if(isEquals) {
-                                    if(stringNormalizer($(textNode).text()) === stringNormalizer(searchText)) {
-                                        $(this).replaceWith($('<span>').addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(textNode).text()));
-                                    }
-                                } else {
-                                    that._highlightSearchTextCore($(textNode), searchText);
+                        textNodes.forEach(textNode => {
+                            if(isEquals) {
+                                if(stringNormalizer($(textNode).text()) === stringNormalizer(searchText)) {
+                                    $(textNode).replaceWith($('<span>').addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(textNode).text()));
                                 }
-                            });
+                            } else {
+                                that._highlightSearchTextCore($(textNode), searchText);
+                            }
                         });
                     }
                 },

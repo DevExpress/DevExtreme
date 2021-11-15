@@ -1,5 +1,6 @@
 import {
   ComponentBindings,
+  Event,
   ForwardRef,
   JSXTemplate,
   OneWay,
@@ -19,7 +20,7 @@ import { DateTableLayoutProps } from './date_table/layout';
 import { HeaderPanelLayoutProps } from './header_panel/layout';
 import { LayoutProps } from './layout_props';
 import { TimePanelLayoutProps } from './time_panel/layout';
-import { ScrollableDirection } from '../../../scroll_view/common/types';
+import { ScrollableDirection, ScrollEventArgs } from '../../../scroll_view/common/types';
 
 @ComponentBindings()
 export class MainLayoutProps extends LayoutProps {
@@ -84,6 +85,8 @@ export class MainLayoutProps extends LayoutProps {
 
   @OneWay() scrollingDirection?: ScrollableDirection;
 
+  @Event() onScroll!: (event: ScrollEventArgs) => void;
+
   @ForwardRef() dateTableRef!: RefObject<HTMLTableElement>;
 
   @ForwardRef() allDayPanelRef?: RefObject<HTMLTableElement>;
@@ -91,6 +94,8 @@ export class MainLayoutProps extends LayoutProps {
   @ForwardRef() timePanelRef?: RefObject<HTMLTableElement>;
 
   @ForwardRef() groupPanelRef?: RefObject<HTMLDivElement>;
+
+  @ForwardRef() widgetElementRef?: RefObject<HTMLDivElement>;
 
   @Slot() appointments?: JSX.Element;
 

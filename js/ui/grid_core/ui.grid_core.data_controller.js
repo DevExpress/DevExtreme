@@ -633,19 +633,24 @@ export const dataControllerModule = {
                     return false;
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
-                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== 'group' && newItem.rowType !== 'groupFooter') {
-                        const columnIndices = [];
+                    let columnIndices;
+                    if(oldItem.rowType === newItem.rowType) {
+                        if(newItem.rowType !== 'group' && newItem.rowType !== 'groupFooter') {
+                            columnIndices = [];
 
-                        if(newItem.rowType !== 'detail') {
-                            for(let columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
-                                if(this._isCellChanged(oldItem, newItem, visibleRowIndex, columnIndex, isLiveUpdate)) {
-                                    columnIndices.push(columnIndex);
+                            if(newItem.rowType !== 'detail') {
+                                for(let columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
+                                    if(this._isCellChanged(oldItem, newItem, visibleRowIndex, columnIndex, isLiveUpdate)) {
+                                        columnIndices.push(columnIndex);
+                                    }
                                 }
                             }
                         }
-
-                        return columnIndices;
+                        if(newItem.rowType === 'group' && newItem.isExpanded === oldItem.isExpanded && oldItem.cells) {
+                            columnIndices = oldItem.cells.map((cell, index) => cell.column?.type !== 'groupExpand' ? index : -1).filter(index => index >= 0);
+                        }
                     }
+                    return columnIndices;
                 },
                 _partialUpdateRow: function(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
                     let changedColumnIndices = this._getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);

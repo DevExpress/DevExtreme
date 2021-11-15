@@ -3198,6 +3198,7 @@ if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
             beforeEach: function() {
+                this.isMac = devices.real().mac;
                 helper = new ariaAccessibilityTestHelper({
                     createWidget: ($element, options) => new Lookup($element,
                         $.extend({
@@ -3221,7 +3222,11 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
                 if($input.length) {
-                    helper.checkAttributes($input, { autocomplete: 'off', type: 'text', spellcheck: 'false', tabindex: '0', role: 'textbox' }, 'input');
+                    const expectedAttributes = { autocomplete: 'off', type: 'text', spellcheck: 'false', tabindex: '0', role: 'textbox' };
+                    if(this.isMac) {
+                        expectedAttributes.placeholder = ' ';
+                    }
+                    helper.checkAttributes($input, expectedAttributes, 'input');
                 }
 
                 helper.widget.option('searchEnabled', !searchEnabled);
@@ -3230,7 +3235,11 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
                 if($input.length) {
-                    helper.checkAttributes($input, { autocomplete: 'off', type: 'text', spellcheck: 'false', role: 'textbox' }, 'input');
+                    const expectedAttributes = { autocomplete: 'off', type: 'text', spellcheck: 'false', role: 'textbox' };
+                    if(this.isMac) {
+                        expectedAttributes.placeholder = ' ';
+                    }
+                    helper.checkAttributes($input, expectedAttributes, 'input');
                 }
             });
 

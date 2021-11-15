@@ -3,7 +3,6 @@ import Toolbar from '../toolbar';
 import { ColumnsView } from './ui.grid_core.columns_view';
 import { noop } from '../../core/utils/common';
 import { isDefined, isString } from '../../core/utils/type';
-import { triggerResizeEvent } from '../../events/visibility_change';
 import messageLocalization from '../../localization/message';
 
 import '../drop_down_menu';
@@ -146,9 +145,7 @@ const HeaderPanel = ColumnsView.inherit({
     },
 
     updateToolbarDimensions: function() {
-        if(this._toolbar) {
-            triggerResizeEvent(this.getHeaderPanel());
-        }
+        this._toolbar?.updateDimensions();
     },
 
     getHeaderPanel: function() {

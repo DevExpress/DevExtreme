@@ -18,7 +18,47 @@ const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 let speedDialMainItem = null;
 
 const modifyActionOptions = (action) => {
-    return extend({}, action._options.silent(), {
+    const {
+        icon,
+        onClick,
+        label,
+        visible,
+        index,
+        onContentReady,
+        activeStateEnabled,
+        hoverStateEnabled,
+        animation,
+        id,
+        actions,
+        actionComponent,
+        actionVisible,
+        zIndex,
+        position,
+        hint,
+        parentPosition,
+        direction
+    } = action.option();
+
+    return extend({}, {
+        icon,
+        onClick,
+        label,
+        visible,
+        index,
+        onContentReady,
+        activeStateEnabled,
+        hoverStateEnabled,
+        animation,
+        id,
+        actions,
+        actionComponent,
+        actionVisible,
+        zIndex,
+        position,
+        hint,
+        parentPosition,
+        direction
+    }, {
         onInitialized: null,
         onDisposing: null
     });
@@ -111,9 +151,13 @@ class SpeedDialMainItem extends SpeedDialItem {
     _getCurrentOptions(actions) {
         const visibleActions = speedDialMainItem._getVisibleActions(actions);
 
+        const defaultOptions = this._getDefaultOptions();
+
+        delete defaultOptions.elementAttr;
+
         return visibleActions.length === 1 ?
-            extend(visibleActions[0]._options.silent(), { position: this._getPosition() }) :
-            extend(this._getDefaultOptions(), { visible: visibleActions.length !== 0 });
+            extend(modifyActionOptions(visibleActions[0]), { position: this._getPosition() }) :
+            extend(defaultOptions, { visible: visibleActions.length !== 0 });
     }
 
     _clickHandler() {

@@ -5710,6 +5710,7 @@ if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
         QUnit.module(`Aria accessibility, searchEnabled: ${searchEnabled}`, {
             beforeEach: function() {
+                this.isMac = devices.real().mac;
                 helper = new ariaAccessibilityTestHelper({
                     createWidget: ($element, options) => new SelectBox($element,
                         $.extend({
@@ -5742,6 +5743,9 @@ if(devices.real().deviceType === 'desktop') {
 
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
+                }
+                if(this.isMac) {
+                    inputAttributes.placeholder = ' ';
                 }
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
@@ -5778,6 +5782,9 @@ if(devices.real().deviceType === 'desktop') {
                 };
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
+                }
+                if(this.isMac) {
+                    inputAttributes.placeholder = ' ';
                 }
                 helper.checkAttributes(helper.$widget, { }, 'widget');
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');

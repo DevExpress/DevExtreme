@@ -106,13 +106,18 @@ describe('OrdinaryLayout', () => {
 
     it('should render widget as root component', () => {
       const layout = mountComponent({
-        props: { className: 'custom-classes' },
+        props: {
+          className: 'custom-classes',
+          widgetElementRef: 'widgetElementRef',
+        },
       });
 
       expect(layout.is(Widget))
         .toBe(true);
       expect(layout.prop('className'))
         .toBe('custom-classes');
+      expect(layout.prop('rootElementRef'))
+        .toBe('widgetElementRef');
     });
 
     it('should render heder panel container', () => {
