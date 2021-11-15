@@ -11547,7 +11547,7 @@ declare module DevExpress.ui {
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxFileManager>;
     export type ContextMenuItemClickEvent = DevExpress.events.NativeEventInfo<
       dxFileManager,
-      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+      KeyboardEvent | PointerEvent | MouseEvent
     > & {
       readonly itemData: any;
       readonly itemElement: DevExpress.core.DxElement;
@@ -11558,7 +11558,7 @@ declare module DevExpress.ui {
     export type ContextMenuShowingEvent = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<
         dxFileManager,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+        KeyboardEvent | PointerEvent | MouseEvent
       > & {
         readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
         readonly targetElement?: DevExpress.core.DxElement;
@@ -11666,7 +11666,7 @@ declare module DevExpress.ui {
       };
     export type ToolbarItemClickEvent = DevExpress.events.NativeEventInfo<
       dxFileManager,
-      PointerEvent | MouseEvent | TouchEvent
+      PointerEvent | MouseEvent
     > & {
       readonly itemData: any;
       readonly itemElement: DevExpress.core.DxElement;
@@ -12170,13 +12170,13 @@ declare module DevExpress.ui {
     export type DisposingEvent = DevExpress.events.EventInfo<dxFileUploader>;
     export type DropZoneEnterEvent = DevExpress.events.NativeEventInfo<
       dxFileUploader,
-      PointerEvent | MouseEvent | TouchEvent
+      PointerEvent | MouseEvent
     > & {
       readonly dropZoneElement: DevExpress.core.DxElement;
     };
     export type DropZoneLeaveEvent = DevExpress.events.NativeEventInfo<
       dxFileUploader,
-      PointerEvent | MouseEvent | TouchEvent
+      PointerEvent | MouseEvent
     > & {
       readonly dropZoneElement: DevExpress.core.DxElement;
     };
