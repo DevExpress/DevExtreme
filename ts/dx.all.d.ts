@@ -13693,7 +13693,7 @@ declare module DevExpress.ui {
     };
     export type TaskClickEvent = DevExpress.events.NativeEventInfo<
       dxGantt,
-      PointerEvent | MouseEvent | TouchEvent
+      PointerEvent | MouseEvent
     > & {
       readonly key?: any;
       readonly data?: any;
@@ -13708,10 +13708,7 @@ declare module DevExpress.ui {
       readonly taskSize: any;
     };
     export type TaskDblClickEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<
-        dxGantt,
-        PointerEvent | MouseEvent | TouchEvent
-      > & {
+      DevExpress.events.NativeEventInfo<dxGantt, PointerEvent | MouseEvent> & {
         readonly key?: any;
         readonly data?: any;
       };
