@@ -148,7 +148,7 @@ class Diagram extends Widget {
                 .appendTo(this._$content);
             this._createComponent($scrollViewWrapper, DiagramScrollView, {
                 onCreateDiagram: (e) => {
-                    this._diagramInstance.createDocument(e.$parent[0], e.scrollView);
+                    this._diagramInstance.createDocument(e.$parent[0], e.scrollView, $contentWrapper[0]);
                 }
             });
         }
