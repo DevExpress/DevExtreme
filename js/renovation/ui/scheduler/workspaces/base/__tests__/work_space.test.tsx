@@ -2500,6 +2500,33 @@ describe('WorkSpace', () => {
               topVirtualRowHeight: 0,
             });
         });
+
+        it('should calculate default value if state is undefined and rtl is enabled', () => {
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            type: 'day',
+            currentDate: new Date(2021, 10, 9),
+            scrolling: { mode: 'virtual' },
+            schedulerHeight: 300,
+            schedulerWidth: 300,
+          } as any);
+
+          workSpace.config = { rtlEnabled: true };
+
+          expect(workSpace.correctedVirtualScrollingState)
+            .toEqual({
+              bottomVirtualRowHeight: 1950,
+              cellCount: 1,
+              cellWidth: 75,
+              leftVirtualCellWidth: 0,
+              rightVirtualCellWidth: 0,
+              rowCount: 9,
+              startCellIndex: 0,
+              startIndex: 0,
+              startRowIndex: 0,
+              topVirtualRowHeight: 0,
+            });
+        });
       });
     });
 
