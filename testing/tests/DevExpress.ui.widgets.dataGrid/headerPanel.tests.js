@@ -863,4 +863,26 @@ QUnit.module('Draw buttons in header panel', {
         // assert
         assert.equal($button.length, 1, 'button location is center');
     });
+
+    // T1043654
+    QUnit.test('The default buttons should be hidden when they are specified in the toolbar.items option', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const $testElement = $('#container');
+
+        this.options.toolbar = {
+            items: ['addRowButton', 'applyFilterButton', 'columnChooserButton', 'exportButton', 'groupPanel', 'revertButton', 'saveButton', 'searchPanel']
+        };
+
+        // act
+        headerPanel.init();
+        headerPanel.render($testElement);
+        const $toolbarItemElements = $testElement.find('.dx-toolbar-item');
+
+        // assert
+        assert.strictEqual($toolbarItemElements.length, 8, 'count button');
+        $.each($toolbarItemElements, (_, toolbarItemElement) => {
+            assert.ok($(toolbarItemElement).hasClass('dx-state-invisible'), 'button is hidden');
+        });
+    });
 });
