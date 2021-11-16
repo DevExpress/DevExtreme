@@ -12,12 +12,12 @@
 
 <body>
     <div class="dx-viewport demo-container">
-        <div id="gridContainer"></div>
+        <div id="gridContainer1"></div>
+        <div id="gridContainer2"></div>
     </div>
     <script>
         $(() => {
-            const dataGrid = $("#gridContainer")
-                .dxDataGrid({
+            const options = {
                     dataSource: [],
                     keyExpr: "ID",
                     showBorders: true,
@@ -63,8 +63,9 @@
                             }
                         ]
                     }
-                })
-                .dxDataGrid("instance");
+                };
+            $("#gridContainer1").dxDataGrid(options);
+            $("#gridContainer2").dxDataGrid(Object.assign({ rtlEnabled: true }, options));
         });
     </script>
 </body>
