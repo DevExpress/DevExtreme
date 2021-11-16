@@ -1857,8 +1857,6 @@ export interface SelectionBase {
 /**
  * @docid
  * @inherits Widget, DataHelperMixin
- * @module ui/grid_base
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */

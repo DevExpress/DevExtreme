@@ -31,8 +31,6 @@ export interface ComponentOptions<TComponent> {
 }
 /**
  * @docid Component
- * @module core/component
- * @export Component
  * @namespace DevExpress
  * @hidden
  * @wrappable
