@@ -108,16 +108,15 @@ export const HorizontalHeadersArea = AreaItem.inherit({
         return false;
     },
 
-    renderScrollable: function(rtlEnabled) {
+    renderScrollable: function() {
         this._groupElement.dxScrollable({
             useNative: false,
             useSimulatedScrollbar: false,
             showScrollbar: 'never',
             bounceEnabled: false,
             direction: 'horizontal',
-            rtlEnabled,
             updateManually: true
-        }).dxScrollable('instance');
+        });
     },
 
     processScrollBarSpacing: function(scrollBarWidth) {

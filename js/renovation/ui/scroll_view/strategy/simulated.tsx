@@ -1142,10 +1142,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const maxOffset = this.vScrollOffsetMax
       - this.bottomPocketHeight - this.contentPaddingBottom;
 
-    if (maxOffset === 0) {
-      return 0;
-    }
-
     if (location > 0) {
       transformValue = location;
     } else if (location <= maxOffset) {
@@ -1159,10 +1155,6 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     // https://stackoverflow.com/questions/49219462/webkit-scrollleft-css-translate-horizontal-bug
     const location = this.hScrollLocation;
     let transformValue = location % 1;
-
-    if (this.hScrollOffsetMax === 0) {
-      return 0;
-    }
 
     if (location > 0) {
       transformValue = location;
