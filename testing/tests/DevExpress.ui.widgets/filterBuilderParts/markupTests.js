@@ -118,10 +118,10 @@ QUnit.test('filter Content init by several conditions', function(assert) {
 });
 
 [
-    ['and', 'or', 'notOr', 'notAnd'],
-    ['or', 'notOr', 'notAnd', 'and'],
-    ['notOr', 'notAnd', 'and', 'or'],
-    ['notAnd', 'and', 'or', 'notOr'],
+    ['and'],
+    ['or'],
+    ['notOr'],
+    ['notAnd'],
 ].forEach(groupOperations => {
     const getOperationText = function(operation) {
         const isNot = operation.indexOf('not') !== -1;
@@ -133,15 +133,6 @@ QUnit.test('filter Content init by several conditions', function(assert) {
                 assert.ok(true, 'This test is not actual for mobile devices, because dxclick add onclick=\'void(0)\' to every button in mobile');
                 return;
             }
-            const $etalon = $('<div/>').html(
-                '<div class="dx-filterbuilder-group">'
-                    + '<div class="dx-filterbuilder-group-item">'
-                        + `<div class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">${getOperationText(groupOperations[0])}</div>`
-                        + '<div class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
-                    + '</div>'
-                    + '<div class="dx-filterbuilder-group-content"></div>'
-                + '</div>'
-            );
 
             const element = $('#container').dxFilterBuilder({
                 fields: fields,
@@ -150,7 +141,7 @@ QUnit.test('filter Content init by several conditions', function(assert) {
             });
 
             // assert
-            assert.equal(element.html(), $etalon.html());
+            assert.strictEqual(element.find('.dx-filterbuilder-group-operation').text(), getOperationText(groupOperations[0]));
         });
     });
 });
