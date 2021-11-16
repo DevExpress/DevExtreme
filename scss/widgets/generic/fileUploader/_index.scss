@@ -45,14 +45,13 @@ $generic-fileuploader-file-wrapper-border-size: 3px;
 
   .dx-fileuploader-input-container {
     display: block;
-    border: $generic-fileuploader-file-wrapper-border-size dashed $fileuploader-border-color;
     width: 100%;
   }
 
   .dx-fileuploader-input {
     display: block;
     width: 100%;
-    padding: $generic-fileuploader-vertical-padding * 2 $generic-fileuploader-file-wrapper-border-size;
+    padding: $generic-fileuploader-vertical-padding * 2 + $generic-fileuploader-file-wrapper-border-size $generic-fileuploader-file-wrapper-border-size;
 
     // NOTE: height of the widget should be the same in default and drag over states
     margin-bottom: 1px;
@@ -61,6 +60,7 @@ $generic-fileuploader-file-wrapper-border-size: 3px;
 
   .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
     padding: $generic-fileuploader-vertical-padding * 2 $generic-fileuploader-vertical-padding + 2px;
+    border: $generic-fileuploader-file-wrapper-border-size dashed $fileuploader-border-color;
   }
 }
 

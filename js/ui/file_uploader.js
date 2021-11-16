@@ -378,7 +378,7 @@ class FileUploader extends Editor {
 
     _render() {
         this._preventRecreatingFiles = false;
-        this._attachDragEventHandlers(this._$inputWrapper);
+        this._attachDragEventHandlers(this._$inputContainer);
         this._attachDragEventHandlers(this.option('dropZone'));
 
         this._renderFiles();
@@ -886,7 +886,7 @@ class FileUploader extends Editor {
     }
 
     _attachDragEventHandlers(target) {
-        const isCustomTarget = target !== this._$inputWrapper;
+        const isCustomTarget = target !== this._$inputContainer;
         if(!isDefined(target) || !this._shouldDragOverBeRendered()) {
             return;
         }
