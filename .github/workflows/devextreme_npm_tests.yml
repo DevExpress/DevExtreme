@@ -286,6 +286,7 @@ jobs:
         path: ./devextreme-demos
 
     - name: Delete DX packages
+      working-directory: ./devextreme-demos
       run:  sed -i '/22.1-next/d' ./package.json
 
     - name: Install packages for devextreme-demos
