@@ -84,6 +84,72 @@ fixture`Form`
 });
 
 ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+  [true, false].forEach((alignItemLabelsInAllGroups) => {
+    [true, false].forEach((alignItemLabels) => {
+      const testName = `align items,frmLblMode=${formLabelMode},alignInAllGrp=${alignItemLabelsInAllGroups},alignInGrp=${alignItemLabels}`;
+      test(testName, async (t) => {
+        const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+        await t
+          .expect(await takeScreenshot(`${testName}.png`, '#container'))
+          .ok()
+          .expect(compareResults.isValid())
+          .ok(compareResults.errorMessages());
+      }).before(async () => {
+        const options = {
+          labelMode: formLabelMode,
+          alignItemLabelsInAllGroups,
+          colCount: 2,
+          width: 1000,
+          items: [
+            {
+              itemType: 'group',
+              caption: 'Group1',
+              colSpan: 1,
+              alignItemLabels,
+              items: [
+                { dataField: 'field1', label: { text: 'field1' }, editorType: 'dxTextBox' },
+                { dataField: 'field2', label: { text: 'field2 long text' }, editorType: 'dxTextBox' },
+                { dataField: 'field3', label: { text: 'CheckBox1' }, editorType: 'dxCheckBox' },
+                { dataField: 'field4', label: { text: 'CheckBox2 long text' }, editorType: 'dxCheckBox' },
+              ],
+            },
+            {
+              itemType: 'group',
+              caption: 'Group2',
+              colSpan: 1,
+              alignItemLabels,
+              items: [
+                { dataField: 'field5', label: { text: 'short text' }, editorType: 'dxTextBox' },
+                { dataField: 'field6', label: { text: 'field2 very long text' }, editorType: 'dxTextBox' },
+                { dataField: 'field7', label: { text: 'CheckBox1 text' }, editorType: 'dxCheckBox' },
+                { dataField: 'field8', label: { text: 'CheckBox2 very long text' }, editorType: 'dxCheckBox' },
+              ],
+            },
+            {
+              itemType: 'group',
+              caption: 'Group3',
+              colSpan: 2,
+              alignItemLabels,
+              items: [
+                { dataField: 'field9', label: { text: 'short text' }, editorType: 'dxTextBox' },
+                { dataField: 'field10', label: { text: 'field2 very long text' }, editorType: 'dxTextBox' },
+                { dataField: 'field11', label: { text: 'ChBx1 very very long text' }, editorType: 'dxCheckBox' },
+                { dataField: 'field12', label: { text: 'ChBx2 very long text' }, editorType: 'dxCheckBox' },
+              ],
+            },
+          ],
+        } as any;
+
+        if (formLabelMode !== undefined) {
+          options.labelMode = formLabelMode;
+        }
+        return createWidget('dxForm', options);
+      });
+    });
+  });
+});
+
+['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
   const testName = `label properties, frmLblMode=${formLabelMode}`;
   test(testName, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
