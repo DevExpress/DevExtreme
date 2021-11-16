@@ -75,6 +75,7 @@ export const dataControllerModule = {
                     that._loadErrorHandler = that._handleLoadError.bind(that);
                     that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
                     that._changingHandler = that._handleChanging.bind(that);
+                    that._dataPushedHandler = that._handleDataPushed.bind(that);
 
                     that._columnsController.columnsChanged.add(that._columnsChangedHandler);
 
@@ -95,7 +96,7 @@ export const dataControllerModule = {
                     return this._dataSource[optionName]();
                 },
                 callbackNames: function() {
-                    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged'];
+                    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed'];
                 },
                 callbackFlags: function(name) {
                     if(name === 'dataErrorOccurred') {
@@ -370,6 +371,9 @@ export const dataControllerModule = {
                 },
                 _handleLoadError: function(e) {
                     this.dataErrorOccurred.fire(e);
+                },
+                _handleDataPushed: function(changes) {
+                    this.pushed.fire(changes);
                 },
                 fireError: function() {
                     this.dataErrorOccurred.fire(errors.Error.apply(errors, arguments));
@@ -1026,6 +1030,7 @@ export const dataControllerModule = {
                         oldDataSource.loadError.remove(that._loadErrorHandler);
                         oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
                         oldDataSource.changing.remove(that._changingHandler);
+                        oldDataSource.pushed.remove(that._dataPushedHandler);
                         oldDataSource.dispose(that._isSharedDataSource);
                     }
 
@@ -1045,6 +1050,7 @@ export const dataControllerModule = {
                         dataSource.loadError.add(that._loadErrorHandler);
                         dataSource.customizeStoreLoadOptions.add(that._customizeStoreLoadOptionsHandler);
                         dataSource.changing.add(that._changingHandler);
+                        dataSource.pushed.add(that._dataPushedHandler);
                     }
                 },
                 items: function() {
