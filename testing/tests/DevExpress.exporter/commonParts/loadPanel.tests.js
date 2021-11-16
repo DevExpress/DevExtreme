@@ -9,7 +9,7 @@ const LOAD_PANEL_CLASS = 'dx-loadpanel';
 const EXPORT_LOAD_PANEL_CLASS = 'dx-export-loadpanel';
 
 const LoadPanelTests = {
-    runTests(moduleConfig, exportFunc, getComponent, componentOptions, document) {
+    runTests(moduleConfig, exportFunc, getComponent, componentOptions, documentPropertyName) {
         const componentLoadPanelEnabledOption = componentOptions.loadPanel.enabled === true;
 
         QUnit.module(`LoadPanel: component.loadPanel.enabled: ${componentOptions.loadPanel.enabled}`, moduleConfig, () => {
@@ -55,7 +55,7 @@ const LoadPanelTests = {
                     let isFirstCall = true;
                     let exportLoadPanel;
 
-                    exportFunc({ component: component, [document]: this[document], loadPanel: loadPanelOptions, customizeCell: () => {
+                    exportFunc({ component: component, [documentPropertyName]: this[documentPropertyName], loadPanel: loadPanelOptions, customizeCell: () => {
                         if(isFirstCall) {
                             const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
                             assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
@@ -105,7 +105,7 @@ const LoadPanelTests = {
                 }
                 setHeight($targetElement, 5000);
 
-                exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
+                exportFunc({ component: component, [documentPropertyName]: this[documentPropertyName], loadPanel: { enabled: true }, customizeCell: () => {
                     if(isFirstCall) {
                         const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
                         assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
@@ -156,7 +156,7 @@ const LoadPanelTests = {
                     $loadPanelContainer = component.$element();
                 }
                 setHeight($targetElement, 100);
-                exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
+                exportFunc({ component: component, [documentPropertyName]: this[documentPropertyName], loadPanel: { enabled: true }, customizeCell: () => {
                     if(isFirstCall) {
                         const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
                         assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
@@ -190,7 +190,7 @@ const LoadPanelTests = {
 
                 let isFirstCall = true;
 
-                exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: false }, customizeCell: () => {
+                exportFunc({ component: component, [documentPropertyName]: this[documentPropertyName], loadPanel: { enabled: false }, customizeCell: () => {
                     if(isFirstCall) {
                         const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
                         assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
@@ -221,8 +221,7 @@ const LoadPanelTests = {
 
                 let isFirstCall = true;
 
-
-                exportFunc({ component: component, [document]: this[document], loadPanel: { enabled: true }, customizeCell: () => {
+                exportFunc({ component: component, [documentPropertyName]: this[documentPropertyName], loadPanel: { enabled: true }, customizeCell: () => {
                     if(isFirstCall) {
                         const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
                         assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
@@ -245,13 +244,11 @@ const LoadPanelTests = {
                 });
             });
 
-
             [{ type: 'default', expected: 'エクスポート...' }, { type: 'custom', expected: '!CUSTOM TEXT!' }].forEach((localizationText) => {
                 QUnit.test(`${localizationText.type} localization text, locale('ja')`, function(assert) {
                     assert.expect(7);
                     const done = assert.async();
                     const locale = localization.locale();
-
 
                     try {
                         if(localizationText.type === 'default') {
@@ -272,7 +269,7 @@ const LoadPanelTests = {
                         let isFirstCall = true;
                         let exportLoadPanel;
 
-                        exportFunc({ component: component, [document]: this[document], customizeCell: () => {
+                        exportFunc({ component: component, [documentPropertyName]: this[documentPropertyName], customizeCell: () => {
                             if(isFirstCall) {
                                 const $builtInLoadPanel = component.$element().find(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`);
                                 assert.strictEqual($builtInLoadPanel.length, 0, 'builtin loadpanel is turn off');
@@ -301,6 +298,39 @@ const LoadPanelTests = {
                         localization.locale(locale);
                     }
                 });
+            });
+
+            QUnit.test('loadPanel: { enabled: true }, use unical instance of exportLoadPanel for each exportDataGrid`s function call', function(assert) {
+                const clock = sinon.useFakeTimers();
+
+                const $secondGrid = $('<div>');
+                $('#qunit-fixture').css({ position: 'static' });
+                $('#qunit-fixture').append($secondGrid);
+
+                const loadingTimeout = 30;
+                componentOptions.loadingTimeout = loadingTimeout;
+                const component = getComponent(componentOptions);
+                const secondComponent = $secondGrid[component.NAME](componentOptions)[component.NAME]('instance');
+
+                const initialComponentLoadPanelEnabledValue = component.option('loadPanel').enabled;
+
+                clock.tick(300);
+
+                exportFunc({ component: component, [documentPropertyName]: this[documentPropertyName], loadPanel: { enabled: true } });
+                exportFunc({ component: secondComponent, [documentPropertyName]: this[documentPropertyName], loadPanel: { enabled: true } });
+
+                assert.strictEqual($(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`).length, 0, 'builtin loadpanel is turn off');
+                assert.strictEqual($(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`).length, 2, 'export loadpanel exist');
+
+                clock.tick(300);
+
+                assert.strictEqual($(`.${LOAD_PANEL_CLASS}`).not(`.${EXPORT_LOAD_PANEL_CLASS}`).length, componentLoadPanelEnabledOption ? 2 : 0, 'builtin loadpanel is turn off');
+                assert.strictEqual(component.option('loadPanel').enabled, initialComponentLoadPanelEnabledValue, 'component.loadPanel.enabled');
+                assert.strictEqual(secondComponent.option('loadPanel').enabled, initialComponentLoadPanelEnabledValue, 'component.loadPanel.enabled');
+                assert.strictEqual($(`.${LOAD_PANEL_CLASS}.${EXPORT_LOAD_PANEL_CLASS}`).length, 0, 'export loadpanel exist');
+
+                $secondGrid.remove();
+                clock.restore();
             });
         });
     }
