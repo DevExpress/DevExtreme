@@ -12,8 +12,11 @@ export function subscribeToResize(
       (entries: { target }) => {
         // TODO Vitik workaround for temporary fix:
         // testing\testcafe\tests\renovation\scheduler\appointments\recurrence.ts
+        /* istanbul ignore next: temporary workaround */
         getWindow().requestAnimationFrame(() => {
+          /* istanbul ignore next: temporary workaround */
           if (!Array.isArray(entries) || !entries.length) {
+            /* istanbul ignore next: temporary workaround */
             return;
           }
           handler(entries.target);
