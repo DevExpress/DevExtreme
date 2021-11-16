@@ -6,6 +6,8 @@ import Component from './common/component';
 import type { Button } from '../ui/button';
 
 export default class ButtonWrapper extends Component {
+  _clickAction!: (...args) => unknown;
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get _validationGroupConfig(): any {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -22,7 +24,11 @@ export default class ButtonWrapper extends Component {
 
   getProps(): Record<string, unknown> {
     const props = super.getProps();
-    props.validationGroup = this._validationGroupConfig;
+
+    props.onClick = ({ event }): void => {
+      this._clickAction({ event, validationGroup: this._validationGroupConfig });
+    };
+
     return props;
   }
 
@@ -73,6 +79,9 @@ export default class ButtonWrapper extends Component {
   _init(): void {
     super._init();
     this._addAction('onSubmit', this._getSubmitAction());
+    this._clickAction = this._createActionByOption('onClick', {
+      excludeValidators: ['readOnly'],
+    });
   }
 
   _initMarkup(): void {

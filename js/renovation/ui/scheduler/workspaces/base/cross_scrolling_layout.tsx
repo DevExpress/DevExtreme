@@ -58,6 +58,7 @@ export const viewFunction = ({
     allDayPanelRef,
     timePanelRef,
     groupPanelRef,
+    widgetElementRef,
 
     appointments,
     allDayAppointments,
@@ -65,6 +66,7 @@ export const viewFunction = ({
 }: CrossScrollingLayout): JSX.Element => (
   <Widget
     className={className}
+    rootElementRef={widgetElementRef}
   >
     <div className="dx-scheduler-fixed-appointments" />
     <div className="dx-scheduler-header-panel-container">
@@ -180,7 +182,7 @@ export const viewFunction = ({
   view: viewFunction,
 })
 export class CrossScrollingLayout extends JSXComponent<
-MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef'
+MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef' | 'onScroll'
 >() {
   @Ref() dateTableScrollableRef!: RefObject<Scrollable>;
 
@@ -223,6 +225,8 @@ MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' 
     this.headerSemaphore.isFree() && this.headerScrollableRef.current!.scrollTo({
       left: e.scrollOffset.left,
     });
+
+    this.props.onScroll(e);
 
     this.dateTableSemaphore.release();
   }
