@@ -1,11 +1,17 @@
 import {
   CSSAttributes,
   Component, ComponentBindings, JSXComponent, OneWay, JSXTemplate, Template,
+  Ref, RefObject, Event,
 } from '@devextreme-generator/declarations';
 import type { AppointmentTemplateData } from '../../../../ui/scheduler';
-import { AppointmentTemplateProps, AppointmentViewModel } from './types';
+import {
+  AppointmentTemplateProps,
+  AppointmentViewModel,
+  AppointmentClickData,
+} from './types';
 import { getAppointmentStyles } from './utils';
 import { AppointmentContent } from './content';
+import { Widget } from '../../common/widget';
 import { combineClasses } from '../../../utils/combine_classes';
 
 export const viewFunction = ({
@@ -14,6 +20,8 @@ export const viewFunction = ({
   styles,
   data,
   index,
+  ref,
+  onItemClick,
   classes,
   isReduced,
   props: {
@@ -26,9 +34,15 @@ export const viewFunction = ({
   },
 }: Appointment): JSX.Element => {
   const AppointmentTemplate = appointmentTemplate;
-
   return (
-    <div className={classes} style={styles} title={text} role="button">
+    <Widget
+      onClick={onItemClick}
+      rootElementRef={ref}
+      style={styles}
+      classes={classes}
+      hint={text}
+      {...{ role: 'button' }}
+    >
       {
         !!AppointmentTemplate && (
           <AppointmentTemplate data={data} index={index} />
@@ -44,7 +58,7 @@ export const viewFunction = ({
           />
         )
       }
-    </div>
+    </Widget>
   );
 };
 
@@ -55,18 +69,24 @@ export class AppointmentProps {
   @OneWay() index = 0;
 
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
+
+  @Event() onItemClick!: (e: AppointmentClickData) => void;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Appointment extends JSXComponent<AppointmentProps, 'viewModel'>() {
+export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'onItemClick'>() {
+  @Ref() ref!: RefObject<HTMLDivElement>;
+
   get text(): string { return this.props.viewModel.appointment.text; }
 
   get dateText(): string { return this.props.viewModel.info.dateText; }
 
-  get styles(): CSSAttributes { return getAppointmentStyles(this.props.viewModel); }
+  get styles(): CSSAttributes {
+    return getAppointmentStyles(this.props.viewModel);
+  }
 
   get data(): AppointmentTemplateData {
     return {
@@ -77,6 +97,16 @@ export class Appointment extends JSXComponent<AppointmentProps, 'viewModel'>() {
 
   get index(): number {
     return this.props.index;
+  }
+
+  onItemClick(): void {
+    const e = {
+      data: [this.props.viewModel],
+      target: this.ref.current as HTMLDivElement,
+      index: this.props.index,
+    };
+
+    this.props.onItemClick(e);
   }
 
   get isReduced(): boolean {
