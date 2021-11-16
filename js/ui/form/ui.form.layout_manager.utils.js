@@ -40,10 +40,10 @@ export function convertToRenderFieldItemOptions({
         item, id: itemId, isRequired, managerMarkOptions,
         showColonAfterLabel,
         labelLocation: managerLabelLocation,
+        formLabelMode: labelMode,
     });
 
-    const isOutsideLabelMode = labelMode === 'outside';
-    const needRenderLabel = labelOptions.visible && labelOptions.text && isOutsideLabelMode;
+    const needRenderLabel = labelOptions.visible && labelOptions.text;
     const { location: labelLocation, labelID } = labelOptions;
     const labelNeedBaselineAlign =
         labelLocation !== 'top'
@@ -74,8 +74,8 @@ export function convertToRenderFieldItemOptions({
             editorInputId: itemId,
             editorValidationBoundary,
             editorStylingMode,
-            labelMode: isOutsideLabelMode ? 'hidden' : labelMode,
-            labelText: isOutsideLabelMode ? undefined : labelOptions.text,
+            labelMode: item?.editorOptions?.labelMode ?? (labelMode === 'outside' ? 'hidden' : labelMode),
+            labelText: labelOptions.text,
             labelMark: getLabelMarkText(labelOptions.markOptions),
         })
     };
@@ -161,14 +161,15 @@ function _hasRequiredRuleInSet(rules) {
     return hasRequiredRule;
 }
 
-function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation }) {
+function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation, formLabelMode }) {
+    const isEditorWithoutLabels = inArray(item.editorType, ['dxCheckBox', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor']) !== -1;
     const labelOptions = extend(
         {
             showColon: showColonAfterLabel,
             location: labelLocation,
             id: id,
-            visible: true,
-            isRequired: isRequired
+            visible: formLabelMode === 'outside' || (isEditorWithoutLabels && formLabelMode !== 'hidden'),
+            isRequired: isRequired,
         },
         item ? item.label : {},
         { markOptions: convertToLabelMarkOptions(managerMarkOptions, isRequired) }
