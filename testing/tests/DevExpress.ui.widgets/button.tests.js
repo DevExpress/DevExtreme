@@ -70,6 +70,18 @@ QUnit.module('Button', function() {
             assert.ok(params.validationGroup, 'validationGroup should be passed');
         });
 
+        QUnit.test('onClick handler should not closure on a first one', function(assert) {
+            this.instance.option('onClick', () => {});
+            this.element.trigger('dxclick');
+
+            const clickHandler = sinon.stub();
+
+            this.instance.option('onClick', clickHandler);
+            this.element.trigger('dxclick');
+
+            assert.ok(clickHandler.calledOnce, 'second handler is called');
+        });
+
         QUnit.test('onClick should have validationGroup parameter even if validationGroup is inited on another element (T1041957)', function(assert) {
             const clickHandler = sinon.stub();
 
