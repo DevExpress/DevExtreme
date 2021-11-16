@@ -58,24 +58,32 @@ function getAutoSizedElements($table, direction = 'horizontal') {
     return result;
 }
 
-function setLineElementsFormat(module, { elements, property, value, ignoreValueChange }) {
-    const fullPropertyName = `cell${camelize(property, true)}`;
+function setLineElementsFormat(module, { elements, property, value }) {
+    const propertyName = `cell${camelize(property, true)}`;
     each(elements, (i, element) => {
         const cellBlot = module.quill.scroll.find(element);
-        cellBlot?.format(fullPropertyName, value + 'px');
+        cellBlot?.format(propertyName, value + 'px');
     });
 }
 
 function setElementFormat(module, { element, propertyName, value }) {
-    const startSelection = module.editorInstance.getSelection();
+    // const startSelection = module.editorInstance.getSelection();
 
+    // const elementIndex = module.quill.getIndex(module.quill.scroll.find(element));
+    // module.editorInstance.setSelection(elementIndex, 0);
+    // module.editorInstance.format(propertyName, value + 'px');
+
+    // if(startSelection?.index) {
+    //     module.editorInstance.setSelection(startSelection.index, startSelection.length, 'silent');
+    // }
+    raiseQuillValueChange(module, { element, propertyName, value });
+}
+
+
+function raiseQuillValueChange(module, { element, propertyName, value }) {
     const elementIndex = module.quill.getIndex(module.quill.scroll.find(element));
-    module.editorInstance.getQuillInstance().setSelection(elementIndex, 0);
-    module.editorInstance.format(propertyName, value + 'px');
 
-    if(startSelection?.index) {
-        module.editorInstance.setSelection(startSelection.index, startSelection.length);
-    }
+    module.quill.formatText(elementIndex, 0, propertyName, value + 'px');
 }
 
 function getLineElements($table, index, direction = 'horizontal') {
