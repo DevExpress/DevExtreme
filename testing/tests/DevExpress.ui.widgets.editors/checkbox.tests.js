@@ -24,7 +24,7 @@ const ICON_SELECTOR = '.dx-checkbox-icon';
 QUnit.module('Checkbox', function() {
     const isRenovation = !!dxCheckBox.IS_RENOVATED_WIDGET;
 
-    QUnit.test('CheckBox to be checked if any non-nullable data is passed as value (T1044062)', function(assert) {
+    QUnit.test('checkBox is checked if any non-nullable data is passed as value (T1044062)', function(assert) {
         const $checkBox = $('#checkBox').dxCheckBox({});
         const checkBox = $checkBox.dxCheckBox('instance');
 
