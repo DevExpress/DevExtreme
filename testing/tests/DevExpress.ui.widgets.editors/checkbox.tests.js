@@ -18,10 +18,22 @@ QUnit.testStart(function() {
 });
 
 const CHECKBOX_CLASS = 'dx-checkbox';
+const CHECKBOX_CHECKED_CLASS = 'dx-checkbox-checked';
 const ICON_SELECTOR = '.dx-checkbox-icon';
 
 QUnit.module('Checkbox', function() {
     const isRenovation = !!dxCheckBox.IS_RENOVATED_WIDGET;
+
+    QUnit.test('CheckBox to be checked if any non-nullable data is passed as value (T1044062)', function(assert) {
+        const $checkBox = $('#checkBox').dxCheckBox({});
+        const checkBox = $checkBox.dxCheckBox('instance');
+
+        [true, 1, 'some', {}].forEach(value => {
+            checkBox.option({ value });
+
+            assert.ok($checkBox.hasClass(CHECKBOX_CHECKED_CLASS), `checkbox is checked if value=${JSON.stringify(value)}`);
+        });
+    });
 
     QUnit.module('methods', () => {
         QUnit.testInActiveWindow('focus', function(assert) {
