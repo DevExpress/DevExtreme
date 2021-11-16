@@ -689,12 +689,6 @@ describe('Scheduler', () => {
             ...new SchedulerProps(),
           });
 
-          /* eslint-disable @typescript-eslint/no-unused-expressions */
-          scheduler.tooltipVisible;
-          scheduler.tooltipTarget;
-          scheduler.tooltipData;
-          /* eslint-enable @typescript-eslint/no-unused-expressions */
-
           scheduler.showTooltip({ data, target } as any);
 
           expect(scheduler.tooltipVisible).toBe(true);

@@ -70,9 +70,6 @@ describe('Appointment', () => {
 
       expect(appointment.prop('hint'))
         .toEqual('some-text');
-
-      expect(appointment.props('restAttributes').role)
-        .toEqual('button');
     });
 
     it('it should has correct render with template', () => {
