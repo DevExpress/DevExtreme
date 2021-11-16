@@ -724,20 +724,23 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
     const { fullScrollProp, location, needFireScroll } = eventData;
 
+    // we pass scrollTop value the 687.875px to container
+    // after that container's scrollTop property store the 687.333px
     this.containerRef.current![fullScrollProp] = location;
+    const actualNativeLocation = this.containerRef.current![fullScrollProp];
 
     if (fullScrollProp === 'scrollLeft') {
-      this.hScrollLocation = -location;
+      this.hScrollLocation = -actualNativeLocation;
     } else {
-      this.vScrollLocation = -location;
+      this.vScrollLocation = -actualNativeLocation;
     }
 
-    const scrollDelta = Math.abs(this.savedScrollOffset[fullScrollProp] - location);
+    const scrollDelta = Math.abs(this.savedScrollOffset[fullScrollProp] - actualNativeLocation);
 
     if (needFireScroll && scrollDelta >= 1) {
       this.onScroll();
     }
-    this.savedScrollOffset[fullScrollProp] = location;
+    this.savedScrollOffset[fullScrollProp] = actualNativeLocation;
   }
 
   get hScrollOffsetMax(): number {
