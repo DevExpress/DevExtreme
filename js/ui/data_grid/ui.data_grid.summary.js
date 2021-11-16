@@ -353,10 +353,10 @@ const SummaryDataSourceAdapterClientExtender = (function() {
                         }
                         options.data = sortGroupsBySummary(options.data, groups, summary);
                     }
-                } else if(!remoteOperations.paging) {
+                } else if(!remoteOperations.paging && summary) {
                     const operationTypes = options.operationTypes || {};
                     const hasOperations = Object.keys(operationTypes).some(type => operationTypes[type]);
-                    if(!hasOperations || !options.cachedPagesData?.extra?.summary) {
+                    if(!hasOperations || !options.cachedPagesData?.extra?.summary || groups.length && summary.groupAggregates.length) {
                         const totalAggregates = calculateAggregates(that, summary, options.data, groups.length);
                         options.extra = isPlainObject(options.extra) ? options.extra : {};
                         options.extra.summary = totalAggregates;
