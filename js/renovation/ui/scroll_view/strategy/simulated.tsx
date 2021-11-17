@@ -96,12 +96,12 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     hScrollbarRef, vScrollbarRef,
     topPocketRef, bottomPocketRef, bottomPocketHeight,
     hovered, pulledDown, scrollLocationChange,
-    contentWidth, containerClientWidth, contentHeight, containerClientHeight,
+    containerHasSizes, contentWidth, containerClientWidth, contentHeight, containerClientHeight,
     scrollableRef, contentStyles, containerStyles, onBounce,
     onReachBottom, onPullDown, onEnd, direction, topPocketState,
     isLoadPanelVisible, scrollViewContentRef,
     vScrollLocation, hScrollLocation, contentPaddingBottom, active,
-    scrolling, lock, unlock,
+    onVisibilityChangeHandler, scrolling, lock, unlock,
     hScrollOffsetMax, vScrollOffsetMax, vScrollOffsetMin,
     props: {
       aria, disabled, height, width, rtlEnabled, children, visible,
@@ -109,7 +109,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       needRenderScrollbars, needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
       reachBottomText, useKeyboard, bounceEnabled, inertiaEnabled,
-      pullDownEnabled, reachBottomEnabled, refreshStrategy, onVisibilityChange,
+      pullDownEnabled, reachBottomEnabled, refreshStrategy,
     },
     restAttributes,
   } = viewModel;
@@ -126,7 +126,8 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       height={height}
       width={width}
       visible={visible}
-      onVisibilityChange={onVisibilityChange}
+      // onVisibilityChange uses for date_view_roller purposes only
+      onVisibilityChange={onVisibilityChangeHandler}
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
       // onKeyDown exist in restAttributes and has undefined value
       onKeyDown={useKeyboard ? handleKeyDown : undefined}
@@ -181,6 +182,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
               onEnd={onEnd}
+              containerHasSizes={containerHasSizes}
 
               rtlEnabled={rtlEnabled}
             />
@@ -202,6 +204,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               inertiaEnabled={inertiaEnabled}
               onBounce={onBounce}
               onEnd={onEnd}
+              containerHasSizes={containerHasSizes}
 
               forceGeneratePockets={forceGeneratePockets}
               bottomPocketSize={bottomPocketHeight}
@@ -604,8 +607,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const { scrollLeft, scrollTop } = this.containerRef.current!;
     const { top, left } = location;
 
-    left && this.hScrollbarRef.current?.scrollTo(scrollLeft + left);
-    top && this.vScrollbarRef.current?.scrollTo(scrollTop + top);
+    this.hScrollbarRef.current?.scrollTo(scrollLeft + left);
+    this.vScrollbarRef.current?.scrollTo(scrollTop + top);
 
     this.scrolling = false;
   }
@@ -946,12 +949,12 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
   }
 
   syncScrollbarsWithContent(): void {
-    const { scrollLeft, scrollTop } = this.containerRef.current!;
+    const { left, top } = this.scrollOffset();
 
-    this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: -clampIntoRange(-scrollTop, 0, this.vScrollOffsetMax), needFireScroll: false });
+    this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: -clampIntoRange(-top, 0, this.vScrollOffsetMax), needFireScroll: false });
 
     if (!this.props.rtlEnabled) { // TODO: support native rtl mode
-      this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: -clampIntoRange(-scrollLeft, 0, this.hScrollOffsetMax), needFireScroll: false });
+      this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: -clampIntoRange(-left, 0, this.hScrollOffsetMax), needFireScroll: false });
     }
   }
 
@@ -1055,6 +1058,20 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     }
   }
 
+  // onVisibilityChangeHandler uses for date_view_roller purposes only
+  onVisibilityChangeHandler(visible: boolean): void {
+    if (visible) {
+      this.updateHandler();
+
+      const { scrollTop, scrollLeft } = this.savedScrollOffset;
+      // restore scrollLocation on second and next opening of popup with data_view rollers
+      this.scrollLocationChange({ fullScrollProp: 'scrollTop', location: scrollTop, needFireScroll: false });
+      this.scrollLocationChange({ fullScrollProp: 'scrollLeft', location: scrollLeft, needFireScroll: false });
+    }
+
+    this.props.onVisibilityChange?.(visible);
+  }
+
   updateElementDimensions(): void {
     if (this.props.forceGeneratePockets) {
       this.setTopPocketDimensions(this.topPocketRef.current!);
@@ -1108,6 +1125,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       : Math.max(this.contentScrollWidth, this.contentClientWidth);
   }
 
+  get containerHasSizes(): boolean {
+    return this.containerClientHeight > 0 && this.containerClientWidth > 0;
+  }
+
   get contentStyles(): { [key: string]: string } {
     return {
       transform: `translate(${this.contentTranslateX}px, ${this.contentTranslateY}px)`,
@@ -1120,6 +1141,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
     const maxOffset = this.vScrollOffsetMax
       - this.bottomPocketHeight - this.contentPaddingBottom;
+
+    if (maxOffset === 0) {
+      return 0;
+    }
 
     if (location > 0) {
       transformValue = location;
@@ -1134,6 +1159,10 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     // https://stackoverflow.com/questions/49219462/webkit-scrollleft-css-translate-horizontal-bug
     const location = this.hScrollLocation;
     let transformValue = location % 1;
+
+    if (this.hScrollOffsetMax === 0) {
+      return 0;
+    }
 
     if (location > 0) {
       transformValue = location;
