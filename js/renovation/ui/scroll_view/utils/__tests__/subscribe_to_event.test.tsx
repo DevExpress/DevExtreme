@@ -17,7 +17,7 @@ describe('subscribeToResize', () => {
     const observeHandler = jest.fn();
     resizeObserverSingleton.observe = observeHandler;
 
-    subscribeToResize(null, () => {});
+    subscribeToResize(null, () => { });
 
     expect(observeHandler).toBeCalledTimes(0);
   });
@@ -70,28 +70,36 @@ describe('subscribeToResize', () => {
   });
 
   it('should observe element changing, hasWindow: true', () => {
-    const observeHandler = jest.fn();
-    const resizeHandler = jest.fn();
-    resizeObserverSingleton.observe = observeHandler;
+    const originalWindow = getWindow();
 
-    const element = {
-      clientWidth: 10,
-      clientHeight: 15,
-    } as HTMLDivElement;
+    try {
+      setWindow({ requestAnimationFrame: (callback: () => void) => { callback(); } }, true);
+      const observeHandler = jest.fn();
+      const resizeHandler = jest.fn();
+      resizeObserverSingleton.observe = observeHandler;
 
-    subscribeToResize(element, resizeHandler);
+      const element = {
+        clientWidth: 10,
+        clientHeight: 15,
+      } as HTMLDivElement;
 
-    expect(observeHandler).toBeCalledTimes(1);
-    expect(observeHandler.mock.calls[0][0]).toEqual(element);
+      subscribeToResize(element, resizeHandler);
 
-    const target = {
-      clientWidth: 20,
-      clientHeight: 30,
-    };
-    const entry = { target };
-    observeHandler.mock.calls[0][1](entry);
-    expect(resizeHandler).toBeCalledTimes(1);
-    expect(resizeHandler).toBeCalledWith(target);
+      expect(observeHandler).toBeCalledTimes(1);
+      expect(observeHandler.mock.calls[0][0]).toEqual(element);
+
+      const target = {
+        clientWidth: 20,
+        clientHeight: 30,
+      };
+      const entry = [{}];
+      (entry as any).target = target;
+      observeHandler.mock.calls[0][1](entry);
+      expect(resizeHandler).toBeCalledTimes(1);
+      expect(resizeHandler).toBeCalledWith(target);
+    } finally {
+      setWindow(originalWindow, true);
+    }
   });
 
   it('should unobserve element changing on unsubsribe from effect, hasWindow: true', () => {
