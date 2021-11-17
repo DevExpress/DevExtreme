@@ -140,7 +140,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        this.wrapper.getDetailsViewScrollableContainer().scrollTop(500);
+        this.wrapper.getDetailsViewScrollable().scrollTo({ top: 500 });
         const scrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
         this.clock.tick(400);
 
@@ -180,7 +180,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         this.clock.tick(400);
 
         const scrollPosition = 64;
-        this.wrapper.getTreeViewScrollableContainer().scrollTop(scrollPosition);
+        this.wrapper.getDirsPanel().find('.dx-scrollable').dxScrollable('instance').scrollTo({ top: scrollPosition });
         this.clock.tick(400);
 
         this.fileManager.refresh();
