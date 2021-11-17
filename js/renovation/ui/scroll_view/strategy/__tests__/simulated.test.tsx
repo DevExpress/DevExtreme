@@ -104,7 +104,6 @@ describe('Simulated > View', () => {
       reachBottomText: 'Loading...',
       refreshStrategy: 'simulated',
       refreshingText: 'Refreshing...',
-      rtlEnabled: false,
       scrollByContent: true,
       scrollByThumb: false,
       showScrollbar: 'onScroll',

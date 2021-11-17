@@ -19,6 +19,22 @@ import { EventCallback } from './event_callback';
 import { DisposeEffectReturn } from '../../utils/effect_return';
 import { getUpdatedOptions } from './utils/get_updated_options';
 
+interface ComponentProps {
+  className?: string;
+  itemTemplate?: string | (() => string | HTMLElement);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  valueChange?: EventCallback<any>;
+}
+
+const normalizeProps = (props: ComponentProps): ComponentProps => Object
+  .keys(props).reduce((accumulator, key) => {
+    if (props[key] !== undefined) {
+      accumulator[key] = props[key];
+    }
+
+    return accumulator;
+  }, {});
+
 export const viewFunction = ({
   widgetRef,
   props: { componentProps: { className } },
@@ -41,12 +57,7 @@ export class DomComponentWrapperProps {
 
   @OneWay() templateNames!: string[];
 
-  @OneWay() componentProps!: {
-    className?: string;
-    itemTemplate?: string | (() => string | HTMLElement);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    valueChange?: EventCallback<any>;
-  };
+  @OneWay() componentProps!: ComponentProps;
 }
 
 @Component({
@@ -101,17 +112,22 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     const updatedOptions = getUpdatedOptions(this.prevProps || {}, this.properties);
     if (updatedOptions.length) {
       instance.beginUpdate();
-      updatedOptions.forEach(({ path, value }) => { instance.option(path, value); });
+      updatedOptions.forEach(({ path, value }) => {
+        instance.option(path, value);
+      });
       instance.endUpdate();
     }
+
     this.prevProps = this.properties;
   }
 
   get properties(): Record<string, unknown> {
+    const normalizedProps = normalizeProps(this.props.componentProps);
+
     const {
       valueChange,
       ...restProps
-    } = this.props.componentProps;
+    } = normalizedProps;
 
     const properties = ({
       rtlEnabled: !!this.config?.rtlEnabled, // widget expects boolean

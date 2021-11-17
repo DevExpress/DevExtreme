@@ -80,7 +80,6 @@ describe('Native > View', () => {
       reachBottomText: 'Loading...',
       refreshStrategy: 'pullDown',
       refreshingText: 'Refreshing...',
-      rtlEnabled: false,
       scrollByContent: true,
       showScrollbar: 'onScroll',
       useSimulatedScrollbar: false,
