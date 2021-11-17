@@ -287,7 +287,10 @@ class DateViewRoller extends Scrollable {
 
     _visibilityChangedHandler(visible) {
         if(visible) {
-            this._renderSelectedValue(this.option('selectedIndex'));
+            // uses for purposes of renovated scrollable widget
+            this._visibilityTimer = setTimeout(() => {
+                this._renderSelectedValue(this.option('selectedIndex'));
+            });
         }
         this.toggleActiveState(false);
     }
@@ -327,6 +330,11 @@ class DateViewRoller extends Scrollable {
             default:
                 super._optionChanged(args);
         }
+    }
+
+    _dispose() {
+        clearTimeout(this._visibilityTimer);
+        super._dispose();
     }
 }
 

@@ -19,7 +19,7 @@ import { ScrollableWrapper } from '../../component_wrapper/navigation/scrollable
 import { getElementLocationInternal } from './utils/get_element_location_internal';
 import { convertToLocation } from './utils/convert_location';
 import { getOffsetDistance } from './utils/get_offset_distance';
-import { isDefined } from '../../../core/utils/type';
+import { isDefined, isNumeric } from '../../../core/utils/type';
 
 import { hasWindow } from '../../../core/utils/window';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from './common/consts';
@@ -175,11 +175,11 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
     // destructuring assignment with default values not working
     // TODO: delete next two conditions after fix - https://github.com/DevExpress/devextreme-renovation/issues/734
     /* istanbul ignore next */
-    if (!isDefined(top)) {
+    if (!isDefined(top) || !isNumeric(top)) {
       top = 0;
     }
     /* istanbul ignore next */
-    if (!isDefined(left)) {
+    if (!isDefined(left) || !isNumeric(top)) {
       left = 0;
     }
 

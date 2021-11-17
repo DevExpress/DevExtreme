@@ -33,6 +33,7 @@ describe('Scrollbar', () => {
 
     expect({ ...viewModel.props() }).toEqual({
       direction: 'vertical',
+      containerHasSizes: false,
       containerSize: 0,
       contentSize: 0,
       visible: false,
@@ -46,18 +47,27 @@ describe('Scrollbar', () => {
     each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
       each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
         each([
-          { scrollLocation: 50.145623, expectedTranslate: -25.0728115 },
-          { scrollLocation: 0, expectedTranslate: 0 },
-          { scrollLocation: -50, expectedTranslate: 25 },
-          { scrollLocation: -100, expectedTranslate: 50 },
-          { scrollLocation: -150, expectedTranslate: 75 },
-        ]).describe('testData: %o', ({ scrollLocation, expectedTranslate }) => {
-          it('thumb styles, containerSize: 100, contentSize: 200, maxOffset: -100', () => {
+          {
+            contentSize: 300,
+            scrollLocation: 50.145623,
+            expected: { translate: -33.430415333333336, height: 33 },
+          },
+          {
+            contentSize: 200,
+            scrollLocation: 50.145623,
+            expected: { translate: -25.0728115, height: 50 },
+          },
+          { contentSize: 200, scrollLocation: 0, expected: { translate: 0, height: 50 } },
+          { contentSize: 200, scrollLocation: -50, expected: { translate: 25, height: 50 } },
+          { contentSize: 200, scrollLocation: -100, expected: { translate: 50, height: 50 } },
+          { contentSize: 200, scrollLocation: -150, expected: { translate: 75, height: 50 } },
+        ]).describe('testData: %o', ({ contentSize, scrollLocation, expected }) => {
+          it(`thumb styles, containerSize: 100, contentSize: ${contentSize}, maxOffset: -100`, () => {
             const viewModel = new Scrollbar({
               direction,
               showScrollbar,
               containerSize: 100,
-              contentSize: 200,
+              contentSize,
               maxOffset: -100,
               scrollLocation,
             });
@@ -70,17 +80,17 @@ describe('Scrollbar', () => {
               expectedThumbTransform = 'none';
             } else {
               if (direction === DIRECTION_HORIZONTAL) {
-                expectedThumbTransform = `translate(${expectedTranslate}px, 0px)`;
+                expectedThumbTransform = `translate(${expected.translate}px, 0px)`;
               }
               if (direction === DIRECTION_VERTICAL) {
-                expectedThumbTransform = `translate(0px, ${expectedTranslate}px)`;
+                expectedThumbTransform = `translate(0px, ${expected.translate}px)`;
               }
             }
 
             const thumbElement = scrollbar.find('.dx-scrollable-scroll');
 
             expect(thumbElement.prop('style')).toHaveProperty('transform', expectedThumbTransform);
-            expect(thumbElement.prop('style')).toHaveProperty(direction === 'vertical' ? 'height' : 'width', 50);
+            expect(thumbElement.prop('style')).toHaveProperty(direction === 'vertical' ? 'height' : 'width', expected.height);
             expect(thumbElement.prop('style')).not.toHaveProperty(direction === 'vertical' ? 'width' : 'height');
           });
         });
@@ -263,11 +273,8 @@ describe('Scrollbar', () => {
                   direction,
                   rtlEnabled,
                   scrollLocation,
+                  containerHasSizes,
                   maxOffset,
-                });
-
-                Object.defineProperties(viewModel, {
-                  containerHasSizes: { get() { return containerHasSizes; } },
                 });
 
                 [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
@@ -368,30 +375,36 @@ describe('Scrollbar', () => {
         });
       });
 
-      each([-500.25, -400, -100.25, -55.75, 0.25, 100.25, 500.25]).describe('scrollLocation: %o', (scrollLocation) => {
-        it('moveTo(location) should pass to scrollable correct newScrollLocation with delta', () => {
-          const scrollLocationChange = jest.fn();
+      test.each([
+        { prevScrollLocation: -499, scrollLocation: -500.25, expected: { needFireScroll: true } },
+        { prevScrollLocation: -399, scrollLocation: -400, expected: { needFireScroll: true } },
+        { prevScrollLocation: -100, scrollLocation: -100.25, expected: { needFireScroll: true } },
+        { prevScrollLocation: -55, scrollLocation: -55.75, expected: { needFireScroll: true } },
+        { prevScrollLocation: 0, scrollLocation: 0.25, expected: { needFireScroll: true } },
+        { prevScrollLocation: 100, scrollLocation: 100.25, expected: { needFireScroll: true } },
+        { prevScrollLocation: 500.24, scrollLocation: 500.25, expected: { needFireScroll: true } },
+        { prevScrollLocation: 480, scrollLocation: 480, expected: { needFireScroll: false } },
+      ])('moveTo(location), pass correct arguments to scrollLocationChange event: %o', ({ prevScrollLocation, scrollLocation, expected }) => {
+        const scrollLocationChange = jest.fn();
 
-          const viewModel = new Scrollbar({
-            direction,
-            scrollLocationChange,
-            scrollLocation,
-          });
-
-          const prevScrollLocation = Math.floor(Math.random() * 10) - 5;
-          viewModel.prevScrollLocation = prevScrollLocation;
-
-          viewModel.moveTo(scrollLocation);
-
-          expect(scrollLocationChange).toHaveBeenCalledTimes(1);
-          expect(scrollLocationChange).toHaveBeenCalledWith(
-            {
-              fullScrollProp: viewModel.fullScrollProp,
-              location: -scrollLocation,
-              needFireScroll: Math.abs(prevScrollLocation - scrollLocation) >= 1,
-            },
-          );
+        const viewModel = new Scrollbar({
+          direction,
+          scrollLocationChange,
+          scrollLocation,
         });
+
+        viewModel.prevScrollLocation = prevScrollLocation;
+
+        viewModel.moveTo(scrollLocation);
+
+        expect(scrollLocationChange).toHaveBeenCalledTimes(1);
+        expect(scrollLocationChange).toHaveBeenCalledWith(
+          {
+            fullScrollProp: viewModel.fullScrollProp,
+            location: -scrollLocation,
+            needFireScroll: expected.needFireScroll,
+          },
+        );
       });
 
       each(optionValues.showScrollbar).describe('ShowScrollbar: %o', (showScrollbar) => {
@@ -501,21 +514,6 @@ describe('Scrollbar', () => {
         const viewModel = new Scrollbar({ direction });
 
         expect((viewModel as any).dimension).toBe(direction === 'horizontal' ? 'width' : 'height');
-      });
-
-      each([0, 100]).describe('contentSize: %o', (contentSize) => {
-        each([0, 100]).describe('containerSize: %o', (containerSize) => {
-          test('containerHasSizes()', () => {
-            const viewModel = new Scrollbar({
-              direction,
-              containerSize,
-              contentSize,
-            });
-
-            expect(viewModel.containerHasSizes)
-              .toEqual(contentSize > 0 && containerSize > 0);
-          });
-        });
       });
 
       each([0, 50, 200]).describe('containerSize: %o', (containerSize) => {

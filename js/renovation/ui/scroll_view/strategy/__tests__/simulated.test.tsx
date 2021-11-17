@@ -171,6 +171,20 @@ describe('Simulated > Render', () => {
       });
     });
 
+    each([0, 100]).describe('containerClientWidth: %o', (containerClientWidth) => {
+      each([0, 100]).describe('containerClientHeight: %o', (containerClientHeight) => {
+        test('containerHasSizes()', () => {
+          const viewModel = new Scrollable({ direction });
+
+          viewModel.containerClientHeight = containerClientHeight;
+          viewModel.containerClientWidth = containerClientWidth;
+
+          expect(viewModel.containerHasSizes)
+            .toEqual(containerClientWidth > 0 && containerClientHeight > 0);
+        });
+      });
+    });
+
     each([{ top: 120, left: -200 }, { top: -60, left: 40 }]).describe('contentTranslateOffset: %o', (contentTranslateOffset) => {
       it('contentStyles()', () => {
         const helper = new ScrollableTestHelper({ direction });
@@ -1290,6 +1304,55 @@ describe('Simulated > Behavior', () => {
         expect(event.originalEvent.stopPropagation).toBeCalled();
         expect(helper.viewModel.scrollByKey).toBeCalledTimes(1);
         expect(helper.viewModel.scrollByKey).toBeCalledWith('end');
+      });
+
+      each([undefined, jest.fn()]).describe('handler: %o', (actionHandler) => {
+        afterEach(() => {
+          jest.clearAllMocks();
+        });
+
+        each([{ scrollTop: 0, scrollLeft: 0 }, { scrollTop: 20, scrollLeft: 30 }]).describe('initialSavedScrollOffset: %o', (initialSavedScrollOffset) => {
+          test.each([true, false])('onVisibilityChangeHandler(%o)', (visible) => {
+            const viewModel = new Scrollable({
+              direction,
+              onVisibilityChange: actionHandler,
+            });
+
+            viewModel.savedScrollOffset = initialSavedScrollOffset;
+            viewModel.updateHandler = jest.fn();
+            viewModel.scrollLocationChange = jest.fn();
+
+            viewModel.scrollableRef = {
+              current: { offsetWidth: 100, offsetHeight: 100 },
+            } as RefObject;
+            viewModel.containerRef = {
+              current: {
+                scrollTop: 10,
+                scrollLeft: 20,
+              },
+            } as RefObject<HTMLDivElement>;
+
+            viewModel.onVisibilityChangeHandler(visible);
+
+            if (actionHandler) {
+              expect(actionHandler).toHaveBeenCalledTimes(1);
+              expect(actionHandler).toHaveBeenLastCalledWith(visible);
+            }
+
+            const expectedContainerScrollTop = 10;
+            const expectedContainerScrollLeft = 20;
+            const containerEl = viewModel.containerRef.current!;
+            if (visible) {
+              expect(viewModel.updateHandler).toBeCalledTimes(1);
+              expect(viewModel.savedScrollOffset).toEqual(initialSavedScrollOffset);
+            } else {
+              expect(viewModel.updateHandler).toBeCalledTimes(0);
+            }
+
+            expect(containerEl.scrollTop).toEqual(expectedContainerScrollTop);
+            expect(containerEl.scrollLeft).toEqual(expectedContainerScrollLeft);
+          });
+        });
       });
 
       each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
