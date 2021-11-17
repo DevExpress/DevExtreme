@@ -127,6 +127,17 @@ export class VirtualScrollingDispatcher {
 
     setViewOptions(options) {
         this.options = options;
+
+        if(this.verticalVirtualScrolling) {
+            this.verticalVirtualScrolling.options = options;
+            this.verticalVirtualScrolling.itemSize = this.rowHeight;
+            this.verticalVirtualScrolling.viewportSize = this.viewportHeight;
+        }
+        if(this.horizontalVirtualScrolling) {
+            this.horizontalVirtualScrolling.options = options;
+            this.verticalVirtualScrolling.itemSize = this.cellWidth;
+            this.verticalVirtualScrolling.viewportSize = this.viewportWidth;
+        }
     }
 
     getRenderState() {

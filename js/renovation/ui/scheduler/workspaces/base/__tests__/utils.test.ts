@@ -259,6 +259,7 @@ describe('Workspace base utils', () => {
         completeColumnCount: 9,
         windowHeight: 100,
         windowWidth: 200,
+        rtlEnabled: true,
       });
 
       expect(result.getCellHeight())
@@ -268,7 +269,7 @@ describe('Workspace base utils', () => {
       expect(result.getCellMinWidth())
         .toBe(75);
       expect(result.isRTL())
-        .toBe(false);
+        .toBe(true);
       expect(result.getSchedulerHeight())
         .toBe(3);
       expect(result.getSchedulerWidth())

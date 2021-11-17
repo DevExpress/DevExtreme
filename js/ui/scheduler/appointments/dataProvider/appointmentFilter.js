@@ -20,7 +20,7 @@ import {
     getRecurrenceException,
     getAppointmentTakesAllDay
 } from './utils';
-import getPreparedDataItems from '../../../../renovation/ui/scheduler/utils/data';
+import { getPreparedDataItems } from '../../../../renovation/ui/scheduler/utils/data';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;

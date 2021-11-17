@@ -648,10 +648,17 @@ module('Virtual Scrolling', {
         test('setViewOptions should chenge dispatcher\'s options', function(assert) {
             this.prepareInstance();
 
-            const nextOptions = {};
+            const nextOptions = {
+                ...this.options,
+                getSchedulerHeight: () => 5,
+                getSchedulerWidth: () => 6,
+            };
+
             this.virtualScrollingDispatcher.setViewOptions(nextOptions);
 
             assert.equal(this.virtualScrollingDispatcher.options, nextOptions, 'Options were updated');
+            assert.equal(this.verticalVirtualScrolling.options.getSchedulerHeight(), 5, 'Correct options');
+            assert.equal(this.horizontalVirtualScrolling.options.getSchedulerWidth(), 6, 'Correct options');
         });
     });
 

@@ -121,12 +121,13 @@ export const createVirtualScrollingOptions = (
     completeColumnCount: number;
     windowHeight: number;
     windowWidth: number;
+    rtlEnabled: boolean;
   },
 ): VirtualScrollingOptions => ({
   getCellHeight: (): number => options.cellHeight,
   getCellWidth: (): number => options.cellWidth,
   getCellMinWidth: (): number => DATE_TABLE_MIN_CELL_WIDTH,
-  isRTL: (): boolean => false, // TODO
+  isRTL: (): boolean => options.rtlEnabled,
   getSchedulerHeight: ():
   number | string | (() => number | string) | undefined => options.schedulerHeight,
   getSchedulerWidth: ():

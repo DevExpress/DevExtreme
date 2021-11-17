@@ -1,8 +1,8 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
-import cloneTest from '../../../../helpers/check-all-platforms';
+import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
-const SCHEDULER_SELECTOR = '.test-scheduler';
+const SCHEDULER_SELECTOR = '#container';
 
 const data = [
   {
@@ -148,54 +148,15 @@ const data = [
   },
 ];
 
-const test = (options?: any): any => cloneTest(
-  'declaration/scheduler',
-  ['react'],
-  options,
-);
+const test = multiPlatformTest({
+  page: 'declaration/scheduler',
+  platforms: [/* 'jquery', */'react'],
+});
 
 fixture('Renovated scheduler - Cross-scrolling');
 
 ['day', 'week', 'workWeek', 'month'].forEach((currentView) => {
-  test({
-    timeZone: 'America/Los_Angeles',
-    dataSource: data,
-    views: [{
-      type: 'day',
-    }, {
-      type: 'week',
-      intervalCount: 4,
-    }, {
-      type: 'workWeek',
-      intervalCount: 4,
-    }, {
-      type: 'month',
-    }],
-    currentView,
-    currentDate: new Date(2021, 3, 21),
-    startDayHour: 9,
-    endDayHour: 16,
-    groups: ['priorityId'],
-    resources: [
-      {
-        fieldExpr: 'priorityId',
-        allowMultiple: false,
-        dataSource: [{
-          text: 'Low Priority',
-          id: 1,
-          color: '#1e90ff',
-        }, {
-          text: 'High Priority',
-          id: 2,
-          color: '#ff9747',
-        }],
-        label: 'Priority',
-      },
-    ],
-    showCurrentTimeIndicator: false,
-    crossScrollingEnabled: true,
-    height: 800,
-  })(`it should render appointments correctly if currentView is ${currentView} and cross-scrolling is enabled`, async (t, { screenshotComparerOptions }) => {
+  test(`it should render appointments correctly if currentView is ${currentView} and cross-scrolling is enabled`, async (t, { screenshotComparerOptions }) => {
     const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
     await t
@@ -206,5 +167,45 @@ fixture('Renovated scheduler - Cross-scrolling');
         screenshotComparerOptions,
       ))
       .ok();
-  });
+  }).before(
+    async (_, { platform }) => createWidget(platform, 'dxScheduler', {
+      timeZone: 'America/Los_Angeles',
+      dataSource: data,
+      views: [{
+        type: 'day',
+      }, {
+        type: 'week',
+        intervalCount: 4,
+      }, {
+        type: 'workWeek',
+        intervalCount: 4,
+      }, {
+        type: 'month',
+      }],
+      currentView,
+      currentDate: new Date(2021, 3, 21),
+      startDayHour: 9,
+      endDayHour: 16,
+      groups: ['priorityId'],
+      resources: [
+        {
+          fieldExpr: 'priorityId',
+          allowMultiple: false,
+          dataSource: [{
+            text: 'Low Priority',
+            id: 1,
+            color: '#1e90ff',
+          }, {
+            text: 'High Priority',
+            id: 2,
+            color: '#ff9747',
+          }],
+          label: 'Priority',
+        },
+      ],
+      showCurrentTimeIndicator: false,
+      crossScrollingEnabled: true,
+      height: 800,
+    }),
+  );
 });
