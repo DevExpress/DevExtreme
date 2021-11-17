@@ -8,6 +8,11 @@ export type Options<
     TKey = any,
 > = CustomStoreOptions<TItem, TKey>;
 
+/** @public */
+export type GroupItem<
+    TItem = any,
+> = { key: string; items?: Array<TItem> | GroupItem; count?: number; summary?: Array<number> };
+
 /**
  * @namespace DevExpress.data
  * @deprecated Use Options instead
@@ -44,12 +49,12 @@ export interface CustomStoreOptions<
      */
     load: ((options: LoadOptions<TItem>) =>
       | DxPromise<Array<TItem>
-        | {
-            data: Array<TItem | { key: string; items?: Array<TItem>; count?: number; summary: Array<number> }>;
-            totalCount?: number;
-            summary: Array<number>;
-            groupCount?: number;
-          }>
+          | {
+              data: Array<TItem> | Array<GroupItem>;
+              totalCount?: number;
+              summary?: Array<number>;
+              groupCount?: number;
+            }>
       | Array<TItem>);
     /**
      * @docid
