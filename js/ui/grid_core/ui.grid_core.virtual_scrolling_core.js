@@ -187,6 +187,10 @@ export const VirtualScrollController = Class.inherit((function() {
         },
         setViewportPosition: function(position) {
             const result = new Deferred();
+            if(this._position === position) {
+                return result.resolve().promise();
+            }
+
             const scrollingTimeout = this.getScrollingTimeout();
 
             clearTimeout(this._scrollTimeoutID);
@@ -255,7 +259,8 @@ export const VirtualScrollController = Class.inherit((function() {
                     this._itemSizes[virtualItemsCount.begin + index] = size;
                 });
 
-                const virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + this.itemsCount()) * this._viewportItemSize;
+                const itemsCount = this.option(LEGACY_SCROLLING_MODE) ? this.itemsCount() : this._dataOptions.itemsCount();
+                const virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + itemsCount) * this._viewportItemSize;
                 const contentHeightLimit = getContentHeightLimit(browser);
                 if(virtualContentSize > contentHeightLimit) {
                     this._sizeRatio = contentHeightLimit / virtualContentSize;
