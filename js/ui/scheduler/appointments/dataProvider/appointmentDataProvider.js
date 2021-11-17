@@ -19,7 +19,6 @@ export class AppointmentDataProvider {
         this.initFilterStrategy();
     }
 
-    get filterMaker() { return this.getFilterStrategy().filterMaker; }
     get keyName() { return this.appointmentDataSource.keyName; }
     get filterStrategyName() {
         return this.options.getIsVirtualScrolling()
