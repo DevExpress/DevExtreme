@@ -18,6 +18,7 @@ fixture`Form`
           .ok(compareResults.errorMessages());
       }).before(async () => createWidget('dxForm', {
         width: 1000,
+        labelMode: formLabelMode,
         colCount: 2,
         items: [
           {
