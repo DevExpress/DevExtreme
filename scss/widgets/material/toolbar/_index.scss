@@ -111,7 +111,7 @@
 
 .dx-toolbar-button {
   .dx-button-has-text {
-    .dx-icon {
+    .dx-button-content .dx-icon {
       @include dx-icon-sizing($material-button-icon-size);
       @include dx-icon-margin(6px);
     }
