@@ -118,54 +118,57 @@ describe('Simulated > Render', () => {
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
     each([
       { location: -500.25, expected: -100.25 },
+      { location: -401.35, expected: -1.3500000000000227 },
       { location: -400, expected: 0 },
-      { location: -100.25, expected: -0.25 },
-      { location: -55.75, expected: -0.75 },
+      { location: -100.25, expected: 0 },
+      { location: -55.75, expected: 0 },
+      { location: -0.13, expected: 0 },
       { location: 0.25, expected: 0.25 },
-      { location: 100.25, expected: 100.25 },
-      { location: 500.25, expected: 500.25 },
+      { location: 100.66, expected: 100.66 },
+      { location: 500.357, expected: 500.357 },
     ]).describe('Location: %o', ({ location, expected }) => {
-      each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
-        each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
-          it('contentTranslateY()', () => {
-            const topPocketSize = 85;
+      each([0, -400]).describe('maxOffset: %o', (maxOffset) => {
+        each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+          each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
+            it('contentTranslateY()', () => {
+              const topPocketSize = 85;
 
-            const viewModel = new Scrollable({
-              direction,
-              forceGeneratePockets,
-              pullDownEnabled,
+              const viewModel = new Scrollable({
+                direction,
+                forceGeneratePockets,
+                pullDownEnabled,
+              });
+
+              viewModel.containerClientHeight = 100;
+              viewModel.contentClientHeight = 500;
+              viewModel.topPocketHeight = topPocketSize;
+              viewModel.vScrollLocation = location;
+
+              Object.defineProperties(viewModel, {
+                vScrollOffsetMax: { get() { return maxOffset; } },
+              });
+
+              expect(viewModel.contentTranslateY)
+                .toEqual(maxOffset === 0 ? 0 : expected - topPocketSize);
             });
 
-            viewModel.containerClientHeight = 100;
-            viewModel.contentClientHeight = 500;
-            viewModel.topPocketHeight = topPocketSize;
-            viewModel.vScrollLocation = location;
-            const maxOffset = -400;
+            it('contentTranslateX()', () => {
+              const viewModel = new Scrollable({
+                direction,
+                forceGeneratePockets,
+                pullDownEnabled,
+              });
 
-            Object.defineProperties(viewModel, {
-              vScrollOffsetMax: { get() { return maxOffset; } },
+              viewModel.containerClientWidth = 100;
+              viewModel.contentClientWidth = 500;
+              viewModel.hScrollLocation = location;
+
+              Object.defineProperties(viewModel, {
+                hScrollOffsetMax: { get() { return maxOffset; } },
+              });
+
+              expect(viewModel.contentTranslateX).toEqual(maxOffset === 0 ? 0 : expected);
             });
-
-            expect(viewModel.contentTranslateY).toEqual(expected - topPocketSize);
-          });
-
-          it('contentTranslateX()', () => {
-            const viewModel = new Scrollable({
-              direction,
-              forceGeneratePockets,
-              pullDownEnabled,
-            });
-
-            viewModel.containerClientWidth = 100;
-            viewModel.contentClientWidth = 500;
-            viewModel.hScrollLocation = location;
-            const maxOffset = -400;
-
-            Object.defineProperties(viewModel, {
-              hScrollOffsetMax: { get() { return maxOffset; } },
-            });
-
-            expect(viewModel.contentTranslateX).toEqual(expected);
           });
         });
       });

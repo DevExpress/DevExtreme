@@ -39,6 +39,7 @@ import {
 import { isDefined } from '../../../../core/utils/type';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
 import eventsEngine from '../../../../events/core/events_engine';
+import { inRange } from '../../../../core/utils/math';
 
 import {
   ScrollDirection,
@@ -84,7 +85,7 @@ import { BottomPocket } from '../internal/pocket/bottom';
 
 import { getDevicePixelRatio } from '../utils/get_device_pixel_ratio';
 import { isElementVisible } from '../utils/is_element_visible';
-import { getTranslateValues } from '../utils/get_translate_values';
+// import { getTranslateValues } from '../utils/get_translate_values';
 import { clampIntoRange } from '../utils/clamp_into_range';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { subscribeToResize } from '../utils/subscribe_to_resize';
@@ -352,16 +353,16 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   @Method()
   scrollOffset(): ScrollOffset {
-    const { top, left } = getTranslateValues(this.contentRef.current);
-    const { scrollTop, scrollLeft } = this.containerRef.current!;
+    // const { top, left } = getTranslateValues(this.contentRef.current);
+    // const { scrollTop, scrollLeft } = this.containerRef.current!;
 
     return {
-      top: scrollTop - top
+      top: -this.vScrollLocation // scrollTop - top
         - (this.props.pullDownEnabled && this.props.forceGeneratePockets
           ? this.topPocketHeight
           : 0
         ),
-      left: scrollLeft - left,
+      left: -this.hScrollLocation, // scrollLeft - left,
     };
   }
 
@@ -518,7 +519,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     if (this.props.bounceEnabled) {
       return true;
     }
-
+    console.log('1');
+    console.log(isDxMouseWheelEvent(event));
     return isDxMouseWheelEvent(event)
       ? this.validateWheel(event as DxMouseWheelEvent)
       : this.validateMove(event as DxMouseEvent);
@@ -923,7 +925,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       && (locatedNotAtBound || scrollFromMin || scrollFromMax);
 
     validated = validated || this.validateWheelTimer !== undefined;
-
+    console.log(validated);
     if (validated) {
       this.clearWheelValidationTimer();
       this.validateWheelTimer = setTimeout(
@@ -1142,14 +1144,18 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const maxOffset = this.vScrollOffsetMax
       - this.bottomPocketHeight - this.contentPaddingBottom;
 
-    if (maxOffset === 0
-        || (this.vScrollLocation <= 0 && this.vScrollLocation >= this.vScrollOffsetMax)) {
-      return 0 - this.topPocketHeight;
+    if (maxOffset === 0) {
+      return 0;
+    }
+
+    if (inRange(this.vScrollLocation, maxOffset, 0)) {
+      return -this.topPocketHeight;
     }
 
     if (location > 0) {
       transformValue = location;
-    } else if (location <= maxOffset) {
+    }
+    if (location < maxOffset) {
       transformValue = location - maxOffset;
     }
 
@@ -1161,14 +1167,14 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const location = this.hScrollLocation;
     let transformValue = location % 1;
 
-    if (this.hScrollOffsetMax === 0
-      || (this.hScrollLocation <= 0 && this.hScrollLocation >= this.hScrollOffsetMax)) {
+    if (this.hScrollOffsetMax === 0 || inRange(this.hScrollLocation, this.hScrollOffsetMax, 0)) {
       return 0;
     }
 
     if (location > 0) {
       transformValue = location;
-    } else if (location <= this.hScrollOffsetMax) {
+    }
+    if (location < this.hScrollOffsetMax) {
       transformValue = location - this.hScrollOffsetMax;
     }
 
