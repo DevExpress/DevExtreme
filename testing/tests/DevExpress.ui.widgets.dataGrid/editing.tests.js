@@ -17458,6 +17458,87 @@ QUnit.module('Edit Form', {
         assert.equal($textEditors.eq(1).dxTextBox('instance').option('readOnly'), false, 'item 1 readOnly false by default');
     });
 
+    QUnit.test('editing.form.labelMode should be passed to editors', function(assert) {
+        this.setupModules(this);
+
+        const that = this;
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        $.extend(that.options.editing, {
+            mode: 'form',
+            allowUpdating: true,
+            form: {
+                labelMode: 'floating',
+                items: [{
+                    dataField: 'name'
+                }, {
+                    dataField: 'phone',
+                    editorOptions: {
+                        labelMode: 'hidden'
+                    }
+                }, {
+                    dataField: 'custom'
+                }]
+            }
+        });
+
+        rowsView.render(testElement);
+
+        // act
+        that.editRow(0);
+
+        // assert
+        const $textEditors = testElement.find('.dx-form .dx-texteditor');
+
+        assert.equal($textEditors.length, 3, 'text editor count');
+        assert.equal($textEditors.eq(0).dxTextBox('instance').option('labelMode'), 'floating', 'item 0 labelMode');
+        assert.equal($textEditors.eq(0).dxTextBox('instance').option('label'), 'Name:', 'item 0 label');
+        assert.equal($textEditors.eq(1).dxTextBox('instance').option('labelMode'), 'hidden', 'item 1 labelMode');
+        assert.equal($textEditors.eq(1).dxTextBox('instance').option('label'), 'Phone:', 'item 1 label');
+    });
+
+    ['static', 'floating'].forEach(labelMode => {
+        QUnit.test(`Form item with boolean editor should have visible label if editing.form.labelMode is ${labelMode}`, function(assert) {
+            this.setupModules(this);
+
+            const that = this;
+            const rowsView = this.rowsView;
+            const testElement = $('#container');
+
+            $.extend(that.options.editing, {
+                mode: 'form',
+                allowUpdating: true,
+                form: {
+                    labelMode,
+                    items: [{
+                        dataField: 'name'
+                    }, {
+                        dataField: 'phone',
+                        editorOptions: {
+                            labelMode: 'hidden'
+                        }
+                    }, {
+                        dataField: 'custom'
+                    }]
+                }
+            });
+
+            rowsView.render(testElement);
+
+            that.columnOption(0, 'dataType', 'boolean');
+
+            // act
+            that.editRow(0);
+
+            // assert
+            const formLayoutItems = testElement.find('.dx-form').dxForm('instance')._rootLayoutManager.option('items');
+
+            assert.strictEqual(formLayoutItems[0].label.visible, true, 'item 0 label.visible is assigned');
+            assert.strictEqual(formLayoutItems[1].label.visible, undefined, 'item 1 label.visible is not assigned');
+        });
+    });
+
     QUnit.testInActiveWindow('Focus editor after click on a label', function(assert) {
         this.setupModules(this);
 
