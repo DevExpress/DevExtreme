@@ -79,10 +79,10 @@ interface CellInfo<TRowData = any, TKey = any> {
 export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey>;
+export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & CellInfo<TRowData, TKey>;
 
 /** @public */
-export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey>;
+export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & CellInfo<TRowData, TKey>;
 
 /** @public */
 export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey> & {
@@ -173,7 +173,7 @@ export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTr
 };
 
 /** @public */
-export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
     readonly cellElement: DxElement;
     readonly prevColumnIndex: number;
     readonly prevRowIndex: number;
@@ -192,7 +192,7 @@ export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTre
 };
 
 /** @public */
-export type FocusedRowChangingEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
     readonly rowElement: DxElement;
     readonly prevRowIndex: number;
     newRowIndex: number;
@@ -206,7 +206,7 @@ export type InitializedEvent<TRowData = any, TKey = any> = InitializedEventInfo<
 export type InitNewRowEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & NewRowInfo<TRowData>;
 
 /** @public */
-export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & KeyDownInfo;
+export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent> & KeyDownInfo;
 
 /** @public */
 export type NodesInitializedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
@@ -217,7 +217,7 @@ export type NodesInitializedEvent<TRowData = any, TKey = any> = EventInfo<dxTree
 export type OptionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
     readonly data: TRowData;
     readonly key: TKey;
     readonly values: Array<any>;
@@ -240,7 +240,7 @@ export type RowCollapsedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList
 export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
     readonly data: TRowData;
     readonly key: TKey;
     readonly values: Array<any>;
@@ -330,7 +330,7 @@ export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = RowDraggingEven
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragReorderInfo;
 
 /** @public */
-export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
     row?: Row<TRowData, TKey>;
     column?: Column<TRowData, TKey>;
 };

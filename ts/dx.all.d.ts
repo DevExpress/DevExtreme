@@ -5974,7 +5974,10 @@ declare module DevExpress.ui {
     export type CellClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       readonly data: TRowData;
       readonly key: TKey;
       readonly value?: any;
@@ -5990,7 +5993,10 @@ declare module DevExpress.ui {
     export type CellDblClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       readonly data: TRowData;
       readonly key: TKey;
       readonly value?: any;
@@ -6331,7 +6337,10 @@ declare module DevExpress.ui {
     export type ColumnButtonClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       row?: Row<TRowData, TKey>;
       column?: Column<TRowData, TKey>;
     };
@@ -6637,7 +6646,9 @@ declare module DevExpress.ui {
       TKey = any
     > {
       readonly component: T;
-      readonly event: DevExpress.events.DxEvent;
+      readonly event: DevExpress.events.DxEvent<
+        PointerEvent | MouseEvent | TouchEvent
+      >;
       itemData?: TRowData;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
@@ -7235,7 +7246,10 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+      DevExpress.events.NativeEventInfo<
+        dxDataGrid<TRowData, TKey>,
+        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly cellElement: DevExpress.core.DxElement;
         readonly prevColumnIndex: number;
         readonly prevRowIndex: number;
@@ -7257,7 +7271,10 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+      DevExpress.events.NativeEventInfo<
+        dxDataGrid<TRowData, TKey>,
+        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly rowElement: DevExpress.core.DxElement;
         readonly prevRowIndex: number;
         newRowIndex: number;
@@ -7428,7 +7445,10 @@ declare module DevExpress.ui {
     export type KeyDownEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      KeyboardEvent
+    > &
       KeyDownInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7615,7 +7635,10 @@ declare module DevExpress.ui {
     export type RowClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       readonly data: TRowData;
       readonly key: TKey;
       readonly values: Array<any>;
@@ -7643,7 +7666,10 @@ declare module DevExpress.ui {
     export type RowDblClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       readonly data: TRowData;
       readonly key: TKey;
       readonly values: Array<any>;
@@ -7818,7 +7844,9 @@ declare module DevExpress.ui {
       TKey = any
     > {
       readonly component: T;
-      readonly event: DevExpress.events.DxEvent;
+      readonly event: DevExpress.events.DxEvent<
+        PointerEvent | MouseEvent | TouchEvent
+      >;
       readonly itemData?: TRowData;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
@@ -10832,7 +10860,10 @@ declare module DevExpress.ui {
   module dxDraggable {
     export type DisposingEvent = DevExpress.events.EventInfo<dxDraggable>;
     export type DragEndEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDraggable> & {
+      DevExpress.events.NativeEventInfo<
+        dxDraggable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly fromComponent: dxSortable | dxDraggable;
@@ -10841,7 +10872,10 @@ declare module DevExpress.ui {
         readonly toData?: any;
       };
     export type DragMoveEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDraggable> & {
+      DevExpress.events.NativeEventInfo<
+        dxDraggable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly fromComponent: dxSortable | dxDraggable;
@@ -10850,7 +10884,10 @@ declare module DevExpress.ui {
         readonly toData?: any;
       };
     export type DragStartEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDraggable> & {
+      DevExpress.events.NativeEventInfo<
+        dxDraggable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly fromData?: any;
@@ -20183,7 +20220,9 @@ declare module DevExpress.ui {
       readonly component: dxSortable;
       readonly element: DevExpress.core.DxElement;
       readonly model?: any;
-      readonly event: DevExpress.events.DxEvent;
+      readonly event: DevExpress.events.DxEvent<
+        PointerEvent | MouseEvent | TouchEvent
+      >;
       readonly itemData?: any;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
@@ -20196,7 +20235,10 @@ declare module DevExpress.ui {
     }
     export type DisposingEvent = DevExpress.events.EventInfo<dxSortable>;
     export type DragChangeEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxSortable> & {
+      DevExpress.events.NativeEventInfo<
+        dxSortable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly itemData?: any;
         readonly itemElement: DevExpress.core.DxElement;
         readonly fromIndex?: number;
@@ -20208,7 +20250,10 @@ declare module DevExpress.ui {
         readonly dropInsideItem?: boolean;
       };
     export type DragEndEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxSortable> & {
+      DevExpress.events.NativeEventInfo<
+        dxSortable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly itemData?: any;
         readonly itemElement: DevExpress.core.DxElement;
         readonly fromIndex: number;
@@ -20220,7 +20265,10 @@ declare module DevExpress.ui {
         readonly dropInsideItem: boolean;
       };
     export type DragMoveEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxSortable> & {
+      DevExpress.events.NativeEventInfo<
+        dxSortable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly itemData?: any;
         readonly itemElement: DevExpress.core.DxElement;
         readonly fromIndex: number;
@@ -20232,7 +20280,10 @@ declare module DevExpress.ui {
         readonly dropInsideItem: boolean;
       };
     export type DragStartEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxSortable> & {
+      DevExpress.events.NativeEventInfo<
+        dxSortable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         itemData?: any;
         readonly itemElement: DevExpress.core.DxElement;
         readonly fromIndex: number;
@@ -20248,7 +20299,10 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxSortable> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSortableOptions;
-    export type RemoveEvent = DevExpress.events.NativeEventInfo<dxSortable> & {
+    export type RemoveEvent = DevExpress.events.NativeEventInfo<
+      dxSortable,
+      PointerEvent | MouseEvent | TouchEvent
+    > & {
       readonly itemData?: any;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
@@ -20258,7 +20312,10 @@ declare module DevExpress.ui {
       readonly fromData?: any;
       readonly toData?: any;
     };
-    export type ReorderEvent = DevExpress.events.NativeEventInfo<dxSortable> & {
+    export type ReorderEvent = DevExpress.events.NativeEventInfo<
+      dxSortable,
+      PointerEvent | MouseEvent | TouchEvent
+    > & {
       readonly itemData?: any;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
@@ -21953,12 +22010,18 @@ declare module DevExpress.ui {
     export type CellClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > &
       CellInfo<TRowData, TKey>;
     export type CellDblClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > &
       CellInfo<TRowData, TKey>;
     export type CellHoverChangedEvent<
       TRowData = any,
@@ -22005,7 +22068,10 @@ declare module DevExpress.ui {
     export type ColumnButtonClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       row?: Row<TRowData, TKey>;
       column?: Column<TRowData, TKey>;
     };
@@ -22275,7 +22341,10 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+      DevExpress.events.NativeEventInfo<
+        dxTreeList<TRowData, TKey>,
+        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly cellElement: DevExpress.core.DxElement;
         readonly prevColumnIndex: number;
         readonly prevRowIndex: number;
@@ -22296,7 +22365,10 @@ declare module DevExpress.ui {
     export type FocusedRowChangingEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+    > & {
       readonly rowElement: DevExpress.core.DxElement;
       readonly prevRowIndex: number;
       newRowIndex: number;
@@ -22314,7 +22386,10 @@ declare module DevExpress.ui {
     export type KeyDownEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      KeyboardEvent
+    > &
       DevExpress.ui.dxDataGrid.KeyDownInfo;
     /**
      * [descr:dxTreeListNode]
@@ -22425,7 +22500,10 @@ declare module DevExpress.ui {
     export type RowClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       readonly data: TRowData;
       readonly key: TKey;
       readonly values: Array<any>;
@@ -22454,7 +22532,10 @@ declare module DevExpress.ui {
     export type RowDblClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       readonly data: TRowData;
       readonly key: TKey;
       readonly values: Array<any>;
@@ -24245,7 +24326,7 @@ declare module DevExpress.ui {
      * [descr:GridBaseOptions.onKeyDown]
      */
     onKeyDown?: (
-      e: DevExpress.events.NativeEventInfo<TComponent> &
+      e: DevExpress.events.NativeEventInfo<TComponent, KeyboardEvent> &
         DevExpress.ui.dxDataGrid.KeyDownInfo
     ) => void;
     /**
