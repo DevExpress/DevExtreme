@@ -2,6 +2,7 @@
 /* eslint-disable class-methods-use-this */
 import {
   Component,
+  Consumer,
   Effect,
   ForwardRef,
   InternalState,
@@ -59,6 +60,7 @@ import type { dxSchedulerScrolling } from '../../../../../ui/scheduler';
 import { getWindow } from '../../../../../core/utils/window';
 import domAdapter from '../../../../../core/dom_adapter';
 import { EffectReturn } from '../../../../utils/effect_return';
+import { ConfigContext, ConfigContextValue } from '../../../../common/config_context';
 
 interface VirtualScrollingSizes {
   cellHeight: number;
@@ -94,6 +96,7 @@ const calculateDefaultVirtualScrollingState = (
     isVerticalGrouping: boolean;
     schedulerHeight?: number | string | (() => number | string);
     schedulerWidth?: number | string | (() => number | string);
+    rtlEnabled: boolean;
   },
 ): VirtualScrollingState => {
   const completeColumnCount = options.completeViewDataMap[0].length;
@@ -114,6 +117,7 @@ const calculateDefaultVirtualScrollingState = (
     completeColumnCount,
     windowHeight: defaultVirtualScrollingMetaData.windowHeight,
     windowWidth: defaultVirtualScrollingMetaData.windowWidth,
+    rtlEnabled: options.rtlEnabled,
   }));
   options.virtualScrollingDispatcher.createVirtualScrolling();
   options.virtualScrollingDispatcher.updateDimensions(true);
@@ -317,6 +321,9 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   @ForwardRef()
   widgetElementRef!: RefObject<HTMLDivElement>;
 
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
+
   get renderConfig(): ViewRenderConfig {
     return getViewRenderConfigByType(
       this.props.type,
@@ -464,6 +471,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         isVerticalGrouping: this.isVerticalGrouping,
         schedulerHeight,
         schedulerWidth,
+        rtlEnabled: false, // Necessary for initialization
       });
     }
 
@@ -848,6 +856,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         completeColumnCount,
         windowHeight: nextSizes.windowHeight,
         windowWidth: nextSizes.windowWidth,
+        rtlEnabled: !!this.config?.rtlEnabled,
       }));
       this.virtualScrolling.createVirtualScrolling();
       this.virtualScrolling.updateDimensions(true);
