@@ -75,7 +75,7 @@ export function convertToRenderFieldItemOptions({
             editorInputId: itemId,
             editorValidationBoundary,
             editorStylingMode,
-            labelMode: item?.editorOptions?.labelMode ?? (labelMode === 'outside' ? 'hidden' : labelMode),
+            formLabelMode: labelMode,
             labelText: labelOptions.text,
             labelMark: getLabelMarkText(labelOptions.markOptions),
         })
@@ -108,7 +108,7 @@ function _convertToEditorOptions({
     editorInputId,
     editorValidationBoundary,
     editorStylingMode,
-    labelMode,
+    formLabelMode,
     labelText,
     labelMark,
 }) {
@@ -120,6 +120,11 @@ function _convertToEditorOptions({
         editorOptionsWithValue.value = editorOptionsWithValue.value || [];
     }
 
+    let labelMode = externalEditorOptions?.labelMode;
+    if(!isDefined(labelMode)) {
+        labelMode = formLabelMode === 'outside' ? 'hidden' : formLabelMode;
+    }
+
     const result = extend(true, editorOptionsWithValue,
         externalEditorOptions,
         {
@@ -127,7 +132,7 @@ function _convertToEditorOptions({
             validationBoundary: editorValidationBoundary,
             stylingMode: editorStylingMode,
             label: labelText,
-            labelMode: labelMode,
+            labelMode,
             labelMark,
         },
     );
@@ -164,16 +169,12 @@ function _hasRequiredRuleInSet(rules) {
 
 function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation, formLabelMode }) {
     const isEditorWithoutLabels = inArray(item.editorType, EDITORS_WITHOUT_LABELS) !== -1;
-    const isLabelVisible = isEditorWithoutLabels
-        ? formLabelMode !== 'hidden'
-        : formLabelMode === 'outside';
-
     const labelOptions = extend(
         {
             showColon: showColonAfterLabel,
             location: labelLocation,
             id: id,
-            visible: isLabelVisible,
+            visible: formLabelMode === 'outside' || (isEditorWithoutLabels && formLabelMode !== 'hidden'),
             isRequired: isRequired,
         },
         item ? item.label : {},
