@@ -8,6 +8,7 @@ import Guid from '../../core/guid';
 import { SIMPLE_ITEM_TYPE } from './constants';
 
 const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
+const EDITORS_WITHOUT_LABELS = ['dxCalendar', 'dxCheckBox', 'dxHtmlEditor', 'dxRadioGroup', 'dxRangeSlider', 'dxSlider', 'dxSwitch'];
 
 export function convertToRenderFieldItemOptions({
     $parent,
@@ -162,13 +163,17 @@ function _hasRequiredRuleInSet(rules) {
 }
 
 function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation, formLabelMode }) {
-    const isEditorWithoutLabels = inArray(item.editorType, ['dxCheckBox', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor']) !== -1;
+    const isEditorWithoutLabels = inArray(item.editorType, EDITORS_WITHOUT_LABELS) !== -1;
+    const isLabelVisible = isEditorWithoutLabels
+        ? formLabelMode !== 'hidden'
+        : formLabelMode === 'outside';
+
     const labelOptions = extend(
         {
             showColon: showColonAfterLabel,
             location: labelLocation,
             id: id,
-            visible: formLabelMode === 'outside' || (isEditorWithoutLabels && formLabelMode !== 'hidden'),
+            visible: isLabelVisible,
             isRequired: isRequired,
         },
         item ? item.label : {},

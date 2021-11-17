@@ -6,7 +6,7 @@ fixture`Form`
   .page(url(__dirname, '../../container.html'));
 
 [undefined, true, false].forEach((labelVisible) => {
-  [undefined, 'outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+  ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
     [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
       const testName = `labelMode priorities, frmLblMode=${formLabelMode},lblVis=${labelVisible},edtr.lblMode=${editorLabelMode}`;
       test(testName, async (t) => {
@@ -16,69 +16,63 @@ fixture`Form`
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }).before(async () => {
-        const options = {
-          width: 500,
-          items: [
-            {
-              dataField: 'field1', label: { visible: labelVisible }, editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field3', label: { visible: labelVisible }, editorType: 'dxCheckBox', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field4', label: { visible: labelVisible }, editorType: 'dxColorBox', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field5', label: { visible: labelVisible }, editorType: 'dxDateBox', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field6', label: { visible: labelVisible }, editorType: 'dxDropDownBox', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field7', label: { visible: labelVisible }, editorType: 'dxHtmlEditor', editorOptions: { labelMode: editorLabelMode, height: 100, toolbar: { items: ['undo', 'redo', 'separator', 'insertTable', 'deleteTable', 'insertRowAbove', 'insertRowBelow', 'deleteRow', 'insertColumnLeft', 'insertColumnRight', 'deleteColumn'] } },
-            },
-            {
-              dataField: 'field8', label: { visible: labelVisible }, editorType: 'dxLookup', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field9', label: { visible: labelVisible }, editorType: 'dxNumberBox', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field10', label: { visible: labelVisible }, editorType: 'dxRadioGroup', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field11', label: { visible: labelVisible }, editorType: 'dxRangeSlider', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field12', label: { visible: labelVisible }, editorType: 'dxSelectBox', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field13', label: { visible: labelVisible }, editorType: 'dxSlider', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field14', label: { visible: labelVisible }, editorType: 'dxSwitch', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field15', label: { visible: labelVisible }, editorType: 'dxTagBox', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field16', label: { visible: labelVisible }, editorType: 'dxTextArea', editorOptions: { labelMode: editorLabelMode },
-            },
-            {
-              dataField: 'field17', label: { visible: labelVisible }, editorType: 'dxTextBox', editorOptions: { labelMode: editorLabelMode },
-            },
-          ],
-        } as any;
-
-        if (formLabelMode !== undefined) {
-          options.labelMode = formLabelMode;
-        }
-        return createWidget('dxForm', options);
-      });
+      }).before(async () => createWidget('dxForm', {
+        width: 1000,
+        colCount: 2,
+        items: [
+          {
+            dataField: 'field1', label: { visible: labelVisible }, editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field3', label: { visible: labelVisible }, editorType: 'dxCheckBox', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field4', label: { visible: labelVisible }, editorType: 'dxColorBox', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field5', label: { visible: labelVisible }, editorType: 'dxDateBox', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field6', label: { visible: labelVisible }, editorType: 'dxDropDownBox', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field7', label: { visible: labelVisible }, editorType: 'dxHtmlEditor', editorOptions: { labelMode: editorLabelMode, height: 100, toolbar: { items: ['undo', 'redo', 'separator', 'insertTable', 'deleteTable', 'insertRowAbove', 'insertRowBelow', 'deleteRow', 'insertColumnLeft', 'insertColumnRight', 'deleteColumn'] } },
+          },
+          {
+            dataField: 'field8', label: { visible: labelVisible }, editorType: 'dxLookup', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field9', label: { visible: labelVisible }, editorType: 'dxNumberBox', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field10', label: { visible: labelVisible }, editorType: 'dxRadioGroup', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field11', label: { visible: labelVisible }, editorType: 'dxRangeSlider', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field12', label: { visible: labelVisible }, editorType: 'dxSelectBox', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field13', label: { visible: labelVisible }, editorType: 'dxSlider', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field14', label: { visible: labelVisible }, editorType: 'dxSwitch', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field15', label: { visible: labelVisible }, editorType: 'dxTagBox', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field16', label: { visible: labelVisible }, editorType: 'dxTextArea', editorOptions: { labelMode: editorLabelMode },
+          },
+          {
+            dataField: 'field17', label: { visible: labelVisible }, editorType: 'dxTextBox', editorOptions: { labelMode: editorLabelMode },
+          },
+        ],
+      }));
     });
   });
 });
