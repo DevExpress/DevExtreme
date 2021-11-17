@@ -39,10 +39,18 @@ export interface CustomStoreOptions<
     /**
      * @docid
      * @type_function_param1 options:LoadOptions
-     * @type_function_return Promise<Array>|Array
+     * @type_function_return Promise<Array|object>|Array
      * @public
      */
-    load: ((options: LoadOptions<TItem>) => DxPromise<Array<TItem>> | Array<TItem>);
+    load: ((options: LoadOptions<TItem>) =>
+      | DxPromise<Array<TItem>
+        | {
+            data: Array<TItem | { key: string; items?: Array<TItem>; count?: number; summary: Array<number> }>;
+            totalCount?: number;
+            summary: Array<number>;
+            groupCount?: number;
+          }>
+      | Array<TItem>);
     /**
      * @docid
      * @default 'processed'

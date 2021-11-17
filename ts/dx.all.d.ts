@@ -1674,9 +1674,25 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load: (
-      options: LoadOptions<TItem>
-    ) => DevExpress.core.utils.DxPromise<Array<TItem>> | Array<TItem>;
+    load: (options: LoadOptions<TItem>) =>
+      | DevExpress.core.utils.DxPromise<
+          | Array<TItem>
+          | {
+              data: Array<
+                | TItem
+                | {
+                    key: string;
+                    items?: Array<TItem>;
+                    count?: number;
+                    summary: Array<number>;
+                  }
+              >;
+              totalCount?: number;
+              summary: Array<number>;
+              groupCount?: number;
+            }
+        >
+      | Array<TItem>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
