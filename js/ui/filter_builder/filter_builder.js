@@ -90,14 +90,6 @@ const FilterBuilder = Widget.inherit({
              * @hidden
              */
 
-            /**
-            * @name dxFilterBuilderOptions.defaultGroupOperation
-            * @type string
-            * @default "and"
-            * @hidden
-            */
-            defaultGroupOperation: 'and',
-
             groupOperations: ['and', 'or', 'notAnd', 'notOr'],
 
             maxGroupLevel: undefined,
@@ -149,7 +141,6 @@ const FilterBuilder = Widget.inherit({
                 this._invalidate();
                 break;
             case 'fields':
-            case 'defaultGroupOperation':
             case 'maxGroupLevel':
             case 'groupOperations':
             case 'allowHierarchicalFields':
@@ -215,8 +206,12 @@ const FilterBuilder = Widget.inherit({
         this._customOperations = getMergedOperations(this.option('customOperations'), this.option('filterOperationDescriptions.between'), this);
     },
 
+    _getDefaultGroupOperation: function() {
+        return this.option('groupOperations')?.[0] ?? OPERATORS.and;
+    },
+
     _getModel: function(value) {
-        return convertToInnerStructure(value, this._customOperations);
+        return convertToInnerStructure(value, this._customOperations, this._getDefaultGroupOperation());
     },
 
     _initModel: function() {
@@ -287,7 +282,7 @@ const FilterBuilder = Widget.inherit({
         this._createGroupOperationButton(criteria).appendTo($groupItem);
 
         this._createAddButton(() => {
-            const newGroup = createEmptyGroup(this.option('defaultGroupOperation'));
+            const newGroup = createEmptyGroup(this._getDefaultGroupOperation());
             addItem(newGroup, criteria);
             this._createGroupElement(newGroup, criteria, groupLevel + 1).appendTo($groupContent);
             this._updateFilter();
