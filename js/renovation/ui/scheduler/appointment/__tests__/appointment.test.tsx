@@ -1,5 +1,7 @@
+import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { viewFunction, Appointment, AppointmentProps } from '../appointment';
+import { Widget } from '../../../common/widget';
+import { viewFunction as ViewFunction, Appointment, AppointmentProps } from '../appointment';
 import { AppointmentContent } from '../content';
 import { AppointmentViewModel, ReduceType } from '../types';
 
@@ -40,13 +42,15 @@ describe('Appointment', () => {
   };
 
   describe('Render', () => {
-    const render = (viewModel): ShallowWrapper => shallow(viewFunction({
-      ...viewModel,
-      props: {
-        viewModel: defaultViewModel,
-        ...viewModel.props,
-      },
-    }));
+    const render = (viewModel): ShallowWrapper => shallow(
+      <ViewFunction
+        {...viewModel}
+        props={{
+          viewModel: defaultViewModel,
+          ...viewModel.props,
+        }}
+      />,
+    );
 
     it('it should has correct render', () => {
       const appointment = render({
@@ -55,20 +59,17 @@ describe('Appointment', () => {
         text: 'some-text',
       });
 
-      expect(appointment.hasClass('some-classes'))
+      expect(appointment.is(Widget))
         .toBe(true);
 
-      expect(appointment.is('div'))
-        .toBe(true);
+      expect(appointment.prop('classes'))
+        .toBe('some-classes');
 
       expect(appointment.prop('style'))
         .toEqual('some-styles');
 
-      expect(appointment.prop('title'))
-        .toBe('some-text');
-
-      expect(appointment.prop('role'))
-        .toBe('button');
+      expect(appointment.prop('hint'))
+        .toEqual('some-text');
     });
 
     it('it should has correct render with template', () => {
@@ -86,11 +87,11 @@ describe('Appointment', () => {
         },
       });
 
-      expect(appointment.is('div'))
+      expect(appointment.is(Widget))
         .toBe(true);
 
-      expect(appointment.hasClass('some-classes'))
-        .toBe(true);
+      expect(appointment.prop('classes'))
+        .toBe('some-classes');
 
       expect(appointment.prop('style'))
         .toEqual('some-styles');
@@ -136,13 +137,41 @@ describe('Appointment', () => {
     });
   });
 
+  describe('Behavior', () => {
+    describe('Methods', () => {
+      describe('onItemClick', () => {
+        it('should call onItemClick prop with correct arguments', () => {
+          const mockCallback = jest.fn();
+          const appointment = new Appointment({
+            viewModel: defaultViewModel,
+            index: 2021,
+            onItemClick: mockCallback,
+          });
+          appointment.ref = {
+            current: 'element',
+          } as any;
+
+          appointment.onItemClick();
+
+          expect(mockCallback).toBeCalledTimes(1);
+
+          expect(mockCallback).toHaveBeenCalledWith({
+            data: [defaultViewModel],
+            target: 'element',
+            index: 2021,
+          });
+        });
+      });
+    });
+  });
+
   describe('Logic', () => {
     describe('Getters', () => {
       describe('styles', () => {
         it('should return correct styles', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
-          });
+          } as any);
 
           expect(appointment.styles)
             .toEqual({
@@ -165,7 +194,7 @@ describe('Appointment', () => {
                 direction: 'vertical',
               },
             },
-          });
+          } as any);
 
           expect(appointment.classes)
             .toBe('dx-scheduler-appointment dx-scheduler-appointment-vertical');
@@ -180,7 +209,7 @@ describe('Appointment', () => {
                 direction: 'horizontal',
               },
             },
-          });
+          } as any);
 
           expect(appointment.classes)
             .toBe('dx-scheduler-appointment dx-scheduler-appointment-horizontal');
@@ -195,7 +224,7 @@ describe('Appointment', () => {
                 isRecurrent: true,
               },
             },
-          });
+          } as any);
 
           const defaultClasses = 'dx-scheduler-appointment dx-scheduler-appointment-vertical';
 
@@ -212,7 +241,7 @@ describe('Appointment', () => {
                 allDay: true,
               },
             },
-          });
+          } as any);
 
           const defaultClasses = 'dx-scheduler-appointment dx-scheduler-appointment-vertical';
 
@@ -230,7 +259,7 @@ describe('Appointment', () => {
                   appointmentReduced,
                 },
               },
-            });
+            } as any);
 
             const defaultClasses = 'dx-scheduler-appointment dx-scheduler-appointment-vertical';
 
@@ -244,7 +273,7 @@ describe('Appointment', () => {
         it('should return correct text', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
-          });
+          } as any);
 
           expect(appointment.text)
             .toBe('Some text');
@@ -255,7 +284,7 @@ describe('Appointment', () => {
         it('should return correct dateText', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
-          });
+          } as any);
 
           expect(appointment.dateText)
             .toBe('1AM - 2PM');
@@ -266,7 +295,7 @@ describe('Appointment', () => {
         it('shoud return correct data', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
-          });
+          } as any);
 
           expect(appointment.data)
             .toEqual({
@@ -295,7 +324,7 @@ describe('Appointment', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
             index: 1234,
-          });
+          } as any);
 
           expect(appointment.index)
             .toEqual(1234);
@@ -306,7 +335,7 @@ describe('Appointment', () => {
         it('should be false by default', () => {
           const appointment = new Appointment({
             viewModel: defaultViewModel,
-          });
+          } as any);
 
           expect(appointment.isReduced)
             .toBe(false);
@@ -322,7 +351,7 @@ describe('Appointment', () => {
                   appointmentReduced,
                 },
               },
-            });
+            } as any);
 
             expect(appointment.isReduced)
               .toBe(true);

@@ -73,3 +73,9 @@ export interface OverflowIndicatorTemplateProps extends BaseTemplateProps {
   appointmentCount: number;
   isCompact: boolean;
 }
+
+export interface AppointmentClickData {
+  data: AppointmentViewModel[];
+  target: HTMLElement;
+  index: number;
+}

@@ -119,6 +119,8 @@ export const createVirtualScrollingOptions = (
     isVerticalGrouping: boolean;
     completeRowCount: number;
     completeColumnCount: number;
+    windowHeight: number;
+    windowWidth: number;
   },
 ): VirtualScrollingOptions => ({
   getCellHeight: (): number => options.cellHeight,
@@ -137,4 +139,6 @@ export const createVirtualScrollingOptions = (
   isVerticalGrouping: (): boolean => options.isVerticalGrouping,
   getTotalRowCount: (): number => options.completeRowCount,
   getTotalCellCount: (): number => options.completeColumnCount,
+  getWindowHeight: (): number => options.windowHeight,
+  getWindowWidth: (): number => options.windowWidth,
 });
