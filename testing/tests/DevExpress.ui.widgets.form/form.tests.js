@@ -450,7 +450,7 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
         const widgetLabelText = renderedWidget.option('label');
 
         assert.equal(widgetLabelMode, labelMode === 'outside' ? 'hidden' : labelMode);
-        assert.equal(widgetLabelText, labelMode === 'outside' ? '' : 'Name:');
+        assert.equal(widgetLabelText, 'Name:');
 
         form.dispose();
     });
