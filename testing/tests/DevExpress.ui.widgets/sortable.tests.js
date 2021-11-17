@@ -1415,6 +1415,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         assert.strictEqual(onAddSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
         assert.strictEqual(onAddSpy.getCall(0).args[0].fromData, 'x', 'fromData');
         assert.strictEqual(onAddSpy.getCall(0).args[0].toData, 'y', 'toData');
+        assert.strictEqual(onAddSpy.getCall(0).args[0].event.type, 'dxdragend', 'event');
         assert.strictEqual($(onAddSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
         assert.strictEqual($(sortable2.element()).children('#item2').length, 1, 'item is added');
     });
@@ -1537,6 +1538,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         assert.strictEqual(onRemoveSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
         assert.strictEqual(onRemoveSpy.getCall(0).args[0].fromData, 'x', 'fromData');
         assert.strictEqual(onRemoveSpy.getCall(0).args[0].toData, 'y', 'toData');
+        assert.strictEqual(onRemoveSpy.getCall(0).args[0].event.type, 'dxdragend', 'event');
         assert.strictEqual($(onRemoveSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
         assert.strictEqual($(sortable1.element()).children('#item2').length, 0, 'item is removed');
     });
@@ -1614,6 +1616,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         assert.strictEqual(onReorderSpy.getCall(0).args[0].toIndex, 1, 'toIndex');
         assert.strictEqual(onReorderSpy.getCall(0).args[0].fromData, 'x', 'fromData');
         assert.strictEqual(onReorderSpy.getCall(0).args[0].toData, 'x', 'toData');
+        assert.strictEqual(onReorderSpy.getCall(0).args[0].event.type, 'dxdragend', 'event');
         assert.strictEqual($(onReorderSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
     });
 
