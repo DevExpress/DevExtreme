@@ -900,7 +900,7 @@ export const virtualScrollingModule = {
                             updateLoading: function() {
                             },
                             itemsCount: function() {
-                                return this.items().filter(isItemCountable).length;
+                                return this.items(true).length;
                             },
                             correctCount: function(items, count, fromEnd) {
                                 return correctCount(items, count, fromEnd, (item, isNextAfterLast, fromEnd) => {
@@ -916,27 +916,29 @@ export const virtualScrollingModule = {
                                 });
                             },
                             items: function(countableOnly) {
-                                const dataSource = that.dataSource();
-                                const virtualItemsCount = dataSource && dataSource.virtualItemsCount();
-                                const begin = virtualItemsCount ? virtualItemsCount.begin : 0;
-                                const rowPageSize = that.getRowPageSize();
+                                let result = that.items();
 
-                                let skip = that._rowPageIndex * rowPageSize - begin;
-                                let take = rowPageSize;
+                                if(that.option(LEGACY_SCROLLING_MODE)) {
+                                    const virtualItemsCount = that.virtualItemsCount();
+                                    const begin = virtualItemsCount ? virtualItemsCount.begin : 0;
+                                    const rowPageSize = that.getRowPageSize();
 
-                                let result = that._items;
+                                    let skip = that._rowPageIndex * rowPageSize - begin;
+                                    let take = rowPageSize;
 
-                                if(skip < 0) {
-                                    return [];
-                                }
 
-                                if(skip) {
-                                    skip = this.correctCount(result, skip);
-                                    result = result.slice(skip);
-                                }
-                                if(take) {
-                                    take = this.correctCount(result, take);
-                                    result = result.slice(0, take);
+                                    if(skip < 0) {
+                                        return [];
+                                    }
+
+                                    if(skip) {
+                                        skip = this.correctCount(result, skip);
+                                        result = result.slice(skip);
+                                    }
+                                    if(take) {
+                                        take = this.correctCount(result, take);
+                                        result = result.slice(0, take);
+                                    }
                                 }
 
                                 return countableOnly ? result.filter(isItemCountable) : result;
