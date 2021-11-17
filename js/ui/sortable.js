@@ -292,17 +292,18 @@ const Sortable = Draggable.inherit({
         const sourceDraggable = this._getSourceDraggable();
         const isSourceDraggable = sourceDraggable.NAME !== this.NAME;
         const toIndex = this.option('toIndex');
-        const allowDrop = this._allowDrop(sourceEvent.event);
+        const event = sourceEvent.event;
+        const allowDrop = this._allowDrop(event);
 
         if(toIndex !== null && toIndex >= 0 && allowDrop) {
             let cancelAdd;
             let cancelRemove;
 
             if(sourceDraggable !== this) {
-                cancelAdd = this._fireAddEvent(sourceEvent);
+                cancelAdd = this._fireAddEvent(event);
 
                 if(!cancelAdd) {
-                    cancelRemove = this._fireRemoveEvent(sourceEvent);
+                    cancelRemove = this._fireRemoveEvent(event);
                 }
             }
 
@@ -314,7 +315,7 @@ const Sortable = Draggable.inherit({
             }
 
             if(sourceDraggable === this) {
-                return this._fireReorderEvent(sourceEvent);
+                return this._fireReorderEvent(event);
             }
         }
 
