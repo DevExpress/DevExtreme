@@ -13,7 +13,8 @@ export const viewFunction = ({
     {sourceType === 'dxIcon' && (<i className={iconClassName} />)}
     {sourceType === 'fontIcon' && (<i className={iconClassName} />)}
     {sourceType === 'image' && (<img className={iconClassName} alt="" src={source} />)}
-    {sourceType === 'svg' && (<i className={iconClassName}>{source}</i>)}
+    {/* eslint-disable-next-line react/no-danger */}
+    {sourceType === 'svg' && (<i className={iconClassName} dangerouslySetInnerHTML={{ __html: source as string }} />)}
   </Fragment>
 );
 

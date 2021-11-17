@@ -50,7 +50,8 @@ describe('Icon', () => {
         expect(content.is('i')).toBe(true);
         expect(content.hasClass('dx-icon')).toBe(true);
         expect(content.hasClass('dx-svg-icon')).toBe(true);
-        expect(content.contains('<svg><path /></svg>')).toBe(true);
+
+        expect(icon.render().find('svg')).toHaveLength(1); // T1045245
       });
     });
 
