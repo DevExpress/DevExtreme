@@ -10,6 +10,7 @@ export type WidgetName =
 'dxScrollView' |
 'dxDataGrid' |
 'dxTreeList' |
+'dxPager' |
 'dxScheduler' |
 'dxTagBox' |
 'dxContextMenu' |
