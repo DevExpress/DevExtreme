@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import { VirtualScrollingDispatcher } from 'ui/scheduler/workspaces/ui.scheduler.virtual_scrolling';
-import { getWindow } from 'core/utils/window';
 import domAdapter from 'core/dom_adapter';
 import eventsEngine from 'events/core/events_engine';
 import { addNamespace } from 'events/utils/index';
@@ -46,6 +45,8 @@ module('Virtual Scrolling', {
                 getCellMinWidth: () => 1,
                 updateRender: () => {},
                 updateGrid: () => {},
+                getWindowHeight: () => 500,
+                getWindowWidth: () => 600,
                 ...workSpaceOptions,
             };
 
@@ -90,9 +91,8 @@ module('Virtual Scrolling', {
                 this.prepareInstance({ height: null });
 
                 const { viewportHeight } = this.virtualScrollingDispatcher;
-                const expectedHeight = getWindow().innerHeight;
 
-                assert.equal(viewportHeight, expectedHeight, 'viewport height is correct');
+                assert.equal(viewportHeight, 500, 'viewport height is correct');
             });
 
             test('document scroll event should be subscribed correctly if heigth option is undefined', function(assert) {
@@ -170,9 +170,8 @@ module('Virtual Scrolling', {
                 this.prepareInstance({ width: null });
 
                 const { viewportWidth } = this.virtualScrollingDispatcher;
-                const expectedWidth = getWindow().innerWidth;
 
-                assert.equal(viewportWidth, expectedWidth, 'Viewport width is correct');
+                assert.equal(viewportWidth, 600, 'Viewport width is correct');
             });
 
             test('document scroll event should not been subscribed if the "width" option is not defined', function(assert) {
