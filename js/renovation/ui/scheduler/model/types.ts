@@ -24,17 +24,17 @@ export interface AppointmentsConfigType {
   appointmentOffset: number;
   allowResizing: boolean;
   allowAllDayResizing: boolean;
-  dateTableOffset: number; // 0 always
+  dateTableOffset: number;
   groupOrientation: GroupOrientation;
   startViewDate?: Date;
   timeZone: string;
   firstDayOfWeek: number;
   viewType: ViewType;
   cellDurationInMinutes: number;
-  supportAllDayRow: boolean; // ?
-  isVerticalGroupOrientation: boolean; // ?
-  groupCount: number; // resource manager
-  dateRange: Date[]; // ? -> viewDataProvider
+  supportAllDayRow: boolean;
+  isVerticalGroupOrientation: boolean;
+  groupCount: number;
+  dateRange: Date[]; // TODO replace with min / max
 }
 
 export interface AppointmentsModelType extends AppointmentsConfigType {
@@ -44,7 +44,7 @@ export interface AppointmentsModelType extends AppointmentsConfigType {
   timeZoneCalculator: unknown;
   viewDataProvider: unknown;
   positionHelper: unknown;
-  resizableStep: number; // positionHelper.getResizableStep()
+  resizableStep: number;
   isGroupedAllDayPanel: boolean;
   rowCount: number;
   cellWidth: number;

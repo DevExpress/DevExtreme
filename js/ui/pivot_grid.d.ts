@@ -23,7 +23,7 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid> & {
+export type CellClickEvent = Cancelable & NativeEventInfo<dxPivotGrid, MouseEvent | PointerEvent> & {
     readonly area?: string;
     readonly cellElement?: DxElement;
     readonly cell?: Cell;
