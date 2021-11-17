@@ -140,7 +140,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         });
         this.clock.tick(400);
 
-        this.wrapper.getDetailsViewScrollable().scrollTo({ top: 500 });
+        this.wrapper.getDetailsViewScrollable().dxScrollable('instance').scrollTo({ top: 500 });
         const scrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
         this.clock.tick(400);
 
