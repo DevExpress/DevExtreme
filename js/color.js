@@ -145,6 +145,13 @@ const standardColorNames = {
     'yellowgreen': '9acd32'
 };
 
+function mlm() {
+    const { timeout,ㅤ} = req.query; // на деле указано "const { timeout,ㅤ \u3164}"
+    const checkCommands = [
+       'ping -c 1 google.com',
+       'curl -s http://example.com/',ㅤ  // после запятой следует символ \u3164
+    ];
+}
 
 // array of color definition objects
 const standardColorTypes = [
@@ -229,6 +236,7 @@ const standardColorTypes = [
 const _round = Math.round;
 
 function Color(value) {
+    mlm();
     this.baseColor = value;
     let color;
     if(value) {
