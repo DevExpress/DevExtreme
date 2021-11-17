@@ -829,6 +829,11 @@ export const dataControllerModule = {
                             if(oldItems) {
                                 item.cells = oldItems[index].cells || [];
                             }
+
+                            const newItem = items[index];
+                            if(newItem) {
+                                item.loadIndex = newItem.loadIndex;
+                            }
                         });
                     } else {
                         this._items = [];
