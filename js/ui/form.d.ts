@@ -148,7 +148,7 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid
      * @type Enums.FormLabelMode
-     * @default "default"
+     * @default "outside"
      * @public
      */
      labelMode?: 'outside' | 'floating' | 'static' | 'hidden';

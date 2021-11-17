@@ -1413,6 +1413,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         assert.strictEqual(onAddSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
         assert.strictEqual(onAddSpy.getCall(0).args[0].fromData, 'x', 'fromData');
         assert.strictEqual(onAddSpy.getCall(0).args[0].toData, 'y', 'toData');
+        assert.strictEqual(onAddSpy.getCall(0).args[0].event.type, 'dxdragend', 'event');
         assert.strictEqual($(onAddSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
         assert.strictEqual($(sortable2.element()).children('#item2').length, 1, 'item is added');
     });
@@ -1535,6 +1536,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         assert.strictEqual(onRemoveSpy.getCall(0).args[0].toIndex, 2, 'toIndex');
         assert.strictEqual(onRemoveSpy.getCall(0).args[0].fromData, 'x', 'fromData');
         assert.strictEqual(onRemoveSpy.getCall(0).args[0].toData, 'y', 'toData');
+        assert.strictEqual(onRemoveSpy.getCall(0).args[0].event.type, 'dxdragend', 'event');
         assert.strictEqual($(onRemoveSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
         assert.strictEqual($(sortable1.element()).children('#item2').length, 0, 'item is removed');
     });
@@ -1612,6 +1614,7 @@ QUnit.module('Events', crossComponentModuleConfig, () => {
         assert.strictEqual(onReorderSpy.getCall(0).args[0].toIndex, 1, 'toIndex');
         assert.strictEqual(onReorderSpy.getCall(0).args[0].fromData, 'x', 'fromData');
         assert.strictEqual(onReorderSpy.getCall(0).args[0].toData, 'x', 'toData');
+        assert.strictEqual(onReorderSpy.getCall(0).args[0].event.type, 'dxdragend', 'event');
         assert.strictEqual($(onReorderSpy.getCall(0).args[0].itemElement).get(0), $sourceElement.get(0), 'itemElement');
     });
 
@@ -3076,8 +3079,8 @@ QUnit.module('Dragging between sortables with scroll', {
         };
 
         this.createSortable = (options) => {
-            this.$elements.forEach(($element) => {
-                this.createOneSortable(options, $element);
+            return this.$elements.map(($element) => {
+                return this.createOneSortable(options, $element);
             });
         };
     },
@@ -3138,6 +3141,45 @@ QUnit.module('Dragging between sortables with scroll', {
         assert.equal(this.$elements[1].children().length, 11, 'children count');
         assert.equal(onRemove.callCount, 1, 'onRemove call count');
         assert.equal(onAdd.callCount, 1, 'onAdd call count');
+    });
+
+    QUnit.test('Dragging between two sortables with scroll should update itemPoints (T1035958)', function(assert) {
+        // arrange
+        const done = assert.async();
+        let scrollTimes = 0;
+
+        const sortable = this.createSortable({
+            filter: '.draggable',
+            group: 'shared',
+            moveItemOnDrop: true,
+        });
+
+        $('.draggable').width(280);
+        this.$elements[0].width(280);
+        this.$elements[1].width(280);
+        this.$elements[1].height(280);
+
+        $('#bothScrolls2').css('top', 0);
+        $('#bothScrolls2').css('left', 300);
+
+        this.$scrolls[1].on('scroll', () => {
+            // assert
+            const itemPoints = sortable[1].option('itemPoints');
+
+            if(scrollTimes === 0) {
+                // first scroll event, itemPoints must be the same
+                assert.equal(itemPoints[1].top, 50);
+            } else if(scrollTimes === 1) {
+                // second scroll event, itemPoints must be the same
+                assert.equal(itemPoints[1].top, 49);
+                done();
+            }
+
+            scrollTimes++;
+        });
+
+        // act
+        pointerMock(this.$elements[0].children().eq(0)).start().down().move(300, 200).move(0, 50);
     });
 
     // T872379
@@ -3782,7 +3824,6 @@ QUnit.module('autoscroll', getModuleConfigForTestsWithScroll('#itemsWithScroll',
             done();
         });
     });
-
 });
 
 // T971119

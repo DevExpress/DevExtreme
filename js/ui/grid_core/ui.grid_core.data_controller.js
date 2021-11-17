@@ -75,6 +75,7 @@ export const dataControllerModule = {
                     that._loadErrorHandler = that._handleLoadError.bind(that);
                     that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
                     that._changingHandler = that._handleChanging.bind(that);
+                    that._dataPushedHandler = that._handleDataPushed.bind(that);
 
                     that._columnsController.columnsChanged.add(that._columnsChangedHandler);
 
@@ -95,7 +96,7 @@ export const dataControllerModule = {
                     return this._dataSource[optionName]();
                 },
                 callbackNames: function() {
-                    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged'];
+                    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed'];
                 },
                 callbackFlags: function(name) {
                     if(name === 'dataErrorOccurred') {
@@ -371,6 +372,9 @@ export const dataControllerModule = {
                 _handleLoadError: function(e) {
                     this.dataErrorOccurred.fire(e);
                 },
+                _handleDataPushed: function(changes) {
+                    this.pushed.fire(changes);
+                },
                 fireError: function() {
                     this.dataErrorOccurred.fire(errors.Error.apply(errors, arguments));
                 },
@@ -633,19 +637,24 @@ export const dataControllerModule = {
                     return false;
                 },
                 _getChangedColumnIndices: function(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
-                    if(oldItem.rowType === newItem.rowType && newItem.rowType !== 'group' && newItem.rowType !== 'groupFooter') {
-                        const columnIndices = [];
+                    let columnIndices;
+                    if(oldItem.rowType === newItem.rowType) {
+                        if(newItem.rowType !== 'group' && newItem.rowType !== 'groupFooter') {
+                            columnIndices = [];
 
-                        if(newItem.rowType !== 'detail') {
-                            for(let columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
-                                if(this._isCellChanged(oldItem, newItem, visibleRowIndex, columnIndex, isLiveUpdate)) {
-                                    columnIndices.push(columnIndex);
+                            if(newItem.rowType !== 'detail') {
+                                for(let columnIndex = 0; columnIndex < oldItem.values.length; columnIndex++) {
+                                    if(this._isCellChanged(oldItem, newItem, visibleRowIndex, columnIndex, isLiveUpdate)) {
+                                        columnIndices.push(columnIndex);
+                                    }
                                 }
                             }
                         }
-
-                        return columnIndices;
+                        if(newItem.rowType === 'group' && newItem.isExpanded === oldItem.isExpanded && oldItem.cells) {
+                            columnIndices = oldItem.cells.map((cell, index) => cell.column?.type !== 'groupExpand' ? index : -1).filter(index => index >= 0);
+                        }
                     }
+                    return columnIndices;
                 },
                 _partialUpdateRow: function(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
                     let changedColumnIndices = this._getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate);
@@ -819,6 +828,11 @@ export const dataControllerModule = {
                             item.rowIndex = index - rowIndexDelta;
                             if(oldItems) {
                                 item.cells = oldItems[index].cells || [];
+                            }
+
+                            const newItem = items[index];
+                            if(newItem) {
+                                item.loadIndex = newItem.loadIndex;
                             }
                         });
                     } else {
@@ -1021,6 +1035,7 @@ export const dataControllerModule = {
                         oldDataSource.loadError.remove(that._loadErrorHandler);
                         oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
                         oldDataSource.changing.remove(that._changingHandler);
+                        oldDataSource.pushed.remove(that._dataPushedHandler);
                         oldDataSource.dispose(that._isSharedDataSource);
                     }
 
@@ -1040,6 +1055,7 @@ export const dataControllerModule = {
                         dataSource.loadError.add(that._loadErrorHandler);
                         dataSource.customizeStoreLoadOptions.add(that._customizeStoreLoadOptionsHandler);
                         dataSource.changing.add(that._changingHandler);
+                        dataSource.pushed.add(that._dataPushedHandler);
                     }
                 },
                 items: function() {

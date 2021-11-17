@@ -9,7 +9,10 @@ import { map, each } from '../../../../core/utils/iterator';
 import { isFunction, isDefined, isString } from '../../../../core/utils/type';
 import query from '../../../../data/query';
 
-import { isDateAndTimeView as calculateIsDateAndTimeView } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import {
+    isDateAndTimeView as calculateIsDateAndTimeView,
+    isSupportMultiDayAppointments
+} from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { getResourcesDataByGroups } from '../../resources/utils';
 import {
     compareDateWithStartDayHour,
@@ -20,7 +23,7 @@ import {
     getRecurrenceException,
     getAppointmentTakesAllDay
 } from './utils';
-import getPreparedDataItems from '../../../../renovation/ui/scheduler/utils/data';
+import { getPreparedDataItems } from '../../../../renovation/ui/scheduler/utils/data';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
@@ -156,7 +159,8 @@ export class AppointmentFilterBaseStrategy {
             min: dateRange[0],
             max: dateRange[1],
             resources: this.loadedResources,
-            allDay: allDay,
+            allDay,
+            supportMultiDayAppointments: isSupportMultiDayAppointments(this.viewType),
             firstDayOfWeek: this.firstDayOfWeek,
         }, preparedItems);
     }
@@ -256,7 +260,8 @@ export class AppointmentFilterBaseStrategy {
             viewEndDayHour,
             resources,
             firstDayOfWeek,
-            checkIntersectViewport
+            checkIntersectViewport,
+            supportMultiDayAppointments
         } = filterOptions;
 
         const [trimMin, trimMax] = getTrimDates(min, max);
@@ -316,9 +321,10 @@ export class AppointmentFilterBaseStrategy {
                 }
             }
 
-            // NOTE: Long appointment part without allDay field and recurrence rule should be filtered by min
-            if(endDate < min && isLongAppointment && !isAllDay && (!useRecurrence || (useRecurrence && !hasRecurrenceRule))) {
-                return false;
+            if(!isAllDay && supportMultiDayAppointments && isLongAppointment) {
+                if(endDate < min && (!useRecurrence || (useRecurrence && !hasRecurrenceRule))) {
+                    return false;
+                }
             }
 
             if(isDefined(startDayHour) && (!useRecurrence || !filterOptions.isVirtualScrolling)) {
@@ -345,8 +351,8 @@ export class AppointmentFilterBaseStrategy {
                 }
             }
 
-            if(useRecurrence && !hasRecurrenceRule) {
-                if(endDate < min && !isAllDay) {
+            if(!isAllDay && (!isLongAppointment || supportMultiDayAppointments)) {
+                if(endDate < min && useRecurrence && !hasRecurrenceRule) {
                     return false;
                 }
             }
@@ -555,6 +561,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
                 viewEndDayHour: this.viewEndDayHour,
                 min: groupStartDate,
                 max: groupEndDate,
+                supportMultiDayAppointments: isSupportMultiDayAppointments(this.viewType),
                 allDay: supportAllDayAppointment,
                 resources,
                 firstDayOfWeek: this.firstDayOfWeek,
@@ -568,10 +575,10 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
         }, preparedItems);
     }
 
-    filterPreparedItems({ filterOptions, groupCount }) {
+    filterPreparedItems({ filterOptions, groupCount }, preparedItems) {
         const combinedFilters = [];
 
-        let itemsToFilter = this.preparedItems;
+        let itemsToFilter = preparedItems || this.preparedItems;
         const needPreFilter = groupCount > 0;
         if(needPreFilter) {
             itemsToFilter = itemsToFilter.filter(({ rawAppointment }) => {

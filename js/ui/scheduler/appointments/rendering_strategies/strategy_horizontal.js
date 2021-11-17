@@ -1,6 +1,7 @@
 import BaseAppointmentsStrategy from './strategy.base';
 import dateUtils from '../../../../core/utils/date';
 import { ExpressionUtils } from '../../expressionUtils';
+import getSkippedHoursInRange from '../../../../renovation/ui/scheduler/view_model/appointments/utils/getSkippedHoursInRange';
 
 const DEFAULT_APPOINTMENT_HEIGHT = 60;
 const MIN_APPOINTMENT_HEIGHT = 35;
@@ -17,6 +18,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         const cellWidth = this.cellWidth || this.getAppointmentMinSize();
         const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointment);
         const startDate = position.info.appointment.startDate;
+        const endDate = position.info.appointment.endDate;
         const { normalizedEndDate } = position.info.appointment;
 
         let duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
@@ -24,7 +26,12 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         duration = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate);
 
         const cellDuration = this.cellDurationInMinutes * toMs('minute');
-        const durationInCells = duration / cellDuration;
+        const skippedHours = getSkippedHoursInRange(
+            startDate,
+            endDate,
+            this.viewDataProvider
+        );
+        const durationInCells = (duration - skippedHours * toMs('hour')) / cellDuration;
         const width = this.cropAppointmentWidth(durationInCells * cellWidth, cellWidth);
 
         return width;

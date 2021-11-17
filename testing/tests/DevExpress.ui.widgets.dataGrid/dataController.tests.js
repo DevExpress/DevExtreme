@@ -201,6 +201,64 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.ok(lastArgs.items[0].values);
     });
 
+    QUnit.test('The pushed callback on initialize', function(assert) {
+        // arrange
+        const pushedSpy = sinon.spy();
+        const array = [
+            { id: 0, name: 'Alex', phone: '55-55-55' },
+            { id: 1, name: 'Dan', phone: '98-75-21' }
+        ];
+        const dataSource = createDataSource(array, { key: 'id' });
+
+        this.dataController.pushed.add(pushedSpy);
+
+        // assert
+        assert.strictEqual(pushedSpy.callCount, 0, 'the pushed callback was not called');
+
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        // act
+        dataSource.store().push([{ type: 'remove', key: 1 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(pushedSpy.callCount, 1, 'the pushed callback was called only once');
+        assert.deepEqual(pushedSpy.getCall(0).args[0], [{ type: 'remove', key: 1 }], 'the pushed callback args');
+    });
+
+    QUnit.test('The handler of the dataSource pushed callback should be removed after disposing dataSource', function(assert) {
+        // arrange
+        const dataPushedHandlerSpy = sinon.spy();
+        const array = [
+            { id: 0, name: 'Alex', phone: '55-55-55' },
+            { id: 1, name: 'Dan', phone: '98-75-21' }
+        ];
+        let dataSource = createDataSource(array, { key: 'id' });
+
+        this.dataController._dataPushedHandler = dataPushedHandlerSpy;
+        this.dataController.setDataSource(dataSource);
+        dataSource = this.dataController.dataSource();
+        dataSource.load();
+
+        // assert
+        assert.ok(dataSource.pushed.has(dataPushedHandlerSpy), 'the pushed callback has handler');
+        assert.strictEqual(dataPushedHandlerSpy.callCount, 0);
+
+        // act
+        dataSource.store().push([{ type: 'remove', key: 1 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataPushedHandlerSpy.callCount, 1, 'the handler of the pushed callback was called only once');
+
+        // act
+        this.dataController.dispose();
+
+        // assert
+        assert.notOk(dataSource.pushed.has(dataPushedHandlerSpy), 'the pushed callback has no handler');
+    });
+
     // B255430
     QUnit.test('Call changed after all columnsChanged', function(assert) {
     // arrange
@@ -954,6 +1012,37 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             assert.equal(pageIndex, 1);
         });
         assert.equal(count, 1, 'Count');
+    });
+
+    QUnit.test('Get page index by group key if there is no groouping and remoteOperations is true and data (T1042661)', function(assert) {
+        // arrange
+        let count = 0;
+        const loadingSpy = sinon.spy();
+        const dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Dan', age: 25 },
+            { team: 'internal', name: 'Bob', age: 20 },
+            { team: 'public', name: 'Alice', age: 19 }],
+        { key: 'name' },
+        { pageSize: 1, asyncLoadEnabled: false });
+
+        this.applyOptions({
+            remoteOperations: true,
+            dataSource: dataSource
+        });
+
+        dataSource.store().on('loading', loadingSpy);
+
+        // act
+        this.dataController._refreshDataSource();
+        assert.equal(loadingSpy.callCount, 1, 'loading count');
+
+        this.dataController.getPageIndexByKey(['Alice']).done(function(pageIndex) {
+            ++count;
+            assert.equal(pageIndex, -1);
+        });
+        assert.equal(count, 1, 'Count');
+        assert.equal(loadingSpy.callCount, 1, 'loading count is not changed');
     });
 
     QUnit.test('Get page index by composite key', function(assert) {
@@ -9294,7 +9383,7 @@ QUnit.module('Summary', {
         }], 'totalFooter items');
         assert.deepEqual(this.dataController.items()[0].rowType, 'group', 'first row type');
         // T328430
-        assert.deepEqual(this.dataController.items()[0].summaryCells, [[{ summaryType: 'count', value: 1 }], []], 'group summaryCells');
+        assert.deepEqual(this.dataController.items()[0].summaryCells, [[], [{ summaryType: 'count', value: 1 }]], 'group summaryCells');
     });
 
     // T615903
@@ -9582,12 +9671,12 @@ QUnit.module('Summary', {
             items: [{ name: 'Alex', age: 19 }],
             aggregates: [19]
         });
-        assert.deepEqual(this.dataController.items()[0].summaryCells, [[{
+        assert.deepEqual(this.dataController.items()[0].summaryCells, [[], [{
             column: 'age',
             columnCaption: 'Age',
             summaryType: 'max',
             value: 19
-        }], []]);
+        }]]);
         assert.deepEqual(this.dataController.items()[1].data, { name: 'Alex', age: 19 });
         assert.deepEqual(this.dataController.footerItems(), [{
             rowType: 'totalFooter', summaryCells: [[], [{
@@ -9837,12 +9926,12 @@ QUnit.module('Summary', {
         assert.ok(!this.dataController.isLoading());
         assert.equal(this.dataController.totalCount(), 2, 'totalCount');
         assert.equal(this.dataController.pageCount(), 1, 'pageCount');
-        assert.deepEqual(this.dataController.items()[0].summaryCells, [[{
+        assert.deepEqual(this.dataController.items()[0].summaryCells, [[], [{
             column: 'age',
             columnCaption: 'Age',
             summaryType: 'count',
             value: 1
-        }], []], 'summary cells');
+        }]], 'summary cells');
         assert.deepEqual(this.dataController.footerItems(), [{
             rowType: 'totalFooter', summaryCells: [[], [{
                 value: 3,
@@ -9902,12 +9991,12 @@ QUnit.module('Summary', {
         assert.ok(!this.dataController.isLoading());
         assert.equal(this.dataController.totalCount(), 2, 'totalCount');
         assert.equal(this.dataController.pageCount(), 1, 'pageCount');
-        assert.deepEqual(this.dataController.items()[0].summaryCells, [[{
+        assert.deepEqual(this.dataController.items()[0].summaryCells, [[], [{
             column: 'age',
             columnCaption: 'Age',
             summaryType: 'count',
             value: 1
-        }], []], 'summary cells');
+        }]], 'summary cells');
         assert.deepEqual(this.dataController.footerItems(), [{
             rowType: 'totalFooter', summaryCells: [[], [{
                 value: 3,
@@ -10800,18 +10889,18 @@ QUnit.module('Summary', {
         // assert
         assert.ok(!this.dataController.isLoading());
         assert.strictEqual(this.dataController.items().length, 2);
-        assert.deepEqual(this.dataController.items()[0].summaryCells, [[{
+        assert.deepEqual(this.dataController.items()[0].summaryCells, [[], [{
             value: 15,
             column: 'age',
             columnCaption: 'Age',
             summaryType: 'min'
-        }], []]);
-        assert.deepEqual(this.dataController.items()[1].summaryCells, [[{
+        }]]);
+        assert.deepEqual(this.dataController.items()[1].summaryCells, [[], [{
             value: 25,
             columnCaption: 'Age',
             column: 'age',
             summaryType: 'min'
-        }], []]);
+        }]]);
     });
 
     QUnit.test('Group footer is hidden when group summary is defined a for one a grouped column', function(assert) {
@@ -10920,11 +11009,11 @@ QUnit.module('Summary', {
         assert.ok(!this.dataController.isLoading());
         assert.strictEqual(this.dataController.items().length, 3);
         assert.deepEqual(this.dataController.items()[0].data.key, 'Dan');
-        assert.deepEqual(this.dataController.items()[0].summaryCells[0][0].value, 1);
+        assert.deepEqual(this.dataController.items()[0].summaryCells[1][0].value, 1);
         assert.deepEqual(this.dataController.items()[1].data.key, 'Alex');
-        assert.deepEqual(this.dataController.items()[1].summaryCells[0][0].value, 2);
+        assert.deepEqual(this.dataController.items()[1].summaryCells[1][0].value, 2);
         assert.deepEqual(this.dataController.items()[2].data.key, 'Sam');
-        assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 3);
+        assert.deepEqual(this.dataController.items()[2].summaryCells[1][0].value, 3);
     });
 
     // T526028
@@ -10960,11 +11049,11 @@ QUnit.module('Summary', {
         assert.ok(!this.dataController.isLoading());
         assert.strictEqual(this.dataController.items().length, 3);
         assert.deepEqual(this.dataController.items()[0].data.key, 'Dan');
-        assert.deepEqual(this.dataController.items()[0].summaryCells[0][0].value, 1);
+        assert.deepEqual(this.dataController.items()[0].summaryCells[1][0].value, 1);
         assert.deepEqual(this.dataController.items()[1].data.key, 'Alex');
-        assert.deepEqual(this.dataController.items()[1].summaryCells[0][0].value, 2);
+        assert.deepEqual(this.dataController.items()[1].summaryCells[1][0].value, 2);
         assert.deepEqual(this.dataController.items()[2].data.key, 'Sam');
-        assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 3);
+        assert.deepEqual(this.dataController.items()[2].summaryCells[1][0].value, 3);
     });
 
     QUnit.test('group sorting by summary when change grouping', function(assert) {
@@ -11001,11 +11090,11 @@ QUnit.module('Summary', {
         assert.ok(!this.dataController.isLoading());
         assert.strictEqual(this.dataController.items().length, 3);
         assert.deepEqual(this.dataController.items()[0].data.key, 'Dan');
-        assert.deepEqual(this.dataController.items()[0].summaryCells[0][0].value, 1);
+        assert.deepEqual(this.dataController.items()[0].summaryCells[1][0].value, 1);
         assert.deepEqual(this.dataController.items()[1].data.key, 'Alex');
-        assert.deepEqual(this.dataController.items()[1].summaryCells[0][0].value, 2);
+        assert.deepEqual(this.dataController.items()[1].summaryCells[1][0].value, 2);
         assert.deepEqual(this.dataController.items()[2].data.key, 'Sam');
-        assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 3);
+        assert.deepEqual(this.dataController.items()[2].summaryCells[1][0].value, 3);
     });
 
     QUnit.test('Changing sortByGroupSummaryInfo', function(assert) {
@@ -11041,11 +11130,11 @@ QUnit.module('Summary', {
         assert.ok(!this.dataController.isLoading());
         assert.strictEqual(this.dataController.items().length, 3);
         assert.deepEqual(this.dataController.items()[0].data.key, 'Dan');
-        assert.deepEqual(this.dataController.items()[0].summaryCells[0][0].value, 1);
+        assert.deepEqual(this.dataController.items()[0].summaryCells[1][0].value, 1);
         assert.deepEqual(this.dataController.items()[1].data.key, 'Alex');
-        assert.deepEqual(this.dataController.items()[1].summaryCells[0][0].value, 2);
+        assert.deepEqual(this.dataController.items()[1].summaryCells[1][0].value, 2);
         assert.deepEqual(this.dataController.items()[2].data.key, 'Sam');
-        assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 3);
+        assert.deepEqual(this.dataController.items()[2].summaryCells[1][0].value, 3);
     });
 
     QUnit.test('group sorting by summary when several columns grouped', function(assert) {
@@ -11091,9 +11180,9 @@ QUnit.module('Summary', {
         // assert
         assert.ok(!this.dataController.isLoading());
         assert.deepEqual(this.dataController.items()[0].data.key, 'Sam');
-        assert.deepEqual(this.dataController.items()[0].summaryCells[0][0].value, 3);
+        assert.deepEqual(this.dataController.items()[0].summaryCells[1][0].value, 3);
         assert.deepEqual(this.dataController.items()[1].data.key, 20);
-        assert.deepEqual(this.dataController.items()[1].summaryCells[1][1].value, 20);
+        assert.deepEqual(this.dataController.items()[1].summaryCells[2][1].value, 20);
     });
 
     QUnit.test('group sorting by first summary', function(assert) {
@@ -11128,11 +11217,11 @@ QUnit.module('Summary', {
         assert.ok(!this.dataController.isLoading());
         assert.strictEqual(this.dataController.items().length, 3);
         assert.deepEqual(this.dataController.items()[0].data.key, 'Dan');
-        assert.deepEqual(this.dataController.items()[0].summaryCells[0][0].value, 1);
+        assert.deepEqual(this.dataController.items()[0].summaryCells[1][0].value, 1);
         assert.deepEqual(this.dataController.items()[1].data.key, 'Alex');
-        assert.deepEqual(this.dataController.items()[1].summaryCells[0][0].value, 2);
+        assert.deepEqual(this.dataController.items()[1].summaryCells[1][0].value, 2);
         assert.deepEqual(this.dataController.items()[2].data.key, 'Sam');
-        assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 3);
+        assert.deepEqual(this.dataController.items()[2].summaryCells[1][0].value, 3);
     });
 
     // T678072
@@ -11234,11 +11323,11 @@ QUnit.module('Summary', {
         assert.ok(!this.dataController.isLoading());
         assert.strictEqual(this.dataController.items().length, 3);
         assert.deepEqual(this.dataController.items()[0].data.key, 'Sam');
-        assert.deepEqual(this.dataController.items()[0].summaryCells[0][0].value, 3);
+        assert.deepEqual(this.dataController.items()[0].summaryCells[1][0].value, 3);
         assert.deepEqual(this.dataController.items()[1].data.key, 'Alex');
-        assert.deepEqual(this.dataController.items()[1].summaryCells[0][0].value, 2);
+        assert.deepEqual(this.dataController.items()[1].summaryCells[1][0].value, 2);
         assert.deepEqual(this.dataController.items()[2].data.key, 'Dan');
-        assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 1);
+        assert.deepEqual(this.dataController.items()[2].summaryCells[1][0].value, 1);
     });
 
     QUnit.test('group sorting by several summaries', function(assert) {
@@ -11279,13 +11368,13 @@ QUnit.module('Summary', {
         assert.ok(!this.dataController.isLoading());
         assert.strictEqual(this.dataController.items().length, 3);
         assert.deepEqual(this.dataController.items()[0].data.key, 'Sam');
-        assert.deepEqual(this.dataController.items()[0].summaryCells[0][0].value, 2);
-        assert.deepEqual(this.dataController.items()[0].summaryCells[0][1].value, 19);
+        assert.deepEqual(this.dataController.items()[0].summaryCells[1][0].value, 2);
+        assert.deepEqual(this.dataController.items()[0].summaryCells[1][1].value, 19);
         assert.deepEqual(this.dataController.items()[1].data.key, 'Alex');
-        assert.deepEqual(this.dataController.items()[1].summaryCells[0][0].value, 2);
-        assert.deepEqual(this.dataController.items()[1].summaryCells[0][1].value, 25);
+        assert.deepEqual(this.dataController.items()[1].summaryCells[1][0].value, 2);
+        assert.deepEqual(this.dataController.items()[1].summaryCells[1][1].value, 25);
         assert.deepEqual(this.dataController.items()[2].data.key, 'Dan');
-        assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 1);
+        assert.deepEqual(this.dataController.items()[2].summaryCells[1][0].value, 1);
     });
 
     QUnit.test('group sorting groupColumn fo grouped column only', function(assert) {
@@ -11328,13 +11417,13 @@ QUnit.module('Summary', {
         assert.ok(!this.dataController.isLoading());
         assert.strictEqual(this.dataController.items().length, 3);
         assert.deepEqual(this.dataController.items()[0].data.key, 'Alex');
-        assert.deepEqual(this.dataController.items()[0].summaryCells[0][0].value, 2);
-        assert.deepEqual(this.dataController.items()[0].summaryCells[0][1].value, 25);
+        assert.deepEqual(this.dataController.items()[0].summaryCells[1][0].value, 2);
+        assert.deepEqual(this.dataController.items()[0].summaryCells[1][1].value, 25);
         assert.deepEqual(this.dataController.items()[1].data.key, 'Sam');
-        assert.deepEqual(this.dataController.items()[1].summaryCells[0][0].value, 2);
-        assert.deepEqual(this.dataController.items()[1].summaryCells[0][1].value, 19);
+        assert.deepEqual(this.dataController.items()[1].summaryCells[1][0].value, 2);
+        assert.deepEqual(this.dataController.items()[1].summaryCells[1][1].value, 19);
         assert.deepEqual(this.dataController.items()[2].data.key, 'Dan');
-        assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 1);
+        assert.deepEqual(this.dataController.items()[2].summaryCells[1][0].value, 1);
     });
 
     QUnit.test('group custom summary item', function(assert) {
@@ -11387,16 +11476,16 @@ QUnit.module('Summary', {
         // assert
         assert.ok(!this.dataController.isLoading());
         assert.strictEqual(this.dataController.items().length, 2);
-        assert.deepEqual(this.dataController.items()[0].summaryCells, [[{
+        assert.deepEqual(this.dataController.items()[0].summaryCells, [[], [{
             value: 2,
             name: 'CountFromAge18',
             summaryType: 'custom'
-        }], []]);
-        assert.deepEqual(this.dataController.items()[1].summaryCells, [[{
+        }]]);
+        assert.deepEqual(this.dataController.items()[1].summaryCells, [[], [{
             value: 1,
             name: 'CountFromAge18',
             summaryType: 'custom'
-        }], []]);
+        }]]);
 
         // T278115
         assert.strictEqual(startCount, 2, 'start count');
@@ -11442,15 +11531,15 @@ QUnit.module('Summary', {
 
         // assert
         assert.strictEqual(this.dataController.items().length, 5);
-        assert.deepEqual(this.dataController.items()[0].summaryCells, [[{
+        assert.deepEqual(this.dataController.items()[0].summaryCells, [[], [{
             value: 3,
             name: 'CountForFirstGroup',
             summaryType: 'custom'
-        }], [], []], 'summary value is calculated for first group');
-        assert.deepEqual(this.dataController.items()[1].summaryCells, [[], [{
+        }], []], 'summary value is calculated for first group');
+        assert.deepEqual(this.dataController.items()[1].summaryCells, [[], [], [{
             name: 'CountForFirstGroup',
             summaryType: 'custom'
-        }], []], 'summary value is not calculated for second group');
+        }]], 'summary value is not calculated for second group');
     });
 
     QUnit.test('group summary item alignByColumn', function(assert) {
@@ -11523,13 +11612,13 @@ QUnit.module('Summary', {
         // assert
         assert.ok(!this.dataController.isLoading());
         assert.strictEqual(this.dataController.items()[0].rowType, 'group');
-        assert.deepEqual(this.dataController.items()[0].summaryCells, [
-            [$.extend({ value: 2 }, this.options.summary.groupItems[0])], [],
+        assert.deepEqual(this.dataController.items()[0].summaryCells, [[],
+            [$.extend({ value: 2 }, this.options.summary.groupItems[0])],
             [$.extend({ value: 15 }, this.options.summary.groupItems[1])]
         ]);
         assert.strictEqual(this.dataController.items()[3].rowType, 'group');
-        assert.deepEqual(this.dataController.items()[3].summaryCells, [
-            [$.extend({ value: 1 }, this.options.summary.groupItems[0])], [],
+        assert.deepEqual(this.dataController.items()[3].summaryCells, [[],
+            [$.extend({ value: 1 }, this.options.summary.groupItems[0])],
             [$.extend({ value: 25 }, this.options.summary.groupItems[1])]
         ]);
     });
@@ -11564,17 +11653,17 @@ QUnit.module('Summary', {
         // assert
         assert.ok(!this.dataController.isLoading());
         assert.strictEqual(this.dataController.items()[0].rowType, 'group');
-        assert.deepEqual(this.dataController.items()[0].summaryCells, [[
+        assert.deepEqual(this.dataController.items()[0].summaryCells, [[], [
             $.extend({ value: 59, columnCaption: 'Age' }, this.options.summary.groupItems[0])
-        ], [], []]);
+        ], []]);
         assert.strictEqual(this.dataController.items()[1].rowType, 'group');
-        assert.deepEqual(this.dataController.items()[1].summaryCells, [[], [
+        assert.deepEqual(this.dataController.items()[1].summaryCells, [[], [], [
             $.extend({ value: 34, columnCaption: 'Age' }, this.options.summary.groupItems[0])
-        ], []]);
+        ]]);
         assert.strictEqual(this.dataController.items()[4].rowType, 'group');
-        assert.deepEqual(this.dataController.items()[4].summaryCells, [[], [
+        assert.deepEqual(this.dataController.items()[4].summaryCells, [[], [], [
             $.extend({ value: 25, columnCaption: 'Age' }, this.options.summary.groupItems[0])
-        ], []]);
+        ]]);
     });
 
     QUnit.test('group summary item with showInGroupFooter when no autoExpandAll', function(assert) {

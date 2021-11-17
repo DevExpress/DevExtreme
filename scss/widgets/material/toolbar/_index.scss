@@ -67,7 +67,8 @@
 .dx-toolbar-menu-section {
   border-bottom: 1px solid $base-border-color;
 
-  .dx-toolbar-hidden-button {
+  .dx-toolbar-hidden-button,
+  .dx-toolbar-hidden-button-group {
     .dx-toolbar-item-auto-hide {
       padding: 0;
     }
@@ -75,20 +76,27 @@
     .dx-button {
       height: $material-list-item-height;
       padding: 0;
-    }
 
-    .dx-button-content {
-      padding: 0 $material-list-item-horizontal-padding;
-    }
-  }
+      .dx-button-text {
+        text-transform: none;
+        font-weight: 400;
+        font-size: $material-list-main-font-size;
+      }
 
-  .dx-button-content {
-    padding: 4px;
+      .dx-button-content {
+        padding: 0 $material-list-item-horizontal-padding;
 
-    .dx-icon {
-      color: $toolbar-color;
+        .dx-icon {
+          margin-right: $material-list-item-horizontal-padding;
 
-      @include dx-icon-sizing($material-button-icon-size);
+          @include dx-icon-sizing($material-button-icon-size);
+
+          .dx-rtl & {
+            margin-right: 0;
+            margin-left: $material-list-item-horizontal-padding;
+          }
+        }
+      }
     }
   }
 
@@ -102,8 +110,8 @@
 }
 
 .dx-toolbar-button {
-  .dx-button-has-text:not(.dx-button-back) {
-    .dx-icon {
+  .dx-button-has-text {
+    .dx-button-content .dx-icon {
       @include dx-icon-sizing($material-button-icon-size);
       @include dx-icon-margin(6px);
     }

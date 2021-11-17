@@ -463,6 +463,24 @@ module('Virtual Scrolling', {
 
             assert.equal(this.virtualScrollingDispatcher.leftVirtualCellsCount, 1, 'leftVirtualCellsCount is correct');
         });
+
+        test('update dimensions should updatee viewPort height and width', function(assert) {
+            this.prepareInstance();
+
+            const nextOptions = {
+                ...this.virtualScrollingDispatcher.options,
+                getSchedulerHeight: () => 1500,
+                getSchedulerWidth: () => 2000,
+                getViewHeight: () => 1400,
+                getViewWidth: () => 2000,
+            };
+
+            this.virtualScrollingDispatcher.setViewOptions(nextOptions);
+            this.virtualScrollingDispatcher.updateDimensions(true);
+
+            assert.equal(this.verticalVirtualScrolling.viewportSize, 1400, 'Correct viewport size');
+            assert.equal(this.horizontalVirtualScrolling.viewportSize, 2000, 'Correct viewport size');
+        });
     });
 
     module('API', () => {
@@ -626,6 +644,15 @@ module('Virtual Scrolling', {
                 },
                 'Horizontal scrolling state is correct'
             );
+        });
+
+        test('setViewOptions should chenge dispatcher\'s options', function(assert) {
+            this.prepareInstance();
+
+            const nextOptions = {};
+            this.virtualScrollingDispatcher.setViewOptions(nextOptions);
+
+            assert.equal(this.virtualScrollingDispatcher.options, nextOptions, 'Options were updated');
         });
     });
 

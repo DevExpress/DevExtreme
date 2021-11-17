@@ -645,19 +645,19 @@ declare module DevExpress {
     /**
      * [descr:Component.option(optionName)]
      */
-    option<TPropertyName extends string>(
+    option<TPropertyName extends string, TValue = unknown>(
       optionName: TPropertyName
     ): TPropertyName extends keyof TProperties
       ? TProperties[TPropertyName]
-      : unknown;
+      : TValue;
     /**
      * [descr:Component.option(optionName, optionValue)]
      */
-    option<TPropertyName extends string>(
+    option<TPropertyName extends string, TValue = unknown>(
       optionName: TPropertyName,
       optionValue: TPropertyName extends keyof TProperties
         ? TProperties[TPropertyName]
-        : unknown
+        : TValue
     ): void;
     /**
      * [descr:Component.option(options)]
@@ -4620,17 +4620,26 @@ declare module DevExpress.ui {
     export type ItemClickEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxAccordion<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxAccordion<TItem, TKey>,
+      KeyboardEvent | MouseEvent | PointerEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxAccordion<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxAccordion<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemHoldEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxAccordion<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxAccordion<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -4639,12 +4648,15 @@ declare module DevExpress.ui {
     export type ItemRenderedEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxAccordion<TItem, TKey>> &
+    > = DevExpress.events.EventInfo<dxAccordion<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemTitleClickEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxAccordion<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxAccordion<TItem, TKey>,
+      MouseEvent | PointerEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type OptionChangedEvent<
       TItem extends ItemLike = any,
@@ -5064,17 +5076,26 @@ declare module DevExpress.ui {
     export type ItemClickEvent<
       TItem extends ItemLike<TKey> = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxBox<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxBox<TItem, TKey>,
+      MouseEvent | PointerEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
       TItem extends ItemLike<TKey> = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxBox<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxBox<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemHoldEvent<
       TItem extends ItemLike<TKey> = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxBox<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxBox<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -5083,7 +5104,7 @@ declare module DevExpress.ui {
     export type ItemRenderedEvent<
       TItem extends ItemLike<TKey> = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxBox<TItem, TKey>> &
+    > = DevExpress.events.EventInfo<dxBox<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
     export type OptionChangedEvent<
       TItem extends ItemLike<TKey> = any,
@@ -5177,9 +5198,11 @@ declare module DevExpress.ui {
     export type DisposingEvent = DevExpress.events.EventInfo<dxButtonGroup>;
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxButtonGroup>;
-    export type ItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxButtonGroup> &
-        DevExpress.events.ItemInfo;
+    export type ItemClickEvent = DevExpress.events.NativeEventInfo<
+      dxButtonGroup,
+      KeyboardEvent | MouseEvent | PointerEvent
+    > &
+      DevExpress.events.ItemInfo;
     export type OptionChangedEvent =
       DevExpress.events.EventInfo<dxButtonGroup> &
         DevExpress.events.ChangedOptionInfo;
@@ -5643,21 +5666,29 @@ declare module DevExpress.ui {
     export type InitializedEvent<TKey = any> =
       DevExpress.events.InitializedEventInfo<dxContextMenu<TKey>>;
     export type ItemClickEvent<TKey = any> = DevExpress.events.NativeEventInfo<
-      dxContextMenu<TKey>
+      dxContextMenu<TKey>,
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<Item>;
     export type ItemContextMenuEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxContextMenu<TKey>> &
+      DevExpress.events.NativeEventInfo<
+        dxContextMenu<TKey>,
+        MouseEvent | PointerEvent | TouchEvent
+      > &
         DevExpress.events.ItemInfo<Item>;
-    export type ItemRenderedEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxContextMenu<TKey>> &
-        DevExpress.events.ItemInfo<Item>;
+    export type ItemRenderedEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxContextMenu<TKey>
+    > &
+      DevExpress.events.ItemInfo<Item>;
     export type OptionChangedEvent<TKey = any> = DevExpress.events.EventInfo<
       dxContextMenu<TKey>
     > &
       DevExpress.events.ChangedOptionInfo;
     export type PositioningEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxContextMenu<TKey>> & {
+      DevExpress.events.NativeEventInfo<
+        dxContextMenu<TKey>,
+        MouseEvent | PointerEvent | TouchEvent
+      > & {
         readonly position: PositionConfig;
       };
     export type Properties<TKey = any> = dxContextMenuOptions<TKey>;
@@ -5691,7 +5722,11 @@ declare module DevExpress.ui {
      */
     closeOnOutsideClick?:
       | boolean
-      | ((event: DevExpress.events.DxEvent) => boolean);
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
     /**
      * [descr:dxContextMenuOptions.dataSource]
      */
@@ -5941,7 +5976,10 @@ declare module DevExpress.ui {
     export type CellClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       readonly data: TRowData;
       readonly key: TKey;
       readonly value?: any;
@@ -5957,7 +5995,10 @@ declare module DevExpress.ui {
     export type CellDblClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       readonly data: TRowData;
       readonly key: TKey;
       readonly value?: any;
@@ -6298,7 +6339,10 @@ declare module DevExpress.ui {
     export type ColumnButtonClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       row?: Row<TRowData, TKey>;
       column?: Column<TRowData, TKey>;
     };
@@ -6604,7 +6648,9 @@ declare module DevExpress.ui {
       TKey = any
     > {
       readonly component: T;
-      readonly event: DevExpress.events.DxEvent;
+      readonly event: DevExpress.events.DxEvent<
+        PointerEvent | MouseEvent | TouchEvent
+      >;
       itemData?: TRowData;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
@@ -7202,7 +7248,10 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+      DevExpress.events.NativeEventInfo<
+        dxDataGrid<TRowData, TKey>,
+        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly cellElement: DevExpress.core.DxElement;
         readonly prevColumnIndex: number;
         readonly prevRowIndex: number;
@@ -7224,7 +7273,10 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+      DevExpress.events.NativeEventInfo<
+        dxDataGrid<TRowData, TKey>,
+        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly rowElement: DevExpress.core.DxElement;
         readonly prevRowIndex: number;
         newRowIndex: number;
@@ -7395,7 +7447,10 @@ declare module DevExpress.ui {
     export type KeyDownEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      KeyboardEvent
+    > &
       KeyDownInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -7582,7 +7637,10 @@ declare module DevExpress.ui {
     export type RowClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       readonly data: TRowData;
       readonly key: TKey;
       readonly values: Array<any>;
@@ -7610,7 +7668,10 @@ declare module DevExpress.ui {
     export type RowDblClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxDataGrid<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       readonly data: TRowData;
       readonly key: TKey;
       readonly values: Array<any>;
@@ -7785,7 +7846,9 @@ declare module DevExpress.ui {
       TKey = any
     > {
       readonly component: T;
-      readonly event: DevExpress.events.DxEvent;
+      readonly event: DevExpress.events.DxEvent<
+        PointerEvent | MouseEvent | TouchEvent
+      >;
       readonly itemData?: TRowData;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
@@ -10799,7 +10862,10 @@ declare module DevExpress.ui {
   module dxDraggable {
     export type DisposingEvent = DevExpress.events.EventInfo<dxDraggable>;
     export type DragEndEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDraggable> & {
+      DevExpress.events.NativeEventInfo<
+        dxDraggable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly fromComponent: dxSortable | dxDraggable;
@@ -10808,7 +10874,10 @@ declare module DevExpress.ui {
         readonly toData?: any;
       };
     export type DragMoveEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDraggable> & {
+      DevExpress.events.NativeEventInfo<
+        dxDraggable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly fromComponent: dxSortable | dxDraggable;
@@ -10817,7 +10886,10 @@ declare module DevExpress.ui {
         readonly toData?: any;
       };
     export type DragStartEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxDraggable> & {
+      DevExpress.events.NativeEventInfo<
+        dxDraggable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         itemData?: any;
         readonly itemElement?: DevExpress.core.DxElement;
         readonly fromData?: any;
@@ -10911,7 +10983,11 @@ declare module DevExpress.ui {
      */
     closeOnOutsideClick?:
       | boolean
-      | ((event: DevExpress.events.DxEvent) => boolean);
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
     /**
      * [descr:dxDrawerOptions.maxSize]
      */
@@ -13570,7 +13646,9 @@ declare module DevExpress.ui {
     export type ContextMenuPreparingEvent = DevExpress.events.Cancelable & {
       readonly component?: dxGantt;
       readonly element?: DevExpress.core.DxElement;
-      readonly event?: DevExpress.events.DxEvent;
+      readonly event?: DevExpress.events.DxEvent<
+        PointerEvent | MouseEvent | TouchEvent
+      >;
       readonly targetKey?: any;
       readonly targetType?: string;
       readonly data?: any;
@@ -13652,7 +13730,10 @@ declare module DevExpress.ui {
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxGantt> & {
       readonly selectedRowKey?: any;
     };
-    export type TaskClickEvent = DevExpress.events.NativeEventInfo<dxGantt> & {
+    export type TaskClickEvent = DevExpress.events.NativeEventInfo<
+      dxGantt,
+      PointerEvent | MouseEvent
+    > & {
       readonly key?: any;
       readonly data?: any;
     };
@@ -13666,7 +13747,7 @@ declare module DevExpress.ui {
       readonly taskSize: any;
     };
     export type TaskDblClickEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxGantt> & {
+      DevExpress.events.NativeEventInfo<dxGantt, PointerEvent | MouseEvent> & {
         readonly key?: any;
         readonly data?: any;
       };
@@ -16198,15 +16279,20 @@ declare module DevExpress.ui {
     export type InitializedEvent<TKey = any> =
       DevExpress.events.InitializedEventInfo<dxMenu<TKey>>;
     export type ItemClickEvent<TKey = any> = DevExpress.events.NativeEventInfo<
-      dxMenu<TKey>
+      dxMenu<TKey>,
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       DevExpress.events.ItemInfo<Item>;
     export type ItemContextMenuEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxMenu<TKey>> &
+      DevExpress.events.NativeEventInfo<
+        dxMenu<TKey>,
+        MouseEvent | PointerEvent | TouchEvent
+      > &
         DevExpress.events.ItemInfo<Item>;
-    export type ItemRenderedEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxMenu<TKey>> &
-        DevExpress.events.ItemInfo<Item>;
+    export type ItemRenderedEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxMenu<TKey>
+    > &
+      DevExpress.events.ItemInfo<Item>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -16509,17 +16595,26 @@ declare module DevExpress.ui {
     export type ItemClickEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<MultiViewInstance<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      MultiViewInstance<TItem, TKey>,
+      KeyboardEvent | MouseEvent | PointerEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<MultiViewInstance<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      MultiViewInstance<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemHoldEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<MultiViewInstance<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      MultiViewInstance<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -16528,7 +16623,7 @@ declare module DevExpress.ui {
     export type ItemRenderedEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<MultiViewInstance<TItem, TKey>> &
+    > = DevExpress.events.EventInfo<MultiViewInstance<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -16644,17 +16739,26 @@ declare module DevExpress.ui {
     export type ItemClickEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxNavBar<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxNavBar<TItem, TKey>,
+      KeyboardEvent | MouseEvent | PointerEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxNavBar<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxNavBar<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemHoldEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxNavBar<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxNavBar<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -16663,7 +16767,7 @@ declare module DevExpress.ui {
     export type ItemRenderedEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxNavBar<TItem, TKey>> &
+    > = DevExpress.events.EventInfo<dxNavBar<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
     export type OptionChangedEvent<
       TItem extends ItemLike = any,
@@ -17010,7 +17114,10 @@ declare module DevExpress.ui {
   }
   module dxPivotGrid {
     export type CellClickEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxPivotGrid> & {
+      DevExpress.events.NativeEventInfo<
+        dxPivotGrid,
+        MouseEvent | PointerEvent
+      > & {
         readonly area?: string;
         readonly cellElement?: DevExpress.core.DxElement;
         readonly cell?: Cell;
@@ -18376,17 +18483,26 @@ declare module DevExpress.ui {
     export type ItemClickEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxResponsiveBox<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxResponsiveBox<TItem, TKey>,
+      MouseEvent | PointerEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxResponsiveBox<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxResponsiveBox<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemHoldEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxResponsiveBox<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxResponsiveBox<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -18395,7 +18511,7 @@ declare module DevExpress.ui {
     export type ItemRenderedEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxResponsiveBox<TItem, TKey>> &
+    > = DevExpress.events.EventInfo<dxResponsiveBox<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
     export type OptionChangedEvent<
       TItem extends ItemLike = any,
@@ -19466,7 +19582,10 @@ declare module DevExpress.ui {
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     export interface ScrollEventInfo<T>
-      extends DevExpress.events.NativeEventInfo<T> {
+      extends DevExpress.events.NativeEventInfo<
+        T,
+        WheelEvent | MouseEvent | Event
+      > {
       readonly scrollOffset?: any;
       readonly reachedLeft?: boolean;
       readonly reachedRight?: boolean;
@@ -19773,17 +19892,26 @@ declare module DevExpress.ui {
     export type ItemClickEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxSlideOut<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxSlideOut<TItem, TKey>,
+      MouseEvent | PointerEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxSlideOut<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxSlideOut<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemHoldEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxSlideOut<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxSlideOut<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -19792,7 +19920,7 @@ declare module DevExpress.ui {
     export type ItemRenderedEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxSlideOut<TItem, TKey>> &
+    > = DevExpress.events.EventInfo<dxSlideOut<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
     export type MenuGroupRenderedEvent<
       TItem extends ItemLike = any,
@@ -20094,7 +20222,9 @@ declare module DevExpress.ui {
       readonly component: dxSortable;
       readonly element: DevExpress.core.DxElement;
       readonly model?: any;
-      readonly event: DevExpress.events.DxEvent;
+      readonly event: DevExpress.events.DxEvent<
+        PointerEvent | MouseEvent | TouchEvent
+      >;
       readonly itemData?: any;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
@@ -20107,7 +20237,10 @@ declare module DevExpress.ui {
     }
     export type DisposingEvent = DevExpress.events.EventInfo<dxSortable>;
     export type DragChangeEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxSortable> & {
+      DevExpress.events.NativeEventInfo<
+        dxSortable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly itemData?: any;
         readonly itemElement: DevExpress.core.DxElement;
         readonly fromIndex?: number;
@@ -20119,7 +20252,10 @@ declare module DevExpress.ui {
         readonly dropInsideItem?: boolean;
       };
     export type DragEndEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxSortable> & {
+      DevExpress.events.NativeEventInfo<
+        dxSortable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly itemData?: any;
         readonly itemElement: DevExpress.core.DxElement;
         readonly fromIndex: number;
@@ -20131,7 +20267,10 @@ declare module DevExpress.ui {
         readonly dropInsideItem: boolean;
       };
     export type DragMoveEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxSortable> & {
+      DevExpress.events.NativeEventInfo<
+        dxSortable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly itemData?: any;
         readonly itemElement: DevExpress.core.DxElement;
         readonly fromIndex: number;
@@ -20143,7 +20282,10 @@ declare module DevExpress.ui {
         readonly dropInsideItem: boolean;
       };
     export type DragStartEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxSortable> & {
+      DevExpress.events.NativeEventInfo<
+        dxSortable,
+        PointerEvent | MouseEvent | TouchEvent
+      > & {
         itemData?: any;
         readonly itemElement: DevExpress.core.DxElement;
         readonly fromIndex: number;
@@ -20159,7 +20301,10 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxSortable> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxSortableOptions;
-    export type RemoveEvent = DevExpress.events.NativeEventInfo<dxSortable> & {
+    export type RemoveEvent = DevExpress.events.NativeEventInfo<
+      dxSortable,
+      PointerEvent | MouseEvent | TouchEvent
+    > & {
       readonly itemData?: any;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
@@ -20169,7 +20314,10 @@ declare module DevExpress.ui {
       readonly fromData?: any;
       readonly toData?: any;
     };
-    export type ReorderEvent = DevExpress.events.NativeEventInfo<dxSortable> & {
+    export type ReorderEvent = DevExpress.events.NativeEventInfo<
+      dxSortable,
+      PointerEvent | MouseEvent | TouchEvent
+    > & {
       readonly itemData?: any;
       readonly itemElement: DevExpress.core.DxElement;
       readonly fromIndex: number;
@@ -20395,17 +20543,26 @@ declare module DevExpress.ui {
     export type ItemClickEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTabPanel<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTabPanel<TItem, TKey>,
+      KeyboardEvent | MouseEvent | PointerEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTabPanel<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTabPanel<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemHoldEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTabPanel<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTabPanel<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -20414,7 +20571,7 @@ declare module DevExpress.ui {
     export type ItemRenderedEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTabPanel<TItem, TKey>> &
+    > = DevExpress.events.EventInfo<dxTabPanel<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
     export type OptionChangedEvent<
       TItem extends ItemLike = any,
@@ -20440,12 +20597,18 @@ declare module DevExpress.ui {
     export type TitleClickEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTabPanel<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTabPanel<TItem, TKey>,
+      KeyboardEvent | MouseEvent | PointerEvent
+    > &
       TabPanelItemInfo<TItem>;
     export type TitleHoldEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTabPanel<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTabPanel<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       TabPanelItemInfo<TItem>;
     export type TitleRenderedEvent<
       TItem extends ItemLike = any,
@@ -20585,17 +20748,26 @@ declare module DevExpress.ui {
     export type ItemClickEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<TabsInstance<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      TabsInstance<TItem, TKey>,
+      KeyboardEvent | MouseEvent | PointerEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<TabsInstance<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      TabsInstance<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemHoldEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<TabsInstance<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      TabsInstance<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -20604,7 +20776,7 @@ declare module DevExpress.ui {
     export type ItemRenderedEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<TabsInstance<TItem, TKey>> &
+    > = DevExpress.events.EventInfo<TabsInstance<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
     export type OptionChangedEvent<
       TItem extends ItemLike = any,
@@ -21251,17 +21423,26 @@ declare module DevExpress.ui {
     export type ItemClickEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTileView<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTileView<TItem, TKey>,
+      KeyboardEvent | MouseEvent | PointerEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemContextMenuEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTileView<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTileView<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     export type ItemHoldEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTileView<TItem, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTileView<TItem, TKey>,
+      MouseEvent | PointerEvent | TouchEvent
+    > &
       DevExpress.events.ItemInfo<TItem>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -21270,7 +21451,7 @@ declare module DevExpress.ui {
     export type ItemRenderedEvent<
       TItem extends ItemLike = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTileView<TItem, TKey>> &
+    > = DevExpress.events.EventInfo<dxTileView<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
     export type OptionChangedEvent<
       TItem extends ItemLike = any,
@@ -21831,12 +22012,18 @@ declare module DevExpress.ui {
     export type CellClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > &
       CellInfo<TRowData, TKey>;
     export type CellDblClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > &
       CellInfo<TRowData, TKey>;
     export type CellHoverChangedEvent<
       TRowData = any,
@@ -21883,7 +22070,10 @@ declare module DevExpress.ui {
     export type ColumnButtonClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       row?: Row<TRowData, TKey>;
       column?: Column<TRowData, TKey>;
     };
@@ -22153,7 +22343,10 @@ declare module DevExpress.ui {
       TRowData = any,
       TKey = any
     > = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+      DevExpress.events.NativeEventInfo<
+        dxTreeList<TRowData, TKey>,
+        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+      > & {
         readonly cellElement: DevExpress.core.DxElement;
         readonly prevColumnIndex: number;
         readonly prevRowIndex: number;
@@ -22174,7 +22367,10 @@ declare module DevExpress.ui {
     export type FocusedRowChangingEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+    > & {
       readonly rowElement: DevExpress.core.DxElement;
       readonly prevRowIndex: number;
       newRowIndex: number;
@@ -22192,7 +22388,10 @@ declare module DevExpress.ui {
     export type KeyDownEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> &
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      KeyboardEvent
+    > &
       DevExpress.ui.dxDataGrid.KeyDownInfo;
     /**
      * [descr:dxTreeListNode]
@@ -22303,7 +22502,10 @@ declare module DevExpress.ui {
     export type RowClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       readonly data: TRowData;
       readonly key: TKey;
       readonly values: Array<any>;
@@ -22332,7 +22534,10 @@ declare module DevExpress.ui {
     export type RowDblClickEvent<
       TRowData = any,
       TKey = any
-    > = DevExpress.events.NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+    > = DevExpress.events.NativeEventInfo<
+      dxTreeList<TRowData, TKey>,
+      PointerEvent | MouseEvent
+    > & {
       readonly data: TRowData;
       readonly key: TKey;
       readonly values: Array<any>;
@@ -22975,17 +23180,31 @@ declare module DevExpress.ui {
     export type InitializedEvent<TKey = any> =
       DevExpress.events.InitializedEventInfo<dxTreeView<TKey>>;
     export type ItemClickEvent<TKey = any> = DevExpress.events.NativeEventInfo<
-      dxTreeView<TKey>
+      dxTreeView<TKey>,
+      KeyboardEvent | MouseEvent | PointerEvent
     > &
       ItemInfo<TKey>;
     export type ItemCollapsedEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+      DevExpress.events.NativeEventInfo<
+        dxTreeView<TKey>,
+        MouseEvent | PointerEvent
+      > &
+        ItemInfo<TKey>;
     export type ItemContextMenuEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+      DevExpress.events.NativeEventInfo<
+        dxTreeView<TKey>,
+        MouseEvent | PointerEvent | TouchEvent
+      > &
+        ItemInfo<TKey>;
     export type ItemExpandedEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+      DevExpress.events.NativeEventInfo<
+        dxTreeView<TKey>,
+        MouseEvent | PointerEvent
+      > &
+        ItemInfo<TKey>;
     export type ItemHoldEvent<TKey = any> = DevExpress.events.NativeEventInfo<
-      dxTreeView<TKey>
+      dxTreeView<TKey>,
+      MouseEvent | PointerEvent | TouchEvent
     > &
       ItemInfo<TKey>;
     /**
@@ -22997,8 +23216,10 @@ declare module DevExpress.ui {
       readonly itemIndex?: number;
       readonly node?: Node<TKey>;
     }
-    export type ItemRenderedEvent<TKey = any> =
-      DevExpress.events.NativeEventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
+    export type ItemRenderedEvent<TKey = any> = DevExpress.events.EventInfo<
+      dxTreeView<TKey>
+    > &
+      ItemInfo<TKey>;
     export type ItemSelectionChangedEvent<TKey = any> =
       DevExpress.events.EventInfo<dxTreeView<TKey>> & ItemInfo<TKey>;
     export type Node<TKey = any> = dxTreeViewNode<TKey>;
@@ -24107,7 +24328,7 @@ declare module DevExpress.ui {
      * [descr:GridBaseOptions.onKeyDown]
      */
     onKeyDown?: (
-      e: DevExpress.events.NativeEventInfo<TComponent> &
+      e: DevExpress.events.NativeEventInfo<TComponent, KeyboardEvent> &
         DevExpress.ui.dxDataGrid.KeyDownInfo
     ) => void;
     /**

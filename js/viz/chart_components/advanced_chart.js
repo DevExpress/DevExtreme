@@ -442,6 +442,11 @@ export const AdvancedChart = BaseChart.inherit({
         that._scaleBreaksGroup.linkAppend();
     },
 
+    _cleanGroups() {
+        this.callBase();
+        this._labelsAxesGroup.linkRemove().clear();
+    },
+
     _populateMarginOptions() {
         const that = this;
         const bubbleSize = estimateBubbleSize(that.getSize(), that.panes.length, that._themeManager.getOptions('maxBubbleSize'), that._isRotated());
@@ -770,7 +775,9 @@ export const AdvancedChart = BaseChart.inherit({
         this._axesReinitialized = false;
 
         if(this.option('disableTwoWayBinding') !== true) { // for dashboards T732396
+            this.skipOptionsRollBack = true;// T1037806
             this._notifyVisualRange();
+            this.skipOptionsRollBack = false;
         }
     },
 
