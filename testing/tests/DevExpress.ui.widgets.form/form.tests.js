@@ -640,6 +640,29 @@ QUnit.test('items aren\'t tiny', function(assert) {
     assert.ok(getWidth(testContainer.find('.dx-multiview-item .dx-textbox').first()) / getWidth(testContainer) > 0.5, 'Editors are not tiny');
 });
 
+QUnit.test('Show scroll buttons in tabpanel', function(assert) {
+    const $testContainer = $('#form');
+    $testContainer.width(250);
+
+    $testContainer.dxForm({
+        items: [
+            {
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    showNavButtons: true,
+                },
+                tabs: [
+                    { title: 'tabbed 1111111111111' },
+                    { title: 'tabbed 2222222222222' },
+                ]
+            }
+        ]
+    });
+
+    assert.strictEqual($testContainer.find('.dx-tabs-nav-button').length, 2, 'tabPanelNavButtons.length');
+    assert.strictEqual($testContainer.find('.dx-tabs-scrollable').length, 1, 'tabPanelNavButtons.length');
+});
+
 QUnit.test('Render tabs when formData is changed', function(assert) {
     const testContainer = $('#form');
     const form = testContainer.dxForm({

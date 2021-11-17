@@ -306,6 +306,7 @@ const LayoutManager = Widget.inherit({
 
     _renderResponsiveBox: function() {
         const that = this;
+        const templatesInfo = [];
 
         if(that._items && that._items.length) {
             const colCount = that._getColCount();
@@ -314,7 +315,10 @@ const LayoutManager = Widget.inherit({
             that._prepareItemsWithMerging(colCount);
 
             const layoutItems = that._generateLayoutItems();
-            that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount));
+            that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
+            if(!hasWindow()) {
+                that._renderTemplates(templatesInfo);
+            }
         }
     },
 
@@ -322,7 +326,23 @@ const LayoutManager = Widget.inherit({
         this._refresh();
     },
 
-    _getResponsiveBoxConfig: function(layoutItems, colCount) {
+    _renderTemplates: function(templatesInfo) {
+        const that = this;
+        each(templatesInfo, function(_, info) {
+            switch(info.itemType) {
+                case 'empty':
+                    renderEmptyItem(info);
+                    break;
+                case 'button':
+                    that._renderButtonItem(info);
+                    break;
+                default:
+                    that._renderFieldItem(info);
+            }
+        });
+    },
+
+    _getResponsiveBoxConfig: function(layoutItems, colCount, templatesInfo) {
         const that = this;
         const colCountByScreen = that.option('colCountByScreen');
         const xsColCount = colCountByScreen && colCountByScreen.xs;
@@ -340,6 +360,9 @@ const LayoutManager = Widget.inherit({
                 }
             },
             onContentReady: function(e) {
+                if(hasWindow()) {
+                    that._renderTemplates(templatesInfo);
+                }
                 if(that.option('onLayoutChanged')) {
                     that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
@@ -384,16 +407,12 @@ const LayoutManager = Widget.inherit({
                     }
                 }
 
-                switch(item.itemType) {
-                    case 'empty':
-                        renderEmptyItem({ $parent: $itemElement, rootElementCssClassList: itemCssClassList });
-                        break;
-                    case 'button':
-                        that._renderButtonItem({ item, $parent: $itemElement, rootElementCssClassList: itemCssClassList });
-                        break;
-                    default:
-                        that._renderFieldItem({ item, $parent: $itemElement, rootElementCssClassList: itemCssClassList });
-                }
+                templatesInfo.push({
+                    itemType: item.itemType,
+                    item,
+                    $parent: $itemElement,
+                    rootElementCssClassList: itemCssClassList
+                });
             },
             cols: that._generateRatio(colCount),
             rows: that._generateRatio(that._getRowsCount(), true),
