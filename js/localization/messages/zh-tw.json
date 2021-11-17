@@ -57,7 +57,6 @@
         "dxFileUploader-upload": "上傳",
         "dxFileUploader-uploaded": "已上傳",
         "dxFileUploader-readyToUpload": "準備上傳",
-
         "dxFileUploader-uploadFailedMessage": "上傳失敗",
         "dxFileUploader-invalidFileExtension": "文件類型錯誤",
         "dxFileUploader-invalidMaxFileSize": "文件過大",
@@ -151,7 +150,6 @@
         "dxTreeList-editingAddRowToNode": "添加",
         "dxPager-infoText": "第{0}頁,共{1}頁 ({2} 個項目)",
         "dxPager-pagesCountText": "到",
-        "dxPager-pageSizesAllText": "全部",
         "dxPivotGrid-grandTotal": "合計",
         "dxPivotGrid-total": "{0} 總計",
         "dxPivotGrid-fieldChooserTitle": "欄位選擇器",
