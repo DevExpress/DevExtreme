@@ -1008,6 +1008,37 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.equal(count, 1, 'Count');
     });
 
+    QUnit.test('Get page index by group key if there is no groouping and remoteOperations is true and data (T1042661)', function(assert) {
+        // arrange
+        let count = 0;
+        const loadingSpy = sinon.spy();
+        const dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Dan', age: 25 },
+            { team: 'internal', name: 'Bob', age: 20 },
+            { team: 'public', name: 'Alice', age: 19 }],
+        { key: 'name' },
+        { pageSize: 1, asyncLoadEnabled: false });
+
+        this.applyOptions({
+            remoteOperations: true,
+            dataSource: dataSource
+        });
+
+        dataSource.store().on('loading', loadingSpy);
+
+        // act
+        this.dataController._refreshDataSource();
+        assert.equal(loadingSpy.callCount, 1, 'loading count');
+
+        this.dataController.getPageIndexByKey(['Alice']).done(function(pageIndex) {
+            ++count;
+            assert.equal(pageIndex, -1);
+        });
+        assert.equal(count, 1, 'Count');
+        assert.equal(loadingSpy.callCount, 1, 'loading count is not changed');
+    });
+
     QUnit.test('Get page index by composite key', function(assert) {
     // arrange
         const dataSource = createDataSource([
