@@ -182,6 +182,24 @@ QUnit.test('end action isn\'t fired without move', function(assert) {
     assert.equal(end, 0, 'end action wasn\'t fired');
 });
 
+['vertical', 'horizontal', 'both'].forEach((direction) => {
+    [{ left: 50 }, { top: 50 }, { top: 50, left: 50 }, 50].forEach((scrollToValue) => {
+        QUnit.test(`fire onEnd action after scrollTo: ${JSON.stringify(scrollToValue)}, direction: ${direction}`, function(assert) {
+            const onEndHandler = sinon.spy();
+
+            const scrollable = $('#scrollable').dxScrollable({
+                direction,
+                useNative: false,
+                onEnd: onEndHandler
+            }).dxScrollable('instance');
+
+            scrollable.scrollTo(scrollToValue);
+
+            assert.strictEqual(onEndHandler.callCount, 1, 'end action fired');
+        });
+    });
+});
+
 QUnit.test('set actions by option', function(assert) {
     let start = 0;
     let scroll = 0;

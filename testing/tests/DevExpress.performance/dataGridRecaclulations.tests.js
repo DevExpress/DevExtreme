@@ -6,6 +6,7 @@ require('../../content/orders.js');
 require('generic_light.css!');
 const DataGrid = require('ui/data_grid');
 const Pager = require('ui/pager');
+const Scrollable = require('ui/scroll_view/ui.scrollable');
 
 const createDataGridMeasureFunction = function(options) {
     return function() {
@@ -24,7 +25,7 @@ QUnit.performanceTest('render without data', function(assert) {
     const measureFunction = createDataGridMeasureFunction({
     });
 
-    assert.measureStyleRecalculation(measureFunction, DataGrid.IS_RENOVATED_WIDGET ? 12 : 11);
+    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 9 : DataGrid.IS_RENOVATED_WIDGET ? 12 : 11);
 });
 
 QUnit.performanceTest('render with data', function(assert) {
@@ -62,7 +63,7 @@ QUnit.performanceTest('render with virtual scrolling', function(assert) {
         scrolling: { mode: 'virtual' }
     });
 
-    assert.measureStyleRecalculation(measureFunction, DataGrid.IS_RENOVATED_WIDGET ? 14 : 13);
+    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 12 : DataGrid.IS_RENOVATED_WIDGET ? 14 : 13);
 });
 
 QUnit.performanceTest('updateDimensions', function(assert) {
