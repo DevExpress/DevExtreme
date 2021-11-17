@@ -62,16 +62,16 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
     return result;
 }
 
-function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, rowType, backgroundColor }) {
+function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, columns, colCount, rowType, backgroundColor }) {
     const result = [];
     for(let cellIndex = 0; cellIndex < colCount; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
         const cellInfo = {
             gridCell: cellData.cellSourceData,
             pdfCell: {
-                text: cellData.value,
+                text: cellData.value?.toString(),
                 verticalAlign: 'middle',
-                horizontalAlign: 'left',
+                horizontalAlign: columns[cellIndex].alignment ?? 'left',
                 wordWrapEnabled,
                 backgroundColor,
                 padding: 0,
