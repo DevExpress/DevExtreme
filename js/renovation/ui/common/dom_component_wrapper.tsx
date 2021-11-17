@@ -112,9 +112,7 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
     const updatedOptions = getUpdatedOptions(this.prevProps || {}, this.properties);
     if (updatedOptions.length) {
       instance.beginUpdate();
-      updatedOptions.forEach(({ path, value }) => {
-        instance.option(path, value);
-      });
+      updatedOptions.forEach(({ path, value }) => { instance.option(path, value); });
       instance.endUpdate();
     }
 
