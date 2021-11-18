@@ -1,0 +1,111 @@
+import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import Scheduler from '../../../../model/scheduler';
+import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
+
+const SCHEDULER_SELECTOR = '#container';
+
+const test = multiPlatformTest({
+  page: 'declaration/scheduler',
+  platforms: [/* 'jquery' , */'react'],
+});
+
+const data = [
+  {
+    text: 'Appt-0',
+    groupId: [1, 2],
+    startDate: new Date(2021, 3, 5),
+    allDay: true,
+  },
+  // TODO uncomment after fix bug with overflow indicator in all day panel
+  // {
+  //   text: 'Appt-1',
+  //   groupId: [1, 2],
+  //   startDate: new Date(2021, 3, 5),
+  //   allDay: true,
+  // },
+  {
+    text: 'Appt-0-1-2',
+    groupId: [1, 2],
+    startDate: new Date(2021, 3, 5, 9, 30),
+    endDate: new Date(2021, 3, 5, 11, 30),
+  },
+  {
+    text: 'Appt-0-1',
+    groupId: 1,
+    startDate: new Date(2021, 3, 5, 9, 30),
+    endDate: new Date(2021, 3, 5, 11, 30),
+  },
+];
+
+const resources = [
+  {
+    fieldExpr: 'groupId',
+    dataSource: [{
+      text: 'Group-0',
+      id: 1,
+      color: '#1e90ff',
+    }, {
+      text: 'Group-1',
+      id: 2,
+      color: '#ff9747',
+    }],
+    label: 'Priority',
+  },
+];
+
+fixture('Renovated scheduler - Overflow indicator');
+
+[
+  'week',
+  'month',
+].forEach((currentView) => {
+  [
+    {
+      type: 'function',
+      appointmentTemplate: () => '<span>Test-Appt</span>',
+      appointmentCollectorTemplate: () => '<span>Test</span>',
+    },
+    {
+      type: 'markup',
+      appointmentTemplate: '<span>Test-Appt</span>',
+      appointmentCollectorTemplate: '<span>Test</span>',
+    },
+  ].forEach(({ type, appointmentTemplate, appointmentCollectorTemplate }) => {
+    test(`it should be rendered correctly if template type is ${type} and view=${currentView}`,
+      async (t, { screenshotComparerOptions }) => {
+        const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+        const appointmentCount = scheduler.getAppointmentCount();
+
+        await t
+          .expect(appointmentCount)
+          .eql(4)
+          .expect(await compareScreenshot(
+            t,
+            `scheduler_overflow-indicator_template_${currentView}-view.png`,
+            scheduler.element,
+            screenshotComparerOptions,
+          ))
+          .ok();
+      }).before(
+      async (t, { platform }) => {
+        await t.resizeWindow(1200, 800);
+        await createWidget(platform, 'dxScheduler', {
+          dataSource: data,
+          maxAppointmentsPerCell: 1,
+          views: [{
+            type: currentView,
+          }],
+          currentView,
+          currentDate: new Date(2021, 3, 4),
+          startDayHour: 9,
+          endDayHour: 14,
+          groups: ['groupId'],
+          resources,
+          showCurrentTimeIndicator: false,
+          appointmentTemplate,
+          appointmentCollectorTemplate,
+        });
+      },
+    );
+  });
+});
