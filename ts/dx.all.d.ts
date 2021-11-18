@@ -1649,10 +1649,10 @@ declare module DevExpress.data {
   }
   module CustomStore {
     export type GroupItem<TItem = any> = {
-      key: string;
-      items?: Array<TItem> | GroupItem;
+      key: any | string | number;
+      items: Array<TItem> | Array<GroupItem> | null;
       count?: number;
-      summary?: Array<number>;
+      summary?: Array<any>;
     };
     export type Options<TItem = any, TKey = any> = CustomStoreOptions<
       TItem,
@@ -1683,13 +1683,15 @@ declare module DevExpress.data {
     load: (options: LoadOptions<TItem>) =>
       | DevExpress.core.utils.DxPromise<
           | Array<TItem>
+          | Array<DevExpress.data.CustomStore.GroupItem>
           | {
               data: Array<TItem> | Array<DevExpress.data.CustomStore.GroupItem>;
-              totalCount?: number;
-              summary?: Array<number>;
+              totalCount?: any;
+              summary?: Array<any>;
               groupCount?: number;
             }
         >
+      | Array<DevExpress.data.CustomStore.GroupItem>
       | Array<TItem>;
     /**
      * [descr:CustomStoreOptions.loadMode]

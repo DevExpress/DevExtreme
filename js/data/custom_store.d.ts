@@ -11,7 +11,7 @@ export type Options<
 /** @public */
 export type GroupItem<
     TItem = any,
-> = { key: string; items?: Array<TItem> | GroupItem; count?: number; summary?: Array<number> };
+> = { key: any | string | number; items: Array<TItem> | Array<GroupItem> | null; count?: number; summary?: Array<any> };
 
 /**
  * @namespace DevExpress.data
@@ -48,13 +48,16 @@ export interface CustomStoreOptions<
      * @public
      */
     load: ((options: LoadOptions<TItem>) =>
-      | DxPromise<Array<TItem>
-          | {
-              data: Array<TItem> | Array<GroupItem>;
-              totalCount?: number;
-              summary?: Array<number>;
-              groupCount?: number;
-            }>
+      | DxPromise<
+        | Array<TItem>
+        | Array<GroupItem>
+        | {
+            data: Array<TItem> | Array<GroupItem>;
+            totalCount?: any;
+            summary?: Array<any>;
+            groupCount?: number;
+          }>
+      | Array<GroupItem>
       | Array<TItem>);
     /**
      * @docid
