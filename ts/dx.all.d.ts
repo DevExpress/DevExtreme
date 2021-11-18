@@ -13644,7 +13644,9 @@ declare module DevExpress.ui {
     export type ContextMenuPreparingEvent = DevExpress.events.Cancelable & {
       readonly component?: dxGantt;
       readonly element?: DevExpress.core.DxElement;
-      readonly event?: DevExpress.events.DxEvent;
+      readonly event?: DevExpress.events.DxEvent<
+        PointerEvent | MouseEvent | TouchEvent
+      >;
       readonly targetKey?: any;
       readonly targetType?: string;
       readonly data?: any;
@@ -13726,7 +13728,10 @@ declare module DevExpress.ui {
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxGantt> & {
       readonly selectedRowKey?: any;
     };
-    export type TaskClickEvent = DevExpress.events.NativeEventInfo<dxGantt> & {
+    export type TaskClickEvent = DevExpress.events.NativeEventInfo<
+      dxGantt,
+      PointerEvent | MouseEvent
+    > & {
       readonly key?: any;
       readonly data?: any;
     };
@@ -13740,7 +13745,7 @@ declare module DevExpress.ui {
       readonly taskSize: any;
     };
     export type TaskDblClickEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxGantt> & {
+      DevExpress.events.NativeEventInfo<dxGantt, PointerEvent | MouseEvent> & {
         readonly key?: any;
         readonly data?: any;
       };
