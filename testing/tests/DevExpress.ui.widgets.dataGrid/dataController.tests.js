@@ -5403,6 +5403,27 @@ QUnit.module('Virtual scrolling preload', {
         assert.equal(visibleRows.length, 16, 'visible items count');
         assert.deepEqual(visibleRows[0].data.id, 50, 'first visible item');
     });
+
+    QUnit.test('New mode. selectAll after scrolling should select all items (T1044995)', function(assert) {
+        // act
+        this.dataController.setViewportPosition(10);
+        this.selectAll();
+
+        // assert
+        assert.deepEqual(this.getSelectedRowKeys().length, 100, 'all items are selected');
+    });
+
+    QUnit.test('New mode. loadAll after scrolling should return all items (T1045649)', function(assert) {
+        // act
+        this.dataController.setViewportPosition(10);
+        let loadedItems;
+        this.dataController.loadAll().done(items => {
+            loadedItems = items;
+        });
+
+        // assert
+        assert.deepEqual(loadedItems.length, 100, 'all items are selected');
+    });
 });
 
 QUnit.module('Infinite scrolling', {
