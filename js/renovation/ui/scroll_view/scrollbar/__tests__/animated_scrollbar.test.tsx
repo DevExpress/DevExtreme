@@ -35,6 +35,7 @@ describe('AnimatedScrollbar', () => {
     expect({ ...viewModel.props() }).toEqual({
       direction: 'vertical',
       bottomPocketSize: 0,
+      containerHasSizes: false,
       containerSize: 0,
       contentPaddingBottom: 0,
       contentSize: 0,
@@ -934,9 +935,8 @@ describe('Animator', () => {
                   inProgress: { get() { return inProgress; } },
                 });
 
-                expect(viewModel.isReadyToStart)
-                  .toEqual(needRiseEnd && !inProgress
-                    && !(pendingRefreshing || pendingLoading) && maxOffset < 0);
+                expect(viewModel.isReadyToStart).toEqual(needRiseEnd && !inProgress
+                    && !(pendingRefreshing || pendingLoading) /* && maxOffset < 0 */);
               });
             });
           });

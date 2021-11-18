@@ -4,6 +4,7 @@ import { dxElementWrapper } from '../../core/renderer';
 import ValidationEngine from '../../ui/validation_engine';
 import Component from './common/component';
 import type { Button } from '../ui/button';
+import { Option } from './common/types';
 
 export default class ButtonWrapper extends Component {
   _clickAction!: (...args) => unknown;
@@ -79,9 +80,7 @@ export default class ButtonWrapper extends Component {
   _init(): void {
     super._init();
     this._addAction('onSubmit', this._getSubmitAction());
-    this._clickAction = this._createActionByOption('onClick', {
-      excludeValidators: ['readOnly'],
-    });
+    this._clickAction = this._createClickAction();
   }
 
   _initMarkup(): void {
@@ -110,6 +109,24 @@ export default class ButtonWrapper extends Component {
       ? validationGroup
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       : (ValidationEngine as any).findGroup($element, (this as any)._modelByElement($element));
+  }
+
+  _createClickAction(): (...args) => unknown {
+    return this._createActionByOption('onClick', {
+      excludeValidators: ['readOnly'],
+    });
+  }
+
+  _optionChanged(option: Option): void {
+    switch (option.name) {
+      case 'onClick':
+        this._clickAction = this._createClickAction();
+        break;
+      default:
+        break;
+    }
+
+    super._optionChanged(option);
   }
 }
 /* eslint-enable @typescript-eslint/no-unsafe-member-access */

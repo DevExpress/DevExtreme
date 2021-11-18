@@ -1,3 +1,4 @@
+import type { Appointment } from '../../../ui/scheduler';
 import type { DxPromise } from '../../../core/utils/deferred';
 
 export type Direction = 'vertical' | 'horizontal';
@@ -17,4 +18,19 @@ export interface BaseTemplateProps {
 
 export interface DataSourcePromise extends DxPromise {
   done: (items: unknown) => void;
+}
+
+export interface AppointmentDataItem {
+  startDate: Date;
+  endDate: Date;
+  recurrenceRule: string;
+  recurrenceException: string;
+  hasRecurrenceRule: boolean;
+  allDay: boolean;
+  visible: boolean;
+  rawAppointment: Appointment;
+}
+
+export interface AppointmentFilter {
+  filter: (dataItems: AppointmentDataItem[]) => Appointment[];
 }

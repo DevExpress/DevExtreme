@@ -140,6 +140,9 @@ jobs:
         npm -v
         npm install --no-audit --no-fund
 
+    - name: Check build
+      run: npm run build:dev
+
   package_lock:
     runs-on: ubuntu-latest
     timeout-minutes: 10

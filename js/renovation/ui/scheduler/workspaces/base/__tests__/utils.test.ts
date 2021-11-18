@@ -257,6 +257,9 @@ describe('Workspace base utils', () => {
         isVerticalGrouping: true,
         completeRowCount: 8,
         completeColumnCount: 9,
+        windowHeight: 100,
+        windowWidth: 200,
+        rtlEnabled: true,
       });
 
       expect(result.getCellHeight())
@@ -266,7 +269,7 @@ describe('Workspace base utils', () => {
       expect(result.getCellMinWidth())
         .toBe(75);
       expect(result.isRTL())
-        .toBe(false);
+        .toBe(true);
       expect(result.getSchedulerHeight())
         .toBe(3);
       expect(result.getSchedulerWidth())
@@ -287,6 +290,10 @@ describe('Workspace base utils', () => {
         .toBe(8);
       expect(result.getTotalCellCount())
         .toBe(9);
+      expect(result.getWindowHeight())
+        .toBe(100);
+      expect(result.getWindowWidth())
+        .toBe(200);
     });
   });
 });

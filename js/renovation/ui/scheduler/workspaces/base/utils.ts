@@ -119,12 +119,15 @@ export const createVirtualScrollingOptions = (
     isVerticalGrouping: boolean;
     completeRowCount: number;
     completeColumnCount: number;
+    windowHeight: number;
+    windowWidth: number;
+    rtlEnabled: boolean;
   },
 ): VirtualScrollingOptions => ({
   getCellHeight: (): number => options.cellHeight,
   getCellWidth: (): number => options.cellWidth,
   getCellMinWidth: (): number => DATE_TABLE_MIN_CELL_WIDTH,
-  isRTL: (): boolean => false, // TODO
+  isRTL: (): boolean => options.rtlEnabled,
   getSchedulerHeight: ():
   number | string | (() => number | string) | undefined => options.schedulerHeight,
   getSchedulerWidth: ():
@@ -137,4 +140,6 @@ export const createVirtualScrollingOptions = (
   isVerticalGrouping: (): boolean => options.isVerticalGrouping,
   getTotalRowCount: (): number => options.completeRowCount,
   getTotalCellCount: (): number => options.completeColumnCount,
+  getWindowHeight: (): number => options.windowHeight,
+  getWindowWidth: (): number => options.windowWidth,
 });

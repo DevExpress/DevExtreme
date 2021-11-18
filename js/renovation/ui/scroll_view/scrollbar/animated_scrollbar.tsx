@@ -41,6 +41,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       showScrollbar, scrollByThumb, bounceEnabled, scrollLocationChange,
       visible, rtlEnabled,
       minOffset, maxOffset,
+      containerHasSizes,
     },
   } = viewModel;
 
@@ -58,6 +59,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       scrollByThumb={scrollByThumb}
       bounceEnabled={bounceEnabled}
       showScrollbar={showScrollbar}
+      containerHasSizes={containerHasSizes}
       // Horizontal
       rtlEnabled={rtlEnabled}
     />
@@ -353,8 +355,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   get isReadyToStart(): boolean {
     return this.needRiseEnd
       && !this.inProgress
-      && !(this.pendingRefreshing || this.pendingLoading)
-      && this.props.maxOffset < 0;
+      && !(this.pendingRefreshing || this.pendingLoading);
+    // && this.props.maxOffset < 0; // TODO: try without it
   }
 
   get distanceToNearestBoundary(): number {
