@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+
 namespace Runner.Tools
 {
     public class ConsoleWriter {
