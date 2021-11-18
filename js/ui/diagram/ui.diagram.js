@@ -721,8 +721,7 @@ class Diagram extends Widget {
             }
         }
 
-        this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
-        this._diagramInstance.registerBar(this.optionsUpdateBar);
+        this._recreateOptionsUpdateBar();
         if(hasWindow()) {
             // eslint-disable-next-line spellcheck/spell-checker
             this._diagramInstance.initMeasurer(this.$element()[0]);
@@ -730,11 +729,17 @@ class Diagram extends Widget {
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
     }
+    _recreateOptionsUpdateBar() {
+        delete this.optionsUpdateBar;
+        this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
+        this._diagramInstance.registerBar(this.optionsUpdateBar);
+    }
     _clean() {
         if(this._diagramInstance) {
             this._diagramInstance.cleanMarkup((element) => {
                 $(element).empty();
             });
+            this._recreateOptionsUpdateBar();
         }
         super._clean();
     }
