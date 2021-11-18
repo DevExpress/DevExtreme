@@ -12,6 +12,7 @@ import registerEmitter from './core/emitter_registrator';
 import { noop } from '../core/utils/common';
 
 const CLICK_EVENT_NAME = 'dxclick';
+const NATIVE_CLICK_CLASS = 'dx-native-click';
 
 const isInput = function(element) {
     return $(element).is('input, textarea, select, button ,:focus, :focus *');
@@ -22,9 +23,9 @@ const misc = { requestAnimationFrame, cancelAnimationFrame };
 let prevented = null;
 let lastFiredEvent = null;
 
-function onNodeRemove() {
+const onNodeRemove = () => {
     lastFiredEvent = null;
-}
+};
 
 const clickHandler = function(e) {
     const originalEvent = e.originalEvent;
@@ -37,9 +38,7 @@ const clickHandler = function(e) {
         }
 
         unsubscribeNodesDisposing(lastFiredEvent, onNodeRemove);
-
         lastFiredEvent = originalEvent;
-
         subscribeNodesDisposing(lastFiredEvent, onNodeRemove);
 
         fireEvent({
@@ -53,7 +52,6 @@ const ClickEmitter = Emitter.inherit({
 
     ctor: function(element) {
         this.callBase(element);
-
         this._makeElementClickable($(element));
     },
 
@@ -63,6 +61,9 @@ const ClickEmitter = Emitter.inherit({
 
     configure: function(data) {
         this.callBase(data);
+        if(data.useNative) {
+            this.getElement().addClass(NATIVE_CLICK_CLASS);
+        }
     },
 
     start: function(e) {
