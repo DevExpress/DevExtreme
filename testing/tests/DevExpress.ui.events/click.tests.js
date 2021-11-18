@@ -319,7 +319,7 @@ QUnit.test('dxclick should be based on native click for all devices', function(a
     let dxClickCallCount = 0;
     let dxClickChildCallCount = 0;
 
-    $element.on('dxclick', { useNative: true }, function() {
+    $element.on('dxclick', function() {
         dxClickCallCount++;
     });
 
