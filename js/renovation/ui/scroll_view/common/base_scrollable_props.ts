@@ -24,7 +24,7 @@ export class BaseScrollableProps {
 
   @OneWay() visible = true;
 
-  @OneWay() rtlEnabled = false;
+  @OneWay() rtlEnabled?: boolean;
 
   @OneWay() classes?: string = '';
 

@@ -129,6 +129,18 @@ describe('DomComponentWrapper', () => {
           } as Partial<DomComponentWrapperProps> as any);
           expect(component.properties.rtlEnabled).toBe(false);
         });
+
+        it('should be false when it is passed as undefined', () => {
+          const component = new DomComponentWrapper({
+            templateNames: [],
+            componentProps: { rtlEnabled: undefined },
+          } as any);
+
+          expect(component.properties)
+            .toEqual({
+              rtlEnabled: false,
+            });
+        });
       });
 
       it('default onValueChange', () => {
@@ -153,6 +165,16 @@ describe('DomComponentWrapper', () => {
         (onValueChanged as (({ value: number }) => any))({ value: 5 });
 
         expect(fn.mock.calls).toEqual([[5]]);
+      });
+
+      it('should remove undefined properties', () => {
+        const component = new DomComponentWrapper({
+          templateNames: [],
+          componentProps: { valueChange: undefined },
+        } as any);
+
+        expect(component.properties)
+          .toEqual({ rtlEnabled: false });
       });
     });
 

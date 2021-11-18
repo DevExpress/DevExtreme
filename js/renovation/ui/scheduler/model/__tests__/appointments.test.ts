@@ -110,7 +110,7 @@ describe('Appointments model', () => {
           expect(appointmentsModel)
             .toMatchObject({
               adaptivityEnabled: false,
-              rtlEnabled: false,
+              rtlEnabled: undefined,
               startDayHour: 0,
               viewStartDayHour: 0, // TODO remove
               endDayHour: 24,

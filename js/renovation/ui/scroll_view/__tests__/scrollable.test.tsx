@@ -59,7 +59,6 @@ describe('Scrollable', () => {
       reachBottomText: 'Loading...',
       refreshStrategy: 'pullDown',
       refreshingText: 'Refreshing...',
-      rtlEnabled: false,
       scrollByContent: false,
       scrollByThumb: true,
       showScrollbar: 'onHover',
