@@ -53,59 +53,46 @@ const resources = [
   },
 ];
 
-fixture('Renovated scheduler - Overflow indicator');
+fixture('Renovated scheduler - Appointment templates');
 
 [
   'week',
   'month',
 ].forEach((currentView) => {
-  [
-    {
-      type: 'function',
-      appointmentTemplate: () => '<span>Test-Appt</span>',
-      appointmentCollectorTemplate: () => '<span>Test</span>',
-    },
-    {
-      type: 'markup',
-      appointmentTemplate: '<span>Test-Appt</span>',
-      appointmentCollectorTemplate: '<span>Test</span>',
-    },
-  ].forEach(({ type, appointmentTemplate, appointmentCollectorTemplate }) => {
-    test(`it should be rendered correctly if template type is ${type} and view=${currentView}`,
-      async (t, { screenshotComparerOptions }) => {
-        const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-        const appointmentCount = scheduler.getAppointmentCount();
+  test(`it should be rendered correctly if view=${currentView}`,
+    async (t, { screenshotComparerOptions }) => {
+      const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+      const appointmentCount = scheduler.getAppointmentCount();
 
-        await t
-          .expect(appointmentCount)
-          .eql(4)
-          .expect(await compareScreenshot(
-            t,
-            `scheduler_overflow-indicator_template_${currentView}-view.png`,
-            scheduler.element,
-            screenshotComparerOptions,
-          ))
-          .ok();
-      }).before(
-      async (t, { platform }) => {
-        await t.resizeWindow(1200, 800);
-        await createWidget(platform, 'dxScheduler', {
-          dataSource: data,
-          maxAppointmentsPerCell: 1,
-          views: [{
-            type: currentView,
-          }],
-          currentView,
-          currentDate: new Date(2021, 3, 4),
-          startDayHour: 9,
-          endDayHour: 14,
-          groups: ['groupId'],
-          resources,
-          showCurrentTimeIndicator: false,
-          appointmentTemplate,
-          appointmentCollectorTemplate,
-        });
-      },
-    );
-  });
+      await t
+        .expect(appointmentCount)
+        .eql(4)
+        .expect(await compareScreenshot(
+          t,
+          `scheduler_appointment_template_${currentView}-view.png`,
+          scheduler.element,
+          screenshotComparerOptions,
+        ))
+        .ok();
+    }).before(
+    async (t, { platform }) => {
+      await t.resizeWindow(1200, 800);
+      await createWidget(platform, 'dxScheduler', {
+        dataSource: data,
+        maxAppointmentsPerCell: 1,
+        views: [{
+          type: currentView,
+        }],
+        currentView,
+        currentDate: new Date(2021, 3, 4),
+        startDayHour: 9,
+        endDayHour: 14,
+        groups: ['groupId'],
+        resources,
+        showCurrentTimeIndicator: false,
+        appointmentTemplate: () => '<span>Test-Appt</span>',
+        appointmentCollectorTemplate: () => '<span>Test</span>',
+      });
+    },
+  );
 });
