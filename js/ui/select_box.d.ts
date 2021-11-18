@@ -134,7 +134,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
      * @public
      */
-    onCustomItemCreating?: ((e: CustomItemCreatingEvent) => void);
+    onCustomItemCreating?: ((e: EventInfo<T> & CustomItemCreatingInfo) => void);
     /**
      * @docid
      * @default true
