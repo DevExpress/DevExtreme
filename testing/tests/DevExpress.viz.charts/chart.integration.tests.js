@@ -2063,8 +2063,6 @@ QUnit.test('Dispose unused axes (T1042940)', function(assert) {
         }
     });
 
-    assert.ok(chart);
-
     chart.option({
         valueAxis: [{
             name: 'Count',
