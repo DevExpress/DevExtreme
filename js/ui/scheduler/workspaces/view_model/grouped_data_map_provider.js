@@ -30,19 +30,23 @@ export class GroupedDataMapProvider {
         }
     }
 
-    findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay) {
+    findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay, isFindByDate) {
+        // TODO make separate method for finding cells in all day panel
         if(isAllDay) {
             return this.findAllDayGroupCellStartDate(groupIndex, startDate);
         }
-
         const groupData = this.getGroupFromDateTableGroupMap(groupIndex);
-
         const checkCellStartDate = (rowIndex, columnIndex) => {
             const { cellData } = groupData[rowIndex][columnIndex];
-            const {
+            let {
                 startDate: secondMin,
                 endDate: secondMax
             } = cellData;
+
+            if(isFindByDate) {
+                secondMin = dateUtils.trimTime(secondMin);
+                secondMax = dateUtils.setToDayEnd(secondMin);
+            }
 
             if(dateUtils.intervalsOverlap({
                 firstMin: startDate,
