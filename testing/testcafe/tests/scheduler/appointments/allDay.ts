@@ -6,6 +6,7 @@ fixture`Scheduler - All day appointments`
   .page(url(__dirname, './containerAllDay.html'));
 
 test('it should skip weekend days in workWeek', async (t) => {
+  await t.resizeWindow(1200, 800);
   const {
     takeScreenshot,
     compareResults,
