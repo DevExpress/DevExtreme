@@ -1,7 +1,7 @@
 import { version } from '../core/version';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
-import { imageCreator } from './image_creator';
+import { imageCreator, calcScaledInfo } from './image_creator';
 import { isFunction } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 
@@ -19,8 +19,11 @@ const pad = function(str, len) {
 
 let composePdfString = function(imageString, options, curDate) {
     const margin = (options.margin || 0) * 2;
-    const width = options.width + margin;
-    const height = options.height + margin;
+
+    let { width, height } = calcScaledInfo(options.width, options.height);
+    width += margin;
+    height += margin;
+
     const widthPt = (width * 0.75).toFixed(2);
     const heightPt = (height * 0.75).toFixed(2);
 

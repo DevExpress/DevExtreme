@@ -1002,7 +1002,8 @@ const environment = {
         assert.ok(chart._labelsGroup.stub('clear').called, 'Series Labels group should be cleared');
         assert.ok(chart._labelsGroup.linkAppend.called, 'Series labels group should be added to root');
         assert.ok(chart._axesGroup.linkAppend.called, 'Axes group should be added to root');
-        assert.ok(chart._stripLabelAxesGroup.linkAppend.called, 'Label axes group should be added to root');
+        assert.ok(chart._labelsAxesGroup.linkAppend.called, 'Label axes group should be added to root');
+        assert.ok(chart._stripLabelAxesGroup.linkAppend.called, 'Strips label group should be added to root');
         assert.ok(chart._panesBorderGroup.linkAppend.called, 'Panes border group should be added to root');
         assert.ok(chart._stripsGroup.linkAppend.called, 'Strips group should be added to root');
         assert.ok(chart._constantLinesGroup.above.linkAppend.called, 'Constant lines group should be added to root');

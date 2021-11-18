@@ -88,9 +88,9 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() showCurrentTimeIndicator = true;
 
-  @OneWay() schedulerHeight?: number;
+  @OneWay() schedulerHeight?: string | number | (() => (string | number));
 
-  @OneWay() schedulerWidth?: number;
+  @OneWay() schedulerWidth?: string | number | (() => (string | number));
 
   @OneWay() type: ViewType = 'week';
 

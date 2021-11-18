@@ -50,6 +50,10 @@ const prepareInstances = (
     },
     viewRenderConfig,
     false,
+    {
+      startCellIndex: 0,
+      startRowIndex: 0,
+    },
   );
   viewDataProvider.update(generationOptions, true);
 

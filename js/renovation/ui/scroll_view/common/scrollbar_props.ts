@@ -13,6 +13,8 @@ export class ScrollbarProps {
 
   @OneWay() visible = false;
 
+  @OneWay() containerHasSizes = false;
+
   @OneWay() scrollLocation = 0;
 
   @OneWay() minOffset = 0;

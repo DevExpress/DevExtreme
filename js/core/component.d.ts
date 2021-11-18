@@ -101,14 +101,14 @@ export class Component<TProperties> {
    * @param1 optionName:string
    * @public
    */
-   option<TPropertyName extends string>(optionName: TPropertyName): TPropertyName extends (keyof TProperties) ? TProperties[TPropertyName] : unknown;
+   option<TPropertyName extends string, TValue = unknown>(optionName: TPropertyName): TPropertyName extends (keyof TProperties) ? TProperties[TPropertyName] : TValue;
   /**
    * @docid
    * @publicName option(optionName, optionValue)
    * @param1 optionName:string
    * @public
    */
-   option<TPropertyName extends string>(optionName: TPropertyName, optionValue: TPropertyName extends keyof TProperties ? TProperties[TPropertyName] : unknown): void;
+   option<TPropertyName extends string, TValue = unknown>(optionName: TPropertyName, optionValue: TPropertyName extends keyof TProperties ? TProperties[TPropertyName] : TValue): void;
   /**
    * @docid
    * @publicName option(options)

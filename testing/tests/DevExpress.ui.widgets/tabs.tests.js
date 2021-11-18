@@ -538,7 +538,7 @@ QUnit.module('Horizontal scrolling', () => {
     });
 
     QUnit.module('Disabled state of navigation buttons', () => {
-        [0.33, 0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.2, 1.25, 1.34, 1.5, 1.875, 2.25, 2.65].forEach((browserZoom) => {
+        [0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.2, 1.25, 1.34, 1.5, 1.875, 2.25, 2.65].forEach((browserZoom) => {
             [true, false].forEach((rtlEnabled) => {
                 const cssStyles = {
                     transform: `scale(${browserZoom})`,

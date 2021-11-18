@@ -1959,6 +1959,29 @@ QUnit.test('Chart can hide series on done event', function(assert) {
     assert.strictEqual(drawn.callCount, 2);
 });
 
+// T1037806
+QUnit.test('skipOptionsRallBack', function(assert) {
+    const skipOptionsRollBackValues = [];
+    const optionChanged = ({ component }) => {
+        skipOptionsRollBackValues.push(component.skipOptionsRollBack);
+    };
+    const chart = createChartInstance({
+        dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 100 }],
+        series: [{}],
+        valueAxis: {
+            visualRange: { startValue: 10, endValue: 20 }
+        }
+    }, $('#chartContainer'));
+
+    chart.on('optionChanged', optionChanged);
+    chart.option('valueAxis.visualRange', { startValue: null, endValue: null });
+
+    assert.strictEqual(skipOptionsRollBackValues.length, 3);
+    assert.strictEqual(skipOptionsRollBackValues[1], true);
+    assert.strictEqual(skipOptionsRollBackValues[2], true);
+    assert.strictEqual(chart.skipOptionsRollBack, false);
+});
+
 // T1009261
 QUnit.test('Chart with large scale break', function(assert) {
     const container = $('#chartContainer');

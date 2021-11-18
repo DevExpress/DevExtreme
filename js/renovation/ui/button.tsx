@@ -108,7 +108,7 @@ export class ButtonProps extends BaseWidgetProps {
   @Event({
     actionConfig: { excludeValidators: ['readOnly'] },
   })
-  onClick?: (e: { event: Event; validationGroup?: string }) => void;
+  onClick?: (e: { event: Event }) => void;
 
   @Event() onSubmit?: (e: { event: Event; submitInput: HTMLInputElement | null }) => void;
 
@@ -127,8 +127,6 @@ export class ButtonProps extends BaseWidgetProps {
   @OneWay() useInkRipple = false;
 
   @OneWay() useSubmitBehavior = false;
-
-  @OneWay() validationGroup?: string = undefined;
 
   @OneWay() templateData?: Record<string, unknown> = {};
 }
@@ -207,9 +205,12 @@ export class Button extends JSXComponent(ButtonProps) {
   }
 
   onWidgetClick(event: Event): void {
-    const { onClick, useSubmitBehavior, validationGroup } = this.props;
+    const {
+      onClick,
+      useSubmitBehavior,
+    } = this.props;
 
-    onClick?.({ event, validationGroup });
+    onClick?.({ event });
     useSubmitBehavior && this.submitInputRef.current!.click();
   }
 

@@ -1078,6 +1078,7 @@ QUnit.module('Templates', () => {
                     $input = $textBox.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
                     keyboard = new keyboardMock($input, true);
                     caretWorkaround($input);
+                    keyboard.caret(0);
                 }
             });
 

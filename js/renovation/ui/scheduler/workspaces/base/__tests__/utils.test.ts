@@ -2,6 +2,7 @@ import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../
 import { Group, TableWidthWorkSpaceConfig } from '../../types';
 import {
   createCellElementMetaData,
+  createVirtualScrollingOptions,
   getDateForHeaderText,
   getDateTableWidth,
   getHiddenInterval,
@@ -238,6 +239,54 @@ describe('Workspace base utils', () => {
 
       expect(result)
         .toBe(1400);
+    });
+  });
+
+  describe('createVirtualScrollingOptions', () => {
+    it('should create virtual scrolling options', () => {
+      const result = createVirtualScrollingOptions({
+        cellHeight: 1,
+        cellWidth: 2,
+        schedulerHeight: 3,
+        schedulerWidth: 4,
+        viewHeight: 5,
+        viewWidth: 6,
+        scrolling: { mode: 'virtual' },
+        scrollableWidth: 7,
+        groups: [],
+        isVerticalGrouping: true,
+        completeRowCount: 8,
+        completeColumnCount: 9,
+      });
+
+      expect(result.getCellHeight())
+        .toBe(1);
+      expect(result.getCellWidth())
+        .toBe(2);
+      expect(result.getCellMinWidth())
+        .toBe(75);
+      expect(result.isRTL())
+        .toBe(false);
+      expect(result.getSchedulerHeight())
+        .toBe(3);
+      expect(result.getSchedulerWidth())
+        .toBe(4);
+      expect(result.getViewHeight())
+        .toBe(5);
+      expect(result.getViewWidth())
+        .toBe(6);
+      expect(result.getScrolling())
+        .toEqual({ mode: 'virtual' });
+      expect(result.getScrollableOuterWidth())
+        .toBe(7);
+      expect(result.getGroupCount())
+        .toBe(0);
+      expect(result.isVerticalGrouping())
+        .toBe(true);
+      expect(result.getTotalRowCount())
+        .toBe(8);
+      expect(result.getTotalCellCount())
+        .toBe(9);
     });
   });
 });

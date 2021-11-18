@@ -106,13 +106,18 @@ describe('OrdinaryLayout', () => {
 
     it('should render widget as root component', () => {
       const layout = mountComponent({
-        props: { className: 'custom-classes' },
+        props: {
+          className: 'custom-classes',
+          widgetElementRef: 'widgetElementRef',
+        },
       });
 
       expect(layout.is(Widget))
         .toBe(true);
       expect(layout.prop('className'))
         .toBe('custom-classes');
+      expect(layout.prop('rootElementRef'))
+        .toBe('widgetElementRef');
     });
 
     it('should render heder panel container', () => {
@@ -457,7 +462,10 @@ describe('OrdinaryLayout', () => {
     describe('Methods', () => {
       describe('onDateTableScroll', () => {
         it('should call scrollTo of header and side-bar scrollables', () => {
-          const layout = new CrossScrollingLayout({} as any);
+          const onScroll = jest.fn();
+          const layout = new CrossScrollingLayout({
+            onScroll,
+          } as any);
 
           const sideBarScrollTo = jest.fn();
           const headerScrollTo = jest.fn();
@@ -486,6 +494,8 @@ describe('OrdinaryLayout', () => {
             .toBeCalledWith({
               left: 50,
             });
+          expect(onScroll)
+            .toHaveBeenCalledTimes(1);
         });
       });
 

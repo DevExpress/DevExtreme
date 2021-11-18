@@ -22,6 +22,21 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Gulp Tests watch",
+      "program": "${workspaceRoot}/node_modules/gulp/bin/gulp.js",
+      "args": [
+        "build-renovation-testing:watch",
+        "--playgroundName",
+      ],
+      "runtimeArgs": [
+        "--harmony"
+      ],
+      "sourceMaps": true,
+      "cwd": "${workspaceRoot}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Jest Test (current opened file)",
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": [

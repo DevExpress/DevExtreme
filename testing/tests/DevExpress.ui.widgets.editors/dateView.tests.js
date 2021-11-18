@@ -282,16 +282,16 @@ QUnit.module('dateView', {
         }
     });
     QUnit.test('default value set correctly', function(assert) {
-        const value = new Date(2015, 5, 5, 5, 5);
         const clock = sinon.useFakeTimers();
 
         try {
+            const value = new Date(2015, 5, 5, 5, 5);
+
             const $dateView = $('<div>').appendTo('#qunit-fixture').dxDateView({
                 value: value,
-                min: new Date(2014, 1, 1, 1, 1),
+                minDate: new Date(2014, 1, 1, 1, 1),
                 type: 'datetime'
             });
-
             triggerShownEvent('#qunit-fixture');
             clock.tick();
 
