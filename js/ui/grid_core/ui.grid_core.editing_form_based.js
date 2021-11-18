@@ -264,14 +264,16 @@ export const editingFormBasedModule = {
                     const column = item.column;
                     const editorType = getEditorType(item);
                     const rowData = detailCellOptions?.row.data;
+                    const form = formTemplateOptions.component;
                     const cellOptions = extend({}, detailCellOptions, {
                         data: rowData,
                         cellElement: null,
                         isOnForm: true,
                         item: item,
+                        id: form.getItemID(item.name || item.dataField),
                         column: extend({}, column, {
                             editorType: editorType,
-                            editorOptions: extend({}, column.editorOptions, formTemplateOptions.editorOptions, item.editorOptions)
+                            editorOptions: extend({}, formTemplateOptions.editorOptions, column.editorOptions, item.editorOptions)
                         }),
                         columnIndex: column.index,
                         setValue: !isReadOnly && column.allowEditing && function(value) {
