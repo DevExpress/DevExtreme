@@ -1145,7 +1145,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const maxOffset = this.vScrollOffsetMax
       - this.bottomPocketHeight - this.contentPaddingBottom;
 
-    if (maxOffset >= 0) {
+    if (!this.props.bounceEnabled || maxOffset >= 0) {
       return 0;
     }
 
@@ -1168,7 +1168,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const location = this.hScrollLocation;
     let transformValue = location % 1;
 
-    if (this.hScrollOffsetMax >= 0 || inRange(this.hScrollLocation, this.hScrollOffsetMax, 0)) {
+    if (!this.props.bounceEnabled
+      || this.hScrollOffsetMax >= 0 || inRange(this.hScrollLocation, this.hScrollOffsetMax, 0)) {
       return 0;
     }
 
