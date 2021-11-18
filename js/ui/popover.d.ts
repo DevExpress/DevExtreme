@@ -53,7 +53,7 @@ export type ShowingEvent = Cancelable & EventInfo<dxPopover>;
 export type ShownEvent = EventInfo<dxPopover>;
 
 /** @public */
-export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
+export type TitleRenderedEvent = EventInfo<dxPopover> & TitleRenderedInfo;
 
 /**
  * @deprecated use Properties instead
