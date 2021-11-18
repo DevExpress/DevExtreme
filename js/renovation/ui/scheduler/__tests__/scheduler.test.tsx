@@ -1357,6 +1357,22 @@ describe('Scheduler', () => {
           expect(scheduler.workSpaceKey)
             .toBe('day_horizontal_3_0');
         });
+
+        it('should return key if cross-scrolling is not used but virtual scrolling is used', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            scrolling: { mode: 'virtual' },
+            currentView: 'day',
+            views: [{
+              type: 'day',
+              intervalCount: 3,
+              groupOrientation: 'horizontal',
+            }],
+          });
+
+          expect(scheduler.workSpaceKey)
+            .toBe('day_horizontal_3_0');
+        });
       });
 
       describe('Cell Templates', () => {
