@@ -2,9 +2,9 @@ import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
-import { resetActiveElement, contains, closestCommonParent } from '../core/utils/dom';
+import { resetActiveElement } from '../core/utils/dom';
 import { requestAnimationFrame, cancelAnimationFrame } from '../animation/frame';
-import { addNamespace, fireEvent, eventDelta, eventData } from './utils/index';
+import { addNamespace, fireEvent } from './utils/index';
 import { subscribeNodesDisposing, unsubscribeNodesDisposing } from './utils/event_nodes_disposing';
 import pointerEvents from './pointer';
 import Emitter from './core/emitter';
@@ -12,16 +12,44 @@ import registerEmitter from './core/emitter_registrator';
 import { noop } from '../core/utils/common';
 
 const CLICK_EVENT_NAME = 'dxclick';
-const TOUCH_BOUNDARY = 10;
-const abs = Math.abs;
 
 const isInput = function(element) {
     return $(element).is('input, textarea, select, button ,:focus, :focus *');
 };
 
-const misc = { requestAnimationFrame: requestAnimationFrame, cancelAnimationFrame: cancelAnimationFrame };
+const misc = { requestAnimationFrame, cancelAnimationFrame };
 
-let ClickEmitter = Emitter.inherit({
+let prevented = null;
+let lastFiredEvent = null;
+
+function onNodeRemove() {
+    lastFiredEvent = null;
+}
+
+const clickHandler = function(e) {
+    const originalEvent = e.originalEvent;
+    const eventAlreadyFired = originalEvent && (lastFiredEvent === originalEvent || originalEvent.DXCLICK_FIRED);
+    const leftButton = !e.which || e.which === 1;
+
+    if(leftButton && !prevented && !eventAlreadyFired) {
+        if(originalEvent) {
+            originalEvent.DXCLICK_FIRED = true;
+        }
+
+        unsubscribeNodesDisposing(lastFiredEvent, onNodeRemove);
+
+        lastFiredEvent = originalEvent;
+
+        subscribeNodesDisposing(lastFiredEvent, onNodeRemove);
+
+        fireEvent({
+            type: CLICK_EVENT_NAME,
+            originalEvent: e
+        });
+    }
+};
+
+const ClickEmitter = Emitter.inherit({
 
     ctor: function(element) {
         this.callBase(element);
@@ -30,117 +58,28 @@ let ClickEmitter = Emitter.inherit({
     },
 
     _makeElementClickable: function($element) {
-        if(!$element.attr('onclick')) {
-            $element.attr('onclick', 'void(0)');
-        }
+        eventsEngine.on($element, 'click', clickHandler);
+    },
+
+    configure: function(data) {
+        this.callBase(data);
     },
 
     start: function(e) {
-        this._blurPrevented = e.isDefaultPrevented();
-        this._startTarget = e.target;
-        this._startEventData = eventData(e);
+        prevented = null;
     },
 
-    end: function(e) {
-        if(this._eventOutOfElement(e, this.getElement().get(0)) || e.type === pointerEvents.cancel) {
-            this._cancel(e);
-            return;
-        }
+    end: noop,
 
-        if(!isInput(e.target) && !this._blurPrevented) {
-            resetActiveElement();
-        }
-
-        this._accept(e);
-        this._clickAnimationFrame = misc.requestAnimationFrame((function() {
-            this._fireClickEvent(e);
-        }).bind(this));
-    },
-
-    _eventOutOfElement: function(e, element) {
-        const target = e.target;
-        const targetChanged = !contains(element, target) && element !== target;
-
-        const gestureDelta = eventDelta(eventData(e), this._startEventData);
-        const boundsExceeded = abs(gestureDelta.x) > TOUCH_BOUNDARY || abs(gestureDelta.y) > TOUCH_BOUNDARY;
-
-        return targetChanged || boundsExceeded;
-    },
-
-    _fireClickEvent: function(e) {
-        this._fireEvent(CLICK_EVENT_NAME, e, {
-            target: closestCommonParent(this._startTarget, e.target)
-        });
+    cancel: function() {
+        prevented = true;
     },
 
     dispose: function() {
         misc.cancelAnimationFrame(this._clickAnimationFrame);
+        eventsEngine.off(this.getElement(), 'click', clickHandler);
     }
-
 });
-
-(function() {
-    const NATIVE_CLICK_CLASS = 'dx-native-click';
-
-    let prevented = null;
-    let lastFiredEvent = null;
-
-    function onNodeRemove() {
-        lastFiredEvent = null;
-    }
-
-    const clickHandler = function(e) {
-        const originalEvent = e.originalEvent;
-        const eventAlreadyFired = lastFiredEvent === originalEvent || originalEvent && originalEvent.DXCLICK_FIRED;
-        const leftButton = !e.which || e.which === 1;
-
-        if(leftButton && !prevented && !eventAlreadyFired) {
-            if(originalEvent) {
-                originalEvent.DXCLICK_FIRED = true;
-            }
-
-            unsubscribeNodesDisposing(lastFiredEvent, onNodeRemove);
-
-            lastFiredEvent = originalEvent;
-
-            subscribeNodesDisposing(lastFiredEvent, onNodeRemove);
-
-            fireEvent({
-                type: CLICK_EVENT_NAME,
-                originalEvent: e
-            });
-        }
-    };
-
-    ClickEmitter = ClickEmitter.inherit({
-        _makeElementClickable: function($element) {
-            eventsEngine.on($element, 'click', clickHandler);
-        },
-
-        configure: function(data) {
-            this.callBase(data);
-            if(data.useNative) {
-                this.getElement().addClass(NATIVE_CLICK_CLASS);
-            }
-        },
-
-        start: function(e) {
-            prevented = null;
-        },
-
-        end: noop,
-
-        cancel: function() {
-            prevented = true;
-        },
-
-        dispose: function() {
-            this.callBase();
-
-            eventsEngine.off(this.getElement(), 'click', clickHandler);
-        }
-    });
-})();
 
 
 // NOTE: fixes native click blur on slow devices

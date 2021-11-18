@@ -314,8 +314,7 @@ QUnit.test('dxclick should be based on native click', function(assert) {
     $element.trigger('click');
 });
 
-// T322738
-QUnit.test('dxclick should be based on native click for all devices when useNative parameter is true', function(assert) {
+QUnit.test('dxclick should be based on native click for all devices', function(assert) {
     const $element = $('#element');
     let dxClickCallCount = 0;
     let dxClickChildCallCount = 0;
@@ -333,7 +332,6 @@ QUnit.test('dxclick should be based on native click for all devices when useNati
 
     assert.equal(dxClickCallCount, 2, 'dxclick call count');
     assert.equal(dxClickChildCallCount, 1, 'dxclick child call count');
-    assert.ok($element.hasClass('dx-native-click'), 'dx-native-click class was added');
 });
 
 QUnit.test('dxclick should triggers only on left mouse button click', function(assert) {
