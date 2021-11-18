@@ -53,7 +53,7 @@ const resources = [
   },
 ];
 
-fixture('Renovated scheduler - Appointment templates');
+fixture.skip('Renovated scheduler - Appointment templates');
 
 [
   'week',
