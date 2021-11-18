@@ -643,7 +643,10 @@ const dxChart = AdvancedChart.inherit({
                 axis.setPane(that.defaultPane);
             }
             const paneExists = doesPaneExist(that.panes, axis.pane);
-            !paneExists && axis.dispose();
+            if(!paneExists) {
+                axis.dispose();
+                axis = null;
+            }
             return paneExists;
         }).sort(compareAxes);
 
