@@ -109,7 +109,7 @@ namespace Runner
         static bool IsContinuousIntegration()
         {
             return !String.IsNullOrEmpty(Environment.GetEnvironmentVariable("CCNetWorkingDirectory"))
-                || !String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DEVEXTREME_DOCKER_CI"));
+                || !String.IsNullOrEmpty(Environment.GetEnvironmentVariable("DEVEXTREME_TEST_CI"));
         }
 
         static bool IsIntranet()

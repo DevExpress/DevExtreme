@@ -29,7 +29,7 @@ require('./build/gulp/check_licenses');
 require('./build/gulp/qunit-in-docker');
 require('./build/gulp/renovation-testing-playground');
 
-if(!env.TEST_CI && !env.DOCKER_CI) {
+if(!env.TEST_CI) {
     require('./build/gulp/create_timezones_data');
     require('./build/gulp/test_timezones_data');
 }
@@ -62,9 +62,7 @@ function createMainBatch(dev) {
         tasks.push('js-bundles-prod');
     }
     tasks.push('style-compiler-batch', 'misc-batch');
-    return env.DOCKER_CI
-        ? gulp.series(tasks)
-        : (callback) => multiProcess(tasks, callback, true);
+    return (callback) => multiProcess(tasks, callback, true);
 }
 
 function createDefaultBatch(dev) {
