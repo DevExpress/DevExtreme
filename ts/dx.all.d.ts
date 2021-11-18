@@ -4818,11 +4818,6 @@ declare module DevExpress.ui {
     }
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxCalendar>;
     export type DisabledDate = ComponentDisabledDate<dxCalendar>;
-    export type DisposingEvent = DevExpress.events.EventInfo<dxCalendar>;
-    export type InitializedEvent =
-      DevExpress.events.InitializedEventInfo<dxCalendar>;
-    export type OptionChangedEvent = DevExpress.events.EventInfo<dxCalendar> &
-      DevExpress.events.ChangedOptionInfo;
     export type Properties = dxCalendarOptions;
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxCalendar,
@@ -14338,7 +14333,7 @@ declare module DevExpress.ui {
     > &
       DevExpress.ui.dxList.ScrollInfo;
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxLookup> &
-      DevExpress.ui.dxDropDownList.SelectionChangedInfo;
+      DevExpress.ui.CollectionWidget.SelectionChangedInfo;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxLookup> &
       DevExpress.ui.dxPopup.TitleRenderedInfo;
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
@@ -16253,7 +16248,7 @@ declare module DevExpress.ui {
     export type Properties = dxPopoverOptions;
     export type ShowingEvent = DevExpress.events.EventInfo<dxPopover>;
     export type ShownEvent = DevExpress.events.EventInfo<dxPopover>;
-    export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopover> &
+    export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopup> &
       DevExpress.ui.dxPopup.TitleRenderedInfo;
   }
   /**
@@ -16446,10 +16441,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.onTitleRendered]
      */
-    onTitleRendered?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxPopup.TitleRenderedInfo
-    ) => void;
+    onTitleRendered?: (e: DevExpress.ui.dxPopup.TitleRenderedEvent) => void;
     /**
      * [descr:dxPopupOptions.position]
      */
@@ -18160,8 +18152,7 @@ declare module DevExpress.ui {
      * [descr:dxSelectBoxOptions.onCustomItemCreating]
      */
     onCustomItemCreating?: (
-      e: DevExpress.events.EventInfo<TComponent> &
-        DevExpress.ui.dxSelectBox.CustomItemCreatingInfo
+      e: DevExpress.ui.dxSelectBox.CustomItemCreatingEvent
     ) => void;
     /**
      * [descr:dxSelectBoxOptions.openOnFieldClick]

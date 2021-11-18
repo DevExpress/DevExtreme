@@ -53,7 +53,7 @@ export type ShowingEvent = EventInfo<dxPopover>;
 export type ShownEvent = EventInfo<dxPopover>;
 
 /** @public */
-export type TitleRenderedEvent = EventInfo<dxPopover> & TitleRenderedInfo;
+export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
 /**
  * @deprecated use Properties instead

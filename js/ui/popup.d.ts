@@ -168,7 +168,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @action
      * @public
      */
-    onTitleRendered?: ((e: EventInfo<TComponent> & TitleRenderedInfo) => void);
+    onTitleRendered?: ((e: TitleRenderedEvent) => void);
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function

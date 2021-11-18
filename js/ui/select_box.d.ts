@@ -44,7 +44,6 @@ export type ContentReadyEvent = EventInfo<dxSelectBox>;
 
 /** @public */
 export type CopyEvent = NativeEventInfo<dxSelectBox, ClipboardEvent>;
-
 /** @public */
 export type CustomItemCreatingEvent = EventInfo<dxSelectBox> & CustomItemCreatingInfo;
 
@@ -135,7 +134,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
      * @public
      */
-    onCustomItemCreating?: ((e: EventInfo<TComponent> & CustomItemCreatingInfo) => void);
+    onCustomItemCreating?: ((e: CustomItemCreatingEvent) => void);
     /**
      * @docid
      * @default true
