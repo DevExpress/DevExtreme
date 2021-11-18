@@ -18021,8 +18021,8 @@ declare module DevExpress.ui {
     export type ShowingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxPopup>;
     export type ShownEvent = DevExpress.events.EventInfo<dxPopup>;
-    export type TitleRenderedEvent<TComponent = dxPopup> =
-      DevExpress.events.EventInfo<TComponent> & TitleRenderedInfo;
+    export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopup> &
+      TitleRenderedInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -18089,7 +18089,8 @@ declare module DevExpress.ui {
      * [descr:dxPopupOptions.onTitleRendered]
      */
     onTitleRendered?: (
-      e: DevExpress.ui.dxPopup.TitleRenderedEvent<TComponent>
+      e: DevExpress.events.EventInfo<TComponent> &
+        DevExpress.ui.dxPopup.TitleRenderedInfo
     ) => void;
     /**
      * [descr:dxPopupOptions.position]
@@ -19720,8 +19721,8 @@ declare module DevExpress.ui {
       dxSelectBox,
       ClipboardEvent
     >;
-    export type CustomItemCreatingEvent<TComponent = dxSelectBox> =
-      DevExpress.events.EventInfo<TComponent> & CustomItemCreatingInfo;
+    export type CustomItemCreatingEvent =
+      DevExpress.events.EventInfo<dxSelectBox> & CustomItemCreatingInfo;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
@@ -19815,7 +19816,8 @@ declare module DevExpress.ui {
      * [descr:dxSelectBoxOptions.onCustomItemCreating]
      */
     onCustomItemCreating?: (
-      e: DevExpress.ui.dxSelectBox.CustomItemCreatingEvent<TComponent>
+      e: DevExpress.events.EventInfo<TComponent> &
+        DevExpress.ui.dxSelectBox.CustomItemCreatingInfo
     ) => void;
     /**
      * [descr:dxSelectBoxOptions.openOnFieldClick]
@@ -23789,7 +23791,7 @@ declare module DevExpress.ui {
      * [descr:EditorOptions.onValueChanged]
      */
     onValueChanged?: (
-      e: DevExpress.events.NativeEventInfo<TComponent, KeyboardEvent | Event> &
+      e: DevExpress.events.NativeEventInfo<TComponent, Event> &
         DevExpress.ui.Editor.ValueChangedInfo
     ) => void;
     /**

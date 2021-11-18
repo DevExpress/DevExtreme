@@ -70,7 +70,7 @@ export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;
 export type ShowingEvent = Cancelable & EventInfo<dxPopup>;
 
 /** @public */
-export type TitleRenderedEvent<TComponent = dxPopup> = EventInfo<TComponent> & TitleRenderedInfo;
+export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -168,7 +168,7 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
      * @action
      * @public
      */
-    onTitleRendered?: ((e: TitleRenderedEvent<TComponent>) => void);
+    onTitleRendered?: ((e: EventInfo<TComponent> & TitleRenderedInfo) => void);
     /**
      * @docid
      * @type Enums.PositionAlignment|PositionConfig|function
