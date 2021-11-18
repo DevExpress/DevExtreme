@@ -1009,7 +1009,6 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
     /**
      * @docid
      * @publicName forEachNode(callback)
-     * @param1 callback:function
      * @public
      */
     forEachNode(callback: Function): void;
@@ -1017,7 +1016,6 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
      * @docid
      * @publicName forEachNode(nodes, callback)
      * @param1 nodes:Array<dxTreeListNode>
-     * @param2 callback:function
      * @public
      */
     forEachNode(nodes: Array<Node<TRowData, TKey>>, callback: Function): void;

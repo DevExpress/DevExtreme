@@ -87,7 +87,6 @@ declare class DevicesObject {
      * @docid
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
-     * @param2 eventHandler:function
      * @return this
      * @public
      */
@@ -96,7 +95,6 @@ declare class DevicesObject {
      * @docid
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
-     * @param2 eventHandler:function
      * @return this
      * @public
      */

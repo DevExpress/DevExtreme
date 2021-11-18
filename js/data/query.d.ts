@@ -11,8 +11,6 @@ export interface Query {
      * @docid
      * @publicName aggregate(seed, step, finalize)
      * @param1 seed:object
-     * @param2 step:function
-     * @param3 finalize:function
      * @return Promise<any>
      * @public
      */
@@ -20,7 +18,6 @@ export interface Query {
     /**
      * @docid
      * @publicName aggregate(step)
-     * @param1 step:function
      * @return Promise<any>
      * @public
      */
@@ -63,7 +60,6 @@ export interface Query {
     /**
      * @docid
      * @publicName filter(predicate)
-     * @param1 predicate:function
      * @public
      */
     filter(predicate: Function): Query;
