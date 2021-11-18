@@ -672,22 +672,22 @@ declare module DevExpress {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface ComponentOptions<
-    TDisposingEventArg,
-    TInitializedEventArg,
-    TOptionChangedEventArg
+    TDisposingEvent,
+    TInitializedEvent,
+    TOptionChangedEvent
   > {
     /**
      * [descr:ComponentOptions.onDisposing]
      */
-    onDisposing?: (e: TDisposingEventArg) => void;
+    onDisposing?: (e: TDisposingEvent) => void;
     /**
      * [descr:ComponentOptions.onInitialized]
      */
-    onInitialized?: (e: TInitializedEventArg) => void;
+    onInitialized?: (e: TInitializedEvent) => void;
     /**
      * [descr:ComponentOptions.onOptionChanged]
      */
-    onOptionChanged?: (e: TOptionChangedEventArg) => void;
+    onOptionChanged?: (e: TOptionChangedEvent) => void;
   }
   /**
    * [descr:config()]
@@ -843,15 +843,14 @@ declare module DevExpress {
     _createElement(element: HTMLElement): void;
   }
   module DOMComponent {
-    export type DisposingEvent<TComponent> =
-      DevExpress.events.EventInfo<TComponent>;
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
      */
     interface DOMComponentInstance extends DOMComponent<Properties> {}
-    export type InitializedEvent<TComponent> =
-      DevExpress.events.InitializedEventInfo<TComponent>;
-    export type OptionChangedEvent<TComponent> =
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    export type OptionChangedEventInfo<TComponent> =
       DevExpress.events.EventInfo<TComponent> &
         DevExpress.events.ChangedOptionInfo;
     /**
@@ -866,9 +865,9 @@ declare module DevExpress {
    */
   export interface DOMComponentOptions<TComponent>
     extends ComponentOptions<
-      DevExpress.DOMComponent.DisposingEvent<TComponent>,
-      DevExpress.DOMComponent.InitializedEvent<TComponent>,
-      DevExpress.DOMComponent.OptionChangedEvent<TComponent>
+      DevExpress.events.EventInfo<TComponent>,
+      DevExpress.events.InitializedEventInfo<TComponent>,
+      DevExpress.DOMComponent.OptionChangedEventInfo<TComponent>
     > {
     /**
      * [descr:DOMComponentOptions.bindingOptions]
@@ -885,14 +884,12 @@ declare module DevExpress {
     /**
      * [descr:DOMComponentOptions.onDisposing]
      */
-    onDisposing?: (
-      e: DevExpress.DOMComponent.DisposingEvent<TComponent>
-    ) => void;
+    onDisposing?: (e: DevExpress.events.EventInfo<TComponent>) => void;
     /**
      * [descr:DOMComponentOptions.onOptionChanged]
      */
     onOptionChanged?: (
-      e: DevExpress.DOMComponent.OptionChangedEvent<TComponent>
+      e: DevExpress.DOMComponent.OptionChangedEventInfo<TComponent>
     ) => void;
     /**
      * [descr:DOMComponentOptions.rtlEnabled]

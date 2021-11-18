@@ -18,22 +18,15 @@ import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
 import { DefaultOptionsRule } from './options';
 
-/** @public */
-export type DisposingEvent<TComponent> = EventInfo<TComponent>;
-
-/** @public */
-export type InitializedEvent<TComponent> = InitializedEventInfo<TComponent>;
-
-/** @public */
-export type OptionChangedEvent<TComponent> = EventInfo<TComponent> & ChangedOptionInfo;
+export type OptionChangedEventInfo<TComponent> = EventInfo<TComponent> & ChangedOptionInfo;
 
 /* eslint-disable no-underscore-dangle */
 
 /** @namespace DevExpress */
 export interface DOMComponentOptions<TComponent> extends ComponentOptions<
-    DisposingEvent<TComponent>,
-    InitializedEvent<TComponent>,
-    OptionChangedEvent<TComponent>
+    EventInfo<TComponent>,
+    InitializedEventInfo<TComponent>,
+    OptionChangedEventInfo<TComponent>
 > {
     /**
      * @docid
@@ -63,7 +56,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
      * @type_function_param1_field3 model:any
      * @public
      */
-    onDisposing?: ((e: DisposingEvent<TComponent>) => void);
+    onDisposing?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @action
@@ -77,7 +70,7 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
      * @type_function_param1_field6 value:any
      * @public
      */
-    onOptionChanged?: ((e: OptionChangedEvent<TComponent>) => void);
+    onOptionChanged?: ((e: OptionChangedEventInfo<TComponent>) => void);
     /**
      * @docid
      * @default false

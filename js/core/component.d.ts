@@ -1,5 +1,5 @@
 /** @namespace DevExpress */
-export interface ComponentOptions<TDisposingEventArg, TInitializedEventArg, TOptionChangedEventArg> {
+export interface ComponentOptions<TDisposingEvent, TInitializedEvent, TOptionChangedEvent> {
   /**
    * @docid
    * @type_function_param1 e:object
@@ -8,7 +8,7 @@ export interface ComponentOptions<TDisposingEventArg, TInitializedEventArg, TOpt
    * @action
    * @public
    */
-  onDisposing?: ((e: TDisposingEventArg) => void);
+  onDisposing?: ((e: TDisposingEvent) => void);
   /**
    * @docid
    * @type_function_param1 e:object
@@ -18,7 +18,7 @@ export interface ComponentOptions<TDisposingEventArg, TInitializedEventArg, TOpt
    * @action
    * @public
    */
-  onInitialized?: ((e: TInitializedEventArg) => void);
+  onInitialized?: ((e: TInitializedEvent) => void);
   /**
    * @docid
    * @type_function_param1 e:object
@@ -30,7 +30,7 @@ export interface ComponentOptions<TDisposingEventArg, TInitializedEventArg, TOpt
    * @action
    * @public
    */
-  onOptionChanged?: ((e: TOptionChangedEventArg) => void);
+  onOptionChanged?: ((e: TOptionChangedEvent) => void);
 }
 /**
  * @docid Component
