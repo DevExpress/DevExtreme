@@ -259,8 +259,7 @@ export const VirtualScrollController = Class.inherit((function() {
                     this._itemSizes[virtualItemsCount.begin + index] = size;
                 });
 
-                const itemsCount = this.option(LEGACY_SCROLLING_MODE) ? this.itemsCount() : this._dataOptions.itemsCount();
-                const virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + itemsCount) * this._viewportItemSize;
+                const virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + this.itemsCount()) * this._viewportItemSize;
                 const contentHeightLimit = getContentHeightLimit(browser);
                 if(virtualContentSize > contentHeightLimit) {
                     this._sizeRatio = contentHeightLimit / virtualContentSize;
@@ -391,13 +390,25 @@ export const VirtualScrollController = Class.inherit((function() {
                 skip,
                 take
             };
+        },
+
+        itemsCount: function() {
+            let result = 0;
+
+            if(this.option(LEGACY_SCROLLING_MODE)) {
+                result = this._dataLoader.itemsCount.apply(this._dataLoader, arguments);
+            } else {
+                result = this._dataOptions.itemsCount();
+            }
+
+            return result;
         }
     };
 
     [
         'pageIndex', 'beginPageIndex', 'endPageIndex',
         'pageSize', 'load', 'loadIfNeed', 'handleDataChanged',
-        'itemsCount', 'getDelayDeferred'
+        'getDelayDeferred'
     ].forEach(function(name) {
         members[name] = function() {
             return this._dataLoader[name].apply(this._dataLoader, arguments);
