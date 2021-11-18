@@ -10,7 +10,8 @@ import ViewDataProvider from '../../../../ui/scheduler/workspaces/view_model/vie
 import { WorkSpace } from '../workspaces/base/work_space';
 import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
-import { filterAppointments } from '../common';
+import { getPreparedDataItems } from '../utils/data';
+import { getFilterStrategy } from '../utils/filter';
 import { getAppointmentsConfig, getAppointmentsModel } from '../model/appointments';
 import { getAppointmentsViewModel } from '../view_model/appointments/appointments';
 import { AppointmentLayout } from '../appointment/layout';
@@ -26,9 +27,13 @@ jest.mock('../view_model/appointments/appointments', () => ({
   getAppointmentsViewModel: jest.fn(() => 'Test_getAppointmentsViewModel'),
 }));
 
-jest.mock('../common', () => ({
-  ...jest.requireActual('../common'),
-  filterAppointments: jest.fn(() => 'Test_filterAppointments'),
+jest.mock('../utils/data', () => ({
+  ...jest.requireActual('../utils/data'),
+  getPreparedDataItems: jest.fn((items) => `Prepared_${items}`),
+}));
+jest.mock('../utils/filter', () => ({
+  ...jest.requireActual('../utils/filter'),
+  getFilterStrategy: jest.fn(() => ({ filter: (items) => `Filter_${items}` })),
 }));
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
@@ -1073,16 +1078,116 @@ describe('Scheduler', () => {
         });
       });
 
+      describe('preparedDataItems', () => {
+        it('should return correct items', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          scheduler.dataItems = 'Test_dataItems' as any;
+
+          expect(scheduler.preparedDataItems)
+            .toEqual('Prepared_Test_dataItems');
+
+          expect(getPreparedDataItems)
+            .toHaveBeenCalledTimes(1);
+        });
+
+        it('should return empty array if appointmentsConfig is not exists', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          scheduler.dataItems = 'dataItems' as any;
+
+          jest.spyOn(scheduler, 'dataAccessors', 'get')
+            .mockReturnValue('dataAccessors_test' as any);
+
+          jest.spyOn(scheduler, 'currentViewConfig', 'get')
+            .mockReturnValue({ cellDuration: 60 } as any);
+
+          jest.spyOn(scheduler, 'timeZoneCalculator', 'get')
+            .mockReturnValue('timeZoneCalculator_test' as any);
+
+          expect(scheduler.preparedDataItems)
+            .toEqual('Prepared_dataItems');
+
+          expect(getPreparedDataItems)
+            .toHaveBeenCalledTimes(1);
+
+          expect(getPreparedDataItems)
+            .toHaveBeenCalledWith(
+              'dataItems',
+              'dataAccessors_test',
+              60,
+              'timeZoneCalculator_test',
+            );
+        });
+      });
+
       describe('filteredItems', () => {
         it('should invoke filterAppointments correctly', () => {
           const schedulerProps = new SchedulerProps();
           const scheduler = new Scheduler(schedulerProps);
+          const mockAppointmentsConfig = {
+            resources: 'test_resources',
+            startDayHour: 1,
+            endDayHour: 2,
+            cellDurationInMinutes: 3,
+            showAllDayPanel: true,
+            supportAllDayRow: true,
+            firstDayOfWeek: 5,
+            viewType: 'typeView',
+            dateRange: 123,
+            groupCount: 234,
+            loadedResources: 'resources',
+            isVirtualScrolling: true,
+          };
+
+          jest.spyOn(scheduler, 'appointmentsConfig', 'get')
+            .mockReturnValue(mockAppointmentsConfig as any);
+
+          const preparedDataItems = jest.spyOn(scheduler, 'preparedDataItems', 'get')
+            .mockReturnValue('preparedDataItems_test' as any);
+
+          jest.spyOn(scheduler, 'appointmentsConfig', 'get')
+            .mockReturnValue(mockAppointmentsConfig as any);
+
+          jest.spyOn(scheduler, 'timeZoneCalculator', 'get')
+            .mockReturnValue('Test_timeZoneCalculator' as any);
+
+          jest.spyOn(scheduler, 'dataAccessors', 'get')
+            .mockReturnValue('Test_dataAccessors' as any);
+
+          scheduler.workSpaceViewModel = { viewDataProvider: 'Test_viewDataProvider' } as any;
+          scheduler.loadedResources = [];
 
           expect(scheduler.filteredItems)
-            .toBe('Test_filterAppointments');
+            .toBe('Filter_preparedDataItems_test');
 
-          expect(filterAppointments)
+          expect(getFilterStrategy)
             .toHaveBeenCalledTimes(1);
+
+          expect(getFilterStrategy)
+            .toHaveBeenCalledWith(
+              ...Object.values(mockAppointmentsConfig),
+              'Test_timeZoneCalculator',
+              'Test_dataAccessors',
+              'Test_viewDataProvider',
+            );
+
+          expect(preparedDataItems)
+            .toHaveBeenCalledTimes(1);
+        });
+
+        it('should return empty array if appointmentsConfig is not exists', () => {
+          const schedulerProps = new SchedulerProps();
+          const scheduler = new Scheduler(schedulerProps);
+
+          scheduler.workSpaceViewModel = {} as any;
+          scheduler.loadedResources = [];
+
+          expect(scheduler.filteredItems)
+            .toEqual([]);
+
+          expect(getFilterStrategy)
+            .toHaveBeenCalledTimes(0);
         });
       });
 
@@ -1093,13 +1198,14 @@ describe('Scheduler', () => {
 
           jest.spyOn(scheduler, 'appointmentsConfig', 'get')
             .mockReturnValue('appointmentsConfig_test' as any);
+
+          jest.spyOn(scheduler, 'filteredItems', 'get')
+            .mockReturnValue([{}]);
+
           scheduler.workSpaceViewModel = {} as any;
 
           expect(scheduler.appointmentsViewModel)
             .toBe('Test_getAppointmentsViewModel');
-
-          expect(filterAppointments)
-            .toHaveBeenCalledTimes(2);
 
           expect(getAppointmentsModel)
             .toHaveBeenCalledTimes(1);
@@ -1124,9 +1230,6 @@ describe('Scheduler', () => {
           expect(scheduler.appointmentsViewModel)
             .toEqual(defaultAppointmentViewModel);
 
-          expect(filterAppointments)
-            .toHaveBeenCalledTimes(0);
-
           expect(getAppointmentsModel)
             .toHaveBeenCalledTimes(0);
 
@@ -1143,9 +1246,6 @@ describe('Scheduler', () => {
 
           expect(scheduler.appointmentsViewModel)
             .toEqual(defaultAppointmentViewModel);
-
-          expect(filterAppointments)
-            .toHaveBeenCalledTimes(0);
 
           expect(getAppointmentsModel)
             .toHaveBeenCalledTimes(0);
