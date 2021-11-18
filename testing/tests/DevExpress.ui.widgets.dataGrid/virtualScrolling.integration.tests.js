@@ -4658,6 +4658,62 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             assert.deepEqual(dataGrid.getVisibleRows().map(row => row.key), [4, 5], 'visible rows');
         });
     });
+
+    QUnit.test('Store.load should not be called on scroll down when the last row is visible', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 1000000; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const store = new ArrayStore({
+            key: 'id',
+            data: getData()
+        });
+        let callCount = 0;
+        const dataGrid = createDataGrid({
+            dataSource: {
+                key: store.key(),
+                load: function(loadOptions) {
+                    callCount++;
+                    return store.load(loadOptions);
+                },
+                totalCount: function(loadOptions) {
+                    return store.totalCount(loadOptions);
+                }
+            },
+            height: 500,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.navigateToRow(999999);
+        this.clock.tick(300);
+        dataGrid.getScrollable().scrollTo({ top: 16000000 });
+        this.clock.tick(300);
+        callCount = 0;
+        const visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.strictEqual(visibleRows[visibleRows.length - 1].key, 1000000, 'last row is rendered');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 16000000 });
+        this.clock.tick(300);
+
+        assert.strictEqual(callCount, 0, 'load is not called');
+    });
 });
 
 
