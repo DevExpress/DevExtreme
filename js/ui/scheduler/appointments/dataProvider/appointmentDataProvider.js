@@ -1,6 +1,8 @@
+import config from '../../../../core/config';
 import { AppointmentDataSource } from './appointmentDataSource';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
+import combinedRemoteFilter from './remoteFilter';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -75,8 +77,23 @@ export class AppointmentDataProvider {
         return this.getFilterStrategy().filter();
     }
 
+    // TODO rename to the setRemoteFilter
     filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
-        this.getFilterStrategy().filterByDate(min, max, remoteFiltering, dateSerializationFormat);
+        if(!this.dataSource || !remoteFiltering) {
+            return;
+        }
+
+        const dataSourceFilter = this.dataSource.filter();
+        const filter = combinedRemoteFilter(
+            dataSourceFilter,
+            this.dataAccessors,
+            min,
+            max,
+            dateSerializationFormat,
+            config().forceIsoDateParsing
+        );
+
+        this.dataSource.filter(filter);
     }
 
 
