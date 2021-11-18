@@ -154,13 +154,13 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.props.scrollLocationChange?.({
       fullScrollProp: this.fullScrollProp,
       location: -location,
-      needFireScroll: scrollDelta >= 1,
+      needFireScroll: scrollDelta > 0,
     });
   }
 
   @Effect()
   syncScrollLocation(): void {
-    if (this.containerHasSizes) {
+    if (this.props.containerHasSizes) {
       let newScrollLocation = this.props.scrollLocation;
 
       const maxOffsetChanged = Math.abs(this.props.maxOffset - this.prevMaxOffset) > 0;
@@ -177,10 +177,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
         this.moveTo(newScrollLocation);
       }
     }
-  }
-
-  get containerHasSizes(): boolean {
-    return this.props.containerSize > 0 && this.props.contentSize > 0;
   }
 
   get axis(): 'x' | 'y' {
@@ -233,7 +229,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   get thumbStyles(): { [key: string]: string | number } {
     return {
-      [this.dimension]: this.scrollSize || THUMB_MIN_SIZE, // TODO: remove ||
+      [this.dimension]: Math.round(this.scrollSize) || THUMB_MIN_SIZE,
       transform: this.isNeverMode ? 'none' : this.thumbTransform,
     };
   }
