@@ -600,6 +600,32 @@ module('View Data Provider', {
                         'Group 2 cell 1 allDay start date is correct when startDate is out of view'
                     );
                 });
+
+                test('it should return correct cell start date if find by date', function(assert) {
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10), false, true),
+                        new Date(2020, 7, 24),
+                        'Group 2 cell 0 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20), false, true),
+                        new Date(2020, 7, 25),
+                        'Group 2 cell 1 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 24, 0, 11), new Date(2020, 7, 24, 1, 22), false, true),
+                        new Date(2020, 7, 24),
+                        'Group 3 cell 0 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30), false, true),
+                        new Date(2020, 7, 25),
+                        'Group 3 cell 1 start date is correct'
+                    );
+                });
             });
 
             module('Date views', () => {

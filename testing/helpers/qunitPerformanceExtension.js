@@ -1,19 +1,15 @@
 /* eslint-disable no-console */
-import { getOuterWidth } from 'core/utils/size';
 
 (function(root, factory) {
-    if(QUnit.urlParams['nojquery']) {
-        factory(undefined);
-        return;
-    }
+    const useJQuery = !QUnit.urlParams['nojquery'];
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
-            factory(require('jquery'));
+            factory(useJQuery ? require('jquery') : undefined, require('core/utils/size'));
         });
     } else {
-        factory(root.jQuery);
+        factory(useJQuery ? root.jQuery : undefined, DevExpress.require('core/utils/size'));
     }
-}(this, function($) {
+}(this, function($, sizeUtils) {
     function ChromeRemote() {
         const that = this;
         that.callbacks = {};
@@ -202,7 +198,7 @@ import { getOuterWidth } from 'core/utils/size';
             };
 
             if(!$) {
-                [...document.querySelectorAll('body')].forEach(x => getOuterWidth(x, true));
+                [...document.querySelectorAll('body')].forEach(x => sizeUtils.getOuterWidth(x, true));
             } else {
                 $('body').outerWidth(true);
             }
