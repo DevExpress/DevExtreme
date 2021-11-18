@@ -380,4 +380,41 @@ export default class DataGrid extends Widget {
       },
     })();
   }
+
+  isVirtualRowIntersectViewport(): Promise<boolean> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(() => {
+      let result = false;
+      const gridInstance = getGridInstance() as any;
+      const rowsViewElement = gridInstance.getView('rowsView').element();
+      const isElementIntersectRowsView = (element) => {
+        const rowsViewRect = rowsViewElement[0].getBoundingClientRect();
+        const elementRect = element.getBoundingClientRect();
+
+        return (elementRect.top > rowsViewRect.top && elementRect.top < rowsViewRect.bottom)
+          || (elementRect.bottom > rowsViewRect.top && elementRect.bottom < rowsViewRect.bottom)
+          || (elementRect.top <= rowsViewRect.top && elementRect.bottom >= rowsViewRect.bottom);
+      };
+      const virtualRowElements = rowsViewElement.find('.dx-virtual-row');
+
+      // eslint-disable-next-line @typescript-eslint/prefer-for-of
+      for (let i = 0; i < virtualRowElements.length; i += 1) {
+        result = isElementIntersectRowsView(virtualRowElements[i]);
+        if (result) {
+          break;
+        }
+      }
+
+      return result;
+    }, {
+      dependencies: {
+        getGridInstance,
+      },
+    })();
+  }
+
+  getScrollBarThumbTrack(scrollbarPosition: string): Selector {
+    return this.getRowsView().find(`.dx-scrollbar-${scrollbarPosition.toLowerCase()} .dx-scrollable-scroll`);
+  }
 }
