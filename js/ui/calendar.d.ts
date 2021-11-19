@@ -38,7 +38,7 @@ export type InitializedEvent = InitializedEventInfo<dxCalendar>;
 export type OptionChangedEvent = EventInfo<dxCalendar> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxCalendar> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxCalendar, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;
 
 /** @public */
 export type CellTemplateData = {

@@ -38,7 +38,7 @@ import Widget, {
 } from './widget/ui.widget';
 
 /** @public */
-export type ButtonClickEvent = NativeEventInfo<dxDropDownButton> & {
+export type ButtonClickEvent = NativeEventInfo<dxDropDownButton, KeyboardEvent | MouseEvent | PointerEvent> & {
     readonly selectedItem?: any;
 };
 
@@ -52,7 +52,7 @@ export type DisposingEvent = EventInfo<dxDropDownButton>;
 export type InitializedEvent = InitializedEventInfo<dxDropDownButton>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxDropDownButton> & {
+export type ItemClickEvent = NativeEventInfo<dxDropDownButton, KeyboardEvent | MouseEvent | PointerEvent> & {
     readonly itemData?: any;
     readonly itemElement: DxElement;
 };
@@ -61,7 +61,7 @@ export type ItemClickEvent = NativeEventInfo<dxDropDownButton> & {
 export type OptionChangedEvent = EventInfo<dxDropDownButton> & ChangedOptionInfo;
 
 /** @public */
-export type SelectionChangedEvent = NativeEventInfo<dxDropDownButton> & {
+export type SelectionChangedEvent = EventInfo<dxDropDownButton> & {
     readonly item: any;
     readonly previousItem: any;
 };

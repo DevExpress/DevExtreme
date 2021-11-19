@@ -36,16 +36,16 @@ export type DisposingEvent = EventInfo<dxGallery>;
 export type InitializedEvent = InitializedEventInfo<dxGallery>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxGallery> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxGallery, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxGallery> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxGallery, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxGallery> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxGallery, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxGallery> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxGallery> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxGallery> & ChangedOptionInfo;

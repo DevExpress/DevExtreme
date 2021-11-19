@@ -81,7 +81,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @action
      * @public
      */
-    onItemClick?: ((e: NativeEventInfo<T> & ItemInfo) => void);
+    onItemClick?: ((e: NativeEventInfo<T, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -107,7 +107,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @action
      * @public
      */
-    onValueChanged?: ((e: NativeEventInfo<T> & ValueChangedInfo) => void);
+    onValueChanged?: ((e: NativeEventInfo<T, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false
