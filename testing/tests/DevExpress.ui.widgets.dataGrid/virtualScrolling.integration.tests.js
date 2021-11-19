@@ -3055,7 +3055,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const visibleRows = dataGrid.getVisibleRows();
 
         assert.ok(topVisibleRowData.id > 1, 'top visible row data is not first');
-        assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id > 3, 'rows in viewport are rendered');
+        assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id >= 3, 'rows in viewport are rendered');
     });
 
     // T750279
