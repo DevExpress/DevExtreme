@@ -75,7 +75,7 @@ const TextEditorBase = Editor.inherit({
 
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
-        this._$labelContainerElement = null;
+        this._labelContainerElement = null;
 
         this.callBase.apply(this, arguments);
     },
@@ -447,10 +447,10 @@ const TextEditorBase = Editor.inherit({
 
 
     _cleanLabelObservable: function() {
-        if(this._$labelContainerElement) {
-            resizeObserverSingleton.unobserve(this._$labelContainerElement);
+        if(this._labelContainerElement) {
+            resizeObserverSingleton.unobserve(this._labelContainerElement);
 
-            this._$labelContainerElement = null;
+            this._labelContainerElement = null;
         }
     },
 
@@ -476,7 +476,7 @@ const TextEditorBase = Editor.inherit({
     _renderLabel: function() {
         this._cleanLabelObservable();
 
-        this._$labelContainerElement = $(this._getLabelContainer()).get(0);
+        this._labelContainerElement = $(this._getLabelContainer()).get(0);
 
         const { label, labelMode, labelMark } = this.option();
 
@@ -492,8 +492,8 @@ const TextEditorBase = Editor.inherit({
 
         this._label = new TextEditorLabelCreator(labelConfig);
 
-        if(this._$labelContainerElement) {
-            resizeObserverSingleton.observe(this._$labelContainerElement, this._updateLabelWidth.bind(this));
+        if(this._labelContainerElement) {
+            resizeObserverSingleton.observe(this._labelContainerElement, this._updateLabelWidth.bind(this));
         }
     },
 
