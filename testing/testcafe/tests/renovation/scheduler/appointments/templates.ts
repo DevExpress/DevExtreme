@@ -61,16 +61,13 @@ fixture('Renovated scheduler - Appointment templates');
 ].forEach((currentView) => {
   test(`it should be rendered correctly if view=${currentView}`,
     async (t, { screenshotComparerOptions }) => {
-      const scheduler = new Scheduler(SCHEDULER_SELECTOR);
-      const appointmentCount = scheduler.getAppointmentCount();
+      const { element } = new Scheduler(SCHEDULER_SELECTOR);
 
       await t
-        .expect(appointmentCount)
-        .eql(4)
         .expect(await compareScreenshot(
           t,
           `scheduler_appointment_template_${currentView}-view.png`,
-          scheduler.element,
+          element,
           screenshotComparerOptions,
         ))
         .ok();
