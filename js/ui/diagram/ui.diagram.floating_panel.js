@@ -126,7 +126,6 @@ class DiagramFloatingPanel extends DiagramPanel {
             showCloseButton: true,
             copyRootClassesToWrapper: true,
             _ignoreCopyRootClassesToWrapperDeprecation: true,
-            propagateOutsideClick: true,
             onContentReady: function() {
                 that._renderPopupContent(that._popup.content());
             },
