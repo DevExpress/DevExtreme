@@ -45,6 +45,15 @@ QUnit.module('Options', {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.ZoomLevel).execute(1.5);
         assert.equal(this.instance.option('zoomLevel'), 1.5);
         assert.ok(this.onOptionChanged.called);
+
+        // T1044759
+        this.instance.repaint();
+        this.instance.option('zoomLevel', 1.2);
+        assert.equal(this.instance.option('zoomLevel'), 1.2);
+        assert.ok(this.onOptionChanged.called);
+        this.instance.fitToWidth();
+        assert.equal(this.instance.option('zoomLevel'), 1);
+        assert.ok(this.onOptionChanged.called);
     });
     test('should change zoomLevel object property', function(assert) {
         assert.equal(this.instance._diagramInstance.settings.zoomLevel, 1);
