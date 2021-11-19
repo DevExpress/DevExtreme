@@ -383,6 +383,7 @@ class Diagram extends Widget {
             },
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
+        this._toolbox._popup.option('propagateOutsideClick', !this.option('fullScreen'));
         this._toolboxResizeCallback = () => {
             const bounds = this._getToolboxBounds($parent, isServerSide);
             this._toolbox.option('height', bounds.height);
@@ -1203,6 +1204,7 @@ class Diagram extends Widget {
         this._processDiagramResize();
         if(this._toolbox) {
             this._toolbox.repaint();
+            this._toolbox._popup.option('propagateOutsideClick', !fullScreen);
         }
         if(this._propertiesPanel) {
             this._propertiesPanel.repaint();
