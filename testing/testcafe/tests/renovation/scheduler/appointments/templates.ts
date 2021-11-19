@@ -53,7 +53,7 @@ const resources = [
   },
 ];
 
-fixture.skip('Renovated scheduler - Appointment templates');
+fixture('Renovated scheduler - Appointment templates');
 
 [
   'week',
@@ -90,8 +90,8 @@ fixture.skip('Renovated scheduler - Appointment templates');
         groups: ['groupId'],
         resources,
         showCurrentTimeIndicator: false,
-        appointmentTemplate: () => '<span>Test-Appt</span>',
-        appointmentCollectorTemplate: () => '<span>Test</span>',
+        appointmentTemplate: () => 'Test-Appt',
+        appointmentCollectorTemplate: () => 'Test',
       });
     },
   );

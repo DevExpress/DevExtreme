@@ -1395,7 +1395,7 @@ describe('Scheduler', () => {
       });
 
       describe('Appointment templates', () => {
-        it('should return templates correctly', () => {
+        it('should return templates', () => {
           const templates = {
             appointmentTemplate: jest.fn(),
             appointmentCollectorTemplate: jest.fn(),
@@ -1410,6 +1410,33 @@ describe('Scheduler', () => {
             .toBe(templates.appointmentTemplate);
           expect(scheduler.appointmentCollectorTemplate)
             .toBe(templates.appointmentCollectorTemplate);
+        });
+
+        it('should return templates from view', () => {
+          const templates = {
+            appointmentTemplate: jest.fn(),
+            appointmentCollectorTemplate: jest.fn(),
+          };
+
+          const viewTemplates = {
+            appointmentTemplate: jest.fn(),
+            appointmentCollectorTemplate: jest.fn(),
+          };
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            views: [{
+              type: 'day',
+              ...viewTemplates,
+            }],
+            currentView: 'day',
+            ...templates,
+          });
+
+          expect(scheduler.appointmentTemplate)
+            .toBe(viewTemplates.appointmentTemplate);
+          expect(scheduler.appointmentCollectorTemplate)
+            .toBe(viewTemplates.appointmentCollectorTemplate);
         });
       });
     });

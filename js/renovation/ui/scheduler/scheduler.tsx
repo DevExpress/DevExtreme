@@ -467,11 +467,11 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get appointmentTemplate(): JSXTemplate<AppointmentTemplateProps> | undefined {
-    return this.props.appointmentTemplate as JSXTemplate<AppointmentTemplateProps>;
+    return this.currentViewConfig.appointmentTemplate;
   }
 
   get appointmentCollectorTemplate(): JSXTemplate<OverflowIndicatorTemplateProps> | undefined {
-    return this.props.appointmentCollectorTemplate as JSXTemplate<OverflowIndicatorTemplateProps>;
+    return this.currentViewConfig.appointmentCollectorTemplate;
   }
 
   @Method()
