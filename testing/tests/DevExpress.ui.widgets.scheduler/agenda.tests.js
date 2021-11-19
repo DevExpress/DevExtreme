@@ -194,4 +194,17 @@ module('Agenda', {}, () => {
 
         assert.notOk(cells.eq(2).hasClass(HOVER_CLASS), 'onHover event does not work');
     });
+
+    test('Should return correct DOM meta data', function(assert) {
+        const instance = createInstance();
+
+        assert.deepEqual(
+            instance.getDOMElementsMetaData(),
+            {
+                dateTableCellsMeta: [[{}]],
+                allDayPanelCellsMeta: [{}],
+            },
+            'Correct DOM meta data',
+        );
+    });
 });
