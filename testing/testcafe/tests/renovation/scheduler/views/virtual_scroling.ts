@@ -171,6 +171,7 @@ const resources = [{
         }],
         showCurrentTimeIndicator: false,
         scrolling: { mode: 'virtual' },
+        height: 600,
       });
     },
   );
