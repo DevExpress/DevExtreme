@@ -34,8 +34,6 @@ export interface ComponentOptions<TDisposingEvent, TInitializedEvent, TOptionCha
 }
 /**
  * @docid Component
- * @module core/component
- * @export Component
  * @namespace DevExpress
  * @hidden
  * @wrappable
@@ -71,7 +69,6 @@ export class Component<TProperties> {
   /**
    * @docid
    * @publicName off(eventName, eventHandler)
-   * @param2 eventHandler:function
    * @return this
    * @public
    */
@@ -79,7 +76,6 @@ export class Component<TProperties> {
   /**
    * @docid
    * @publicName on(eventName, eventHandler)
-   * @param2 eventHandler:function
    * @return this
    * @public
    */
