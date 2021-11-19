@@ -4,7 +4,9 @@ import {
 } from '../core/element';
 
 import {
+    ChangedOptionInfo,
     EventInfo,
+    InitializedEventInfo,
     NativeEventInfo,
 } from '../events/index';
 
@@ -25,6 +27,15 @@ export interface ComponentDisabledDate<T> {
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxCalendar>;
+
+/** @public */
+export type DisposingEvent = EventInfo<dxCalendar>;
+
+/** @public */
+export type InitializedEvent = InitializedEventInfo<dxCalendar>;
+
+/** @public */
+export type OptionChangedEvent = EventInfo<dxCalendar> & ChangedOptionInfo;
 
 /** @public */
 export type ValueChangedEvent = NativeEventInfo<dxCalendar, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | Event> & ValueChangedInfo;

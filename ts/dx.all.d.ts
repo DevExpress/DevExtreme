@@ -651,27 +651,23 @@ declare module DevExpress {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  export interface ComponentOptions<T = Component> {
+  export interface ComponentOptions<
+    TDisposingEvent = any,
+    TInitializedEvent = any,
+    TOptionChangedEvent = any
+  > {
     /**
      * [descr:ComponentOptions.onDisposing]
      */
-    onDisposing?: (e: { component: T }) => void;
+    onDisposing?: (e: TDisposingEvent) => void;
     /**
      * [descr:ComponentOptions.onInitialized]
      */
-    onInitialized?: (e: {
-      component?: T;
-      element?: DevExpress.core.DxElement;
-    }) => void;
+    onInitialized?: (e: TInitializedEvent) => void;
     /**
      * [descr:ComponentOptions.onOptionChanged]
      */
-    onOptionChanged?: (e: {
-      component?: T;
-      name?: string;
-      fullName?: string;
-      value?: any;
-    }) => void;
+    onOptionChanged?: (e: TOptionChangedEvent) => void;
   }
   /**
    * [descr:config()]
@@ -817,11 +813,22 @@ declare module DevExpress {
     _invalidate(): void;
     _refresh(): void;
   }
+  module DOMComponent {
+    /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
+     */
+    type OptionChangedEventInfo<T> = DevExpress.events.EventInfo<T> &
+      DevExpress.events.ChangedOptionInfo;
+  }
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface DOMComponentOptions<T = DOMComponent>
-    extends ComponentOptions<T> {
+    extends ComponentOptions<
+      DevExpress.events.EventInfo<T>,
+      DevExpress.events.InitializedEventInfo<T>,
+      DevExpress.DOMComponent.OptionChangedEventInfo<T>
+    > {
     /**
      * [descr:DOMComponentOptions.bindingOptions]
      */
@@ -837,22 +844,13 @@ declare module DevExpress {
     /**
      * [descr:DOMComponentOptions.onDisposing]
      */
-    onDisposing?: (e: {
-      component?: T;
-      element?: DevExpress.core.DxElement;
-      model?: any;
-    }) => void;
+    onDisposing?: (e: DevExpress.events.EventInfo<T>) => void;
     /**
      * [descr:DOMComponentOptions.onOptionChanged]
      */
-    onOptionChanged?: (e: {
-      component?: T;
-      element?: DevExpress.core.DxElement;
-      model?: any;
-      name?: string;
-      fullName?: string;
-      value?: any;
-    }) => void;
+    onOptionChanged?: (
+      e: DevExpress.DOMComponent.OptionChangedEventInfo<T>
+    ) => void;
     /**
      * [descr:DOMComponentOptions.rtlEnabled]
      */
@@ -3610,7 +3608,7 @@ declare module DevExpress.fileManagement {
 }
 declare module DevExpress.localization {
   /**
-   * [descr:localization.formatDate(value, format)]
+   * [descr:localization.formatDate(value, DevExpress.ui.format)]
    */
   export function formatDate(value: Date, format: DevExpress.ui.format): string;
   /**
@@ -3618,7 +3616,7 @@ declare module DevExpress.localization {
    */
   export function formatMessage(key: string, ...values: Array<string>): string;
   /**
-   * [descr:localization.formatNumber(value, format)]
+   * [descr:localization.formatNumber(value, DevExpress.ui.format)]
    */
   export function formatNumber(
     value: number,
@@ -3637,11 +3635,11 @@ declare module DevExpress.localization {
    */
   export function locale(locale: string): void;
   /**
-   * [descr:localization.parseDate(text, format)]
+   * [descr:localization.parseDate(text, DevExpress.ui.format)]
    */
   export function parseDate(text: string, format: DevExpress.ui.format): Date;
   /**
-   * [descr:localization.parseNumber(text, format)]
+   * [descr:localization.parseNumber(text, DevExpress.ui.format)]
    */
   export function parseNumber(
     text: string,
@@ -4818,6 +4816,11 @@ declare module DevExpress.ui {
     }
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxCalendar>;
     export type DisabledDate = ComponentDisabledDate<dxCalendar>;
+    export type DisposingEvent = DevExpress.events.EventInfo<dxCalendar>;
+    export type InitializedEvent =
+      DevExpress.events.InitializedEventInfo<dxCalendar>;
+    export type OptionChangedEvent = DevExpress.events.EventInfo<dxCalendar> &
+      DevExpress.events.ChangedOptionInfo;
     export type Properties = dxCalendarOptions;
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
       dxCalendar,
@@ -14333,7 +14336,7 @@ declare module DevExpress.ui {
     > &
       DevExpress.ui.dxList.ScrollInfo;
     export type SelectionChangedEvent = DevExpress.events.EventInfo<dxLookup> &
-      DevExpress.ui.CollectionWidget.SelectionChangedInfo;
+      DevExpress.ui.dxDropDownList.SelectionChangedInfo;
     export type TitleRenderedEvent = DevExpress.events.EventInfo<dxLookup> &
       DevExpress.ui.dxPopup.TitleRenderedInfo;
     export type ValueChangedEvent = DevExpress.events.NativeEventInfo<
@@ -16248,7 +16251,7 @@ declare module DevExpress.ui {
     export type Properties = dxPopoverOptions;
     export type ShowingEvent = DevExpress.events.EventInfo<dxPopover>;
     export type ShownEvent = DevExpress.events.EventInfo<dxPopover>;
-    export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopup> &
+    export type TitleRenderedEvent = DevExpress.events.EventInfo<dxPopover> &
       DevExpress.ui.dxPopup.TitleRenderedInfo;
   }
   /**
@@ -16441,7 +16444,10 @@ declare module DevExpress.ui {
     /**
      * [descr:dxPopupOptions.onTitleRendered]
      */
-    onTitleRendered?: (e: DevExpress.ui.dxPopup.TitleRenderedEvent) => void;
+    onTitleRendered?: (
+      e: DevExpress.events.EventInfo<T> &
+        DevExpress.ui.dxPopup.TitleRenderedInfo
+    ) => void;
     /**
      * [descr:dxPopupOptions.position]
      */
@@ -18152,7 +18158,8 @@ declare module DevExpress.ui {
      * [descr:dxSelectBoxOptions.onCustomItemCreating]
      */
     onCustomItemCreating?: (
-      e: DevExpress.ui.dxSelectBox.CustomItemCreatingEvent
+      e: DevExpress.events.EventInfo<T> &
+        DevExpress.ui.dxSelectBox.CustomItemCreatingInfo
     ) => void;
     /**
      * [descr:dxSelectBoxOptions.openOnFieldClick]
