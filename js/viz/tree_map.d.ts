@@ -616,36 +616,30 @@ export interface dxTreeMapNode {
     /**
      * @docid
      * @publicName getAllChildren()
-     * @return Array<dxTreeMapNode>
      * @public
      */
     getAllChildren(): Array<dxTreeMapNode>;
     /**
      * @docid
      * @publicName getAllNodes()
-     * @return Array<dxTreeMapNode>
      * @public
      */
     getAllNodes(): Array<dxTreeMapNode>;
     /**
      * @docid
      * @publicName getChild(index)
-     * @param1 index:number
-     * @return dxTreeMapNode
      * @public
      */
     getChild(index: number): dxTreeMapNode;
     /**
      * @docid
      * @publicName getChildrenCount()
-     * @return number
      * @public
      */
     getChildrenCount(): number;
     /**
      * @docid
      * @publicName getParent()
-     * @return dxTreeMapNode
      * @public
      */
     getParent(): dxTreeMapNode;
@@ -657,42 +651,36 @@ export interface dxTreeMapNode {
     /**
      * @docid
      * @publicName isActive()
-     * @return boolean
      * @public
      */
     isActive(): boolean;
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;
     /**
      * @docid
      * @publicName isLeaf()
-     * @return boolean
      * @public
      */
     isLeaf(): boolean;
     /**
      * @docid
      * @publicName isSelected()
-     * @return boolean
      * @public
      */
     isSelected(): boolean;
     /**
      * @docid
      * @publicName label()
-     * @return string
      * @public
      */
     label(): string;
     /**
      * @docid
      * @publicName label(label)
-     * @param1 label:string
      * @public
      */
     label(label: string): void;
@@ -710,7 +698,6 @@ export interface dxTreeMapNode {
     /**
      * @docid
      * @publicName select(state)
-     * @param1 state:boolean
      * @public
      */
     select(state: boolean): void;
@@ -723,7 +710,6 @@ export interface dxTreeMapNode {
     /**
      * @docid
      * @publicName value()
-     * @return number
      * @public
      */
     value(): number;

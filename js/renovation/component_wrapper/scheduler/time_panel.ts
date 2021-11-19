@@ -1,13 +1,13 @@
 /* eslint-disable no-underscore-dangle */
-import Component from './common/component';
+import Component from '../common/component';
 
-export default class HeaderPanel extends Component {
+export class TimePanel extends Component {
   _setOptionsByReference(): void {
     super._setOptionsByReference();
 
     this._optionsByReference = {
       ...this._optionsByReference,
-      dateHeaderData: true,
+      timeCellTemplate: true,
     };
   }
 }

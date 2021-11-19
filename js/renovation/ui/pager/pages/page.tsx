@@ -19,9 +19,15 @@ export const viewFunction = ({
   </LightButton>
 );
 
+// for angular type inference (onClick type in angular changes to EventEmitter)
+export interface PagePropsInterface {
+  index: number;
+  onClick?: EventCallback;
+  selected: boolean;
+}
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
-export class PageProps {
+export class PageProps implements PagePropsInterface {
   @OneWay() index = 0;
 
   /* istanbul ignore next: EventCallback cannot be tested */

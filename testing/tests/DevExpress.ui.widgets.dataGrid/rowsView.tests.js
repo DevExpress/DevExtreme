@@ -673,6 +673,29 @@ QUnit.module('Rows view', {
         assert.equal(getNormalizeMarkup(cells.eq(0)), 'test1a<br>test<span class=' + searchTextClass + '>1b</span>', 'cell 0');
     });
 
+    QUnit.test('Highlight searchText in bold text node if encodeHtml is false (T1040425)', function(assert) {
+        this.items = [
+            { data: { name: '<b>Super</b>Super' }, values: ['<b>Super</b>Super'], rowType: 'data', dataIndex: 0 },
+        ];
+        const columns = [
+            { allowFiltering: true, dataType: 'string', encodeHtml: false }
+        ];
+        const dataController = new MockDataController({ items: this.items });
+        const rowsView = this.createRowsView(this.items, dataController, columns);
+        const $testElement = $('#container');
+        const searchTextClass = 'dx-datagrid-search-text';
+
+        // act
+        this.options.searchPanel = { highlightSearchText: true, text: 'p' };
+
+        rowsView.render($testElement);
+        const cells = $testElement.find('td');
+
+        // assert
+        const searchHtml = '<span class=' + searchTextClass + '>p</span>';
+        assert.equal(getNormalizeMarkup(cells.eq(0)), `<b>Su${searchHtml}er</b>Su${searchHtml}er`, 'cell 0');
+    });
+
     function getNormalizeMarkup($element) {
         const quoteRE = new RegExp('"', 'g');
         const spanRE = new RegExp('span', 'gi');

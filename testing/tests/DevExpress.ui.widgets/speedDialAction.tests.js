@@ -2,6 +2,7 @@ import $ from 'jquery';
 import config from 'core/config';
 import fx from 'animation/fx';
 import SpeedDialItem from 'ui/speed_dial_action/speed_dial_item';
+import { logger } from 'core/utils/console';
 
 import 'ui/speed_dial_action';
 import 'generic_light.css!';
@@ -1060,6 +1061,40 @@ QUnit.module('T959764 (multiple actions)', {
         $fabMainContent.closest('.dx-overlay-shader').trigger(event);
 
         assert.equal(preventDefaultStub.callCount, 1, 'there is peventDefault in outsideClickHandler when shading is true');
+    });
+});
+
+
+QUnit.module('T1033961 (elementAttr warning)', {
+    beforeEach: function() {
+        fx.off = true;
+    },
+
+    afterEach: function() {
+        fx.off = false;
+    },
+}, () => {
+    QUnit.test('check elementAttr warning  when one action', function(assert) {
+
+        sinon.stub(logger, 'warn');
+
+        $('#fab-one').dxSpeedDialAction({ icon: 'add' });
+
+        assert.ok(logger.warn.notCalled, 'no warnings');
+
+        logger.warn.restore();
+    });
+
+    QUnit.test('check elementAttr warning when multiple actions', function(assert) {
+
+        sinon.stub(logger, 'warn');
+
+        $('#fab-one').dxSpeedDialAction({ icon: 'add' });
+        $('#fab-two').dxSpeedDialAction({ icon: 'remove' });
+
+        assert.ok(logger.warn.notCalled, 'no warnings');
+
+        logger.warn.restore();
     });
 });
 

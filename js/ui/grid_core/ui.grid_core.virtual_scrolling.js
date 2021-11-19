@@ -293,7 +293,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             const loadPageCount = this.loadPageCount();
 
             options.loadPageCount = loadPageCount;
-            if(this.option(LEGACY_SCROLLING_MODE) === false && loadPageCount > 1) {
+            if(!options.isCustomLoading && this.option(LEGACY_SCROLLING_MODE) === false && loadPageCount > 1) {
                 options.storeLoadOptions.take = loadPageCount * this.pageSize();
             }
             this.callBase.apply(this, arguments);

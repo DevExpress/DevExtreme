@@ -1,5 +1,5 @@
 import type { Appointment } from '../../../../ui/scheduler';
-import { DataAccessorType } from '../types';
+import { AppointmentDataItem, DataAccessorType } from '../types';
 import { replaceWrongEndDate } from '../../../../ui/scheduler/appointments/dataProvider/utils';
 import { createAppointmentAdapter } from '../../../../ui/scheduler/appointmentAdapter';
 import { TimeZoneCalculator } from '../timeZoneCalculator/utils';
@@ -7,18 +7,7 @@ import { isDefined } from '../../../../core/utils/type';
 
 const RECURRENCE_FREQ = 'freq';
 
-interface AppointmentDataItem {
-  startDate: Date;
-  endDate: Date;
-  recurrenceRule: string;
-  recurrenceException: string;
-  hasRecurrenceRule: boolean;
-  allDay: boolean;
-  visible: boolean;
-  rawAppointment: Appointment;
-}
-
-const getPreparedDataItems = (
+export const getPreparedDataItems = (
   dataItems: Appointment[] | undefined,
   dataAccessors: DataAccessorType,
   cellDurationInMinutes: number,
@@ -59,5 +48,3 @@ const getPreparedDataItems = (
 
   return result;
 };
-
-export default getPreparedDataItems;

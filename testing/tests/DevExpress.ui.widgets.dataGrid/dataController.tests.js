@@ -201,6 +201,64 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.ok(lastArgs.items[0].values);
     });
 
+    QUnit.test('The pushed callback on initialize', function(assert) {
+        // arrange
+        const pushedSpy = sinon.spy();
+        const array = [
+            { id: 0, name: 'Alex', phone: '55-55-55' },
+            { id: 1, name: 'Dan', phone: '98-75-21' }
+        ];
+        const dataSource = createDataSource(array, { key: 'id' });
+
+        this.dataController.pushed.add(pushedSpy);
+
+        // assert
+        assert.strictEqual(pushedSpy.callCount, 0, 'the pushed callback was not called');
+
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        // act
+        dataSource.store().push([{ type: 'remove', key: 1 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(pushedSpy.callCount, 1, 'the pushed callback was called only once');
+        assert.deepEqual(pushedSpy.getCall(0).args[0], [{ type: 'remove', key: 1 }], 'the pushed callback args');
+    });
+
+    QUnit.test('The handler of the dataSource pushed callback should be removed after disposing dataSource', function(assert) {
+        // arrange
+        const dataPushedHandlerSpy = sinon.spy();
+        const array = [
+            { id: 0, name: 'Alex', phone: '55-55-55' },
+            { id: 1, name: 'Dan', phone: '98-75-21' }
+        ];
+        let dataSource = createDataSource(array, { key: 'id' });
+
+        this.dataController._dataPushedHandler = dataPushedHandlerSpy;
+        this.dataController.setDataSource(dataSource);
+        dataSource = this.dataController.dataSource();
+        dataSource.load();
+
+        // assert
+        assert.ok(dataSource.pushed.has(dataPushedHandlerSpy), 'the pushed callback has handler');
+        assert.strictEqual(dataPushedHandlerSpy.callCount, 0);
+
+        // act
+        dataSource.store().push([{ type: 'remove', key: 1 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataPushedHandlerSpy.callCount, 1, 'the handler of the pushed callback was called only once');
+
+        // act
+        this.dataController.dispose();
+
+        // assert
+        assert.notOk(dataSource.pushed.has(dataPushedHandlerSpy), 'the pushed callback has no handler');
+    });
+
     // B255430
     QUnit.test('Call changed after all columnsChanged', function(assert) {
     // arrange
@@ -954,6 +1012,37 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             assert.equal(pageIndex, 1);
         });
         assert.equal(count, 1, 'Count');
+    });
+
+    QUnit.test('Get page index by group key if there is no groouping and remoteOperations is true and data (T1042661)', function(assert) {
+        // arrange
+        let count = 0;
+        const loadingSpy = sinon.spy();
+        const dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Dan', age: 25 },
+            { team: 'internal', name: 'Bob', age: 20 },
+            { team: 'public', name: 'Alice', age: 19 }],
+        { key: 'name' },
+        { pageSize: 1, asyncLoadEnabled: false });
+
+        this.applyOptions({
+            remoteOperations: true,
+            dataSource: dataSource
+        });
+
+        dataSource.store().on('loading', loadingSpy);
+
+        // act
+        this.dataController._refreshDataSource();
+        assert.equal(loadingSpy.callCount, 1, 'loading count');
+
+        this.dataController.getPageIndexByKey(['Alice']).done(function(pageIndex) {
+            ++count;
+            assert.equal(pageIndex, -1);
+        });
+        assert.equal(count, 1, 'Count');
+        assert.equal(loadingSpy.callCount, 1, 'loading count is not changed');
     });
 
     QUnit.test('Get page index by composite key', function(assert) {
@@ -5402,6 +5491,27 @@ QUnit.module('Virtual scrolling preload', {
         assert.deepEqual(loadedItems[0].id, 1, 'first loaded item');
         assert.equal(visibleRows.length, 16, 'visible items count');
         assert.deepEqual(visibleRows[0].data.id, 50, 'first visible item');
+    });
+
+    QUnit.test('New mode. selectAll after scrolling should select all items (T1044995)', function(assert) {
+        // act
+        this.dataController.setViewportPosition(10);
+        this.selectAll();
+
+        // assert
+        assert.deepEqual(this.getSelectedRowKeys().length, 100, 'all items are selected');
+    });
+
+    QUnit.test('New mode. loadAll after scrolling should return all items (T1045649)', function(assert) {
+        // act
+        this.dataController.setViewportPosition(10);
+        let loadedItems;
+        this.dataController.loadAll().done(items => {
+            loadedItems = items;
+        });
+
+        // assert
+        assert.deepEqual(loadedItems.length, 100, 'all items are selected');
     });
 });
 

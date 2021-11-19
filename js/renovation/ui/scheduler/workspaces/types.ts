@@ -1,4 +1,5 @@
 import type { dxSchedulerScrolling } from '../../../../ui/scheduler';
+import { ScrollOffset } from '../../scroll_view/common/types';
 import { BaseTemplateProps, GroupOrientation, ViewType } from '../types';
 import { GetDateForHeaderText } from '../view_model/to_test/views/types';
 
@@ -248,13 +249,15 @@ interface ViewDataMapGenerationOptions {
   startCellIndex: number;
   isVerticalGrouping: boolean;
   isAllDayPanelVisible: boolean;
+  cellCount?: number;
+  rowCount?: number;
 }
 
 interface ViewDataGenerationOptions {
-  topVirtualRowHeight: number;
-  bottomVirtualRowHeight: number;
-  leftVirtualCellWidth: number;
-  rightVirtualCellWidth: number;
+  topVirtualRowHeight?: number;
+  bottomVirtualRowHeight?: number;
+  leftVirtualCellWidth?: number;
+  rightVirtualCellWidth?: number;
   startRowIndex: number;
   startCellIndex: number;
   isProvideVirtualCellsWidth: boolean;
@@ -313,7 +316,7 @@ interface CompleteDateHeaderMapGenerationOptions {
 
 interface DateHeaderDataGenerationOptions {
   isGenerateWeekDaysHeaderData: boolean;
-  cellWidth: number;
+  cellWidth?: number;
   isProvideVirtualCellsWidth: boolean;
   startDayHour: number;
   endDayHour: number;
@@ -357,8 +360,8 @@ interface CompleteTimePanelMapGenerationOptions {
 interface TimePanelDataGenerationOptions {
   startRowIndex: number;
   rowCount?: number;
-  topVirtualRowHeight: number;
-  bottomVirtualRowHeight: number;
+  topVirtualRowHeight?: number;
+  bottomVirtualRowHeight?: number;
   isGroupedAllDayPanel: boolean;
   isVerticalGrouping: boolean;
   isAllDayPanelVisible: boolean;
@@ -428,4 +431,46 @@ export interface ViewMetaData {
 export interface TableWidthWorkSpaceConfig extends CountGenerationConfig {
   groups: Group[];
   groupOrientation: GroupOrientation;
+}
+
+export interface VirtualScrollingState {
+  startCellIndex?: number;
+  startRowIndex?: number;
+  topVirtualRowHeight?: number;
+  bottomVirtualRowHeight?: number;
+  rowCount?: number;
+  leftVirtualCellWidth?: number;
+  rightVirtualCellWidth?: number;
+  cellCount?: number;
+  cellWidth?: number;
+}
+
+export interface CorrectedVirtualScrollingState extends VirtualScrollingState {
+  startCellIndex: number;
+  startRowIndex: number;
+}
+
+export interface VirtualScrollingOptions {
+  getCellHeight: () => number;
+  getCellWidth: () => number;
+  getCellMinWidth: () => number;
+  isRTL: () => boolean;
+  getSchedulerHeight: () => (number | string | (() => string | number) | undefined);
+  getSchedulerWidth: () => (number | string | (() => string | number) | undefined);
+  getViewHeight: () => number;
+  getViewWidth: () => number;
+  getScrolling: () => dxSchedulerScrolling;
+  getScrollableOuterWidth: () => number;
+  getGroupCount: () => number;
+  isVerticalGrouping: () => boolean;
+  getTotalRowCount: () => number;
+  getTotalCellCount: () => number;
+}
+
+export interface VirtualScrollingDispatcherType {
+  setViewOptions: (options: VirtualScrollingOptions) => void;
+  createVirtualScrolling: () => void;
+  getRenderState: () => VirtualScrollingState;
+  updateDimensions: (isForce?: boolean) => void;
+  handleOnScrollEvent: (scrollOffset: ScrollOffset) => void;
 }

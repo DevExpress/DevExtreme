@@ -38,6 +38,8 @@ export class DateGeneratorBaseStrategy {
 
     get loadedResources() { return this.options.loadedResources; }
 
+    get isDateAppointment() { return !isDateAndTimeView(this.viewType) && this.appointmentTakesAllDay; }
+
     getIntervalDuration() {
         return this.appointmentTakesAllDay
             ? this.options.allDayIntervalDuration
@@ -419,8 +421,9 @@ export class DateGeneratorBaseStrategy {
             resultDate = dateUtils.normalizeDate(appointment.startDate, startDate);
         }
 
-
-        return dateUtils.roundDateByStartDayHour(resultDate, startDayHour);
+        return !this.isDateAppointment
+            ? dateUtils.roundDateByStartDayHour(resultDate, startDayHour)
+            : resultDate;
     }
 
     _getAppointmentFirstViewDate(appointment) {
@@ -430,7 +433,13 @@ export class DateGeneratorBaseStrategy {
             endDate
         } = appointment;
 
-        return this.viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, this.isAllDayRowAppointment);
+        return this.viewDataProvider.findGroupCellStartDate(
+            groupIndex,
+            startDate,
+            endDate,
+            this.isAllDayRowAppointment,
+            this.isDateAppointment
+        );
     }
 
     _getGroupIndices(appointmentResources) {

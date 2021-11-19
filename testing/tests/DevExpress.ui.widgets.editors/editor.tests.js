@@ -474,7 +474,7 @@ QUnit.module('validation', {
                         this.reinitEditor({
                             isValid: false,
                             validationError: {
-                                message: ''
+                                message: 'Message'
                             },
                             validationMessageOffset: offset
                         });

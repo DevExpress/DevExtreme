@@ -1,16 +1,17 @@
+import type { dxSchedulerScrolling } from '../../../../../ui/scheduler';
 import dateUtils from '../../../../../core/utils/date';
 import { getGroupCount } from '../../../../../ui/scheduler/resources/utils';
 import { GroupOrientation } from '../../types';
 import { GetDateForHeaderText } from '../../view_model/to_test/views/types';
 import {
-  Group, TableWidthWorkSpaceConfig, ViewDataProviderType,
+  Group, TableWidthWorkSpaceConfig, ViewDataProviderType, VirtualScrollingOptions,
 } from '../types';
 import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 
 const DAY_MS = dateUtils.dateToMilliseconds('day');
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');
 
-const DATE_TABLE_MIN_CELL_WIDTH = 75;
+export const DATE_TABLE_MIN_CELL_WIDTH = 75;
 
 export const getTotalRowCount = (
   rowCount: number,
@@ -85,7 +86,7 @@ export const getDateTableWidth = (
   viewDataProvider: ViewDataProviderType,
   workSpaceConfig: TableWidthWorkSpaceConfig,
 ): number => {
-  const dateTableCell = dateTable.querySelector('td');
+  const dateTableCell = dateTable.querySelector('td:not(.dx-scheduler-virtual-cell)');
 
   // eslint-disable-next-line rulesdir/no-non-null-assertion
   let cellWidth = dateTableCell!.getBoundingClientRect().width;
@@ -103,3 +104,37 @@ export const getDateTableWidth = (
 
   return scrollableWidth < minTablesWidth ? minTablesWidth : scrollableWidth;
 };
+
+export const createVirtualScrollingOptions = (
+  options: {
+    cellHeight: number;
+    cellWidth: number;
+    schedulerHeight?: number | string | (() => number | string);
+    schedulerWidth?: number | string | (() => number | string);
+    viewHeight: number;
+    viewWidth: number;
+    scrolling: dxSchedulerScrolling;
+    scrollableWidth: number;
+    groups: Group[];
+    isVerticalGrouping: boolean;
+    completeRowCount: number;
+    completeColumnCount: number;
+  },
+): VirtualScrollingOptions => ({
+  getCellHeight: (): number => options.cellHeight,
+  getCellWidth: (): number => options.cellWidth,
+  getCellMinWidth: (): number => DATE_TABLE_MIN_CELL_WIDTH,
+  isRTL: (): boolean => false, // TODO
+  getSchedulerHeight: ():
+  number | string | (() => number | string) | undefined => options.schedulerHeight,
+  getSchedulerWidth: ():
+  number | string | (() => number | string) | undefined => options.schedulerWidth,
+  getViewHeight: (): number => options.viewHeight,
+  getViewWidth: (): number => options.viewWidth,
+  getScrolling: (): dxSchedulerScrolling => options.scrolling,
+  getScrollableOuterWidth: (): number => options.scrollableWidth,
+  getGroupCount: (): number => getGroupCount(options.groups),
+  isVerticalGrouping: (): boolean => options.isVerticalGrouping,
+  getTotalRowCount: (): number => options.completeRowCount,
+  getTotalCellCount: (): number => options.completeColumnCount,
+});

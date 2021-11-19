@@ -85,7 +85,6 @@ export default class Widget<TProperties> extends DOMComponent<TProperties> {
     /**
      * @docid
      * @publicName registerKeyHandler(key, handler)
-     * @param2 handler:function
      * @public
      */
     registerKeyHandler(key: string, handler: Function): void;

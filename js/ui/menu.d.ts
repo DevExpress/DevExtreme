@@ -31,13 +31,13 @@ export type DisposingEvent<TKey = any> = EventInfo<dxMenu<TKey>>;
 export type InitializedEvent<TKey = any> = InitializedEventInfo<dxMenu<TKey>>;
 
 /** @public */
-export type ItemClickEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>> & ItemInfo<Item>;
+export type ItemClickEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo<Item>;
 
 /** @public */
-export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>> & ItemInfo<Item>;
+export type ItemContextMenuEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<Item>;
 
 /** @public */
-export type ItemRenderedEvent<TKey = any> = NativeEventInfo<dxMenu<TKey>> & ItemInfo<Item>;
+export type ItemRenderedEvent<TKey = any> = EventInfo<dxMenu<TKey>> & ItemInfo<Item>;
 
 /** @public */
 export type OptionChangedEvent<TKey = any> = EventInfo<dxMenu<TKey>> & ChangedOptionInfo;
@@ -259,7 +259,6 @@ export interface MenuBasePlainItem extends CollectionWidgetItem {
 export interface dxMenuBaseItem extends MenuBasePlainItem {
     /**
      * @docid
-     * @type Array<dxMenuBaseItem>
      * @public
      */
     items?: Array<dxMenuBaseItem>;

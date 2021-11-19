@@ -1,14 +1,17 @@
 import $ from 'jquery';
 import config from 'core/config';
 import devices from 'core/devices';
-import { alert, confirm, custom, DEBUG_set_title } from 'ui/dialog';
+import { alert, confirm, custom } from 'ui/dialog';
 import domUtils from 'core/utils/dom';
 import errors from 'ui/widget/ui.errors';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { value as viewPort } from 'core/utils/view_port';
+import domAdapter from 'core/dom_adapter';
 
 const { module, test, testInActiveWindow } = QUnit;
+
+const DIALOG_WRAPPER_CLASS = 'dx-dialog-wrapper';
 
 module('dialog tests', {
     beforeEach: function() {
@@ -19,7 +22,7 @@ module('dialog tests', {
         this.title = 'Title here';
         this.messageHtml = '<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>';
         this.dialog = () => {
-            return $('.dx-dialog-wrapper');
+            return $(`.${DIALOG_WRAPPER_CLASS}`);
         };
         this.thereIsDialog = () => {
             return this.dialog().length === 1;
@@ -92,32 +95,16 @@ module('dialog tests', {
     });
 
     test('dialog content', function(assert) {
-        let instance;
-        let options = {
+        const options = {
             title: this.title,
             messageHtml: this.messageHtml
         };
 
-        instance = custom(options);
+        const instance = custom(options);
         instance.show();
 
         assert.equal(this.dialog().find('.dx-popup-title').text(), this.title, 'Actual title is equal to expected.');
         assert.equal((this.dialog().find('.dx-dialog-message').html() || '').toLowerCase(), this.messageHtml.toLowerCase(), 'Actual message is equal to expected.');
-        instance.hide();
-
-        assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
-
-        options = {
-            messageHtml: this.messageHtml
-        };
-        assert.equal(instance.title, undefined, 'dialog.title value isn\'t set.');
-
-        DEBUG_set_title(this.title);
-        instance = custom(options);
-        instance.show();
-
-        assert.equal(this.dialog().find('.dx-popup-title').text(), this.title, 'Dialog default title is used.');
-
         instance.hide();
 
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
@@ -220,8 +207,7 @@ module('dialog tests', {
     test('alert dialog', function(assert) {
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
 
-        DEBUG_set_title(this.title);
-        alert(this.messageHtml);
+        alert(this.messageHtml, this.title);
 
         assert.ok(this.thereIsDialog(), 'Dialog is shown.');
         assert.equal(this.dialog().find('.dx-popup-title').text(), this.title, 'Dialog default title is used.');
@@ -324,5 +310,42 @@ module('dialog tests', {
         assert.ok(Object.prototype.hasOwnProperty.call(clickArgs, 'component'));
         assert.ok(Object.prototype.hasOwnProperty.call(clickArgs, 'event'));
         assert.strictEqual(clickArgs.component.NAME, 'dxButton');
+    });
+});
+
+QUnit.module('width on android', {
+    beforeEach: function() {
+        viewPort('#qunit-fixture');
+        fx.off = true;
+        this.realDevice = devices.real();
+
+        devices.real({ platform: 'android' });
+
+        this.dialog = custom();
+        this.documentStub = sinon.stub(domAdapter, 'getDocumentElement');
+        this.getDialogElement = () => $(`.${DIALOG_WRAPPER_CLASS} .dx-overlay-content`);
+    },
+    afterEach: function() {
+        devices.real(this.realDevice);
+        this.documentStub.restore();
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('should be 80% for portrait orientation', function(assert) {
+        this.documentStub.returns({ clientWidth: 200, clientHeight: 500 });
+
+        this.dialog.show();
+
+        const $dialog = this.getDialogElement();
+        assert.strictEqual($dialog.width(), 160, 'width is correct');
+    });
+
+    QUnit.test('should be 60% for landscape orientation', function(assert) {
+        this.documentStub.returns({ clientWidth: 600, clientHeight: 500 });
+
+        this.dialog.show();
+
+        const $dialog = this.getDialogElement();
+        assert.strictEqual($dialog.width(), 360, 'width is correct');
     });
 });

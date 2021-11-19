@@ -14,6 +14,7 @@ import { GroupPanelHorizontalLayout, HorizontalGroupPanelLayoutProps } from './h
 import { Group } from '../../types';
 import { GroupOrientation } from '../../../types';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../consts';
+import { GroupPanelWrapper } from '../../../../../component_wrapper/scheduler/group_panel';
 
 export const viewFunction = ({
   layout: Layout,
@@ -48,7 +49,10 @@ export class GroupPanelProps extends GroupPanelBaseProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: { register: true },
+  jQuery: {
+    register: true,
+    component: GroupPanelWrapper,
+  },
 })
 export class GroupPanel extends JSXComponent(GroupPanelProps) {
   get layout():
