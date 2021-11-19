@@ -3723,7 +3723,7 @@ const createDragBehaviorConfig = (
             getElementsFromPoint(newX + appointmentWidth / 2, newY);
 
         const dateTables = getDateTables();
-        const droppableCell = elements.find(el => {
+        const droppableCell = elements.filter(el => {
             const classList = el.classList;
 
             const isCurrentSchedulerElement = dateTables.find(el).length === 1;
@@ -3733,7 +3733,7 @@ const createDragBehaviorConfig = (
                     classList.contains(DATE_TABLE_CELL_CLASS) ||
                     classList.contains(ALL_DAY_TABLE_CELL_CLASS)
                 );
-        });
+        })[0];
 
         if(droppableCell) {
             const oldDroppableCell = getDroppableCell();
