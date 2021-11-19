@@ -28,6 +28,7 @@ $generic-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shado
 $generic-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
 $generic-grid-base-checkbox-icon-size: 16px;
 $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
+$grid-masterdetail-padding: 20px;
 
 
 @mixin dx-set-checkbox-border-color-as-background() {
@@ -676,6 +677,9 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
     }
 
     .dx-master-detail-row {
+      > .dx-master-detail-cell {
+        padding: $grid-masterdetail-padding;
+      }
       > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell {
         border-top: $datagrid-border;
