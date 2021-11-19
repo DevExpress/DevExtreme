@@ -6,6 +6,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
 import visibilityEventsModule from 'events/visibility_change';
+import { EDITORS_WITHOUT_LABELS } from 'ui/form/ui.form.layout_manager.utils';
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
@@ -441,7 +442,7 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
 QUnit.test('From renders editors with the right label, labelMode', function(assert) {
     ['outside', 'hidden', 'static', 'floating'].forEach(labelMode => {
         const form = $('#form').dxForm({
-            formData: { name: 'Name' },
+            items: [ { dataField: 'name', editorType: 'dxTextBox' } ],
             labelMode
         }).dxForm('instance');
 
@@ -453,6 +454,73 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
         assert.equal(widgetLabelText, 'Name:');
 
         form.dispose();
+    });
+});
+
+[undefined, true, false].forEach((isLabelVisible) => {
+    ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+        [
+            'dxAutocomplete',
+            'dxCalendar',
+            'dxCheckBox',
+            'dxColorBox',
+            'dxDateBox',
+            'dxDropDownBox',
+            'dxHtmlEditor',
+            'dxLookup',
+            'dxNumberBox',
+            'dxRadioGroup',
+            'dxRangeSlider',
+            'dxSelectBox',
+            'dxSlider',
+            'dxSwitch',
+            'dxTagBox',
+            'dxTextArea',
+            'dxTextBox'
+        ].forEach((editorType) => {
+            QUnit.test(`label rendering, form.labelMode=${formLabelMode},label.visible=${isLabelVisible},editorType=${editorType}`, function(assert) {
+                const $form = $('#form').dxForm({
+                    labelMode: formLabelMode,
+                    items: [
+                        { dataField: 'item1', editorType, label: { visible: isLabelVisible } }
+                    ]
+                });
+
+                const label = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+                let needRenderLabel = isLabelVisible;
+                if(needRenderLabel === undefined) {
+                    if(EDITORS_WITHOUT_LABELS.indexOf(editorType) !== -1 && formLabelMode !== 'hidden') {
+                        needRenderLabel = true;
+                    } else if(formLabelMode === 'outside') {
+                        needRenderLabel = true;
+                    }
+                }
+                assert.equal(label.length, needRenderLabel ? 1 : 0, 'label is rendered correctly');
+            });
+        });
+    });
+});
+
+
+['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+    [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
+        QUnit.test(`check editor labelMode, form.labelMode=${formLabelMode},editorOptions.labelMode=${editorLabelMode}`, function(assert) {
+            const form = $('#form').dxForm({
+                labelMode: formLabelMode,
+                items: [
+                    { dataField: 'item1', editorType: 'dxTextBox', editorOptions: { labelMode: editorLabelMode } }
+                ]
+            }).dxForm('instance');
+
+            const editor = form.getEditor('item1');
+            let expectedEditorLabelMode = editorLabelMode;
+            if(expectedEditorLabelMode === undefined) {
+                expectedEditorLabelMode = formLabelMode === 'outside'
+                    ? 'hidden'
+                    : formLabelMode;
+            }
+            assert.equal(editor.option('labelMode'), expectedEditorLabelMode, 'editor.labelMode is correct');
+        });
     });
 });
 
