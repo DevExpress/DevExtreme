@@ -66,7 +66,7 @@ fixture('Renovated scheduler - Appointment templates');
       await t
         .expect(await compareScreenshot(
           t,
-          `scheduler_appointment_template_${currentView}-view.png`,
+          `scheduler_appointment_template_${currentView}.png`,
           element,
           screenshotComparerOptions,
         ))
