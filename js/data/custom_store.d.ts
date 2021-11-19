@@ -44,7 +44,7 @@ export interface CustomStoreOptions<
     /**
      * @docid
      * @type_function_param1 options:LoadOptions
-     * @type_function_return Promise<Array|object>|Array
+     * @type_function_return Promise<Array<any>|object>|Array<any>
      * @public
      */
     load: ((options: LoadOptions<TItem>) =>
