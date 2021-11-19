@@ -41,6 +41,8 @@ import {
   AppointmentsViewModelType,
   AppointmentViewModel,
   AppointmentClickData,
+  AppointmentTemplateProps,
+  OverflowIndicatorTemplateProps,
 } from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
@@ -69,6 +71,8 @@ export const viewFunction = ({
   dateCellTemplate,
   timeCellTemplate,
   resourceCellTemplate,
+  appointmentTemplate,
+  appointmentCollectorTemplate,
 
   props: {
     accessKey,
@@ -190,6 +194,8 @@ export const viewFunction = ({
               isAllDay
               appointments={appointmentsViewModel.allDay}
               overflowIndicators={appointmentsViewModel.allDayCompact}
+              appointmentTemplate={appointmentTemplate}
+              overflowIndicatorTemplate={appointmentCollectorTemplate}
               onAppointmentClick={showTooltip}
             />
           )}
@@ -198,6 +204,8 @@ export const viewFunction = ({
             <AppointmentLayout
               appointments={appointmentsViewModel.regular}
               overflowIndicators={appointmentsViewModel.regularCompact}
+              appointmentTemplate={appointmentTemplate}
+              overflowIndicatorTemplate={appointmentCollectorTemplate}
               onAppointmentClick={showTooltip}
             />
           )}
@@ -456,6 +464,14 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   get resourceCellTemplate(): JSXTemplate<ResourceCellTemplateProps> | undefined {
     return this.currentViewConfig.resourceCellTemplate;
+  }
+
+  get appointmentTemplate(): JSXTemplate<AppointmentTemplateProps> | undefined {
+    return this.currentViewConfig.appointmentTemplate;
+  }
+
+  get appointmentCollectorTemplate(): JSXTemplate<OverflowIndicatorTemplateProps> | undefined {
+    return this.currentViewConfig.appointmentCollectorTemplate;
   }
 
   @Method()

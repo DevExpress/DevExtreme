@@ -22,6 +22,7 @@ import { DateTableLayoutProps } from './base/date_table/layout';
 import { TimePanelLayoutProps } from './base/time_panel/layout';
 import { GetDateForHeaderText } from '../view_model/to_test/views/types';
 import { ScrollableDirection } from '../../scroll_view/common/types';
+import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from '../appointment/types';
 
 // TODO: WA for bug in generators: they use getters for default props
 const DEFAULT_GROUPS = [];
@@ -39,6 +40,10 @@ export class WorkSpaceProps extends BaseWidgetProps {
   @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
   @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
+
+  @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
+
+  @Template() appointmentCollectorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
 
   // -----------------
   // Public props
@@ -135,6 +140,8 @@ WorkSpaceProps,
 | 'dateCellTemplate'
 | 'timeCellTemplate'
 | 'resourceCellTemplate'
+| 'appointmentTemplate'
+| 'appointmentCollectorTemplate'
 >;
 
 export interface ViewRenderConfig {
