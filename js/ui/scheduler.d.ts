@@ -393,8 +393,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       * @docid
       * @default "dropDownAppointment"
       * @type_function_param1 itemData:object
-      * @type_function_param2 itemIndex:number
-      * @type_function_param3 contentElement:DxElement
       * @type_function_return string|Element|jQuery
       * @deprecated dxSchedulerOptions.appointmentTooltipTemplate
       * @public
@@ -896,8 +894,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
       * @docid
       * @default "dropDownAppointment"
       * @type_function_param1 itemData:object
-      * @type_function_param2 itemIndex:number
-      * @type_function_param3 contentElement:DxElement
       * @type_function_return string|Element|jQuery
       * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
       */

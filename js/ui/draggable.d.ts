@@ -100,7 +100,6 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
 /**
  * @docid
  * @inherits DOMComponent
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */
