@@ -157,6 +157,8 @@ class Diagram extends Widget {
 
         this._setCustomCommandChecked(DiagramCommandsManager.SHOW_PROPERTIES_PANEL_COMMAND_NAME, this._isPropertiesPanelVisible());
         this._setCustomCommandChecked(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME, this._isToolboxVisible());
+
+        this._createOptionsUpdateBar();
     }
     _dimensionChanged() {
         this._isMobileScreenSize = undefined;
@@ -721,7 +723,7 @@ class Diagram extends Widget {
             }
         }
 
-        this._recreateOptionsUpdateBar();
+        this._createOptionsUpdateBar();
         if(hasWindow()) {
             // eslint-disable-next-line spellcheck/spell-checker
             this._diagramInstance.initMeasurer(this.$element()[0]);
@@ -729,17 +731,21 @@ class Diagram extends Widget {
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
     }
-    _recreateOptionsUpdateBar() {
+    _createOptionsUpdateBar() {
+        if(!this.optionsUpdateBar) {
+            this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
+            this._diagramInstance.registerBar(this.optionsUpdateBar);
+        }
+    }
+    _deleteOptionsUpdateBar() {
         delete this.optionsUpdateBar;
-        this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
-        this._diagramInstance.registerBar(this.optionsUpdateBar);
     }
     _clean() {
         if(this._diagramInstance) {
             this._diagramInstance.cleanMarkup((element) => {
                 $(element).empty();
             });
-            this._recreateOptionsUpdateBar();
+            this._deleteOptionsUpdateBar();
         }
         super._clean();
     }
