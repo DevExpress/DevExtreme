@@ -165,7 +165,7 @@ const resources = [{
         endDayHour: 14,
         groups: ['personId'],
         resources: [{
-          fieldExpr: 'groupersonIdpId',
+          fieldExpr: 'personId',
           dataSource: resources,
           label: 'Priority',
         }],
