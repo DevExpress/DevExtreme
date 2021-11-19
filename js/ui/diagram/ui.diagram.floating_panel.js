@@ -122,7 +122,6 @@ class DiagramFloatingPanel extends DiagramPanel {
             minWidth: this._getPopupMinWidth(),
             minHeight: this._getPopupMinHeight(),
             position: this._getPopupPosition(),
-            propagateOutsideClick: true,
             onContentReady: function() {
                 that._renderPopupContent(that._popup.content());
             },
