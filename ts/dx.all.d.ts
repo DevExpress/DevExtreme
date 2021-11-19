@@ -858,7 +858,6 @@ declare module DevExpress {
      */
     type Properties = DOMComponentOptions<DOMComponentInstance>;
   }
-  /* eslint-disable no-underscore-dangle */
 
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -1422,30 +1421,6 @@ declare module DevExpress.core {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  interface Component<TProperties> {
-    // eslint-disable-line @typescript-eslint/no-unused-vars
-    _optionsByReference: Record<string, unknown>;
-    _deprecatedOptions: Record<string, unknown>;
-    _options: {
-      silent(path: any, value: any): void;
-    };
-    _createActionByOption(
-      optionName: string,
-      config: Record<string, unknown>
-    ): (...args: any[]) => any;
-    _dispose(): void;
-    _getDefaultOptions(): Record<string, unknown>;
-    _initOptions(options: Record<string, unknown>): void;
-    _init(): void;
-    _initializeComponent(): void;
-    _optionChanging(name: string, value: unknown, prevValue: unknown): void;
-    _optionChanged(args: { name: string; value: unknown }): void;
-    _setOptionsByReference(): void;
-    _setDeprecatedOptions(): void;
-  }
-  /**
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-   */
   type ComponentFactory<TComponent> = {
     new (
       element: UserDefinedElement,
@@ -1533,6 +1508,7 @@ declare module DevExpress.core {
       transclude?: boolean;
     }): DxElement;
   }
+
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1541,6 +1517,7 @@ declare module DevExpress.core {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   interface PromiseType<T> extends JQueryPromise<T> {}
+
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -1549,6 +1526,7 @@ declare module DevExpress.core {
    * [descr:template]
    */
   export type template = string | Function | UserDefinedElement;
+
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -3168,7 +3146,7 @@ declare module DevExpress.events {
     readonly value?: any;
     readonly previousValue?: any;
   }
-  /* eslint-enable @typescript-eslint/no-empty-interface */
+
   /**
    * [descr:DxEvent]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
