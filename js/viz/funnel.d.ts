@@ -647,28 +647,24 @@ export interface dxFunnelItem {
     /**
      * @docid
      * @publicName getColor()
-     * @return string
      * @public
      */
     getColor(): string;
     /**
      * @docid
      * @publicName hover(state)
-     * @param1 state:boolean
      * @public
      */
     hover(state: boolean): void;
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;
     /**
      * @docid
      * @publicName isSelected()
-     * @return boolean
      * @public
      */
     isSelected(): boolean;
@@ -680,7 +676,6 @@ export interface dxFunnelItem {
     /**
      * @docid
      * @publicName select(state)
-     * @param1 state:boolean
      * @public
      */
     select(state: boolean): void;
