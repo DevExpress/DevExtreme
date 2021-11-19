@@ -187,10 +187,6 @@ export const VirtualScrollController = Class.inherit((function() {
         },
         setViewportPosition: function(position) {
             const result = new Deferred();
-            if(this._position === position) {
-                return result.resolve().promise();
-            }
-
             const scrollingTimeout = this.getScrollingTimeout();
 
             clearTimeout(this._scrollTimeoutID);
