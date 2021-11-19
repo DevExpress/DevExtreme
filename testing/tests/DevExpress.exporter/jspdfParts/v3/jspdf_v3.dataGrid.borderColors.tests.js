@@ -11,6 +11,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border HEX color for one header cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -24,7 +25,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header' && gridCell.column.index === 1) {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -63,6 +63,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border GRAY color for one header cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -76,7 +77,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header' && gridCell.column.index === 1) {
                         pdfCell.borderColor = 128;
                     }
@@ -115,6 +115,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border RGB color for one header cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -128,7 +129,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header' && gridCell.column.index === 1) {
                         pdfCell.borderColor = { ch1: 0, ch2: 255, ch3: 0 };
                     }
@@ -167,6 +167,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border SMYC color for one header cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -180,7 +181,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header' && gridCell.column.index === 1) {
                         pdfCell.borderColor = { ch1: 0, ch2: 0, ch3: 1, ch4: 0 };
                     }
@@ -219,6 +219,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border HEX color for header cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -232,7 +233,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -271,6 +271,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border GRAY color for header cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -284,7 +285,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header') {
                         pdfCell.borderColor = 128;
                     }
@@ -325,6 +325,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border RGB color for header cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -338,7 +339,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header') {
                         pdfCell.borderColor = { ch1: 0, ch2: 255, ch3: 0 };
                     }
@@ -379,6 +379,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border SMYC color for header cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -392,7 +393,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header') {
                         pdfCell.borderColor = { ch1: 0, ch2: 0, ch3: 1, ch4: 0 };
                     }
@@ -433,6 +433,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Different border HEX colors for header cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -447,7 +448,6 @@ const JSPdfBorderColorsTests = {
 
                 const colors = ['#ff0000', '#00ff00', '#0000ff'];
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header') {
                         pdfCell.borderColor = colors[gridCell.column.index];
                     }
@@ -488,6 +488,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Different border GRAY colors for header cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -502,7 +503,6 @@ const JSPdfBorderColorsTests = {
 
                 const colors = [80, 128, 255];
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header') {
                         pdfCell.borderColor = colors[gridCell.column.index];
                     }
@@ -543,6 +543,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Different border RGB colors for header cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -557,7 +558,6 @@ const JSPdfBorderColorsTests = {
 
                 const colors = [{ ch1: 255, ch2: 0, ch3: 0 }, { ch1: 0, ch2: 255, ch3: 0 }, { ch1: 0, ch2: 0, ch3: 255 }];
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header') {
                         pdfCell.borderColor = colors[gridCell.column.index];
                     }
@@ -598,6 +598,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Different border SMYC colors for header cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -612,7 +613,6 @@ const JSPdfBorderColorsTests = {
 
                 const colors = [{ ch1: 1, ch2: 0, ch3: 0, ch4: 0 }, { ch1: 0, ch2: 1, ch3: 0, ch4: 0 }, { ch1: 0, ch2: 0, ch3: 1, ch4: 0 }];
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header') {
                         pdfCell.borderColor = colors[gridCell.column.index];
                     }
@@ -653,6 +653,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2, f3] - Custom border color for center cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -667,7 +668,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(pdfCell.text === 'f1_2') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -715,6 +715,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2, f3] - Custom border color for column cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -729,7 +730,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.column.dataField === 'f2') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -777,6 +777,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2, f3] - Different border colors for column cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -793,7 +794,6 @@ const JSPdfBorderColorsTests = {
                 const colors = ['#ff0000', '#00ff00', '#0000ff'];
                 let rowIndex = 0;
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.column.dataField === 'f2') {
                         pdfCell.borderColor = colors[rowIndex];
                         rowIndex += 1;
@@ -844,6 +844,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border color for header cells - borders for data cells are hidden', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -856,7 +857,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'header') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -894,6 +894,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border color for header cells - vertical borders are hidden', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -906,7 +907,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     pdfCell.drawLeftBorder = false;
                     pdfCell.drawRightBorder = false;
                     if(gridCell.rowType === 'header') {
@@ -945,6 +945,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border color for header cells - horizontal borders are hidden', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -957,7 +958,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     pdfCell.drawTopBorder = false;
                     pdfCell.drawBottomBorder = false;
                     if(gridCell.rowType === 'header') {
@@ -996,6 +996,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border HEX color for data cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1008,7 +1009,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'data') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -1041,6 +1041,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border GRAY color for data cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1053,7 +1054,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'data') {
                         pdfCell.borderColor = 128;
                     }
@@ -1087,6 +1087,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border RGB color for data cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1099,7 +1100,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'data') {
                         pdfCell.borderColor = { ch1: 0, ch2: 255, ch3: 0 };
                     }
@@ -1133,6 +1133,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border SMYC color for data cells', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1145,7 +1146,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'data') {
                         pdfCell.borderColor = { ch1: 0, ch2: 1, ch3: 0, ch4: 0 };
                     }
@@ -1179,6 +1179,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border color for data cells - vertical borders are hidden', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1191,7 +1192,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     pdfCell.drawLeftBorder = false;
                     pdfCell.drawRightBorder = false;
                     if(gridCell.rowType === 'data') {
@@ -1230,6 +1230,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Simple - [{f1, f2] - Custom border color for data cells - horizontal borders are hidden', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1242,7 +1243,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     pdfCell.drawTopBorder = false;
                     pdfCell.drawBottomBorder = false;
                     if(gridCell.rowType === 'data') {
@@ -1281,6 +1281,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Grouped rows - 1 level - [{f1, groupIndex: 0}, f2, f3] - custom border color in grouped row', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1295,7 +1296,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'group') {
                         pdfCell.borderColor = (gridCell.column.index === 0) ? '#dddd00' : { ch1: 221, ch2: 221, ch3: 0 };
                     }
@@ -1330,6 +1330,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Grouped rows - 1 level - [{f1, groupIndex: 0}, f2, f3] - custom border color in grouped row and data row', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1344,7 +1345,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'group' && gridCell.column.dataField === 'f1') {
                         pdfCell.borderColor = 100;
                     } else if(gridCell.rowType === 'data' && gridCell.column.dataField === 'f2') {
@@ -1382,6 +1382,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Grouped rows - 1 level - [{f1, groupIndex: 0}, f2, f3] - custom border color in grouped row - borders between data cell are hidden', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1396,7 +1397,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'group') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -1436,6 +1436,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Grouped rows - 2 level - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4] - custom border color in grouped row - different colors for group levels', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1451,7 +1452,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'group') {
                         pdfCell.borderColor = gridCell.groupIndex === 0 ? '#dddd00' : '#00dddd';
                     }
@@ -1488,6 +1488,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Group summaries - 1 level - [{f1, groupIndex: 0}, f2, f3, f4], groupItems: [{f4, alignByColumn, showInGroupFooter}] - custom border color in group footer row', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1503,7 +1504,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'groupFooter') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -1540,6 +1540,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Group summaries - 2 level - [{f1, groupIndex: 0}, {f2, groupIndex: 1}, f3, f4], groupItems: [f1, {f4, alignByColumn, showInGroupFooter}] - custom border color in group footer row - different colors for group levels', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1559,7 +1560,6 @@ const JSPdfBorderColorsTests = {
 
                 let groupFooterCells = 0;
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'groupFooter') {
                         pdfCell.borderColor = groupFooterCells < 2 ? { ch1: 221, ch2: 221, ch3: 0 } : '#00dddd';
                         groupFooterCells += 1;
@@ -1597,6 +1597,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Total summaries - [f1, f2], totalItems: [f1] - custom color in summary row', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1612,7 +1613,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'totalFooter') {
                         pdfCell.borderColor = '#dddd00';
                     }
@@ -1642,6 +1642,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('Total summaries - [{f1, groupIndex: 0}, f2, f3], totalItems: [f2] - custom color in summary row', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1658,7 +1659,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ gridCell, pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(gridCell.rowType === 'totalFooter') {
                         pdfCell.borderColor = { ch1: 221, ch2: 221, ch3: 0 };
                     }
@@ -1691,6 +1691,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('[band1-[f1, f2]] - custom color for BAND cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1700,7 +1701,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(pdfCell.text === 'Band1') {
                         pdfCell.borderColor = '#ffff00';
                     }
@@ -1730,6 +1730,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('[band1-[band1_1-[f1], f2]] - custom color for BAND cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1744,7 +1745,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(pdfCell.text === 'Band1') {
                         pdfCell.borderColor = { ch1: 221, ch2: 221, ch3: 0 };
                     }
@@ -1779,6 +1779,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('[band1-[f1, band1_2-[f2]]] - custom color for BAND cell', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1794,7 +1795,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(pdfCell.text === 'Band1') {
                         pdfCell.borderColor = { ch1: 221, ch2: 221, ch3: 0 };
                     }
@@ -1829,6 +1829,7 @@ const JSPdfBorderColorsTests = {
             QUnit.test('[band1-[f1, band1_2-[f2]]] - custom color for BAND cell with hidden borders', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
+                doc.__logOptions.textOptions = false;
 
                 const dataGrid = createDataGrid({
                     columns: [
@@ -1844,7 +1845,6 @@ const JSPdfBorderColorsTests = {
                 });
 
                 const customizeCell = ({ pdfCell }) => {
-                    pdfCell.jsPdfTextOptions = { baseline: 'alphabetic' };
                     if(pdfCell.text === 'Band1') {
                         pdfCell.borderColor = { ch1: 221, ch2: 221, ch3: 0 };
                     }
