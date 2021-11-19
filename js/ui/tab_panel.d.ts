@@ -40,16 +40,16 @@ export type DisposingEvent = EventInfo<dxTabPanel>;
 export type InitializedEvent = InitializedEventInfo<dxTabPanel>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxTabPanel, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxTabPanel, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxTabPanel, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxTabPanel> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxTabPanel> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxTabPanel> & ChangedOptionInfo;
@@ -58,13 +58,13 @@ export type OptionChangedEvent = EventInfo<dxTabPanel> & ChangedOptionInfo;
 export type SelectionChangedEvent = EventInfo<dxTabPanel> & SelectionChangedInfo;
 
 /** @public */
-export type TitleClickEvent = NativeEventInfo<dxTabPanel> & {
+export type TitleClickEvent = NativeEventInfo<dxTabPanel, KeyboardEvent | MouseEvent | PointerEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
 };
 
 /** @public */
-export type TitleHoldEvent = NativeEventInfo<dxTabPanel> & {
+export type TitleHoldEvent = NativeEventInfo<dxTabPanel, MouseEvent | PointerEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
 };

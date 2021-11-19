@@ -165,7 +165,7 @@ export interface ToolbarPreparingInfo {
 
 export interface RowDraggingEventInfo<T extends GridBase> {
   readonly component: T;
-  readonly event: DxEvent;
+  readonly event: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
   readonly itemData?: any;
   readonly itemElement: DxElement;
   readonly fromIndex: number;
@@ -178,7 +178,7 @@ export interface RowDraggingEventInfo<T extends GridBase> {
 
 export interface DragStartEventInfo<T extends GridBase> {
   readonly component: T;
-  readonly event: DxEvent;
+  readonly event: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
   itemData?: any;
   readonly itemElement: DxElement;
   readonly fromIndex: number;
@@ -723,7 +723,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onKeyDown?: ((e: NativeEventInfo<T> & KeyDownInfo) => void);
+    onKeyDown?: ((e: NativeEventInfo<T, KeyboardEvent> & KeyDownInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -2747,7 +2747,7 @@ export interface ColumnButtonBase {
 export type AdaptiveDetailRowPreparingEvent = EventInfo<dxDataGrid> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent = NativeEventInfo<dxDataGrid> & {
+export type CellClickEvent = NativeEventInfo<dxDataGrid, PointerEvent | MouseEvent> & {
   readonly data: any;
   readonly key: any;
   readonly value?: any;
@@ -2762,7 +2762,7 @@ export type CellClickEvent = NativeEventInfo<dxDataGrid> & {
 };
 
 /** @public */
-export type CellDblClickEvent = NativeEventInfo<dxDataGrid> & {
+export type CellDblClickEvent = NativeEventInfo<dxDataGrid, PointerEvent | MouseEvent> & {
   readonly data: any;
   readonly key: any;
   readonly value?: any;
@@ -2905,7 +2905,7 @@ export type FocusedCellChangedEvent = EventInfo<dxDataGrid> & {
 };
 
 /** @public */
-export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
+export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
   readonly cellElement: DxElement;
   readonly prevColumnIndex: number;
   readonly prevRowIndex: number;
@@ -2924,7 +2924,7 @@ export type FocusedRowChangedEvent = EventInfo<dxDataGrid> & {
 };
 
 /** @public */
-export type FocusedRowChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
+export type FocusedRowChangingEvent = Cancelable & NativeEventInfo<dxDataGrid, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
   readonly rowElement: DxElement;
   readonly prevRowIndex: number;
   newRowIndex: number;
@@ -2938,13 +2938,13 @@ export type InitializedEvent = InitializedEventInfo<dxDataGrid>;
 export type InitNewRowEvent = EventInfo<dxDataGrid> & NewRowInfo;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxDataGrid> & KeyDownInfo;
+export type KeyDownEvent = NativeEventInfo<dxDataGrid, KeyboardEvent> & KeyDownInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxDataGrid> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent = NativeEventInfo<dxDataGrid> & {
+export type RowClickEvent = NativeEventInfo<dxDataGrid, PointerEvent | MouseEvent> & {
   readonly data: any;
   readonly key: any;
   readonly values: Array<any>;
@@ -2966,7 +2966,7 @@ export type RowCollapsedEvent = EventInfo<dxDataGrid> & RowKeyInfo;
 export type RowCollapsingEvent = Cancelable & EventInfo<dxDataGrid> & RowKeyInfo;
 
 /** @public */
-export type RowDblClickEvent = NativeEventInfo<dxDataGrid> & {
+export type RowDblClickEvent = NativeEventInfo<dxDataGrid, PointerEvent | MouseEvent> & {
   readonly data: any;
   readonly key: any;
   readonly values: Array<any>;
@@ -3056,7 +3056,7 @@ export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxDataGrid>;
 export type RowDraggingReorderEvent = RowDraggingEventInfo<dxDataGrid> & DragReorderInfo;
 
 /** @public */
-export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
+export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid, PointerEvent | MouseEvent> & {
   row?: Row;
   column?: Column;
 };

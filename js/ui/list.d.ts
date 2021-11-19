@@ -70,10 +70,10 @@ export type GroupRenderedEvent = EventInfo<dxList> & {
 export type InitializedEvent = InitializedEventInfo<dxList>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxList> & ListItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxList, KeyboardEvent | MouseEvent | PointerEvent> & ListItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxList> & ListItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxList, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo;
 
 /** @public */
 export type ItemDeletedEvent = EventInfo<dxList> & ListItemInfo;
@@ -84,10 +84,10 @@ export type ItemDeletingEvent = EventInfo<dxList> & ListItemInfo & {
 };
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxList> & ListItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxList, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxList> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxList> & ItemInfo;
 
 /** @public */
 export type ItemReorderedEvent = EventInfo<dxList> & ListItemInfo & {
@@ -96,7 +96,7 @@ export type ItemReorderedEvent = EventInfo<dxList> & ListItemInfo & {
 };
 
 /** @public */
-export type ItemSwipeEvent = NativeEventInfo<dxList> & ListItemInfo & {
+export type ItemSwipeEvent = NativeEventInfo<dxList, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo & {
     readonly direction: string;
 };
 
@@ -110,7 +110,7 @@ export type PageLoadingEvent = EventInfo<dxList>;
 export type PullRefreshEvent = EventInfo<dxList>;
 
 /** @public */
-export type ScrollEvent = NativeEventInfo<dxList> & ScrollInfo;
+export type ScrollEvent = NativeEventInfo<dxList, Event> & ScrollInfo;
 
 /** @public */
 export type SelectAllValueChangedEvent = EventInfo<dxList> & {

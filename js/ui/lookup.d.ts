@@ -61,7 +61,7 @@ export type DisposingEvent = EventInfo<dxLookup>;
 export type InitializedEvent = InitializedEventInfo<dxLookup>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxLookup> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
 export type OpenedEvent = EventInfo<dxLookup>;
@@ -76,7 +76,7 @@ export type PageLoadingEvent = EventInfo<dxLookup>;
 export type PullRefreshEvent = EventInfo<dxLookup>;
 
 /** @public */
-export type ScrollEvent = NativeEventInfo<dxLookup> & ScrollInfo;
+export type ScrollEvent = NativeEventInfo<dxLookup, MouseEvent | Event> & ScrollInfo;
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxLookup> & SelectionChangedInfo;
@@ -85,7 +85,7 @@ export type SelectionChangedEvent = EventInfo<dxLookup> & SelectionChangedInfo;
 export type TitleRenderedEvent = EventInfo<dxLookup> & TitleRenderedInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxLookup> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead

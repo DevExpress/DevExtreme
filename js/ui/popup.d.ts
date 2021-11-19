@@ -55,13 +55,13 @@ export type InitializedEvent = InitializedEventInfo<dxPopup>;
 export type ShownEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type ResizeEvent = NativeEventInfo<dxPopup> & ResizeInfo;
+export type ResizeEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
-export type ResizeStartEvent = NativeEventInfo<dxPopup> & ResizeInfo;
+export type ResizeStartEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
-export type ResizeEndEvent = NativeEventInfo<dxPopup> & ResizeInfo;
+export type ResizeEndEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;
