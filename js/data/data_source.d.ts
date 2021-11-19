@@ -262,7 +262,6 @@ export default class DataSource<
      * @docid
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
-     * @param2 eventHandler:function
      * @return this
      * @public
      */
@@ -271,7 +270,6 @@ export default class DataSource<
      * @docid
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
-     * @param2 eventHandler:function
      * @return this
      * @public
      */
