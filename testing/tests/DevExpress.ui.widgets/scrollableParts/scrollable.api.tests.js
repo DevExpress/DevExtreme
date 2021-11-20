@@ -1188,7 +1188,7 @@ class ScrollableTestHelper {
                         <div class="content2"></div>\
                     </div>';
                 $('#qunit-fixture').html(markup);
-                this.resizeTimeout = 50;
+                this.resizeTimeout = 200;
             }
         }, () => {
             QUnit.test(`Direction: horizontal, useNative: ${useNative}, useSimulatedScrollbar: ${useSimulatedScrollbar}, initialScrollPosition(Right), content.width:100, container.width(50) -> container.width(75) -> container.width(100)`, function(assert) {
