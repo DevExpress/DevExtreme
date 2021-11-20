@@ -85,7 +85,6 @@ import { BottomPocket } from '../internal/pocket/bottom';
 
 import { getDevicePixelRatio } from '../utils/get_device_pixel_ratio';
 import { isElementVisible } from '../utils/is_element_visible';
-// import { getTranslateValues } from '../utils/get_translate_values';
 import { clampIntoRange } from '../utils/clamp_into_range';
 import { allowedDirection } from '../utils/get_allowed_direction';
 import { subscribeToResize } from '../utils/subscribe_to_resize';
@@ -356,12 +355,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const { scrollTop, scrollLeft } = this.savedScrollOffset;
 
     return {
-      top: this.vScrollOffsetMax === 0 ? 0 : scrollTop // scrollTop - top
-        - (this.props.pullDownEnabled && this.props.forceGeneratePockets
-          ? this.topPocketHeight
-          : 0
-        ),
-      left: this.hScrollOffsetMax === 0 ? 0 : scrollLeft, // scrollLeft - left,
+      top: this.vScrollOffsetMax === 0 ? 0 : scrollTop,
+      left: this.hScrollOffsetMax === 0 ? 0 : scrollLeft,
     };
   }
 
@@ -1145,11 +1140,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     const maxOffset = this.vScrollOffsetMax
       - this.bottomPocketHeight - this.contentPaddingBottom;
 
-    if (!this.props.bounceEnabled || maxOffset >= 0) {
+    if (maxOffset >= 0) {
       return 0;
     }
 
-    if (inRange(this.vScrollLocation, maxOffset, 0)) {
+    if (!this.props.bounceEnabled || inRange(this.vScrollLocation, maxOffset, 0)) {
       return -this.topPocketHeight;
     }
 
@@ -1169,7 +1164,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     let transformValue = location % 1;
 
     if (!this.props.bounceEnabled
-      || this.hScrollOffsetMax >= 0 || inRange(this.hScrollLocation, this.hScrollOffsetMax, 0)) {
+      || this.hScrollOffsetMax === 0 || inRange(this.hScrollLocation, this.hScrollOffsetMax, 0)) {
       return 0;
     }
 

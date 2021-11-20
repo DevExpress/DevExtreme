@@ -116,58 +116,71 @@ describe('Simulated > View', () => {
 
 describe('Simulated > Render', () => {
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH]).describe('Direction: %o', (direction) => {
-    each([
-      { location: -500.25, expected: -100.25 },
-      { location: -401.35, expected: -1.3500000000000227 },
-      { location: -400, expected: 0 },
-      { location: -100.25, expected: 0 },
-      { location: -55.75, expected: 0 },
-      { location: -0.13, expected: 0 },
-      { location: 0.25, expected: 0.25 },
-      { location: 100.66, expected: 100.66 },
-      { location: 500.357, expected: 500.357 },
-    ]).describe('Location: %o', ({ location, expected }) => {
+    each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
       each([0, -400]).describe('maxOffset: %o', (maxOffset) => {
-        each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
-          each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
-            it('contentTranslateY()', () => {
-              const topPocketSize = 85;
+        each([
+          { location: -500.25, expected: (isTranslate) => (isTranslate ? -100.25 : 0) },
+          { location: -401.35, expected: (isTranslate) => (isTranslate ? -1.3500000000000227 : 0) },
+          { location: -400, expected: () => 0 },
+          { location: -100.25, expected: () => 0 },
+          { location: -55.75, expected: () => 0 },
+          { location: -0.13, expected: () => 0 },
+          { location: 0.25, expected: (isTranslate) => (isTranslate ? 0.25 : 0) },
+          { location: 100.66, expected: (isTranslate) => (isTranslate ? 100.66 : 0) },
+          { location: 500.357, expected: (isTranslate) => (isTranslate ? 500.357 : 0) },
+        ]).describe('Location: %o', ({ location, expected }) => {
+          each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
+            each([true, false]).describe('pullDownEnabled: %o', (pullDownEnabled) => {
+              it('contentTranslateY()', () => {
+                const topPocketSize = 85;
 
-              const viewModel = new Scrollable({
-                direction,
-                forceGeneratePockets,
-                pullDownEnabled,
+                const viewModel = new Scrollable({
+                  direction,
+                  bounceEnabled,
+                  forceGeneratePockets,
+                  pullDownEnabled,
+                });
+
+                viewModel.containerClientHeight = 100;
+                viewModel.contentClientHeight = 500;
+                viewModel.topPocketHeight = topPocketSize;
+                viewModel.vScrollLocation = location;
+
+                Object.defineProperties(viewModel, {
+                  vScrollOffsetMax: { get() { return maxOffset; } },
+                });
+
+                if (maxOffset >= 0) {
+                  expect(viewModel.contentTranslateY)
+                    .toEqual(0);
+                } else if (!bounceEnabled) {
+                  expect(viewModel.contentTranslateY)
+                    .toEqual(-topPocketSize);
+                } else {
+                  expect(viewModel.contentTranslateY)
+                    .toEqual(expected(maxOffset < 0) - topPocketSize);
+                }
               });
 
-              viewModel.containerClientHeight = 100;
-              viewModel.contentClientHeight = 500;
-              viewModel.topPocketHeight = topPocketSize;
-              viewModel.vScrollLocation = location;
+              it('contentTranslateX()', () => {
+                const viewModel = new Scrollable({
+                  direction,
+                  bounceEnabled,
+                  forceGeneratePockets,
+                  pullDownEnabled,
+                });
 
-              Object.defineProperties(viewModel, {
-                vScrollOffsetMax: { get() { return maxOffset; } },
+                viewModel.containerClientWidth = 100;
+                viewModel.contentClientWidth = 500;
+                viewModel.hScrollLocation = location;
+
+                Object.defineProperties(viewModel, {
+                  hScrollOffsetMax: { get() { return maxOffset; } },
+                });
+
+                expect(viewModel.contentTranslateX)
+                  .toEqual(expected(bounceEnabled && maxOffset < 0));
               });
-
-              expect(viewModel.contentTranslateY)
-                .toEqual(maxOffset === 0 ? 0 : expected - topPocketSize);
-            });
-
-            it('contentTranslateX()', () => {
-              const viewModel = new Scrollable({
-                direction,
-                forceGeneratePockets,
-                pullDownEnabled,
-              });
-
-              viewModel.containerClientWidth = 100;
-              viewModel.contentClientWidth = 500;
-              viewModel.hScrollLocation = location;
-
-              Object.defineProperties(viewModel, {
-                hScrollOffsetMax: { get() { return maxOffset; } },
-              });
-
-              expect(viewModel.contentTranslateX).toEqual(maxOffset === 0 ? 0 : expected);
             });
           });
         });
@@ -1636,6 +1649,23 @@ describe('Simulated > Behavior', () => {
         viewModel.unlock();
 
         expect(viewModel.locked).toEqual(!!disabled);
+      });
+    });
+
+    describe('ScrollOffset', () => {
+      it('scrollOffset() without overflow', () => {
+        const helper = new ScrollableTestHelper({
+          contentSize: 300,
+          containerSize: 300,
+        });
+
+        const scrollLocation = { left: 130, top: 560 };
+        helper.initContainerPosition(scrollLocation);
+
+        expect(helper.viewModel.scrollOffset()).toEqual({
+          left: 0,
+          top: 0,
+        });
       });
     });
 
