@@ -214,25 +214,6 @@ fixture`Scrollable_ScrollToElement`
         const scrollable = new Scrollable('#container', { useNative, direction });
         const { getInstance } = scrollable;
 
-        // const positions = [
-        // { initialScrollOffset: { top: 0, left: 0 }, position: 'fromTopLCorner' },
-        // { initialScrollOffset: { top: 0, left: 290 }, position: 'fromTopRCorner' },
-        // { initialScrollOffset: { top: 290, left: 290 }, position: 'fromBRCorner' },
-        // { initialScrollOffset: { top: 290, left: 0 }, position: 'fromBLCorner' },
-
-        // { initialScrollOffset: { top: 0, left: 160 }, position: 'fromTop' },
-        // { initialScrollOffset: { top: 160, left: 290 }, position: 'fromR' },
-        // { initialScrollOffset: { top: 290, left: 160 }, position: 'fromB' },
-        // { initialScrollOffset: { top: 160, left: 0 }, position: 'fromL' },
-
-        // // from inside
-
-        // { initialScrollOffset: { top: 165, left: 175 }, position: 'fromInsideTopLPart' },
-        // { initialScrollOffset: { top: 140, left: 140 }, position: 'fromInsideRBPart' },
-        // ];
-
-        // eslint-disable-next-line no-restricted-syntax
-        // for (const { initialScrollOffset, position } of positions) {
         await ClientFunction(
           () => {
             (getInstance() as any).scrollTo(initialScrollOffset);
@@ -250,7 +231,6 @@ fixture`Scrollable_ScrollToElement`
           .ok()
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      // }
       }).before(async () => {
         await ClientFunction(() => {
           $('#container').css({
@@ -284,6 +264,78 @@ fixture`Scrollable_ScrollToElement`
           height: 100,
           useNative,
           direction,
+          showScrollbar: 'always',
+        });
+      });
+    });
+  });
+});
+
+fixture`Scrollable_Resize`
+  .page(url(__dirname, '../../container.html'));
+
+(['horizontal'] as ScrollableDirection[]).forEach((direction) => {
+  [false, true].forEach((useNative) => {
+    [false, true].forEach((useSimulatedScrollbar) => {
+      test(`Scroll offset after resize, rtlEnabled: true, useNative: '${useNative}', useSimulatedScrollbar: '${useSimulatedScrollbar}, container.width = 75 -> 50 -> 75 -> 100 -> 75`, async (t) => {
+        const scrollable = new Scrollable('#scrollable', { direction, useNative, useSimulatedScrollbar });
+
+        await scrollable.setContainerCssWidth(75);
+
+        await t.expect(await scrollable.apiScrollOffset()).eql({ left: 25, top: 0 });
+        if (scrollable.hScrollbar) {
+          const { top, left } = await scrollable.hScrollbar?.getScrollTranslate();
+          await t.expect(top).eql(0);
+          await t.expect(left).within(18, 20);
+        }
+
+        await scrollable.setContainerCssWidth(50);
+
+        await t.expect(await scrollable.apiScrollOffset()).eql({ left: 50, top: 0 });
+        if (scrollable.hScrollbar) {
+          const { top, left } = await scrollable.hScrollbar?.getScrollTranslate();
+          await t.expect(top).eql(0);
+          await t.expect(left).within(24, 26);
+        }
+
+        await scrollable.setContainerCssWidth(75);
+
+        await t.expect(await scrollable.apiScrollOffset()).eql({ left: 25, top: 0 });
+        if (scrollable.hScrollbar) {
+          const { top, left } = await scrollable.hScrollbar?.getScrollTranslate();
+          await t.expect(top).eql(0);
+          await t.expect(left).within(18, 20);
+        }
+
+        await scrollable.setContainerCssWidth(100);
+
+        await t.expect(await scrollable.apiScrollOffset()).eql({ left: 0, top: 0 });
+        if (scrollable.hScrollbar) {
+          const { top, left } = await scrollable.hScrollbar?.getScrollTranslate();
+          await t.expect(top).eql(0);
+          await t.expect(left).eql(0);
+        }
+
+        await scrollable.setContainerCssWidth(75);
+
+        await t.expect(await scrollable.apiScrollOffset()).eql({ left: 25, top: 0 });
+        if (scrollable.hScrollbar) {
+          const { top, left } = await scrollable.hScrollbar?.getScrollTranslate();
+          await t.expect(top).eql(0);
+          await t.expect(left).within(18, 20);
+        }
+      }).before(async () => {
+        await appendElementTo('#container', 'div', 'content', {
+          width: '100px', height: '100px', backgroundColor: 'skyblue',
+        });
+
+        return createWidget('dxScrollable', {
+          width: 50,
+          height: 50,
+          useNative,
+          rtlEnabled: true,
+          useSimulatedScrollbar,
+          direction: 'horizontal',
           showScrollbar: 'always',
         });
       });

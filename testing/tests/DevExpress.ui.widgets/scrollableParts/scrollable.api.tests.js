@@ -67,6 +67,8 @@ const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
 QUnit.module('api', moduleConfig);
 
 QUnit.test('update', function(assert) {
+    this.clock.restore();
+    const done = assert.async();
     const moveDistance = -10;
     const moveDuration = 10;
     const inertiaDistance = calculateInertiaDistance(moveDistance, moveDuration);
@@ -80,7 +82,9 @@ QUnit.test('update', function(assert) {
         useNative: false,
         onEnd: function() {
             const location = getScrollOffset($scrollable);
-            assert.equal(Math.round(location.top), Math.round(distance), 'distance was calculated correctly');
+            assert.roughEqual(location.top, distance, 1, 'distance was calculated correctly');
+
+            done();
         }
     });
 
@@ -855,18 +859,14 @@ class ScrollableTestHelper {
             const checkTranslateValues = ({ vertical, horizontal }) => {
                 if(this._direction === DIRECTION_VERTICAL || this._direction === 'both') {
                     const $scroll = this.$scrollable.find(`.${SCROLLBAR_VERTICAL_CLASS} .${SCROLLABLE_SCROLL_CLASS}`);
-
-
                     const { left, top } = getTranslateValues($scroll.get(0));
 
                     QUnit.assert.strictEqual(left, 0, 'translate left');
                     QUnit.assert.roughEqual(top, vertical, 1.001, 'translate top');
-
                 }
 
                 if(this._direction === DIRECTION_HORIZONTAL || this._direction === 'both') {
                     const $scroll = this.$scrollable.find(`.${SCROLLBAR_HORIZONTAL_CLASS} .${SCROLLABLE_SCROLL_CLASS}`);
-
                     const { left, top } = getTranslateValues($scroll.get(0));
 
                     QUnit.assert.roughEqual(left, horizontal, 1.001, 'translate left');
