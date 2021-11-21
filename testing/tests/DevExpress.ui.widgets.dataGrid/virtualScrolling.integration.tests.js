@@ -4921,7 +4921,7 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 16, 'visible rows');
         if(isRenovatedScrollable && browser.mozilla) {
-            assert.roughEqual(dataGrid.getVisibleRows()[0].data.id, 18, 1, 'top visible row');
+            assert.roughEqual(dataGrid.getVisibleRows()[0].data.id, 18, 1.001, 'top visible row');
         } else {
             assert.equal(dataGrid.getVisibleRows()[0].data.id, 18, 'top visible row');
         }

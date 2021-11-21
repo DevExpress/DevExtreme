@@ -615,7 +615,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             .move(0, -10)
             .up();
 
-        const resizeWaitTimer = 50;
+        const resizeWaitTimer = 100;
         setTimeout(() => {
             $scrollView.dxScrollView('option', 'pullDownEnabled', false);
             $scrollView.dxScrollView('option', 'onPullDown', undefined);
