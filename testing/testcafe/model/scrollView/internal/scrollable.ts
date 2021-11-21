@@ -57,11 +57,76 @@ export default class Scrollable extends Widget {
     return Selector(`.${CLASS.scrollableContent}`);
   }
 
+  async getMaxScrollOffset(): Promise<{ vertical: number; horizontal: number }> {
+    const container = this.getContainer();
+    const scrollHeight = await container.scrollHeight;
+    const clientHeight = await container.clientHeight;
+    const scrollWidth = await container.scrollWidth;
+    const clientWidth = await container.clientWidth;
+
+    return ClientFunction(
+      () => ({
+        vertical: scrollHeight - clientHeight,
+        horizontal: scrollWidth - clientWidth,
+      }),
+      {
+        dependencies: {
+          scrollHeight, clientHeight, scrollWidth, clientWidth,
+        },
+      },
+    )();
+  }
+
   apiScrollOffset(): Promise<{ top: number; left: number }> {
     const { getInstance } = this;
 
     return ClientFunction(
       () => (getInstance() as any).scrollOffset(),
+      { dependencies: { getInstance } },
+    )();
+  }
+
+  apiScrollTo(value: { top?: number; left?: number }): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        (getInstance() as any).scrollTo(value);
+      },
+      { dependencies: { getInstance, value } },
+    )();
+  }
+
+  apiScrollToElement(selector: string): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        (getInstance() as any).scrollToElement(selector);
+      },
+      { dependencies: { getInstance, selector } },
+    )();
+  }
+
+  apiOption(name: string, value: string | number | boolean = 'undefined'): Promise<any> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        const scrollable = getInstance() as any;
+        return value !== 'undefined' ? scrollable.option(name, value) : scrollable.option(name);
+      },
+      { dependencies: { getInstance, name, value } },
+    )();
+  }
+
+  apiUpdate(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => {
+        (getInstance() as any).update();
+      },
       { dependencies: { getInstance } },
     )();
   }
