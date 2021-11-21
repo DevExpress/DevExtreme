@@ -330,6 +330,8 @@ class ScrollableTestHelper {
     this.viewModel.containerRef.current!.scrollTop = top;
     this.viewModel.containerRef.current!.scrollLeft = left;
 
+    this.viewModel.savedScrollOffset = { scrollTop: top, scrollLeft: left };
+
     this.viewModel.vScrollLocation = -top;
     this.viewModel.hScrollLocation = -left;
   }
