@@ -24,7 +24,7 @@ fixture`ScrollView`
         });
 
         await t.expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseLeave);
-        await t.hover(ScrollView.getContainer());
+        await t.hover(scrollView.getContainer());
         await t.expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseEnter);
         await t.click(Selector('#mouseLeaveButton'));
         await t.expect(scrollView.scrollbar.isScrollVisible()).eql(scrollBarVisibleAfterMouseLeave);

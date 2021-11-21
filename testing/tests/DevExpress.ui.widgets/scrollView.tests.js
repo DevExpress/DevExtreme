@@ -67,6 +67,7 @@ const moduleConfig = {
     }
 };
 
+
 QUnit.testStart(function() {
     const markup = '\
         <div id="scrollView" style="height: 50px; width: 50px;">\

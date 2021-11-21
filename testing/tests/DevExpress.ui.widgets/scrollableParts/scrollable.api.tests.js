@@ -1181,7 +1181,6 @@ class ScrollableTestHelper {
                         <div class="content2"></div>\
                     </div>';
                 $('#qunit-fixture').html(markup);
-                this.resizeTimeout = 100;
             }
         }, () => {
             [0, 10, 20].forEach(scrollRight => {

@@ -104,7 +104,7 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     onVisibilityChangeHandler, scrolling, lock, unlock,
     hScrollOffsetMax, vScrollOffsetMax, vScrollOffsetMin,
     props: {
-      aria, disabled, height, width, rtlEnabled, children, visible,
+      aria, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
       needRenderScrollbars, needScrollViewLoadPanel,
       showScrollbar, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
@@ -121,7 +121,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
       aria={aria}
       addWidgetClass={false}
       classes={cssClasses}
-      disabled={disabled}
       rtlEnabled={rtlEnabled}
       height={height}
       width={width}

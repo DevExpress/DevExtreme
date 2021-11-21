@@ -1893,6 +1893,7 @@ QUnit.module('Scroll group content', {
         this.clock.restore();
     }
 }, () => {
+
     QUnit.test('No scroll group content', function(assert) {
         const $sortable = this.createSortable();
         const $item = $sortable.find('.test-item').eq(3);
@@ -2100,5 +2101,7 @@ QUnit.module('Scroll group content', {
         assert.strictEqual(this.onScroll.callCount, 0);
         assert.strictEqual($sortable.find('.test-container').eq(0).dxScrollable('instance')._eventsStrategy.hasEvent('scroll'), false);
     });
+
+
 });
 
