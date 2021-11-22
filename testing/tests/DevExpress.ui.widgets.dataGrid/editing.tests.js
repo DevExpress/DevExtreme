@@ -24,6 +24,7 @@ import errors from 'ui/widget/ui.errors';
 import { getCells, generateItems, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
+import nativePointerMock from '../../helpers/nativePointerMock.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -1122,8 +1123,7 @@ QUnit.module('Editing', {
         rowsView.render(testElement);
 
         // act
-        $($input).trigger('click');
-
+        nativePointerMock($($input)).click();
         // assert
         assert.equal(getInputElements(testElement).length, 2);
         assert.equal(testElement.find('td').first().find('input').length, 1);
@@ -2720,7 +2720,8 @@ QUnit.module('Editing', {
         allowUpdating.reset();
 
         // act
-        that.gridContainer.find('td').first().trigger('click');
+        const $td = that.gridContainer.find('td').first();
+        nativePointerMock($td).click();
 
         // assert
         assert.strictEqual(allowUpdating.callCount, 0, 'allowUpdating isn\'t called');
@@ -7989,7 +7990,7 @@ QUnit.module('Editing with real dataController', {
         let $linkElement = $testElement.find('.dx-command-edit').first().find('.dx-link').first();
 
         // act
-        $linkElement.trigger('click');
+        nativePointerMock($linkElement).click();
         this.clock.tick();
 
         // assert
@@ -17555,15 +17556,15 @@ QUnit.module('Edit Form', {
         this.editRow(0);
         const $labels = testElement.find('.dx-datagrid-edit-form label');
 
-        $labels.eq(0).trigger('click');
+        nativePointerMock($labels.eq(0)).click();
         assert.ok(testElement.find('input[id*=\'name\']').parent().parent().parent().hasClass('dx-state-focused'), 'input with \'name\' id');
-        $labels.eq(1).trigger('click');
+        nativePointerMock($labels.eq(1)).click();
         assert.ok(testElement.find('input[id*=\'age\']').parent().parent().parent().hasClass('dx-state-focused'), 'input with \'age\' id');
-        $labels.eq(2).trigger('click');
+        nativePointerMock($labels.eq(2)).click();
         assert.ok(testElement.find('input[id*=\'lastName\']').parent().parent().parent().hasClass('dx-state-focused'), 'input with \'lastName\' id');
-        $labels.eq(3).trigger('click');
+        nativePointerMock($labels.eq(3)).click();
         assert.ok(testElement.find('input[id*=\'phone\']').parent().parent().parent().hasClass('dx-state-focused'), 'input with \'phone\' id');
-        $labels.eq(4).trigger('click');
+        nativePointerMock($labels.eq(4)).click();
         assert.ok(testElement.find('input[id*=\'room\']').parent().parent().parent().hasClass('dx-state-focused'), 'input with \'room\' id');
     });
 

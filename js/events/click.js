@@ -103,7 +103,8 @@ const useNativeClick =
 
     const clickHandler = function(e) {
         const originalEvent = e.originalEvent;
-        const eventAlreadyFired = lastFiredEvent === originalEvent || originalEvent && originalEvent.DXCLICK_FIRED;
+
+        const eventAlreadyFired = lastFiredEvent === originalEvent || originalEvent.DXCLICK_FIRED;
         const leftButton = !e.which || e.which === 1;
 
         if(leftButton && !prevented && isNativeClickEvent(e.target) && !eventAlreadyFired) {
