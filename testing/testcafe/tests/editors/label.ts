@@ -176,3 +176,22 @@ stylingMods.forEach((stylingMode) => {
     });
   });
 });
+
+test('Label max-width changed with container size', async (t) => {
+  const componentOption = {
+    width: 100,
+    label: 'long label text long label text long label text long label text long label text',
+  };
+
+  await createWidget('dxTextBox', {
+    ...componentOption,
+  }, true);
+
+  await t
+    .expect(Selector('#container .dx-label').getStyleProperty('max-width')).eql('82px');
+
+  await t.eval(() => { $('#container').css('width', 400); });
+
+  await t
+    .expect(Selector('#container .dx-label').getStyleProperty('max-width')).eql('382px');
+});

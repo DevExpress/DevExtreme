@@ -201,15 +201,15 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   get elementAttr(): HTMLAttributes<unknown> {
     if (!this._elementAttr) {
       const { attributes } = this.$element()[0];
-      this._elementAttr = {
-        ...Object.keys(attributes).reduce((result, key) => {
+      const attrs = Array.from<{ name: string; value: unknown }>(attributes)
+        .filter((attr) => !this._propsInfo.templates.includes(attr.name)
+      && attributes[attr.name]?.specified)
+        .reduce((result, { name, value }) => {
           const updatedAttributes = result;
-          if (attributes[key]?.specified) {
-            updatedAttributes[attributes[key].name] = attributes[key].value;
-          }
+          updatedAttributes[name] = value;
           return updatedAttributes;
-        }, {}),
-      };
+        }, {});
+      this._elementAttr = attrs;
       this._storedClasses = this.$element()[0].getAttribute('class') || '';
     }
     const elemStyle: CSSStyleDeclaration = this.$element()[0].style;

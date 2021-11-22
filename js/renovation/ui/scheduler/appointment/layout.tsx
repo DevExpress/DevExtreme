@@ -56,9 +56,9 @@ export class AppointmentLayoutProps {
 
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
-  @Event() onAppointmentClick?: (e: AppointmentClickData) => void;
-
   @Template() overflowIndicatorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
+
+  @Event() onAppointmentClick?: (e: AppointmentClickData) => void;
 }
 
 @Component({
