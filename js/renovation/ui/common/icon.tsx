@@ -13,11 +13,7 @@ export const viewFunction = ({
     {sourceType === 'dxIcon' && (<i className={iconClassName} />)}
     {sourceType === 'fontIcon' && (<i className={iconClassName} />)}
     {sourceType === 'image' && (<img className={iconClassName} alt="" src={source} />)}
-    {IconTemplate && (
-      <i className={iconClassName}>
-        <IconTemplate />
-      </i>
-    )}
+    {IconTemplate && (<i className={iconClassName}><IconTemplate /></i>)}
   </Fragment>
 );
 

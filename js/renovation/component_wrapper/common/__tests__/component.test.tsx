@@ -689,6 +689,17 @@ describe('templates and slots', () => {
     expect(fakeEventSingleton.handlerCount).toBe(0);
   });
 
+  it('template can be rendered without data passed', () => {
+    const templateMarkup = '<span>Template content</span>';
+    $('#component').dxTemplatedTestWidget({
+      templateWithoutData() {
+        return templateMarkup;
+      },
+    });
+
+    expect($('#component').children()[0].innerHTML).toBe(templateMarkup);
+  });
+
   it('pass anonymous template content as children', () => {
     $('#component').html('<span>Default slot</span>');
 
