@@ -311,4 +311,4 @@ gulp.task('generate-components-watch', gulp.series('generate-components', functi
         ));
 }));
 
-gulp.task('native-components-compilation-check', gulp.series('react-compilation-check', 'angular-compilation-check', 'vue-compilation-check'));
+gulp.task('native-components-compilation-check', gulp.series('react-compilation-check', 'angular-compilation-check'));
