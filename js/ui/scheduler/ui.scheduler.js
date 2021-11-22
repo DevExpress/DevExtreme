@@ -860,9 +860,11 @@ class Scheduler extends Widget {
     _dimensionChanged() {
         this._toggleSmallClass();
 
-        if(!this._isAgenda() && this.filteredItems && this._isVisible()) {
-            this._workSpace.option('allDayExpanded', this._isAllDayExpanded(this.filteredItems));
-            this._workSpace._dimensionChanged();
+        const workspace = this.getWorkSpace();
+
+        if(!this._isAgenda() && this.filteredItems && this._isVisible() && workspace) {
+            workspace.option('allDayExpanded', this._isAllDayExpanded(this.filteredItems));
+            workspace._dimensionChanged();
 
             const appointments = this.getLayoutManager().createAppointmentsMap(this.filteredItems);
 
