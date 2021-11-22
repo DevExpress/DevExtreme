@@ -23,7 +23,7 @@ export class IconProps {
 
   @OneWay() source?: string = '';
 
-  @Template() iconTemplate?: () => JSX.Element;
+  @Template() iconTemplate?: (props) => JSX.Element;
 }
 
 @Component({
