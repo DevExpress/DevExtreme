@@ -210,6 +210,8 @@
     "build:angular:watch": "gulp generate-angular-watch",
     "build:vue": "gulp generate-vue",
     "build:vue:watch": "gulp generate-vue-watch",
+    "build-npm-renovation:react": "gulp renovation-npm-react",
+    "build-npm-renovation:angular": "gulp renovation-npm-angular",
     "build:modular": "cd ./playground/modular && webpack",
     "build:modular:watch": "cd ./playground/modular && webpack --watch",
     "build:testing-playground": "gulp build-renovation-testing:watch --playgroundName",
