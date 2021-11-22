@@ -23,7 +23,10 @@ import {
     getRecurrenceException,
     getAppointmentTakesAllDay
 } from './utils';
-import { getPreparedDataItems } from '../../../../renovation/ui/scheduler/utils/data';
+import {
+    getPreparedDataItems,
+    resolveDataItems
+} from '../../../../renovation/ui/scheduler/utils/data';
 
 const toMs = dateUtils.dateToMilliseconds;
 const DATE_FILTER_POSITION = 0;
@@ -228,8 +231,8 @@ export class AppointmentFilterBaseStrategy {
         if(this.dataSource) {
             const store = this.dataSource.store();
 
-            store.on('loaded', (items) => {
-                updateItems(items);
+            store.on('loaded', (options) => {
+                updateItems(resolveDataItems(options));
             });
 
             if(this.dataSource.isLoaded()) {
