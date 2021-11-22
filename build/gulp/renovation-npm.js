@@ -11,8 +11,9 @@ const { parse, print } = require('recast');
 const { visit, namedTypes, builders } = require('ast-types');
 const path = require('path');
 const tsparser = require("recast/parsers/typescript");
-const jsparser = require("recast/parsers/babel")
+const jsparser = require("recast/parsers/babel");
 
+const rawPackageSet = new Set();
 function performRecastReplacements(rootFolderPath) {
     return through.obj((file, enc, callback) => {
         if (file.isNull())
@@ -50,6 +51,7 @@ function performRecastReplacements(rootFolderPath) {
                 return false;
             } else {
                 //package module import
+                rawPackageSet.add(importFrom);
                 return false;
             }
         }
@@ -91,11 +93,47 @@ function performRecastReplacements(rootFolderPath) {
     });
 }
 
+function performPackageLockReplacements() {
+    return through.obj((file, enc, callback) => {
+        const pkg = JSON.parse(file.contents.toString());
+        const knownFields = ['name', 'version', 'description', 'keywords', 'homepage', 'bugs', 'author', 'repository', 'license', 'browserslist'];
+        const result = {};
+        knownFields.forEach(x => result[x] = pkg[x]);
+
+        const depsList = new Array(...rawPackageSet).map(x => {
+            const splitted = x.split('/');
+            if (splitted.length != 1 && splitted[0].startsWith('@')) {
+                return `${splitted[0]}/${splitted[1]}`;
+            }
+            return splitted[0];
+        });
+        const depsListDistinct = new Array(...new Set(depsList));
+
+        result.dependencies = {};
+
+        ['dependencies', 'peerDependencies', 'devDependencies'].forEach(field => {
+            if (!pkg[field]) {
+                return;
+            }
+            result[field] = {};
+            depsListDistinct.forEach(x => {
+                result[field][x] = pkg[field][x];
+            });
+        })
+
+        result.dependencies.devextreme = ctx.version.package;
+
+        file.contents = Buffer.from(JSON.stringify(result, null, 2), enc);
+        callback(null, file);
+    });
+}
+
 function copyServiceFiles(dist) {
     return () => merge(
         gulp
             .src('package.json')
             .pipe(replace(version, ctx.version.package))
+            .pipe(performPackageLockReplacements())
             .pipe(gulp.dest(dist)),
         gulp
             .src('README.md')
