@@ -1625,6 +1625,12 @@ declare module DevExpress.data {
     clearRawDataCache(): void;
   }
   module CustomStore {
+    export type GroupItem<TItem = any> = {
+      key: any | string | number;
+      items: Array<TItem> | Array<GroupItem> | null;
+      count?: number;
+      summary?: Array<any>;
+    };
     export type Options<TItem = any, TKey = any> = CustomStoreOptions<
       TItem,
       TKey
@@ -1651,7 +1657,19 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load: (options: LoadOptions<TItem>) => PromiseLike<TItem> | Array<TItem>;
+    load: (options: LoadOptions<TItem>) =>
+      | DevExpress.core.utils.DxPromise<
+          | Array<TItem>
+          | Array<DevExpress.data.CustomStore.GroupItem>
+          | {
+              data: Array<TItem> | Array<DevExpress.data.CustomStore.GroupItem>;
+              totalCount?: number;
+              summary?: Array<any>;
+              groupCount?: number;
+            }
+        >
+      | Array<DevExpress.data.CustomStore.GroupItem>
+      | Array<TItem>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
