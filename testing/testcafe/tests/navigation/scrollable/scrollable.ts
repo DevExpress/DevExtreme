@@ -339,25 +339,25 @@ fixture`Scrollable_Resize`
           await scrollable.setContainerCssWidth(75);
 
           let expectedScrollOffset = (await scrollable.getMaxScrollOffset()).horizontal - scrollOffset;
-          await t.expect((await scrollable.apiScrollOffset()).left).within(expectedScrollOffset - 0.5, expectedScrollOffset + 0.5);
+          await t.expect((await scrollable.apiScrollOffset()).left).within(expectedScrollOffset - 1, expectedScrollOffset + 1);
           await t.expect((await scrollable.apiScrollOffset()).top).eql(0);
           if (scrollable.hScrollbar) {
             const { top, left } = await scrollable.hScrollbar?.getScrollTranslate();
             await t.expect(top).eql(0);
-            const expectedTranslateValue = ((await scrollable.getMaxScrollOffset()).horizontal - scrollOffset) * 0.75;
-            await t.expect(left).within(expectedTranslateValue - 0.5, expectedTranslateValue + 0.5);
+            const expectedTranslateValue = expectedScrollOffset * 0.75;
+            await t.expect(left).within(expectedTranslateValue - 1, expectedTranslateValue + 1);
           }
 
           await scrollable.setContainerCssWidth(50);
 
           expectedScrollOffset = (await scrollable.getMaxScrollOffset()).horizontal - scrollOffset;
-          await t.expect((await scrollable.apiScrollOffset()).left).within(expectedScrollOffset - 0.5, expectedScrollOffset + 0.5);
+          await t.expect((await scrollable.apiScrollOffset()).left).within(expectedScrollOffset - 1, expectedScrollOffset + 1);
           await t.expect((await scrollable.apiScrollOffset()).top).eql(0);
           if (scrollable.hScrollbar) {
             const { top, left } = await scrollable.hScrollbar?.getScrollTranslate();
             await t.expect(top).eql(0);
-            const expectedTranslateValue = ((await scrollable.getMaxScrollOffset()).horizontal - scrollOffset) * 0.5;
-            await t.expect(left).within(expectedTranslateValue - 0.5, expectedTranslateValue + 0.5);
+            const expectedTranslateValue = expectedScrollOffset * 0.5;
+            await t.expect(left).within(expectedTranslateValue - 1, expectedTranslateValue + 1);
           }
 
           await scrollable.setContainerCssWidth(100);
@@ -418,7 +418,7 @@ fixture`Scrollable_Resize`
           if (scrollable.hScrollbar) {
             const { top, left } = await scrollable.hScrollbar?.getScrollTranslate();
             await t.expect(top).eql(0);
-            const expectedTranslateValue = (scrollOffset - 25) * 0.75;
+            const expectedTranslateValue = expectedScrollOffset * 0.75;
             await t.expect(left).within(expectedTranslateValue - 0.5, expectedTranslateValue + 0.5);
           }
 

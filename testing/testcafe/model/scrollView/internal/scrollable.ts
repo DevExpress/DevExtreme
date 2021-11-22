@@ -137,7 +137,9 @@ export default class Scrollable extends Widget {
     return ClientFunction(
       () => {
         (getInstance() as any).container().css({ width: value });
-        (getInstance() as any).update();
+        // force recalculate size for old component
+        // eslint-disable-next-line no-underscore-dangle
+        (getInstance() as any)._dimensionChanged();
       },
       { dependencies: { getInstance, value } },
     )();

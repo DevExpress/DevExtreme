@@ -8,14 +8,26 @@ import {
     DxElement,
 } from './element';
 
+import {
+    ChangedOptionInfo,
+    EventInfo,
+    InitializedEventInfo,
+} from '../events/index';
+
 import { TemplateManager } from './template_manager';
 import { FunctionTemplate } from './templates/function_template';
 import { DefaultOptionsRule } from './options';
 
+type OptionChangedEventInfo<TComponent> = EventInfo<TComponent> & ChangedOptionInfo;
+
 /* eslint-disable no-underscore-dangle */
 
 /** @namespace DevExpress */
-export interface DOMComponentOptions<TComponent> extends ComponentOptions<TComponent> {
+export interface DOMComponentOptions<TComponent> extends ComponentOptions<
+    EventInfo<TComponent>,
+    InitializedEventInfo<TComponent>,
+    OptionChangedEventInfo<TComponent>
+> {
     /**
      * @docid
      * @default {}
@@ -38,18 +50,27 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<TCompo
      * @docid
      * @action
      * @default null
+     * @type_function_param1 e:object
      * @type_function_param1_field1 component:<DOMComponent>
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
      * @public
      */
-    onDisposing?: ((e: { component?: TComponent; element?: DxElement; model?: any }) => void);
+    onDisposing?: ((e: EventInfo<TComponent>) => void);
     /**
      * @docid
      * @action
      * @default null
+     * @type_function_param1 e:object
      * @type_function_param1_field1 component:<DOMComponent>
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 name:string
+     * @type_function_param1_field5 fullName:string
+     * @type_function_param1_field6 value:any
      * @public
      */
-    onOptionChanged?: ((e: { component?: TComponent; element?: DxElement; model?: any; name?: string; fullName?: string; value?: any }) => void);
+    onOptionChanged?: ((e: OptionChangedEventInfo<TComponent>) => void);
     /**
      * @docid
      * @default false

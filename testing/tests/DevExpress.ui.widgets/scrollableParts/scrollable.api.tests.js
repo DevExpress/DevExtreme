@@ -76,8 +76,8 @@ QUnit.test('update', function(assert) {
         useNative: false,
         onEnd: function() {
             const location = getScrollOffset($scrollable);
-            assert.roughEqual(location.top, distance, 1, 'distance was calculated correctly');
 
+            assert.roughEqual(location.top, distance, 1, 'distance was calculated correctly');
             done();
         }
     });

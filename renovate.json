@@ -3,11 +3,11 @@
         "config:base"
     ],
     "baseBranches": [
-        "21_2"
+        "21_2",
+        "22_1"
     ],
     "labels": [
-        "dependencies",
-        "21_2"
+        "dependencies"
     ],
     "lockFileMaintenance": {
         "enabled": true,
@@ -34,5 +34,8 @@
     ],
     "ignorePaths": [
         ".github"
-    ]
+    ],
+    "constraints": {
+        "npm": "^7.0.0"
+    }
 }
