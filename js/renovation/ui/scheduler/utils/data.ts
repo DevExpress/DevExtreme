@@ -1,5 +1,5 @@
 import type { Appointment } from '../../../../ui/scheduler';
-import { AppointmentDataItem, DataAccessorType } from '../types';
+import { AppointmentDataItem, DataAccessorType, LoadDataType } from '../types';
 import { replaceWrongEndDate } from '../../../../ui/scheduler/appointments/dataProvider/utils';
 import { createAppointmentAdapter } from '../../../../ui/scheduler/appointmentAdapter';
 import { TimeZoneCalculator } from '../timeZoneCalculator/utils';
@@ -48,3 +48,9 @@ export const getPreparedDataItems = (
 
   return result;
 };
+
+export const resolveDataItems = (options: LoadDataType): Appointment[] => (
+  Array.isArray(options)
+    ? options
+    : options.data
+);
