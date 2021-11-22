@@ -34,32 +34,51 @@ function performRecastReplacements(rootFolderPath) {
         let needsPrint = false;
         const fileDir = path.dirname(file.path);
         const devextremeFolder = path.dirname(absoluteRootFolderPath);
+
+        const processImport = (importFrom, performReplacement) => {
+            if (importFrom.startsWith('.')) {
+                //relative module path
+                const absoluteModulePath = path.resolve(fileDir, importFrom);
+                if (absoluteModulePath.startsWith(absoluteRootFolderPath)) {
+                    return false;
+                }
+                const newPath = path.relative(devextremeFolder, absoluteModulePath).replace(/\\/g, '/');
+
+                performReplacement(`devextreme/${newPath}`)
+
+                needsPrint = true;
+                return false;
+            } else {
+                //package module import
+                return false;
+            }
+        }
         visit(ast, {
             visitImportDeclaration(nodePath) {
-                const importFrom = nodePath.node.source.value;
-                if (importFrom.startsWith('.')) {
-                    //relative module path
-                    const absoluteModulePath = path.resolve(fileDir, importFrom);
-                    if (absoluteModulePath.startsWith(absoluteRootFolderPath)) {
-                        return false;
-                    }
-                    const newPath = path.relative(devextremeFolder, absoluteModulePath).replace(/\\/g, '/');
-
+                return processImport(nodePath.node.source.value, (newImport) => {
                     const args = [
                         nodePath.node.specifiers,
-                        builders.stringLiteral(`devextreme/${newPath}`),
+                        builders.stringLiteral(newImport),
                         nodePath.node.importKind
                     ];
                     if (!args[2]) {
                         args.splice(2, 1);
                     }
                     nodePath.replace(builders.importDeclaration(...args));
-                    needsPrint = true;
-                    return false;
-                } else {
-                    //package module import
-                    return false;
-                }
+                });
+            },
+            visitTSImportType(nodePath) {
+                return processImport(nodePath.node.argument.value, (newImport) => {
+                    const args = [
+                        builders.stringLiteral(newImport),
+                        nodePath.node.qualifier,
+                        nodePath.node.typeParameters
+                    ];
+                    if (!args[2]) {
+                        args.splice(2, 1);
+                    }
+                    nodePath.replace(builders.tsImportType(...args));
+                })
             }
         })
 
