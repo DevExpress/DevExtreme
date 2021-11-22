@@ -53,7 +53,7 @@ export interface CustomStoreOptions<
         | Array<GroupItem>
         | {
             data: Array<TItem> | Array<GroupItem>;
-            totalCount?: any;
+            totalCount?: number;
             summary?: Array<any>;
             groupCount?: number;
           }>

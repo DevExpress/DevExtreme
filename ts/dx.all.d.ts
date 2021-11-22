@@ -1688,7 +1688,7 @@ declare module DevExpress.data {
           | Array<DevExpress.data.CustomStore.GroupItem>
           | {
               data: Array<TItem> | Array<DevExpress.data.CustomStore.GroupItem>;
-              totalCount?: any;
+              totalCount?: number;
               summary?: Array<any>;
               groupCount?: number;
             }
