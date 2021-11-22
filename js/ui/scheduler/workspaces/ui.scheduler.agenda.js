@@ -551,6 +551,13 @@ class SchedulerAgenda extends WorkSpace {
     _getIntervalDuration() {
         return dateUtils.dateToMilliseconds('day') * this.option('intervalCount');
     }
+
+    getDOMElementsMetaData() {
+        return {
+            dateTableCellsMeta: [[{}]],
+            allDayPanelCellsMeta: [{}],
+        };
+    }
 }
 
 registerComponent('dxSchedulerAgenda', SchedulerAgenda);

@@ -55,3 +55,33 @@ QUnit.test('Appointment template should be render once(T947938)', function(asser
     assert.equal($('.dx-scheduler-appointment-title').length, 1, 'title should be render once');
     assert.equal($('.dx-scheduler-appointment-content-details').length, 1, 'details should be render once');
 });
+
+QUnit.test('Appointment DnD with disabled property (T1046067)', function(assert) {
+    const markupText = `<div class='dx-viewport demo-container'>
+        <div id='scheduler-demo'>
+            <div data-bind='dxScheduler: schedulerOptions'></div>
+        </div>
+    </div>`;
+
+    const $element = $(markupText).appendTo('#qunit-fixture');
+
+    function PageViewModel() {
+        this.schedulerOptions = {
+            dataSource: [{
+                text: ko.observable('Website Re-Design Plan'),
+                startDate: ko.observable(new Date(2021, 4, 25, 1)),
+                endDate: ko.observable(new Date(2021, 4, 25, 2)),
+                disabled: ko.observable(true),
+            }],
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2021, 4, 25),
+            height: 600
+        };
+    }
+
+    ko.applyBindings(new PageViewModel(), $element.get(0));
+
+    assert.equal($('.dx-scheduler-appointment-title').length, 1, 'title should be render once');
+    assert.equal($('.dx-scheduler-appointment-content-details').length, 1, 'details should be render once');
+});

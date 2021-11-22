@@ -1101,7 +1101,6 @@ export default class dxDiagram extends Widget<dxDiagramOptions> {
      * @docid
      * @publicName exportTo(format, callback)
      * @param1 format:Enums.DiagramExportFormat
-     * @param2 callback:function
      * @public
      */
     exportTo(format: 'svg' | 'png' | 'jpg', callback: Function): void;
