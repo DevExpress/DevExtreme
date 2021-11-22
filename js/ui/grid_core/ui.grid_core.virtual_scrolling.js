@@ -1255,7 +1255,7 @@ export const virtualScrollingModule = {
                         const changedParams = this._getChangedLoadParams();
                         let result = false;
 
-                        if(virtualPaging && checkLoading && changedParams && changedParams.pageIndex > dataSourceAdapter.pageIndex()) {
+                        if(!dataSourceAdapter || (virtualPaging && checkLoading && changedParams && changedParams.pageIndex > dataSourceAdapter.pageIndex())) {
                             return result;
                         }
 

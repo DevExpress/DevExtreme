@@ -2007,6 +2007,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             attachGeneralEvents,
             detachGeneralEvents,
             () => this._getDroppableCell(),
+            () => this._getDateTables(),
             () => this.removeDroppableCellClass(),
             () => this.getCellWidth(),
             options)
@@ -2993,6 +2994,7 @@ const createDragBehaviorConfig = (
     attachGeneralEvents,
     detachGeneralEvents,
     getDroppableCell,
+    getDateTables,
     removeDroppableCellClass,
     getCellWidth,
     options) => {
@@ -3072,10 +3074,18 @@ const createDragBehaviorConfig = (
             domAdapter.elementsFromPoint(newX, newY) :
             domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY);
 
-        const droppableCell = elements.filter(el => {
+        const dateTables = getDateTables();
+        const droppableCell = elements.find(el => {
             const classList = el.classList;
-            return classList.contains(DATE_TABLE_CELL_CLASS) || classList.contains(ALL_DAY_TABLE_CELL_CLASS);
-        })[0];
+
+            const isCurrentSchedulerElement = dateTables.find(el).length === 1;
+
+            return isCurrentSchedulerElement &&
+                (
+                    classList.contains(DATE_TABLE_CELL_CLASS) ||
+                    classList.contains(ALL_DAY_TABLE_CELL_CLASS)
+                );
+        });
 
         if(droppableCell) {
             const oldDroppableCell = getDroppableCell();
