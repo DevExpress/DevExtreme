@@ -110,7 +110,7 @@ test('Virtual scrolling layout in scheduler views when grouping by date is enabl
   await scrollTo(scrollConfig[1].firstDate, { resourceId: 3 });
 
   await t.expect(
-    await takeScreenshot(`virtual-scrolling-currentView-${view.type}-after-scroll-grouping-by-date.png`),
+    await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-grouping-by-date.png`),
   ).ok();
 
   await scrollTo(scrollConfig[1].lastDate, { resourceId: 0 });
