@@ -102,23 +102,23 @@ test('Virtual scrolling layout in scheduler views when grouping by date is enabl
 
   // TODO: views[0] is day view and we have a bug in its CSS
   // It is not advisable to create screenshots for incorrect layout
-  for (let i = 1; i < views.length; i += 1) {
-    const view = views[i];
+  // for (let i = 1; i < views.length; i += 1) {
+  const view = views[1];
 
-    await scheduler.option('currentView', view.type);
+  await scheduler.option('currentView', view.type);
 
-    await scrollTo(scrollConfig[i].firstDate, { resourceId: 3 });
+  await scrollTo(scrollConfig[1].firstDate, { resourceId: 3 });
 
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-grouping-by-date.png`),
-    ).ok();
+  await t.expect(
+    await takeScreenshot(`virtual-scrolling-${view.type}-after-scroll-grouping-by-date.png`),
+  ).ok();
 
-    await scrollTo(scrollConfig[i].lastDate, { resourceId: 0 });
+  await scrollTo(scrollConfig[1].lastDate, { resourceId: 0 });
 
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-grouping-by-date.png`),
-    ).ok();
-  }
+  await t.expect(
+    await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-grouping-by-date.png`),
+  ).ok();
+  // }
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
