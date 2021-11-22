@@ -2341,9 +2341,6 @@ export const editingModule = {
 
                     return template || this.callBase(options);
                 },
-                _isNativeClick: function() {
-                    return (devices.real().ios || devices.real().android) && this.option('editing.allowUpdating');
-                },
                 _createRow: function(row) {
                     const $row = this.callBase.apply(this, arguments);
 
