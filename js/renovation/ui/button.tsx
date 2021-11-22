@@ -51,7 +51,7 @@ export const viewFunction = (viewModel: Button): JSX.Element => {
   } = viewModel.props;
   const renderText = !ButtonTemplate && !children && text !== '';
   const isIconLeft = iconPosition === 'left';
-  const iconComponent = !ButtonTemplate && !children && viewModel.iconSource
+  const iconComponent = !ButtonTemplate && !children && (viewModel.iconSource || IconTemplate)
         && (
         <Icon
           source={viewModel.iconSource}
@@ -126,7 +126,7 @@ export class ButtonProps extends BaseWidgetProps {
 
   @Template() template?: (props: { data: { icon?: string; text?: string } }) => JSX.Element;
 
-  @Template() iconTemplate?: () => JSX.Element;
+  @Template() iconTemplate?: (props) => JSX.Element;
 
   @Slot() children?: JSX.Element;
 
