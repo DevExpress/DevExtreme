@@ -12,7 +12,6 @@ import registerEmitter from './core/emitter_registrator';
 import { noop } from '../core/utils/common';
 
 const CLICK_EVENT_NAME = 'dxclick';
-const NATIVE_CLICK_CLASS = 'dx-native-click';
 
 const isInput = function(element) {
     return $(element).is('input, textarea, select, button ,:focus, :focus *');
@@ -61,9 +60,6 @@ const ClickEmitter = Emitter.inherit({
 
     configure: function(data) {
         this.callBase(data);
-        if(data.useNative) {
-            this.getElement().addClass(NATIVE_CLICK_CLASS);
-        }
     },
 
     start: function(e) {
