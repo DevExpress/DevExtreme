@@ -37,7 +37,8 @@ System.config({
         'jszip': 'npm:jszip@3.1.3/dist/jszip.min.js',
         'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.js',
         'devextreme': '../../artifacts/angular',
-        '@devextreme/runtime/angular': '../../node_modules/@devextreme/runtime/cjs/angular'
+        '@devextreme/runtime/angular': '../../node_modules/@devextreme/runtime/cjs/angular',
+        'rrule': 'npm:rrule@2.6.8/dist/es5/rrule.js'
     },
     packages: {
         'app': {
