@@ -1375,6 +1375,8 @@ QUnit.module('drag', {
             this.$title = this.popup.topToolbar();
         };
         this.reinit = (options) => {
+            this.popup.dispose();
+
             this.init(options);
         };
 
@@ -1415,10 +1417,10 @@ QUnit.module('drag', {
 
     QUnit.test('popup should be dragged if title was changed', function(assert) {
         const position = this.$overlayContent.position();
-
         this.popup.option('title', 'newTitle');
 
-        const pointer = pointerMock(this.popup.topToolbar());
+        const $title = this.popup.topToolbar();
+        const pointer = pointerMock($title);
 
         pointer.start().dragStart().drag(50, 50).dragEnd();
 
@@ -1488,6 +1490,8 @@ QUnit.module('drag', {
         const position = this.$overlayContent.position();
         const startEvent = pointer.start().dragStart().lastEvent();
 
+        $container.css({ padding: 0 });
+
         assert.strictEqual(position.left - startEvent.maxLeftOffset, 0, 'popup should not be dragged left of target');
         assert.strictEqual(position.left + startEvent.maxRightOffset, viewWidth - getOuterWidth(this.$overlayContent), 'popup should not be dragged right of target');
         assert.strictEqual(position.top - startEvent.maxTopOffset, 0, 'popup should not be dragged above the target');
@@ -1517,20 +1521,6 @@ QUnit.module('drag', {
             assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - getOuterHeight(this.$overlayContent), 'popup should not be dragged below than target');
         } finally {
             viewPort().removeAttr('style');
-            viewPort(toSelector(VIEWPORT_CLASS));
-        }
-    });
-
-    // ETO PERENESTI V RESIZE I UBRAT' SKIP
-    QUnit.skip('overlay should have correct resizable area if viewport and container is not specified', function(assert) {
-        try {
-            viewPort(null);
-
-            this.reinit({ width: 2, height: 2 });
-            const resizable = this.$overlayContent.dxResizable('instance');
-
-            assert.ok($.isWindow(resizable.option('area').get(0)), 'window is the area of the resizable');
-        } finally {
             viewPort(toSelector(VIEWPORT_CLASS));
         }
     });
@@ -1619,63 +1609,111 @@ QUnit.module('drag', {
         assert.notStrictEqual(startOverlayPosition, newOverlayPosition, 'overlay repositioned after dragging');
         assert.ok(newOverlayPosition < -9000, 'overlay now is positioned in viewport');
     });
+
+    QUnit.test('dragged popup should have default dimensions after toggle visibility', function(assert) {
+        this.reinit({
+            width: 'auto',
+            height: 'auto'
+        });
+
+        const pointer = pointerMock(this.$title);
+
+        pointer.start().dragStart().drag(-10).dragEnd();
+
+        this.popup.hide();
+        this.popup.show();
+
+        assert.deepEqual([this.$overlayContent[0].style.width, this.$overlayContent[0].style.height], ['auto', 'auto'], 'correct size');
+    });
 });
 
 QUnit.module('resize', {
     beforeEach: function() {
-        fx.off = true;
-    },
-    afterEach: function() {
-        fx.off = false;
+        const initialOptions = {
+            animation: null,
+            resizeEnabled: true,
+            visible: true,
+            width: 200,
+            height: 200
+        };
+        this.init = (options) => {
+            this.element = $('#popup');
+            this.popup = this.element
+                .dxPopup($.extend({}, initialOptions, options))
+                .dxPopup('instance');
+            this.$overlayContent = this.popup.$content().parent();
+            this.$handle = this.$overlayContent.find(toSelector(POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS));
+        };
+        this.reinit = (options) => {
+            this.popup && this.popup.dispose();
+
+            this.init(options);
+        };
+
+        this.init();
     }
 }, () => {
-    QUnit.test('popup content should update height after resize', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            resizeEnabled: true,
-            showTitle: false,
-            visible: true,
-            showCloseButton: false,
-            toolbarItems: []
-        });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
-        const $handle = $overlayContent.find(`.${POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS}`);
-        const pointer = pointerMock($handle).start();
-
-        pointer.dragStart().drag(-100, -100);
-        assert.roughEqual(getOuterHeight(popup.$content()), getHeight($overlayContent), 0.1, 'size of popup and overlay is equal');
+    QUnit.test('popup should have resizable component on overlay content', function(assert) {
+        assert.strictEqual(this.$overlayContent.dxResizable('option', 'handles'), 'all', 'direction specified correctly');
     });
 
-    QUnit.test('resize should work correct after runtime dimension change', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            resizeEnabled: true,
-            visible: true,
-            width: 500,
-            height: 500
-        });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
-        let $handle = $overlayContent.find(`.${POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS}`);
-        let pointer = pointerMock($handle).start();
+    QUnit.test('popup shouldn\'t have resizable component on overlay content if resizeEnabled is false', function(assert) {
+        this.reinit({ resizeEnabled: false });
 
-        pointer.dragStart().drag(0, -100).dragEnd();
-        popup.option({
-            width: 100,
-            height: 100
-        });
+        assert.strictEqual(this.$overlayContent.dxResizable('option', 'handles'), 'none', 'direction specified correctly');
+    });
 
-        $handle = $overlayContent.find(`.${POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS}`);
-        pointer = pointerMock($handle).start();
-        pointer.dragStart().drag(100, 0).dragEnd();
+    QUnit.test('popup shouldn\'t have resizable component on overlay content if resizeEnabled is changed dynamically', function(assert) {
+        this.popup.option('resizeEnabled', false);
+        assert.strictEqual(this.$overlayContent.dxResizable('option', 'handles'), 'none', 'direction specified correctly');
+    });
 
-        assert.strictEqual(popup.option('width'), 200, 'width is correct');
-        assert.strictEqual(popup.option('height'), 100, 'height is correct');
+    QUnit.test('resized popup should save dimensions after dimensions change', function(assert) {
+        const pointer = pointerMock(this.$handle);
+
+        pointer.start().dragStart().drag(10, 10).dragEnd();
+
+        assert.deepEqual([this.popup.option('width'), this.popup.option('height')], [210, 210], 'correct size');
+
+        pointer.start().dragStart().drag(-20, -20).dragEnd();
+
+        assert.deepEqual([this.popup.option('width'), this.popup.option('height')], [190, 190], 'correct size');
+    });
+
+    QUnit.test('resized popup should not save dimensions after height changed', function(assert) {
+        const pointer = pointerMock(this.$handle);
+
+        pointer.start().dragStart().drag(10, 10).dragEnd();
+
+        this.popup.option('width', 300);
+        assert.deepEqual([this.popup.option('width'), this.popup.option('height')], [300, 210], 'correct size');
+    });
+
+    QUnit.test('resized popup should save dimension for the side which was not resized', function(assert) {
+        this.reinit({ height: '70%' });
+
+        const pointer = pointerMock(this.$handle);
+
+        pointer.start().dragStart().drag(10, 0).dragEnd();
+
+        assert.deepEqual([this.popup.option('width'), this.popup.option('height')], [210, '70%'], 'correct size');
+    });
+
+    QUnit.test('resized popup should not have default dimensions after toggle visibility', function(assert) {
+        const pointer = pointerMock(this.$handle);
+
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        this.popup.hide();
+        this.popup.show();
+
+        assert.deepEqual([this.popup.option('width'), this.popup.option('height')], [250, 250], 'correct size');
     });
 
     QUnit.test('resize callbacks', function(assert) {
-        const onResizeStartStub = sinon.stub();
-        const onResizeStub = sinon.stub();
-        const onResizeEndStub = sinon.stub();
+        const onResizeStartFired = sinon.stub();
+        const onResizeFired = sinon.stub();
+        const onResizeEndFired = sinon.stub();
         const checkExtraFields = (args, eventType) => {
             ['event', 'height', 'width'].forEach((field) => {
                 assert.ok(field in args, `${field} field is existed`);
@@ -1683,26 +1721,27 @@ QUnit.module('resize', {
             assert.strictEqual(args.event.type, eventType, 'correct event type');
         };
 
-        const instance = $('#popup').dxPopup({
-            resizeEnabled: true,
-            visible: true,
-            onResizeStart: onResizeStartStub,
-            onResize: onResizeStub,
-            onResizeEnd: onResizeEndStub
-        }).dxPopup('instance');
+        this.reinit({
+            onResizeStart: onResizeStartFired,
+            onResize: onResizeFired,
+            onResizeEnd: onResizeEndFired
+        });
 
-        const $content = instance.$overlayContent();
-        const $handle = $content.find('.dx-resizable-handle-top');
-        const pointer = pointerMock($handle);
+        const pointer = pointerMock(this.$handle);
 
         pointer.start().dragStart().drag(0, 50).dragEnd();
 
-        assert.ok(onResizeStartStub.calledOnce, 'onResizeStart fired');
-        checkExtraFields(onResizeStartStub.lastCall.args[0], 'dxdragstart');
-        assert.ok(onResizeStub.calledOnce, 'onResize fired');
-        checkExtraFields(onResizeStub.lastCall.args[0], 'dxdrag');
-        assert.ok(onResizeEndStub.calledOnce, 'onResizeEnd fired');
-        checkExtraFields(onResizeEndStub.lastCall.args[0], 'dxdragend');
+        assert.strictEqual(onResizeStartFired.callCount, 1, 'onResizeStart fired');
+        assert.strictEqual(onResizeStartFired.getCall(0).args.length, 1, 'event is passed');
+        checkExtraFields(onResizeStartFired.lastCall.args[0], 'dxdragstart');
+
+        assert.strictEqual(onResizeFired.callCount, 1, 'onResize fired');
+        assert.strictEqual(onResizeFired.getCall(0).args.length, 1, 'event is passed');
+        checkExtraFields(onResizeFired.lastCall.args[0], 'dxdrag');
+
+        assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
+        assert.strictEqual(onResizeEndFired.getCall(0).args.length, 1, 'event is passed');
+        checkExtraFields(onResizeEndFired.lastCall.args[0], 'dxdragend');
     });
 
     QUnit.test('resize event handlers should correctly added via "on" method', function(assert) {
@@ -1710,24 +1749,93 @@ QUnit.module('resize', {
         const onResizeStub = sinon.stub();
         const onResizeEndStub = sinon.stub();
 
-        const instance = $('#popup').dxPopup({
-            resizeEnabled: true
-        }).dxPopup('instance');
+        this.popup.on('resize', onResizeStub);
+        this.popup.on('resizeStart', onResizeStartStub);
+        this.popup.on('resizeEnd', onResizeEndStub);
+        this.popup.show();
 
-        instance.on('resize', onResizeStub);
-        instance.on('resizeStart', onResizeStartStub);
-        instance.on('resizeEnd', onResizeEndStub);
-        instance.show();
-
-        const $content = instance.$overlayContent();
-        const $handle = $content.find('.dx-resizable-handle-top');
-        const pointer = pointerMock($handle);
+        const pointer = pointerMock(this.$handle);
 
         pointer.start().dragStart().drag(0, 50).dragEnd();
 
         assert.ok(onResizeStartStub.calledOnce, 'onResizeStart fired');
         assert.ok(onResizeStub.calledOnce, 'onResize fired');
         assert.ok(onResizeEndStub.calledOnce, 'onResizeEnd fired');
+    });
+
+    QUnit.test('popup should have correct resizable area if viewport and container is not specified', function(assert) {
+        try {
+            viewPort(null);
+
+            this.reinit({ width: 2, height: 2 });
+            const resizable = this.$overlayContent.dxResizable('instance');
+
+            assert.ok($.isWindow(resizable.option('area').get(0)), 'window is the area of the resizable');
+        } finally {
+            viewPort(toSelector(VIEWPORT_CLASS));
+        }
+    });
+
+    QUnit.module('popup should set resize area', {
+        beforeEach: function() {
+            this.$container = $('#container');
+            this.initialOptions = {
+                resizeEnabled: true,
+                visible: true,
+            };
+            this.reinit = (options) => {
+                this.init(options);
+
+                this.getResizableArea = () => this.popup._resizable.option('area');
+            };
+
+            this.reinit({});
+        }
+    }, () => {
+        QUnit.test('after dragAndResizeArea option set on init', function(assert) {
+            this.reinit({ dragAndResizeArea: this.$container });
+
+            assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was configured');
+        });
+
+        QUnit.test('after container option set on init', function(assert) {
+            this.reinit({ container: this.$container });
+
+            assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was configured');
+        });
+
+        QUnit.test('after dragAndResizeArea option runtime change', function(assert) {
+            this.popup.option('dragAndResizeArea', this.$container);
+
+            assert.equal(this.getResizableArea().get(0), this.$container.get(0), 'resize container was changed');
+        });
+
+        QUnit.test('after container option runtime change', function(assert) {
+            this.popup.option('container', this.$container);
+
+            assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was changed');
+        });
+    });
+
+    QUnit.module('resizeObserver integration', {
+        beforeEach: function() {
+            this.timeToWaitResize = 50;
+        }
+    }, () => {
+        QUnit.testInActiveWindow('overlay content dimensions should be updated during resize', function(assert) {
+            const resizeOnOpeningDone = assert.async();
+            const resizeOnDraggingDone = assert.async();
+            const pointer = pointerMock(this.$handle);
+
+            setTimeout(() => {
+                pointer.start().dragStart().drag(10);
+                setTimeout(() => {
+                    assert.strictEqual(getWidth(this.$overlayContent), 208, 'width was changed before pointerdown');
+                    resizeOnDraggingDone();
+                }, this.timeToWaitResize);
+                resizeOnOpeningDone();
+            }, this.timeToWaitResize);
+        });
     });
 });
 
@@ -2119,7 +2227,8 @@ QUnit.module('templates', () => {
 QUnit.module('renderGeometry', {
     beforeEach: function() {
         const initialOptions = {
-            visible: true
+            visible: true,
+            resizeEnabled: false,
         };
         this.init = (options) => {
             this.popup = $('#popup')
@@ -2170,6 +2279,7 @@ QUnit.module('renderGeometry', {
     QUnit.test('option change', function(assert) {
         const options = this.popup.option();
         const newOptions = {
+            resizeEnabled: true,
             fullScreen: !options.fullScreen,
             autoResizeEnabled: !options.autoResizeEnabled,
             showTitle: !options.showTitle,

@@ -1,6 +1,7 @@
 import $ from '../../core/renderer';
 import { move } from '../../animation/translator';
 import { getWindow } from '../../core/utils/window';
+import { originalViewPort } from '../../core/utils/view_port';
 import { OverlayPositionController } from '../overlay/overlay_position_controller';
 
 const window = getWindow();
@@ -67,7 +68,16 @@ class PopupPositionController extends OverlayPositionController {
         this._updateOutsideDragFactor();
     }
 
+    updateContainer(containerProp) {
+        super.updateContainer(containerProp);
+        this._updateDragResizeContainer();
+    }
+
     dragHandled() {
+        this.restorePositionOnNextRender(false);
+    }
+
+    resizeHandled() {
         this.restorePositionOnNextRender(false);
     }
 
@@ -86,6 +96,35 @@ class PopupPositionController extends OverlayPositionController {
                 super.positionContent();
             }
         }
+    }
+
+    _updateOutsideDragFactor() {
+        this._outsideDragFactor = this._getOutsideDragFactor();
+    }
+
+    _getOutsideDragFactor() {
+        if(this._props.dragOutsideBoundary) {
+            return 1;
+        }
+
+        return this._props.outsideDragFactor;
+    }
+
+    _updateDragResizeContainer() {
+        this._$dragResizeContainer = this._getDragResizeContainer();
+    }
+
+    _getDragResizeContainer() {
+        if(this._props.dragOutsideBoundary) {
+            return $(window);
+        }
+        if(this._props.dragAndResizeArea) {
+            return $(this._props.dragAndResizeArea);
+        }
+
+        const isContainerDefined = originalViewPort().get(0) || this._props.container;
+
+        return isContainerDefined ? this._$markupContainer : $(window);
     }
 
     _getWrapperCoveredElement() {

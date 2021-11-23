@@ -21,12 +21,10 @@ import { getBoundingRect } from '../../core/utils/position';
 import { isDefined } from '../../core/utils/type';
 import { compare as compareVersions } from '../../core/utils/version';
 import { getWindow, hasWindow } from '../../core/utils/window';
-import {
-    move as dragEventMove
-} from '../../events/drag';
 import { triggerResizeEvent } from '../../events/visibility_change';
 import messageLocalization from '../../localization/message';
 import PopupDrag from './popup_drag';
+import Resizable from '../resizable';
 import Button from '../button';
 import Overlay from '../overlay/ui.overlay';
 import { isMaterial, current as currentTheme } from '../themes';
@@ -135,6 +133,14 @@ const Popup = Overlay.inherit({
             dragAndResizeArea: undefined,
 
             outsideDragFactor: 0,
+
+            onResizeStart: null,
+
+            onResize: null,
+
+            onResizeEnd: null,
+
+            resizeEnabled: false,
 
             toolbarItems: [],
 
@@ -279,10 +285,14 @@ const Popup = Overlay.inherit({
         });
     },
 
+    _getActionsList: function() {
+        return this.callBase().concat(['onResizeStart', 'onResize', 'onResizeEnd']);
+    },
+
     _renderContentImpl: function() {
         this._renderTitle();
         this.callBase();
-        this._renderDrag();
+        this._renderResize();
         this._renderBottom();
     },
 
@@ -570,13 +580,38 @@ const Popup = Overlay.inherit({
     },
 
     _renderResize: function() {
-        this.callBase();
+        this._resizable = this._createComponent(this._$content, Resizable, {
+            handles: this.option('resizeEnabled') ? 'all' : 'none',
+            onResizeEnd: (e) => {
+                this._resizeEndHandler(e);
+                this._observeContentResize(true);
+            },
+            onResize: (e) => {
+                this._setContentHeight();
+                this._actions.onResize(e);
+            },
+            onResizeStart: (e) => {
+                this._observeContentResize(false);
+                this._actions.onResizeStart(e);
+            },
+            minHeight: 100,
+            minWidth: 100,
+            area: this._positionController.$dragResizeContainer
+        });
+    },
 
-        this._resizable.option('onResize', ((e) => {
-            this._setContentHeight();
+    _resizeEndHandler: function(e) {
+        const width = this._resizable.option('width');
+        const height = this._resizable.option('height');
 
-            this._actions.onResize(e);
-        }));
+        width && this._setOptionWithoutOptionChange('width', width);
+        height && this._setOptionWithoutOptionChange('height', height);
+        this._cacheDimensions();
+
+        this._positionController.resizeHandled();
+        this._positionController.detectVisualPositionChange(e.event);
+
+        this._actions.onResizeEnd(e);
     },
 
     _setContentHeight: function() {
@@ -721,6 +756,17 @@ const Popup = Overlay.inherit({
                 this._renderGeometry();
                 triggerResizeEvent(this.$overlayContent());
                 break;
+            case 'container':
+                this.callBase(args);
+                if(this.option('resizeEnabled')) {
+                    this._resizable?.option('area', this._positionController.$dragResizeContainer);
+                }
+                break;
+            case 'width':
+            case 'height':
+                this.callBase(args);
+                this._resizable?.option(args.name, args.value);
+                break;
             case 'onTitleRendered':
                 this._createTitleRenderAction(args.value);
                 break;
@@ -758,6 +804,10 @@ const Popup = Overlay.inherit({
                 break;
             case 'outsideDragFactor':
                 this._positionController.outsideDragFactor = value;
+                break;
+            case 'resizeEnabled':
+                this._renderResize();
+                this._renderGeometry();
                 break;
             case 'autoResizeEnabled':
                 this._renderGeometry();

@@ -92,13 +92,7 @@ const Toast = Overlay.inherit({
 
             closeOnSwipe: true,
 
-            closeOnClick: false,
-
-            /**
-            * @name dxToastOptions.resizeEnabled
-            * @hidden
-            */
-            resizeEnabled: false
+            closeOnClick: false
         });
     },
 

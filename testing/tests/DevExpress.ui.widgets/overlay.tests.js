@@ -119,9 +119,6 @@ const INNER_OVERLAY_CLASS = 'dx-inner-overlay';
 const HOVER_STATE_CLASS = 'dx-state-hover';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
-const RESIZABLE_HANDLE_TOP_CLASS = 'dx-resizable-handle-top';
-const RESIZABLE_HANDLE_CORNER_BR_CLASS = 'dx-resizable-handle-corner-bottom-right';
-
 const IS_SAFARI = !!browser.safari;
 const VIEWPORT_CLASS = 'dx-viewport';
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
@@ -430,63 +427,6 @@ testModule('option', moduleConfig, () => {
                 assert.strictEqual(afterHideFired, 1);
             });
         });
-    });
-
-    test('resize callbacks', function(assert) {
-        const onResizeStartFired = sinon.stub();
-        const onResizeFired = sinon.stub();
-        const onResizeEndFired = sinon.stub();
-        const checkExtraFields = (args, eventType) => {
-            ['event', 'height', 'width'].forEach((field) => {
-                assert.ok(field in args, `${field} field is existed`);
-            });
-            assert.strictEqual(args.event.type, eventType, 'correct event type');
-        };
-
-        const instance = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true,
-            onResizeStart: onResizeStartFired,
-            onResize: onResizeFired,
-            onResizeEnd: onResizeEndFired
-        }).dxOverlay('instance');
-
-        const $content = $(instance.$content());
-        const $handle = $content.find(toSelector(RESIZABLE_HANDLE_TOP_CLASS));
-        const pointer = pointerMock($handle);
-
-        pointer.start().dragStart().drag(0, 50).dragEnd();
-
-        assert.strictEqual(onResizeStartFired.callCount, 1, 'onResizeStart fired');
-        assert.strictEqual(onResizeStartFired.getCall(0).args.length, 1, 'event is passed');
-        checkExtraFields(onResizeStartFired.lastCall.args[0], 'dxdragstart');
-
-        assert.strictEqual(onResizeFired.callCount, 1, 'onResize fired');
-        assert.strictEqual(onResizeFired.getCall(0).args.length, 1, 'event is passed');
-        checkExtraFields(onResizeFired.lastCall.args[0], 'dxdrag');
-
-        assert.strictEqual(onResizeEndFired.callCount, 1, 'onResizeEnd fired');
-        assert.strictEqual(onResizeEndFired.getCall(0).args.length, 1, 'event is passed');
-        checkExtraFields(onResizeEndFired.lastCall.args[0], 'dxdragend');
-
-    });
-
-    test('resize should change overlay width/height options value', function(assert) {
-        const instance = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true,
-            width: 100,
-            height: 100
-        }).dxOverlay('instance');
-
-        const $content = $(instance.$content());
-        const $handle = $content.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
-        const pointer = pointerMock($handle);
-
-        pointer.start().dragStart().drag(10, 10).dragEnd();
-
-        assert.strictEqual(instance.option('width'), 110, 'width is correct');
-        assert.strictEqual(instance.option('height'), 110, 'height is correct');
     });
 
     testModule('wrapperAttr option', {
@@ -2950,186 +2890,6 @@ testModule('widget sizing render', moduleConfig, () => {
     });
 });
 
-testModule('resize', moduleConfig, () => {
-    test('overlay should have resizable component on content', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-
-        assert.strictEqual($overlayContent.dxResizable('option', 'handles'), 'all', 'direction specified correctly');
-    });
-
-    test('overlay shouldn\'t have resizable component on content if resizeEnabled is false', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            resizeEnabled: false,
-            visible: true
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-
-        assert.strictEqual($overlayContent.dxResizable('option', 'handles'), 'none', 'direction specified correctly');
-    });
-
-    test('overlay shouldn\'t have resizable component on content if resizeEnabled is changed dynamically', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-
-        overlay.option('resizeEnabled', false);
-        assert.strictEqual($overlayContent.dxResizable('option', 'handles'), 'none', 'direction specified correctly');
-    });
-
-    test('resized overlay should save dimensions after dimensions change', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true,
-            width: 200,
-            height: 200
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-        const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
-        const pointer = pointerMock($handle);
-
-        pointer.start().dragStart().drag(10, 10).dragEnd();
-        resizeCallbacks.fire();
-        assert.deepEqual([getWidth($overlayContent), getHeight($overlayContent)], [210, 210], 'correct size');
-
-        pointer.start().dragStart().drag(-20, -20).dragEnd();
-        resizeCallbacks.fire();
-        assert.deepEqual([getWidth($overlayContent), getHeight($overlayContent)], [190, 190], 'correct size');
-    });
-
-    test('resized overlay should not save dimensions after height changed', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true,
-            width: 200,
-            height: 200
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-        const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
-        const pointer = pointerMock($handle);
-
-        pointer.start().dragStart().drag(10, 10).dragEnd();
-        resizeCallbacks.fire();
-
-        overlay.option('width', 300);
-        assert.deepEqual([getWidth($overlayContent), getHeight($overlayContent)], [300, 210], 'correct size');
-    });
-
-    test('resized overlay should save dimension for the side which was not resized', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true,
-            width: 200,
-            height: '70%'
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-        const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
-        const pointer = pointerMock($handle);
-
-        pointer.start().dragStart().drag(10, 0).dragEnd();
-        resizeCallbacks.fire();
-
-        assert.deepEqual([overlay.option('width'), overlay.option('height')], [210, '70%'], 'correct size');
-    });
-
-    test('resized overlay should not have default dimensions after toggle visibility', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true,
-            width: 200,
-            height: 200
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-        const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
-        const pointer = pointerMock($handle);
-
-        pointer.start().dragStart().drag(50, 50).dragEnd();
-
-        overlay.hide();
-        overlay.show();
-
-        assert.deepEqual([getWidth($overlayContent), getHeight($overlayContent)], [250, 250], 'correct size');
-    });
-
-    QUnit.module('overlay should set resize area', {
-        beforeEach: function() {
-            this.$container = $('#parentContainer');
-            this.$resizeContainer = $('#container');
-            this.initialOptions = {
-                resizeEnabled: true,
-                visible: true,
-            };
-            this.reinit = (options) => {
-                this.overlay && this.overlay.dispose();
-
-                const newOptions = $.extend({}, this.initialOptions, options);
-                this.overlay = $('#overlay').dxOverlay(newOptions).dxOverlay('instance');
-                this.getResizableArea = () => this.overlay._resizable.option('area');
-            };
-
-            this.reinit({});
-        }
-    }, () => {
-        test('after dragAndResizeArea option set on init', function(assert) {
-            this.reinit({ dragAndResizeArea: this.$resizeContainer });
-
-            assert.strictEqual(this.getResizableArea().get(0), this.$resizeContainer.get(0), 'resize container was configured');
-        });
-
-        test('after container option set on init', function(assert) {
-            this.reinit({ container: this.$container });
-
-            assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was configured');
-        });
-
-        test('after dragAndResizeArea option runtime change', function(assert) {
-            this.overlay.option('dragAndResizeArea', this.$resizeContainer);
-
-            assert.equal(this.getResizableArea().get(0), this.$resizeContainer.get(0), 'resize container was changed');
-        });
-
-        test('after container option runtime change', function(assert) {
-            this.overlay.option('container', this.$container);
-
-            assert.strictEqual(this.getResizableArea().get(0), this.$container.get(0), 'resize container was changed');
-        });
-    });
-});
-
-
-testModule('drag & resize', moduleConfig, () => {
-    test('dragged overlay should have default dimensions after toggle visibility', function(assert) {
-        const $overlay = $('#overlay').dxOverlay({
-            dragEnabled: true,
-            resizeEnabled: true,
-            visible: true,
-            width: 'auto',
-            height: 'auto'
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-
-        pointerMock($overlayContent).start().dragStart().drag(50, 50).dragEnd();
-
-        overlay.hide();
-        overlay.show();
-
-        assert.deepEqual([$overlayContent[0].style.width, $overlayContent[0].style.height], ['auto', 'auto'], 'correct size');
-    });
-});
-
 
 testModule('keyboard navigation', {
     beforeEach: function() {
@@ -3137,7 +2897,6 @@ testModule('keyboard navigation', {
 
         this.$overlay = $('#overlay').dxOverlay({
             focusStateEnabled: true,
-            dragEnabled: true,
             visible: true,
             width: 1,
             height: 1,
@@ -3719,8 +3478,6 @@ testModule('renderGeometry', {
         this.timeToWaitResize = 50;
         this.overlayInstance = $('#overlay').dxOverlay({
             deferRendering: false,
-            dragEnabled: false,
-            resizeEnabled: false,
         }).dxOverlay('instance');
         this.renderGeometrySpy = sinon.spy(this.overlayInstance, '_renderGeometry');
         this.checkNoExcessResizeHandle = (assert) => {
@@ -3787,8 +3544,6 @@ testModule('renderGeometry', {
         }
     }, () => {
         const newOptions = {
-            dragEnabled: true,
-            resizeEnabled: true,
             width: 500,
             height: 500,
             minWidth: 2000,
@@ -3966,40 +3721,5 @@ QUnit.module('prevent safari scrolling on ios devices', {
 
         this.instance.option('container', undefined);
         assert.ok(this.$body.hasClass(PREVENT_SAFARI_SCROLLING_CLASS), 'class is added when "container" is window');
-    });
-});
-
-QUnit.module('resizeObserver integration', {
-    beforeEach: function() {
-        fx.off = true;
-        this.timeToWaitResize = 50;
-    },
-    afterEach: function() {
-        fx.off = false;
-    }
-}, () => {
-    QUnit.testInActiveWindow('overlay content dimensions should be updated during resize', function(assert) {
-        const resizeOnOpeningDone = assert.async();
-        const resizeOnDraggingDone = assert.async();
-        const $overlay = $('#overlay').dxOverlay({
-            resizeEnabled: true,
-            visible: true,
-            width: 200,
-            height: 200
-        });
-        const overlay = $overlay.dxOverlay('instance');
-        const $overlayContent = overlay.$content();
-        const $handle = $overlayContent.find(toSelector(RESIZABLE_HANDLE_CORNER_BR_CLASS));
-        const pointer = pointerMock($handle);
-
-
-        setTimeout(() => {
-            pointer.start().dragStart().drag(10);
-            setTimeout(() => {
-                assert.strictEqual(getWidth($overlayContent), 210, 'width was changed before pointerdown');
-                resizeOnDraggingDone();
-            }, this.timeToWaitResize);
-            resizeOnOpeningDone();
-        }, this.timeToWaitResize);
     });
 });

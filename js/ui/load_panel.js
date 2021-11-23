@@ -54,12 +54,6 @@ const LoadPanel = Overlay.inherit({
 
             hideTopOverlayHandler: null,
 
-            /**
-            * @name dxLoadPanelOptions.resizeEnabled
-            * @hidden
-            */
-            resizeEnabled: false,
-
             focusStateEnabled: false
 
             /**
