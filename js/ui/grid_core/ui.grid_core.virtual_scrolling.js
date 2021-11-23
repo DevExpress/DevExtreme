@@ -1101,12 +1101,16 @@ export const virtualScrollingModule = {
                         return allItems ? (this._allItems || this._items) : (this._visibleItems || this._items);
                     },
                     getRowIndexDelta: function() {
-                        const visibleItems = this._visibleItems;
                         let delta = 0;
 
-                        if(visibleItems && visibleItems[0]) {
-                            delta = this._items.indexOf(visibleItems[0]);
+                        if(this.option(LEGACY_SCROLLING_MODE)) {
+                            const visibleItems = this._visibleItems;
+
+                            if(visibleItems && visibleItems[0]) {
+                                delta = this._items.indexOf(visibleItems[0]);
+                            }
                         }
+
 
                         return delta < 0 ? 0 : delta;
                     },
