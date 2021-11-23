@@ -93,11 +93,15 @@ function performRecastReplacements(rootFolderPath) {
     });
 }
 
-function performPackageLockReplacements() {
+function performPackageLockReplacements(frameworkName) {
     return through.obj((file, enc, callback) => {
         const pkg = JSON.parse(file.contents.toString());
-        const knownFields = ['name', 'version', 'description', 'keywords', 'homepage', 'bugs', 'author', 'repository', 'license', 'browserslist'];
-        const result = {};
+        
+        const result = {
+            name: `@devextreme/${frameworkName}`
+        };
+        
+        const knownFields = ['version', 'description', 'keywords', 'homepage', 'bugs', 'author', 'repository', 'license', 'browserslist'];
         knownFields.forEach(x => result[x] = pkg[x]);
 
         const depsList = new Array(...rawPackageSet).map(x => {
@@ -128,12 +132,12 @@ function performPackageLockReplacements() {
     });
 }
 
-function copyServiceFiles(dist) {
+function copyServiceFiles(frameworkName, dist) {
     return () => merge(
         gulp
             .src('package.json')
             .pipe(replace(version, ctx.version.package))
-            .pipe(performPackageLockReplacements())
+            .pipe(performPackageLockReplacements(frameworkName))
             .pipe(gulp.dest(dist)),
         gulp
             .src('README.md')
@@ -161,7 +165,7 @@ function addCompilationTask(frameworkName) {
         cleanNpmFramework(npmDestFolder),
         `generate-${frameworkName}`,
         copyFrameworkArtifacts(frameworkSrc, npmDestFolder),
-        copyServiceFiles(npmDestFolder)
+        copyServiceFiles(frameworkName, npmDestFolder)
     ];
     gulp.task(`renovation-npm-${frameworkName}`, gulp.series(...generateSeries));
 }
