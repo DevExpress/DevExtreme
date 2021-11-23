@@ -232,7 +232,7 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandAlignRight'),
                     text: messageLocalization.format('dxDiagram-commandAlignRight'),
                     icon: 'alignright',
-                    menu: 'alignright'
+                    menuIcon: 'alignright'
                 },
                 lock: {
                     command: DiagramCommand.Lock,

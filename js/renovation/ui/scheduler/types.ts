@@ -34,3 +34,7 @@ export interface AppointmentDataItem {
 export interface AppointmentFilter {
   filter: (dataItems: AppointmentDataItem[]) => Appointment[];
 }
+
+// NOTE: CustomStore add "data" field to the result Object.
+interface CustomLoadDataType { data: Appointment[] }
+export type LoadDataType = Appointment[] | CustomLoadDataType;

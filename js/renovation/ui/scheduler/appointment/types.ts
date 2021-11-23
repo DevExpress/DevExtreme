@@ -1,4 +1,4 @@
-import type { AppointmentTemplateData } from '../../../../ui/scheduler';
+import type { AppointmentCollectorTemplateData, AppointmentTemplateData } from '../../../../ui/scheduler';
 import { BaseTemplateProps, Direction } from '../types';
 
 export type ReduceType = 'head' | 'body' | 'tail';
@@ -70,8 +70,7 @@ export interface AppointmentTemplateProps extends BaseTemplateProps {
 }
 
 export interface OverflowIndicatorTemplateProps extends BaseTemplateProps {
-  appointmentCount: number;
-  isCompact: boolean;
+  data: AppointmentCollectorTemplateData;
 }
 
 export interface AppointmentClickData {

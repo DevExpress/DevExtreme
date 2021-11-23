@@ -76,6 +76,8 @@ export const getCurrentViewConfig = (
     timeCellTemplate,
     resourceCellTemplate,
     dateCellTemplate,
+    appointmentTemplate,
+    appointmentCollectorTemplate,
   } = currentViewProps;
 
   const isVirtualScrolling = schedulerScrolling.mode === 'virtual'
@@ -97,6 +99,11 @@ export const getCurrentViewConfig = (
       schedulerProps.resourceCellTemplate, resourceCellTemplate,
     ),
     dateCellTemplate: getViewConfigProp(schedulerProps.dateCellTemplate, dateCellTemplate),
+    appointmentTemplate: getViewConfigProp(schedulerProps.appointmentTemplate, appointmentTemplate),
+    appointmentCollectorTemplate: getViewConfigProp(
+      schedulerProps.appointmentCollectorTemplate,
+      appointmentCollectorTemplate,
+    ),
 
     // currentDate: dateUtils.trimTime(new Date(schedulerProps.currentDate)), // TODO
     currentDate: schedulerProps.currentDate,

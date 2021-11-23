@@ -1009,7 +1009,6 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
     /**
      * @docid
      * @publicName forEachNode(callback)
-     * @param1 callback:function
      * @public
      */
     forEachNode(callback: Function): void;
@@ -1017,7 +1016,6 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
      * @docid
      * @publicName forEachNode(nodes, callback)
      * @param1 nodes:Array<dxTreeListNode>
-     * @param2 callback:function
      * @public
      */
     forEachNode(nodes: Array<Node<TRowData, TKey>>, callback: Function): void;
@@ -1205,7 +1203,6 @@ export interface ToolbarItem extends dxToolbarItem {
 /**
  * @public
  * @docid dxTreeListToolbar
- * @type object
  * @namespace DevExpress.ui.dxTreeList
  */
 export type Toolbar = {
@@ -1217,14 +1214,12 @@ export type Toolbar = {
     items?: (DefaultToolbarItemName | ToolbarItem)[];
     /**
      * @docid dxTreeListToolbar.visible
-     * @type boolean
      * @default undefined
      * @public
      */
     visible?: boolean;
     /**
      * @docid dxTreeListToolbar.disabled
-     * @type boolean
      * @default false
      * @public
      */
@@ -1384,7 +1379,6 @@ export type dxTreeListNode<TRowData = any, TKey = any> = Node<TRowData, TKey>;
 /**
  * @public
  * @docid dxTreeListNode
- * @type object
  */
 export type Node<TRowData = any, TKey = any> = {
     /**
@@ -1435,7 +1429,6 @@ export type dxTreeListRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey
 /**
  * @public
  * @docid dxTreeListRowObject
- * @type object
  */
 export type Row<TRowData = any, TKey = any> = {
     /**

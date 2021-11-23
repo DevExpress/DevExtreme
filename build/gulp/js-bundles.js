@@ -65,7 +65,7 @@ function prepareDebugMeta(watch) {
     return { debugConfig, bundles };
 }
 
-function createDebugBundlesStream(watch) {
+function createDebugBundlesStream(watch, displayName) {
     const { debugConfig, bundles } = prepareDebugMeta(watch);
     const destination = ctx.RESULT_JS_PATH;
 
@@ -81,15 +81,15 @@ function createDebugBundlesStream(watch) {
         .pipe(gulpIf(!watch, compressionPipes.beautify()))
         .pipe(gulp.dest(destination));
 
-    task.displayName = 'js-bundles-debug';
+    task.displayName = `${displayName}-worker`;
 
     return task;
 }
 
 gulp.task('js-bundles-debug', gulp.series(
-    createDebugBundlesStream(false)
+    createDebugBundlesStream(false, 'js-bundles-debug')
 ));
 
 gulp.task('js-bundles-watch', gulp.parallel(
-    createDebugBundlesStream(true)
+    createDebugBundlesStream(true, 'js-bundles-watch')
 ));
