@@ -22,7 +22,7 @@ import {
     getPreparedDataItems,
     resolveDataItems
 } from '../../../../renovation/ui/scheduler/utils/data';
-import getTrimDates from '../../../../renovation/ui/scheduler/utils/filtering/getTrimDates';
+import getDatesWithoutTime from '../../../../renovation/ui/scheduler/utils/filtering/getDatesWithoutTime';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -167,7 +167,7 @@ export class AppointmentFilterBaseStrategy {
             supportMultiDayAppointments
         } = filterOptions;
 
-        const [trimMin, trimMax] = getTrimDates(min, max);
+        const [trimMin, trimMax] = getDatesWithoutTime(min, max);
         const useRecurrence = isDefined(this.dataAccessors.getter.recurrenceRule);
 
         return [[appointment => {
@@ -318,7 +318,7 @@ export class AppointmentFilterBaseStrategy {
         const recurrenceProcessor = getRecurrenceProcessor();
 
         if(allDay || _appointmentPartInInterval(appointmentStartDate, appointmentEndDate, startDayHour, endDayHour)) {
-            const [trimMin, trimMax] = getTrimDates(min, max);
+            const [trimMin, trimMax] = getDatesWithoutTime(min, max);
 
             min = trimMin;
             max = new Date(trimMax.getTime() - toMs('minute'));

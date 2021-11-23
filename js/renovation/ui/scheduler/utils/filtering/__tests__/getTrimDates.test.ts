@@ -1,4 +1,4 @@
-import getTrimDates from '../getTrimDates';
+import getDatesWithoutTime from '../getDatesWithoutTime';
 
 jest.mock(
   '../../../../../../ui/scheduler/appointments/dataProvider/appointmentFilter',
@@ -8,9 +8,9 @@ jest.mock(
   }),
 );
 
-describe('getTrimDates', () => {
+describe('getDatesWithoutTime', () => {
   it('should trim dates correctly', () => {
-    expect(getTrimDates(
+    expect(getDatesWithoutTime(
       new Date(2021, 10, 23, 11, 11),
       new Date(2021, 10, 24, 12, 12),
     )).toEqual([

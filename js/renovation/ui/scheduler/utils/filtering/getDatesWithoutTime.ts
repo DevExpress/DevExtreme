@@ -1,6 +1,6 @@
 import dateUtils from '../../../../../core/utils/date';
 
-const getTrimDates = (min: Date, max: Date): [Date, Date] => {
+const getDatesWithoutTime = (min: Date, max: Date): [Date, Date] => {
   const newMin = dateUtils.trimTime(min) as Date;
   const newMax = dateUtils.trimTime(max) as Date;
 
@@ -9,4 +9,4 @@ const getTrimDates = (min: Date, max: Date): [Date, Date] => {
   return [newMin, newMax];
 };
 
-export default getTrimDates;
+export default getDatesWithoutTime;

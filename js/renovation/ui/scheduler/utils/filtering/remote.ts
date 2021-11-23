@@ -3,7 +3,7 @@ import { DataAccessorType } from '../../types';
 import { extend } from '../../../../../core/utils/extend';
 import dateSerialization from '../../../../../core/utils/date_serialization';
 import { isDefined, isString } from '../../../../../core/utils/type';
-import getTrimDates from './getTrimDates';
+import getDatesWithoutTime from './getDatesWithoutTime';
 import { CombineRemoteFilterType, DateFilterType, RemoteFilterOptions } from './types';
 
 const FilterPosition = {
@@ -115,7 +115,7 @@ class RemoteFilterCombiner {
   }
 
   combine(min: Date, max: Date): unknown[] {
-    const [trimMin, trimMax] = getTrimDates(min, max);
+    const [trimMin, trimMax] = getDatesWithoutTime(min, max);
     const dateFilter = this.makeDateFilter(trimMin, trimMax);
     const userFilter = this.getUserFilter(dateFilter);
 
