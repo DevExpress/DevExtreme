@@ -81,6 +81,15 @@ function performRecastReplacements(rootFolderPath) {
                     }
                     nodePath.replace(builders.tsImportType(...args));
                 })
+            },
+            visitCallExpression(nodePath) {
+                const callee = nodePath.node.callee;
+                if (callee.type === 'Identifier' && callee.name === 'require') {
+                    return processImport(nodePath.node.arguments[0].value, (newImport) => {
+                        nodePath.replace(builders.callExpression(callee, [builders.stringLiteral(newImport)]));
+                    });
+                }
+                this.traverse(nodePath);
             }
         })
 
