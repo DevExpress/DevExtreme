@@ -52,6 +52,64 @@ jobs:
         path: ./artifacts/npm/devextreme/devextreme-*.tgz
         retention-days: 1
 
+  test_npm_renovation_react:
+    name: Renovated NPM - React package test
+    needs: build
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    timeout-minutes: 30
+
+    steps:
+    - name: Use Node.js v14
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Install packages in devextreme repo
+      run: npm install --no-audit --no-fund
+
+    - name: Build And Pack Renovated NPM
+      run: |
+        npm run build-npm-renovation:react
+        npm pack ./artifacts/npm-react
+
+    - name: Download artifacts
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      uses: actions/download-artifact@v2
+      with:
+        name: devextreme-npm
+        path: ./devextreme-setup
+   
+    - name: Install packages
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      working-directory: ./devextreme-angular-repo
+      run: |
+        pushd devextreme-setup
+        installerName=$(realpath .)/$(ls *.tgz)
+        popd
+        
+        cd ./packages/devextreme-angular
+        npm install --save-dev $installerName
+        cd ../sandbox
+        npm install --save-dev $installerName
+        cd ../../
+        npm install --save-dev $installerName
+
+    - name: Run tests with Angular 7
+      if: steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+        cd ./devextreme-angular-repo
+        npx lerna run --scope devextreme-angular gulp -- run.tests
+
   test_angular:
     name: Angular wrapper tests
     needs: build
@@ -352,7 +410,7 @@ jobs:
   notify:
     runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
     name: Send notifications
-    needs: [build, test_angular, test_bundlers, test_demos]
+    needs: [build, test_angular, test_bundlers, test_demos, test_npm_renovation_react]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
