@@ -1312,6 +1312,13 @@ export interface dxDiagramCustomCommand {
      * @public
      */
     items?: Array<dxDiagramCustomCommand>;
+    /**
+     * @docid
+     * @default "before"
+     * @type Enums.ToolbarItemLocation
+     * @public
+     */
+    location?: 'after' | 'before' | 'center';
 }
 
 /**
