@@ -43,11 +43,6 @@ test('Virtual scrolling layout in scheduler views', async (t) => {
     const view = views[i];
 
     await scheduler.option('currentView', view.type);
-
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll.png`),
-    ).ok();
-
     await scrollTo(scrollConfig[i].firstDate);
 
     await t.expect(
@@ -79,11 +74,6 @@ test('Virtual scrolling layout in scheduler views when horizontal grouping is en
     const view = views[i];
 
     await scheduler.option('currentView', view.type);
-
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-horizontal-grouping.png`),
-    ).ok();
-
     await scrollTo(scrollConfig[i].firstDate, { resourceId: 6 });
 
     await t.expect(
@@ -117,10 +107,6 @@ test('Virtual scrolling layout in scheduler views when grouping by date is enabl
     const view = views[i];
 
     await scheduler.option('currentView', view.type);
-
-    await t.expect(
-      await takeScreenshot(`virtual-scrolling-${view.type}-before-scroll-grouping-by-date.png`),
-    ).ok();
 
     await scrollTo(scrollConfig[i].firstDate, { resourceId: 3 });
 
