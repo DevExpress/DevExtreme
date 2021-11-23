@@ -759,11 +759,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   }
 
   @Effect({ run: 'always' })
-  groupPanelHeightEffect(): void {
-    this.groupPanelHeight = this.dateTableRef.current?.getBoundingClientRect().height;
-  }
-
-  @Effect({ run: 'always' })
   headerEmptyCellWidthEffect(): void {
     const timePanelWidth = this.timePanelRef.current?.getBoundingClientRect().width ?? 0;
     const groupPanelWidth = this.groupPanelRef.current?.getBoundingClientRect().width ?? 0;
@@ -866,6 +861,11 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         sizes: nextSizes,
       };
     }
+  }
+
+  @Effect({ run: 'always' })
+  groupPanelHeightEffect(): void {
+    this.groupPanelHeight = this.dateTableRef.current?.getBoundingClientRect().height;
   }
 
   @Effect()

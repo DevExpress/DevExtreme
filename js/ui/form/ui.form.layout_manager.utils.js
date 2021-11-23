@@ -8,6 +8,7 @@ import Guid from '../../core/guid';
 import { SIMPLE_ITEM_TYPE } from './constants';
 
 const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
+export const EDITORS_WITHOUT_LABELS = ['dxCalendar', 'dxCheckBox', 'dxHtmlEditor', 'dxRadioGroup', 'dxRangeSlider', 'dxSlider', 'dxSwitch'];
 
 export function convertToRenderFieldItemOptions({
     $parent,
@@ -40,10 +41,10 @@ export function convertToRenderFieldItemOptions({
         item, id: itemId, isRequired, managerMarkOptions,
         showColonAfterLabel,
         labelLocation: managerLabelLocation,
+        formLabelMode: labelMode,
     });
 
-    const isOutsideLabelMode = labelMode === 'outside';
-    const needRenderLabel = labelOptions.visible && labelOptions.text && isOutsideLabelMode;
+    const needRenderLabel = labelOptions.visible && labelOptions.text;
     const { location: labelLocation, labelID } = labelOptions;
     const labelNeedBaselineAlign =
         labelLocation !== 'top'
@@ -74,8 +75,8 @@ export function convertToRenderFieldItemOptions({
             editorInputId: itemId,
             editorValidationBoundary,
             editorStylingMode,
-            labelMode: isOutsideLabelMode ? 'hidden' : labelMode,
-            labelText: isOutsideLabelMode ? undefined : labelOptions.text,
+            formLabelMode: labelMode,
+            labelText: labelOptions.text,
             labelMark: getLabelMarkText(labelOptions.markOptions),
         })
     };
@@ -107,7 +108,7 @@ function _convertToEditorOptions({
     editorInputId,
     editorValidationBoundary,
     editorStylingMode,
-    labelMode,
+    formLabelMode,
     labelText,
     labelMark,
 }) {
@@ -119,6 +120,11 @@ function _convertToEditorOptions({
         editorOptionsWithValue.value = editorOptionsWithValue.value || [];
     }
 
+    let labelMode = externalEditorOptions?.labelMode;
+    if(!isDefined(labelMode)) {
+        labelMode = formLabelMode === 'outside' ? 'hidden' : formLabelMode;
+    }
+
     const result = extend(true, editorOptionsWithValue,
         externalEditorOptions,
         {
@@ -126,7 +132,7 @@ function _convertToEditorOptions({
             validationBoundary: editorValidationBoundary,
             stylingMode: editorStylingMode,
             label: labelText,
-            labelMode: labelMode,
+            labelMode,
             labelMark,
         },
     );
@@ -161,14 +167,15 @@ function _hasRequiredRuleInSet(rules) {
     return hasRequiredRule;
 }
 
-function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation }) {
+function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation, formLabelMode }) {
+    const isEditorWithoutLabels = inArray(item.editorType, EDITORS_WITHOUT_LABELS) !== -1;
     const labelOptions = extend(
         {
             showColon: showColonAfterLabel,
             location: labelLocation,
             id: id,
-            visible: true,
-            isRequired: isRequired
+            visible: formLabelMode === 'outside' || (isEditorWithoutLabels && formLabelMode !== 'hidden'),
+            isRequired: isRequired,
         },
         item ? item.label : {},
         { markOptions: convertToLabelMarkOptions(managerMarkOptions, isRequired) }

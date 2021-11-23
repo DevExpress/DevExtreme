@@ -83,6 +83,7 @@ import {
 } from './helpers/positionHelper';
 
 import { utils } from '../utils';
+import { compileGetter } from '../../../core/utils/data';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -3004,6 +3005,17 @@ const createDragBehaviorConfig = (
         itemData: undefined,
     };
 
+    const isItemDisabled = () => {
+        const { itemData } = state;
+
+        if(itemData) {
+            const getter = compileGetter('disabled');
+            return getter(itemData);
+        }
+
+        return true;
+    };
+
     const createDragAppointment = (itemData, settings, appointments) => {
         const appointmentIndex = appointments.option('items').length;
 
@@ -3032,7 +3044,7 @@ const createDragBehaviorConfig = (
         const settings = options.getItemSettings($itemElement, e);
         const initialPosition = options.initialPosition;
 
-        if(state.itemData && !state.itemData.disabled) {
+        if(!isItemDisabled()) {
             event.data = event.data || {};
             if(!canceled) {
                 if(!settings.isCompact) {
@@ -3103,7 +3115,7 @@ const createDragBehaviorConfig = (
             attachGeneralEvents();
         }
 
-        if(state.itemData && !state.itemData.disabled) {
+        if(!isItemDisabled()) {
             dragBehavior.onDragEnd(e);
         }
 

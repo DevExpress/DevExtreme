@@ -287,7 +287,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     if (this.isReadyToStart) {
       this.canceled = false;
 
-      if (!this.inRange) {
+      if (!this.inRange && this.props.bounceEnabled) {
         const distanceToBound = clampIntoRange(
           this.props.scrollLocation, this.props.minOffset, this.maxOffset,
         ) - this.props.scrollLocation;

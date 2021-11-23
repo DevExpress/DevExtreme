@@ -312,3 +312,22 @@ QUnit.test('min option should be parsed with ISO8601 dates before sending to wor
 
     assert.deepEqual(header.option('min'), new Date(2017, 1, 6), 'min is OK  after option change');
 });
+
+QUnit.test('dimensionChanged should not generate exception if workspace is not created', function(assert) {
+    this.createInstance({
+        views: ['day'],
+        currentView: 'day',
+        currentDate: new Date(2017, 1, 8),
+        min: '20170207'
+    });
+
+    this.instance._workSpace = null;
+
+    this.instance._dimensionChanged();
+
+    try {
+        assert.ok(true, 'No exception');
+    } catch(e) {
+        assert.ok(false, `${e.message}`);
+    }
+});
