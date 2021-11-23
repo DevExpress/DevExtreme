@@ -49,7 +49,7 @@ import { AppointmentsConfigType } from './model/types';
 import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
 import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
 import { getPreparedDataItems, resolveDataItems } from './utils/data';
-import { getFilterStrategy } from './utils/filter';
+import { getFilterStrategy } from './utils/filtering/local';
 
 export const viewFunction = ({
   restAttributes,

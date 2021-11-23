@@ -13,7 +13,6 @@ import { getResourcesDataByGroups } from '../../resources/utils';
 import {
     compareDateWithStartDayHour,
     compareDateWithEndDayHour,
-    getTrimDates,
     getAppointmentTakesSeveralDays,
     _appointmentPartInInterval,
     getRecurrenceException,
@@ -23,6 +22,7 @@ import {
     getPreparedDataItems,
     resolveDataItems
 } from '../../../../renovation/ui/scheduler/utils/data';
+import getTrimDates from '../../../../renovation/ui/scheduler/utils/filtering/getTrimDates';
 
 const toMs = dateUtils.dateToMilliseconds;
 
