@@ -3184,7 +3184,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                         rowRenderingMode
                     }
                 });
-                const scrollTopPosition = 380; // top position of the 5-th data row
+                const scrollTopPosition = 330; // top position of the 5-th data row
 
                 // act
                 this.clock.tick();

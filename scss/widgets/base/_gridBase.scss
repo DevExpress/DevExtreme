@@ -23,7 +23,6 @@
   $grid-command-edit-column-width: 100px;
   $grid-command-edit-column-with-icons-width: 80px;
   $grid-command-expand-column-width: 30px;
-  $grid-masterdetail-padding: 30px;
   $grid-command-adaptive-column-width: 36px;
   $grid-column-header-indicator-width: 14px;
   $grid-text-content-margin: 3px;
@@ -912,8 +911,6 @@
     }
 
     .dx-row > .dx-master-detail-cell {
-      padding: $grid-masterdetail-padding;
-
       &:focus {
         outline: 0;
       }
