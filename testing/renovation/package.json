@@ -34,7 +34,7 @@
   "devDependencies": {
     "html-loader": "^2.1.2",
     "babel-preset-react-app": "^10.0.0",
-    "raw-loader": "1.0.0",
+    "raw-loader": "^4.0.2",
     "ts-loader": "^9.2.4",
     "vue-loader": "^15.9.8",
     "vue-template-compiler": "^2.6.11"
