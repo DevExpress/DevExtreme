@@ -8,7 +8,6 @@ import { AllDayPanelTitle } from '../../date_table/all_day_panel/title';
 import { Table } from '../../table';
 
 const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel');
-const getKeyByGroup = jest.spyOn(utilsModule, 'getKeyByGroup');
 
 jest.mock('../../table', () => ({
   ...jest.requireActual('../../table'),
@@ -46,6 +45,7 @@ describe('TimePanelLayout', () => {
         isLastGroupCell: false,
       }],
       groupIndex: 2,
+      key: '1',
     }],
   };
 
@@ -60,10 +60,6 @@ describe('TimePanelLayout', () => {
     );
 
     afterEach(jest.resetAllMocks);
-
-    beforeEach(() => {
-      getKeyByGroup.mockImplementation((key) => (key ? key.toString() : '0'));
-    });
 
     it('should spread restAttributes', () => {
       const layout = render(
@@ -191,6 +187,7 @@ describe('TimePanelLayout', () => {
           groupedData: [{
             dateTable: [],
             groupIndex: 33,
+            key: '1',
           }],
           isGroupedAllDayPanel: true,
         };
@@ -200,15 +197,6 @@ describe('TimePanelLayout', () => {
         expect(titleCell.find(AllDayPanelTitle).exists())
           .toBe(mockValue);
       });
-    });
-
-    it('should call getKeyByGroup with correct arguments', () => {
-      render({});
-
-      expect(getKeyByGroup)
-        .toHaveBeenCalledTimes(1);
-      expect(getKeyByGroup)
-        .toHaveBeenCalledWith(2, undefined);
     });
   });
 
