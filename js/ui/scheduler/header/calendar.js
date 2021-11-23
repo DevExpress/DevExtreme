@@ -17,7 +17,6 @@ export default class SchedulerCalendar extends Widget {
             this._popover.option('target', target);
         }
         this._popover.show();
-        this._calendar.focus();
     }
 
     hide() {
@@ -25,7 +24,7 @@ export default class SchedulerCalendar extends Widget {
     }
 
     _keyboardHandler(opts) {
-        this._calendar._keyboardHandler(opts);
+        this._calendar?._keyboardHandler(opts);
     }
 
     _init() {
@@ -47,6 +46,7 @@ export default class SchedulerCalendar extends Widget {
 
         this._popover = this._createComponent(this.$element(), overlayType, {
             contentTemplate: () => this._createPopupContent(),
+            onShown: () => this._calendar.focus(),
             defaultOptionsRules: [
                 {
                     device: () => isMobileLayout,
