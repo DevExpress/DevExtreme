@@ -41,7 +41,7 @@ import { AppointmentsViewModelType } from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
-import { getPreparedDataItems } from './utils/data';
+import { getPreparedDataItems, resolveDataItems } from './utils/data';
 import { getFilterStrategy } from './utils/filter';
 
 export const viewFunction = ({
@@ -526,8 +526,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   loadDataSource(): void {
     if (!this.internalDataSource.isLoaded() && !this.internalDataSource.isLoading()) {
       (this.internalDataSource.load() as DataSourcePromise)
-        .done((items: Appointment[]) => {
-          this.dataItems = items;
+        .done((loadOptions: Appointment[] | { data: Appointment[] }) => {
+          this.dataItems = resolveDataItems(loadOptions);
         });
     }
   }
