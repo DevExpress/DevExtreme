@@ -8,6 +8,7 @@ const window = getWindow();
 class PopupPositionController extends OverlayPositionController {
     constructor({
         fullScreen, forceApplyBindings,
+        dragOutsideBoundary, dragAndResizeArea, outsideDragFactor,
         ...args
     }) {
         super(args);
@@ -15,10 +16,18 @@ class PopupPositionController extends OverlayPositionController {
         this._props = {
             ...this._props,
             fullScreen,
-            forceApplyBindings
+            forceApplyBindings,
+            dragOutsideBoundary,
+            dragAndResizeArea,
+            outsideDragFactor,
         };
 
+        this._$dragResizeContainer = undefined;
+        this._outsideDragFactor = undefined;
         this._lastPositionBeforeFullScreen = undefined;
+
+        this._updateDragResizeContainer();
+        this._updateOutsideDragFactor();
     }
 
     set fullScreen(fullScreen) {
@@ -29,6 +38,37 @@ class PopupPositionController extends OverlayPositionController {
         } else {
             this._fullScreenDisabled();
         }
+    }
+
+    get $dragResizeContainer() {
+        return this._$dragResizeContainer;
+    }
+
+    get outsideDragFactor() {
+        return this._outsideDragFactor;
+    }
+
+    set dragAndResizeArea(dragAndResizeArea) {
+        this._props.dragAndResizeArea = dragAndResizeArea;
+
+        this._updateDragResizeContainer();
+    }
+
+    set dragOutsideBoundary(dragOutsideBoundary) {
+        this._props.dragOutsideBoundary = dragOutsideBoundary;
+
+        this._updateDragResizeContainer();
+        this._updateOutsideDragFactor();
+    }
+
+    set outsideDragFactor(outsideDragFactor) {
+        this._props.outsideDragFactor = outsideDragFactor;
+
+        this._updateOutsideDragFactor();
+    }
+
+    dragHandled() {
+        this.restorePositionOnNextRender(false);
     }
 
     positionContent() {

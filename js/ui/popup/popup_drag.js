@@ -13,7 +13,7 @@ import { addNamespace } from '../../events/utils/index';
 
 const KEYBOARD_DRAG_STEP = 5;
 
-class OverlayDrag {
+class PopupDrag {
     constructor(config) {
         this.init(config);
     }
@@ -231,4 +231,4 @@ class OverlayDrag {
     }
 }
 
-export default OverlayDrag;
+export default PopupDrag;

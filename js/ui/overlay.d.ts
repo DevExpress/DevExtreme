@@ -66,24 +66,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     deferRendering?: boolean;
     /**
      * @docid
-     * @default undefined
-     * @public
-     */
-    dragAndResizeArea?: string | UserDefinedElement;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-    dragEnabled?: boolean;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-     dragOutsideBoundary?: boolean;
-    /**
-     * @docid
      * @deprecated
      * @default {}
      * @public

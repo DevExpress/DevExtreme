@@ -27,7 +27,6 @@ import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../event
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import Resizable from '../resizable';
-import OverlayDrag from './overlay_drag';
 import { tabbable } from '../widget/selectors';
 import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
@@ -77,10 +76,6 @@ const Overlay = Widget.inherit({
             escape: function() {
                 this.hide();
             },
-            upArrow: (e) => { this._drag.moveUp(e); },
-            downArrow: (e) => { this._drag.moveDown(e); },
-            leftArrow: (e) => { this._drag.moveLeft(e); },
-            rightArrow: (e) => { this._drag.moveRight(e); }
         });
     },
 
@@ -138,8 +133,6 @@ const Overlay = Widget.inherit({
                 }
             },
 
-            dragOutsideBoundary: false,
-
             closeOnOutsideClick: false,
 
             copyRootClassesToWrapper: false,
@@ -155,12 +148,6 @@ const Overlay = Widget.inherit({
             onHidden: null,
 
             contentTemplate: 'content',
-
-            dragEnabled: false,
-
-            dragAndResizeArea: undefined,
-
-            outsideDragFactor: 0,
 
             resizeEnabled: false,
             onResizeStart: null,
@@ -921,7 +908,6 @@ const Overlay = Widget.inherit({
             }
         });
 
-        this._renderDrag();
         this._renderResize();
         this._renderScrollTerminator();
 
@@ -935,7 +921,7 @@ const Overlay = Widget.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { target, container, dragAndResizeArea, dragOutsideBoundary, outsideDragFactor, _fixWrapperPosition, restorePosition } = this.option();
+        const { target, container, _fixWrapperPosition, restorePosition } = this.option();
         // NOTE: position is passed to controller in renderGeometry to prevent window field using in server side mode
 
         return {
@@ -947,9 +933,6 @@ const Overlay = Widget.inherit({
             onPositioned: this._actions.onPositioned,
             onVisualPositionChanged: this._actions.onVisualPositionChanged,
             restorePosition,
-            dragAndResizeArea,
-            dragOutsideBoundary,
-            outsideDragFactor,
             _fixWrapperPosition
         };
     },
@@ -958,27 +941,6 @@ const Overlay = Widget.inherit({
         this._positionController = new OverlayPositionController(
             this._getPositionControllerConfig()
         );
-    },
-
-    _renderDrag: function() {
-        const $dragTarget = this._getDragTarget();
-
-        if(!$dragTarget) {
-            return;
-        }
-
-        const config = {
-            dragEnabled: this.option('dragEnabled'),
-            handle: $dragTarget.get(0),
-            draggableElement: this._$content.get(0),
-            positionController: this._positionController
-        };
-
-        if(this._drag) {
-            this._drag.init(config);
-        } else {
-            this._drag = new OverlayDrag(config);
-        }
     },
 
     _renderResize: function() {
@@ -1044,10 +1006,6 @@ const Overlay = Widget.inherit({
                 e.preventDefault();
             }
         });
-    },
-
-    _getDragTarget: function() {
-        return this.$content();
     },
 
     _moveFromContainer: function() {
@@ -1289,10 +1247,6 @@ const Overlay = Widget.inherit({
         }
 
         switch(args.name) {
-            case 'dragEnabled':
-                this._renderDrag();
-                this._renderGeometry();
-                break;
             case 'resizeEnabled':
                 this._renderResize();
                 this._renderGeometry();
@@ -1375,22 +1329,6 @@ const Overlay = Widget.inherit({
                 break;
             case 'wrapperAttr':
                 this._renderWrapperAttributes();
-                break;
-            case 'dragAndResizeArea':
-                this._positionController.dragAndResizeArea = value;
-                if(this.option('resizeEnabled')) {
-                    this._resizable.option('area', this._positionController.$dragResizeContainer);
-                }
-                this._positionController.positionContent();
-                break;
-            case 'dragOutsideBoundary':
-                this._positionController.dragOutsideBoundary = value;
-                if(this.option('resizeEnabled')) {
-                    this._resizable.option('area', this._positionController.$dragResizeContainer);
-                }
-                break;
-            case 'outsideDragFactor':
-                this._positionController.outsideDragFactor = value;
                 break;
             case 'restorePosition':
                 this._positionController.restorePosition = args.value;

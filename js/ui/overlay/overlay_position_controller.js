@@ -26,7 +26,6 @@ class OverlayPositionController {
         position, target, container,
         $root, $content, $wrapper,
         onPositioned, onVisualPositionChanged,
-        dragOutsideBoundary, dragAndResizeArea, outsideDragFactor,
         restorePosition,
         _fixWrapperPosition
     }) {
@@ -34,9 +33,6 @@ class OverlayPositionController {
             position,
             target,
             container,
-            dragOutsideBoundary,
-            dragAndResizeArea,
-            outsideDragFactor,
             restorePosition,
             onPositioned,
             onVisualPositionChanged,
@@ -54,50 +50,19 @@ class OverlayPositionController {
         this._visualPosition = undefined;
         this._initialPosition = undefined;
         this._previousVisualPosition = undefined;
-        this._$dragResizeContainer = undefined;
-        this._outsideDragFactor = undefined;
 
         this.updateContainer(container);
         this.updatePosition(position, target);
-        this._updateDragResizeContainer();
-        this._updateOutsideDragFactor();
     }
 
     get $container() {
         return this._$markupContainer;
     }
 
-    get $dragResizeContainer() {
-        return this._$dragResizeContainer;
-    }
-
-    get outsideDragFactor() {
-        return this._outsideDragFactor;
-    }
-
     set fixWrapperPosition(fixWrapperPosition) {
         this._props._fixWrapperPosition = fixWrapperPosition;
 
         this.styleWrapperPosition();
-    }
-
-    set dragAndResizeArea(dragAndResizeArea) {
-        this._props.dragAndResizeArea = dragAndResizeArea;
-
-        this._updateDragResizeContainer();
-    }
-
-    set dragOutsideBoundary(dragOutsideBoundary) {
-        this._props.dragOutsideBoundary = dragOutsideBoundary;
-
-        this._updateDragResizeContainer();
-        this._updateOutsideDragFactor();
-    }
-
-    set outsideDragFactor(outsideDragFactor) {
-        this._props.outsideDragFactor = outsideDragFactor;
-
-        this._updateOutsideDragFactor();
     }
 
     set restorePosition(restorePosition) {
@@ -113,10 +78,6 @@ class OverlayPositionController {
         const shouldRestorePosition = this._props.restorePosition;
 
         this.restorePositionOnNextRender(shouldRestorePosition);
-    }
-
-    dragHandled() {
-        this.restorePositionOnNextRender(false);
     }
 
     resizeHandled() {

@@ -87,8 +87,6 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
-viewPort($('#qunit-fixture').addClass('dx-viewport'));
-
 executeAsyncMock.setup();
 
 const POPUP_CLASS = 'dx-popup';
@@ -109,8 +107,13 @@ const POPUP_TOP_LEFT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-top-left'
 
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
-const viewport = function() { return $('.dx-viewport'); };
+const VIEWPORT_CLASS = 'dx-viewport';
 
+const viewport = function() { return $(toSelector(VIEWPORT_CLASS)); };
+
+const toSelector = (cssClass) => `.${cssClass}`;
+
+viewPort($('#qunit-fixture').addClass(VIEWPORT_CLASS));
 
 QUnit.module('basic', () => {
     QUnit.test('markup init', function(assert) {
@@ -1356,6 +1359,268 @@ QUnit.module('options changed callbacks', {
     });
 });
 
+QUnit.module('drag', {
+    beforeEach: function() {
+        const initialOptions = {
+            animation: null,
+            dragEnabled: true,
+            visible: true
+        };
+        this.init = (options) => {
+            this.element = $('#popup');
+            this.popup = this.element
+                .dxPopup($.extend({}, initialOptions, options))
+                .dxPopup('instance');
+            this.$overlayContent = this.popup.$content().parent();
+            this.$title = this.popup.topToolbar();
+        };
+        this.reinit = (options) => {
+            this.init(options);
+        };
+
+        this.init();
+    }
+}, () => {
+    QUnit.test('class should be added if drag is enabled', function(assert) {
+        assert.ok(this.$overlayContent.hasClass(POPUP_DRAGGABLE_CLASS), 'class was added');
+
+        this.popup.option('dragEnabled', false);
+
+        assert.ok(!this.$overlayContent.hasClass(POPUP_DRAGGABLE_CLASS), 'class was added');
+    });
+
+    QUnit.test('popup should be dragged by title', function(assert) {
+        const pointer = pointerMock(this.$title);
+        const position = this.$overlayContent.position();
+
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        assert.deepEqual(this.$overlayContent.position(), {
+            top: position.top + 50,
+            left: position.left + 50
+        }, 'popup was moved');
+    });
+
+    QUnit.test('popup shouldn\'t be dragged by content', function(assert) {
+        const pointer = pointerMock(this.popup.$content());
+        const position = this.$overlayContent.position();
+
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        assert.deepEqual(this.$overlayContent.position(), {
+            top: position.top,
+            left: position.left
+        }, 'popup was not moved');
+    });
+
+    QUnit.test('popup should be dragged if title was changed', function(assert) {
+        const position = this.$overlayContent.position();
+
+        this.popup.option('title', 'newTitle');
+
+        const pointer = pointerMock(this.popup.topToolbar());
+
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        assert.deepEqual(this.$overlayContent.position(), {
+            top: position.top + 50,
+            left: position.left + 50
+        }, 'popup was moved');
+    });
+
+    QUnit.test('overlay should not be dragged if dragEnabled is false', function(assert) {
+        this.reinit({ dragEnabled: false });
+        const pointer = pointerMock(this.$title);
+        const position = this.$overlayContent.position();
+
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        assert.deepEqual(this.$overlayContent.position(), {
+            top: position.top,
+            left: position.left
+        }, 'popup was not moved');
+    });
+
+    QUnit.test('popup should not be dragged if dragEnabled is changed dynamically', function(assert) {
+        const pointer = pointerMock(this.$title);
+        const position = this.$overlayContent.position();
+
+        this.popup.option('dragEnabled', false);
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        assert.deepEqual(this.$overlayContent.position(), {
+            top: position.top,
+            left: position.left
+        }, 'popup was not moved');
+    });
+
+    QUnit.test('dragged popup should save position after dimensions change', function(assert) {
+        this.reinit({ width: 1,
+            height: 1,
+            position: { of: viewPort() }
+        });
+        const pointer = pointerMock(this.$title);
+
+        pointer.start().dragStart().drag(-10).dragEnd();
+        let prevPosition = this.$overlayContent.position().left;
+        resizeCallbacks.fire();
+        assert.strictEqual(this.$overlayContent.position().left, prevPosition, 'correct position after first move');
+
+        pointer.start().dragStart().drag(-10).dragEnd();
+        prevPosition = this.$overlayContent.position().left;
+        resizeCallbacks.fire();
+        assert.strictEqual(this.$overlayContent.position().left, prevPosition, 'correct position after next move');
+    });
+
+    QUnit.test('popup should not be dragged out of target', function(assert) {
+        this.reinit({
+            width: 2,
+            height: 2,
+            position: { of: viewPort() }
+        });
+        const $container = viewPort();
+        const pointer = pointerMock(this.$title);
+
+        $container.css({ padding: '10px' });
+
+        const viewWidth = getOuterWidth($container);
+        const viewHeight = getOuterHeight($container);
+        const position = this.$overlayContent.position();
+        const startEvent = pointer.start().dragStart().lastEvent();
+
+        assert.strictEqual(position.left - startEvent.maxLeftOffset, 0, 'popup should not be dragged left of target');
+        assert.strictEqual(position.left + startEvent.maxRightOffset, viewWidth - getOuterWidth(this.$overlayContent), 'popup should not be dragged right of target');
+        assert.strictEqual(position.top - startEvent.maxTopOffset, 0, 'popup should not be dragged above the target');
+        assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - getOuterHeight(this.$overlayContent), 'popup should not be dragged below than target');
+    });
+
+    QUnit.test('popup can be dragged out of target if viewport and container is not specified', function(assert) {
+        try {
+            viewPort(null);
+
+            this.reinit({
+                width: 2,
+                height: 2,
+            });
+            const pointer = pointerMock(this.$title);
+
+            viewPort().attr('style', 'width: 100px; height: 100px');
+
+            const $container = $(window);
+            const viewWidth = Math.max(document.body.clientWidth, getOuterWidth($container));
+            const viewHeight = Math.max(document.body.clientHeight, getOuterHeight($container));
+            const position = this.$overlayContent.position();
+
+            const startEvent = pointer.start().dragStart().lastEvent();
+
+            assert.strictEqual(position.left + startEvent.maxRightOffset, viewWidth - getOuterWidth(this.$overlayContent), 'popup should not be dragged right of target');
+            assert.strictEqual(position.top + startEvent.maxBottomOffset, viewHeight - getOuterHeight(this.$overlayContent), 'popup should not be dragged below than target');
+        } finally {
+            viewPort().removeAttr('style');
+            viewPort(toSelector(VIEWPORT_CLASS));
+        }
+    });
+
+    // ETO PERENESTI V RESIZE I UBRAT' SKIP
+    QUnit.skip('overlay should have correct resizable area if viewport and container is not specified', function(assert) {
+        try {
+            viewPort(null);
+
+            this.reinit({ width: 2, height: 2 });
+            const resizable = this.$overlayContent.dxResizable('instance');
+
+            assert.ok($.isWindow(resizable.option('area').get(0)), 'window is the area of the resizable');
+        } finally {
+            viewPort(toSelector(VIEWPORT_CLASS));
+        }
+    });
+
+    QUnit.test('popup should not be dragged when container size less than overlay content', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').height(0).width(20);
+        this.reinit({
+            height: 10,
+            width: 10,
+            container: $container
+        });
+
+        const pointer = pointerMock(this.$title);
+        const startEvent = pointer.start().dragStart().lastEvent();
+
+        assert.strictEqual(startEvent.maxTopOffset, 0, 'popup should not be dragged vertically');
+        assert.strictEqual(startEvent.maxBottomOffset, 0, 'popup should not be dragged vertically');
+        assert.strictEqual(startEvent.maxLeftOffset, 0, 'popup should not be dragged horizontally');
+        assert.strictEqual(startEvent.maxRightOffset, 0, 'popup should not be dragged horizontally');
+    });
+
+    QUnit.test('popup can be dragged when container size less than overlay content and outsideDragFactor is enabled', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').height(10).width(10);
+        this.reinit({
+            height: 10,
+            width: 10,
+            container: $container,
+            position: { of: $container },
+            outsideDragFactor: 1
+        });
+
+        const pointer = pointerMock(this.$title);
+        const startEvent = pointer.start().dragStart().lastEvent();
+
+        assert.strictEqual(startEvent.maxTopOffset, 10, 'popup can dragged vertically');
+        assert.strictEqual(startEvent.maxBottomOffset, 10, 'popup can be dragged vertically');
+        assert.strictEqual(startEvent.maxLeftOffset, 10, 'popup can be dragged horizontally');
+        assert.strictEqual(startEvent.maxRightOffset, 10, 'popup can be dragged horizontally');
+    });
+
+    QUnit.test('popup should be dragged correctly when position.of and shading (T534551)', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').height(0).width(200);
+        $container.css('margin-left', '200px');
+        $container.css('margin-top', '200px');
+
+        this.reinit({
+            shading: true,
+            height: 20,
+            width: 20,
+            position: { of: $container }
+        });
+
+        const overlayPosition = this.$overlayContent.position();
+        const containerPosition = $container.position();
+        const viewWidth = getOuterWidth(viewport());
+        const viewHeight = getOuterHeight(viewport());
+
+        const pointer = pointerMock(this.$title);
+        const startEvent = pointer.start().dragStart().lastEvent();
+
+        assert.strictEqual(startEvent.maxRightOffset, viewWidth - getOuterWidth(this.$overlayContent) - overlayPosition.left - 200, 'popup should be dragged right');
+        assert.strictEqual(startEvent.maxLeftOffset, 200 + overlayPosition.left, 'popup should be dragged left');
+        assert.roughEqual(startEvent.maxTopOffset, 200 + overlayPosition.top + containerPosition.top, 1, 'popup should be dragged top');
+        assert.roughEqual(startEvent.maxBottomOffset, viewHeight - getOuterHeight(this.$overlayContent) - containerPosition.top - overlayPosition.top - 200, 1, 'popup should be dragged bottom');
+    });
+
+    QUnit.test('popup changes position after dragging', function(assert) {
+        this.reinit({ position: { my: 'top', at: 'top', of: viewport(), offset: '0 0' } });
+        const pointer = pointerMock(this.$title);
+
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+        assert.strictEqual(this.$overlayContent.position().top, 50, 'overlay positioned correctly after dragging');
+
+        this.popup.option('position.offset', '0 20');
+
+        assert.strictEqual(this.$overlayContent.position().top, 20, 'overlay positioned correctly after change the \'position\' option');
+    });
+
+    QUnit.test('popup should reposition after dragging if position is outside of drag area', function(assert) {
+        const startOverlayPosition = this.$overlayContent.position().left;
+        const pointer = pointerMock(this.$title);
+
+        pointer.start().down().move(10, 10).move(-10, -10).up();
+        const newOverlayPosition = this.$overlayContent.position().left;
+
+        assert.notStrictEqual(startOverlayPosition, newOverlayPosition, 'overlay repositioned after dragging');
+        assert.ok(newOverlayPosition < -9000, 'overlay now is positioned in viewport');
+    });
+});
+
 QUnit.module('resize', {
     beforeEach: function() {
         fx.off = true;
@@ -1466,85 +1731,101 @@ QUnit.module('resize', {
     });
 });
 
-QUnit.module('drag popup by title', {
+QUnit.module('keyboard navigation', {
     beforeEach: function() {
-        fx.off = true;
-    },
-    afterEach: function() {
-        fx.off = false;
+        const initialOptions = {
+            animation: null,
+            dragEnabled: true,
+            visible: true,
+            width: 1,
+            height: 1,
+            position: { of: viewPort() }
+        };
+        this.init = (options) => {
+            this.element = $('#popup');
+            this.popup = this.element
+                .dxPopup($.extend({}, initialOptions, options))
+                .dxPopup('instance');
+            this.$overlayContent = this.popup.$content().parent();
+            this.position = this.$overlayContent.position();
+            this.keyboard = keyboardMock(this.$overlayContent);
+        };
+        this.reinit = (options) => {
+            this.init(options);
+        };
+
+        this.init();
     }
 }, () => {
-    QUnit.test('class should be added if drag is enabled', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            dragEnabled: true,
-            visible: true
-        });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
+    QUnit.test('arrows handling', function(assert) {
+        const offset = 5;
 
-        assert.ok($overlayContent.hasClass(POPUP_DRAGGABLE_CLASS), 'class was added');
+        this.keyboard.keyDown('left');
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left - offset, 'popup position was change after pressing left arrow');
+        this.position = this.$overlayContent.position();
 
-        popup.option('dragEnabled', false);
-        assert.ok(!$overlayContent.hasClass(POPUP_DRAGGABLE_CLASS), 'class was added');
+        this.keyboard.keyDown('down');
+        assert.strictEqual(this.$overlayContent.position().top, this.position.top + offset, 'popup position was change after pressing down arrow');
+        this.position = this.$overlayContent.position();
+
+        this.keyboard.keyDown('right');
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left + offset, 'popup position was change after pressing right arrow');
+        this.position = this.$overlayContent.position();
+
+        this.keyboard.keyDown('up');
+        assert.strictEqual(this.$overlayContent.position().top, this.position.top - offset, 'popup position was change after pressing up arrow');
     });
 
-    QUnit.test('popup should be dragged by title', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            dragEnabled: true,
-            visible: true
+    QUnit.test('popup should not be dragged when container size less than overlay content}', function(assert) {
+        const $container = $('<div>').appendTo('#qunit-fixture').height(14).width(14);
+        this.reinit({
+            height: 10,
+            width: 10,
+            container: $container,
+            position: { my: 'center center', at: 'center center', of: $container }
         });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
-        const $title = $overlayContent.children(`.${POPUP_TITLE_CLASS}`);
-        const pointer = pointerMock($title);
-        const position = $overlayContent.position();
 
-        pointer.start().dragStart().drag(50, 50).dragEnd();
+        const $overlayContent = this.$overlayContent;
+        const keyboard = keyboardMock($overlayContent);
 
-        assert.deepEqual($overlayContent.position(), {
-            top: position.top + 50,
-            left: position.left + 50
-        }, 'popup was moved');
+        keyboard.keyDown('left');
+        assert.strictEqual($overlayContent.position().left, 0, 'popup should not be dragged left of target');
+
+        keyboard.keyDown('right');
+        assert.strictEqual($overlayContent.position().left, getWidth($container) - getOuterWidth($overlayContent), 'popup should not be dragged right of target');
+
+        keyboard.keyDown('up');
+        assert.strictEqual($overlayContent.position().top, 0, 'popup should not be dragged above the target');
+
+        keyboard.keyDown('down');
+        assert.strictEqual($overlayContent.position().top, getHeight($container) - getOuterHeight($overlayContent), 'popup should not be dragged below than target');
     });
 
-    QUnit.test('popup shouldn\'t be dragged by content', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            dragEnabled: true,
-            visible: true
-        });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
-        const pointer = pointerMock(popup.$content());
-        const position = $overlayContent.position();
+    QUnit.test('arrows handling for rtl', function(assert) {
+        this.reinit({ rtlEnabled: true });
+        const offset = 5;
 
-        pointer.start().dragStart().drag(50, 50).dragEnd();
+        this.keyboard.keyDown('left');
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left - offset, 'popup position was change after pressing left arrow');
+        this.position = this.$overlayContent.position();
 
-        assert.deepEqual($overlayContent.position(), {
-            top: position.top,
-            left: position.left
-        }, 'popup was not moved');
+        this.keyboard.keyDown('right');
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left + offset, 'popup position was change after pressing right arrow');
     });
 
-    QUnit.test('popup should be dragged if title was changed', function(assert) {
-        const $popup = $('#popup').dxPopup({
-            dragEnabled: true,
-            visible: true
-        });
-        const popup = $popup.dxPopup('instance');
-        const $overlayContent = popup.$content().parent();
-        const position = $overlayContent.position();
+    QUnit.test('arrows handling with dragEnabled = false', function(assert) {
+        this.reinit({ dragEnabled: false });
 
-        popup.option('title', 'newTitle');
+        this.keyboard.keyDown('left');
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'popup position was not changed after pressing left arrow');
 
-        const $title = $overlayContent.children(`.${POPUP_TITLE_CLASS}`);
-        const pointer = pointerMock($title);
+        this.keyboard.keyDown('down');
+        assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'popup position was not changed after pressing down arrow');
 
-        pointer.start().dragStart().drag(50, 50).dragEnd();
+        this.keyboard.keyDown('right');
+        assert.strictEqual(this.$overlayContent.position().left, this.position.left, 'popup position was not changed after pressing right arrow');
 
-        assert.deepEqual($overlayContent.position(), {
-            top: position.top + 50,
-            left: position.left + 50
-        }, 'popup was moved');
+        assert.strictEqual(this.$overlayContent.position().top, this.position.top, 'popup position was not changed after pressing up arrow');
     });
 });
 
