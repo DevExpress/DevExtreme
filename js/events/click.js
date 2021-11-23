@@ -13,10 +13,6 @@ import { noop } from '../core/utils/common';
 
 const CLICK_EVENT_NAME = 'dxclick';
 
-const isInput = function(element) {
-    return $(element).is('input, textarea, select, button ,:focus, :focus *');
-};
-
 const misc = { requestAnimationFrame, cancelAnimationFrame };
 
 let prevented = null;
@@ -73,7 +69,6 @@ const ClickEmitter = Emitter.inherit({
     },
 
     dispose: function() {
-        misc.cancelAnimationFrame(this._clickAnimationFrame);
         eventsEngine.off(this.getElement(), 'click', clickHandler);
     }
 });
@@ -86,6 +81,10 @@ const ClickEmitter = Emitter.inherit({
     if(!desktopDevice) {
         let startTarget = null;
         let blurPrevented = false;
+
+        const isInput = function(element) {
+            return $(element).is('input, textarea, select, button ,:focus, :focus *');
+        };
 
         const pointerDownHandler = function(e) {
             startTarget = e.target;
