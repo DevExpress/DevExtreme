@@ -1193,6 +1193,7 @@ export const virtualScrollingModule = {
                         return preloadEnabled ? 2 * viewportSize : viewportSize;
                     },
                     getLoadPageParams: function(byLoadedPage) {
+                        const pageSize = this.pageSize();
                         const viewportParams = this._loadViewportParams;
                         const lastLoadOptions = this._dataSource?.lastLoadOptions();
                         const loadedPageIndex = lastLoadOptions?.pageIndex || 0;
@@ -1203,12 +1204,12 @@ export const virtualScrollingModule = {
                         const bottomPreloadCount = isScrollingBack ? 0 : this.getPreloadedRowCount();
                         const totalCountCorrection = this._dataSource?.totalCountCorrection() || 0;
                         const skipWithPreload = Math.max(0, viewportParams.skip - topPreloadCount);
-                        const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(skipWithPreload / this.pageSize());
-                        const pageOffset = pageIndex * this.pageSize();
+                        const pageIndex = byLoadedPage ? loadedPageIndex : Math.floor(pageSize ? skipWithPreload / pageSize : 0);
+                        const pageOffset = pageIndex * pageSize;
                         const skipForCurrentPage = viewportParams.skip - pageOffset;
                         const loadingTake = viewportParams.take + skipForCurrentPage + bottomPreloadCount - totalCountCorrection;
                         const take = byLoadedPage ? loadedTake : loadingTake;
-                        const loadPageCount = Math.ceil(take / this.pageSize());
+                        const loadPageCount = Math.ceil(pageSize ? take / pageSize : 0);
 
                         return {
                             pageIndex,
@@ -1296,6 +1297,7 @@ export const virtualScrollingModule = {
                                 this.updateItems({
                                     repaintChangesOnly: true,
                                     needUpdateDimensions: true,
+                                    useProcessedItemsCache: true,
                                     cancelEmptyChanges: true
                                 });
                             }
