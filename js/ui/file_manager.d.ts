@@ -37,7 +37,7 @@ import {
 export type ContentReadyEvent = EventInfo<dxFileManager>;
 
 /** @public */
-export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager> & {
+export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager, KeyboardEvent | PointerEvent | MouseEvent> & {
     readonly itemData: any;
     readonly itemElement: DxElement;
     readonly itemIndex: number;
@@ -46,7 +46,7 @@ export type ContextMenuItemClickEvent = NativeEventInfo<dxFileManager> & {
 };
 
 /** @public */
-export type ContextMenuShowingEvent = Cancelable & NativeEventInfo<dxFileManager> & {
+export type ContextMenuShowingEvent = Cancelable & NativeEventInfo<dxFileManager, KeyboardEvent | PointerEvent | MouseEvent> & {
     readonly fileSystemItem?: FileSystemItem;
     readonly targetElement?: DxElement;
     readonly viewArea: 'navPane' | 'itemView';
@@ -93,7 +93,7 @@ export type SelectionChangedEvent = EventInfo<dxFileManager> & {
 };
 
 /** @public */
-export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager> & {
+export type ToolbarItemClickEvent = NativeEventInfo<dxFileManager, PointerEvent | MouseEvent> & {
     readonly itemData: any;
     readonly itemElement: DxElement;
     readonly itemIndex: number;
