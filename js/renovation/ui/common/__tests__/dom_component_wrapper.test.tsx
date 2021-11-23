@@ -138,7 +138,6 @@ describe('DomComponentWrapper', () => {
 
           expect(component.properties)
             .toEqual({
-              isRenovated: true,
               rtlEnabled: false,
             });
         });
@@ -175,10 +174,7 @@ describe('DomComponentWrapper', () => {
         } as any);
 
         expect(component.properties)
-          .toEqual({
-            isRenovated: true,
-            rtlEnabled: false,
-          });
+          .toEqual({ rtlEnabled: false });
       });
     });
 

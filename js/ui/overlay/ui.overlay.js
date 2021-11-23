@@ -1232,8 +1232,7 @@ const Overlay = Widget.inherit({
     },
 
     _clean: function() {
-        const options = this.option();
-        if(!this._contentAlreadyRendered && !options.isRenovated) {
+        if(!this._contentAlreadyRendered) {
             this.$content().empty();
         }
 
