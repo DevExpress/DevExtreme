@@ -11,7 +11,7 @@ describe('NumberBox', () => {
     it('default render', () => {
       const componentProps = new NumberBoxProps();
       const props = {
-        props: componentProps,
+        componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<NumberBox>;
       const tree = shallow(<NumberBoxView {...props as any} /> as any);

@@ -10,13 +10,13 @@ import { BaseWidgetProps } from '../common/base_props';
 function today(): Date { return new Date(); }
 
 export const viewFunction = ({
-  props,
+  componentProps,
   restAttributes,
   domComponentWrapperRef,
 }: Calendar): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyCalendar}
-    componentProps={props}
+    componentProps={componentProps}
     templateNames={['cellTemplate']}
     ref={domComponentWrapperRef}
     // eslint-disable-next-line react/jsx-props-no-spreading
@@ -62,5 +62,9 @@ export class Calendar extends JSXComponent<CalendarProps>() {
   @Method()
   focus(): void {
     this.instance?.focus();
+  }
+
+  get componentProps(): CalendarProps {
+    return this.props;
   }
 }

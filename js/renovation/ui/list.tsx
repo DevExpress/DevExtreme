@@ -28,12 +28,12 @@ export interface ItemClickInfo {
 export type ItemClickEvent = ItemClickInfo & EventExtension;
 
 export const viewFunction = ({
-  props,
+  componentProps,
   restAttributes,
 }: List): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyList}
-    componentProps={props}
+    componentProps={componentProps}
     templateNames={['itemTemplate']}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
@@ -183,4 +183,8 @@ export class ListProps extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class List extends JSXComponent<ListProps>() {}
+export class List extends JSXComponent<ListProps>() {
+  get componentProps(): ListProps {
+    return this.props;
+  }
+}

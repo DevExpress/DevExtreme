@@ -7,12 +7,12 @@ import { EventCallback } from '../../common/event_callback';
 import { BaseWidgetProps } from '../../common/base_props';
 
 export const viewFunction = ({
-  props,
+  componentProps,
   restAttributes,
 }: DateBox): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyDateBox}
-    componentProps={props}
+    componentProps={componentProps}
     templateNames={[]}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
@@ -40,4 +40,8 @@ export class DateBoxProps extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class DateBox extends JSXComponent<DateBoxProps>() {}
+export class DateBox extends JSXComponent<DateBoxProps>() {
+  get componentProps(): DateBoxProps {
+    return this.props;
+  }
+}

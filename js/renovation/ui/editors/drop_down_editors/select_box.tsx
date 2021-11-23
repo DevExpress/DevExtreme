@@ -12,18 +12,18 @@ import { EventCallback } from '../../common/event_callback';
 import { BaseWidgetProps } from '../../common/base_props';
 
 export const viewFunction = ({
-  props,
+  componentProps,
   restAttributes,
 }: SelectBox): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacySelectBox}
-    componentProps={props}
+    componentProps={componentProps}
     templateNames={[
       'dropDownButtonTemplate',
       'groupTemplate',
       'itemTemplate',
     ]}
-  // eslint-disable-next-line react/jsx-props-no-spreading
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
 );
@@ -51,4 +51,8 @@ export class SelectBoxProps extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class SelectBox extends JSXComponent(SelectBoxProps) {}
+export class SelectBox extends JSXComponent(SelectBoxProps) {
+  get componentProps(): SelectBoxProps {
+    return this.props;
+  }
+}

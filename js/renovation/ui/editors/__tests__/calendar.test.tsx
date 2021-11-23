@@ -11,7 +11,7 @@ describe('Calendar', () => {
     it('View render', () => {
       const componentProps = new CalendarProps();
       const props = {
-        props: componentProps,
+        componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Calendar>;
       const tree = shallow(<CalendarView {...props as any} />);
