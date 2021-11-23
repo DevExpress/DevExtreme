@@ -548,8 +548,6 @@ QUnit.test('velocity calculated correctly when content height less than containe
 
 [true, false].forEach((useNative) => {
     QUnit.test(`window resize should call update, useNative: ${useNative}`, function(assert) {
-        assert.expect(1);
-
         const $scrollable = $('#scrollable');
 
         const updateHandler = sinon.spy();
@@ -563,7 +561,7 @@ QUnit.test('velocity calculated correctly when content height less than containe
 
         resizeCallbacks.fire();
 
-        assert.equal(updateHandler.callCount, isRenovation ? 0 : 1, 'onUpdate handler was fired once');
+        assert.equal(updateHandler.callCount, 1, 'onUpdate handler was fired once');
     });
 
 
