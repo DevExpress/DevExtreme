@@ -786,11 +786,13 @@ const TagBox = SelectBox.inherit({
         const filteredItems = selectedItems.filter(clientFilterFunction);
         const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
         const d = new Deferred();
+        const dataSource = this._dataSource;
 
-        if((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
+        if(!dataSource) {
+            return d.resolve([]).promise();
+        } else if((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
             return d.resolve(filteredItems).promise();
         } else {
-            const dataSource = this._dataSource;
             const { customQueryParams, expand, select } = dataSource.loadOptions();
             const filter = this._getFilter(creator);
 
@@ -864,7 +866,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _isGroupedData: function() {
-        return this.option('grouped') && !this._dataSource.group();
+        return this.option('grouped') && !this._dataSource?.group();
     },
 
     _getItemsByValues: function(values) {
@@ -880,6 +882,11 @@ const TagBox = SelectBox.inherit({
 
     _getFilteredGroupedItems: function(values) {
         const selectedItems = new Deferred();
+
+        if(!this._dataSource) {
+            return selectedItems.promise();
+        }
+
         if(this._filteredGroupedItemsLoadPromise) {
             this._dataSource.cancel(this._filteredGroupedItemsLoadPromise.operationId);
         }
