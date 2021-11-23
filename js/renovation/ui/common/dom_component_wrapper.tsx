@@ -129,6 +129,7 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
 
     const properties = ({
       rtlEnabled: !!this.config?.rtlEnabled, // widget expects boolean
+      isRenovated: true,
       ...restProps,
     }) as Record<string, unknown>;
     if (valueChange) {
