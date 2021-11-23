@@ -10,8 +10,8 @@ import { SIMPLE_ITEM_TYPE } from './constants';
 const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
 
 export function convertToRenderFieldItemOptions({
-    $container,
-    containerCssClass,
+    $parent,
+    rootElementCssClassList,
     parentComponent,
     createComponentCallback,
     useFlexLayout,
@@ -54,8 +54,8 @@ export function convertToRenderFieldItemOptions({
         );
 
     return {
-        $container,
-        containerCssClass,
+        $parent,
+        rootElementCssClassList,
         parentComponent,
         createComponentCallback,
         useFlexLayout,
@@ -79,9 +79,9 @@ export function convertToRenderFieldItemOptions({
 
 export function convertToLabelMarkOptions({ showRequiredMark, requiredMark, showOptionalMark, optionalMark }, isRequired) {
     return {
-        isRequiredMark: showRequiredMark && isRequired,
+        showRequiredMark: showRequiredMark && isRequired,
         requiredMark,
-        isOptionalMark: showOptionalMark && !isRequired,
+        showOptionalMark: showOptionalMark && !isRequired,
         optionalMark
     };
 }

@@ -305,8 +305,16 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getTimeDiff() {
-        const today = this._getToday();
+        let today = this._getToday();
         const date = this._getIndicationFirstViewDate();
+
+        const startViewDate = this.getStartViewDate();
+        const dayLightOffset = timeZoneUtils.getDaylightOffsetInMs(startViewDate, today);
+
+        if(dayLightOffset) {
+            today = new Date(today.getTime() + dayLightOffset);
+        }
+
         return today.getTime() - date.getTime();
     }
 

@@ -21,11 +21,6 @@ interface PromiseExtension<T> {
 export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     /**
      * @docid
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 url:string
-     * @type_function_param1_field2 async:boolean
-     * @type_function_param1_field3 method:string
-     * @type_function_param1_field4 timeout:number
      * @type_function_param1_field5 params:object
      * @type_function_param1_field6 payload:object
      * @type_function_param1_field7 headers:object
@@ -40,7 +35,6 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     /**
      * @docid
      * @type_function_param1 e:Error
-     * @type_function_param1_field1 httpStatus:number
      * @type_function_param1_field2 errorDetails:object
      * @type_function_param1_field3 requestOptions:object
      * @public
@@ -72,7 +66,6 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
     /**
      * @docid
-     * @type_function_param1 loadOptions:LoadOptions
      * @action
      * @public
      */
@@ -99,8 +92,6 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
 /**
  * @docid
  * @inherits Store
- * @module data/odata/store
- * @export default
  * @public
  */
 export default class ODataStore extends Store {
@@ -110,9 +101,6 @@ export default class ODataStore extends Store {
      * @docid
      * @publicName byKey(key, extraOptions)
      * @param1 key:object|string|number
-     * @param2 extraOptions:object
-     * @param2_field1 expand:string|Array<string>
-     * @param2_field2 select:string|Array<string>
      * @return Promise<any>
      * @public
      */

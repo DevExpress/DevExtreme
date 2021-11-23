@@ -581,6 +581,13 @@
         "dxGantt-zoomIn": "Vergrößern",
         "dxGantt-zoomOut": "Verkleinern",
         "dxGantt-fullScreen": "Vollbildmodus",
-        "dxGantt-quarter": "Q{0}"
+        "dxGantt-quarter": "Q{0}",
+        "dxGantt-sortingAscendingText": "Aufsteigend sortieren",
+        "dxGantt-sortingDescendingText": "Absteigend sortieren",
+        "dxGantt-sortingClearText": "Sortierung aufheben",
+        "dxGantt-showResources": "Ressourcen Anzeigen",
+        "dxGantt-showDependencies": "Abhängigkeiten Anzeigen",
+        "dxGantt-dialogStartDateValidation": "Startdatum muss später sein als {0}",
+        "dxGantt-dialogEndDateValidation": "Enddatum muss später sein als {0}"
     }
 }

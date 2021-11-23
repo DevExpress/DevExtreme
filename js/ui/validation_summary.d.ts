@@ -24,7 +24,7 @@ export type DisposingEvent = EventInfo<dxValidationSummary>;
 export type InitializedEvent = InitializedEventInfo<dxValidationSummary>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxValidationSummary> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxValidationSummary, MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxValidationSummary> & ChangedOptionInfo;
@@ -44,8 +44,6 @@ export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxVa
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/validation_summary
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

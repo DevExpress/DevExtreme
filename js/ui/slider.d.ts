@@ -34,7 +34,7 @@ export type InitializedEvent = InitializedEventInfo<dxSlider>;
 export type OptionChangedEvent = EventInfo<dxSlider> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxSlider> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSlider, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -52,8 +52,6 @@ export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
  * @docid
  * @isEditor
  * @inherits dxSliderBase
- * @module ui/slider
- * @export default
 * @namespace DevExpress.ui
  * @public
  */

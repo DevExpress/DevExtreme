@@ -15,8 +15,11 @@ $list-searchbox-margin-bottom: 5px;
   }
 }
 
-.dx-wrap-item-text > .dx-list-item > .dx-list-item-content {
-  white-space: normal;
+.dx-wrap-item-text,
+.dx-wrap-item-text > .dx-list-group > .dx-list-group-body {
+  & > .dx-list-item > .dx-list-item-content {
+    white-space: normal;
+  }
 }
 
 .dx-empty-collection .dx-list-select-all {

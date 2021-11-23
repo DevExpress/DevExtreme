@@ -349,14 +349,9 @@ export default class TableResizingModule extends BaseModule {
 
     _getTableDeterminantElements($table, direction) {
         if(direction === 'vertical') {
-            return $table.find('td:first-child');
+            return $table.find('th:first-child, td:first-child');
         } else {
-            const $theadElements = $table.find('th');
-            if($theadElements.length) {
-                return $theadElements;
-            } else {
-                return $table.find('tr').eq(0).find('td');
-            }
+            return $table.find('tr').eq(0).find('th, td');
         }
     }
 
@@ -392,9 +387,9 @@ export default class TableResizingModule extends BaseModule {
     _getLineElements($table, index, direction) {
         let result;
         if(direction !== 'vertical') {
-            result = $table.find(`td:nth-child(${(1 + index)})`);
+            result = $table.find(`th:nth-child(${(1 + index)}), td:nth-child(${(1 + index)})`);
         } else {
-            result = $table.find('tr').eq(index).find('td');
+            result = $table.find('tr').eq(index).find('th, td');
         }
         return result;
     }

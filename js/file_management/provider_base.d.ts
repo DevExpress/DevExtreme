@@ -41,9 +41,7 @@ export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
 }
 /**
  * @docid
- * @module file_management/provider_base
  * @namespace DevExpress.fileManagement
- * @export default
  * @hidden
  */
 export default class FileSystemProviderBase {
@@ -51,7 +49,6 @@ export default class FileSystemProviderBase {
     /**
      * @docid
      * @publicName getItems()
-     * @param1 parentDirectory:FileSystemItem
      * @return Promise<Array<FileSystemItem>>
      * @public
      */
@@ -60,8 +57,6 @@ export default class FileSystemProviderBase {
     /**
      * @docid
      * @publicName renameItem()
-     * @param1 item:FileSystemItem
-     * @param2 newName:string
      * @return Promise<any>
      * @public
      */
@@ -70,8 +65,6 @@ export default class FileSystemProviderBase {
     /**
      * @docid
      * @publicName createDirectory()
-     * @param1 parentDirectory:FileSystemItem
-     * @param2 name:string
      * @return Promise<any>
      * @public
      */
@@ -80,7 +73,6 @@ export default class FileSystemProviderBase {
     /**
      * @docid
      * @publicName deleteItems()
-     * @param1 items:Array<FileSystemItem>
      * @return Array<Promise<any>>
      * @public
      */
@@ -89,8 +81,6 @@ export default class FileSystemProviderBase {
     /**
      * @docid
      * @publicName moveItems()
-     * @param1 items:Array<FileSystemItem>
-     * @param2 destinationDirectory:FileSystemItem
      * @return Array<Promise<any>>
      * @public
      */
@@ -99,8 +89,6 @@ export default class FileSystemProviderBase {
     /**
      * @docid
      * @publicName copyItems()
-     * @param1 items:Array<FileSystemItem>
-     * @param2 destinationDirectory:FileSystemItem
      * @return Array<Promise<any>>
      * @public
      */
@@ -109,9 +97,6 @@ export default class FileSystemProviderBase {
     /**
      * @docid
      * @publicName uploadFileChunk()
-     * @param1 fileData:File
-     * @param2 uploadInfo:UploadInfo
-     * @param3 destinationDirectory:FileSystemItem
      * @return Promise<any>
      * @public
      */
@@ -120,9 +105,6 @@ export default class FileSystemProviderBase {
     /**
      * @docid
      * @publicName abortFileUpload()
-     * @param1 fileData:File
-     * @param2 uploadInfo:UploadInfo
-     * @param3 destinationDirectory:FileSystemItem
      * @return Promise<any>
      * @public
      */
@@ -131,7 +113,6 @@ export default class FileSystemProviderBase {
     /**
      * @docid
      * @publicName downloadItems()
-     * @param1 items:Array<FileSystemItem>
      * @public
      */
     downloadItems(items: Array<FileSystemItem>): void;
@@ -139,7 +120,6 @@ export default class FileSystemProviderBase {
     /**
      * @docid
      * @publicName getItemsContent()
-     * @param1 items:Array<FileSystemItem>
      * @return Promise<object>
      * @public
      */

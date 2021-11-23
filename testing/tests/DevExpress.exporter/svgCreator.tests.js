@@ -201,3 +201,31 @@ QUnit.test('getData returns base64 when blob is not supported', function(assert)
         }
     });
 });
+
+QUnit.test('Do not export elements with \'hidden-for-export\' attribute', function(assert) {
+    if(!checkForBlob.call(this, assert)) return;
+
+    const done = assert.async();
+    const versionXML = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>';
+    const svgStart = '<svg ';
+    const xmlLink = 'xmlns:xlink="http://www.w3.org/1999/xlink" ';
+    const rootAttributes = 'xmlns="http://www.w3.org/2000/svg" class="dxc dxc-chart" style="line-height: normal; overflow: hidden; display: block; -ms-user-select: none; -ms-touch-action: pan-x pan-y pinch-zoom; touch-action: pan-x pan-y pinch-zoom; -moz-user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);" fill="none" stroke="none" stroke-width="0" width="500" height="250" version="1.1">';
+    const svgEnd = '</svg>';
+    const hiddenMarkup = '<g hidden-for-export="true"><rect x="20" y="20" width="200" height="200" fill="#FF0000"></rect></g>';
+    const innerMarkup = '<rect x="50" y="50" width="200" height="200" fill="#00FF00"></rect>';
+    const testingMarkup = svgStart + rootAttributes + hiddenMarkup + innerMarkup + svgEnd;
+    const deferred = exporter.getData(testingMarkup, {});
+
+    assert.expect(3);
+    $.when(deferred).done(function(blob) {
+        try {
+            const $resultSvg = $(blob.arrayBuffer[0]);
+
+            assert.ok(blob, 'Blob was created');
+            assert.deepEqual($resultSvg[1].outerHTML, $(versionXML + svgStart + xmlLink + rootAttributes + innerMarkup + svgEnd)[1].outerHTML, 'Blob content is correct');
+            assert.equal(blob.options.type, 'image/svg+xml', 'Blob type is correct');
+        } finally {
+            done();
+        }
+    });
+});

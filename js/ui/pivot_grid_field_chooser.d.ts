@@ -116,7 +116,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     /**
      * @docid
      * @default 400
-     * @type_function_return number|string
      * @public
      */
     height?: number | string | (() => number | string);
@@ -189,8 +188,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
 /**
  * @docid
  * @inherits Widget
- * @module ui/pivot_grid_field_chooser
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -211,7 +208,6 @@ export default class dxPivotGridFieldChooser extends Widget {
     /**
      * @docid
      * @publicName getDataSource()
-     * @return PivotGridDataSource
      * @public
      */
     getDataSource(): PivotGridDataSource;

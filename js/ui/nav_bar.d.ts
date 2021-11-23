@@ -29,16 +29,16 @@ export type DisposingEvent = EventInfo<dxNavBar>;
 export type InitializedEvent = InitializedEventInfo<dxNavBar>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxNavBar, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxNavBar, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxNavBar, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxNavBar> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxNavBar> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxNavBar> & ChangedOptionInfo;
@@ -60,8 +60,6 @@ export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
 /**
  * @docid
  * @inherits dxTabs
- * @module ui/nav_bar
- * @export default
  * @namespace DevExpress.ui
  * @deprecated dxTabs
  * @public

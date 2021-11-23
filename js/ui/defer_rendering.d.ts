@@ -83,8 +83,6 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
 /**
  * @docid
  * @inherits Widget
- * @module ui/defer_rendering
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

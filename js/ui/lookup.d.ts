@@ -25,15 +25,12 @@ import {
 } from '../events/index';
 
 import {
-    SelectionChangedInfo,
-} from './collection/ui.collection_widget.base';
-
-import {
     ValueChangedInfo,
 } from './editor/editor';
 
 import dxDropDownList, {
     dxDropDownListOptions,
+    SelectionChangedInfo,
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
@@ -61,7 +58,7 @@ export type DisposingEvent = EventInfo<dxLookup>;
 export type InitializedEvent = InitializedEventInfo<dxLookup>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxLookup> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
 export type OpenedEvent = EventInfo<dxLookup>;
@@ -76,7 +73,7 @@ export type PageLoadingEvent = EventInfo<dxLookup>;
 export type PullRefreshEvent = EventInfo<dxLookup>;
 
 /** @public */
-export type ScrollEvent = NativeEventInfo<dxLookup> & ScrollInfo;
+export type ScrollEvent = NativeEventInfo<dxLookup, MouseEvent | Event> & ScrollInfo;
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxLookup> & SelectionChangedInfo;
@@ -85,7 +82,7 @@ export type SelectionChangedEvent = EventInfo<dxLookup> & SelectionChangedInfo;
 export type TitleRenderedEvent = EventInfo<dxLookup> & TitleRenderedInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxLookup> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -156,7 +153,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default null
      * @type_function_param1 selectedItem:object
-     * @type_function_param2 fieldElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -180,8 +176,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default "group"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -286,7 +280,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default function() { return $(window).height() * 0.8 }
-     * @type_function_return number|string
      * @default 'auto' &for(desktop|iPad)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
@@ -295,7 +288,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default function() {return $(window).width() * 0.8 }
-     * @type_function_return number|string
      * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } &for(iPad)
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
@@ -388,7 +380,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid
      * @default "title"
-     * @type_function_param1 titleElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
@@ -427,8 +418,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
  * @docid
  * @isEditor
  * @inherits dxDropDownList
- * @module ui/lookup
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

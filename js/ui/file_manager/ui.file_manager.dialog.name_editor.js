@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 
 import TextBox from '../text_box';
-import FileManagerDialogBase from './ui.file_manager.dialog.js';
+import FileManagerDialogBase from './ui.file_manager.dialog';
 
 const FILE_MANAGER_DIALOG_NAME_EDITOR = 'dx-filemanager-dialog-name-editor';
 const FILE_MANAGER_DIALOG_NAME_EDITOR_POPUP = 'dx-filemanager-dialog-name-editor-popup';
@@ -44,10 +44,15 @@ class FileManagerNameEditorDialog extends FileManagerDialogBase {
 
         this._nameTextBox = this._createComponent($('<div>'), TextBox, {
             value: this._initialNameValue,
-            onEnterKey: this._applyDialogChanges.bind(this)
+            onEnterKey: () => this._hasCompositionJustEnded && this._applyDialogChanges(),
+            onKeyDown: e => this._checkCompositionEnded(e)
         });
 
         this._$contentElement.append(this._nameTextBox.$element());
+    }
+
+    _checkCompositionEnded({ event }) {
+        this._hasCompositionJustEnded = event.which !== 229;
     }
 
     _getDialogResult() {

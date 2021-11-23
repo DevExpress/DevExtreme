@@ -16,7 +16,7 @@ const OUTPUT_ARTIFACTS_DIR = 'artifacts/ts';
 
 const TS_BUNDLE_FILE = './ts/dx.all.d.ts';
 const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE, './ts/aliases.d.ts'];
-const TS_MODULES_GLOB = './js/**/*.d.ts';
+const src = ['./js/**/*.d.ts', '!./js/renovation/**/*'];
 
 function compileTS(settings) {
     return ts.createProject({
@@ -97,14 +97,14 @@ gulp.task('ts-check-bundle', function() {
 });
 
 gulp.task('ts-check-modules', function() {
-    return gulp.src(TS_MODULES_GLOB)
+    return gulp.src(src)
         .pipe(compileTS());
 });
 
 gulp.task('ts-copy-modules', function() {
     const BUNDLE_IMPORT = 'import DevExpress from \'../bundles/dx.all\';';
 
-    return gulp.src(TS_MODULES_GLOB)
+    return gulp.src(src)
         /* legacy modules */
         .pipe(file('events/click.d.ts', BUNDLE_IMPORT))
         .pipe(file('events/contextmenu.d.ts', BUNDLE_IMPORT))
@@ -178,5 +178,3 @@ function widgetNameByPath(widgetPath) {
         return parts.length === 2 ? parts[1] : '';
     }
 }
-
-exports.GLOB_TS = TS_MODULES_GLOB;

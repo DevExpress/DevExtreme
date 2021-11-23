@@ -11,7 +11,7 @@ import {
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions,
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -54,19 +54,19 @@ export type HidingEvent = Cancelable & EventInfo<dxContextMenu>;
 export type InitializedEvent = InitializedEventInfo<dxContextMenu>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxContextMenu, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxContextMenu, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxContextMenu> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxContextMenu> & ChangedOptionInfo;
 
 /** @public */
-export type PositioningEvent = NativeEventInfo<dxContextMenu> & {
+export type PositioningEvent = NativeEventInfo<dxContextMenu, MouseEvent | PointerEvent | TouchEvent> & {
     readonly position: positionConfig;
 };
 
@@ -91,7 +91,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @type_function_return Boolean
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @type string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions
@@ -213,8 +213,6 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
 /**
  * @docid
  * @inherits dxMenuBase
- * @module ui/context_menu
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -237,7 +235,6 @@ export default class dxContextMenu extends dxMenuBase {
     /**
      * @docid
      * @publicName toggle(showing)
-     * @param1 showing:boolean
      * @return Promise<void>
      * @public
      */

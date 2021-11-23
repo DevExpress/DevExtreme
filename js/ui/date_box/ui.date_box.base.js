@@ -1,6 +1,5 @@
 import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
-import registerComponent from '../../core/component_registrator';
 import { isDate as isDateType, isString, isNumeric } from '../../core/utils/type';
 import { createTextElementHiddenCopy } from '../../core/utils/dom';
 import { each } from '../../core/utils/iterator';
@@ -484,7 +483,7 @@ const DateBox = DropDownEditor.inherit({
         if(text === this._getDisplayedText(currentValue)) {
             if(!validationError || validationError.editorSpecific) {
                 this._applyInternalValidation(currentValue);
-                this._applyCustomValidation();
+                this._applyCustomValidation(currentValue);
             }
             return;
         }
@@ -777,7 +776,5 @@ const DateBox = DropDownEditor.inherit({
         }
     }
 });
-
-registerComponent('dxDateBox', DateBox);
 
 export default DateBox;

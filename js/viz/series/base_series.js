@@ -1254,6 +1254,33 @@ Series.prototype = {
 
     getRenderer() {
         return this._renderer;
+    },
+
+    removePointElements() {
+        if(this._markersGroup) {
+            _each(this._points, (_, p) => p.deleteMarker());
+            this._markersGroup.dispose();
+            this._markersGroup = null;
+        }
+    },
+
+    removeGraphicElements() {
+        const that = this;
+        if(that._elementsGroup) {
+            that._elementsGroup.dispose();
+            that._elementsGroup = null;
+        }
+        _each(that._graphics || [], (_, elem) => {
+            that._removeElement(elem);
+        });
+        that._graphics = null;
+    },
+
+    removeBordersGroup() {
+        if(this._bordersGroup) {
+            this._bordersGroup.dispose();
+            this._bordersGroup = null;
+        }
     }
 };
 

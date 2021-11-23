@@ -15,7 +15,7 @@ import {
 import Store from '../data/abstract_store';
 
 import DataSource, {
-    DataSourceOptions,
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import {
@@ -165,7 +165,7 @@ export interface ToolbarPreparingInfo {
 
 export interface RowDraggingEventInfo<T extends GridBase> {
   readonly component: T;
-  readonly event: DxEvent;
+  readonly event: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
   readonly itemData?: any;
   readonly itemElement: DxElement;
   readonly fromIndex: number;
@@ -178,7 +178,7 @@ export interface RowDraggingEventInfo<T extends GridBase> {
 
 export interface DragStartEventInfo<T extends GridBase> {
   readonly component: T;
-  readonly event: DxEvent;
+  readonly event: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
   itemData?: any;
   readonly itemElement: DxElement;
   readonly fromIndex: number;
@@ -212,7 +212,6 @@ export interface FilterPanel<T extends GridBase> {
    * @type_function_param1_field1 component:this
    * @type_function_param1_field2 filterValue:object
    * @type_function_param1_field3 text:string
-   * @type_function_return string
    */
   customizeText?: ((e: FilterPanelCustomizeTextArg<T>) => string);
   /**
@@ -291,7 +290,6 @@ export interface RowDragging<T extends GridBase> {
      * @type_function_param1 dragInfo:object
      * @type_function_param1_field1 itemData:any
      * @type_function_param1_field2 itemElement:DxElement
-     * @type_function_param2 containerElement:DxElement
      * @type_function_return string|Element|jQuery
      * @default undefined
      */
@@ -725,7 +723,7 @@ export interface GridBaseOptions<T extends GridBase> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onKeyDown?: ((e: NativeEventInfo<T> & KeyDownInfo) => void);
+    onKeyDown?: ((e: NativeEventInfo<T, KeyboardEvent> & KeyDownInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -1767,6 +1765,7 @@ export interface ScrollingBase {
     /**
      * @docid GridBaseOptions.scrolling.scrollByContent
      * @default true
+     * @default false &for(non-touch_devices)
      * @public
      */
     scrollByContent?: boolean;
@@ -2385,22 +2384,17 @@ export interface ColumnBase {
     /**
      * @docid GridBaseColumn.calculateCellValue
      * @type_function_param1 rowData:object
-     * @type_function_return any
      * @public
      */
     calculateCellValue?: ((rowData: any) => any);
     /**
      * @docid GridBaseColumn.calculateDisplayValue
      * @type_function_param1 rowData:object
-     * @type_function_return any
      * @public
      */
     calculateDisplayValue?: string | ((rowData: any) => any);
     /**
      * @docid GridBaseColumn.calculateFilterExpression
-     * @type_function_param1 filterValue:any
-     * @type_function_param2 selectedFilterOperation:string
-     * @type_function_param3 target:string
      * @type_function_return Filter expression
      * @public
      */
@@ -2408,7 +2402,6 @@ export interface ColumnBase {
     /**
      * @docid GridBaseColumn.calculateSortValue
      * @type_function_param1 rowData:object
-     * @type_function_return any
      * @public
      */
     calculateSortValue?: string | ((rowData: any) => any);
@@ -2431,7 +2424,6 @@ export interface ColumnBase {
      * @type_function_param1_field2 valueText:string
      * @type_function_param1_field3 target:string
      * @type_function_param1_field4 groupInterval:string|number
-     * @type_function_return string
      * @public
      */
     customizeText?: ((cellInfo: ColumnCustomizeTextArg) => string);
@@ -2578,7 +2570,6 @@ export interface ColumnBase {
     /**
      * @docid GridBaseColumn.setCellValue
      * @type_function_param1 newData:object
-     * @type_function_param2 value:any
      * @type_function_param3 currentRowData:object
      * @type_function_return void|Promise<void>
      * @public
@@ -2614,9 +2605,6 @@ export interface ColumnBase {
     sortOrder?: 'asc' | 'desc';
     /**
      * @docid GridBaseColumn.sortingMethod
-     * @type_function_param1 value1:any
-     * @type_function_param2 value2:any
-     * @type_function_return number
      * @default undefined
      * @public
      */
@@ -2662,9 +2650,7 @@ export interface ColumnHeaderFilter {
   allowSearch?: boolean;
   /**
    * @docid GridBaseColumn.headerFilter.dataSource
-   * @type_function_param1 options:object
    * @type_function_param1_field1 component:object
-   * @type_function_param1_field2 dataSource:DataSourceOptions
    * @default undefined
    * @type_function_return void
    */
@@ -2701,10 +2687,7 @@ export interface ColumnLookup {
   allowClearing?: boolean;
   /**
    * @docid GridBaseColumn.lookup.dataSource
-   * @type_function_param1 options:object
    * @type_function_param1_field1 data:object
-   * @type_function_param1_field2 key:any
-   * @type_function_return Array<any>|DataSourceOptions|Store
    * @default undefined
    */
   dataSource?: Array<any> | DataSourceOptions | Store | ((options: { data?: any; key?: any }) => Array<any> | DataSourceOptions | Store);
@@ -2712,7 +2695,6 @@ export interface ColumnLookup {
    * @docid GridBaseColumn.lookup.displayExpr
    * @default undefined
    * @type_function_param1 data:object
-   * @type_function_return string
    */
   displayExpr?: string | ((data: any) => string);
   /**
@@ -2723,7 +2705,6 @@ export interface ColumnLookup {
   /**
    * @docid GridBaseColumn.lookup.calculateCellValue
    * @type_function_param1 rowData:object
-   * @type_function_return any
    * @public
    */
   calculateCellValue?: ((rowData: any) => any);
@@ -2766,7 +2747,7 @@ export interface ColumnButtonBase {
 export type AdaptiveDetailRowPreparingEvent = EventInfo<dxDataGrid> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent = NativeEventInfo<dxDataGrid> & {
+export type CellClickEvent = NativeEventInfo<dxDataGrid, PointerEvent | MouseEvent> & {
   readonly data: any;
   readonly key: any;
   readonly value?: any;
@@ -2777,11 +2758,11 @@ export type CellClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly rowIndex: number;
   readonly rowType: string;
   readonly cellElement: DxElement;
-  readonly row: RowObject;
+  readonly row: Row;
 };
 
 /** @public */
-export type CellDblClickEvent = NativeEventInfo<dxDataGrid> & {
+export type CellDblClickEvent = NativeEventInfo<dxDataGrid, PointerEvent | MouseEvent> & {
   readonly data: any;
   readonly key: any;
   readonly value?: any;
@@ -2792,7 +2773,7 @@ export type CellDblClickEvent = NativeEventInfo<dxDataGrid> & {
   readonly rowIndex: number;
   readonly rowType: string;
   readonly cellElement: DxElement;
-  readonly row: RowObject;
+  readonly row: Row;
 };
 
 /** @public */
@@ -2808,7 +2789,7 @@ export type CellHoverChangedEvent = EventInfo<dxDataGrid> & {
   readonly column: Column;
   readonly rowType: string;
   readonly cellElement: DxElement;
-  readonly row: RowObject;
+  readonly row: Row;
 };
 
 /** @public */
@@ -2822,7 +2803,7 @@ export type CellPreparedEvent = EventInfo<dxDataGrid> & {
   readonly column: Column;
   readonly rowIndex: number;
   readonly rowType: string;
-  readonly row: RowObject;
+  readonly row: Row;
   readonly isSelected?: boolean;
   readonly isExpanded?: boolean;
   readonly isNewRow?: boolean;
@@ -2842,7 +2823,7 @@ export type ContextMenuPreparingEvent = EventInfo<dxDataGrid> & {
   readonly columnIndex: number;
   readonly column?: Column;
   readonly rowIndex: number;
-  readonly row?: RowObject;
+  readonly row?: Row;
 };
 
 /** @public */
@@ -2876,7 +2857,7 @@ export type EditorPreparedEvent = EventInfo<dxDataGrid> & {
   readonly editorElement: DxElement;
   readonly readOnly: boolean;
   readonly dataField?: string;
-  readonly row?: RowObject;
+  readonly row?: Row;
 };
 
 /** @public */
@@ -2894,7 +2875,7 @@ export type EditorPreparingEvent = EventInfo<dxDataGrid> & {
   editorName: string;
   editorOptions: any;
   readonly dataField?: string;
-  readonly row?: RowObject;
+  readonly row?: Row;
 };
 
 /** @public */
@@ -2919,18 +2900,18 @@ export type FocusedCellChangedEvent = EventInfo<dxDataGrid> & {
   readonly cellElement: DxElement;
   readonly columnIndex: number;
   readonly rowIndex: number;
-  readonly row?: RowObject;
+  readonly row?: Row;
   readonly column?: Column;
 };
 
 /** @public */
-export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
+export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
   readonly cellElement: DxElement;
   readonly prevColumnIndex: number;
   readonly prevRowIndex: number;
   newColumnIndex: number;
   newRowIndex: number;
-  readonly rows: Array<RowObject>;
+  readonly rows: Array<Row>;
   readonly columns: Array<Column>;
   isHighlighted: boolean;
 };
@@ -2939,15 +2920,15 @@ export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> 
 export type FocusedRowChangedEvent = EventInfo<dxDataGrid> & {
   readonly rowElement: DxElement;
   readonly rowIndex: number;
-  readonly row?: RowObject;
+  readonly row?: Row;
 };
 
 /** @public */
-export type FocusedRowChangingEvent = Cancelable & NativeEventInfo<dxDataGrid> & {
+export type FocusedRowChangingEvent = Cancelable & NativeEventInfo<dxDataGrid, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
   readonly rowElement: DxElement;
   readonly prevRowIndex: number;
   newRowIndex: number;
-  readonly rows: Array<RowObject>;
+  readonly rows: Array<Row>;
 };
 
 /** @public */
@@ -2957,13 +2938,13 @@ export type InitializedEvent = InitializedEventInfo<dxDataGrid>;
 export type InitNewRowEvent = EventInfo<dxDataGrid> & NewRowInfo;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxDataGrid> & KeyDownInfo;
+export type KeyDownEvent = NativeEventInfo<dxDataGrid, KeyboardEvent> & KeyDownInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxDataGrid> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent = NativeEventInfo<dxDataGrid> & {
+export type RowClickEvent = NativeEventInfo<dxDataGrid, PointerEvent | MouseEvent> & {
   readonly data: any;
   readonly key: any;
   readonly values: Array<any>;
@@ -2985,7 +2966,7 @@ export type RowCollapsedEvent = EventInfo<dxDataGrid> & RowKeyInfo;
 export type RowCollapsingEvent = Cancelable & EventInfo<dxDataGrid> & RowKeyInfo;
 
 /** @public */
-export type RowDblClickEvent = NativeEventInfo<dxDataGrid> & {
+export type RowDblClickEvent = NativeEventInfo<dxDataGrid, PointerEvent | MouseEvent> & {
   readonly data: any;
   readonly key: any;
   readonly values: Array<any>;
@@ -3075,8 +3056,8 @@ export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxDataGrid>;
 export type RowDraggingReorderEvent = RowDraggingEventInfo<dxDataGrid> & DragReorderInfo;
 
 /** @public */
-export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid> & {
-  row?: RowObject;
+export type ColumnButtonClickEvent = NativeEventInfo<dxDataGrid, PointerEvent | MouseEvent> & {
+  row?: Row;
   column?: Column;
 };
 
@@ -3089,7 +3070,7 @@ export type ColumnButtonTemplateData = {
   readonly column: Column;
   readonly rowIndex: number;
   readonly rowType: string;
-  readonly row: RowObject;
+  readonly row: Row;
 };
 
 /** @public */
@@ -3103,7 +3084,7 @@ export type ColumnCellTemplateData = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column;
-  readonly row: RowObject;
+  readonly row: Row;
   readonly rowType: string;
   readonly watch?: Function;
 };
@@ -3119,7 +3100,7 @@ export type ColumnEditCellTemplateData = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column;
-  readonly row: RowObject;
+  readonly row: Row;
   readonly rowType: string;
   readonly watch?: Function;
 };
@@ -3134,7 +3115,7 @@ export type ColumnGroupCellTemplateData = {
   readonly columnIndex: number;
   readonly rowIndex: number;
   readonly column: Column;
-  readonly row: RowObject;
+  readonly row: Row;
   readonly summaryItems: Array<any>;
   readonly groupContinuesMessage?: string;
   readonly groupContinuedMessage?: string;
@@ -3196,7 +3177,7 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
      * @type_function_param2 rows:Array<dxDataGridRowObject>
      * @public
      */
-    customizeExportData?: ((columns: Array<Column>, rows: Array<RowObject>) => void);
+    customizeExportData?: ((columns: Array<Column>, rows: Array<Row>) => void);
     /**
      * @docid
      * @public
@@ -3626,7 +3607,6 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     } | 'auto';
     /**
      * @docid
-     * @type_function_param1 rowElement:DxElement
      * @type_function_param2 rowInfo:object
      * @type_function_param2_field1 key:any
      * @type_function_param2_field2 data:any
@@ -3690,6 +3670,7 @@ export interface ExcelCellInfo {
   gridCell?: ExcelCell;
 }
 
+/** @public */
 export interface Export {
   /**
    * @docid dxDataGridOptions.export.allowExportSelectedData
@@ -3863,7 +3844,6 @@ export interface MasterDetail {
   enabled?: boolean;
   /**
    * @docid dxDataGridOptions.masterDetail.template
-   * @type_function_param1 detailElement:DxElement
    * @type_function_param2 detailInfo:object
    * @type_function_param2_field1 key:any
    * @type_function_param2_field2 data:object
@@ -3964,7 +3944,6 @@ export interface SummaryGroupItem {
      * @type_function_param1 itemInfo:object
      * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field2 valueText:string
-     * @type_function_return string
      */
     customizeText?: ((itemInfo: SummaryItemTextInfo) => string);
     /**
@@ -4026,7 +4005,6 @@ export interface SummaryTotalItem {
    * @type_function_param1 itemInfo:object
    * @type_function_param1_field1 value:string|number|date
    * @type_function_param1_field2 valueText:string
-   * @type_function_return string
    */
   customizeText?: ((itemInfo: SummaryItemTextInfo) => string);
   /**
@@ -4112,10 +4090,11 @@ export interface SummaryTexts {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Editing instead
  */
 export type dxDataGridEditing = Editing;
 
+/** @public */
 export interface Editing extends EditingBase {
     /**
      * @docid dxDataGridOptions.editing.allowAdding
@@ -4126,23 +4105,19 @@ export interface Editing extends EditingBase {
     /**
      * @docid dxDataGridOptions.editing.allowDeleting
      * @default false
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 component:dxDataGrid
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_return Boolean
      * @public
      */
-    allowDeleting?: boolean | ((options: { component?: dxDataGrid; row?: RowObject }) => boolean);
+    allowDeleting?: boolean | ((options: { component?: dxDataGrid; row?: Row }) => boolean);
     /**
      * @docid dxDataGridOptions.editing.allowUpdating
      * @default false
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 component:dxDataGrid
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_return Boolean
      * @public
      */
-    allowUpdating?: boolean | ((options: { component?: dxDataGrid; row?: RowObject }) => boolean);
+    allowUpdating?: boolean | ((options: { component?: dxDataGrid; row?: Row }) => boolean);
     /**
      * @docid dxDataGridOptions.editing.texts
      * @public
@@ -4153,10 +4128,11 @@ export interface Editing extends EditingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Scrolling instead
  */
 export type dxDataGridScrolling = Scrolling;
 
+/** @public */
 export interface Scrolling extends ScrollingBase {
     /**
      * @docid dxDataGridOptions.scrolling.mode
@@ -4170,10 +4146,11 @@ export interface Scrolling extends ScrollingBase {
 /**
  * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Selection instead
  */
 export type dxDataGridSelection = Selection;
 
+/** @public */
 export interface Selection extends SelectionBase {
     /**
      * @docid dxDataGridOptions.selection.deferred
@@ -4199,8 +4176,6 @@ export interface Selection extends SelectionBase {
 /**
  * @docid
  * @inherits GridBase
- * @module ui/data_grid
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -4236,7 +4211,6 @@ declare class dxDataGrid extends Widget implements GridBase {
     /**
      * @docid
      * @publicName collapseRow(key)
-     * @param1 key:any
      * @return Promise<void>
      * @public
      */
@@ -4251,7 +4225,6 @@ declare class dxDataGrid extends Widget implements GridBase {
     /**
      * @docid
      * @publicName expandRow(key)
-     * @param1 key:any
      * @return Promise<void>
      * @public
      */
@@ -4260,7 +4233,6 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @docid
      * @publicName exportToExcel(selectionOnly)
      * @deprecated excelExporter.exportDataGrid
-     * @param1 selectionOnly:boolean
      * @public
      */
     exportToExcel(selectionOnly: boolean): void;
@@ -4282,7 +4254,6 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @docid
      * @publicName getTotalSummaryValue(summaryItemName)
      * @param1 summaryItemName:String
-     * @return any
      * @public
      */
     getTotalSummaryValue(summaryItemName: string): any;
@@ -4296,7 +4267,6 @@ declare class dxDataGrid extends Widget implements GridBase {
     /**
      * @docid
      * @publicName getVisibleColumns(headerLevel)
-     * @param1 headerLevel:number
      * @return Array<dxDataGridColumn>
      * @public
      */
@@ -4307,20 +4277,16 @@ declare class dxDataGrid extends Widget implements GridBase {
      * @return Array<dxDataGridRowObject>
      * @public
      */
-    getVisibleRows(): Array<RowObject>;
+    getVisibleRows(): Array<Row>;
     /**
      * @docid
      * @publicName isRowExpanded(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isRowExpanded(key: any): boolean;
     /**
      * @docid
      * @publicName isRowSelected(data)
-     * @param1 data:any
-     * @return boolean
      * @public
      */
     isRowSelected(data: any): boolean;
@@ -4437,13 +4403,11 @@ export interface dxDataGridColumn extends ColumnBase {
     /**
      * @docid dxDataGridColumn.calculateGroupValue
      * @type_function_param1 rowData:object
-     * @type_function_return any
      * @public
      */
     calculateGroupValue?: string | ((rowData: any) => any);
     /**
      * @docid dxDataGridColumn.cellTemplate
-     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 data:object
      * @type_function_param2_field2 component:dxDataGrid
@@ -4469,7 +4433,6 @@ export interface dxDataGridColumn extends ColumnBase {
     columns?: Array<Column | string>;
     /**
      * @docid dxDataGridColumn.editCellTemplate
-     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 setValue(newValue, newText):any
      * @type_function_param2_field2 data:object
@@ -4488,7 +4451,6 @@ export interface dxDataGridColumn extends ColumnBase {
     editCellTemplate?: template | ((cellElement: DxElement, cellInfo: ColumnEditCellTemplateData) => any);
     /**
      * @docid dxDataGridColumn.groupCellTemplate
-     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 data:object
      * @type_function_param2_field2 component:dxDataGrid
@@ -4514,7 +4476,6 @@ export interface dxDataGridColumn extends ColumnBase {
     groupIndex?: number;
     /**
      * @docid dxDataGridColumn.headerCellTemplate
-     * @type_function_param1 columnHeader:DxElement
      * @type_function_param2 headerInfo:object
      * @type_function_param2_field1 component:dxDataGrid
      * @type_function_param2_field2 columnIndex:number
@@ -4534,7 +4495,7 @@ export interface dxDataGridColumn extends ColumnBase {
      * @type Enums.GridCommandColumnType
      * @public
      */
-    type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection';
+    type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
 }
 
 /**
@@ -4566,7 +4527,6 @@ export interface dxDataGridColumnButton extends ColumnButtonBase {
     onClick?: ((e: ColumnButtonClickEvent) => void);
     /**
      * @docid dxDataGridColumnButton.template
-     * @type_function_param1 cellElement:DxElement
      * @type_function_param2 cellInfo:object
      * @type_function_param2_field1 component:dxDataGrid
      * @type_function_param2_field2 data:object
@@ -4583,28 +4543,26 @@ export interface dxDataGridColumnButton extends ColumnButtonBase {
     /**
      * @docid dxDataGridColumnButton.visible
      * @default true
-     * @type_function_param1 options:object
-     * @type_function_param1_field1 component:dxDataGrid
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_param1_field3 column:dxDataGridColumn
      * @type_function_return Boolean
      * @public
      */
-    visible?: boolean | ((options: { component?: dxDataGrid; row?: RowObject; column?: Column }) => boolean);
+    visible?: boolean | ((options: { component?: dxDataGrid; row?: Row; column?: Column }) => boolean);
 }
 
 /**
- * @public
  * @namespace DevExpress.ui
- * @deprecated
+ * @deprecated Use Row instead
  */
-export type dxDataGridRowObject = RowObject;
+export type dxDataGridRowObject = Row;
 
 /**
+ * @public
  * @docid dxDataGridRowObject
  * @type object
  */
-export interface RowObject {
+export interface Row {
     /**
      * @docid dxDataGridRowObject.data
      * @public

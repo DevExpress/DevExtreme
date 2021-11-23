@@ -1,8 +1,6 @@
 /**
  * @docid
  * @namespace DevExpress.data
- * @module core/guid
- * @export default
  * @public
  */
 export default class Guid {
@@ -11,14 +9,12 @@ export default class Guid {
     /**
      * @docid
      * @publicName toString()
-     * @return string
      * @public
      */
     toString(): string;
     /**
      * @docid
      * @publicName valueOf()
-     * @return string
      * @public
      */
     valueOf(): string;

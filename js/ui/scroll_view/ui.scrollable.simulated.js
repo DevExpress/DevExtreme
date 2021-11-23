@@ -415,8 +415,8 @@ export const Scroller = Class.inherit({
     },
 
     _updateBounds: function() {
-        this._maxOffset = Math.round(this._getMaxOffset());
-        this._minOffset = Math.round(this._getMinOffset());
+        this._maxOffset = this._getMaxOffset();
+        this._minOffset = this._getMinOffset();
     },
 
     _getMaxOffset: function() {
@@ -511,11 +511,11 @@ export const Scroller = Class.inherit({
     },
 
     _reachedMin: function() {
-        return this._location <= this._minOffset;
+        return Math.round(this._location - this._minOffset) <= 0;
     },
 
     _reachedMax: function() {
-        return this._location >= this._maxOffset;
+        return Math.round(this._location - this._maxOffset) >= 0;
     },
 
     _cursorEnterHandler: function() {

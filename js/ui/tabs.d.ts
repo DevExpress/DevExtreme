@@ -32,16 +32,16 @@ export type DisposingEvent = EventInfo<dxTabs>;
 export type InitializedEvent = InitializedEventInfo<dxTabs>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxTabs> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxTabs, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxTabs> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxTabs, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxTabs> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxTabs, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxTabs> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxTabs> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxTabs> & ChangedOptionInfo;
@@ -122,8 +122,6 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/tabs
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

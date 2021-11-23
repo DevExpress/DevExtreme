@@ -93,7 +93,6 @@ export interface PdfExportDataGridProps {
     /**
      * @docid
      * @type_function_param1 options:Object
-     * @type_function_param1_field1 gridCell:PdfDataGridCell
      * @type_function_param1_field2 pdfCell:Object
      * @public
      */
@@ -108,10 +107,8 @@ export interface PdfExportDataGridProps {
 /**
  * @docid pdfExporter.exportDataGrid
  * @publicName exportDataGrid(options)
- * @param1 options:PdfExportDataGridProps
  * @return Promise<void>
  * @namespace DevExpress.pdfExporter
- * @module pdf_exporter
  * @static
  * @public
  */

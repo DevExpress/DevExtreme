@@ -10,6 +10,10 @@
 }
 
 @mixin diagram-action-icons-mixin($toolbar-color, $menu-color, $icon-size, $toolbar-colorbutton-border-width) {
+  .dx-diagram-i-selectbox-null-icon {
+    @include diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/selectbox-null-icon.svg'), $toolbar-color, 1.56 * $icon-size, $icon-size);
+  }
+
   .dx-diagram-i-connector-begin-none {
     @include diagram-icon-colored(data-uri('image/svg+xml;charset=UTF-8', 'images/widgets/common/diagram/connector-begin-none.svg'), $toolbar-color, 1.56 * $icon-size, $icon-size);
   }

@@ -426,7 +426,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
   }
 
   @Method()
-  getVisibleRows(): any /* dxDataGridRowObject[] */ {
+  getVisibleRows(): any /* Row[] */ {
     return this.instance?.getVisibleRows();
   }
 

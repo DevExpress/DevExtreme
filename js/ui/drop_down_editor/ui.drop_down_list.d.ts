@@ -45,8 +45,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @docid
      * @default "group"
      * @type_function_param1 itemData:object
-     * @type_function_param2 itemIndex:number
-     * @type_function_param3 itemElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -83,7 +81,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @action
      * @public
      */
-    onItemClick?: ((e: NativeEventInfo<T> & ItemInfo) => void);
+    onItemClick?: ((e: NativeEventInfo<T, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -109,7 +107,7 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
      * @action
      * @public
      */
-    onValueChanged?: ((e: NativeEventInfo<T> & ValueChangedInfo) => void);
+    onValueChanged?: ((e: NativeEventInfo<T, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false
@@ -178,8 +176,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
 /**
  * @docid
  * @inherits DataExpressionMixin, dxDropDownEditor
- * @module ui/drop_down_editor/ui.drop_down_list
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */

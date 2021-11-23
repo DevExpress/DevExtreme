@@ -528,6 +528,13 @@
         "dxGantt-zoomIn": "Inzoomen",
         "dxGantt-zoomOut": "Uitzoomen",
         "dxGantt-fullScreen": "Volledig scherm",
-        "dxGantt-quarter": "TODO"
+        "dxGantt-quarter": "TODO",
+        "dxGantt-sortingAscendingText": "Sorteer Oplopend",
+        "dxGantt-sortingDescendingText": "Sorteer Aflopend",
+        "dxGantt-sortingClearText": "Sortering wissen",
+        "dxGantt-showResources": "TODO",
+        "dxGantt-showDependencies": "TODO",
+        "dxGantt-dialogStartDateValidation": "TODO",
+        "dxGantt-dialogEndDateValidation": "TODO"
     }
 }

@@ -2,7 +2,7 @@ import dateUtils from '../../core/utils/date';
 import { isEmptyObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getRecurrenceProcessor } from './recurrence';
-import timeZoneUtils from './utils.timeZone.js';
+import timeZoneUtils from './utils.timeZone';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -65,7 +65,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     _getProcessedByAppointmentTimeZone(appointmentList, appointment) {
         const hasAppointmentTimeZone = !isEmptyObject(appointment.startDateTimeZone) || !isEmptyObject(appointment.endDateTimeZone);
 
-        if(appointmentList.length > 1 && hasAppointmentTimeZone) {
+        if(hasAppointmentTimeZone) {
             const appointmentOffsets = {
                 startDate: this.timeZoneCalculator.getOffsets(appointment.startDate, appointment.startDateTimeZone),
                 endDate: this.timeZoneCalculator.getOffsets(appointment.endDate, appointment.endDateTimeZone),

@@ -15,7 +15,7 @@ import {
     NativeEventInfo,
 } from '../../events/index';
 
-export interface ScrollEventInfo<T = dxScrollable> extends NativeEventInfo<T> {
+export interface ScrollEventInfo<T = dxScrollable> extends NativeEventInfo<T, WheelEvent | MouseEvent | Event> {
     readonly scrollOffset?: any;
     readonly reachedLeft?: boolean;
     readonly reachedRight?: boolean;
@@ -96,8 +96,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     /**
      * @docid
      * @default 'onHover' &for(desktop)
-     * @type string
-     * @acceptValues 'onScroll'|'onHover'|'always'|'never'
      * @default 'onScroll'
      * @public
      */
@@ -135,7 +133,6 @@ export default class dxScrollable extends DOMComponent {
     /**
      * @docid
      * @publicName content()
-     * @return DxElement
      * @public
      */
     content(): DxElement;

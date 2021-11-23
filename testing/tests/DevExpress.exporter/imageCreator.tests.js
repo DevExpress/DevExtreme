@@ -7,6 +7,9 @@ const testingMarkupEnd = '</svg>';
 import browser from 'core/utils/browser';
 import svgUtils from 'core/utils/svg';
 import { Deferred } from 'core/utils/deferred';
+import { getWindow } from 'core/utils/window';
+
+const window = getWindow();
 
 const pathNameByUrl = (url) => {
     const a = document.createElement('a');
@@ -20,6 +23,8 @@ const pathNameByUrl = (url) => {
 function setupCanvasStub(drawnElements, paths) {
     const prototype = window.CanvasRenderingContext2D.prototype;
     const canvasPrototype = window.HTMLCanvasElement.prototype;
+
+    sinon.spy(exporter.image.creator, '_createCanvas');
 
     // image
     sinon.stub(prototype, 'drawImage', function(img, x, y, width, height) {
@@ -304,6 +309,8 @@ function teardownCanvasStub() {
     const prototype = window.CanvasRenderingContext2D.prototype;
     const canvasPrototype = window.HTMLCanvasElement.prototype;
 
+    exporter.image.creator._createCanvas.restore();
+
     // image
     prototype.drawImage.restore();
     canvasPrototype.toDataURL.restore();
@@ -361,6 +368,49 @@ QUnit.module('Svg to image to canvas', {
     },
     afterEach: function() {
         teardownCanvasStub();
+    }
+});
+
+QUnit.test('Canvas size', function(assert) {
+    const done = assert.async();
+    const imageBlob = exporter.image.getData(testingMarkupStart + testingMarkupEnd, {
+        format: 'png', width: 500,
+        height: 250, margin: 10
+    });
+
+    $.when(imageBlob).done(function() {
+        const createCanvas = exporter.image.creator._createCanvas;
+
+        assert.strictEqual(createCanvas.callCount, 1);
+        assert.deepEqual(createCanvas.getCall(0).args, [500, 250, 10]);
+        done();
+    });
+});
+
+QUnit.test('Canvas size. Scaled screen', function(assert) {
+    if(browser.msie) {
+        assert.ok(true, 'This test is not for IE/Edge');
+        return;
+    }
+    const done = assert.async();
+    const srcPixelRatio = window.devicePixelRatio;
+    window.devicePixelRatio = 2;
+
+    try {
+        const imageBlob = exporter.image.getData(testingMarkupStart + testingMarkupEnd, {
+            format: 'png', width: 500,
+            height: 250, margin: 10
+        });
+
+        $.when(imageBlob).done(function() {
+            const createCanvas = exporter.image.creator._createCanvas;
+
+            assert.strictEqual(createCanvas.callCount, 1);
+            assert.deepEqual(createCanvas.getCall(0).args, [1000, 500, 10]);
+            done();
+        });
+    } finally {
+        window.devicePixelRatio = srcPixelRatio;
     }
 });
 
@@ -448,41 +498,30 @@ QUnit.test('Defined background', function(assert) {
     });
 });
 
-QUnit.test('Defined background, devicePixelRatio is 2 (T892041)', function(assert) {
+QUnit.test('Transformation of canvas context args (T892041, T1020859)', function(assert) {
     if(browser.msie) {
         assert.ok(true, 'This test is not for IE/Edge');
         return;
     }
 
-    const that = this;
-    const tmpDevicePixelRatio = window.devicePixelRatio;
-    window.devicePixelRatio = 2;
     const done = assert.async();
+    const srcPixelRatio = window.devicePixelRatio;
+    window.devicePixelRatio = 2;
     const context = window.CanvasRenderingContext2D.prototype;
     const imageBlob = imageCreator.getData(testingMarkupStart + '<polygon points=\'220,10 300,210 170,250 123,234\' style=\'fill:lime;stroke:purple;stroke-width:1\'/>' + testingMarkupEnd,
         {
             width: 560,
             height: 290,
-            margin: 10,
-            format: 'png',
-            backgroundColor: '#ff0000'
+            format: 'png'
         });
 
-    assert.expect(2);
+    assert.expect(1);
     $.when(imageBlob).done(function() {
         try {
-            const backgroundElem = that.drawnElements[0];
-
-            assert.deepEqual(backgroundElem.args, {
-                x: -10,
-                y: -10,
-                width: 1140,
-                height: 600
-            }, 'Background args');
             assert.deepEqual(context.setTransform.getCall(0).args, [2, 0, 0, 2, 0, 0], 'setTransform');
         } finally {
             done();
-            window.devicePixelRatio = tmpDevicePixelRatio;
+            window.devicePixelRatio = srcPixelRatio;
         }
     });
 });

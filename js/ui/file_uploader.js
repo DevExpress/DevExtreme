@@ -183,6 +183,8 @@ class FileUploader extends Editor {
 
             validationMessageOffset: { h: 0, v: 0 },
 
+            hoverStateEnabled: true,
+
             useNativeInputClick: false,
             useDragOver: true,
             nativeDropSupported: true,
@@ -643,7 +645,8 @@ class FileUploader extends Editor {
                 icon: 'close',
                 visible: this.option('allowCanceling'),
                 disabled: this.option('readOnly'),
-                integrationOptions: {}
+                integrationOptions: {},
+                hoverStateEnabled: this.option('hoverStateEnabled')
             }
         );
 
@@ -662,7 +665,8 @@ class FileUploader extends Editor {
             Button,
             {
                 onClick: () => this._uploadFile(file),
-                icon: 'upload'
+                icon: 'upload',
+                hoverStateEnabled: this.option('hoverStateEnabled')
             }
         );
 
@@ -749,7 +753,8 @@ class FileUploader extends Editor {
             text: this.option('selectButtonText'),
             focusStateEnabled: false,
             integrationOptions: {},
-            disabled: this.option('readOnly')
+            disabled: this.option('readOnly'),
+            hoverStateEnabled: this.option('hoverStateEnabled')
         });
         this._selectFileDialogHandler = this._selectButtonClickHandler.bind(this);
 
@@ -805,7 +810,8 @@ class FileUploader extends Editor {
             text: this.option('uploadButtonText'),
             onClick: this._uploadButtonClickHandler.bind(this),
             type: this.option('_uploadButtonType'),
-            integrationOptions: {}
+            integrationOptions: {},
+            hoverStateEnabled: this.option('hoverStateEnabled')
         });
     }
 
@@ -1206,6 +1212,16 @@ class FileUploader extends Editor {
         this._attachDragEventHandlers(this._$inputWrapper);
     }
 
+    _updateHoverState() {
+        const value = this.option('hoverStateEnabled');
+        this._selectButton?.option('hoverStateEnabled', value);
+        this._uploadButton?.option('hoverStateEnabled', value);
+        this._files.forEach(file => {
+            file.uploadButton?.option('hoverStateEnabled', value);
+            file.cancelButton?.option('hoverStateEnabled', value);
+        });
+    }
+
     _optionChanged(args) {
         const { name, value, previousValue } = args;
 
@@ -1293,6 +1309,10 @@ class FileUploader extends Editor {
             case 'uploadHeaders':
             case 'uploadCustomData':
             case 'extendSelection':
+                break;
+            case 'hoverStateEnabled':
+                this._updateHoverState();
+                super._optionChanged(args);
                 break;
             case 'allowCanceling':
             case 'uploadMode':

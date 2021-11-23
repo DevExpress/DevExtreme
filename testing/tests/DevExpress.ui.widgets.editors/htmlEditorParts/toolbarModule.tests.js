@@ -39,7 +39,6 @@ const COLOR_VIEW_HEX_FIELD_CLASS = 'dx-colorview-label-hex';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const DROPDOWNEDITOR_ICON_CLASS = 'dx-dropdowneditor-icon';
 const LIST_ITEM_CLASS = 'dx-list-item';
-const BOX_ITEM_CONTENT_CLASS = 'dx-box-item-content';
 const POPUP_TITLE_CLASS = 'dx-popup-title';
 
 const BOLD_FORMAT_CLASS = 'dx-bold-format';
@@ -861,13 +860,11 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         const $form = $(`.${FORM_CLASS}`);
         const $colorView = $form.find(`.${COLORVIEW_CLASS}`);
         const $hexValueInput = $colorView.find(`.${COLOR_VIEW_HEX_FIELD_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
-        const $boxItemContent = $colorView.closest(`.${BOX_ITEM_CONTENT_CLASS}`);
         const popupTitleText = $(`.${POPUP_TITLE_CLASS}`).text();
 
         assert.strictEqual($form.length, 1, 'Form shown');
         assert.strictEqual($colorView.length, 1, 'Form contains ColorView');
         assert.strictEqual($hexValueInput.val(), '000000', 'Base value');
-        assert.strictEqual($boxItemContent.css('flexBasis'), 'auto', 'Box item content flex-basis is \'auto\'');
         assert.strictEqual(popupTitleText, 'Change Font Color');
         assert.strictEqual($form.attr('aria-label'), popupTitleText);
     });

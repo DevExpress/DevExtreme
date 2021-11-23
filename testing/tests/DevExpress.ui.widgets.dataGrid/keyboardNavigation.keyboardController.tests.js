@@ -368,6 +368,7 @@ QUnit.module('Keyboard controller', {
                     <td><textarea></textarea></td>
                     <td><a>Link<a/></td>
                     <td><select></select></td>
+                    <td><div class='dx-checkbox'></div></td>
                 </tr>`));
 
         const view = this.getView('rowsView');
@@ -408,6 +409,13 @@ QUnit.module('Keyboard controller', {
         callViewsRenderCompleted(this.component._views);
         this.clock.tick();
         assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('select'), 'Interactive element is select');
+
+        // T1034050
+        // act, assert
+        navigationController.setFocusedCellPosition(0, 5);
+        callViewsRenderCompleted(this.component._views);
+        this.clock.tick();
+        assert.ok(navigationController._testInteractiveElement && navigationController._testInteractiveElement.is('.dx-checkbox'), 'Interactive element is select');
     });
 
     QUnit.testInActiveWindow('View is not focused when row is inline edited', function(assert) {

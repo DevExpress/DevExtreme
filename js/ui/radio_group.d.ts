@@ -33,7 +33,7 @@ export type InitializedEvent = InitializedEventInfo<dxRadioGroup>;
 export type OptionChangedEvent = EventInfo<dxRadioGroup> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxRadioGroup> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxRadioGroup, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -83,8 +83,6 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
  * @docid
  * @isEditor
  * @inherits Editor, DataExpressionMixin
- * @module ui/radio_group
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

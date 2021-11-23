@@ -579,6 +579,13 @@
         "dxGantt-zoomIn": "Увеличить масштаб",
         "dxGantt-zoomOut": "Уменьшить масштаб",
         "dxGantt-fullScreen": "Полноэкранный режим",
-        "dxGantt-quarter": "{0}-й кв."
+        "dxGantt-quarter": "{0}-й кв.",
+        "dxGantt-sortingAscendingText": "Сортировать по возрастанию",
+        "dxGantt-sortingDescendingText": "Сортировать по убыванию",
+        "dxGantt-sortingClearText": "Сбросить сортировку",
+        "dxGantt-showResources": "Отображать Ресурсы",
+        "dxGantt-showDependencies": "Отображать Зависимости",
+        "dxGantt-dialogStartDateValidation": "Начальная дата должна быть позднее {0}",
+        "dxGantt-dialogEndDateValidation": "Конечная дата должна быть позднее {0}"
     }
 }

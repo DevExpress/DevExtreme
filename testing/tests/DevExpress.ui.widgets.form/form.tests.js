@@ -602,6 +602,29 @@ QUnit.test('items aren\'t tiny', function(assert) {
     assert.ok(testContainer.find('.dx-multiview-item .dx-textbox').first().width() / testContainer.width() > 0.5, 'Editors are not tiny');
 });
 
+QUnit.test('Show scroll buttons in tabpanel', function(assert) {
+    const $testContainer = $('#form');
+    $testContainer.width(250);
+
+    $testContainer.dxForm({
+        items: [
+            {
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    showNavButtons: true,
+                },
+                tabs: [
+                    { title: 'tabbed 1111111111111' },
+                    { title: 'tabbed 2222222222222' },
+                ]
+            }
+        ]
+    });
+
+    assert.strictEqual($testContainer.find('.dx-tabs-nav-button').length, 2, 'tabPanelNavButtons.length');
+    assert.strictEqual($testContainer.find('.dx-tabs-scrollable').length, 1, 'tabPanelNavButtons.length');
+});
+
 QUnit.test('Render tabs when formData is changed', function(assert) {
     const testContainer = $('#form');
     const form = testContainer.dxForm({
@@ -1433,6 +1456,74 @@ QUnit.test('required mark aligned', function(assert) {
 
     assert.roughEqual($labelsContent.offset().left + $requiredLabel.width(), $requiredMark.offset().left, 0.5, 'position of requared mark is right');
     assert.ok($requiredLabel.position().left < $requiredMark.position().left, 'required mark should be after of the text');
+});
+
+QUnit.test('Align with "" required mark, T1031458', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        width: 200,
+        requiredMark: '',
+        items: [{
+            dataField: 'X',
+            isRequired: true
+        }]
+    });
+
+    const $labelText = $testContainer.find('.dx-field-item-label-text');
+    const $textBox = $testContainer.find('.dx-textbox');
+
+    assert.roughEqual($labelText.width(), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 3, 'textBox.left');
+});
+
+QUnit.test('Align with " " required mark, T1031458', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        width: 200,
+        requiredMark: ' ',
+        items: [{
+            dataField: 'X',
+            isRequired: true
+        }]
+    });
+
+    const $labelText = $testContainer.find('.dx-field-item-label-text');
+    const $textBox = $testContainer.find('.dx-textbox');
+
+    assert.roughEqual($labelText.width(), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 25, 5, 'textBox.left');
+});
+
+QUnit.test('Align with "!" required mark, T1031458', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        width: 200,
+        requiredMark: '!',
+        items: [{
+            dataField: 'X',
+            isRequired: true
+        }]
+    });
+
+    const $labelText = $testContainer.find('.dx-field-item-label-text');
+    const $textBox = $testContainer.find('.dx-textbox');
+
+    assert.roughEqual($labelText.width(), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 29, 3, 'textBox.left');
+});
+
+QUnit.test('Align with "×" required mark, T1031458', function(assert) {
+    const $testContainer = $('#form').dxForm({
+        width: 200,
+        requiredMark: '×',
+        items: [{
+            dataField: 'X',
+            isRequired: true
+        }]
+    });
+
+    const $labelText = $testContainer.find('.dx-field-item-label-text');
+    const $textBox = $testContainer.find('.dx-textbox');
+
+    assert.roughEqual($labelText.width(), 11, 3, 'labelsContent.width');
+    assert.roughEqual($textBox.offset().left, $labelText.offset().left + 35, 3, 'textBox.left');
 });
 
 QUnit.test('optional mark aligned', function(assert) {

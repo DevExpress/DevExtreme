@@ -89,6 +89,43 @@ QUnit.module('common', moduleConfig, () => {
         assert.equal($input.val(), 'Test', 'input value is correct');
     });
 
+    QUnit.test('value should be rendered if it is resolved after non-existent item resolve (T1017628)', function(assert) {
+        const item = { id: 1, name: 'test' };
+        const store = {
+            load: () => {
+                $.Deferred().resolve([item]).promise();
+            },
+            byKey: (key) => {
+                const d = $.Deferred();
+
+                if(key === 1) {
+                    setTimeout(() => {
+                        d.resolve(item);
+                    }, 500);
+                } else {
+                    d.resolve(null);
+                }
+
+                return d.promise();
+            }
+        };
+
+        this.$element.dxDropDownBox({
+            dataSource: store,
+            valueExpr: 'id',
+            displayExpr: 'name',
+            value: [1, 2]
+        });
+        const instance = this.$element.dxDropDownBox('instance');
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        this.clock.tick(500);
+
+        assert.deepEqual(instance.option('value'), [1, 2], 'value is correct');
+        assert.strictEqual(instance.option('text'), 'test', 'text is correct');
+        assert.strictEqual($input.val(), 'test', 'input value is correct');
+    });
+
     QUnit.test('the widget should work when dataSource is set to null', function(assert) {
         this.$element.dxDropDownBox({ value: 1, dataSource: [1, 2, 3] });
 
@@ -445,6 +482,30 @@ QUnit.module('common', moduleConfig, () => {
 
             assert.strictEqual(this.dropDownBox.option('text'), '', 'byKey result is ignored');
         });
+    });
+
+    QUnit.test('value should be rendered if it is not in dataSource if acceptCustomValue=true (T1042773)', function(assert) {
+        new DropDownBox(this.$element, {
+            dataSource: [{
+                id: 1,
+                name: 'first'
+            }],
+            value: [1],
+            valueExpr: 'id',
+            displayExpr: 'name',
+            acceptCustomValue: true
+        });
+
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+        const customValue = 'custom';
+
+        keyboard
+            .caret({ start: 0, end: 5 })
+            .type(customValue)
+            .change();
+
+        assert.strictEqual($input.val(), customValue, 'custom value is rendered');
     });
 });
 

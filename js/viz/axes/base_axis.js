@@ -1205,16 +1205,15 @@ Axis.prototype = {
         }
 
         let visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(visualRange, newRange, oppositeVisualRangeUpdateMode);
-        if(!that.isArgumentAxis) {
-            const viewport = that.getViewport();
-            if(!isDefined(viewport.startValue) &&
+        const viewport = that.getViewport();
+
+        if(!isDefined(viewport.startValue) &&
                 !isDefined(viewport.endValue) &&
                 !isDefined(viewport.length)) {
-                visualRangeUpdateMode = RESET;
-            }
+            visualRangeUpdateMode = RESET;
+        } else {
+            that._prevDataWasEmpty && (visualRangeUpdateMode = KEEP);
         }
-
-        that._prevDataWasEmpty && (visualRangeUpdateMode = KEEP);
 
         if(visualRangeUpdateMode === KEEP) {
             that._setVisualRange([visualRange.startValue, visualRange.endValue]);

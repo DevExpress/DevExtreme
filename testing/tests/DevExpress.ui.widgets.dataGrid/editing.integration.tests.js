@@ -256,6 +256,52 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
     });
 
+    QUnit.test('Custom button with asynchronious template should have correct position', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            useLegacyColumnButtonTemplate: false,
+            dataSource: [{ id: 1 }],
+            columns: [
+                'id',
+                {
+                    type: 'buttons',
+                    cssClass: 'my-buttons',
+                    buttons: [{
+                        cssClass: 'my-button1',
+                        template: 'button1'
+                    }, {
+                        text: 'Button2',
+                        cssClass: 'my-button2'
+                    }]
+                },
+            ],
+            templatesRenderAsynchronously: true,
+            integrationOptions: {
+                templates: {
+                    button1: {
+                        render({ container, model, onRendered }) {
+                            setTimeout(() => {
+                                $('<div>').addClass('my-button1').text('Button1').appendTo(container);
+                                onRendered();
+                            });
+
+                            return container;
+                        }
+                    }
+                }
+            }
+        });
+
+        this.clock.tick();
+
+        // assert
+        const $commandCell = $(dataGrid.getCellElement(0, 1));
+
+        assert.equal($commandCell.children('.my-button1').index(), 0, 'my-button1 position');
+        assert.equal($commandCell.children('.my-button1').text(), 'Button1', 'my-button1 text');
+        assert.equal($commandCell.children('.my-button2').index(), 1, 'my-button2 position');
+    });
+
     QUnit.test('Should not cut border of selected cell by \'Add row\' (T748046)', function(assert) {
         // arrange
         const clock = sinon.useFakeTimers();
@@ -1187,6 +1233,59 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing call count');
     });
 
+    QUnit.test('Edit form should be updated if change editing.form option inside setCellValue (T1026215)', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            keyExpr: 'id',
+            dataSource: [{ id: 1, field1: 1, field2: 2 }],
+            columns: [
+                { dataField: 'field1', setCellValue: function(data, value) {
+                    data.field1 = value;
+                    dataGrid.option('editing.form.items[1].visible', false);
+                } },
+                { dataField: 'field2' },
+            ],
+            editing: {
+                mode: 'form',
+                form: {
+                    items: [
+                        { dataField: 'field1' },
+                        { dataField: 'field2' },
+                    ]
+                }
+            }
+        });
+
+        dataGrid.editRow(0);
+        dataGrid.cellValue(0, 0, 2);
+
+        assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editing is not canceled');
+        assert.equal(dataGrid.$element().find('.dx-texteditor').length, 1, 'one editor is visible, second is hidden');
+    });
+
+    QUnit.test('Edit form should be updated if change editing.form option (T1026215)', function(assert) {
+        const dataGrid = createDataGrid({
+            loadingTimeout: null,
+            keyExpr: 'id',
+            dataSource: [{ id: 1, field1: 1, field2: 2 }],
+            editing: {
+                mode: 'form',
+                form: {
+                    items: [
+                        { dataField: 'field1' },
+                        { dataField: 'field2' },
+                    ]
+                }
+            }
+        });
+
+        dataGrid.editRow(0);
+        dataGrid.option('editing.form.items[1].visible', false);
+
+        assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editing is not canceled');
+        assert.equal(dataGrid.$element().find('.dx-texteditor').length, 1, 'one editor is visible, second is hidden');
+    });
+
     // T558301
     QUnit.testInActiveWindow('Height virtual table should be updated to show validation message when there is a single row and virtual scrolling is enabled', function(assert) {
         // arrange
@@ -1452,6 +1551,33 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                     assert.strictEqual(dataGrid.cellValue(1, i), `${i}`, `cell ${i} has modified value`);
                 }
             });
+        });
+    });
+
+    ['Row', 'Cell', 'Batch'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - cellClick should not be raised when a new row is added (T1027166)`, function(assert) {
+            // arrange
+            const cellClickSpy = sinon.spy(function() {});
+            const dataGrid = createDataGrid({
+                dataSource: [{ id: 1, field: 'test' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowAdding: true
+                },
+                onCellClick: cellClickSpy
+            });
+            this.clock.tick();
+
+            // act
+            dataGrid.addRow();
+            this.clock.tick(300);
+            const $firstCell = $(dataGrid.getCellElement(0, 0));
+
+            // assert
+            assert.ok($firstCell.hasClass('dx-editor-cell'), 'cell has an editor');
+            assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
+            assert.notOk(cellClickSpy.called, 'onCellClick is not raised');
         });
     });
 });
@@ -1835,6 +1961,53 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
             done();
         });
+    });
+
+    QUnit.testInActiveWindow('Cell mode - Cell validation message and revert button should not be shown after click in added row if startEditAction is dblclick and if isHighlighted (T1041287)', function(assert) {
+        // arrange
+        const gridConfig = {
+            dataSource: [{ a: 'a', b: 'b' }],
+            editing: {
+                mode: 'cell',
+                allowAdding: true,
+                allowUpdating: true,
+                startEditAction: 'dblClick',
+            },
+            onFocusedCellChanging(e) {
+                e.isHighlighted = true;
+            },
+            columns: [
+                {
+                    dataField: 'a',
+                    validationRules: [{
+                        type: 'required'
+                    }]
+                }, {
+                    dataField: 'b',
+                    validationRules: [{
+                        type: 'required'
+                    }]
+                }
+            ]
+        };
+
+        const grid = createDataGrid(gridConfig);
+        this.clock.tick();
+
+        grid.addRow();
+        this.clock.tick();
+
+        let $secondCell = $(grid.getCellElement(0, 1));
+        $secondCell.trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick(1000);
+        $secondCell = $(grid.getCellElement(0, 1));
+        $secondCell.trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick();
+        $secondCell = $(grid.getCellElement(0, 1));
+
+        // assert
+        assert.equal($(grid.element()).find('.dx-datagrid-revert-tooltip .dx-overlay-content').length, 1, 'one revert button is visible');
+        assert.equal($(grid.element()).find('.dx-invalid-message .dx-overlay-content').length, 1, 'one error message is visible');
     });
 
     QUnit.testInActiveWindow('Cell mode - Cell validation message should be shown when a user clicks outside the cell (T869854)', function(assert) {
@@ -2251,12 +2424,12 @@ QUnit.module('Editing', baseModuleConfig, () => {
             $(grid.$element()).find('input').val(123).trigger('change');
             action === 'close edit cell' ? grid.closeEditCell() : grid.cancelEditData();
             this.clock.tick();
-
             $(grid.getCellElement(0, 1)).trigger('dxclick');
             this.clock.tick();
+            const callCount = action === 'close edit cell' ? 3 : 4;
 
             // assert
-            assert.equal(validationCallback.callCount, 3, 'validation callback call count');
+            assert.equal(validationCallback.callCount, callCount, 'validation callback call count');
         });
     });
 
@@ -2815,6 +2988,73 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.strictEqual(dataGrid.cellValue(0, 0), '123', 'first cell value');
             assert.strictEqual(dataGrid.cellValue(0, 1), false, 'second cell value');
         });
+    });
+
+    ['Cell', 'Batch'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - cell value should be validated when a value in a neighboring cell is modified (repaintChangesOnly enabled) (T1026857)`, function(assert) {
+            const data = [
+                { id: 1, field1: null, field2: 'test' }
+            ];
+            const dataGrid = createDataGrid({
+                dataSource: data,
+                keyExpr: 'id',
+                columns: [{
+                    dataField: 'field1',
+                    validationRules: [{
+                        type: 'required'
+                    }],
+                }, 'field2'],
+                repaintChangesOnly: true,
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    allowUpdating: true
+                }
+            });
+            this.clock.tick();
+            dataGrid.editCell(0, 1);
+            this.clock.tick();
+
+            // act
+            const $input = $(dataGrid.getCellElement(0, 1)).find('input.dx-texteditor-input');
+            $input.val('123');
+            $input.trigger('change');
+            dataGrid.saveEditData();
+            this.clock.tick();
+
+            // assert
+            assert.ok($(dataGrid.getCellElement(0, 0)).hasClass('dx-datagrid-invalid'), 'unmodified cell is invalid');
+        });
+    });
+
+    QUnit.test('Editing cell editor\'s content should not be selected twice', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [{ field1: 'test1', field2: 'test2' }],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true,
+                selectTextOnEditStart: true
+            }
+        });
+
+        const onSelectedSpy = sinon.spy();
+
+        // act
+        this.clock.tick(100);
+        const $cell = $(dataGrid.getCellElement(0, 0)).trigger('dxclick');
+        this.clock.tick(100);
+
+        // arrange
+        const $editor = $cell.find('.dx-texteditor-input');
+        $editor.on('select', onSelectedSpy);
+
+        // act
+        $editor.val('asd').trigger('change');
+        this.clock.tick(100);
+
+        // assert
+
+        assert.strictEqual(onSelectedSpy.callCount, 0, 'is not selected after change');
     });
 });
 
@@ -4575,6 +4815,36 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         // assert
         assert.notOk($('.dx-datagrid-edit-popup').is(':visible'), 'editor popup is hidden');
+    });
+
+    QUnit.test('Remove button click should remove correct row after cancelEditData if repaintChangesOnly is true', function(assert) {
+        // arrange
+        const dataGrid = createDataGrid({
+            dataSource: [
+                { id: 1 },
+                { id: 2 }
+            ],
+            keyExpr: 'id',
+            loadingTimeout: null,
+            repaintChangesOnly: true,
+            editing: {
+                mode: 'batch',
+                allowAdding: true,
+                allowDeleting: true
+            }
+        });
+
+        dataGrid.addRow();
+        this.clock.tick();
+        dataGrid.cancelEditData();
+        this.clock.tick();
+        dataGrid.addRow();
+        this.clock.tick();
+        $(dataGrid.getCellElement(2, 1)).find('.dx-link-delete').trigger('dxpointerdown').trigger('click');
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows()[2].removed, true, 'row 2 is marked as removed');
     });
 
     // T851082

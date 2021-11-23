@@ -49,7 +49,7 @@ export type ContentReadyEvent = EventInfo<dxGantt>;
 export type ContextMenuPreparingEvent = Cancelable & {
     readonly component?: dxGantt;
     readonly element?: DxElement;
-    readonly event?: DxEvent;
+    readonly event?: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
     readonly targetKey?: any;
     readonly targetType?: string;
     readonly data?: any;
@@ -148,13 +148,13 @@ export type SelectionChangedEvent = EventInfo<dxGantt> & {
 };
 
 /** @public */
-export type TaskClickEvent = NativeEventInfo<dxGantt> & {
+export type TaskClickEvent = NativeEventInfo<dxGantt, PointerEvent | MouseEvent> & {
     readonly key?: any;
     readonly data?: any;
 };
 
 /** @public */
-export type TaskDblClickEvent = Cancelable & NativeEventInfo<dxGantt> & {
+export type TaskDblClickEvent = Cancelable & NativeEventInfo<dxGantt, PointerEvent | MouseEvent> & {
     readonly key?: any;
     readonly data?: any;
 };
@@ -881,15 +881,12 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     stripLines?: Array<dxGanttStripLine>;
     /**
      * @docid
-     * @type_function_param1 container:DxElement
-     * @type_function_param2 task:any
      * @type_function_return string|Element|jQuery
      * @public
      */
     taskTooltipContentTemplate?: template | ((container: DxElement, task: any) => string | UserDefinedElement);
     /**
      * @docid
-     * @type_function_param1 container:DxElement
      * @type_function_param2 item:object
      * @type_function_param2_field1 start:Date
      * @type_function_param2_field2 end:Date
@@ -899,7 +896,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     taskTimeTooltipContentTemplate?: template | ((container: DxElement, item: TimeTooltipTemplateData) => string | UserDefinedElement);
     /**
      * @docid
-     * @type_function_param1 container:DxElement
      * @type_function_param2 item:object
      * @type_function_param2_field1 progress:number
      * @type_function_return string|Element|jQuery
@@ -908,7 +904,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     taskProgressTooltipContentTemplate?: template | ((container: DxElement, item: ProgressTooltipTemplateData) => string | UserDefinedElement);
     /**
      * @docid
-     * @type_function_param1 container:DxElement
      * @type_function_param2 item:object
      * @type_function_param2_field1 cellSize:object
      * @type_function_param2_field2 isMilestone:boolean
@@ -931,8 +926,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
 /**
  * @docid
  * @inherits Widget
- * @module ui/gantt
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -1083,7 +1076,6 @@ export default class dxGantt extends Widget {
     /**
      * @docid
      * @publicName scrollToDate(date)
-     * @param1 date:Date|Number|string
      * @public
      */
     scrollToDate(date: Date | Number | string): void;
@@ -1196,14 +1188,12 @@ export interface dxGanttStripLine {
     cssClass?: string;
     /**
      * @docid
-     * @type_function_return Date|number|string
      * @default undefined
      * @public
      */
     end?: Date | number | string | (() => Date | number | string);
     /**
      * @docid
-     * @type_function_return Date|number|string
      * @default undefined
      * @public
      */

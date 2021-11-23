@@ -3,7 +3,7 @@ import {
 } from '../core/element';
 
 import DataSource, {
-    DataSourceOptions,
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -32,16 +32,16 @@ export type DisposingEvent = EventInfo<dxMultiView>;
 export type InitializedEvent = InitializedEventInfo<dxMultiView>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxMultiView, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxMultiView, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxMultiView, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxMultiView> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxMultiView> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxMultiView> & ChangedOptionInfo;
@@ -108,8 +108,6 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
 /**
  * @docid
  * @inherits CollectionWidget
- * @module ui/multi_view
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

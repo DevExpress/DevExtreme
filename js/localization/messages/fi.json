@@ -528,6 +528,13 @@
         "dxGantt-zoomIn": "TODO",
         "dxGantt-zoomOut": "TODO",
         "dxGantt-fullScreen": "TODO",
-        "dxGantt-quarter": "TODO"
+        "dxGantt-quarter": "TODO",
+        "dxGantt-sortingAscendingText": "Lajittele nouseva",
+        "dxGantt-sortingDescendingText": "Lajittele laskeva",
+        "dxGantt-sortingClearText": "Tyhjennä lajittelu",
+        "dxGantt-showResources": "TODO",
+        "dxGantt-showDependencies": "TODO",
+        "dxGantt-dialogStartDateValidation": "TODO",
+        "dxGantt-dialogEndDateValidation": "TODO"
     }
 }

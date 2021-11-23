@@ -1974,6 +1974,36 @@ QUnit.module('option change', moduleConfig, () => {
         customDropZone.remove();
         customDialogTrigger.remove();
     });
+    QUnit.test('uploader must change hoverStateEnabled option of all buttons by general hoverStateEnabled change', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons'
+        });
+        simulateFileChoose($fileUploader, fakeFile);
+        this.clock.tick(100);
+
+        let buttonElements = $fileUploader.find('.' + FILEUPLOADER_BUTTON_CLASS);
+        assert.strictEqual(buttonElements.length, 4, 'all buttons found');
+        buttonElements.each((index, button) => {
+            const buttonElem = $(button);
+            buttonElem.trigger('dxpointerenter');
+            assert.ok(buttonElem.hasClass('dx-state-hover'));
+            buttonElem.trigger('dxpointerleave');
+        });
+
+        $fileUploader.dxFileUploader({
+            hoverStateEnabled: false
+        });
+        this.clock.tick(100);
+
+        buttonElements = $fileUploader.find('.' + FILEUPLOADER_BUTTON_CLASS);
+        assert.strictEqual(buttonElements.length, 4, 'all buttons found');
+        buttonElements.each((index, button) => {
+            const buttonElem = $(button);
+            buttonElem.trigger('dxpointerenter');
+            assert.notOk(buttonElem.hasClass('dx-state-hover'));
+            buttonElem.trigger('dxpointerleave');
+        });
+    });
 });
 
 QUnit.module('file uploading', moduleConfig, () => {

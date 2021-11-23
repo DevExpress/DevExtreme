@@ -87,7 +87,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       }
 
       .dx-texteditor {
-        .dx-texteditor-input {
+        .dx-texteditor-input,
+        .dx-placeholder::before {
           padding-left: $material-grid-base-texteditor-input-padding;
         }
       }
@@ -879,6 +880,10 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       border-top: $material-grid-base-row-border;
       border-bottom: $material-grid-base-row-border;
 
+      &:focus {
+        outline: none;
+      }
+
       &.dx-edit-row:first-child > td {
         border-top-width: 0;
         border-bottom: $datagrid-border;
@@ -973,10 +978,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     .dx-row-focused {
-      &:focus {
-        outline: none;
-      }
-
       &.dx-data-row {
         & > td:not(.dx-focused),
         & > tr > td:not(.dx-focused),

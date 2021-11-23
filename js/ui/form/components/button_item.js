@@ -4,26 +4,31 @@ import { extend } from '../../../core/utils/extend';
 
 const FIELD_BUTTON_ITEM_CLASS = 'dx-field-button-item';
 
-export function renderButtonItemTo({
+export function renderButtonItem({
     item,
-    $container,
+    $parent,
+    rootElementCssClassList,
     validationGroup,
-    createComponentCallback,
-    cssItemClass
+    createComponentCallback
 }) {
-    $container
+    const $rootElement = $('<div>')
+        .appendTo($parent)
+        .addClass(rootElementCssClassList.join(' '))
         .addClass(FIELD_BUTTON_ITEM_CLASS)
-        .css('textAlign', convertAlignmentToTextAlign(item.horizontalAlignment))
-        .addClass(cssItemClass);
+        .css('textAlign', convertAlignmentToTextAlign(item.horizontalAlignment));
 
     // TODO: try to avoid changes in $container.parent() and adjust the created $elements only
-    $container.parent().css('justifyContent', convertAlignmentToJustifyContent(item.verticalAlignment));
+    $parent.css('justifyContent', convertAlignmentToJustifyContent(item.verticalAlignment));
 
-    const $button = $('<div>');
-    $container.append($button);
-    return createComponentCallback(
-        $button, 'dxButton',
-        extend({ validationGroup }, item.buttonOptions));
+    const $button = $('<div>')
+        .appendTo($rootElement);
+
+    return {
+        $rootElement,
+        buttonInstance: createComponentCallback(
+            $button, 'dxButton',
+            extend({ validationGroup }, item.buttonOptions))
+    };
 }
 
 function convertAlignmentToTextAlign(horizontalAlignment) {

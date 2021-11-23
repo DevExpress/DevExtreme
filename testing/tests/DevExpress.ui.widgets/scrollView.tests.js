@@ -224,6 +224,58 @@ QUnit.module('dimension', moduleConfig, () => {
     });
 });
 
+QUnit.module('onReachBottom', () => {
+    [0.33, 0.5, 0.67, 0.75, 0.8, 0.9, 1, 1.1, 1.2, 1.25, 1.34, 1.5, 1.875, 2.25, 2.65].forEach((browserZoom) => {
+        [
+            { useNative: false, refreshStrategy: 'simulated' },
+            { useNative: true, refreshStrategy: 'pullDown' },
+            { useNative: true, refreshStrategy: 'swipeDown' },
+        ].forEach(({ useNative, refreshStrategy }) => {
+            const cssStyles = {
+                transform: `scale(${browserZoom})`,
+                transformOrigin: '0 0',
+            };
+            // T1032842
+            QUnit.test(`Start loading when reaching bottom boundary with wrapperStyles: ${JSON.stringify(cssStyles)}, useNative: ${useNative}, refreshStrategy: ${refreshStrategy}`, function(assert) {
+                assert.expect(1);
+                const done = assert.async();
+
+                const $scrollView = $('<div>');
+                const $scrollViewWrapper = $scrollView.wrap('<div>').parent();
+                const $contentWrapper = $('<div>').appendTo($scrollView);
+                for(let i = 0; i < 30; i++) {
+                    $contentWrapper.append($('<div>').addClass('item').text(`item${i}`).css({ height: 33, width: '100%' }));
+                }
+
+                $scrollViewWrapper.appendTo('#qunit-fixture');
+                $scrollViewWrapper.css(cssStyles);
+
+                const scrollView = $scrollView.dxScrollView({
+                    useNative,
+                    direction: 'vertical',
+                    height: 430,
+                    width: '100%',
+                    showScrollbar: 'always',
+                    refreshStrategy,
+                    onReachBottom: () => {
+                        assert.ok(true, 'loading started');
+                        done();
+                    },
+                    reachBottomEnabled: true,
+                    reachBottomText: 'Updating...'
+                }).dxScrollView('instance');
+
+                const $lastItem = $scrollView.find('.item').last();
+                const $prevItem = $lastItem.prev();
+
+                scrollView.scrollToElement($prevItem);
+                scrollView.scrollToElement($lastItem);
+            });
+        });
+    });
+});
+
+
 QUnit.module('actions', moduleConfig, () => {
     QUnit.test('onPullDown action', function(assert) {
         let firstScroll = true;

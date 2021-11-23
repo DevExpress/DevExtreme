@@ -84,6 +84,15 @@ class DiagramContextToolbox extends Widget {
                 top: y + this._popoverPositionData[side].offset.y
             })
             .show();
+
+        // correct offset when parent has position absolute, relative, etc (T1010677)
+        const window = getWindow();
+        const targetDiv = this._$popoverTargetElement.get(0);
+        this._$popoverTargetElement.css({
+            left: targetDiv.offsetLeft - ((targetDiv.getBoundingClientRect().left + window.scrollX) - targetDiv.offsetLeft),
+            top: targetDiv.offsetTop - ((targetDiv.getBoundingClientRect().top + window.scrollY) - targetDiv.offsetTop)
+        });
+
         this._popoverInstance.option({
             position: {
                 my: this._popoverPositionData[side].my,

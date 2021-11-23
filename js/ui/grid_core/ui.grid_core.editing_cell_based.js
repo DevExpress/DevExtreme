@@ -315,7 +315,7 @@ export default {
                     return result.promise();
                 },
 
-                _closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData) {
+                _closeEditCellCore: function(isError, oldEditRowIndex, withoutSaveEditData) {
                     const dataController = this._dataController;
                     const deferred = new Deferred();
                     const promise = deferred.promise();
@@ -331,18 +331,19 @@ export default {
                             });
                             return promise;
                         }
-                    } else if(oldEditRowIndex >= 0) {
-                        const rowIndices = [oldEditRowIndex];
-
+                    } else {
                         this._resetEditRowKey();
                         this._resetEditColumnName();
 
-                        this._beforeCloseEditCellInBatchMode(rowIndices);
-                        if(!isError) {
-                            dataController.updateItems({
-                                changeType: 'update',
-                                rowIndices: rowIndices
-                            });
+                        if(oldEditRowIndex >= 0) {
+                            const rowIndices = [oldEditRowIndex];
+                            this._beforeCloseEditCellInBatchMode(rowIndices);
+                            if(!isError) {
+                                dataController.updateItems({
+                                    changeType: 'update',
+                                    rowIndices: rowIndices
+                                });
+                            }
                         }
                     }
 
@@ -542,6 +543,21 @@ export default {
                     return buttonItems;
                 },
 
+                _saveEditDataInner: function() {
+                    const editRow = this._dataController.getVisibleRows()[this.getEditRowIndex()];
+                    const editColumn = this._getEditColumn();
+                    const showEditorAlways = editColumn?.showEditorAlways;
+                    const isUpdateInCellMode = this.isCellEditMode() && !editRow?.isNewRow;
+                    let deferred;
+
+                    if(isUpdateInCellMode && showEditorAlways) {
+                        deferred = new Deferred();
+                        this.addDeferred(deferred);
+                    }
+
+                    return this.callBase.apply(this, arguments).always(deferred?.resolve);
+                },
+
                 _applyChange: function(options, params, forceUpdateRow) {
                     const isUpdateInCellMode = this.isCellEditMode() && options.row && !options.row.isNewRow;
                     const showEditorAlways = options.column.showEditorAlways;
@@ -599,6 +615,14 @@ export default {
                     }
 
                     return this.callBase.apply(this, arguments);
+                },
+
+                _beforeFocusElementInRow: function(rowIndex) {
+                    this.callBase.apply(this, arguments);
+
+                    const editRowIndex = rowIndex >= 0 ? rowIndex : 0;
+                    const columnIndex = this.getFirstEditableColumnIndex();
+                    columnIndex >= 0 && this.editCell(editRowIndex, columnIndex);
                 }
             }
         },

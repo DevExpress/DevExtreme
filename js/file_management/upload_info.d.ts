@@ -1,8 +1,6 @@
 /**
  * @docid
- * @module file_management/upload_info
  * @namespace DevExpress.fileManagement
- * @export default
  * @public
  */
 export default interface UploadInfo {

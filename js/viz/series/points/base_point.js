@@ -199,10 +199,10 @@ Point.prototype = {
     },
 
     applyView: function(legendCallback) {
-        const style = this._getViewStyle();
         const that = this;
+        const style = that._getViewStyle();
         that._currentStyle = style;
-        if(!that.graphic && that.series.autoHidePointMarkers && (style === SELECTION || style === HOVER)) {
+        if(!that.graphic && that.getMarkerVisibility() && that.series.autoHidePointMarkers && (style === SELECTION || style === HOVER)) {
             that._drawMarker(that.series.getRenderer(), that.series.getMarkersGroup());
         }
         if(that.graphic) {

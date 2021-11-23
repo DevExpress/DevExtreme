@@ -12,7 +12,7 @@ import {
 } from '../core/utils/deferred';
 
 import DataSource, {
-    DataSourceOptions,
+    Options as DataSourceOptions,
 } from '../data/data_source';
 
 import Store from '../data/abstract_store';
@@ -70,10 +70,10 @@ export type GroupRenderedEvent = EventInfo<dxList> & {
 export type InitializedEvent = InitializedEventInfo<dxList>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxList> & ListItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxList, KeyboardEvent | MouseEvent | PointerEvent> & ListItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxList> & ListItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxList, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo;
 
 /** @public */
 export type ItemDeletedEvent = EventInfo<dxList> & ListItemInfo;
@@ -84,10 +84,10 @@ export type ItemDeletingEvent = EventInfo<dxList> & ListItemInfo & {
 };
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxList> & ListItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxList, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxList> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxList> & ItemInfo;
 
 /** @public */
 export type ItemReorderedEvent = EventInfo<dxList> & ListItemInfo & {
@@ -96,7 +96,7 @@ export type ItemReorderedEvent = EventInfo<dxList> & ListItemInfo & {
 };
 
 /** @public */
-export type ItemSwipeEvent = NativeEventInfo<dxList> & ListItemInfo & {
+export type ItemSwipeEvent = NativeEventInfo<dxList, MouseEvent | PointerEvent | TouchEvent> & ListItemInfo & {
     readonly direction: string;
 };
 
@@ -110,7 +110,7 @@ export type PageLoadingEvent = EventInfo<dxList>;
 export type PullRefreshEvent = EventInfo<dxList>;
 
 /** @public */
-export type ScrollEvent = NativeEventInfo<dxList> & ScrollInfo;
+export type ScrollEvent = NativeEventInfo<dxList, Event> & ScrollInfo;
 
 /** @public */
 export type SelectAllValueChangedEvent = EventInfo<dxList> & {
@@ -161,7 +161,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @docid
      * @default undefined
      * @type_function_param1 item:object
-     * @type_function_return string
      * @public
      */
     displayExpr?: string | ((item: any) => string);
@@ -175,8 +174,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      * @docid
      * @default "group"
      * @type_function_param1 groupData:object
-     * @type_function_param2 groupIndex:number
-     * @type_function_param3 groupElement:DxElement
      * @type_function_return string|Element|jQuery
      * @public
      */
@@ -228,7 +225,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     menuItems?: Array<{
       /**
        * @docid
-       * @type_function_param1 itemElement:DxElement
        * @type_function_param2 itemData:object
        * @type_function_return void
        */
@@ -533,8 +529,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
 /**
  * @docid
  * @inherits CollectionWidget, SearchBoxMixin
- * @module ui/list
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
@@ -558,7 +552,6 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid
      * @publicName deleteItem(itemElement)
-     * @param1 itemElement:Element
      * @return Promise<void>
      * @public
      */
@@ -582,8 +575,6 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid
      * @publicName isItemSelected(itemElement)
-     * @param1 itemElement:Element
-     * @return boolean
      * @public
      */
     isItemSelected(itemElement: Element): boolean;
@@ -591,7 +582,6 @@ export default class dxList extends CollectionWidget {
      * @docid
      * @publicName isItemSelected(itemIndex)
      * @param1 itemIndex:Number|Object
-     * @return boolean
      * @public
      */
     isItemSelected(itemIndex: number | any): boolean;
@@ -604,8 +594,6 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid
      * @publicName reorderItem(itemElement, toItemElement)
-     * @param1 itemElement:Element
-     * @param2 toItemElement:Element
      * @return Promise<void>
      * @public
      */
@@ -643,7 +631,6 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid
      * @publicName scrollToItem(itemElement)
-     * @param1 itemElement:Element
      * @public
      */
     scrollToItem(itemElement: Element): void;
@@ -670,7 +657,6 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid
      * @publicName selectItem(itemElement)
-     * @param1 itemElement:Element
      * @public
      */
     selectItem(itemElement: Element): void;
@@ -690,7 +676,6 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid
      * @publicName unselectItem(itemElement)
-     * @param1 itemElement:Element
      * @public
      */
     unselectItem(itemElement: Element): void;

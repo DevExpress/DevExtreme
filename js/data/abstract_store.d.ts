@@ -6,6 +6,8 @@ import {
     LoadOptions,
 } from './load_options';
 
+export type Options = StoreOptions;
+
 /** @namespace DevExpress.data */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface StoreOptions<T = Store> {
@@ -36,14 +38,12 @@ export interface StoreOptions<T = Store> {
     onInserting?: ((values: any) => void);
     /**
      * @docid
-     * @type_function_param1 result:Array<any>
      * @action
      * @public
      */
     onLoaded?: ((result: Array<any>) => void);
     /**
      * @docid
-     * @type_function_param1 loadOptions:LoadOptions
      * @action
      * @public
      */
@@ -62,7 +62,6 @@ export interface StoreOptions<T = Store> {
     onModifying?: Function;
     /**
      * @docid
-     * @type_function_param1 changes:Array<any>
      * @action
      * @public
      */
@@ -101,12 +100,10 @@ export interface StoreOptions<T = Store> {
 /**
  * @docid
  * @hidden
- * @module data/abstract_store
- * @export default
  * @namespace DevExpress.data
  */
 export default class Store {
-    constructor(options?: StoreOptions)
+    constructor(options?: Options)
     /**
      * @docid
      * @publicName byKey(key)
@@ -126,7 +123,6 @@ export default class Store {
     /**
      * @docid
      * @publicName key()
-     * @return any
      * @public
      */
     key(): any;
@@ -134,7 +130,6 @@ export default class Store {
      * @docid
      * @publicName keyOf(obj)
      * @param1 obj:object
-     * @return any
      * @public
      */
     keyOf(obj: any): any;
@@ -148,7 +143,6 @@ export default class Store {
     /**
      * @docid
      * @publicName load(options)
-     * @param1 options:LoadOptions
      * @return Promise<any>
      * @public
      */
@@ -156,7 +150,6 @@ export default class Store {
     /**
      * @docid
      * @publicName off(eventName)
-     * @param1 eventName:string
      * @return this
      * @public
      */
@@ -164,7 +157,6 @@ export default class Store {
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
-     * @param1 eventName:string
      * @param2 eventHandler:function
      * @return this
      * @public
@@ -173,7 +165,6 @@ export default class Store {
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
-     * @param1 eventName:string
      * @param2 eventHandler:function
      * @return this
      * @public
@@ -190,7 +181,6 @@ export default class Store {
     /**
      * @docid
      * @publicName push(changes)
-     * @param1 changes:Array<any>
      * @public
      */
     push(changes: Array<any>): void;
@@ -205,7 +195,6 @@ export default class Store {
     /**
      * @docid
      * @publicName totalCount(options)
-     * @param1 obj:object
      * @param1_field1 filter:object
      * @param1_field2 group:object
      * @return Promise<number>

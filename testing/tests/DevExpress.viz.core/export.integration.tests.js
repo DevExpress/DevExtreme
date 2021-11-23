@@ -8,6 +8,9 @@ const exportModule = require('viz/core/export');
 const Deferred = require('core/utils/deferred').Deferred;
 const logger = require('core/utils/console').logger;
 const { isFunction } = require('core/utils/type');
+const getWindow = require('core/utils/window').getWindow;
+
+const window = getWindow();
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 200px; height: 150px;"></div>');
 

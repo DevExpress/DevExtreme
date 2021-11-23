@@ -27,7 +27,7 @@ export type InitializedEvent = InitializedEventInfo<dxSwitch>;
 export type OptionChangedEvent = EventInfo<dxSwitch> & ChangedOptionInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxSwitch> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxSwitch, KeyboardEvent | MouseEvent | PointerEvent | TouchEvent | UIEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -81,8 +81,6 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
  * @docid
  * @isEditor
  * @inherits Editor
- * @module ui/switch
- * @export default
  * @namespace DevExpress.ui
  * @public
  */

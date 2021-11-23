@@ -944,19 +944,26 @@ class SchedulerWorkSpace extends WidgetObserver {
             useKeyboard: false,
             bounceEnabled: false,
             updateManually: true,
+            onScroll: () => {
+                this._groupedStrategy.cache?.clear();
+            },
         };
         if(this._needCreateCrossScrolling()) {
-            config = extend(config, this._createCrossScrollingConfig());
+            config = extend(config, this._createCrossScrollingConfig(config));
         }
 
         return config;
     }
 
-    _createCrossScrollingConfig() {
+    _createCrossScrollingConfig(currentConfig) {
         const config = {};
         config.direction = 'both';
 
+        const currentOnScroll = currentConfig.onScroll;
+
         config.onScroll = e => {
+            currentOnScroll();
+
             this._dataTableSemaphore.take();
 
             this._sideBarSemaphore.isFree() && this._sidebarScrollable && this._sidebarScrollable.scrollTo({
@@ -1121,6 +1128,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._attachHeaderTableClasses();
 
         this._updateGroupTableHeight();
+
+        this._updateScrollable();
     }
 
     getWorkSpaceMinWidth() {
@@ -1133,6 +1142,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this.headerPanelOffsetRecalculate();
+
+        this._updateScrollable();
 
         this.cache.clear();
         this._cleanAllowedPositions();
@@ -2533,8 +2544,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             if(this._needCreateCrossScrolling()) {
                 return getBoundingRect(this._$dateTable.get(0)).width;
             }
+            const totalWidth = getBoundingRect(this.$element().get(0)).width;
+            const timePanelWidth = this.getTimePanelWidth();
+            const groupTableWidth = this.getGroupTableWidth();
 
-            return getBoundingRect(this.$element().get(0)).width - this.getTimePanelWidth();
+            return totalWidth - timePanelWidth - groupTableWidth;
         });
     }
 
@@ -3530,6 +3544,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             attachGeneralEvents,
             detachGeneralEvents,
             () => this._getDroppableCell(),
+            () => this._getDateTables(),
             () => this.removeDroppableCellClass(),
             () => this.getCellWidth(),
             options)
@@ -3628,6 +3643,7 @@ const createDragBehaviorConfig = (
     attachGeneralEvents,
     detachGeneralEvents,
     getDroppableCell,
+    getDateTables,
     removeDroppableCellClass,
     getCellWidth,
     options) => {
@@ -3706,9 +3722,17 @@ const createDragBehaviorConfig = (
             getElementsFromPoint(newX, newY) :
             getElementsFromPoint(newX + appointmentWidth / 2, newY);
 
+        const dateTables = getDateTables();
         const droppableCell = elements.filter(el => {
             const classList = el.classList;
-            return classList.contains(DATE_TABLE_CELL_CLASS) || classList.contains(ALL_DAY_TABLE_CELL_CLASS);
+
+            const isCurrentSchedulerElement = dateTables.find(el).length === 1;
+
+            return isCurrentSchedulerElement &&
+                (
+                    classList.contains(DATE_TABLE_CELL_CLASS) ||
+                    classList.contains(ALL_DAY_TABLE_CELL_CLASS)
+                );
         })[0];
 
         if(droppableCell) {

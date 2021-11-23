@@ -78,7 +78,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     focusStateEnabled?: boolean;
     /**
      * @docid
-     * @type_function_return number|string
      * @default 90
      * @default 60 &for(Material)
      * @public
@@ -93,14 +92,12 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid
      * @default 60 &for(Material)
-     * @type_function_return number|string
      * @public
      */
     maxHeight?: number | string | (() => number | string);
     /**
      * @docid
      * @default 60 &for(Material)
-     * @type_function_return number|string
      * @public
      */
     maxWidth?: number | string | (() => number | string);
@@ -140,7 +137,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid
      * @default 222
      * @default 60 &for(Material)
-     * @type_function_return number|string
      * @public
      */
     width?: number | string | (() => number | string);
@@ -163,8 +159,6 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
 /**
  * @docid
  * @inherits dxOverlay
- * @module ui/load_panel
- * @export default
  * @namespace DevExpress.ui
  * @public
  */
