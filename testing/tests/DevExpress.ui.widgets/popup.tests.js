@@ -1843,6 +1843,7 @@ QUnit.module('keyboard navigation', {
     beforeEach: function() {
         const initialOptions = {
             animation: null,
+            focusStateEnabled: true,
             dragEnabled: true,
             visible: true,
             width: 1,
