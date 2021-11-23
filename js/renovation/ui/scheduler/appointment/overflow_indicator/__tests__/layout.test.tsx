@@ -61,8 +61,10 @@ describe('OverflowIndicator', () => {
     it('it should invoke template correctly', () => {
       const template = 'some-template';
       const overflowIndicator = render({
-        isCompact: true,
-        appointmentCount: 6,
+        data: {
+          isCompact: true,
+          appointmentCount: 6,
+        },
         props: {
           overflowIndicatorTemplate: template,
         },
@@ -80,8 +82,10 @@ describe('OverflowIndicator', () => {
 
       expect(children.props)
         .toEqual({
-          isCompact: true,
-          appointmentCount: 6,
+          data: {
+            isCompact: true,
+            appointmentCount: 6,
+          },
         });
     });
   });
@@ -94,7 +98,7 @@ describe('OverflowIndicator', () => {
             viewModel: defaultViewModel as any,
           });
 
-          expect(overflowIndicator.appointmentCount)
+          expect(overflowIndicator.data.appointmentCount)
             .toBe(3);
         });
       });
@@ -109,7 +113,7 @@ describe('OverflowIndicator', () => {
               },
             });
 
-            expect(overflowIndicator.isCompact)
+            expect(overflowIndicator.data.isCompact)
               .toBe(isCompact);
           });
         });

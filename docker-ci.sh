@@ -4,7 +4,7 @@
 
 trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
-export DEVEXTREME_DOCKER_CI=true
+export DEVEXTREME_TEST_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
 
 function run_lint {
@@ -19,8 +19,6 @@ function run_ts {
 }
 
 function run_test {
-    export DEVEXTREME_TEST_CI=true
-
     local port=`node -e "console.log(require('./ports.json').qunit)"`
     local url="http://localhost:$port/run?notimers=true"
     local runner_pid
@@ -41,7 +39,7 @@ function run_test {
     if [ "$NO_HEADLESS" == "true" ]; then
         Xvfb -ac :99 -screen 0 1200x600x24 > /dev/null 2>&1 &
         if [ "$GITHUBACTION" != "true" ]; then
-        x11vnc -display :99 2>/dev/null &
+            x11vnc -display :99 2>/dev/null &
         fi
     fi
 
@@ -76,9 +74,7 @@ function run_test {
     case "$BROWSER" in
 
         "firefox")
-            local profile_path="/firefox-profile" 
-            [ "$GITHUBACTION" == "true" ] && profile_path="/tmp/firefox-profile"
-            local firefox_args="-profile $profile_path $url"
+            local firefox_args="$url"
             [ "$NO_HEADLESS" != "true" ] && firefox_args="-headless $firefox_args"
 
             firefox --version

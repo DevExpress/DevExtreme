@@ -41,12 +41,14 @@ import {
   AppointmentsViewModelType,
   AppointmentViewModel,
   AppointmentClickData,
+  AppointmentTemplateProps,
+  OverflowIndicatorTemplateProps,
 } from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
 import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
-import { getPreparedDataItems } from './utils/data';
+import { getPreparedDataItems, resolveDataItems } from './utils/data';
 import { getFilterStrategy } from './utils/filter';
 
 export const viewFunction = ({
@@ -69,6 +71,8 @@ export const viewFunction = ({
   dateCellTemplate,
   timeCellTemplate,
   resourceCellTemplate,
+  appointmentTemplate,
+  appointmentCollectorTemplate,
 
   props: {
     accessKey,
@@ -190,6 +194,8 @@ export const viewFunction = ({
               isAllDay
               appointments={appointmentsViewModel.allDay}
               overflowIndicators={appointmentsViewModel.allDayCompact}
+              appointmentTemplate={appointmentTemplate}
+              overflowIndicatorTemplate={appointmentCollectorTemplate}
               onAppointmentClick={showTooltip}
             />
           )}
@@ -198,6 +204,8 @@ export const viewFunction = ({
             <AppointmentLayout
               appointments={appointmentsViewModel.regular}
               overflowIndicators={appointmentsViewModel.regularCompact}
+              appointmentTemplate={appointmentTemplate}
+              overflowIndicatorTemplate={appointmentCollectorTemplate}
               onAppointmentClick={showTooltip}
             />
           )}
@@ -429,8 +437,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   // TODO: This is a WA because we need to clean workspace completely to set table sizes correctly
   // We need to remove this after we refactor crossScrolling to set table sizes through CSS, not JS
   get workSpaceKey(): string {
-    const { currentView, crossScrollingEnabled } = this.props;
-    const { groupOrientation, intervalCount } = this.currentViewConfig;
+    const { currentView } = this.props;
+    const { groupOrientation, intervalCount, crossScrollingEnabled } = this.currentViewConfig;
 
     if (!crossScrollingEnabled) {
       return '';
@@ -456,6 +464,14 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   get resourceCellTemplate(): JSXTemplate<ResourceCellTemplateProps> | undefined {
     return this.currentViewConfig.resourceCellTemplate;
+  }
+
+  get appointmentTemplate(): JSXTemplate<AppointmentTemplateProps> | undefined {
+    return this.currentViewConfig.appointmentTemplate;
+  }
+
+  get appointmentCollectorTemplate(): JSXTemplate<OverflowIndicatorTemplateProps> | undefined {
+    return this.currentViewConfig.appointmentCollectorTemplate;
   }
 
   @Method()
@@ -550,8 +566,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   loadDataSource(): void {
     if (!this.internalDataSource.isLoaded() && !this.internalDataSource.isLoading()) {
       (this.internalDataSource.load() as DataSourcePromise)
-        .done((items: Appointment[]) => {
-          this.dataItems = items;
+        .done((loadOptions: Appointment[] | { data: Appointment[] }) => {
+          this.dataItems = resolveDataItems(loadOptions);
         });
     }
   }

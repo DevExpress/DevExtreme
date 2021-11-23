@@ -6,13 +6,13 @@ import { OverflowIndicatorTemplateProps, OverflowIndicatorViewModel } from '../t
 import { Button } from '../../../button';
 import { getOverflowIndicatorStyles } from './utils';
 import messageLocalization from '../../../../../localization/message';
+import type { AppointmentCollectorTemplateData } from '../../../../../ui/scheduler';
 
 export const viewFunction = ({
   text,
   styles,
   classes,
-  appointmentCount,
-  isCompact,
+  data,
   props: {
     overflowIndicatorTemplate: OverflowIndicatorTemplate,
   },
@@ -26,10 +26,7 @@ export const viewFunction = ({
   >
     {
       OverflowIndicatorTemplate && (
-        <OverflowIndicatorTemplate
-          appointmentCount={appointmentCount}
-          isCompact={isCompact}
-        />
+        <OverflowIndicatorTemplate data={data} />
       )
     }
   </Button>
@@ -47,28 +44,30 @@ export class OverflowIndicatorProps {
   view: viewFunction,
 })
 export class OverflowIndicator extends JSXComponent<OverflowIndicatorProps, 'viewModel'>() {
-  get appointmentCount(): number {
-    return this.props.viewModel.items.settings.length;
-  }
-
-  get isCompact(): boolean {
-    return this.props.viewModel.isCompact;
+  get data(): AppointmentCollectorTemplateData {
+    return {
+      appointmentCount: this.props.viewModel.items.settings.length,
+      isCompact: this.props.viewModel.isCompact,
+    };
   }
 
   get text(): string {
     const {
       isCompact,
     } = this.props.viewModel;
+    const {
+      appointmentCount,
+    } = this.data;
 
     if (isCompact) {
-      return `${this.appointmentCount}`;
+      return `${appointmentCount}`;
     }
 
     const formatter = messageLocalization.getFormatter(
       'dxScheduler-moreAppointments',
     ) as (value: number) => string;
 
-    return formatter(this.appointmentCount);
+    return formatter(appointmentCount);
   }
 
   get styles(): CSSAttributes {
@@ -78,7 +77,7 @@ export class OverflowIndicator extends JSXComponent<OverflowIndicatorProps, 'vie
   get classes(): string {
     return combineClasses({
       'dx-scheduler-appointment-collector': true,
-      'dx-scheduler-appointment-collector-compact': this.isCompact,
+      'dx-scheduler-appointment-collector-compact': this.data.isCompact,
     });
   }
 }

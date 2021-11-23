@@ -5307,6 +5307,33 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         }
     });
 
+    QUnit.test('loadViewport should not throw an error when dataSource is null (T1045898)', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                legacyMode: false,
+                rowPageSize: 5,
+                prerenderedRowCount: 1
+            }
+        });
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        try {
+            // act
+            this.dataController.option('dataSource', null);
+            this.dataController.loadViewport();
+
+            assert.ok(true, 'error is not thrown');
+        } catch(e) {
+            assert.ok(false, `the error is thrown: ${e.message}`);
+        }
+    });
+
+
     QUnit.test('Scrolling timeout should be zero when renderAsync is false', function(assert) {
         // arrange
         this.applyOptions({
@@ -5554,6 +5581,27 @@ QUnit.module('Virtual scrolling preload', {
 
         // assert
         assert.strictEqual(calculateCellValueCallCount, 0, 'rows are not regenerated');
+    });
+
+    QUnit.test('New mode. selectAll after scrolling should select all items (T1044995)', function(assert) {
+        // act
+        this.dataController.setViewportPosition(10);
+        this.selectAll();
+
+        // assert
+        assert.deepEqual(this.getSelectedRowKeys().length, 100, 'all items are selected');
+    });
+
+    QUnit.test('New mode. loadAll after scrolling should return all items (T1045649)', function(assert) {
+        // act
+        this.dataController.setViewportPosition(10);
+        let loadedItems;
+        this.dataController.loadAll().done(items => {
+            loadedItems = items;
+        });
+
+        // assert
+        assert.deepEqual(loadedItems.length, 100, 'all items are selected');
     });
 });
 

@@ -1,12 +1,8 @@
-import config from '../../../../core/config';
 import dateUtils from '../../../../core/utils/date';
-import { equalByValue } from '../../../../core/utils/common';
-import dateSerialization from '../../../../core/utils/date_serialization';
 import { getRecurrenceProcessor } from '../../recurrence';
 import { inArray, wrapToArray } from '../../../../core/utils/array';
-import { extend } from '../../../../core/utils/extend';
 import { map, each } from '../../../../core/utils/iterator';
-import { isFunction, isDefined, isString } from '../../../../core/utils/type';
+import { isFunction, isDefined } from '../../../../core/utils/type';
 import query from '../../../../data/query';
 
 import {
@@ -23,12 +19,12 @@ import {
     getRecurrenceException,
     getAppointmentTakesAllDay
 } from './utils';
-import { getPreparedDataItems } from '../../../../renovation/ui/scheduler/utils/data';
-import { makeDateFilter } from './remoteFilter';
+import {
+    getPreparedDataItems,
+    resolveDataItems
+} from '../../../../renovation/ui/scheduler/utils/data';
 
 const toMs = dateUtils.dateToMilliseconds;
-const DATE_FILTER_POSITION = 0;
-const USER_FILTER_POSITION = 1;
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -99,37 +95,6 @@ export class AppointmentFilterBaseStrategy {
         }, preparedItems);
     }
 
-    filterByDate(min, max, remoteFiltering, dateSerializationFormat) {
-        if(!this.dataSource || !remoteFiltering) {
-            return;
-        }
-
-        const [trimMin, trimMax] = getTrimDates(min, max);
-        const dateFilter = makeDateFilter(trimMin, trimMax, this.dataAccessors);
-
-        let userFilter = this._excessFiltering(dateFilter)
-            ? this.dataSource.filter()[USER_FILTER_POSITION]
-            : this.dataSource.filter();
-
-        userFilter = this._serializeRemoteFilter(
-            userFilter,
-            dateSerializationFormat
-        );
-
-        const combinedFilter = this._combineRemoteFilter(dateFilter, userFilter, dateSerializationFormat);
-
-        this.dataSource.filter(combinedFilter);
-    }
-
-    _combineRemoteFilter(dateFilter, userFilter, dateSerializationFormat) {
-        const filter = [];
-
-        dateFilter && filter.push(dateFilter);
-        userFilter && filter.push(userFilter);
-
-        return this._serializeRemoteFilter(filter, dateSerializationFormat);
-    }
-
     hasAllDayAppointments(appointments) {
         let result = false;
 
@@ -145,7 +110,6 @@ export class AppointmentFilterBaseStrategy {
         return result;
     }
 
-    //
     setDataAccessors(dataAccessors) {
         this.dataAccessors = dataAccessors;
     }
@@ -167,8 +131,8 @@ export class AppointmentFilterBaseStrategy {
         if(this.dataSource) {
             const store = this.dataSource.store();
 
-            store.on('loaded', (items) => {
-                updateItems(items);
+            store.on('loaded', (options) => {
+                updateItems(resolveDataItems(options));
             });
 
             if(this.dataSource.isLoaded()) {
@@ -300,45 +264,9 @@ export class AppointmentFilterBaseStrategy {
         }]];
     }
 
+    // TODO get rid of wrapper
     _createAppointmentFilter(filterOptions) {
         return this._createCombinedFilter(filterOptions);
-    }
-
-    _excessFiltering(dateFilter) {
-        const dataSourceFilter = this.dataSource.filter();
-
-        const result = dateFilter && dataSourceFilter && (
-            equalByValue(dataSourceFilter, dateFilter) ||
-            (dataSourceFilter.length && equalByValue(dataSourceFilter[DATE_FILTER_POSITION], dateFilter))
-        );
-
-        return result;
-    }
-
-    _serializeRemoteFilter(filter, dateSerializationFormat) {
-        if(!Array.isArray(filter)) {
-            return filter;
-        }
-
-        filter = extend([], filter);
-
-        const startDate = this.dataAccessors.expr.startDateExpr;
-        const endDate = this.dataAccessors.expr.endDateExpr;
-
-        if(isString(filter[0])) {
-            if(config().forceIsoDateParsing && filter.length > 1) {
-                if(filter[0] === startDate || filter[0] === endDate) {
-                    // TODO: wrap filter value to new Date only necessary for case T838165(details in note)
-                    filter[filter.length - 1] = dateSerialization.serializeDate(new Date(filter[filter.length - 1]), dateSerializationFormat);
-                }
-            }
-        }
-
-        for(let i = 0; i < filter.length; i++) {
-            filter[i] = this._serializeRemoteFilter(filter[i], dateSerializationFormat);
-        }
-
-        return filter;
     }
 
     _filterAppointmentByResources(appointment, resources) {

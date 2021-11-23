@@ -676,6 +676,27 @@ describe('templates and slots', () => {
     expect($template.text()).toBe('template text');
   });
 
+  it('should render custom template when component has attibute with template name', () => {
+    $('#component').attr('template', 'test');
+    $('#component').dxTemplatedTestWidget({
+      template: 'test',
+      integrationOptions: {
+        templates: {
+          test: {
+            render: () => $('<span>')
+              .addClass('dx-template-wrapper')
+              .text('template text')[0],
+          },
+        },
+      },
+    });
+
+    $('#component').removeAttr('template');
+
+    const $template = $('#component').find('.dx-template-wrapper');
+    expect($template.text()).toBe('template text');
+  });
+
   it('should unsubscribe from all events for nested jquery components when disposing parent component', () => {
     $('#component').dxTemplatedTestWidget({
       template(_: never, element: Element) {

@@ -219,6 +219,11 @@ describe('Scheduler', () => {
 
     describe('Appointments', () => {
       it('should render appointments as a property of workspace', () => {
+        const templates = {
+          appointmentTemplate: jest.fn(),
+          appointmentCollectorTemplate: jest.fn(),
+        };
+
         const props = {
           min: new Date(2021, 9, 7),
           max: new Date(2021, 9, 8),
@@ -236,6 +241,7 @@ describe('Scheduler', () => {
         const scheduler = renderComponent({
           props,
           appointmentsViewModel,
+          ...templates,
         });
 
         const workspace = scheduler.find(WorkSpace);
@@ -250,6 +256,8 @@ describe('Scheduler', () => {
             isAllDay: false,
             appointments: appointmentsViewModel.regular,
             overflowIndicators: appointmentsViewModel.regularCompact,
+            appointmentTemplate: templates.appointmentTemplate,
+            overflowIndicatorTemplate: templates.appointmentCollectorTemplate,
           });
 
         expect(allDayAppointments.type)
@@ -260,6 +268,8 @@ describe('Scheduler', () => {
             isAllDay: true,
             appointments: appointmentsViewModel.allDay,
             overflowIndicators: appointmentsViewModel.allDayCompact,
+            appointmentTemplate: templates.appointmentTemplate,
+            overflowIndicatorTemplate: templates.appointmentCollectorTemplate,
           });
       });
     });
@@ -1357,6 +1367,22 @@ describe('Scheduler', () => {
           expect(scheduler.workSpaceKey)
             .toBe('day_horizontal_3_0');
         });
+
+        it('should return key if cross-scrolling is not used but virtual scrolling is used', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            scrolling: { mode: 'virtual' },
+            currentView: 'day',
+            views: [{
+              type: 'day',
+              intervalCount: 3,
+              groupOrientation: 'horizontal',
+            }],
+          });
+
+          expect(scheduler.workSpaceKey)
+            .toBe('day_horizontal_3_0');
+        });
       });
 
       describe('Cell Templates', () => {
@@ -1381,6 +1407,52 @@ describe('Scheduler', () => {
             .toBe(templates.timeCellTemplate);
           expect(scheduler.resourceCellTemplate)
             .toBe(templates.resourceCellTemplate);
+        });
+      });
+
+      describe('Appointment templates', () => {
+        it('should return templates', () => {
+          const templates = {
+            appointmentTemplate: jest.fn(),
+            appointmentCollectorTemplate: jest.fn(),
+          };
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            ...templates,
+          });
+
+          expect(scheduler.appointmentTemplate)
+            .toBe(templates.appointmentTemplate);
+          expect(scheduler.appointmentCollectorTemplate)
+            .toBe(templates.appointmentCollectorTemplate);
+        });
+
+        it('should return templates from view', () => {
+          const templates = {
+            appointmentTemplate: jest.fn(),
+            appointmentCollectorTemplate: jest.fn(),
+          };
+
+          const viewTemplates = {
+            appointmentTemplate: jest.fn(),
+            appointmentCollectorTemplate: jest.fn(),
+          };
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            views: [{
+              type: 'day',
+              ...viewTemplates,
+            }],
+            currentView: 'day',
+            ...templates,
+          });
+
+          expect(scheduler.appointmentTemplate)
+            .toBe(viewTemplates.appointmentTemplate);
+          expect(scheduler.appointmentCollectorTemplate)
+            .toBe(viewTemplates.appointmentCollectorTemplate);
         });
       });
     });
