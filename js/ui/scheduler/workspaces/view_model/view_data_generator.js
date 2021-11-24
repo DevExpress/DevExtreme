@@ -11,7 +11,7 @@ import {
     getTotalRowCountByCompleteData,
     getDisplayedCellCount,
 } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getKeyByGroup } from '../../../../renovation/ui/scheduler/workspaces/utils';
+import { getIsGroupedAllDayPanel, getKeyByGroup } from '../../../../renovation/ui/scheduler/workspaces/utils';
 
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');
 const DAY_MS = dateUtils.dateToMilliseconds('day');
@@ -277,7 +277,7 @@ export class ViewDataGenerator {
             if(currentGroupIndex !== previousGroupIndex) {
                 groupedData.push({
                     dateTable: [],
-                    isGroupedAllDayPanel,
+                    isGroupedAllDayPanel: getIsGroupedAllDayPanel(!!isAllDayRow, isVerticalGrouping),
                     groupIndex: currentGroupIndex,
                     key: getKeyByGroup(currentGroupIndex, isVerticalGrouping),
                 });
