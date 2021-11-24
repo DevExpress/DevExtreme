@@ -11,7 +11,7 @@ import { WorkSpace } from '../workspaces/base/work_space';
 import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
 import { getPreparedDataItems } from '../utils/data';
-import { getFilterStrategy } from '../utils/filter';
+import { getFilterStrategy } from '../utils/filtering/local';
 import { getAppointmentsConfig, getAppointmentsModel } from '../model/appointments';
 import { getAppointmentsViewModel } from '../view_model/appointments/appointments';
 import { AppointmentLayout } from '../appointment/layout';
@@ -31,8 +31,8 @@ jest.mock('../utils/data', () => ({
   ...jest.requireActual('../utils/data'),
   getPreparedDataItems: jest.fn((items) => `Prepared_${items}`),
 }));
-jest.mock('../utils/filter', () => ({
-  ...jest.requireActual('../utils/filter'),
+jest.mock('../utils/filtering/local', () => ({
+  ...jest.requireActual('../utils/filtering/local'),
   getFilterStrategy: jest.fn(() => ({ filter: (items) => `Filter_${items}` })),
 }));
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
