@@ -60,6 +60,7 @@ function addCompilationTask(frameworkData) {
 addCompilationTask({
     name: 'react',
     generator: 'generate-react',
+    copyFilesSteps: [require('./steps-react').createReactEntryPoint]
 });
 addCompilationTask({
     name: 'angular',

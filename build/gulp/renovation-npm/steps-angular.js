@@ -5,13 +5,8 @@ const through = require('through2');
 const path = require('path');
 const ngPackager = require('ng-packagr');
 const createVinyl = require('./utils/create-gulp-file');
+const { camelCase } = require('./utils')
 
-function camelCase(str) {
-    return str
-        .split('_')
-        .map(x => `${x[0].toUpperCase()}${x.slice(1)}`)
-        .join('');
-}
 function createNgEntryPoint(context) {
     const components = require(path.resolve(process.cwd(), path.join(context.destination, 'components.js')));
     const contents = components
