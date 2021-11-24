@@ -310,8 +310,9 @@ const EditingController = modules.ViewController.inherit((function() {
             return extend({
                 name: buttonName,
                 text: editingTexts[buttonName],
-                cssClass: EDIT_LINK_CLASS[buttonName],
-                onClick: (e) => {
+                cssClass: EDIT_LINK_CLASS[buttonName]
+            }, {
+                onClick: methodName && ((e) => {
                     const event = e.event;
 
                     event.stopPropagation();
@@ -319,7 +320,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     setTimeout(() => {
                         options.row && allowAction && this[methodName] && this[methodName](options.row.rowIndex);
                     });
-                }
+                })
             }, config);
         },
 
@@ -1951,11 +1952,13 @@ const EditingController = modules.ViewController.inherit((function() {
                     $button.attr('title', button.hint);
                 }
 
-                eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), this.createAction(function(e) {
-                    button.onClick.call(button, extend({}, e, { row: options.row, column: options.column }));
-                    e.event.preventDefault();
-                    e.event.stopPropagation();
-                }));
+                if(!button.template || button.onClick) {
+                    eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), this.createAction(function(e) {
+                        button.onClick?.call(button, extend({}, e, { row: options.row, column: options.column }));
+                        e.event.preventDefault();
+                        e.event.stopPropagation();
+                    }));
+                }
                 $container.append($button, '&nbsp;');
 
                 if(button.template) {
