@@ -1088,7 +1088,7 @@ QUnit.module('Grouping with basic remoteOperations', {
         source.load();
 
         // assert
-        assert.equal(source.itemsCount(), 4);
+        assert.equal(source.itemsCount(), 2);
 
         // act
         source.changeRowExpand([1]);
@@ -4965,7 +4965,7 @@ QUnit.module('Remote group paging', {
                 }, {
                     key: 2, items: null
                 }]);
-                assert.equal(source.itemsCount(), 6);
+                assert.equal(source.itemsCount(), 3);
             });
 
             QUnit.test('Expand second level group', function(assert) {

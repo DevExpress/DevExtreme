@@ -4697,7 +4697,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         // assert
         assert.deepEqual(this.getDataItems(), items);
-        assert.equal(dataController.itemsCount(), 10);
+        assert.equal(dataController.itemsCount(), 5);
         assert.ok(dataController.isLoaded());
         assert.ok(!dataController.isLoading(), 'loading completed');
         assert.ok(!isLoadingByEvent, 'loading completed');
@@ -5002,6 +5002,45 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.equal(visibleItems.length, 16, 'visible items count');
         assert.deepEqual(visibleItems[0].data, { id: 26, name: 'Name 26' }, 'first visible item');
         assert.deepEqual(visibleItems[15].data, { id: 41, name: 'Name 41' }, 'last visible item');
+    });
+
+    QUnit.test('New mode. Load params if pageSize is 0 (All) and scrolling mode is standart', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        this.applyOptions({
+            scrolling: {
+                rowRenderingMode: 'virtual',
+                mode: 'standart',
+                legacyMode: false,
+                rowPageSize: 5,
+                prerenderedRowCount: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(10),
+            pageSize: 0
+        });
+
+        // act
+        this.dataController.viewportSize(15);
+        this.dataController.setViewportPosition(100);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 0, loadPageCount: 1, skipForCurrentPage: 5 }, 'load page params after scrolling');
+        assert.deepEqual(this.dataController.pageIndex(), 0, 'page index after scrolling');
+        assert.deepEqual(this.getVisibleRows()[0].data.id, 6, 'first visible row id');
     });
 
     QUnit.test('New mode. View port items should be rendered partially on scroll', function(assert) {
@@ -5539,6 +5578,30 @@ QUnit.module('Virtual scrolling preload', {
 
         // assert
         assert.deepEqual(loadedItems.length, 100, 'all items are selected');
+    });
+
+    QUnit.test('New mode. Rows should not be regenerated on scroll (T1046265)', function(assert) {
+        let calculateCellValueCallCount = 0;
+        this.applyOptions({
+            columns: [{
+                name: 'id',
+                calculateCellValue: function(data) {
+                    calculateCellValueCallCount++;
+                    return data.id;
+                }
+            }]
+        });
+        this.dataController.setViewportPosition(1);
+
+        assert.strictEqual(calculateCellValueCallCount, 100, 'rows are generated');
+
+        calculateCellValueCallCount = 0;
+
+        // act
+        this.dataController.setViewportPosition(2);
+
+        // assert
+        assert.strictEqual(calculateCellValueCallCount, 0, 'rows are not regenerated');
     });
 });
 
