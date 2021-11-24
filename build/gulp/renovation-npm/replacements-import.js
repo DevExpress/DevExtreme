@@ -9,6 +9,7 @@ const jsparser = require('recast/parsers/babel');
 
 function performRecastReplacements(context) {
     context.rawPackageSet = new Set();
+    context.moduleMap = {};
     const rootFolderPath = context.source;
     return through.obj((file, enc, callback) => {
         if (file.isNull())
@@ -34,11 +35,26 @@ function performRecastReplacements(context) {
         const fileDir = path.dirname(file.path);
         const devextremeFolder = path.dirname(absoluteRootFolderPath);
 
+        const processModuleMap = (modulePath) => {
+            const tsPath = file.extname === '.tsx' ? file.path.replace('.tsx', '.ts') : '';
+            if (!modulePath) {
+                context.moduleMap[file.path] = [];
+                tsPath && (context.moduleMap[tsPath] = [])
+            } else {
+                context.moduleMap[file.path].push(modulePath);
+                tsPath && (context.moduleMap[tsPath].push(modulePath))
+            }
+        }
+
         const processImport = (importFrom, performReplacement) => {
             if (importFrom.startsWith('.')) {
                 //relative module path
                 const absoluteModulePath = path.resolve(fileDir, importFrom);
                 if (absoluteModulePath.startsWith(absoluteRootFolderPath)) {
+                    context.extensions.forEach(ext => {
+                        const fileVar = `${absoluteModulePath}${ext}`;
+                        processModuleMap(fileVar);
+                    });
                     return false;
                 }
                 const newPath = path.relative(devextremeFolder, absoluteModulePath).replace(/\\/g, '/');
@@ -53,6 +69,7 @@ function performRecastReplacements(context) {
                 return false;
             }
         }
+        processModuleMap();
         visit(ast, {
             visitImportDeclaration(nodePath) {
                 return processImport(nodePath.node.source.value, (newImport) => {

@@ -3,7 +3,7 @@
 const gulp = require('gulp');
 const through = require('through2');
 const path = require('path');
-const ngPackager = require('ng-packagr');
+//const ngPackager = require('ng-packagr');
 const createVinyl = require('./utils/create-gulp-file');
 const { camelCase } = require('./utils')
 
@@ -28,17 +28,17 @@ function preparePackageForPackagr(packageObject, basePackageObject, context) {
     packageObject.devDependencies["@angular/common"] = "^11.0.0";
     packageObject.devDependencies["@angular/forms"] = "^11.0.0";
 }
-function runPackagr(context) {
+/* function runPackagr(context) {
     const name = `packer-${context.name}`;
     gulp.task(name, () => ngPackager.ngPackagr()
         .forProject(path.join(context.destination, 'package.json'))
         // .withTsConfig('tsconfig.lib.json')
         .build());
     return name;
-}
+} */
 
 module.exports = {
     createNgEntryPoint,
     preparePackageForPackagr,
-    runPackagr
+    // runPackagr
 }

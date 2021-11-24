@@ -10,6 +10,7 @@ const through = require('through2');
 const path = require('path');
 const performRecastReplacements = require('./replacements-import');
 const performPackageLockReplacements = require('./replacements-package-lock');
+const removeFiles = require('./remove-unused-modules');
 
 function copyServiceFiles(context) {
     return () => merge(
@@ -46,12 +47,15 @@ function addCompilationTask(frameworkData) {
         ...frameworkData,
         source: `artifacts/${frameworkData.name}/renovation`,
         destination: `artifacts/npm-${frameworkData.name}`,
+        extensions: ['.js', '.ts', '.d.ts', '.tsx']
     }
     const generateSeries = [
         cleanNpmFramework(context),
         context.generator,
         copyFrameworkArtifacts(context),
         copyServiceFiles(context),
+        removeFiles.removeUnusedModules(context),
+        removeFiles.cleanEmptyFolders(context.destination),
         ...context.completionSteps.map(x=>x(context))
     ];
     gulp.task(`renovation-npm-${context.name}`, gulp.series(...generateSeries));
