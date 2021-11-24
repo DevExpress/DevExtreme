@@ -154,6 +154,7 @@ class SpeedDialMainItem extends SpeedDialItem {
         const defaultOptions = this._getDefaultOptions();
 
         delete defaultOptions.elementAttr;
+        delete defaultOptions.closeOnOutsideClick;
 
         return visibleActions.length === 1 ?
             extend(modifyActionOptions(visibleActions[0]), { position: this._getPosition() }) :
