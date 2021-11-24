@@ -43,6 +43,7 @@ export const isMouseOverElement = function(mouseEvent, element, correctPseudoEle
     const eventX = getEventX(mouseEvent);
     const eventY = getEventY(mouseEvent);
 
+    // console.log(`eventX: ${eventX} >= x: ${x} && eventX: ${eventX} < x + w: ${x + w} && eventY: ${eventY} >= y: ${y} && eventY: ${eventY} < y + h: ${y + h}`);
     return eventX >= x && eventX < (x + w) && eventY >= y && eventY < (y + h);
 };
 export const reRaiseEvent = function(e, eventType, newTarget) {
