@@ -657,6 +657,7 @@ QUnit.module('Keyboard keys', {
     QUnit.testInActiveWindow('Page down should scroll page down when paging disabled and vertial scroll exists', function(assert) {
         // arrange
         const that = this;
+        const rowsViewHeight = 180;
 
         this.options = {
             height: 200
@@ -665,7 +666,7 @@ QUnit.module('Keyboard keys', {
 
         // act
         this.gridView.render($('#container'));
-        this.rowsView.height(200);
+        this.rowsView.height(rowsViewHeight);
         this.rowsView.resize();
 
         this.focusFirstCell();
@@ -677,7 +678,7 @@ QUnit.module('Keyboard keys', {
         // assert
         assert.ok(that.rowsView.element().is(':focus'), 'rowsview element is focused');
         assert.deepEqual(that.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 5 });
-        assert.equal(this.rowsView.getScrollable().scrollTop(), 200);
+        assert.equal(this.rowsView.getScrollable().scrollTop(), rowsViewHeight);
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
     });
 
@@ -712,15 +713,15 @@ QUnit.module('Keyboard keys', {
 
         // act
         this.gridView.render($('#container'));
-        this.rowsView.height(200);
+        this.rowsView.height(180);
         this.rowsView.resize();
         this.focusFirstCell();
-        this.rowsView.getScrollable().scrollTo({ left: 0, top: 210 });
+        this.rowsView.getScrollable().scrollTo({ left: 0, top: 200 });
 
         const isPreventDefaultCalled = this.triggerKeyDown('pageUp').preventDefault;
 
         // assert
-        assert.equal(this.rowsView.getScrollable().scrollTop(), 10);
+        assert.equal(this.rowsView.getScrollable().scrollTop(), 20);
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
     });
 
