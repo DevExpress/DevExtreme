@@ -9391,6 +9391,10 @@ declare module DevExpress.ui {
      * [descr:dxDiagramCustomCommand.items]
      */
     items?: Array<dxDiagramCustomCommand>;
+    /**
+     * [descr:dxDiagramCustomCommand.location]
+     */
+    location?: 'after' | 'before' | 'center';
   }
   /**
    * [descr:dxDiagramDeleteConnectorArgs]

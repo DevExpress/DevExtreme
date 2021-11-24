@@ -5,6 +5,7 @@ import ValidationEngine from '../../ui/validation_engine';
 import Component from './common/component';
 import type { Button } from '../ui/button';
 import { Option } from './common/types';
+import { getImageSourceType } from '../../core/utils/icon';
 
 export default class ButtonWrapper extends Component {
   _clickAction!: (...args) => unknown;
@@ -29,6 +30,11 @@ export default class ButtonWrapper extends Component {
     props.onClick = ({ event }): void => {
       this._clickAction({ event, validationGroup: this._validationGroupConfig });
     };
+
+    const iconType = getImageSourceType(props.icon);
+    if (iconType === 'svg') {
+      props.iconTemplate = this._createTemplateComponent(() => props.icon);
+    }
 
     return props;
   }

@@ -40,11 +40,13 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
       data, index,
     } = this.props.model ?? { data: {} };
 
-    Object.keys(data).forEach((name) => {
-      if (data[name] && domAdapter.isNode(data[name])) {
-        data[name] = getPublicElement($(data[name] as Element));
-      }
-    });
+    if (data) {
+      Object.keys(data).forEach((name) => {
+        if (data[name] && domAdapter.isNode(data[name])) {
+          data[name] = getPublicElement($(data[name] as Element));
+        }
+      });
+    }
 
     const $result = $(this.props.template.render({
       container: getPublicElement($parent),

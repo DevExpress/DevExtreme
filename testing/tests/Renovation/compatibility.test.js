@@ -145,16 +145,20 @@ QUnit.module('Mandatory component setup', {
                 + '</div>\n\n'
                 + 'If for some reason you don\'t have data (if it is based on other props) - exclude your component from the test below\n'
                 + 'and add correspondig tests in your component\'s test suite.';
-                assert.expect(meta.props.template.length * 3);
+                const templatesToCheck = meta.props.template.filter(templateName => {
+                    // skip template here if you don't want to test its compatibility
+                    return templateName !== 'iconTemplate';
+                });
+                assert.expect(templatesToCheck.length * 3);
 
-                const options = meta.props.template.reduce((r, template) => ({
+                const options = templatesToCheck.reduce((r, template) => ({
                     ...r,
                     [template]: sinon.spy()
                 }), {});
 
                 $('#component')[`dx${meta.name}`](options);
 
-                meta.props.template.forEach((template) => {
+                templatesToCheck.forEach((template) => {
                     const [data, index, element = index] = options[template].getCall(0).args;
 
                     assert.ok($('#component').has(element).length > 0, message);
