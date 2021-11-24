@@ -93,18 +93,18 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @docid
      * @hidden
      */
-     dragAndResizeArea?: string | UserDefinedElement;
-     /**
-      * @docid
-      * @default false
-      * @hidden
-      */
-     dragEnabled?: boolean;
-      /**
-      * @docid
-      * @hidden
-      */
-     dragOutsideBoundary?: boolean;
+    dragAndResizeArea?: string | UserDefinedElement;
+    /**
+     * @docid
+     * @default false
+     * @hidden
+     */
+    dragEnabled?: boolean;
+    /**
+     * @docid
+     * @hidden
+     */
+    dragOutsideBoundary?: boolean;
     /**
      * @docid
      * @default "auto"
