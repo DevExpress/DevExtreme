@@ -31,24 +31,19 @@ describe('Workspaces utils', () => {
 
   describe('getKeyByGroup', () => {
     it('should generate key from group', () => {
-      expect(getKeyByGroup(0, VERTICAL_GROUP_ORIENTATION))
+      expect(getKeyByGroup(0, true))
         .toBe('0');
-      expect(getKeyByGroup(1, VERTICAL_GROUP_ORIENTATION))
+      expect(getKeyByGroup(1, true))
         .toBe('1');
     });
 
-    it('should return 0 when group orientation is not provided', () => {
-      expect(getKeyByGroup(32, undefined))
-        .toBe('0');
-    });
-
     it('should return 0 when group orientation is horizontal', () => {
-      expect(getKeyByGroup(32, HORIZONTAL_GROUP_ORIENTATION))
+      expect(getKeyByGroup(32, false))
         .toBe('0');
     });
 
     it('should return "0" when groupIndex is undefined', () => {
-      expect(getKeyByGroup(undefined, undefined))
+      expect(getKeyByGroup(undefined, false))
         .toBe('0');
     });
   });

@@ -1015,6 +1015,7 @@ QUnit.module('Renovated Render', {
                 groupedData: [{
                     dateTable: [cellsBase],
                     groupIndex: 0,
+                    key: '0',
                     isGroupedAllDayPanel: false
                 }],
                 bottomVirtualRowHeight: undefined,
@@ -1085,6 +1086,7 @@ QUnit.module('Renovated Render', {
                         key: 3,
                     }]],
                     groupIndex: 0,
+                    key: '0',
                     isGroupedAllDayPanel: false,
                 }],
                 bottomVirtualRowHeight: undefined,
@@ -1146,6 +1148,7 @@ QUnit.module('Renovated Render', {
                         groups: { res: 1 },
                     }]],
                     groupIndex: 0,
+                    key: '0',
                     isGroupedAllDayPanel: false,
                 }, {
                     dateTable: [[{
@@ -1160,6 +1163,7 @@ QUnit.module('Renovated Render', {
                         key: 3,
                     }]],
                     groupIndex: 1,
+                    key: '1',
                     isGroupedAllDayPanel: false,
                 }],
                 bottomVirtualRowHeight: undefined,
