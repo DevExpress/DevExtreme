@@ -59,7 +59,7 @@ export class PopoverProps extends BaseWidgetProps {
     hide: { type: 'fade', to: 0 },
   };
 
-  @OneWay() closeOnOutsideClick: boolean | (() => boolean) = false;
+  @OneWay() hideOnOutsideClick: boolean | (() => boolean) = false;
 
   @OneWay() container?: string | Element;
 

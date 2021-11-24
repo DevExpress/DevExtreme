@@ -73,7 +73,7 @@ export class PopupProps extends BaseWidgetProps {
     },
   };
 
-  @OneWay() closeOnOutsideClick: boolean | (() => boolean) = false;
+  @OneWay() hideOnOutsideClick: boolean | (() => boolean) = false;
 
   @OneWay() container?: string | Element;
 

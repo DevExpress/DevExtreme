@@ -58,7 +58,7 @@ export class TooltipProps extends BaseWidgetProps {
     hide: { type: 'fade', to: 0 },
   };
 
-  @OneWay() closeOnOutsideClick: boolean | (() => boolean) = true;
+  @OneWay() hideOnOutsideClick: boolean | (() => boolean) = true;
 
   @OneWay() container?: string | Element;
 
