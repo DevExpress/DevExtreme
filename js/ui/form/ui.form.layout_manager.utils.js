@@ -66,7 +66,7 @@ export function convertToRenderFieldItemOptions({
         formLabelMode: labelMode,
         labelText: labelOptions.text,
         labelMark: labelOptions.markOptions.showRequiredMark
-            ? labelOptions.markOptions.requiredMark
+            ? String.fromCharCode(160) + labelOptions.markOptions.requiredMark
             : '',
     });
 
