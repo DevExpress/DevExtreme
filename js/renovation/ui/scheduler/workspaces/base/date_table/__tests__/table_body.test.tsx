@@ -8,7 +8,6 @@ import * as utilsModule from '../../../utils';
 import * as combineClassesUtils from '../../../../../../utils/combine_classes';
 
 const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel').mockImplementation(() => true);
-const getKeyByGroup = jest.spyOn(utilsModule, 'getKeyByGroup');
 const combineClasses = jest.spyOn(combineClassesUtils, 'combineClasses');
 
 describe('DateTableBody', () => {
@@ -63,6 +62,7 @@ describe('DateTableBody', () => {
         }]],
         allDayPanel: [{ startDate: new Date(), key: '1' }],
         groupIndex: 1,
+        key: '1',
       }],
       leftVirtualCellWidth: 100,
       rightVirtualCellWidth: 200,
@@ -231,32 +231,6 @@ describe('DateTableBody', () => {
             0,
           );
       });
-    });
-
-    it('should provide correct key to a groups\'s Fragment depending on groupIndex', () => {
-      render({
-        props: {
-          viewData: {
-            groupedData: [{
-              dateTable: [],
-              groupIndex: 3,
-            }, {
-              dateTable: [],
-              groupIndex: 4,
-            }],
-            leftVirtualCellWidth: 100,
-            rightVirtualCellWidth: 200,
-            leftVirtualCellCount: 2,
-          },
-        },
-      });
-
-      expect(getKeyByGroup)
-        .toHaveBeenCalledTimes(2);
-      expect(getKeyByGroup)
-        .toHaveBeenNthCalledWith(1, 3, VERTICAL_GROUP_ORIENTATION);
-      expect(getKeyByGroup)
-        .toHaveBeenNthCalledWith(2, 4, VERTICAL_GROUP_ORIENTATION);
     });
   });
 

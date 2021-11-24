@@ -17,9 +17,9 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
 };
 
 export const getKeyByGroup = (
-  groupIndex: number | undefined, groupOrientation: GroupOrientation | undefined,
+  groupIndex: number | undefined, isVerticalGrouping: boolean,
 ): string => {
-  if (groupOrientation === VERTICAL_GROUP_ORIENTATION && !!groupIndex) {
+  if (isVerticalGrouping && !!groupIndex) {
     return groupIndex.toString();
   }
 

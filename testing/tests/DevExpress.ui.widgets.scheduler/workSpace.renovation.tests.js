@@ -104,6 +104,7 @@ module('Renovated Render', {
                             key: 1,
                         }]],
                         groupIndex: 0,
+                        key: '0',
                         isGroupedAllDayPanel: false
                     }],
                     bottomVirtualRowHeight: undefined,
@@ -246,6 +247,7 @@ module('Renovated Render', {
                             key: 3,
                         }]],
                         groupIndex: 0,
+                        key: '0',
                         isGroupedAllDayPanel: false,
                     }],
                     bottomVirtualRowHeight: undefined,
@@ -494,6 +496,7 @@ module('Renovated Render', {
                             key: 7,
                         }]],
                         groupIndex: 0,
+                        key: '0',
                         isGroupedAllDayPanel: false,
                     }],
                     bottomVirtualRowHeight: undefined,
@@ -561,7 +564,8 @@ module('Renovated Render', {
                             isFirstGroupCell: false,
                             isLastGroupCell: true,
                             key: 1,
-                        }]]
+                        }]],
+                        key: '0',
                     }, {
                         allDayPanel: [{
                             allDay: true,
@@ -596,7 +600,8 @@ module('Renovated Render', {
                             isFirstGroupCell: false,
                             isLastGroupCell: true,
                             key: 3,
-                        }]]
+                        }]],
+                        key: '1',
                     }],
                 };
 
