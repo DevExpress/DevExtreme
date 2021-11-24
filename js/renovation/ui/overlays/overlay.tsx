@@ -67,6 +67,7 @@ export class OverlayProps extends BaseWidgetProps {
   view: viewFunction,
 })
 export class Overlay extends JSXComponent(OverlayProps) {
+  /* istanbul ignore next: WA for Angular */
   get componentProps(): OverlayProps {
     return this.props;
   }

@@ -32,6 +32,7 @@ export class LoadPanelProps extends OverlayProps {
   view: viewFunction,
 })
 export class LoadPanel extends JSXComponent(LoadPanelProps) {
+  /* istanbul ignore next: WA for Angular */
   get componentProps(): LoadPanelProps {
     return this.props;
   }

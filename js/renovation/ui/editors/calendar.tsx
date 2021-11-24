@@ -64,6 +64,7 @@ export class Calendar extends JSXComponent<CalendarProps>() {
     this.instance?.focus();
   }
 
+  /* istanbul ignore next: WA for Angular */
   get componentProps(): CalendarProps {
     return this.props;
   }

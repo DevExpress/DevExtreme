@@ -182,7 +182,8 @@ export class Popup extends JSXComponent(PopupProps) {
     });
   }
 
-  get componentProps(): { children?: PopupProps['children']; restProps: PopupProps } {
+  /* istanbul ignore next: WA for Angular */
+  get componentProps(): { children?: PopupProps['children']; restProps: Partial<PopupProps> } {
     const { children, ...restProps } = this.props;
     return {
       children,

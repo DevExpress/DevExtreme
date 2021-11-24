@@ -29,6 +29,7 @@ export const viewFunction = ({
 })
 
 export class Form extends JSXComponent<FormProps>() {
+  /* istanbul ignore next: WA for Angular */
   get componentProps(): FormProps {
     return this.props;
   }

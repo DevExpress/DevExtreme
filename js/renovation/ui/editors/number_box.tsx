@@ -59,6 +59,7 @@ export class NumberBoxProps extends BaseWidgetProps {
   view: viewFunction,
 })
 export class NumberBox extends JSXComponent(NumberBoxProps) {
+  /* istanbul ignore next: WA for Angular */
   get componentProps(): NumberBoxProps {
     return this.props;
   }

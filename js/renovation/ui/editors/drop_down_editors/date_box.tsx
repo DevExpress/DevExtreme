@@ -41,6 +41,7 @@ export class DateBoxProps extends BaseWidgetProps {
   view: viewFunction,
 })
 export class DateBox extends JSXComponent<DateBoxProps>() {
+  /* istanbul ignore next: WA for Angular */
   get componentProps(): DateBoxProps {
     return this.props;
   }

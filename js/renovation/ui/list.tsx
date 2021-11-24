@@ -184,6 +184,7 @@ export class ListProps extends BaseWidgetProps {
   view: viewFunction,
 })
 export class List extends JSXComponent<ListProps>() {
+  /* istanbul ignore next: WA for Angular */
   get componentProps(): ListProps {
     return this.props;
   }

@@ -154,7 +154,8 @@ export class Popover extends JSXComponent(PopoverProps) {
     });
   }
 
-  get componentProps(): { children?: PopoverProps['children']; restProps: PopoverProps } {
+  /* istanbul ignore next: WA for Angular */
+  get componentProps(): { children?: PopoverProps['children']; restProps: Partial<PopoverProps> } {
     const { children, ...restProps } = this.props;
     return {
       children,

@@ -32,6 +32,7 @@ export class LoadIndicatorProps extends BaseWidgetProps {
   view: viewFunction,
 })
 export class LoadIndicator extends JSXComponent(LoadIndicatorProps) {
+  /* istanbul ignore next: WA for Angular */
   get componentProps(): LoadIndicatorProps {
     return this.props;
   }

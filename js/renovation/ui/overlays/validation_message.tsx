@@ -41,6 +41,7 @@ export class ValidationMessageProps extends BaseWidgetProps {
   view: viewFunction,
 })
 export class ValidationMessage extends JSXComponent(ValidationMessageProps) {
+  /* istanbul ignore next: WA for Angular */
   get componentProps(): ValidationMessageProps {
     return this.props;
   }

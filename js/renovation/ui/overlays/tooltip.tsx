@@ -148,7 +148,8 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     });
   }
 
-  get componentProps(): { children?: TooltipProps['children']; restProps: TooltipProps } {
+  /* istanbul ignore next: WA for Angular */
+  get componentProps(): { children?: TooltipProps['children']; restProps: Partial<TooltipProps> } {
     const { children, ...restProps } = this.props;
     return {
       children,
