@@ -30,6 +30,8 @@ const widgets = isRenovation ? widgetsMeta
             && widgetsInBundle.indexOf(meta.name) !== -1;
     }) : [];
 
+const IGNORE_TEMPLATE_TESTING_WIDGETS = ['DataGrid'];
+
 QUnit.module('Check components registration', () => {
     widgets
         .forEach((meta) => {
@@ -129,7 +131,7 @@ QUnit.module('Mandatory component setup', {
         });
 
     widgets
-        .filter((m) => m.props.template.length)
+        .filter((m) => m.props.template.length && IGNORE_TEMPLATE_TESTING_WIDGETS.indexOf(m.name) < 0)
         .forEach((meta) => {
             QUnit.test(`${`dx${meta.name}`} - pass right props to template`, function(assert) {
                 const message = 'For templates that jQuery users set.\n'
