@@ -10,8 +10,6 @@ import {
 } from '@devextreme-generator/declarations';
 
 import { DisposeEffectReturn } from '../../../utils/effect_return';
-import { BaseWidgetProps } from '../../common/base_props';
-
 import { Scrollbar } from './scrollbar';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../../../animation/frame';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
@@ -39,7 +37,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       direction,
       contentSize, containerSize,
       showScrollbar, scrollByThumb, bounceEnabled, scrollLocationChange,
-      visible, rtlEnabled,
+      visible,
       minOffset, maxOffset,
       containerHasSizes,
     },
@@ -60,15 +58,11 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       bounceEnabled={bounceEnabled}
       showScrollbar={showScrollbar}
       containerHasSizes={containerHasSizes}
-      // Horizontal
-      rtlEnabled={rtlEnabled}
     />
   );
 };
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-& Pick<BaseWidgetProps, 'rtlEnabled'>
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<ScrollableSimulatedProps, 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'
 | 'inertiaEnabled' | 'showScrollbar' | 'scrollByThumb' | 'bounceEnabled' | 'scrollLocationChange'>;
