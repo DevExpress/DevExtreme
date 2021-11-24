@@ -48,8 +48,8 @@ function addCompilationTask(frameworkData) {
         destination: `artifacts/npm-${frameworkData.name}`,
     }
     const generateSeries = [
-        // cleanNpmFramework(context),
-        // context.generator,
+        cleanNpmFramework(context),
+        context.generator,
         copyFrameworkArtifacts(context),
         copyServiceFiles(context),
         ...context.completionSteps.map(x=>x(context))
