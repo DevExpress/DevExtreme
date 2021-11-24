@@ -5,7 +5,7 @@ export type DateFilterType = string | string[] | (string | Date)[][];
 export interface RemoteFilterOptions {
   dataAccessors: DataAccessorType;
   dataSourceFilter?: unknown[];
-  dateSerializationFormat: string;
+  dateSerializationFormat?: string;
   forceIsoDateParsing?: boolean;
 }
 

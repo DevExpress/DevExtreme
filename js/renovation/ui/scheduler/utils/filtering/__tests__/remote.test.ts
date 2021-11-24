@@ -1,7 +1,7 @@
-import combinedRemoteFilter from '../remote';
+import combineRemoteFilter from '../remote';
 
 describe('Remote filtering', () => {
-  describe('combinedRemoteFilter', () => {
+  describe('combineRemoteFilter', () => {
     const FilterPosition = {
       dateFilter: 0,
       userFilter: 1,
@@ -47,7 +47,7 @@ describe('Remote filtering', () => {
     ];
 
     it('should return correct filter', () => {
-      const combinedFilter = combinedRemoteFilter({
+      const combinedFilter = combineRemoteFilter({
         dataAccessors: defaultDataAccessors,
         dateSerializationFormat: '',
         min: new Date(2021, 10, 23, 15, 15),
@@ -62,7 +62,7 @@ describe('Remote filtering', () => {
     });
 
     it('should return correct filter if recurrenceRuleExpr', () => {
-      const combinedFilter = combinedRemoteFilter({
+      const combinedFilter = combineRemoteFilter({
         dataAccessors: {
           expr: {
             ...defaultDataAccessors.expr,
@@ -113,7 +113,7 @@ describe('Remote filtering', () => {
 
     describe('userFilter', () => {
       it('should return correct filter if userFilter is present', () => {
-        const combinedFilter = combinedRemoteFilter({
+        const combinedFilter = combineRemoteFilter({
           dataAccessors: defaultDataAccessors,
           dataSourceFilter: ['startDate', '>', new Date(2021, 10, 23, 15, 25)],
           dateSerializationFormat: '',
@@ -132,7 +132,7 @@ describe('Remote filtering', () => {
       });
 
       it('should return correct filter if userFilter is present and dateSerializationFormat', () => {
-        const combinedFilter = combinedRemoteFilter({
+        const combinedFilter = combineRemoteFilter({
           dataAccessors: defaultDataAccessors,
           dataSourceFilter: ['startDate', '>', new Date(2021, 10, 23, 15, 25)],
           dateSerializationFormat: 'yyyy',
@@ -179,7 +179,7 @@ describe('Remote filtering', () => {
       });
 
       it('should return correct filter if userFilter is present and dateSerializationFormat and forceIsoDateString is false', () => {
-        const combinedFilter = combinedRemoteFilter({
+        const combinedFilter = combineRemoteFilter({
           dataAccessors: defaultDataAccessors,
           dataSourceFilter: ['startDate', '>', new Date(2021, 10, 23, 15, 25)],
           min: new Date(2021, 10, 23, 15, 15),
@@ -201,7 +201,7 @@ describe('Remote filtering', () => {
 
     describe('dateFilter present', () => {
       it('should return correct filter if dateFilter is a part of the dataSourceFilter', () => {
-        const combinedFilter = combinedRemoteFilter({
+        const combinedFilter = combineRemoteFilter({
           dataAccessors: defaultDataAccessors,
           dataSourceFilter: [dateFilter],
           dateSerializationFormat: '',
@@ -217,7 +217,7 @@ describe('Remote filtering', () => {
       });
 
       it('should return correct filter if dataSourceFilter is equals to the dateFilter', () => {
-        const combinedFilter = combinedRemoteFilter({
+        const combinedFilter = combineRemoteFilter({
           dataAccessors: defaultDataAccessors,
           dataSourceFilter: dateFilter,
           dateSerializationFormat: '',
