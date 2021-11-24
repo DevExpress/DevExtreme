@@ -16693,7 +16693,8 @@ QUnit.module('Editing with scrolling', {
                 scrolling: {
                     mode: rowRenderingMode,
                     rowRenderingMode: rowRenderingMode,
-                    rowPageSize: 5
+                    rowPageSize: 5,
+                    legacyMode: false
                 }
             });
 
