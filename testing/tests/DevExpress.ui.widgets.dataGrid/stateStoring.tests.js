@@ -1715,6 +1715,23 @@ QUnit.module('State Storing with real controllers', {
         assert.strictEqual(this.option('searchPanel.text'), '1', 'searchPanel.text equals its initial value');
         assert.equal(this.dataController.items().length, 1);
     });
+
+    QUnit.test('searchPanel.text should be cleared after calling state(null)', function(assert) {
+        // arrange
+        this.setupDataGridModules({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            searchPanel: {
+                visible: true,
+                text: 'Some text'
+            },
+        });
+
+        // act
+        this.state(null);
+
+        // assert
+        assert.equal(this.option('searchPanel.text'), '');
+    });
 });
 
 QUnit.module('State Storing for filterPanel', {
