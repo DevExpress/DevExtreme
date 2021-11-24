@@ -14,7 +14,6 @@ const defaultDropDownOptions = {
             type: 'fade'
         }
     },
-    closeOnOutsideClick: null,
     hideOnOutsideClick: null,
     container: undefined,
     contentTemplate: null,
