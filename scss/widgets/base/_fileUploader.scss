@@ -28,6 +28,7 @@
   &::before,
   &::after {
     width: 100%;
+    pointer-events: none;
   }
 
   &::before {
