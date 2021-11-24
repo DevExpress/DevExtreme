@@ -189,7 +189,7 @@ export const stateStoringModule = {
 
                     that.component.endUpdate();
 
-                    searchText && that.option('searchPanel.text', searchText);
+                    that.option('searchPanel.text', searchText || '');
 
                     that.option('filterValue', getFilterValue(that, state));
 
