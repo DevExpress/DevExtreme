@@ -5715,6 +5715,7 @@ declare module DevExpress.ui {
     extends dxMenuBaseOptions<dxContextMenu<TKey>, dxContextMenuItem, TKey> {
     /**
      * [descr:dxContextMenuOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxContextMenuOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -16974,6 +16975,7 @@ declare module DevExpress.ui {
     animation?: dxOverlayAnimation;
     /**
      * [descr:dxOverlayOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxOverlayOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -17933,6 +17935,7 @@ declare module DevExpress.ui {
     animation?: dxPopoverAnimation;
     /**
      * [descr:dxPopoverOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxPopoverOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -21610,6 +21613,7 @@ declare module DevExpress.ui {
     closeOnClick?: boolean;
     /**
      * [descr:dxToastOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxToastOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
