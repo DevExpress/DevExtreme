@@ -1905,7 +1905,7 @@ module('View Data Provider', {
                             completeTimePanelMap[1],
                         ],
                         groupIndex: 0,
-                        isGroupedAllDayPanel: true,
+                        isGroupedAllDayPanel: false,
                         key: '0',
                     }, {
                         dateTable: [
@@ -1913,7 +1913,7 @@ module('View Data Provider', {
                             completeTimePanelMap[3],
                         ],
                         groupIndex: 1,
-                        isGroupedAllDayPanel: true,
+                        isGroupedAllDayPanel: false,
                         key: '1',
                     }],
                     bottomVirtualRowHeight: undefined,
@@ -2092,7 +2092,7 @@ module('View Data Provider', {
                         groupedData: [{
                             dateTable: [completeViewDataMap[1]],
                             groupIndex: 2,
-                            isGroupedAllDayPanel: true,
+                            isGroupedAllDayPanel: false,
                             key: '2',
                         }, {
                             allDayPanel: completeViewDataMap[2],
@@ -2388,14 +2388,14 @@ module('View Data Provider', {
                         ],
                         groupIndex: 0,
                         key: '0',
-                        isGroupedAllDayPanel: true,
+                        isGroupedAllDayPanel: false,
                     }, {
                         dateTable: [
                             completeTimePanelMap[2],
                         ],
                         groupIndex: 1,
                         key: '1',
-                        isGroupedAllDayPanel: true,
+                        isGroupedAllDayPanel: false,
                     }],
                     bottomVirtualRowHeight: 50,
                     topVirtualRowHeight: 50,

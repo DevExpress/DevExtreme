@@ -4,10 +4,8 @@ import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 import { DateTableBody, DateTableBodyProps, viewFunction as TableBodyView } from '../table_body';
 import { Row } from '../../row';
 import { AllDayPanelTableBody } from '../all_day_panel/table_body';
-import * as utilsModule from '../../../utils';
 import * as combineClassesUtils from '../../../../../../utils/combine_classes';
 
-const getIsGroupedAllDayPanel = jest.spyOn(utilsModule, 'getIsGroupedAllDayPanel').mockImplementation(() => true);
 const combineClasses = jest.spyOn(combineClassesUtils, 'combineClasses');
 
 describe('DateTableBody', () => {
@@ -63,6 +61,7 @@ describe('DateTableBody', () => {
         allDayPanel: [{ startDate: new Date(), key: '1' }],
         groupIndex: 1,
         key: '1',
+        isGroupedAllDayPanel: true,
       }],
       leftVirtualCellWidth: 100,
       rightVirtualCellWidth: 200,
@@ -213,23 +212,21 @@ describe('DateTableBody', () => {
         });
     });
 
-    [true, false].forEach((shouldRender) => {
-      it('should render AllDayPanelBody depending on getIsGroupedAllDayPanel result', () => {
-        (getIsGroupedAllDayPanel as jest.Mock).mockReturnValue(shouldRender);
-        const tableBody = render({});
+    [true, false].forEach((isGroupedAllDayPanel) => {
+      it(`should render AllDayPanelBody correctly when isGroupedAllDayPanel=${isGroupedAllDayPanel}`, () => {
+        const testViewData = {
+          ...viewData,
+          groupedData: [{
+            ...viewData.groupedData[0],
+            isGroupedAllDayPanel,
+          }],
+        };
+
+        const tableBody = render({ props: { viewData: testViewData } });
 
         const allDayPanelTableBody = tableBody.find(AllDayPanelTableBody);
         expect(allDayPanelTableBody.exists())
-          .toBe(shouldRender);
-
-        expect(getIsGroupedAllDayPanel)
-          .toHaveBeenCalledTimes(1);
-
-        expect(getIsGroupedAllDayPanel)
-          .toHaveBeenCalledWith(
-            viewData,
-            0,
-          );
+          .toBe(isGroupedAllDayPanel);
       });
     });
   });

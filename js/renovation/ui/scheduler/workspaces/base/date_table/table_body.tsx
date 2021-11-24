@@ -8,9 +8,6 @@ import {
 } from '@devextreme-generator/declarations';
 import { Row } from '../row';
 import { DataCellTemplateProps, ViewCellData } from '../../types';
-import {
-  getIsGroupedAllDayPanel,
-} from '../../utils';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
 import { LayoutProps } from '../layout_props';
 import { DateTableCellBase } from './cell';
@@ -30,9 +27,14 @@ export const viewFunction = ({
 }: DateTableBody): JSX.Element => (
   <Fragment>
     {viewData
-      .groupedData.map(({ dateTable, allDayPanel, key: fragmentKey }, index) => (
+      .groupedData.map(({
+        dateTable,
+        allDayPanel,
+        key: fragmentKey,
+        isGroupedAllDayPanel,
+      }) => (
         <Fragment key={fragmentKey}>
-          {getIsGroupedAllDayPanel(viewData, index) && (
+          {isGroupedAllDayPanel && (
             <AllDayPanelTableBody
               viewData={allDayPanel}
               dataCellTemplate={dataCellTemplate}
