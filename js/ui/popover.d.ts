@@ -131,16 +131,43 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
 
     /**
      * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 width:number
+     * @type_function_param1_field6 height:number
+     * @action
      * @hidden
      */
     onResize?: ((e: ResizeEvent) => void);
     /**
      * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 width:number
+     * @type_function_param1_field6 height:number
+     * @action
      * @hidden
      */
     onResizeEnd?: ((e: ResizeEndEvent) => void);
     /**
      * @docid
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:this
+     * @type_function_param1_field2 element:DxElement
+     * @type_function_param1_field3 model:any
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 width:number
+     * @type_function_param1_field6 height:number
+     * @action
      * @hidden
      */
     onResizeStart?: ((e: ResizeStartEvent) => void);
