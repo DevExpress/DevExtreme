@@ -4,12 +4,11 @@ const path = require('path');
 
 function removeUnusedModules(context) {
     const components = require(path.resolve(process.cwd(), path.join(context.source, 'components.js')));
-    let componentPaths = [];
+    const componentPaths = [];
     components.forEach(c => {
         const fileName = path.resolve(process.cwd(), path.join(context.source, c.pathInRenovationFolder.slice(0, -2)));
         context.extensions.forEach(ext => componentPaths.push(`${fileName}${ext}`));
     });
-    componentPaths = componentPaths.filter(f => fs.existsSync(f));
 
     return function removeUnusedModules(cb) {
         const visitedModules = Object.keys(context.moduleMap).reduce((p, c) => {
@@ -18,11 +17,6 @@ function removeUnusedModules(context) {
         }, {});
 
         const modulesToVisit = [...componentPaths];
-        componentPaths.forEach(cp => {
-            if (path.extname(cp) === '.tsx') {
-                modulesToVisit.push(cp.replace('.tsx', '.ts'));
-            }
-        })
         while (modulesToVisit.length) {
             const current = modulesToVisit.pop();
             const importedModules = context.moduleMap[current];
