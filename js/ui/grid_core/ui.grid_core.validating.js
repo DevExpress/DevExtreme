@@ -583,12 +583,12 @@ export const validatingModule = {
     extenders: {
         controllers: {
             editing: {
-                _addChange: function(params) {
+                _addChange: function(changeParams) {
                     const change = this.callBase.apply(this, arguments);
                     const validatingController = this.getController('validating');
 
-                    if(change && params.type !== EDIT_DATA_REMOVE_TYPE) {
-                        change && validatingController.updateValidationState(change);
+                    if(change && changeParams.type !== EDIT_DATA_REMOVE_TYPE) {
+                        validatingController.updateValidationState(change);
                     }
 
                     return change;
