@@ -1442,7 +1442,7 @@ QUnit.module('api', moduleConfig, () => {
                 assert.equal(loadPanel.option('visible'), true, 'load panel shown on start');
 
                 e.component.release().done(() => {
-                    isRenovation && this.clock.tick(1000);
+                    this.clock.tick(1000);
                     deferred.resolve();
                 });
             }
@@ -1455,6 +1455,8 @@ QUnit.module('api', moduleConfig, () => {
         deferred.done(function() {
             assert.equal(loadPanel.option('visible'), false, 'load panel hidden on done');
         });
+
+        this.clock.tick(1000); // NOTE: wait complete for all strategies
     });
 
     QUnit.test('refreshingText pass to dxLoadPanel', function(assert) {
