@@ -29,6 +29,9 @@ function preparePackageForPackagr(packageObject, basePackageObject, context) {
             entryFile: 'ngentrypoint.ts'
         }
     }
+    packageObject.devDependencies["@angular/core"] = "^11.0.0";
+    packageObject.devDependencies["@angular/common"] = "^11.0.0";
+    packageObject.devDependencies["@angular/forms"] = "^11.0.0";
 }
 function runPackagr(context) {
     const name = `packer-${context.name}`;
