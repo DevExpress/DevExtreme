@@ -46,7 +46,7 @@ const getScrollOffset = function($scrollView) {
     };
 };
 
-const isRenovation = !!ScrollView.IS_RENOVATED_WIDGET;
+const isRenovatedScrollView = !!ScrollView.IS_RENOVATED_WIDGET;
 
 themes.setDefaultTimeout(0);
 
@@ -363,8 +363,8 @@ QUnit.module('actions', moduleConfig, () => {
         const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
-        assert.equal(location.top, isRenovation ? -($topPocket.height() - offset) : 0, 'translate top position is right');
-        assert.equal($container.scrollTop(), isRenovation ? 0 : $topPocket.height() - offset, 'scroll top position is right');
+        assert.equal(location.top, isRenovatedScrollView ? -($topPocket.height() - offset) : 0, 'translate top position is right');
+        assert.equal($container.scrollTop(), isRenovatedScrollView ? 0 : $topPocket.height() - offset, 'scroll top position is right');
     });
 
     QUnit.test('onReachBottom action', function(assert) {
@@ -966,7 +966,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             },
             onEnd: function() {
                 const location = getScrollOffset($scrollView);
-                if(isRenovation) {
+                if(isRenovatedScrollView) {
                     const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
                     assert.roughEqual(location.top, $container.height() - $content.height() + $bottomPocket.height(), 1, 'scrollview bounced');
                 } else {
@@ -1706,7 +1706,7 @@ QUnit.module('native pullDown strategy', {
     });
 
     QUnit.test('pulled down adds ready state', function(assert) {
-        if(isRenovation) {
+        if(isRenovatedScrollView) {
             assert.ok(true);
             return;
         }
@@ -1737,7 +1737,7 @@ QUnit.module('native pullDown strategy', {
     });
 
     QUnit.test('onPullDown action', function(assert) {
-        if(isRenovation) {
+        if(isRenovatedScrollView) {
             assert.ok(true);
             return;
         }
@@ -2263,7 +2263,7 @@ QUnit.module('default value', {
         devices.current(this.originalCurrentDevice);
     }
 }, () => {
-    if(!isRenovation) {
+    if(!isRenovatedScrollView) {
         QUnit.test('refreshStrategy for ios set by real device', function(assert) {
             devices.real({ platform: 'ios' });
             devices.current({ platform: 'android' });
@@ -2330,7 +2330,7 @@ QUnit.module('pullDown, reachBottom events', moduleConfig, () => {
     });
 
     ['config', 'onInitialized'].forEach(assignMethod => {
-        if(isRenovation && assignMethod === 'onInitialized') {
+        if(isRenovatedScrollView && assignMethod === 'onInitialized') {
             // onInitialized function used to save the UI component instance
             return;
         }
