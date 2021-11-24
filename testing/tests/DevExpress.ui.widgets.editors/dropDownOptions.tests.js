@@ -24,7 +24,6 @@ const optionTestValues = {
             type: 'fade'
         }
     },
-    closeOnOutsideClick: false,
     hideOnOutsideClick: false,
     container: '#container',
     contentTemplate: 'content template',
@@ -125,10 +124,6 @@ const optionComparer = {
 
         assert.strictEqual(editor.option('dropDownOptions.showTitle'), false, 'dropDownOptions.showTitle is correct');
         assert.strictEqual(getPopupInstance(editor).option('showTitle'), false, 'popup showTitle is correct');
-    },
-    closeOnOutsideClick: function(assert, editor) {
-        assert.ok(editor.option('dropDownOptions.closeOnOutsideClick'), 'dropDownOptions.closeOnOutsideClick is correct');
-        assert.ok(getPopupInstance(editor).option('closeOnOutsideClick'), 'popup closeOnOutsideClick is correct');
     },
     hideOnOutsideClick: function(assert, editor) {
         assert.ok(editor.option('dropDownOptions.hideOnOutsideClick'), 'dropDownOptions.hideOnOutsideClick is correct');
