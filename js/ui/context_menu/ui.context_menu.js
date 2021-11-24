@@ -130,6 +130,13 @@ class ContextMenu extends MenuBase {
         }]);
     }
 
+    _setDeprecatedOptions() {
+        super._setDeprecatedOptions();
+        extend(this._deprecatedOptions, {
+            'closeOnOutsideClick': { since: '22.2', alias: 'hideOnOutsideClick' }
+        });
+    }
+
     _initActions() {
         this._actions = {};
 
