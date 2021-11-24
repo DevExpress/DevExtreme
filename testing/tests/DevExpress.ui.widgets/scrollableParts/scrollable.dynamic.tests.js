@@ -16,7 +16,7 @@ import {
 const INERTIA_TIMEOUT = 100;
 
 const GESTURE_LOCK_KEY = 'dxGestureLock';
-const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
+const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -319,6 +319,7 @@ QUnit.test('stop bounce on click', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
+            assert.ok(isRenovatedScrollable ? true : false, 'shouldn\'t fire end action');
         }
     });
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
@@ -351,6 +352,7 @@ QUnit.test('stop inertia bounce on after mouse up', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
+            assert.ok(isRenovatedScrollable ? true : false, 'scroll complete shouldn`t be fired');
         }
     });
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
@@ -561,7 +563,7 @@ QUnit.test('velocity calculated correctly when content height less than containe
 
         resizeCallbacks.fire();
 
-        assert.equal(updateHandler.callCount, isRenovation ? 0 : 1, 'onUpdate handler was fired once');
+        assert.equal(updateHandler.callCount, isRenovatedScrollable ? 0 : 1, 'onUpdate handler was fired once');
     });
 
 
