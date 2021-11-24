@@ -108,7 +108,9 @@ export const StateStoringController = modules.ViewController.inherit((function()
                 this._isLoaded = true;
                 this._isLoading = false;
             }).done((state) => {
-                this.state(state);
+                if(state !== null) {
+                    this.state(state);
+                }
             });
             return loadResult;
         },
