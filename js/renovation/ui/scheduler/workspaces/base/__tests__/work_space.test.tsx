@@ -118,7 +118,6 @@ describe('WorkSpace', () => {
   }];
 
   describe('Render', () => {
-    const Layout = (props) => <div {...props} />;
     const headerPanelTemplate = () => null;
     const dateTableTemplate = () => null;
     const timePanelTemplate = () => null;
@@ -127,16 +126,18 @@ describe('WorkSpace', () => {
       isRenderDateHeader: true,
       scrollingDirection: 'vertical',
       groupPanelClassName: 'dx-scheduler-group-table',
+      isCreateCrossScrolling: false,
     };
 
-    const renderComponent = (viewModel) => shallow(WorkSpaceLayout({
-      layout: Layout,
-      renderConfig,
-      headerPanelTemplate,
-      dateTableTemplate,
-      timePanelTemplate,
-      ...viewModel,
-    }) as any);
+    const renderComponent = (viewModel) => shallow(
+      <WorkSpaceLayout
+        renderConfig={renderConfig}
+        headerPanelTemplate={headerPanelTemplate}
+        dateTableTemplate={dateTableTemplate}
+        timePanelTemplate={timePanelTemplate}
+        {...viewModel}
+      />,
+    );
 
     it('should pass correct props to the root component', () => {
       const props = {
@@ -184,6 +185,8 @@ describe('WorkSpace', () => {
         },
       });
 
+      expect(workSpace.is(OrdinaryLayout))
+        .toBe(true);
       expect(workSpace.props())
         .toEqual({
           ...props,
@@ -197,7 +200,9 @@ describe('WorkSpace', () => {
             baseColSpan: 5,
             groupPanelItems: [],
           },
-          ...renderConfig,
+          isRenderDateHeader: true,
+          scrollingDirection: 'vertical',
+          groupPanelClassName: 'dx-scheduler-group-table',
           headerPanelTemplate,
           dateTableTemplate,
           timePanelTemplate,
@@ -214,6 +219,53 @@ describe('WorkSpace', () => {
           onScroll: onScrollableScroll,
           widgetElementRef: 'widgetElementRef',
         });
+    });
+
+    it('should render cross-scrolling layout when necessary', () => {
+      const props = {
+        dataCellTemplate: () => null,
+        dateCellTemplate: () => null,
+        timeCellTemplate: () => null,
+        resourceCellTemplate: () => null,
+
+        groups,
+        intervalCount: 1,
+      };
+      const onScrollableScroll = jest.fn();
+
+      const viewModel = {
+        dateHeaderData,
+        viewData,
+        timePanelData,
+        isAllDayPanelVisible: true,
+        isRenderHeaderEmptyCell: true,
+        groupPanelData: {
+          baseColSpan: 5,
+          groupPanelItems: [],
+        },
+        groupPanelHeight: 500,
+        headerEmptyCellWidth: 300,
+        tablesWidth: 1900,
+        groupOrientation: VERTICAL_GROUP_ORIENTATION,
+        isGroupedByDate: false,
+        onScrollableScroll,
+      };
+
+      const workSpace = renderComponent({
+        ...viewModel,
+        props: {
+          ...new WorkSpaceProps(),
+          ...props,
+          allDayPanelExpanded: false,
+        },
+        renderConfig: {
+          ...renderConfig,
+          isCreateCrossScrolling: true,
+        },
+      });
+
+      expect(workSpace.is(CrossScrollingLayout))
+        .toBe(true);
     });
   });
 
@@ -1401,30 +1453,6 @@ describe('WorkSpace', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      describe('layout', () => {
-        it('should return ordinary layout if crossScrolling is not enabled', () => {
-          const workSpace = new WorkSpace({
-            currentDate: new Date(),
-            crossScrollingEnabled: false,
-            type: 'week',
-          } as any);
-
-          expect(workSpace.layout)
-            .toBe(OrdinaryLayout);
-        });
-
-        it('should return cross-scrolling layout if crossScrolling is enabled', () => {
-          const workSpace = new WorkSpace({
-            currentDate: new Date(),
-            crossScrollingEnabled: true,
-            type: 'week',
-          } as any);
-
-          expect(workSpace.layout)
-            .toBe(CrossScrollingLayout);
-        });
-      });
-
       describe('isAllDayPanelVisible', () => {
         it('should return false when all-day panel is not supported', () => {
           const workSpace = new WorkSpace({

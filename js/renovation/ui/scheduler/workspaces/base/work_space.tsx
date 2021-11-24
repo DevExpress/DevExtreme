@@ -48,7 +48,6 @@ import { DateTableLayoutProps } from './date_table/layout';
 import { TimePanelLayoutProps } from './time_panel/layout';
 import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 import { CrossScrollingLayout } from './cross_scrolling_layout';
-import { MainLayoutProps } from './main_layout_props';
 import { GroupOrientation } from '../../types';
 import { getViewDataGeneratorByViewType } from '../../../../../ui/scheduler/workspaces/view_model/utils';
 import { calculateIsGroupedAllDayPanel } from '../../view_model/to_test/views/utils/base';
@@ -185,7 +184,6 @@ export const viewFunction = ({
   viewData,
   timePanelData,
   groupPanelData,
-  layout: Layout,
   isAllDayPanelVisible,
   isRenderHeaderEmptyCell,
 
@@ -226,59 +224,63 @@ export const viewFunction = ({
     isRenderDateHeader,
     scrollingDirection,
     groupPanelClassName,
+    isCreateCrossScrolling,
   },
   headerPanelTemplate,
   dateTableTemplate,
   timePanelTemplate,
-}: WorkSpace): JSX.Element => (
-  <Layout
-    ref={layoutRef}
+}: WorkSpace): JSX.Element => {
+  const Layout = isCreateCrossScrolling ? CrossScrollingLayout : OrdinaryLayout;
+  return (
+    <Layout
+      ref={layoutRef}
 
-    viewData={viewData}
-    dateHeaderData={dateHeaderData}
-    timePanelData={timePanelData}
-    groupPanelData={groupPanelData}
-    dataCellTemplate={dataCellTemplate}
-    dateCellTemplate={dateCellTemplate}
-    timeCellTemplate={timeCellTemplate}
-    resourceCellTemplate={resourceCellTemplate}
+      viewData={viewData}
+      dateHeaderData={dateHeaderData}
+      timePanelData={timePanelData}
+      groupPanelData={groupPanelData}
+      dataCellTemplate={dataCellTemplate}
+      dateCellTemplate={dateCellTemplate}
+      timeCellTemplate={timeCellTemplate}
+      resourceCellTemplate={resourceCellTemplate}
 
-    groups={groups}
-    groupByDate={isGroupedByDate}
-    groupOrientation={groupOrientation}
-    groupPanelClassName={groupPanelClassName}
+      groups={groups}
+      groupByDate={isGroupedByDate}
+      groupOrientation={groupOrientation}
+      groupPanelClassName={groupPanelClassName}
 
-    intervalCount={intervalCount}
+      intervalCount={intervalCount}
 
-    headerPanelTemplate={headerPanelTemplate}
-    dateTableTemplate={dateTableTemplate}
-    timePanelTemplate={timePanelTemplate}
+      headerPanelTemplate={headerPanelTemplate}
+      dateTableTemplate={dateTableTemplate}
+      timePanelTemplate={timePanelTemplate}
 
-    isAllDayPanelCollapsed={!allDayPanelExpanded}
-    isAllDayPanelVisible={isAllDayPanelVisible}
-    isRenderDateHeader={isRenderDateHeader}
-    isRenderHeaderEmptyCell={isRenderHeaderEmptyCell}
-    isRenderGroupPanel={isVerticalGrouping}
-    isStandaloneAllDayPanel={isStandaloneAllDayPanel}
+      isAllDayPanelCollapsed={!allDayPanelExpanded}
+      isAllDayPanelVisible={isAllDayPanelVisible}
+      isRenderDateHeader={isRenderDateHeader}
+      isRenderHeaderEmptyCell={isRenderHeaderEmptyCell}
+      isRenderGroupPanel={isVerticalGrouping}
+      isStandaloneAllDayPanel={isStandaloneAllDayPanel}
 
-    scrollingDirection={scrollingDirection}
-    groupPanelHeight={groupPanelHeight}
-    headerEmptyCellWidth={headerEmptyCellWidth}
-    tablesWidth={tablesWidth}
+      scrollingDirection={scrollingDirection}
+      groupPanelHeight={groupPanelHeight}
+      headerEmptyCellWidth={headerEmptyCellWidth}
+      tablesWidth={tablesWidth}
 
-    onScroll={onScrollableScroll}
+      onScroll={onScrollableScroll}
 
-    className={classes}
-    dateTableRef={dateTableRef}
-    allDayPanelRef={allDayPanelRef}
-    timePanelRef={timePanelRef}
-    groupPanelRef={groupPanelRef}
-    widgetElementRef={widgetElementRef}
+      className={classes}
+      dateTableRef={dateTableRef}
+      allDayPanelRef={allDayPanelRef}
+      timePanelRef={timePanelRef}
+      groupPanelRef={groupPanelRef}
+      widgetElementRef={widgetElementRef}
 
-    appointments={appointments}
-    allDayAppointments={allDayAppointments}
-  />
-);
+      appointments={appointments}
+      allDayAppointments={allDayAppointments}
+    />
+  );
+};
 
 @Component({
   defaultOptionRules: null,
@@ -355,14 +357,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       this.groupOrientation,
       this.props.groupByDate,
     );
-  }
-
-  get layout(): JSXTemplate<
-  MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef' | 'onScroll'
-  > {
-    return this.renderConfig.isCreateCrossScrolling
-      ? CrossScrollingLayout
-      : OrdinaryLayout;
   }
 
   get isAllDayPanelVisible(): boolean {
