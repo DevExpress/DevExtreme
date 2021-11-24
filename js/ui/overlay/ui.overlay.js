@@ -381,27 +381,32 @@ const Overlay = Widget.inherit({
     },
 
     _documentDownHandler: function(e) {
-        const { closeOnOutsideClick, hideOnOutsideClick, propagateOutsideClick } = this.option();
-
         if(this._showAnimationProcessing) {
             this._stopAnimation();
         }
-
-        const shouldCloseOnOutsideClick = closeOnOutsideClick
-            || hideOnOutsideClick
-            || isFunction(closeOnOutsideClick) && closeOnOutsideClick(e)
-            || isFunction(hideOnOutsideClick) && hideOnOutsideClick(e);
 
         const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
         const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
         const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content.is(e.target)
             || contains(this._$content.get(0), e.target));
 
-        if(outsideClick && shouldCloseOnOutsideClick) {
+        if(outsideClick && this._shouldHideOnOutsideClick(e)) {
             this._outsideClickHandler(e);
         }
 
-        return propagateOutsideClick;
+        return this.option('propagateOutsideClick');
+    },
+
+    _shouldHideOnOutsideClick: function(e) {
+        const { closeOnOutsideClick, hideOnOutsideClick } = this.option();
+
+        if(isFunction(hideOnOutsideClick)) {
+            return hideOnOutsideClick(e);
+        } else if(isFunction(closeOnOutsideClick)) {
+            return closeOnOutsideClick(e);
+        } else {
+            return hideOnOutsideClick || closeOnOutsideClick;
+        }
     },
 
     _outsideClickHandler(e) {

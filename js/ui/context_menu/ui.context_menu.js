@@ -475,7 +475,7 @@ class ContextMenu extends MenuBase {
             focusStateEnabled: this.option('focusStateEnabled'),
             animation: this.option('animation'),
             innerOverlay: true,
-            hideOnOutsideClick: this._closeOnOutsideClickHandler.bind(this),
+            hideOnOutsideClick: this._hideOnOutsideClickHandler.bind(this),
             propagateOutsideClick: true,
             hideOnParentScroll: true,
             deferRendering: false,
@@ -513,15 +513,20 @@ class ContextMenu extends MenuBase {
         this._actions.onHidden(arg);
     }
 
-    _closeOnOutsideClickHandler(e) {
+    _shouldHideOnOutsideClick(e) {
         const { closeOnOutsideClick, hideOnOutsideClick } = this.option();
 
-        const shouldCloseOnOutsideClick = closeOnOutsideClick
-            || hideOnOutsideClick
-            || isFunction(closeOnOutsideClick) && closeOnOutsideClick(e)
-            || isFunction(hideOnOutsideClick) && hideOnOutsideClick(e);
+        if(isFunction(hideOnOutsideClick)) {
+            return hideOnOutsideClick(e);
+        } else if(isFunction(closeOnOutsideClick)) {
+            return closeOnOutsideClick(e);
+        } else {
+            return hideOnOutsideClick || closeOnOutsideClick;
+        }
+    }
 
-        if(!shouldCloseOnOutsideClick) {
+    _hideOnOutsideClickHandler(e) {
+        if(!this._shouldHideOnOutsideClick(e)) {
             return false;
         }
 
