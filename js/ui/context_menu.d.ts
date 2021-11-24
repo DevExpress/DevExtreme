@@ -99,6 +99,14 @@ export interface dxContextMenuOptions<
     dataSource?: DataSourceLike<Item, TKey>;
     /**
      * @docid
+     * @default true
+     * @type_function_param1 event:event
+     * @type_function_return Boolean
+     * @public
+     */
+    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    /**
+     * @docid
      * @type Array<dxContextMenuItem>
      * @public
      */

@@ -141,6 +141,7 @@ const Overlay = Widget.inherit({
             dragOutsideBoundary: false,
 
             closeOnOutsideClick: false,
+            hideOnOutsideClick: false,
 
             copyRootClassesToWrapper: false,
 
@@ -379,26 +380,27 @@ const Overlay = Widget.inherit({
     },
 
     _documentDownHandler: function(e) {
+        const { closeOnOutsideClick, hideOnOutsideClick, propagateOutsideClick } = this.option();
+
         if(this._showAnimationProcessing) {
             this._stopAnimation();
         }
 
-        let closeOnOutsideClick = this.option('closeOnOutsideClick');
-
-        if(isFunction(closeOnOutsideClick)) {
-            closeOnOutsideClick = closeOnOutsideClick(e);
-        }
+        const shouldCloseOnOutsideClick = closeOnOutsideClick
+            || hideOnOutsideClick
+            || isFunction(closeOnOutsideClick) && closeOnOutsideClick(e)
+            || isFunction(hideOnOutsideClick) && hideOnOutsideClick(e);
 
         const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
         const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
         const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content.is(e.target)
             || contains(this._$content.get(0), e.target));
 
-        if(outsideClick && closeOnOutsideClick) {
+        if(outsideClick && shouldCloseOnOutsideClick) {
             this._outsideClickHandler(e);
         }
 
-        return this.option('propagateOutsideClick');
+        return propagateOutsideClick;
     },
 
     _outsideClickHandler(e) {
@@ -1361,6 +1363,7 @@ const Overlay = Widget.inherit({
                 this._toggleParentsScrollSubscription(this.option('visible'));
                 break;
             case 'closeOnOutsideClick':
+            case 'hideOnOutsideClick':
             case 'propagateOutsideClick':
                 break;
             case 'animation':

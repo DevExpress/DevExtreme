@@ -15,6 +15,7 @@ const defaultDropDownOptions = {
         }
     },
     closeOnOutsideClick: null,
+    hideOnOutsideClick: null,
     container: undefined,
     contentTemplate: null,
     deferRendering: false,

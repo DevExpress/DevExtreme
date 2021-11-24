@@ -100,6 +100,20 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     } | string;
     /**
      * @docid
+     * @type_function_param1 event:event
+     * @type_function_return Boolean
+     * @default true
+     * @public
+     */
+    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    hideOnParentScroll?: boolean;
+    /**
+     * @docid
      * @type Enums.Position|PositionConfig
      * @default { my: 'top center', at: 'bottom center', collision: 'fit flip' }
      * @public
@@ -146,12 +160,6 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @public
      */
     width?: number | string | (() => number | string);
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    hideOnParentScroll?: boolean;
 }
 /** @namespace DevExpress.ui */
 export interface dxPopoverAnimation extends dxPopupAnimation {

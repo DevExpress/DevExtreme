@@ -88,7 +88,7 @@ class SpeedDialMainItem extends SpeedDialItem {
             childIndent: 40,
             childOffset: 9,
             callOverlayRenderShading: true,
-            closeOnOutsideClick: true
+            hideOnOutsideClick: true
         };
 
         return extend(

@@ -5731,6 +5731,16 @@ declare module DevExpress.ui {
       TKey
     >;
     /**
+     * [descr:dxContextMenuOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
+    /**
      * [descr:dxContextMenuOptions.items]
      */
     items?: Array<DevExpress.ui.dxContextMenu.Item>;
@@ -17007,6 +17017,20 @@ declare module DevExpress.ui {
      */
     elementAttr?: any;
     /**
+     * [descr:dxOverlayOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
+    /**
+     * [descr:dxOverlayOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
+    /**
      * [descr:dxOverlayOptions.height]
      */
     height?: number | string | (() => number | string);
@@ -17070,10 +17094,6 @@ declare module DevExpress.ui {
      * [descr:dxOverlayOptions.wrapperAttr]
      */
     wrapperAttr?: any;
-    /**
-     * [descr:dxOverlayOptions.hideOnParentScroll]
-     */
-    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPivotGrid]
@@ -17941,6 +17961,20 @@ declare module DevExpress.ui {
         }
       | string;
     /**
+     * [descr:dxPopoverOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
+    /**
+     * [descr:dxPopoverOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
+    /**
      * [descr:dxPopoverOptions.position]
      */
     position?: 'bottom' | 'left' | 'right' | 'top' | PositionConfig;
@@ -17975,10 +18009,6 @@ declare module DevExpress.ui {
      * [descr:dxPopoverOptions.width]
      */
     width?: number | string | (() => number | string);
-    /**
-     * [descr:dxPopoverOptions.hideOnParentScroll]
-     */
-    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPopup]
@@ -21596,6 +21626,16 @@ declare module DevExpress.ui {
      * [descr:dxToastOptions.displayTime]
      */
     displayTime?: number;
+    /**
+     * [descr:dxToastOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
     /**
      * [descr:dxToastOptions.height]
      */

@@ -1025,7 +1025,7 @@ export const validatingModule = {
                             shading: false,
                             container: $overlayContainer,
                             propagateOutsideClick: true,
-                            closeOnOutsideClick: false,
+                            hideOnOutsideClick: false,
                             copyRootClassesToWrapper: true,
                             _ignoreCopyRootClassesToWrapperDeprecation: true,
                             contentTemplate: () => {
@@ -1124,7 +1124,7 @@ export const validatingModule = {
                             visible: true,
                             animation: false,
                             propagateOutsideClick: true,
-                            closeOnOutsideClick: false,
+                            hideOnOutsideClick: false,
                             copyRootClassesToWrapper: true,
                             _ignoreCopyRootClassesToWrapperDeprecation: true,
                             position: {

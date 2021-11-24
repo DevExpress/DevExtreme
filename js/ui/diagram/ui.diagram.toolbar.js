@@ -286,7 +286,7 @@ class DiagramToolbar extends DiagramPanel {
                 target: widget.$element(),
                 cssClass: DiagramMenuHelper.getContextMenuCssClass(),
                 showEvent: '',
-                closeOnOutsideClick: (e) => {
+                hideOnOutsideClick: (e) => {
                     return !isTouchMode && ($(e.target).closest(widget._contextMenu._dropDownButtonElement).length === 0);
                 },
                 focusStateEnabled: false,

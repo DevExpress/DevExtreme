@@ -11,7 +11,7 @@ const SliderTooltip = Tooltip.inherit({
         return extend(this.callBase(), {
             visible: false,
             position: 'top',
-            closeOnOutsideClick: false,
+            hideOnOutsideClick: false,
             hideTopOverlayHandler: null,
             hideOnParentScroll: false,
             animation: null,

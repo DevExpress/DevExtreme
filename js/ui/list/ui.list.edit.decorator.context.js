@@ -27,7 +27,7 @@ registerDecorator(
                 shading: false,
                 deferRendering: true,
                 hideOnParentScroll: true,
-                closeOnOutsideClick: function(e) {
+                hideOnOutsideClick: function(e) {
                     return !$(e.target).closest('.' + CONTEXTMENU_CLASS).length;
                 },
                 animation: {

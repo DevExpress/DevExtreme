@@ -74,7 +74,7 @@ class ContextMenu extends MenuBase {
         return extend(super._getDefaultOptions(), {
             showEvent: DEFAULT_SHOW_EVENT,
 
-            closeOnOutsideClick: true,
+            hideOnOutsideClick: true,
 
             position: {
                 at: 'top left',
@@ -475,7 +475,7 @@ class ContextMenu extends MenuBase {
             focusStateEnabled: this.option('focusStateEnabled'),
             animation: this.option('animation'),
             innerOverlay: true,
-            closeOnOutsideClick: this._closeOnOutsideClickHandler.bind(this),
+            hideOnOutsideClick: this._closeOnOutsideClickHandler.bind(this),
             propagateOutsideClick: true,
             hideOnParentScroll: true,
             deferRendering: false,
@@ -514,13 +514,14 @@ class ContextMenu extends MenuBase {
     }
 
     _closeOnOutsideClickHandler(e) {
-        const closeOnOutsideClick = this.option('closeOnOutsideClick');
+        const { closeOnOutsideClick, hideOnOutsideClick } = this.option();
 
-        if(isFunction(closeOnOutsideClick)) {
-            return closeOnOutsideClick(e);
-        }
+        const shouldCloseOnOutsideClick = closeOnOutsideClick
+            || hideOnOutsideClick
+            || isFunction(closeOnOutsideClick) && closeOnOutsideClick(e)
+            || isFunction(hideOnOutsideClick) && hideOnOutsideClick(e);
 
-        if(!closeOnOutsideClick) {
+        if(!shouldCloseOnOutsideClick) {
             return false;
         }
 
@@ -802,6 +803,7 @@ class ContextMenu extends MenuBase {
                 this._invalidate();
                 break;
             case 'closeOnOutsideClick':
+            case 'hideOnOutsideClick':
                 break;
             default:
                 super._optionChanged(args);

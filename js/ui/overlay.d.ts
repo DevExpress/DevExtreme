@@ -91,6 +91,20 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     elementAttr?: any;
     /**
      * @docid
+     * @default false
+     * @type_function_param1 event:event
+     * @type_function_return Boolean
+     * @public
+     */
+    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    /**
+     * @docid
+     * @default false
+     * @public
+     */
+    hideOnParentScroll?: boolean;
+    /**
+     * @docid
      * @default '80vh'
      * @public
      */
@@ -204,12 +218,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      * @public
      */
     wrapperAttr?: any;
-    /**
-     * @docid
-     * @default false
-     * @public
-     */
-     hideOnParentScroll?: boolean;
 }
 /** @namespace DevExpress.ui */
 export interface dxOverlayAnimation {

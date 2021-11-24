@@ -85,6 +85,14 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     displayTime?: number;
     /**
      * @docid
+     * @type_function_param1 event:event
+     * @type_function_return Boolean
+     * @default true &for(Android)
+     * @public
+     */
+    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    /**
+     * @docid
      * @default 'auto'
      * @public
      */

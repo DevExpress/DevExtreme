@@ -574,7 +574,7 @@ const DropDownEditor = TextBox.inherit({
             shading: false,
             wrapperAttr: { class: DROP_DOWN_EDITOR_OVERLAY },
             hideOnParentScroll: true,
-            closeOnOutsideClick: this._closeOutsideDropDownHandler.bind(this),
+            hideOnOutsideClick: this._closeOutsideDropDownHandler.bind(this),
             animation: {
                 show: { type: 'fade', duration: 0, from: 0, to: 1 },
                 hide: { type: 'fade', duration: 400, from: 1, to: 0 }
