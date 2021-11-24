@@ -662,12 +662,11 @@ const EditingController = modules.ViewController.inherit((function() {
             if(loadedRowIndex < 0) {
                 const newRowPosition = this._getNewRowPosition();
                 const pageIndex = dataController.pageIndex();
-                const pageCount = dataController.pageCount();
                 const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
 
                 if(newRowPosition !== LAST_NEW_ROW_POSITION && pageIndex === 0 && !isDefined(insertAfterOrBeforeKey)) {
                     loadedRowIndex = 0;
-                } else if(newRowPosition === LAST_NEW_ROW_POSITION && pageIndex === (pageCount - 1)) {
+                } else if(newRowPosition === LAST_NEW_ROW_POSITION && dataController.isLastPageLoaded()) {
                     loadedRowIndex = items.length;
                 }
             }
@@ -975,11 +974,13 @@ const EditingController = modules.ViewController.inherit((function() {
         _beforeFocusElementInRow: noop,
 
         _focusFirstEditableCellInRow: function(rowIndex) {
+            const dataController = this._dataController;
+            const key = dataController.getKeyByRowIndex(rowIndex);
             const $firstCell = this.getFirstEditableCellInRow(rowIndex);
 
             this._editCellInProgress = true;
-
             this._delayedInputFocus($firstCell, () => {
+                rowIndex = dataController.getRowIndexByKey(key);
                 this._editCellInProgress = false;
                 this._beforeFocusElementInRow(rowIndex);
             });

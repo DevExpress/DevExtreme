@@ -323,10 +323,10 @@ export const VirtualScrollController = Class.inherit((function() {
             return this._viewportSize;
         },
         viewportHeight: function(height) {
-            const begin = this.getItemIndexByPosition();
-            const end = this.getItemIndexByPosition(this._position + height);
+            const begin = Math.ceil(this.getItemIndexByPosition());
+            const end = Math.floor(this.getItemIndexByPosition(this._position + height));
 
-            this.viewportSize(Math.ceil(end - begin));
+            this.viewportSize(end - begin);
         },
         reset: function(isRefresh) {
             this._dataLoader.reset();

@@ -851,13 +851,11 @@ export const virtualScrollingModule = {
                                 return isVirtualMode(that) && that._dataSource?.lastLoadOptions().skip || 0;
                             },
                             loadedItemCount: function() {
-                                const insertRowCount = that._allItems?.filter(it => it.isNewRow).length || 0;
-                                return that._itemCount + insertRowCount;
+                                return that._itemCount;
                             },
                             totalItemsCount: function() {
                                 if(isVirtualPaging(that)) {
-                                    const insertRowCount = that.getController('editing')?.getInsertRowCount() ?? 0;
-                                    return that.totalItemsCount() + insertRowCount;
+                                    return that.totalItemsCount();
                                 }
 
                                 return that.option(LEGACY_SCROLLING_MODE) === false ? that._itemCount : that._items.filter(isItemCountable).length;
@@ -1424,6 +1422,20 @@ export const virtualScrollingModule = {
                     },
                     isEmpty: function() {
                         return this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this) ? !this._itemCount : this.callBase(this, arguments);
+                    },
+                    isLastPageLoaded: function() {
+                        let result = false;
+
+                        if(this.option(LEGACY_SCROLLING_MODE) === false) {
+                            const { pageIndex, loadPageCount } = this.getLoadPageParams(true);
+                            const pageCount = this.pageCount();
+
+                            result = pageIndex + loadPageCount >= pageCount;
+                        } else {
+                            result = this.callBase.apply(this, arguments);
+                        }
+
+                        return result;
                     }
                 };
 
