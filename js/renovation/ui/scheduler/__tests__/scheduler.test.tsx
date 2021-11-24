@@ -12,6 +12,7 @@ import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
 import { getPreparedDataItems } from '../utils/data';
 import { getFilterStrategy } from '../utils/filtering/local';
+import combineRemoteFilter from '../utils/filtering/remote';
 import { getAppointmentsConfig, getAppointmentsModel } from '../model/appointments';
 import { getAppointmentsViewModel } from '../view_model/appointments/appointments';
 import { AppointmentLayout } from '../appointment/layout';
@@ -31,10 +32,18 @@ jest.mock('../utils/data', () => ({
   ...jest.requireActual('../utils/data'),
   getPreparedDataItems: jest.fn((items) => `Prepared_${items}`),
 }));
+
 jest.mock('../utils/filtering/local', () => ({
   ...jest.requireActual('../utils/filtering/local'),
   getFilterStrategy: jest.fn(() => ({ filter: (items) => `Filter_${items}` })),
 }));
+
+jest.mock('../utils/filtering/remote', () => ({
+  __esModule: true,
+  ...jest.requireActual('../utils/filtering/remote'),
+  default: jest.fn(() => 'Test_combineRemoteFilter'),
+}));
+
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
 
@@ -407,6 +416,8 @@ describe('Scheduler', () => {
             dataSource: data,
           });
 
+          scheduler.workSpaceViewModel = {} as any;
+
           scheduler.loadDataSource();
 
           expect(scheduler.dataItems)
@@ -428,10 +439,28 @@ describe('Scheduler', () => {
             },
           });
 
+          scheduler.workSpaceViewModel = {} as any;
+
           scheduler.loadDataSource();
 
           expect(scheduler.dataItems)
             .toMatchObject(data);
+        });
+
+        it('loadDataSource should not load dataItems if workSpaceViewModel is not defined', () => {
+          const data = [{
+            startDate: new Date(2021, 9, 6, 15, 15),
+            endDate: new Date(2021, 9, 6, 16, 16),
+            allDay: false,
+          }];
+          const scheduler = new Scheduler({
+            dataSource: data,
+          });
+
+          scheduler.loadDataSource();
+
+          expect(scheduler.dataItems)
+            .toHaveLength(0);
         });
 
         it('loadDataSource should not load dataItems if internalDataSource is loaded', () => {
@@ -476,6 +505,49 @@ describe('Scheduler', () => {
 
           expect(scheduler.dataItems)
             .toHaveLength(0);
+        });
+
+        describe('Remote filtering', () => {
+          it('should apply remote filter', () => {
+            const userFilter = ['Some value', '>', 'Other value'];
+            const data = [{
+              startDate: new Date(2021, 9, 6, 15, 15),
+              endDate: new Date(2021, 9, 6, 16, 16),
+              allDay: false,
+            }];
+            const scheduler = new Scheduler({
+              ...new SchedulerProps(),
+              dataSource: data,
+              remoteFiltering: true,
+              dateSerializationFormat: 'Some format',
+            });
+
+            scheduler.workSpaceViewModel = {
+              viewDataProvider: {
+                getStartViewDate: () => new Date(2021, 10, 24, 9),
+                getLastViewDateByEndDayHour: () => new Date(2021, 10, 24, 18),
+              },
+            } as any;
+
+            const { internalDataSource } = scheduler;
+            internalDataSource.filter(userFilter);
+            jest.spyOn(scheduler, 'internalDataSource', 'get')
+              .mockReturnValue(internalDataSource);
+
+            scheduler.loadDataSource();
+
+            expect(scheduler.internalDataSource.filter())
+              .toBe('Test_combineRemoteFilter');
+
+            expect(combineRemoteFilter)
+              .toBeCalledWith({
+                dataAccessors: expect.anything(),
+                dataSourceFilter: userFilter,
+                min: new Date(2021, 10, 24, 9),
+                max: new Date(2021, 10, 24, 18),
+                dateSerializationFormat: 'Some format',
+              });
+          });
         });
       });
     });

@@ -50,6 +50,7 @@ import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
 import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
 import { getPreparedDataItems, resolveDataItems } from './utils/data';
 import { getFilterStrategy } from './utils/filtering/local';
+import combineRemoteFilter from './utils/filtering/remote';
 
 export const viewFunction = ({
   restAttributes,
@@ -564,7 +565,29 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadDataSource(): void {
-    if (!this.internalDataSource.isLoaded() && !this.internalDataSource.isLoading()) {
+    if (
+      !this.internalDataSource.isLoaded()
+      && !this.internalDataSource.isLoading()
+      && this.workSpaceViewModel
+    ) {
+      if (this.props.remoteFiltering) {
+        const { viewDataProvider } = this.workSpaceViewModel;
+        const startDate = viewDataProvider.getStartViewDate();
+        const endDate = viewDataProvider.getLastViewDateByEndDayHour(
+          this.currentViewConfig.endDayHour,
+        );
+
+        const combinedFilter = combineRemoteFilter({
+          dataAccessors: this.dataAccessors,
+          dataSourceFilter: this.internalDataSource.filter(),
+          min: startDate,
+          max: endDate,
+          dateSerializationFormat: this.props.dateSerializationFormat,
+        });
+
+        this.internalDataSource.filter(combinedFilter);
+      }
+
       (this.internalDataSource.load() as DataSourcePromise)
         .done((loadOptions: Appointment[] | { data: Appointment[] }) => {
           this.dataItems = resolveDataItems(loadOptions);

@@ -22,7 +22,7 @@ class RemoteFilterCombiner {
 
   get dataSourceFilter(): unknown[] | undefined { return this.options.dataSourceFilter; }
 
-  get dateSerializationFormat(): string { return this.options.dateSerializationFormat; }
+  get dateSerializationFormat(): string | undefined { return this.options.dateSerializationFormat; }
 
   get forceIsoDateParsing(): boolean {
     return isDefined(this.options.forceIsoDateParsing)
@@ -125,8 +125,8 @@ class RemoteFilterCombiner {
   }
 }
 
-const combinedRemoteFilter = (
+const combineRemoteFilter = (
   options: CombineRemoteFilterType,
 ): unknown[] => new RemoteFilterCombiner(options).combine(options.min, options.max);
 
-export default combinedRemoteFilter;
+export default combineRemoteFilter;
