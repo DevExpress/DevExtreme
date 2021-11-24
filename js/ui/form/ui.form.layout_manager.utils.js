@@ -71,7 +71,7 @@ export function convertToRenderFieldItemOptions({
     });
 
     const needRenderOptionalMarkAsHelpText = labelOptions.markOptions.showOptionalMark
-        && editorOptions.labelMode !== 'hidden' && !labelOptions.visible
+        && !labelOptions.visible && editorOptions.labelMode !== 'hidden'
         && !isDefined(item.helpText);
 
     const helpText = needRenderOptionalMarkAsHelpText
