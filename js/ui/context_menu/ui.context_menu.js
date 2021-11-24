@@ -482,7 +482,7 @@ class ContextMenu extends MenuBase {
             focusStateEnabled: this.option('focusStateEnabled'),
             animation: this.option('animation'),
             innerOverlay: true,
-            hideOnOutsideClick: this._hideOnOutsideClickHandler.bind(this),
+            hideOnOutsideClick: (e) => this._hideOnOutsideClickHandler(e),
             propagateOutsideClick: true,
             hideOnParentScroll: true,
             deferRendering: false,
