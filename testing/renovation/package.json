@@ -27,9 +27,11 @@
     "inferno-create-element": "^7.4.6",
     "inferno-hydrate": "^7.4.6",
     "react-dom": "^16.13.1",
+    "react": "^16.13.1",
     "rxjs": "^6.5.4",
     "vue": "^2.6.11",
-    "zone.js": "^0.10.3"
+    "zone.js": "^0.10.3",
+    "core-js": "^3.19.1"
   },
   "devDependencies": {
     "html-loader": "^2.1.2",

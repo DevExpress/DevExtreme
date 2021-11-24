@@ -813,9 +813,16 @@ export const dataControllerModule = {
                     change.changeType = changeType;
 
                     if(dataSource) {
-                        items = change.items || dataSource.items();
-                        items = this._beforeProcessItems(items);
-                        items = this._processItems(items, change);
+                        const cachedProcessedItems = this._cachedProcessedItems;
+                        if(change.useProcessedItemsCache && cachedProcessedItems) {
+                            items = cachedProcessedItems;
+                        } else {
+                            items = change.items || dataSource.items();
+                            items = this._beforeProcessItems(items);
+                            items = this._processItems(items, change);
+                            this._cachedProcessedItems = items;
+                        }
+
                         items = this._afterProcessItems(items, change);
 
                         change.items = items;
