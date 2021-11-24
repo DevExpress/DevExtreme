@@ -27,7 +27,7 @@ import {
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_ITEM_LABEL_CLASS,
     FORM_GROUP_CAPTION_CLASS,
-    FORM_UNDERLINED_CLASS,
+    FORM_UNDERLINED_CLASS
 } from 'ui/form/constants';
 
 import {
@@ -504,6 +504,7 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
         });
     });
 });
+
 
 ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
     [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
