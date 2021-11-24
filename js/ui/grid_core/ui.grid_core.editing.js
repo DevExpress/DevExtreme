@@ -1938,36 +1938,36 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _validateEditFormAfterUpdate: noop,
 
-        _addChange: function(params, options) {
+        _addChange: function(changeParams, options) {
             const row = options?.row;
             const changes = [...this.getChanges()];
-            let index = gridCoreUtils.getIndexByKey(params.key, changes);
+            let index = gridCoreUtils.getIndexByKey(changeParams.key, changes);
 
             if(index < 0) {
                 index = changes.length;
 
                 this._addInternalData({
-                    key: params.key,
-                    oldData: params.oldData
+                    key: changeParams.key,
+                    oldData: changeParams.oldData
                 });
 
-                delete params.oldData;
+                delete changeParams.oldData;
 
-                changes.push(params);
+                changes.push(changeParams);
             }
 
             const change = { ...changes[index] };
 
             if(change) {
-                if(params.data) {
-                    change.data = createObjectWithChanges(change.data, params.data);
+                if(changeParams.data) {
+                    change.data = createObjectWithChanges(change.data, changeParams.data);
                 }
-                if((!change.type || !params.data) && params.type) {
-                    change.type = params.type;
+                if((!change.type || !changeParams.data) && changeParams.type) {
+                    change.type = changeParams.type;
                 }
                 if(row) {
                     row.oldData = this._getOldData(row.key);
-                    row.data = createObjectWithChanges(row.data, params.data);
+                    row.data = createObjectWithChanges(row.data, changeParams.data);
                 }
             }
 
@@ -1975,7 +1975,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
             this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
 
-            if(options && !equalByValue(changes[index], this.getChanges()?.[index])) {
+            // T1043517
+            if(options && change !== this.getChanges()?.[index]) {
                 options.forceUpdateRow = true;
             }
 
