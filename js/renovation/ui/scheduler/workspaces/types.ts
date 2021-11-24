@@ -28,6 +28,7 @@ export interface DateHeaderCellData extends ViewCellData {
 interface ViewDataBase {
   groupIndex: number;
   isGroupedAllDayPanel?: boolean;
+  key: string;
 }
 
 interface ViewData extends ViewDataBase {

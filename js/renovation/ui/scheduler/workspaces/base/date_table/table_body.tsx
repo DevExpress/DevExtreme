@@ -9,7 +9,6 @@ import {
 import { Row } from '../row';
 import { DataCellTemplateProps, ViewCellData } from '../../types';
 import {
-  getKeyByGroup,
   getIsGroupedAllDayPanel,
 } from '../../utils';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
@@ -24,7 +23,6 @@ export interface CellTemplateProps extends ViewCellData {
 export const viewFunction = ({
   props: {
     viewData,
-    groupOrientation,
     dataCellTemplate,
     cellTemplate: Cell,
   },
@@ -32,8 +30,8 @@ export const viewFunction = ({
 }: DateTableBody): JSX.Element => (
   <Fragment>
     {viewData
-      .groupedData.map(({ dateTable, allDayPanel, groupIndex }, index) => (
-        <Fragment key={getKeyByGroup(groupIndex, groupOrientation)}>
+      .groupedData.map(({ dateTable, allDayPanel, key: fragmentKey }, index) => (
+        <Fragment key={fragmentKey}>
           {getIsGroupedAllDayPanel(viewData, index) && (
             <AllDayPanelTableBody
               viewData={allDayPanel}

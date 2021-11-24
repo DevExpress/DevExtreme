@@ -1699,6 +1699,7 @@ describe('WorkSpace', () => {
                 }]],
                 groupIndex: 0,
                 isGroupedAllDayPanel: false,
+                key: '0',
               }],
               topVirtualRowCount: 0,
               bottomVirtualRowCount: 0,
@@ -2032,6 +2033,7 @@ describe('WorkSpace', () => {
                 }],
                 groupIndex: undefined,
                 isGroupedAllDayPanel: false,
+                key: '0',
               }],
               isGroupedAllDayPanel: false,
             });
