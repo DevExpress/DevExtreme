@@ -126,7 +126,7 @@ stylingMods.forEach((stylingMode) => {
 
 stylingMods.forEach((stylingMode) => {
   themes.forEach((theme) => {
-    test(`Label for opened Lookup ${theme} stylingMode=${stylingMode}`, async (t) => {
+    test(`Floating label for opened Lookup ${theme} stylingMode=${stylingMode}`, async (t) => {
       await setTheme(theme);
 
       const componentOption = {
@@ -144,7 +144,7 @@ stylingMods.forEach((stylingMode) => {
 
       await t.click(Selector('.dx-lookup-field'));
 
-      await t.expect(await compareScreenshot(t, `label-lookup-${theme}-styleMode=${stylingMode}.png`)).ok();
+      await t.expect(await compareScreenshot(t, `floating-label-opened-lookup-${theme}-styleMode=${stylingMode}.png`)).ok();
     });
   });
 });
