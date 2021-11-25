@@ -126,13 +126,14 @@ stylingMods.forEach((stylingMode) => {
 
 stylingMods.forEach((stylingMode) => {
   themes.forEach((theme) => {
-    test(`Label for Lookup when choose item ${theme} stylingMode=${stylingMode}`, async (t) => {
+    test(`Label for opened Lookup ${theme} stylingMode=${stylingMode}`, async (t) => {
       await setTheme(theme);
 
       const componentOption = {
         width: 300,
         label: 'label text',
         labelMode: 'floating',
+        dropDownCentered: false,
         items: [...Array(10)].map((_, i) => `item${i}`),
         stylingMode,
       };
