@@ -95,7 +95,7 @@ jobs:
 
     - name: Clone devextreme-angular repo from PR author fork
       continue-on-error: true
-      if: github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request' && steps.last_run_status.outputs.last_run_status != 'success'
       run: |
         REMOTE_URL=https://github.com/${{github.event.pull_request.user.login}}/devextreme-angular
         REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
@@ -298,6 +298,7 @@ jobs:
         path: ./devextreme-demos
 
     - name: Delete DX packages
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
       run:  sed -i '/22.1-next/d' ./package.json
 
