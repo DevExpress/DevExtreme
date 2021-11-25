@@ -533,7 +533,7 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
         ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
             [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
                 [undefined, '', 'some help text'].forEach((helpText) => {
-                    QUnit.test(`form renders with right optional mark, showOptionalMark=${showOptionalMark}, isLabelVisible=${isLabelVisible}, formLabelMode=${formLabelMode}, editorLabelMode=${editorLabelMode}, helpText=${helpText}`, function(assert) {
+                    QUnit.test(`form renders with right optional mark, config=${JSON.stringify({ showOptionalMark, isLabelVisible, formLabelMode, editorLabelMode, helpText })}`, function(assert) {
                         const $form = $('#form').dxForm({
                             showOptionalMark,
                             labelMode: formLabelMode,
