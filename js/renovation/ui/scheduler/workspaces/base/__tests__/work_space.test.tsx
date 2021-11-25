@@ -51,33 +51,43 @@ describe('WorkSpace', () => {
   const viewData = {
     groupedData: [{
       allDayPane: [],
-      dateTable: [[
-        {
-          startDate: new Date(2020, 6, 9),
-          endDate: new Date(2020, 6, 10),
-          today: true,
-          groups: 1,
-        },
-        {
-          startDate: new Date(2020, 6, 10),
-          endDate: new Date(2020, 6, 11),
-          today: false,
-          groups: 2,
-        },
-      ], [
-        {
-          startDate: new Date(2020, 6, 11),
-          endDate: new Date(2020, 6, 12),
-          today: false,
-          groups: 3,
-        },
-        {
-          startDate: new Date(2020, 6, 12),
-          endDate: new Date(2020, 6, 13),
-          today: false,
-          groups: 4,
-        },
-      ]],
+      dateTable: [{
+        cells: [
+          {
+            startDate: new Date(2020, 6, 9),
+            endDate: new Date(2020, 6, 10),
+            today: true,
+            groups: 1,
+            key: 0,
+          },
+          {
+            startDate: new Date(2020, 6, 10),
+            endDate: new Date(2020, 6, 11),
+            today: false,
+            groups: 2,
+            key: 1,
+          },
+        ],
+        key: 0,
+      }, {
+        cells: [
+          {
+            startDate: new Date(2020, 6, 11),
+            endDate: new Date(2020, 6, 12),
+            today: false,
+            groups: 3,
+            key: 0,
+          },
+          {
+            startDate: new Date(2020, 6, 12),
+            endDate: new Date(2020, 6, 13),
+            today: false,
+            groups: 4,
+            key: 1,
+          },
+        ],
+        key: 1,
+      }],
     }],
   };
   const dateHeaderData = {
@@ -1678,25 +1688,31 @@ describe('WorkSpace', () => {
                   isLastGroupCell: true,
                   key: 0,
                 }],
-                dateTable: [[{
-                  startDate: new Date(2021, 9, 26),
-                  endDate: new Date(2021, 9, 26, 0, 30),
-                  groupIndex: 0,
-                  index: 0,
-                  allDay: false,
-                  isFirstGroupCell: true,
-                  isLastGroupCell: true,
+                dateTable: [{
+                  cells: [{
+                    startDate: new Date(2021, 9, 26),
+                    endDate: new Date(2021, 9, 26, 0, 30),
+                    groupIndex: 0,
+                    index: 0,
+                    allDay: false,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: true,
+                    key: 0,
+                  }],
                   key: 0,
-                }], [{
-                  startDate: new Date(2021, 9, 26, 0, 30),
-                  endDate: new Date(2021, 9, 26, 1),
-                  groupIndex: 0,
-                  index: 1,
-                  allDay: false,
-                  isFirstGroupCell: true,
-                  isLastGroupCell: true,
+                }, {
+                  cells: [{
+                    startDate: new Date(2021, 9, 26, 0, 30),
+                    endDate: new Date(2021, 9, 26, 1),
+                    groupIndex: 0,
+                    index: 1,
+                    allDay: false,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: true,
+                    key: 1,
+                  }],
                   key: 1,
-                }]],
+                }],
                 groupIndex: 0,
                 isGroupedAllDayPanel: false,
                 key: '0',

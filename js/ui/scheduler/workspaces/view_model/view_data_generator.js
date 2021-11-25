@@ -286,7 +286,10 @@ export class ViewDataGenerator {
             if(isAllDayRow) {
                 groupedData[groupedData.length - 1].allDayPanel = cellDataRow;
             } else {
-                groupedData[groupedData.length - 1].dateTable.push(cellDataRow);
+                groupedData[groupedData.length - 1].dateTable.push({
+                    cells: cellDataRow,
+                    key: cellDataRow[0].key - startCellIndex,
+                });
             }
 
             return {
