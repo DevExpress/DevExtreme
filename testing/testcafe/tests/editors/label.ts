@@ -126,6 +126,30 @@ stylingMods.forEach((stylingMode) => {
 
 stylingMods.forEach((stylingMode) => {
   themes.forEach((theme) => {
+    test(`Label for Lookup when choose item ${theme} stylingMode=${stylingMode}`, async (t) => {
+      await setTheme(theme);
+
+      const componentOption = {
+        width: 300,
+        label: 'label text',
+        labelMode: 'floating',
+        items: [...Array(10)].map((_, i) => `item${i}`),
+        stylingMode,
+      };
+
+      await createWidget('dxLookup', {
+        ...componentOption,
+      }, true);
+
+      await t.click(Selector('.dx-lookup-field'));
+
+      await t.expect(await compareScreenshot(t, `label-lookup-${theme}-styleMode=${stylingMode}.png`)).ok();
+    });
+  });
+});
+
+stylingMods.forEach((stylingMode) => {
+  themes.forEach((theme) => {
     test(`Label for dxNumberBox ${theme} stylingMode=${stylingMode}`, async (t) => {
       await setTheme(theme);
 

@@ -339,6 +339,7 @@ $generic-texteditor-label-transition:
     }
 
     &.dx-state-focused,
+    &.dx-dropdowneditor-active,
     &.dx-textarea.dx-state-focused {
       .dx-placeholder {
         display: block;
@@ -650,6 +651,8 @@ $generic-texteditor-label-transition:
       }
     }
 
+    &.dx-dropdowneditor-active,
+    &.dx-dropdowneditor-active.dx-state-hover,
     &.dx-textarea.dx-state-focused,
     &.dx-textarea.dx-state-focused.dx-state-hover,
     &.dx-state-focused,
@@ -746,6 +749,7 @@ $generic-texteditor-label-transition:
     }
 
     &.dx-state-focused,
+    &.dx-dropdowneditor-active,
     &.dx-textarea.dx-state-focused {
       .dx-placeholder {
         display: block;
