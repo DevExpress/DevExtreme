@@ -98,7 +98,7 @@ export const getAppointmentsConfig = (
     resources: schedulerConfig.resources,
     maxAppointmentsPerCell: schedulerConfig.maxAppointmentsPerCell,
     timeZone: schedulerConfig.timeZone,
-    modelGroups: schedulerConfig.groups,
+    groups: schedulerConfig.groups,
     startDayHour: viewConfig.startDayHour,
     viewStartDayHour: viewConfig.startDayHour, // TODO remove
     endDayHour: viewConfig.endDayHour,
@@ -135,7 +135,7 @@ export const getAppointmentsModel = (
   cellsMetaData: CellsMetaData,
 ): AppointmentsModelType => {
   const groupedByDate = isGroupingByDate(
-    appointmentsConfig.modelGroups as unknown as Group[],
+    appointmentsConfig.groups as unknown as Group[],
     appointmentsConfig.groupOrientation,
     appointmentsConfig.groupByDate,
   );
