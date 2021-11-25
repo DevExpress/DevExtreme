@@ -375,7 +375,6 @@ class FileUploader extends Editor {
         this._renderUploadButton();
 
         this._preventRecreatingFiles = true;
-        this._hasActiveDragFiles = false;
         this._activeDropZone = null;
     }
 
@@ -921,15 +920,12 @@ class FileUploader extends Editor {
             return false;
         }
 
-        this._hasActiveDragFiles = true;
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
 
         const dropZoneElement = this._getDropZoneElement(isCustomTarget);
-        const isOverDZ = isMouseOverElement(e, dropZoneElement, true);
-
-        if(isOverDZ && dropZoneElement === e.target) {
+        if(dropZoneElement === e.target && this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, false)) {
             this._activeDropZone = dropZoneElement;
             this._tryToggleDropZoneActive(true, isCustomTarget, e);
             this._updateEventTargets(e);
@@ -943,10 +939,10 @@ class FileUploader extends Editor {
         e.originalEvent.dataTransfer.dropEffect = 'copy';
         const dropZoneElement = this._getDropZoneElement(isCustomTarget);
 
-        if(this._hasActiveDragFiles && this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, true)) {
+        if(this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, false)) {
             reRaiseEvent(e, 'dragenter', dropZoneElement);
         }
-        if(this._activeDropZone === dropZoneElement && !isMouseOverElement(e, dropZoneElement, true)) {
+        if(this._activeDropZone === dropZoneElement && !isMouseOverElement(e, dropZoneElement, !isCustomTarget)) {
             reRaiseEvent(e, 'dragleave', dropZoneElement);
         }
     }
@@ -960,8 +956,7 @@ class FileUploader extends Editor {
         }
 
         const dropZoneElement = this._getDropZoneElement(isCustomTarget);
-
-        if(!isMouseOverElement(e, dropZoneElement, true)) {
+        if(!isMouseOverElement(e, dropZoneElement, !isCustomTarget)) {
             if(this._activeDropZone !== e.target) {
                 reRaiseEvent(e, 'dragleave', dropZoneElement);
             } else {
@@ -969,10 +964,6 @@ class FileUploader extends Editor {
                 this._activeDropZone = null;
             }
         }
-        if(!isMouseOverElement(e, dropZoneElement)) {
-            this._hasActiveDragFiles = false;
-        }
-
     }
 
     _updateEventTargets(e) {
@@ -1004,7 +995,7 @@ class FileUploader extends Editor {
     _dropHandler(isCustomTarget, e) {
         this._dragEventsTargets = [];
         this._activeDropZone = null;
-        this._hasActiveDragFiles = false;
+        // this._hasActiveDragFiles = false;
         window.canLog = true;
         if(!isCustomTarget) {
             this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
