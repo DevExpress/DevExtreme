@@ -89,7 +89,6 @@ export default class Widget extends DOMComponent {
     /**
      * @docid
      * @publicName registerKeyHandler(key, handler)
-     * @param2 handler:function
      * @public
      */
     registerKeyHandler(key: string, handler: Function): void;
@@ -113,7 +112,6 @@ export var dxItem: any;
 /**
  * @docid
  * @type Enums.Format|string|function|Object
- * @type_function_param1 value:number|date
  * @default undefined
  * @section Common
  * @namespace DevExpress.ui
@@ -126,12 +124,10 @@ export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential'
   currency?: string;
   /**
    * @docid
-   * @type_function_param1 value:number|date
    */
   formatter?: ((value: number | Date) => string);
   /**
    * @docid
-   * @type_function_return number|date
    */
   parser?: ((value: string) => number | Date);
   /**

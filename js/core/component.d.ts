@@ -71,7 +71,6 @@ export class Component {
   /**
    * @docid
    * @publicName off(eventName, eventHandler)
-   * @param2 eventHandler:function
    * @return this
    * @public
    */
@@ -79,7 +78,6 @@ export class Component {
   /**
    * @docid
    * @publicName on(eventName, eventHandler)
-   * @param2 eventHandler:function
    * @return this
    * @public
    */

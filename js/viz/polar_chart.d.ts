@@ -157,7 +157,6 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
     tag?: any;
     /**
      * @docid
-     * @type Enums.PolarChartSeriesType
      * @default 'scatter'
      * @public
      */
@@ -252,11 +251,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
       convertToAxisDataType?: boolean;
       /**
        * @docid
-       * @type_function_param1_field1 arg:Date|Number|string
-       * @type_function_param1_field2 val:Date|Number|string
-       * @type_function_param2_field1 arg:Date|Number|string
-       * @type_function_param2_field2 val:Date|Number|string
-       * @type_function_return Number
        * @default true
        */
       sortingMethod?: boolean | ((a: { arg?: Date | number | string; val?: Date | number | string }, b: { arg?: Date | number | string; val?: Date | number | string }) => number);
@@ -278,7 +272,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @docid
      * @default null
      * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 argument:Date|Number|string
      * @notUsedInTheme
      * @action
      * @public
@@ -615,13 +608,11 @@ export interface dxPolarChartArgumentAxisConstantLinesLabel extends dxPolarChart
 export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
     /**
      * @docid dxPolarChartOptions.argumentAxis.label.customizeHint
-     * @type_function_param1_field1 value:Date|Number|string
      * @public
      */
     customizeHint?: ((argument: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxPolarChartOptions.argumentAxis.label.customizeText
-     * @type_function_param1_field1 value:Date|Number|string
      * @notUsedInTheme
      * @public
      */
@@ -1006,7 +997,6 @@ export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesType
     stackedbar?: any;
     /**
      * @docid dxPolarChartOptions.commonSeriesSettings.type
-     * @type Enums.PolarChartSeriesType
      * @default 'scatter'
      * @public
      */
@@ -1016,13 +1006,11 @@ export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesType
 export interface dxPolarChartLegend extends BaseChartLegend {
     /**
      * @docid dxPolarChartOptions.legend.customizeHint
-     * @type_function_param1_field2 seriesIndex:Number
      * @public
      */
     customizeHint?: ((seriesInfo: { seriesName?: any; seriesIndex?: number; seriesColor?: string }) => string);
     /**
      * @docid dxPolarChartOptions.legend.customizeText
-     * @type_function_param1_field2 seriesIndex:Number
      * @notUsedInTheme
      * @public
      */
@@ -1231,13 +1219,11 @@ export interface dxPolarChartValueAxisConstantLinesLabel extends dxPolarChartCom
 export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
     /**
      * @docid dxPolarChartOptions.valueAxis.label.customizeHint
-     * @type_function_param1_field1 value:Date|Number|string
      * @public
      */
     customizeHint?: ((axisValue: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxPolarChartOptions.valueAxis.label.customizeText
-     * @type_function_param1_field1 value:Date|Number|string
      * @notUsedInTheme
      * @public
      */

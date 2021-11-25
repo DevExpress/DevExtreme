@@ -2,7 +2,6 @@
  * @public
  * @docid
  * @section commonObjectStructures
- * @type object
  * @namespace DevExpress
  * @export default
  */
@@ -85,7 +84,6 @@ declare class DevicesObject {
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
-     * @param2 eventHandler:function
      * @return this
      * @public
      */
@@ -93,7 +91,6 @@ declare class DevicesObject {
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
-     * @param2 eventHandler:function
      * @return this
      * @public
      */
@@ -109,7 +106,6 @@ declare class DevicesObject {
     /**
      * @docid
      * @publicName orientation()
-     * @return String
      * @public
      */
     orientation(): string;

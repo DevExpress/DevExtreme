@@ -1826,7 +1826,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName beginCustomLoading(messageText)
-     * @param1 messageText:string
      * @public
      */
     beginCustomLoading(messageText: string): void;
@@ -1847,36 +1846,24 @@ export interface GridBase {
     /**
      * @docid
      * @publicName cellValue(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @return any
      * @public
      */
     cellValue(rowIndex: number, dataField: string): any;
     /**
      * @docid
      * @publicName cellValue(rowIndex, dataField, value)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @param3 value:any
      * @public
      */
     cellValue(rowIndex: number, dataField: string, value: any): void;
     /**
      * @docid
      * @publicName cellValue(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @return any
      * @public
      */
     cellValue(rowIndex: number, visibleColumnIndex: number): any;
     /**
      * @docid
      * @publicName cellValue(rowIndex, visibleColumnIndex, value)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @param3 value:any
      * @public
      */
     cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
@@ -1889,7 +1876,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName clearFilter(filterName)
-     * @param1 filterName:string
      * @public
      */
     clearFilter(filterName: string): void;
@@ -1920,14 +1906,12 @@ export interface GridBase {
     /**
      * @docid
      * @publicName columnCount()
-     * @return number
      * @public
      */
     columnCount(): number;
     /**
      * @docid
      * @publicName columnOption(id)
-     * @param1 id:number|string
      * @return object
      * @public
      */
@@ -1935,25 +1919,18 @@ export interface GridBase {
     /**
      * @docid
      * @publicName columnOption(id, optionName)
-     * @param1 id:number|string
-     * @param2 optionName:string
-     * @return any
      * @public
      */
     columnOption(id: number | string, optionName: string): any;
     /**
      * @docid
      * @publicName columnOption(id, optionName, optionValue)
-     * @param1 id:number|string
-     * @param2 optionName:string
-     * @param3 optionValue:any
      * @public
      */
     columnOption(id: number | string, optionName: string, optionValue: any): void;
     /**
      * @docid
      * @publicName columnOption(id, options)
-     * @param1 id:number|string
      * @param2 options:object
      * @public
      */
@@ -1961,14 +1938,12 @@ export interface GridBase {
     /**
      * @docid
      * @publicName deleteColumn(id)
-     * @param1 id:number|string
      * @public
      */
     deleteColumn(id: number | string): void;
     /**
      * @docid
      * @publicName deleteRow(rowIndex)
-     * @param1 rowIndex:number
      * @public
      */
     deleteRow(rowIndex: number): void;
@@ -1982,7 +1957,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName deselectRows(keys)
-     * @param1 keys:Array<any>
      * @return Promise<any>
      * @public
      */
@@ -1990,23 +1964,18 @@ export interface GridBase {
     /**
      * @docid
      * @publicName editCell(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
      * @public
      */
     editCell(rowIndex: number, dataField: string): void;
     /**
      * @docid
      * @publicName editCell(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
      * @public
      */
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     /**
      * @docid
      * @publicName editRow(rowIndex)
-     * @param1 rowIndex:number
      * @public
      */
     editRow(rowIndex: number): void;
@@ -2019,21 +1988,18 @@ export interface GridBase {
     /**
      * @docid
      * @publicName expandAdaptiveDetailRow(key)
-     * @param1 key:any
      * @public
      */
     expandAdaptiveDetailRow(key: any): void;
     /**
      * @docid
      * @publicName filter()
-     * @return any
      * @public
      */
     filter(): any;
     /**
      * @docid
      * @publicName filter(filterExpr)
-     * @param1 filterExpr:any
      * @public
      */
     filter(filterExpr: any): void;
@@ -2048,33 +2014,24 @@ export interface GridBase {
     /**
      * @docid
      * @publicName getCellElement(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @return DxElement|undefined
      * @public
      */
     getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
     /**
      * @docid
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @return DxElement|undefined
      * @public
      */
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     /**
      * @docid
      * @publicName getCombinedFilter()
-     * @return any
      * @public
      */
     getCombinedFilter(): any;
     /**
      * @docid
      * @publicName getCombinedFilter(returnDataField)
-     * @param1 returnDataField:boolean
-     * @return any
      * @public
      */
     getCombinedFilter(returnDataField: boolean): any;
@@ -2083,14 +2040,12 @@ export interface GridBase {
      * @docid
      * @publicName getKeyByRowIndex(rowIndex)
      * @param1 rowIndex:numeric
-     * @return any
      * @public
      */
     getKeyByRowIndex(rowIndex: number): any;
     /**
      * @docid
      * @publicName getRowElement(rowIndex)
-     * @param1 rowIndex:number
      * @return Array<Element>|jQuery|undefined
      * @public
      */
@@ -2106,22 +2061,18 @@ export interface GridBase {
     /**
      * @docid
      * @publicName getScrollable()
-     * @return dxScrollable
      * @public
      */
     getScrollable(): dxScrollable;
     /**
      * @docid
      * @publicName getVisibleColumnIndex(id)
-     * @param1 id:number|string
-     * @return number
      * @public
      */
     getVisibleColumnIndex(id: number | string): number;
     /**
      * @docid
      * @publicName hasEditData()
-     * @return boolean
      * @public
      */
     hasEditData(): boolean;
@@ -2134,24 +2085,18 @@ export interface GridBase {
     /**
      * @docid
      * @publicName isAdaptiveDetailRowExpanded(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isAdaptiveDetailRowExpanded(key: any): boolean;
     /**
      * @docid
      * @publicName isRowFocused(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isRowFocused(key: any): boolean;
     /**
      * @docid
      * @publicName isRowSelected(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isRowSelected(key: any): boolean;
@@ -2159,14 +2104,12 @@ export interface GridBase {
      * @docid
      * @publicName keyOf(obj)
      * @param1 obj:object
-     * @return any
      * @public
      */
     keyOf(obj: any): any;
     /**
      * @docid
      * @publicName navigateToRow(key)
-     * @param1 key:any
      * @public
      */
     navigateToRow(key: any): void;
@@ -2216,7 +2159,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName refresh(changesOnly)
-     * @param1 changesOnly:boolean
      * @return Promise<void>
      * @public
      */
@@ -2224,7 +2166,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName repaintRows(rowIndexes)
-     * @param1 rowIndexes:Array<number>
      * @public
      */
     repaintRows(rowIndexes: Array<number>): void;
@@ -2238,7 +2179,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName searchByText(text)
-     * @param1 text:string
      * @public
      */
     searchByText(text: string): void;
@@ -2252,8 +2192,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName selectRows(keys, preserve)
-     * @param1 keys:Array<any>
-     * @param2 preserve:boolean
      * @return Promise<any>
      * @public
      */
@@ -2261,7 +2199,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName selectRowsByIndexes(indexes)
-     * @param1 indexes:Array<number>
      * @return Promise<any>
      * @public
      */
@@ -2289,7 +2226,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName undeleteRow(rowIndex)
-     * @param1 rowIndex:number
      * @public
      */
     undeleteRow(rowIndex: number): void;
@@ -4106,7 +4042,6 @@ export interface Editing extends EditingBase {
      * @docid dxDataGridOptions.editing.allowDeleting
      * @default false
      * @type_function_param1_field2 row:dxDataGridRowObject
-     * @type_function_return Boolean
      * @public
      */
     allowDeleting?: boolean | ((options: { component?: dxDataGrid; row?: Row }) => boolean);
@@ -4114,7 +4049,6 @@ export interface Editing extends EditingBase {
      * @docid dxDataGridOptions.editing.allowUpdating
      * @default false
      * @type_function_param1_field2 row:dxDataGridRowObject
-     * @type_function_return Boolean
      * @public
      */
     allowUpdating?: boolean | ((options: { component?: dxDataGrid; row?: Row }) => boolean);
@@ -4253,7 +4187,6 @@ declare class dxDataGrid extends Widget implements GridBase {
     /**
      * @docid
      * @publicName getTotalSummaryValue(summaryItemName)
-     * @param1 summaryItemName:String
      * @public
      */
     getTotalSummaryValue(summaryItemName: string): any;
@@ -4545,7 +4478,6 @@ export interface dxDataGridColumnButton extends ColumnButtonBase {
      * @default true
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_param1_field3 column:dxDataGridColumn
-     * @type_function_return Boolean
      * @public
      */
     visible?: boolean | ((options: { component?: dxDataGrid; row?: Row; column?: Column }) => boolean);
