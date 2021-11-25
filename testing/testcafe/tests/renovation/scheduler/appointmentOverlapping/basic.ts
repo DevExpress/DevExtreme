@@ -29,7 +29,7 @@ test('Multi-day appointment should not overlap other appointments when specific 
   },
 ));
 
-test('Simple appointment should not overlap allDay appointment when specific width is set, \'auto\' mode (T864456)', async (t) => {
+test('Simple appointment should not overlap allDay appointment when specific width is set, "auto" mode (T864456)', async (t) => {
   const scheduler = new Scheduler('#container');
   const { element } = scheduler.getAppointment('Appointment 4');
 
