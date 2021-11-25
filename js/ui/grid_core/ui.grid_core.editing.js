@@ -1766,10 +1766,12 @@ const EditingController = modules.ViewController.inherit((function() {
             return isCustomSetCellValue || isCustomCalculateCellValue;
         },
         _applyChange: function(options, params, forceUpdateRow) {
-            this._addChange(params, options.row);
+            const changeOptions = { ...options, forceUpdateRow };
+
+            this._addChange(params, changeOptions);
             this._updateEditButtons();
 
-            return this._applyChangeCore(options, forceUpdateRow);
+            return this._applyChangeCore(options, changeOptions.forceUpdateRow);
         },
         _applyChangeCore: function(options, forceUpdateRow) {
             const isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue;
@@ -1835,41 +1837,47 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _validateEditFormAfterUpdate: noop,
 
-        _addChange: function(options, row) {
+        _addChange: function(changeParams, options) {
+            const row = options?.row;
             const changes = [...this.getChanges()];
-            let index = gridCoreUtils.getIndexByKey(options.key, changes);
+            let index = gridCoreUtils.getIndexByKey(changeParams.key, changes);
 
             if(index < 0) {
                 index = changes.length;
 
                 this._addInternalData({
-                    key: options.key,
-                    oldData: options.oldData
+                    key: changeParams.key,
+                    oldData: changeParams.oldData
                 });
 
-                delete options.oldData;
+                delete changeParams.oldData;
 
-                changes.push(options);
+                changes.push(changeParams);
             }
 
             const change = { ...changes[index] };
 
             if(change) {
-                if(options.data) {
-                    change.data = createObjectWithChanges(change.data, options.data);
+                if(changeParams.data) {
+                    change.data = createObjectWithChanges(change.data, changeParams.data);
                 }
-                if((!change.type || !options.data) && options.type) {
-                    change.type = options.type;
+                if((!change.type || !changeParams.data) && changeParams.type) {
+                    change.type = changeParams.type;
                 }
                 if(row) {
                     row.oldData = this._getOldData(row.key);
-                    row.data = createObjectWithChanges(row.data, options.data);
+                    row.data = createObjectWithChanges(row.data, changeParams.data);
                 }
             }
 
             changes[index] = change;
 
             this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
+
+            // T1043517
+            if(options && change !== this.getChanges()?.[index]) {
+                options.forceUpdateRow = true;
+            }
 
             return index;
         },
