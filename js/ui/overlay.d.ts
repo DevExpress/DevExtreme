@@ -93,6 +93,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     /**
      * @docid
      * @default false
+     * @type boolean | function
      * @type_function_param1 event:event
      * @type_function_return Boolean
      * @public

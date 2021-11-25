@@ -86,6 +86,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     displayTime?: number;
     /**
      * @docid
+     * @type boolean | function
      * @type_function_param1 event:event
      * @type_function_return Boolean
      * @default true &for(Android)
