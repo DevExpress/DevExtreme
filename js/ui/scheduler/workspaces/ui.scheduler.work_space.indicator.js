@@ -277,11 +277,19 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _getCurrentTimePanelCellIndices() {
+        const displayedDates = this.viewDataProvider.completeDateHeaderMap[0];
+        let today = this._getToday();
+        for(let i = 0; i < displayedDates.length; i++) {
+            if(dateUtils.sameDate(displayedDates[i].startDate, this._getToday())) {
+                today = new Date(today.getTime() - toMs('day') * i);
+            }
+        }
+
         return getCurrentTimePanelCellIndices(
             this.viewDataProvider.completeTimePanelMap,
             {
                 cellDuration: this.getCellDuration(),
-                today: this._getToday(),
+                today,
                 cellCountPerGroup: this._getTimePanelRowCount(),
                 groupCount: this._getGroupCount(),
                 isSequentialGrouping: this._isVerticalGroupedWorkSpace(),
