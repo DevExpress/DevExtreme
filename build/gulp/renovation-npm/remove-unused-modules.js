@@ -3,18 +3,18 @@ const del = require('del');
 const path = require('path');
 
 function removeUnusedModules(context) {
-    const components = require(path.resolve(process.cwd(), path.join(context.source, 'components.js')));
-    const componentPaths = [];
-    components.forEach(c => {
-        const fileName = path.resolve(process.cwd(), path.join(context.source, c.pathInRenovationFolder.slice(0, -2)));
-        context.extensions.forEach(ext => componentPaths.push(`${fileName}${ext}`));
-    });
-
     return function removeUnusedModules(cb) {
+        const componentPaths = [];
+        const components = require(path.resolve(process.cwd(), path.join(context.source, 'components.js')));
         const visitedModules = Object.keys(context.moduleMap).reduce((p, c) => {
             p[c] = false;
             return p;
         }, {});
+
+        components.forEach(c => {
+            const fileName = path.resolve(process.cwd(), path.join(context.source, c.pathInRenovationFolder.slice(0, -2)));
+            context.extensions.forEach(ext => componentPaths.push(`${fileName}${ext}`));
+        });
 
         const modulesToVisit = [...componentPaths];
         while (modulesToVisit.length) {
