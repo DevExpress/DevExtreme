@@ -19,6 +19,7 @@ import timezoneUtils from '../utils.timeZone';
 
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
 import { formatWeekdayAndDay } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { getCurrentTimePanelCellIndices } from './helpers/currentTimeCellUtils';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
@@ -381,21 +382,17 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getCurrentTimePanelCellIndices() {
-        const columnCountPerGroup = this._getCellCount();
-        const today = this._getToday();
-        const index = this.getCellIndexByDate(today);
-        const { columnIndex: currentTimeColumnIndex } = this._getCellCoordinatesByIndex(index);
-
-        if(currentTimeColumnIndex === undefined) {
-            return [];
-        }
-
-        const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
-            ? this._getGroupCount()
-            : 1;
-
-        return [...(new Array(horizontalGroupCount))]
-            .map((_, groupIndex) => columnCountPerGroup * groupIndex + currentTimeColumnIndex);
+        return getCurrentTimePanelCellIndices(
+            this.viewDataProvider.completeDateHeaderMap[0],
+            {
+                cellDuration: this.getCellDuration(),
+                today: this._getToday(),
+                cellCountPerGroup: this._getTimePanelRowCount(),
+                groupCount: this._getGroupCount(),
+                isSequentialGrouping: this._isHorizontalGroupedWorkSpace(),
+                selectNeighbors: false,
+            }
+        );
     }
 
     // --------------

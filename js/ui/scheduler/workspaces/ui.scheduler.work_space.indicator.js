@@ -9,6 +9,7 @@ import { hasWindow } from '../../../core/utils/window';
 import { HEADER_CURRENT_TIME_CELL_CLASS } from '../classes';
 import { getToday } from '../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import timezoneUtils from '../utils.timeZone';
+import { getCurrentTimePanelCellIndices } from './helpers/currentTimeCellUtils';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -276,35 +277,17 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _getCurrentTimePanelCellIndices() {
-        const rowCountPerGroup = this._getTimePanelRowCount();
-        const today = this._getToday();
-        const index = this.getCellIndexByDate(today);
-        const { rowIndex: currentTimeRowIndex } = this._getCellCoordinatesByIndex(index);
-
-        if(currentTimeRowIndex === undefined) {
-            return [];
-        }
-
-        let cellIndices;
-        if(currentTimeRowIndex === 0) {
-            cellIndices = [currentTimeRowIndex];
-        } else {
-            cellIndices = currentTimeRowIndex % 2 === 0
-                ? [currentTimeRowIndex - 1, currentTimeRowIndex]
-                : [currentTimeRowIndex, currentTimeRowIndex + 1];
-        }
-
-        const verticalGroupCount = this._isVerticalGroupedWorkSpace()
-            ? this._getGroupCount()
-            : 1;
-
-        return [...(new Array(verticalGroupCount))]
-            .reduce((currentIndices, _, groupIndex) => {
-                return [
-                    ...currentIndices,
-                    ...cellIndices.map(cellIndex => rowCountPerGroup * groupIndex + cellIndex),
-                ];
-            }, []);
+        return getCurrentTimePanelCellIndices(
+            this.viewDataProvider.completeTimePanelMap,
+            {
+                cellDuration: this.getCellDuration(),
+                today: this._getToday(),
+                cellCountPerGroup: this._getTimePanelRowCount(),
+                groupCount: this._getGroupCount(),
+                isSequentialGrouping: this._isVerticalGroupedWorkSpace(),
+                selectNeighbors: true,
+            }
+        );
     }
 }
 
