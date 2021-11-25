@@ -16,6 +16,7 @@ import 'ui/drop_down_box';
 
 import windowModule from 'core/utils/window';
 import Form from 'ui/form/ui.form.js';
+import TextEditorBase from 'ui/text_box/ui.text_editor.base.js';
 import { renderLabel } from 'ui/form/components/label.js';
 
 import {
@@ -3945,3 +3946,39 @@ QUnit.test('Form set the right class to the root element for different global ed
     });
 });
 
+QUnit.test('Form item stylingMode option should rewrite global editorStylingMode option (T1044604)', function(assert) {
+    const stylingModes = [null, 'outlined', 'filled', 'underlined' ];
+    const defaultStylingMode = TextEditorBase.prototype._getDefaultOptions().stylingMode;
+
+
+    stylingModes.forEach(globalStylingMode => {
+        stylingModes.forEach(editorStylingMode => {
+            if(globalStylingMode) {
+                config({ editorStylingMode: globalStylingMode });
+            }
+
+            $('#form').dxForm({
+                formData: { field1: '', field2: '' },
+                items: [
+                    { dataField: 'field1' },
+                    { dataField: 'field2', editorOptions: { stylingMode: editorStylingMode } }
+                ]
+            });
+
+            function getExpectedClass(mode) {
+                return `dx-editor-${mode ? mode : defaultStylingMode}`;
+            }
+
+            const firstEditorExpectedClass = getExpectedClass(globalStylingMode);
+            const secondEditorExpectedClass = getExpectedClass(editorStylingMode || globalStylingMode);
+
+            const form = $('#form').dxForm('instance');
+
+            assert.ok($(form.getEditor('field1').element()).hasClass(firstEditorExpectedClass), `default editor (global=${globalStylingMode}), editor not set`);
+            assert.ok($(form.getEditor('field2').element()).hasClass(secondEditorExpectedClass), `custom editor (global=${globalStylingMode}, editor=${editorStylingMode})`);
+
+            form.dispose();
+            config({ editorStylingMode: null });
+        });
+    });
+});
