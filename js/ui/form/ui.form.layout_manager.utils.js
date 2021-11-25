@@ -125,12 +125,14 @@ function _convertToEditorOptions({
         labelMode = formLabelMode === 'outside' ? 'hidden' : formLabelMode;
     }
 
+    const stylingMode = externalEditorOptions?.stylingMode || editorStylingMode;
+
     const result = extend(true, editorOptionsWithValue,
         externalEditorOptions,
         {
             inputAttr: { id: editorInputId },
             validationBoundary: editorValidationBoundary,
-            stylingMode: editorStylingMode,
+            stylingMode,
             label: labelText,
             labelMode,
             labelMark,
