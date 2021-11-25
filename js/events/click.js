@@ -9,7 +9,6 @@ import { subscribeNodesDisposing, unsubscribeNodesDisposing } from './utils/even
 import pointerEvents from './pointer';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
-import { noop } from '../core/utils/common';
 
 const CLICK_EVENT_NAME = 'dxclick';
 
@@ -47,22 +46,12 @@ const ClickEmitter = Emitter.inherit({
 
     ctor: function(element) {
         this.callBase(element);
-        this._makeElementClickable($(element));
-    },
-
-    _makeElementClickable: function($element) {
-        eventsEngine.on($element, 'click', clickHandler);
-    },
-
-    configure: function(data) {
-        this.callBase(data);
+        eventsEngine.on(this.getElement(), 'click', clickHandler);
     },
 
     start: function(e) {
         prevented = null;
     },
-
-    end: noop,
 
     cancel: function() {
         prevented = true;
