@@ -11,6 +11,8 @@ const path = require('path');
 const performRecastReplacements = require('./replacements-import');
 const performPackageLockReplacements = require('./replacements-package-lock');
 const removeFiles = require('./remove-unused-modules');
+const babel = require('gulp-babel');
+const transpileConfig = require('../transpile-config');
 
 function copyServiceFiles(context) {
     return () => merge(
@@ -39,6 +41,12 @@ function copyFrameworkArtifacts(context) {
     );
 }
 
+function transpileJSModules(context) {
+    return () => gulp.src(`${context.destination}/**/*.js`)
+                    .pipe(babel(transpileConfig.esm))
+                    .pipe(gulp.dest(context.destination));;
+}
+
 function addCompilationTask(frameworkData) {
     const context = {
         packageLockSteps: [],
@@ -58,12 +66,16 @@ function addCompilationTask(frameworkData) {
         removeFiles.cleanEmptyFolders(context.destination),
         ...context.completionSteps.map(x=>x(context))
     ];
+    if (frameworkData.transpileJS) {
+        generateSeries.push(transpileJSModules(context));
+    }
     gulp.task(`renovation-npm-${context.name}`, gulp.series(...generateSeries));
 }
 
 addCompilationTask({
     name: 'react',
     generator: 'generate-react',
+    transpileJS: true,
     copyFilesSteps: [require('./steps-react').createReactEntryPoint]
 });
 addCompilationTask({
