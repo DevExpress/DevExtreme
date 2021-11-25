@@ -37,7 +37,7 @@ export class OverlayProps extends BaseWidgetProps {
 
   @OneWay() height?: number | string | (() => number | string);
 
-  @OneWay() closeOnOutsideClick? = false;
+  @OneWay() hideOnOutsideClick? = false;
 
   @OneWay() hideOnParentScroll? = false;
 

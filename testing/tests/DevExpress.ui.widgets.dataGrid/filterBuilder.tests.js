@@ -330,12 +330,12 @@ QUnit.module('Real dataGrid', {
     });
 
     // T657917
-    QUnit.test('The value for the \'Is any of\' operation is changed when filterBuilderPopup has closeOnOutsideClick=true', function(assert) {
+    QUnit.test('The value for the \'Is any of\' operation is changed when filterBuilderPopup has hideOnOutsideClick=true', function(assert) {
         this.initDataGrid({
             columns: [{ dataField: 'field', dataType: 'string', defaultFilterOperations: ['anyof'] }],
             filterBuilderPopup: {
                 visible: true,
-                closeOnOutsideClick: true
+                hideOnOutsideClick: true
             },
             filterValue: ['field', 'anyof', ['text']],
         });

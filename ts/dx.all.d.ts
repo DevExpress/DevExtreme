@@ -5715,6 +5715,7 @@ declare module DevExpress.ui {
     extends dxMenuBaseOptions<dxContextMenu<TKey>, dxContextMenuItem, TKey> {
     /**
      * [descr:dxContextMenuOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxContextMenuOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -5730,6 +5731,16 @@ declare module DevExpress.ui {
       DevExpress.ui.dxContextMenu.Item,
       TKey
     >;
+    /**
+     * [descr:dxContextMenuOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
     /**
      * [descr:dxContextMenuOptions.items]
      */
@@ -16975,6 +16986,7 @@ declare module DevExpress.ui {
     animation?: dxOverlayAnimation;
     /**
      * [descr:dxOverlayOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxOverlayOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -17017,6 +17029,20 @@ declare module DevExpress.ui {
      * @deprecated [depNote:dxOverlayOptions.elementAttr]
      */
     elementAttr?: any;
+    /**
+     * [descr:dxOverlayOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
+    /**
+     * [descr:dxOverlayOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
     /**
      * [descr:dxOverlayOptions.height]
      */
@@ -17081,10 +17107,6 @@ declare module DevExpress.ui {
      * [descr:dxOverlayOptions.wrapperAttr]
      */
     wrapperAttr?: any;
-    /**
-     * [descr:dxOverlayOptions.hideOnParentScroll]
-     */
-    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPivotGrid]
@@ -17924,6 +17946,7 @@ declare module DevExpress.ui {
     animation?: dxPopoverAnimation;
     /**
      * [descr:dxPopoverOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxPopoverOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -17951,6 +17974,20 @@ declare module DevExpress.ui {
           name?: string;
         }
       | string;
+    /**
+     * [descr:dxPopoverOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
+    /**
+     * [descr:dxPopoverOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
     /**
      * [descr:dxPopoverOptions.position]
      */
@@ -17986,10 +18023,6 @@ declare module DevExpress.ui {
      * [descr:dxPopoverOptions.width]
      */
     width?: number | string | (() => number | string);
-    /**
-     * [descr:dxPopoverOptions.hideOnParentScroll]
-     */
-    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPopup]
@@ -21591,6 +21624,7 @@ declare module DevExpress.ui {
     closeOnClick?: boolean;
     /**
      * [descr:dxToastOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxToastOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -21607,6 +21641,16 @@ declare module DevExpress.ui {
      * [descr:dxToastOptions.displayTime]
      */
     displayTime?: number;
+    /**
+     * [descr:dxToastOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
     /**
      * [descr:dxToastOptions.height]
      */

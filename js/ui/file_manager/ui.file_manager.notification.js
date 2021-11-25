@@ -190,13 +190,13 @@ export default class FileManagerNotificationControl extends Widget {
             return {
                 openedStateMode: 'overlap',
                 shading: true,
-                closeOnOutsideClick: true
+                hideOnOutsideClick: true
             };
         } else {
             return {
                 openedStateMode: 'shrink',
                 shading: false,
-                closeOnOutsideClick: false
+                hideOnOutsideClick: false
             };
         }
     }
@@ -283,7 +283,7 @@ export default class FileManagerNotificationControl extends Widget {
                 dragEnabled: false,
                 shading: false,
                 visible: false,
-                closeOnOutsideClick: true,
+                hideOnOutsideClick: true,
                 animation: { duration: 0 },
                 position: {
                     my: 'right top',
