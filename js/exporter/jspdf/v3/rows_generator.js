@@ -52,7 +52,6 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
                 wordWrapEnabled,
                 columns,
                 rowType,
-                colCount: columns.length,
                 backgroundColor: (rowType === 'header') ? headerBackgroundColor : undefined
             }),
             rowIndex,
@@ -62,16 +61,16 @@ function generateRowsInfo(dataProvider, dataGrid, headerBackgroundColor) {
     return result;
 }
 
-function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, rowType, backgroundColor }) {
+function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, columns, rowType, backgroundColor }) {
     const result = [];
-    for(let cellIndex = 0; cellIndex < colCount; cellIndex++) {
+    for(let cellIndex = 0; cellIndex < columns.length; cellIndex++) {
         const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
         const cellInfo = {
             gridCell: cellData.cellSourceData,
             pdfCell: {
-                text: cellData.value,
+                text: cellData.value?.toString(),
                 verticalAlign: 'middle',
-                horizontalAlign: 'left',
+                horizontalAlign: columns[cellIndex].alignment ?? 'left',
                 wordWrapEnabled,
                 backgroundColor,
                 padding: 0,
@@ -89,7 +88,7 @@ function generateRowCells({ dataProvider, rowIndex, wordWrapEnabled, colCount, r
             }
         } else if(rowType === 'group') {
             cellInfo.pdfCell.drawLeftBorder = cellIndex === 0;
-            cellInfo.pdfCell.drawRightBorder = cellIndex === colCount - 1;
+            cellInfo.pdfCell.drawRightBorder = cellIndex === columns.length - 1;
 
             if(cellIndex > 0) {
                 const isEmptyCellsExceptFirst = result.slice(1).reduce(
