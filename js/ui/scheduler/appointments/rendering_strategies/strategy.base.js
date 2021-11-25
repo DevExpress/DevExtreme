@@ -40,8 +40,6 @@ class BaseRenderingStrategy {
     get resizableStep() { return this.options.resizableStep; }
     get isGroupedByDate() { return this.options.isGroupedByDate; }
     get visibleDayDuration() { return this.options.visibleDayDuration; }
-    get viewStartDayHour() { return this.options.viewStartDayHour; }
-    get viewEndDayHour() { return this.options.viewEndDayHour; }
     get cellDuration() { return this.options.cellDuration; }
     get cellDurationInMinutes() { return this.options.cellDurationInMinutes; }
     get leftVirtualCellCount() { return this.options.leftVirtualCellCount; }
@@ -245,7 +243,7 @@ class BaseRenderingStrategy {
 
     isAppointmentTakesAllDay(rawAppointment) {
         const adapter = createAppointmentAdapter(rawAppointment, this.dataAccessors, this.timeZoneCalculator);
-        return getAppointmentTakesAllDay(adapter, this.viewStartDayHour, this.viewEndDayHour);
+        return getAppointmentTakesAllDay(adapter, this.startDayHour, this.endDayHour);
     }
 
     _getAppointmentParts() {

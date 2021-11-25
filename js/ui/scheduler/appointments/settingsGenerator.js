@@ -28,8 +28,8 @@ export class DateGeneratorBaseStrategy {
     get timeZone() { return this.options.timeZone; }
     get dateRange() { return this.options.dateRange; }
     get firstDayOfWeek() { return this.options.firstDayOfWeek; }
-    get viewStartDayHour() { return this.options.viewStartDayHour; }
-    get viewEndDayHour() { return this.options.viewEndDayHour; }
+    get startDayHour() { return this.options.startDayHour; }
+    get endDayHour() { return this.options.endDayHour; }
     get endViewDate() { return this.options.endViewDate; }
     get viewType() { return this.options.viewType; }
     get isGroupedByDate() { return this.options.isGroupedByDate; }
@@ -224,11 +224,10 @@ export class DateGeneratorBaseStrategy {
             }
         }
 
-        const endDayHour = this.viewEndDayHour;
         const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', rawAppointment);
-        const currentViewEndTime = new Date(new Date(endDate.getTime()).setHours(endDayHour, 0, 0, 0));
+        const currentViewEndTime = new Date(new Date(endDate.getTime()).setHours(this.endDayHour, 0, 0, 0));
 
-        if(result.getTime() > currentViewEndTime.getTime() || (allDay && result.getHours() < endDayHour)) {
+        if(result.getTime() > currentViewEndTime.getTime() || (allDay && result.getHours() < this.endDayHour)) {
             result = currentViewEndTime;
         }
 
@@ -400,7 +399,7 @@ export class DateGeneratorBaseStrategy {
     }
 
     _getViewStartDayHour() {
-        return this.viewStartDayHour;
+        return this.startDayHour;
     }
     _getAppointmentResultDate(options) {
         const {

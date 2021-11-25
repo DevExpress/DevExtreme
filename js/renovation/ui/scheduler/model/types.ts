@@ -7,9 +7,7 @@ export interface AppointmentsConfigType {
   adaptivityEnabled: boolean;
   rtlEnabled?: boolean;
   startDayHour: number;
-  viewStartDayHour: number;
   endDayHour: number;
-  viewEndDayHour: number;
   currentDate: Date;
   resources: ResourceProps[];
   maxAppointmentsPerCell: number | 'auto' | 'unlimited';

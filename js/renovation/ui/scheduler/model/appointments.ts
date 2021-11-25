@@ -100,9 +100,7 @@ export const getAppointmentsConfig = (
     timeZone: schedulerConfig.timeZone,
     groups: schedulerConfig.groups,
     startDayHour: viewConfig.startDayHour,
-    viewStartDayHour: viewConfig.startDayHour, // TODO remove
     endDayHour: viewConfig.endDayHour,
-    viewEndDayHour: viewConfig.endDayHour, // TODO remove
     currentDate: viewConfig.currentDate,
     isVirtualScrolling: viewConfig.scrolling.mode === 'virtual',
     intervalCount: viewConfig.intervalCount,

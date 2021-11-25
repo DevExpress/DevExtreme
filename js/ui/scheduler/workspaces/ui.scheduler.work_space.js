@@ -2229,8 +2229,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.positionHelper = new PositionHelper({
             key: this.option('key'),
             viewDataProvider: this.viewDataProvider,
-            viewStartDayHour: this.option('startDayHour'),
-            viewEndDayHour: this.option('endDayHour'),
             cellDuration: this.getCellDuration(),
             groupedStrategy: this._groupedStrategy,
             isGroupedByDate: this.isGroupedByDate(),

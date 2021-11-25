@@ -112,9 +112,7 @@ describe('Appointments model', () => {
               adaptivityEnabled: false,
               rtlEnabled: undefined,
               startDayHour: 0,
-              viewStartDayHour: 0, // TODO remove
               endDayHour: 24,
-              viewEndDayHour: 24, // TODO remove
               resources: [],
               maxAppointmentsPerCell: 'auto',
               currentDate: new Date('2021-09-22T00:00:00'),

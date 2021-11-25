@@ -11,8 +11,8 @@ class BaseStrategy {
     get viewDataProvider() { return this.options.viewDataProvider; }
     get positionHelper() { return this.options.positionHelper; }
     get startViewDate() { return this.options.startViewDate; }
-    get viewStartDayHour() { return this.options.viewStartDayHour; }
-    get viewEndDayHour() { return this.options.viewEndDayHour; }
+    get startDayHour() { return this.options.startDayHour; }
+    get endDayHour() { return this.options.endDayHour; }
     get cellDuration() { return this.options.cellDuration; }
     get getPositionShift() { return this.options.getPositionShiftCallback; }
     get groupCount() { return this.options.groupCount; }
@@ -171,10 +171,10 @@ class BaseStrategy {
     getTimeShift(date) {
         const currentDayStart = new Date(date);
 
-        const currentDayEndHour = new Date(new Date(date).setHours(this.viewEndDayHour, 0, 0));
+        const currentDayEndHour = new Date(new Date(date).setHours(this.endDayHour, 0, 0));
 
         if(date.getTime() <= currentDayEndHour.getTime()) {
-            currentDayStart.setHours(this.viewStartDayHour, 0, 0, 0);
+            currentDayStart.setHours(this.startDayHour, 0, 0, 0);
         }
 
         const timeZoneDifference = dateUtils.getTimezonesDifference(date, currentDayStart);
