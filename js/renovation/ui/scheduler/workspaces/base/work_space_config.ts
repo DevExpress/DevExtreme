@@ -8,7 +8,6 @@ import { ViewRenderConfig } from '../props';
 import { TimelineHeaderPanelLayout } from '../timeline/header_panel/layout';
 import { DateTableLayoutBase } from './date_table/layout';
 import { HeaderPanelLayout } from './header_panel/layout';
-import { TimePanelTableLayout } from './time_panel/layout';
 import { getDateForHeaderText } from './utils';
 import { Group } from '../types';
 import { isVerticalGroupingApplied } from '../utils';
@@ -25,7 +24,6 @@ type GetRenderConfig = (
 const verticalViewConfig: ViewRenderConfig = {
   headerPanelTemplate: HeaderPanelLayout,
   dateTableTemplate: DateTableLayoutBase,
-  timePanelTemplate: TimePanelTableLayout,
   isAllDayPanelSupported: true,
   isProvideVirtualCellsWidth: false,
   isRenderTimePanel: true,
@@ -38,6 +36,8 @@ const verticalViewConfig: ViewRenderConfig = {
   className: 'dx-scheduler-work-space-day',
   isCreateCrossScrolling: false,
   defaultGroupOrientation: 'horizontal',
+  isUseMonthDateTable: false,
+  isUseTimelineHeader: false,
 };
 const timelineViewConfig: ViewRenderConfig = {
   headerPanelTemplate: TimelineHeaderPanelLayout,
@@ -54,6 +54,8 @@ const timelineViewConfig: ViewRenderConfig = {
   className: `dx-scheduler-timeline-day ${TIMELINE_CLASS}`,
   isCreateCrossScrolling: true,
   defaultGroupOrientation: 'vertical',
+  isUseMonthDateTable: false,
+  isUseTimelineHeader: true,
 };
 
 const getVerticalViewConfig = (crossScrollingEnabled: boolean): ViewRenderConfig => ({
@@ -108,6 +110,8 @@ const getMonthViewConfig: GetRenderConfig = (
   isCreateCrossScrolling: crossScrollingEnabled
     || isVerticalGroupingApplied(groups, groupOrientation),
   defaultGroupOrientation: 'horizontal',
+  isUseMonthDateTable: true,
+  isUseTimelineHeader: false,
 });
 
 const getTimelineDayViewConfig: GetRenderConfig = (_, intervalCount) => ({

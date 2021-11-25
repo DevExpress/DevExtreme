@@ -19,7 +19,6 @@ import {
 import { DateTableLayoutProps } from './date_table/layout';
 import { HeaderPanelLayoutProps } from './header_panel/layout';
 import { LayoutProps } from './layout_props';
-import { TimePanelLayoutProps } from './time_panel/layout';
 import { ScrollableDirection, ScrollEventArgs } from '../../../scroll_view/common/types';
 
 @ComponentBindings()
@@ -27,8 +26,6 @@ export class MainLayoutProps extends LayoutProps {
   @Template() headerPanelTemplate!: JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'>;
 
   @Template() dateTableTemplate!: JSXTemplate<DateTableLayoutProps>;
-
-  @Template() timePanelTemplate?: JSXTemplate<TimePanelLayoutProps>;
 
   @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
 
@@ -76,6 +73,12 @@ export class MainLayoutProps extends LayoutProps {
   @OneWay() isRenderGroupPanel = false;
 
   @OneWay() isStandaloneAllDayPanel = false;
+
+  @OneWay() isRenderTimePanel = false;
+
+  @OneWay() isUseMonthDateTable = false;
+
+  @OneWay() isUseTimelineHeader = false;
 
   @OneWay() groupPanelHeight?: number;
 
