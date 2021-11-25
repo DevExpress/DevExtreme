@@ -58,8 +58,28 @@ export const getAppointmentRenderingStrategyName = (viewType: ViewType): string 
 };
 
 export const getAppointmentsConfig = (
-  schedulerConfig: SchedulerProps,
-  viewConfig: CurrentViewConfigType,
+  schedulerConfig: Pick<
+  SchedulerProps,
+  'adaptivityEnabled' |
+  'rtlEnabled' |
+  'resources' |
+  'maxAppointmentsPerCell' |
+  'timeZone' |
+  'groups'
+  >,
+  viewConfig: Pick<
+  CurrentViewConfigType,
+  'startDayHour' |
+  'endDayHour' |
+  'currentDate' |
+  'scrolling' |
+  'intervalCount' |
+  'hoursInterval' |
+  'showAllDayPanel' |
+  'firstDayOfWeek' |
+  'type' |
+  'cellDuration'
+  >,
   loadedResources: Group[],
   viewDataProvider: ViewDataProviderType,
   isAllDayPanelSupported: boolean,

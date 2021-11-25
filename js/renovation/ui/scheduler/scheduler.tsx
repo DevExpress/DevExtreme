@@ -368,8 +368,26 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     );
 
     return getAppointmentsConfig(
-      this.props, // TODO extract props for performace
-      this.currentViewConfig, // TODO extract props for performace
+      {
+        adaptivityEnabled: this.props.adaptivityEnabled,
+        rtlEnabled: this.props.rtlEnabled,
+        resources: this.props.resources,
+        maxAppointmentsPerCell: this.props.maxAppointmentsPerCell,
+        timeZone: this.props.timeZone,
+        groups: this.props.groups,
+      },
+      {
+        startDayHour: this.currentViewConfig.startDayHour,
+        endDayHour: this.currentViewConfig.endDayHour,
+        currentDate: this.currentViewConfig.currentDate,
+        scrolling: this.currentViewConfig.scrolling,
+        intervalCount: this.currentViewConfig.intervalCount,
+        hoursInterval: this.currentViewConfig.hoursInterval,
+        showAllDayPanel: this.currentViewConfig.showAllDayPanel,
+        firstDayOfWeek: this.currentViewConfig.firstDayOfWeek,
+        type: this.currentViewConfig.type,
+        cellDuration: this.currentViewConfig.cellDuration,
+      },
       this.loadedResources,
       this.workSpaceViewModel!.viewDataProvider,
       renderConfig.isAllDayPanelSupported,
