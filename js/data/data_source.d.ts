@@ -49,14 +49,12 @@ export interface DataSourceOptions {
     map?: ((dataItem: any) => any);
     /**
      * @docid
-     * @type_function_param1 e:Object
      * @action
      * @public
      */
     onChanged?: ((e: { changes?: Array<any> }) => void);
     /**
      * @docid
-     * @type_function_param1 error:Object
      * @action
      * @public
      */
@@ -241,7 +239,6 @@ export default class DataSource {
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
-     * @param2 eventHandler:function
      * @return this
      * @public
      */
@@ -249,7 +246,6 @@ export default class DataSource {
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
-     * @param2 eventHandler:function
      * @return this
      * @public
      */
@@ -293,14 +289,12 @@ export default class DataSource {
     /**
      * @docid
      * @publicName paginate()
-     * @return Boolean
      * @public
      */
     paginate(): boolean;
     /**
      * @docid
      * @publicName paginate(value)
-     * @param1 value:Boolean
      * @public
      */
     paginate(value: boolean): void;

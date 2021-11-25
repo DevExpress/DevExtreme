@@ -5,7 +5,6 @@ import {
 /**
  * @docid localization.formatDate
  * @publicName formatDate(value, format)
- * @param1 value:date
  * @static
  * @namespace DevExpress.localization
  * @public
@@ -65,7 +64,6 @@ export function locale(locale: string): void;
 /**
  * @docid localization.parseDate
  * @publicName parseDate(text, format)
- * @return date
  * @static
  * @namespace DevExpress.localization
  * @public
