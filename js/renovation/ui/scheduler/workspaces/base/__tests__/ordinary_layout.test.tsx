@@ -11,6 +11,11 @@ import { AllDayPanelLayout, AllDayPanelLayoutProps } from '../date_table/all_day
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { HeaderPanelEmptyCell } from '../header_panel_empty_cell';
 import { MainLayoutProps } from '../main_layout_props';
+import { HeaderPanelLayout } from '../header_panel/layout';
+import { TimelineHeaderPanelLayout } from '../../timeline/header_panel/layout';
+import { DateTableLayoutBase, DateTableLayoutProps } from '../date_table/layout';
+import { MonthDateTableLayout } from '../../month/date_table/layout';
+import { TimePanelTableLayout } from '../time_panel/layout';
 
 describe('OrdinaryLayout', () => {
   const viewData = {
@@ -43,6 +48,7 @@ describe('OrdinaryLayout', () => {
           groups: 4,
         },
       ]],
+      key: '1',
     }],
   };
   const dateHeaderData = {
@@ -78,15 +84,14 @@ describe('OrdinaryLayout', () => {
   }];
 
   describe('Render', () => {
-    const headerPanelTemplate = () => null;
-    const dateTableTemplate = () => null;
     const commonProps = {
-      headerPanelTemplate,
-      dateTableTemplate,
       viewData,
       dateHeaderData,
       timePanelData,
       isRenderHeaderEmptyCell: true,
+      isUseMonthDateTable: false,
+      isUseTimelineHeader: false,
+      isRenderTimePanel: false,
     };
 
     const render = (viewModel) => shallow(LayoutView({
@@ -193,10 +198,28 @@ describe('OrdinaryLayout', () => {
 
       expect(headerPanel.exists())
         .toBe(true);
-      expect(headerPanel.is(headerPanelTemplate))
+      expect(headerPanel.is(HeaderPanelLayout))
         .toBe(true);
       expect(headerPanel.props())
         .toEqual(props);
+    });
+
+    it('should render TimelinHeaderPanel', () => {
+      const props = {
+        dateHeaderData,
+        groupPanelData: {
+          groupPanelItems: [],
+          baseColSpan: 34,
+        },
+        isRenderDateHeader: true,
+        isUseTimelineHeader: true,
+      };
+      const layout = render({ props });
+
+      const headerPanel = layout.find(TimelineHeaderPanelLayout);
+
+      expect(headerPanel.is(TimelineHeaderPanelLayout))
+        .toBe(true);
     });
 
     it('should render scrollable and pass correct props to it', () => {
@@ -229,15 +252,35 @@ describe('OrdinaryLayout', () => {
         },
       });
 
-      const dateTable = layout.find(dateTableTemplate);
+      const dateTable = layout.find(DateTableLayoutBase);
 
       expect(dateTable.exists())
         .toBe(true);
       expect(dateTable.props())
         .toEqual({
+          ...new DateTableLayoutProps(),
           ...props,
           tableRef: 'dateTableRef',
         });
+    });
+
+    it('should render month date-table', () => {
+      const props = {
+        viewData,
+        groupOrientation: 'horizontal',
+        isUseMonthDateTable: true,
+      };
+      const layout = render({
+        props: {
+          ...props,
+          dateTableRef: 'dateTableRef',
+        },
+      });
+
+      const dateTable = layout.find(MonthDateTableLayout);
+
+      expect(dateTable.exists())
+        .toBe(true);
     });
 
     it('should render date-table scrollable content', () => {
@@ -264,7 +307,6 @@ describe('OrdinaryLayout', () => {
 
     it('should render time panel when it is passed as a prop', () => {
       const timePanelRef = React.createRef();
-      const timePanelTemplate = () => null;
       const props = {
         timeCellTemplate: () => {},
         groupOrientation: 'vertical',
@@ -273,7 +315,7 @@ describe('OrdinaryLayout', () => {
 
       const layout = render({
         props: {
-          timePanelTemplate,
+          isRenderTimePanel: true,
           timePanelRef,
           ...props,
         },
@@ -287,7 +329,7 @@ describe('OrdinaryLayout', () => {
 
       const timePanel = scrollableContent.childAt(0);
 
-      expect(timePanel.is(timePanelTemplate))
+      expect(timePanel.is(TimePanelTableLayout))
         .toBe(true);
       expect(timePanel.props())
         .toEqual({
