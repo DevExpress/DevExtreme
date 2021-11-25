@@ -5,6 +5,9 @@ import {
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
+import { TableContent } from './views/table_content';
+import { TableHeader } from './views/table_header';
+
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
     accessKey={viewModel.props.accessKey}
@@ -22,59 +25,8 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
     {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
   >
     <div className="dx-datagrid dx-gridbase-container" role="grid" aria-label="Data grid">
-      <div className="dx-datagrid-headers dx-datagrid-nowrap" role="presentation">
-        <div className="dx-datagrid-content dx-datagrid-scroll-container" role="presentation">
-          <table className="dx-datagrid-table dx-datagrid-table-fixed" role="presentation">
-            <tbody role="presentation">
-              <tr className="dx-row dx-column-lines dx-header-row" role="row">
-                {viewModel.props.columns.map((dataField, index) => (
-                  <td
-                    aria-selected="false"
-                    role="columnheader" // eslint-disable-line jsx-a11y/no-noninteractive-element-to-interactive-role
-                    aria-colindex={index + 1}
-                    id={`dx-col-${index + 1}`}
-                    aria-label={`Column ${dataField}`}
-                    className="dx-datagrid-action dx-cell-focus-disabled"
-                    aria-sort="none"
-                    tabIndex={0}
-                  >
-                    <div className="dx-datagrid-text-content dx-text-content-alignment-left" role="presentation">
-                      {dataField}
-                    </div>
-                  </td>
-                ))}
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div className="dx-datagrid-rowsview dx-datagrid-nowrap" role="presentation">
-        <div className="dx-datagrid-content">
-          <table className="dx-datagrid-table dx-datagrid-table-fixed" role="presentation">
-            <tbody role="presentation">
-              {viewModel.props.dataSource.map((item, rowIndex) => (
-                <tr
-                  className="dx-row dx-data-row dx-column-lines"
-                  role="row"
-                  aria-selected="false"
-                  aria-rowindex={rowIndex + 1}
-                >
-                  {viewModel.props.columns.map((dataField, index) => (
-                    <td
-                      aria-describedby={`dx-col-${index + 1}`}
-                      aria-selected="false"
-                      role="gridcell"
-                      aria-colindex={index + 1}
-                    >
-                      {String(item[dataField])}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <TableHeader columns={viewModel.props.columns} />
+      <TableContent columns={viewModel.props.columns} dataSource={viewModel.props.dataSource} />
     </div>
   </Widget>
 );
