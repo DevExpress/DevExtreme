@@ -52,6 +52,7 @@ export class SelectBoxProps extends BaseWidgetProps {
   view: viewFunction,
 })
 export class SelectBox extends JSXComponent(SelectBoxProps) {
+  /* istanbul ignore next: WA for Angular */
   get componentProps(): SelectBoxProps {
     return this.props;
   }
