@@ -8,12 +8,12 @@ import { DomComponentWrapper } from '../common/dom_component_wrapper';
 import { OverlayProps } from './overlay';
 
 export const viewFunction = ({
-  props,
+  componentProps,
   restAttributes,
 }: LoadPanel): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyLoadPanel}
-    componentProps={props}
+    componentProps={componentProps}
     templateNames={[]}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
@@ -31,4 +31,9 @@ export class LoadPanelProps extends OverlayProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class LoadPanel extends JSXComponent(LoadPanelProps) {}
+export class LoadPanel extends JSXComponent(LoadPanelProps) {
+  /* istanbul ignore next: WA for Angular */
+  get componentProps(): LoadPanelProps {
+    return this.props;
+  }
+}

@@ -29,27 +29,23 @@ const window = getWindow();
 
 export const viewFunction = ({
   domComponentWrapperRef,
-  props,
+  componentProps,
   restAttributes,
-}: Popup): JSX.Element => {
-  const { children } = props;
-
-  return (
-    <DomComponentWrapper
-      componentType={LegacyPopup}
-      componentProps={props}
-      templateNames={[
-        'titleTemplate',
-        'contentTemplate',
-      ]}
-      ref={domComponentWrapperRef}
+}: Popup): JSX.Element => (
+  <DomComponentWrapper
+    componentType={LegacyPopup}
+    componentProps={componentProps.restProps}
+    templateNames={[
+      'titleTemplate',
+      'contentTemplate',
+    ]}
+    ref={domComponentWrapperRef}
       // eslint-disable-next-line react/jsx-props-no-spreading
-      {...restAttributes}
-    >
-      {children}
-    </DomComponentWrapper>
-  );
-};
+    {...restAttributes}
+  >
+    {componentProps.children}
+  </DomComponentWrapper>
+);
 
 @ComponentBindings()
 export class PopupProps extends BaseWidgetProps {
@@ -184,5 +180,14 @@ export class Popup extends JSXComponent(PopupProps) {
     this.instance.option('onHiding', () => {
       this.props.visible = false;
     });
+  }
+
+  /* istanbul ignore next: WA for Angular */
+  get componentProps(): { children?: PopupProps['children']; restProps: Partial<PopupProps> } {
+    const { children, ...restProps } = this.props;
+    return {
+      children,
+      restProps,
+    };
   }
 }

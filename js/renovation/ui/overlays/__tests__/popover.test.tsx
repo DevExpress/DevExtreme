@@ -11,7 +11,7 @@ describe('Popover', () => {
     it('default render', () => {
       const componentProps = new PopoverProps();
       const props = {
-        props: componentProps,
+        componentProps: { restProps: componentProps },
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Popover>;
       const tree = shallow(<PopoverView {...props as any} /> as any);
