@@ -1,4 +1,4 @@
-const { spawn } = require('child_process');
+const { spawnSync } = require('child_process');
 
 function camelCase(str) {
     return str
@@ -8,8 +8,8 @@ function camelCase(str) {
 }
 function run(cmd, args, options) {
     return function run(cb) {
-        const proc = spawn(cmd, args, { stdio: 'inherit', ...options });
-        proc.on('close', () => cb());
+        const proc = spawnSync(cmd, args, { stdio: 'inherit', ...options });
+        cb();
     }
 }
 
