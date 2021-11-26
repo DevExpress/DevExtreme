@@ -18,7 +18,7 @@ import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
 import type { Options as DataSourceOptions } from '../../../data/data_source';
-import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
+import { getCurrentViewConfig, getCurrentViewProps, getValidGroups } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import {
   DataCellTemplateProps,
@@ -367,6 +367,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.currentViewConfig.groupOrientation,
     );
 
+    const validGroups = getValidGroups(this.props.groups, this.currentViewProps.groups);
+
     return getAppointmentsConfig(
       {
         adaptivityEnabled: this.props.adaptivityEnabled,
@@ -374,7 +376,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         resources: this.props.resources,
         maxAppointmentsPerCell: this.props.maxAppointmentsPerCell,
         timeZone: this.props.timeZone,
-        groups: this.props.groups,
+        groups: validGroups,
       },
       {
         startDayHour: this.currentViewConfig.startDayHour,
@@ -569,13 +571,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadGroupResources(): void {
-    const { groups: schedulerGroups, resources } = this.props;
-    const { groups: currentViewProps } = this.currentViewProps;
-
-    const validGroups = currentViewProps ?? schedulerGroups;
+    const validGroups = getValidGroups(this.props.groups, this.currentViewProps.groups);
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    (loadResources(validGroups, resources, this.resourcePromisesMap) as Promise<Group[]>)
+    (loadResources(validGroups, this.props.resources, this.resourcePromisesMap) as Promise<Group[]>)
       .then((loadedResources) => {
         this.loadedResources = loadedResources;
       });
