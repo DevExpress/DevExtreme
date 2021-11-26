@@ -1,23 +1,27 @@
 import {
-  Component, ComponentBindings, CSSAttributes, JSXComponent, JSXTemplate, OneWay,
+  Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay,
 } from '@devextreme-generator/declarations';
 import { addWidthToStyle } from '../utils';
 import { HeaderCell } from './header_cell';
-import { CellProps, OrdinaryCell } from './ordinary_cell';
+import { OrdinaryCell } from './ordinary_cell';
 
 export const viewFunction = ({
   style,
-  cellComponent: Cell,
   props: {
     colSpan,
+    isHeaderCell,
   },
-}: VirtualCell): JSX.Element => (
-  <Cell
-    className="dx-scheduler-virtual-cell"
-    styles={style}
-    colSpan={colSpan}
-  />
-);
+}: VirtualCell): JSX.Element => {
+  const Cell = isHeaderCell ? HeaderCell : OrdinaryCell;
+
+  return (
+    <Cell
+      className="dx-scheduler-virtual-cell"
+      styles={style}
+      colSpan={colSpan}
+    />
+  );
+};
 
 @ComponentBindings()
 export class VirtualCellProps {
@@ -38,9 +42,5 @@ export class VirtualCell extends JSXComponent(VirtualCellProps) {
     const { style } = this.restAttributes;
 
     return addWidthToStyle(width, style);
-  }
-
-  get cellComponent(): JSXTemplate<CellProps> {
-    return this.props.isHeaderCell ? HeaderCell : OrdinaryCell;
   }
 }
