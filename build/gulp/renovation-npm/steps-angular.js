@@ -26,9 +26,14 @@ function preparePackageForPackagr(packageObject, basePackageObject, context) {
     }
 
     packageObject.peerDependencies = packageObject.peerDependencies || {};
-    packageObject.peerDependencies["@angular/core"] = "^11.0.0";
-    packageObject.peerDependencies["@angular/common"] = "^11.0.0";
-    packageObject.peerDependencies["@angular/forms"] = "^11.0.0";
+    packageObject.peerDependencies = {
+        ...packageObject.peerDependencies,
+        ...packageObject.dependencies,
+        "@angular/core": "^11.0.0",
+        "@angular/common": "^11.0.0",
+        "@angular/forms": "^11.0.0",
+    }
+    delete packageObject.dependencies;
 }
 /* function runPackagr(context) {
     const name = `packer-${context.name}`;

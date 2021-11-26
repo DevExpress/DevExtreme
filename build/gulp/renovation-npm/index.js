@@ -67,7 +67,7 @@ function addCompilationTask(frameworkData) {
         removeFiles.removeUnusedModules(context),
         removeFiles.cleanEmptyFolders(context.destination),
         ...(frameworkData.transpileJS ? [transpileJSModules(context)] : []),
-        // run('cmd', ['/c npm i'], { cwd: context.destination }),
+        run('cmd', ['/c npm i'], { cwd: context.destination }),
         ...context.completionSteps.map(x=>x(context))
     ];
     
