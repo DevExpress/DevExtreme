@@ -69,7 +69,7 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     animation?: dxPopoverAnimation;
     /**
      * @docid
-     * @deprecated dxPopover.hideOnOutsideClick
+     * @deprecated dxPopoverOptions.hideOnOutsideClick
      * @type_function_param1 event:event
      * @type_function_return Boolean
      * @default true

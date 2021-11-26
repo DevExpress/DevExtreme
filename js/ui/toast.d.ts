@@ -64,7 +64,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     closeOnClick?: boolean;
     /**
      * @docid
-     * @deprecated dxToast.hideOnOutsideClick
+     * @deprecated dxToastOptions.hideOnOutsideClick
      * @type_function_param1 event:event
      * @type_function_return Boolean
      * @default true &for(Android)
