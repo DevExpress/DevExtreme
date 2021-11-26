@@ -35,7 +35,6 @@ export function convertToRenderFieldItemOptions({
     const isRequired = isDefined(item.isRequired) ? item.isRequired : !!_hasRequiredRuleInSet(item.validationRules);
     const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
     const helpID = item.helpText ? ('dx-' + new Guid()) : null;
-    const helpText = item.helpText;
 
     const labelOptions = _convertToLabelOptions({
         item, id: itemId, isRequired, managerMarkOptions,
@@ -55,6 +54,30 @@ export function convertToRenderFieldItemOptions({
             inArray(item.editorType, ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor']) !== -1
         );
 
+    const editorOptions = _convertToEditorOptions({
+        editorType: item.editorType,
+        editorValue,
+        defaultEditorName: item.dataField,
+        canAssignUndefinedValueToEditor,
+        externalEditorOptions: item.editorOptions,
+        editorInputId: itemId,
+        editorValidationBoundary,
+        editorStylingMode,
+        formLabelMode: labelMode,
+        labelText: labelOptions.text,
+        labelMark: labelOptions.markOptions.showRequiredMark
+            ? String.fromCharCode(160) + labelOptions.markOptions.requiredMark
+            : '',
+    });
+
+    const needRenderOptionalMarkAsHelpText = labelOptions.markOptions.showOptionalMark
+        && !labelOptions.visible && editorOptions.labelMode !== 'hidden'
+        && !isDefined(item.helpText);
+
+    const helpText = needRenderOptionalMarkAsHelpText
+        ? labelOptions.markOptions.optionalMark
+        : item.helpText;
+
     return {
         $parent,
         rootElementCssClassList,
@@ -66,19 +89,7 @@ export function convertToRenderFieldItemOptions({
         formLabelLocation,
         requiredMessageTemplate,
         validationGroup,
-        editorOptions: _convertToEditorOptions({
-            editorType: item.editorType,
-            editorValue,
-            defaultEditorName: item.dataField,
-            canAssignUndefinedValueToEditor,
-            externalEditorOptions: item.editorOptions,
-            editorInputId: itemId,
-            editorValidationBoundary,
-            editorStylingMode,
-            formLabelMode: labelMode,
-            labelText: labelOptions.text,
-            labelMark: getLabelMarkText(labelOptions.markOptions),
-        })
+        editorOptions
     };
 }
 
@@ -125,12 +136,14 @@ function _convertToEditorOptions({
         labelMode = formLabelMode === 'outside' ? 'hidden' : formLabelMode;
     }
 
+    const stylingMode = externalEditorOptions?.stylingMode || editorStylingMode;
+
     const result = extend(true, editorOptionsWithValue,
         externalEditorOptions,
         {
             inputAttr: { id: editorInputId },
             validationBoundary: editorValidationBoundary,
-            stylingMode: editorStylingMode,
+            stylingMode,
             label: labelText,
             labelMode,
             labelMark,
