@@ -96,6 +96,6 @@ export class DateTableLayoutBase extends JSXComponent(DateTableLayoutProps) {
   }
 
   get virtualCellsCount(): number {
-    return this.props.viewData.groupedData[0].dateTable[0].length;
+    return this.props.viewData.groupedData[0].dateTable[0].cells.length;
   }
 }
