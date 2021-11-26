@@ -69,6 +69,7 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     animation?: dxPopoverAnimation;
     /**
      * @docid
+     * @deprecated
      * @type_function_param1 event:event
      * @type_function_return Boolean
      * @default true
@@ -98,6 +99,21 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
        */
       name?: string;
     } | string;
+    /**
+     * @docid
+     * @type boolean | function
+     * @type_function_param1 event:event
+     * @type_function_return Boolean
+     * @default true
+     * @public
+     */
+    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    hideOnParentScroll?: boolean;
     /**
      * @docid
      * @type Enums.Position|PositionConfig
@@ -146,12 +162,6 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @public
      */
     width?: number | string | (() => number | string);
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    hideOnParentScroll?: boolean;
 }
 /** @namespace DevExpress.ui */
 export interface dxPopoverAnimation extends dxPopupAnimation {

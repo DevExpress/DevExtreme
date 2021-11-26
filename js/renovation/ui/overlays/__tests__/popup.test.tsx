@@ -9,7 +9,7 @@ describe('Popup', () => {
     it('should render', () => {
       const componentProps = new PopupProps();
       const props = {
-        props: componentProps,
+        componentProps: { restProps: componentProps },
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Popup>;
 

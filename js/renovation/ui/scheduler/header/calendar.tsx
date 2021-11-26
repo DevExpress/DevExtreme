@@ -52,7 +52,7 @@ export const viewFunction = (viewModel: SchedulerCalendar): JSX.Element => {
       <Popup
         className="dx-scheduler-navigator-calendar-popup"
         showTitle={false}
-        closeOnOutsideClick
+        hideOnOutsideClick
         visible={visible}
         visibleChange={updateVisible}
         showCloseButton
@@ -68,7 +68,7 @@ export const viewFunction = (viewModel: SchedulerCalendar): JSX.Element => {
         target=".dx-scheduler-navigator-caption"
         className="dx-scheduler-navigator-calendar-popover"
         showTitle={false}
-        closeOnOutsideClick
+        hideOnOutsideClick
         visible={visible}
         visibleChange={updateVisible}
         onShown={focusCalendar}

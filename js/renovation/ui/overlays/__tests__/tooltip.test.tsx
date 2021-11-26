@@ -11,7 +11,7 @@ describe('Tooltip', () => {
     it('default render', () => {
       const componentProps = new TooltipProps();
       const props = {
-        props: componentProps,
+        componentProps: { restProps: componentProps },
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Tooltip>;
       const tree = shallow(<TooltipView {...props as any} /> as any);

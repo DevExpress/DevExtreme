@@ -583,11 +583,11 @@ export const validatingModule = {
     extenders: {
         controllers: {
             editing: {
-                _addChange: function(options, row) {
-                    const change = this.callBase(options, row);
+                _addChange: function(changeParams) {
+                    const change = this.callBase.apply(this, arguments);
                     const validatingController = this.getController('validating');
 
-                    if(change && options.type !== EDIT_DATA_REMOVE_TYPE) {
+                    if(change && changeParams.type !== EDIT_DATA_REMOVE_TYPE) {
                         validatingController.updateValidationState(change);
                     }
 
@@ -1025,7 +1025,7 @@ export const validatingModule = {
                             shading: false,
                             container: $overlayContainer,
                             propagateOutsideClick: true,
-                            closeOnOutsideClick: false,
+                            hideOnOutsideClick: false,
                             copyRootClassesToWrapper: true,
                             _ignoreCopyRootClassesToWrapperDeprecation: true,
                             contentTemplate: () => {
@@ -1124,7 +1124,7 @@ export const validatingModule = {
                             visible: true,
                             animation: false,
                             propagateOutsideClick: true,
-                            closeOnOutsideClick: false,
+                            hideOnOutsideClick: false,
                             copyRootClassesToWrapper: true,
                             _ignoreCopyRootClassesToWrapperDeprecation: true,
                             position: {

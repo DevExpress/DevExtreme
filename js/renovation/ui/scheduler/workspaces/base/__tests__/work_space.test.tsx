@@ -14,7 +14,6 @@ import { WorkSpaceProps } from '../../props';
 import * as ConfigUtils from '../work_space_config';
 import { HeaderPanelLayout } from '../header_panel/layout';
 import { DateTableLayoutBase } from '../date_table/layout';
-import { TimePanelTableLayout } from '../time_panel/layout';
 
 import { combineClasses } from '../../../../../utils/combine_classes';
 import * as Utils from '../../utils';
@@ -118,23 +117,20 @@ describe('WorkSpace', () => {
   }];
 
   describe('Render', () => {
-    const headerPanelTemplate = () => null;
-    const dateTableTemplate = () => null;
-    const timePanelTemplate = () => null;
     const renderConfig = {
       className: 'custom',
       isRenderDateHeader: true,
       scrollingDirection: 'vertical',
       groupPanelClassName: 'dx-scheduler-group-table',
       isCreateCrossScrolling: false,
+      isUseMonthDateTable: true,
+      isUseTimelineHeader: false,
+      isRenderTimePanel: false,
     };
 
     const renderComponent = (viewModel) => shallow(
       <WorkSpaceLayout
         renderConfig={renderConfig}
-        headerPanelTemplate={headerPanelTemplate}
-        dateTableTemplate={dateTableTemplate}
-        timePanelTemplate={timePanelTemplate}
         {...viewModel}
       />,
     );
@@ -203,9 +199,9 @@ describe('WorkSpace', () => {
           isRenderDateHeader: true,
           scrollingDirection: 'vertical',
           groupPanelClassName: 'dx-scheduler-group-table',
-          headerPanelTemplate,
-          dateTableTemplate,
-          timePanelTemplate,
+          isUseMonthDateTable: true,
+          isUseTimelineHeader: false,
+          isRenderTimePanel: false,
           className: 'custom-classes',
           groupPanelHeight: 500,
           headerEmptyCellWidth: 300,
@@ -2251,7 +2247,8 @@ describe('WorkSpace', () => {
             .toEqual({
               headerPanelTemplate: HeaderPanelLayout,
               dateTableTemplate: DateTableLayoutBase,
-              timePanelTemplate: TimePanelTableLayout,
+              isUseMonthDateTable: false,
+              isUseTimelineHeader: false,
               isAllDayPanelSupported: true,
               isProvideVirtualCellsWidth: false,
               isRenderTimePanel: true,
@@ -2268,42 +2265,6 @@ describe('WorkSpace', () => {
 
           expect(getViewRenderConfigByType)
             .toBeCalledWith('week', true, 3, groups, 'vertical');
-        });
-      });
-
-      describe('headerPanelTemplate', () => {
-        it('should return correct HeaderPanelLayout', () => {
-          const workSpace = new WorkSpace({
-            type: 'week',
-            intervalCount: 3,
-          } as any);
-
-          expect(workSpace.headerPanelTemplate)
-            .toBe(HeaderPanelLayout);
-        });
-      });
-
-      describe('dateTableTemplate', () => {
-        it('should return correct dateTableTemplate', () => {
-          const workSpace = new WorkSpace({
-            type: 'week',
-            intervalCount: 3,
-          } as any);
-
-          expect(workSpace.dateTableTemplate)
-            .toBe(DateTableLayoutBase);
-        });
-      });
-
-      describe('timePanelTemplate', () => {
-        it('should return correct timePanelTemplate', () => {
-          const workSpace = new WorkSpace({
-            type: 'week',
-            intervalCount: 3,
-          } as any);
-
-          expect(workSpace.timePanelTemplate)
-            .toBe(TimePanelTableLayout);
         });
       });
 

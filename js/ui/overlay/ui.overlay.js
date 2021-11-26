@@ -141,6 +141,7 @@ const Overlay = Widget.inherit({
             dragOutsideBoundary: false,
 
             closeOnOutsideClick: false,
+            hideOnOutsideClick: false,
 
             copyRootClassesToWrapper: false,
 
@@ -218,7 +219,8 @@ const Overlay = Widget.inherit({
     _setDeprecatedOptions() {
         this.callBase();
         extend(this._deprecatedOptions, {
-            'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' }
+            'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' },
+            'closeOnOutsideClick': { since: '22.2', alias: 'hideOnOutsideClick' }
         });
     },
 
@@ -383,22 +385,28 @@ const Overlay = Widget.inherit({
             this._stopAnimation();
         }
 
-        let closeOnOutsideClick = this.option('closeOnOutsideClick');
-
-        if(isFunction(closeOnOutsideClick)) {
-            closeOnOutsideClick = closeOnOutsideClick(e);
-        }
-
         const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
         const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
         const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content.is(e.target)
             || contains(this._$content.get(0), e.target));
 
-        if(outsideClick && closeOnOutsideClick) {
+        if(outsideClick && this._shouldHideOnOutsideClick(e)) {
             this._outsideClickHandler(e);
         }
 
         return this.option('propagateOutsideClick');
+    },
+
+    _shouldHideOnOutsideClick: function(e) {
+        const { closeOnOutsideClick, hideOnOutsideClick } = this.option();
+
+        if(isFunction(hideOnOutsideClick)) {
+            return hideOnOutsideClick(e);
+        } else if(isFunction(closeOnOutsideClick)) {
+            return closeOnOutsideClick(e);
+        } else {
+            return hideOnOutsideClick || closeOnOutsideClick;
+        }
     },
 
     _outsideClickHandler(e) {
@@ -1361,6 +1369,7 @@ const Overlay = Widget.inherit({
                 this._toggleParentsScrollSubscription(this.option('visible'));
                 break;
             case 'closeOnOutsideClick':
+            case 'hideOnOutsideClick':
             case 'propagateOutsideClick':
                 break;
             case 'animation':

@@ -7,7 +7,6 @@ import {
   ForwardRef,
   InternalState,
   JSXComponent,
-  JSXTemplate,
   Ref,
   RefObject,
 } from '@devextreme-generator/declarations';
@@ -43,9 +42,6 @@ import {
 } from './utils';
 import { ViewRenderConfig, WorkSpaceProps } from '../props';
 import { getViewRenderConfigByType } from './work_space_config';
-import { HeaderPanelLayoutProps } from './header_panel/layout';
-import { DateTableLayoutProps } from './date_table/layout';
-import { TimePanelLayoutProps } from './time_panel/layout';
 import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 import { CrossScrollingLayout } from './cross_scrolling_layout';
 import { GroupOrientation } from '../../types';
@@ -225,10 +221,10 @@ export const viewFunction = ({
     scrollingDirection,
     groupPanelClassName,
     isCreateCrossScrolling,
+    isUseMonthDateTable,
+    isUseTimelineHeader,
+    isRenderTimePanel,
   },
-  headerPanelTemplate,
-  dateTableTemplate,
-  timePanelTemplate,
 }: WorkSpace): JSX.Element => {
   const Layout = isCreateCrossScrolling ? CrossScrollingLayout : OrdinaryLayout;
   return (
@@ -251,9 +247,9 @@ export const viewFunction = ({
 
       intervalCount={intervalCount}
 
-      headerPanelTemplate={headerPanelTemplate}
-      dateTableTemplate={dateTableTemplate}
-      timePanelTemplate={timePanelTemplate}
+      isUseMonthDateTable={isUseMonthDateTable}
+      isUseTimelineHeader={isUseTimelineHeader}
+      isRenderTimePanel={isRenderTimePanel}
 
       isAllDayPanelCollapsed={!allDayPanelExpanded}
       isAllDayPanelVisible={isAllDayPanelVisible}
@@ -689,23 +685,8 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return groupPanelData;
   }
 
-  get headerPanelTemplate(): JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'> {
-    const { headerPanelTemplate } = this.renderConfig;
-    return headerPanelTemplate;
-  }
-
-  get dateTableTemplate(): JSXTemplate<DateTableLayoutProps> {
-    const { dateTableTemplate } = this.renderConfig;
-    return dateTableTemplate;
-  }
-
-  get timePanelTemplate(): JSXTemplate<TimePanelLayoutProps> | undefined {
-    const { timePanelTemplate } = this.renderConfig;
-    return timePanelTemplate;
-  }
-
   get isRenderHeaderEmptyCell(): boolean {
-    return this.isVerticalGrouping || !!this.timePanelTemplate;
+    return this.isVerticalGrouping || !!this.renderConfig.isRenderTimePanel;
   }
 
   // eslint-disable-next-line @typescript-eslint/class-literal-property-style
