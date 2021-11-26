@@ -1235,12 +1235,13 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         scrollable.scrollTo({ top: 1000000 });
 
         realSetTimeout(function() {
-            const topVisibleRowKey = dataGrid.getTopVisibleRowData().key;
+            const scrollPosition = scrollable.scrollTop();
+
             // act
             dataGrid.clearGrouping();
 
             // assert
-            assert.equal(dataGrid.getTopVisibleRowData().id, topVisibleRowKey, 'top visible item is not changed');
+            assert.equal(scrollable.scrollTop(), scrollPosition, 'top visible position is not changed');
             assert.ok(getHeight($(dataGrid.element()).find('.dx-virtual-row').first()) <= dataGrid.getScrollable().scrollTop(), 'first virtual row is not in viewport');
             assert.ok($(dataGrid.element()).find('.dx-virtual-row').last().position().top >= dataGrid.getScrollable().scrollTop(), 'second virtual row is not in viewport');
             done();
@@ -2453,11 +2454,11 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         });
 
         // assert
-        assert.strictEqual(instance.pageIndex(), 10, 'current page index is not changed'); // T881314
-        assert.strictEqual(instance.getTopVisibleRowData().name, 'name24', 'top visible row is changed');
+        assert.strictEqual(instance.pageIndex(), 20, 'current page index is changed'); // T881314
+        assert.strictEqual(instance.getTopVisibleRowData().name, 'name40', 'top visible row is changed');
         assert.notStrictEqual(rowsView._rowHeight, rowHeight, 'row height has changed');
         assert.ok(rowsView._rowHeight < 50, 'rowHeight < 50');
-        assert.strictEqual(instance.getVisibleRows().length, 5, 'row count');
+        assert.strictEqual(instance.getVisibleRows().length, 6, 'row count');
         // T835869
         assert.strictEqual(loadingSpy.callCount, 1, 'data is loaded once');
     });
