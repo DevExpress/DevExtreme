@@ -1,8 +1,7 @@
 import domAdapter from '../core/dom_adapter';
-// import browser from '../core/utils/browser';
+import browser from '../core/utils/browser';
 import { getWindow } from '../core/utils/window';
-// import $ from '../core/renderer';
-// import { isTouchEvent } from '../events/utils';
+import { isTouchEvent } from '../events/utils';
 import { getOffset } from '../core/utils/size';
 
 const window = getWindow();
@@ -36,8 +35,8 @@ export const isMouseOverElement = function(mouseEvent, element, correctPseudoEle
 
     const beforeHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':before').height) : 0;
     const afterHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':after').height) : 0;
-    const x = getOffset(element).left; // getAbsoluteX(element);
-    const y = getOffset(element).top + beforeHeight; // getAbsoluteY(element) + beforeHeight;
+    const x = getOffset(element).left;
+    const y = getOffset(element).top + beforeHeight;
     const w = element.offsetWidth;
     const h = element.offsetHeight - beforeHeight - afterHeight;
     const eventX = getEventX(mouseEvent);
@@ -90,14 +89,34 @@ export const reRaiseEvent = function(e, eventType, newTarget) {
     }
 };
 const getEventX = function(e) {
-    // if(isTouchEvent(e)) {
-    //     return ASPx.TouchUIHelper.getEventX(e);
-    // }
-    return e.clientX;// + (clientEventRequiresDocScrollCorrection() ? ASPx.GetDocumentScrollLeft() : 0);
+    return isTouchEvent(e) ? getTouchEventX(e) : e.clientX + getDocumentScrollLeft();
 };
 const getEventY = function(e) {
-    // if(ASPx.TouchUIHelper.isTouchEvent(e)) { return ASPx.TouchUIHelper.getEventY(e); }
-    return e.clientY;// + (clientEventRequiresDocScrollCorrection() ? ASPx.GetDocumentScrollTop() : 0);
+    return isTouchEvent(e) ? getTouchEventY(e) : e.clientY + getDocumentScrollTop();
+};
+const getTouchEventX = function(e) {
+    // if(browser.msie) {
+    //     return e.pageX;
+    // }
+    let touchPoint = null;
+    if(e.changedTouches.length > 0) {
+        touchPoint = e.changedTouches;
+    } else if(e.targetTouches.length > 0) {
+        touchPoint = e.targetTouches;
+    }
+    return touchPoint ? touchPoint[0].pageX : 0;
+};
+const getTouchEventY = function(e) {
+    // if(browser.msie) {
+    //     return e.pageY;
+    // }
+    let touchPoint = null;
+    if(e.changedTouches.length > 0) {
+        touchPoint = e.changedTouches;
+    } else if(e.targetTouches.length > 0) {
+        touchPoint = e.targetTouches;
+    }
+    return touchPoint ? touchPoint[0].pageY : 0;
 };
 const setAbsoluteX = function(element, x) {
     element.style.left = prepareClientPosForElement(x, element, true) + 'px';
@@ -113,4 +132,27 @@ const getPositionElementOffset = function(element, isX) {
     return isX ? getOffset(element).left : getOffset(element).top;
 
 };
-
+const getDocumentScrollTop = function() {
+    const document = domAdapter.getDocument();
+    // var isScrollBodyIE = Browser.IE && ASPx.GetCurrentStyle(document.body).overflow == "hidden" && document.body.scrollTop > 0;
+    // if(browser.msie || isScrollBodyIE) {
+    //     return document.body.scrollTop;
+    // }
+    if(browser.webkit) {
+        return document.documentElement.scrollTop || document.body.scrollTop;
+    } else {
+        return document.documentElement.scrollTop;
+    }
+};
+const getDocumentScrollLeft = function() {
+    const document = domAdapter.getDocument();
+    // var isScrollBodyIE = Browser.IE && ASPx.GetCurrentStyle(document.body).overflow == "hidden" && document.body.scrollLeft > 0;
+    // if(Browser.Edge || isScrollBodyIE) {
+    //     return document.body ? document.body.scrollLeft : document.documentElement.scrollLeft;
+    // }
+    if(browser.webkit) {
+        return document.documentElement.scrollLeft || document.body.scrollLeft;
+    } else {
+        return document.documentElement.scrollLeft;
+    }
+};
