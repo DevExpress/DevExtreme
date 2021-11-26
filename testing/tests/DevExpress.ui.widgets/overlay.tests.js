@@ -1582,6 +1582,20 @@ testModule('content', moduleConfig, () => {
         assert.ok(contentReadyStub.calledOnce);
     });
 
+    test('content shouldn`t clean when component is renovated', function(assert) {
+        const $overlay = $('#overlay').dxOverlay({
+            isRenovated: true,
+            contentTemplate: 'template',
+            visible: true
+        });
+        const instance = $overlay.dxOverlay('instance');
+        const $content = instance.$content();
+        const contentRenderSpy = sinon.spy($content, 'empty');
+
+        instance.option({ visible: false, contentTemplate: 'template1' });
+        assert.equal(contentRenderSpy.callCount, 0);
+    });
+
     test('content should be rendered only once after resize', function(assert) {
         const contentReadyStub = sinon.stub();
 
