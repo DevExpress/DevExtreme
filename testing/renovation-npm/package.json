@@ -1,0 +1,28 @@
+{
+  "name": "renovation-npm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:devextreme": "gulp build-devextreme --framework",
+    "build:renovation": "gulp build-devextreme-renovation --framework",
+    "build": "gulp build-all --framework",
+    "pack:devextreme": "gulp pack-devextreme --framework",
+    "pack:renovation": "gulp pack-devextreme-renovation --framework",
+    "pack": "gulp pack-all --framework",
+    "install:devextreme": "gulp install-devextreme --framework",
+    "install:renovation": "gulp install-devextreme-renovation --framework",
+    "install": "gulp install-all --framework",
+    "start": "gulp start --framework"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "glob": "^7.2.0",
+    "gulp": "^4.0.2"
+  },
+  "devDependencies": {
+    "yargs": "^17.2.1"
+  }
+}
