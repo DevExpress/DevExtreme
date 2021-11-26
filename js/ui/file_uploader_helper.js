@@ -1,5 +1,4 @@
 import domAdapter from '../core/dom_adapter';
-import browser from '../core/utils/browser';
 import { getWindow } from '../core/utils/window';
 import { isTouchEvent } from '../events/utils';
 import { getOffset } from '../core/utils/size';
@@ -64,7 +63,6 @@ export const reRaiseEvent = function(e, eventType, newTarget) {
             button: e.button,
             relatedTarget: e.relatedTarget
         });
-        // newEvent.target = newTarget;
 
         newTarget.dispatchEvent(newEvent);
     } else if(document.createEventObject) {
@@ -95,9 +93,6 @@ const getEventY = function(e) {
     return isTouchEvent(e) ? getTouchEventY(e) : e.clientY + getDocumentScrollTop();
 };
 const getTouchEventX = function(e) {
-    // if(browser.msie) {
-    //     return e.pageX;
-    // }
     let touchPoint = null;
     if(e.changedTouches.length > 0) {
         touchPoint = e.changedTouches;
@@ -107,9 +102,6 @@ const getTouchEventX = function(e) {
     return touchPoint ? touchPoint[0].pageX : 0;
 };
 const getTouchEventY = function(e) {
-    // if(browser.msie) {
-    //     return e.pageY;
-    // }
     let touchPoint = null;
     if(e.changedTouches.length > 0) {
         touchPoint = e.changedTouches;
@@ -134,25 +126,9 @@ const getPositionElementOffset = function(element, isX) {
 };
 const getDocumentScrollTop = function() {
     const document = domAdapter.getDocument();
-    // var isScrollBodyIE = Browser.IE && ASPx.GetCurrentStyle(document.body).overflow == "hidden" && document.body.scrollTop > 0;
-    // if(browser.msie || isScrollBodyIE) {
-    //     return document.body.scrollTop;
-    // }
-    if(browser.webkit) {
-        return document.documentElement.scrollTop || document.body.scrollTop;
-    } else {
-        return document.documentElement.scrollTop;
-    }
+    return document.documentElement.scrollTop || document.body.scrollTop;
 };
 const getDocumentScrollLeft = function() {
     const document = domAdapter.getDocument();
-    // var isScrollBodyIE = Browser.IE && ASPx.GetCurrentStyle(document.body).overflow == "hidden" && document.body.scrollLeft > 0;
-    // if(Browser.Edge || isScrollBodyIE) {
-    //     return document.body ? document.body.scrollLeft : document.documentElement.scrollLeft;
-    // }
-    if(browser.webkit) {
-        return document.documentElement.scrollLeft || document.body.scrollLeft;
-    } else {
-        return document.documentElement.scrollLeft;
-    }
+    return document.documentElement.scrollLeft || document.body.scrollLeft;
 };

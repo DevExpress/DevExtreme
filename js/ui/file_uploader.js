@@ -895,8 +895,6 @@ class FileUploader extends Editor {
         this._detachDragEventHandlers(target);
         target = $(target);
 
-        this._dragEventsTargets = [];
-
         eventsEngine.on(target, addNamespace('dragenter', this.NAME), this._dragEnterHandler.bind(this, isCustomTarget));
         eventsEngine.on(target, addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this, isCustomTarget));
         eventsEngine.on(target, addNamespace('dragleave', this.NAME), this._dragLeaveHandler.bind(this, isCustomTarget));
@@ -928,7 +926,6 @@ class FileUploader extends Editor {
         if(dropZoneElement === e.target && this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, false)) {
             this._activeDropZone = dropZoneElement;
             this._tryToggleDropZoneActive(true, isCustomTarget, e);
-            this._updateEventTargets(e);
         }
     }
 
@@ -966,17 +963,6 @@ class FileUploader extends Editor {
         }
     }
 
-    _updateEventTargets(e) {
-        const targetIndex = this._dragEventsTargets.indexOf(e.target);
-        const isTargetExists = targetIndex !== -1;
-
-        if(e.type === 'dragenter') {
-            !isTargetExists && this._dragEventsTargets.push(e.target);
-        } else {
-            isTargetExists && this._dragEventsTargets.splice(targetIndex, 1);
-        }
-    }
-
     _tryToggleDropZoneActive(active, isCustom, event) {
         const classAction = active ? 'addClass' : 'removeClass';
         const mouseAction = active ? '_dropZoneEnterAction' : '_dropZoneLeaveAction';
@@ -988,15 +974,11 @@ class FileUploader extends Editor {
         if(!isCustom) {
             this.$element()[classAction](FILEUPLOADER_DRAGOVER_CLASS);
         }
-        // if(!this._dragEventsTargets.length) {
-        // }
     }
 
     _dropHandler(isCustomTarget, e) {
-        this._dragEventsTargets = [];
         this._activeDropZone = null;
-        // this._hasActiveDragFiles = false;
-        window.canLog = true;
+
         if(!isCustomTarget) {
             this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
         }
