@@ -548,8 +548,6 @@ QUnit.test('velocity calculated correctly when content height less than containe
 
 [true, false].forEach((useNative) => {
     QUnit.test(`window resize should call update, useNative: ${useNative}`, function(assert) {
-        assert.expect(1);
-
         const $scrollable = $('#scrollable');
 
         const updateHandler = sinon.spy();
