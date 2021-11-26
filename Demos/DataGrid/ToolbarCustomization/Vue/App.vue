@@ -30,39 +30,55 @@
       format="currency"
     />
     <DxToolbar>
-      <DxItem location="before">
-        <div class="informer">
-          <h2 class="count">{{ totalCount }}</h2>
-          <span class="name">Total Count</span>
-        </div>
-      </DxItem>
-      <DxItem location="before">
-        <DxSelectBox
-          width="225"
-          :items="groupingValues"
-          display-expr="text"
-          value-expr="value"
-          value="CustomerStoreState"
-          @value-changed="groupChanged"
-        />
-      </DxItem>
-      <DxItem location="before">
-        <DxButton
-          :text="expanded ? 'Collapse All' : 'Expand All'"
-          width="136"
-          @click="collapseAllClick"
-        />
-      </DxItem>
-      <DxItem location="after">
-        <DxButton
-          icon="refresh"
-          @click="refreshDataGrid"
-        />
-      </DxItem>
+      <DxItem
+        location="before"
+        template="totalCountTemplate"
+      />
+      <DxItem
+        location="before"
+        template="groupingTemplate"
+      />
+      <DxItem
+        location="before"
+        template="collapseTemplate"
+      />
+      <DxItem
+        location="after"
+        template="refreshTemplate"
+      />
       <DxItem
         name="columnChooserButton"
       />
     </DxToolbar>
+    <template #totalCountTemplate>
+      <div class="informer">
+        <h2 class="count">{{ totalCount }}</h2>
+        <span class="name">Total Count</span>
+      </div>
+    </template>
+    <template #groupingTemplate>
+      <DxSelectBox
+        width="225"
+        :items="groupingValues"
+        display-expr="text"
+        value-expr="value"
+        value="CustomerStoreState"
+        @value-changed="groupChanged"
+      />
+    </template>
+    <template #collapseTemplate>
+      <DxButton
+        :text="expanded ? 'Collapse All' : 'Expand All'"
+        width="136"
+        @click="collapseAllClick"
+      />
+    </template>
+    <template #refreshTemplate>
+      <DxButton
+        icon="refresh"
+        @click="refreshDataGrid"
+      />
+    </template>
   </DxDataGrid>
 </template>
 <script>

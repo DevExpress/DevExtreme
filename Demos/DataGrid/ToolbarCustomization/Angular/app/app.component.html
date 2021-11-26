@@ -25,33 +25,39 @@
 
   <dxo-toolbar>
     <dxi-item location="before">
-      <div class="informer">
+      <div *dxTemplate class="informer">
         <h2 class="count">{{ totalCount }}</h2>
         <span class="name">Total Count</span>
       </div>
     </dxi-item>
     <dxi-item location="before">
-      <dx-select-box
-        width="225"
-        [items]="groupingValues"
-        displayExpr="text"
-        valueExpr="value"
-        value="CustomerStoreState"
-        (onValueChanged)="groupChanged($event)"
-      >
-      </dx-select-box>
+      <div *dxTemplate>
+        <dx-select-box
+          width="225"
+          [items]="groupingValues"
+          displayExpr="text"
+          valueExpr="value"
+          value="CustomerStoreState"
+          (onValueChanged)="groupChanged($event)"
+        >
+        </dx-select-box>
+      </div>
     </dxi-item>
     <dxi-item location="before">
-      <dx-button
-        [text]="this.expanded ? 'Collapse All' : 'Expand All'"
-        width="136"
-        (onClick)="collapseAllClick($event)"
-      >
-      </dx-button>
+      <div *dxTemplate>
+        <dx-button
+          [text]="this.expanded ? 'Collapse All' : 'Expand All'"
+          width="136"
+          (onClick)="collapseAllClick($event)"
+        >
+        </dx-button>
+      </div>
     </dxi-item>
     <dxi-item location="after">
-      <dx-button icon="refresh" (onClick)="refreshDataGrid($event)">
-      </dx-button>
+      <div *dxTemplate>
+        <dx-button icon="refresh" (onClick)="refreshDataGrid($event)">
+        </dx-button>
+      </div>
     </dxi-item>
     <dxi-item name="columnChooserButton"></dxi-item>
   </dxo-toolbar>
