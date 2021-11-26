@@ -64,6 +64,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     closeOnClick?: boolean;
     /**
      * @docid
+     * @deprecated
      * @type_function_param1 event:event
      * @type_function_return Boolean
      * @default true &for(Android)
@@ -83,6 +84,15 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
      * @public
      */
     displayTime?: number;
+    /**
+     * @docid
+     * @type boolean | function
+     * @type_function_param1 event:event
+     * @type_function_return Boolean
+     * @default true &for(Android)
+     * @public
+     */
+    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @default 'auto'

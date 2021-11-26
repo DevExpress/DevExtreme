@@ -550,7 +550,7 @@ export class AppointmentSettingsGenerator {
     get dataAccessors() { return this.options.dataAccessors; }
     get timeZoneCalculator() { return this.options.timeZoneCalculator; }
     get isAllDayRowAppointment() { return this.options.appointmentTakesAllDay && this.options.supportAllDayRow; }
-    get modelGroups() { return this.options.modelGroups; }
+    get groups() { return this.options.groups; }
     get dateSettingsStrategy() {
         const options = {
             ...this.options,
@@ -631,7 +631,7 @@ export class AppointmentSettingsGenerator {
         const appointmentConfig = {
             itemData: this.rawAppointment,
             groupIndex,
-            groups: this.modelGroups
+            groups: this.groups
         };
 
         this.options.getAppointmentColor(appointmentConfig).done((color) => info.resourceColor = color);

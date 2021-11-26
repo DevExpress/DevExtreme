@@ -14,7 +14,6 @@ import { WorkSpaceProps } from '../../props';
 import * as ConfigUtils from '../work_space_config';
 import { HeaderPanelLayout } from '../header_panel/layout';
 import { DateTableLayoutBase } from '../date_table/layout';
-import { TimePanelTableLayout } from '../time_panel/layout';
 
 import { combineClasses } from '../../../../../utils/combine_classes';
 import * as Utils from '../../utils';
@@ -51,33 +50,43 @@ describe('WorkSpace', () => {
   const viewData = {
     groupedData: [{
       allDayPane: [],
-      dateTable: [[
-        {
-          startDate: new Date(2020, 6, 9),
-          endDate: new Date(2020, 6, 10),
-          today: true,
-          groups: 1,
-        },
-        {
-          startDate: new Date(2020, 6, 10),
-          endDate: new Date(2020, 6, 11),
-          today: false,
-          groups: 2,
-        },
-      ], [
-        {
-          startDate: new Date(2020, 6, 11),
-          endDate: new Date(2020, 6, 12),
-          today: false,
-          groups: 3,
-        },
-        {
-          startDate: new Date(2020, 6, 12),
-          endDate: new Date(2020, 6, 13),
-          today: false,
-          groups: 4,
-        },
-      ]],
+      dateTable: [{
+        cells: [
+          {
+            startDate: new Date(2020, 6, 9),
+            endDate: new Date(2020, 6, 10),
+            today: true,
+            groups: 1,
+            key: 0,
+          },
+          {
+            startDate: new Date(2020, 6, 10),
+            endDate: new Date(2020, 6, 11),
+            today: false,
+            groups: 2,
+            key: 1,
+          },
+        ],
+        key: 0,
+      }, {
+        cells: [
+          {
+            startDate: new Date(2020, 6, 11),
+            endDate: new Date(2020, 6, 12),
+            today: false,
+            groups: 3,
+            key: 0,
+          },
+          {
+            startDate: new Date(2020, 6, 12),
+            endDate: new Date(2020, 6, 13),
+            today: false,
+            groups: 4,
+            key: 1,
+          },
+        ],
+        key: 1,
+      }],
     }],
   };
   const dateHeaderData = {
@@ -118,25 +127,23 @@ describe('WorkSpace', () => {
   }];
 
   describe('Render', () => {
-    const Layout = (props) => <div {...props} />;
-    const headerPanelTemplate = () => null;
-    const dateTableTemplate = () => null;
-    const timePanelTemplate = () => null;
     const renderConfig = {
       className: 'custom',
       isRenderDateHeader: true,
       scrollingDirection: 'vertical',
       groupPanelClassName: 'dx-scheduler-group-table',
+      isCreateCrossScrolling: false,
+      isUseMonthDateTable: true,
+      isUseTimelineHeader: false,
+      isRenderTimePanel: false,
     };
 
-    const renderComponent = (viewModel) => shallow(WorkSpaceLayout({
-      layout: Layout,
-      renderConfig,
-      headerPanelTemplate,
-      dateTableTemplate,
-      timePanelTemplate,
-      ...viewModel,
-    }) as any);
+    const renderComponent = (viewModel) => shallow(
+      <WorkSpaceLayout
+        renderConfig={renderConfig}
+        {...viewModel}
+      />,
+    );
 
     it('should pass correct props to the root component', () => {
       const props = {
@@ -184,6 +191,8 @@ describe('WorkSpace', () => {
         },
       });
 
+      expect(workSpace.is(OrdinaryLayout))
+        .toBe(true);
       expect(workSpace.props())
         .toEqual({
           ...props,
@@ -197,10 +206,12 @@ describe('WorkSpace', () => {
             baseColSpan: 5,
             groupPanelItems: [],
           },
-          ...renderConfig,
-          headerPanelTemplate,
-          dateTableTemplate,
-          timePanelTemplate,
+          isRenderDateHeader: true,
+          scrollingDirection: 'vertical',
+          groupPanelClassName: 'dx-scheduler-group-table',
+          isUseMonthDateTable: true,
+          isUseTimelineHeader: false,
+          isRenderTimePanel: false,
           className: 'custom-classes',
           groupPanelHeight: 500,
           headerEmptyCellWidth: 300,
@@ -214,6 +225,53 @@ describe('WorkSpace', () => {
           onScroll: onScrollableScroll,
           widgetElementRef: 'widgetElementRef',
         });
+    });
+
+    it('should render cross-scrolling layout when necessary', () => {
+      const props = {
+        dataCellTemplate: () => null,
+        dateCellTemplate: () => null,
+        timeCellTemplate: () => null,
+        resourceCellTemplate: () => null,
+
+        groups,
+        intervalCount: 1,
+      };
+      const onScrollableScroll = jest.fn();
+
+      const viewModel = {
+        dateHeaderData,
+        viewData,
+        timePanelData,
+        isAllDayPanelVisible: true,
+        isRenderHeaderEmptyCell: true,
+        groupPanelData: {
+          baseColSpan: 5,
+          groupPanelItems: [],
+        },
+        groupPanelHeight: 500,
+        headerEmptyCellWidth: 300,
+        tablesWidth: 1900,
+        groupOrientation: VERTICAL_GROUP_ORIENTATION,
+        isGroupedByDate: false,
+        onScrollableScroll,
+      };
+
+      const workSpace = renderComponent({
+        ...viewModel,
+        props: {
+          ...new WorkSpaceProps(),
+          ...props,
+          allDayPanelExpanded: false,
+        },
+        renderConfig: {
+          ...renderConfig,
+          isCreateCrossScrolling: true,
+        },
+      });
+
+      expect(workSpace.is(CrossScrollingLayout))
+        .toBe(true);
     });
   });
 
@@ -1401,30 +1459,6 @@ describe('WorkSpace', () => {
 
   describe('Logic', () => {
     describe('Getters', () => {
-      describe('layout', () => {
-        it('should return ordinary layout if crossScrolling is not enabled', () => {
-          const workSpace = new WorkSpace({
-            currentDate: new Date(),
-            crossScrollingEnabled: false,
-            type: 'week',
-          } as any);
-
-          expect(workSpace.layout)
-            .toBe(OrdinaryLayout);
-        });
-
-        it('should return cross-scrolling layout if crossScrolling is enabled', () => {
-          const workSpace = new WorkSpace({
-            currentDate: new Date(),
-            crossScrollingEnabled: true,
-            type: 'week',
-          } as any);
-
-          expect(workSpace.layout)
-            .toBe(CrossScrollingLayout);
-        });
-      });
-
       describe('isAllDayPanelVisible', () => {
         it('should return false when all-day panel is not supported', () => {
           const workSpace = new WorkSpace({
@@ -1650,27 +1684,34 @@ describe('WorkSpace', () => {
                   isLastGroupCell: true,
                   key: 0,
                 }],
-                dateTable: [[{
-                  startDate: new Date(2021, 9, 26),
-                  endDate: new Date(2021, 9, 26, 0, 30),
-                  groupIndex: 0,
-                  index: 0,
-                  allDay: false,
-                  isFirstGroupCell: true,
-                  isLastGroupCell: true,
+                dateTable: [{
+                  cells: [{
+                    startDate: new Date(2021, 9, 26),
+                    endDate: new Date(2021, 9, 26, 0, 30),
+                    groupIndex: 0,
+                    index: 0,
+                    allDay: false,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: true,
+                    key: 0,
+                  }],
                   key: 0,
-                }], [{
-                  startDate: new Date(2021, 9, 26, 0, 30),
-                  endDate: new Date(2021, 9, 26, 1),
-                  groupIndex: 0,
-                  index: 1,
-                  allDay: false,
-                  isFirstGroupCell: true,
-                  isLastGroupCell: true,
+                }, {
+                  cells: [{
+                    startDate: new Date(2021, 9, 26, 0, 30),
+                    endDate: new Date(2021, 9, 26, 1),
+                    groupIndex: 0,
+                    index: 1,
+                    allDay: false,
+                    isFirstGroupCell: true,
+                    isLastGroupCell: true,
+                    key: 1,
+                  }],
                   key: 1,
-                }]],
+                }],
                 groupIndex: 0,
                 isGroupedAllDayPanel: false,
+                key: '0',
               }],
               topVirtualRowCount: 0,
               bottomVirtualRowCount: 0,
@@ -2004,6 +2045,7 @@ describe('WorkSpace', () => {
                 }],
                 groupIndex: undefined,
                 isGroupedAllDayPanel: false,
+                key: '0',
               }],
               isGroupedAllDayPanel: false,
             });
@@ -2221,7 +2263,8 @@ describe('WorkSpace', () => {
             .toEqual({
               headerPanelTemplate: HeaderPanelLayout,
               dateTableTemplate: DateTableLayoutBase,
-              timePanelTemplate: TimePanelTableLayout,
+              isUseMonthDateTable: false,
+              isUseTimelineHeader: false,
               isAllDayPanelSupported: true,
               isProvideVirtualCellsWidth: false,
               isRenderTimePanel: true,
@@ -2238,42 +2281,6 @@ describe('WorkSpace', () => {
 
           expect(getViewRenderConfigByType)
             .toBeCalledWith('week', true, 3, groups, 'vertical');
-        });
-      });
-
-      describe('headerPanelTemplate', () => {
-        it('should return correct HeaderPanelLayout', () => {
-          const workSpace = new WorkSpace({
-            type: 'week',
-            intervalCount: 3,
-          } as any);
-
-          expect(workSpace.headerPanelTemplate)
-            .toBe(HeaderPanelLayout);
-        });
-      });
-
-      describe('dateTableTemplate', () => {
-        it('should return correct dateTableTemplate', () => {
-          const workSpace = new WorkSpace({
-            type: 'week',
-            intervalCount: 3,
-          } as any);
-
-          expect(workSpace.dateTableTemplate)
-            .toBe(DateTableLayoutBase);
-        });
-      });
-
-      describe('timePanelTemplate', () => {
-        it('should return correct timePanelTemplate', () => {
-          const workSpace = new WorkSpace({
-            type: 'week',
-            intervalCount: 3,
-          } as any);
-
-          expect(workSpace.timePanelTemplate)
-            .toBe(TimePanelTableLayout);
         });
       });
 

@@ -113,7 +113,7 @@ const Popover = Popup.inherit({
 
             position: extend({}, POPOVER_POSITION_ALIASES.bottom),
 
-            closeOnOutsideClick: true,
+            hideOnOutsideClick: true,
 
             animation: {
                 show: {

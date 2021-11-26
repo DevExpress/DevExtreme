@@ -122,7 +122,7 @@ describe('Appointments model', () => {
               intervalCount: 7,
               hoursInterval: 0.5,
               showAllDayPanel: false,
-              modelGroups: [],
+              groups: [],
               appointmentCountPerCell: 2, // TODO default
               appointmentOffset: 26, // TODO default
               allowResizing: false, // TODO resizing

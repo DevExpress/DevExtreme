@@ -21,7 +21,7 @@ export const viewFunction = ({
   },
 }: AppointmentTooltip): JSX.Element => (
   <Tooltip
-    closeOnOutsideClick
+    hideOnOutsideClick
     visible={visible}
     visibleChange={onVisibleChange}
     target={target}

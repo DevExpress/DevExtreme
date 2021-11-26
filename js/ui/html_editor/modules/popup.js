@@ -67,7 +67,7 @@ if(Quill) {
                 height: 'auto',
                 shading: false,
                 hideOnParentScroll: true,
-                closeOnOutsideClick: true,
+                hideOnOutsideClick: true,
                 animation: {
                     show: { type: 'fade', duration: 0, from: 0, to: 1 },
                     hide: { type: 'fade', duration: 400, from: 1, to: 0 }

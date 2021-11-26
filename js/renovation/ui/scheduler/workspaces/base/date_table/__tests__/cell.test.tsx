@@ -41,12 +41,11 @@ describe('DateTableCellBase', () => {
           ...new CellBaseProps(),
           isFirstGroupCell: true,
           isLastGroupCell: false,
-          contentTemplate: dataCellTemplate,
-          contentTemplateProps: dataCellTemplateProps,
           ariaLabel: 'Custom label',
           className: 'test-class',
           startDate: expect.any(Date),
           endDate: expect.any(Date),
+          children: expect.anything(),
         });
     });
 
@@ -55,6 +54,27 @@ describe('DateTableCellBase', () => {
 
       expect(cell.find('.child').exists())
         .toBe(true);
+    });
+
+    it('should render dataCellTemplate', () => {
+      const dataCellTemplate = jest.fn();
+      const dataCellTemplateProps = {
+        index: 1,
+        data: {},
+      };
+
+      const cell = render({
+        props: {
+          children: <div className="child" />,
+          dataCellTemplate,
+        },
+        dataCellTemplateProps,
+      });
+
+      expect(cell.find('.child').exists())
+        .toBe(false);
+      expect(cell.find(dataCellTemplate).props())
+        .toEqual(dataCellTemplateProps);
     });
   });
 

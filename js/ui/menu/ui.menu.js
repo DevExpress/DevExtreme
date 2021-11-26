@@ -343,7 +343,7 @@ class Menu extends MenuBase {
                 this._toggleHamburgerActiveState(false);
             },
             height: 'auto',
-            closeOnOutsideClick(e) {
+            hideOnOutsideClick(e) {
                 return !($(e.target).closest(`.${DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS}`).length);
             },
             position: {

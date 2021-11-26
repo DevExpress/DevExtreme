@@ -13,9 +13,21 @@ describe('MonthDateTableLayout', () => {
   describe('Render', () => {
     const viewData = {
       groupedData: [{
-        dateTable: [
-          [{ startDate: new Date(2020, 6, 9, 0), endDate: new Date(2020, 6, 9, 0, 30), groups: 1 }],
-          [{ startDate: new Date(2020, 6, 9, 0, 30), endDate: new Date(2020, 6, 9, 1), groups: 2 }],
+        dateTable: [{
+          cells: [{
+            startDate: new Date(2020, 6, 9, 0),
+            endDate: new Date(2020, 6, 9, 0, 30),
+            groups: 1,
+          }],
+          key: 0,
+        }, {
+          cells: [{
+            startDate: new Date(2020, 6, 9, 0, 30),
+            endDate: new Date(2020, 6, 9, 1),
+            groups: 2,
+          }],
+          key: 1,
+        },
         ],
       }],
     };

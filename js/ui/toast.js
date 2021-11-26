@@ -122,7 +122,7 @@ const Toast = Overlay.inherit({
             {
                 device: { platform: 'android' },
                 options: {
-                    closeOnOutsideClick: true,
+                    hideOnOutsideClick: true,
 
                     width: 'auto',
 

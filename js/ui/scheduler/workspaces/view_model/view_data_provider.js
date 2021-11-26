@@ -220,9 +220,9 @@ export default class ViewDataProvider {
         } = groupedData[0];
         const filteredDateTable = [];
 
-        dateTable.forEach(row => {
+        dateTable.forEach(({ cells }) => {
             filteredDateTable.push(
-                filterCells(row)
+                filterCells(cells)
             );
         });
 

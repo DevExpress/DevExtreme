@@ -84,6 +84,7 @@ export interface dxContextMenuOptions<
 > extends dxMenuBaseOptions<dxContextMenu<TKey>, dxContextMenuItem, TKey> {
     /**
      * @docid
+     * @deprecated
      * @default true
      * @type_function_param1 event:event
      * @type_function_return Boolean
@@ -97,6 +98,15 @@ export interface dxContextMenuOptions<
      * @public
      */
     dataSource?: DataSourceLike<Item, TKey>;
+    /**
+     * @docid
+     * @default true
+     * @type boolean | function
+     * @type_function_param1 event:event
+     * @type_function_return Boolean
+     * @public
+     */
+    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @type Array<dxContextMenuItem>

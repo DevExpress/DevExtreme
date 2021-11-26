@@ -58,8 +58,28 @@ export const getAppointmentRenderingStrategyName = (viewType: ViewType): string 
 };
 
 export const getAppointmentsConfig = (
-  schedulerConfig: SchedulerProps,
-  viewConfig: CurrentViewConfigType,
+  schedulerConfig: Pick<
+  SchedulerProps,
+  'adaptivityEnabled' |
+  'rtlEnabled' |
+  'resources' |
+  'maxAppointmentsPerCell' |
+  'timeZone' |
+  'groups'
+  >,
+  viewConfig: Pick<
+  CurrentViewConfigType,
+  'startDayHour' |
+  'endDayHour' |
+  'currentDate' |
+  'scrolling' |
+  'intervalCount' |
+  'hoursInterval' |
+  'showAllDayPanel' |
+  'firstDayOfWeek' |
+  'type' |
+  'cellDuration'
+  >,
   loadedResources: Group[],
   viewDataProvider: ViewDataProviderType,
   isAllDayPanelSupported: boolean,
@@ -78,7 +98,7 @@ export const getAppointmentsConfig = (
     resources: schedulerConfig.resources,
     maxAppointmentsPerCell: schedulerConfig.maxAppointmentsPerCell,
     timeZone: schedulerConfig.timeZone,
-    modelGroups: schedulerConfig.groups,
+    groups: schedulerConfig.groups,
     startDayHour: viewConfig.startDayHour,
     viewStartDayHour: viewConfig.startDayHour, // TODO remove
     endDayHour: viewConfig.endDayHour,
@@ -115,7 +135,7 @@ export const getAppointmentsModel = (
   cellsMetaData: CellsMetaData,
 ): AppointmentsModelType => {
   const groupedByDate = isGroupingByDate(
-    appointmentsConfig.modelGroups as unknown as Group[],
+    appointmentsConfig.groups as unknown as Group[],
     appointmentsConfig.groupOrientation,
     appointmentsConfig.groupByDate,
   );

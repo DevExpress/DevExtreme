@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Fragment,
+  Component, ComponentBindings, JSXComponent, OneWay, Fragment, Template,
 } from '@devextreme-generator/declarations';
 import { getImageSourceType } from '../../../core/utils/icon';
 import { combineClasses } from '../../utils/combine_classes';
@@ -7,13 +7,13 @@ import { combineClasses } from '../../utils/combine_classes';
 export const viewFunction = ({
   sourceType,
   iconClassName,
-  props: { source },
+  props: { source, iconTemplate: IconTemplate },
 }: Icon): JSX.Element => (
   <Fragment>
     {sourceType === 'dxIcon' && (<i className={iconClassName} />)}
     {sourceType === 'fontIcon' && (<i className={iconClassName} />)}
     {sourceType === 'image' && (<img className={iconClassName} alt="" src={source} />)}
-    {sourceType === 'svg' && (<i className={iconClassName}>{source}</i>)}
+    {IconTemplate && (<i className={iconClassName}><IconTemplate /></i>)}
   </Fragment>
 );
 
@@ -22,6 +22,8 @@ export class IconProps {
   @OneWay() position?: string = 'left';
 
   @OneWay() source?: string = '';
+
+  @Template() iconTemplate?: (props) => JSX.Element;
 }
 
 @Component({
