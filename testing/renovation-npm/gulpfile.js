@@ -6,6 +6,7 @@ const { spawn } = require('child_process');
 const glob = require('glob');
 const path = require('path');
 const argv = require('yargs').argv;
+const del = require('del');
 
 const framework = argv.framework;
 if(!framework || framework !== 'react' && framework !== 'angular') {
@@ -65,3 +66,11 @@ gulp.task('install-all', (cb)=>{
 gulp.task('start', (cb) => {
     run('npm run start', cb);
 });
+
+gulp.task('cleanup', (cb) => {
+    del.sync(`./${framework}-app/node_modules/**`, { force: true });
+    del.sync(`./${framework}-app/devextreme-*.tgz`, { force: true });
+    cb();
+});
+
+gulp.task('prepare-all', gulp.series('cleanup', 'build-all', 'pack-all', 'install-all'));

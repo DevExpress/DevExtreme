@@ -13,7 +13,9 @@
     "install:devextreme": "gulp install-devextreme --framework",
     "install:renovation": "gulp install-devextreme-renovation --framework",
     "install": "gulp install-all --framework",
-    "start": "gulp start --framework"
+    "start": "gulp start --framework",
+    "cleanup": "gulp cleanup --framework",
+    "prepare-all": "gulp prepare-all --framework"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +25,7 @@
     "gulp": "^4.0.2"
   },
   "devDependencies": {
+    "del": "^6.0.0",
     "yargs": "^17.2.1"
   }
 }
