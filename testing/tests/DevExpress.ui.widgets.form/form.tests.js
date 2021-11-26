@@ -456,51 +456,59 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
         const widgetLabelText = renderedWidget.option('label');
 
         assert.equal(widgetLabelMode, labelMode === 'outside' ? 'hidden' : labelMode);
-        assert.equal(widgetLabelText, 'Name:');
+        assert.equal(widgetLabelText, 'Name');
 
         form.dispose();
     });
 });
 
-[undefined, true, false].forEach((isLabelVisible) => {
-    ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
-        [
-            'dxAutocomplete',
-            'dxCalendar',
-            'dxCheckBox',
-            'dxColorBox',
-            'dxDateBox',
-            'dxDropDownBox',
-            'dxHtmlEditor',
-            'dxLookup',
-            'dxNumberBox',
-            'dxRadioGroup',
-            'dxRangeSlider',
-            'dxSelectBox',
-            'dxSlider',
-            'dxSwitch',
-            'dxTagBox',
-            'dxTextArea',
-            'dxTextBox'
-        ].forEach((editorType) => {
-            QUnit.test(`label rendering, form.labelMode=${formLabelMode},label.visible=${isLabelVisible},editorType=${editorType}`, function(assert) {
-                const $form = $('#form').dxForm({
-                    labelMode: formLabelMode,
-                    items: [
-                        { dataField: 'item1', editorType, label: { visible: isLabelVisible } }
-                    ]
-                });
+[true, false].forEach((showColon) => {
+    [undefined, true, false].forEach((isLabelVisible) => {
+        ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+            [
+                'dxAutocomplete',
+                'dxCalendar',
+                'dxCheckBox',
+                'dxColorBox',
+                'dxDateBox',
+                'dxDropDownBox',
+                'dxHtmlEditor',
+                'dxLookup',
+                'dxNumberBox',
+                'dxRadioGroup',
+                'dxRangeSlider',
+                'dxSelectBox',
+                'dxSlider',
+                'dxSwitch',
+                'dxTagBox',
+                'dxTextArea',
+                'dxTextBox'
+            ].forEach((editorType) => {
+                QUnit.test(`label rendering, form.labelMode=${formLabelMode},label.visible=${isLabelVisible},editorType=${editorType},label.showColon=${showColon}`, function(assert) {
+                    const $form = $('#form').dxForm({
+                        labelMode: formLabelMode,
+                        items: [{
+                            dataField: 'item1',
+                            editorType,
+                            label: {
+                                visible: isLabelVisible,
+                                showColon,
+                            }
+                        }],
+                    });
 
-                const label = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-                let needRenderLabel = isLabelVisible;
-                if(needRenderLabel === undefined) {
-                    if(EDITORS_WITHOUT_LABELS.indexOf(editorType) !== -1 && formLabelMode !== 'hidden') {
-                        needRenderLabel = true;
-                    } else if(formLabelMode === 'outside') {
-                        needRenderLabel = true;
+                    const $label = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+                    let needRenderLabel = isLabelVisible;
+                    if(needRenderLabel === undefined) {
+                        if(EDITORS_WITHOUT_LABELS.indexOf(editorType) !== -1 && formLabelMode !== 'hidden') {
+                            needRenderLabel = true;
+                        } else if(formLabelMode === 'outside') {
+                            needRenderLabel = true;
+                        }
                     }
-                }
-                assert.equal(label.length, needRenderLabel ? 1 : 0, 'label is rendered correctly');
+                    assert.equal($label.length, needRenderLabel ? 1 : 0, 'label is rendered correctly');
+                    assert.equal($label.text(), needRenderLabel ? `Item 1${showColon ? ':' : ''}` : '');
+                });
             });
         });
     });
@@ -531,40 +539,48 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
 
 [true, false].forEach((showOptionalMark) => {
     [true, false].forEach((isLabelVisible) => {
-        ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
-            [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
-                [undefined, '', 'some help text'].forEach((helpText) => {
-                    QUnit.test(`form renders with right optional mark, config=${JSON.stringify({ showOptionalMark, isLabelVisible, formLabelMode, editorLabelMode, helpText })}`, function(assert) {
-                        const $form = $('#form').dxForm({
-                            showOptionalMark,
-                            labelMode: formLabelMode,
-                            items: [ {
-                                dataField: 'item1',
-                                label: { visible: isLabelVisible },
-                                editorOptions: { labelMode: editorLabelMode },
-                                helpText
-                            }]
+        [true, false].forEach((showColon) => {
+            ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+                [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
+                    [undefined, '', 'some help text'].forEach((helpText) => {
+                        QUnit.test(`form renders with right optional mark, config=${JSON.stringify({ showOptionalMark, isLabelVisible, formLabelMode, editorLabelMode, helpText, showColon })}`, function(assert) {
+                            const $form = $('#form').dxForm({
+                                showOptionalMark,
+                                labelMode: formLabelMode,
+                                items: [ {
+                                    dataField: 'item1',
+                                    label: { visible: isLabelVisible, showColon },
+                                    editorOptions: { labelMode: editorLabelMode },
+                                    helpText
+                                }]
+                            });
+
+                            const $formLabel = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+                            const $editorLabel = $form.find(`.${EDITOR_LABEL_CLASS}`);
+                            const $helpText = $form.find(`.${FIELD_ITEM_HELP_TEXT_CLASS}`);
+
+                            const optionalMarkIsRenderedAsHelpText = $helpText.text().indexOf('optional') !== -1;
+                            const optionalMarkIsRenderedAsFormLabel = $formLabel.text().indexOf('optional') !== -1;
+                            const optionalMarkIsRenderedAsEditorLabel = $editorLabel.text().indexOf('optional') !== -1;
+
+                            const expectedFormLabelText = isLabelVisible ? `Item 1${showColon ? ':' : ''}${optionalMarkIsRenderedAsFormLabel ? `${String.fromCharCode(160)}optional` : ''}` : '';
+                            assert.equal($formLabel.text(), expectedFormLabelText, 'form.labelText');
+                            const resultLabelMode = editorLabelMode || formLabelMode;
+                            const needRenderEditorLabel = resultLabelMode !== 'outside' && resultLabelMode !== 'hidden';
+                            assert.equal($editorLabel.text(), needRenderEditorLabel ? 'Item 1' : '', 'editor.labelText');
+
+                            assert.equal(optionalMarkIsRenderedAsEditorLabel, false, 'optional mark in editor is not rendered');
+                            if(showOptionalMark === false) {
+                                assert.equal(optionalMarkIsRenderedAsHelpText, false, 'optional mark in help text is not rendered');
+                                assert.equal(optionalMarkIsRenderedAsFormLabel, false, 'optional mark in form label is not rendered');
+                            } else if(isLabelVisible) {
+                                assert.equal(optionalMarkIsRenderedAsFormLabel, true, 'optional mark in form label is rendered if label is visible');
+                                assert.equal(optionalMarkIsRenderedAsHelpText, false, 'optional mark in help text is not rendered if label is visible');
+                            } else {
+                                assert.equal(optionalMarkIsRenderedAsFormLabel, false, 'optional mark in form label is not rendered if label is hidden');
+                                assert.equal(optionalMarkIsRenderedAsHelpText, !isDefined(helpText) && ['static', 'floating'].indexOf(editorLabelMode || formLabelMode) !== -1, 'optional mark in help text is rendered correctly');
+                            }
                         });
-
-                        const $formLabel = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-                        const $editorLabel = $form.find(`.${EDITOR_LABEL_CLASS}`);
-                        const $helpText = $form.find(`.${FIELD_ITEM_HELP_TEXT_CLASS}`);
-
-                        const optionalMarkIsRenderedAsHelpText = $helpText.text().indexOf('optional') !== -1;
-                        const optionalMarkIsRenderedAsFormLabel = $formLabel.text().indexOf('optional') !== -1;
-                        const optionalMarkIsRenderedAsEditorLabel = $editorLabel.text().indexOf('optional') !== -1;
-
-                        assert.equal(optionalMarkIsRenderedAsEditorLabel, false, 'optional mark in editor is not rendered');
-                        if(showOptionalMark === false) {
-                            assert.equal(optionalMarkIsRenderedAsHelpText, false, 'optional mark in help text is not rendered');
-                            assert.equal(optionalMarkIsRenderedAsFormLabel, false, 'optional mark in form label is not rendered');
-                        } else if(isLabelVisible) {
-                            assert.equal(optionalMarkIsRenderedAsFormLabel, true, 'optional mark in form label is rendered if label is visible');
-                            assert.equal(optionalMarkIsRenderedAsHelpText, false, 'optional mark in help text is not rendered if label is visible');
-                        } else {
-                            assert.equal(optionalMarkIsRenderedAsFormLabel, false, 'optional mark in form label is not rendered if label is hidden');
-                            assert.equal(optionalMarkIsRenderedAsHelpText, !isDefined(helpText) && ['static', 'floating'].indexOf(editorLabelMode || formLabelMode) !== -1, 'optional mark in help text is rendered correctly');
-                        }
                     });
                 });
             });
