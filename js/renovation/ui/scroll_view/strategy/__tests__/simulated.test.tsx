@@ -268,7 +268,6 @@ describe('Simulated > Render', () => {
           direction,
           showScrollbar,
           scrollByThumb: true,
-          rtlEnabled: true,
           forceGeneratePockets: true,
           bounceEnabled: true,
         });
@@ -289,7 +288,7 @@ describe('Simulated > Render', () => {
         if (helper.isBoth) {
           expect(scrollbars.length).toEqual(2);
           expect(animatedScrollbars.at(0).props())
-            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL, rtlEnabled: true });
+            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL });
           expect(animatedScrollbars.at(1).props())
             .toMatchObject({
               ...commonOptions,
@@ -297,7 +296,7 @@ describe('Simulated > Render', () => {
               forceGeneratePockets: true,
             });
           expect(scrollbars.at(0).props())
-            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL, rtlEnabled: true });
+            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL });
           expect(scrollbars.at(1).props())
             .toMatchObject({
               ...commonOptions,
@@ -325,11 +324,11 @@ describe('Simulated > Render', () => {
         } else if (helper.isHorizontal) {
           expect(animatedScrollbars.length).toEqual(1);
           expect(animatedScrollbars.at(0).props())
-            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL, rtlEnabled: true });
+            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL });
           expect(scrollbars.at(0).getDOMNode().className).toBe(hScrollbarClasses);
           expect(scrollbars.length).toEqual(1);
           expect(scrollbars.at(0).props())
-            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL, rtlEnabled: true });
+            .toMatchObject({ ...commonOptions, direction: DIRECTION_HORIZONTAL });
           expect(scrollbars.at(0).getDOMNode().className).toBe(hScrollbarClasses);
         }
       });

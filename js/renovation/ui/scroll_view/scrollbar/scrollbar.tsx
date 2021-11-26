@@ -7,6 +7,7 @@ import {
   Effect,
   Method,
   Mutable,
+  Consumer,
 } from '@devextreme-generator/declarations';
 
 import { combineClasses } from '../../../utils/combine_classes';
@@ -28,10 +29,10 @@ import {
   subscribeToMouseLeaveEvent,
 } from '../../../utils/subscribe_to_event';
 
-import { BaseWidgetProps } from '../../common/base_props';
 import { DxMouseEvent } from '../common/types';
 import { ScrollbarProps } from '../common/scrollbar_props';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
+import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 export const THUMB_MIN_SIZE = 15;
 
@@ -51,8 +52,6 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 
 export type ScrollbarPropsType = ScrollbarProps
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-& Pick<BaseWidgetProps, 'rtlEnabled'>
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'showScrollbar' | 'scrollByThumb' | 'scrollLocationChange'>;
 
 @Component({
@@ -61,6 +60,9 @@ export type ScrollbarPropsType = ScrollbarProps
 })
 
 export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
+
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
@@ -165,7 +167,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
       const maxOffsetChanged = Math.abs(this.props.maxOffset - this.prevMaxOffset) > 0;
       this.prevMaxOffset = this.props.maxOffset;
-      if (maxOffsetChanged && this.isHorizontal && this.props.rtlEnabled) {
+      if (maxOffsetChanged && this.isHorizontal && this.config?.rtlEnabled) {
         if (this.props.maxOffset === 0) {
           this.rightScrollLocation = 0;
         }

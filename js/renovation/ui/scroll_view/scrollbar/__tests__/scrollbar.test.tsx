@@ -262,20 +262,21 @@ describe('Scrollbar', () => {
   });
 
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL]).describe('direction: %o', (direction) => {
-    each(optionValues.rtlEnabled).describe('rtlEnabled: %o', (rtlEnabled) => {
+    each([{ rtlEnabled: true }, { rtlEnabled: false }, undefined]).describe('ConfigContext: %o', (ConfigContext) => {
       each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
-        each([true, false]).describe('containerHasSizes: %o', (containerHasSizes) => {
+        each([true, false, undefined]).describe('containerHasSizes: %o', (containerHasSizes) => {
           each([0, -300]).describe('maxOffset: %o', (prevMaxOffset) => {
             each([0, -300]).describe('maxOffset: %o', (maxOffset) => {
               it('syncScrollLocation() should call moveTo(location)', () => {
                 const viewModel = new Scrollbar({
                   showScrollbar: 'always',
                   direction,
-                  rtlEnabled,
                   scrollLocation,
                   containerHasSizes,
                   maxOffset,
                 });
+
+                viewModel.config = ConfigContext;
 
                 [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
                   viewModel.moveTo = jest.fn();
@@ -290,7 +291,7 @@ describe('Scrollbar', () => {
                   if (containerHasSizes) {
                     let expectedLocation = scrollLocation;
 
-                    if (Math.abs(maxOffset - prevMaxOffset) > 0 && direction === 'horizontal' && rtlEnabled) {
+                    if (Math.abs(maxOffset - prevMaxOffset) > 0 && direction === 'horizontal' && ConfigContext?.rtlEnabled) {
                       if (maxOffset === 0) {
                         expectedRightScrollLocation = 0;
                       }
