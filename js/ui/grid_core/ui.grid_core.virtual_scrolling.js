@@ -708,7 +708,9 @@ const VirtualScrollingRowsViewExtender = (function() {
                 });
             }
 
-            that.loadIfNeed();
+            if(this.option(LEGACY_SCROLLING_MODE) !== false) {
+                that.loadIfNeed();
+            }
         },
 
         loadIfNeed: function() {
@@ -1055,9 +1057,17 @@ export const virtualScrollingModule = {
                             this._allItems = items;
                             if(items.length) {
                                 const { skipForCurrentPage } = this.getLoadPageParams(true);
-                                const startLoadIndex = items[0].loadIndex + skipForCurrentPage;
+                                const skip = items[0].loadIndex + skipForCurrentPage;
+                                const take = this._loadViewportParams.take;
 
-                                result = items.filter(it => (it.loadIndex >= startLoadIndex || it.isNewRow && it.loadIndex >= startLoadIndex - 1) && it.loadIndex < startLoadIndex + this._loadViewportParams.take);
+                                result = items.filter(it => {
+                                    const isNewRowOnStart = it.isNewRow && it.loadIndex >= skip - 1;
+                                    const isNewRowInEmptyData = it.isNewRow && it.loadIndex === skip && take === 0;
+                                    const isLoadIndexGreaterStart = it.loadIndex >= skip || isNewRowOnStart;
+                                    const isLoadIndexLessEnd = it.loadIndex < skip + take || isNewRowInEmptyData;
+
+                                    return isLoadIndexGreaterStart && isLoadIndexLessEnd;
+                                });
                             }
 
                             return result;
@@ -1427,13 +1437,28 @@ export const virtualScrollingModule = {
                     isLastPageLoaded: function() {
                         let result = false;
 
-                        if(this.option(LEGACY_SCROLLING_MODE) === false) {
+                        if(this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this)) {
                             const { pageIndex, loadPageCount } = this.getLoadPageParams(true);
                             const pageCount = this.pageCount();
 
                             result = pageIndex + loadPageCount >= pageCount;
                         } else {
                             result = this.callBase.apply(this, arguments);
+                        }
+
+                        return result;
+                    },
+                    getLastPageToNavigate: function() {
+                        let result = this.callBase.apply(this, arguments);
+                        const totalCount = this.totalItemsCount();
+                        const rowsScrollController = this._rowsScrollController;
+
+                        if(isVirtualMode(this) && this.option(LEGACY_SCROLLING_MODE) === false && rowsScrollController && totalCount > 0) {
+                            const viewportSize = rowsScrollController.viewportSize();
+
+                            if(totalCount > viewportSize) {
+                                result = Math.floor((totalCount - viewportSize) / this.pageSize());
+                            }
                         }
 
                         return result;
