@@ -375,7 +375,6 @@ class FileUploader extends Editor {
         this._renderUploadButton();
 
         this._preventRecreatingFiles = true;
-        this._hasActiveDragFiles = false;
         this._activeDropZone = null;
     }
 
@@ -894,8 +893,6 @@ class FileUploader extends Editor {
         this._detachDragEventHandlers(target);
         target = $(target);
 
-        this._dragEventsTargets = [];
-
         eventsEngine.on(target, addNamespace('dragenter', this.NAME), this._dragEnterHandler.bind(this, isCustomTarget));
         eventsEngine.on(target, addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this, isCustomTarget));
         eventsEngine.on(target, addNamespace('dragleave', this.NAME), this._dragLeaveHandler.bind(this, isCustomTarget));
@@ -914,53 +911,38 @@ class FileUploader extends Editor {
         return isCustomTarget ? $(this.option('dropZone')).get(0) : this._$inputWrapper.get(0);
     }
 
-    _logThatShit(name) {
-        // console.log(name);
-        // console.log(`hasActiveDragFiles=${this._hasActiveDragFiles}, activeDropZone${this._activeDropZone ? this._activeDropZone.id ? '.id' : '.class' : ''}=${this._activeDropZone?.id || this._activeDropZone?.classList[0]}`);
-    }
-
     _dragEnterHandler(isCustomTarget, e) {
         if(this.option('disabled')) {
             return false;
         }
 
-        this._hasActiveDragFiles = true;
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
 
         const dropZoneElement = this._getDropZoneElement(isCustomTarget);
-        const isOverDZ = isMouseOverElement(e, dropZoneElement, true);
-
-        this._logThatShit('_dragEnterHandler');
-        // console.log(`isOverDZ:${isOverDZ} && dropZoneElement === e.target:${dropZoneElement === e.target}`);
-        if(isOverDZ && dropZoneElement === e.target) {
-            this._logThatShit('_dragEnterHandler');
+        if(dropZoneElement === e.target && this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, false)) {
             this._activeDropZone = dropZoneElement;
             this._tryToggleDropZoneActive(true, isCustomTarget, e);
-            this._updateEventTargets(e);
         }
     }
 
     _dragOverHandler(isCustomTarget, e) {
-        // this._logThatShit('_dragOverHandler');
-
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
         e.originalEvent.dataTransfer.dropEffect = 'copy';
         const dropZoneElement = this._getDropZoneElement(isCustomTarget);
 
-        if(this._hasActiveDragFiles && this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, true)) {
+        if(this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, false)) {
             reRaiseEvent(e, 'dragenter', dropZoneElement);
         }
-        if(this._activeDropZone === dropZoneElement && !isMouseOverElement(e, dropZoneElement, true)) {
+        if(this._activeDropZone === dropZoneElement && !isMouseOverElement(e, dropZoneElement, !isCustomTarget)) {
             reRaiseEvent(e, 'dragleave', dropZoneElement);
         }
     }
 
     _dragLeaveHandler(isCustomTarget, e) {
-        this._logThatShit('_dragLeaveHandler');
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
@@ -969,29 +951,13 @@ class FileUploader extends Editor {
         }
 
         const dropZoneElement = this._getDropZoneElement(isCustomTarget);
-
-        if(!isMouseOverElement(e, dropZoneElement, true)) {
+        if(!isMouseOverElement(e, dropZoneElement, !isCustomTarget)) {
             if(this._activeDropZone !== e.target) {
                 reRaiseEvent(e, 'dragleave', dropZoneElement);
             } else {
                 this._tryToggleDropZoneActive(false, isCustomTarget, e);
                 this._activeDropZone = null;
             }
-        }
-        if(!isMouseOverElement(e, dropZoneElement)) {
-            this._hasActiveDragFiles = false;
-        }
-
-    }
-
-    _updateEventTargets(e) {
-        const targetIndex = this._dragEventsTargets.indexOf(e.target);
-        const isTargetExists = targetIndex !== -1;
-
-        if(e.type === 'dragenter') {
-            !isTargetExists && this._dragEventsTargets.push(e.target);
-        } else {
-            isTargetExists && this._dragEventsTargets.splice(targetIndex, 1);
         }
     }
 
@@ -1006,15 +972,11 @@ class FileUploader extends Editor {
         if(!isCustom) {
             this.$element()[classAction](FILEUPLOADER_DRAGOVER_CLASS);
         }
-        // if(!this._dragEventsTargets.length) {
-        // }
     }
 
     _dropHandler(isCustomTarget, e) {
-        this._dragEventsTargets = [];
         this._activeDropZone = null;
-        this._hasActiveDragFiles = false;
-        window.canLog = true;
+
         if(!isCustomTarget) {
             this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
         }
