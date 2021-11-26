@@ -20367,6 +20367,7 @@ QUnit.module('Editing - new row position', {
                 assert.strictEqual(rows.length, 10, 'row count');
 
                 // act
+                config.name === 'virtual scrolling' && this.dataController._rowsScrollController.viewportSize(rows.length);
                 this.addRow();
                 this.clock.tick();
 
@@ -20407,7 +20408,7 @@ QUnit.module('Editing - new row position', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 9, 'pageIndex');
-                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 6 : 11, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 7 : 11, 'row count');
                 assert.ok(rows[rows.length - 1].isNewRow, 'new row');
             });
 
