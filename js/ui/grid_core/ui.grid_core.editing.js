@@ -841,8 +841,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const newRowPosition = this._getNewRowPosition();
             const dataController = this._dataController;
             const pageIndex = dataController.pageIndex();
-            const pageCount = dataController.pageCount();
-            const lastPageIndex = pageCount - 1;
+            const lastPageIndex = dataController.getLastPageToNavigate();
 
             if(newRowPosition === FIRST_NEW_ROW_POSITION && pageIndex !== 0) {
                 return 0;
