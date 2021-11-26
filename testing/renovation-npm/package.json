@@ -12,7 +12,7 @@
     "pack": "gulp pack-all --framework",
     "install:devextreme": "gulp install-devextreme --framework",
     "install:renovation": "gulp install-devextreme-renovation --framework",
-    "install": "gulp install-all --framework",
+    "install-all": "gulp install-all --framework",
     "start": "gulp start --framework",
     "cleanup": "gulp cleanup --framework",
     "prepare-all": "gulp prepare-all --framework"
