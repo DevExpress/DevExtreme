@@ -532,6 +532,15 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS}`);
     }
 
+    triggerDragEvent($element, eventType) {
+        $element = $($element);
+        const offset = eventType === 'dragenter' ? 1 : -1;
+        $element.trigger($.Event(eventType, {
+            clientX: $element.offset().left + offset,
+            clientY: $element.offset().top + offset
+        }));
+    }
+
 }
 
 export class FileManagerProgressPanelWrapper {
