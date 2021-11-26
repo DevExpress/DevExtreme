@@ -20,6 +20,23 @@ module.exports = modules;
         .pipe(gulp.dest(context.destination));
 }
 
+function createModuleEntryPointers(context) {
+    const components = require(path.resolve(process.cwd(), path.join(context.destination, 'components.js')));
+    const vinyls = components.map(c => {
+        const name = (c.name.charAt(0).toLowerCase() + c.name.slice(1)).replace(/[A-Z]/g, m => "-" + m.toLowerCase());
+        return {
+            fileName: `${name}.js`,
+            content: `import ${c.name} from './${c.pathInRenovationFolder.slice(0, -2)}';
+    export default ${c.name};`
+        };
+    }).map(ef => {
+        return createVinyl(ef.fileName, ef.content)
+                .pipe(gulp.dest(context.destination))
+    });
+
+    return vinyls;
+}
+
 function preparePackage(packageObject, basePackageObject, context) {
     const vreact = packageObject.devDependencies["react"];
     const vreactDom = packageObject.devDependencies["react-dom"];
@@ -34,5 +51,6 @@ function preparePackage(packageObject, basePackageObject, context) {
 
 module.exports = {
     createReactEntryPoint,
+    createModuleEntryPointers,
     preparePackage,
 }

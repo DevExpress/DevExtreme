@@ -68,7 +68,14 @@ function addCompilationTask(frameworkData) {
         removeFiles.cleanEmptyFolders(context.destination),
         ...(frameworkData.transpileJS ? [transpileJSModules(context)] : []),
         run('cmd', ['/c npm i'], { cwd: context.destination }),
-        ...context.completionSteps.map(x=>x(context))
+        ...context.completionSteps.map(x => x(context)).reduce(function(p, c) {
+                if(Array.isArray(c)) {
+                    p.push(...c);
+                } else {
+                    p.push(c);
+                }
+                return p;
+            }, [])
     ];
     
     gulp.task(`renovation-npm-${context.name}`, gulp.series(...generateSeries));
@@ -79,7 +86,7 @@ addCompilationTask({
     generator: 'generate-react',
     transpileJS: true,
     packageLockSteps: [require('./steps-react').preparePackage],
-    copyFilesSteps: [require('./steps-react').createReactEntryPoint]
+    copyFilesSteps: [require('./steps-react').createReactEntryPoint, require('./steps-react').createModuleEntryPointers]
 });
 addCompilationTask({
     name: 'angular',
