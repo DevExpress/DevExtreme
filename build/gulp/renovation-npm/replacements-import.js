@@ -57,8 +57,10 @@ function performRecastReplacements(context) {
                     });
                     return false;
                 }
-                const newPath = path.relative(devextremeFolder, absoluteModulePath).replace(/\\/g, '/');
-
+                let newPath = path.relative(devextremeFolder, absoluteModulePath).replace(/\\/g, '/');
+                if (newPath.endsWith('/index')) {
+                    newPath = newPath.slice(0, -'/index'.length);
+                }
                 performReplacement(`devextreme/${newPath}`)
 
                 needsPrint = true;
