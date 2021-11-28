@@ -2253,6 +2253,35 @@ QUnit.module('Export menu', {
         assert.equal($button.first().attr('title'), 'Export', 'hint of button');
     });
 
+    QUnit.test('export.texts options are used', function(assert) {
+        // arrange
+        this.setupModules({
+            'export': {
+                enabled: true,
+                allowExportSelectedData: true,
+                texts: {
+                    exportAll: 'exportAll',
+                    exportSelectedRows: 'exportSelectedRows',
+                    exportTo: 'exportTo',
+                }
+            }
+        }, true);
+
+        const $container = $('#container');
+
+        this.headerPanel.render($container);
+
+        const $button = $container.find('.dx-datagrid-export-button');
+        $button.find('.dx-button').trigger('click');
+        const $exportAllButton = $('.dx-datagrid-export-menu .dx-item:eq(0)');
+        const $exportSelectedRows = $('.dx-datagrid-export-menu .dx-item:eq(1)');
+
+        // assert
+        assert.equal($button.attr('title'), 'exportTo', 'exportTo');
+        assert.equal($exportAllButton.attr('title'), 'exportAll', 'exportAll');
+        assert.equal($exportSelectedRows.attr('title'), 'exportSelectedRows', 'exportSelectedRows');
+    });
+
     QUnit.test('Search panel should be replaced after export button', function(assert) {
         this.setupModules({
             'export': {
