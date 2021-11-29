@@ -233,9 +233,17 @@ QUnit.test('not valid size (not rendered)', function(assert) {
     assert.ok(!this.rangeBar.render(this.options).enabled);
 });
 
-QUnit.test('not valid radius (not rendered)', function(assert) {
+QUnit.test('not valid radius. min radius check', function(assert) {
     this.options.radius = 10;
-    assert.ok(!this.rangeBar.render(this.options).resize({ radius: 10 }).visible);
+    this.options.x = 10;
+    this.options.y = 10;
+
+    assert.ok(this.rangeBar.render(this.options).resize({ radius: 10 }).visible);
+    assert.deepEqual(this.renderer.path.lastCall.returnValue.attr.lastCall.args[0].points, [10, -3,
+        10, -12,
+        12, -12,
+        12, -3
+    ]);
 });
 
 QUnit.test('getTooltipParameters', function(assert) {
