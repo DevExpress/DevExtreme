@@ -64,7 +64,7 @@ export function convertToRenderFieldItemOptions({
         editorValidationBoundary,
         editorStylingMode,
         formLabelMode: labelMode,
-        labelText: labelOptions.text,
+        labelText: labelOptions.textWithoutColon,
         labelMark: labelOptions.markOptions.showRequiredMark
             ? String.fromCharCode(160) + labelOptions.markOptions.requiredMark
             : '',
@@ -204,6 +204,7 @@ function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, show
     }
 
     if(labelOptions.text) {
+        labelOptions.textWithoutColon = labelOptions.text;
         labelOptions.text += labelOptions.showColon ? ':' : '';
     }
 
