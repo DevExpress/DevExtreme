@@ -1,6 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../../../helpers/createWidget';
-import url from '../../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../../model/scheduler';
 import {
   createDataSetForScreenShotTests,
@@ -10,14 +8,21 @@ import {
   horizontalViews,
 } from '../../utils';
 import { restoreBrowserSize } from '../../../../../../helpers/restoreBrowserSize';
+import { multiPlatformTest, createWidget } from '../../../../../../helpers/multi-platform-test';
+import { PlatformType } from '../../../../../../helpers/multi-platform-test/platform-type';
 
-fixture.skip`Scheduler: Adaptive material theme layout`
-  .page(url(__dirname, '../../../../containerMaterial.html'));
+const test = multiPlatformTest({
+  page: 'declaration/schedulerMaterial',
+  platforms: ['jquery', 'react'],
+});
+
+fixture('Scheduler: Adaptive material theme layout');
 
 const createScheduler = async (
+  platform: PlatformType,
   additionalProps: Record<string, unknown>,
 ): Promise<void> => {
-  await createWidget('dxScheduler', {
+  await createWidget(platform, 'dxScheduler', {
     dataSource: createDataSetForScreenShotTests(),
     currentDate: new Date(2020, 6, 15),
     height: 600,
@@ -41,10 +46,10 @@ const createScheduler = async (
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
+  }).before(async (t, { platform }) => {
     await t.resizeWindow(400, 600);
 
-    await createScheduler({
+    await createScheduler(platform, {
       views,
       currentView: 'day',
       crossScrollingEnabled,
@@ -68,10 +73,10 @@ const createScheduler = async (
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
+  }).before(async (t, { platform }) => {
     await t.resizeWindow(400, 600);
 
-    await createScheduler({
+    await createScheduler(platform, {
       views: horizontalViews,
       currentView: 'day',
       crossScrollingEnabled,
@@ -97,10 +102,10 @@ const createScheduler = async (
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
+  }).before(async (t, { platform }) => {
     await t.resizeWindow(400, 600);
 
-    await createScheduler({
+    await createScheduler(platform, {
       views: verticalViews,
       currentView: 'day',
       crossScrollingEnabled,
