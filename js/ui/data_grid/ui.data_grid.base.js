@@ -101,6 +101,9 @@ const DataGrid = Widget.inherit({
                     },
                     editing: {
                         useIcons: true
+                    },
+                    selection: {
+                        showCheckBoxesMode: 'always'
                     }
                 }
             },

@@ -1124,7 +1124,10 @@ testComponentDefaults(DataGrid,
     {
         showRowLines: true,
         showColumnLines: false,
-        editing: { useIcons: true }
+        editing: { useIcons: true },
+        selection: {
+            showCheckBoxesMode: 'always'
+        }
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
