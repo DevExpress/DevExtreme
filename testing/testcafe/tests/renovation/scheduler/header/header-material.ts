@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from '../../../../model/scheduler';
-import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
+import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../../helpers/multi-platform-test';
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler-material',
@@ -54,16 +54,14 @@ test('viewSwitcher dropdown button popup should have a specified class', async (
   },
 ));
 
-test('The toolbar should not display if the config is empty', async (t) => {
+test('The toolbar should not display if the config is empty', async (t, { platform }) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  const scheduler = new Scheduler('#container');
 
   await t
     .expect(await takeScreenshot('scheduler-with-empty-toolbar-config.png'))
     .ok();
 
-  await scheduler.option('toolbar', [{ defaultElement: 'viewSwitcher' }]);
+  await updateComponentOptions(platform, { toolbar: [{ defaultElement: 'viewSwitcher' }] });
 
   await t
     .expect(await takeScreenshot('scheduler-with-non-empty-toolbar-config.png'))

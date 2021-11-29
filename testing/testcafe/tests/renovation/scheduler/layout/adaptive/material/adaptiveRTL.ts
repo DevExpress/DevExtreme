@@ -1,6 +1,4 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../../../helpers/createWidget';
-import url from '../../../../../../helpers/getPageUrl';
 import Scheduler from '../../../../../../model/scheduler';
 import {
   createDataSetForScreenShotTests,
@@ -10,14 +8,21 @@ import {
   horizontalViews,
 } from '../../utils';
 import { restoreBrowserSize } from '../../../../../../helpers/restoreBrowserSize';
+import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../../../../helpers/multi-platform-test';
+import { PlatformType } from '../../../../../../helpers/multi-platform-test/platform-type';
 
-fixture.skip`Scheduler: Adaptive Material theme layout in RTL`
-  .page(url(__dirname, '../../../../containerMaterial.html'));
+const test = multiPlatformTest({
+  page: 'declaration/schedulerMaterial',
+  platforms: ['jquery', 'react'],
+});
+
+fixture('Scheduler: Adaptive Material theme layout in RTL');
 
 const createScheduler = async (
+  platform: PlatformType,
   additionalProps: Record<string, unknown>,
 ): Promise<void> => {
-  await createWidget('dxScheduler', {
+  await createWidget(platform, 'dxScheduler', {
     dataSource: createDataSetForScreenShotTests(),
     currentDate: new Date(2020, 6, 15),
     height: 600,
@@ -27,13 +32,13 @@ const createScheduler = async (
 };
 
 [false, true].forEach((crossScrollingEnabled) => {
-  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} in RTL`, async (t) => {
+  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} in RTL`, async (t, { platform }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line no-restricted-syntax
     for (const view of views) {
-      await scheduler.option('currentView', view);
+      await updateComponentOptions(platform, { currentView: view });
 
       await t.expect(
         await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-rtl.png`, scheduler.workSpace),
@@ -42,10 +47,10 @@ const createScheduler = async (
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
+  }).before(async (t, { platform }) => {
     await t.resizeWindow(400, 600);
 
-    await createScheduler({
+    await createScheduler(platform, {
       views,
       currentView: 'day',
       crossScrollingEnabled,
@@ -54,13 +59,13 @@ const createScheduler = async (
     await restoreBrowserSize(t);
   });
 
-  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and RTL are used`, async (t) => {
+  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and RTL are used`, async (t, { platform }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line no-restricted-syntax
     for (const view of views) {
-      await scheduler.option('currentView', view);
+      await updateComponentOptions(platform, { currentView: view });
 
       await t.expect(
         await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`, scheduler.workSpace),
@@ -69,10 +74,10 @@ const createScheduler = async (
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
+  }).before(async (t, { platform }) => {
     await t.resizeWindow(400, 600);
 
-    await createScheduler({
+    await createScheduler(platform, {
       views: horizontalViews,
       currentView: 'day',
       crossScrollingEnabled,
@@ -83,13 +88,13 @@ const createScheduler = async (
     await restoreBrowserSize(t);
   });
 
-  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t) => {
+  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t, { platform }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line no-restricted-syntax
     for (const view of verticalViews) {
-      await scheduler.option('currentView', view.type);
+      await updateComponentOptions(platform, { currentView: view });
 
       // Another bug in RTL in month view
       if (crossScrollingEnabled || view.type !== 'month') {
@@ -101,10 +106,10 @@ const createScheduler = async (
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t) => {
+  }).before(async (t, { platform }) => {
     await t.resizeWindow(400, 600);
 
-    await createScheduler({
+    await createScheduler(platform, {
       views: verticalViews,
       currentView: 'day',
       crossScrollingEnabled,
