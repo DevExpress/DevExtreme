@@ -228,7 +228,7 @@ describe('Handlers', () => {
                   viewModel.crossThumbScrolling = crossThumbScrolling;
                   viewModel.thumbScrolling = thumbScrolling;
 
-                  viewModel.moveHandler(delta);
+                  viewModel.moveHandler(delta, false);
 
                   let resultDelta = delta;
 

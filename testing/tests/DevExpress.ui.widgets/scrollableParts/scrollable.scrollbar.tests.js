@@ -569,7 +569,7 @@ QUnit.skip('useSimulatedScrollbar option dependence from useNative option', func
 
     $scrollable.dxScrollable('option', 'useNative', true);
     // NOTE: on android devices useSimulatedScrollbar is true always
-    assert.equal($scrollable.dxScrollable('option', 'useSimulatedScrollbar'), devices.real().platform === 'android', 'useSimulatedScrollbar option was changed');
+    assert.equal($scrollable.dxScrollable('option', 'useSimulatedScrollbar'), isRenovation ? true : devices.real().platform === 'android', 'useSimulatedScrollbar option was changed');
 });
 
 QUnit.test('scrollBar is not hoverable when scrollByThumb options is false', function(assert) {

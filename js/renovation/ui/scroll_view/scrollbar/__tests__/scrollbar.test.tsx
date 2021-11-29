@@ -200,63 +200,69 @@ describe('Scrollbar', () => {
       expect(scrollbar.active).toEqual(false);
     });
 
-    it('should subscribe to mouseenter event if showScrollbar mode is onHover', () => {
-      const viewModel = new Scrollbar({
-        direction: 'vertical',
-        showScrollbar: 'onHover',
-      });
-      viewModel.scrollbarRef = { current: {} } as RefObject;
-      viewModel.hovered = false;
+    each(optionValues.scrollByThumb).describe('scrollByThumb: %o', (scrollByThumb) => {
+      each([ShowScrollbarMode.HOVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
+        it(`should subscribe to mouseenter event if ${JSON.stringify({ showScrollbar, scrollByThumb })}`, () => {
+          const viewModel = new Scrollbar({
+            direction: 'vertical',
+            showScrollbar,
+            scrollByThumb,
+          });
+          viewModel.scrollbarRef = { current: {} } as RefObject;
+          viewModel.hovered = false;
 
-      viewModel.mouseEnterEffect();
-      emit('mouseenter');
+          viewModel.mouseEnterEffect();
+          emit('mouseenter');
 
-      expect(viewModel.hovered).toEqual(true);
-    });
-
-    each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
-      it(`should not subscribe to mouseenter event if showScrollbar mode is ${showScrollbar}`, () => {
-        const viewModel = new Scrollbar({
-          direction: 'vertical',
-          showScrollbar,
+          expect(viewModel.hovered).toEqual(scrollByThumb);
         });
-        viewModel.scrollbarRef = { current: {} } as RefObject;
-        viewModel.hovered = false;
 
-        viewModel.mouseEnterEffect();
-        emit('mouseenter');
+        it(`should subscribe to mouseleave event if ${JSON.stringify({ showScrollbar, scrollByThumb })}`, () => {
+          const viewModel = new Scrollbar({
+            direction: 'vertical',
+            showScrollbar,
+            scrollByThumb,
+          });
+          viewModel.scrollbarRef = { current: {} } as RefObject;
+          viewModel.hovered = true;
 
-        expect(viewModel.hovered).toEqual(false);
-      });
-    });
+          viewModel.mouseLeaveEffect();
+          emit('mouseleave');
 
-    it('should subscribe to mouseleave event if showScrollbar mode is onHover', () => {
-      const viewModel = new Scrollbar({
-        direction: 'vertical',
-        showScrollbar: 'onHover',
-      });
-      viewModel.scrollbarRef = { current: {} } as RefObject;
-      viewModel.hovered = true;
-
-      viewModel.mouseLeaveEffect();
-      emit('mouseleave');
-
-      expect(viewModel.hovered).toEqual(false);
-    });
-
-    each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
-      it(`should not subscribe to mouseleave event if showScrollbar mode is ${showScrollbar}`, () => {
-        const viewModel = new Scrollbar({
-          direction: 'vertical',
-          showScrollbar,
+          expect(viewModel.hovered).toEqual(!scrollByThumb);
         });
-        viewModel.scrollbarRef = { current: {} } as RefObject;
-        viewModel.hovered = true;
+      });
 
-        viewModel.mouseLeaveEffect();
-        emit('mouseleave');
+      each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER]).describe('ShowScrollbar: %o', (showScrollbar) => {
+        it(`should not subscribe to mouseenter event if ${JSON.stringify({ showScrollbar, scrollByThumb })}`, () => {
+          const viewModel = new Scrollbar({
+            direction: 'vertical',
+            showScrollbar,
+            scrollByThumb,
+          });
+          viewModel.scrollbarRef = { current: {} } as RefObject;
+          viewModel.hovered = false;
 
-        expect(viewModel.hovered).toEqual(true);
+          viewModel.mouseEnterEffect();
+          emit('mouseenter');
+
+          expect(viewModel.hovered).toEqual(false);
+        });
+
+        it(`should not subscribe to mouseleave event if ${JSON.stringify({ showScrollbar, scrollByThumb })}`, () => {
+          const viewModel = new Scrollbar({
+            direction: 'vertical',
+            showScrollbar,
+            scrollByThumb,
+          });
+          viewModel.scrollbarRef = { current: {} } as RefObject;
+          viewModel.hovered = true;
+
+          viewModel.mouseLeaveEffect();
+          emit('mouseleave');
+
+          expect(viewModel.hovered).toEqual(true);
+        });
       });
     });
   });

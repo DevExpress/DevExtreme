@@ -682,8 +682,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       const { horizontal, vertical } = this.endActionDirections;
 
       if (horizontal && vertical) {
-        this.endActionDirections.vertical = false;
-        this.endActionDirections.horizontal = false;
+        this.restoreEndActionDirections();
 
         this.scrolling = false;
         this.props.onEnd?.(this.getEventArgs());
@@ -692,6 +691,11 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       this.scrolling = false;
       this.props.onEnd?.(this.getEventArgs());
     }
+  }
+
+  restoreEndActionDirections(): void {
+    this.endActionDirections[DIRECTION_HORIZONTAL] = false;
+    this.endActionDirections[DIRECTION_VERTICAL] = false;
   }
 
   onUpdated(): void {
@@ -767,6 +771,8 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   handleInit(event: DxMouseEvent): void {
     this.suppressDirections(event);
+    this.restoreEndActionDirections();
+
     this.eventForUserAction = event;
 
     const crossThumbScrolling = this.isCrossThumbScrolling(event);
@@ -794,8 +800,9 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
     this.adjustDistance(e, 'delta');
     this.eventForUserAction = e;
 
-    this.hScrollbarRef.current?.moveHandler(e.delta.x);
-    this.vScrollbarRef.current?.moveHandler(e.delta.y);
+    const isDxMouseWheel = isDxMouseWheelEvent(e.originalEvent);
+    this.hScrollbarRef.current?.moveHandler(e.delta.x, isDxMouseWheel);
+    this.vScrollbarRef.current?.moveHandler(e.delta.y, isDxMouseWheel);
   }
 
   handleEnd(event: DxMouseEvent): void {

@@ -46,7 +46,7 @@ const getScrollOffset = function($scrollView) {
     };
 };
 
-const isRenovation = !!ScrollView.IS_RENOVATED_WIDGET;
+const isRenovatedScrollView = !!ScrollView.IS_RENOVATED_WIDGET;
 
 themes.setDefaultTimeout(0);
 
@@ -363,8 +363,8 @@ QUnit.module('actions', moduleConfig, () => {
         const $container = $scrollView.find('.' + SCROLLABLE_CONTAINER_CLASS);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
 
-        assert.equal(location.top, isRenovation ? -($topPocket.height() - offset) : 0, 'translate top position is right');
-        assert.equal($container.scrollTop(), isRenovation ? 0 : $topPocket.height() - offset, 'scroll top position is right');
+        assert.equal(location.top, isRenovatedScrollView ? -($topPocket.height() - offset) : 0, 'translate top position is right');
+        assert.equal($container.scrollTop(), isRenovatedScrollView ? 0 : $topPocket.height() - offset, 'scroll top position is right');
     });
 
     QUnit.test('onReachBottom action', function(assert) {
@@ -677,8 +677,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             useNative: false,
             inertiaEnabled: false,
             pullDownEnabled: true,
-            onPullDown: noop,
-            showScrollbar: 'always'
+            onPullDown: noop
         });
         const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
         const $topPocket = $scrollView.find('.' + SCROLLVIEW_TOP_POCKET_CLASS);
@@ -968,7 +967,7 @@ QUnit.module('dynamic', moduleConfig, () => {
             },
             onEnd: function() {
                 const location = getScrollOffset($scrollView);
-                if(isRenovation) {
+                if(isRenovatedScrollView) {
                     const $bottomPocket = $scrollView.find('.' + SCROLLVIEW_BOTTOM_POCKET_CLASS);
                     assert.roughEqual(location.top, $container.height() - $content.height() + $bottomPocket.height(), 1, 'scrollview bounced');
                 } else {
@@ -1011,7 +1010,6 @@ QUnit.module('dynamic', moduleConfig, () => {
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: false,
             inertiaEnabled: false,
-            showScrollbar: 'always',
             pullDownEnabled: true,
             onPullDown: function() {
                 isLoadPanelVisible = $scrollView.find('.' + SCROLLVIEW_LOADPANEL).eq(0).dxLoadPanel('option', 'visible');
@@ -1445,7 +1443,7 @@ QUnit.module('api', moduleConfig, () => {
                 assert.equal(loadPanel.option('visible'), true, 'load panel shown on start');
 
                 e.component.release().done(() => {
-                    isRenovation && this.clock.tick(1000);
+                    this.clock.tick(1000);
                     deferred.resolve();
                 });
             }
@@ -1710,7 +1708,7 @@ QUnit.module('native pullDown strategy', {
     });
 
     QUnit.test('pulled down adds ready state', function(assert) {
-        if(isRenovation) {
+        if(isRenovatedScrollView) {
             assert.ok(true);
             return;
         }
@@ -1741,7 +1739,7 @@ QUnit.module('native pullDown strategy', {
     });
 
     QUnit.test('onPullDown action', function(assert) {
-        if(isRenovation) {
+        if(isRenovatedScrollView) {
             assert.ok(true);
             return;
         }
@@ -2242,7 +2240,7 @@ QUnit.module('native swipeDown strategy', {
 });
 
 QUnit.module('regressions', moduleConfig, () => {
-    QUnit.skip('B251572 - dxScrollView - Scroll position flies away when setting the direction option to horizontal or both', function(assert) {
+    QUnit.test('B251572 - dxScrollView - Scroll position flies away when setting the direction option to horizontal or both', function(assert) {
         const $scrollView = $('#scrollView').dxScrollView({});
 
         $scrollView.dxScrollView('option', 'direction', 'horizontal');
@@ -2268,7 +2266,7 @@ QUnit.module('default value', {
         devices.current(this.originalCurrentDevice);
     }
 }, () => {
-    if(!isRenovation) {
+    if(!isRenovatedScrollView) {
         QUnit.test('refreshStrategy for ios set by real device', function(assert) {
             devices.real({ platform: 'ios' });
             devices.current({ platform: 'android' });
@@ -2335,7 +2333,7 @@ QUnit.module('pullDown, reachBottom events', moduleConfig, () => {
     });
 
     ['config', 'onInitialized'].forEach(assignMethod => {
-        if(isRenovation && assignMethod === 'onInitialized') {
+        if(isRenovatedScrollView && assignMethod === 'onInitialized') {
             // onInitialized function used to save the UI component instance
             return;
         }
@@ -2351,6 +2349,7 @@ QUnit.module('pullDown, reachBottom events', moduleConfig, () => {
                 config.onInitialized = (e) => {
                     e.component.option('pullDownEnabled', true);
                     e.component.on('pullDown', pullDownHandler);
+                    e.component.option('pullDownEnabled', true);
                 };
             } else {
                 assert.ok(false);
@@ -2399,4 +2398,3 @@ QUnit.module('pullDown, reachBottom events', moduleConfig, () => {
         });
     });
 });
-
