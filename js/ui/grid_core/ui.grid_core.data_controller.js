@@ -1264,10 +1264,6 @@ export const dataControllerModule = {
                     const pageIndex = this.pageIndex();
                     const pageCount = this.pageCount();
                     return pageIndex === (pageCount - 1);
-                },
-
-                getLastPageToNavigate: function() {
-                    return this.pageCount() - 1;
                 }
             };
 

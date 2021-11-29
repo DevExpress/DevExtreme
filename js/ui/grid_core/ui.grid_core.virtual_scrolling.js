@@ -305,7 +305,8 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
 
     [
         'beginPageIndex',
-        'endPageIndex'
+        'endPageIndex',
+        'pageIndex'
     ].forEach(function(name) {
         result[name] = function() {
             if(this.option(LEGACY_SCROLLING_MODE) === false) {
@@ -325,7 +326,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         'setContentItemSizes', 'setViewportPosition',
         'getViewportItemIndex', 'setViewportItemIndex', 'getItemIndexByPosition',
         'viewportSize', 'viewportItemSize', 'getItemSize', 'getItemSizes',
-        'pageIndex', 'loadIfNeed'
+        'loadIfNeed'
     ].forEach(function(name) {
         result[name] = function() {
             const virtualScrollController = this._virtualScrollController;
@@ -1323,8 +1324,9 @@ export const virtualScrollingModule = {
                         const viewportIsNotFilled = viewportSize > itemCount;
                         const currentTake = this._loadViewportParams?.take ?? 0;
                         const newTake = this._rowsScrollController?.getViewportParams().take;
+                        const isLastPage = isVirtualMode(this) && this.pageIndex() === this.pageCount() - 1;
 
-                        (viewportIsNotFilled || currentTake < newTake) && itemCount && this.loadViewport({
+                        ((viewportIsNotFilled && !isLastPage) || currentTake < newTake) && itemCount && this.loadViewport({
                             checkLoading: true
                         });
                     },
@@ -1443,21 +1445,6 @@ export const virtualScrollingModule = {
                             result = pageIndex + loadPageCount >= pageCount;
                         } else {
                             result = this.callBase.apply(this, arguments);
-                        }
-
-                        return result;
-                    },
-                    getLastPageToNavigate: function() {
-                        let result = this.callBase.apply(this, arguments);
-                        const totalCount = this.totalItemsCount();
-                        const rowsScrollController = this._rowsScrollController;
-
-                        if(isVirtualMode(this) && this.option(LEGACY_SCROLLING_MODE) === false && rowsScrollController && totalCount > 0) {
-                            const viewportSize = rowsScrollController.viewportSize();
-
-                            if(totalCount > viewportSize) {
-                                result = Math.floor((totalCount - viewportSize) / this.pageSize());
-                            }
                         }
 
                         return result;
