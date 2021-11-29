@@ -1,5 +1,5 @@
 import ViewDataProvider from '../../../../../../ui/scheduler/workspaces/view_model/view_data_provider';
-import { SchedulerProps } from '../../../props';
+import { SchedulerProps, ViewProps } from '../../../props';
 import { DataAccessorType, ViewType } from '../../../types';
 import { prepareGenerationOptions } from '../../../workspaces/base/work_space';
 import { getViewRenderConfigByType } from '../../../workspaces/base/work_space_config';
@@ -11,6 +11,7 @@ import { compileGetter, compileSetter } from '../../../../../../core/utils/data'
 import { createTimeZoneCalculator } from '../../../common';
 import { AppointmentsConfigType } from '../../../model/types';
 import { TimeZoneCalculator } from '../../../timeZoneCalculator/utils';
+import { getCurrentViewConfig } from '../../../model/views';
 
 jest.mock('../../../../../../ui/scheduler/workspaces/helpers/positionHelper', () => ({
   ...jest.requireActual('../../../../../../ui/scheduler/workspaces/helpers/positionHelper'),
@@ -55,11 +56,19 @@ const prepareInstances = (
 } => {
   const schedulerProps = new SchedulerProps();
   schedulerProps.currentDate = currentDate;
-  const workspaceProps = new WorkSpaceProps();
+  let workspaceProps = new WorkSpaceProps();
   workspaceProps.type = viewType;
   workspaceProps.intervalCount = intervalCount;
   workspaceProps.currentDate = currentDate;
   workspaceProps.startDate = currentDate;
+
+  workspaceProps = {
+    ...workspaceProps,
+    ...getCurrentViewConfig(
+      workspaceProps as unknown as Partial<ViewProps>,
+      schedulerProps,
+    ),
+  };
 
   // TODO: convert ViewdataProvider to TS
   const viewDataProvider = (new ViewDataProvider('week') as unknown) as ViewDataProviderType;
