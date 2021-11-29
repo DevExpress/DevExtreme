@@ -182,9 +182,9 @@ function addGenerationTask(
     copyArtifacts = false,
     babelGeneratedFiles = true
 ) {
-    addGenerationTask2(frameworkName, '', knownErrors, compileTs, copyArtifacts, babelGeneratedFiles)
+    addGenerationTaskWithSuffix(frameworkName, '', knownErrors, compileTs, copyArtifacts, babelGeneratedFiles)
 }
-function addGenerationTask2(
+function addGenerationTaskWithSuffix(
     frameworkName,
     suffix,
     knownErrors = [],
@@ -312,7 +312,7 @@ const ngErrors = [
 ].concat(knownErrors);
 
 addGenerationTask('angular', ngErrors);
-addGenerationTask2('angular', '-v2', ngErrors, false, false, false);
+addGenerationTaskWithSuffix('angular', '-v2', ngErrors, false, false, false);
 
 addGenerationTask('vue', [], false, true, false);
 
