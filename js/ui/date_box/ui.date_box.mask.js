@@ -133,8 +133,7 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _useBeforeInputEvent: function() {
-        const device = devices.real();
-        return device.android;
+        return devices.real().android;
     },
 
     _keyInputHandler(e, key) {

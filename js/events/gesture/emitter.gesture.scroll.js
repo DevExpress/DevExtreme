@@ -153,10 +153,9 @@ let PointerLocker = TimeoutLocker.inherit((function() {
 })());
 
 (function() {
-    const iosDevice = realDevice.ios;
-    const androidDevice = realDevice.android;
+    const { ios: isIos, android: isAndroid } = realDevice;
 
-    if(!(iosDevice || androidDevice)) {
+    if(!(isIos || isAndroid)) {
         return;
     }
 
