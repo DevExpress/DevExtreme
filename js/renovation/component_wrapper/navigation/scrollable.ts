@@ -15,6 +15,10 @@ export class ScrollableWrapper extends Component {
     return Deferred().resolve();
   }
 
+  isRenovated(): boolean {
+    return !!Component.IS_RENOVATED_WIDGET;
+  }
+
   _visibilityChanged(): void {}
 
   _dimensionChanged(): void {
