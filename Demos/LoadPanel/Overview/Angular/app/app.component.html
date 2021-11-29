@@ -29,7 +29,7 @@
   [showIndicator]="true"
   [showPane]="true"
   [shading]="true"
-  [closeOnOutsideClick]="false"
+  [hideOnOutsideClick]="false"
   (onShown)="onShown()"
   (onHidden)="onHidden()"
 >
@@ -51,8 +51,8 @@
   </div>
   <div class="option">
     <dx-check-box
-      text="Close on outside click"
-      [(value)]="loadPanel.closeOnOutsideClick"
+      text="Hide on outside click"
+      [(value)]="loadPanel.hideOnOutsideClick"
     >
     </dx-check-box>
   </div>

@@ -57,7 +57,7 @@ $(() => {
     title: 'Information',
     visible: false,
     dragEnabled: false,
-    closeOnOutsideClick: true,
+    hideOnOutsideClick: true,
   };
 
   const showInfo = function (data) {

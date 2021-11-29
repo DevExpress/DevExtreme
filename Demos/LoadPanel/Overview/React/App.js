@@ -16,7 +16,7 @@ class App extends React.Component {
       showIndicator: true,
       shading: true,
       showPane: true,
-      closeOnOutsideClick: false,
+      hideOnOutsideClick: false,
     };
 
     this.onClick = this.onClick.bind(this);
@@ -24,7 +24,7 @@ class App extends React.Component {
     this.onShowIndicatorChange = this.onShowIndicatorChange.bind(this);
     this.onShadingChange = this.onShadingChange.bind(this);
     this.onShowPaneChange = this.onShowPaneChange.bind(this);
-    this.onCloseOnOutsideClickChange = this.onCloseOnOutsideClickChange.bind(this);
+    this.onHideOnOutsideClickChange = this.onHideOnOutsideClickChange.bind(this);
   }
 
   render() {
@@ -61,7 +61,7 @@ class App extends React.Component {
           showIndicator={this.state.showIndicator}
           shading={this.state.shading}
           showPane={this.state.showPane}
-          closeOnOutsideClick={this.state.closeOnOutsideClick}
+          hideOnOutsideClick={this.state.hideOnOutsideClick}
         />
 
         <div className="options">
@@ -94,9 +94,9 @@ class App extends React.Component {
 
           <div className="option">
             <CheckBox
-              text="Close on outside click"
-              value={this.state.closeOnOutsideClick}
-              onValueChanged={this.onCloseOnOutsideClickChange}
+              text="Hide on outside click"
+              value={this.state.hideOnOutsideClick}
+              onValueChanged={this.onHideOnOutsideClickChange}
             />
           </div>
         </div>
@@ -138,9 +138,9 @@ class App extends React.Component {
     });
   }
 
-  onCloseOnOutsideClickChange(e) {
+  onHideOnOutsideClickChange(e) {
     this.setState({
-      closeOnOutsideClick: e.value,
+      hideOnOutsideClick: e.value,
     });
   }
 }

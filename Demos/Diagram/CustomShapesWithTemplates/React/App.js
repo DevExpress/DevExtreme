@@ -67,7 +67,7 @@ class App extends React.Component {
           visible={this.state.popupVisible}
           onHiding={this.hideInfo}
           dragEnabled={false}
-          closeOnOutsideClick={true}
+          hideOnOutsideClick={true}
           showTitle={true}
           title="Information"
           width={300}

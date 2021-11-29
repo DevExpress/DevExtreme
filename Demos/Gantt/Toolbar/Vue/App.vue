@@ -54,7 +54,7 @@
       title="About"
       :height="auto"
       :show-title="true"
-      :close-on-outside-click="true"
+      :hide-on-outside-click="true"
     >
       <div>
         The DevExtreme JavaScript <b>Gantt</b> allows you to display the task

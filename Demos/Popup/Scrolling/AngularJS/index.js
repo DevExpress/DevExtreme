@@ -8,7 +8,7 @@ DemoApp.controller('DemoController', ($scope) => {
     height: 350,
     visible: true,
     showTitle: false,
-    closeOnOutsideClick: false,
+    hideOnOutsideClick: false,
   };
 
   $scope.scrollViewOptions = {

@@ -51,7 +51,7 @@ class App extends React.Component {
           showTitle={true}
           title={this.state.currentHouse.Address}
           dragEnabled={false}
-          closeOnOutsideClick={true}
+          hideOnOutsideClick={true}
           visible={this.state.popupVisible}
           onHiding={this.handlePopupHidden}
           contentRender={this.renderPopup}

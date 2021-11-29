@@ -4,7 +4,7 @@ window.onload = function () {
 
     that.employee = ko.observable({});
     that.loadingVisible = ko.observable(false);
-    that.closeOnOutsideClick = ko.observable(false);
+    that.hideOnOutsideClick = ko.observable(false);
     that.showIndicator = ko.observable(true);
     that.showPane = ko.observable(true);
     that.shading = ko.observable(true);
@@ -14,7 +14,7 @@ window.onload = function () {
       showIndicator: that.showIndicator,
       showPane: that.showPane,
       shading: that.shading,
-      closeOnOutsideClick: that.closeOnOutsideClick,
+      hideOnOutsideClick: that.hideOnOutsideClick,
       shadingColor: 'rgba(0,0,0,0.4)',
       position: { of: '#employee' },
       onShown() {

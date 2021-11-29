@@ -4,7 +4,7 @@
     :height="350"
     :visible="true"
     :show-title="false"
-    :close-on-outside-click="false"
+    :hide-on-outside-click="false"
   >
     <template #content>
       <DxScrollView

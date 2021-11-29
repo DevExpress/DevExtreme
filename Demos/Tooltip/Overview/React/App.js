@@ -57,7 +57,7 @@ class App extends React.Component {
           <Tooltip
             target="#product1"
             visible={this.state.defaultVisible}
-            closeOnOutsideClick={false}
+            hideOnOutsideClick={false}
           >
             <div>ExcelRemote IR</div>
           </Tooltip>
@@ -76,7 +76,7 @@ class App extends React.Component {
             target="#product2"
             position="right"
             visible={this.state.withTemplateVisible}
-            closeOnOutsideClick={false}
+            hideOnOutsideClick={false}
           >
             <img width="150" src="../../../../images/products/3.png" /><br />
             <b>SuperPlasma 50</b><br /> 2400$
@@ -97,7 +97,7 @@ class App extends React.Component {
             position="top"
             animation={animationConfig}
             visible={this.state.withAnimationVisible}
-            closeOnOutsideClick={false}
+            hideOnOutsideClick={false}
           >
             <div>Projector PlusHD</div>
           </Tooltip>

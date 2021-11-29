@@ -33,7 +33,7 @@ class App extends React.Component {
               displayExpr="Subject"
             >
               <DropDownOptions
-                closeOnOutsideClick={true}
+                hideOnOutsideClick={true}
                 showTitle={false}
               />
             </Lookup>

@@ -4,13 +4,13 @@ window.onload = function () {
       target: '#product1',
       showEvent: 'mouseenter',
       hideEvent: 'mouseleave',
-      closeOnOutsideClick: false,
+      hideOnOutsideClick: false,
     },
     withTemplateOptions: {
       target: '#product2',
       showEvent: 'mouseenter',
       hideEvent: 'mouseleave',
-      closeOnOutsideClick: false,
+      hideOnOutsideClick: false,
       position: 'right',
       contentTemplate(data) {
         data.html("<img width='150' src='../../../../images/products/3.png'><br/><b>SuperPlasma 50</b><br/>2400$");
@@ -20,7 +20,7 @@ window.onload = function () {
       target: '#product3',
       showEvent: 'mouseenter',
       hideEvent: 'mouseleave',
-      closeOnOutsideClick: false,
+      hideOnOutsideClick: false,
       position: 'top',
       animation: {
         show: {

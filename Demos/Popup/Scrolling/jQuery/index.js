@@ -4,7 +4,7 @@ $(() => {
     height: 350,
     visible: true,
     showTitle: false,
-    closeOnOutsideClick: false,
+    hideOnOutsideClick: false,
     contentTemplate() {
       const scrollView = $('<div />');
 

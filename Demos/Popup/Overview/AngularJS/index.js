@@ -14,7 +14,7 @@ DemoApp.controller('DemoController', ($scope) => {
     showTitle: true,
     title: 'Information',
     dragEnabled: false,
-    closeOnOutsideClick: true,
+    hideOnOutsideClick: true,
     showCloseButton: false,
     position: {
       at: 'bottom',

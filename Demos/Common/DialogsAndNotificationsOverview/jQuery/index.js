@@ -22,7 +22,7 @@ $(() => {
     showTitle: true,
     visible: false,
     dragEnabled: false,
-    closeOnOutsideClick: true,
+    hideOnOutsideClick: true,
   };
 
   const buttonOptions = {

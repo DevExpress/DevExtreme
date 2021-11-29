@@ -48,7 +48,7 @@
       :show-title="true"
       :title="currentHouse.Address"
       :drag-enabled="false"
-      :close-on-outside-click="true"
+      :hide-on-outside-click="true"
       v-model:visible="popupVisible"
     >
       <template #content="{ data }">

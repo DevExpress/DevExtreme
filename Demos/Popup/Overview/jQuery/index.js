@@ -19,7 +19,7 @@ $(() => {
     title: 'Information',
     visible: false,
     dragEnabled: false,
-    closeOnOutsideClick: true,
+    hideOnOutsideClick: true,
     showCloseButton: false,
     position: {
       at: 'bottom',

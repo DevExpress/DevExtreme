@@ -12,7 +12,7 @@
 
       <DxTooltip
         v-model:visible="defaultVisible"
-        :close-on-outside-click="false"
+        :hide-on-outside-click="false"
         target="#product1"
       >
         ExcelRemote IR
@@ -30,7 +30,7 @@
 
       <DxTooltip
         v-model:visible="withTemplateVisible"
-        :close-on-outside-click="false"
+        :hide-on-outside-click="false"
         target="#product2"
         position="right"
       >
@@ -56,7 +56,7 @@
         :position="'top'"
         :animation="animationConfig"
         v-model:visible="withAnimationVisible"
-        :close-on-outside-click="false"
+        :hide-on-outside-click="false"
       >
         Projector PlusHD
       </DxTooltip>

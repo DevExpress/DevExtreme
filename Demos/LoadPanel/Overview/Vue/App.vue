@@ -30,7 +30,7 @@
       :show-indicator="showIndicator"
       :show-pane="showPane"
       :shading="shading"
-      :close-on-outside-click="closeOnOutsideClick"
+      :hide-on-outside-click="hideOnOutsideClick"
       :on-shown="onShown"
       :on-hidden="onHidden"
       shading-color="rgba(0,0,0,0.4)"
@@ -58,8 +58,8 @@
       </div>
       <div class="option">
         <DxCheckBox
-          v-model:value="closeOnOutsideClick"
-          text="Close on outside click"
+          v-model:value="hideOnOutsideClick"
+          text="Hide on outside click"
         />
       </div>
     </div>
@@ -87,7 +87,7 @@ export default {
       showIndicator: true,
       shading: true,
       showPane: true,
-      closeOnOutsideClick: false,
+      hideOnOutsideClick: false,
     };
   },
 

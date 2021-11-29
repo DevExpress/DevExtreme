@@ -11,7 +11,7 @@ class App extends React.Component {
         height={350}
         visible={true}
         showTitle={false}
-        closeOnOutsideClick={false}>
+        hideOnOutsideClick={false}>
         <ScrollView width='100%' height='100%'>
           <img src="../../../../images/Popup-Scrolling-Image.jpg" className="center" />
           <div id="textBlock">

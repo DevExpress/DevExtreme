@@ -34,7 +34,7 @@
     <DxPopup
       v-model:visible="popupVisible"
       :drag-enabled="false"
-      :close-on-outside-click="true"
+      :hide-on-outside-click="true"
       :show-title="true"
       :width="300"
       :height="280"

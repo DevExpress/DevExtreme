@@ -17,7 +17,7 @@
     </DxFileManager>
 
     <DxPopup
-      :close-on-outside-click="true"
+      :hide-on-outside-click="true"
       v-model:visible="popupVisible"
       v-model:title="imageItemToDisplay.name"
       max-height="600"

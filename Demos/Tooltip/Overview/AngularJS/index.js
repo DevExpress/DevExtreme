@@ -5,14 +5,14 @@ DemoApp.controller('DemoController', ($scope) => {
     target: '#product1',
     showEvent: 'mouseenter',
     hideEvent: 'mouseleave',
-    closeOnOutsideClick: false,
+    hideOnOutsideClick: false,
   };
 
   $scope.withTemplateOptions = {
     target: '#product2',
     showEvent: 'mouseenter',
     hideEvent: 'mouseleave',
-    closeOnOutsideClick: false,
+    hideOnOutsideClick: false,
     position: 'right',
     contentTemplate(data) {
       data.html("<img width='150' src='../../../../images/products/3.png'><br/><b>SuperPlasma 50</b><br/>2400$");
@@ -23,7 +23,7 @@ DemoApp.controller('DemoController', ($scope) => {
     target: '#product3',
     showEvent: 'mouseenter',
     hideEvent: 'mouseleave',
-    closeOnOutsideClick: false,
+    hideOnOutsideClick: false,
     position: 'top',
     animation: {
       show: {

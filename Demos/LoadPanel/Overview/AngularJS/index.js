@@ -3,7 +3,7 @@ const DemoApp = angular.module('DemoApp', ['dx']);
 DemoApp.controller('DemoController', ($scope) => {
   $scope.employeeInfo = {};
   $scope.loadingVisible = false;
-  $scope.closeOnOutsideClick = false;
+  $scope.hideOnOutsideClick = false;
   $scope.showIndicator = true;
   $scope.showPane = true;
   $scope.shading = true;
@@ -16,7 +16,7 @@ DemoApp.controller('DemoController', ($scope) => {
       showIndicator: 'showIndicator',
       showPane: 'showPane',
       shading: 'shading',
-      closeOnOutsideClick: 'closeOnOutsideClick',
+      hideOnOutsideClick: 'hideOnOutsideClick',
     },
     onShown() {
       setTimeout(() => {

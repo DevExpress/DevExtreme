@@ -25,7 +25,7 @@ $(() => {
     showIndicator: true,
     showPane: true,
     shading: true,
-    closeOnOutsideClick: false,
+    hideOnOutsideClick: false,
     onShown() {
       setTimeout(() => {
         loadPanel.hide();
@@ -62,9 +62,9 @@ $(() => {
 
   $('.outside-click').dxCheckBox({
     value: false,
-    text: 'Close on outside click',
+    text: 'Hide on outside click',
     onValueChanged(e) {
-      loadPanel.option('closeOnOutsideClick', e.value);
+      loadPanel.option('hideOnOutsideClick', e.value);
     },
   });
 });

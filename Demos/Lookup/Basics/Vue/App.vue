@@ -20,7 +20,7 @@
           display-expr="Subject"
         >
           <DxDropDownOptions
-            :close-on-outside-click="true"
+            :hide-on-outside-click="true"
             :show-title="false"
           />
         </DxLookup>

@@ -16,7 +16,7 @@ DemoApp.controller('DemoController', ($scope) => {
       group: 'Assigned',
     }),
     dropDownOptions: {
-      closeOnOutsideClick: true,
+      hideOnOutsideClick: true,
       showTitle: false,
     },
     grouped: true,

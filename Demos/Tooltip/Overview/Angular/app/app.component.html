@@ -10,7 +10,7 @@
     <dx-tooltip
       target="#product1"
       [(visible)]="defaultVisible"
-      [closeOnOutsideClick]="false"
+      [hideOnOutsideClick]="false"
     >
       <div *dxTemplate="let data = data; of: 'content'"> ExcelRemote IR </div>
     </dx-tooltip>
@@ -27,7 +27,7 @@
       target="#product2"
       position="right"
       [(visible)]="withTemplateVisible"
-      [closeOnOutsideClick]="false"
+      [hideOnOutsideClick]="false"
     >
       <div *dxTemplate="let data = data; of: 'content'">
         <img width="150" src="../../../../images/products/3.png" /><br />
@@ -48,7 +48,7 @@
       target="#product3"
       position="top"
       [(visible)]="withAnimationVisible"
-      [closeOnOutsideClick]="false"
+      [hideOnOutsideClick]="false"
     >
       <dxo-animation>
         <dxo-show

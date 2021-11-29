@@ -65,7 +65,7 @@ class App extends React.Component {
 
         <Popup
           maxHeight={600}
-          closeOnOutsideClick={true}
+          hideOnOutsideClick={true}
           title={this.state.imageItemToDisplay.name}
           visible={this.state.popupVisible}
           onHiding={this.hideImagePopup}

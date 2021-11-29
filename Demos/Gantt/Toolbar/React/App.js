@@ -61,7 +61,7 @@ function App() {
       <Popup
         visible={ganttConfig.popupVisible}
         onHiding = {onHiding}
-        closeOnOutsideClick
+        hideOnOutsideClick
         showTitle
         title="About"
         height="auto"
