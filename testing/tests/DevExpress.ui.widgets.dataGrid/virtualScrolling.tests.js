@@ -940,7 +940,7 @@ QUnit.module('VirtualScrollingController. New mode', {
     QUnit.test('Viewport params at the bottom', function(assert) {
         const viewportSize = 25;
         this.scrollController.viewportSize(viewportSize);
-        const viewportItemIndex = DEFAULT_TOTAL_ITEMS_COUNT - 15;
+        const viewportItemIndex = DEFAULT_TOTAL_ITEMS_COUNT - viewportSize;
         this.scrollController.setViewportItemIndex(viewportItemIndex);
         const viewportParams = this.scrollController.getViewportParams();
         const virtualItemsCount = this.scrollController.virtualItemsCount();

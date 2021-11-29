@@ -1152,9 +1152,11 @@ QUnit.module('Initialization', baseModuleConfig, () => {
                 useNative: false
             }
         }).dxDataGrid('instance');
+        this.clock.tick(300);
 
         // act
         dataGrid.getScrollable().scrollTo({ y: 1500 });
+        $(dataGrid.getScrollable().content()).trigger('scroll');
 
         dataGrid.editCell(dataGrid.getRowIndexByKey(38), 0);
 
