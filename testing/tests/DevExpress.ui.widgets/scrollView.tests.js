@@ -698,7 +698,6 @@ QUnit.module('dynamic', moduleConfig, () => {
 
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: false,
-            showScrollbar: 'always',
             inertiaEnabled: false,
             pullDownEnabled: true,
             onPullDown() {
@@ -1223,7 +1222,7 @@ QUnit.module('api', moduleConfig, () => {
         assert.expect(1);
 
         const $scrollView = $('#scrollView').dxScrollView({
-            useNative: false,
+            useNative: false
         });
 
         $scrollView.dxScrollView('release')
@@ -1659,8 +1658,7 @@ QUnit.module('native pullDown strategy', {
         const done = assert.async();
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: true,
-            refreshStrategy: 'pullDown',
-            showScrollbar: 'always'
+            refreshStrategy: 'pullDown'
         });
 
         $scrollView.dxScrollView('option', 'pullDownEnabled', true);
@@ -1960,7 +1958,6 @@ QUnit.module('native swipeDown strategy', {
     QUnit.test('pulled down action should be fired when content less than container (T105659)', function(assert) {
         const $scrollView = $('#scrollView').dxScrollView({
             useNative: true,
-            showScrollbar: 'always',
             refreshStrategy: 'swipeDown',
             pullDownEnabled: true,
             onPullDown: function() {
@@ -2355,7 +2352,7 @@ QUnit.module('pullDown, reachBottom events', moduleConfig, () => {
                 assert.ok(false);
             }
 
-            const $scrollView = $('#scrollView').dxScrollView($.extend(config, { useNative: false, showScrollbar: 'always' }));
+            const $scrollView = $('#scrollView').dxScrollView($.extend(config, { useNative: false }));
             assert.ok(true, 'no exceptions');
 
             const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
