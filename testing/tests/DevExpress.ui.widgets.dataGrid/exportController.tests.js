@@ -2272,7 +2272,7 @@ QUnit.module('Export menu', {
         this.headerPanel.render($container);
 
         const $button = $container.find('.dx-datagrid-export-button');
-        $button.find('.dx-button').trigger('click');
+        $button.find('.dx-button').trigger('dxclick');
         const $exportAllButton = $('.dx-datagrid-export-menu .dx-item:eq(0)');
         const $exportSelectedRows = $('.dx-datagrid-export-menu .dx-item:eq(1)');
 
