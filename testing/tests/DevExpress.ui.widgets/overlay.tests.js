@@ -3145,8 +3145,8 @@ testModule('drag', moduleConfig, () => {
 
         const startEvent = pointer.start().dragStart().lastEvent();
 
-        assert.strictEqual(startEvent.maxTopOffset, 10, 'overlay can dragged vertically');
-        assert.strictEqual(startEvent.maxBottomOffset, 10, 'overlay can be dragged vertically');
+        assert.roughEqual(startEvent.maxTopOffset, 10, 0.2, 'overlay can dragged vertically');
+        assert.roughEqual(startEvent.maxBottomOffset, 10, 0.2, 'overlay can be dragged vertically');
         assert.strictEqual(startEvent.maxLeftOffset, 10, 'overlay can be dragged horizontally');
         assert.strictEqual(startEvent.maxRightOffset, 10, 'overlay can be dragged horizontally');
     });
@@ -3466,10 +3466,10 @@ testModule('keyboard navigation', {
         assert.strictEqual($overlayContent.position().left, getWidth($container) - getOuterWidth($overlayContent), 'overlay should not be dragged right of target');
 
         keyboard.keyDown('up');
-        assert.strictEqual($overlayContent.position().top, 0, 'overlay should not be dragged above the target');
+        assert.roughEqual($overlayContent.position().top, 0, 0.2, 'overlay should not be dragged above the target');
 
         keyboard.keyDown('down');
-        assert.strictEqual($overlayContent.position().top, getHeight($container) - getOuterHeight($overlayContent), 'overlay should not be dragged below than target');
+        assert.roughEqual($overlayContent.position().top, getHeight($container) - getOuterHeight($overlayContent), 0.2, 'overlay should not be dragged below than target');
     });
 
     test('arrows handling for rtl', function(assert) {
