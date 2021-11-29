@@ -4967,7 +4967,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        overlayTarget = dataGrid.$element().find('.dx-invalid-message').data('dxOverlay').option('target');
+        overlayTarget = dataGrid.$element().find('.dx-invalid-message').data('dxOverlay').option('position.of');
         assert.ok(overlayTarget.hasClass('dx-editor-cell'), 'target in material theme');
 
         themes.isMaterial = origIsMaterial;
