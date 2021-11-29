@@ -8,7 +8,7 @@ import {
   horizontalViews,
 } from '../../utils';
 import { restoreBrowserSize } from '../../../../../../helpers/restoreBrowserSize';
-import { multiPlatformTest, createWidget } from '../../../../../../helpers/multi-platform-test';
+import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../../../../helpers/multi-platform-test';
 import { PlatformType } from '../../../../../../helpers/multi-platform-test/platform-type';
 
 const test = multiPlatformTest({
@@ -31,13 +31,13 @@ const createScheduler = async (
 };
 
 [false, true].forEach((crossScrollingEnabled) => {
-  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled}`, async (t) => {
+  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled}`, async (t, { platform }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line no-restricted-syntax
     for (const view of views) {
-      await scheduler.option('currentView', view);
+      await updateComponentOptions(platform, { currentView: view });
 
       await t.expect(
         await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}.png`, scheduler.workSpace),
@@ -61,13 +61,13 @@ const createScheduler = async (
     await restoreBrowserSize(t);
   });
 
-  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t) => {
+  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping is used`, async (t, { platform }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line no-restricted-syntax
     for (const view of views) {
-      await scheduler.option('currentView', view);
+      await updateComponentOptions(platform, { currentView: view });
 
       await t.expect(
         await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal.png`, scheduler.workSpace),
@@ -93,13 +93,13 @@ const createScheduler = async (
     await restoreBrowserSize(t);
   });
 
-  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping is used`, async (t) => {
+  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping is used`, async (t, { platform }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // eslint-disable-next-line no-restricted-syntax
     for (const view of views) {
-      await scheduler.option('currentView', view);
+      await updateComponentOptions(platform, { currentView: view });
 
       await t.expect(
         await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-vertical.png`, scheduler.workSpace),
