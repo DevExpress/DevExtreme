@@ -102,7 +102,9 @@ const prepareInstances = (
   const DOMMetaData = {
     allDayPanelCellsMeta,
     dateTableCellsMeta: [
-      [],
+      [{
+        left: 0, top: 0, width: 100, height: 200,
+      }],
       [{
         left: 0, top: 0, width: 100, height: 200,
       }],
@@ -528,6 +530,59 @@ describe('Appointments view model', () => {
           false,
           false,
         );
+
+        const appointmentsModel = getAppointmentsModel(
+          instances.appointmentsConfig,
+          instances.viewDataProvider,
+          instances.timeZoneCalculator,
+          defaultDataAccessors,
+          instances.DOMMetaData,
+        );
+
+        const viewModel = getAppointmentsViewModel(
+          appointmentsModel,
+          [appointment],
+        );
+
+        const {
+          regular,
+          allDay,
+          regularCompact,
+          allDayCompact,
+        } = viewModel;
+
+        expect(regular)
+          .toHaveLength(1);
+
+        expect(regularCompact)
+          .toHaveLength(0);
+
+        expect(allDay)
+          .toHaveLength(0);
+
+        expect(allDayCompact)
+          .toHaveLength(0);
+
+        expect(regular[0].appointment)
+          .toMatchObject(appointment);
+      });
+
+      it('should generate all day appointment in date view if vertical grouping', () => {
+        const appointment = {
+          text: 'Test-01',
+          startDate: new Date(2021, 3, 29),
+          endDate: new Date(2021, 3, 29, 1),
+          allDay: true,
+        };
+        const instances = prepareInstances(
+          'week',
+          new Date(2021, 3, 29),
+          1,
+          true,
+          true,
+        );
+
+        instances.appointmentsConfig.isVerticalGroupOrientation = true;
 
         const appointmentsModel = getAppointmentsModel(
           instances.appointmentsConfig,

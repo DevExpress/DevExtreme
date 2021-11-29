@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import Scheduler from '../../../../../model/scheduler';
-import { multiPlatformTest, createWidget } from '../../../../../helpers/multi-platform-test';
+import Scheduler from '../../../../model/scheduler';
+import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platform-test';
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
