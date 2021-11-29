@@ -291,13 +291,14 @@ const DropDownMenu = Widget.inherit({
             contentTemplate: (function(contentElement) {
                 this._renderList(contentElement);
             }).bind(this),
-            position: extend({}, this.option('popupPosition'), { of: this.$element() }),
+            position: this.option('popupPosition'),
             animation: this.option('popupAnimation'),
             onOptionChanged: (function(args) {
                 if(args.name === 'visible') {
                     this.option('opened', args.value);
                 }
             }).bind(this),
+            target: this.$element(),
             height: this.option('popupHeight'),
             width: this.option('popupWidth'),
             maxHeight: this.option('popupMaxHeight'),
