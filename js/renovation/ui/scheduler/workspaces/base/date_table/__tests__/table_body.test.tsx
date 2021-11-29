@@ -12,52 +12,61 @@ describe('DateTableBody', () => {
   describe('Render', () => {
     const viewData = {
       groupedData: [{
-        dateTable: [[{
-          startDate: new Date(2020, 6, 9, 0),
-          endDate: new Date(2020, 6, 9, 0, 30),
-          groups: { id: 1 },
-          groupIndex: 1,
-          index: 4,
-          isFirstGroupCell: true,
-          isLastGroupCell: false,
-          key: 3,
-          text: 'test 1',
-          today: true,
-          otherMonth: true,
-          firstDayOfMonth: true,
-          isSelected: true,
-          isFocused: false,
-        }], [{
-          startDate: new Date(2020, 6, 9, 1),
-          endDate: new Date(2020, 6, 9, 1, 30),
-          groups: { id: 2 },
-          groupIndex: 2,
-          index: 5,
-          isFirstGroupCell: false,
-          isLastGroupCell: false,
-          key: 6,
-          text: 'test 2',
-          today: false,
-          otherMonth: false,
-          firstDayOfMonth: true,
-          isSelected: true,
-          isFocused: true,
-        }], [{
-          startDate: new Date(2020, 6, 9, 2),
-          endDate: new Date(2020, 6, 9, 2, 30),
-          groups: { id: 3 },
-          groupIndex: 3,
-          index: 6,
-          isFirstGroupCell: false,
-          isLastGroupCell: true,
-          key: 9,
-          text: 'test 3',
-          today: false,
-          otherMonth: false,
-          firstDayOfMonth: false,
-          isSelected: false,
-          isFocused: false,
-        }]],
+        dateTable: [{
+          cells: [{
+            startDate: new Date(2020, 6, 9, 0),
+            endDate: new Date(2020, 6, 9, 0, 30),
+            groups: { id: 1 },
+            groupIndex: 1,
+            index: 4,
+            isFirstGroupCell: true,
+            isLastGroupCell: false,
+            key: 3,
+            text: 'test 1',
+            today: true,
+            otherMonth: true,
+            firstDayOfMonth: true,
+            isSelected: true,
+            isFocused: false,
+          }],
+          key: 0,
+        }, {
+          cells: [{
+            startDate: new Date(2020, 6, 9, 1),
+            endDate: new Date(2020, 6, 9, 1, 30),
+            groups: { id: 2 },
+            groupIndex: 2,
+            index: 5,
+            isFirstGroupCell: false,
+            isLastGroupCell: false,
+            key: 6,
+            text: 'test 2',
+            today: false,
+            otherMonth: false,
+            firstDayOfMonth: true,
+            isSelected: true,
+            isFocused: true,
+          }],
+          key: 1,
+        }, {
+          cells: [{
+            startDate: new Date(2020, 6, 9, 2),
+            endDate: new Date(2020, 6, 9, 2, 30),
+            groups: { id: 3 },
+            groupIndex: 3,
+            index: 6,
+            isFirstGroupCell: false,
+            isLastGroupCell: true,
+            key: 9,
+            text: 'test 3',
+            today: false,
+            otherMonth: false,
+            firstDayOfMonth: false,
+            isSelected: false,
+            isFocused: false,
+          }],
+          key: 2,
+        }],
         allDayPanel: [{ startDate: new Date(), key: '1' }],
         groupIndex: 1,
         key: '1',
@@ -119,7 +128,7 @@ describe('DateTableBody', () => {
         rowIndex: number,
       ): void => {
         const cell = cells.at(rowIndex);
-        const data = viewData.groupedData[0].dateTable[rowIndex][0];
+        const data = viewData.groupedData[0].dateTable[rowIndex].cells[0];
         const {
           startDate,
           endDate,
@@ -176,11 +185,11 @@ describe('DateTableBody', () => {
         .toBe(3);
 
       expect(rows.at(0).key())
-        .toBe('1');
+        .toBe('0');
       expect(rows.at(1).key())
-        .toBe('4');
+        .toBe('1');
       expect(rows.at(2).key())
-        .toBe('7');
+        .toBe('2');
     });
 
     it('should render AllDayPanelBody and pass correct arguments to it', () => {

@@ -84,7 +84,7 @@ export interface dxContextMenuOptions<
 > extends dxMenuBaseOptions<dxContextMenu<TKey>, dxContextMenuItem, TKey> {
     /**
      * @docid
-     * @deprecated
+     * @deprecated dxContextMenuOptions.hideOnOutsideClick
      * @default true
      * @type_function_param1 event:event
      * @type_function_return Boolean

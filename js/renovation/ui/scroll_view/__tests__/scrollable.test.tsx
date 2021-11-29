@@ -23,6 +23,8 @@ import { getWindow, setWindow } from '../../../../core/utils/window';
 import * as ElementLocationModule from '../utils/get_element_location_internal';
 import { DIRECTION_BOTH, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from '../common/consts';
 import { ScrollableProps } from '../common/scrollable_props';
+import config from '../../../../core/config';
+import { ConfigContextValue } from '../../../common/config_context';
 
 jest.mock('../utils/get_element_location_internal', () => ({
   ...jest.requireActual('../utils/get_element_location_internal'),
@@ -71,7 +73,7 @@ describe('Scrollable', () => {
 
   each([false, true]).describe('useNative: %o', (useNativeScrolling) => {
     it('should pass all necessary properties to the Widget', () => {
-      const config = {
+      const options = {
         useNative: useNativeScrolling,
         direction: 'vertical' as ScrollableDirection,
         width: '120px',
@@ -86,9 +88,9 @@ describe('Scrollable', () => {
         visible: true,
       };
 
-      const scrollable = mount<Scrollable>(<Scrollable {...config} />);
+      const scrollable = mount<Scrollable>(<Scrollable {...options} />);
 
-      const { direction, useNative, ...restProps } = config;
+      const { direction, useNative, ...restProps } = options;
       expect(scrollable.find(Widget).at(0).props()).toMatchObject({
         classes: useNative
           ? 'dx-scrollable dx-scrollable-native dx-scrollable-native-generic dx-scrollable-vertical dx-scrollable-disabled'
@@ -422,10 +424,34 @@ describe('Scrollable', () => {
     });
 
     describe('Getters', () => {
-      it('isRenovated', () => {
-        const viewModel = new Scrollable({ });
+      describe('rtlEnabled', () => {
+        each`
+        global       | rtlEnabled   | contextConfig      | expected
+        ${true}      | ${true}      | ${true}            | ${true}
+        ${undefined} | ${undefined} | ${undefined}       | ${false}
+        ${true}      | ${true}      | ${undefined}       | ${true}
+        ${true}      | ${false}     | ${undefined}       | ${false}
+        ${true}      | ${true}      | ${false}           | ${true}
+        ${true}      | ${false}     | ${true}            | ${false}
+        ${true}      | ${undefined} | ${undefined}       | ${true}
+        ${true}      | ${undefined} | ${true}            | ${true}
+        ${true}      | ${undefined} | ${false}           | ${false}
+          `
+          .describe('pass the prepared rtl value to the strategy', ({
+            global, rtlEnabled, contextConfig, expected,
+          }) => {
+            const name = `${JSON.stringify({
+              global, rtlEnabled, contextConfig, expected,
+            })}`;
 
-        expect(viewModel.isRenovated()).toEqual(true);
+            it(name, () => {
+              const viewModel = new Scrollable({ rtlEnabled });
+              config().rtlEnabled = global;
+              viewModel.config = { rtlEnabled: contextConfig } as ConfigContextValue;
+
+              expect(viewModel.rtlEnabled).toEqual(expected);
+            });
+          });
       });
 
       each([false, true]).describe('useNative: %o', (useNative) => {

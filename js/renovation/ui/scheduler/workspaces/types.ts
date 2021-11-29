@@ -31,8 +31,13 @@ interface ViewDataBase {
   key: string;
 }
 
+interface RowData {
+  cells: ViewCellData[];
+  key: number;
+}
+
 interface ViewData extends ViewDataBase {
-  dateTable: ViewCellData[][];
+  dateTable: RowData[];
   allDayPanel?: ViewCellData[];
 }
 

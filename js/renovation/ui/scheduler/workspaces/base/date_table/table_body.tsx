@@ -45,16 +45,16 @@ export const viewFunction = ({
               rightVirtualCellCount={viewData.rightVirtualCellCount}
             />
           )}
-          {dateTable.map((cellsRow) => (
+          {dateTable.map(({ key: rowKey, cells }) => (
             <Row
               className={rowClasses}
-              key={cellsRow[0].key - viewData.leftVirtualCellCount}
+              key={rowKey}
               leftVirtualCellWidth={viewData.leftVirtualCellWidth}
               rightVirtualCellWidth={viewData.rightVirtualCellWidth}
               leftVirtualCellCount={viewData.leftVirtualCellCount}
               rightVirtualCellCount={viewData.rightVirtualCellCount}
             >
-              {cellsRow.map(({
+              {cells.map(({
                 startDate,
                 endDate,
                 groups,
