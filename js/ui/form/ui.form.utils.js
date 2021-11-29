@@ -52,3 +52,22 @@ export const getItemPath = (items, item, isTabs) => {
         }
     }
 };
+
+export function getRootLevelOfExpectedComplexOption(fullOptionName) {
+    const expectedRootNames = ['formData', 'items'];
+    const splitFullName = fullOptionName.split('.');
+    let result;
+
+    if(splitFullName.length > 1) {
+        let i;
+        const rootOptionName = splitFullName[0];
+
+        for(i = 0; i < expectedRootNames.length; i++) {
+            if(rootOptionName.search(expectedRootNames[i]) !== -1) {
+                result = expectedRootNames[i];
+            }
+        }
+    }
+
+    return result;
+}
