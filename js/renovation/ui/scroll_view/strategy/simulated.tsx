@@ -962,7 +962,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
       return;
     }
 
-    const isKeySupported = Object.values(KEY_CODES).includes(normalizeKeyName(event));
+    const isKeySupported = Object.values(KEY_CODES).includes(normalizeKeyName(event) as string);
 
     if (isKeySupported) {
       event.originalEvent.stopPropagation();
