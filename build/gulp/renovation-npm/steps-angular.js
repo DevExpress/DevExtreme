@@ -1,11 +1,9 @@
 'use strict';
 
 const gulp = require('gulp');
-const through = require('through2');
 const path = require('path');
-//const ngPackager = require('ng-packagr');
 const createVinyl = require('./utils/create-gulp-file');
-const { camelCase } = require('./utils')
+const { camelCase, run } = require('./utils')
 
 function createNgEntryPoint(context) {
     const components = require(path.resolve(process.cwd(), path.join(context.destination, 'components.js')));
@@ -25,27 +23,19 @@ function preparePackageForPackagr(packageObject, basePackageObject, context) {
         }
     }
 
-    packageObject.peerDependencies = packageObject.peerDependencies || {};
     packageObject.peerDependencies = {
         ...packageObject.peerDependencies,
-        ...packageObject.dependencies,
         "@angular/core": "^11.0.0",
         "@angular/common": "^11.0.0",
         "@angular/forms": "^11.0.0",
     }
-    delete packageObject.dependencies;
 }
-/* function runPackagr(context) {
-    const name = `packer-${context.name}`;
-    gulp.task(name, () => ngPackager.ngPackagr()
-        .forProject(path.join(context.destination, 'package.json'))
-        // .withTsConfig('tsconfig.lib.json')
-        .build());
-    return name;
-} */
+function runPackagr(context) {
+    return run('cmd', [`/c npx ng-packagr -p ${path.join(context.destination, 'package.json')}`], { });
+}
 
 module.exports = {
     createNgEntryPoint,
     preparePackageForPackagr,
-    // runPackagr
+    runPackagr,
 }

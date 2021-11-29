@@ -4,7 +4,7 @@ const ctx = require('../context.js');
 const through = require('through2');
 const versionUtils = require('./utils/version-utils');
 
-function performPackageLockReplacements(context) {
+function performPackageReplacements(context) {
     const frameworkName = context.name;
     return through.obj((file, enc, callback) => {
         const basePackageObject = JSON.parse(file.contents.toString());
@@ -44,6 +44,13 @@ function performPackageLockReplacements(context) {
             suffix: 'next'
         });
 
+        packageObject.peerDependencies = packageObject.peerDependencies || {};
+        packageObject.peerDependencies = {
+            ...packageObject.peerDependencies,
+            ...packageObject.dependencies
+        }
+        delete packageObject.dependencies;
+
         context.packageLockSteps.forEach(x => x(packageObject, basePackageObject, context));
 
         file.contents = Buffer.from(JSON.stringify(packageObject, null, 2), enc);
@@ -51,4 +58,4 @@ function performPackageLockReplacements(context) {
     });
 }
 
-module.exports = performPackageLockReplacements;
+module.exports = performPackageReplacements;

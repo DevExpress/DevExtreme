@@ -6,22 +6,19 @@ const merge = require('merge-stream');
 const ctx = require('../context.js');
 const { version } = require('../../../package.json');
 const replace = require('gulp-replace');
-const through = require('through2');
-const path = require('path');
 const performRecastReplacements = require('./replacements-import');
-const performPackageLockReplacements = require('./replacements-package-lock');
+const performPackageReplacements = require('./replacements-package');
 const removeFiles = require('./remove-unused-modules');
 const babel = require('gulp-babel');
 const transpileConfig = require('../transpile-config');
 const { run } = require('./utils');
-const gulpIf = require('gulp-if');
 
 function copyServiceFiles(context) {
     return () => merge(
         gulp
             .src('package.json')
             .pipe(replace(version, ctx.version.package))
-            .pipe(performPackageLockReplacements(context))
+            .pipe(performPackageReplacements(context))
             .pipe(gulp.dest(context.destination)),
         gulp
             .src('README.md')
@@ -68,14 +65,7 @@ function addCompilationTask(frameworkData) {
         removeFiles.cleanEmptyFolders(context.destination),
         ...(frameworkData.transpileJS ? [transpileJSModules(context)] : []),
         run('cmd', ['/c npm i'], { cwd: context.destination }),
-        ...context.completionSteps.map(x => x(context)).reduce(function(p, c) {
-                if(Array.isArray(c)) {
-                    p.push(...c);
-                } else {
-                    p.push(c);
-                }
-                return p;
-            }, [])
+        ...context.completionSteps.map(x => x(context))
     ];
     
     gulp.task(`renovation-npm-${context.name}`, gulp.series(...generateSeries));
@@ -92,6 +82,6 @@ addCompilationTask({
     name: 'angular',
     generator: 'generate-angular-v2',
     packageLockSteps: [require('./steps-angular').preparePackageForPackagr],
-    // completionSteps: [require('./steps-angular').runPackagr],
+    completionSteps: [require('./steps-angular').runPackagr],
     copyFilesSteps: [require('./steps-angular').createNgEntryPoint]
 });

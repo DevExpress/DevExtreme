@@ -38,15 +38,8 @@ function createModuleEntryPointers(context) {
 }
 
 function preparePackage(packageObject, basePackageObject, context) {
-    const vreact = packageObject.devDependencies["react"];
-    const vreactDom = packageObject.devDependencies["react-dom"];
-
-    delete packageObject.devDependencies["react"];
-    delete packageObject.devDependencies["react-dom"];
-
-    packageObject.peerDependencies = packageObject.peerDependencies || {};
-    packageObject.peerDependencies["react"] = `>= ${vreact}`;
-    packageObject.peerDependencies["react-dom"] = `>= ${vreactDom}`;
+    packageObject.peerDependencies["react"] = `>= ${packageObject.peerDependencies["react"]}`;
+    packageObject.peerDependencies["react-dom"] = `>= ${packageObject.peerDependencies["react-dom"]}`;
 }
 
 module.exports = {
