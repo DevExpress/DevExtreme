@@ -659,6 +659,7 @@ const Form = Widget.inherit({
             return;
         }
 
+        this._defaultOptionChangedHandler();
         switch(args.name) {
             case 'formData':
                 if(!this.option('items')) {
@@ -835,11 +836,21 @@ const Form = Widget.inherit({
         return result;
     },
 
+    _itemsOptionChangedHandler: function() {
+    },
+
+    _formDataOptionChangedHandler: function() {
+    },
+
+    _defaultOptionChangedHandler: function() {
+    },
+
     _customHandlerOfComplexOption: function(args, rootOptionName) {
         const nameParts = args.fullName.split('.');
         const value = args.value;
 
         if(rootOptionName === 'items') {
+            this._itemsOptionChangedHandler();
             const itemPath = this._getItemPath(nameParts);
             const item = this.option(itemPath);
             const optionNameWithoutPath = args.fullName.replace(itemPath + '.', '');
@@ -856,6 +867,7 @@ const Form = Widget.inherit({
         }
 
         if(rootOptionName === 'formData') {
+            this._formDataOptionChangedHandler();
             const dataField = nameParts.slice(1).join('.');
             const editor = this.getEditor(dataField);
             if(editor) {
