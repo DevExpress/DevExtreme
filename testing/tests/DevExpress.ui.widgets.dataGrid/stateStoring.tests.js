@@ -456,7 +456,7 @@ QUnit.module('State Storing with real controllers', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options, ignoreClockTick) {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'editing', 'filterRow', 'headerFilter', 'search', 'pager', 'selection', 'virtualScrolling', 'focus', 'keyboardNavigation'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'columnHeaders', 'editorFactory', 'editing', 'filterRow', 'headerFilter', 'search', 'pager', 'selection', 'virtualScrolling', 'focus', 'keyboardNavigation', 'filterSync'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: options
