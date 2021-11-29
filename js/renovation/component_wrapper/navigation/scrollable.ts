@@ -15,7 +15,15 @@ export class ScrollableWrapper extends Component {
     return Deferred().resolve();
   }
 
+  isRenovated(): boolean {
+    return !!Component.IS_RENOVATED_WIDGET;
+  }
+
   _visibilityChanged(): void {}
+
+  _dimensionChanged(): void {
+    (this.viewRef as Scrollable)?.updateHandler();
+  }
 
   $content(): dxElementWrapper {
     return (this.$element() as unknown as dxElementWrapper).find('.dx-scrollable-content').eq(0);

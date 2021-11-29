@@ -541,9 +541,7 @@ export default class ComponentWrapper extends DOMComponent<ComponentWrapperProps
   }
 }
 
-/// #DEBUG
 ComponentWrapper.IS_RENOVATED_WIDGET = true;
-/// #ENDDEBUG
 
 /* eslint-enable @typescript-eslint/ban-types */
 /* eslint-enable @typescript-eslint/no-unsafe-member-access */
