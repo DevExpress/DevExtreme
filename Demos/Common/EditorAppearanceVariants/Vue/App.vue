@@ -199,6 +199,7 @@ export default {
 
 .editors {
   margin-right: 320px;
+  height: 570px;
 }
 
 .editors .left {
