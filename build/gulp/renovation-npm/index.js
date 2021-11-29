@@ -8,22 +8,22 @@ const { version } = require('../../../package.json');
 const replace = require('gulp-replace');
 const performRecastReplacements = require('./replacements-import');
 const performPackageReplacements = require('./replacements-package');
-const removeFiles = require('./remove-unused-modules');
+const { removeUnusedModules, cleanEmptyFolders } = require('./remove-unused-modules');
 const babel = require('gulp-babel');
 const transpileConfig = require('../transpile-config');
 const { run } = require('./utils');
+const argv = require('yargs').argv;
 
-function copyServiceFiles(context) {
+function copyServiceFiles(context, additionalReplacements) {
     return () => merge(
         gulp
             .src('package.json')
             .pipe(replace(version, ctx.version.package))
-            .pipe(performPackageReplacements(context))
+            .pipe(performPackageReplacements(context, additionalReplacements))
             .pipe(gulp.dest(context.destination)),
         gulp
             .src('README.md')
             .pipe(gulp.dest(context.destination)),
-        ...context.copyFilesSteps.map(x=>x(context))
     );
 }
 function cleanNpmFramework(context) {
@@ -45,43 +45,127 @@ function transpileJSModules(context) {
                     .pipe(babel(transpileConfig.esm))
                     .pipe(gulp.dest(context.destination));
 }
+function installPackages(context) {
+    return run('cmd', ['/c npm i'], { cwd: context.destination });
+}
+function generateRenovation(context, generator) {
+    return generator;
+}
+
+function buildSeries(steps, context) {
+    const result = [];
+    steps.forEach(majorStep => {
+        const name = majorStep.name;
+        const extension = context.steps[name] || {};
+
+        const minorSteps = [extension.before, { ...majorStep, ...extension }, extension.after];
+
+        minorSteps.forEach((minorStep) => {
+            if (!minorStep)
+                return;
+            if (minorStep.condition && !minorStep.condition(context))
+                return;
+            if (minorStep.actions) {
+                minorStep.actions.forEach(action => {
+                    if (minorStep.arg) {
+                        result.push(action(context, minorStep.arg(context)));
+                    } else {
+                        result.push(action(context));
+                    }
+                })
+            }
+        });
+    });
+    return result;
+}
 
 function addCompilationTask(frameworkData) {
     const context = {
-        packageLockSteps: [],
-        completionSteps: [],
-        copyFilesSteps: [],
         source: `artifacts/${frameworkData.name}/renovation`,
         destination: `artifacts/npm-${frameworkData.name}`,
         extensions: ['.js', '.ts', '.d.ts', '.tsx'],
+        production: argv.production,
         ...frameworkData,
     }
-    const generateSeries = [
-        cleanNpmFramework(context),
-        context.generator,
-        copyFrameworkArtifacts(context),
-        copyServiceFiles(context),
-        removeFiles.removeUnusedModules(context),
-        removeFiles.cleanEmptyFolders(context.destination),
-        ...(frameworkData.transpileJS ? [transpileJSModules(context)] : []),
-        run('cmd', ['/c npm i'], { cwd: context.destination }),
-        ...context.completionSteps.map(x => x(context))
+    const steps = [
+        {
+            name: 'startup'
+        },
+        {
+            name: 'cleanup',
+            actions: [cleanNpmFramework]
+        },
+        {
+            name: 'generate',
+            arg: (ctx) => ctx.generator,
+            actions: [generateRenovation],
+        },
+        {
+            name: 'copyFramework',
+            actions: [copyFrameworkArtifacts]
+        },
+        {
+            name: 'copyService',
+            requires: 'copyFramework',
+            actions: [copyServiceFiles]
+        },
+        {
+            name: 'removeUnused',
+            actions: [removeUnusedModules, cleanEmptyFolders]
+        },
+        {
+            name: 'transpile',
+            condition: (ctx) => ctx.switches.transpile,
+            actions: [transpileJSModules]
+        },
+        {
+            name: 'installPackages',
+            condition: (ctx) => ctx.switches.installPackages,
+            actions: [installPackages]
+        },
+        {
+            name: 'teardown'
+        }
     ];
-    
-    gulp.task(`renovation-npm-${context.name}`, gulp.series(...generateSeries));
+
+    const builtSteps = buildSeries(steps, context)
+    gulp.task(`renovation-npm-${context.name}`, gulp.series(...buildSeries(steps, context)));
 }
 
 addCompilationTask({
     name: 'react',
     generator: 'generate-react',
-    transpileJS: true,
-    packageLockSteps: [require('./steps-react').preparePackage],
-    copyFilesSteps: [require('./steps-react').createReactEntryPoint, require('./steps-react').createModuleEntryPointers]
+
+    switches: {
+        transpile: true
+    },
+    steps: {
+        copyService: {
+            arg: (ctx) => require('./steps-react').preparePackage,
+            after: {
+                actions: [require('./steps-react').createReactEntryPoint, require('./steps-react').createModuleEntryPointers]
+            }
+        },
+    }
 });
 addCompilationTask({
     name: 'angular',
     generator: 'generate-angular-v2',
-    packageLockSteps: [require('./steps-angular').preparePackageForPackagr],
-    completionSteps: [require('./steps-angular').runPackagr],
-    copyFilesSteps: [require('./steps-angular').createNgEntryPoint]
+
+    switches: {
+        installPackages: true,
+    },
+    steps: {
+        copyService: {
+            arg: (ctx) => require('./steps-angular').preparePackageForPackagr,
+            after: {
+                actions: [require('./steps-angular').createNgEntryPoint]
+            }
+        },
+        teardown: {
+            before: {
+                actions: [require('./steps-angular').runPackagr]
+            }
+        }
+    }
 });

@@ -4,7 +4,7 @@ const ctx = require('../context.js');
 const through = require('through2');
 const versionUtils = require('./utils/version-utils');
 
-function performPackageReplacements(context) {
+function performPackageReplacements(context, additionalReplacements) {
     const frameworkName = context.name;
     return through.obj((file, enc, callback) => {
         const basePackageObject = JSON.parse(file.contents.toString());
@@ -38,11 +38,17 @@ function performPackageReplacements(context) {
         });
 
         const version = versionUtils.parse(ctx.version.package);
-        packageObject.dependencies.devextreme = versionUtils.stringify({
+        const dxversion = versionUtils.stringify({
             major: version.major,
             minor: version.minor,
             suffix: 'next'
         });
+        
+        if (context.production) {
+            packageObject.dependencies.devextreme = dxversion;
+        } else {
+            packageObject.dependencies.devextreme = `${dxversion} || ${basePackageObject.version}`;
+        }
 
         packageObject.peerDependencies = packageObject.peerDependencies || {};
         packageObject.peerDependencies = {
@@ -51,7 +57,9 @@ function performPackageReplacements(context) {
         }
         delete packageObject.dependencies;
 
-        context.packageLockSteps.forEach(x => x(packageObject, basePackageObject, context));
+        if (additionalReplacements) {
+            additionalReplacements(packageObject, basePackageObject, context);
+        }
 
         file.contents = Buffer.from(JSON.stringify(packageObject, null, 2), enc);
         callback(null, file);

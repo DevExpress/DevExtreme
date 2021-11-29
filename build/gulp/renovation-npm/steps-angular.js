@@ -6,14 +6,16 @@ const createVinyl = require('./utils/create-gulp-file');
 const { camelCase, run } = require('./utils')
 
 function createNgEntryPoint(context) {
-    const components = require(path.resolve(process.cwd(), path.join(context.destination, 'components.js')));
-    const contents = components
-        .map(x => x.pathInRenovationFolder.slice(0, -2))
-        .map(x => `export * as ${camelCase(x.split('/').splice(-1)[0])} from './${x}';`)
-        .join('\n');
+    return () => {
+        const components = require(path.resolve(process.cwd(), path.join(context.destination, 'components.js')));
+        const contents = components
+            .map(x => x.pathInRenovationFolder.slice(0, -2))
+            .map(x => `export * as ${camelCase(x.split('/').splice(-1)[0])} from './${x}';`)
+            .join('\n');
     
-    return createVinyl('ngentrypoint.ts', contents)
-        .pipe(gulp.dest(context.destination));
+        return createVinyl('ngentrypoint.ts', contents)
+            .pipe(gulp.dest(context.destination));
+    };
 }
 
 function preparePackageForPackagr(packageObject, basePackageObject, context) {
@@ -31,7 +33,7 @@ function preparePackageForPackagr(packageObject, basePackageObject, context) {
     }
 }
 function runPackagr(context) {
-    return run('cmd', [`/c npx ng-packagr -p ${path.join(context.destination, 'package.json')}`], { });
+    return run('cmd', [`/c npx ng-packagr -p ${path.join(process.cwd(), context.destination, 'package.json')}`], { });
 }
 
 module.exports = {

@@ -38,24 +38,24 @@ function removeUnusedModules(context) {
     }
 }
 
-function cleanEmptyFolders(destFolder) {
+function cleanEmptyFolders(destination) {
     return function cleanEmptyFoldersRecurcive(cb) {
-        const isDir = fs.statSync(destFolder).isDirectory();
+        const isDir = fs.statSync(destination).isDirectory();
         if (!isDir) {
             cb();
             return;
         }
-        let files = fs.readdirSync(destFolder);
+        let files = fs.readdirSync(destination);
         if (files.length > 0) {
             files.forEach(function(file) {
-                const fullPath = path.join(destFolder, file);
+                const fullPath = path.join(destination, file);
                 cleanEmptyFolders(fullPath)(cb);
             });
-            files = fs.readdirSync(destFolder);
+            files = fs.readdirSync(destination);
         }
     
         if (!files.length) {
-          fs.rmdirSync(destFolder);
+          fs.rmdirSync(destination);
         }
         cb();
     }
@@ -63,5 +63,5 @@ function cleanEmptyFolders(destFolder) {
 
 module.exports = {
     removeUnusedModules,
-    cleanEmptyFolders
+    cleanEmptyFolders: (x) => cleanEmptyFolders(x.destination)
 }
