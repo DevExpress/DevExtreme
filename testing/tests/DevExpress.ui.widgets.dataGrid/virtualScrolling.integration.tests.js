@@ -1,15 +1,18 @@
 import { getHeight, getWidth } from 'core/utils/size';
 import devices from 'core/devices';
 import commonUtils from 'core/utils/common';
+import browser from 'core/utils/browser';
 import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import Scrollable from 'ui/scroll_view/ui.scrollable.js';
 import $ from 'jquery';
 
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
+const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 const createLargeDataSource = function(count) {
     return {
@@ -4973,7 +4976,12 @@ QUnit.module('Infinite Scrolling', baseModuleConfig, () => {
 
         // assert
         assert.equal(dataGrid.getVisibleRows().length, 16, 'visible rows');
-        assert.equal(dataGrid.getVisibleRows()[0].data.id, 18, 'top visible row');
+        // This specific for GA in FF only. There the 17th row is top visible.
+        if(isRenovatedScrollable && browser.mozilla) {
+            assert.roughEqual(dataGrid.getVisibleRows()[0].data.id, 18, 1.001, 'top visible row');
+        } else {
+            assert.equal(dataGrid.getVisibleRows()[0].data.id, 18, 'top visible row');
+        }
         assert.equal(dataGrid.$element().find('.dx-datagrid-bottom-load-panel').length, 1, 'bottom loading exists');
 
         // act
