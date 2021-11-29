@@ -35,6 +35,8 @@ class PopoverPositionController extends OverlayPositionController {
         this._$arrow = $arrow;
 
         this._positionSide = undefined;
+
+        this.updatePosition(this._props.position);
     }
 
     positionWrapper() {
