@@ -595,6 +595,7 @@ initEvent(normalizeEventArguments(function(src, config) {
         that.originalEvent = src;
         that.type = src.type;
         that.currentTarget = undefined;
+        Object.prototype.hasOwnProperty.call(src, 'isTrusted') && (that.isTrusted = src.isTrusted);
         that.timeStamp = src.timeStamp || Date.now();
     } else {
         Object.assign(that, src);
