@@ -40,7 +40,7 @@ const longOption = {
 fixture`Label`
   .page(url(__dirname, '../container.html'));
 
-const components: WidgetName[] = ['dxTextBox', 'dxTextArea', 'dxSelectBox'];
+const components: WidgetName[] = ['dxTextBox', 'dxTextArea', 'dxSelectBox', 'dxLookup'];
 components.forEach((component) => {
   labelMods.forEach((labelMode) => {
     stylingMods.forEach((stylingMode) => {

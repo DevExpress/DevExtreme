@@ -314,6 +314,10 @@ $generic-texteditor-label-transition:
         display: none;
       }
 
+      .dx-lookup-field {
+        font-size: 0;
+      }
+
       .dx-texteditor-label {
         transition: $generic-texteditor-label-transition;
         font-size: $generic-base-font-size;
@@ -343,6 +347,10 @@ $generic-texteditor-label-transition:
     &.dx-textarea.dx-state-focused {
       .dx-placeholder {
         display: block;
+      }
+
+      .dx-lookup-field {
+        font-size: $generic-base-font-size;
       }
 
       .dx-texteditor-label {
@@ -408,6 +416,10 @@ $generic-texteditor-label-transition:
       }
     }
 
+    .dx-lookup-field {
+      font-size: $generic-base-font-size;
+    }
+
     &.dx-rtl {
       .dx-texteditor-label {
         .dx-label-before {
@@ -470,6 +482,10 @@ $generic-texteditor-label-transition:
         top: $generic-base-inline-borderedwidget-top-padding;
         margin-top: 0;
       }
+    }
+
+    .dx-lookup-field {
+      font-size: 0;
     }
 
     .dx-placeholder {
@@ -722,6 +738,10 @@ $generic-texteditor-label-transition:
         display: none;
       }
 
+      .dx-lookup-field {
+        font-size: 0;
+      }
+
       .dx-texteditor-label {
         transition: $generic-texteditor-label-transition;
         transform: translate(0, 0);
@@ -753,6 +773,10 @@ $generic-texteditor-label-transition:
     &.dx-textarea.dx-state-focused {
       .dx-placeholder {
         display: block;
+      }
+
+      .dx-lookup-field {
+        font-size: $generic-base-font-size;
       }
 
       .dx-texteditor-label {
