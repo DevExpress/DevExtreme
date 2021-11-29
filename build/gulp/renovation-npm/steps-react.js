@@ -1,13 +1,12 @@
 const createVinyl = require('./utils/create-gulp-file');
-const { camelCase } = require('./utils')
+const { camelCase, getComponentsSpecification } = require('./utils')
 const path = require('path');
 const gulp = require('gulp');
 const merge = require('merge-stream');
 
 function createReactEntryPoint(context) {
     return () => {
-        const components = require(path.resolve(process.cwd(), path.join(context.destination, 'components.js')));
-        const contents = components
+        const contents = getComponentsSpecification(context.destination, context.components)
             .map(x => x.pathInRenovationFolder.slice(0, -2))
             .map(x => `    ${camelCase(x.split('/').splice(-1)[0])}: require('./${x}')`)
             .join(',\n');
@@ -25,18 +24,18 @@ module.exports = modules;
 
 function createModuleEntryPointers(context) {
     return () => {
-        const components = require(path.resolve(process.cwd(), path.join(context.destination, 'components.js')));
-        const vinyls = components.map(c => {
-            const name = (c.name.charAt(0).toLowerCase() + c.name.slice(1)).replace(/[A-Z]/g, m => "-" + m.toLowerCase());
-            return {
-                fileName: `${name}.js`,
-                content: `import ${c.name} from './${c.pathInRenovationFolder.slice(0, -2)}';
+        const vinyls = getComponentsSpecification(context.destination, context.components)
+            .map(c => {
+                const name = (c.name.charAt(0).toLowerCase() + c.name.slice(1)).replace(/[A-Z]/g, m => "-" + m.toLowerCase());
+                return {
+                    fileName: `${name}.js`,
+                    content: `import ${c.name} from './${c.pathInRenovationFolder.slice(0, -2)}';
     export default ${c.name};`
-            };
-        }).map(ef => {
-            return createVinyl(ef.fileName, ef.content)
-                .pipe(gulp.dest(context.destination))
-        });
+                };
+            }).map(ef => {
+                return createVinyl(ef.fileName, ef.content)
+                    .pipe(gulp.dest(context.destination))
+            });
 
         return merge(vinyls);
     };

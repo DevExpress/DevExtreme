@@ -139,6 +139,7 @@ addCompilationTask({
     switches: {
         transpile: true
     },
+    components: 'all',
     steps: {
         copyMiscFiles: {
             arg: (ctx) => require('./steps-react').preparePackage,
@@ -155,6 +156,7 @@ addCompilationTask({
     switches: {
         installPackages: true,
     },
+    components: ['Button'],
     steps: {
         copyMiscFiles: {
             arg: (ctx) => require('./steps-angular').preparePackageForPackagr,

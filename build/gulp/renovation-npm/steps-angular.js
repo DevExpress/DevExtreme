@@ -3,12 +3,11 @@
 const gulp = require('gulp');
 const path = require('path');
 const createVinyl = require('./utils/create-gulp-file');
-const { camelCase, run } = require('./utils')
+const { camelCase, run, getComponentsSpecification } = require('./utils');
 
 function createNgEntryPoint(context) {
     return () => {
-        const components = require(path.resolve(process.cwd(), path.join(context.destination, 'components.js')));
-        const contents = components
+        const contents = getComponentsSpecification(context.destination, context.components)
             .map(x => x.pathInRenovationFolder.slice(0, -2))
             .map(x => `export * as ${camelCase(x.split('/').splice(-1)[0])} from './${x}';`)
             .join('\n');

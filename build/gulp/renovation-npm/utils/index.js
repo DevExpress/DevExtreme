@@ -1,4 +1,5 @@
 const { spawnSync } = require('child_process');
+const path = require('path');
 
 function camelCase(str) {
     return str
@@ -12,8 +13,13 @@ function run(cmd, args, options) {
         cb();
     }
 }
+function getComponentsSpecification(specDest, componentsList) {
+    const components = require(path.resolve(process.cwd(), path.join(specDest, 'components.js')));
+    return componentsList === 'all' ? components : components.filter(x => componentsList.includes(x.name));
+}
 
 module.exports = {
     camelCase,
-    run
+    run,
+    getComponentsSpecification
 }
