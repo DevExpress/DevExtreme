@@ -21,9 +21,11 @@ import {
     EDITING_FORM_OPTION_NAME
 } from './ui.grid_core.editing_constants';
 
+const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
+
 const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
 const EDIT_POPUP_CLASS = 'edit-popup';
-const FOCUSABLE_SCROLLABLE_ELEMENT_CLASS = 'dx-scrollable';
+const FOCUSABLE_ELEMENT_CLASS = isRenovatedScrollable ? 'dx-scrollable' : 'dx-scrollable-container';
 const BUTTON_CLASS = 'dx-button';
 
 const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
@@ -169,11 +171,7 @@ export const editingFormBasedModule = {
                         this._editPopup = this._createComponent($popupContainer, Popup, { copyRootClassesToWrapper: true, _ignoreCopyRootClassesToWrapperDeprecation: true });
                         this._editPopup.on('hiding', this._getEditPopupHiddenHandler());
                         this._editPopup.on('shown', (e) => {
-                            eventsEngine.trigger(e.component.$content()
-                                .find(FOCUSABLE_ELEMENT_SELECTOR)
-                                .not(`.${FOCUSABLE_SCROLLABLE_ELEMENT_CLASS}${this._scrollable?.isRenovated() ? '' : '-container' }`)
-                                .first(),
-                            'focus');
+                            eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).not(`.${FOCUSABLE_ELEMENT_CLASS}`).first(), 'focus');
 
                             if(repaintForm) {
                                 this._editForm?.repaint();
@@ -197,9 +195,9 @@ export const editingFormBasedModule = {
 
                     return (container) => {
                         const formTemplate = this.getEditFormTemplate();
-                        this._scrollable = this._createComponent($('<div>').appendTo(container), Scrollable);
+                        const scrollable = this._createComponent($('<div>').appendTo(container), Scrollable);
 
-                        this._$popupContent = $(this._scrollable.content());
+                        this._$popupContent = $(scrollable.content());
 
                         formTemplate(this._$popupContent, templateOptions, { renderFormOnly: true });
                     };
