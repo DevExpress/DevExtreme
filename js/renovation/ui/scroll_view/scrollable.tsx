@@ -305,7 +305,6 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
     return this.scrollableRef.validate(event) as boolean;
   }
 
-  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollableRef(): any {
     if (this.props.useNative) {
