@@ -5,7 +5,7 @@ import errors from '../widget/ui.errors';
 import { sessionStorage } from '../../core/utils/storage';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { isDefined, isPlainObject } from '../../core/utils/type';
+import { isDefined, isPlainObject, isEmptyObject } from '../../core/utils/type';
 import { fromPromise } from '../../core/utils/deferred';
 
 const DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
@@ -22,10 +22,6 @@ const parseDates = function(state) {
             }
         }
     });
-};
-
-const isEmptyObject = function(obj) {
-    return obj && Object.keys(obj).length === 0;
 };
 
 export const StateStoringController = modules.ViewController.inherit((function() {
