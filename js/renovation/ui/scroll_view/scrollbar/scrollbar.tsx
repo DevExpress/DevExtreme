@@ -99,7 +99,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Effect()
   mouseEnterEffect(): EffectReturn {
-    if (this.isHoverMode) {
+    if (this.isExpandable) {
       return subscribeToMouseEnterEvent(
         this.scrollbarRef.current, () => {
           this.hovered = true;
@@ -112,7 +112,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Effect()
   mouseLeaveEffect(): EffectReturn {
-    if (this.isHoverMode) {
+    if (this.isExpandable) {
       return subscribeToMouseLeaveEvent(
         this.scrollbarRef.current, () => {
           this.hovered = false;
