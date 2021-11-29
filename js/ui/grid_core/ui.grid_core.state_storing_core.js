@@ -24,6 +24,10 @@ const parseDates = function(state) {
     });
 };
 
+const isEmptyObject = function(obj) {
+    return obj && Object.keys(obj).length === 0;
+};
+
 export const StateStoringController = modules.ViewController.inherit((function() {
     const getStorage = function(options) {
         const storage = options.type === 'sessionStorage' ? sessionStorage() : getWindow().localStorage;
@@ -108,7 +112,7 @@ export const StateStoringController = modules.ViewController.inherit((function()
                 this._isLoaded = true;
                 this._isLoading = false;
             }).done((state) => {
-                if(state !== null) {
+                if(state !== null && !isEmptyObject(state)) {
                     this.state(state);
                 }
             });
