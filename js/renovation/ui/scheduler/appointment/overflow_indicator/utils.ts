@@ -27,15 +27,15 @@ export const getOverflowIndicatorStyles = (
   }, {
     attr: 'height',
     value: `${height}px`,
+  }, {
+    attr: 'boxShadow',
+    value: `inset ${width}px 0 0 0 rgba(0, 0, 0, 0.3)`,
   }]);
 
   if (color) {
     result = addToStyles([{
       attr: 'backgroundColor',
       value: color,
-    }, {
-      attr: 'boxShadow',
-      value: `inset ${width}px 0 0 0 rgba(0, 0, 0, 0.3)`,
     }], result);
   }
 
