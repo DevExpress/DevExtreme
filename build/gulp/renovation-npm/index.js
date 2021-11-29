@@ -14,7 +14,7 @@ const transpileConfig = require('../transpile-config');
 const { run } = require('./utils');
 const argv = require('yargs').argv;
 
-function copyServiceFiles(context, additionalReplacements) {
+function copyMiscFiles(context, additionalReplacements) {
     return () => merge(
         gulp
             .src('package.json')
@@ -32,7 +32,7 @@ function cleanNpmFramework(context) {
         done();
     };
 }
-function copyFrameworkArtifacts(context) {
+function copyRenovatedComponents(context) {
     return () => merge(
         gulp.src(context.source + '/**/*')
             .pipe(performRecastReplacements(context))
@@ -101,16 +101,16 @@ function addCompilationTask(frameworkData) {
             actions: [generateRenovation],
         },
         {
-            name: 'copyFramework',
-            actions: [copyFrameworkArtifacts]
+            name: 'copyRenovatedComponents',
+            actions: [copyRenovatedComponents]
         },
         {
-            name: 'copyService',
-            requires: 'copyFramework',
-            actions: [copyServiceFiles]
+            name: 'copyMiscFiles',
+            requires: 'copyRenovatedComponents',
+            actions: [copyMiscFiles]
         },
         {
-            name: 'removeUnused',
+            name: 'removeUnusedModules',
             actions: [removeUnusedModules, cleanEmptyFolders]
         },
         {
@@ -140,7 +140,7 @@ addCompilationTask({
         transpile: true
     },
     steps: {
-        copyService: {
+        copyMiscFiles: {
             arg: (ctx) => require('./steps-react').preparePackage,
             after: {
                 actions: [require('./steps-react').createReactEntryPoint, require('./steps-react').createModuleEntryPointers]
@@ -150,13 +150,13 @@ addCompilationTask({
 });
 addCompilationTask({
     name: 'angular',
-    generator: 'generate-angular-v2',
+    generator: 'generate-angular-typescript',
 
     switches: {
         installPackages: true,
     },
     steps: {
-        copyService: {
+        copyMiscFiles: {
             arg: (ctx) => require('./steps-angular').preparePackageForPackagr,
             after: {
                 actions: [require('./steps-angular').createNgEntryPoint]

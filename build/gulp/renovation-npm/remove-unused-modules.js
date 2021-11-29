@@ -26,12 +26,12 @@ function removeUnusedModules(context) {
             modulesToVisit.push(...importedModules);
         }
         const filesToRemove = Object.keys(context.moduleMap)
-                                .filter(m => !visitedModules[m])
-                                .map(m => {
-                                    const sourcePath = path.resolve(process.cwd(), path.join(context.source));
-                                    const destPath = path.resolve(process.cwd(), path.join(context.destination));
-                                    return m.replace(sourcePath, destPath);
-                                });
+            .filter(m => !visitedModules[m])
+            .map(m => {
+                const sourcePath = path.resolve(process.cwd(), path.join(context.source));
+                const destPath = path.resolve(process.cwd(), path.join(context.destination));
+                return m.replace(sourcePath, destPath);
+            });
 
         del.sync(filesToRemove);
         cb();

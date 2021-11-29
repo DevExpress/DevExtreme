@@ -61,6 +61,13 @@ function performPackageReplacements(context, additionalReplacements) {
             additionalReplacements(packageObject, basePackageObject, context);
         }
 
+        if (context.production) {
+            delete packageObject.peerDependencies.devextreme;
+            packageObject.dependencies = {
+                devextreme: ctx.version
+            };
+        }
+
         file.contents = Buffer.from(JSON.stringify(packageObject, null, 2), enc);
         callback(null, file);
     });

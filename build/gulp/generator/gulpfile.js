@@ -312,7 +312,7 @@ const ngErrors = [
 ].concat(knownErrors);
 
 addGenerationTask('angular', ngErrors);
-addGenerationTaskWithSuffix('angular', '-v2', ngErrors, false, false, false);
+addGenerationTaskWithSuffix('angular', '-typescript', ngErrors, false, false, false);
 
 addGenerationTask('vue', [], false, true, false);
 

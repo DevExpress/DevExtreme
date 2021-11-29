@@ -20,6 +20,7 @@ function performRecastReplacements(context) {
         const isJs = file.extname === '.js';
         const isTs = file.extname === '.ts' || file.extname === '.tsx';
 
+        // TODO: Condition below: workaround for angular generator. It creates *.tsx file instead of *.ts (it does not contain react markup);
         if (isTs && context.name === 'angular') {
             file.extname = '.ts';
         }
@@ -37,20 +38,21 @@ function performRecastReplacements(context) {
 
         const processModuleMap = (modulePath) => {
             const tsPath = file.extname === '.tsx' ? file.path.replace('.tsx', '.ts') : '';
-            if (!modulePath) {
-                context.moduleMap[file.path] = [];
-                tsPath && (context.moduleMap[tsPath] = [])
-            } else {
+            if (modulePath) {
                 context.moduleMap[file.path].push(modulePath);
                 tsPath && (context.moduleMap[tsPath].push(modulePath))
+            } else {
+                context.moduleMap[file.path] = [];
+                tsPath && (context.moduleMap[tsPath] = [])
             }
         }
 
         const processImport = (importFrom, performReplacement) => {
             if (importFrom.startsWith('.')) {
-                //relative module path
+                // NOTE: import that starts from the dot sign is a relative module path
                 const absoluteModulePath = path.resolve(fileDir, importFrom);
                 if (absoluteModulePath.startsWith(absoluteRootFolderPath)) {
+                    // NOTE: current import refers to a code inside the renovation folder
                     context.extensions.forEach(ext => {
                         const fileVar = `${absoluteModulePath}${ext}`;
                         processModuleMap(fileVar);
@@ -66,7 +68,7 @@ function performRecastReplacements(context) {
                 needsPrint = true;
                 return false;
             } else {
-                //package module import
+                // NOTE: import that does not start from the dot sign is a package module import
                 context.rawPackageSet.add(importFrom);
                 return false;
             }
