@@ -2145,7 +2145,7 @@ module('Table resizing integration', {
                         assert.roughEqual($(rowElement).outerHeight(), 24, 2, 'Row has expected height, index = ' + i);
                     });
 
-                    assert.roughEqual($table.outerHeight(), 74, 2, 'Table width is correct');
+                    assert.roughEqual($table.outerHeight(), 74, 2, 'Table height is correct');
 
                     done();
                 }, TIME_TO_WAIT);

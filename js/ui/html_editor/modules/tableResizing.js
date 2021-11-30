@@ -167,7 +167,7 @@ export default class TableResizingModule extends BaseModule {
             if(getAutoSizedElements($table).length === 0) {
                 const { columnsSum } = this._getColumnElementsSum($columnElements);
 
-                unfixTableWidth($table, undefined, this.quill);
+                unfixTableWidth($table, { quill: this.quill });
 
                 const tableWidth = this._tableLastWidth(frame) ?? getOuterWidth($table);
 
@@ -383,7 +383,7 @@ export default class TableResizingModule extends BaseModule {
         if($determinantElements[index + 1]) {
             this._nextLineSize = parseInt(this._getSize($($determinantElements[index + 1]), directionInfo));
         } else if(direction === 'horizontal') {
-            unfixTableWidth(frame.$table, undefined, this.quill);
+            unfixTableWidth(frame.$table, { quill: this.quill });
         }
     }
 

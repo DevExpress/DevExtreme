@@ -30,7 +30,7 @@ function hasEmbedContent(module, selection) {
     return !!selection && module.quill.getText(selection).trim().length < selection.length;
 }
 
-function unfixTableWidth($table, tableBlot, quill) {
+function unfixTableWidth($table, { tableBlot, quill }) {
     const unfixValue = 'initial';
     if(tableBlot) {
         tableBlot.format('tableWidth', unfixValue);
