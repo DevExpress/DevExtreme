@@ -45,12 +45,58 @@ jobs:
       working-directory: ./artifacts/npm/devextreme
       run: npm pack
 
-    - name: Copy build artifacts      
+    - name: Copy build artifacts
       uses: actions/upload-artifact@v2
       with:
         name: devextreme-npm
         path: ./artifacts/npm/devextreme/devextreme-*.tgz
         retention-days: 1
+
+  test_npm_renovation:
+    name: Renovated NPM - ${{ matrix.framework }}
+    needs: build
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:      
+        framework: [angular, react]
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Install packages in devextreme repo
+      run: npm install --no-audit --no-fund
+
+    - name: Build Renovated NPM
+      run: npm run build-npm-renovation:${{ matrix.framework }}
+
+    - name: Download DevExtreme package
+      uses: actions/download-artifact@v2
+      with:
+        name: devextreme-npm
+        path: ./testing/renovation-npm/${{ matrix.framework }}-app
+
+    - name: Prepare test project
+      working-directory: ./testing/renovation-npm
+      run: |
+        npm i
+
+        npm run pack:renovation ${{ matrix.framework }}
+        npm run install-all ${{ matrix.framework }}
+        npm run start ${{ matrix.framework }} &
+
+    - name: Run tests
+      run: |
+        echo "hello world"
 
   test_angular:
     name: Angular wrapper tests
@@ -352,7 +398,7 @@ jobs:
   notify:
     runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
     name: Send notifications
-    needs: [build, test_angular, test_bundlers, test_demos]
+    needs: [build, test_angular, test_bundlers, test_demos, test_npm_renovation]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:
