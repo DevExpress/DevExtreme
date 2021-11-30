@@ -727,10 +727,9 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
         assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
 
-        const splitterOffsetLeft = this.wrapper.getSplitterWrapper().offset().left;
         const splitterHalfWidth = parseFloat(this.wrapper.getSplitter().css('margin-left'));
 
-        this.wrapper.triggerDragEvent(itemViewPanel, 'dragleave', { top: 0, left: splitterOffsetLeft + splitterHalfWidth - 1 });
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragleave', { top: 1, left: splitterHalfWidth - 1 });
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
     });
 

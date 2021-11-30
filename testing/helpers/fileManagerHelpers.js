@@ -489,12 +489,8 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.SPLITTER_CLASS}`);
     }
 
-    getSplitterWrapper() {
-        return this._$element.find(`.${Consts.SPLITTER_WRAPPER_CLASS}`);
-    }
-
     getSplitterPosition() {
-        const $splitterWrapper = this.getSplitterWrapper();
+        const $splitterWrapper = this._$element.find(`.${Consts.SPLITTER_WRAPPER_CLASS}`);
         return $splitterWrapper.get(0).offsetLeft + parseFloat(this.getSplitter().css('margin-left'));
     }
 
