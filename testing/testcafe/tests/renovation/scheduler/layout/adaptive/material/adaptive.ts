@@ -39,6 +39,10 @@ const createScheduler = async (
     for (const view of views) {
       await updateComponentOptions(platform, { currentView: view });
 
+      await t
+        .expect(scheduler.checkViewType(view))
+        .ok();
+
       await t.expect(
         await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}.png`, scheduler.workSpace),
       ).ok();
@@ -65,6 +69,10 @@ const createScheduler = async (
     // eslint-disable-next-line no-restricted-syntax
     for (const view of views) {
       await updateComponentOptions(platform, { currentView: view });
+
+      await t
+        .expect(scheduler.checkViewType(view))
+        .ok();
 
       await t.expect(
         await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal.png`, scheduler.workSpace),
@@ -94,6 +102,10 @@ const createScheduler = async (
     // eslint-disable-next-line no-restricted-syntax
     for (const view of views) {
       await updateComponentOptions(platform, { currentView: view });
+
+      await t
+        .expect(scheduler.checkViewType(view))
+        .ok();
 
       await t.expect(
         await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-vertical.png`, scheduler.workSpace),

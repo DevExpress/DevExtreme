@@ -40,6 +40,10 @@ const createScheduler = async (
     for (const view of views) {
       await updateComponentOptions(platform, { currentView: view });
 
+      await t
+        .expect(scheduler.checkViewType(view))
+        .ok();
+
       await t.expect(
         await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-rtl.png`, scheduler.workSpace),
       ).ok();
@@ -66,6 +70,10 @@ const createScheduler = async (
     // eslint-disable-next-line no-restricted-syntax
     for (const view of views) {
       await updateComponentOptions(platform, { currentView: view });
+
+      await t
+        .expect(scheduler.checkViewType(view))
+        .ok();
 
       await t.expect(
         await takeScreenshot(`material-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`, scheduler.workSpace),
@@ -94,7 +102,11 @@ const createScheduler = async (
 
     // eslint-disable-next-line no-restricted-syntax
     for (const view of verticalViews) {
-      await updateComponentOptions(platform, { currentView: view });
+      await updateComponentOptions(platform, { currentView: view.type });
+
+      await t
+        .expect(scheduler.checkViewType(view.type))
+        .ok();
 
       // Another bug in RTL in month view
       if (crossScrollingEnabled || view.type !== 'month') {
