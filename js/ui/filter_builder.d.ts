@@ -315,7 +315,6 @@ export default class dxFilterBuilder extends Widget {
 export type CustomOperation = dxFilterBuilderCustomOperation;
 
 /**
- * @type object
  * @namespace DevExpress.ui
  * @deprecated Use the CustomOperation type instead
  */
@@ -384,7 +383,6 @@ export interface dxFilterBuilderCustomOperation {
 export type Field = dxFilterBuilderField;
 
 /**
- * @type object
  * @namespace DevExpress.ui
  * @deprecated Use the Field type instead
  */
