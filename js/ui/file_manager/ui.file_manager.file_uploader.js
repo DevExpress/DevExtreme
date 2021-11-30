@@ -9,7 +9,6 @@ import Widget from '../widget/ui.widget';
 import FileUploader from '../file_uploader';
 
 import { whenSome } from './ui.file_manager.common';
-import { isMouseOverElement } from '../file_uploader_helper';
 
 const FILE_MANAGER_FILE_UPLOADER_CLASS = 'dx-filemanager-fileuploader';
 const FILE_MANAGER_FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS = 'dx-filemanager-fileuploader-dropzone-placeholder';
@@ -63,7 +62,7 @@ class FileManagerFileUploader extends Widget {
         });
 
         fileUploader._shouldRaiseDragLeaveBase = fileUploader._shouldRaiseDragLeave;
-        fileUploader._shouldRaiseDragLeave = e => this._shouldRaiseDragLeave(e, fileUploader._shouldRaiseDragLeaveBase.bind(fileUploader));
+        fileUploader._shouldRaiseDragLeave = e => this._shouldRaiseDragLeave(e, fileUploader);
 
         const uploaderInfo = {
             fileUploader
@@ -197,8 +196,8 @@ class FileManagerFileUploader extends Widget {
         }
     }
 
-    _shouldRaiseDragLeave(e, baseCallback) {
-        return isMouseOverElement(e, this.option('splitterElement')) || baseCallback(e, true);
+    _shouldRaiseDragLeave(e, uploaderInstance) {
+        return uploaderInstance.isMouseOverElement(e, this.option('splitterElement')) || uploaderInstance._shouldRaiseDragLeaveBase(e, true);
     }
 
     _uploadFiles(uploaderInfo, files) {
