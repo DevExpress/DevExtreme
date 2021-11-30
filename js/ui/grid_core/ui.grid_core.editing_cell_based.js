@@ -217,7 +217,7 @@ export default {
                         return;
                     }
 
-                    if(column && item && (item.rowType === 'data' || item.rowType === 'detailAdaptive') && !item.removed && this.isCellOrBatchEditMode()) {
+                    if(column && (item.rowType === 'data' || item.rowType === 'detailAdaptive') && !item.removed && this.isCellOrBatchEditMode()) {
                         if(!isEditByOptionChanged && this.isEditCell(rowIndex, columnIndex)) {
                             return true;
                         }
