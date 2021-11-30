@@ -685,17 +685,17 @@ QUnit.test('Change options -> check _itemsOptionChangedHandler/_formDataOptionCh
     }).dxForm('instance');
 
     let actualLog = '';
-    const _itemsOptionChangedHandler = form._itemsOptionChangedHandler.bind(form);
-    form._itemsOptionChangedHandler = () => { actualLog += 'items; '; _itemsOptionChangedHandler.call(form, arguments); };
-    const _formDataOptionChangedHandler = form._formDataOptionChangedHandler.bind(form);
-    form._formDataOptionChangedHandler = () => { actualLog += 'formData; '; _formDataOptionChangedHandler.call(form, arguments); };
-    const _defaultOptionChangedHandler = form._defaultOptionChangedHandler.bind(form);
-    form._defaultOptionChangedHandler = () => { actualLog += 'default; '; _defaultOptionChangedHandler.call(form, arguments); };
+    const _itemsOptionChangedHandler = form._itemsOptionChangedHandler;
+    form._itemsOptionChangedHandler = function() { actualLog += 'items; '; _itemsOptionChangedHandler.apply(form, arguments); };
+    const _formDataOptionChangedHandler = form._formDataOptionChangedHandler;
+    form._formDataOptionChangedHandler = function() { actualLog += 'formData; '; _formDataOptionChangedHandler.apply(form, arguments); };
+    const _defaultOptionChangedHandler = form._defaultOptionChangedHandler;
+    form._defaultOptionChangedHandler = function() { actualLog += 'default; '; _defaultOptionChangedHandler.apply(form, arguments); };
 
     function testConfig(optionName, expectedLog) {
         actualLog = '';
         form.option(optionName, {});
-        assert.strictEqual(expectedLog, actualLog, `option("${optionName}")`);
+        assert.strictEqual(actualLog, expectedLog, `option("${optionName}")`);
     }
 
     testConfig('.', 'default; ');
@@ -752,6 +752,13 @@ QUnit.test('Change options -> check _itemsOptionChangedHandler/_formDataOptionCh
 
     testConfig('hint.formData', 'default; ');
     testConfig('hint.formData.a', 'default; ');
+
+    testConfig('formData_items', 'default; ');
+    testConfig('formData_items.', 'items; default; ');
+    testConfig('xxx_formData_xxx', 'default; ');
+    testConfig('xxx_formData_xxx.', 'formData; ');
+    testConfig('xxx_items_xxx', 'default; ');
+    testConfig('xxx_items_xxx.', 'items; default; ');
 });
 
 QUnit.module('Tabs', {
