@@ -155,6 +155,7 @@ addCompilationTask({
     switches: {
         installPackages: true,
     },
+    components: 'Button',
     steps: {
         copyMiscFiles: {
             arg: (ctx) => require('./steps-angular').preparePackageForPackagr,
