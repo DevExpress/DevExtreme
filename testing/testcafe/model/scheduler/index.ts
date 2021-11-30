@@ -141,4 +141,8 @@ export default class Scheduler extends Widget {
       dependencies: { element, name },
     })();
   }
+
+  checkViewType(type: string): Promise<boolean> {
+    return this.workSpace.hasClass(`${CLASS.workSpace}-${type}`);
+  }
 }
