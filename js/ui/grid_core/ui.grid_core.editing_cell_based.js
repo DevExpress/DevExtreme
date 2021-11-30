@@ -208,6 +208,10 @@ export default {
                         column
                     };
 
+                    if(!item) {
+                        return;
+                    }
+
                     if(item.key === undefined) {
                         this._dataController.fireError('E1043');
                         return;

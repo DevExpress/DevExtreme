@@ -1323,10 +1323,10 @@ export const virtualScrollingModule = {
                         const itemCount = this.items().length;
                         const viewportIsNotFilled = viewportSize > itemCount;
                         const currentTake = this._loadViewportParams?.take ?? 0;
-                        const newTake = this._rowsScrollController?.getViewportParams().take;
-                        const isLastPage = isVirtualMode(this) && this.pageIndex() === this.pageCount() - 1;
+                        const rowsScrollController = this._rowsScrollController;
+                        const newTake = rowsScrollController?.getViewportParams().take;
 
-                        ((viewportIsNotFilled && !isLastPage) || currentTake < newTake) && itemCount && this.loadViewport({
+                        (viewportIsNotFilled || currentTake < newTake) && itemCount && this.loadViewport({
                             checkLoading: true
                         });
                     },
