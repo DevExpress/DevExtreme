@@ -2065,6 +2065,7 @@ export interface GridBase {
     /**
      * @docid
      * @publicName getScrollable()
+     * @return dxScrollable
      * @public
      */
     getScrollable(): Scrollable;
