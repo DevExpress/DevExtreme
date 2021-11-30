@@ -916,7 +916,7 @@ export const virtualScrollingModule = {
                                 });
                             },
                             items: function(countableOnly) {
-                                let result = that.items();
+                                let result = that._items;
 
                                 if(that.option(LEGACY_SCROLLING_MODE)) {
                                     const virtualItemsCount = that.virtualItemsCount();
