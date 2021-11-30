@@ -229,7 +229,7 @@
     "update-ts": "dx-tools update-ts-bundle --js-scripts ./js --output-path ./ts/dx.all.d.ts --exclude js/renovation/",
     "validate-ts": "gulp validate-ts",
     "internal-tool": "dx-tools",
-    "validate-declarations": "dx-tools validate-declarations --js-scripts ./js",
+    "validate-declarations": "dx-tools validate-declarations --js-scripts ./js --exclude js/renovation/",
     "test-testcafe": "node ./testing/testcafe/runner",
     "test-testcafe-inprogress": "node ./testing/testcafe/runner --meta=renovation",
     "test-jest": "jest --coverage --maxWorkers=8",
