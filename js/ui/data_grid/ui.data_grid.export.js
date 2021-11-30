@@ -738,7 +738,7 @@ dataGridCore.registerModule('export', {
                             icon: DATAGRID_EXPORT_ICON,
                             displayExpr: 'text',
                             items: items,
-                            hint: 'Export',
+                            hint: this.option('export.texts.exportTo'),
                             elementAttr: {
                                 class: DATAGRID_EXPORT_BUTTON_CLASS
                             },
