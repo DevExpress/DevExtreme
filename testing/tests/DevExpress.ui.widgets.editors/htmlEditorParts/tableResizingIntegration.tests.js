@@ -2071,7 +2071,7 @@ module('Table resizing integration', {
         test('The widget can revert whole table resizing by redo if table has no columns with auto width', function(assert) {
             assert.expect(5);
             const done = assert.async();
-            this.createWidget({ value: tableMarkupWidth, width: 282 });
+            this.createWidget({ value: tableMarkupWidth, width: 282, tableResizing: { enabled: true, minColumnWidth: 0 } });
             this.clock.tick(TIME_TO_WAIT);
 
             const $columnResizerElements = this.$element.find(`.${DX_COLUMN_RESIZER_CLASS}`);
@@ -2084,7 +2084,7 @@ module('Table resizing integration', {
             PointerMock($draggableElements.eq(0))
                 .start()
                 .dragStart()
-                .drag(-9, 0)
+                .drag(-10, 0)
                 .dragEnd();
 
             this.clock.tick(TIME_TO_WAIT);
@@ -2105,6 +2105,47 @@ module('Table resizing integration', {
                     });
 
                     assert.roughEqual($table.outerWidth(), 240, 2, 'Table width is correct');
+
+                    done();
+                }, TIME_TO_WAIT);
+
+            }, TIME_TO_WAIT);
+        });
+
+        test('The widget can revert table vertical resizing by undo', function(assert) {
+            assert.expect(4);
+            const done = assert.async();
+            this.createWidget();
+            this.clock.tick(TIME_TO_WAIT);
+
+            const $rowResizerElements = this.$element.find(`.${DX_ROW_RESIZER_CLASS}`);
+
+            $rowResizerElements.eq(3)
+                .trigger('dxpointerdown');
+
+            const $draggableElements = this.$element.find(`.${DX_DRAGGABLE_CLASS}`);
+
+            PointerMock($draggableElements.eq(0))
+                .start()
+                .dragStart()
+                .drag(30, 0)
+                .dragEnd();
+
+            this.clock.tick(TIME_TO_WAIT);
+
+            this.clock.restore();
+
+            setTimeout(() => {
+                this.instance.undo();
+
+                const $table = this.$element.find('table');
+
+                setTimeout(() => {
+                    $table.find('tr').each((i, rowElement) => {
+                        assert.roughEqual($(rowElement).outerHeight(), 24, 2, 'Row has expected height, index = ' + i);
+                    });
+
+                    assert.roughEqual($table.outerHeight(), 74, 2, 'Table width is correct');
 
                     done();
                 }, TIME_TO_WAIT);
