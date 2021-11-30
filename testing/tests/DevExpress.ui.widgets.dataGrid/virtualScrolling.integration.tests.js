@@ -4714,6 +4714,40 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         assert.strictEqual(callCount, 0, 'load is not called');
     });
+
+    QUnit.test('Rows should be rendered in legacy scrolling mode', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 50; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(50),
+            height: 400,
+            keyExpr: 'id',
+            scrolling: {
+                rowRenderingMode: 'virtual',
+                useNative: false,
+                legacyMode: true,
+                mode: 'virtual',
+            }
+        });
+
+        this.clock.tick(300);
+
+        // act
+        const renderedRowCount = dataGrid.getVisibleRows().length;
+
+        // assert
+        assert.equal(renderedRowCount, 20, 'rows are rendered');
+    });
 });
 
 
