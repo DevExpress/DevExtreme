@@ -404,24 +404,6 @@ QUnit.module('datebox tests', moduleConfig, () => {
         });
     });
 
-    QUnit.test('T278148 - picker type should be \'rollers\' if the real device is phone in generic theme', function(assert) {
-        const realDevice = devices.real();
-        const currentDevice = devices.current();
-
-        devices.real({ deviceType: 'phone', platform: 'android', version: [4, 3] });
-        devices.current({ platform: 'generic' });
-
-        try {
-            const dateBox = $('<div>').dxDateBox({
-                type: 'date'
-            }).dxDateBox('instance');
-            assert.equal(dateBox.option('pickerType'), 'rollers', 'the \'pickerType\' option is correct');
-        } finally {
-            devices.real(realDevice);
-            devices.current(currentDevice);
-        }
-    });
-
     QUnit.test('Customize \'Done\' and \'Cancel\' buttons', function(assert) {
         const expectedDoneText = 'newDoneText';
         const expectedCancelText = 'newCancelText';
@@ -1242,25 +1224,6 @@ QUnit.module('dateView integration', {
 
         assert.ok($element.hasClass('dx-datebox-native'), 'class is correct');
         assert.equal($element.dxDateBox('instance')._strategy.NAME, 'Native', 'correct strategy is chosen');
-    });
-
-    QUnit.test('pickerType should be \'rollers\' on android < 4.4 (Q588373, Q588012)', function(assert) {
-        support.inputType = () => {
-            return true;
-        };
-
-        let originalDevice;
-
-        try {
-            originalDevice = devices.real();
-            devices.real({ platform: 'android', version: [4, 3], android: true });
-
-            const dateBox = $('#dateBox').dxDateBox().dxDateBox('instance');
-            assert.notStrictEqual(dateBox.option('pickerType'), 'native');
-        } finally {
-            support.inputType = this.originalInputType;
-            devices.real(originalDevice);
-        }
     });
 
     QUnit.test('pickerType should be \'native\' on android >= 4.4 (Q588373, Q588012)', function(assert) {

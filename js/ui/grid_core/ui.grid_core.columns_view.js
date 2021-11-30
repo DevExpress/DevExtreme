@@ -69,7 +69,7 @@ const subscribeToRowEvents = function(that, $table) {
         }
     });
 
-    eventsEngine.on($table, [clickEventName, dblclickEvent, pointerEvents.down].join(' '), '.dx-row', { useNative: that._isNativeClick() }, that.createAction(function(e) {
+    eventsEngine.on($table, [clickEventName, dblclickEvent, pointerEvents.down].join(' '), '.dx-row', that.createAction(function(e) {
         const event = e.event;
 
         if(touchTarget) {
@@ -323,8 +323,6 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         return $table;
     },
-
-    _isNativeClick: noop,
 
     _rowPointerDown: noop,
 

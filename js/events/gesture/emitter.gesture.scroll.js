@@ -6,7 +6,6 @@ import GestureEmitter from '../../events/gesture/emitter.gesture';
 import registerEmitter from '../../events/core/emitter_registrator';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
 import devices from '../../core/devices';
-import { compare as compareVersions } from '../../core/utils/version';
 
 const realDevice = devices.real();
 
@@ -154,10 +153,9 @@ let PointerLocker = TimeoutLocker.inherit((function() {
 })());
 
 (function() {
-    const ios8_greater = realDevice.ios && compareVersions(realDevice.version, [8]) >= 0;
-    const android5_greater = realDevice.android && compareVersions(realDevice.version, [5]) >= 0;
+    const { ios: isIos, android: isAndroid } = realDevice;
 
-    if(!(ios8_greater || android5_greater)) {
+    if(!(isIos || isAndroid)) {
         return;
     }
 
