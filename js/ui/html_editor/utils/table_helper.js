@@ -32,12 +32,10 @@ function hasEmbedContent(module, selection) {
 
 function unfixTableWidth($table, { tableBlot, quill }) {
     const unfixValue = 'initial';
-    if(tableBlot) {
-        tableBlot.format('tableWidth', unfixValue);
-    } else {
-        let formatBlot = quill.scroll.find($table.get(0));
-        formatBlot.format('tableWidth', unfixValue);
-    }
+
+    const formatBlot = tableBlot ?? quill.scroll.find($table.get(0));
+
+    formatBlot.format('tableWidth', unfixValue);
 }
 
 function getColumnElements($table, index = 0) {
