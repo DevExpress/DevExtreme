@@ -34,6 +34,10 @@ const wrapper = function() {
     return $('body').find(toSelector(POPOVER_WRAPPER_CLASS));
 };
 
+const getArrow = function() {
+    return wrapper().find(`.${POPOVER_ARROW_CLASS}`);
+};
+
 const getElementsPositionAndSize = function($popover, $target) {
     const $content = wrapper().find('.dx-overlay-content');
     const $popupContent = wrapper().find('.dx-popup-content');
@@ -2133,3 +2137,50 @@ QUnit.module('shading', () => {
         }
     });
 });
+
+QUnit.module('target option', {
+    beforeEach: function() {
+        fixtures.differentTargets.create();
+
+        this.$target = $('#where');
+        this.popover = new Popover($('#what'), { visible: true });
+        this.getMiddleX = (rect) => {
+            return (rect.left + rect.right) / 2;
+        };
+    },
+    afterEach: function() {
+        fixtures.differentTargets.drop();
+    }
+}, () => {
+    QUnit.test('content should be positioned regard of target', function(assert) {
+        this.popover.option({
+            target: this.$target
+        });
+
+        const $arrow = getArrow();
+        const targetRect = this.$target.get(0).getBoundingClientRect();
+        const arrowRect = $arrow.get(0).getBoundingClientRect();
+
+        assert.roughEqual(arrowRect.top, targetRect.bottom, 0.1, 'y coordinate is correct');
+        assert.roughEqual(this.getMiddleX(arrowRect), this.getMiddleX(targetRect), 0.1, 'y coordinate is correct');
+    });
+
+    QUnit.test('content should be positioned regard of position.of if it is specified', function(assert) {
+        const positionOf = $('#there');
+
+        this.popover.option({
+            target: this.$target,
+            position: {
+                of: positionOf
+            }
+        });
+
+        const $arrow = getArrow();
+        const positionOfRect = positionOf.get(0).getBoundingClientRect();
+        const arrowRect = $arrow.get(0).getBoundingClientRect();
+
+        assert.roughEqual(arrowRect.top, positionOfRect.bottom, 0.1, 'y coordinate is correct');
+        assert.roughEqual(this.getMiddleX(arrowRect), this.getMiddleX(positionOfRect), 0.1, 'y coordinate is correct');
+    });
+});
+
