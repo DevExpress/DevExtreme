@@ -5307,60 +5307,11 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             this.dataController.updateViewport();
 
             // assert
-            assert.notOk(updateItemsSpy.called, 'not called because of a single page');
+            assert.ok(updateItemsSpy.called, 'called');
         } finally {
             updateItemsSpy.restore();
         }
     });
-
-    QUnit.test('New mode. loadViewport should not be called when updateViewport is called for the last page', function(assert) {
-        // arrange
-        this.applyOptions({
-            scrolling: {
-                legacyMode: false,
-                rowPageSize: 5,
-                prerenderedRowCount: 1
-            }
-        });
-
-        this.dataController.init();
-        this.setupDataSource({
-            data: [
-                { id: 1, name: 'test' },
-                { id: 2, name: 'test2' }
-            ],
-            pageSize: 1
-        });
-
-        const loadViewportSpy = sinon.spy(this.dataController, 'loadViewport');
-
-        try {
-            // act
-            this.dataController.updateViewport();
-
-            // assert
-            assert.ok(loadViewportSpy.called, 'called');
-
-            // act
-            this.dataController.pageIndex(1);
-            this.dataController.load();
-
-            // assert
-            assert.equal(this.dataController.pageIndex(), 1, 'second page');
-            assert.equal(this.dataController.items(true).length, 1, 'one item on the second page');
-            assert.equal(this.dataController.items(true)[0].data.id, 2, 'first row on the second page');
-            assert.equal(loadViewportSpy.callCount, 1, 'loadViewport is called on loading');
-
-            // act
-            this.dataController.updateViewport();
-
-            // assert
-            assert.equal(loadViewportSpy.callCount, 1, 'loadViewport is not called on update viewport');
-        } finally {
-            loadViewportSpy.restore();
-        }
-    });
-
 
     QUnit.test('loadViewport should not throw an error when dataSource is null (T1045898)', function(assert) {
         // arrange
