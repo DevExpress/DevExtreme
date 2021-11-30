@@ -16,7 +16,7 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
-fixture('Scheduler: Adaptive Material theme layout in RTL');
+fixture.skip('Scheduler: Adaptive Material theme layout in RTL');
 
 const createScheduler = async (
   platform: PlatformType,
