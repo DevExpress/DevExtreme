@@ -6121,4 +6121,45 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             });
         });
     });
+
+    // T1043517
+    QUnit.test('Changing the \'editing.changes\' option  on the onOptionChanged event - The edit row should be updated when editing the boolean column', function(assert) {
+        // arrange
+        const onOptionChangedSpy = sinon.spy(function(e) {
+            const changes = e.component.option('editing.changes');
+
+            if(changes && changes.length && changes[0].data.field1 === false) {
+                e.component.option('editing.changes', []);
+            }
+        });
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{ id: 1, field1: false }, { id: 2, field1: false }],
+            keyExpr: 'id',
+            columns: ['id', { dataField: 'field1', dataType: 'boolean' }],
+            editing: {
+                allowUpdating: true,
+                mode: 'batch'
+            },
+            onOptionChanged: onOptionChangedSpy,
+            loadingTimeout: null
+        }).dxDataGrid('instance');
+
+        // act
+        $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        let $secondCell = $(dataGrid.getCellElement(0, 1));
+        assert.deepEqual(dataGrid.option('editing.changes'), [{ key: 1, data: { field1: true }, type: 'update' }], 'editing.changes');
+        assert.ok($secondCell.hasClass('dx-cell-modified'), 'second cell is rendered as modified');
+
+        // act
+        $(dataGrid.getCellElement(0, 1)).find('.dx-checkbox').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        $secondCell = $(dataGrid.getCellElement(0, 1));
+        assert.deepEqual(dataGrid.option('editing.changes'), [], 'editing.changes');
+        assert.notOk($secondCell.hasClass('dx-cell-modified'), 'second cell is rendered as unmodified');
+    });
 });

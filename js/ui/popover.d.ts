@@ -70,7 +70,6 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**
      * @docid
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @default true
      * @public
      */

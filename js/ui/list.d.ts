@@ -544,7 +544,6 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid
      * @publicName collapseGroup(groupIndex)
-     * @param1 groupIndex:Number
      * @return Promise<void>
      * @public
      */
@@ -567,7 +566,6 @@ export default class dxList extends CollectionWidget {
     /**
      * @docid
      * @publicName expandGroup(groupIndex)
-     * @param1 groupIndex:Number
      * @return Promise<void>
      * @public
      */

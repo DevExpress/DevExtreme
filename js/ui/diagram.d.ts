@@ -1062,7 +1062,6 @@ export default class dxDiagram extends Widget {
     /**
      * @docid
      * @publicName getItemById(id)
-     * @param1 id:String
      * @return dxDiagramItem
      * @public
      */
@@ -1105,7 +1104,6 @@ export default class dxDiagram extends Widget {
      * @docid
      * @publicName exportTo(format, callback)
      * @param1 format:Enums.DiagramExportFormat
-     * @param2 callback:function
      * @public
      */
     exportTo(format: 'svg' | 'png' | 'jpg', callback: Function): void;
@@ -1269,7 +1267,6 @@ export interface dxDiagramShape extends Item {
     attachedConnectorIds?: Array<String>;
     /**
      * @docid dxDiagramShape.containerId
-     * @type String
      * @public
      */
     containerId?: string;
@@ -1280,7 +1277,6 @@ export interface dxDiagramShape extends Item {
     containerChildItemIds?: Array<String>;
     /**
      * @docid dxDiagramShape.containerExpanded
-     * @type Boolean
      * @public
      */
     containerExpanded?: boolean;
@@ -1312,6 +1308,13 @@ export interface dxDiagramCustomCommand {
      * @public
      */
     items?: Array<dxDiagramCustomCommand>;
+    /**
+     * @docid
+     * @default "before"
+     * @type Enums.ToolbarItemLocation
+     * @public
+     */
+    location?: 'after' | 'before' | 'center';
 }
 
 /**

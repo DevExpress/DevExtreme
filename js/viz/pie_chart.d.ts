@@ -386,7 +386,6 @@ export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
 export interface dxPieChartLegend extends BaseChartLegend {
     /**
      * @docid dxPieChartOptions.legend.customizeHint
-     * @type_function_param1_field2 pointIndex:Number
      * @public
      */
     customizeHint?: ((pointInfo: { pointName?: any; pointIndex?: number; pointColor?: string }) => string);
@@ -399,7 +398,6 @@ export interface dxPieChartLegend extends BaseChartLegend {
     customizeItems?: ((items: Array<LegendItem>) => Array<LegendItem>);
     /**
      * @docid dxPieChartOptions.legend.customizeText
-     * @type_function_param1_field2 pointIndex:Number
      * @notUsedInTheme
      * @public
      */
@@ -831,7 +829,6 @@ export interface piePointObject extends basePointObject {
     /**
      * @docid
      * @publicName isVisible()
-     * @return boolean
      * @public
      */
     isVisible(): boolean;

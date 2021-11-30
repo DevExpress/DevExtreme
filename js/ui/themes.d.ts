@@ -22,7 +22,6 @@ export default class themes {
     /**
      * @docid ui.themes.ready
      * @publicName ready(callback)
-     * @param1 callback:function
      * @static
      * @public
      */
@@ -30,7 +29,6 @@ export default class themes {
     /**
      * @docid ui.themes.initialized
      * @publicName initialized(callback)
-     * @param1 callback:function
      * @static
      * @public
      */
