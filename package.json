@@ -33,13 +33,13 @@
     "devexpress-diagram": "2.1.39",
     "devexpress-gantt": "3.0.19",
     "devextreme-quill": "~1.4.2",
+    "devextreme-showdown": "^1.0.1",
     "inferno": "^7.4.6",
     "inferno-compat": "^7.4.6",
     "inferno-create-element": "^7.4.6",
     "inferno-hydrate": "^7.4.6",
     "jszip": "^3.7.1",
     "rrule": "2.6.6",
-    "devextreme-showdown": "^1.0.1",
     "turndown": "~7.0.0"
   },
   "devDependencies": {
@@ -80,7 +80,7 @@
     "cssom": "^0.4.4",
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
-    "devextreme-internal-tools": "7.4.1",
+    "devextreme-internal-tools": "^7.5.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "eslint": "^7.32.0",
