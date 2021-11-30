@@ -24,6 +24,17 @@ export const CLASS = {
   workSpace: 'dx-scheduler-work-space',
 };
 
+const ViewTypeClassesMap = {
+  day: 'dx-scheduler-work-space-day',
+  week: 'dx-scheduler-work-space-week',
+  workWeek: 'dx-scheduler-work-space-work-week',
+  month: 'dx-scheduler-work-space-month',
+  timelineDay: 'dx-scheduler-timeline-day',
+  timelineWeek: 'dx-scheduler-timeline-week',
+  timelineWorkWeek: 'dx-scheduler-timeline-work-week',
+  timelineMonth: 'dx-scheduler-timeline-month',
+};
+
 export default class Scheduler extends Widget {
   readonly name = 'dxScheduler';
 
@@ -143,6 +154,6 @@ export default class Scheduler extends Widget {
   }
 
   checkViewType(type: string): Promise<boolean> {
-    return this.workSpace.hasClass(`${CLASS.workSpace}-${type}`);
+    return this.workSpace.hasClass(ViewTypeClassesMap[type]);
   }
 }
