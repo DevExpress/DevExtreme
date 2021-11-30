@@ -59,8 +59,9 @@ jobs:
     timeout-minutes: 30
     strategy:
       fail-fast: false
-      matrix:      
-        framework: [angular, react]
+      matrix:
+        # framework: [angular, react]
+        framework: [react]
 
     steps:
     - name: Get sources
@@ -95,8 +96,9 @@ jobs:
         npm run start ${{ matrix.framework }} &
 
     - name: Run tests
+      working-directory: ./testing/renovation-npm
       run: |
-        echo "hello world"
+        npm run test:${{ matrix.framework }}
 
   test_angular:
     name: Angular wrapper tests
