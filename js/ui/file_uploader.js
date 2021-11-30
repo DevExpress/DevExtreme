@@ -923,7 +923,7 @@ class FileUploader extends Editor {
         }
 
         const dropZoneElement = this._getDropZoneElement(isCustomTarget);
-        if(dropZoneElement === e.target && this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, false)) {
+        if(dropZoneElement === e.target && this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, !isCustomTarget)) {
             this._activeDropZone = dropZoneElement;
             this._tryToggleDropZoneActive(true, isCustomTarget, e);
         }
@@ -936,11 +936,11 @@ class FileUploader extends Editor {
         e.originalEvent.dataTransfer.dropEffect = 'copy';
         const dropZoneElement = this._getDropZoneElement(isCustomTarget);
 
-        if(this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, false)) {
+        if(this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, !isCustomTarget)) {
             reRaiseEvent(e, 'dragenter', dropZoneElement);
         }
-        if(this._activeDropZone === dropZoneElement && !isMouseOverElement(e, dropZoneElement, !isCustomTarget)) {
-            reRaiseEvent(e, 'dragleave', dropZoneElement);
+        if(this._activeDropZone !== null && this._shouldRaiseDragLeave(e, !isCustomTarget)) {
+            reRaiseEvent(e, 'dragleave', this._activeDropZone);
         }
     }
 
@@ -952,15 +952,18 @@ class FileUploader extends Editor {
             return;
         }
 
-        const dropZoneElement = this._getDropZoneElement(isCustomTarget);
-        if(!isMouseOverElement(e, dropZoneElement, !isCustomTarget)) {
+        if(this._shouldRaiseDragLeave(e, isCustomTarget)) {
             if(this._activeDropZone !== e.target) {
-                reRaiseEvent(e, 'dragleave', dropZoneElement);
+                reRaiseEvent(e, 'dragleave', this._activeDropZone);
             } else {
                 this._tryToggleDropZoneActive(false, isCustomTarget, e);
                 this._activeDropZone = null;
             }
         }
+    }
+
+    _shouldRaiseDragLeave(e, isCustomTarget) {
+        return !isMouseOverElement(e, this._activeDropZone, !isCustomTarget);
     }
 
     _tryToggleDropZoneActive(active, isCustom, event) {

@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import devices from 'core/devices';
+import { isDefined } from 'core/utils/type.js';
 import { deserializeDate } from 'core/utils/date_serialization';
 import FileSystemItem from 'file_management/file_system_item';
 
@@ -488,8 +489,12 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.SPLITTER_CLASS}`);
     }
 
+    getSplitterWrapper() {
+        return this._$element.find(`.${Consts.SPLITTER_WRAPPER_CLASS}`);
+    }
+
     getSplitterPosition() {
-        const $splitterWrapper = this._$element.find(`.${Consts.SPLITTER_WRAPPER_CLASS}`);
+        const $splitterWrapper = this.getSplitterWrapper();
         return $splitterWrapper.get(0).offsetLeft + parseFloat(this.getSplitter().css('margin-left'));
     }
 
@@ -532,12 +537,18 @@ export class FileManagerWrapper {
         return this._$element.find(`.${Consts.FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS}`);
     }
 
-    triggerDragEvent($element, eventType) {
+    triggerDragEvent($element, eventType, elementOffset) {
+        const offsetValue = eventType === 'dragenter' ? 1 : -1;
         $element = $($element);
-        const offset = eventType === 'dragenter' ? 1 : -1;
+        if(!isDefined(elementOffset)) {
+            elementOffset = { top: offsetValue, left: offsetValue };
+        } else {
+            elementOffset.top = !isDefined(elementOffset.top) ? offsetValue : elementOffset.top;
+            elementOffset.left = !isDefined(elementOffset.left) ? offsetValue : elementOffset.left;
+        }
         $element.trigger($.Event(eventType, {
-            clientX: $element.offset().left + offset,
-            clientY: $element.offset().top + offset
+            clientX: $element.offset().left + elementOffset.left,
+            clientY: $element.offset().top + elementOffset.top
         }));
     }
 
