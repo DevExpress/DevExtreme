@@ -11384,9 +11384,10 @@ declare module DevExpress.ui {
   module dxFilterBuilder {
     export type ContentReadyEvent =
       DevExpress.events.EventInfo<dxFilterBuilder>;
+    export type CustomOperation = dxFilterBuilderCustomOperation;
     export type CustomOperationEditorTemplate = {
       readonly value?: string | number | Date;
-      readonly field: dxFilterBuilderField;
+      readonly field: Field;
       readonly setValue: Function;
     };
     export type DisposingEvent = DevExpress.events.EventInfo<dxFilterBuilder>;
@@ -11419,10 +11420,11 @@ declare module DevExpress.ui {
         readonly disabled: boolean;
         readonly rtlEnabled: boolean;
       };
+    export type Field = dxFilterBuilderField;
     export type FieldEditorTemplate = {
       readonly value?: string | number | Date;
       readonly filterOperation?: string;
-      readonly field: dxFilterBuilderField;
+      readonly field: Field;
       readonly setValue: Function;
     };
     export type InitializedEvent =
@@ -11438,7 +11440,7 @@ declare module DevExpress.ui {
       };
   }
   /**
-   * [descr:dxFilterBuilderCustomOperation]
+   * @deprecated Use the CustomOperation type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFilterBuilderCustomOperation {
@@ -11447,7 +11449,7 @@ declare module DevExpress.ui {
      */
     calculateFilterExpression?: (
       filterValue: any,
-      field: dxFilterBuilderField
+      field: DevExpress.ui.dxFilterBuilder.Field
     ) => string | Array<any> | Function;
     /**
      * [descr:dxFilterBuilderCustomOperation.caption]
@@ -11459,7 +11461,7 @@ declare module DevExpress.ui {
     customizeText?: (fieldInfo: {
       value?: string | number | Date;
       valueText?: string;
-      field?: dxFilterBuilderField;
+      field?: DevExpress.ui.dxFilterBuilder.Field;
     }) => string;
     /**
      * [descr:dxFilterBuilderCustomOperation.dataTypes]
@@ -11490,7 +11492,7 @@ declare module DevExpress.ui {
     name?: string;
   }
   /**
-   * [descr:dxFilterBuilderField]
+   * @deprecated Use the Field type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFilterBuilderField {
@@ -11606,11 +11608,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderOptions.customOperations]
      */
-    customOperations?: Array<dxFilterBuilderCustomOperation>;
+    customOperations?: Array<DevExpress.ui.dxFilterBuilder.CustomOperation>;
     /**
      * [descr:dxFilterBuilderOptions.fields]
      */
-    fields?: Array<dxFilterBuilderField>;
+    fields?: Array<DevExpress.ui.dxFilterBuilder.Field>;
     /**
      * [descr:dxFilterBuilderOptions.filterOperationDescriptions]
      */
