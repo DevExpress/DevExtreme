@@ -686,11 +686,11 @@ QUnit.test('Change options -> check _itemsOptionChangedHandler/_formDataOptionCh
 
     let actualLog = '';
     const _itemsOptionChangedHandler = form._itemsOptionChangedHandler;
-    form._itemsOptionChangedHandler = function() { actualLog += 'items; '; _itemsOptionChangedHandler.apply(form, arguments); };
+    form._itemsOptionChangedHandler = function() { actualLog += 'items; '; return _itemsOptionChangedHandler.apply(form, arguments); };
     const _formDataOptionChangedHandler = form._formDataOptionChangedHandler;
-    form._formDataOptionChangedHandler = function() { actualLog += 'formData; '; _formDataOptionChangedHandler.apply(form, arguments); };
+    form._formDataOptionChangedHandler = function() { actualLog += 'formData; '; return _formDataOptionChangedHandler.apply(form, arguments); };
     const _defaultOptionChangedHandler = form._defaultOptionChangedHandler;
-    form._defaultOptionChangedHandler = function() { actualLog += 'default; '; _defaultOptionChangedHandler.apply(form, arguments); };
+    form._defaultOptionChangedHandler = function() { actualLog += 'default; '; return _defaultOptionChangedHandler.apply(form, arguments); };
 
     function testConfig(optionName, expectedLog) {
         actualLog = '';

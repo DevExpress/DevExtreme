@@ -652,27 +652,21 @@ const Form = Widget.inherit({
 
     _optionChanged: function(args) {
         const splitFullName = args.fullName.split('.');
-        let rootNameOfComplexOption;
 
-        if(splitFullName.length > 1) {
-            if(splitFullName[0].search('formData') !== -1) {
-                rootNameOfComplexOption = 'formData';
-            }
-            if(splitFullName[0].search('items') !== -1) { // it can be 'items'/' items '/' items .'/'items[0]'/'items[ 10 ] .'
-                rootNameOfComplexOption = 'items';
-            }
+        // search() is used because the string can be ['items', ' items ', ' items .', 'items[0]', 'items[ 10 ] .', ...]
+        if((splitFullName.length > 1)
+            && (splitFullName[0].search('items') !== -1)
+            && this._itemsOptionChangedHandler(args)) {
+            return;
         }
 
-        if(rootNameOfComplexOption) {
-            if(rootNameOfComplexOption === 'items') {
-                this._itemsOptionChangedHandler(args);
-            }
-            if(rootNameOfComplexOption === 'formData') {
-                this._formDataOptionChangedHandler(args);
-            }
-        } else {
-            this._defaultOptionChangedHandler(args);
+        if((splitFullName.length > 1)
+            && (splitFullName[0].search('formData') !== -1)
+            && this._formDataOptionChangedHandler(args)) {
+            return;
         }
+
+        this._defaultOptionChangedHandler(args);
     },
 
     _defaultOptionChangedHandler: function(args) {
@@ -748,13 +742,16 @@ const Form = Widget.inherit({
         const simpleOptionName = optionNameWithoutPath.split('.')[0].replace(/\[\d+]/, '');
         const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue, itemPath);
 
-        if(!this._tryExecuteItemOptionAction(itemAction) && !this._tryChangeLayoutManagerItemOption(args.fullName, value)) {
-            if(item) {
-                this._changeItemOption(item, optionNameWithoutPath, value);
-                const items = this._generateItemsFromData(this.option('items'));
-                this.option('items', items);
-            }
+        let result = this._tryExecuteItemOptionAction(itemAction) || this._tryChangeLayoutManagerItemOption(args.fullName, value);
+
+        if(!result && item) {
+            this._changeItemOption(item, optionNameWithoutPath, value);
+            const items = this._generateItemsFromData(this.option('items'));
+            this.option('items', items);
+            result = true;
         }
+
+        return result;
     },
 
     _formDataOptionChangedHandler: function(args) {
@@ -767,6 +764,7 @@ const Form = Widget.inherit({
         } else {
             this._triggerOnFieldDataChanged({ dataField, value });
         }
+        return true;
     },
 
     _tryCreateItemOptionAction: function(optionName, item, value, previousValue, itemPath) {
