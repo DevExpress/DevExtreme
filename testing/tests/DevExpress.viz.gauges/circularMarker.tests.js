@@ -87,8 +87,15 @@ QUnit.test('not valid width (not rendered)', function(assert) {
     assert.ok(!this.marker.render(this.options).enabled);
 });
 
-QUnit.test('not valid radius (not rendered)', function(assert) {
-    assert.ok(!this.marker.render(this.options).measure({ radius: 0 }).visible);
+QUnit.test('not valid radius. min radius check', function(assert) {
+    this.options.x = 10;
+    this.options.y = 10;
+    this.options.width = 4;
+    this.options.length = 5;
+    this.options.radius = 0;
+
+    assert.ok(this.marker.render(this.options).resize({ radius: 0 }).visible);
+    assert.deepEqual(this.renderer.path.lastCall.returnValue.attr.lastCall.args[0].points, [10, 9, 8, 4, 12, 4]);
 });
 
 QUnit.test('getTooltipParameters', function(assert) {
@@ -244,7 +251,16 @@ QUnit.test('_getTextCloudOptions - 4 quarter', function(assert) {
     });
 });
 
-QUnit.test('not valid radius (not rendered)', function(assert) {
+QUnit.test('not valid radius. min radius check', function(assert) {
     this.options.radius = -1;
-    assert.ok(!this.marker.render(this.options).resize({ radius: -1 }).visible);
+    this.options.x = 10;
+    this.options.y = 10;
+
+    assert.ok(this.marker.render(this.options).resize({ radius: -1 }).visible);
+    assert.deepEqual(this.renderer.path.lastCall.returnValue.attr.lastCall.args[0].points, [9, 9,
+        9, -18,
+        -47, -18,
+        -47, 6,
+        6, 6
+    ]);
 });
