@@ -8,9 +8,17 @@ function camelCase(str) {
         .map(x => `${x[0].toUpperCase()}${x.slice(1)}`)
         .join('');
 }
-function run(cmd, args, options) {
+function run(cmd, options) {
+    const info = {};
     return function run(cb) {
-        const proc = spawnSync(cmd, args, { stdio: 'inherit', ...options });
+        if (platform() === 'win32') {
+            info.command = 'cmd';
+            info.args = [`/c ${cmd}`];
+        } else {
+            info.command = 'bash';
+            info.args = ['-c', cmd];
+        }
+        spawnSync(info.command, info.args, { stdio: 'inherit', ...options });
         cb();
     }
 }

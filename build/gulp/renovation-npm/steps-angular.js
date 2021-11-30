@@ -34,7 +34,7 @@ function preparePackageForPackagr(packageObject, basePackageObject, context) {
 }
 function runPackagr(context) {
     // TODO: Calling ng-packagr via npx because it conflicts with the current typescript version
-    return run('cmd', [`/c npx ng-packagr -p ${path.join(process.cwd(), context.destination, 'package.json')}`], { });
+    return run([`npx ng-packagr -p ${path.join(process.cwd(), context.destination, 'package.json')}`], { });
 }
 
 module.exports = {

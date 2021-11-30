@@ -7,6 +7,7 @@ const glob = require('glob');
 const path = require('path');
 const argv = require('yargs').argv;
 const del = require('del');
+const { platform } = require('os');
 
 const framework = argv.framework;
 if(!framework || framework !== 'react' && framework !== 'angular') {
@@ -16,7 +17,15 @@ if(!framework || framework !== 'react' && framework !== 'angular') {
 const dirname = () => path.join(__dirname, `${framework}-app`);
 
 const run = (cmd, cb) => {
-    spawn('cmd', [`/c ${cmd}`], { stdio: 'inherit', cwd: dirname() })
+    const info = {};
+    if(platform() === 'win32') {
+        info.command = 'cmd';
+        info.args = [`/c ${cmd}`];
+    } else {
+        info.command = 'bash';
+        info.args = ['-c', cmd];
+    }
+    spawn(info.command, info.args, { stdio: 'inherit', cwd: dirname() })
         .on('close', () => cb());
 };
 

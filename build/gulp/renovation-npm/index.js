@@ -46,7 +46,7 @@ function transpileJSModules(context) {
                     .pipe(gulp.dest(context.destination));
 }
 function installPackages(context) {
-    return run('cmd', ['/c npm i'], { cwd: context.destination });
+    return run('npm i', { cwd: context.destination });
 }
 function generateRenovation(context, generator) {
     return generator;
