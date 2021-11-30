@@ -142,7 +142,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @action
      * @public
      */
-    onPointClick?: ((e: NativeEventInfo<T> & PointInteractionInfo) => void) | string;
+    onPointClick?: ((e: NativeEventInfo<T, MouseEvent | PointerEvent> & PointInteractionInfo) => void) | string;
     /**
      * @docid
      * @type_function_param1 e:object

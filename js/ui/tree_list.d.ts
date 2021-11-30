@@ -84,10 +84,10 @@ export type Scrollable = Skip<dxScrollable, '_templateManager' | '_getTemplate' 
 export type AdaptiveDetailRowPreparingEvent = EventInfo<dxTreeList> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent = NativeEventInfo<dxTreeList> & CellInfo;
+export type CellClickEvent = NativeEventInfo<dxTreeList, PointerEvent | MouseEvent> & CellInfo;
 
 /** @public */
-export type CellDblClickEvent = NativeEventInfo<dxTreeList> & CellInfo;
+export type CellDblClickEvent = NativeEventInfo<dxTreeList, PointerEvent | MouseEvent> & CellInfo;
 
 /** @public */
 export type CellHoverChangedEvent = EventInfo<dxTreeList> & CellInfo & {
@@ -178,7 +178,7 @@ export type FocusedCellChangedEvent = EventInfo<dxTreeList> & {
 };
 
 /** @public */
-export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxTreeList> & {
+export type FocusedCellChangingEvent = Cancelable & NativeEventInfo<dxTreeList, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
     readonly cellElement: DxElement;
     readonly prevColumnIndex: number;
     readonly prevRowIndex: number;
@@ -197,7 +197,7 @@ export type FocusedRowChangedEvent = EventInfo<dxTreeList> & {
 };
 
 /** @public */
-export type FocusedRowChangingEvent = NativeEventInfo<dxTreeList> & {
+export type FocusedRowChangingEvent = NativeEventInfo<dxTreeList, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
     readonly rowElement: DxElement;
     readonly prevRowIndex: number;
     newRowIndex: number;
@@ -211,7 +211,7 @@ export type InitializedEvent = InitializedEventInfo<dxTreeList>;
 export type InitNewRowEvent = EventInfo<dxTreeList> & NewRowInfo;
 
 /** @public */
-export type KeyDownEvent = NativeEventInfo<dxTreeList> & KeyDownInfo;
+export type KeyDownEvent = NativeEventInfo<dxTreeList, KeyboardEvent> & KeyDownInfo;
 
 /** @public */
 export type NodesInitializedEvent = EventInfo<dxTreeList> & {
@@ -222,7 +222,7 @@ export type NodesInitializedEvent = EventInfo<dxTreeList> & {
 export type OptionChangedEvent = EventInfo<dxTreeList> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent = NativeEventInfo<dxTreeList> & {
+export type RowClickEvent = NativeEventInfo<dxTreeList, PointerEvent | MouseEvent> & {
     readonly data: any;
     readonly key: any;
     readonly values: Array<any>;
@@ -245,7 +245,7 @@ export type RowCollapsedEvent = EventInfo<dxTreeList> & RowKeyInfo;
 export type RowCollapsingEvent = Cancelable & EventInfo<dxTreeList> & RowKeyInfo;
 
 /** @public */
-export type RowDblClickEvent = NativeEventInfo<dxTreeList> & {
+export type RowDblClickEvent = NativeEventInfo<dxTreeList, PointerEvent | MouseEvent> & {
     readonly data: any;
     readonly key: any;
     readonly values: Array<any>;
@@ -335,7 +335,7 @@ export type RowDraggingRemoveEvent = RowDraggingEventInfo<dxTreeList>;
 export type RowDraggingReorderEvent = RowDraggingEventInfo<dxTreeList> & DragReorderInfo;
 
 /** @public */
-export type ColumnButtonClickEvent = NativeEventInfo<dxTreeList> & {
+export type ColumnButtonClickEvent = NativeEventInfo<dxTreeList, PointerEvent | MouseEvent> & {
     row?: Row;
     column?: Column;
 };
@@ -861,7 +861,6 @@ export interface Editing extends EditingBase {
      * @docid dxTreeListOptions.editing.allowAdding
      * @default false
      * @type_function_param1_field2 row:dxTreeListRowObject
-     * @type_function_return Boolean
      * @public
      */
     allowAdding?: boolean | ((options: { readonly component: dxTreeList; readonly row?: Row }) => boolean);
@@ -869,7 +868,6 @@ export interface Editing extends EditingBase {
      * @docid dxTreeListOptions.editing.allowDeleting
      * @default false
      * @type_function_param1_field2 row:dxTreeListRowObject
-     * @type_function_return Boolean
      * @public
      */
     allowDeleting?: boolean | ((options: { readonly component: dxTreeList; readonly row?: Row }) => boolean);
@@ -877,7 +875,6 @@ export interface Editing extends EditingBase {
      * @docid dxTreeListOptions.editing.allowUpdating
      * @default false
      * @type_function_param1_field2 row:dxTreeListRowObject
-     * @type_function_return Boolean
      * @public
      */
     allowUpdating?: boolean | ((options: { readonly component: dxTreeList; readonly row?: Row }) => boolean);
@@ -1001,7 +998,6 @@ export default class dxTreeList extends Widget implements GridBase {
     /**
      * @docid
      * @publicName forEachNode(callback)
-     * @param1 callback:function
      * @public
      */
     forEachNode(callback: Function): void;
@@ -1009,7 +1005,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @docid
      * @publicName forEachNode(nodes, callback)
      * @param1 nodes:Array<dxTreeListNode>
-     * @param2 callback:function
      * @public
      */
     forEachNode(nodes: Array<Node>, callback: Function): void;
@@ -1294,7 +1289,6 @@ export interface dxTreeListColumnButton extends ColumnButtonBase {
      * @default true
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_param1_field3 column:dxTreeListColumn
-     * @type_function_return Boolean
      * @public
      */
     visible?: boolean | ((options: { readonly component: dxTreeList; row?: Row; readonly column: Column }) => boolean);

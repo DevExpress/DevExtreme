@@ -92,7 +92,6 @@ export interface PdfExportDataGridProps {
     keepColumnWidths?: boolean;
     /**
      * @docid
-     * @type_function_param1 options:Object
      * @type_function_param1_field2 pdfCell:Object
      * @public
      */

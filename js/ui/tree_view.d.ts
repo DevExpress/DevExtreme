@@ -42,7 +42,7 @@ export type DisposingEvent = EventInfo<dxTreeView>;
 export type InitializedEvent = InitializedEventInfo<dxTreeView>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxTreeView> & {
+export type ItemClickEvent = NativeEventInfo<dxTreeView, KeyboardEvent | MouseEvent | PointerEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number | any;
@@ -50,7 +50,7 @@ export type ItemClickEvent = NativeEventInfo<dxTreeView> & {
 };
 
 /** @public */
-export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
+export type ItemCollapsedEvent = NativeEventInfo<dxTreeView, MouseEvent | PointerEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
@@ -58,7 +58,7 @@ export type ItemCollapsedEvent = NativeEventInfo<dxTreeView> & {
 };
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxTreeView> & {
+export type ItemContextMenuEvent = NativeEventInfo<dxTreeView, MouseEvent | PointerEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number | any;
@@ -66,7 +66,7 @@ export type ItemContextMenuEvent = NativeEventInfo<dxTreeView> & {
 };
 
 /** @public */
-export type ItemExpandedEvent = NativeEventInfo<dxTreeView> & {
+export type ItemExpandedEvent = NativeEventInfo<dxTreeView, MouseEvent | PointerEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
@@ -74,7 +74,7 @@ export type ItemExpandedEvent = NativeEventInfo<dxTreeView> & {
 };
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxTreeView> & {
+export type ItemHoldEvent = NativeEventInfo<dxTreeView, MouseEvent | PointerEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
@@ -82,7 +82,7 @@ export type ItemHoldEvent = NativeEventInfo<dxTreeView> & {
 };
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxTreeView> & {
+export type ItemRenderedEvent = EventInfo<dxTreeView> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;

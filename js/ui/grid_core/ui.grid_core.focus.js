@@ -610,6 +610,11 @@ export const focusModule = {
                     const that = this;
                     const deferred = new Deferred();
                     const dataSource = that._dataSource;
+
+                    if(Array.isArray(key)) {
+                        return deferred.resolve(-1).promise();
+                    }
+
                     let filter = that._generateFilterByKey(key);
 
                     dataSource.load({

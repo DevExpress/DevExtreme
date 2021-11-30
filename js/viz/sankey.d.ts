@@ -58,7 +58,7 @@ export type IncidentOccurredEvent = EventInfo<dxSankey> & IncidentInfo;
 export type InitializedEvent = InitializedEventInfo<dxSankey>;
 
 /** @public */
-export type LinkClickEvent = NativeEventInfo<dxSankey> & {
+export type LinkClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
     readonly target: dxSankeyLink;
 };
 /** @public */
@@ -66,7 +66,7 @@ export type LinkHoverEvent = EventInfo<dxSankey> & {
     readonly target: dxSankeyLink;
 };
 /** @public */
-export type NodeClickEvent = NativeEventInfo<dxSankey> & {
+export type NodeClickEvent = NativeEventInfo<dxSankey, MouseEvent | PointerEvent> & {
     readonly target: dxSankeyNode;
 };
 /** @public */
@@ -529,7 +529,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     /**
      * @docid  dxSankeyOptions.tooltip.customizeLinkTooltip
      * @default undefined
-     * @type_function_param1_field3 weight:Number
      * @type_function_return object
      * @public
      */
@@ -538,8 +537,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @docid  dxSankeyOptions.tooltip.customizeNodeTooltip
      * @default undefined
      * @type_function_param1_field1 title:string:deprecated(label)
-     * @type_function_param1_field3 weightIn:Number
-     * @type_function_param1_field4 weightOut:Number
      * @type_function_return object
      * @public
      */
@@ -552,7 +549,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     enabled?: boolean;
     /**
      * @docid dxSankeyOptions.tooltip.linkTooltipTemplate
-     * @type_function_param1_field3 weight:Number
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -560,8 +556,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     linkTooltipTemplate?: template | ((info: { source?: string; target?: string; weight?: number }, element: DxElement) => string | UserDefinedElement);
     /**
      * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
-     * @type_function_param1_field2 weightIn:Number
-     * @type_function_param1_field3 weightOut:Number
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -641,14 +635,12 @@ export interface dxSankeyLink {
     /**
      * @docid
      * @publicName hover(state)
-     * @param1 state:boolean
      * @public
      */
     hover(state: boolean): void;
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;
@@ -675,14 +667,12 @@ export interface dxSankeyNode {
     /**
      * @docid
      * @publicName hover(state)
-     * @param1 state:boolean
      * @public
      */
     hover(state: boolean): void;
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;

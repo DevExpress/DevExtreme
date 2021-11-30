@@ -84,6 +84,7 @@ class Gantt extends Widget {
         delete this._ganttView;
         delete this._dialogInstance;
         delete this._loadPanel;
+        delete this._exportHelper;
         super._clean();
     }
     _refresh() {

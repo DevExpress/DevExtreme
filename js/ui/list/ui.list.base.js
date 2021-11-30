@@ -319,7 +319,7 @@ export const ListBase = CollectionWidget.inherit({
             return;
         }
 
-        this.callBase(e);
+        return this.callBase(e);
     },
 
     _allowDynamicItemsAppend: function() {

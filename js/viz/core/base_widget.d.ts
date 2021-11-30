@@ -582,8 +582,6 @@ export default class BaseWidget extends DOMComponent {
      * @docid
      * @static
      * @publicName defaultOptions(rule)
-     * @param1 rule:Object
-     * @param1_field1 device:Device|Array<Device>|function
      * @param1_field2 options:Object
      * @hidden
      */

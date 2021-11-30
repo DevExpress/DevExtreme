@@ -72,10 +72,12 @@ const additionalProps = [
     'pageY',
 
     'offsetX',
-    'offsetY'
+    'offsetY',
+    'isTrusted'
 ];
 
 const eventOwnProps = ['originalEvent', 'type', 'currentTarget', 'timeStamp'];
+const noJQueryEventOwnProps = ['isTrusted'];
 
 testStart(() => {
     const markup = `
@@ -101,6 +103,11 @@ QUnit.module('event utils', () => {
                     $.each(eventOwnProps, function(_, propName) {
                         assert.ok(Object.prototype.hasOwnProperty.call(e, propName), 'property \'' + this + '\' is own property');
                     });
+                    if(QUnit.urlParams['nojquery']) {
+                        $.each(noJQueryEventOwnProps, function(_, propName) {
+                            assert.ok(Object.prototype.hasOwnProperty.call(e, propName), 'property \'' + this + '\' is own property (no jquery)');
+                        });
+                    }
                 }
             });
         });

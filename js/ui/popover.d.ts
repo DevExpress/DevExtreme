@@ -53,7 +53,7 @@ export type ShowingEvent = EventInfo<dxPopover>;
 export type ShownEvent = EventInfo<dxPopover>;
 
 /** @public */
-export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
+export type TitleRenderedEvent = EventInfo<dxPopover> & TitleRenderedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -70,11 +70,10 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**
      * @docid
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @default true
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @default "auto"

@@ -24,7 +24,7 @@ export type DisposingEvent = EventInfo<dxValidationSummary>;
 export type InitializedEvent = InitializedEventInfo<dxValidationSummary>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxValidationSummary> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxValidationSummary, MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxValidationSummary> & ChangedOptionInfo;

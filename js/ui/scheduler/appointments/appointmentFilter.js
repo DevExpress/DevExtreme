@@ -1,4 +1,5 @@
 import dateUtils from '../../../core/utils/date';
+import { isSupportMultiDayAppointments } from '../workspaces/utils/base';
 
 const toMs = dateUtils.dateToMilliseconds;
 const HOUR_MS = toMs('hour');
@@ -59,6 +60,7 @@ class AppointmentFilterBaseStrategy {
             max: dateRange[1],
             resources: resources,
             allDay: allDay,
+            supportMultiDayAppointments: isSupportMultiDayAppointments(this.scheduler.option('currentView')),
             firstDayOfWeek: this.firstDayOfWeek,
             recurrenceException: this.recurrenceExceptionGenerator,
         }, this.timeZoneCalculator);
@@ -116,6 +118,7 @@ class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrategy {
                 min: groupStartDate,
                 max: groupEndDate,
                 allDay: supportAllDayAppointment,
+                supportMultiDayAppointments: isSupportMultiDayAppointments(this.scheduler.option('currentView')),
                 resources,
                 firstDayOfWeek: this.firstDayOfWeek,
                 recurrenceException: this.recurrenceExceptionGenerator,
