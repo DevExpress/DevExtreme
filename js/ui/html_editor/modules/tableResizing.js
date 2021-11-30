@@ -104,8 +104,8 @@ export default class TableResizingModule extends BaseModule {
                 this._updateFramesSeparators();
             } else {
                 this._updateFramesPositions();
-                if(!this._isVerticalDragging) {
-                    this._updateFramesSeparators('vertical');
+                if(!this._isDragging) {
+                    this._updateFramesSeparators();
                 }
             }
         };
@@ -167,7 +167,7 @@ export default class TableResizingModule extends BaseModule {
             if(getAutoSizedElements($table).length === 0) {
                 const { columnsSum } = this._getColumnElementsSum($columnElements);
 
-                unfixTableWidth($table);
+                unfixTableWidth($table, undefined, this.quill);
 
                 const tableWidth = this._tableLastWidth(frame) ?? getOuterWidth($table);
 
@@ -373,9 +373,7 @@ export default class TableResizingModule extends BaseModule {
     _dragStartHandler({ $determinantElements, index, frame, direction, lineSeparator }) {
         const directionInfo = this._getDirectionInfo(direction);
 
-        if(direction === 'vertical') {
-            this._isVerticalDragging = true;
-        }
+        this._isDragging = true;
 
         this._fixColumnsWidth(frame.$table);
         this._startLineSize = parseInt(this._getSize($($determinantElements[index]), directionInfo));
@@ -385,7 +383,7 @@ export default class TableResizingModule extends BaseModule {
         if($determinantElements[index + 1]) {
             this._nextLineSize = parseInt(this._getSize($($determinantElements[index + 1]), directionInfo));
         } else if(direction === 'horizontal') {
-            unfixTableWidth(frame.$table);
+            unfixTableWidth(frame.$table, undefined, this.quill);
         }
     }
 
@@ -481,6 +479,8 @@ export default class TableResizingModule extends BaseModule {
         const directionInfo = this._getDirectionInfo(direction);
         let eventOffset = event.offset[directionInfo.positionCoordinateName];
 
+        this.editorInstance._saveValueChangeEvent(event);
+
         if(this._shouldRevertOffset(direction)) {
             eventOffset = -eventOffset;
         }
@@ -497,7 +497,7 @@ export default class TableResizingModule extends BaseModule {
 
     _dragEndHandler(options) {
         this._$highlightedElement?.remove();
-        this._isVerticalDragging = undefined;
+        this._isDragging = undefined;
         this._nextColumnOffsetLimit = undefined;
         this._tableLastWidth(options.frame, getOuterWidth(options.frame.$table));
         this._updateFramesPositions();
@@ -670,7 +670,7 @@ export default class TableResizingModule extends BaseModule {
         _windowResizeCallbacks.remove(this._resizeHandlerWithContext);
         clearTimeout(this._windowResizeTimeout);
         this._resizeHandlerWithContext = undefined;
-        this._isVerticalDragging = undefined;
+        this._isDragging = undefined;
         this._startTableWidth = undefined;
 
         clearTimeout(this._attachResizerTimeout);

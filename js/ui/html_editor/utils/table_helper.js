@@ -30,12 +30,13 @@ function hasEmbedContent(module, selection) {
     return !!selection && module.quill.getText(selection).trim().length < selection.length;
 }
 
-function unfixTableWidth($table, tableBlot) {
+function unfixTableWidth($table, tableBlot, quill) {
     const unfixValue = 'initial';
     if(tableBlot) {
         tableBlot.format('tableWidth', unfixValue);
     } else {
-        $table.css('width', unfixValue);
+        let formatBlot = quill.scroll.find($table.get(0));
+        formatBlot.format('tableWidth', unfixValue);
     }
 }
 
@@ -59,10 +60,15 @@ function getAutoSizedElements($table, direction = 'horizontal') {
 }
 
 function setLineElementsFormat(module, { elements, property, value }) {
+    const tableBlotNames = module.quill.getModule('table').tableBlots;
+    const fullPropertyName = `cell${camelize(property, true)}`;
     each(elements, (i, element) => {
-        const cellBlot = module.quill.scroll.find(element);
-        const fullPropertyName = `cell${camelize(property, true)}`;
-        cellBlot?.format(fullPropertyName, value + 'px');
+        let formatBlot = module.quill.scroll.find(element);
+        if(!tableBlotNames.includes(formatBlot.statics.blotName)) {
+            const descendBlot = formatBlot.descendant((blot) => tableBlotNames.includes(blot.statics.blotName));
+            formatBlot = descendBlot ? descendBlot[0] : null;
+        }
+        formatBlot?.format(fullPropertyName, value + 'px');
     });
 }
 
