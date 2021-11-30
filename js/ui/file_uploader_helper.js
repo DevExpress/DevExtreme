@@ -6,30 +6,6 @@ import { getOffset } from '../core/utils/size';
 
 const window = getWindow();
 
-export const setFileInputPosition = function($fileInput, e, rtlEnabled) {
-    const space = 10;
-    let xPos = getEventX(e);
-    let yPos = getEventY(e);
-    const fileSelector = $fileInput.get(0);
-    const width = fileSelector.offsetWidth;
-    const height = fileSelector.offsetHeight;
-
-    xPos -= rtlEnabled ? space : (width - space);
-    yPos -= height / 2;
-
-    setAbsoluteY(fileSelector, yPos);
-    setAbsoluteX(fileSelector, xPos);
-};
-export const shouldRaiseDragLeave = function(e, zone, activeZone, lastEventName) {
-    return activeZone === zone && (isActiveZoneLeft(e, zone) || dragCanceledByEscKey(lastEventName));
-};
-const isActiveZoneLeft = function(e, zone) {
-    return !isMouseOverElement(e, zone);
-};
-const dragCanceledByEscKey = function(lastEventName) {
-    // When the 'esc' key was hit, the "dragenter" event would not be fired right before the "dragleave"
-    return lastEventName !== 'dragenter';
-};
 export const isMouseOverElement = function(mouseEvent, element, correctPseudoElements) {
     if(!element) return false;
 
@@ -117,20 +93,6 @@ const getTouchEventY = function(e) {
         touchPoint = e.targetTouches;
     }
     return touchPoint ? touchPoint[0].pageY : 0;
-};
-const setAbsoluteX = function(element, x) {
-    element.style.left = prepareClientPosForElement(x, element, true) + 'px';
-};
-const setAbsoluteY = function(element, y) {
-    element.style.top = prepareClientPosForElement(y, element, false) + 'px';
-};
-const prepareClientPosForElement = function(pos, element, isX) {
-    pos -= getPositionElementOffset(element, isX);
-    return pos;
-};
-const getPositionElementOffset = function(element, isX) {
-    return isX ? getOffset(element).left : getOffset(element).top;
-
 };
 const getDocumentScrollTop = function() {
     const document = domAdapter.getDocument();

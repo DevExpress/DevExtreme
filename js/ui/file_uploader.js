@@ -937,8 +937,8 @@ class FileUploader extends Editor {
         if(this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, false)) {
             reRaiseEvent(e, 'dragenter', dropZoneElement);
         }
-        if(this._activeDropZone === dropZoneElement && !isMouseOverElement(e, dropZoneElement, !isCustomTarget)) {
-            reRaiseEvent(e, 'dragleave', dropZoneElement);
+        if(this._activeDropZone !== null && this._shouldRaiseDragLeave(e, isCustomTarget)) {
+            reRaiseEvent(e, 'dragleave', this._activeDropZone);
         }
     }
 
@@ -950,15 +950,18 @@ class FileUploader extends Editor {
             return;
         }
 
-        const dropZoneElement = this._getDropZoneElement(isCustomTarget);
-        if(!isMouseOverElement(e, dropZoneElement, !isCustomTarget)) {
+        if(this._shouldRaiseDragLeave(e, isCustomTarget)) {
             if(this._activeDropZone !== e.target) {
-                reRaiseEvent(e, 'dragleave', dropZoneElement);
+                reRaiseEvent(e, 'dragleave', this._activeDropZone);
             } else {
                 this._tryToggleDropZoneActive(false, isCustomTarget, e);
                 this._activeDropZone = null;
             }
         }
+    }
+
+    _shouldRaiseDragLeave(e, isCustomTarget) {
+        return !isMouseOverElement(e, this._activeDropZone, !isCustomTarget);
     }
 
     _tryToggleDropZoneActive(active, isCustom, event) {

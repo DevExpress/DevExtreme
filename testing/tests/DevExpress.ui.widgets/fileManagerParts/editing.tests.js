@@ -718,6 +718,23 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
     });
 
+    test('upload drop zone must hide on dragleave at the left edge (splitter issue)', function(assert) {
+        const itemViewPanel = this.wrapper.getItemsViewPanel();
+        const dropZonePlaceholder = this.wrapper.getUploaderDropZonePlaceholder();
+
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
+
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragenter');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        const splitterHalfWidth = parseFloat(this.wrapper.getSplitter().css('margin-left'));
+
+        this.wrapper.triggerDragEvent(itemViewPanel, 'dragleave', { top: 1, left: splitterHalfWidth - 1 });
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+    });
+
     test('upload drop zone does not hide on drag interaction', function(assert) {
         const itemViewPanel = this.wrapper.getItemsViewPanel();
         const detailsItemNameCell = $(this.wrapper.getDetailsCell('Name', 1));
