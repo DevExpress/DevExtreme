@@ -43,8 +43,8 @@ jobs:
 
     - name: Build
       run: BUILD_INPROGRESS_RENOVATION="${{ matrix.ARGS.inProgressRenovation == true }}" npm run build:dev
-      
-    - name: Zip artifacts 
+
+    - name: Zip artifacts
       run: |
         7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
 
@@ -93,7 +93,7 @@ jobs:
 
     - name: Run npm install
       run: npm install --no-audit --no-fund
-        
+
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
@@ -118,8 +118,10 @@ jobs:
     - name: Run TestCafe tests
       run: |
         [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && META_RENOVATION="--meta renovation"
+        [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && DASHBOARD="--reporter dashboard"
+        [ "${{ matrix.ARGS.inProgressRenovation }}" == "true" ] && TESTCAFE_DASHBOARD_AUTHENTICATION_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9qZWN0SWQiOiJhNDg1YzQzZS02OGEwLTQ2NzctYTU5YS0xMzRjZDMwY2RlNDQiLCJpYXQiOjE2MzgyNzAzNzl9.wE24iakeUD_wagm9kehf-5mVdU0Uta1zf3kLPC7I5Ow"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
-        all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION $INDICES"
+        all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION $INDICES $DASHBOARD"
         echo "$all_args"
         npm run test-testcafe -- $all_args
 
