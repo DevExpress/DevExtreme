@@ -923,7 +923,7 @@ class FileUploader extends Editor {
         }
 
         const dropZoneElement = this._getDropZoneElement(isCustomTarget);
-        if(dropZoneElement === e.target && this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, !isCustomTarget)) {
+        if(dropZoneElement === e.target && this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, false)) {
             this._activeDropZone = dropZoneElement;
             this._tryToggleDropZoneActive(true, isCustomTarget, e);
         }
@@ -936,10 +936,10 @@ class FileUploader extends Editor {
         e.originalEvent.dataTransfer.dropEffect = 'copy';
         const dropZoneElement = this._getDropZoneElement(isCustomTarget);
 
-        if(this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, !isCustomTarget)) {
+        if(this._activeDropZone === null && isMouseOverElement(e, dropZoneElement, false)) {
             reRaiseEvent(e, 'dragenter', dropZoneElement);
         }
-        if(this._activeDropZone !== null && this._shouldRaiseDragLeave(e, !isCustomTarget)) {
+        if(this._activeDropZone !== null && this._shouldRaiseDragLeave(e, isCustomTarget)) {
             reRaiseEvent(e, 'dragleave', this._activeDropZone);
         }
     }
