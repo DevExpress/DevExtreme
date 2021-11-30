@@ -4256,6 +4256,7 @@ export type Selection = SelectionBase & {
      * @docid dxDataGridOptions.selection.showCheckBoxesMode
      * @type Enums.GridSelectionShowCheckBoxesMode
      * @default "onClick"
+     * @default "always" &for(Material)
      * @public
      */
     showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';

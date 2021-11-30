@@ -18,7 +18,7 @@ export interface AppointmentsConfigType {
   hoursInterval: number;
   showAllDayPanel: boolean;
   loadedResources: Group[];
-  modelGroups: string[];
+  groups: string[];
   groupByDate: boolean;
   appointmentCountPerCell: number;
   appointmentOffset: number;

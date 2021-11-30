@@ -147,3 +147,8 @@ export const getCurrentViewConfig = (
     // selectedCellData: [], // TODO
   } as CurrentViewConfigType;
 };
+
+export const getValidGroups = (
+  schedulerGroups: string[],
+  viewGroups?: string[],
+): string[] => getViewConfigProp(schedulerGroups, viewGroups);

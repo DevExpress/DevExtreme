@@ -1013,8 +1013,12 @@ QUnit.module('Renovated Render', {
 
             const expectedViewData = {
                 groupedData: [{
-                    dateTable: [cellsBase],
+                    dateTable: [{
+                        cells: cellsBase,
+                        key: 0,
+                    }],
                     groupIndex: 0,
+                    key: '0',
                     isGroupedAllDayPanel: false
                 }],
                 bottomVirtualRowHeight: undefined,
@@ -1063,28 +1067,32 @@ QUnit.module('Renovated Render', {
 
             const expectedViewData = {
                 groupedData: [{
-                    dateTable: [[{
-                        ...cellsBase[0],
-                        groups: { res: 1 },
-                        isLastGroupCell: false,
-                    }, {
-                        ...cellsBase[1],
-                        groups: { res: 1 },
-                        isFirstGroupCell: false,
-                    }, {
-                        ...cellsBase[0],
-                        groups: { res: 2 },
-                        groupIndex: 1,
-                        isLastGroupCell: false,
-                        key: 2,
-                    }, {
-                        ...cellsBase[1],
-                        groups: { res: 2 },
-                        groupIndex: 1,
-                        isFirstGroupCell: false,
-                        key: 3,
-                    }]],
+                    dateTable: [{
+                        cells: [{
+                            ...cellsBase[0],
+                            groups: { res: 1 },
+                            isLastGroupCell: false,
+                        }, {
+                            ...cellsBase[1],
+                            groups: { res: 1 },
+                            isFirstGroupCell: false,
+                        }, {
+                            ...cellsBase[0],
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            isLastGroupCell: false,
+                            key: 2,
+                        }, {
+                            ...cellsBase[1],
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            isFirstGroupCell: false,
+                            key: 3,
+                        }],
+                        key: 0,
+                    }],
                     groupIndex: 0,
+                    key: '0',
                     isGroupedAllDayPanel: false,
                 }],
                 bottomVirtualRowHeight: undefined,
@@ -1097,7 +1105,7 @@ QUnit.module('Renovated Render', {
                 leftVirtualCellCount: 0,
                 rightVirtualCellCount: 0,
             };
-            const expectedDateTable = expectedViewData.groupedData[0].dateTable[0];
+            const expectedDateTable = expectedViewData.groupedData[0].dateTable[0].cells;
 
             const expectedViewDataMap = {
                 allDayPanelMap: [],
@@ -1138,28 +1146,36 @@ QUnit.module('Renovated Render', {
 
             const expectedViewData = {
                 groupedData: [{
-                    dateTable: [[{
-                        ...cellsBase[0],
-                        groups: { res: 1 },
-                    }, {
-                        ...cellsBase[1],
-                        groups: { res: 1 },
-                    }]],
+                    dateTable: [{
+                        cells: [{
+                            ...cellsBase[0],
+                            groups: { res: 1 },
+                        }, {
+                            ...cellsBase[1],
+                            groups: { res: 1 },
+                        }],
+                        key: 0,
+                    }],
                     groupIndex: 0,
+                    key: '0',
                     isGroupedAllDayPanel: false,
                 }, {
-                    dateTable: [[{
-                        ...cellsBase[0],
-                        groups: { res: 2 },
-                        groupIndex: 1,
+                    dateTable: [{
+                        cells: [{
+                            ...cellsBase[0],
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            key: 2,
+                        }, {
+                            ...cellsBase[1],
+                            groups: { res: 2 },
+                            groupIndex: 1,
+                            key: 3,
+                        }],
                         key: 2,
-                    }, {
-                        ...cellsBase[1],
-                        groups: { res: 2 },
-                        groupIndex: 1,
-                        key: 3,
-                    }]],
+                    }],
                     groupIndex: 1,
+                    key: '1',
                     isGroupedAllDayPanel: false,
                 }],
                 bottomVirtualRowHeight: undefined,
@@ -1177,16 +1193,16 @@ QUnit.module('Renovated Render', {
                 allDayPanelMap: [],
                 dateTableMap: [
                     [{
-                        cellData: expectedViewData.groupedData[0].dateTable[0][0],
+                        cellData: expectedViewData.groupedData[0].dateTable[0].cells[0],
                         position: { rowIndex: 0, columnIndex: 0 }
                     }, {
-                        cellData: expectedViewData.groupedData[0].dateTable[0][1],
+                        cellData: expectedViewData.groupedData[0].dateTable[0].cells[1],
                         position: { rowIndex: 0, columnIndex: 1 }
                     }], [{
-                        cellData: expectedViewData.groupedData[1].dateTable[0][0],
+                        cellData: expectedViewData.groupedData[1].dateTable[0].cells[0],
                         position: { rowIndex: 1, columnIndex: 0 }
                     }, {
-                        cellData: expectedViewData.groupedData[1].dateTable[0][1],
+                        cellData: expectedViewData.groupedData[1].dateTable[0].cells[1],
                         position: { rowIndex: 1, columnIndex: 1 }
                     }]
                 ]
@@ -1216,7 +1232,7 @@ QUnit.module('Renovated Render', {
                 index: 13,
             };
 
-            const dateTable = viewData.groupedData[0].dateTable[0];
+            const dateTable = viewData.groupedData[0].dateTable[0].cells;
 
             assert.equal(dateTable.length, 14, 'Correct number of cells');
             assert.deepEqual(dateTable[0], firstCell, 'Correct first cell');
@@ -1243,7 +1259,7 @@ QUnit.module('Renovated Render', {
                 index: 30,
             };
 
-            const dateTable = viewData.groupedData[0].dateTable[0];
+            const dateTable = viewData.groupedData[0].dateTable[0].cells;
 
             assert.equal(dateTable.length, 31, 'Correct number of cells');
             assert.deepEqual(dateTable[0], firstCell, 'Correct first cell');

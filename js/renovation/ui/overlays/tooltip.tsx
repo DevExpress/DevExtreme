@@ -27,26 +27,22 @@ const isDesktop = !(!devices.real().generic || devices.isSimulator());
 
 export const viewFunction = ({
   domComponentWrapperRef,
-  props,
+  componentProps,
   restAttributes,
-}: Tooltip): JSX.Element => {
-  const { children } = props;
-
-  return (
-    <DomComponentWrapper
-      componentType={LegacyTooltip}
-      componentProps={props}
-      templateNames={[
-        'contentTemplate',
-      ]}
-      ref={domComponentWrapperRef}
+}: Tooltip): JSX.Element => (
+  <DomComponentWrapper
+    componentType={LegacyTooltip}
+    componentProps={componentProps.restProps}
+    templateNames={[
+      'contentTemplate',
+    ]}
+    ref={domComponentWrapperRef}
       // eslint-disable-next-line react/jsx-props-no-spreading
-      {...restAttributes}
-    >
-      {children}
-    </DomComponentWrapper>
-  );
-};
+    {...restAttributes}
+  >
+    {componentProps.children}
+  </DomComponentWrapper>
+);
 
 @ComponentBindings()
 export class TooltipProps extends BaseWidgetProps {
@@ -58,7 +54,7 @@ export class TooltipProps extends BaseWidgetProps {
     hide: { type: 'fade', to: 0 },
   };
 
-  @OneWay() closeOnOutsideClick: boolean | (() => boolean) = true;
+  @OneWay() hideOnOutsideClick: boolean | (() => boolean) = true;
 
   @OneWay() container?: string | Element;
 
@@ -150,5 +146,14 @@ export class Tooltip extends JSXComponent(TooltipProps) {
     this.instance.option('onHiding', () => {
       this.props.visible = false;
     });
+  }
+
+  /* istanbul ignore next: WA for Angular */
+  get componentProps(): { children?: TooltipProps['children']; restProps: Partial<TooltipProps> } {
+    const { children, ...restProps } = this.props;
+    return {
+      children,
+      restProps,
+    };
   }
 }

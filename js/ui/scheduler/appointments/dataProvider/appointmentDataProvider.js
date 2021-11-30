@@ -2,7 +2,7 @@ import config from '../../../../core/config';
 import { AppointmentDataSource } from './appointmentDataSource';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './appointmentFilter';
 import { createAppointmentAdapter } from '../../appointmentAdapter';
-import combinedRemoteFilter from './remoteFilter';
+import combineRemoteFilter from '../../../../renovation/ui/scheduler/utils/filtering/remote';
 
 const FilterStrategies = {
     virtual: 'virtual',
@@ -84,14 +84,14 @@ export class AppointmentDataProvider {
         }
 
         const dataSourceFilter = this.dataSource.filter();
-        const filter = combinedRemoteFilter(
+        const filter = combineRemoteFilter({
             dataSourceFilter,
-            this.dataAccessors,
+            dataAccessors: this.dataAccessors,
             min,
             max,
             dateSerializationFormat,
-            config().forceIsoDateParsing
-        );
+            forceIsoDateParsing: config().forceIsoDateParsing
+        });
 
         this.dataSource.filter(filter);
     }

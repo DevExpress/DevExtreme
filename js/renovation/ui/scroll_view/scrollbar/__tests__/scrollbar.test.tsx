@@ -200,82 +200,89 @@ describe('Scrollbar', () => {
       expect(scrollbar.active).toEqual(false);
     });
 
-    it('should subscribe to mouseenter event if showScrollbar mode is onHover', () => {
-      const viewModel = new Scrollbar({
-        direction: 'vertical',
-        showScrollbar: 'onHover',
-      });
-      viewModel.scrollbarRef = { current: {} } as RefObject;
-      viewModel.hovered = false;
+    each(optionValues.scrollByThumb).describe('scrollByThumb: %o', (scrollByThumb) => {
+      each([ShowScrollbarMode.HOVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
+        it(`should subscribe to mouseenter event if ${JSON.stringify({ showScrollbar, scrollByThumb })}`, () => {
+          const viewModel = new Scrollbar({
+            direction: 'vertical',
+            showScrollbar,
+            scrollByThumb,
+          });
+          viewModel.scrollbarRef = { current: {} } as RefObject;
+          viewModel.hovered = false;
 
-      viewModel.mouseEnterEffect();
-      emit('mouseenter');
+          viewModel.mouseEnterEffect();
+          emit('mouseenter');
 
-      expect(viewModel.hovered).toEqual(true);
-    });
-
-    each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
-      it(`should not subscribe to mouseenter event if showScrollbar mode is ${showScrollbar}`, () => {
-        const viewModel = new Scrollbar({
-          direction: 'vertical',
-          showScrollbar,
+          expect(viewModel.hovered).toEqual(scrollByThumb);
         });
-        viewModel.scrollbarRef = { current: {} } as RefObject;
-        viewModel.hovered = false;
 
-        viewModel.mouseEnterEffect();
-        emit('mouseenter');
+        it(`should subscribe to mouseleave event if ${JSON.stringify({ showScrollbar, scrollByThumb })}`, () => {
+          const viewModel = new Scrollbar({
+            direction: 'vertical',
+            showScrollbar,
+            scrollByThumb,
+          });
+          viewModel.scrollbarRef = { current: {} } as RefObject;
+          viewModel.hovered = true;
 
-        expect(viewModel.hovered).toEqual(false);
-      });
-    });
+          viewModel.mouseLeaveEffect();
+          emit('mouseleave');
 
-    it('should subscribe to mouseleave event if showScrollbar mode is onHover', () => {
-      const viewModel = new Scrollbar({
-        direction: 'vertical',
-        showScrollbar: 'onHover',
-      });
-      viewModel.scrollbarRef = { current: {} } as RefObject;
-      viewModel.hovered = true;
-
-      viewModel.mouseLeaveEffect();
-      emit('mouseleave');
-
-      expect(viewModel.hovered).toEqual(false);
-    });
-
-    each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER, ShowScrollbarMode.ALWAYS]).describe('ShowScrollbar: %o', (showScrollbar) => {
-      it(`should not subscribe to mouseleave event if showScrollbar mode is ${showScrollbar}`, () => {
-        const viewModel = new Scrollbar({
-          direction: 'vertical',
-          showScrollbar,
+          expect(viewModel.hovered).toEqual(!scrollByThumb);
         });
-        viewModel.scrollbarRef = { current: {} } as RefObject;
-        viewModel.hovered = true;
+      });
 
-        viewModel.mouseLeaveEffect();
-        emit('mouseleave');
+      each([ShowScrollbarMode.SCROLL, ShowScrollbarMode.NEVER]).describe('ShowScrollbar: %o', (showScrollbar) => {
+        it(`should not subscribe to mouseenter event if ${JSON.stringify({ showScrollbar, scrollByThumb })}`, () => {
+          const viewModel = new Scrollbar({
+            direction: 'vertical',
+            showScrollbar,
+            scrollByThumb,
+          });
+          viewModel.scrollbarRef = { current: {} } as RefObject;
+          viewModel.hovered = false;
 
-        expect(viewModel.hovered).toEqual(true);
+          viewModel.mouseEnterEffect();
+          emit('mouseenter');
+
+          expect(viewModel.hovered).toEqual(false);
+        });
+
+        it(`should not subscribe to mouseleave event if ${JSON.stringify({ showScrollbar, scrollByThumb })}`, () => {
+          const viewModel = new Scrollbar({
+            direction: 'vertical',
+            showScrollbar,
+            scrollByThumb,
+          });
+          viewModel.scrollbarRef = { current: {} } as RefObject;
+          viewModel.hovered = true;
+
+          viewModel.mouseLeaveEffect();
+          emit('mouseleave');
+
+          expect(viewModel.hovered).toEqual(true);
+        });
       });
     });
   });
 
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL]).describe('direction: %o', (direction) => {
-    each(optionValues.rtlEnabled).describe('rtlEnabled: %o', (rtlEnabled) => {
+    each([{ rtlEnabled: true }, { rtlEnabled: false }, undefined]).describe('ConfigContext: %o', (ConfigContext) => {
       each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
-        each([true, false]).describe('containerHasSizes: %o', (containerHasSizes) => {
+        each([true, false, undefined]).describe('containerHasSizes: %o', (containerHasSizes) => {
           each([0, -300]).describe('maxOffset: %o', (prevMaxOffset) => {
             each([0, -300]).describe('maxOffset: %o', (maxOffset) => {
               it('syncScrollLocation() should call moveTo(location)', () => {
                 const viewModel = new Scrollbar({
                   showScrollbar: 'always',
                   direction,
-                  rtlEnabled,
                   scrollLocation,
                   containerHasSizes,
                   maxOffset,
                 });
+
+                viewModel.config = ConfigContext;
 
                 [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
                   viewModel.moveTo = jest.fn();
@@ -290,7 +297,7 @@ describe('Scrollbar', () => {
                   if (containerHasSizes) {
                     let expectedLocation = scrollLocation;
 
-                    if (Math.abs(maxOffset - prevMaxOffset) > 0 && direction === 'horizontal' && rtlEnabled) {
+                    if (Math.abs(maxOffset - prevMaxOffset) > 0 && direction === 'horizontal' && ConfigContext?.rtlEnabled) {
                       if (maxOffset === 0) {
                         expectedRightScrollLocation = 0;
                       }

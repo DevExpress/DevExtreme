@@ -12,7 +12,7 @@ describe('Overlay', () => {
     it('default render', () => {
       const componentProps = new OverlayProps();
       const props = {
-        props: componentProps,
+        componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Overlay>;
       const tree = shallow(<OverlayView {...props as any} /> as any);

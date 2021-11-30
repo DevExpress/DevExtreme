@@ -2063,7 +2063,7 @@ QUnit.module('popup options', {
     QUnit.test('lookup popup should be hidden after click outside was present', function(assert) {
         const $lookup = $('#lookupOptions');
         const instance = $lookup.dxLookup({
-            'dropDownOptions.closeOnOutsideClick': true,
+            'dropDownOptions.hideOnOutsideClick': true,
             visible: true,
             usePopover: false
         }).dxLookup('instance');
@@ -2275,7 +2275,7 @@ QUnit.module('popup options', {
         }
     });
 
-    ['onTitleRendered', 'closeOnOutsideClick'].forEach(option => {
+    ['onTitleRendered', 'hideOnOutsideClick'].forEach(option => {
         QUnit.test(`${option} should be passed to the popup`, function(assert) {
             const stub = sinon.stub();
             const fullOptionName = `dropDownOptions.${option}`;

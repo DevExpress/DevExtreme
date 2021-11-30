@@ -8,10 +8,6 @@ import {
 } from '@devextreme-generator/declarations';
 import { Row } from '../row';
 import { DataCellTemplateProps, ViewCellData } from '../../types';
-import {
-  getKeyByGroup,
-  getIsGroupedAllDayPanel,
-} from '../../utils';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
 import { LayoutProps } from '../layout_props';
 import { DateTableCellBase } from './cell';
@@ -24,7 +20,6 @@ export interface CellTemplateProps extends ViewCellData {
 export const viewFunction = ({
   props: {
     viewData,
-    groupOrientation,
     dataCellTemplate,
     cellTemplate: Cell,
   },
@@ -32,9 +27,14 @@ export const viewFunction = ({
 }: DateTableBody): JSX.Element => (
   <Fragment>
     {viewData
-      .groupedData.map(({ dateTable, allDayPanel, groupIndex }, index) => (
-        <Fragment key={getKeyByGroup(groupIndex, groupOrientation)}>
-          {getIsGroupedAllDayPanel(viewData, index) && (
+      .groupedData.map(({
+        dateTable,
+        allDayPanel,
+        key: fragmentKey,
+        isGroupedAllDayPanel,
+      }) => (
+        <Fragment key={fragmentKey}>
+          {isGroupedAllDayPanel && (
             <AllDayPanelTableBody
               viewData={allDayPanel}
               dataCellTemplate={dataCellTemplate}
@@ -45,16 +45,16 @@ export const viewFunction = ({
               rightVirtualCellCount={viewData.rightVirtualCellCount}
             />
           )}
-          {dateTable.map((cellsRow) => (
+          {dateTable.map(({ key: rowKey, cells }) => (
             <Row
               className={rowClasses}
-              key={cellsRow[0].key - viewData.leftVirtualCellCount}
+              key={rowKey}
               leftVirtualCellWidth={viewData.leftVirtualCellWidth}
               rightVirtualCellWidth={viewData.rightVirtualCellWidth}
               leftVirtualCellCount={viewData.leftVirtualCellCount}
               rightVirtualCellCount={viewData.rightVirtualCellCount}
             >
-              {cellsRow.map(({
+              {cells.map(({
                 startDate,
                 endDate,
                 groups,

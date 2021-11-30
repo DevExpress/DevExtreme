@@ -1410,18 +1410,20 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.ok(instance.option('visible'), 'menu is visible');
     });
 
-    QUnit.test('context menu should not block outside click for other overlays on outside click', function(assert) {
-        const otherOverlay = $('<div>').appendTo('#qunit-fixture').dxOverlay({
-            closeOnOutsideClick: true,
-            visible: true
-        }).dxOverlay('instance');
+    ['closeOnOutsideClick', 'hideOnOutsideClick'].forEach(closeOnOutsideClickOptionName => {
+        QUnit.test('context menu should not block outside click for other overlays on outside click', function(assert) {
+            const otherOverlay = $('<div>').appendTo('#qunit-fixture').dxOverlay({
+                [closeOnOutsideClickOptionName]: true,
+                visible: true
+            }).dxOverlay('instance');
 
-        const contextMenu = new ContextMenu(this.$element, { items: [{ text: 'item 1' }], visible: true });
+            const contextMenu = new ContextMenu(this.$element, { items: [{ text: 'item 1' }], visible: true });
 
-        $(document).trigger('dxpointerdown');
+            $(document).trigger('dxpointerdown');
 
-        assert.notOk(otherOverlay.option('visible'), 'other overlay was hidden');
-        assert.notOk(contextMenu.option('visible'), 'context menu was hidden');
+            assert.notOk(otherOverlay.option('visible'), 'other overlay was hidden');
+            assert.notOk(contextMenu.option('visible'), 'context menu was hidden');
+        });
     });
 
     QUnit.test('context menu should prevent default behavior if it shows', function(assert) {

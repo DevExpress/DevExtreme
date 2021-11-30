@@ -7,6 +7,7 @@ export default class TemplatedTestComponent extends Component {
       template: 'defaultTemplateName1',
       indexedTemplate: 'defaultTemplateName2',
       elementTemplate: 'defaultTemplateName3',
+      templateWithoutData: 'defaultTemplateName4',
     };
   }
 }

@@ -12,7 +12,7 @@ describe('List', () => {
     it('default render', () => {
       const componentProps = new ListProps();
       const props = {
-        props: componentProps,
+        componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<List>;
       const tree = shallow(<ListView {...props as any} /> as any);

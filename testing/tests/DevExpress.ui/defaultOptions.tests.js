@@ -204,7 +204,7 @@ testComponentDefaults(ValidationMessage,
         shading: false,
         width: 'auto',
         height: 'auto',
-        closeOnOutsideClick: false,
+        hideOnOutsideClick: false,
         hideOnParentScroll: false,
         animation: null,
         visible: true,
@@ -463,7 +463,7 @@ testComponentDefaults(Lookup,
     {},
     {
         usePopover: false,
-        'dropDownOptions.closeOnOutsideClick': true,
+        'dropDownOptions.hideOnOutsideClick': true,
         searchEnabled: false,
         showCancelButton: false,
         'dropDownOptions.showTitle': false,
@@ -1003,7 +1003,7 @@ testComponentDefaults(SliderTooltip, {},
     {
         visible: false,
         position: 'top',
-        closeOnOutsideClick: false,
+        hideOnOutsideClick: false,
         hideTopOverlayHandler: null,
         hideOnParentScroll: false,
         animation: null,
@@ -1124,7 +1124,10 @@ testComponentDefaults(DataGrid,
     {
         showRowLines: true,
         showColumnLines: false,
-        editing: { useIcons: true }
+        editing: { useIcons: true },
+        selection: {
+            showCheckBoxesMode: 'always'
+        }
     },
     function() {
         this.origIsMaterial = themes.isMaterial;
