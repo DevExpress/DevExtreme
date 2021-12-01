@@ -24,7 +24,7 @@ function run(cmd, options) {
 }
 function getComponentsSpecification(specDest, componentsList) {
     const components = require(path.resolve(process.cwd(), path.join(specDest, 'components.js')));
-    let pattern = componentsList ?? '';
+    let pattern = componentsList ? componentsList : '';
     if(Array.isArray(pattern)) {
         if(pattern.length === 1) {
             pattern = pattern[0];
