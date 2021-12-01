@@ -50,39 +50,34 @@ const compileBundles = (bundles) => {
         .pipe(dest(cssArtifactsPath));
 };
 
-function createBundles(callback) {
+function saveBundleFile(folder, fileName, content) {
+    const bundlePath = join(folder, fileName);
+    if(!existsSync(folder)) mkdirSync(folder);
+    writeFileSync(bundlePath, content);
+}
+
+function generateScssBundleName(theme, size, color, mode) {
+    return 'dx' +
+        (theme === 'material' ? '.material' : '') +
+        `.${color}` +
+        (mode ? `.${mode}` : '') +
+        (size === 'default' ? '' : '.compact') +
+        '.scss';
+}
+
+function generateScssBundles(bundlesFolder, getBundleContent) {
     const sizes = ['default', 'compact'];
     const materialColors = ['blue', 'lime', 'orange', 'purple', 'teal'];
     const materialModes = ['light', 'dark'];
     const genericColors = ['carmine', 'contrast', 'dark', 'darkmoon', 'darkviolet', 'greenmist', 'light', 'softblue'];
-
-    const saveBundleFile = (fileName, content) => {
-        const bundlesFolder = join(process.cwd(), 'scss', 'bundles');
-        const bundlePath = join(bundlesFolder, fileName);
-        if(!existsSync(bundlesFolder)) mkdirSync(bundlesFolder);
-        writeFileSync(bundlePath, content);
-    };
-
-    const readTemplate = (theme) => readFileSync(join(__dirname, `bundle-template.${theme}.scss`), 'utf8');
-
+    
     const saveBundle = (theme, size, color, mode) => {
-        const bundleTemplate = readTemplate(theme);
-        const bundleContent = bundleTemplate
-            .replace('$COLOR', color)
-            .replace('$SIZE', size)
-            .replace('$MODE', mode);
+        const bundleName = generateScssBundleName(theme, size, color, mode);
+        const content = getBundleContent(theme, size, color, mode);
 
-        const bundleName =
-            'dx' +
-            (theme === 'material' ? '.material' : '') +
-            `.${color}` +
-            (mode ? `.${mode}` : '') +
-            (size === 'default' ? '' : '.compact') +
-            '.scss';
-
-        saveBundleFile(bundleName, bundleContent);
+        saveBundleFile(bundlesFolder, bundleName, content);
     };
-
+    
     sizes.forEach(size => {
         materialModes.forEach(mode => {
             materialColors.forEach(color => saveBundle('material', size, color, mode));
@@ -90,8 +85,22 @@ function createBundles(callback) {
 
         genericColors.forEach(color => saveBundle('generic', size, color));
     });
+}
 
-    saveBundleFile('dx.common.scss', readTemplate('common'));
+function createBundles(callback) {
+    const bundlesFolder = join(process.cwd(), 'scss', 'bundles');
+    const readTemplate = (theme) => readFileSync(join(__dirname, `bundle-template.${theme}.scss`), 'utf8');
+    const getBundleContent = (theme, size, color, mode) => {
+        const bundleTemplate = readTemplate(theme);
+        const bundleContent = bundleTemplate
+            .replace('$COLOR', color)
+            .replace('$SIZE', size)
+            .replace('$MODE', mode);
+        return bundleContent;
+    };
+
+    generateScssBundles(bundlesFolder, getBundleContent);
+    saveBundleFile(bundlesFolder, 'dx.common.scss', readTemplate('common'));
 
     if(callback) callback();
 }
@@ -142,3 +151,8 @@ task('style-compiler-themes-watch', () => {
     watch('scss/**/*', parallel(() => compileBundles(bundles), 'copy-fonts-and-icons'))
         .on('ready', () => console.log('style-compiler-themes task is watching for changes...'));
 });
+
+module.exports = {
+    generateScssBundleName,
+    generateScssBundles
+};

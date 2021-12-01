@@ -13,6 +13,7 @@ const babel = require('gulp-babel');
 const transpileConfig = require('../transpile-config');
 const { run } = require('./utils');
 const argv = require('yargs').argv;
+const createScssBundles = require('./create-scss-bundles');
 
 function copyMiscFiles(context, additionalReplacements) {
     return () => merge(
@@ -34,12 +35,11 @@ function cleanNpmFramework(context) {
 }
 function copyRenovatedComponents(context) {
     return () => merge(
-        gulp.src(context.source + '/**/*')
+        gulp.src(`${context.source}/**/*`)
             .pipe(performRecastReplacements(context))
             .pipe(gulp.dest(context.destination))
     );
 }
-
 function transpileJSModules(context) {
     return () => gulp.src(`${context.destination}/**/*.js`)
                     .pipe(babel(transpileConfig.esm))
@@ -84,6 +84,7 @@ function addCompilationTask(frameworkData) {
         source: `artifacts/${frameworkData.name}/renovation`,
         destination: `artifacts/npm-${frameworkData.name}`,
         extensions: ['.js', '.ts', '.d.ts', '.tsx'],
+        scssBundlesSource: 'devextreme/scss/bundles',
         production: argv.production,
         ...frameworkData,
     }
@@ -112,6 +113,10 @@ function addCompilationTask(frameworkData) {
         {
             name: 'removeUnusedModules',
             actions: [removeUnusedModules, cleanEmptyFolders]
+        },
+        {
+            name: 'createScssBundles',
+            actions: [createScssBundles]
         },
         {
             name: 'transpile',
