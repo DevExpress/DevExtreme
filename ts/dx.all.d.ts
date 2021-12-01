@@ -17848,30 +17848,6 @@ declare module DevExpress.ui {
      */
     interface PopoverInstance extends dxPopover<Properties> {}
     export type Properties = dxPopoverOptions<PopoverInstance>;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type ResizeEndEvent = DevExpress.events.NativeEventInfo<
-      dxPopup,
-      MouseEvent | TouchEvent
-    > &
-      DevExpress.ui.dxResizable.ResizeInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type ResizeEvent = DevExpress.events.NativeEventInfo<
-      dxPopup,
-      MouseEvent | TouchEvent
-    > &
-      DevExpress.ui.dxResizable.ResizeInfo;
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
-     */
-    export type ResizeStartEvent = DevExpress.events.NativeEventInfo<
-      dxPopup,
-      MouseEvent | TouchEvent
-    > &
-      DevExpress.ui.dxResizable.ResizeInfo;
     export type ShowingEvent = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxPopover>;
     export type ShownEvent = DevExpress.events.EventInfo<dxPopover>;
@@ -17912,18 +17888,6 @@ declare module DevExpress.ui {
           >
         ) => boolean);
     /**
-     * [descr:dxPopoverOptions.dragAndResizeArea]
-     */
-    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement;
-    /**
-     * [descr:dxPopoverOptions.dragEnabled]
-     */
-    dragEnabled?: boolean;
-    /**
-     * [descr:dxPopoverOptions.dragOutsideBoundary]
-     */
-    dragOutsideBoundary?: boolean;
-    /**
      * [descr:dxPopoverOptions.height]
      */
     height?: number | string | (() => number | string);
@@ -17942,27 +17906,10 @@ declare module DevExpress.ui {
           name?: string;
         }
       | string;
-
-    /**
-     * [descr:dxPopoverOptions.onResize]
-     */
-    onResize?: (e: DevExpress.ui.dxPopover.ResizeEvent) => void;
-    /**
-     * [descr:dxPopoverOptions.onResizeEnd]
-     */
-    onResizeEnd?: (e: DevExpress.ui.dxPopover.ResizeEndEvent) => void;
-    /**
-     * [descr:dxPopoverOptions.onResizeStart]
-     */
-    onResizeStart?: (e: DevExpress.ui.dxPopover.ResizeStartEvent) => void;
     /**
      * [descr:dxPopoverOptions.position]
      */
     position?: 'bottom' | 'left' | 'right' | 'top' | PositionConfig;
-    /**
-     * [descr:dxPopoverOptions.resizeEnabled]
-     */
-    resizeEnabled?: boolean;
     /**
      * [descr:dxPopoverOptions.shading]
      */
