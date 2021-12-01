@@ -25,7 +25,7 @@ fixture`Form`
             dataField: 'field1', label: { visible: labelVisible }, editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
           },
           {
-            dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { labelMode: editorLabelMode },
+            dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { labelMode: editorLabelMode, value: new Date(2021, 10, 29) },
           },
           {
             dataField: 'field3', label: { visible: labelVisible }, editorType: 'dxCheckBox', editorOptions: { labelMode: editorLabelMode },
