@@ -15,6 +15,7 @@ import {
 
 import {
     DeepPartial,
+    Skip,
 } from '../core/index';
 
 import {
@@ -2101,8 +2102,9 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @docid
      * @publicName getScrollable()
      * @public
+     * @return dxScrollable
      */
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     /**
      * @docid
      * @publicName getVisibleColumnIndex(id)
@@ -2721,6 +2723,9 @@ export interface ColumnButtonBase {
      */
     text?: string;
 }
+
+/** @public */
+export type Scrollable = Skip<dxScrollable, '_templateManager' | '_getTemplate' | '_invalidate' | '_refresh'>;
 
 /** @public */
 export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;
@@ -4425,7 +4430,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
