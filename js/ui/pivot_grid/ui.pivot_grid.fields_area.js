@@ -86,7 +86,7 @@ export const FieldsArea = AreaItem.inherit({
             },
             shading: false,
             showTitle: false,
-            closeOnOutsideClick: true,
+            hideOnOutsideClick: true,
             container: button.parent()
         };
     },

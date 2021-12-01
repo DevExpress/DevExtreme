@@ -30,7 +30,7 @@ class FileManagerDialogBase extends Widget {
             showTitle: true,
             title: options.title,
             visible: false,
-            closeOnOutsideClick: true,
+            hideOnOutsideClick: true,
             copyRootClassesToWrapper: true,
             _ignoreCopyRootClassesToWrapperDeprecation: true,
             contentTemplate: this._createContentTemplate.bind(this),

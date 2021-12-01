@@ -371,7 +371,7 @@ export const VirtualScrollController = Class.inherit((function() {
             const bottomIndex = this._viewportSize + topIndex;
             const maxGap = this.option('scrolling.prerenderedRowChunkSize') || 1;
             const isScrollingBack = this.isScrollingBack();
-            const minGap = this.option('scrolling.prerenderedRowCount');
+            const minGap = this.option('scrolling.prerenderedRowCount') ?? 1;
             const topMinGap = isScrollingBack ? minGap : 0;
             const bottomMinGap = isScrollingBack ? 0 : minGap;
             const skip = Math.floor(Math.max(0, topIndex - topMinGap) / maxGap) * maxGap;
@@ -386,13 +386,25 @@ export const VirtualScrollController = Class.inherit((function() {
                 skip,
                 take
             };
+        },
+
+        itemsCount: function() {
+            let result = 0;
+
+            if(this.option(LEGACY_SCROLLING_MODE)) {
+                result = this._dataLoader.itemsCount.apply(this._dataLoader, arguments);
+            } else {
+                result = this._dataOptions.itemsCount();
+            }
+
+            return result;
         }
     };
 
     [
         'pageIndex', 'beginPageIndex', 'endPageIndex',
         'pageSize', 'load', 'loadIfNeed', 'handleDataChanged',
-        'itemsCount', 'getDelayDeferred'
+        'getDelayDeferred'
     ].forEach(function(name) {
         members[name] = function() {
             return this._dataLoader[name].apply(this._dataLoader, arguments);

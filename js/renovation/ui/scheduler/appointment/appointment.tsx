@@ -1,7 +1,14 @@
 import {
   CSSAttributes,
-  Component, ComponentBindings, JSXComponent, OneWay, JSXTemplate, Template,
-  Ref, RefObject, Event,
+  Component,
+  ComponentBindings,
+  JSXComponent,
+  OneWay,
+  JSXTemplate,
+  Template,
+  RefObject,
+  Event,
+  ForwardRef,
 } from '@devextreme-generator/declarations';
 import type { AppointmentTemplateData } from '../../../../ui/scheduler';
 import {
@@ -78,7 +85,7 @@ export class AppointmentProps {
   view: viewFunction,
 })
 export class Appointment extends JSXComponent<AppointmentProps, 'viewModel' | 'onItemClick'>() {
-  @Ref() ref!: RefObject<HTMLDivElement>;
+  @ForwardRef() ref!: RefObject<HTMLDivElement>;
 
   get text(): string { return this.props.viewModel.appointment.text; }
 

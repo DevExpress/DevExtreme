@@ -19,7 +19,7 @@ describe('Form', () => {
       componentProps.items[0].validationRules = [new RequiredRule()];
 
       const props = {
-        props: componentProps,
+        componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Form>;
       const tree = shallow(<FormView {...props as any} /> as any);

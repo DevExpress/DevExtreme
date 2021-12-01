@@ -206,7 +206,7 @@ export const HeaderFilterView = modules.View.inherit({
             showCloseButton: false,
             hideOnParentScroll: false, // T756320
             dragEnabled: false,
-            closeOnOutsideClick: true,
+            hideOnOutsideClick: true,
             focusStateEnabled: false,
             copyRootClassesToWrapper: true,
             _ignoreCopyRootClassesToWrapperDeprecation: true,
