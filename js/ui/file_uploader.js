@@ -909,8 +909,12 @@ class FileUploader extends Editor {
     }
 
     _getDropZoneElement(isCustomTarget, e) {
-        let targetList = isCustomTarget ? Array.from($(this.option('dropZone'))) : [this._$inputWrapper];
-        targetList = targetList.map(element => $(element).get(0));
+        const targetList = [];
+        if(isCustomTarget) {
+            $(this.option('dropZone')).each((i, element) => targetList.push($(element).get(0)));
+        } else {
+            targetList.push(this._$inputWrapper.get(0));
+        }
         return targetList[targetList.indexOf(e.currentTarget)];
     }
 
