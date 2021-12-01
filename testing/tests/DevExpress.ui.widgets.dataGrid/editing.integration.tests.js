@@ -3105,6 +3105,40 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
         assert.strictEqual(onSelectedSpy.callCount, 0, 'is not selected after change');
     });
+
+    QUnit.testInActiveWindow('key should not be compared many times on paging (T1047506)', function(assert) {
+        // arrange
+        let idCallCount = 0;
+        const items = Array.from({ length: 50 }).map((_, index) => {
+            return {
+                id: {
+                    get value() {
+                        idCallCount++;
+                        return index;
+                    }
+                }
+            };
+        });
+        const dataGrid = createDataGrid({
+            height: 500,
+            dataSource: items,
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+        });
+
+        this.clock.tick();
+
+        idCallCount = 0;
+
+        // act
+        dataGrid.pageIndex(1);
+
+        // assert
+        assert.equal(idCallCount, 200, 'key call count after paging');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
