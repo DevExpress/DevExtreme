@@ -180,7 +180,7 @@ fixture`Form`
 ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
   [true, false].forEach((showColonAfterLabel) => {
     const testName = `show semicolon, frmLblMode=${formLabelMode}, shwSmclnAfterlbl=${showColonAfterLabel}`;
-    test.skip(testName, async (t) => {
+    test(testName, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await t
         .expect(await takeScreenshot(`${testName}.png`, '#container'))
@@ -194,7 +194,7 @@ fixture`Form`
         width: 500,
         items: [
           { dataField: 'field1', editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'] } },
-          { dataField: 'field2', editorType: 'dxCalendar' },
+          { dataField: 'field2', editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17) } },
           { dataField: 'field3', editorType: 'dxCheckBox' },
           { dataField: 'field4', editorType: 'dxColorBox' },
           { dataField: 'field5', editorType: 'dxDateBox' },
