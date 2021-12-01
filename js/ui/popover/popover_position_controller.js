@@ -23,23 +23,32 @@ const POPOVER_POSITION_ALIASES = {
 const POPOVER_DEFAULT_BOUNDARY_OFFSET = { h: 10, v: 10 };
 
 class PopoverPositionController extends OverlayPositionController {
-    constructor({ shading, $arrow, ...args }) {
+    constructor({ shading, target, $arrow, ...args }) {
         super(args);
 
         this._props = {
             ...this._props,
-            shading
+            shading,
+            target
         };
 
         this._$arrow = $arrow;
 
         this._positionSide = undefined;
+
+        this.updatePosition(this._props.position);
     }
 
     positionWrapper() {
         if(this._props.shading) {
             this._$wrapper.css({ top: 0, left: 0 });
         }
+    }
+
+    updateTarget(target) {
+        this._props.target = target;
+
+        this.updatePosition(this._props.position);
     }
 
     _renderBoundaryOffset() {}
@@ -95,9 +104,9 @@ class PopoverPositionController extends OverlayPositionController {
         return horizontalWeight > verticalWeight ? at.h : at.v;
     }
 
-    _normalizePosition(positionProp, targetProp) {
+    _normalizePosition(positionProp) {
         const defaultPositionConfig = {
-            of: targetProp,
+            of: this._props.target,
             boundaryOffset: POPOVER_DEFAULT_BOUNDARY_OFFSET
         };
 

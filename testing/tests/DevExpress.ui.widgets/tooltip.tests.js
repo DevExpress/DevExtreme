@@ -91,32 +91,34 @@ QUnit.module('overlay integration', {
         fx.off = false;
     }
 }, () => {
-    QUnit.test('tooltip should be closed on outside click if closeOnOutsideClick is true', function(assert) {
-        const $tooltip = $('#tooltip').dxTooltip({
-            closeOnOutsideClick: true
+    ['closeOnOutsideClick', 'hideOnOutsideClick'].forEach(closeOnOutsideClickOptionName => {
+        QUnit.test(`tooltip should be closed on outside click if ${closeOnOutsideClickOptionName} is true`, function(assert) {
+            const $tooltip = $('#tooltip').dxTooltip({
+                [closeOnOutsideClickOptionName]: true
+            });
+            const instance = $tooltip.dxTooltip('instance');
+
+            instance.show();
+            $('#qunit-fixture').trigger('dxpointerdown');
+
+            assert.equal(instance.option('visible'), false, 'toast was hidden should be hiding');
         });
-        const instance = $tooltip.dxTooltip('instance');
 
-        instance.show();
-        $('#qunit-fixture').trigger('dxpointerdown');
+        QUnit.test(`tooltip should not prevent ${closeOnOutsideClickOptionName} handler of other overlays`, function(assert) {
+            const tooltip = new Tooltip($('#tooltip'));
+            const $overlay = $('<div>').appendTo('.dx-viewport');
 
-        assert.equal(instance.option('visible'), false, 'toast was hidden should be hiding');
-    });
+            const overlay = $overlay.dxOverlay({
+                [closeOnOutsideClickOptionName]: true
+            }).dxOverlay('instance');
 
-    QUnit.test('tooltip should not prevent closeOnOutsideClick handler of other overlays', function(assert) {
-        const tooltip = new Tooltip($('#tooltip'));
-        const $overlay = $('<div>').appendTo('.dx-viewport');
+            overlay.show();
+            tooltip.show();
 
-        const overlay = $overlay.dxOverlay({
-            closeOnOutsideClick: true
-        }).dxOverlay('instance');
+            $('#qunit-fixture').trigger('dxpointerdown');
 
-        overlay.show();
-        tooltip.show();
-
-        $('#qunit-fixture').trigger('dxpointerdown');
-
-        assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
+            assert.equal(overlay.option('visible'), false, 'dxOverlay should be hiding');
+        });
     });
 });
 

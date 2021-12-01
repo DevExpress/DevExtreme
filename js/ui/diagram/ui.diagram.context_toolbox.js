@@ -54,7 +54,7 @@ class DiagramContextToolbox extends Widget {
             popoverClass += ' ' + DIAGRAM_TOUCH_CONTEXT_TOOLBOX_CLASS;
         }
         this._popoverInstance = this._createComponent($popoverElement, Popover, {
-            closeOnOutsideClick: false,
+            hideOnOutsideClick: false,
             container: this.$element(),
             elementAttr: { class: popoverClass }
         });

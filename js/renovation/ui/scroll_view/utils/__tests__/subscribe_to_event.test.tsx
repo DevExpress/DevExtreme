@@ -1,6 +1,7 @@
 import { DisposeEffectReturn } from '../../../../utils/effect_return';
 import resizeObserverSingleton from '../../../../../core/resize_observer';
 import { getWindow, setWindow } from '../../../../../core/utils/window';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../../../../animation/frame';
 
 import { subscribeToResize } from '../subscribe_to_resize';
 
@@ -8,6 +9,12 @@ jest.mock('../../../../../core/resize_observer', () => ({
   ...jest.requireActual('../../../../../core/resize_observer'),
   observe: jest.fn(),
   unobserve: jest.fn(),
+}));
+
+jest.mock('../../../../../animation/frame', () => ({
+  ...jest.requireActual('../../../../../animation/frame'),
+  requestAnimationFrame: jest.fn(),
+  cancelAnimationFrame: jest.fn(),
 }));
 
 describe('subscribeToResize', () => {
@@ -73,7 +80,9 @@ describe('subscribeToResize', () => {
     const originalWindow = getWindow();
 
     try {
-      setWindow({ requestAnimationFrame: (callback: () => void) => { callback(); } }, true);
+      (requestAnimationFrame as jest.Mock)
+        .mockImplementation((callback: () => void) => { callback(); });
+      setWindow({}, true);
       const observeHandler = jest.fn();
       const resizeHandler = jest.fn();
       resizeObserverSingleton.observe = observeHandler;
@@ -99,24 +108,37 @@ describe('subscribeToResize', () => {
       expect(resizeHandler).toBeCalledWith(target);
     } finally {
       setWindow(originalWindow, true);
+      jest.restoreAllMocks();
     }
   });
 
   it('should unobserve element changing on unsubsribe from effect, hasWindow: true', () => {
-    const handler = jest.fn();
-    const unobserveHandler = jest.fn();
-    resizeObserverSingleton.unobserve = unobserveHandler;
+    (cancelAnimationFrame as jest.Mock)
+      .mockImplementation(jest.fn());
 
-    const element = {
-      clientWidth: 10,
-      clientHeight: 15,
-    } as HTMLDivElement;
+    try {
+      const handler = jest.fn();
+      const unobserveHandler = jest.fn();
+      resizeObserverSingleton.unobserve = unobserveHandler;
 
-    const unsubscribeFn = subscribeToResize(element, handler);
+      const element = {
+        clientWidth: 10,
+        clientHeight: 15,
+      } as HTMLDivElement;
 
-    (unsubscribeFn as DisposeEffectReturn)();
+      const unsubscribeFn = subscribeToResize(element, handler);
 
-    expect(unobserveHandler).toBeCalledTimes(1);
-    expect(unobserveHandler).toBeCalledWith(element);
+      expect(cancelAnimationFrame).toBeCalledTimes(0);
+      expect(unobserveHandler).toBeCalledTimes(0);
+
+      (unsubscribeFn as DisposeEffectReturn)();
+
+      expect(unobserveHandler).toBeCalledTimes(1);
+      expect(unobserveHandler).toBeCalledWith(element);
+      expect(cancelAnimationFrame).toBeCalledTimes(1);
+      expect(cancelAnimationFrame).toBeCalledWith(-1);
+    } finally {
+      jest.restoreAllMocks();
+    }
   });
 });

@@ -24,7 +24,7 @@ const optionTestValues = {
             type: 'fade'
         }
     },
-    closeOnOutsideClick: false,
+    hideOnOutsideClick: false,
     container: '#container',
     contentTemplate: 'content template',
     deferRendering: false,
@@ -125,9 +125,9 @@ const optionComparer = {
         assert.strictEqual(editor.option('dropDownOptions.showTitle'), false, 'dropDownOptions.showTitle is correct');
         assert.strictEqual(getPopupInstance(editor).option('showTitle'), false, 'popup showTitle is correct');
     },
-    closeOnOutsideClick: function(assert, editor) {
-        assert.ok(editor.option('dropDownOptions.closeOnOutsideClick'), 'dropDownOptions.closeOnOutsideClick is correct');
-        assert.ok(getPopupInstance(editor).option('closeOnOutsideClick'), 'popup closeOnOutsideClick is correct');
+    hideOnOutsideClick: function(assert, editor) {
+        assert.ok(editor.option('dropDownOptions.hideOnOutsideClick'), 'dropDownOptions.hideOnOutsideClick is correct');
+        assert.ok(getPopupInstance(editor).option('hideOnOutsideClick'), 'popup hideOnOutsideClick is correct');
     },
     deferRendering: skipTesting,
     width: skipTesting,
@@ -377,7 +377,7 @@ dropDownEditorsNames.forEach(widgetName => {
             });
         });
 
-        QUnit.module('dropDownOptions.closeOnOutsideClick', () => {
+        QUnit.module('dropDownOptions.hideOnOutsideClick', () => {
             QUnit.test('popup should be hidden after click outside', function(assert) {
                 new dropDownEditorsList[widgetName]('#editor', { opened: true, pickerType: 'calendar' });
                 const $overlay = $('.dx-overlay-content').eq(0);

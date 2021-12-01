@@ -8,6 +8,7 @@ import Guid from '../../core/guid';
 import { SIMPLE_ITEM_TYPE } from './constants';
 
 const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
+export const EDITORS_WITHOUT_LABELS = ['dxCalendar', 'dxCheckBox', 'dxHtmlEditor', 'dxRadioGroup', 'dxRangeSlider', 'dxSlider', 'dxSwitch'];
 
 export function convertToRenderFieldItemOptions({
     $parent,
@@ -34,16 +35,15 @@ export function convertToRenderFieldItemOptions({
     const isRequired = isDefined(item.isRequired) ? item.isRequired : !!_hasRequiredRuleInSet(item.validationRules);
     const isSimpleItem = item.itemType === SIMPLE_ITEM_TYPE;
     const helpID = item.helpText ? ('dx-' + new Guid()) : null;
-    const helpText = item.helpText;
 
     const labelOptions = _convertToLabelOptions({
         item, id: itemId, isRequired, managerMarkOptions,
         showColonAfterLabel,
         labelLocation: managerLabelLocation,
+        formLabelMode: labelMode,
     });
 
-    const isOutsideLabelMode = labelMode === 'outside';
-    const needRenderLabel = labelOptions.visible && labelOptions.text && isOutsideLabelMode;
+    const needRenderLabel = labelOptions.visible && labelOptions.text;
     const { location: labelLocation, labelID } = labelOptions;
     const labelNeedBaselineAlign =
         labelLocation !== 'top'
@@ -53,6 +53,30 @@ export function convertToRenderFieldItemOptions({
             ||
             inArray(item.editorType, ['dxTextArea', 'dxRadioGroup', 'dxCalendar', 'dxHtmlEditor']) !== -1
         );
+
+    const editorOptions = _convertToEditorOptions({
+        editorType: item.editorType,
+        editorValue,
+        defaultEditorName: item.dataField,
+        canAssignUndefinedValueToEditor,
+        externalEditorOptions: item.editorOptions,
+        editorInputId: itemId,
+        editorValidationBoundary,
+        editorStylingMode,
+        formLabelMode: labelMode,
+        labelText: labelOptions.textWithoutColon,
+        labelMark: labelOptions.markOptions.showRequiredMark
+            ? String.fromCharCode(160) + labelOptions.markOptions.requiredMark
+            : '',
+    });
+
+    const needRenderOptionalMarkAsHelpText = labelOptions.markOptions.showOptionalMark
+        && !labelOptions.visible && editorOptions.labelMode !== 'hidden'
+        && !isDefined(item.helpText);
+
+    const helpText = needRenderOptionalMarkAsHelpText
+        ? labelOptions.markOptions.optionalMark
+        : item.helpText;
 
     return {
         $parent,
@@ -65,19 +89,7 @@ export function convertToRenderFieldItemOptions({
         formLabelLocation,
         requiredMessageTemplate,
         validationGroup,
-        editorOptions: _convertToEditorOptions({
-            editorType: item.editorType,
-            editorValue,
-            defaultEditorName: item.dataField,
-            canAssignUndefinedValueToEditor,
-            externalEditorOptions: item.editorOptions,
-            editorInputId: itemId,
-            editorValidationBoundary,
-            editorStylingMode,
-            labelMode: isOutsideLabelMode ? 'hidden' : labelMode,
-            labelText: isOutsideLabelMode ? undefined : labelOptions.text,
-            labelMark: getLabelMarkText(labelOptions.markOptions),
-        })
+        editorOptions
     };
 }
 
@@ -107,7 +119,7 @@ function _convertToEditorOptions({
     editorInputId,
     editorValidationBoundary,
     editorStylingMode,
-    labelMode,
+    formLabelMode,
     labelText,
     labelMark,
 }) {
@@ -119,14 +131,21 @@ function _convertToEditorOptions({
         editorOptionsWithValue.value = editorOptionsWithValue.value || [];
     }
 
+    let labelMode = externalEditorOptions?.labelMode;
+    if(!isDefined(labelMode)) {
+        labelMode = formLabelMode === 'outside' ? 'hidden' : formLabelMode;
+    }
+
+    const stylingMode = externalEditorOptions?.stylingMode || editorStylingMode;
+
     const result = extend(true, editorOptionsWithValue,
         externalEditorOptions,
         {
             inputAttr: { id: editorInputId },
             validationBoundary: editorValidationBoundary,
-            stylingMode: editorStylingMode,
+            stylingMode,
             label: labelText,
-            labelMode: labelMode,
+            labelMode,
             labelMark,
         },
     );
@@ -161,14 +180,15 @@ function _hasRequiredRuleInSet(rules) {
     return hasRequiredRule;
 }
 
-function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation }) {
+function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, showColonAfterLabel, labelLocation, formLabelMode }) {
+    const isEditorWithoutLabels = inArray(item.editorType, EDITORS_WITHOUT_LABELS) !== -1;
     const labelOptions = extend(
         {
             showColon: showColonAfterLabel,
             location: labelLocation,
             id: id,
-            visible: true,
-            isRequired: isRequired
+            visible: formLabelMode === 'outside' || (isEditorWithoutLabels && formLabelMode !== 'hidden'),
+            isRequired: isRequired,
         },
         item ? item.label : {},
         { markOptions: convertToLabelMarkOptions(managerMarkOptions, isRequired) }
@@ -184,6 +204,7 @@ function _convertToLabelOptions({ item, id, isRequired, managerMarkOptions, show
     }
 
     if(labelOptions.text) {
+        labelOptions.textWithoutColon = labelOptions.text;
         labelOptions.text += labelOptions.showColon ? ':' : '';
     }
 

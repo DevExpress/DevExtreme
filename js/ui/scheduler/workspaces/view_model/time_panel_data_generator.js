@@ -1,3 +1,4 @@
+import { getIsGroupedAllDayPanel, getKeyByGroup } from '../../../../renovation/ui/scheduler/workspaces/utils';
 import { getDisplayedRowCount } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { getTimePanelCellText } from '../../../../renovation/ui/scheduler/view_model/to_test/views/utils/week';
 
@@ -88,21 +89,22 @@ export class TimePanelDataGenerator {
 
         const {
             previousGroupedData: groupedData,
-        } = this._generateTimePanelDataFromMap(timePanelMap, isGroupedAllDayPanel);
+        } = this._generateTimePanelDataFromMap(timePanelMap, isVerticalGrouping);
 
         timePanelData.groupedData = groupedData;
 
         return timePanelData;
     }
 
-    _generateTimePanelDataFromMap(timePanelMap, isGroupedAllDayPanel) {
+    _generateTimePanelDataFromMap(timePanelMap, isVerticalGrouping) {
         return timePanelMap.reduce(({ previousGroupIndex, previousGroupedData }, cellData) => {
             const currentGroupIndex = cellData.groupIndex;
             if(currentGroupIndex !== previousGroupIndex) {
                 previousGroupedData.push({
                     dateTable: [],
-                    isGroupedAllDayPanel,
+                    isGroupedAllDayPanel: getIsGroupedAllDayPanel(!!cellData.allDay, isVerticalGrouping),
                     groupIndex: currentGroupIndex,
+                    key: getKeyByGroup(currentGroupIndex, isVerticalGrouping),
                 });
             }
             if(cellData.allDay) {

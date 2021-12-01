@@ -23,6 +23,7 @@ export type WidgetName =
 'dxTextArea' |
 'dxTagBox' |
 'dxDateBox' |
+'dxLookup' |
 'dxNumberBox';
 
 export default async function createWidget(

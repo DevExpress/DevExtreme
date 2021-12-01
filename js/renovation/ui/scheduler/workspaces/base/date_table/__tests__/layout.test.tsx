@@ -14,25 +14,31 @@ jest.mock('../table_body', () => ({
 describe('DateTableLayoutBase', () => {
   const viewDataBase = {
     groupedData: [{
-      dateTable: [[{
-        startDate: new Date(2020, 6, 9, 0),
-        endDate: new Date(2020, 6, 9, 0, 30),
-        groups: { id: 1 },
-        text: '',
-        index: 0,
-        isFirstGroupCell: false,
-        isLastGroupCell: false,
-        key: '1',
-      }], [{
-        startDate: new Date(2020, 6, 9, 0, 30),
-        endDate: new Date(2020, 6, 9, 1),
-        groups: { id: 2 },
-        text: '',
-        index: 0,
-        isFirstGroupCell: false,
-        isLastGroupCell: false,
-        key: '2',
-      }]],
+      dateTable: [{
+        cells: [{
+          startDate: new Date(2020, 6, 9, 0),
+          endDate: new Date(2020, 6, 9, 0, 30),
+          groups: { id: 1 },
+          text: '',
+          index: 0,
+          isFirstGroupCell: false,
+          isLastGroupCell: false,
+          key: '1',
+        }],
+        key: 0,
+      }, {
+        cells: [{
+          startDate: new Date(2020, 6, 9, 0, 30),
+          endDate: new Date(2020, 6, 9, 1),
+          groups: { id: 2 },
+          text: '',
+          index: 0,
+          isFirstGroupCell: false,
+          isLastGroupCell: false,
+          key: '2',
+        }],
+        key: 1,
+      }],
       groupIndex: 1,
     }],
     leftVirtualCellCount: 32,

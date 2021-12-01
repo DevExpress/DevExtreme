@@ -1623,6 +1623,12 @@ declare module DevExpress.data {
     clearRawDataCache(): void;
   }
   module CustomStore {
+    export type GroupItem<TItem = any> = {
+      key: any | string | number;
+      items: Array<TItem> | Array<GroupItem> | null;
+      count?: number;
+      summary?: Array<any>;
+    };
     export type Options<TItem = any, TKey = any> = CustomStoreOptions<
       TItem,
       TKey
@@ -1649,7 +1655,19 @@ declare module DevExpress.data {
     /**
      * [descr:CustomStoreOptions.load]
      */
-    load: (options: LoadOptions<TItem>) => PromiseLike<TItem> | Array<TItem>;
+    load: (options: LoadOptions<TItem>) =>
+      | DevExpress.core.utils.DxPromise<
+          | Array<TItem>
+          | Array<DevExpress.data.CustomStore.GroupItem>
+          | {
+              data: Array<TItem> | Array<DevExpress.data.CustomStore.GroupItem>;
+              totalCount?: number;
+              summary?: Array<any>;
+              groupCount?: number;
+            }
+        >
+      | Array<DevExpress.data.CustomStore.GroupItem>
+      | Array<TItem>;
     /**
      * [descr:CustomStoreOptions.loadMode]
      */
@@ -5697,6 +5715,7 @@ declare module DevExpress.ui {
     extends dxMenuBaseOptions<dxContextMenu<TKey>, dxContextMenuItem, TKey> {
     /**
      * [descr:dxContextMenuOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxContextMenuOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -5712,6 +5731,16 @@ declare module DevExpress.ui {
       DevExpress.ui.dxContextMenu.Item,
       TKey
     >;
+    /**
+     * [descr:dxContextMenuOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
     /**
      * [descr:dxContextMenuOptions.items]
      */
@@ -9373,6 +9402,10 @@ declare module DevExpress.ui {
      * [descr:dxDiagramCustomCommand.items]
      */
     items?: Array<dxDiagramCustomCommand>;
+    /**
+     * [descr:dxDiagramCustomCommand.location]
+     */
+    location?: 'after' | 'before' | 'center';
   }
   /**
    * [descr:dxDiagramDeleteConnectorArgs]
@@ -11562,16 +11595,21 @@ declare module DevExpress.ui {
       cancel: boolean | PromiseLike<void>;
     }
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxFileManager>;
-    export type ContextMenuItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxFileManager> & {
-        readonly itemData: any;
-        readonly itemElement: DevExpress.core.DxElement;
-        readonly itemIndex: number;
-        readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
-        readonly viewArea: 'navPane' | 'itemView';
-      };
+    export type ContextMenuItemClickEvent = DevExpress.events.NativeEventInfo<
+      dxFileManager,
+      KeyboardEvent | PointerEvent | MouseEvent
+    > & {
+      readonly itemData: any;
+      readonly itemElement: DevExpress.core.DxElement;
+      readonly itemIndex: number;
+      readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
+      readonly viewArea: 'navPane' | 'itemView';
+    };
     export type ContextMenuShowingEvent = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<dxFileManager> & {
+      DevExpress.events.NativeEventInfo<
+        dxFileManager,
+        KeyboardEvent | PointerEvent | MouseEvent
+      > & {
         readonly fileSystemItem?: DevExpress.fileManagement.FileSystemItem;
         readonly targetElement?: DevExpress.core.DxElement;
         readonly viewArea: 'navPane' | 'itemView';
@@ -11676,12 +11714,14 @@ declare module DevExpress.ui {
         readonly selectedItems: Array<DevExpress.fileManagement.FileSystemItem>;
         readonly selectedItemKeys: Array<string>;
       };
-    export type ToolbarItemClickEvent =
-      DevExpress.events.NativeEventInfo<dxFileManager> & {
-        readonly itemData: any;
-        readonly itemElement: DevExpress.core.DxElement;
-        readonly itemIndex: number;
-      };
+    export type ToolbarItemClickEvent = DevExpress.events.NativeEventInfo<
+      dxFileManager,
+      PointerEvent | MouseEvent
+    > & {
+      readonly itemData: any;
+      readonly itemElement: DevExpress.core.DxElement;
+      readonly itemIndex: number;
+    };
   }
   /**
    * [descr:dxFileManagerContextMenu]
@@ -12178,14 +12218,18 @@ declare module DevExpress.ui {
       };
     export type ContentReadyEvent = DevExpress.events.EventInfo<dxFileUploader>;
     export type DisposingEvent = DevExpress.events.EventInfo<dxFileUploader>;
-    export type DropZoneEnterEvent =
-      DevExpress.events.NativeEventInfo<dxFileUploader> & {
-        readonly dropZoneElement: DevExpress.core.DxElement;
-      };
-    export type DropZoneLeaveEvent =
-      DevExpress.events.NativeEventInfo<dxFileUploader> & {
-        readonly dropZoneElement: DevExpress.core.DxElement;
-      };
+    export type DropZoneEnterEvent = DevExpress.events.NativeEventInfo<
+      dxFileUploader,
+      PointerEvent | MouseEvent
+    > & {
+      readonly dropZoneElement: DevExpress.core.DxElement;
+    };
+    export type DropZoneLeaveEvent = DevExpress.events.NativeEventInfo<
+      dxFileUploader,
+      PointerEvent | MouseEvent
+    > & {
+      readonly dropZoneElement: DevExpress.core.DxElement;
+    };
     export type FilesUploadedEvent =
       DevExpress.events.EventInfo<dxFileUploader>;
     export type InitializedEvent =
@@ -16942,6 +16986,7 @@ declare module DevExpress.ui {
     animation?: dxOverlayAnimation;
     /**
      * [descr:dxOverlayOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxOverlayOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -16972,6 +17017,20 @@ declare module DevExpress.ui {
      * @deprecated [depNote:dxOverlayOptions.elementAttr]
      */
     elementAttr?: any;
+    /**
+     * [descr:dxOverlayOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
+    /**
+     * [descr:dxOverlayOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
     /**
      * [descr:dxOverlayOptions.height]
      */
@@ -17036,10 +17095,6 @@ declare module DevExpress.ui {
      * [descr:dxOverlayOptions.wrapperAttr]
      */
     wrapperAttr?: any;
-    /**
-     * [descr:dxOverlayOptions.hideOnParentScroll]
-     */
-    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPivotGrid]
@@ -17879,6 +17934,7 @@ declare module DevExpress.ui {
     animation?: dxPopoverAnimation;
     /**
      * [descr:dxPopoverOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxPopoverOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -17906,6 +17962,20 @@ declare module DevExpress.ui {
           name?: string;
         }
       | string;
+    /**
+     * [descr:dxPopoverOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
+    /**
+     * [descr:dxPopoverOptions.hideOnParentScroll]
+     */
+    hideOnParentScroll?: boolean;
     /**
      * [descr:dxPopoverOptions.position]
      */
@@ -17941,10 +18011,6 @@ declare module DevExpress.ui {
      * [descr:dxPopoverOptions.width]
      */
     width?: number | string | (() => number | string);
-    /**
-     * [descr:dxPopoverOptions.hideOnParentScroll]
-     */
-    hideOnParentScroll?: boolean;
   }
   /**
    * [descr:dxPopup]
@@ -21554,6 +21620,7 @@ declare module DevExpress.ui {
     closeOnClick?: boolean;
     /**
      * [descr:dxToastOptions.closeOnOutsideClick]
+     * @deprecated [depNote:dxToastOptions.closeOnOutsideClick]
      */
     closeOnOutsideClick?:
       | boolean
@@ -21570,6 +21637,16 @@ declare module DevExpress.ui {
      * [descr:dxToastOptions.displayTime]
      */
     displayTime?: number;
+    /**
+     * [descr:dxToastOptions.hideOnOutsideClick]
+     */
+    hideOnOutsideClick?:
+      | boolean
+      | ((
+          event: DevExpress.events.DxEvent<
+            MouseEvent | PointerEvent | TouchEvent
+          >
+        ) => boolean);
     /**
      * [descr:dxToastOptions.height]
      */

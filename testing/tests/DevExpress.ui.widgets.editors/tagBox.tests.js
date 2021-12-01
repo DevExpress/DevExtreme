@@ -6108,6 +6108,30 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 });
 
 QUnit.module('dataSource integration', moduleSetup, () => {
+    [{
+        dataSource: [1, 2, 3, 4, 5],
+        titleSuffix: 'is not grouped'
+    }, {
+        dataSource: [{ key: 'key', items: [1, 2] }],
+        titleSuffix: 'is grouped'
+    }].forEach(({ dataSource, titleSuffix }) => {
+        QUnit.test(`setting dataSource to null after opening should not raise any errors if dataSource ${titleSuffix} (T1046896)`, function(assert) {
+            const tagBox = $('#tagBox').dxTagBox({
+                dataSource
+            }).dxTagBox('instance');
+
+            tagBox.open();
+
+            try {
+                tagBox.option('dataSource', null);
+            } catch(e) {
+                assert.ok(false, `error is raised: ${e}`);
+            } finally {
+                assert.ok(true, 'no errors is raised');
+            }
+        });
+    });
+
     QUnit.test('item should be chosen synchronously if item is already loaded', function(assert) {
         assert.expect(0);
 

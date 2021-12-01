@@ -56,7 +56,7 @@ const getScrollOffset = function($scrollable) {
     };
 };
 
-const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
+const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('markup', moduleConfig);
 
@@ -512,7 +512,7 @@ QUnit.test('B250273 - dxList: showScrollbar option does not work on device.', fu
 });
 
 QUnit.test('simulated scrollable should stop animators on disposing', function(assert) {
-    if(isRenovation) {
+    if(isRenovatedScrollable) {
         assert.ok(true);
         return;
     }

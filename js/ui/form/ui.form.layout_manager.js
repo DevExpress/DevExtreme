@@ -10,7 +10,7 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { normalizeIndexes } from '../../core/utils/array';
 import { compileGetter } from '../../core/utils/data';
-import { removeEvent } from '../../core/remove_event';
+import { removeEvent } from '../../events/remove';
 import messageLocalization from '../../localization/message';
 import { styleProp } from '../../core/utils/style';
 import Widget from '../widget/ui.widget';
@@ -374,6 +374,9 @@ const LayoutManager = Widget.inherit({
                 const $itemElement = $(itemElement);
                 const itemRenderedCountInPreviousRows = e.location.row * colCount;
                 const item = that._items[e.location.col + itemRenderedCountInPreviousRows];
+                if(!item) {
+                    return;
+                }
 
                 const itemCssClassList = [item.cssClass];
 

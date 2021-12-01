@@ -48,9 +48,25 @@ describe('TimePanelCell', () => {
         .toMatchObject({
           isFirstGroupCell: true,
           isLastGroupCell: true,
-          contentTemplate: timeCellTemplate,
-          contentTemplateProps: timeCellTemplateProps,
         });
+    });
+
+    it('should render timeCellTemplate', () => {
+      const timeCellTemplate = jest.fn();
+      const timeCellTemplateProps = {
+        index: 1,
+        data: {},
+      };
+
+      const cell = render({
+        props: {
+          timeCellTemplate,
+        },
+        timeCellTemplateProps,
+      });
+
+      expect(cell.find(timeCellTemplate).props())
+        .toEqual(timeCellTemplateProps);
     });
   });
 
