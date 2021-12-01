@@ -908,8 +908,10 @@ class FileUploader extends Editor {
         return this.option('nativeDropSupported') && this.option('uploadMode') === 'useForm';
     }
 
-    _getDropZoneElement(isCustomTarget) {
-        return isCustomTarget ? $(this.option('dropZone')).get(0) : this._$inputWrapper.get(0);
+    _getDropZoneElement(isCustomTarget, e) {
+        let targetList = isCustomTarget ? Array.from($(this.option('dropZone'))) : [this._$inputWrapper];
+        targetList = targetList.map(element => $(element).get(0));
+        return targetList[targetList.indexOf(e.currentTarget)];
     }
 
     _dragEnterHandler(isCustomTarget, e) {
@@ -921,8 +923,8 @@ class FileUploader extends Editor {
             e.preventDefault();
         }
 
-        const dropZoneElement = this._getDropZoneElement(isCustomTarget);
-        if(dropZoneElement === e.target && this._activeDropZone === null && this.isMouseOverElement(e, dropZoneElement, false)) {
+        const dropZoneElement = this._getDropZoneElement(isCustomTarget, e);
+        if(isDefined(dropZoneElement) && this._activeDropZone === null && this.isMouseOverElement(e, dropZoneElement, false)) {
             this._activeDropZone = dropZoneElement;
             this._tryToggleDropZoneActive(true, isCustomTarget, e);
         }
@@ -933,13 +935,15 @@ class FileUploader extends Editor {
             e.preventDefault();
         }
         e.originalEvent.dataTransfer.dropEffect = 'copy';
-        const dropZoneElement = this._getDropZoneElement(isCustomTarget);
 
-        if(this._activeDropZone === null && this.isMouseOverElement(e, dropZoneElement, false)) {
-            this._reRaiseEvent(e, 'dragenter', dropZoneElement);
-        }
-        if(this._activeDropZone !== null && this._shouldRaiseDragLeave(e, isCustomTarget)) {
-            this._reRaiseEvent(e, 'dragleave', this._activeDropZone);
+        if(!isCustomTarget) { // only default dropzone has pseudoelements
+            const dropZoneElement = this._getDropZoneElement(false, e);
+            if(this._activeDropZone === null && this.isMouseOverElement(e, dropZoneElement, false)) {
+                this._dragEnterHandler(false, e);
+            }
+            if(this._activeDropZone !== null && this._shouldRaiseDragLeave(e, false)) {
+                this._dragLeaveHandler(false, e);
+            }
         }
     }
 
@@ -952,12 +956,8 @@ class FileUploader extends Editor {
         }
 
         if(this._shouldRaiseDragLeave(e, isCustomTarget)) {
-            if(this._activeDropZone !== e.target) {
-                this._reRaiseEvent(e, 'dragleave', this._activeDropZone);
-            } else {
-                this._tryToggleDropZoneActive(false, isCustomTarget, e);
-                this._activeDropZone = null;
-            }
+            this._tryToggleDropZoneActive(false, isCustomTarget, e);
+            this._activeDropZone = null;
         }
     }
 
@@ -971,7 +971,7 @@ class FileUploader extends Editor {
 
         this[mouseAction]({
             event,
-            dropZoneElement: event.currentTarget
+            dropZoneElement: this._activeDropZone
         });
         if(!isCustom) {
             this.$element()[classAction](FILEUPLOADER_DRAGOVER_CLASS);
@@ -1234,49 +1234,6 @@ class FileUploader extends Editor {
         const eventY = this._getEventY(mouseEvent);
 
         return eventX >= x && eventX < (x + w) && eventY >= y && eventY < (y + h);
-    }
-    _reRaiseEvent(e, eventType, newTarget) {
-        const document = domAdapter.getDocument();
-        let newEvent;
-        if(window.MouseEvent) {
-            newEvent = new window.MouseEvent(eventType, {
-                bubbles: e.bubbles,
-                cancelable: e.cancelable,
-                window: e.window,
-                detail: e.detail,
-                screenX: e.screenX,
-                screenY: e.screenY,
-                clientX: e.clientX,
-                clientY: e.clientY,
-                ctrlKey: e.ctrlKey,
-                altKey: e.altKey,
-                shiftKey: e.shiftKey,
-                metaKey: e.metaKey,
-                button: e.button,
-                relatedTarget: e.relatedTarget
-            });
-
-            newTarget.dispatchEvent(newEvent);
-        } else if(document.createEventObject) {
-            newEvent = document.createEventObject(window.event);
-            newEvent.type = eventType;
-            newEvent.bubbles = e.bubbles;
-            newEvent.cancelable = e.cancelable;
-            newEvent.view = window;
-            newEvent.detail = e.detail;
-            newEvent.screenX = e.screenX;
-            newEvent.screenY = e.screenY;
-            newEvent.clientX = e.clientX;
-            newEvent.clientY = e.clientY;
-            newEvent.ctrlKey = e.ctrlKey;
-            newEvent.altKey = e.altKey;
-            newEvent.shiftKey = e.shiftKey;
-            newEvent.metaKey = e.metaKey;
-            newEvent.button = e.button;
-            newEvent.relatedTarget = e.relatedTarget;
-
-            newTarget.fireEvent(eventType, newEvent);
-        }
     }
     _getEventX(e) {
         return isTouchEvent(e) ? this._getTouchEventX(e) : e.clientX + this._getDocumentScrollLeft();
