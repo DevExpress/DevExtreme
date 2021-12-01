@@ -1716,21 +1716,23 @@ QUnit.module('State Storing with real controllers', {
         assert.equal(this.dataController.items().length, 1);
     });
 
-    QUnit.test('searchPanel.text should be cleared after calling state(null)', function(assert) {
-        // arrange
-        this.setupDataGridModules({
-            dataSource: [{ id: 1 }, { id: 2 }],
-            searchPanel: {
-                visible: true,
-                text: 'Some text'
-            },
+    [null, {}].forEach(emptyState => {
+        QUnit.test(`searchPanel.text should be cleared after calling state(${emptyState})`, function(assert) {
+            // arrange
+            this.setupDataGridModules({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                searchPanel: {
+                    visible: true,
+                    text: 'Some text'
+                },
+            });
+
+            // act
+            this.state(emptyState);
+
+            // assert
+            assert.equal(this.option('searchPanel.text'), '');
         });
-
-        // act
-        this.state(null);
-
-        // assert
-        assert.equal(this.option('searchPanel.text'), '');
     });
 });
 
