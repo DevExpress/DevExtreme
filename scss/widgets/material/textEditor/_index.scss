@@ -837,6 +837,11 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
           @include dx-state-empty($texteditor-invalid-focused-border-color, 1);
         }
       }
+
+      &.dx-dropdowneditor-active,
+      &.dx-dropdowneditor-active.dx-state-hover {
+        @include dx-state($texteditor-border-color, 1);
+      }
     }
   }
 
@@ -941,8 +946,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       }
     }
 
-    &.dx-dropdowneditor-active,
-    &.dx-dropdowneditor-active.dx-state-hover,
     &.dx-textarea.dx-state-focused,
     &.dx-textarea.dx-state-focused.dx-state-hover,
     &.dx-state-focused,

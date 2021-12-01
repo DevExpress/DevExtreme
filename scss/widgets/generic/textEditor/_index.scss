@@ -554,6 +554,11 @@ $generic-texteditor-label-transition:
         }
       }
 
+      &.dx-dropdowneditor-active,
+      &.dx-dropdowneditor-active.dx-state-hover {
+        @include dx-state($texteditor-border-color, solid);
+      }
+
       &.dx-state-readonly,
       &.dx-state-disabled {
         @include dx-state-empty($texteditor-border-color, dashed);
@@ -667,8 +672,6 @@ $generic-texteditor-label-transition:
       }
     }
 
-    &.dx-dropdowneditor-active,
-    &.dx-dropdowneditor-active.dx-state-hover,
     &.dx-textarea.dx-state-focused,
     &.dx-textarea.dx-state-focused.dx-state-hover,
     &.dx-state-focused,
