@@ -25,7 +25,7 @@ fixture`Form`
             dataField: 'field1', label: { visible: labelVisible }, editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
           },
           {
-            dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { labelMode: editorLabelMode },
+            dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { labelMode: editorLabelMode, value: new Date(2021, 10, 29) },
           },
           {
             dataField: 'field3', label: { visible: labelVisible }, editorType: 'dxCheckBox', editorOptions: { labelMode: editorLabelMode },
@@ -194,7 +194,7 @@ fixture`Form`
         width: 500,
         items: [
           { dataField: 'field1', editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'] } },
-          { dataField: 'field2', editorType: 'dxCalendar' },
+          { dataField: 'field2', editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 10, 29) } },
           { dataField: 'field3', editorType: 'dxCheckBox' },
           { dataField: 'field4', editorType: 'dxColorBox' },
           { dataField: 'field5', editorType: 'dxDateBox' },
