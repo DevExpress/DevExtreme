@@ -3555,6 +3555,57 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         customDropZone.remove();
     });
 
+    QUnit.test('dropZoneEnter and dropZoneLeave events should fire if there are several custom drop zones on the page', function(assert) {
+        const customDropZone1 = $('<div>')
+            .addClass('drop')
+            .css({
+                width: '5px',
+                height: '5px',
+                position: 'relative',
+                margin: '5px'
+            })
+            .appendTo('#qunit-fixture');
+        const customDropZone2 = $('<div>')
+            .addClass('drop')
+            .css({
+                width: '5px',
+                height: '5px',
+                position: 'relative',
+                margin: '5px'
+            })
+            .appendTo('#qunit-fixture');
+        const onDropZoneEnterSpy = sinon.spy();
+        const onDropZoneLeaveSpy = sinon.spy();
+        $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            dropZone: '.drop',
+            onDropZoneEnter: onDropZoneEnterSpy,
+            onDropZoneLeave: onDropZoneLeaveSpy
+        });
+
+        triggerDragEvent(customDropZone1, 'dragenter');
+        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called on first dropZone');
+        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone1[0], 'dropZone argument is correct');
+
+        triggerDragEvent(customDropZone1, 'dragleave');
+        assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called on first dropZone');
+        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone1[0], 'dropZone argument is correct');
+
+        onDropZoneEnterSpy.reset();
+        onDropZoneLeaveSpy.reset();
+
+        triggerDragEvent(customDropZone2, 'dragenter');
+        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called on second dropZone');
+        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone2[0], 'dropZone argument is correct');
+
+        triggerDragEvent(customDropZone2, 'dragleave');
+        assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called on second dropZone');
+        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone2[0], 'dropZone argument is correct');
+
+        customDropZone1.remove();
+        customDropZone2.remove();
+    });
+
     QUnit.test('dropZoneEnter and dropZoneLeave events should fire once on correspondent interactions in the deafult drop zone', function(assert) {
         const onDropZoneEnterSpy = sinon.spy();
         const onDropZoneLeaveSpy = sinon.spy();
