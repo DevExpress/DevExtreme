@@ -6660,7 +6660,7 @@ QUnit.module('Virtual scrolling', {
 
         rowsView._hasHeight = true;
         rowsView.render($testElement);
-        rowsView.height(100);
+        $testElement.height(100);
         rowsView.resize();
 
         // assert
