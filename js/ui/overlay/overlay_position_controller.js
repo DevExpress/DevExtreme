@@ -58,6 +58,10 @@ class OverlayPositionController {
         return this._$markupContainer;
     }
 
+    get position() {
+        return this._position;
+    }
+
     set fixWrapperPosition(fixWrapperPosition) {
         this._props._fixWrapperPosition = fixWrapperPosition;
 
