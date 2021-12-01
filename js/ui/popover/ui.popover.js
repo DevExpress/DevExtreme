@@ -133,12 +133,69 @@ const Popover = Popup.inherit({
 
             height: 'auto',
 
+            /**
+             * @name dxPopoverOptions.dragEnabled
+             * @hidden
+             */
             dragEnabled: false,
 
+            /**
+            * @name dxPopoverOptions.dragOutsideBoundary
+            * @hidden
+            */
+
+            /**
+            * @name dxPopoverOptions.dragAndResizeArea
+            * @hidden
+            */
+
+            /**
+            * @name dxPopoverOptions.resizeEnabled
+            * @hidden
+            */
             resizeEnabled: false,
 
             /**
             * @name dxPopoverOptions.restorePosition
+            * @hidden
+            */
+
+            /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
+            * @name dxPopoverOptions.onResizeStart
+            * @action
+            * @hidden
+            */
+
+            /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
+            * @name dxPopoverOptions.onResize
+            * @action
+            * @hidden
+            */
+
+            /**
+            * @section Utils
+            * @type function
+            * @default null
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 component:this
+            * @type_function_param1_field2 element:DxElement
+            * @type_function_param1_field3 model:object
+            * @name dxPopoverOptions.onResizeEnd
+            * @action
             * @hidden
             */
 

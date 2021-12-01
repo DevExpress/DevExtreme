@@ -18,7 +18,6 @@ import {
     DxEvent,
     Cancelable,
     EventInfo,
-    NativeEventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
 } from '../events/index';
@@ -28,10 +27,6 @@ import dxPopup, {
     dxPopupOptions,
     TitleRenderedInfo,
 } from './popup';
-
-import {
-    ResizeInfo,
-} from './resizable';
 
 /** @public */
 export type ContentReadyEvent = EventInfo<dxPopover>;
@@ -47,15 +42,6 @@ export type HiddenEvent = EventInfo<dxPopover>;
 
 /** @public */
 export type InitializedEvent = InitializedEventInfo<dxPopover>;
-
-/** @hidden */
-export type ResizeEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
-
-/** @hidden */
-export type ResizeStartEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
-
-/** @hidden */
-export type ResizeEndEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxPopover> & ChangedOptionInfo;
@@ -91,22 +77,6 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
-     * @hidden
-     */
-    dragAndResizeArea?: string | UserDefinedElement;
-    /**
-     * @docid
-     * @default false
-     * @hidden
-     */
-    dragEnabled?: boolean;
-    /**
-     * @docid
-     * @hidden
-     */
-    dragOutsideBoundary?: boolean;
-    /**
-     * @docid
      * @default "auto"
      * @public
      */
@@ -128,49 +98,6 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
        */
       name?: string;
     } | string;
-
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 width:number
-     * @type_function_param1_field6 height:number
-     * @action
-     * @hidden
-     */
-    onResize?: ((e: ResizeEvent) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 width:number
-     * @type_function_param1_field6 height:number
-     * @action
-     * @hidden
-     */
-    onResizeEnd?: ((e: ResizeEndEvent) => void);
-    /**
-     * @docid
-     * @default null
-     * @type_function_param1 e:object
-     * @type_function_param1_field1 component:this
-     * @type_function_param1_field2 element:DxElement
-     * @type_function_param1_field3 model:any
-     * @type_function_param1_field4 event:event
-     * @type_function_param1_field5 width:number
-     * @type_function_param1_field6 height:number
-     * @action
-     * @hidden
-     */
-    onResizeStart?: ((e: ResizeStartEvent) => void);
     /**
      * @docid
      * @type Enums.Position|PositionConfig
@@ -178,11 +105,6 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @public
      */
     position?: 'bottom' | 'left' | 'right' | 'top' | PositionConfig;
-    /**
-     * @docid
-     * @hidden
-     */
-    resizeEnabled?: boolean;
     /**
      * @docid
      * @default false
