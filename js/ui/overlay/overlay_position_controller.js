@@ -23,7 +23,7 @@ const OVERLAY_DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 
 class OverlayPositionController {
     constructor({
-        position, target, container,
+        position, container,
         $root, $content, $wrapper,
         onPositioned, onVisualPositionChanged,
         restorePosition,
@@ -31,7 +31,6 @@ class OverlayPositionController {
     }) {
         this._props = {
             position,
-            target,
             container,
             restorePosition,
             onPositioned,
@@ -52,7 +51,7 @@ class OverlayPositionController {
         this._previousVisualPosition = undefined;
 
         this.updateContainer(container);
-        this.updatePosition(position, target);
+        this.updatePosition(position);
     }
 
     get $container() {
@@ -80,15 +79,9 @@ class OverlayPositionController {
         this.restorePositionOnNextRender(shouldRestorePosition);
     }
 
-    updateTarget(target) {
-        this._props.target = target;
-
-        this.updatePosition(this._props.position, target);
-    }
-
-    updatePosition(positionProp, targetProp = this._props.target) {
+    updatePosition(positionProp) {
         this._props.position = positionProp;
-        this._position = this._normalizePosition(positionProp, targetProp);
+        this._position = this._normalizePosition(positionProp);
 
         this._updateWrapperCoveredElement();
     }
@@ -197,9 +190,8 @@ class OverlayPositionController {
         }
     }
 
-    _normalizePosition(positionProp, targetProp) {
+    _normalizePosition(positionProp) {
         const defaultPositionConfig = {
-            of: targetProp,
             boundaryOffset: OVERLAY_DEFAULT_BOUNDARY_OFFSET
         };
 
