@@ -4,9 +4,9 @@ import eventsEngine from '../../events/core/events_engine';
 import modules from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';
 import { createObjectWithChanges } from '../../data/array_utils';
-import { deferUpdate, equalByValue } from '../../core/utils/common';
+import { deferUpdate, equalByValue, getKeyHash } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
-import { isDefined, isEmptyObject } from '../../core/utils/type';
+import { isDefined, isEmptyObject, isObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { focused } from '../widget/selectors';
 import messageLocalization from '../../localization/message';
@@ -72,6 +72,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
             if(!this._validationState) {
                 this._validationState = [];
+                this._validationStateCache = {};
             }
         },
 
@@ -82,11 +83,22 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         _getValidationData: function(key, create) {
-            let validationData = this._validationState.filter(data => equalByValue(data.key, key))[0];
+            const keyHash = getKeyHash(key);
+            const isObjectKeyHash = isObject(keyHash);
+            let validationData;
+
+            if(isObjectKeyHash) {
+                validationData = this._validationState.filter(data => equalByValue(data.key, key))[0];
+            } else {
+                validationData = this._validationStateCache[keyHash];
+            }
 
             if(!validationData && create) {
                 validationData = { key, isValid: true };
                 this._validationState.push(validationData);
+                if(!isObjectKeyHash) {
+                    this._validationStateCache[keyHash] = validationData;
+                }
             }
 
             return validationData;
@@ -866,7 +878,9 @@ export const validatingModule = {
                         }
 
                         if(shouldResetValidationState) {
-                            this.getController('validating')._validationState = [];
+                            const validatingController = this.getController('validating');
+                            validatingController._validationState = [];
+                            validatingController._validationStateCache = {};
                         }
                     }
                 },
@@ -902,6 +916,7 @@ export const validatingModule = {
                     const validatingController = this.getController('validating');
 
                     validatingController._validationState = [];
+                    validatingController._validationStateCache = {};
 
                     this.callBase();
                 },
