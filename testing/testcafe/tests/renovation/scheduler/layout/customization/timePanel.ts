@@ -65,7 +65,7 @@ const createScheduler = async (
 };
 
 [false, true].forEach((crossScrollingEnabled) => {
-  ['week', 'agenda'].forEach((view) => {
+  ['week'/* 'agenda' */].forEach((view) => {
     test(`Time panel customization should work in ${view} view`, async (t, { screenshotComparerOptions }) => {
       const scheduler = new Scheduler('#container');
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
