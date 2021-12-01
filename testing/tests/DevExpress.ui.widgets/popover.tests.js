@@ -2142,7 +2142,6 @@ QUnit.module('target option', {
     beforeEach: function() {
         fixtures.differentTargets.create();
 
-        this.$target = $('#where');
         this.popover = new Popover($('#what'), { visible: true });
         this.getMiddleX = (rect) => {
             return (rect.left + rect.right) / 2;
@@ -2153,12 +2152,14 @@ QUnit.module('target option', {
     }
 }, () => {
     QUnit.test('content should be positioned regard of target', function(assert) {
+        const target = $('#there');
+
         this.popover.option({
-            target: this.$target
+            target: target
         });
 
         const $arrow = getArrow();
-        const targetRect = this.$target.get(0).getBoundingClientRect();
+        const targetRect = target.get(0).getBoundingClientRect();
         const arrowRect = $arrow.get(0).getBoundingClientRect();
 
         assert.roughEqual(arrowRect.top, targetRect.bottom, 0.1, 'y coordinate is correct');
@@ -2167,9 +2168,10 @@ QUnit.module('target option', {
 
     QUnit.test('content should be positioned regard of position.of if it is specified', function(assert) {
         const positionOf = $('#there');
+        const target = $('#where');
 
         this.popover.option({
-            target: this.$target,
+            target: target,
             position: {
                 of: positionOf
             }
