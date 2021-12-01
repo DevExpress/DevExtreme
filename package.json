@@ -208,11 +208,11 @@
     "dev": "dotnet build build/build-dotnet.sln && cross-env DEVEXTREME_TEST_CI=true gulp dev",
     "dev:watch": "cross-env DEVEXTREME_TEST_CI=true gulp dev-watch",
     "transpile-tests": "gulp transpile-tests",
-    "discover-declarations": "dx-tools discover --js-scripts ./js",
+    "discover-declarations": "dx-tools discover --js-scripts ./js --exclude js/renovation/",
     "update-ts": "dx-tools update-ts-bundle --js-scripts ./js --output-path ./ts/dx.all.d.ts --exclude js/renovation/",
     "validate-ts": "gulp validate-ts",
     "internal-tool": "dx-tools",
-    "validate-declarations": "dx-tools validate-declarations --js-scripts ./js",
+    "validate-declarations": "dx-tools validate-declarations --js-scripts ./js --exclude js/renovation/",
     "test-testcafe": "node ./testing/testcafe/runner",
     "test-jest": "jest --coverage --maxWorkers=8",
     "test-jest:watch": "jest --watch"
