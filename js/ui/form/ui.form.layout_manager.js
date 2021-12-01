@@ -374,6 +374,9 @@ const LayoutManager = Widget.inherit({
                 const $itemElement = $(itemElement);
                 const itemRenderedCountInPreviousRows = e.location.row * colCount;
                 const item = that._items[e.location.col + itemRenderedCountInPreviousRows];
+                if(!item) {
+                    return;
+                }
 
                 const itemCssClassList = [item.cssClass];
 
