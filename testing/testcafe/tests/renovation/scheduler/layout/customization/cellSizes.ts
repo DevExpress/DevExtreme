@@ -70,7 +70,7 @@ const views = [{
   groupOrientation: 'vertical',
 }];
 
-test('Cell sizes customization should work', async (t, { platform }) => {
+test('Cell sizes customization should work', async (t, { platform, screenshotComparerOptions }) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -79,7 +79,7 @@ test('Cell sizes customization should work', async (t, { platform }) => {
     await updateComponentOptions(platform, { currentView: view.type });
 
     await t.expect(
-      await takeScreenshot(`custom-cell-sizes-in-${view.type}.png`, scheduler.workSpace),
+      await takeScreenshot(`custom-cell-sizes-in-${view.type}.png`, scheduler.workSpace, screenshotComparerOptions),
     ).ok();
   }
 
@@ -91,12 +91,12 @@ test('Cell sizes customization should work', async (t, { platform }) => {
   });
 });
 
-test('Cell sizes customization should work when all-day panel is enabled', async (t) => {
+test('Cell sizes customization should work when all-day panel is enabled', async (t, { screenshotComparerOptions }) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.expect(
-    await takeScreenshot('custom-cell-sizes-with-all-day-panel-in-\'week.png', scheduler.workSpace),
+    await takeScreenshot('custom-cell-sizes-with-all-day-panel-in-\'week.png', scheduler.workSpace, screenshotComparerOptions),
   ).ok();
 
   await t.expect(compareResults.isValid())

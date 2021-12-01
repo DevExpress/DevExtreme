@@ -32,7 +32,7 @@ const createScheduler = async (
 };
 
 [false, true].forEach((crossScrollingEnabled) => {
-  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} in RTL`, async (t, { platform }) => {
+  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} in RTL`, async (t, { platform, screenshotComparerOptions }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -46,7 +46,7 @@ const createScheduler = async (
         .wait(100);
 
       await t.expect(
-        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-rtl.png`, scheduler.workSpace),
+        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
       ).ok();
     }
 
@@ -64,7 +64,7 @@ const createScheduler = async (
     await restoreBrowserSize(t);
   });
 
-  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and RTL are used`, async (t, { platform }) => {
+  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and RTL are used`, async (t, { platform, screenshotComparerOptions }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -78,7 +78,7 @@ const createScheduler = async (
         .wait(100);
 
       await t.expect(
-        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`, scheduler.workSpace),
+        await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
       ).ok();
     }
 
@@ -98,7 +98,7 @@ const createScheduler = async (
     await restoreBrowserSize(t);
   });
 
-  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t, { platform }) => {
+  test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t, { platform, screenshotComparerOptions }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -112,7 +112,7 @@ const createScheduler = async (
         .wait(100);
 
       await t.expect(
-        await takeScreenshot(`generic-view=${view.type}-crossScrolling=${!!crossScrollingEnabled}-vertical-rtl.png`, scheduler.workSpace),
+        await takeScreenshot(`generic-view=${view.type}-crossScrolling=${!!crossScrollingEnabled}-vertical-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
       ).ok();
     }
 

@@ -66,12 +66,12 @@ const createScheduler = async (
 
 [false, true].forEach((crossScrollingEnabled) => {
   ['week', 'agenda'].forEach((view) => {
-    test(`Time panel customization should work in ${view} view`, async (t) => {
+    test(`Time panel customization should work in ${view} view`, async (t, { screenshotComparerOptions }) => {
       const scheduler = new Scheduler('#container');
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t.expect(
-        await takeScreenshot(`custom-time-panel-in-${view}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element),
+        await takeScreenshot(`custom-time-panel-in-${view}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element, screenshotComparerOptions),
       ).ok();
 
       await t.expect(compareResults.isValid())

@@ -11,12 +11,12 @@ fixture('Layout:Appointments:visible');
 
 [1, 0].forEach((maxAppointmentsPerCell) => {
   [true, false, undefined].forEach((visible) => {
-    test(`Appointments should be filtered by visible property(visible='${visible}', maxAppointmentsPerCell='${maxAppointmentsPerCell}'`, async (t) => {
+    test(`Appointments should be filtered by visible property(visible='${visible}', maxAppointmentsPerCell='${maxAppointmentsPerCell}'`, async (t, { screenshotComparerOptions }) => {
       const scheduler = new Scheduler('#container');
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await t
-        .expect(await takeScreenshot(`filtering-visible=${visible}-maxAppointmentsPerCell=${maxAppointmentsPerCell}.png`, scheduler.workSpace))
+        .expect(await takeScreenshot(`filtering-visible=${visible}-maxAppointmentsPerCell=${maxAppointmentsPerCell}.png`, scheduler.workSpace, screenshotComparerOptions))
         .ok()
 
         .expect(compareResults.isValid())

@@ -66,7 +66,7 @@ const views = [{
 }];
 
 [false, true].forEach((crossScrollingEnabled) => {
-  test('Group panel customization should work', async (t, { platform }) => {
+  test('Group panel customization should work', async (t, { platform, screenshotComparerOptions }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -75,7 +75,7 @@ const views = [{
       await updateComponentOptions(platform, { currentView: view.type });
 
       await t.expect(
-        await takeScreenshot(`custom-group-panel-in-${view.type}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element),
+        await takeScreenshot(`custom-group-panel-in-${view.type}-cross-scrolling=${crossScrollingEnabled}.png`, scheduler.element, screenshotComparerOptions),
       ).ok();
     }
 

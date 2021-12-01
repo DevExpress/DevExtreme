@@ -54,17 +54,17 @@ test('viewSwitcher dropdown button popup should have a specified class', async (
   },
 ));
 
-test('The toolbar should not display if the config is empty', async (t, { platform }) => {
+test('The toolbar should not display if the config is empty', async (t, { platform, screenshotComparerOptions }) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
-    .expect(await takeScreenshot('scheduler-with-empty-toolbar-config.png'))
+    .expect(await takeScreenshot('scheduler-with-empty-toolbar-config.png', undefined, screenshotComparerOptions))
     .ok();
 
   await updateComponentOptions(platform, { toolbar: [{ defaultElement: 'viewSwitcher' }] });
 
   await t
-    .expect(await takeScreenshot('scheduler-with-non-empty-toolbar-config.png'))
+    .expect(await takeScreenshot('scheduler-with-non-empty-toolbar-config.png', undefined, screenshotComparerOptions))
     .ok();
 
   await t
