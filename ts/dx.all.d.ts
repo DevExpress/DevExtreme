@@ -8064,7 +8064,13 @@ declare module DevExpress.ui {
     }
     export type Scrollable = DevExpress.core.Skip<
       dxScrollable,
-      '_templateManager' | '_getTemplate' | '_invalidate' | '_refresh'
+      | '_templateManager'
+      | '_cancelOptionChange'
+      | '_getTemplate'
+      | '_invalidate'
+      | '_refresh'
+      | '_notifyOptionChanged'
+      | '_createElement'
     >;
     export type Scrolling = ScrollingBase & {
       /**
@@ -22754,7 +22760,13 @@ declare module DevExpress.ui {
       DevExpress.ui.dxDataGrid.SavingInfo<TRowData, TKey>;
     export type Scrollable = DevExpress.core.Skip<
       dxScrollable,
-      '_templateManager' | '_getTemplate' | '_invalidate' | '_refresh'
+      | '_templateManager'
+      | '_cancelOptionChange'
+      | '_getTemplate'
+      | '_invalidate'
+      | '_refresh'
+      | '_notifyOptionChanged'
+      | '_createElement'
     >;
     export interface Scrolling extends DevExpress.ui.dxDataGrid.ScrollingBase {
       /**
