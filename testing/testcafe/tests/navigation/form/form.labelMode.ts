@@ -9,7 +9,7 @@ fixture`Form`
   ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
     [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
       const testName = `labelMode priorities, frmLblMode=${formLabelMode},lblVis=${labelVisible},edtr.lblMode=${editorLabelMode}`;
-      test.skip(testName, async (t) => {
+      test(testName, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
         await t
           .expect(await takeScreenshot(`${testName}.png`, '#container'))
