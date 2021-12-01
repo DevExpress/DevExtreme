@@ -677,6 +677,8 @@ $generic-texteditor-label-transition:
 
     &.dx-textarea.dx-state-focused,
     &.dx-textarea.dx-state-focused.dx-state-hover,
+    &.dx-dorpdowneditor-active.dx-state-focused,
+    &.dx-dorpdowneditor-active.dx-state-focused.dx-state-hover,
     &.dx-state-focused,
     &.dx-state-focused.dx-state-hover {
       @include dx-state($texteditor-focused-border-color, solid);
