@@ -6,11 +6,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxCheckBoxModule } from '../../../../../../artifacts/angular/renovation/ui/editors/check_box/check_box';
 
+import template from './app.component.html';
+
 @Component({
   providers: [],
   selector: '#app',
   // eslint-disable-next-line spellcheck/spell-checker
   styleUrls: [],
+  template,
 })
 export class AppComponent {}
 @NgModule({
