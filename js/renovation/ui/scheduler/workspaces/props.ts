@@ -98,6 +98,8 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() type: ViewType = 'week';
 
+  @OneWay() maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
 
   @Slot() appointments?: JSX.Element;
@@ -141,6 +143,7 @@ WorkSpaceProps,
 | 'resourceCellTemplate'
 | 'appointmentTemplate'
 | 'appointmentCollectorTemplate'
+| 'maxAppointmentsPerCell'
 >;
 
 export interface ViewRenderConfig {

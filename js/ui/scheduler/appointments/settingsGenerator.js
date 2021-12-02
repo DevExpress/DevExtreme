@@ -33,7 +33,7 @@ export class DateGeneratorBaseStrategy {
     get endViewDate() { return this.options.endViewDate; }
     get viewType() { return this.options.viewType; }
     get isGroupedByDate() { return this.options.isGroupedByDate; }
-    get isVerticalOrientation() { return this.options.isVerticalOrientation; }
+    get isVerticalOrientation() { return this.options.isVerticalGroupOrientation; }
     get dataAccessors() { return this.options.dataAccessors; }
 
     get loadedResources() { return this.options.loadedResources; }

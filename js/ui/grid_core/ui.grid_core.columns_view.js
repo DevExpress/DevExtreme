@@ -1053,7 +1053,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         let $cells;
 
         if($rows.length > 0 && cellPosition.rowIndex >= 0) {
-            if(this.option('scrolling.mode') !== 'virtual') {
+            if(this.option('scrolling.mode') !== 'virtual' && this.option('scrolling.rowRenderingMode') !== 'virtual') {
                 cellPosition.rowIndex = cellPosition.rowIndex < $rows.length ? cellPosition.rowIndex : $rows.length - 1;
             }
             $cells = this.getCellElements(cellPosition.rowIndex);

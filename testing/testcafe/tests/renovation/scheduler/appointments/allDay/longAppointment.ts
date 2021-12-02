@@ -4,30 +4,30 @@ import { multiPlatformTest, createWidget } from '../../../../../helpers/multi-pl
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery'/* 'react' */], // TODO uncomment after fix navigator in react
+  platforms: ['jquery', 'react'],
 });
 
 fixture('Layout:Appointments:AllDay');
 
-test('Long all day appointment should be render, if him ended on next view day in currentView: "day" (T1021963)', async (t) => {
+test('Long all day appointment should be render, if him ended on next view day in currentView: "day" (T1021963)', async (t, { screenshotComparerOptions }) => {
   const { workSpace, toolbar } = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
     .click(toolbar.navigator.prevButton)
-    .expect(await takeScreenshot('27-march-day-view.png', workSpace)).ok();
+    .expect(await takeScreenshot('27-march-day-view.png', workSpace, screenshotComparerOptions)).ok();
 
   await t
     .click(toolbar.navigator.nextButton)
-    .expect(await takeScreenshot('28-march-day-view.png', workSpace)).ok();
+    .expect(await takeScreenshot('28-march-day-view.png', workSpace, screenshotComparerOptions)).ok();
 
   await t
     .click(toolbar.navigator.nextButton)
-    .expect(await takeScreenshot('29-march-day-view.png', workSpace)).ok();
+    .expect(await takeScreenshot('29-march-day-view.png', workSpace, screenshotComparerOptions)).ok();
 
   await t
     .click(toolbar.navigator.nextButton)
-    .expect(await takeScreenshot('30-march-day-view.png', workSpace)).ok();
+    .expect(await takeScreenshot('30-march-day-view.png', workSpace, screenshotComparerOptions)).ok();
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
@@ -47,21 +47,21 @@ test('Long all day appointment should be render, if him ended on next view day i
   }, true);
 });
 
-test('Long all day appointment should be render, if him ended on next view day in currentView:', async (t) => {
+test('Long all day appointment should be render, if him ended on next view day in currentView:', async (t, { screenshotComparerOptions }) => {
   const { workSpace, toolbar } = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t
     .click(toolbar.navigator.prevButton)
-    .expect(await takeScreenshot('21-27-march-week-view.png', workSpace)).ok();
+    .expect(await takeScreenshot('21-27-march-week-view.png', workSpace, screenshotComparerOptions)).ok();
 
   await t
     .click(toolbar.navigator.nextButton)
-    .expect(await takeScreenshot('28-march-3-apr-week-view.png', workSpace)).ok();
+    .expect(await takeScreenshot('28-march-3-apr-week-view.png', workSpace, screenshotComparerOptions)).ok();
 
   await t
     .click(toolbar.navigator.nextButton)
-    .expect(await takeScreenshot('4-10-apr-week-view.png', workSpace)).ok();
+    .expect(await takeScreenshot('4-10-apr-week-view.png', workSpace, screenshotComparerOptions)).ok();
 
   await t.expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
