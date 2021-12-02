@@ -1,20 +1,16 @@
 /* eslint-disable no-restricted-globals */
 import {
-  Component, ComponentBindings, JSXComponent, InternalState, Effect, Fragment,
+  Component, ComponentBindings, JSXComponent, InternalState,
 } from '@devextreme-generator/declarations';
 import React from 'react';
 import { CheckBox, CheckBoxProps } from '../../../../js/renovation/ui/editors/check_box/check_box';
 
-export const viewFunction = ({ options, componentProps }: App): JSX.Element => (
-  <Fragment>
-    {options && (
-      <CheckBox
-        id="container"
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...componentProps}
-      />
-    )}
-  </Fragment>
+export const viewFunction = ({ componentProps }: App): JSX.Element => (
+  <CheckBox
+    id="container"
+    value={componentProps.value}
+    valueChange={componentProps.valueChange}
+  />
 );
 @ComponentBindings()
 class AppProps { }
@@ -22,33 +18,17 @@ class AppProps { }
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
+  jQuery: { register: true },
 })
 export class App extends JSXComponent<AppProps>() {
-  @InternalState() options?: Partial<CheckBoxProps>;
-
-  @InternalState() value = false;
+  @InternalState() value = null;
 
   valueChange(value: boolean | null): void {
     this.value = value;
   }
 
-  @Effect({ run: 'once' })
-  optionsUpdated(): void {
-    (window as unknown as { onOptionsUpdated: (unknown) => void })
-      .onOptionsUpdated = (newOptions: CheckBoxProps) => {
-        const { value, ...restProps } = newOptions;
-        this.value = value;
-
-        this.options = {
-          ...this.options,
-          ...restProps,
-        };
-      };
-  }
-
   get componentProps(): Partial<CheckBoxProps & { valueChange: (value: boolean | null) => void }> {
     return {
-      ...this.options,
       value: this.value,
       valueChange: (value: boolean | null): void => { this.valueChange(value); },
     };

@@ -1,13 +1,18 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
-import { multiPlatformTest } from '../../helpers/multi-platform-test';
+import { multiPlatformTest, createWidget } from '../../helpers/multi-platform-test';
 
-const test = multiPlatformTest({ page: 'check_box', platforms: ['jquery', 'react', 'angular'] });
+const test = multiPlatformTest({ page: 'declaration/check_box', platforms: ['jquery', 'react', 'angular'] });
+
+const defaultOptions = {
+  text: 'checkBox',
+  value: null,
+};
 
 fixture('CheckBox');
 
 test('CheckBox value', async (t, { screenshotComparerOptions }) => {
-  const checkBox = Selector('.dx-checkbox');
+  const checkBox = Selector('#container');
 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -29,4 +34,6 @@ test('CheckBox value', async (t, { screenshotComparerOptions }) => {
 
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+}).before(async (_, { platform }) => {
+  await createWidget(platform, 'dxCheckBox', defaultOptions);
 });
