@@ -1,15 +1,18 @@
 <template>
   <div id="form-demo">
     <div class="widget-container">
-      <div>Select company:</div>
+      <div v-if="labelMode === 'outside'">Select company:</div>
       <DxSelectBox
         :data-source="companies"
+        :label-mode="companySelectorLabelMode"
+        label="Select company"
         v-model:value="company"
         display-expr="Name"
       />
       <DxForm
         id="form"
         :form-data="company"
+        :label-mode="labelMode"
         :read-only="readOnly"
         :show-colon-after-label="showColon"
         :label-location="labelLocation"
@@ -20,6 +23,13 @@
     </div>
     <div class="options">
       <div class="caption">Options</div>
+      <div class="option">
+        <span>Label mode:</span>
+        <DxSelectBox
+          :items="['outside', 'static', 'floating', 'hidden']"
+          v-model:value="labelMode"
+        />
+      </div>
       <div class="option">
         <span>Label location:</span>
         <DxSelectBox
@@ -80,7 +90,8 @@ export default {
   data() {
     const companies = service.getCompanies();
     return {
-      labelLocation: 'top',
+      labelMode: 'outside',
+      labelLocation: 'left',
       readOnly: false,
       showColon: true,
       minColWidth: 300,
@@ -89,6 +100,14 @@ export default {
       company: companies[0],
       width: null,
     };
+  },
+  computed: {
+    companySelectorLabelMode() {
+      if (this.labelMode === 'outside') {
+        return 'hidden';
+      }
+      return this.labelMode;
+    },
   },
 };
 </script>

@@ -23,6 +23,8 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   companies: Company[];
 
+  labelMode: string;
+
   labelLocation: string;
 
   readOnly: boolean;
@@ -36,12 +38,19 @@ export class AppComponent {
   width: any;
 
   constructor(service: Service) {
-    this.labelLocation = 'top';
+    this.labelMode = 'outside';
+    this.labelLocation = 'left';
     this.readOnly = false;
     this.showColon = true;
     this.minColWidth = 300;
     this.colCount = 2;
     this.companies = service.getCompanies();
+  }
+
+  getCompanySelectorLabelMode() {
+    return this.labelMode === 'outside'
+      ? 'hidden'
+      : this.labelMode;
   }
 }
 

@@ -1,8 +1,12 @@
 The Form component builds a data entry UI for an object assigned to the [formData](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#formData) property. The component displays and aligns label-editor pairs for each field in the bound object.
 
-You can use the editors on the right to modify the following properties:     
-- [labelLocation](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#labelLocation)    
-Specifies whether to display labels above or to the left of corresponding editors.
+You can use the editors on the right to modify the following properties:
+
+- [labelMode](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#labelMode): *"outside"* | *"static"* | *"floating"* | *"hidden"*        
+Specifies label display mode.
+
+- [labelLocation](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#labelLocation): *"top"* | *"left"* | *"right"*         
+Specifies whether to place outer labels above, to the left, or to the right of corresponding editors. The latter location is not demonstrated in this example.
 
 - [colCount](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#colCount)  
 Specifies the number of columns in the layout. To build an adaptive layout where the column count depends on the container width, set this property's value to *"auto"*.

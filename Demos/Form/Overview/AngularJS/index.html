@@ -18,12 +18,16 @@
     <div class="demo-container" ng-app="DemoApp" ng-controller="DemoController">
       <div id="form-demo">
         <div class="widget-container">
-          <div>Select company:</div>
+          <div ng-if="labelMode === 'outside'">Select company:</div>
           <div dx-select-box="selectCompanyOptions"></div>
           <div id="form" dx-form="formOptions"></div>
         </div>
         <div class="options">
           <div class="caption">Options</div>
+          <div class="option">
+            <span>Label mode:</span>
+            <div dx-select-box="labelModeOptions"></div>
+          </div>
           <div class="option">
             <span>Label location:</span>
             <div dx-select-box="labelLocationOptions"></div>

@@ -1,25 +1,46 @@
 $(() => {
   const form = $('#form').dxForm({
+    labelMode: 'outside',
     formData: companies[0],
     readOnly: false,
     showColonAfterLabel: true,
-    labelLocation: 'top',
+    labelLocation: 'left',
     minColWidth: 300,
     colCount: 2,
   }).dxForm('instance');
 
-  $('#select-company').dxSelectBox({
+  const companySelectorSelectBox = $('#select-company').dxSelectBox({
     displayExpr: 'Name',
     dataSource: companies,
+    labelMode: 'hidden',
+    label: 'Select company',
     value: companies[0],
     onValueChanged(data) {
       form.option('formData', data.value);
+    },
+  }).dxSelectBox('instance');
+
+  const companySelectorText = $('#select-company-text');
+
+  $('#label-mode').dxSelectBox({
+    items: ['outside', 'static', 'floating', 'hidden'],
+    value: 'outside',
+    onValueChanged(data) {
+      form.option('labelMode', data.value);
+
+      if (data.value === 'outside') {
+        companySelectorSelectBox.option('labelMode', 'hidden');
+        companySelectorText.show();
+      } else {
+        companySelectorSelectBox.option('labelMode', data.value);
+        companySelectorText.hide();
+      }
     },
   });
 
   $('#label-location').dxSelectBox({
     items: ['left', 'top'],
-    value: 'top',
+    value: 'left',
     onValueChanged(data) {
       form.option('labelLocation', data.value);
     },

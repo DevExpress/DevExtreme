@@ -1,16 +1,19 @@
 <div id="form-demo">
   <div class="widget-container">
-    <div>Select company:</div>
+    <div *ngIf="labelMode === 'outside'">Select company:</div>
     <dx-select-box
       #company
       displayExpr="Name"
       [(dataSource)]="companies"
+      label="Select company"
+      [labelMode]="getCompanySelectorLabelMode()"
       [value]="companies[0]"
     ></dx-select-box>
     <dx-form
       id="form"
       [(formData)]="company.value"
       [readOnly]="readOnly"
+      [labelMode]="labelMode"
       [showColonAfterLabel]="showColon"
       [labelLocation]="labelLocation"
       [minColWidth]="minColWidth"
@@ -20,6 +23,13 @@
   </div>
   <div class="options">
     <div class="caption">Options</div>
+    <div class="option">
+      <span>Label mode:</span>
+      <dx-select-box
+        [items]="['outside', 'static', 'floating', 'hidden']"
+        [(value)]="labelMode"
+      ></dx-select-box>
+    </div>
     <div class="option">
       <span>Label location:</span>
       <dx-select-box

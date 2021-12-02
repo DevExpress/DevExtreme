@@ -5,6 +5,7 @@ import NumberBox from 'devextreme-react/number-box';
 import Form from 'devextreme-react/form';
 import service from './data.js';
 
+const labelModes = ['outside', 'static', 'floating', 'hidden'];
 const labelLocations = ['left', 'top'];
 const columnsCount = ['auto', 1, 2, 3];
 const minColumnWidths = [150, 200, 300];
@@ -14,7 +15,8 @@ class App extends React.Component {
     super();
     this.companies = service.getCompanies();
     this.state = {
-      labelLocation: 'top',
+      labelMode: 'outside',
+      labelLocation: 'left',
       readOnly: false,
       showColon: true,
       minColWidth: 300,
@@ -22,6 +24,7 @@ class App extends React.Component {
       company: this.companies[0],
     };
     this.onCompanyChanged = this.onCompanyChanged.bind(this);
+    this.onLabelModeChanged = this.onLabelModeChanged.bind(this);
     this.onLabelLocationChanged = this.onLabelLocationChanged.bind(this);
     this.onReadOnlyChanged = this.onReadOnlyChanged.bind(this);
     this.onShowColonChanged = this.onShowColonChanged.bind(this);
@@ -32,6 +35,7 @@ class App extends React.Component {
 
   render() {
     const {
+      labelMode,
       labelLocation,
       readOnly,
       showColon,
@@ -40,18 +44,26 @@ class App extends React.Component {
       company,
       width,
     } = this.state;
+
+    const companySelectorLabelMode = labelMode === 'outside'
+      ? 'hidden'
+      : labelMode;
+
     return (
       <div id="form-demo">
         <div className="widget-container">
-          <div>Select company:</div>
+          { labelMode === 'outside' && (<div>Select company:</div>) }
           <SelectBox
             displayExpr="Name"
             dataSource={this.companies}
+            labelMode={companySelectorLabelMode}
+            label='Select company'
             value={company}
             onValueChanged={this.onCompanyChanged}
           />
           <Form
             id="form"
+            labelMode={labelMode}
             formData={company}
             readOnly={readOnly}
             showColonAfterLabel={showColon}
@@ -63,6 +75,14 @@ class App extends React.Component {
         </div>
         <div className="options">
           <div className="caption">Options</div>
+          <div className="option">
+            <span>Label mode:</span>
+            <SelectBox
+              items={labelModes}
+              value={labelMode}
+              onValueChanged={this.onLabelModeChanged}
+            />
+          </div>
           <div className="option">
             <span>Label location:</span>
             <SelectBox
@@ -117,6 +137,12 @@ class App extends React.Component {
   onCompanyChanged(e) {
     this.setState({
       company: e.value,
+    });
+  }
+
+  onLabelModeChanged(e) {
+    this.setState({
+      labelMode: e.value,
     });
   }
 
