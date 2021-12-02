@@ -13,7 +13,7 @@ import { compileGetter } from '../../core/utils/data';
 import gridCoreUtils from './ui.grid_core.utils';
 import { ColumnsView } from './ui.grid_core.columns_view';
 import Scrollable from '../scroll_view/ui.scrollable';
-import { removeEvent } from '../../core/remove_event';
+import { removeEvent } from '../../events/remove';
 import messageLocalization from '../../localization/message';
 import browser from '../../core/utils/browser';
 import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
@@ -541,13 +541,16 @@ export const rowsModule = {
                             };
                         }
 
-                        this._renderCell($row, {
-                            value: isExpanded,
-                            row: row,
-                            rowIndex: rowIndex,
-                            column: expandColumn,
-                            columnIndex: i
-                        });
+                        if(this._needRenderCell(i, options.columnIndices)) {
+                            this._renderCell($row, {
+                                value: isExpanded,
+                                row: row,
+                                rowIndex: rowIndex,
+                                column: expandColumn,
+                                columnIndex: i,
+                                columnIndices: options.columnIndices
+                            });
+                        }
                     }
 
                     const groupColumnAlignment = getDefaultAlignment(this.option('rtlEnabled'));
@@ -557,6 +560,7 @@ export const rowsModule = {
                         columns[groupCellOptions.columnIndex],
                         {
                             command: null,
+                            type: null,
                             cssClass: null,
                             width: null,
                             showWhenGrouped: false,
@@ -568,13 +572,16 @@ export const rowsModule = {
                         groupColumn.colspan = groupCellOptions.colspan;
                     }
 
-                    this._renderCell($row, {
-                        value: row.values[row.groupIndex],
-                        row: row,
-                        rowIndex: rowIndex,
-                        column: groupColumn,
-                        columnIndex: groupCellOptions.columnIndex
-                    });
+                    if(this._needRenderCell(groupCellOptions.columnIndex + 1, options.columnIndices)) {
+                        this._renderCell($row, {
+                            value: row.values[row.groupIndex],
+                            row: row,
+                            rowIndex: rowIndex,
+                            column: groupColumn,
+                            columnIndex: groupCellOptions.columnIndex + 1,
+                            columnIndices: options.columnIndices
+                        });
+                    }
                 },
 
                 _renderRows: function($table, options) {

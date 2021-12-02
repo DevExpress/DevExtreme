@@ -28,6 +28,7 @@ $generic-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shado
 $generic-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
 $generic-grid-base-checkbox-icon-size: 16px;
 $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
+$grid-masterdetail-padding: 20px;
 
 
 @mixin dx-set-checkbox-border-color-as-background() {
@@ -287,11 +288,9 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
 
     &.dx-checkbox-indeterminate {
       .dx-checkbox-icon {
+        font-size: $generic-grid-base-checkbox-indeterminate-icon-size;
+
         &::before {
-          height: $generic-grid-base-checkbox-indeterminate-icon-size;
-          width: $generic-grid-base-checkbox-indeterminate-icon-size;
-          margin-top: math.div(-$generic-grid-base-checkbox-indeterminate-icon-size, 2);
-          margin-left: math.div(-$generic-grid-base-checkbox-indeterminate-icon-size, 2);
           border-radius: 0;
         }
       }
@@ -658,6 +657,10 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
       border-top: $generic-grid-base-row-border;
       border-bottom: $generic-grid-base-row-border;
 
+      &:focus {
+        outline: none;
+      }
+
       &.dx-edit-row:first-child > td {
         border-top-width: 0;
         border-bottom: $datagrid-border;
@@ -674,6 +677,9 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
     }
 
     .dx-master-detail-row {
+      > .dx-master-detail-cell {
+        padding: $grid-masterdetail-padding;
+      }
       > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell {
         border-top: $datagrid-border;
@@ -732,18 +738,6 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
 
     @include dx-set-checkbox-border-color-as-background();
 
-    .dx-select-checkboxes-hidden > tbody > tr > td > .dx-select-checkbox {
-      display: none;
-    }
-
-    .dx-select-checkboxes-hidden > tbody > tr > td:hover > .dx-select-checkbox {
-      display: inline-block;
-    }
-
-    .dx-select-checkboxes-hidden > tbody > tr.dx-selection > td > .dx-select-checkbox {
-      display: inline-block;
-    }
-
     .dx-adaptive-detail-row {
       .dx-adaptive-item-text {
         padding-top: $generic-grid-base-adaptive-text-padding;
@@ -774,10 +768,6 @@ $generic-grid-base-checkbox-indeterminate-icon-size: 6px;
     }
 
     .dx-row-focused {
-      &:focus {
-        outline: none;
-      }
-
       &.dx-data-row {
         & > td:not(.dx-focused),
         & > tr > td:not(.dx-focused),

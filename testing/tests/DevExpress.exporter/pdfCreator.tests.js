@@ -4,8 +4,10 @@ const getData = require('exporter').pdf.getData;
 const pdfCreator = require('exporter/pdf_creator').__tests;
 const isFunction = require('core/utils/type').isFunction;
 const imageCreator = require('exporter/image_creator').imageCreator;
+const getWindow = require('core/utils/window').getWindow;
+const window = getWindow();
 
-QUnit.module('PDF content test', {
+const contentTestEnv = {
     beforeEach: function() {
         pdfCreator.set_getBlob(function(data) { return data; });
         pdfCreator.set_getBase64(function(data) { return data; });
@@ -19,7 +21,9 @@ QUnit.module('PDF content test', {
         pdfCreator.restore_getCurDate();
         imageCreator.getImageData.restore();
     }
-});
+};
+
+QUnit.module('PDF content test', contentTestEnv);
 
 QUnit.test('PDF \'main page\' populated with correct size in pt', function(assert) {
     const done = assert.async();
@@ -92,6 +96,35 @@ QUnit.test('PDF \'xref\' populated with correct blocks offset', function(assert)
         assert.strictEqual(parseInt(match[6]), 450, '6');
         assert.strictEqual(parseInt(match[7]), 143, '7');
 
+        done();
+    });
+});
+
+QUnit.module('PDF content size. Scaled screen', {
+    beforeEach() {
+        contentTestEnv.beforeEach.apply(this, arguments);
+        this.srcDevicePixelRatio = window.devicePixelRatio;
+        window.devicePixelRatio = 2;
+    },
+    afterEach() {
+        contentTestEnv.afterEach.apply(this, arguments);
+        window.devicePixelRatio = this.srcDevicePixelRatio;
+    }
+});
+
+QUnit.test('PDF \'main page\' populated with correct size in pt', function(assert) {
+    const done = assert.async();
+
+    getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
+        assert.notStrictEqual(data.indexOf('/MediaBox[0 0 915.15 615.30]/'), -1);
+    }).done(done);
+});
+
+QUnit.test('PDF \'content stream\' populated with correct size in pt', function(assert) {
+    const done = assert.async();
+
+    getData('image_markup', { width: 600.1, height: 400.2, margin: 10 }).then(function(data) {
+        assert.notStrictEqual(data.indexOf('q 915.15 0 0 615.30 0.00 0.00 cm /I0 Do Q'), -1);
         done();
     });
 });

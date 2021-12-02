@@ -42,15 +42,31 @@ describe('Icon', () => {
         expect(content.prop('src')).toEqual('localhost/JFLSKDksjdhfolHWThr30oi');
       });
 
-      it('should draw svg icon', () => {
-        const icon = shallow(<Icon source="<svg><path /></svg>" />);
+      it('should draw svg icon if svg is passed using iconTemplate', () => {
+        const icon = shallow(<Icon
+          iconTemplate={() => <svg><path /></svg>}
+          source="<svg><path /></svg>"
+        />);
         const content = icon.childAt(0);
 
         expect(icon.children()).toHaveLength(1);
         expect(content.is('i')).toBe(true);
         expect(content.hasClass('dx-icon')).toBe(true);
         expect(content.hasClass('dx-svg-icon')).toBe(true);
-        expect(content.contains('<svg><path /></svg>')).toBe(true);
+
+        expect(icon.render().find('svg')).toHaveLength(1);
+      });
+
+      it('should draw icon template if it is specified', () => {
+        const icon = shallow(<Icon iconTemplate={() => <input />} />);
+        const content = icon.childAt(0);
+
+        expect(icon.children()).toHaveLength(1);
+        expect(content.is('i')).toBe(true);
+        expect(content.hasClass('dx-icon')).toBe(false);
+        expect(content.hasClass('dx-svg-icon')).toBe(false);
+
+        expect(icon.render().find('input')).toHaveLength(1);
       });
     });
 

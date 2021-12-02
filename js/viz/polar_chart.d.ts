@@ -157,7 +157,6 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
     tag?: any;
     /**
      * @docid
-     * @type Enums.PolarChartSeriesType
      * @default 'scatter'
      * @public
      */
@@ -1008,7 +1007,6 @@ export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesType
     stackedbar?: any;
     /**
      * @docid dxPolarChartOptions.commonSeriesSettings.type
-     * @type Enums.PolarChartSeriesType
      * @default 'scatter'
      * @public
      */

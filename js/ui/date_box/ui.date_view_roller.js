@@ -287,7 +287,7 @@ class DateViewRoller extends Scrollable {
 
     _visibilityChangedHandler(visible) {
         if(visible) {
-            // TODO: for renovated code, avoid async
+            // uses for purposes of renovated scrollable widget
             this._visibilityTimer = setTimeout(() => {
                 this._renderSelectedValue(this.option('selectedIndex'));
             });

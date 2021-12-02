@@ -1,12 +1,12 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
-import cloneTest from '../../helpers/check-all-platforms';
+import { multiPlatformTest } from '../../helpers/multi-platform-test';
 
-const multiPlatformTest = cloneTest('button', ['react']);
+const test = multiPlatformTest({ page: 'button' /* , platforms: ['jquery', 'react', 'angular'] */ });
 
 fixture('Button');
 
-multiPlatformTest('Check default render', async (t, { screenshotComparerOptions }) => {
+test('Check default render', async (t, { screenshotComparerOptions }) => {
   await t
     .expect(Selector('.dx-button-text').textContent).eql('Click Me!')
     .expect(await compareScreenshot(t, 'button.png', null, screenshotComparerOptions)).eql(true);

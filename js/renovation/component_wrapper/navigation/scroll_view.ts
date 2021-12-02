@@ -16,6 +16,14 @@ export class ScrollViewWrapper extends Component {
     return Deferred().resolve();
   }
 
+  isRenovated(): boolean {
+    return !!Component.IS_RENOVATED_WIDGET;
+  }
+
+  _dimensionChanged(): void {
+    (this.viewRef as ScrollView)?.updateHandler();
+  }
+
   _optionChanged(option: Option): void {
     const { name } = option;
     if (name === 'useNative') {

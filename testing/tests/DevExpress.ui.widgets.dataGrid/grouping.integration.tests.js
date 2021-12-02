@@ -690,6 +690,53 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getController('data')._dataSource.group(), [{ selector: 'field3', desc: false, isExpanded: true }], 'datasource grouping is up to date');
         assert.equal(dataGrid.columnOption('field3', 'groupIndex'), 0, 'Group by field3');
     });
+
+    QUnit.test('Expand cell of a group row should not be re-rendered when repaintChangesOnly is enabled (T1039699)', function(assert) {
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: {
+                store: new ArrayStore({
+                    key: 'ID',
+                    data: [{
+                        ID: 1,
+                        Count: 0,
+                        Name: 'Name 1',
+                        Category: 'Category 1'
+                    }]
+                }),
+                reshapeOnPush: true
+            },
+            repaintChangesOnly: true,
+            columns: [
+                { dataField: 'Category', groupIndex: 0 },
+                { dataField: 'Name', groupIndex: 1, autoExpandGroup: false },
+                'Count'
+            ],
+            summary: {
+                groupItems: [{
+                    summaryType: 'sum',
+                    displayFormat: '{0}',
+                    column: 'Count'
+                }]
+            },
+        }).dxDataGrid('instance');
+
+        this.clock.tick();
+
+        const cell0_0 = $(dataGrid.getCellElement(0, 0)).get(0);
+        const cell1_1 = $(dataGrid.getCellElement(1, 1)).get(0);
+
+        // act
+        dataGrid.getDataSource().store().push([
+            { type: 'update', key: 1, data: { Count: 100 } }
+        ]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual($(dataGrid.getCellElement(0, 0)).get(0), cell0_0, 'expand cell in the first row is not re-rendered');
+        assert.strictEqual($(dataGrid.getCellElement(0, 1)).text(), 'Category: Category 1 (100)', 'first group row text');
+        assert.strictEqual($(dataGrid.getCellElement(1, 1)).get(0), cell1_1, 'expand cell in the second row is not re-rendered');
+        assert.strictEqual($(dataGrid.getCellElement(1, 2)).text(), 'Name: Name 1 (100)', 'second group row text');
+    });
 });
 
 

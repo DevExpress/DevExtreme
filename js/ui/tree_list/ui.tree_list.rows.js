@@ -112,7 +112,7 @@ export const RowsView = rowsModule.views.rowsView.inherit((function() {
             const $rowElement = this.callBase.apply(this, arguments);
 
             if(node) {
-                this.setAria('level', row.level, $rowElement);
+                this.setAria('level', row.level + 1, $rowElement);
 
                 if(node.hasChildren) {
                     this.setAria('expanded', row.isExpanded, $rowElement);

@@ -1,7 +1,7 @@
 import { compileGetter, compileSetter } from '../../../../../core/utils/data';
 import { createTimeZoneCalculator } from '../../common';
 import { DataAccessorType } from '../../types';
-import getPreparedDataItems from '../data';
+import { getPreparedDataItems, resolveDataItems } from '../data';
 
 const defaultDataAccessors: DataAccessorType = {
   getter: {
@@ -165,6 +165,24 @@ describe('Data API', () => {
           startDate: new Date(2021, 9, 9, 17),
           visible: true,
         }]);
+    });
+  });
+
+  describe('resolveDataItems', () => {
+    it('should return correct items if loaded Array', () => {
+      const data = [1, 2, 3];
+
+      expect(resolveDataItems(data as any))
+        .toBe(data);
+    });
+
+    it('should return correct items if loaded Object', () => {
+      const options = {
+        data: [1, 2, 3],
+      };
+
+      expect(resolveDataItems(options as any))
+        .toBe(options.data);
     });
   });
 });

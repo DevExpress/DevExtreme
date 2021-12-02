@@ -1943,9 +1943,6 @@ Axis.prototype = {
         that._templatesRendered && that._templatesRendered.reject();
         that._templatesRendered = new Deferred();
 
-        when.apply(this, that._majorTicks.map(tick => tick.getTemplateDeferred())).done(() => {
-            that._templatesRendered.resolve();
-        });
         that._majorTicks.forEach(function(tick) {
             tick.labelRotationAngle = 0;
             tick.labelAlignment = undefined;
@@ -1992,6 +1989,10 @@ Axis.prototype = {
             that._setLabelsPlacement();
             offset = that._adjustLabels(offset);
         }
+
+        when.apply(this, that._majorTicks.map(tick => tick.getTemplateDeferred())).done(() => {
+            that._templatesRendered.resolve();
+        });
 
         offset = that._adjustDateMarkers(offset);
         that._adjustTitle(offset);

@@ -222,6 +222,7 @@ export default gridCore.Controller.inherit((function() {
             that.loadError = Callbacks();
             that.customizeStoreLoadOptions = Callbacks();
             that.changing = Callbacks();
+            that.pushed = Callbacks();
 
             that._dataChangedHandler = that._handleDataChanged.bind(that);
             that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
@@ -237,7 +238,7 @@ export default gridCore.Controller.inherit((function() {
             dataSource.on('loadingChanged', that._loadingChangedHandler);
             dataSource.on('loadError', that._loadErrorHandler);
             dataSource.on('changing', that._changingHandler);
-            dataSource.store().on('push', that._pushHandler);
+            dataSource.store().on('beforePush', that._pushHandler);
 
             each(dataSource, function(memberName, member) {
                 if(!that[memberName] && isFunction(member)) {
@@ -261,7 +262,7 @@ export default gridCore.Controller.inherit((function() {
             dataSource.off('loadingChanged', that._loadingChangedHandler);
             dataSource.off('loadError', that._loadErrorHandler);
             dataSource.off('changing', that._changingHandler);
-            store && store.off('push', that._pushHandler);
+            store && store.off('beforePush', that._pushHandler);
 
             if(!isSharedDataSource) {
                 dataSource.dispose();
@@ -317,6 +318,8 @@ export default gridCore.Controller.inherit((function() {
             if(!fromStore) {
                 this._applyBatch(changes);
             }
+
+            this.pushed.fire(changes);
         },
         getDataIndexGetter: function() {
             if(!this._dataIndexGetter) {
@@ -378,7 +381,7 @@ export default gridCore.Controller.inherit((function() {
 
             changes.splice(0, changes.length);
         },
-        _handlePush: function(changes) {
+        _handlePush: function({ changes }) {
             this.push(changes, true);
         },
         _handleChanging: function(e) {

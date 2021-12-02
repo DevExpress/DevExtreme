@@ -45,12 +45,20 @@ const getCssClasses = (model: ButtonProps): string => {
 };
 export const viewFunction = (viewModel: Button): JSX.Element => {
   const {
-    children, iconPosition, template: ButtonTemplate, text,
+    children, iconPosition, text,
+    template: ButtonTemplate,
+    iconTemplate: IconTemplate,
   } = viewModel.props;
   const renderText = !ButtonTemplate && !children && text !== '';
   const isIconLeft = iconPosition === 'left';
-  const iconComponent = !ButtonTemplate && !children && viewModel.iconSource
-        && <Icon source={viewModel.iconSource} position={iconPosition} />;
+  const iconComponent = !ButtonTemplate && !children && (viewModel.iconSource || IconTemplate)
+        && (
+        <Icon
+          source={viewModel.iconSource}
+          position={iconPosition}
+          iconTemplate={IconTemplate}
+        />
+        );
 
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -108,7 +116,7 @@ export class ButtonProps extends BaseWidgetProps {
   @Event({
     actionConfig: { excludeValidators: ['readOnly'] },
   })
-  onClick?: (e: { event: Event; validationGroup?: string }) => void;
+  onClick?: (e: { event: Event }) => void;
 
   @Event() onSubmit?: (e: { event: Event; submitInput: HTMLInputElement | null }) => void;
 
@@ -117,6 +125,8 @@ export class ButtonProps extends BaseWidgetProps {
   @OneWay() stylingMode: 'outlined' | 'text' | 'contained' = 'contained';
 
   @Template() template?: (props: { data: { icon?: string; text?: string } }) => JSX.Element;
+
+  @Template() iconTemplate?: (props) => JSX.Element;
 
   @Slot() children?: JSX.Element;
 
@@ -127,8 +137,6 @@ export class ButtonProps extends BaseWidgetProps {
   @OneWay() useInkRipple = false;
 
   @OneWay() useSubmitBehavior = false;
-
-  @OneWay() validationGroup?: string = undefined;
 
   @OneWay() templateData?: Record<string, unknown> = {};
 }
@@ -207,9 +215,12 @@ export class Button extends JSXComponent(ButtonProps) {
   }
 
   onWidgetClick(event: Event): void {
-    const { onClick, useSubmitBehavior, validationGroup } = this.props;
+    const {
+      onClick,
+      useSubmitBehavior,
+    } = this.props;
 
-    onClick?.({ event, validationGroup });
+    onClick?.({ event });
     useSubmitBehavior && this.submitInputRef.current!.click();
   }
 

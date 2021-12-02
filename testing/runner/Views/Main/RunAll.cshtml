@@ -74,7 +74,6 @@
             noTryCatch = @Html.Raw(Json.Serialize(Model.NoTryCatch)),
             noGlobals = @Html.Raw(Json.Serialize(Model.NoGlobals)),
             noTimers = @Html.Raw(Json.Serialize(Model.NoTimers)),
-            jqueryVersion = @Html.Raw(Json.Serialize(Model.JQueryVersion)),
             noJQuery = @Html.Raw(Json.Serialize(Model.NoJQuery)),
             noRenovation = @Html.Raw(Json.Serialize(Model.NoRenovation)),
             farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration)),
@@ -174,8 +173,6 @@
                 additionalParams.noglobals = "true";
             if(noTimers)
                 additionalParams.notimers = "true";
-            if(jqueryVersion)
-                additionalParams.jquery = jqueryVersion;
             if(noJQuery)
                 additionalParams.nojquery = "true";
             if(noRenovation)

@@ -30,16 +30,6 @@ const DEFAULT_TEXT_COLOR = '#000';
 
 let parseAttributes;
 
-function createCanvas(width, height, margin) {
-    const canvas = $('<canvas>')[0];
-
-    canvas.width = width + margin * 2;
-    canvas.height = height + margin * 2;
-    canvas.hidden = true;
-
-    return canvas;
-}
-
 function getStringFromCanvas(canvas, mimeType) {
     const dataURL = canvas.toDataURL(mimeType, IMAGE_QUALITY);
     const imageData = window.atob(dataURL.substring(('data:' + mimeType + ';base64,').length));
@@ -656,7 +646,7 @@ function strokeElement(context, options, isText) {
 
 function getPattern(context, pattern, shared) {
     const options = getElementOptions(pattern, shared.rootAppended);
-    const patternCanvas = createCanvas(options.width, options.height, 0);
+    const patternCanvas = imageCreator._createCanvas(options.width, options.height, 0);
     const patternContext = patternCanvas.getContext('2d');
 
     drawCanvasElements(pattern.childNodes, patternContext, options, shared);
@@ -720,10 +710,11 @@ function convertSvgToCanvas(svg, canvas, rootAppended) {
     });
 }
 
-function getCanvasFromSvg(markup, { width, height, backgroundColor, margin, pixelRatio, svgToCanvas = convertSvgToCanvas }) {
-    const canvas = createCanvas(width, height, margin);
+function getCanvasFromSvg(markup, { width, height, backgroundColor, margin, svgToCanvas = convertSvgToCanvas }) {
+    const scaledScreenInfo = calcScaledInfo(width, height);
+    const canvas = imageCreator._createCanvas(scaledScreenInfo.width, scaledScreenInfo.height, margin);
     const context = canvas.getContext('2d');
-    context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+    context.setTransform(scaledScreenInfo.pixelRatio, 0, 0, scaledScreenInfo.pixelRatio, 0, 0);
     const svgElem = getSvgElement(markup);
     let invisibleDiv;
     const markupIsDomElement = domAdapter.isElementNode(markup);
@@ -785,6 +776,16 @@ export const imageCreator = {
 
     _getBase64: function(binaryData) {
         return window.btoa(binaryData);
+    },
+
+    _createCanvas(width, height, margin) {
+        const canvas = $('<canvas>')[0];
+
+        canvas.width = width + margin * 2;
+        canvas.height = height + margin * 2;
+        canvas.hidden = true;
+
+        return canvas;
     }
 };
 
@@ -793,7 +794,7 @@ export function getData(data, options) {
 }
 
 export function testFormats(formats) {
-    const canvas = createCanvas(100, 100, 0);
+    const canvas = imageCreator._createCanvas(100, 100, 0);
     return formats.reduce(function(r, f) {
         const mimeType = ('image/' + f).toLowerCase();
 
@@ -804,4 +805,14 @@ export function testFormats(formats) {
         }
         return r;
     }, { supported: [], unsupported: [] });
+}
+
+export function calcScaledInfo(width, height) {
+    const pixelRatio = window.devicePixelRatio || 1;
+
+    return {
+        pixelRatio,
+        width: width * pixelRatio,
+        height: height * pixelRatio
+    };
 }

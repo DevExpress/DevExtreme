@@ -54,11 +54,10 @@ jobs:
       if: matrix.ARGS.componentFolder == 'renovation'
       run: |
         pushd testing/renovation
-        npm install --no-audit --no-fund
+        npm install --no-audit --no-fund 
         popd
         npm run build:angular
         npm run build:react
-        npm run build:vue
         npx gulp build-renovation-testing
 
     - name: Run TestCafe tests

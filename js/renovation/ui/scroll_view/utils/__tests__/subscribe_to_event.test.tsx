@@ -1,6 +1,7 @@
 import { DisposeEffectReturn } from '../../../../utils/effect_return';
 import resizeObserverSingleton from '../../../../../core/resize_observer';
 import { getWindow, setWindow } from '../../../../../core/utils/window';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../../../../animation/frame';
 
 import { subscribeToResize } from '../subscribe_to_resize';
 
@@ -10,6 +11,12 @@ jest.mock('../../../../../core/resize_observer', () => ({
   unobserve: jest.fn(),
 }));
 
+jest.mock('../../../../../animation/frame', () => ({
+  ...jest.requireActual('../../../../../animation/frame'),
+  requestAnimationFrame: jest.fn(),
+  cancelAnimationFrame: jest.fn(),
+}));
+
 describe('subscribeToResize', () => {
   afterEach(() => { jest.clearAllMocks(); });
 
@@ -17,7 +24,7 @@ describe('subscribeToResize', () => {
     const observeHandler = jest.fn();
     resizeObserverSingleton.observe = observeHandler;
 
-    subscribeToResize(null, () => {});
+    subscribeToResize(null, () => { });
 
     expect(observeHandler).toBeCalledTimes(0);
   });
@@ -70,45 +77,68 @@ describe('subscribeToResize', () => {
   });
 
   it('should observe element changing, hasWindow: true', () => {
-    const observeHandler = jest.fn();
-    const resizeHandler = jest.fn();
-    resizeObserverSingleton.observe = observeHandler;
+    const originalWindow = getWindow();
 
-    const element = {
-      clientWidth: 10,
-      clientHeight: 15,
-    } as HTMLDivElement;
+    try {
+      (requestAnimationFrame as jest.Mock)
+        .mockImplementation((callback: () => void) => { callback(); });
+      setWindow({}, true);
+      const observeHandler = jest.fn();
+      const resizeHandler = jest.fn();
+      resizeObserverSingleton.observe = observeHandler;
 
-    subscribeToResize(element, resizeHandler);
+      const element = {
+        clientWidth: 10,
+        clientHeight: 15,
+      } as HTMLDivElement;
 
-    expect(observeHandler).toBeCalledTimes(1);
-    expect(observeHandler.mock.calls[0][0]).toEqual(element);
+      subscribeToResize(element, resizeHandler);
 
-    const target = {
-      clientWidth: 20,
-      clientHeight: 30,
-    };
-    const entry = { target };
-    observeHandler.mock.calls[0][1](entry);
-    expect(resizeHandler).toBeCalledTimes(1);
-    expect(resizeHandler).toBeCalledWith(target);
+      expect(observeHandler).toBeCalledTimes(1);
+      expect(observeHandler.mock.calls[0][0]).toEqual(element);
+
+      const target = {
+        clientWidth: 20,
+        clientHeight: 30,
+      };
+      const entry = [{}];
+      (entry as any).target = target;
+      observeHandler.mock.calls[0][1](entry);
+      expect(resizeHandler).toBeCalledTimes(1);
+      expect(resizeHandler).toBeCalledWith(target);
+    } finally {
+      setWindow(originalWindow, true);
+      jest.restoreAllMocks();
+    }
   });
 
   it('should unobserve element changing on unsubsribe from effect, hasWindow: true', () => {
-    const handler = jest.fn();
-    const unobserveHandler = jest.fn();
-    resizeObserverSingleton.unobserve = unobserveHandler;
+    (cancelAnimationFrame as jest.Mock)
+      .mockImplementation(jest.fn());
 
-    const element = {
-      clientWidth: 10,
-      clientHeight: 15,
-    } as HTMLDivElement;
+    try {
+      const handler = jest.fn();
+      const unobserveHandler = jest.fn();
+      resizeObserverSingleton.unobserve = unobserveHandler;
 
-    const unsubscribeFn = subscribeToResize(element, handler);
+      const element = {
+        clientWidth: 10,
+        clientHeight: 15,
+      } as HTMLDivElement;
 
-    (unsubscribeFn as DisposeEffectReturn)();
+      const unsubscribeFn = subscribeToResize(element, handler);
 
-    expect(unobserveHandler).toBeCalledTimes(1);
-    expect(unobserveHandler).toBeCalledWith(element);
+      expect(cancelAnimationFrame).toBeCalledTimes(0);
+      expect(unobserveHandler).toBeCalledTimes(0);
+
+      (unsubscribeFn as DisposeEffectReturn)();
+
+      expect(unobserveHandler).toBeCalledTimes(1);
+      expect(unobserveHandler).toBeCalledWith(element);
+      expect(cancelAnimationFrame).toBeCalledTimes(1);
+      expect(cancelAnimationFrame).toBeCalledWith(-1);
+    } finally {
+      jest.restoreAllMocks();
+    }
   });
 });

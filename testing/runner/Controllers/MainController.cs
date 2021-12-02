@@ -219,21 +219,12 @@ namespace Runner.Controllers
 
             m.IsContinuousIntegration = _runFlags.IsContinuousIntegration;
             m.IsIntranet = _runFlags.IsIntranet;
-            m.JQueryVersion = JQueryVersion();
             m.NoGlobals = q.ContainsKey("noglobals");
             m.NoTimers = q.ContainsKey("notimers");
             m.NoTryCatch = q.ContainsKey("notrycatch");
             m.NoJQuery = q.ContainsKey("nojquery");
             m.WorkerInWindow = q.ContainsKey("workerinwindow");
             m.NoRenovation = q.ContainsKey("norenovation") || false;
-        }
-
-        string JQueryVersion()
-        {
-            var requestValue = Request.Query["jquery"];
-            if (!String.IsNullOrEmpty(requestValue))
-                return requestValue;
-            return null;
         }
 
         bool HasDeviceModeFlag()

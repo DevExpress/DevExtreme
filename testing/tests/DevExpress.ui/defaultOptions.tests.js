@@ -229,14 +229,6 @@ testComponentDefaults(FakeDialogComponent,
     { width: 276 }
 );
 
-testComponentDefaults(FakeDialogComponent,
-    { platform: 'android' },
-    {
-        lWidth: '60%',
-        pWidth: '80%'
-    }
-);
-
 testComponentDefaults(DropDownMenu,
     {},
     {
@@ -1132,7 +1124,10 @@ testComponentDefaults(DataGrid,
     {
         showRowLines: true,
         showColumnLines: false,
-        editing: { useIcons: true }
+        editing: { useIcons: true },
+        selection: {
+            showCheckBoxesMode: 'always'
+        }
     },
     function() {
         this.origIsMaterial = themes.isMaterial;

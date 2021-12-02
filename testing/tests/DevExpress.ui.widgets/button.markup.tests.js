@@ -26,6 +26,7 @@ const BUTTON_BACK_CLASS = 'dx-button-back';
 const TEMPLATE_WRAPPER_CLASS = 'dx-template-wrapper';
 const BUTTON_TEXT_STYLE_CLASS = 'dx-button-mode-text';
 const BUTTON_CONTAINED_STYLE_CLASS = 'dx-button-mode-contained';
+const BUTTON_SUBMIT_INPUT_CLASS = 'dx-button-submit-input';
 
 QUnit.module('Button markup', function() {
     QUnit.test('markup init', function(assert) {
@@ -206,6 +207,30 @@ QUnit.module('Button markup', function() {
         });
 
         assert.equal($element.text(), 'button text', 'container is correct');
+    });
+
+    QUnit.test('dxButton template content has input element', function(assert) {
+        const $element = $('#button').dxButton({
+            template: 'test',
+            useSubmitBehavior: true,
+            integrationOptions: {
+                templates: {
+                    'test': {
+                        render: function(args) {
+                            const $element = $('<span>')
+                                .addClass('dx-template-wrapper')
+                                .text('button text');
+
+                            return $element.get(0);
+                        }
+                    }
+                }
+            }
+        });
+
+        const $templateContent = $element.find(`.${TEMPLATE_WRAPPER_CLASS}`);
+
+        assert.ok($templateContent.children(`.${BUTTON_SUBMIT_INPUT_CLASS}`).length, 'template has submit input');
     });
 
     QUnit.module('aria accessibility', () => {

@@ -34,6 +34,7 @@ $material-grid-base-command-select-column-width: $material-grid-base-checkbox-si
 
 $material-grid-base-cell-vertical-padding: round(math.div($material-grid-base-cell-height - $material-grid-base-cell-line-height, 2));
 $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $material-grid-base-cell-horizontal-padding;
+$grid-masterdetail-padding: 16px;
 
 @mixin grid-base($widget-name) {
   .dx-#{$widget-name},
@@ -234,8 +235,7 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
     .dx-row {
       & > td {
-        padding-top: $material-grid-base-cell-vertical-padding;
-        padding-bottom: $material-grid-base-cell-vertical-padding;
+        padding: $material-grid-base-cell-vertical-padding $material-grid-base-cell-horizontal-padding;
         font-size: $material-grid-base-cell-font-size;
         line-height: $material-grid-base-cell-line-height;
       }
@@ -245,8 +245,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all),
       > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending),
       > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) {
-        padding-right: $material-grid-base-cell-horizontal-padding;
-        padding-left: $material-grid-base-cell-horizontal-padding;
         vertical-align: middle;
 
         &.dx-command-select {
@@ -858,6 +856,10 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       border-top: $material-grid-base-row-border;
       border-bottom: $material-grid-base-row-border;
 
+      &:focus {
+        outline: none;
+      }
+
       &.dx-edit-row:first-child > td {
         border-top-width: 0;
         border-bottom: $datagrid-border;
@@ -870,6 +872,9 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     .dx-master-detail-row {
+      > .dx-master-detail-cell {
+        padding: $grid-masterdetail-padding;
+      }
       > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell {
         border-top: $datagrid-border;
@@ -953,10 +958,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     .dx-row-focused {
-      &:focus {
-        outline: none;
-      }
-
       &.dx-data-row {
         & > td:not(.dx-focused),
         & > tr > td:not(.dx-focused),

@@ -10,6 +10,7 @@ export type WidgetName =
 'dxScrollView' |
 'dxDataGrid' |
 'dxTreeList' |
+'dxPager' |
 'dxScheduler' |
 'dxTagBox' |
 'dxContextMenu' |
@@ -22,6 +23,7 @@ export type WidgetName =
 'dxTextArea' |
 'dxTagBox' |
 'dxDateBox' |
+'dxLookup' |
 'dxNumberBox';
 
 export default async function createWidget(

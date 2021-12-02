@@ -481,6 +481,30 @@ QUnit.module('common', moduleConfig, () => {
             assert.strictEqual(this.dropDownBox.option('text'), '', 'byKey result is ignored');
         });
     });
+
+    QUnit.test('value should be rendered if it is not in dataSource if acceptCustomValue=true (T1042773)', function(assert) {
+        new DropDownBox(this.$element, {
+            dataSource: [{
+                id: 1,
+                name: 'first'
+            }],
+            value: [1],
+            valueExpr: 'id',
+            displayExpr: 'name',
+            acceptCustomValue: true
+        });
+
+        const $input = this.$element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+        const customValue = 'custom';
+
+        keyboard
+            .caret({ start: 0, end: 5 })
+            .type(customValue)
+            .change();
+
+        assert.strictEqual($input.val(), customValue, 'custom value is rendered');
+    });
 });
 
 QUnit.module('popup options', moduleConfig, () => {

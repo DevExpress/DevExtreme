@@ -258,19 +258,23 @@ export const editingFormBasedModule = {
                         }
                     }
                 },
-                renderFormEditTemplate: function(detailCellOptions, item, form, container, isReadOnly) {
+                renderFormEditTemplate: function(detailCellOptions, item, formTemplateOptions, container, isReadOnly) {
                     const that = this;
                     const $container = $(container);
                     const column = item.column;
                     const editorType = getEditorType(item);
                     const rowData = detailCellOptions?.row.data;
+                    const form = formTemplateOptions.component;
                     const cellOptions = extend({}, detailCellOptions, {
                         data: rowData,
                         cellElement: null,
                         isOnForm: true,
                         item: item,
-                        column: extend({}, column, { editorType: editorType, editorOptions: item.editorOptions }),
                         id: form.getItemID(item.name || item.dataField),
+                        column: extend({}, column, {
+                            editorType: editorType,
+                            editorOptions: extend({}, formTemplateOptions.editorOptions, column.editorOptions, item.editorOptions)
+                        }),
                         columnIndex: column.index,
                         setValue: !isReadOnly && column.allowEditing && function(value) {
                             that.updateFieldValue(cellOptions, value);
@@ -300,7 +304,7 @@ export const editingFormBasedModule = {
                             const validatorOptions = validator?.option();
 
                             $container.contents().remove();
-                            cellOptions = this.renderFormEditTemplate.bind(this)(cellOptions, item, options.component, $container);
+                            cellOptions = this.renderFormEditTemplate.bind(this)(cellOptions, item, options, $container);
 
                             $editorElement = $container.find('.dx-widget').first();
                             validator = $editorElement.data('dxValidator');
@@ -313,7 +317,7 @@ export const editingFormBasedModule = {
                             }
                         });
 
-                        cellOptions = this.renderFormEditTemplate.bind(this)(cellOptions, item, options.component, $container);
+                        cellOptions = this.renderFormEditTemplate.bind(this)(cellOptions, item, options, $container);
                     };
                 },
 
@@ -359,6 +363,12 @@ export const editingFormBasedModule = {
                             if(column) {
                                 item.label = item.label || {};
                                 item.label.text = item.label.text || column.caption;
+                                if(column.dataType === 'boolean' && item.label.visible === undefined) {
+                                    const labelMode = this.option('editing.form.labelMode');
+                                    if(labelMode === 'floating' || labelMode === 'static') {
+                                        item.label.visible = true;
+                                    }
+                                }
                                 item.template = item.template || this.getFormEditorTemplate(detailOptions, item);
                                 item.column = column;
                                 item.isCustomEditorType = isCustomEditorType[itemId];

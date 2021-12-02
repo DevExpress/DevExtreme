@@ -19,6 +19,7 @@ import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 import { TextEditorLabel } from './ui.text_editor.label';
 import { getWidth } from '../../core/utils/size';
+import resizeObserverSingleton from '../../core/resize_observer';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
@@ -74,6 +75,7 @@ const TextEditorBase = Editor.inherit({
 
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
+        this._labelContainerElement = null;
 
         this.callBase.apply(this, arguments);
     },
@@ -290,6 +292,7 @@ const TextEditorBase = Editor.inherit({
     _clean() {
         this._buttonCollection.clean();
         this._disposePendingIndicator();
+        this._cleanLabelObservable();
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
         this._$textEditorContainer = null;
@@ -442,6 +445,15 @@ const TextEditorBase = Editor.inherit({
         this._input().prop('spellcheck', this.option('spellcheck'));
     },
 
+
+    _cleanLabelObservable: function() {
+        if(this._labelContainerElement) {
+            resizeObserverSingleton.unobserve(this._labelContainerElement);
+
+            this._labelContainerElement = null;
+        }
+    },
+
     _getLabelContainer: function() {
         return this._input();
     },
@@ -462,6 +474,10 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderLabel: function() {
+        this._cleanLabelObservable();
+
+        this._labelContainerElement = $(this._getLabelContainer()).get(0);
+
         const { label, labelMode, labelMark } = this.option();
 
         const labelConfig = {
@@ -475,6 +491,10 @@ const TextEditorBase = Editor.inherit({
         };
 
         this._label = new TextEditorLabelCreator(labelConfig);
+
+        if(this._labelContainerElement) {
+            resizeObserverSingleton.observe(this._labelContainerElement, this._updateLabelWidth.bind(this));
+        }
     },
 
     _renderPlaceholder: function() {
