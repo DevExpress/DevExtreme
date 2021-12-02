@@ -106,7 +106,7 @@ export interface FormatObject {
     */
    type?: PredefinedFormat | string;
 }
-type ExternalFormat = any;
+type ExternalFormat = never;
 
 /**
  * @docid
