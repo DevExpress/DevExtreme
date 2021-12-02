@@ -82,7 +82,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @action
      * @public
      */
-    onItemClick?: ((e: NativeEventInfo<T> & ItemInfo) => void) | string;
+    onItemClick?: ((e: NativeEventInfo<T, MouseEvent | PointerEvent> & ItemInfo) => void) | string;
     /**
      * @docid
      * @default null
@@ -97,7 +97,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @action
      * @public
      */
-    onItemContextMenu?: ((e: NativeEventInfo<T> & ItemInfo) => void);
+    onItemContextMenu?: ((e: NativeEventInfo<T, MouseEvent | PointerEvent | TouchEvent> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -112,7 +112,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @action
      * @public
      */
-    onItemHold?: ((e: NativeEventInfo<T> & ItemInfo) => void);
+    onItemHold?: ((e: NativeEventInfo<T, MouseEvent | PointerEvent | TouchEvent> & ItemInfo) => void);
     /**
      * @docid
      * @default null
@@ -126,7 +126,7 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
      * @action
      * @public
      */
-    onItemRendered?: ((e: NativeEventInfo<T> & ItemInfo) => void);
+    onItemRendered?: ((e: EventInfo<T> & ItemInfo) => void);
     /**
      * @docid
      * @default null

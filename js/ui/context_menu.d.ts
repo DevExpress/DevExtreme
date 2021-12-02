@@ -1,5 +1,5 @@
 import {
-    positionConfig,
+    PositionConfig,
 } from '../animation/position';
 
 import {
@@ -54,20 +54,20 @@ export type HidingEvent = Cancelable & EventInfo<dxContextMenu>;
 export type InitializedEvent = InitializedEventInfo<dxContextMenu>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxContextMenu, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxContextMenu, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxContextMenu> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxContextMenu> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxContextMenu> & ChangedOptionInfo;
 
 /** @public */
-export type PositioningEvent = NativeEventInfo<dxContextMenu> & {
-    readonly position: positionConfig;
+export type PositioningEvent = NativeEventInfo<dxContextMenu, MouseEvent | PointerEvent | TouchEvent> & {
+    readonly position: PositionConfig;
 };
 
 /** @public */
@@ -88,10 +88,9 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @docid
      * @default true
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @type string | Array<dxContextMenuItem> | Store | DataSource | DataSourceOptions
@@ -169,8 +168,9 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default { my: 'top left', at: 'top left' }
      * @ref
      * @public
+     * @type positionConfig
      */
-    position?: positionConfig;
+    position?: PositionConfig;
     /**
      * @docid
      * @default "dxcontextmenu"

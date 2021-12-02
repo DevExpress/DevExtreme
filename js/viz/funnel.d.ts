@@ -95,10 +95,10 @@ export type IncidentOccurredEvent = EventInfo<dxFunnel> & IncidentInfo;
 export type InitializedEvent = InitializedEventInfo<dxFunnel>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxFunnel> & FunnelItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxFunnel, MouseEvent | PointerEvent> & FunnelItemInfo;
 
 /** @public */
-export type LegendClickEvent = NativeEventInfo<dxFunnel> & FunnelItemInfo;
+export type LegendClickEvent = NativeEventInfo<dxFunnel, MouseEvent | PointerEvent> & FunnelItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxFunnel> & ChangedOptionInfo;
@@ -360,8 +360,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
       /**
        * @docid
        * @type_function_param1_field1 item:dxFunnelItem
-       * @type_function_param1_field2 value:Number
-       * @type_function_param1_field4 percent:Number
        * @notUsedInTheme
        */
       customizeText?: ((itemInfo: { item?: Item; value?: number; valueText?: string; percent?: number; percentText?: string }) => string);
@@ -577,8 +575,6 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxFunnelOptions.tooltip.contentTemplate
      * @type_function_param1_field1 item:dxFunnelItem
-     * @type_function_param1_field2 value:Number
-     * @type_function_param1_field4 percent:Number
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -588,8 +584,6 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined
      * @type_function_param1_field1 item:dxFunnelItem
-     * @type_function_param1_field2 value:Number
-     * @type_function_param1_field4 percent:Number
      * @type_function_return object
      * @public
      */
@@ -649,28 +643,24 @@ export interface dxFunnelItem {
     /**
      * @docid
      * @publicName getColor()
-     * @return string
      * @public
      */
     getColor(): string;
     /**
      * @docid
      * @publicName hover(state)
-     * @param1 state:boolean
      * @public
      */
     hover(state: boolean): void;
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;
     /**
      * @docid
      * @publicName isSelected()
-     * @return boolean
      * @public
      */
     isSelected(): boolean;
@@ -682,7 +672,6 @@ export interface dxFunnelItem {
     /**
      * @docid
      * @publicName select(state)
-     * @param1 state:boolean
      * @public
      */
     select(state: boolean): void;

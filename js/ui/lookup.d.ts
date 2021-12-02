@@ -25,15 +25,12 @@ import {
 } from '../events/index';
 
 import {
-    SelectionChangedInfo,
-} from './collection/ui.collection_widget.base';
-
-import {
     ValueChangedInfo,
 } from './editor/editor';
 
 import dxDropDownList, {
     dxDropDownListOptions,
+    SelectionChangedInfo,
 } from './drop_down_editor/ui.drop_down_list';
 
 import {
@@ -61,7 +58,7 @@ export type DisposingEvent = EventInfo<dxLookup>;
 export type InitializedEvent = InitializedEventInfo<dxLookup>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxLookup> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
 export type OpenedEvent = EventInfo<dxLookup>;
@@ -76,7 +73,7 @@ export type PageLoadingEvent = EventInfo<dxLookup>;
 export type PullRefreshEvent = EventInfo<dxLookup>;
 
 /** @public */
-export type ScrollEvent = NativeEventInfo<dxLookup> & ScrollInfo;
+export type ScrollEvent = NativeEventInfo<dxLookup, MouseEvent | Event> & ScrollInfo;
 
 /** @public */
 export type SelectionChangedEvent = EventInfo<dxLookup> & SelectionChangedInfo;
@@ -85,7 +82,7 @@ export type SelectionChangedEvent = EventInfo<dxLookup> & SelectionChangedInfo;
 export type TitleRenderedEvent = EventInfo<dxLookup> & TitleRenderedInfo;
 
 /** @public */
-export type ValueChangedEvent = NativeEventInfo<dxLookup> & ValueChangedInfo;
+export type ValueChangedEvent = NativeEventInfo<dxLookup, KeyboardEvent | MouseEvent | PointerEvent | Event> & ValueChangedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -145,7 +142,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @docid
      * @default false
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @publicName closeOnOutsideClick
      * @default true &for(Material)
      * @public

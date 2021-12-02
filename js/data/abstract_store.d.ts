@@ -4,7 +4,7 @@ import {
 
 import {
     LoadOptions,
-} from './load_options';
+} from './index';
 
 export type Options = StoreOptions;
 
@@ -157,7 +157,6 @@ export default class Store {
     /**
      * @docid
      * @publicName off(eventName, eventHandler)
-     * @param2 eventHandler:function
      * @return this
      * @public
      */
@@ -165,7 +164,6 @@ export default class Store {
     /**
      * @docid
      * @publicName on(eventName, eventHandler)
-     * @param2 eventHandler:function
      * @return this
      * @public
      */

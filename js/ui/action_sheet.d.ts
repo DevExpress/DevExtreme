@@ -41,16 +41,16 @@ export type DisposingEvent = EventInfo<dxActionSheet>;
 export type InitializedEvent = InitializedEventInfo<dxActionSheet>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxActionSheet, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxActionSheet, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxActionSheet, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxActionSheet> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxActionSheet> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxActionSheet> & ChangedOptionInfo;
@@ -184,7 +184,7 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
      * @type_function_param1_field4 event:event
      * @public
      */
-    onClick?: ((e: { component?: dxActionSheet; element?: DxElement; model?: any; event?: DxEvent }) => void) | string;
+    onClick?: ((e: { component?: dxActionSheet; element?: DxElement; model?: any; event?: DxEvent<MouseEvent | PointerEvent> }) => void) | string;
     /**
      * @docid
      * @type Enums.ButtonType

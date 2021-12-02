@@ -42,7 +42,7 @@ export interface InteractionInfo {
 }
 
 /** @public */
-export type ClickEvent = NativeEventInfo<dxTreeMap> & {
+export type ClickEvent = NativeEventInfo<dxTreeMap, MouseEvent | PointerEvent> & {
   readonly node: dxTreeMapNode;
 };
 
@@ -530,7 +530,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
 export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.contentTemplate
-     * @type_function_param1_field1 value:Number
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -539,7 +538,6 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type_function_param1_field1 value:Number
      * @type_function_return object
      * @public
      */
@@ -619,36 +617,30 @@ export interface dxTreeMapNode {
     /**
      * @docid
      * @publicName getAllChildren()
-     * @return Array<dxTreeMapNode>
      * @public
      */
     getAllChildren(): Array<dxTreeMapNode>;
     /**
      * @docid
      * @publicName getAllNodes()
-     * @return Array<dxTreeMapNode>
      * @public
      */
     getAllNodes(): Array<dxTreeMapNode>;
     /**
      * @docid
      * @publicName getChild(index)
-     * @param1 index:number
-     * @return dxTreeMapNode
      * @public
      */
     getChild(index: number): dxTreeMapNode;
     /**
      * @docid
      * @publicName getChildrenCount()
-     * @return number
      * @public
      */
     getChildrenCount(): number;
     /**
      * @docid
      * @publicName getParent()
-     * @return dxTreeMapNode
      * @public
      */
     getParent(): dxTreeMapNode;
@@ -660,42 +652,36 @@ export interface dxTreeMapNode {
     /**
      * @docid
      * @publicName isActive()
-     * @return boolean
      * @public
      */
     isActive(): boolean;
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;
     /**
      * @docid
      * @publicName isLeaf()
-     * @return boolean
      * @public
      */
     isLeaf(): boolean;
     /**
      * @docid
      * @publicName isSelected()
-     * @return boolean
      * @public
      */
     isSelected(): boolean;
     /**
      * @docid
      * @publicName label()
-     * @return string
      * @public
      */
     label(): string;
     /**
      * @docid
      * @publicName label(label)
-     * @param1 label:string
      * @public
      */
     label(label: string): void;
@@ -713,7 +699,6 @@ export interface dxTreeMapNode {
     /**
      * @docid
      * @publicName select(state)
-     * @param1 state:boolean
      * @public
      */
     select(state: boolean): void;
@@ -726,7 +711,6 @@ export interface dxTreeMapNode {
     /**
      * @docid
      * @publicName value()
-     * @return number
      * @public
      */
     value(): number;

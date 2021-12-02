@@ -41,19 +41,19 @@ export type DisposingEvent = EventInfo<dxAccordion>;
 export type InitializedEvent = InitializedEventInfo<dxAccordion>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxAccordion, KeyboardEvent | MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxAccordion, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxAccordion, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxAccordion> & ItemInfo;
 
 /** @public */
-export type ItemTitleClickEvent = NativeEventInfo<dxAccordion> & ItemInfo;
+export type ItemTitleClickEvent = NativeEventInfo<dxAccordion, MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxAccordion> & ChangedOptionInfo;

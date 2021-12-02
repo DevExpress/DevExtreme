@@ -1,33 +1,36 @@
-import {
-  DxElement,
-} from './element';
-
 /** @namespace DevExpress */
-export interface ComponentOptions<T = Component> {
+export interface ComponentOptions<TDisposingEvent = any, TInitializedEvent = any, TOptionChangedEvent = any> {
   /**
    * @docid
+   * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
    * @default null
    * @action
    * @public
    */
-  onDisposing?: ((e: { component: T }) => void);
+  onDisposing?: ((e: TDisposingEvent) => void);
   /**
    * @docid
+   * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
+   * @type_function_param1_field2 element:DxElement
    * @default null
    * @action
    * @public
    */
-  onInitialized?: ((e: { component?: T; element?: DxElement }) => void);
+  onInitialized?: ((e: TInitializedEvent) => void);
   /**
    * @docid
+   * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
+   * @type_function_param1_field2 name:string
+   * @type_function_param1_field3 fullName:string
+   * @type_function_param1_field4 value:any
    * @default null
    * @action
    * @public
    */
-  onOptionChanged?: ((e: { component?: T; name?: string; fullName?: string; value?: any }) => void);
+  onOptionChanged?: ((e: TOptionChangedEvent) => void);
 }
 /**
  * @docid Component
@@ -68,7 +71,6 @@ export class Component {
   /**
    * @docid
    * @publicName off(eventName, eventHandler)
-   * @param2 eventHandler:function
    * @return this
    * @public
    */
@@ -76,7 +78,6 @@ export class Component {
   /**
    * @docid
    * @publicName on(eventName, eventHandler)
-   * @param2 eventHandler:function
    * @return this
    * @public
    */

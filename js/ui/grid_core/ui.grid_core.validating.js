@@ -583,11 +583,11 @@ export const validatingModule = {
     extenders: {
         controllers: {
             editing: {
-                _addChange: function(options, row) {
-                    const index = this.callBase(options, row);
+                _addChange: function(changeParams) {
+                    const index = this.callBase.apply(this, arguments);
                     const validatingController = this.getController('validating');
 
-                    if(index >= 0 && options.type !== EDIT_DATA_REMOVE_TYPE) {
+                    if(index >= 0 && changeParams.type !== EDIT_DATA_REMOVE_TYPE) {
                         const change = this.getChanges()[index];
                         change && validatingController.updateValidationState(change);
                     }
@@ -1024,7 +1024,7 @@ export const validatingModule = {
                             return;
                         }
 
-                        let $tooltipElement = $container.find('.' + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
+                        let $tooltipElement = this._rowsView.element().find('.' + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
                         const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
 
                         $tooltipElement && $tooltipElement.remove();
@@ -1119,10 +1119,14 @@ export const validatingModule = {
                             errorMessageText += (errorMessageText.length ? '<br/>' : '') + encodeHtml(message);
                         });
 
+                        const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
+
+                        this._rowsView.element().find('.' + invalidMessageClass).remove();
+
                         const $overlayElement = $('<div>')
                             .addClass(INVALID_MESSAGE_CLASS)
                             .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
-                            .addClass(this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
+                            .addClass(invalidMessageClass)
                             .html(errorMessageText)
                             .appendTo($cell);
 

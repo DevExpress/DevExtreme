@@ -69,11 +69,10 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     /**
      * @docid
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @default true &for(Android)
      * @public
      */
-    closeOnOutsideClick?: boolean | ((event: DxEvent) => boolean);
+    closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
     /**
      * @docid
      * @default true

@@ -55,7 +55,7 @@ interface SeriesInteractionInfo {
 }
 
 /** @public */
-export type ArgumentAxisClickEvent = NativeEventInfo<dxChart> & {
+export type ArgumentAxisClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
     readonly argument: Date | number | string;
 };
 
@@ -84,7 +84,7 @@ export type IncidentOccurredEvent = EventInfo<dxChart> & IncidentInfo;
 export type InitializedEvent = InitializedEventInfo<dxChart>;
 
 /** @public */
-export type LegendClickEvent = NativeEventInfo<dxChart> & {
+export type LegendClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
     readonly target: chartSeriesObject;
 };
 
@@ -92,7 +92,7 @@ export type LegendClickEvent = NativeEventInfo<dxChart> & {
 export type OptionChangedEvent = EventInfo<dxChart> & ChangedOptionInfo;
 
 /** @public */
-export type PointClickEvent = NativeEventInfo<dxChart> & PointInteractionInfo;
+export type PointClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & PointInteractionInfo;
 
 /** @public */
 export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
@@ -101,7 +101,7 @@ export type PointHoverChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
 export type PointSelectionChangedEvent = EventInfo<dxChart> & PointInteractionInfo;
 
 /** @public */
-export type SeriesClickEvent = NativeEventInfo<dxChart> & {
+export type SeriesClickEvent = NativeEventInfo<dxChart, MouseEvent | PointerEvent> & {
     readonly target: chartSeriesObject;
 };
 
@@ -118,7 +118,7 @@ export type TooltipHiddenEvent = EventInfo<dxChart> & TooltipInfo;
 export type TooltipShownEvent = EventInfo<dxChart> & TooltipInfo;
 
 /** @public */
-export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart> & {
+export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
     readonly rangeStart: Date | number;
     readonly rangeEnd: Date | number;
     readonly axis: chartAxisObject;
@@ -130,7 +130,7 @@ export type ZoomEndEvent = Cancelable & NativeEventInfo<dxChart> & {
 };
 
 /** @public */
-export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart> & {
+export type ZoomStartEvent = Cancelable & NativeEventInfo<dxChart, MouseEvent | TouchEvent> & {
     readonly axis: chartAxisObject;
     readonly range: VizRange;
     readonly actionType?: 'zoom' | 'pan';
@@ -159,14 +159,12 @@ export interface baseLabelObject {
     /**
      * @docid
      * @publicName hide(holdInvisible)
-     * @param1 holdInvisible:boolean
      * @public
      */
     hide(holdInvisible: boolean): void;
     /**
      * @docid
      * @publicName isVisible()
-     * @return boolean
      * @public
      */
     isVisible(): boolean;
@@ -179,7 +177,6 @@ export interface baseLabelObject {
     /**
      * @docid
      * @publicName show(holdVisible)
-     * @param1 holdVisible:boolean
      * @public
      */
     show(holdVisible: boolean): void;
@@ -217,14 +214,12 @@ export interface basePointObject {
     /**
      * @docid
      * @publicName getColor()
-     * @return string
      * @public
      */
     getColor(): string;
     /**
      * @docid
      * @publicName getLabel()
-     * @return baseLabelObject|Array<baseLabelObject>
      * @public
      */
     getLabel(): baseLabelObject & Array<baseLabelObject>;
@@ -243,14 +238,12 @@ export interface basePointObject {
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;
     /**
      * @docid
      * @publicName isSelected()
-     * @return boolean
      * @public
      */
     isSelected(): boolean;
@@ -310,7 +303,6 @@ export interface baseSeriesObject {
     /**
      * @docid
      * @publicName deselectPoint(point)
-     * @param1 point:basePointObject
      * @public
      */
     deselectPoint(point: basePointObject): void;
@@ -322,37 +314,30 @@ export interface baseSeriesObject {
     /**
      * @docid
      * @publicName getAllPoints()
-     * @return Array<basePointObject>
      * @public
      */
     getAllPoints(): Array<basePointObject>;
     /**
      * @docid
      * @publicName getColor()
-     * @return string
      * @public
      */
     getColor(): string;
     /**
      * @docid
      * @publicName getPointByPos(positionIndex)
-     * @param1 positionIndex:number
-     * @return basePointObject
      * @public
      */
     getPointByPos(positionIndex: number): basePointObject;
     /**
      * @docid
      * @publicName getPointsByArg(pointArg)
-     * @param1 pointArg:number|string|date
-     * @return Array<basePointObject>
      * @public
      */
     getPointsByArg(pointArg: number | string | Date): Array<basePointObject>;
     /**
      * @docid
      * @publicName getVisiblePoints()
-     * @return Array<basePointObject>
      * @public
      */
     getVisiblePoints(): Array<basePointObject>;
@@ -371,21 +356,18 @@ export interface baseSeriesObject {
     /**
      * @docid
      * @publicName isHovered()
-     * @return boolean
      * @public
      */
     isHovered(): boolean;
     /**
      * @docid
      * @publicName isSelected()
-     * @return boolean
      * @public
      */
     isSelected(): boolean;
     /**
      * @docid
      * @publicName isVisible()
-     * @return boolean
      * @public
      */
     isVisible(): boolean;
@@ -403,7 +385,6 @@ export interface baseSeriesObject {
     /**
      * @docid
      * @publicName selectPoint(point)
-     * @param1 point:basePointObject
      * @public
      */
     selectPoint(point: basePointObject): void;
@@ -434,7 +415,6 @@ export interface chartAxisObject {
     /**
      * @docid
      * @publicName visualRange()
-     * @return VizRange
      * @public
      */
     visualRange(): VizRange;
@@ -548,14 +528,12 @@ export interface chartSeriesObject extends baseSeriesObject {
     /**
      * @docid
      * @publicName getArgumentAxis()
-     * @return chartAxisObject
      * @public
      */
     getArgumentAxis(): chartAxisObject;
     /**
      * @docid
      * @publicName getValueAxis()
-     * @return chartAxisObject
      * @public
      */
     getValueAxis(): chartAxisObject;
@@ -694,7 +672,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           backgroundColor?: string;
           /**
            * @docid
-           * @type_function_param1_field1 value:Date|Number|string
            * @notUsedInTheme
            */
           customizeText?: ((info: { value?: Date | number | string; valueText?: string; point?: chartPointObject }) => string);
@@ -741,7 +718,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
         backgroundColor?: string;
         /**
          * @docid
-         * @type_function_param1_field1 value:Date|Number|string
          * @notUsedInTheme
          */
         customizeText?: ((info: { value?: Date | number | string; valueText?: string; point?: chartPointObject }) => string);
@@ -792,7 +768,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
           backgroundColor?: string;
           /**
            * @docid
-           * @type_function_param1_field1 value:Date|Number|string
            * @notUsedInTheme
            */
           customizeText?: ((info: { value?: Date | number | string; valueText?: string; point?: chartPointObject }) => string);
@@ -860,7 +835,6 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
        * @docid
        * @type_function_param1 a:object
        * @type_function_param2 b:object
-       * @type_function_return Number
        * @default true
        */
       sortingMethod?: boolean | ((a: any, b: any) => number);
@@ -1475,13 +1449,11 @@ export interface dxChartArgumentAxisConstantLinesLabel extends dxChartCommonAxis
 export interface dxChartArgumentAxisLabel extends dxChartCommonAxisSettingsLabel {
     /**
      * @docid dxChartOptions.argumentAxis.label.customizeHint
-     * @type_function_param1_field1 value:Date|Number|string
      * @public
      */
     customizeHint?: ((argument: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxChartOptions.argumentAxis.label.customizeText
-     * @type_function_param1_field1 value:Date|Number|string
      * @notUsedInTheme
      * @public
      */
@@ -2216,13 +2188,11 @@ export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSer
 export interface dxChartLegend extends BaseChartLegend {
     /**
      * @docid dxChartOptions.legend.customizeHint
-     * @type_function_param1_field2 seriesIndex:Number
      * @public
      */
     customizeHint?: ((seriesInfo: { seriesName?: any; seriesIndex?: number; seriesColor?: string }) => string);
     /**
      * @docid dxChartOptions.legend.customizeText
-     * @type_function_param1_field2 seriesIndex:Number
      * @notUsedInTheme
      * @public
      */
@@ -2547,13 +2517,11 @@ export interface dxChartValueAxisConstantLinesLabel extends dxChartCommonAxisSet
 export interface dxChartValueAxisLabel extends dxChartCommonAxisSettingsLabel {
     /**
      * @docid dxChartOptions.valueAxis.label.customizeHint
-     * @type_function_param1_field1 value:Date|Number|string
      * @public
      */
     customizeHint?: ((axisValue: { value?: Date | number | string; valueText?: string }) => string);
     /**
      * @docid dxChartOptions.valueAxis.label.customizeText
-     * @type_function_param1_field1 value:Date|Number|string
      * @notUsedInTheme
      * @public
      */
@@ -2645,8 +2613,6 @@ export default class dxChart extends BaseChart {
     /**
      * @docid
      * @publicName zoomArgument(startValue,endValue)
-     * @param1 startValue:Number|Date|string
-     * @param2 endValue:Number|Date|string
      * @public
      */
     zoomArgument(startValue: number | Date | string, endValue: number | Date | string): void;

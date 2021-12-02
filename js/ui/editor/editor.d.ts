@@ -36,7 +36,7 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
      * @action
      * @public
      */
-    onValueChanged?: ((e: NativeEventInfo<T> & ValueChangedInfo) => void);
+    onValueChanged?: ((e: NativeEventInfo<T, Event> & ValueChangedInfo) => void);
     /**
      * @docid
      * @default false

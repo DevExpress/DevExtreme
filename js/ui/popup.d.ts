@@ -3,7 +3,7 @@ import {
 } from '../animation/fx';
 
 import {
-    positionConfig,
+    PositionConfig,
 } from '../animation/position';
 
 import {
@@ -55,13 +55,13 @@ export type InitializedEvent = InitializedEventInfo<dxPopup>;
 export type ShownEvent = EventInfo<dxPopup>;
 
 /** @public */
-export type ResizeEvent = NativeEventInfo<dxPopup> & ResizeInfo;
+export type ResizeEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
-export type ResizeStartEvent = NativeEventInfo<dxPopup> & ResizeInfo;
+export type ResizeStartEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
-export type ResizeEndEvent = NativeEventInfo<dxPopup> & ResizeInfo;
+export type ResizeEndEvent = NativeEventInfo<dxPopup, MouseEvent | TouchEvent> & ResizeInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxPopup> & ChangedOptionInfo;
@@ -168,13 +168,13 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
      * @action
      * @public
      */
-    onTitleRendered?: ((e: TitleRenderedEvent) => void);
+    onTitleRendered?: ((e: EventInfo<T> & TitleRenderedInfo) => void);
     /**
      * @docid
      * @type Enums.PositionAlignment|positionConfig|function
      * @public
      */
-    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
+    position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | PositionConfig | Function;
     /**
      * @docid
      * @default false

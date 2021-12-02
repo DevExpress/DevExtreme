@@ -31,16 +31,16 @@ export type DisposingEvent = EventInfo<dxResponsiveBox>;
 export type InitializedEvent = InitializedEventInfo<dxResponsiveBox>;
 
 /** @public */
-export type ItemClickEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+export type ItemClickEvent = NativeEventInfo<dxResponsiveBox, MouseEvent | PointerEvent> & ItemInfo;
 
 /** @public */
-export type ItemContextMenuEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+export type ItemContextMenuEvent = NativeEventInfo<dxResponsiveBox, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemHoldEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+export type ItemHoldEvent = NativeEventInfo<dxResponsiveBox, MouseEvent | PointerEvent | TouchEvent> & ItemInfo;
 
 /** @public */
-export type ItemRenderedEvent = NativeEventInfo<dxResponsiveBox> & ItemInfo;
+export type ItemRenderedEvent = EventInfo<dxResponsiveBox> & ItemInfo;
 
 /** @public */
 export type OptionChangedEvent = EventInfo<dxResponsiveBox> & ChangedOptionInfo;
