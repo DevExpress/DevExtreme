@@ -797,7 +797,7 @@ const Form = Widget.inherit({
     _setLayoutManagerItemOption(layoutManager, optionName, value, path) {
         if(this._updateLockCount > 0) {
             !layoutManager._updateLockCount && layoutManager.beginUpdate();
-            const key = this._itemsRunTimeInfo.getKeyByPath(path);
+            const key = this._itemsRunTimeInfo.findKeyByPath(path);
             this.postponedOperations.add(key, () => {
                 !layoutManager._disposed && layoutManager.endUpdate();
                 return new Deferred().resolve();
@@ -807,13 +807,15 @@ const Form = Widget.inherit({
             e.component.off('contentReady', contentReadyHandler);
             if(isFullPathContainsTabs(path)) {
                 const tabPath = tryGetTabPath(path);
-                const tabLayoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(tabPath);
-                this._alignLabelsInColumn({
-                    items: tabLayoutManager.option('items'),
-                    layoutManager: tabLayoutManager,
-                    $container: tabLayoutManager.$element(),
-                    inOneColumn: tabLayoutManager.isSingleColumnMode()
-                });
+                const tabLayoutManager = this._itemsRunTimeInfo.findGroupOrTabLayoutManagerByPath(tabPath);
+                if(tabLayoutManager) {
+                    this._alignLabelsInColumn({
+                        items: tabLayoutManager.option('items'),
+                        layoutManager: tabLayoutManager,
+                        $container: tabLayoutManager.$element(),
+                        inOneColumn: tabLayoutManager.isSingleColumnMode()
+                    });
+                }
             } else {
                 this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
             }
@@ -829,7 +831,7 @@ const Form = Widget.inherit({
 
         if(optionName === 'items' && nameParts.length > 1) {
             const itemPath = this._getItemPath(nameParts);
-            const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
+            const layoutManager = this._itemsRunTimeInfo.findGroupOrTabLayoutManagerByPath(itemPath);
 
             if(layoutManager) {
                 this._itemsRunTimeInfo.removeItemsByItems(layoutManager.getItemsRunTimeInfo());
@@ -840,7 +842,7 @@ const Form = Widget.inherit({
         } else if(nameParts.length > 2) {
             const endPartIndex = nameParts.length - 2;
             const itemPath = this._getItemPath(nameParts.slice(0, endPartIndex));
-            const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
+            const layoutManager = this._itemsRunTimeInfo.findGroupOrTabLayoutManagerByPath(itemPath);
 
             if(layoutManager) {
                 const fullOptionName = getFullOptionName(nameParts[endPartIndex], optionName);
