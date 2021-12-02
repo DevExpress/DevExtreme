@@ -1,0 +1,109 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+/* eslint-disable max-classes-per-file */
+import {
+  Component, JSXComponent, ComponentBindings, OneWay, TwoWay,
+} from '@devextreme-generator/declarations';
+
+import { Pager as BasePager } from '../../../pager/pager';
+
+export const viewFunction = (viewModel: GridPager): JSX.Element => (
+  <BasePager
+    pageSizes={viewModel.allowedPageSizes}
+    displayMode={viewModel.props.displayMode}
+    infoText={viewModel.props.infoText}
+    showInfo={viewModel.props.showInfo}
+    showNavigationButtons={viewModel.props.showNavigationButtons}
+    showPageSizes={viewModel.props.showPageSizeSelector}
+    pageCount={viewModel.props.pageCount}
+    visible={viewModel.visible}
+    totalCount={viewModel.props.totalCount}
+
+    pageIndex={viewModel.props.pageIndex + 1}
+    pageIndexChange={viewModel.onPageIndexChange}
+
+    pageSize={viewModel.props.pageSize === 'all' ? 0 : viewModel.props.pageSize}
+    pageSizeChange={viewModel.onPageSizeChange}
+  />
+);
+
+@ComponentBindings()
+export class BaseGridPagerProps {
+  @OneWay()
+  allowedPageSizes: (number | 'all')[] | 'auto' = 'auto';
+
+  @OneWay()
+  displayMode: 'adaptive' | 'compact' | 'full' = 'adaptive';
+
+  @OneWay()
+  infoText = 'Page {0} of {1} ({2} items)';
+
+  @OneWay()
+  showInfo = false;
+
+  @OneWay()
+  showNavigationButtons = false;
+
+  @OneWay()
+  showPageSizeSelector = false;
+
+  @OneWay()
+  visible: boolean | 'auto' = 'auto';
+}
+
+@ComponentBindings()
+export class GridPagerProps extends BaseGridPagerProps {
+  @TwoWay()
+  pageSize: number | 'all' = 20;
+
+  @TwoWay()
+  pageIndex = 0;
+
+  @OneWay()
+  pageCount = 0;
+
+  @OneWay()
+  totalCount = 0;
+}
+
+@Component({
+  defaultOptionRules: null,
+  view: viewFunction,
+})
+export class GridPager extends JSXComponent(GridPagerProps) {
+  onPageSizeChange(pageSize: number): void {
+    if (pageSize === 0) {
+      this.props.pageSize = 'all';
+    } else {
+      this.props.pageSize = pageSize;
+    }
+  }
+
+  onPageIndexChange(pageIndex: number): void {
+    this.props.pageIndex = pageIndex - 1;
+  }
+
+  get visible(): boolean {
+    if (this.props.visible === 'auto') {
+      return this.props.pageCount > 1;
+    }
+
+    return this.props.visible;
+  }
+
+  get allowedPageSizes(): (number | 'all')[] {
+    if (this.props.allowedPageSizes === 'auto') {
+      if (this.props.pageSize === 'all') {
+        return [];
+        // eslint-disable-next-line no-else-return
+      } else {
+        return [
+          Math.floor((this.props.pageSize as number) / 2),
+          this.props.pageSize as number,
+          (this.props.pageSize as number) * 2,
+        ];
+      }
+    }
+
+    return this.props.allowedPageSizes;
+  }
+}
