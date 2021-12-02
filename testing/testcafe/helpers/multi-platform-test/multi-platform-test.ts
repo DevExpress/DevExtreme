@@ -44,14 +44,14 @@ export const multiPlatformTest = ({
   testBody: (
     t: TestController,
     { platform, screenshotComparerOptions }:
-    { platform: string; screenshotComparerOptions: Partial<IComparerOptions> }
+    { platform: PlatformType; screenshotComparerOptions: Partial<IComparerOptions> }
   ) => Promise<any>,
 ): MultiPlatformTest => {
   const wrappedTest = new MultiPlatformTest();
   platforms.forEach((platform) => {
     const pageUrl = getPageFilePath(platform, page);
     const testOptions: {
-      platform: string; screenshotComparerOptions: Partial<IComparerOptions>;
+      platform: PlatformType; screenshotComparerOptions: Partial<IComparerOptions>;
     } = {
       platform,
       screenshotComparerOptions: {

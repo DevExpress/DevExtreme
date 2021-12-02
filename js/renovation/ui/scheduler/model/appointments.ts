@@ -60,25 +60,25 @@ export const getAppointmentRenderingStrategyName = (viewType: ViewType): string 
 export const getAppointmentsConfig = (
   schedulerConfig: Pick<
   SchedulerProps,
-  'adaptivityEnabled' |
-  'rtlEnabled' |
-  'resources' |
-  'maxAppointmentsPerCell' |
-  'timeZone' |
-  'groups'
+  | 'adaptivityEnabled'
+  | 'rtlEnabled'
+  | 'resources'
+  | 'timeZone'
+  | 'groups'
   >,
   viewConfig: Pick<
   CurrentViewConfigType,
-  'startDayHour' |
-  'endDayHour' |
-  'currentDate' |
-  'scrolling' |
-  'intervalCount' |
-  'hoursInterval' |
-  'showAllDayPanel' |
-  'firstDayOfWeek' |
-  'type' |
-  'cellDuration'
+  | 'startDayHour'
+  | 'endDayHour'
+  | 'currentDate'
+  | 'scrolling'
+  | 'intervalCount'
+  | 'hoursInterval'
+  | 'showAllDayPanel'
+  | 'firstDayOfWeek'
+  | 'type'
+  | 'cellDuration'
+  | 'maxAppointmentsPerCell'
   >,
   loadedResources: Group[],
   viewDataProvider: ViewDataProviderType,
@@ -96,7 +96,6 @@ export const getAppointmentsConfig = (
     adaptivityEnabled: schedulerConfig.adaptivityEnabled,
     rtlEnabled: schedulerConfig.rtlEnabled,
     resources: schedulerConfig.resources,
-    maxAppointmentsPerCell: schedulerConfig.maxAppointmentsPerCell,
     timeZone: schedulerConfig.timeZone,
     groups: schedulerConfig.groups,
     startDayHour: viewConfig.startDayHour,
@@ -113,6 +112,7 @@ export const getAppointmentsConfig = (
     firstDayOfWeek: viewConfig.firstDayOfWeek,
     viewType: viewConfig.type,
     cellDurationInMinutes: viewConfig.cellDuration,
+    maxAppointmentsPerCell: viewConfig.maxAppointmentsPerCell,
     isVerticalGroupOrientation: viewDataProvider.getViewOptions().isVerticalGrouping,
     groupByDate: viewDataProvider.getViewOptions().isGroupedByDate,
     startViewDate,

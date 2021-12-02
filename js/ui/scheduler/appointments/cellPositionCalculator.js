@@ -17,7 +17,7 @@ class BaseStrategy {
     get getPositionShift() { return this.options.getPositionShiftCallback; }
     get groupCount() { return this.options.groupCount; }
     get rtlEnabled() { return this.options.rtlEnabled; }
-    get isVerticalGrouping() { return this.options.isVerticalOrientation; }
+    get isVerticalGrouping() { return this.options.isVerticalGroupOrientation; }
     get showAllDayPanel() { return this.options.showAllDayPanel; }
     get supportAllDayRow() { return this.options.supportAllDayRow; }
     get isGroupedAllDayPanel() { return this.options.isGroupedAllDayPanel; }

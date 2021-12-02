@@ -200,9 +200,4 @@ export class ScrollView extends JSXComponent<ScrollViewProps>() {
     }
     return this.props.reachBottomEnabled;
   }
-
-  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
-  // get scrollable(): any {
-  //   return this.scrollableRef.current!;
-  // }
 }
