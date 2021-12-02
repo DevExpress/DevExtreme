@@ -756,3 +756,43 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
     });
   });
 });
+
+test('Scroll should not change focused row if focus method is called inside onContentReady (T1047794)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.apiOption('focusedRowKey')).eql(1)
+    .expect(dataGrid.getDataRow(0).isFocusedRow).ok();
+
+  // act
+  await dataGrid.scrollTo({ y: 200 });
+  await dataGrid.scrollTo({ y: 0 });
+
+  // assert
+  await t
+    .expect(dataGrid.apiOption('focusedRowKey')).eql(1)
+    .expect(dataGrid.getDataRow(0).isFocusedRow).ok();
+}).before(async () => {
+  const data = ((): Record<string, unknown>[] => {
+    const result: { ID: number; Name: string }[] = [];
+    for (let i = 0; i < 30; i += 1) {
+      result.push({
+        ID: i + 1,
+        Name: `Name ${i + 1}`,
+      });
+    }
+    return result;
+  })();
+  return createWidget('dxDataGrid', {
+    height: 400,
+    dataSource: data,
+    keyExpr: 'ID',
+    focusedRowEnabled: true,
+    onContentReady(e) {
+      e.component.focus();
+    },
+    scrolling: {
+      mode: 'virtual',
+    },
+  });
+});
