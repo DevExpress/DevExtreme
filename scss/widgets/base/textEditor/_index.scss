@@ -73,7 +73,6 @@
 
   @include user-select(text);
 
-  &:-webkit-autofill,
   &:autofill {
     + .dx-placeholder {
       display: none;
