@@ -520,7 +520,7 @@ describe('WorkSpace', () => {
           const eventMock: any = {
             type: 'mouse',
             target: ref.current,
-            which: 1,
+            button: 0,
           };
 
           const workSpace = new WorkSpace({
@@ -540,7 +540,7 @@ describe('WorkSpace', () => {
           const eventMock: any = {
             type: 'touch',
             target: ref.current,
-            which: 1,
+            button: 0,
           };
 
           const workSpace = new WorkSpace({
@@ -560,7 +560,7 @@ describe('WorkSpace', () => {
           const eventMock: any = {
             type: 'mouse',
             target: ref.current,
-            which: 2,
+            button: 2,
           };
 
           const workSpace = new WorkSpace({
@@ -586,7 +586,7 @@ describe('WorkSpace', () => {
           const eventMock: any = {
             type: 'mouse',
             target: ref.current,
-            which: 1,
+            button: 0,
           };
 
           const workSpace = new WorkSpace({
@@ -635,7 +635,7 @@ describe('WorkSpace', () => {
           const eventMock: any = {
             type: 'mouse',
             target: ref.current,
-            which: 1,
+            button: 0,
           };
 
           const workSpace = new WorkSpace({
@@ -655,7 +655,7 @@ describe('WorkSpace', () => {
           const eventMock: any = {
             type: 'mouse',
             target: ref.current,
-            which: 1,
+            button: 0,
           };
 
           const workSpace = new WorkSpace({
@@ -682,7 +682,7 @@ describe('WorkSpace', () => {
           const eventMock: any = {
             type: 'mouse',
             target: ref.current,
-            which: 1,
+            button: 0,
             preventDefault: jest.fn(),
             stopPropagation: jest.fn(),
           };
@@ -779,7 +779,7 @@ describe('WorkSpace', () => {
           const eventMock: any = {
             type: 'mouse',
             target: ref.current,
-            which: 1,
+            button: 0,
             preventDefault: jest.fn(),
             stopPropagation: jest.fn(),
           };
@@ -852,7 +852,7 @@ describe('WorkSpace', () => {
 
           workSpace.onPointerUp({
             type: 'mouse',
-            which: 1,
+            button: 0,
           } as any);
 
           expect(workSpace.isPointerDown)
@@ -866,15 +866,15 @@ describe('WorkSpace', () => {
 
           workSpace.onPointerUp({
             type: 'touch',
-            which: 1,
+            button: 0,
           } as any);
 
           expect(workSpace.isPointerDown)
             .toBe(true);
 
           workSpace.onPointerUp({
-            type: 'touch',
-            which: 2,
+            type: 'mouse',
+            button: 2,
           } as any);
 
           expect(workSpace.isPointerDown)
@@ -1891,7 +1891,7 @@ describe('WorkSpace', () => {
           const eventMock: any = {
             type: 'mouse',
             target: ref.current,
-            which: 1,
+            button: 0,
           };
 
           const workSpace = new WorkSpace({

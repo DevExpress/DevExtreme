@@ -1059,7 +1059,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   onPointerDown(e: MouseEvent | TouchEvent): void {
     const cell = (e.target as HTMLElement).closest(DATA_CELL_SELECTOR) as HTMLElement;
 
-    if (cell && isMouseEvent(e) && e.which === 1) {
+    if (cell && isMouseEvent(e) && (e as MouseEvent).button === 0) {
       const isAllDay = isCellAllDay(cell);
       const cellIndices = getCellIndices(cell);
 
@@ -1083,7 +1083,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   }
 
   onPointerUp(e: MouseEvent | TouchEvent): void {
-    if (isMouseEvent(e) && e.which === 1) {
+    if (isMouseEvent(e) && (e as MouseEvent).button === 0) {
       this.isPointerDown = false;
     }
   }
