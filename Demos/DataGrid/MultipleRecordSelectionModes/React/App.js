@@ -7,6 +7,7 @@ import DataGrid, {
   Paging,
 } from 'devextreme-react/data-grid';
 import { SelectBox } from 'devextreme-react/select-box';
+import themes from 'devextreme/ui/themes';
 import { sales } from './data.js';
 
 const showCheckBoxesModes = ['none', 'onClick', 'onLongTap', 'always'];
@@ -18,7 +19,7 @@ class App extends React.Component {
 
     this.state = {
       allMode: 'allPages',
-      checkBoxesMode: 'onClick',
+      checkBoxesMode: themes.current().startsWith('material') ? 'always' : 'onClick',
     };
 
     this.onCheckBoxesModeChanged = this.onCheckBoxesModeChanged.bind(this);

@@ -2,7 +2,7 @@ const DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', ($scope) => {
   $scope.selectAllMode = 'allPages';
-  $scope.showCheckBoxesMode = 'onClick';
+  $scope.showCheckBoxesMode = DevExpress.ui.themes.current().startsWith('material') ? 'always' : 'onClick';
 
   $scope.gridOptions = {
     dataSource: sales,

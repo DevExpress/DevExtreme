@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxDataGridModule, DxSelectBoxModule } from 'devextreme-angular';
+import themes from 'devextreme/ui/themes';
 
 import { Service, Sale } from './app.service';
 
@@ -27,7 +28,7 @@ export class AppComponent {
   constructor(service: Service) {
     this.sales = service.getSales();
     this.allMode = 'allPages';
-    this.checkBoxesMode = 'onClick';
+    this.checkBoxesMode = themes.current().startsWith('material') ? 'always' : 'onClick';
   }
 }
 

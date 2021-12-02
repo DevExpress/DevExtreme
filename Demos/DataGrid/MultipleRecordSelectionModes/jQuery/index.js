@@ -41,7 +41,7 @@ $(() => {
 
   $('#show-checkboxes-mode').dxSelectBox({
     dataSource: ['none', 'onClick', 'onLongTap', 'always'],
-    value: 'onClick',
+    value: dataGrid.option('selection.showCheckBoxesMode'),
     onValueChanged(data) {
       dataGrid.option('selection.showCheckBoxesMode', data.value);
       $('#select-all-mode').dxSelectBox('instance').option('disabled', data.value === 'none');

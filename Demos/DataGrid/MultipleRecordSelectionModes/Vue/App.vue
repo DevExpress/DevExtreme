@@ -67,6 +67,7 @@ import {
   DxSelection,
   DxFilterRow,
 } from 'devextreme-vue/data-grid';
+import themes from 'devextreme/ui/themes';
 import { sales } from './data.js';
 
 export default {
@@ -81,7 +82,7 @@ export default {
   data() {
     return {
       allMode: 'allPages',
-      checkBoxesMode: 'onClick',
+      checkBoxesMode: themes.current().startsWith('material') ? 'always' : 'onClick',
       sales,
     };
   },
