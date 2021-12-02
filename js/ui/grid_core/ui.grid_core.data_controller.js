@@ -793,12 +793,14 @@ export const dataControllerModule = {
                         change.isLiveUpdate = true;
                     }
 
-                    this._correctRowIndices(function getRowIndexCorrection(rowIndex) {
-                        const oldItem = oldItems[rowIndex];
+                    this._correctRowIndices((rowIndex) => {
+                        const oldRowIndexOffset = this._rowIndexOffset || 0;
+                        const rowIndexOffset = this.getRowIndexOffset();
+                        const oldItem = oldItems[rowIndex - oldRowIndexOffset];
                         const key = getRowKey(oldItem);
-                        const newRowIndex = newIndexByKey[key];
+                        const newVisibleRowIndex = newIndexByKey[key];
 
-                        return newRowIndex >= 0 ? newRowIndex - rowIndex : 0;
+                        return newVisibleRowIndex >= 0 ? newVisibleRowIndex + rowIndexOffset - rowIndex : 0;
                     });
                 },
                 _correctRowIndices: noop,
@@ -842,6 +844,8 @@ export const dataControllerModule = {
                                 item.loadIndex = newItem.loadIndex;
                             }
                         });
+
+                        this._rowIndexOffset = this.getRowIndexOffset();
                     } else {
                         this._items = [];
                     }
