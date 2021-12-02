@@ -11,13 +11,8 @@ on:
 
 jobs:
   build:
-    name: Build-{{ matrix.ARGS.name }}
-    matrix:
-      fail-fast: false
-      ARGS: [
-        { name: "default", inProgressRenovation: true },
-      ]
     runs-on: shr-ubuntu-m5a-instance-cpu2ram8
+    name: Build
     timeout-minutes: 60
 
     steps:
@@ -40,7 +35,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
-      run: BUILD_INPROGRESS_RENOVATION="${{ matrix.ARGS.inProgressRenovation == true }}" npm run build:dev
+      run: BUILD_INPROGRESS_RENOVATION=true npm run build:dev
       
     - name: Zip artifacts 
       run: |
@@ -49,7 +44,7 @@ jobs:
     - name: Upload build artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: devextreme-artifacts-renovation-${{ matrix.ARGS.inProgressRenovation == true }}
+        name: devextreme-artifacts
         path: artifacts.zip
         retention-days: 1
 
@@ -81,7 +76,7 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@v2
       with:
-        name: devextreme-artifacts-renovation-${{ matrix.ARGS.inProgressRenovation == true }}
+        name: devextreme-artifacts
     # Prepare fast re-run end
 
     - name: Get sources
