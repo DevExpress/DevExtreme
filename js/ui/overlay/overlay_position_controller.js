@@ -23,7 +23,7 @@ const OVERLAY_DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 
 class OverlayPositionController {
     constructor({
-        position, target, container,
+        position, container,
         $root, $content, $wrapper,
         onPositioned, onVisualPositionChanged,
         dragOutsideBoundary, dragAndResizeArea, outsideDragFactor,
@@ -32,7 +32,6 @@ class OverlayPositionController {
     }) {
         this._props = {
             position,
-            target,
             container,
             dragOutsideBoundary,
             dragAndResizeArea,
@@ -58,7 +57,7 @@ class OverlayPositionController {
         this._outsideDragFactor = undefined;
 
         this.updateContainer(container);
-        this.updatePosition(position, target);
+        this.updatePosition(position);
         this._updateDragResizeContainer();
         this._updateOutsideDragFactor();
     }
@@ -73,6 +72,10 @@ class OverlayPositionController {
 
     get outsideDragFactor() {
         return this._outsideDragFactor;
+    }
+
+    get position() {
+        return this._position;
     }
 
     set fixWrapperPosition(fixWrapperPosition) {
@@ -123,15 +126,9 @@ class OverlayPositionController {
         this.restorePositionOnNextRender(false);
     }
 
-    updateTarget(target) {
-        this._props.target = target;
-
-        this.updatePosition(this._props.position, target);
-    }
-
-    updatePosition(positionProp, targetProp = this._props.target) {
+    updatePosition(positionProp) {
         this._props.position = positionProp;
-        this._position = this._normalizePosition(positionProp, targetProp);
+        this._position = this._normalizePosition(positionProp);
 
         this._updateWrapperCoveredElement();
     }
@@ -270,9 +267,8 @@ class OverlayPositionController {
         }
     }
 
-    _normalizePosition(positionProp, targetProp) {
+    _normalizePosition(positionProp) {
         const defaultPositionConfig = {
-            of: targetProp,
             boundaryOffset: OVERLAY_DEFAULT_BOUNDARY_OFFSET
         };
 

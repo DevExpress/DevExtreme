@@ -1582,6 +1582,20 @@ testModule('content', moduleConfig, () => {
         assert.ok(contentReadyStub.calledOnce);
     });
 
+    test('content shouldn`t clean when component is renovated', function(assert) {
+        const $overlay = $('#overlay').dxOverlay({
+            isRenovated: true,
+            contentTemplate: 'template',
+            visible: true
+        });
+        const instance = $overlay.dxOverlay('instance');
+        const $content = instance.$content();
+        const contentRenderSpy = sinon.spy($content, 'empty');
+
+        instance.option({ visible: false, contentTemplate: 'template1' });
+        assert.equal(contentRenderSpy.callCount, 0);
+    });
+
     test('content should be rendered only once after resize', function(assert) {
         const contentReadyStub = sinon.stub();
 
@@ -2582,103 +2596,6 @@ testModule('container', moduleConfig, () => {
     });
 });
 
-
-testModule('target', {
-    beforeEach() {
-        moduleConfig.beforeEach.apply(this, arguments);
-        this.animate = sinon.stub(fx, 'animate');
-        this.baseOverlayOptions = {
-
-            _defaultOptionsRules: function() {
-                return [];
-            },
-
-            _getDefaultOptions: function() {
-                return $.extend(
-                    this.callBase(),
-                    {
-                        animation: {
-                            show: {
-                                to: { position: { of: $(window) } },
-                                from: { position: { of: $(window) } }
-                            },
-                            hide: {
-                                to: { position: { of: $(window) } },
-                                from: { position: { of: $(window) } }
-                            }
-                        }
-                    }
-                );
-            }
-
-        };
-    },
-    afterEach() {
-        moduleConfig.afterEach.apply(this, arguments);
-        this.animate.restore();
-    }
-}, () => {
-    test('target option should be present in show animation position', function(assert) {
-        const $target = $('#container');
-
-        const OverlayTarget = Overlay.inherit(this.baseOverlayOptions);
-
-        const $overlay = $('#overlay');
-        const overlay = new OverlayTarget($overlay, {
-            target: $target
-        });
-
-        overlay.show();
-
-        const animationShowSettings = this.animate.getCall(0).args[1];
-
-        assert.strictEqual(this.animate.callCount, 1, 'animation count');
-        assert.strictEqual(animationShowSettings.to.position.of.get(0), $target.get(0), 'animation.show.to.position.of');
-        assert.strictEqual(animationShowSettings.from.position.of.get(0), $target.get(0), 'animation.show.from.position.of');
-    });
-
-    test('target option should be present in hide animation position', function(assert) {
-        const $target = $('#container');
-
-        const OverlayTarget = Overlay.inherit(this.baseOverlayOptions);
-
-        const $overlay = $('#overlay');
-        const overlay = new OverlayTarget($overlay, {
-            target: $target
-        });
-
-        overlay.show();
-        this.animate.reset();
-        overlay.hide();
-
-        const animationHideSettings = this.animate.getCall(0).args[1];
-
-        assert.strictEqual(this.animate.callCount, 1, 'animation count');
-        assert.strictEqual(animationHideSettings.to.position.of.get(0), $target.get(0), 'animation.hide.to.position.of');
-        assert.strictEqual(animationHideSettings.from.position.of.get(0), $target.get(0), 'animation.hide.from.position.of');
-    });
-
-    test('target participation in position calculation', function(assert) {
-        const $target = $('#container').css({
-            position: 'absolute',
-            left: 100
-        });
-
-        const overlay = new Overlay($('#overlay'), {
-            target: $target
-        });
-
-        overlay.show();
-
-        const $wrapper = overlay.$wrapper();
-
-        const transform = $wrapper.css('transform');
-        const translateX = transform.split(',')[4].trim();
-        assert.strictEqual(translateX, '100', 'target left position is passed to wrapper translateX');
-    });
-});
-
-
 testModule('hide overlay by callback', moduleConfig, () => {
     test('callback should not be added if hideTopOverlayHandler option equals \'null\' (B251263, B251262)', function(assert) {
         const instance = $('#overlay').dxOverlay({
@@ -3146,8 +3063,8 @@ testModule('drag', moduleConfig, () => {
 
         const startEvent = pointer.start().dragStart().lastEvent();
 
-        assert.strictEqual(startEvent.maxTopOffset, 10, 'overlay can dragged vertically');
-        assert.strictEqual(startEvent.maxBottomOffset, 10, 'overlay can be dragged vertically');
+        assert.roughEqual(startEvent.maxTopOffset, 10, 0.2, 'overlay can dragged vertically');
+        assert.roughEqual(startEvent.maxBottomOffset, 10, 0.2, 'overlay can be dragged vertically');
         assert.strictEqual(startEvent.maxLeftOffset, 10, 'overlay can be dragged horizontally');
         assert.strictEqual(startEvent.maxRightOffset, 10, 'overlay can be dragged horizontally');
     });
@@ -3467,10 +3384,10 @@ testModule('keyboard navigation', {
         assert.strictEqual($overlayContent.position().left, getWidth($container) - getOuterWidth($overlayContent), 'overlay should not be dragged right of target');
 
         keyboard.keyDown('up');
-        assert.strictEqual($overlayContent.position().top, 0, 'overlay should not be dragged above the target');
+        assert.roughEqual($overlayContent.position().top, 0, 0.2, 'overlay should not be dragged above the target');
 
         keyboard.keyDown('down');
-        assert.strictEqual($overlayContent.position().top, getHeight($container) - getOuterHeight($overlayContent), 'overlay should not be dragged below than target');
+        assert.roughEqual($overlayContent.position().top, getHeight($container) - getOuterHeight($overlayContent), 0.2, 'overlay should not be dragged below than target');
     });
 
     test('arrows handling for rtl', function(assert) {

@@ -424,12 +424,6 @@ describe('Scrollable', () => {
     });
 
     describe('Getters', () => {
-      it('isRenovated', () => {
-        const viewModel = new Scrollable({ });
-
-        expect(viewModel.isRenovated()).toEqual(true);
-      });
-
       describe('rtlEnabled', () => {
         each`
         global       | rtlEnabled   | contextConfig      | expected

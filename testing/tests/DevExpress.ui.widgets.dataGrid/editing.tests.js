@@ -11587,7 +11587,7 @@ QUnit.module('Editing with validation', {
         // T335660
         const overlayInstance = $overlayElement.dxOverlay('instance');
         assert.ok(overlayInstance, 'has overlay instance');
-        assert.ok(overlayInstance.option('target').hasClass('dx-editor-cell'), 'target of the overlay');
+        assert.ok(overlayInstance.option('position.of').hasClass('dx-editor-cell'), 'target of the overlay');
 
         // act
         $inputElement = getInputElements($testElement).first();
@@ -17533,9 +17533,9 @@ QUnit.module('Edit Form', {
 
         assert.equal($textEditors.length, 3, 'text editor count');
         assert.equal($textEditors.eq(0).dxTextBox('instance').option('labelMode'), 'floating', 'item 0 labelMode');
-        assert.equal($textEditors.eq(0).dxTextBox('instance').option('label'), 'Name:', 'item 0 label');
+        assert.equal($textEditors.eq(0).dxTextBox('instance').option('label'), 'Name', 'item 0 label');
         assert.equal($textEditors.eq(1).dxTextBox('instance').option('labelMode'), 'hidden', 'item 1 labelMode');
-        assert.equal($textEditors.eq(1).dxTextBox('instance').option('label'), 'Phone:', 'item 1 label');
+        assert.equal($textEditors.eq(1).dxTextBox('instance').option('label'), 'Phone', 'item 1 label');
     });
 
     ['static', 'floating'].forEach(labelMode => {

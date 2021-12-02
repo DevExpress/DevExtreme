@@ -182,6 +182,16 @@ function addGenerationTask(
     copyArtifacts = false,
     babelGeneratedFiles = true
 ) {
+    addGenerationTaskWithSuffix(frameworkName, '', knownErrors, compileTs, copyArtifacts, babelGeneratedFiles)
+}
+function addGenerationTaskWithSuffix(
+    frameworkName,
+    suffix,
+    knownErrors = [],
+    compileTs = true,
+    copyArtifacts = false,
+    babelGeneratedFiles = true
+) {
     const frameworkDest = `artifacts/${frameworkName}`;
     const generator = require(`@devextreme-generator/${frameworkName}`).default;
     let tsProject = () => () => { };
@@ -210,9 +220,9 @@ function addGenerationTask(
             });
     }
 
-    gulp.task(`${frameworkName}-compilation-check`, compileComponents);
+    gulp.task(`${frameworkName}${suffix}-compilation-check`, compileComponents);
 
-    gulp.task(`generate-${frameworkName}-declaration-only`, function(done) {
+    gulp.task(`generate-${frameworkName}${suffix}-declaration-only`, function(done) {
         return compileComponents(done)
             .pipe(gulpIf(babelGeneratedFiles, babel(transpileConfig.cjs)))
             .pipe(gulp.dest(frameworkDest));
@@ -226,7 +236,7 @@ function addGenerationTask(
             del.sync(frameworkSrc);
             cb();
         },
-        `generate-${frameworkName}-declaration-only`,
+        `generate-${frameworkName}${suffix}-declaration-only`,
         function() {
             return gulp.src(COMMON_SRC)
                 .pipe(
@@ -239,7 +249,7 @@ function addGenerationTask(
         }];
 
     if(copyArtifacts) {
-        const dest = `./playground/${frameworkName}/src/artifacts`;
+        const dest = `./playground/${frameworkName}${suffix}/src/artifacts`;
         generateSeries.push(function cleanFrameworkPlayground(cb) {
             del.sync(dest);
             cb();
@@ -250,7 +260,7 @@ function addGenerationTask(
         });
     }
 
-    gulp.task(`generate-${frameworkName}`, gulp.series(...generateSeries));
+    gulp.task(`generate-${frameworkName}${suffix}`, gulp.series(...generateSeries));
 
     const watchTasks = [
         function() {
@@ -268,7 +278,7 @@ function addGenerationTask(
                 .pipe(gulp.dest(frameworkDest));
         },
         function declarationBuild() {
-            gulp.watch(SRC, gulp.series(`generate-${frameworkName}-declaration-only`));
+            gulp.watch(SRC, gulp.series(`generate-${frameworkName}${suffix}-declaration-only`));
         }
     ];
 
@@ -276,12 +286,12 @@ function addGenerationTask(
         watchTasks.push(function copyArtifacts() {
             return gulp.src(artifactsSrc, { base: './artifacts/' })
                 .pipe(watch(artifactsSrc, { base: './artifacts/', readDelay: 1000 }))
-                .pipe(gulp.dest(`./playground/${frameworkName}/src/artifacts`));
+                .pipe(gulp.dest(`./playground/${frameworkName}${suffix}/src/artifacts`));
         });
     }
 
-    gulp.task(`generate-${frameworkName}-watch`, gulp.series(
-        `generate-${frameworkName}`,
+    gulp.task(`generate-${frameworkName}${suffix}-watch`, gulp.series(
+        `generate-${frameworkName}${suffix}`,
         gulp.parallel(...watchTasks)
     ));
 }
@@ -292,14 +302,17 @@ addGenerationTask('react',
     true,
     false
 );
-addGenerationTask('angular', [
+const ngErrors = [
     'Cannot find module \'@angular/core\'',
     'Cannot find module \'@angular/common\'',
     'Cannot find module \'@angular/forms\'',
     'Cannot find module \'@angular/cdk/portal\'',
     'Cannot find module \'inferno\'',
     'Cannot find module \'inferno-create-element\'',
-].concat(knownErrors));
+].concat(knownErrors);
+
+addGenerationTask('angular', ngErrors);
+addGenerationTaskWithSuffix('angular', '-typescript', ngErrors, false, false, false);
 
 addGenerationTask('vue', [], false, true, false);
 

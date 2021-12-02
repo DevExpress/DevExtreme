@@ -901,43 +901,48 @@ describe('Simulated > Behavior', () => {
         helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_HORIZONTAL, ['end'], [[event.velocity.x, true]]);
       });
 
-      test.each([true, false])('emit "dxscroll" event, locked: %o', (locked) => {
-        const event = {
-          ...defaultEvent,
-          delta: { x: 10.5633, y: 25.5986 },
-          preventDefault: jest.fn(),
-          cancel: false,
-        };
+      each(optionValues.isDxWheelEvent).describe('isDxWheelEvent: %o', (isDxWheelEvent) => {
+        test.each([true, false])('emit "dxscroll" event, locked: %o', (locked) => {
+          const event = {
+            ...defaultEvent,
+            delta: { x: 10.5633, y: 25.5986 },
+            preventDefault: jest.fn(),
+            originalEvent: {
+              type: isDxWheelEvent ? 'dxmousewheel' : undefined,
+            },
+            cancel: false,
+          };
 
-        const helper = new ScrollableTestHelper({ direction });
+          const helper = new ScrollableTestHelper({ direction });
 
-        helper.initScrollbarSettings();
-        helper.initScrollbarHandlerMocks();
+          helper.initScrollbarSettings();
+          helper.initScrollbarHandlerMocks();
 
-        helper.viewModel.adjustDistance = jest.fn();
-        helper.viewModel.locked = locked;
+          helper.viewModel.adjustDistance = jest.fn();
+          helper.viewModel.locked = locked;
 
-        helper.viewModel.moveEffect();
-        emit('dxscroll', event);
+          helper.viewModel.moveEffect();
+          emit('dxscroll', event);
 
-        if (locked) {
-          expect(event.cancel).toEqual(true);
-          expect(event.preventDefault).not.toBeCalled();
-          expect(helper.viewModel.adjustDistance).toHaveBeenCalledTimes(0);
-          expect(helper.viewModel.eventForUserAction).toEqual(undefined);
-          helper.checkActionHandlerCalls(expect, [], [[]]);
-          helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_VERTICAL, [], [[]]);
-          helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_HORIZONTAL, [], [[]]);
-        } else {
-          expect(event.cancel).toEqual(false);
-          expect(event.preventDefault).toBeCalled();
-          expect(helper.viewModel.adjustDistance).toHaveBeenCalledTimes(1);
-          expect(helper.viewModel.adjustDistance).toHaveBeenCalledWith(event, 'delta');
-          expect(helper.viewModel.eventForUserAction).toEqual(event);
-          helper.checkActionHandlerCalls(expect, [], [[]]);
-          helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_VERTICAL, ['move'], [[event.delta.y]]);
-          helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_HORIZONTAL, ['move'], [[event.delta.x]]);
-        }
+          if (locked) {
+            expect(event.cancel).toEqual(true);
+            expect(event.preventDefault).not.toBeCalled();
+            expect(helper.viewModel.adjustDistance).toHaveBeenCalledTimes(0);
+            expect(helper.viewModel.eventForUserAction).toEqual(undefined);
+            helper.checkActionHandlerCalls(expect, [], [[]]);
+            helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_VERTICAL, [], [[]]);
+            helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_HORIZONTAL, [], [[]]);
+          } else {
+            expect(event.cancel).toEqual(false);
+            expect(event.preventDefault).toBeCalled();
+            expect(helper.viewModel.adjustDistance).toHaveBeenCalledTimes(1);
+            expect(helper.viewModel.adjustDistance).toHaveBeenCalledWith(event, 'delta');
+            expect(helper.viewModel.eventForUserAction).toEqual(event);
+            helper.checkActionHandlerCalls(expect, [], [[]]);
+            helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_VERTICAL, ['move'], [[event.delta.y, isDxWheelEvent]]);
+            helper.checkScrollbarEventHandlerCalls(expect, DIRECTION_HORIZONTAL, ['move'], [[event.delta.x, isDxWheelEvent]]);
+          }
+        });
       });
 
       test.each([jest.fn(), undefined])('emit "dxscroll" event, e.preventDefault: %o, locked: false', (preventDefault) => {

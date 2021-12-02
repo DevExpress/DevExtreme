@@ -1021,7 +1021,6 @@ export const validatingModule = {
                             visible: true,
                             width: 'auto',
                             height: 'auto',
-                            target: $container,
                             shading: false,
                             container: $overlayContainer,
                             propagateOutsideClick: true,
@@ -1045,7 +1044,8 @@ export const validatingModule = {
                                 offset: '1 0',
                                 collision: 'flip',
                                 boundaryOffset: '0 0',
-                                boundary: this._rowsView.element()
+                                boundary: this._rowsView.element(),
+                                of: $container
                             },
                             onPositioned: this._positionedHandler.bind(this)
                         };
@@ -1116,7 +1116,6 @@ export const validatingModule = {
                             .appendTo($cell);
 
                         const overlayOptions = {
-                            target: $cell,
                             container: $overlayContainer,
                             shading: false,
                             width: 'auto',
@@ -1137,7 +1136,8 @@ export const validatingModule = {
                                     y: !isOverlayVisible && browser.mozilla ? -1 : 0
                                 },
                                 my: myPosition,
-                                at: atPosition
+                                at: atPosition,
+                                of: $cell
                             },
                             onPositioned: e => {
                                 this._positionedHandler(e, isOverlayVisible);
