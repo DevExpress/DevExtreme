@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { DataGridLight, viewFunction as DataGridView, DataGridLightProps } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
+import { columns, customers } from './data';
 
 describe('DataGridLight', () => {
   describe('View', () => {
@@ -57,6 +58,41 @@ describe('DataGridLight', () => {
       describe('aria', () => {
         it('should have role "presentation"', () => {
           expect(new DataGridLight({}).aria).toEqual({ role: 'presentation' });
+        });
+      });
+
+      // todo: move when paging will be in different module
+      describe('paging', () => {
+        it('should calculate visibleItems', () => {
+          expect(new DataGridLight({
+            dataSource: customers,
+            columns,
+            paging: {
+              enabled: true,
+              pageIndex: 0,
+              pageSize: 5,
+            },
+          }).visibleItems).toEqual(customers.slice(0, 5));
+
+          expect(new DataGridLight({
+            dataSource: customers,
+            columns,
+            paging: {
+              enabled: true,
+              pageIndex: 1,
+              pageSize: 5,
+            },
+          }).visibleItems).toEqual(customers.slice(5, 10));
+
+          expect(new DataGridLight({
+            dataSource: customers,
+            columns,
+            paging: {
+              enabled: true,
+              pageIndex: 1,
+              pageSize: 'all',
+            },
+          }).visibleItems).toEqual(customers);
         });
       });
     });

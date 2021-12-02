@@ -63,7 +63,7 @@ class PagingProps {
   pageIndex = 0;
 
   @OneWay()
-  pageSize = 20;
+  pageSize: number | 'all' = 20;
 }
 
 @ComponentBindings()
