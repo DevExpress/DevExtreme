@@ -131,6 +131,7 @@ describe('OverflowIndicator', () => {
               top: '2px',
               width: '3px',
               height: '4px',
+              boxShadow: 'inset 3px 0 0 0 rgba(0, 0, 0, 0.3)',
             });
         });
       });

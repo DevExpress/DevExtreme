@@ -5632,6 +5632,9 @@ QUnit.module('Virtual scrolling', {
                 totalItemsCount: function() {
                     const virtualItemsCount = dataController.virtualItemsCount();
                     return items.length + virtualItemsCount.begin + virtualItemsCount.end;
+                },
+                itemsCount: function() {
+                    return items.length;
                 }
             };
 

@@ -11,7 +11,7 @@ describe('Selectbox', () => {
   it('View render', () => {
     const componentProps = new SelectBoxProps();
     const props = {
-      props: componentProps,
+      componentProps,
       restAttributes: { 'rest-attributes': 'true' },
     } as Partial<SelectBox>;
     const tree = shallow(<SelectBoxView {...props as any} /> as any);

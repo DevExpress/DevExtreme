@@ -13,13 +13,16 @@ import { getResourcesDataByGroups } from '../../resources/utils';
 import {
     compareDateWithStartDayHour,
     compareDateWithEndDayHour,
-    getTrimDates,
     getAppointmentTakesSeveralDays,
     _appointmentPartInInterval,
     getRecurrenceException,
     getAppointmentTakesAllDay
 } from './utils';
-import { getPreparedDataItems } from '../../../../renovation/ui/scheduler/utils/data';
+import {
+    getPreparedDataItems,
+    resolveDataItems
+} from '../../../../renovation/ui/scheduler/utils/data';
+import getDatesWithoutTime from '../../../../renovation/ui/scheduler/utils/filtering/getDatesWithoutTime';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -128,8 +131,8 @@ export class AppointmentFilterBaseStrategy {
         if(this.dataSource) {
             const store = this.dataSource.store();
 
-            store.on('loaded', (items) => {
-                updateItems(items);
+            store.on('loaded', (options) => {
+                updateItems(resolveDataItems(options));
             });
 
             if(this.dataSource.isLoaded()) {
@@ -164,7 +167,7 @@ export class AppointmentFilterBaseStrategy {
             supportMultiDayAppointments
         } = filterOptions;
 
-        const [trimMin, trimMax] = getTrimDates(min, max);
+        const [trimMin, trimMax] = getDatesWithoutTime(min, max);
         const useRecurrence = isDefined(this.dataAccessors.getter.recurrenceRule);
 
         return [[appointment => {
@@ -315,7 +318,7 @@ export class AppointmentFilterBaseStrategy {
         const recurrenceProcessor = getRecurrenceProcessor();
 
         if(allDay || _appointmentPartInInterval(appointmentStartDate, appointmentEndDate, startDayHour, endDayHour)) {
-            const [trimMin, trimMax] = getTrimDates(min, max);
+            const [trimMin, trimMax] = getDatesWithoutTime(min, max);
 
             min = trimMin;
             max = new Date(trimMax.getTime() - toMs('minute'));

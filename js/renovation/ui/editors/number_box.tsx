@@ -10,12 +10,12 @@ import { BaseWidgetProps } from '../common/base_props';
 const DEFAULT_VALUE = 0;
 
 export const viewFunction = ({
-  props,
+  componentProps,
   restAttributes,
 }: NumberBox): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyNumberBox}
-    componentProps={props}
+    componentProps={componentProps}
     templateNames={[]}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
@@ -58,4 +58,9 @@ export class NumberBoxProps extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class NumberBox extends JSXComponent(NumberBoxProps) {}
+export class NumberBox extends JSXComponent(NumberBoxProps) {
+  /* istanbul ignore next: WA for Angular */
+  get componentProps(): NumberBoxProps {
+    return this.props;
+  }
+}

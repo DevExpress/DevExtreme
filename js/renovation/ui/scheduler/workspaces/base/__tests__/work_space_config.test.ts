@@ -4,7 +4,6 @@ import {
 } from '../../../view_model/to_test/views/utils/timeline_week';
 import { DateTableLayoutBase } from '../date_table/layout';
 import { HeaderPanelLayout } from '../header_panel/layout';
-import { TimePanelTableLayout } from '../time_panel/layout';
 import { getViewRenderConfigByType } from '../work_space_config';
 import { getDateForHeaderText } from '../utils';
 import { MonthDateTableLayout } from '../../month/date_table/layout';
@@ -17,7 +16,6 @@ describe('Workspace config utils', () => {
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
-          timePanelTemplate: TimePanelTableLayout,
           isAllDayPanelSupported: true,
           isProvideVirtualCellsWidth: false,
           isRenderTimePanel: true,
@@ -30,6 +28,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: false,
         });
     });
 
@@ -38,7 +38,6 @@ describe('Workspace config utils', () => {
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
-          timePanelTemplate: TimePanelTableLayout,
           isAllDayPanelSupported: true,
           isProvideVirtualCellsWidth: false,
           isRenderTimePanel: true,
@@ -51,6 +50,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: false,
         });
     });
 
@@ -59,7 +60,6 @@ describe('Workspace config utils', () => {
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
-          timePanelTemplate: TimePanelTableLayout,
           isAllDayPanelSupported: true,
           isProvideVirtualCellsWidth: false,
           isRenderTimePanel: true,
@@ -72,6 +72,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: false,
         });
     });
 
@@ -80,7 +82,6 @@ describe('Workspace config utils', () => {
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
-          timePanelTemplate: TimePanelTableLayout,
           isAllDayPanelSupported: true,
           isProvideVirtualCellsWidth: false,
           isRenderTimePanel: true,
@@ -93,6 +94,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: false,
         });
     });
 
@@ -113,6 +116,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: true,
+          isUseTimelineHeader: false,
         });
     });
 
@@ -143,6 +148,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: true,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: true,
+          isUseTimelineHeader: false,
         });
     });
 
@@ -163,6 +170,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
           defaultGroupOrientation: 'vertical',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: true,
         });
     });
 
@@ -183,6 +192,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
           defaultGroupOrientation: 'vertical',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: true,
         });
     });
 
@@ -203,6 +214,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
           defaultGroupOrientation: 'vertical',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: true,
         });
     });
 
@@ -223,6 +236,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
           defaultGroupOrientation: 'vertical',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: true,
         });
     });
 
@@ -243,6 +258,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'horizontal',
           isCreateCrossScrolling: true,
           defaultGroupOrientation: 'vertical',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: true,
         });
     });
 
@@ -251,7 +268,6 @@ describe('Workspace config utils', () => {
         .toEqual({
           headerPanelTemplate: HeaderPanelLayout,
           dateTableTemplate: DateTableLayoutBase,
-          timePanelTemplate: TimePanelTableLayout,
           isAllDayPanelSupported: true,
           isProvideVirtualCellsWidth: false,
           isRenderTimePanel: true,
@@ -264,6 +280,8 @@ describe('Workspace config utils', () => {
           scrollingDirection: 'vertical',
           isCreateCrossScrolling: false,
           defaultGroupOrientation: 'horizontal',
+          isUseMonthDateTable: false,
+          isUseTimelineHeader: false,
         });
     });
   });

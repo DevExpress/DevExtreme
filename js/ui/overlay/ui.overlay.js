@@ -13,7 +13,7 @@ import { contains, resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isDefined, isFunction, isPlainObject, isObject } from '../../core/utils/type';
+import { isFunction, isObject } from '../../core/utils/type';
 import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import errors from '../../core/errors';
@@ -141,6 +141,7 @@ const Overlay = Widget.inherit({
             dragOutsideBoundary: false,
 
             closeOnOutsideClick: false,
+            hideOnOutsideClick: false,
 
             copyRootClassesToWrapper: false,
 
@@ -170,11 +171,9 @@ const Overlay = Widget.inherit({
 
             restorePosition: true,
 
-            // NOTE: private options
-
-            target: undefined,
             container: undefined,
 
+            // NOTE: private options
             hideTopOverlayHandler: () => { this.hide(); },
             hideOnParentScroll: false,
             onPositioned: null,
@@ -218,7 +217,8 @@ const Overlay = Widget.inherit({
     _setDeprecatedOptions() {
         this.callBase();
         extend(this._deprecatedOptions, {
-            'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' }
+            'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' },
+            'closeOnOutsideClick': { since: '22.2', alias: 'hideOnOutsideClick' }
         });
     },
 
@@ -265,42 +265,8 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _initOptions: function(options) {
-        this._setAnimationTarget(options.target);
-
-        this.callBase(options);
-    },
-
     _initInnerOverlayClass: function() {
         this._$content.toggleClass(INNER_OVERLAY_CLASS, this.option('innerOverlay'));
-    },
-
-    _setAnimationTarget: function(target) {
-        if(!isDefined(target)) {
-            return;
-        }
-
-        const options = this.option();
-        [
-            'animation.show.from.position.of',
-            'animation.show.to.position.of',
-            'animation.hide.from.position.of',
-            'animation.hide.to.position.of'
-        ].forEach(path => {
-            const pathParts = path.split('.');
-
-            let option = options;
-            while(option) {
-                if(pathParts.length === 1) {
-                    if(isPlainObject(option)) {
-                        option[pathParts.shift()] = target;
-                    }
-                    break;
-                } else {
-                    option = option[pathParts.shift()];
-                }
-            }
-        });
     },
 
     _initHideTopOverlayHandler: function(handler) {
@@ -383,22 +349,28 @@ const Overlay = Widget.inherit({
             this._stopAnimation();
         }
 
-        let closeOnOutsideClick = this.option('closeOnOutsideClick');
-
-        if(isFunction(closeOnOutsideClick)) {
-            closeOnOutsideClick = closeOnOutsideClick(e);
-        }
-
         const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
         const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
         const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content.is(e.target)
             || contains(this._$content.get(0), e.target));
 
-        if(outsideClick && closeOnOutsideClick) {
+        if(outsideClick && this._shouldHideOnOutsideClick(e)) {
             this._outsideClickHandler(e);
         }
 
         return this.option('propagateOutsideClick');
+    },
+
+    _shouldHideOnOutsideClick: function(e) {
+        const { closeOnOutsideClick, hideOnOutsideClick } = this.option();
+
+        if(isFunction(hideOnOutsideClick)) {
+            return hideOnOutsideClick(e);
+        } else if(isFunction(closeOnOutsideClick)) {
+            return closeOnOutsideClick(e);
+        } else {
+            return hideOnOutsideClick || closeOnOutsideClick;
+        }
     },
 
     _outsideClickHandler(e) {
@@ -559,21 +531,21 @@ const Overlay = Widget.inherit({
         return this._showingDeferred.promise();
     },
 
-    _normalizeAnimation: function(animation, prop) {
-        if(animation) {
-            animation = extend({
+    _normalizeAnimation: function(showHideConfig, direction) {
+        if(showHideConfig) {
+            showHideConfig = extend({
                 type: 'slide',
                 skipElementInitialStyles: true, // NOTE: for fadeIn animation
-            }, animation);
+            }, showHideConfig);
 
-            if(animation[prop] && typeof animation[prop] === 'object') {
-                extend(animation[prop], {
-                    position: this._positionController._position
+            if(isObject(showHideConfig[direction])) {
+                extend(showHideConfig[direction], {
+                    position: this._positionController.position
                 });
             }
         }
 
-        return animation;
+        return showHideConfig;
     },
 
     _animateHiding: function() {
@@ -935,11 +907,10 @@ const Overlay = Widget.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { target, container, dragAndResizeArea, dragOutsideBoundary, outsideDragFactor, _fixWrapperPosition, restorePosition } = this.option();
+        const { container, dragAndResizeArea, dragOutsideBoundary, outsideDragFactor, _fixWrapperPosition, restorePosition } = this.option();
         // NOTE: position is passed to controller in renderGeometry to prevent window field using in server side mode
 
         return {
-            target,
             container,
             $root: this.$element(),
             $content: this._$content,
@@ -1232,7 +1203,8 @@ const Overlay = Widget.inherit({
     },
 
     _clean: function() {
-        if(!this._contentAlreadyRendered) {
+        const options = this.option();
+        if(!this._contentAlreadyRendered && !options.isRenovated) {
             this.$content().empty();
         }
 
@@ -1330,11 +1302,6 @@ const Overlay = Widget.inherit({
                     this._animateDeferred.resolveWith(this);
                 });
                 break;
-            case 'target':
-                this._positionController.updateTarget(value);
-                this._setAnimationTarget(value);
-                this._invalidate();
-                break;
             case 'container':
                 this._positionController.updateContainer(value);
                 this._invalidate();
@@ -1361,6 +1328,7 @@ const Overlay = Widget.inherit({
                 this._toggleParentsScrollSubscription(this.option('visible'));
                 break;
             case 'closeOnOutsideClick':
+            case 'hideOnOutsideClick':
             case 'propagateOutsideClick':
                 break;
             case 'animation':

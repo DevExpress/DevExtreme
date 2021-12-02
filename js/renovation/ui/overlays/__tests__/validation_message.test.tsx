@@ -12,7 +12,7 @@ describe('ValidationMessage', () => {
     it('View render', () => {
       const componentProps = new ValidationMessageProps();
       const props = {
-        props: componentProps,
+        componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<ValidationMessage>;
       const tree = shallow(<ValidationMessageView {...props as any} />);

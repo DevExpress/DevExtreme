@@ -38,5 +38,9 @@ module.exports = (dirname) => ({
     },
     resolve: {
         extensions: ['.js', '.tsx', '.ts'],
+        alias: {
+            'react-dom': path.resolve(dirname, '../../node_modules/react-dom'),
+            'react': path.resolve(dirname, '../../node_modules/react'),
+        }
     },
 });

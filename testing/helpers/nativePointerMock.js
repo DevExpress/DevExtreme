@@ -774,6 +774,7 @@
             let event = $.extend($.Event(options.type), originalEvent(options), options);
 
             event[$.expando] = false;
+            event.isTrusted = false;
             event = $.event.fix(event);
 
             return event;

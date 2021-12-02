@@ -11,7 +11,7 @@ describe('DateBox', () => {
     it('View render', () => {
       const componentProps = new DateBoxProps();
       const props = {
-        props: componentProps,
+        componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<DateBox>;
       const tree = shallow(<DateBoxView {...props as any} />);

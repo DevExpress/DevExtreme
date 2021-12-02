@@ -45,17 +45,65 @@ jobs:
       working-directory: ./artifacts/npm/devextreme
       run: npm pack
 
-    - name: Copy build artifacts      
+    - name: Copy build artifacts
       uses: actions/upload-artifact@v2
       with:
         name: devextreme-npm
         path: ./artifacts/npm/devextreme/devextreme-*.tgz
         retention-days: 1
 
+  test_npm_renovation:
+    name: Renovated NPM - ${{ matrix.framework }}
+    needs: build
+    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        # framework: [angular, react]
+        framework: [react]
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v2
+
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Install packages in devextreme repo
+      run: npm install --no-audit --no-fund
+
+    - name: Build Renovated NPM
+      run: npm run build-npm-renovation:${{ matrix.framework }}
+
+    - name: Download DevExtreme package
+      uses: actions/download-artifact@v2
+      with:
+        name: devextreme-npm
+        path: ./testing/renovation-npm/${{ matrix.framework }}-app
+
+    - name: Prepare test project
+      working-directory: ./testing/renovation-npm
+      run: |
+        npm i
+
+        npm run pack:renovation ${{ matrix.framework }}
+        npm run install-all ${{ matrix.framework }}
+        npm run start ${{ matrix.framework }} &
+
+    - name: Run tests
+      working-directory: ./testing/renovation-npm
+      run: |
+        npm run test:${{ matrix.framework }}
+
   test_angular:
     name: Angular wrapper tests
     needs: build
-    runs-on: shr-ubuntu-m5a-docker-cpu2ram8
+    runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 30
 
     steps:
@@ -95,8 +143,14 @@ jobs:
 
     - name: Clone devextreme-angular repo from PR author fork
       continue-on-error: true
-      if: github.event_name == 'pull_request'
-      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-angular ./devextreme-angular-repo
+      if: github.event_name == 'pull_request' && steps.last_run_status.outputs.last_run_status != 'success'
+      run: |
+        REMOTE_URL=https://github.com/${{github.event.pull_request.user.login}}/devextreme-angular
+        REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
+        
+        if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
+          git clone -b $REMOTE_BRANCH $REMOTE_URL ./devextreme-angular-repo
+        fi
 
     - name: Clone devextreme-angular repo
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -270,7 +324,13 @@ jobs:
     - name: Clone devextreme-demos repo from PR author fork
       continue-on-error: true
       if: github.event_name == 'pull_request'
-      run: git clone -b ${{github.event.pull_request.head.ref}} https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos ./devextreme-demos
+      run: |
+        REMOTE_URL=https://github.com/${{github.event.pull_request.user.login}}/devextreme-demos
+        REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
+        
+        if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
+          git clone -b $REMOTE_BRANCH $REMOTE_URL ./devextreme-demos
+        fi
 
     - name: Clone devextreme-demos repo
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -286,6 +346,7 @@ jobs:
         path: ./devextreme-demos
 
     - name: Delete DX packages
+      if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
       run:  sed -i '/22.1-next/d' ./package.json
 
@@ -339,7 +400,7 @@ jobs:
   notify:
     runs-on: shr-ubuntu-c5-docker-cpu0d5ram1
     name: Send notifications
-    needs: [build, test_angular, test_bundlers, test_demos]
+    needs: [build, test_angular, test_bundlers, test_demos, test_npm_renovation]
     if: always() && contains(needs.*.result, 'failure')
 
     steps:

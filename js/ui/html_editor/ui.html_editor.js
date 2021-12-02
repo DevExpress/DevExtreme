@@ -405,7 +405,7 @@ const HtmlEditor = Editor.inherit({
         const userOptions = extend(true, {
             width: 'auto',
             height: 'auto',
-            closeOnOutsideClick: true
+            hideOnOutsideClick: true
         }, this.option('formDialogOptions'));
 
         this._formDialog = new FormDialog(this, userOptions);

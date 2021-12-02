@@ -4,6 +4,7 @@ import {
   Ref,
   Method,
   RefObject,
+  Consumer,
 } from '@devextreme-generator/declarations';
 
 import {
@@ -25,15 +26,19 @@ import { hasWindow } from '../../../core/utils/window';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from './common/consts';
 import { ScrollableProps } from './common/scrollable_props';
 
+import { resolveRtlEnabled } from '../../utils/resolve_rtl';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
+
 let isServerSide = !hasWindow();
 
 export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
     scrollableNativeRef,
     scrollableSimulatedRef,
+    rtlEnabled,
     props: {
       useNative, children, classes,
-      aria, disabled, width, height, visible, rtlEnabled,
+      aria, disabled, width, height, visible,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
       scrollByContent, useKeyboard, pullDownEnabled,
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
@@ -138,6 +143,9 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 })
 
 export class Scrollable extends JSXComponent<ScrollableProps>() {
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
+
   @Ref() scrollableNativeRef!: RefObject<ScrollableNative>;
 
   @Ref() scrollableSimulatedRef!: RefObject<ScrollableSimulated>;
@@ -293,22 +301,20 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
     }
   }
 
-  @Method()
-  // eslint-disable-next-line class-methods-use-this
-  isRenovated(): boolean {
-    return true;
-  }
-
   validate(event: DxMouseEvent): boolean {
     return this.scrollableRef.validate(event) as boolean;
   }
 
-  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollableRef(): any {
     if (this.props.useNative) {
       return this.scrollableNativeRef.current!;
     }
     return this.scrollableSimulatedRef.current!;
+  }
+
+  get rtlEnabled(): boolean {
+    const { rtlEnabled } = this.props;
+    return !!resolveRtlEnabled(rtlEnabled, this.config);
   }
 }

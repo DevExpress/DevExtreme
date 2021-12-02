@@ -55,7 +55,7 @@ const moduleConfig = {
     }
 };
 
-const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
+const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('scrollbar', moduleConfig);
 
@@ -212,7 +212,7 @@ QUnit.test('scrollbar in scaled container has correct position after update', fu
     const distance = -100;
     let expectedScrollbarDistance = -distance * (containerHeight / (contentHeight * 5)) / scaleRatio;
 
-    if(isRenovation) {
+    if(isRenovatedScrollable) {
         expectedScrollbarDistance = -distance * (containerHeight / (contentHeight * 5));
     }
 
@@ -366,7 +366,7 @@ QUnit.test('scroll not updated before start if auto update is prevented', functi
         .down()
         .move(0, -10);
 
-    assert.equal(scrollable.scrollOffset().top, 0, 'scrollable not moved');
+    assert.equal(scrollable.scrollOffset().top, isRenovatedScrollable ? 10 : 0, 'scrollable not moved');
 });
 
 QUnit.test('scroll not updated after scrollTo if auto update is prevented', function(assert) {
@@ -387,7 +387,7 @@ QUnit.test('scroll not updated after scrollTo if auto update is prevented', func
 
     scrollable.scrollTo(10);
 
-    assert.equal(scrollable.scrollOffset().top, 0, 'scrollable not moved');
+    assert.equal(scrollable.scrollOffset().top, isRenovatedScrollable ? 10 : 0, 'scrollable not moved');
 });
 
 QUnit.test('native scrollable should be updated before dxscrollinit', function(assert) {
@@ -569,7 +569,7 @@ QUnit.test('useSimulatedScrollbar option dependence from useNative option', func
 
     $scrollable.dxScrollable('option', 'useNative', true);
     // NOTE: on android devices useSimulatedScrollbar is true always
-    assert.equal($scrollable.dxScrollable('option', 'useSimulatedScrollbar'), devices.real().platform === 'android', 'useSimulatedScrollbar option was changed');
+    assert.equal($scrollable.dxScrollable('option', 'useSimulatedScrollbar'), isRenovatedScrollable ? true : devices.real().platform === 'android', 'useSimulatedScrollbar option was changed');
 });
 
 QUnit.test('scrollBar is not hoverable when scrollByThumb options is false', function(assert) {
@@ -606,7 +606,7 @@ QUnit.test('content size should be rounded to prevent unexpected scrollbar appea
 });
 
 QUnit.test('scrollbar should be hidden when container size is almost similar to content size when zooming', function(assert) {
-    if(isRenovation) {
+    if(isRenovatedScrollable) {
         // uses private API specific for old widget only
         assert.ok(true);
         return;

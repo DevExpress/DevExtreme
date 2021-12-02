@@ -8,12 +8,12 @@ import { DomComponentWrapper } from './common/dom_component_wrapper';
 import { BaseWidgetProps } from './common/base_props';
 
 export const viewFunction = ({
-  props,
+  componentProps,
   restAttributes,
 }: LoadIndicator): JSX.Element => (
   <DomComponentWrapper
     componentType={LegacyLoadIndicator}
-    componentProps={props}
+    componentProps={componentProps}
     templateNames={[]}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
@@ -31,4 +31,9 @@ export class LoadIndicatorProps extends BaseWidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class LoadIndicator extends JSXComponent(LoadIndicatorProps) {}
+export class LoadIndicator extends JSXComponent(LoadIndicatorProps) {
+  /* istanbul ignore next: WA for Angular */
+  get componentProps(): LoadIndicatorProps {
+    return this.props;
+  }
+}

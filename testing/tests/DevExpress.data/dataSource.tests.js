@@ -1306,6 +1306,20 @@ QUnit.test('dispose unsubscribes events', function(assert) {
     assert.ok(!events['customizeStoreLoadOptions'].has());
 });
 
+QUnit.test('items should be deleted on dataSource disposing(T1045202)', function(assert) {
+    const source = new DataSource({
+        store: TEN_NUMBERS,
+    });
+    source.load().done(() => {
+        const items = source.items();
+        assert.deepEqual(items, TEN_NUMBERS);
+
+        source.dispose();
+        assert.deepEqual(items, TEN_NUMBERS);
+        assert.equal(source.items(), undefined);
+    });
+});
+
 QUnit.module('Changing store load options', moduleConfig);
 
 QUnit.test('sort', function(assert) {
