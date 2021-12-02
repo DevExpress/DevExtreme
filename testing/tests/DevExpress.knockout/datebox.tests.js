@@ -5,6 +5,7 @@ const devices = require('core/devices');
 const uiDateUtils = require('ui/date_box/ui.date_utils');
 const dateLocalization = require('localization/date');
 const ko = require('knockout');
+const browser = require('core/utils/browser');
 
 require('integration/knockout');
 require('ui/date_box');
@@ -68,7 +69,10 @@ const getExpectedResult = function(date, mode, stringDate) {
 
 QUnit.module('options changed callbacks', moduleConfig);
 
-QUnit.test('several editors for same value', function(assert) {
+// FF93 change datetime-local formatting. Revive this test after research
+const testAction = browser.mozilla ? 'skip' : 'test';
+
+QUnit[testAction]('several editors for same value', function(assert) {
     const value = new Date(2012, 10, 26, 16, 40, 0);
     let newValue = null;
     const vm = {

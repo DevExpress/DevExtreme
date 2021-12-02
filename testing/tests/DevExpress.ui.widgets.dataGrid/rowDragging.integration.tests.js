@@ -13,6 +13,7 @@ import DataGrid from 'ui/data_grid/ui.data_grid';
 import pointerMock from '../../helpers/pointerMock.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import CustomStore from 'data/custom_store';
+import { generateItems } from '../../helpers/dataGridMocks.js';
 
 
 QUnit.module('Row dragging', baseModuleConfig, () => {
@@ -122,5 +123,35 @@ QUnit.module('Row dragging', baseModuleConfig, () => {
 
         // assert
         assert.notOk($('.dx-sortable-source-hidden').length, 'no dx-sortable-source-hidden elements after dragging');
+    });
+
+    QUnit.test('Fixed content should have correct width when editing, columnFixed and rowDragging are enabled', function(assert) {
+        // arrange, act
+        createDataGrid({
+            dataSource: generateItems(100),
+            height: 300,
+            width: 400,
+            rowDragging: {
+                allowReordering: true,
+                showDragIcons: true
+            },
+            columnFixing: {
+                enabled: true
+            },
+            scrolling: {
+                useNative: true,
+            },
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            }
+        });
+        this.clock.tick(100);
+
+        // assert
+        const $dataGridContent = $('.dx-datagrid-rowsview .dx-datagrid-content:not(dx-datagrid-content-fixed)');
+        const $fixedDataGridContent = $('.dx-datagrid-rowsview .dx-datagrid-content.dx-datagrid-content-fixed');
+
+        assert.strictEqual($dataGridContent.width(), $fixedDataGridContent.width(), 'fixed content has correct width');
     });
 });

@@ -1022,7 +1022,7 @@ export default {
                             return;
                         }
 
-                        let $tooltipElement = $container.find('.' + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
+                        let $tooltipElement = this._rowsView.element().find('.' + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS));
                         const $overlayContainer = $container.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
 
                         $tooltipElement && $tooltipElement.remove();
@@ -1117,10 +1117,14 @@ export default {
                             errorMessageText += (errorMessageText.length ? '<br/>' : '') + encodeHtml(message);
                         });
 
+                        const invalidMessageClass = this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
+
+                        this._rowsView.element().find('.' + invalidMessageClass).remove();
+
                         const $overlayElement = $('<div>')
                             .addClass(INVALID_MESSAGE_CLASS)
                             .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
-                            .addClass(this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
+                            .addClass(invalidMessageClass)
                             .html(errorMessageText)
                             .appendTo($cell);
 

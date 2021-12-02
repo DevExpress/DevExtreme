@@ -2087,6 +2087,9 @@ export default {
                         const groupParameters = gridCoreUtils.normalizeSortingInfo(dataSource.group());
                         const columnsGroupParameters = that.getGroupDataSourceParameters();
                         const columnsSortParameters = that.getSortDataSourceParameters();
+                        const groupingChanged = !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters, true);
+                        const groupExpandingChanged = !groupingChanged && !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters);
+
                         if(!that._columns.length) {
                             each(groupParameters, function(index, group) {
                                 that._columns.push(group.selector);
@@ -2096,13 +2099,15 @@ export default {
                             });
                             assignColumns(that, createColumnsFromOptions(that, that._columns));
                         }
-                        if((fromDataSource || (!columnsGroupParameters && !that._hasUserState)) && !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters)) {
+
+                        if((fromDataSource || (!columnsGroupParameters && !that._hasUserState)) && (groupingChanged || groupExpandingChanged)) {
                             ///#DEBUG
                             that.__groupingUpdated = true;
                             ///#ENDDEBUG
                             updateSortGroupParameterIndexes(that._columns, groupParameters, 'groupIndex');
                             if(fromDataSource) {
-                                updateColumnChanges(that, 'grouping');
+                                groupingChanged && updateColumnChanges(that, 'grouping');
+                                groupExpandingChanged && updateColumnChanges(that, 'groupExpanding');
                                 isColumnsChanged = true;
                             }
                         }

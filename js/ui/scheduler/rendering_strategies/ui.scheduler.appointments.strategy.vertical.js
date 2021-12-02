@@ -290,7 +290,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
         const durationInHours = (endDate.getTime() - startDate.getTime()) / toMs('hour');
 
-        let width = Math.ceil(durationInHours / 24) * cellWidth;
+        const skippedHours = this.getSkippedHoursInRange(startDate, endDate);
+        let width = Math.ceil((durationInHours - skippedHours) / 24) * cellWidth;
 
         width = this.cropAppointmentWidth(width, cellWidth);
         return width;

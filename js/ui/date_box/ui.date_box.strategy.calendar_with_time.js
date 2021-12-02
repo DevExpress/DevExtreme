@@ -195,7 +195,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     getValue: function() {
-        let date = this._widget.option('value');
+        let date = this._widget.option('value') ?? this._widget.getContouredDate();
         date = date ? new Date(date) : new Date();
 
         return this._updateDateTime(date);
