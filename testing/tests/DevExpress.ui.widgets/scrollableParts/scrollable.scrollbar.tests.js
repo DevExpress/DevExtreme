@@ -663,7 +663,7 @@ QUnit.module('scrollbar visibility', {
 
             assert.equal($scrollbar.length, 1, 'scrollbar exist');
             assert.equal($scrollbar.is(':hidden'), showScrollbar === 'never', 'scrollbar visibility');
-            assert.equal($scrollbar.hasClass('dx-state-invisible'), isRenovation ? showScrollbar === 'never' : false, 'scrollbar dx-state-invisible class');
+            assert.equal($scrollbar.hasClass('dx-state-invisible'), isRenovatedScrollable ? showScrollbar === 'never' : false, 'scrollbar dx-state-invisible class');
             assert.equal($verticalScroll.hasClass('dx-state-invisible'), useNative || showScrollbar !== 'always', 'thumb visibility');
         } else {
             assert.equal($scrollbar.length, 0, 'scrollbar not rendered');
@@ -702,12 +702,6 @@ QUnit.module('scrollbar visibility', {
     });
 
     configs.forEach(outerScrollableOptions => {
-        QUnit.test(`check scrollbar visibility: outerScrollable: ${JSON.stringify(outerScrollableOptions)}`, function(assert) {
-            this.$outerScrollable.dxScrollable(outerScrollableOptions);
-
-            checkStyles(assert, this.$outerScrollable, outerScrollableOptions);
-        });
-
         configs.forEach(innerScrollableOptions => {
             QUnit.test(`check scrollbar visibility: outerScrollable: ${JSON.stringify(outerScrollableOptions)}, innerScrollable: ${JSON.stringify(innerScrollableOptions)}`, function(assert) {
                 this.$outerScrollable.dxScrollable(outerScrollableOptions);
