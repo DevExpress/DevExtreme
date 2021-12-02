@@ -24,6 +24,22 @@
     color: $texteditor-placeholder-color;
   }
 
+  &.dx-texteditor-with-label,
+  &.dx-texteditor-with-floating-label {
+    &.dx-editor-underlined {
+      .dx-icon-search {
+        @include dx-texteditor-with-label-icon($material-base-standard-texteditor-input-horizontal-padding);
+      }
+    }
+
+    &.dx-editor-filled,
+    &.dx-editor-outlined {
+      .dx-icon-search {
+        @include dx-texteditor-with-label-icon($material-filled-texteditor-input-horizontal-padding);
+      }
+    }
+  }
+
   &.dx-editor-underlined {
     .dx-icon-search {
       left: $material-base-standard-texteditor-input-horizontal-padding;
