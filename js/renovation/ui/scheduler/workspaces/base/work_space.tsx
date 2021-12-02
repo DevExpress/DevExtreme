@@ -1110,7 +1110,8 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         currentCellData: cellData,
       });
 
-      if (nextFocusedCell === cellData) {
+      if (nextFocusedCell === cellData
+          && this.cellsSelectionState!.focusedCell.cellData.index !== cellData.index) {
         const firstCell = this.cellsSelectionState!.firstSelectedCell;
         const lastCell = cellData;
 

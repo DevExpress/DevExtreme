@@ -842,6 +842,82 @@ describe('WorkSpace', () => {
           expect(workSpace.cellsSelectionState)
             .toBe(defaultSelectionState);
         });
+
+        it('should not save state if new focused cell is equal to the old one', () => {
+          const ref: any = createRef();
+          mount(
+            <div>
+              <div className={DATE_TABLE_ROW_CLASS}>
+                <div ref={ref} className={DATE_TABLE_CELL_CLASS} />
+              </div>
+            </div>,
+          );
+          const eventMock: any = {
+            type: 'mouse',
+            target: ref.current,
+            button: 0,
+            preventDefault: jest.fn(),
+            stopPropagation: jest.fn(),
+          };
+
+          const workSpace = new WorkSpace({
+            ...new WorkSpaceProps(),
+            currentDate: new Date(2021, 10, 20),
+          });
+
+          const defaultSelectionState = {
+            selectedCells: [{
+              startDate: new Date(2021, 10, 21),
+              index: 1,
+              groupIndex: 0,
+            }],
+            focusedCell: {
+              coordinates: {
+                columnIndex: 1,
+                rowIndex: 0,
+              },
+              cellData: {
+                startDate: new Date(2021, 10, 21),
+                index: 1,
+                groupIndex: 0,
+              },
+            },
+            firstSelectedCell: {
+              startDate: new Date(2021, 10, 21),
+              index: 1,
+              groupIndex: 0,
+            },
+          } as any;
+
+          workSpace.isPointerDown = true;
+          workSpace.cellsSelectionState = defaultSelectionState;
+
+          const cells = [[{
+            startDate: new Date(2021, 10, 20),
+            index: 0,
+            groupIndex: 0,
+          }, {
+            startDate: new Date(2021, 10, 21),
+            index: 1,
+            groupIndex: 0,
+          }, {
+            startDate: new Date(2021, 10, 20),
+            index: 0,
+            groupIndex: 1,
+          }, {
+            startDate: new Date(2021, 10, 21),
+            index: 1,
+            groupIndex: 1,
+          }]];
+
+          mockGetCellData.mockImplementationOnce(() => cells[0][1]);
+          mockGetCellsByGroupIndexAndAllDay.mockImplementationOnce(() => [cells[0].slice(0, 2)]);
+
+          workSpace.onPointerMove(eventMock);
+
+          expect(workSpace.cellsSelectionState)
+            .toBe(defaultSelectionState);
+        });
       });
 
       describe('onPointerUp', () => {
