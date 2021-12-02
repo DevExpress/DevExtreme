@@ -7,12 +7,11 @@ import {
   verticalViews,
   horizontalViews,
 } from '../../utils';
-import { restoreBrowserSize } from '../../../../../../helpers/restoreBrowserSize';
 import { multiPlatformTest, createWidget, updateComponentOptions } from '../../../../../../helpers/multi-platform-test';
 import { PlatformType } from '../../../../../../helpers/multi-platform-test/platform-type';
 
 const test = multiPlatformTest({
-  page: 'declaration/scheduler',
+  page: 'declaration/schedulerAdaptiveRTL',
   platforms: ['jquery', 'react'],
 });
 
@@ -42,8 +41,7 @@ const createScheduler = async (
 
       await t
         .expect(scheduler.checkViewType(view))
-        .ok()
-        .wait(100);
+        .ok();
 
       await t.expect(
         await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
@@ -52,16 +50,12 @@ const createScheduler = async (
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t, { platform }) => {
-    await t.resizeWindow(400, 600);
-
+  }).before(async (_, { platform }) => {
     await createScheduler(platform, {
       views,
       currentView: 'day',
       crossScrollingEnabled,
     });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
   });
 
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when horizontal grouping and RTL are used`, async (t, { platform, screenshotComparerOptions }) => {
@@ -74,8 +68,7 @@ const createScheduler = async (
 
       await t
         .expect(scheduler.checkViewType(view))
-        .ok()
-        .wait(100);
+        .ok();
 
       await t.expect(
         await takeScreenshot(`generic-view=${view}-crossScrolling=${!!crossScrollingEnabled}-horizontal-rtl.png`, scheduler.workSpace, screenshotComparerOptions),
@@ -84,9 +77,7 @@ const createScheduler = async (
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t, { platform }) => {
-    await t.resizeWindow(400, 600);
-
+  }).before(async (_, { platform }) => {
     await createScheduler(platform, {
       views: horizontalViews,
       currentView: 'day',
@@ -94,8 +85,6 @@ const createScheduler = async (
       groups: ['priorityId'],
       resources: resourceDataSource,
     });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
   });
 
   test(`Adaptive views layout test in generic theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t, { platform, screenshotComparerOptions }) => {
@@ -118,9 +107,7 @@ const createScheduler = async (
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }).before(async (t, { platform }) => {
-    await t.resizeWindow(400, 600);
-
+  }).before(async (_, { platform }) => {
     await createScheduler(platform, {
       views: verticalViews,
       currentView: 'day',
@@ -128,7 +115,5 @@ const createScheduler = async (
       groups: ['priorityId'],
       resources: resourceDataSource,
     });
-  }).after(async (t) => {
-    await restoreBrowserSize(t);
   });
 });
