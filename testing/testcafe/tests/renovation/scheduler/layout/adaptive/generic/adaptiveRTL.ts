@@ -13,7 +13,7 @@ import { PlatformType } from '../../../../../../helpers/multi-platform-test/plat
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery'/* , 'react' */],
+  platforms: ['jquery', 'react'],
 });
 
 fixture('Scheduler: Adaptive Generic theme layout in RTL');

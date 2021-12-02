@@ -5,7 +5,7 @@ import { PlatformType } from '../../../../../helpers/multi-platform-test/platfor
 
 const test = multiPlatformTest({
   page: 'declaration/schedulerTimePanelCustomizationContainer',
-  platforms: ['jquery'/* , 'react' */],
+  platforms: ['jquery', 'react'],
 });
 
 fixture('Scheduler: Layout Customization: Time Panel');
