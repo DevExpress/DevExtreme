@@ -7,6 +7,7 @@ import {
 } from '../cell';
 import { CellBase, CellBaseProps } from '../../cell';
 import * as combineClassesModule from '../../../../../../utils/combine_classes';
+import { DATE_TABLE_CELL_CLASS } from '../../../const';
 
 const combineClasses = jest.spyOn(combineClassesModule, 'combineClasses');
 
@@ -93,7 +94,7 @@ describe('DateTableCellBase', () => {
             .toHaveBeenCalledWith({
               'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-cell-sizes-vertical': true,
-              'dx-scheduler-date-table-cell': true,
+              [DATE_TABLE_CELL_CLASS]: true,
               'dx-state-focused': true,
               'dx-scheduler-focused-cell': true,
               '': true,
@@ -110,7 +111,7 @@ describe('DateTableCellBase', () => {
             .toHaveBeenCalledWith({
               'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-cell-sizes-vertical': false,
-              'dx-scheduler-date-table-cell': false,
+              [DATE_TABLE_CELL_CLASS]: false,
               '': true,
             });
         });
@@ -125,7 +126,7 @@ describe('DateTableCellBase', () => {
             .toHaveBeenCalledWith({
               'dx-scheduler-cell-sizes-horizontal': true,
               'dx-scheduler-cell-sizes-vertical': true,
-              'dx-scheduler-date-table-cell': true,
+              [DATE_TABLE_CELL_CLASS]: true,
               'test-class': true,
             });
         });

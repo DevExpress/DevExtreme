@@ -12,6 +12,7 @@ import { AllDayPanelTableBody } from './all_day_panel/table_body';
 import { LayoutProps } from '../layout_props';
 import { DateTableCellBase } from './cell';
 import { combineClasses } from '../../../../../utils/combine_classes';
+import { DATE_TABLE_ROW_CLASS } from '../../const';
 
 export interface CellTemplateProps extends ViewCellData {
   dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
@@ -109,7 +110,7 @@ export class DateTableBody extends JSXComponent<DateTableBodyProps, 'cellTemplat
     const { addVerticalSizesClassToRows } = this.props;
 
     return combineClasses({
-      'dx-scheduler-date-table-row': true,
+      [DATE_TABLE_ROW_CLASS]: true,
       'dx-scheduler-cell-sizes-vertical': addVerticalSizesClassToRows,
     });
   }
