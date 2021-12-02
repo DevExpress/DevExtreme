@@ -1,7 +1,7 @@
 
 import $ from 'jquery';
-import OverlayDrag from 'ui/overlay/overlay_drag';
-import { OverlayPositionController } from 'ui/overlay/overlay_position_controller';
+import PopupDrag from 'ui/popup/popup_drag';
+import { PopupPositionController } from 'ui/popup/popup_position_controller';
 
 const KEYBOARD_DRAG_STEP = 5;
 
@@ -28,11 +28,11 @@ QUnit.module('overlay_drag', {
     QUnit.module('public methods', () => {
         QUnit.module('keyboard navigation', {
             beforeEach: function() {
-                this.drag = new OverlayDrag({
+                this.drag = new PopupDrag({
                     dragEnabled: true,
                     handle: this.handle,
                     draggableElement: this.draggableElement,
-                    positionController: new OverlayPositionController({
+                    positionController: new PopupPositionController({
                         container: $('#qunit-fixture'),
                         $root: $('#qunit-fixture'),
                         $content: this.draggableElement,
@@ -86,7 +86,7 @@ QUnit.module('overlay_drag', {
     });
 
     QUnit.test('_moveByOffset() changes draggableElement position', function(assert) {
-        const drag = new OverlayDrag({
+        const drag = new PopupDrag({
             dragEnabled: true,
             handle: this.handle,
             container: this.container,
