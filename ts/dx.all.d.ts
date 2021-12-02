@@ -17013,18 +17013,6 @@ declare module DevExpress.ui {
      */
     deferRendering?: boolean;
     /**
-     * [descr:dxOverlayOptions.dragAndResizeArea]
-     */
-    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement;
-    /**
-     * [descr:dxOverlayOptions.dragEnabled]
-     */
-    dragEnabled?: boolean;
-    /**
-     * [descr:dxOverlayOptions.dragOutsideBoundary]
-     */
-    dragOutsideBoundary?: boolean;
-    /**
      * [descr:dxOverlayOptions.elementAttr]
      * @deprecated [depNote:dxOverlayOptions.elementAttr]
      */
@@ -18100,9 +18088,17 @@ declare module DevExpress.ui {
      */
     container?: string | DevExpress.core.UserDefinedElement;
     /**
+     * [descr:dxPopupOptions.dragAndResizeArea]
+     */
+    dragAndResizeArea?: string | DevExpress.core.UserDefinedElement;
+    /**
      * [descr:dxPopupOptions.dragEnabled]
      */
     dragEnabled?: boolean;
+    /**
+     * [descr:dxPopupOptions.dragOutsideBoundary]
+     */
+    dragOutsideBoundary?: boolean;
     /**
      * [descr:dxPopupOptions.focusStateEnabled]
      */
