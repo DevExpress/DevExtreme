@@ -45,7 +45,7 @@ jobs:
       working-directory: ./artifacts/npm/devextreme
       run: npm pack
 
-    - name: Copy build artifacts      
+    - name: Copy build artifacts
       uses: actions/upload-artifact@v2
       with:
         name: devextreme-npm
@@ -59,6 +59,11 @@ jobs:
     timeout-minutes: 30
 
     steps:
+    - name: Use Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
     - name: Set default run status
       run: echo "default" > last_run_status
 
@@ -104,7 +109,7 @@ jobs:
       with:
         name: devextreme-npm
         path: ./devextreme-angular-repo/packages/devextreme-angular
-   
+
     - name: Install devextreme package
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-angular-repo/packages/devextreme-angular
@@ -114,7 +119,7 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-angular-repo
       run: npm install --no-audit --no-fund
-      
+
     - name: Update angular metadata
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: |
@@ -173,18 +178,18 @@ jobs:
 
     - name: Install bundlers
       if: steps.last_run_status.outputs.last_run_status != 'success'
-      working-directory: ./testing/bundlers  
+      working-directory: ./testing/bundlers
       run: npm install --no-audit --no-fund
 
-    - name: Install DevExtreme package 
+    - name: Install DevExtreme package
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm install --save-dev $(find . -maxdepth 1 -name "devextreme-*.tgz")
 
-    - name: Generate entry files 
+    - name: Generate entry files
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
-      run: npm run generate-entry-files  
+      run: npm run generate-entry-files
 
     - name: Build webpack cjs
       if: steps.last_run_status.outputs.last_run_status != 'success'
@@ -205,12 +210,12 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm run build:rollup
-      
+
     - name: Build parcel
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
       run: npm run build:parcel
-      
+
     - name: Build vite
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./testing/bundlers
@@ -219,18 +224,18 @@ jobs:
     - name: Save run status
       if: steps.last_run_status.outputs.last_run_status != 'success'
       run: echo "::set-output name=last_run_status::success" > last_run_status
-      
+
   test_demos:
     needs: build
     strategy:
       fail-fast: false
-      matrix:      
+      matrix:
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
 
     runs-on: ubuntu-latest
     name: Demos visual tests ${{ matrix.CONSTEL }}
     timeout-minutes: 20
-  
+
     steps:
     - name: Get sources
       uses: actions/checkout@v2
@@ -285,7 +290,7 @@ jobs:
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
       run: npm run prepare-js
-      
+
     - name: Run Web Server
       if: steps.last_run_status.outputs.last_run_status != 'success'
       working-directory: ./devextreme-demos
