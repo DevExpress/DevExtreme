@@ -468,9 +468,4 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
     return this.props.maxOffset;
   }
-
-  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
-  // get scrollbar(): any { // set Scrollbar type is technical limitation in the generator
-  //   return this.scrollbarRef.current!;
-  // }
 }

@@ -9,7 +9,7 @@ fixture`Form`
   ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
     [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
       const testName = `labelMode priorities, frmLblMode=${formLabelMode},lblVis=${labelVisible},edtr.lblMode=${editorLabelMode}`;
-      test.skip(testName, async (t) => {
+      test(testName, async (t) => {
         const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
         await t
           .expect(await takeScreenshot(`${testName}.png`, '#container'))
@@ -25,7 +25,7 @@ fixture`Form`
             dataField: 'field1', label: { visible: labelVisible }, editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'], labelMode: editorLabelMode },
           },
           {
-            dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { labelMode: editorLabelMode },
+            dataField: 'field2', label: { visible: labelVisible }, editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17), labelMode: editorLabelMode },
           },
           {
             dataField: 'field3', label: { visible: labelVisible }, editorType: 'dxCheckBox', editorOptions: { labelMode: editorLabelMode },
@@ -180,7 +180,7 @@ fixture`Form`
 ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
   [true, false].forEach((showColonAfterLabel) => {
     const testName = `show semicolon, frmLblMode=${formLabelMode}, shwSmclnAfterlbl=${showColonAfterLabel}`;
-    test.skip(testName, async (t) => {
+    test(testName, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       await t
         .expect(await takeScreenshot(`${testName}.png`, '#container'))
@@ -194,7 +194,7 @@ fixture`Form`
         width: 500,
         items: [
           { dataField: 'field1', editorType: 'dxAutocomplete', editorOptions: { items: ['1', '2'] } },
-          { dataField: 'field2', editorType: 'dxCalendar' },
+          { dataField: 'field2', editorType: 'dxCalendar', editorOptions: { value: new Date(2021, 9, 17) } },
           { dataField: 'field3', editorType: 'dxCheckBox' },
           { dataField: 'field4', editorType: 'dxColorBox' },
           { dataField: 'field5', editorType: 'dxDateBox' },

@@ -2808,7 +2808,6 @@ testModule('widget sizing render', moduleConfig, () => {
     });
 });
 
-
 testModule('keyboard navigation', {
     beforeEach: function() {
         fx.off = true;
