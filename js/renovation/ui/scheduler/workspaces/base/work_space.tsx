@@ -660,7 +660,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
     viewDataProvider.completeViewDataMap = this.completeViewDataMap;
     viewDataProvider.viewDataMap = this.viewDataMap;
-    viewDataProvider.viewData = this.viewData;
 
     const generationOptions = prepareGenerationOptions(
       {

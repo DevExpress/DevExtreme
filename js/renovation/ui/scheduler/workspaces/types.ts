@@ -185,6 +185,8 @@ interface ViewOptions {
   isVerticalGrouping: boolean;
   groupOrientation: GroupOrientation;
   isGroupedByDate: boolean;
+  startCellIndex: number;
+  startRowIndex: number;
 }
 
 export interface ViewDataProviderOptions {
@@ -218,7 +220,6 @@ export interface ViewDataProviderType {
   completeViewDataMap: ViewCellData[][];
   viewDataMap: ViewDataMap;
   timePanelData: TimePanelData;
-  viewData: GroupedViewData;
   dateHeaderData: DateHeaderData;
   getCellData: (rowIndex: number, columnIndex: number, isAllDay) => ViewCellData;
   getCellCount: (config: CountGenerationConfig) => number;
