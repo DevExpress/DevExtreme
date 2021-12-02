@@ -26,7 +26,8 @@ import {
 import {
     DIRECTION_HORIZONTAL,
     DIRECTION_VERTICAL,
-    SCROLLABLE_WRAPPER_CLASS } from 'renovation/ui/scroll_view/common/consts.js';
+    SCROLLABLE_WRAPPER_CLASS
+} from 'renovation/ui/scroll_view/common/consts.js';
 
 
 const moduleConfig = {
