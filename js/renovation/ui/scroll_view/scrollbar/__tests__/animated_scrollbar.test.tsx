@@ -35,6 +35,7 @@ describe('AnimatedScrollbar', () => {
     expect({ ...viewModel.props() }).toEqual({
       direction: 'vertical',
       bottomPocketSize: 0,
+      containerHasSizes: false,
       containerSize: 0,
       contentPaddingBottom: 0,
       contentSize: 0,
@@ -227,7 +228,7 @@ describe('Handlers', () => {
                   viewModel.crossThumbScrolling = crossThumbScrolling;
                   viewModel.thumbScrolling = thumbScrolling;
 
-                  viewModel.moveHandler(delta);
+                  viewModel.moveHandler(delta, false);
 
                   let resultDelta = delta;
 
@@ -727,62 +728,65 @@ describe('Effects', () => {
             });
 
             each([true, false]).describe('inertiaEnabled: %o', (inertiaEnabled) => {
-              each([true, false]).describe('thumbScrolling: %o', (thumbScrolling) => {
-                each([true, false]).describe('crossThumbScrolling: %o', (crossThumbScrolling) => {
-                  it('startAnimator()', () => {
-                    (inRange as Mock).mockReturnValue(inRangeValue);
-                    const viewModel = new AnimatedScrollbar({
-                      direction: 'vertical',
-                      inertiaEnabled,
-                      onBounce: eventHandler,
-                      scrollLocation: -1500,
-                      maxOffset: -700,
-                      minOffset: 0,
-                    });
+              each([true, false]).describe('bounceEnabled: %o', (bounceEnabled) => {
+                each([true, false]).describe('thumbScrolling: %o', (thumbScrolling) => {
+                  each([true, false]).describe('crossThumbScrolling: %o', (crossThumbScrolling) => {
+                    it('startAnimator()', () => {
+                      (inRange as Mock).mockReturnValue(inRangeValue);
+                      const viewModel = new AnimatedScrollbar({
+                        direction: 'vertical',
+                        inertiaEnabled,
+                        bounceEnabled,
+                        onBounce: eventHandler,
+                        scrollLocation: -1500,
+                        maxOffset: -700,
+                        minOffset: 0,
+                      });
 
-                    viewModel.thumbScrolling = thumbScrolling;
-                    viewModel.crossThumbScrolling = crossThumbScrolling;
-                    Object.defineProperties(viewModel, {
-                      isReadyToStart: { get() { return isReadyToStart; } },
-                    });
-                    viewModel.canceled = true;
-                    viewModel.velocity = -10;
+                      viewModel.thumbScrolling = thumbScrolling;
+                      viewModel.crossThumbScrolling = crossThumbScrolling;
+                      Object.defineProperties(viewModel, {
+                        isReadyToStart: { get() { return isReadyToStart; } },
+                      });
+                      viewModel.canceled = true;
+                      viewModel.velocity = -10;
 
-                    viewModel.startAnimator();
+                      viewModel.startAnimator();
 
-                    let expectedCanceled = true;
-                    let expectedVelocity = -10;
-                    let expectedPendingInertiaAnimator = false;
-                    let needRiseBounce = false;
-                    let expectedPendingBounceAnimator = false;
+                      let expectedCanceled = true;
+                      let expectedVelocity = -10;
+                      let expectedPendingInertiaAnimator = false;
+                      let needRiseBounce = false;
+                      let expectedPendingBounceAnimator = false;
 
-                    if (isReadyToStart) {
-                      expectedCanceled = false;
+                      if (isReadyToStart) {
+                        expectedCanceled = false;
 
-                      if (inRangeValue && inertiaEnabled) {
-                        if (thumbScrolling || (!thumbScrolling && crossThumbScrolling)) {
-                          expectedVelocity = 0;
+                        if (inRangeValue && inertiaEnabled) {
+                          if (thumbScrolling || (!thumbScrolling && crossThumbScrolling)) {
+                            expectedVelocity = 0;
+                          }
+                          expectedPendingInertiaAnimator = true;
                         }
-                        expectedPendingInertiaAnimator = true;
+
+                        if (!inRangeValue && bounceEnabled) {
+                          expectedVelocity = 800 / BOUNCE_ACCELERATION_SUM;
+                          expectedPendingBounceAnimator = true;
+                          needRiseBounce = true;
+                        }
                       }
 
-                      if (!inRangeValue) {
-                        expectedVelocity = 800 / BOUNCE_ACCELERATION_SUM;
-                        expectedPendingBounceAnimator = true;
-                        needRiseBounce = true;
+                      expect(viewModel.canceled).toEqual(expectedCanceled);
+                      expect(viewModel.velocity).toEqual(expectedVelocity);
+                      expect(viewModel.pendingInertiaAnimator)
+                        .toEqual(expectedPendingInertiaAnimator);
+                      expect(viewModel.pendingBounceAnimator)
+                        .toEqual(expectedPendingBounceAnimator);
+
+                      if (eventHandler) {
+                        expect(eventHandler).toHaveBeenCalledTimes(needRiseBounce ? 1 : 0);
                       }
-                    }
-
-                    expect(viewModel.canceled).toEqual(expectedCanceled);
-                    expect(viewModel.velocity).toEqual(expectedVelocity);
-                    expect(viewModel.pendingInertiaAnimator)
-                      .toEqual(expectedPendingInertiaAnimator);
-                    expect(viewModel.pendingBounceAnimator)
-                      .toEqual(expectedPendingBounceAnimator);
-
-                    if (eventHandler) {
-                      expect(eventHandler).toHaveBeenCalledTimes(needRiseBounce ? 1 : 0);
-                    }
+                    });
                   });
                 });
               });
@@ -934,9 +938,8 @@ describe('Animator', () => {
                   inProgress: { get() { return inProgress; } },
                 });
 
-                expect(viewModel.isReadyToStart)
-                  .toEqual(needRiseEnd && !inProgress
-                    && !(pendingRefreshing || pendingLoading) && maxOffset < 0);
+                expect(viewModel.isReadyToStart).toEqual(needRiseEnd && !inProgress
+                    && !(pendingRefreshing || pendingLoading) /* && maxOffset < 0 */);
               });
             });
           });

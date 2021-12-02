@@ -16,11 +16,15 @@ export const view = ({
     elementTemplatePayload,
     indexedTemplate: IndexedTemplateComp,
     template: TemplateComp,
+    templateWithoutData: TemplateWithoutData,
     text,
   },
   restAttributes,
 }: TemplatedTestWidget): JSX.Element => {
-  const hasTemplate = TemplateComp || IndexedTemplateComp || ElementTemplateComp;
+  const hasTemplate = TemplateComp
+    || IndexedTemplateComp
+    || ElementTemplateComp
+    || TemplateWithoutData;
   return (
     <div
       {...restAttributes} // eslint-disable-line react/jsx-props-no-spreading
@@ -43,6 +47,9 @@ export const view = ({
           data={elementTemplatePayload}
         />
         )}
+        { TemplateWithoutData && (
+          <TemplateWithoutData />
+        )}
       </div>
       )}
       {!hasTemplate && children}
@@ -61,6 +68,8 @@ export class TemplatedTestWidgetProps {
   @Template() indexedTemplate?: any;
 
   @Template() elementTemplate?: any;
+
+  @Template() templateWithoutData?: any;
 
   @OneWay() elementTemplatePayload?: any;
 }

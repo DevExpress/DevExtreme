@@ -95,6 +95,7 @@ describe('Scrollable', () => {
           ? 'dx-scrollable dx-scrollable-native dx-scrollable-native-generic dx-scrollable-vertical dx-scrollable-disabled'
           : 'dx-scrollable dx-scrollable-simulated dx-scrollable-vertical dx-scrollable-disabled',
         ...restProps,
+        disabled: !!useNative,
       });
     });
   });
@@ -422,12 +423,6 @@ describe('Scrollable', () => {
     });
 
     describe('Getters', () => {
-      it('isRenovated', () => {
-        const viewModel = new Scrollable({ });
-
-        expect(viewModel.isRenovated()).toEqual(true);
-      });
-
       each([false, true]).describe('useNative: %o', (useNative) => {
         it('scrollableRef', () => {
           const viewModel = new Scrollable({ useNative });

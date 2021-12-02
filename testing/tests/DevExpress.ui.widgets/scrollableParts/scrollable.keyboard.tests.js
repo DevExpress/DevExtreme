@@ -14,7 +14,7 @@ import {
 } from './scrollable.constants.js';
 
 const SCROLL_LINE_HEIGHT = 40;
-const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
+const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 QUnit.module('keyboard support', {
     beforeEach: function() {
@@ -40,7 +40,7 @@ QUnit.module('keyboard support', {
 const getKeyboardMock = ($scrollable) => {
     let keyboard;
 
-    if(isRenovation) {
+    if(isRenovatedScrollable) {
         keyboard = keyboardMock($scrollable);
         $scrollable.focus();
     } else {

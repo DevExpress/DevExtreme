@@ -32,6 +32,7 @@ import {
     isExpectedItem,
     isFullPathContainsTabs,
     getItemPath,
+    getRootLevelOfExpectedComplexOption
 } from './ui.form.utils';
 
 import { convertToLabelMarkOptions } from './ui.form.layout_manager.utils'; // TODO: remove reference to 'ui.form.layout_manager.utils.js'
@@ -651,7 +652,7 @@ const Form = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        const rootNameOfComplexOption = this._getRootLevelOfExpectedComplexOption(args.fullName, ['formData', 'items']);
+        const rootNameOfComplexOption = getRootLevelOfExpectedComplexOption(args.fullName);
 
         if(rootNameOfComplexOption) {
             this._customHandlerOfComplexOption(args, rootNameOfComplexOption);
@@ -719,24 +720,6 @@ const Form = Widget.inherit({
             default:
                 this.callBase(args);
         }
-    },
-
-    _getRootLevelOfExpectedComplexOption: function(fullOptionName, expectedRootNames) {
-        const splitFullName = fullOptionName.split('.');
-        let result;
-
-        if(splitFullName.length > 1) {
-            let i;
-            const rootOptionName = splitFullName[0];
-
-            for(i = 0; i < expectedRootNames.length; i++) {
-                if(rootOptionName.search(expectedRootNames[i]) !== -1) {
-                    result = expectedRootNames[i];
-                }
-            }
-        }
-
-        return result;
     },
 
     _tryCreateItemOptionAction: function(optionName, item, value, previousValue, itemPath) {

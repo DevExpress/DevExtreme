@@ -232,7 +232,7 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandAlignRight'),
                     text: messageLocalization.format('dxDiagram-commandAlignRight'),
                     icon: 'alignright',
-                    menu: 'alignright'
+                    menuIcon: 'alignright'
                 },
                 lock: {
                     command: DiagramCommand.Lock,
@@ -793,6 +793,7 @@ const DiagramCommandsManager = {
                 const command = {
                     command: internalCommand && internalCommand.command,
                     name: c.name,
+                    location: c.location,
                     text: c.text || internalCommand && internalCommand.text,
                     hint: c.text || internalCommand && internalCommand.hint,
                     icon: c.icon || internalCommand && internalCommand.icon,

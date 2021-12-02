@@ -2063,6 +2063,48 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.strictEqual(dataGrid.getVisibleRows()[5].key, 6, 'added row key is correct');
     });
 
+    QUnit.test('Push several insert with reshape and repaintChangesOnly (T1043891)', function(assert) {
+        // arrange
+        const data = [
+            { id: 1 },
+            { id: 2 },
+            { id: 3 },
+            { id: 4 },
+            { id: 5 }
+        ];
+
+        const dataSource = new DataSource({
+            store: {
+                type: 'array',
+                key: 'id',
+                data: data
+            },
+            reshapeOnPush: true,
+            pushAggregationTimeout: 0
+        });
+        const dataGrid = createDataGrid({
+            height: 200,
+            repaintChangesOnly: true,
+            scrolling: {
+                mode: 'virtual',
+                updateTimeout: 0
+            },
+            dataSource: dataSource,
+            columns: [{ dataField: 'id', sortOrder: 'desc' }]
+        });
+
+        this.clock.tick();
+
+        // act
+        for(let id = 6; id <= 10; id++) {
+            dataSource.store().push([{ type: 'insert', data: { id } }]);
+        }
+
+        // assert
+        assert.strictEqual(dataGrid.getVisibleRows()[0].key, 10, 'first row key is correct');
+        assert.strictEqual(dataGrid.getVisibleRows().length, 6, 'visible row count');
+    });
+
     QUnit.test('Push without reshape should not force load if scrolling mode is virtual', function(assert) {
         // arrange
         const data = [
@@ -3013,7 +3055,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         const visibleRows = dataGrid.getVisibleRows();
 
         assert.ok(topVisibleRowData.id > 1, 'top visible row data is not first');
-        assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id > 3, 'rows in viewport are rendered');
+        assert.ok(visibleRows[visibleRows.length - 1].data.id - topVisibleRowData.id >= 3, 'rows in viewport are rendered');
     });
 
     // T750279
@@ -3142,7 +3184,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
                         rowRenderingMode
                     }
                 });
-                const scrollTopPosition = 380; // top position of the 5-th data row
+                const scrollTopPosition = 330; // top position of the 5-th data row
 
                 // act
                 this.clock.tick();
@@ -4615,6 +4657,62 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             assert.strictEqual(dataGrid.option('paging.pageIndex'), 1, 'pageIndex option');
             assert.deepEqual(dataGrid.getVisibleRows().map(row => row.key), [4, 5], 'visible rows');
         });
+    });
+
+    QUnit.test('Store.load should not be called on scroll down when the last row is visible', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 1000000; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        const store = new ArrayStore({
+            key: 'id',
+            data: getData()
+        });
+        let callCount = 0;
+        const dataGrid = createDataGrid({
+            dataSource: {
+                key: store.key(),
+                load: function(loadOptions) {
+                    callCount++;
+                    return store.load(loadOptions);
+                },
+                totalCount: function(loadOptions) {
+                    return store.totalCount(loadOptions);
+                }
+            },
+            height: 500,
+            remoteOperations: true,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.navigateToRow(999999);
+        this.clock.tick(300);
+        dataGrid.getScrollable().scrollTo({ top: 16000000 });
+        this.clock.tick(300);
+        callCount = 0;
+        const visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.strictEqual(visibleRows[visibleRows.length - 1].key, 1000000, 'last row is rendered');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 16000000 });
+        this.clock.tick(300);
+
+        assert.strictEqual(callCount, 0, 'load is not called');
     });
 });
 

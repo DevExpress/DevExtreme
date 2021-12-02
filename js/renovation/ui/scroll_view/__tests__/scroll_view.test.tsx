@@ -95,6 +95,7 @@ describe('ScrollView', () => {
           ? 'dx-scrollable dx-scrollable-native dx-scrollable-native-generic dx-scrollable-vertical dx-scrollable-disabled dx-scrollview'
           : 'dx-scrollable dx-scrollable-simulated dx-scrollable-vertical dx-scrollable-disabled dx-scrollview',
         ...restProps,
+        disabled: !!useNative,
       });
     });
   });

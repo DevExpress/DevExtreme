@@ -90,6 +90,11 @@
           margin-right: $material-list-item-horizontal-padding;
 
           @include dx-icon-sizing($material-button-icon-size);
+
+          .dx-rtl & {
+            margin-right: 0;
+            margin-left: $material-list-item-horizontal-padding;
+          }
         }
       }
     }
@@ -105,8 +110,8 @@
 }
 
 .dx-toolbar-button {
-  .dx-button-has-text:not(.dx-button-back) {
-    .dx-icon {
+  .dx-button-has-text {
+    .dx-button-content .dx-icon {
       @include dx-icon-sizing($material-button-icon-size);
       @include dx-icon-margin(6px);
     }
