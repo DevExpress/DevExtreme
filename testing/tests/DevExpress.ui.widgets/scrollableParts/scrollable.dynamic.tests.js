@@ -561,7 +561,7 @@ QUnit.test('velocity calculated correctly when content height less than containe
 
         resizeCallbacks.fire();
 
-        assert.equal(updateHandler.callCount, isRenovatedScrollable ? 0 : 1, 'onUpdate handler was fired once');
+        assert.equal(updateHandler.callCount, 1, 'onUpdate handler was fired once');
     });
 
 

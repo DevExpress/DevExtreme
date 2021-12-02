@@ -10,11 +10,11 @@ fixture('Timeline Appointments');
 
 const ignore = true;
 if (!ignore) {
-  test('all-day and ordinary appointments should overlap each other correctly in timeline views (T1017889)', async (t) => {
+  test('all-day and ordinary appointments should overlap each other correctly in timeline views (T1017889)', async (t, { screenshotComparerOptions }) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot('timeline-overlapping-appointments.png'))
+      .expect(await takeScreenshot('timeline-overlapping-appointments.png', undefined, screenshotComparerOptions))
       .ok()
 
       .expect(compareResults.isValid())
