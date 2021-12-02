@@ -604,6 +604,7 @@ describe('mapWidget', () => {
     options: [],
     templates: [],
     optionsTypeParams: [],
+    reexports: [],
   };
 
   it('should rename widget', () => {
