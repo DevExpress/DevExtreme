@@ -73,8 +73,11 @@
 
   @include user-select(text);
 
-  &:-webkit-autofill + .dx-placeholder {
-    display: none;
+  &:-webkit-autofill,
+  &:autofill {
+    + .dx-placeholder {
+      display: none;
+    }
   }
 
   &:-moz-ui-invalid {
