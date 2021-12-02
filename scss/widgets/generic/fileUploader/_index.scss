@@ -45,22 +45,24 @@ $generic-fileuploader-file-wrapper-border-size: 3px;
 
   .dx-fileuploader-input-container {
     display: block;
-    border: $generic-fileuploader-file-wrapper-border-size dashed $fileuploader-border-color;
     width: 100%;
   }
 
   .dx-fileuploader-input {
     display: block;
     width: 100%;
-    padding: $generic-fileuploader-vertical-padding * 2 $generic-fileuploader-file-wrapper-border-size;
+    padding-top: $generic-fileuploader-vertical-padding * 2 + $generic-fileuploader-file-wrapper-border-size;
+    padding-right: $generic-fileuploader-file-wrapper-border-size;
 
-    // NOTE: height of the widget should be the same in default and drag over states
-    margin-bottom: 1px;
+    // NOTE: height of the widget should be the same in default and drag over states, but not with margin help
+    padding-bottom: $generic-fileuploader-vertical-padding * 2 + $generic-fileuploader-file-wrapper-border-size + 1px;
+    padding-left: $generic-fileuploader-file-wrapper-border-size;
     box-sizing: content-box;
   }
 
   .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
     padding: $generic-fileuploader-vertical-padding * 2 $generic-fileuploader-vertical-padding + 2px;
+    border: $generic-fileuploader-file-wrapper-border-size dashed $fileuploader-border-color;
   }
 }
 
