@@ -1,20 +1,23 @@
-import React from 'react';
-import { mount } from 'enzyme';
+// import React from 'react';
+// import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { GridPager, viewFunction as GridPagerView, GridPagerProps } from '../widgets/pager';
+import { GridPager /* , viewFunction as GridPagerView, GridPagerProps */ } from '../widgets/pager';
 
 describe('Pager', () => {
-  describe('View', () => {
-    it('default render', () => {
-      const props = new GridPagerProps();
-      props.pageCount = 4;
+  // describe('View', () => {
+  //   it('default render', () => {
+  //     const pagerProps = new GridPagerProps();
+  //     pagerProps.pageCount = 4;
 
-      const viewProps = { props } as Partial<GridPager>;
-      const tree = mount(<GridPagerView {...viewProps as any} /> as any);
+  //     const pager = new GridPager(pagerProps);
 
-      expect(tree.find('.dx-page')).toHaveLength(4);
-    });
-  });
+  //     expect(pager.visible).toEqual(true);
+
+  //     const tree = mount(<GridPagerView {...pager as any} /> as any);
+  //     expect(tree.html()).toEqual('');
+  //     expect(tree.find('.dx-page')).toHaveLength(4);
+  //   });
+  // });
 
   describe('Logic', () => {
     describe('Getters', () => {

@@ -16,7 +16,7 @@ describe('DataGridLight', () => {
       } as Partial<DataGridLight>;
       const tree = mount(<DataGridView {...props as any} /> as any);
 
-      expect(tree.find(Widget).props()).toMatchObject({
+      expect(tree.find(Widget).first().props()).toMatchObject({
         aria: { role: 'presentation' },
         classes: '',
         'rest-attributes': 'true',
@@ -27,7 +27,7 @@ describe('DataGridLight', () => {
       const props = new DataGridLightProps();
       props.dataSource = [{ id: 1 }, { id: 2 }];
       props.columns = ['id'];
-      const viewProps = { props } as Partial<DataGridLight>;
+      const viewProps = new DataGridLight(props);
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
       expect(tree.find('tr')).toHaveLength(3);
@@ -64,7 +64,7 @@ describe('DataGridLight', () => {
       // todo: move when paging will be in different module
       describe('paging', () => {
         it('should calculate visibleItems', () => {
-          expect(new DataGridLight({
+          let dataGrid = new DataGridLight({
             dataSource: customers,
             columns,
             paging: {
@@ -72,9 +72,11 @@ describe('DataGridLight', () => {
               pageIndex: 0,
               pageSize: 5,
             },
-          }).visibleItems).toEqual(customers.slice(0, 5));
+          });
+          dataGrid.updatePagingProps();
+          expect(dataGrid.visibleItems).toEqual(customers.slice(0, 5));
 
-          expect(new DataGridLight({
+          dataGrid = new DataGridLight({
             dataSource: customers,
             columns,
             paging: {
@@ -82,9 +84,11 @@ describe('DataGridLight', () => {
               pageIndex: 1,
               pageSize: 5,
             },
-          }).visibleItems).toEqual(customers.slice(5, 10));
+          });
+          dataGrid.updatePagingProps();
+          expect(dataGrid.visibleItems).toEqual(customers.slice(5, 10));
 
-          expect(new DataGridLight({
+          dataGrid = new DataGridLight({
             dataSource: customers,
             columns,
             paging: {
@@ -92,7 +96,9 @@ describe('DataGridLight', () => {
               pageIndex: 1,
               pageSize: 'all',
             },
-          }).visibleItems).toEqual(customers);
+          });
+          dataGrid.updatePagingProps();
+          expect(dataGrid.visibleItems).toEqual(customers);
         });
       });
     });
