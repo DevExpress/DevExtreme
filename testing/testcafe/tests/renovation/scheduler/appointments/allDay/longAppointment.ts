@@ -4,7 +4,7 @@ import { multiPlatformTest, createWidget } from '../../../../../helpers/multi-pl
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery'/* 'react' */], // TODO uncomment after fix navigator in react
+  platforms: ['jquery', 'react'],
 });
 
 fixture('Layout:Appointments:AllDay');
