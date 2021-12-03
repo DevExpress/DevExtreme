@@ -1611,6 +1611,7 @@ QUnit.module('State Storing with real controllers', {
             'filterPanel': {},
             'filterValue': null,
             'searchText': '',
+            'selectedRowKeys': [],
             'pageIndex': 0,
             'pageSize': 20
         };
@@ -1732,6 +1733,37 @@ QUnit.module('State Storing with real controllers', {
 
             // assert
             assert.equal(this.option('searchPanel.text'), '');
+        });
+
+        QUnit.test(`focusedRowKey should be cleared after calling state(${emptyState})`, function(assert) {
+            // arrange
+            this.setupDataGridModules({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                keyExpr: 'id',
+                focusedRowEnabled: true,
+                focusedRowKey: 1
+            });
+
+            // act
+            this.state(emptyState);
+
+            // assert
+            assert.strictEqual(this.option('focusedRowKey'), null);
+        });
+
+        QUnit.test(`selectedRowKeys should be cleared after calling state(${emptyState})`, function(assert) {
+            // arrange
+            this.setupDataGridModules({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                keyExpr: 'id',
+                selectedRowKeys: [1, 2],
+            });
+
+            // act
+            this.state(emptyState);
+
+            // assert
+            assert.deepEqual(this.option('selectedRowKeys'), []);
         });
     });
 });
