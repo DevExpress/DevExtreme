@@ -68,8 +68,6 @@ export class TooltipProps extends BaseWidgetProps {
 
   @OneWay() disabled = false;
 
-  @OneWay() elementAttr = {};
-
   @OneWay() wrapperAttr = {};
 
   @OneWay() focusStateEnabled = isDesktop;
