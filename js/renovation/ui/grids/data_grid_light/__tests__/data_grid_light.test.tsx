@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { DataGridLight, viewFunction as DataGridView, DataGridLightProps } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
-import { columns, customers } from './data';
+import { columns, customers } from './test_data';
 
 describe('DataGridLight', () => {
   describe('View', () => {
@@ -106,6 +106,22 @@ describe('DataGridLight', () => {
           dataGrid.updatePagingProps();
           expect(dataGrid.visibleItems).toEqual(customers);
         });
+      });
+    });
+
+    describe('Callbacks', () => {
+      it('onPageIndexChange', () => {
+        const grid = new DataGridLight({});
+
+        grid.onPageIndexChange(100);
+        expect(grid.pagingPageIndex).toEqual(100);
+      });
+
+      it('onPageSizeChange', () => {
+        const grid = new DataGridLight({});
+
+        grid.onPageSizeChange(100);
+        expect(grid.pagingPageSize).toEqual(100);
       });
     });
   });

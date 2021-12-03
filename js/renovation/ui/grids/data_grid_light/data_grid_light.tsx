@@ -109,7 +109,7 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   }
 
   get visibleItems(): TRowData[] {
-    if (!this.pagingEnabled || this.pagingPageSize === 'all') {
+    if (!this.props.paging.enabled || this.pagingPageSize === 'all') {
       return this.props.dataSource;
     }
 
@@ -128,9 +128,6 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   }
 
   @InternalState()
-  pagingEnabled = true;
-
-  @InternalState()
   pagingPageIndex = 0;
 
   @InternalState()
@@ -138,7 +135,6 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
 
   @Effect()
   updatePagingProps(): void {
-    this.pagingEnabled = this.props.paging.enabled;
     this.pagingPageIndex = this.props.paging.pageIndex;
     this.pagingPageSize = this.props.paging.pageSize;
   }
