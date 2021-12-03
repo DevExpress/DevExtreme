@@ -9,7 +9,7 @@ export const viewFunction = ({ componentProps }: App): JSX.Element => (
   <CheckBox
     id="container"
     value={componentProps.value}
-    text={componentProps.text}
+    text="checkBox"
     valueChange={componentProps.valueChange}
   />
 );
