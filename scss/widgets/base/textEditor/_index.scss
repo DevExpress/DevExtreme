@@ -75,7 +75,7 @@
 
   &:autofill {
     + .dx-placeholder {
-      display: none;
+      display: none !important; // stylelint-disable-line declaration-no-important
     }
   }
 
