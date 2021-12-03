@@ -1,9 +1,11 @@
 import React from 'react';
 import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { DataGridLight, viewFunction as DataGridView, DataGridLightProps } from '../data_grid_light';
+import {
+  DataGridLight, viewFunction as DataGridView, DataGridLightProps, PagingProps,
+} from '../data_grid_light';
 import { Widget } from '../../../common/widget';
-import { columns, customers } from './test_data';
+import { customers } from './test_data';
 
 describe('DataGridLight', () => {
   describe('View', () => {
@@ -70,41 +72,40 @@ describe('DataGridLight', () => {
       // todo: move when paging will be in different module
       describe('paging', () => {
         it('should calculate visibleItems', () => {
-          let dataGrid = new DataGridLight({
-            dataSource: customers,
-            columns,
-            paging: {
-              enabled: true,
-              pageIndex: 0,
-              pageSize: 5,
-            },
-          });
+          const pagingProps = new PagingProps();
+          pagingProps.pageSize = 5;
+
+          const gridProps = new DataGridLightProps();
+          gridProps.paging = pagingProps;
+          gridProps.dataSource = customers;
+
+          const dataGrid = new DataGridLight(gridProps);
+
+          pagingProps.pageIndex = 0;
           dataGrid.updatePagingProps();
           expect(dataGrid.visibleItems).toEqual(customers.slice(0, 5));
 
-          dataGrid = new DataGridLight({
-            dataSource: customers,
-            columns,
-            paging: {
-              enabled: true,
-              pageIndex: 1,
-              pageSize: 5,
-            },
-          });
+          pagingProps.pageIndex = 1;
           dataGrid.updatePagingProps();
+          expect(dataGrid.pagingPageSize).toEqual(5);
+          expect(dataGrid.pagingPageIndex).toEqual(1);
           expect(dataGrid.visibleItems).toEqual(customers.slice(5, 10));
 
-          dataGrid = new DataGridLight({
-            dataSource: customers,
-            columns,
-            paging: {
-              enabled: true,
-              pageIndex: 1,
-              pageSize: 'all',
-            },
-          });
+          pagingProps.pageSize = 'all';
           dataGrid.updatePagingProps();
           expect(dataGrid.visibleItems).toEqual(customers);
+        });
+
+        it('should calculate pageCount', () => {
+          const dataGrid = new DataGridLight({
+            dataSource: customers,
+          });
+
+          dataGrid.pagingPageSize = 10;
+          expect(dataGrid.pagingPageCount).toEqual(6);
+
+          dataGrid.pagingPageSize = 'all';
+          expect(dataGrid.pagingPageCount).toEqual(1);
         });
       });
     });

@@ -55,7 +55,7 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
 );
 
 @ComponentBindings()
-class PagingProps {
+export class PagingProps {
   @OneWay()
   enabled = true;
 
