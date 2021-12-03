@@ -19,7 +19,7 @@ QUnit.module('State Storing', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options) {
-            setupTreeListModules(this, ['data', 'columns', 'stateStoring', 'filterRow', 'search', 'selection'], {
+            setupTreeListModules(this, ['data', 'columns', 'stateStoring', 'filterRow', 'search', 'selection', 'filterSync'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: $.extend({

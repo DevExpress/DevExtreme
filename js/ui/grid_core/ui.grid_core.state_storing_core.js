@@ -6,7 +6,7 @@ import browser from '../../core/utils/browser';
 import { sessionStorage } from '../../core/utils/storage';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { isDefined, isPlainObject } from '../../core/utils/type';
+import { isDefined, isPlainObject, isEmptyObject } from '../../core/utils/type';
 import { fromPromise } from '../../core/utils/deferred';
 
 const DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
@@ -113,7 +113,9 @@ export const StateStoringController = modules.ViewController.inherit((function()
                 this._isLoaded = true;
                 this._isLoading = false;
             }).done((state) => {
-                this.state(state);
+                if(state !== null && !isEmptyObject(state)) {
+                    this.state(state);
+                }
             });
             return loadResult;
         },
