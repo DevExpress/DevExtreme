@@ -4,6 +4,7 @@ import { normalizeRowsInfo } from './normalizeOptions';
 import { initializeCellsWidth, applyColSpans, applyRowSpans, applyBordersConfig, calculateHeights, calculateCoordinates, calculateTableSize, resizeFirstColumnByIndentLevel } from './row_utils';
 import { updateRowsAndCellsHeights } from './height_updater';
 import { generateRowsInfo } from './rows_generator';
+import { splitRowsInfosHorizontally } from './rows_splitting';
 import { drawCellsContent, drawCellsLines, drawGridLines, getDocumentStyles, setDocumentStyles } from './draw_utils';
 
 // TODO: check names with techwritters
@@ -73,38 +74,47 @@ function exportDataGrid(doc, dataGrid, options) {
             // when we know all rowSpans we can recalculate rowsHeight
             updateRowsAndCellsHeights(doc, rowsInfo);
 
-            // when we known all sizes we can calculate all coordinates
-            calculateCoordinates(doc, rowsInfo, options); // set/init/update 'pdfCell.top/left'
-
-            // recalculate for grouped rows
-            // TODO: applyGroupIndents()
-
-            applyBordersConfig(rowsInfo);
-
-            // splitting to pages
-            // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
-            // TODO: applySplitting()
-
-            const pdfCellsInfo = [].concat.apply([],
-                rowsInfo.map(rowInfo => {
-                    return rowInfo.cells
-                        .filter(cell => !isDefined(cell.pdfCell.isMerged))
-                        .map(cellInfo => {
-                            return { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell, pdfRowInfo: cellInfo.pdfRowInfo };
-                        });
-                })
-            );
-
             const docStyles = getDocumentStyles(doc);
-            drawCellsContent(doc, options.customDrawCell, pdfCellsInfo, docStyles);
-            drawCellsLines(doc, pdfCellsInfo, docStyles);
 
-            const isDrawTableBorderSpecified = options.drawTableBorder === true;
-            const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
-            if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
-                const tableRect = calculateTableSize(doc, rowsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
-                drawGridLines(doc, tableRect, docStyles);
-            }
+            // splitting to pages, split 'rowsInfo' into multiple 'rowsInfo's
+            let rowsInfosByPages = [ rowsInfo ];
+            rowsInfosByPages = splitRowsInfosHorizontally(rowsInfosByPages, options.splitByColumns);
+            // TODO: reinitialize cells widths ???
+            // TODO: splitRowsInfosVertically
+
+            rowsInfosByPages.forEach((pageRowsInfo) => {
+
+                const isFirstPage = rowsInfosByPages.indexOf(pageRowsInfo) === 0;
+                if(!isFirstPage) {
+                    doc.addPage();
+                }
+
+                // when we known all sizes we can calculate all coordinates
+                calculateCoordinates(doc, pageRowsInfo, options); // set/init/update 'pdfCell.top/left'
+
+                applyBordersConfig(pageRowsInfo);
+
+                const pdfCellsInfo = [].concat.apply([],
+                    pageRowsInfo.map(rowInfo => {
+                        return rowInfo.cells
+                            .filter(cell => !isDefined(cell.pdfCell.isMerged))
+                            .map(cellInfo => {
+                                return { ...cellInfo.pdfCell, gridCell: cellInfo.gridCell, pdfRowInfo: cellInfo.pdfRowInfo };
+                            });
+                    })
+                );
+
+                drawCellsContent(doc, options.customDrawCell, pdfCellsInfo, docStyles);
+                drawCellsLines(doc, pdfCellsInfo, docStyles);
+
+                const isDrawTableBorderSpecified = options.drawTableBorder === true;
+                const isEmptyPdfCellsInfoSpecified = isDefined(pdfCellsInfo) && pdfCellsInfo.length === 0;
+                if(isDrawTableBorderSpecified || isEmptyPdfCellsInfoSpecified) {
+                    const tableRect = calculateTableSize(doc, pageRowsInfo, options); // TODO: after splitting to pages we need get 'rowsInfo' for selected table in the page
+                    drawGridLines(doc, tableRect, docStyles);
+                }
+            });
+
             setDocumentStyles(doc, docStyles);
 
             resolve();
