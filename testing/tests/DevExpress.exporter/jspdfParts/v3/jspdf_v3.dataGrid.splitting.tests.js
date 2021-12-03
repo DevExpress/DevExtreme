@@ -12,6 +12,7 @@ const JSPdfSplittingTests = {
                     columns: [
                         { dataField: 'f1' }
                     ],
+                    width: 600,
                     dataSource: [{ f1: 'v1_1' }]
                 });
 
@@ -40,6 +41,7 @@ const JSPdfSplittingTests = {
                         { dataField: 'f1' },
                         { dataField: 'f2' },
                     ],
+                    width: 600,
                     dataSource: [{ f1: 'v1_1', f2: 'v2_1' }]
                 });
 
@@ -76,6 +78,7 @@ const JSPdfSplittingTests = {
                         { dataField: 'f2' },
                         { dataField: 'f3' },
                     ],
+                    width: 600,
                     dataSource: [{ f1: 'v1_1', f2: 'v2_1', f3: 'v3_1' }]
                 });
 
@@ -119,6 +122,7 @@ const JSPdfSplittingTests = {
                         { dataField: 'f2' },
                         { dataField: 'f3' },
                     ],
+                    width: 600,
                     dataSource: [{ f1: 'v1_1', f2: 'v2_1', f3: 'v3_1' }, { f1: 'v1_2', f2: 'v2_2', f3: 'v3_2' }]
                 });
 
