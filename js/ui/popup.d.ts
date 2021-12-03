@@ -92,11 +92,23 @@ export interface dxPopupOptions<TComponent> extends dxOverlayOptions<TComponent>
     container?: string | UserDefinedElement;
     /**
      * @docid
+     * @default undefined
+     * @public
+     */
+    dragAndResizeArea?: string | UserDefinedElement;
+    /**
+     * @docid
      * @default false
      * @default true &for(desktop)
      * @public
      */
     dragEnabled?: boolean;
+     /**
+     * @docid
+     * @default false
+     * @public
+     */
+     dragOutsideBoundary?: boolean;
     /**
      * @docid
      * @default true &for(desktop)
