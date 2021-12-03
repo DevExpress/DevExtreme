@@ -699,6 +699,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       intervalCount,
       allDayPanelExpanded,
       groups,
+      scrolling,
     } = this.props;
 
     return combineClasses({
@@ -717,6 +718,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       'dx-scheduler-group-column-count-two': this.isVerticalGrouping && groups.length === 2,
       'dx-scheduler-group-column-count-three': this.isVerticalGrouping && groups.length === 3,
       'dx-scheduler-work-space-both-scrollbar': this.props.crossScrollingEnabled,
+      'dx-scheduler-work-space-virtual': scrolling.mode === 'virtual',
       'dx-scheduler-work-space': true,
     });
   }
