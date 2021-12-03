@@ -170,6 +170,7 @@ export interface DateHeaderData {
   weekDayRightVirtualCellWidth?: number;
   weekDayLeftVirtualCellCount?: number;
   weekDayRightVirtualCellCount?: number;
+  isMonthDateHeader?: boolean;
 }
 
 interface CountGenerationConfig {
@@ -354,6 +355,7 @@ interface DateHeaderDataGenerationOptions {
   groups: Group[];
   groupOrientation: GroupOrientation;
   isGroupedByDate: boolean;
+  isMonthDateHeader: boolean;
 }
 
 type GetCompleteDateHeaderMap = (

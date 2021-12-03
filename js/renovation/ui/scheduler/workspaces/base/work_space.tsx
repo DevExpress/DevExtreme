@@ -583,6 +583,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       {
         isGenerateWeekDaysHeaderData: this.renderConfig.isGenerateWeekDaysHeaderData,
         isProvideVirtualCellsWidth: this.renderConfig.isProvideVirtualCellsWidth,
+        isMonthDateHeader: this.renderConfig.isMonthDateHeader,
         startDayHour,
         endDayHour,
         hoursInterval,
@@ -902,6 +903,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
     return (): void => {
       disposePointerDown!();
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       disposePointerMove!();
     };
   }
