@@ -15,7 +15,7 @@ class App extends React.Component {
     super();
     this.companies = service.getCompanies();
     this.state = {
-      labelMode: 'outside',
+      labelMode: 'floating',
       labelLocation: 'left',
       readOnly: false,
       showColon: true,

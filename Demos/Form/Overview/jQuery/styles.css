@@ -9,6 +9,10 @@
   margin-top: 25px;
 }
 
+#select-company-text {
+  display: none;
+}
+
 .options {
   padding: 20px;
   position: absolute;

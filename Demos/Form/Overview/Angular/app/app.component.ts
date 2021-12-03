@@ -38,7 +38,7 @@ export class AppComponent {
   width: any;
 
   constructor(service: Service) {
-    this.labelMode = 'outside';
+    this.labelMode = 'floating';
     this.labelLocation = 'left';
     this.readOnly = false;
     this.showColon = true;

@@ -90,7 +90,7 @@ export default {
   data() {
     const companies = service.getCompanies();
     return {
-      labelMode: 'outside',
+      labelMode: 'floating',
       labelLocation: 'left',
       readOnly: false,
       showColon: true,

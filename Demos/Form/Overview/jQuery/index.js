@@ -1,6 +1,6 @@
 $(() => {
   const form = $('#form').dxForm({
-    labelMode: 'outside',
+    labelMode: 'floating',
     formData: companies[0],
     readOnly: false,
     showColonAfterLabel: true,
@@ -12,7 +12,7 @@ $(() => {
   const companySelectorSelectBox = $('#select-company').dxSelectBox({
     displayExpr: 'Name',
     dataSource: companies,
-    labelMode: 'hidden',
+    labelMode: 'floating',
     label: 'Select company',
     value: companies[0],
     onValueChanged(data) {
@@ -24,7 +24,7 @@ $(() => {
 
   $('#label-mode').dxSelectBox({
     items: ['outside', 'static', 'floating', 'hidden'],
-    value: 'outside',
+    value: 'floating',
     onValueChanged(data) {
       form.option('labelMode', data.value);
 
