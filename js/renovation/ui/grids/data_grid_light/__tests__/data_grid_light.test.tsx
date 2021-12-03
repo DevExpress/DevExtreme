@@ -27,7 +27,10 @@ describe('DataGridLight', () => {
       const props = new DataGridLightProps();
       props.dataSource = [{ id: 1 }, { id: 2 }];
       props.columns = ['id'];
-      const viewProps = new DataGridLight(props);
+      const viewProps = {
+        props,
+        visibleItems: props.dataSource,
+      } as Partial<DataGridLight>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
       expect(tree.find('tr')).toHaveLength(3);
@@ -41,7 +44,10 @@ describe('DataGridLight', () => {
       const props = new DataGridLightProps();
       props.dataSource = [{ id: 1, name: 'name 1' }];
       props.columns = ['id', 'name'];
-      const viewProps = { props } as Partial<DataGridLight>;
+      const viewProps = {
+        props,
+        visibleItems: props.dataSource,
+      } as Partial<DataGridLight>;
       const tree = mount(<DataGridView {...viewProps as any} /> as any);
 
       expect(tree.find('tr')).toHaveLength(2);
