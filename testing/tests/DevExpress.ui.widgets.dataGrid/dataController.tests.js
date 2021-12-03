@@ -3977,11 +3977,15 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
             paging: true
         });
         this.dataController._refreshDataSource();
-        this.clock.tick();
+        this.clock.tick(300);
+
+        const rowsScrollController = this.dataController._rowsScrollController;
+        const defaultItemSize = rowsScrollController.getItemSize();
+        const bottomPosition = (this.dataController.totalItemsCount() - this.dataController.viewportSize()) * defaultItemSize;
 
         // act
-        this.dataController.setViewportPosition(100000);
-        this.clock.tick();
+        this.dataController.setViewportPosition(bottomPosition);
+        this.clock.tick(300);
 
         // assert
         const itemCount = this.dataController.items().length;
@@ -5282,7 +5286,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         this.dataController.init();
         this.setupDataSource({
-            data: [{ id: 1, name: 'test' }],
+            data: [
+                { id: 1, name: 'test' }
+            ],
             pageSize: 10
         });
 

@@ -662,12 +662,11 @@ const EditingController = modules.ViewController.inherit((function() {
             if(loadedRowIndex < 0) {
                 const newRowPosition = this._getNewRowPosition();
                 const pageIndex = dataController.pageIndex();
-                const pageCount = dataController.pageCount();
                 const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
 
                 if(newRowPosition !== LAST_NEW_ROW_POSITION && pageIndex === 0 && !isDefined(insertAfterOrBeforeKey)) {
                     loadedRowIndex = 0;
-                } else if(newRowPosition === LAST_NEW_ROW_POSITION && pageIndex === (pageCount - 1)) {
+                } else if(newRowPosition === LAST_NEW_ROW_POSITION && dataController.isLastPageLoaded()) {
                     loadedRowIndex = items.length;
                 }
             }
@@ -799,10 +798,12 @@ const EditingController = modules.ViewController.inherit((function() {
                 case LAST_NEW_ROW_POSITION:
                     break;
                 case PAGE_TOP_NEW_ROW_POSITION:
-                    change.insertBeforeKey = allItems[0].key;
-                    break;
                 case PAGE_BOTTOM_NEW_ROW_POSITION:
-                    change.insertAfterKey = allItems[allItems.length - 1].key;
+                    if(allItems.length) {
+                        const itemIndex = newRowPosition === PAGE_TOP_NEW_ROW_POSITION ? 0 : allItems.length - 1;
+
+                        change[itemIndex === 0 ? 'insertBeforeKey' : 'insertAfterKey'] = allItems[itemIndex].key;
+                    }
                     break;
                 default: {
                     const isViewportBottom = newRowPosition === VIEWPORT_BOTTOM_NEW_ROW_POSITION;
@@ -842,8 +843,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const newRowPosition = this._getNewRowPosition();
             const dataController = this._dataController;
             const pageIndex = dataController.pageIndex();
-            const pageCount = dataController.pageCount();
-            const lastPageIndex = pageCount - 1;
+            const lastPageIndex = dataController.pageCount() - 1;
 
             if(newRowPosition === FIRST_NEW_ROW_POSITION && pageIndex !== 0) {
                 return 0;
@@ -975,11 +975,13 @@ const EditingController = modules.ViewController.inherit((function() {
         _beforeFocusElementInRow: noop,
 
         _focusFirstEditableCellInRow: function(rowIndex) {
+            const dataController = this._dataController;
+            const key = dataController.getKeyByRowIndex(rowIndex);
             const $firstCell = this.getFirstEditableCellInRow(rowIndex);
 
             this._editCellInProgress = true;
-
             this._delayedInputFocus($firstCell, () => {
+                rowIndex = dataController.getRowIndexByKey(key);
                 this._editCellInProgress = false;
                 this._beforeFocusElementInRow(rowIndex);
             });

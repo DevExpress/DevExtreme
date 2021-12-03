@@ -5,6 +5,10 @@ import {
 } from '../core/element';
 
 import {
+    Skip,
+} from '../core/index';
+
+import {
     template,
 } from '../core/templates/template';
 
@@ -74,6 +78,9 @@ interface CellInfo<TRowData = any, TKey = any> {
     readonly cellElement: DxElement;
     readonly row: Row<TRowData, TKey>;
 }
+
+/** @public */
+export type Scrollable = Skip<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
 
 /** @public */
 export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;
@@ -1146,7 +1153,7 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
     getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;

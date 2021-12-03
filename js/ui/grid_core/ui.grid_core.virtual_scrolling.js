@@ -305,7 +305,8 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
 
     [
         'beginPageIndex',
-        'endPageIndex'
+        'endPageIndex',
+        'pageIndex'
     ].forEach(function(name) {
         result[name] = function() {
             if(this.option(LEGACY_SCROLLING_MODE) === false) {
@@ -325,7 +326,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         'setContentItemSizes', 'setViewportPosition',
         'getViewportItemIndex', 'setViewportItemIndex', 'getItemIndexByPosition',
         'viewportSize', 'viewportItemSize', 'getItemSize', 'getItemSizes',
-        'pageIndex', 'loadIfNeed'
+        'loadIfNeed'
     ].forEach(function(name) {
         result[name] = function() {
             const virtualScrollController = this._virtualScrollController;
@@ -708,7 +709,9 @@ const VirtualScrollingRowsViewExtender = (function() {
                 });
             }
 
-            that.loadIfNeed();
+            if(this.option(LEGACY_SCROLLING_MODE) !== false) {
+                that.loadIfNeed();
+            }
         },
 
         loadIfNeed: function() {
@@ -851,13 +854,11 @@ export const virtualScrollingModule = {
                                 return isVirtualMode(that) && that._dataSource?.lastLoadOptions().skip || 0;
                             },
                             loadedItemCount: function() {
-                                const insertRowCount = that._allItems?.filter(it => it.isNewRow).length || 0;
-                                return that._itemCount + insertRowCount;
+                                return that._itemCount;
                             },
                             totalItemsCount: function() {
                                 if(isVirtualPaging(that)) {
-                                    const insertRowCount = that.getController('editing')?.getInsertRowCount() ?? 0;
-                                    return that.totalItemsCount() + insertRowCount;
+                                    return that.totalItemsCount();
                                 }
 
                                 return that.option(LEGACY_SCROLLING_MODE) === false ? that._itemCount : that._items.filter(isItemCountable).length;
@@ -916,10 +917,11 @@ export const virtualScrollingModule = {
                                 });
                             },
                             items: function(countableOnly) {
-                                let result = that.items();
+                                let result = that._items;
 
                                 if(that.option(LEGACY_SCROLLING_MODE)) {
-                                    const virtualItemsCount = that.virtualItemsCount();
+                                    const dataSource = that.dataSource();
+                                    const virtualItemsCount = dataSource?.virtualItemsCount();
                                     const begin = virtualItemsCount ? virtualItemsCount.begin : 0;
                                     const rowPageSize = that.getRowPageSize();
 
@@ -1056,9 +1058,17 @@ export const virtualScrollingModule = {
                             this._allItems = items;
                             if(items.length) {
                                 const { skipForCurrentPage } = this.getLoadPageParams(true);
-                                const startLoadIndex = items[0].loadIndex + skipForCurrentPage;
+                                const skip = items[0].loadIndex + skipForCurrentPage;
+                                const take = this._loadViewportParams.take;
 
-                                result = items.filter(it => (it.loadIndex >= startLoadIndex || it.isNewRow && it.loadIndex >= startLoadIndex - 1) && it.loadIndex < startLoadIndex + this._loadViewportParams.take);
+                                result = items.filter(it => {
+                                    const isNewRowOnStart = it.isNewRow && it.loadIndex >= skip - 1;
+                                    const isNewRowInEmptyData = it.isNewRow && it.loadIndex === skip && take === 0;
+                                    const isLoadIndexGreaterStart = it.loadIndex >= skip || isNewRowOnStart;
+                                    const isLoadIndexLessEnd = it.loadIndex < skip + take || isNewRowInEmptyData;
+
+                                    return isLoadIndexGreaterStart && isLoadIndexLessEnd;
+                                });
                             }
 
                             return result;
@@ -1314,7 +1324,8 @@ export const virtualScrollingModule = {
                         const itemCount = this.items().length;
                         const viewportIsNotFilled = viewportSize > itemCount;
                         const currentTake = this._loadViewportParams?.take ?? 0;
-                        const newTake = this._rowsScrollController?.getViewportParams().take;
+                        const rowsScrollController = this._rowsScrollController;
+                        const newTake = rowsScrollController?.getViewportParams().take;
 
                         (viewportIsNotFilled || currentTake < newTake) && itemCount && this.loadViewport({
                             checkLoading: true
@@ -1424,6 +1435,20 @@ export const virtualScrollingModule = {
                     },
                     isEmpty: function() {
                         return this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this) ? !this._itemCount : this.callBase(this, arguments);
+                    },
+                    isLastPageLoaded: function() {
+                        let result = false;
+
+                        if(this.option(LEGACY_SCROLLING_MODE) === false && isVirtualPaging(this)) {
+                            const { pageIndex, loadPageCount } = this.getLoadPageParams(true);
+                            const pageCount = this.pageCount();
+
+                            result = pageIndex + loadPageCount >= pageCount;
+                        } else {
+                            result = this.callBase.apply(this, arguments);
+                        }
+
+                        return result;
                     }
                 };
 
