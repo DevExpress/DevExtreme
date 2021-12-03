@@ -1262,6 +1262,12 @@ export const dataControllerModule = {
 
                 getCachedStoreData: function() {
                     return this._dataSource && this._dataSource.getCachedStoreData();
+                },
+
+                isLastPageLoaded: function() {
+                    const pageIndex = this.pageIndex();
+                    const pageCount = this.pageCount();
+                    return pageIndex === (pageCount - 1);
                 }
             };
 
