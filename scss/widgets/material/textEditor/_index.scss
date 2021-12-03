@@ -30,22 +30,6 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
   @include dx-icon-sizing($material-texteditor-icon-container-size);
 }
 
-@mixin dx-texteditor-with-label-icon($texteditor-padding) {
-  position: absolute;
-  top: 50%;
-  margin-top: math.div(-($material-texteditor-icon-container-size + $texteditor-padding), 2);
-
-  @include dx-icon-sizing($material-texteditor-icon-container-size, $material-texteditor-icon-container-size + $texteditor-padding);
-
-  left: 0;
-
-  @at-root #{selector-append(".dx-rtl", &)},
-  .dx-rtl & {
-    left: initial;
-    right: 0;
-  }
-}
-
 @mixin texteditor-input-padding-underlined() {
   .dx-texteditor-input {
     padding-right: $material-texteditor-invalid-badge-size + $material-base-standard-texteditor-input-horizontal-padding;
