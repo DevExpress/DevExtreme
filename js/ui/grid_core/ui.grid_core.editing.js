@@ -798,10 +798,12 @@ const EditingController = modules.ViewController.inherit((function() {
                 case LAST_NEW_ROW_POSITION:
                     break;
                 case PAGE_TOP_NEW_ROW_POSITION:
-                    change.insertBeforeKey = allItems[0].key;
-                    break;
                 case PAGE_BOTTOM_NEW_ROW_POSITION:
-                    change.insertAfterKey = allItems[allItems.length - 1].key;
+                    if(allItems.length) {
+                        const itemIndex = newRowPosition === PAGE_TOP_NEW_ROW_POSITION ? 0 : allItems.length - 1;
+
+                        change[itemIndex === 0 ? 'insertBeforeKey' : 'insertAfterKey'] = allItems[itemIndex].key;
+                    }
                     break;
                 default: {
                     const isViewportBottom = newRowPosition === VIEWPORT_BOTTOM_NEW_ROW_POSITION;

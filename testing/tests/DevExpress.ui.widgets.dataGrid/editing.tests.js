@@ -20548,6 +20548,66 @@ QUnit.module('Editing - new row position', {
                 assert.strictEqual(rows.length, isVirtualScrolling ? 9 : 11, 'row count');
                 assert.ok(rows[isVirtualScrolling ? 0 : 1].isNewRow, 'new row');
             });
+
+            QUnit.test('newRowPosition = pageBottom when there are no items', function(assert) {
+                // arrange
+                const $testElement = $('#container').height(200);
+
+                this.options.height = 200;
+                this.options.dataSource.store.data = [];
+                this.options.editing.newRowPosition = 'pageBottom';
+                this.setupModules();
+                this.clock.tick();
+                this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 0, 'row count');
+
+                // act
+                this.addRow();
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 1, 'row count');
+                assert.ok(rows[0].isNewRow, 'new row');
+            });
+
+            QUnit.test('newRowPosition = pageTop when there are no items', function(assert) {
+                // arrange
+                const $testElement = $('#container').height(200);
+
+                this.options.height = 200;
+                this.options.dataSource.store.data = [];
+                this.options.editing.newRowPosition = 'pageTop';
+                this.setupModules();
+                this.clock.tick();
+                this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 0, 'row count');
+
+                // act
+                this.addRow();
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 1, 'row count');
+                assert.ok(rows[0].isNewRow, 'new row');
+            });
         });
     });
 });
