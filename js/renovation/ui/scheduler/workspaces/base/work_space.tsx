@@ -1072,7 +1072,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       this.cellsSelectionState = {
         focusedCell: {
           cellData,
-          coordinates: cellIndices,
+          position: cellIndices,
         },
         selectedCells: [cellData],
         firstSelectedCell: cellData,
@@ -1124,7 +1124,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         this.cellsSelectionState = {
           focusedCell: {
             cellData,
-            coordinates: cellIndices,
+            position: cellIndices,
           },
           selectedCells,
           firstSelectedCell: this.cellsSelectionState!.firstSelectedCell,

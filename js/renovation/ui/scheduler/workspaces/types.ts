@@ -67,7 +67,7 @@ interface CellPositionData {
 }
 
 interface CellInfo {
-  data: ViewCellData;
+  cellData: ViewCellData;
   position: CellPositionData;
 }
 
@@ -157,7 +157,7 @@ interface CellCoordinates {
 
 interface FocusedCell {
   cellData: ViewCellData;
-  coordinates: CellCoordinates;
+  position: CellCoordinates;
 }
 
 export interface DateHeaderData {

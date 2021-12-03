@@ -609,7 +609,7 @@ describe('WorkSpace', () => {
                 groupIndex: 0,
               }],
               focusedCell: {
-                coordinates: {
+                position: {
                   columnIndex: 0,
                   rowIndex: 0,
                 },
@@ -700,7 +700,7 @@ describe('WorkSpace', () => {
               groupIndex: 0,
             }],
             focusedCell: {
-              coordinates: {
+              position: {
                 columnIndex: 1,
                 rowIndex: 0,
               },
@@ -749,7 +749,7 @@ describe('WorkSpace', () => {
                 groupIndex: 0,
               }],
               focusedCell: {
-                coordinates: {
+                position: {
                   columnIndex: 0,
                   rowIndex: 0,
                 },
@@ -796,7 +796,7 @@ describe('WorkSpace', () => {
               groupIndex: 0,
             }],
             focusedCell: {
-              coordinates: {
+              position: {
                 columnIndex: 1,
                 rowIndex: 0,
               },
@@ -872,7 +872,7 @@ describe('WorkSpace', () => {
               groupIndex: 0,
             }],
             focusedCell: {
-              coordinates: {
+              position: {
                 columnIndex: 1,
                 rowIndex: 0,
               },
@@ -2277,7 +2277,7 @@ describe('WorkSpace', () => {
 
           workSpace.cellsSelectionState = {
             focusedCell: {
-              coordinates: {
+              position: {
                 columnIndex: 0,
                 rowIndex: 1,
               },
