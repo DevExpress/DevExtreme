@@ -1000,7 +1000,6 @@ declare module DevExpress {
   }
   /**
    * [descr:fx]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export const fx: {
     /**
@@ -3186,7 +3185,7 @@ declare module DevExpress.events {
   /**
    * [descr:EventObject]
    */
-  export class EventObject {
+  export type EventObject = {
     /**
      * [descr:EventObject.currentTarget]
      */
@@ -3230,7 +3229,7 @@ declare module DevExpress.events {
      * [descr:EventObject.stopPropagation()]
      */
     stopPropagation(): void;
-  }
+  };
   /**
    * [descr:handler(event, extraParameters)]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
@@ -5936,7 +5935,7 @@ declare module DevExpress.ui {
       rowIndex: number
     ): DevExpress.core.UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): DevExpress.ui.dxDataGrid.Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
@@ -8062,6 +8061,16 @@ declare module DevExpress.ui {
       promise?: PromiseLike<void>;
       cancel: boolean;
     }
+    export type Scrollable = DevExpress.core.Skip<
+      dxScrollable,
+      | '_templateManager'
+      | '_cancelOptionChange'
+      | '_getTemplate'
+      | '_invalidate'
+      | '_refresh'
+      | '_notifyOptionChanged'
+      | '_createElement'
+    >;
     export type Scrolling = ScrollingBase & {
       /**
        * [descr:dxDataGridOptions.scrolling.mode]
@@ -12491,9 +12500,10 @@ declare module DevExpress.ui {
   module dxFilterBuilder {
     export type ContentReadyEvent =
       DevExpress.events.EventInfo<dxFilterBuilder>;
+    export type CustomOperation = dxFilterBuilderCustomOperation;
     export type CustomOperationEditorTemplate = {
       readonly value?: string | number | Date;
-      readonly field: dxFilterBuilderField;
+      readonly field: Field;
       readonly setValue: Function;
     };
     export type DisposingEvent = DevExpress.events.EventInfo<dxFilterBuilder>;
@@ -12526,10 +12536,11 @@ declare module DevExpress.ui {
         readonly disabled: boolean;
         readonly rtlEnabled: boolean;
       };
+    export type Field = dxFilterBuilderField;
     export type FieldEditorTemplate = {
       readonly value?: string | number | Date;
       readonly filterOperation?: string;
-      readonly field: dxFilterBuilderField;
+      readonly field: Field;
       readonly setValue: Function;
     };
     /**
@@ -12552,7 +12563,7 @@ declare module DevExpress.ui {
       };
   }
   /**
-   * [descr:dxFilterBuilderCustomOperation]
+   * @deprecated Use the CustomOperation type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFilterBuilderCustomOperation {
@@ -12561,7 +12572,7 @@ declare module DevExpress.ui {
      */
     calculateFilterExpression?: (
       filterValue: any,
-      field: dxFilterBuilderField
+      field: DevExpress.ui.dxFilterBuilder.Field
     ) => string | Array<any> | Function;
     /**
      * [descr:dxFilterBuilderCustomOperation.caption]
@@ -12573,7 +12584,7 @@ declare module DevExpress.ui {
     customizeText?: (fieldInfo: {
       value?: string | number | Date;
       valueText?: string;
-      field?: dxFilterBuilderField;
+      field?: DevExpress.ui.dxFilterBuilder.Field;
     }) => string;
     /**
      * [descr:dxFilterBuilderCustomOperation.dataTypes]
@@ -12604,7 +12615,7 @@ declare module DevExpress.ui {
     name?: string;
   }
   /**
-   * [descr:dxFilterBuilderField]
+   * @deprecated Use the Field type instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
   export interface dxFilterBuilderField {
@@ -12717,11 +12728,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxFilterBuilderOptions.customOperations]
      */
-    customOperations?: Array<dxFilterBuilderCustomOperation>;
+    customOperations?: Array<DevExpress.ui.dxFilterBuilder.CustomOperation>;
     /**
      * [descr:dxFilterBuilderOptions.fields]
      */
-    fields?: Array<dxFilterBuilderField>;
+    fields?: Array<DevExpress.ui.dxFilterBuilder.Field>;
     /**
      * [descr:dxFilterBuilderOptions.filterOperationDescriptions]
      */
@@ -22025,7 +22036,7 @@ declare module DevExpress.ui {
       rowIndex: number
     ): DevExpress.core.UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): DevExpress.ui.dxTreeList.Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
@@ -22744,6 +22755,16 @@ declare module DevExpress.ui {
       TKey = any
     > = DevExpress.events.EventInfo<dxTreeList<TRowData, TKey>> &
       DevExpress.ui.dxDataGrid.SavingInfo<TRowData, TKey>;
+    export type Scrollable = DevExpress.core.Skip<
+      dxScrollable,
+      | '_templateManager'
+      | '_cancelOptionChange'
+      | '_getTemplate'
+      | '_invalidate'
+      | '_refresh'
+      | '_notifyOptionChanged'
+      | '_createElement'
+    >;
     export interface Scrolling extends DevExpress.ui.dxDataGrid.ScrollingBase {
       /**
        * [descr:dxTreeListOptions.scrolling.mode]
@@ -24069,7 +24090,7 @@ declare module DevExpress.ui {
     /**
      * [descr:GridBase.getScrollable()]
      */
-    getScrollable(): dxScrollable;
+    getScrollable(): DevExpress.ui.dxDataGrid.Scrollable;
     /**
      * [descr:GridBase.getVisibleColumnIndex(id)]
      */
