@@ -381,12 +381,3 @@ export const Component = Class.inherit({
         this.endUpdate();
     }
 });
-
-/**
- * @name Component
- * @module core/component
- * @export Component
- * @namespace DevExpress
- * @hidden
- * @wrappable
- */
