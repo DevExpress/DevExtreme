@@ -6,7 +6,7 @@ const SCHEDULER_SELECTOR = '#container';
 
 const test = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: [/* 'jquery', */'react'],
+  platforms: ['jquery', 'react'],
 });
 
 fixture('Renovated scheduler - Overflow indicator');
@@ -98,3 +98,27 @@ fixture('Renovated scheduler - Overflow indicator');
     );
   });
 });
+
+test('Appointment collector has correct offset when adaptivityEnabled=true', async (t, { screenshotComparerOptions }) => {
+  const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+  await t
+    .expect(await compareScreenshot(
+      t,
+      'appointment-collector-adaptability-timelineMonth.png',
+      scheduler.workSpace,
+      screenshotComparerOptions,
+    ))
+    .ok();
+}).before(async (_, { platform }) => createWidget(platform, 'dxScheduler', {
+  adaptivityEnabled: true,
+  currentDate: new Date(2021, 7, 1),
+  views: ['timelineMonth'],
+  currentView: 'timelineMonth',
+  dataSource: [{
+    text: 'text',
+    startDate: new Date(2021, 7, 1),
+    endDate: new Date(2021, 7, 2),
+  }],
+  height: 300,
+}));

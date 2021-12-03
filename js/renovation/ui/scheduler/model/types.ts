@@ -12,13 +12,13 @@ export interface AppointmentsConfigType {
   viewEndDayHour: number;
   currentDate: Date;
   resources: ResourceProps[];
-  maxAppointmentsPerCell: number | 'auto' | 'unlimited';
+  maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
   isVirtualScrolling: boolean;
   intervalCount: number;
   hoursInterval: number;
   showAllDayPanel: boolean;
   loadedResources: Group[];
-  modelGroups: string[];
+  groups: string[];
   groupByDate: boolean;
   appointmentCountPerCell: number;
   appointmentOffset: number;

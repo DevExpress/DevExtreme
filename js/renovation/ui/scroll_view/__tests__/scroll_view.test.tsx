@@ -59,7 +59,6 @@ describe('ScrollView', () => {
       reachBottomText: 'Loading...',
       refreshStrategy: 'pullDown',
       refreshingText: 'Refreshing...',
-      rtlEnabled: false,
       scrollByContent: false,
       scrollByThumb: true,
       showScrollbar: 'onHover',
@@ -95,6 +94,7 @@ describe('ScrollView', () => {
           ? 'dx-scrollable dx-scrollable-native dx-scrollable-native-generic dx-scrollable-vertical dx-scrollable-disabled dx-scrollview'
           : 'dx-scrollable dx-scrollable-simulated dx-scrollable-vertical dx-scrollable-disabled dx-scrollview',
         ...restProps,
+        disabled: !!useNative,
       });
     });
   });

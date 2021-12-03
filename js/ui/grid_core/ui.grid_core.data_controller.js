@@ -75,6 +75,7 @@ export const dataControllerModule = {
                     that._loadErrorHandler = that._handleLoadError.bind(that);
                     that._customizeStoreLoadOptionsHandler = that._handleCustomizeStoreLoadOptions.bind(that);
                     that._changingHandler = that._handleChanging.bind(that);
+                    that._dataPushedHandler = that._handleDataPushed.bind(that);
 
                     that._columnsController.columnsChanged.add(that._columnsChangedHandler);
 
@@ -95,7 +96,7 @@ export const dataControllerModule = {
                     return this._dataSource[optionName]();
                 },
                 callbackNames: function() {
-                    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged'];
+                    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed'];
                 },
                 callbackFlags: function(name) {
                     if(name === 'dataErrorOccurred') {
@@ -370,6 +371,9 @@ export const dataControllerModule = {
                 },
                 _handleLoadError: function(e) {
                     this.dataErrorOccurred.fire(e);
+                },
+                _handleDataPushed: function(changes) {
+                    this.pushed.fire(changes);
                 },
                 fireError: function() {
                     this.dataErrorOccurred.fire(errors.Error.apply(errors, arguments));
@@ -789,12 +793,14 @@ export const dataControllerModule = {
                         change.isLiveUpdate = true;
                     }
 
-                    this._correctRowIndices(function getRowIndexCorrection(rowIndex) {
-                        const oldItem = oldItems[rowIndex];
+                    this._correctRowIndices((rowIndex) => {
+                        const oldRowIndexOffset = this._rowIndexOffset || 0;
+                        const rowIndexOffset = this.getRowIndexOffset();
+                        const oldItem = oldItems[rowIndex - oldRowIndexOffset];
                         const key = getRowKey(oldItem);
-                        const newRowIndex = newIndexByKey[key];
+                        const newVisibleRowIndex = newIndexByKey[key];
 
-                        return newRowIndex >= 0 ? newRowIndex - rowIndex : 0;
+                        return newVisibleRowIndex >= 0 ? newVisibleRowIndex + rowIndexOffset - rowIndex : 0;
                     });
                 },
                 _correctRowIndices: noop,
@@ -809,9 +815,16 @@ export const dataControllerModule = {
                     change.changeType = changeType;
 
                     if(dataSource) {
-                        items = change.items || dataSource.items();
-                        items = this._beforeProcessItems(items);
-                        items = this._processItems(items, change);
+                        const cachedProcessedItems = this._cachedProcessedItems;
+                        if(change.useProcessedItemsCache && cachedProcessedItems) {
+                            items = cachedProcessedItems;
+                        } else {
+                            items = change.items || dataSource.items();
+                            items = this._beforeProcessItems(items);
+                            items = this._processItems(items, change);
+                            this._cachedProcessedItems = items;
+                        }
+
                         items = this._afterProcessItems(items, change);
 
                         change.items = items;
@@ -831,6 +844,8 @@ export const dataControllerModule = {
                                 item.loadIndex = newItem.loadIndex;
                             }
                         });
+
+                        this._rowIndexOffset = this.getRowIndexOffset();
                     } else {
                         this._items = [];
                     }
@@ -1031,6 +1046,7 @@ export const dataControllerModule = {
                         oldDataSource.loadError.remove(that._loadErrorHandler);
                         oldDataSource.customizeStoreLoadOptions.remove(that._customizeStoreLoadOptionsHandler);
                         oldDataSource.changing.remove(that._changingHandler);
+                        oldDataSource.pushed.remove(that._dataPushedHandler);
                         oldDataSource.dispose(that._isSharedDataSource);
                     }
 
@@ -1050,6 +1066,7 @@ export const dataControllerModule = {
                         dataSource.loadError.add(that._loadErrorHandler);
                         dataSource.customizeStoreLoadOptions.add(that._customizeStoreLoadOptionsHandler);
                         dataSource.changing.add(that._changingHandler);
+                        dataSource.pushed.add(that._dataPushedHandler);
                     }
                 },
                 items: function() {
@@ -1245,6 +1262,12 @@ export const dataControllerModule = {
 
                 getCachedStoreData: function() {
                     return this._dataSource && this._dataSource.getCachedStoreData();
+                },
+
+                isLastPageLoaded: function() {
+                    const pageIndex = this.pageIndex();
+                    const pageCount = this.pageCount();
+                    return pageIndex === (pageCount - 1);
                 }
             };
 

@@ -6,6 +6,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
 import visibilityEventsModule from 'events/visibility_change';
+import { EDITORS_WITHOUT_LABELS } from 'ui/form/ui.form.layout_manager.utils';
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
@@ -15,6 +16,7 @@ import 'ui/drop_down_box';
 
 import windowModule from 'core/utils/window';
 import Form from 'ui/form/ui.form.js';
+import TextEditorBase from 'ui/text_box/ui.text_editor.base.js';
 import { renderLabel } from 'ui/form/components/label.js';
 
 import {
@@ -36,6 +38,9 @@ import {
     FIELD_ITEM_LABEL_TEXT_CLASS,
 } from 'ui/form/components/label';
 
+const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
+const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
+
 import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
 
 import 'ui/html_editor';
@@ -48,6 +53,7 @@ import 'ui/text_area';
 import themes from 'ui/themes';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
+import { isDefined } from 'core/utils/type.js';
 
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
@@ -441,7 +447,7 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
 QUnit.test('From renders editors with the right label, labelMode', function(assert) {
     ['outside', 'hidden', 'static', 'floating'].forEach(labelMode => {
         const form = $('#form').dxForm({
-            formData: { name: 'Name' },
+            items: [ { dataField: 'name', editorType: 'dxTextBox' } ],
             labelMode
         }).dxForm('instance');
 
@@ -450,31 +456,134 @@ QUnit.test('From renders editors with the right label, labelMode', function(asse
         const widgetLabelText = renderedWidget.option('label');
 
         assert.equal(widgetLabelMode, labelMode === 'outside' ? 'hidden' : labelMode);
-        assert.equal(widgetLabelText, labelMode === 'outside' ? '' : 'Name:');
+        assert.equal(widgetLabelText, 'Name');
 
         form.dispose();
     });
 });
 
-QUnit.test('From renders editors with the right labelMark', function(assert) {
-    [false, true].forEach(showOptionalMark => {
-        ['static', 'floating'].forEach(labelMode => {
+[true, false].forEach((showColon) => {
+    [undefined, true, false].forEach((isLabelVisible) => {
+        ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+            [
+                'dxAutocomplete',
+                'dxCalendar',
+                'dxCheckBox',
+                'dxColorBox',
+                'dxDateBox',
+                'dxDropDownBox',
+                'dxHtmlEditor',
+                'dxLookup',
+                'dxNumberBox',
+                'dxRadioGroup',
+                'dxRangeSlider',
+                'dxSelectBox',
+                'dxSlider',
+                'dxSwitch',
+                'dxTagBox',
+                'dxTextArea',
+                'dxTextBox'
+            ].forEach((editorType) => {
+                QUnit.test(`label rendering, form.labelMode=${formLabelMode},label.visible=${isLabelVisible},editorType=${editorType},label.showColon=${showColon}`, function(assert) {
+                    const $form = $('#form').dxForm({
+                        labelMode: formLabelMode,
+                        items: [{
+                            dataField: 'item1',
+                            editorType,
+                            label: {
+                                visible: isLabelVisible,
+                                showColon,
+                            }
+                        }],
+                    });
+
+                    const $label = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+                    let needRenderLabel = isLabelVisible;
+                    if(needRenderLabel === undefined) {
+                        if(EDITORS_WITHOUT_LABELS.indexOf(editorType) !== -1 && formLabelMode !== 'hidden') {
+                            needRenderLabel = true;
+                        } else if(formLabelMode === 'outside') {
+                            needRenderLabel = true;
+                        }
+                    }
+                    assert.equal($label.length, needRenderLabel ? 1 : 0, 'label is rendered correctly');
+                    assert.equal($label.text(), needRenderLabel ? `Item 1${showColon ? ':' : ''}` : '');
+                });
+            });
+        });
+    });
+});
+
+
+['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+    [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
+        QUnit.test(`check editor labelMode, form.labelMode=${formLabelMode},editorOptions.labelMode=${editorLabelMode}`, function(assert) {
             const form = $('#form').dxForm({
-                formData: { name: 'Name' },
-                labelMode,
-                showOptionalMark
+                labelMode: formLabelMode,
+                items: [
+                    { dataField: 'item1', editorType: 'dxTextBox', editorOptions: { labelMode: editorLabelMode } }
+                ]
             }).dxForm('instance');
 
-            const renderedWidget = $('#form').find('.dx-field-item .dx-textbox').dxTextBox('instance');
-            const widgetLabelMark = renderedWidget.option('labelMark');
-            const widgetLabelRenderedMark = $('#form').find('.dx-field-item .dx-textbox .dx-label > span').attr('data-mark');
+            const editor = form.getEditor('item1');
+            let expectedEditorLabelMode = editorLabelMode;
+            if(expectedEditorLabelMode === undefined) {
+                expectedEditorLabelMode = formLabelMode === 'outside'
+                    ? 'hidden'
+                    : formLabelMode;
+            }
+            assert.equal(editor.option('labelMode'), expectedEditorLabelMode, 'editor.labelMode is correct');
+        });
+    });
+});
 
-            const expectedMarkValue = showOptionalMark ? String.fromCharCode(160) + 'optional' : '';
+[true, false].forEach((showOptionalMark) => {
+    [true, false].forEach((isLabelVisible) => {
+        [true, false].forEach((showColon) => {
+            ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
+                [undefined, 'floating', 'hidden', 'static'].forEach((editorLabelMode) => {
+                    [undefined, '', 'some help text'].forEach((helpText) => {
+                        QUnit.test(`form renders with right optional mark, config=${JSON.stringify({ showOptionalMark, isLabelVisible, formLabelMode, editorLabelMode, helpText, showColon })}`, function(assert) {
+                            const $form = $('#form').dxForm({
+                                showOptionalMark,
+                                labelMode: formLabelMode,
+                                items: [ {
+                                    dataField: 'item1',
+                                    label: { visible: isLabelVisible, showColon },
+                                    editorOptions: { labelMode: editorLabelMode },
+                                    helpText
+                                }]
+                            });
 
-            assert.equal(widgetLabelMark, expectedMarkValue, `showOptionalMark=${showOptionalMark}, option value`);
-            assert.equal(widgetLabelRenderedMark, expectedMarkValue, `showOptionalMark=${showOptionalMark}, data-mark attr`);
+                            const $formLabel = $form.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+                            const $editorLabel = $form.find(`.${EDITOR_LABEL_CLASS}`);
+                            const $helpText = $form.find(`.${FIELD_ITEM_HELP_TEXT_CLASS}`);
 
-            form.dispose();
+                            const optionalMarkIsRenderedAsHelpText = $helpText.text().indexOf('optional') !== -1;
+                            const optionalMarkIsRenderedAsFormLabel = $formLabel.text().indexOf('optional') !== -1;
+                            const optionalMarkIsRenderedAsEditorLabel = $editorLabel.text().indexOf('optional') !== -1;
+
+                            const expectedFormLabelText = isLabelVisible ? `Item 1${showColon ? ':' : ''}${optionalMarkIsRenderedAsFormLabel ? `${String.fromCharCode(160)}optional` : ''}` : '';
+                            assert.equal($formLabel.text(), expectedFormLabelText, 'form.labelText');
+                            const resultLabelMode = editorLabelMode || formLabelMode;
+                            const needRenderEditorLabel = resultLabelMode !== 'outside' && resultLabelMode !== 'hidden';
+                            assert.equal($editorLabel.text(), needRenderEditorLabel ? 'Item 1' : '', 'editor.labelText');
+
+                            assert.equal(optionalMarkIsRenderedAsEditorLabel, false, 'optional mark in editor is not rendered');
+                            if(showOptionalMark === false) {
+                                assert.equal(optionalMarkIsRenderedAsHelpText, false, 'optional mark in help text is not rendered');
+                                assert.equal(optionalMarkIsRenderedAsFormLabel, false, 'optional mark in form label is not rendered');
+                            } else if(isLabelVisible) {
+                                assert.equal(optionalMarkIsRenderedAsFormLabel, true, 'optional mark in form label is rendered if label is visible');
+                                assert.equal(optionalMarkIsRenderedAsHelpText, false, 'optional mark in help text is not rendered if label is visible');
+                            } else {
+                                assert.equal(optionalMarkIsRenderedAsFormLabel, false, 'optional mark in form label is not rendered if label is hidden');
+                                assert.equal(optionalMarkIsRenderedAsHelpText, !isDefined(helpText) && ['static', 'floating'].indexOf(editorLabelMode || formLabelMode) !== -1, 'optional mark in help text is rendered correctly');
+                            }
+                        });
+                    });
+                });
+            });
         });
     });
 });
@@ -586,6 +695,87 @@ QUnit.test('form.option("onFieldDataChanged", "newHandler") -> check new handler
     });
 });
 
+QUnit.test('Change options -> check _itemsOptionChangedHandler/_formDataOptionChangedHandler calls', function(assert) {
+    const form = $('#form').dxForm({
+        items: [ { name: 'id' } ]
+    }).dxForm('instance');
+
+    let actualLog = '';
+    const _itemsOptionChangedHandler = form._itemsOptionChangedHandler;
+    form._itemsOptionChangedHandler = function() { actualLog += 'items; '; return _itemsOptionChangedHandler.apply(form, arguments); };
+    const _formDataOptionChangedHandler = form._formDataOptionChangedHandler;
+    form._formDataOptionChangedHandler = function() { actualLog += 'formData; '; return _formDataOptionChangedHandler.apply(form, arguments); };
+    const _defaultOptionChangedHandler = form._defaultOptionChangedHandler;
+    form._defaultOptionChangedHandler = function() { actualLog += 'default; '; return _defaultOptionChangedHandler.apply(form, arguments); };
+
+    function testConfig(optionName, expectedLog) {
+        actualLog = '';
+        form.option(optionName, {});
+        assert.strictEqual(actualLog, expectedLog, `option("${optionName}")`);
+    }
+
+    testConfig('.', 'default; ');
+    testConfig('.hint', 'default; ');
+    testConfig('.items', 'default; ');
+    testConfig('.formData', 'default; ');
+
+    testConfig('a', 'default; ');
+    testConfig('hint.b', 'default; ');
+    testConfig('colCountByScreen.b.', 'default; ');
+    testConfig('colCountByScreen.lg.c', 'default; ');
+
+    testConfig('formData', 'default; ');
+    testConfig('formData.', 'formData; ');
+    testConfig(' formData . ', 'formData; ');
+    testConfig('formData.a', 'formData; ');
+    testConfig('formData.a.', 'formData; ');
+    testConfig('formData.a.b', 'formData; ');
+    testConfig('formData.items', 'formData; ');
+    testConfig('formData.items[0]', 'formData; ');
+    testConfig('formData.formData', 'formData; ');
+
+    testConfig('items', 'default; ');
+    testConfig('items.', 'items; default; ');
+    testConfig(' items . ', 'items; default; ');
+    testConfig('items.a', 'items; default; ');
+    testConfig(' items . a ', 'items; default; ');
+    testConfig('items.a.b', 'items; default; ');
+    testConfig('items.formData', 'items; default; ');
+    testConfig('items.formData.b', 'items; default; ');
+    testConfig('items.items', 'items; default; ');
+
+    testConfig('items[0]', 'default; ');
+    testConfig('items[0].a', 'items; default; ');
+    testConfig('items[0].visible', 'items; default; ');
+    testConfig('items[0].items', 'items; default; ');
+    testConfig('items[0].formData', 'items; default; ');
+    testConfig('items[0].items[0]', 'items; default; ');
+
+    testConfig('items[0].tabs', 'items; default; ');
+    testConfig('items[0].tabs.a', 'items; default; ');
+    testConfig('items[0].tabs.visible', 'items; default; ');
+    testConfig('items[0].tabs[0]', 'items; default; ');
+    testConfig('items[0].tabs[0].visible', 'items; default; ');
+    testConfig('items[0].tabs[0].items', 'items; default; ');
+    testConfig('items[0].tabs[0].formData', 'items; default; ');
+    testConfig('items[0].tabs[0].items[0]', 'items; default; ');
+
+    testConfig('hint.items', 'default; ');
+    testConfig('hint.items.', 'default; ');
+    testConfig('hint.items.a', 'default; ');
+    testConfig('hint.items[0]', 'default; ');
+    testConfig('hint.items[0].visible', 'default; ');
+
+    testConfig('hint.formData', 'default; ');
+    testConfig('hint.formData.a', 'default; ');
+
+    testConfig('formData_items', 'default; ');
+    testConfig('formData_items.', 'items; default; ');
+    testConfig('xxx_formData_xxx', 'default; ');
+    testConfig('xxx_formData_xxx.', 'formData; ');
+    testConfig('xxx_items_xxx', 'default; ');
+    testConfig('xxx_items_xxx.', 'items; default; ');
+});
 
 QUnit.module('Tabs', {
     beforeEach: function() {
@@ -638,6 +828,29 @@ QUnit.test('items aren\'t tiny', function(assert) {
             }]
     });
     assert.ok(getWidth(testContainer.find('.dx-multiview-item .dx-textbox').first()) / getWidth(testContainer) > 0.5, 'Editors are not tiny');
+});
+
+QUnit.test('Show scroll buttons in tabpanel', function(assert) {
+    const $testContainer = $('#form');
+    $testContainer.width(250);
+
+    $testContainer.dxForm({
+        items: [
+            {
+                itemType: 'tabbed',
+                tabPanelOptions: {
+                    showNavButtons: true,
+                },
+                tabs: [
+                    { title: 'tabbed 1111111111111' },
+                    { title: 'tabbed 2222222222222' },
+                ]
+            }
+        ]
+    });
+
+    assert.strictEqual($testContainer.find('.dx-tabs-nav-button').length, 2, 'tabPanelNavButtons.length');
+    assert.strictEqual($testContainer.find('.dx-tabs-scrollable').length, 1, 'tabPanelNavButtons.length');
 });
 
 QUnit.test('Render tabs when formData is changed', function(assert) {
@@ -3854,3 +4067,39 @@ QUnit.test('Form set the right class to the root element for different global ed
     });
 });
 
+QUnit.test('Form item stylingMode option should rewrite global editorStylingMode option (T1044604)', function(assert) {
+    const stylingModes = [null, 'outlined', 'filled', 'underlined' ];
+    const defaultStylingMode = TextEditorBase.prototype._getDefaultOptions().stylingMode;
+
+
+    stylingModes.forEach(globalStylingMode => {
+        stylingModes.forEach(editorStylingMode => {
+            if(globalStylingMode) {
+                config({ editorStylingMode: globalStylingMode });
+            }
+
+            $('#form').dxForm({
+                formData: { field1: '', field2: '' },
+                items: [
+                    { dataField: 'field1' },
+                    { dataField: 'field2', editorOptions: { stylingMode: editorStylingMode } }
+                ]
+            });
+
+            function getExpectedClass(mode) {
+                return `dx-editor-${mode ? mode : defaultStylingMode}`;
+            }
+
+            const firstEditorExpectedClass = getExpectedClass(globalStylingMode);
+            const secondEditorExpectedClass = getExpectedClass(editorStylingMode || globalStylingMode);
+
+            const form = $('#form').dxForm('instance');
+
+            assert.ok($(form.getEditor('field1').element()).hasClass(firstEditorExpectedClass), `default editor (global=${globalStylingMode}), editor not set`);
+            assert.ok($(form.getEditor('field2').element()).hasClass(secondEditorExpectedClass), `custom editor (global=${globalStylingMode}, editor=${editorStylingMode})`);
+
+            form.dispose();
+            config({ editorStylingMode: null });
+        });
+    });
+});

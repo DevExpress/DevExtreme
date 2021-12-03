@@ -677,11 +677,11 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
         const $dataRows = $dataTable.find('.dx-data-row');
         assert.equal($dataRows.eq(0).attr('aria-expanded'), 'true', 'first data row - value of \'aria-expanded\' attribute');
-        assert.equal($dataRows.eq(0).attr('aria-level'), '0', 'first data row - value of \'aria-level\' attribute');
+        assert.equal($dataRows.eq(0).attr('aria-level'), '1', 'first data row - value of \'aria-level\' attribute');
         assert.equal($dataRows.eq(1).attr('aria-expanded'), 'false', 'second data row - value of \'aria-expanded\' attribute');
-        assert.equal($dataRows.eq(1).attr('aria-level'), '1', 'second data row - value of \'aria-level\' attribute');
+        assert.equal($dataRows.eq(1).attr('aria-level'), '2', 'second data row - value of \'aria-level\' attribute');
         assert.equal($dataRows.eq(2).attr('aria-expanded'), undefined, 'third data row hasn\'t the \'aria-expanded\' attribute');
-        assert.equal($dataRows.eq(2).attr('aria-level'), '0', 'third data row - value of \'aria-level\' attribute');
+        assert.equal($dataRows.eq(2).attr('aria-level'), '1', 'third data row - value of \'aria-level\' attribute');
     });
 
     QUnit.test('Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)', function(assert) {

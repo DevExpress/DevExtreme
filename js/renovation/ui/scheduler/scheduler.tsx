@@ -18,7 +18,7 @@ import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
 import type { Options as DataSourceOptions } from '../../../data/data_source';
-import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
+import { getCurrentViewConfig, getCurrentViewProps, getValidGroups } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import {
   DataCellTemplateProps,
@@ -41,13 +41,16 @@ import {
   AppointmentsViewModelType,
   AppointmentViewModel,
   AppointmentClickData,
+  AppointmentTemplateProps,
+  OverflowIndicatorTemplateProps,
 } from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
 import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
 import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
-import { getPreparedDataItems } from './utils/data';
-import { getFilterStrategy } from './utils/filter';
+import { getPreparedDataItems, resolveDataItems } from './utils/data';
+import { getFilterStrategy } from './utils/filtering/local';
+import combineRemoteFilter from './utils/filtering/remote';
 
 export const viewFunction = ({
   restAttributes,
@@ -69,6 +72,8 @@ export const viewFunction = ({
   dateCellTemplate,
   timeCellTemplate,
   resourceCellTemplate,
+  appointmentTemplate,
+  appointmentCollectorTemplate,
 
   props: {
     accessKey,
@@ -190,6 +195,8 @@ export const viewFunction = ({
               isAllDay
               appointments={appointmentsViewModel.allDay}
               overflowIndicators={appointmentsViewModel.allDayCompact}
+              appointmentTemplate={appointmentTemplate}
+              overflowIndicatorTemplate={appointmentCollectorTemplate}
               onAppointmentClick={showTooltip}
             />
           )}
@@ -198,6 +205,8 @@ export const viewFunction = ({
             <AppointmentLayout
               appointments={appointmentsViewModel.regular}
               overflowIndicators={appointmentsViewModel.regularCompact}
+              appointmentTemplate={appointmentTemplate}
+              overflowIndicatorTemplate={appointmentCollectorTemplate}
               onAppointmentClick={showTooltip}
             />
           )}
@@ -358,9 +367,29 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.currentViewConfig.groupOrientation,
     );
 
+    const validGroups = getValidGroups(this.props.groups, this.currentViewProps.groups);
+
     return getAppointmentsConfig(
-      this.props, // TODO extract props for performace
-      this.currentViewConfig, // TODO extract props for performace
+      {
+        adaptivityEnabled: this.props.adaptivityEnabled,
+        rtlEnabled: this.props.rtlEnabled,
+        resources: this.props.resources,
+        timeZone: this.props.timeZone,
+        groups: validGroups,
+      },
+      {
+        startDayHour: this.currentViewConfig.startDayHour,
+        endDayHour: this.currentViewConfig.endDayHour,
+        currentDate: this.currentViewConfig.currentDate,
+        scrolling: this.currentViewConfig.scrolling,
+        intervalCount: this.currentViewConfig.intervalCount,
+        hoursInterval: this.currentViewConfig.hoursInterval,
+        showAllDayPanel: this.currentViewConfig.showAllDayPanel,
+        firstDayOfWeek: this.currentViewConfig.firstDayOfWeek,
+        type: this.currentViewConfig.type,
+        cellDuration: this.currentViewConfig.cellDuration,
+        maxAppointmentsPerCell: this.currentViewConfig.maxAppointmentsPerCell,
+      },
       this.loadedResources,
       this.workSpaceViewModel!.viewDataProvider,
       renderConfig.isAllDayPanelSupported,
@@ -429,8 +458,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   // TODO: This is a WA because we need to clean workspace completely to set table sizes correctly
   // We need to remove this after we refactor crossScrolling to set table sizes through CSS, not JS
   get workSpaceKey(): string {
-    const { currentView, crossScrollingEnabled } = this.props;
-    const { groupOrientation, intervalCount } = this.currentViewConfig;
+    const { currentView } = this.props;
+    const { groupOrientation, intervalCount, crossScrollingEnabled } = this.currentViewConfig;
 
     if (!crossScrollingEnabled) {
       return '';
@@ -456,6 +485,14 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   get resourceCellTemplate(): JSXTemplate<ResourceCellTemplateProps> | undefined {
     return this.currentViewConfig.resourceCellTemplate;
+  }
+
+  get appointmentTemplate(): JSXTemplate<AppointmentTemplateProps> | undefined {
+    return this.currentViewConfig.appointmentTemplate;
+  }
+
+  get appointmentCollectorTemplate(): JSXTemplate<OverflowIndicatorTemplateProps> | undefined {
+    return this.currentViewConfig.appointmentCollectorTemplate;
   }
 
   @Method()
@@ -534,13 +571,10 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadGroupResources(): void {
-    const { groups: schedulerGroups, resources } = this.props;
-    const { groups: currentViewProps } = this.currentViewProps;
-
-    const validGroups = currentViewProps ?? schedulerGroups;
+    const validGroups = getValidGroups(this.props.groups, this.currentViewProps.groups);
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    (loadResources(validGroups, resources, this.resourcePromisesMap) as Promise<Group[]>)
+    (loadResources(validGroups, this.props.resources, this.resourcePromisesMap) as Promise<Group[]>)
       .then((loadedResources) => {
         this.loadedResources = loadedResources;
       });
@@ -548,10 +582,32 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadDataSource(): void {
-    if (!this.internalDataSource.isLoaded() && !this.internalDataSource.isLoading()) {
+    if (
+      !this.internalDataSource.isLoaded()
+      && !this.internalDataSource.isLoading()
+      && this.workSpaceViewModel
+    ) {
+      if (this.props.remoteFiltering) {
+        const { viewDataProvider } = this.workSpaceViewModel;
+        const startDate = viewDataProvider.getStartViewDate();
+        const endDate = viewDataProvider.getLastViewDateByEndDayHour(
+          this.currentViewConfig.endDayHour,
+        );
+
+        const combinedFilter = combineRemoteFilter({
+          dataAccessors: this.dataAccessors,
+          dataSourceFilter: this.internalDataSource.filter(),
+          min: startDate,
+          max: endDate,
+          dateSerializationFormat: this.props.dateSerializationFormat,
+        });
+
+        this.internalDataSource.filter(combinedFilter);
+      }
+
       (this.internalDataSource.load() as DataSourcePromise)
-        .done((items: Appointment[]) => {
-          this.dataItems = items;
+        .done((loadOptions: Appointment[] | { data: Appointment[] }) => {
+          this.dataItems = resolveDataItems(loadOptions);
         });
     }
   }

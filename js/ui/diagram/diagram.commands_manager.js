@@ -232,7 +232,7 @@ const DiagramCommandsManager = {
                     hint: messageLocalization.format('dxDiagram-commandAlignRight'),
                     text: messageLocalization.format('dxDiagram-commandAlignRight'),
                     icon: 'alignright',
-                    menu: 'alignright'
+                    menuIcon: 'alignright'
                 },
                 lock: {
                     command: DiagramCommand.Lock,
@@ -783,16 +783,20 @@ const DiagramCommandsManager = {
 
     _getPreparedCommands(allCommands, commands) {
         return commands.map(c => {
-            if(allCommands[c]) {
+            if(c.widget && c.widget === SEPARATOR) {
+                const command = {
+                    command: c,
+                    location: c.location
+                };
+                return command;
+            } else if(allCommands[c]) {
                 return allCommands[c];
             } else if(c.text || c.icon || c.name) {
                 const internalCommand = c.name && allCommands[c.name];
-                if(internalCommand === SEPARATOR_COMMAND) {
-                    return internalCommand;
-                }
                 const command = {
                     command: internalCommand && internalCommand.command,
                     name: c.name,
+                    location: c.location,
                     text: c.text || internalCommand && internalCommand.text,
                     hint: c.text || internalCommand && internalCommand.hint,
                     icon: c.icon || internalCommand && internalCommand.icon,
@@ -821,7 +825,7 @@ const DiagramCommandsManager = {
         return commands.map(c => {
             if(!this._isValidCommand(c, excludeCommands)) return;
 
-            if(c === SEPARATOR_COMMAND) {
+            if(c.widget && c.widget === SEPARATOR) {
                 beginGroup = true;
             } else {
                 const command = this._cloneCommand(c, excludeCommands);

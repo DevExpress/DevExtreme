@@ -1,6 +1,7 @@
 import devices from 'core/devices';
 import errors from 'ui/widget/ui.errors';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
+import pointerMock from '../../helpers/pointerMock.js';
 import $ from 'jquery';
 
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
@@ -671,6 +672,50 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.equal(visibleRows.length, 1, 'visible row count');
         assert.equal(visibleRows[0].isSelected, true, 'first visible row is selected');
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [20], 'selected row key count equals pageSize');
+    });
+
+    QUnit.test('Selection with Shift should work properly when rowRenderingMode is virtual (T1046809)', function(assert) {
+        // arrange, act
+        const array = [];
+
+        for(let i = 1; i <= 100; i++) {
+            array.push({ id: i });
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 500,
+            dataSource: array,
+            keyExpr: 'id',
+            paging: {
+                enabled: false,
+            },
+            scrolling: {
+                mode: 'standard',
+                useNative: false,
+                rowRenderingMode: 'virtual'
+            },
+            selection: {
+                mode: 'multiple',
+                showCheckBoxesMode: 'always'
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick(300);
+
+        // act
+        $(dataGrid.getRowElement(0)).find('.dx-command-select .dx-checkbox-icon').trigger('dxclick');
+
+        // assert
+        assert.deepEqual(dataGrid.getSelectedRowKeys(), [1], 'first row selected');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 2400 });
+        this.clock.tick(300);
+        pointerMock($(dataGrid.getRowElement(0)).find('.dx-command-select .dx-checkbox-icon')).start({ shiftKey: true }).click(true);
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(dataGrid.getSelectedRowKeys().length, 71, 'selected rows count');
     });
 });
 

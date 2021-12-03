@@ -15,28 +15,32 @@ const testViewDataMap = {
             startDate: new Date(2020, 7, 24),
             endDate: new Date(2020, 7, 24),
             groups: 'group_2',
-            groupIndex: 2
+            groupIndex: 2,
+            key: 0,
         },
         {
             allDay: true,
             startDate: new Date(2020, 7, 25),
             endDate: new Date(2020, 7, 25),
             groups: 'group_2',
-            groupIndex: 2
+            groupIndex: 2,
+            key: 1,
         },
         {
             allDay: true,
             startDate: new Date(2020, 7, 24),
             endDate: new Date(2020, 7, 24),
             groups: 'group_3',
-            groupIndex: 3
+            groupIndex: 3,
+            key: 2,
         },
         {
             allDay: true,
             startDate: new Date(2020, 7, 25),
             endDate: new Date(2020, 7, 25),
             groups: 'group_3',
-            groupIndex: 3
+            groupIndex: 3,
+            key: 3,
         }
     ],
     [
@@ -45,28 +49,32 @@ const testViewDataMap = {
             startDate: new Date(2020, 7, 24, 0, 0),
             endDate: new Date(2020, 7, 24, 0, 30),
             groups: 'group_2',
-            groupIndex: 2
+            groupIndex: 2,
+            key: 0,
         },
         {
             allDay: false,
             startDate: new Date(2020, 7, 25, 0, 0),
             endDate: new Date(2020, 7, 25, 0, 30),
             groups: 'group_2',
-            groupIndex: 2
+            groupIndex: 2,
+            key: 1,
         },
         {
             allDay: false,
             startDate: new Date(2020, 7, 24, 1, 0),
             endDate: new Date(2020, 7, 24, 1, 30),
             groups: 'group_3',
-            groupIndex: 3
+            groupIndex: 3,
+            key: 2,
         },
         {
             allDay: false,
             startDate: new Date(2020, 7, 25, 1, 0),
             endDate: new Date(2020, 7, 25, 1, 30),
             groups: 'group_3',
-            groupIndex: 3
+            groupIndex: 3,
+            key: 3,
         },
     ]],
     verticalGrouping: [[
@@ -76,7 +84,8 @@ const testViewDataMap = {
             endDate: new Date(2020, 7, 24),
             groups: 'group_2',
             groupIndex: 2,
-            index: 0
+            index: 0,
+            key: 0,
         },
         {
             allDay: true,
@@ -84,7 +93,8 @@ const testViewDataMap = {
             endDate: new Date(2020, 7, 25),
             groups: 'group_2',
             groupIndex: 2,
-            index: 1
+            index: 1,
+            key: 1,
         }
     ],
     [
@@ -94,7 +104,8 @@ const testViewDataMap = {
             endDate: new Date(2020, 7, 24, 0, 30),
             groups: 'group_2',
             groupIndex: 2,
-            index: 0
+            index: 0,
+            key: 0,
         },
         {
             allDay: false,
@@ -102,7 +113,8 @@ const testViewDataMap = {
             endDate: new Date(2020, 7, 25, 0, 30),
             groups: 'group_2',
             groupIndex: 2,
-            index: 1
+            index: 1,
+            key: 1,
         }
     ],
     [
@@ -112,7 +124,8 @@ const testViewDataMap = {
             endDate: new Date(2020, 7, 24),
             groups: 'group_3',
             groupIndex: 3,
-            index: 0
+            index: 0,
+            key: 2,
         },
         {
             allDay: true,
@@ -120,7 +133,8 @@ const testViewDataMap = {
             endDate: new Date(2020, 7, 25),
             groups: 'group_3',
             groupIndex: 3,
-            index: 1
+            index: 1,
+            key: 3,
         }
     ],
     [
@@ -130,7 +144,8 @@ const testViewDataMap = {
             endDate: new Date(2020, 7, 24, 1, 30),
             groups: 'group_3',
             groupIndex: 3,
-            index: 0
+            index: 0,
+            key: 2,
         },
         {
             allDay: false,
@@ -138,7 +153,8 @@ const testViewDataMap = {
             endDate: new Date(2020, 7, 25, 1, 30),
             groups: 'group_3',
             groupIndex: 3,
-            index: 1
+            index: 1,
+            key: 3,
         }
     ]]
 };
@@ -443,9 +459,13 @@ module('View Data Provider', {
                             groupData,
                             {
                                 allDayPanel: testViewDataMap.verticalGrouping[allDayPanelIndex],
-                                dateTable: [testViewDataMap.verticalGrouping[dateTableIndex]],
+                                dateTable: [{
+                                    cells: testViewDataMap.verticalGrouping[dateTableIndex],
+                                    key: testViewDataMap.verticalGrouping[dateTableIndex][0].key,
+                                }],
                                 groupIndex,
-                                isGroupedAllDayPanel: true
+                                isGroupedAllDayPanel: true,
+                                key: `${groupIndex}`
                             },
                             'Group data is coorect'
                         );
@@ -598,6 +618,32 @@ module('View Data Provider', {
                         this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 23, 0, 11), new Date(2020, 7, 26, 1, 30), true),
                         new Date(2020, 7, 24),
                         'Group 2 cell 1 allDay start date is correct when startDate is out of view'
+                    );
+                });
+
+                test('it should return correct cell start date if find by date', function(assert) {
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10), false, true),
+                        new Date(2020, 7, 24),
+                        'Group 2 cell 0 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20), false, true),
+                        new Date(2020, 7, 25),
+                        'Group 2 cell 1 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 24, 0, 11), new Date(2020, 7, 24, 1, 22), false, true),
+                        new Date(2020, 7, 24),
+                        'Group 3 cell 0 start date is correct'
+                    );
+
+                    assert.deepEqual(
+                        this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30), false, true),
+                        new Date(2020, 7, 25),
+                        'Group 3 cell 1 start date is correct'
                     );
                 });
             });
@@ -1878,14 +1924,16 @@ module('View Data Provider', {
                             completeTimePanelMap[1],
                         ],
                         groupIndex: 0,
-                        isGroupedAllDayPanel: true,
+                        isGroupedAllDayPanel: false,
+                        key: '0',
                     }, {
                         dateTable: [
                             completeTimePanelMap[2],
                             completeTimePanelMap[3],
                         ],
                         groupIndex: 1,
-                        isGroupedAllDayPanel: true,
+                        isGroupedAllDayPanel: false,
+                        key: '1',
                     }],
                     bottomVirtualRowHeight: undefined,
                     topVirtualRowHeight: undefined,
@@ -1919,6 +1967,7 @@ module('View Data Provider', {
                         ],
                         groupIndex: 0,
                         isGroupedAllDayPanel: true,
+                        key: '0'
                     }],
                     bottomVirtualRowHeight: undefined,
                     topVirtualRowHeight: undefined,
@@ -2000,6 +2049,7 @@ module('View Data Provider', {
                     groups: 'group_2',
                     groupIndex: 2,
                     index: 0,
+                    key: 0,
                 },
                 {
                     allDay: true,
@@ -2008,6 +2058,7 @@ module('View Data Provider', {
                     groups: 'group_3',
                     groupIndex: 3,
                     index: 0,
+                    key: 1,
                 },
             ],
             [
@@ -2018,6 +2069,7 @@ module('View Data Provider', {
                     groups: 'group_2',
                     groupIndex: 2,
                     index: 0,
+                    key: 0,
                 },
                 {
                     allDay: false,
@@ -2026,6 +2078,7 @@ module('View Data Provider', {
                     groups: 'group_3',
                     groupIndex: 3,
                     index: 0,
+                    key: 1,
                 },
             ],
             [
@@ -2036,6 +2089,7 @@ module('View Data Provider', {
                     groups: 'group_2',
                     groupIndex: 2,
                     index: 1,
+                    key: 2,
                 },
                 {
                     allDay: false,
@@ -2044,6 +2098,7 @@ module('View Data Provider', {
                     groups: 'group_3',
                     groupIndex: 3,
                     index: 1,
+                    key: 3,
                 },
             ]];
             const horizontalDateHeaderMap = [horizontalDataMap[1]];
@@ -2060,14 +2115,19 @@ module('View Data Provider', {
 
                     const expectedViewData = {
                         groupedData: [{
-                            dateTable: [completeViewDataMap[1]],
+                            dateTable: [{
+                                cells: completeViewDataMap[1],
+                                key: 0,
+                            }],
                             groupIndex: 2,
-                            isGroupedAllDayPanel: true,
+                            isGroupedAllDayPanel: false,
+                            key: '2',
                         }, {
                             allDayPanel: completeViewDataMap[2],
                             dateTable: [],
                             groupIndex: 3,
                             isGroupedAllDayPanel: true,
+                            key: '3'
                         }],
                         bottomVirtualRowCount: 1,
                         topVirtualRowCount: 1,
@@ -2097,9 +2157,13 @@ module('View Data Provider', {
                     const expectedViewData = {
                         groupedData: [{
                             allDayPanel: completeViewDataMap[0],
-                            dateTable: [completeViewDataMap[2]],
+                            dateTable: [{
+                                cells: completeViewDataMap[2],
+                                key: 2,
+                            }],
                             groupIndex: 2,
                             isGroupedAllDayPanel: false,
+                            key: '0',
                         }],
                         bottomVirtualRowCount: 1,
                         topVirtualRowCount: 1,
@@ -2134,16 +2198,20 @@ module('View Data Provider', {
                     const expectedViewData = {
                         groupedData: [{
                             allDayPanel: completeViewDataMap[0],
-                            dateTable: [[{
-                                ...completeViewDataMap[2][0],
-                                isSelected: true,
-                                isFocused: true,
-                            }, {
-                                ...completeViewDataMap[2][1],
-                                isSelected: true,
-                                isFocused: false,
-                            }]],
+                            dateTable: [{
+                                cells: [{
+                                    ...completeViewDataMap[2][0],
+                                    isSelected: true,
+                                    isFocused: true,
+                                }, {
+                                    ...completeViewDataMap[2][1],
+                                    isSelected: true,
+                                    isFocused: false,
+                                }],
+                                key: 2,
+                            }],
                             groupIndex: 2,
+                            key: '0',
                             isGroupedAllDayPanel: false,
                         }],
                         bottomVirtualRowCount: 1,
@@ -2353,13 +2421,15 @@ module('View Data Provider', {
                             completeTimePanelMap[1],
                         ],
                         groupIndex: 0,
-                        isGroupedAllDayPanel: true,
+                        key: '0',
+                        isGroupedAllDayPanel: false,
                     }, {
                         dateTable: [
                             completeTimePanelMap[2],
                         ],
                         groupIndex: 1,
-                        isGroupedAllDayPanel: true,
+                        key: '1',
+                        isGroupedAllDayPanel: false,
                     }],
                     bottomVirtualRowHeight: 50,
                     topVirtualRowHeight: 50,
@@ -2414,21 +2484,24 @@ module('View Data Provider', {
                     startDate: new Date(2020, 7, 24),
                     endDate: new Date(2020, 7, 24),
                     groups: 'group_1',
-                    groupIndex: 1
+                    groupIndex: 1,
+                    key: 0,
                 },
                 {
                     allDay: true,
                     startDate: new Date(2020, 7, 24),
                     endDate: new Date(2020, 7, 24),
                     groups: 'group_2',
-                    groupIndex: 2
+                    groupIndex: 2,
+                    key: 1,
                 },
                 {
                     allDay: true,
                     startDate: new Date(2020, 7, 24),
                     endDate: new Date(2020, 7, 24),
                     groups: 'group_3',
-                    groupIndex: 3
+                    groupIndex: 3,
+                    key: 2,
                 },
             ],
             [
@@ -2437,21 +2510,24 @@ module('View Data Provider', {
                     startDate: new Date(2020, 7, 24, 0, 0),
                     endDate: new Date(2020, 7, 24, 0, 30),
                     groups: 'group_1',
-                    groupIndex: 1
+                    groupIndex: 1,
+                    key: 0,
                 },
                 {
                     allDay: false,
                     startDate: new Date(2020, 7, 24, 1, 0),
                     endDate: new Date(2020, 7, 24, 1, 30),
                     groups: 'group_1',
-                    groupIndex: 2
+                    groupIndex: 2,
+                    key: 1,
                 },
                 {
                     allDay: false,
                     startDate: new Date(2020, 7, 24, 1, 0),
                     endDate: new Date(2020, 7, 24, 1, 30),
                     groups: 'group_3',
-                    groupIndex: 3
+                    groupIndex: 3,
+                    key: 2,
                 },
             ],
             [
@@ -2460,21 +2536,24 @@ module('View Data Provider', {
                     startDate: new Date(2020, 7, 24, 0, 30),
                     endDate: new Date(2020, 7, 24, 1, 0),
                     groups: 'group_1',
-                    groupIndex: 1
+                    groupIndex: 1,
+                    key: 3,
                 },
                 {
                     allDay: false,
                     startDate: new Date(2020, 7, 24, 0, 30),
                     endDate: new Date(2020, 7, 24, 1, 0),
                     groups: 'group_2',
-                    groupIndex: 2
+                    groupIndex: 2,
+                    key: 4,
                 },
                 {
                     allDay: false,
                     startDate: new Date(2020, 7, 24, 0, 30),
                     endDate: new Date(2020, 7, 24, 1, 0),
                     groups: 'group_3',
-                    groupIndex: 3
+                    groupIndex: 3,
+                    key: 5,
                 },
             ]];
             const horizontalDateHeaderMap = [horizontalDataMap[0]];
@@ -2538,9 +2617,13 @@ module('View Data Provider', {
                     const expectedViewData = {
                         groupedData: [{
                             allDayPanel: [completeViewDataMap[0][1]],
-                            dateTable: [[completeViewDataMap[1][1]]],
+                            dateTable: [{
+                                cells: [completeViewDataMap[1][1]],
+                                key: 0,
+                            }],
                             groupIndex: 2,
-                            isGroupedAllDayPanel: true
+                            isGroupedAllDayPanel: true,
+                            key: '2',
                         }],
                         bottomVirtualRowCount: 2,
                         topVirtualRowCount: 0,
@@ -2570,9 +2653,16 @@ module('View Data Provider', {
                     const expectedViewData = {
                         groupedData: [{
                             allDayPanel: [completeViewDataMap[0][1]],
-                            dateTable: [[completeViewDataMap[1][1]], [completeViewDataMap[2][1]]],
+                            dateTable: [{
+                                cells: [completeViewDataMap[1][1]],
+                                key: 0,
+                            }, {
+                                cells: [completeViewDataMap[2][1]],
+                                key: 3,
+                            }],
                             groupIndex: 2,
                             isGroupedAllDayPanel: false,
+                            key: '0',
                         }],
                         bottomVirtualRowCount: 1,
                         topVirtualRowCount: 0,
@@ -2605,9 +2695,16 @@ module('View Data Provider', {
                     const expectedViewData = {
                         groupedData: [{
                             allDayPanel: [completeViewDataMap[0][1]],
-                            dateTable: [[completeViewDataMap[1][1]], [completeViewDataMap[2][1]]],
+                            dateTable: [{
+                                cells: [completeViewDataMap[1][1]],
+                                key: 0,
+                            }, {
+                                cells: [completeViewDataMap[2][1]],
+                                key: 3,
+                            }],
                             groupIndex: 2,
                             isGroupedAllDayPanel: false,
+                            key: '0',
                         }],
                         bottomVirtualRowCount: 1,
                         topVirtualRowCount: 0,

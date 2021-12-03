@@ -167,14 +167,16 @@ module('Server side filtering', () => {
         dataSource.load().done(() => {
             dataSource.filter('priorityId', '=', 1);
 
-            appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2));
+            appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2), true);
 
-            appointmentDataProvider.filterLoadedAppointments({
-                startDayHour: 3,
-                endDayHour: 4
-            });
+            assert.equal(dataSource.filter().length, 2);
+            assert.deepEqual(dataSource.filter()[1], ['priorityId', '=', 1]);
 
-            assert.equal(appointmentDataProvider.filterMaker._filterRegistry, null, 'Empty user filter');
+            dataSource.filter(null);
+
+            appointmentDataProvider.filterByDate(new Date(2015, 0, 1, 1), new Date(2015, 0, 2), true);
+
+            assert.equal(dataSource.filter().length, 1);
         });
     });
 
@@ -1422,7 +1424,8 @@ module('Client side after filtering', () => {
             startDayHour: 1,
             endDayHour: 10,
             min: new Date(2015, 2, 2, 1, 0),
-            max: new Date(2015, 2, 8, 9, 59)
+            max: new Date(2015, 2, 8, 9, 59),
+            supportMultiDayAppointments: true
         });
 
         assert.deepEqual(appts, [], 'Appointments are OK');

@@ -13,7 +13,7 @@ import { contains, resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import readyCallbacks from '../../core/utils/ready_callbacks';
-import { isDefined, isFunction, isPlainObject, isObject } from '../../core/utils/type';
+import { isFunction, isObject } from '../../core/utils/type';
 import { changeCallback } from '../../core/utils/view_port';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import errors from '../../core/errors';
@@ -26,8 +26,6 @@ import { keyboard } from '../../events/short';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../events/utils/index';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
-import Resizable from '../resizable';
-import OverlayDrag from './overlay_drag';
 import { tabbable } from '../widget/selectors';
 import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
@@ -50,8 +48,6 @@ const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
 const RTL_DIRECTION_CLASS = 'dx-rtl';
-
-const ACTIONS = ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioned', 'onResizeStart', 'onResize', 'onResizeEnd', 'onVisualPositionChanged'];
 
 const OVERLAY_STACK = [];
 
@@ -77,10 +73,6 @@ const Overlay = Widget.inherit({
             escape: function() {
                 this.hide();
             },
-            upArrow: (e) => { this._drag.moveUp(e); },
-            downArrow: (e) => { this._drag.moveDown(e); },
-            leftArrow: (e) => { this._drag.moveLeft(e); },
-            rightArrow: (e) => { this._drag.moveRight(e); }
         });
     },
 
@@ -138,9 +130,8 @@ const Overlay = Widget.inherit({
                 }
             },
 
-            dragOutsideBoundary: false,
-
             closeOnOutsideClick: false,
+            hideOnOutsideClick: false,
 
             copyRootClassesToWrapper: false,
 
@@ -156,25 +147,13 @@ const Overlay = Widget.inherit({
 
             contentTemplate: 'content',
 
-            dragEnabled: false,
-
-            dragAndResizeArea: undefined,
-
-            outsideDragFactor: 0,
-
-            resizeEnabled: false,
-            onResizeStart: null,
-            onResize: null,
-            onResizeEnd: null,
             innerOverlay: false,
 
             restorePosition: true,
 
-            // NOTE: private options
-
-            target: undefined,
             container: undefined,
 
+            // NOTE: private options
             hideTopOverlayHandler: () => { this.hide(); },
             hideOnParentScroll: false,
             onPositioned: null,
@@ -218,7 +197,8 @@ const Overlay = Widget.inherit({
     _setDeprecatedOptions() {
         this.callBase();
         extend(this._deprecatedOptions, {
-            'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' }
+            'elementAttr': { since: '21.2', message: 'Use the "wrapperAttr" option instead' },
+            'closeOnOutsideClick': { since: '22.2', alias: 'hideOnOutsideClick' }
         });
     },
 
@@ -265,52 +245,23 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _initOptions: function(options) {
-        this._setAnimationTarget(options.target);
-
-        this.callBase(options);
-    },
-
     _initInnerOverlayClass: function() {
         this._$content.toggleClass(INNER_OVERLAY_CLASS, this.option('innerOverlay'));
-    },
-
-    _setAnimationTarget: function(target) {
-        if(!isDefined(target)) {
-            return;
-        }
-
-        const options = this.option();
-        [
-            'animation.show.from.position.of',
-            'animation.show.to.position.of',
-            'animation.hide.from.position.of',
-            'animation.hide.to.position.of'
-        ].forEach(path => {
-            const pathParts = path.split('.');
-
-            let option = options;
-            while(option) {
-                if(pathParts.length === 1) {
-                    if(isPlainObject(option)) {
-                        option[pathParts.shift()] = target;
-                    }
-                    break;
-                } else {
-                    option = option[pathParts.shift()];
-                }
-            }
-        });
     },
 
     _initHideTopOverlayHandler: function(handler) {
         this._hideTopOverlayHandler = handler;
     },
 
+    _getActionsList: function() {
+        return ['onShowing', 'onShown', 'onHiding', 'onHidden', 'onPositioned', 'onVisualPositionChanged'];
+    },
+
     _initActions: function() {
         this._actions = {};
+        const actions = this._getActionsList();
 
-        each(ACTIONS, (_, action) => {
+        each(actions, (_, action) => {
             this._actions[action] = this._createActionByOption(action, {
                 excludeValidators: ['disabled', 'readOnly']
             }) || noop;
@@ -383,22 +334,28 @@ const Overlay = Widget.inherit({
             this._stopAnimation();
         }
 
-        let closeOnOutsideClick = this.option('closeOnOutsideClick');
-
-        if(isFunction(closeOnOutsideClick)) {
-            closeOnOutsideClick = closeOnOutsideClick(e);
-        }
-
         const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
         const isInnerOverlay = $(e.target).closest(`.${INNER_OVERLAY_CLASS}`).length;
         const outsideClick = isAttachedTarget && !isInnerOverlay && !(this._$content.is(e.target)
             || contains(this._$content.get(0), e.target));
 
-        if(outsideClick && closeOnOutsideClick) {
+        if(outsideClick && this._shouldHideOnOutsideClick(e)) {
             this._outsideClickHandler(e);
         }
 
         return this.option('propagateOutsideClick');
+    },
+
+    _shouldHideOnOutsideClick: function(e) {
+        const { closeOnOutsideClick, hideOnOutsideClick } = this.option();
+
+        if(isFunction(hideOnOutsideClick)) {
+            return hideOnOutsideClick(e);
+        } else if(isFunction(closeOnOutsideClick)) {
+            return closeOnOutsideClick(e);
+        } else {
+            return hideOnOutsideClick || closeOnOutsideClick;
+        }
     },
 
     _outsideClickHandler(e) {
@@ -559,21 +516,21 @@ const Overlay = Widget.inherit({
         return this._showingDeferred.promise();
     },
 
-    _normalizeAnimation: function(animation, prop) {
-        if(animation) {
-            animation = extend({
+    _normalizeAnimation: function(showHideConfig, direction) {
+        if(showHideConfig) {
+            showHideConfig = extend({
                 type: 'slide',
                 skipElementInitialStyles: true, // NOTE: for fadeIn animation
-            }, animation);
+            }, showHideConfig);
 
-            if(animation[prop] && typeof animation[prop] === 'object') {
-                extend(animation[prop], {
-                    position: this._positionController._position
+            if(isObject(showHideConfig[direction])) {
+                extend(showHideConfig[direction], {
+                    position: this._positionController.position
                 });
             }
         }
 
-        return animation;
+        return showHideConfig;
     },
 
     _animateHiding: function() {
@@ -921,8 +878,6 @@ const Overlay = Widget.inherit({
             }
         });
 
-        this._renderDrag();
-        this._renderResize();
         this._renderScrollTerminator();
 
         whenContentRendered.done(() => {
@@ -935,11 +890,10 @@ const Overlay = Widget.inherit({
     },
 
     _getPositionControllerConfig() {
-        const { target, container, dragAndResizeArea, dragOutsideBoundary, outsideDragFactor, _fixWrapperPosition, restorePosition } = this.option();
+        const { container, _fixWrapperPosition, restorePosition } = this.option();
         // NOTE: position is passed to controller in renderGeometry to prevent window field using in server side mode
 
         return {
-            target,
             container,
             $root: this.$element(),
             $content: this._$content,
@@ -947,9 +901,6 @@ const Overlay = Widget.inherit({
             onPositioned: this._actions.onPositioned,
             onVisualPositionChanged: this._actions.onVisualPositionChanged,
             restorePosition,
-            dragAndResizeArea,
-            dragOutsideBoundary,
-            outsideDragFactor,
             _fixWrapperPosition
         };
     },
@@ -958,59 +909,6 @@ const Overlay = Widget.inherit({
         this._positionController = new OverlayPositionController(
             this._getPositionControllerConfig()
         );
-    },
-
-    _renderDrag: function() {
-        const $dragTarget = this._getDragTarget();
-
-        if(!$dragTarget) {
-            return;
-        }
-
-        const config = {
-            dragEnabled: this.option('dragEnabled'),
-            handle: $dragTarget.get(0),
-            draggableElement: this._$content.get(0),
-            positionController: this._positionController
-        };
-
-        if(this._drag) {
-            this._drag.init(config);
-        } else {
-            this._drag = new OverlayDrag(config);
-        }
-    },
-
-    _renderResize: function() {
-        this._resizable = this._createComponent(this._$content, Resizable, {
-            handles: this.option('resizeEnabled') ? 'all' : 'none',
-            onResizeEnd: (e) => {
-                this._resizeEndHandler(e);
-                this._observeContentResize(true);
-            },
-            onResize: (e) => { this._actions.onResize(e); },
-            onResizeStart: (e) => {
-                this._observeContentResize(false);
-                this._actions.onResizeStart(e);
-            },
-            minHeight: 100,
-            minWidth: 100,
-            area: this._positionController.$dragResizeContainer
-        });
-    },
-
-    _resizeEndHandler: function(e) {
-        const width = this._resizable.option('width');
-        const height = this._resizable.option('height');
-
-        width && this._setOptionWithoutOptionChange('width', width);
-        height && this._setOptionWithoutOptionChange('height', height);
-        this._cacheDimensions();
-
-        this._positionController.resizeHandled();
-        this._positionController.detectVisualPositionChange(e.event);
-
-        this._actions.onResizeEnd(e);
     },
 
     _renderScrollTerminator: function() {
@@ -1044,10 +942,6 @@ const Overlay = Widget.inherit({
                 e.preventDefault();
             }
         });
-    },
-
-    _getDragTarget: function() {
-        return this.$content();
     },
 
     _moveFromContainer: function() {
@@ -1232,7 +1126,8 @@ const Overlay = Widget.inherit({
     },
 
     _clean: function() {
-        if(!this._contentAlreadyRendered) {
+        const options = this.option();
+        if(!this._contentAlreadyRendered && !options.isRenovated) {
             this.$content().empty();
         }
 
@@ -1283,20 +1178,12 @@ const Overlay = Widget.inherit({
     _optionChanged: function(args) {
         const value = args.value;
 
-        if(inArray(args.name, ACTIONS) > -1) {
+        if(inArray(args.name, this._getActionsList()) > -1) {
             this._initActions();
             return;
         }
 
         switch(args.name) {
-            case 'dragEnabled':
-                this._renderDrag();
-                this._renderGeometry();
-                break;
-            case 'resizeEnabled':
-                this._renderResize();
-                this._renderGeometry();
-                break;
             case 'shading':
                 this._toggleShading(this.option('visible'));
                 this._toggleSafariScrolling();
@@ -1307,7 +1194,6 @@ const Overlay = Widget.inherit({
             case 'width':
             case 'height':
                 this._renderGeometry();
-                this._resizable?.option(args.name, args.value);
                 break;
             case 'minWidth':
             case 'maxWidth':
@@ -1330,18 +1216,10 @@ const Overlay = Widget.inherit({
                     this._animateDeferred.resolveWith(this);
                 });
                 break;
-            case 'target':
-                this._positionController.updateTarget(value);
-                this._setAnimationTarget(value);
-                this._invalidate();
-                break;
             case 'container':
                 this._positionController.updateContainer(value);
                 this._invalidate();
                 this._toggleSafariScrolling();
-                if(this.option('resizeEnabled')) {
-                    this._resizable?.option('area', this._positionController.$dragResizeContainer);
-                }
                 break;
             case 'innerOverlay':
                 this._initInnerOverlayClass();
@@ -1361,6 +1239,7 @@ const Overlay = Widget.inherit({
                 this._toggleParentsScrollSubscription(this.option('visible'));
                 break;
             case 'closeOnOutsideClick':
+            case 'hideOnOutsideClick':
             case 'propagateOutsideClick':
                 break;
             case 'animation':
@@ -1375,22 +1254,6 @@ const Overlay = Widget.inherit({
                 break;
             case 'wrapperAttr':
                 this._renderWrapperAttributes();
-                break;
-            case 'dragAndResizeArea':
-                this._positionController.dragAndResizeArea = value;
-                if(this.option('resizeEnabled')) {
-                    this._resizable.option('area', this._positionController.$dragResizeContainer);
-                }
-                this._positionController.positionContent();
-                break;
-            case 'dragOutsideBoundary':
-                this._positionController.dragOutsideBoundary = value;
-                if(this.option('resizeEnabled')) {
-                    this._resizable.option('area', this._positionController.$dragResizeContainer);
-                }
-                break;
-            case 'outsideDragFactor':
-                this._positionController.outsideDragFactor = value;
                 break;
             case 'restorePosition':
                 this._positionController.restorePosition = args.value;

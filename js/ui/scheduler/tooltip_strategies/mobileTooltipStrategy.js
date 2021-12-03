@@ -80,7 +80,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
 
         return this._options.createComponent(element, Overlay, {
             target: getWindow(),
-            closeOnOutsideClick: true,
+            hideOnOutsideClick: true,
             animation: animationConfig,
 
             onShowing: () => this._onShowing(),

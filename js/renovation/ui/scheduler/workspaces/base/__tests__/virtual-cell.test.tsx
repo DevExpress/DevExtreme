@@ -1,3 +1,4 @@
+import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as CellView, VirtualCell } from '../virtual_cell';
 import { addWidthToStyle } from '../../utils';
@@ -15,19 +16,23 @@ jest.mock('../../utils', () => ({
 
 describe('VirtualCell', () => {
   describe('Render', () => {
-    const render = (viewModel): ShallowWrapper => shallow(CellView({
-      cellComponent: OrdinaryCell,
-      ...viewModel,
-      props: {
-        ...viewModel.props,
-      },
-    }));
+    const render = (viewModel): ShallowWrapper => shallow(
+      <CellView
+        {...viewModel}
+        props={{
+          isHeaderCell: false,
+          ...viewModel.props,
+        }}
+      />,
+    );
 
     it('should pass style to the root component', () => {
       const cell = render({ style: { with: '31px' } });
 
-      expect(cell.prop('style'))
+      expect(cell.prop('styles'))
         .toEqual({ with: '31px' });
+      expect(cell.is(OrdinaryCell))
+        .toBe(true);
     });
 
     it('should pass colSpan to the root component', () => {
@@ -35,6 +40,13 @@ describe('VirtualCell', () => {
 
       expect(cell.prop('colSpan'))
         .toBe(34);
+    });
+
+    it('should render header cell', () => {
+      const cell = render({ props: { isHeaderCell: true } });
+
+      expect(cell.is(HeaderCell))
+        .toBe(true);
     });
   });
 
@@ -51,22 +63,6 @@ describe('VirtualCell', () => {
 
           expect(addWidthToStyle)
             .toHaveBeenCalledWith(500, style);
-        });
-      });
-
-      describe('cellComponent', () => {
-        it('should return HeaderCell if isHeaderCell is true', () => {
-          const row = new VirtualCell({ isHeaderCell: true });
-
-          expect(row.cellComponent)
-            .toBe(HeaderCell);
-        });
-
-        it('should return OrdinaryCell if isHeaderCell is false', () => {
-          const row = new VirtualCell({ isHeaderCell: false });
-
-          expect(row.cellComponent)
-            .toBe(OrdinaryCell);
         });
       });
     });

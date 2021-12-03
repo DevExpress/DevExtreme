@@ -45,12 +45,20 @@ const getCssClasses = (model: ButtonProps): string => {
 };
 export const viewFunction = (viewModel: Button): JSX.Element => {
   const {
-    children, iconPosition, template: ButtonTemplate, text,
+    children, iconPosition, text,
+    template: ButtonTemplate,
+    iconTemplate: IconTemplate,
   } = viewModel.props;
   const renderText = !ButtonTemplate && !children && text !== '';
   const isIconLeft = iconPosition === 'left';
-  const iconComponent = !ButtonTemplate && !children && viewModel.iconSource
-        && <Icon source={viewModel.iconSource} position={iconPosition} />;
+  const iconComponent = !ButtonTemplate && !children && (viewModel.iconSource || IconTemplate)
+        && (
+        <Icon
+          source={viewModel.iconSource}
+          position={iconPosition}
+          iconTemplate={IconTemplate}
+        />
+        );
 
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -117,6 +125,8 @@ export class ButtonProps extends BaseWidgetProps {
   @OneWay() stylingMode: 'outlined' | 'text' | 'contained' = 'contained';
 
   @Template() template?: (props: { data: { icon?: string; text?: string } }) => JSX.Element;
+
+  @Template() iconTemplate?: (props) => JSX.Element;
 
   @Slot() children?: JSX.Element;
 

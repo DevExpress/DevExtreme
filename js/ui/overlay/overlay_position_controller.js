@@ -4,7 +4,7 @@ import { extend } from '../../core/utils/extend';
 import positionUtils from '../../animation/position';
 import { resetPosition, move, locate } from '../../animation/translator';
 import { getWindow } from '../../core/utils/window';
-import { originalViewPort, value as viewPort } from '../../core/utils/view_port';
+import { value as viewPort } from '../../core/utils/view_port';
 
 const window = getWindow();
 
@@ -23,20 +23,15 @@ const OVERLAY_DEFAULT_BOUNDARY_OFFSET = { h: 0, v: 0 };
 
 class OverlayPositionController {
     constructor({
-        position, target, container,
+        position, container,
         $root, $content, $wrapper,
         onPositioned, onVisualPositionChanged,
-        dragOutsideBoundary, dragAndResizeArea, outsideDragFactor,
         restorePosition,
         _fixWrapperPosition
     }) {
         this._props = {
             position,
-            target,
             container,
-            dragOutsideBoundary,
-            dragAndResizeArea,
-            outsideDragFactor,
             restorePosition,
             onPositioned,
             onVisualPositionChanged,
@@ -54,50 +49,23 @@ class OverlayPositionController {
         this._visualPosition = undefined;
         this._initialPosition = undefined;
         this._previousVisualPosition = undefined;
-        this._$dragResizeContainer = undefined;
-        this._outsideDragFactor = undefined;
 
         this.updateContainer(container);
-        this.updatePosition(position, target);
-        this._updateDragResizeContainer();
-        this._updateOutsideDragFactor();
+        this.updatePosition(position);
     }
 
     get $container() {
         return this._$markupContainer;
     }
 
-    get $dragResizeContainer() {
-        return this._$dragResizeContainer;
-    }
-
-    get outsideDragFactor() {
-        return this._outsideDragFactor;
+    get position() {
+        return this._position;
     }
 
     set fixWrapperPosition(fixWrapperPosition) {
         this._props._fixWrapperPosition = fixWrapperPosition;
 
         this.styleWrapperPosition();
-    }
-
-    set dragAndResizeArea(dragAndResizeArea) {
-        this._props.dragAndResizeArea = dragAndResizeArea;
-
-        this._updateDragResizeContainer();
-    }
-
-    set dragOutsideBoundary(dragOutsideBoundary) {
-        this._props.dragOutsideBoundary = dragOutsideBoundary;
-
-        this._updateDragResizeContainer();
-        this._updateOutsideDragFactor();
-    }
-
-    set outsideDragFactor(outsideDragFactor) {
-        this._props.outsideDragFactor = outsideDragFactor;
-
-        this._updateOutsideDragFactor();
     }
 
     set restorePosition(restorePosition) {
@@ -115,23 +83,9 @@ class OverlayPositionController {
         this.restorePositionOnNextRender(shouldRestorePosition);
     }
 
-    dragHandled() {
-        this.restorePositionOnNextRender(false);
-    }
-
-    resizeHandled() {
-        this.restorePositionOnNextRender(false);
-    }
-
-    updateTarget(target) {
-        this._props.target = target;
-
-        this.updatePosition(this._props.position, target);
-    }
-
-    updatePosition(positionProp, targetProp = this._props.target) {
+    updatePosition(positionProp) {
         this._props.position = positionProp;
-        this._position = this._normalizePosition(positionProp, targetProp);
+        this._position = this._normalizePosition(positionProp);
 
         this._updateWrapperCoveredElement();
     }
@@ -150,7 +104,6 @@ class OverlayPositionController {
         this._$markupContainer = $container.length ? $container : this._$root.parent();
 
         this._updateWrapperCoveredElement();
-        this._updateDragResizeContainer();
     }
 
     detectVisualPositionChange(event) {
@@ -220,35 +173,6 @@ class OverlayPositionController {
         });
     }
 
-    _updateOutsideDragFactor() {
-        this._outsideDragFactor = this._getOutsideDragFactor();
-    }
-
-    _getOutsideDragFactor() {
-        if(this._props.dragOutsideBoundary) {
-            return 1;
-        }
-
-        return this._props.outsideDragFactor;
-    }
-
-    _updateDragResizeContainer() {
-        this._$dragResizeContainer = this._getDragResizeContainer();
-    }
-
-    _getDragResizeContainer() {
-        if(this._props.dragOutsideBoundary) {
-            return $(window);
-        }
-        if(this._props.dragAndResizeArea) {
-            return $(this._props.dragAndResizeArea);
-        }
-
-        const isContainerDefined = originalViewPort().get(0) || this._props.container;
-
-        return isContainerDefined ? this._$markupContainer : $(window);
-    }
-
     _updateWrapperCoveredElement() {
         this._$wrapperCoveredElement = this._getWrapperCoveredElement();
     }
@@ -270,9 +194,8 @@ class OverlayPositionController {
         }
     }
 
-    _normalizePosition(positionProp, targetProp) {
+    _normalizePosition(positionProp) {
         const defaultPositionConfig = {
-            of: targetProp,
             boundaryOffset: OVERLAY_DEFAULT_BOUNDARY_OFFSET
         };
 

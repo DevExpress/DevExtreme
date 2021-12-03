@@ -1,7 +1,8 @@
 using System;
 using System.IO;
 
-namespace Runner.Tools {
+namespace Runner.Tools
+{
     public class ConsoleWriter {
         readonly TextWriter target;
         readonly string header;
@@ -10,25 +11,37 @@ namespace Runner.Tools {
             this.target = target;
             this.header = header;
         }
-        public void Write(string message, ConsoleColor? foreground = null) {
+
+        void WriteCore(string message, ConsoleColor? foreground, bool line) {
             if (foreground.HasValue) {
                 Console.ForegroundColor = foreground.Value;
             }
 
-            var msg = $"{this.header}{message}";
-            ConsoleHelper.Logger.Write(msg);
-            target.Write(msg);
-            Console.ResetColor();
+            if (!String.IsNullOrEmpty(message) || line) {
+                var msg = $"{this.header}{message}";
+                if (line) {
+                    ConsoleHelper.Logger.WriteLine(msg);
+                    target.WriteLine(msg);
+                } else {
+                    ConsoleHelper.Logger.Write(msg);
+                    target.Write(msg);
+                }
+            }
+
+            if (foreground.HasValue) {
+                Console.ResetColor();
+            }
+        }
+        public void Write(string message, ConsoleColor? foreground = null) {
+            WriteCore(message, foreground, false);
         }
 
         public void WriteLine() {
-            ConsoleHelper.Logger.WriteLine();
-            target.WriteLine();
+            WriteCore(null, null, true);
         }
 
         public void WriteLine(string message, ConsoleColor? foreground = null) {
-            Write(message, foreground);
-            WriteLine();
+            WriteCore(message, foreground, true);
         }
     }
 
@@ -47,25 +60,25 @@ namespace Runner.Tools {
         }
 
         void LogCore(string text) {
-            lock (olock) {
-                File.AppendAllText(this.path, text);
-            }
+            File.AppendAllText(this.path, text);
         }
 
         public void Write(string text = "") {
-            if (this.time) {
-                LogCore($"{DateTime.Now:hh:mm:ss}     ");
-                this.time = false;
+            lock (olock) {
+                if (String.IsNullOrEmpty(text))
+                    return;
+                if (this.time) {
+                    LogCore($"{DateTime.Now:hh:mm:ss}     ");
+                    this.time = false;
+                }
+
+                LogCore(text);
             }
-            LogCore(text);
         }
-        public void WriteLine() {
-            Write($"\r\n");
+
+        public void WriteLine(string text = "") {
+            Write($"{text ?? ""}\r\n");
             this.time = true;
-        }
-        public void WriteLine(string text) {
-            Write(text);
-            WriteLine();
         }
     }
     public static class ConsoleHelper {

@@ -9620,6 +9620,33 @@ QUnit.module('Customization of the command columns', {
         assert.deepEqual(this.columnOption('TestField3', 'lookup.dataSource'), [1, 2, 3], 'lookup datasource');
     });
 
+    // T1046609
+    QUnit.test('Update dataSource of the column lookup when command column is specified', function(assert) {
+        // arrange
+        this.applyOptions({
+            columns: [
+                { type: 'buttons', buttons: ['button1', 'button2'] },
+                {
+                    caption: 'Band Column 1', columns: [
+                        { dataField: 'TestField1', caption: 'Column 1', lookup: { dataSource: [] } },
+                        { dataField: 'TestField2', caption: 'Column 2' },
+                    ]
+                }
+            ]
+        });
+
+        try {
+            // act
+            this.columnOption('TestField1', 'lookup.dataSource', [1, 2, 3]);
+
+            // assert
+            assert.deepEqual(this.columnOption('TestField1', 'lookup.dataSource'), [1, 2, 3], 'lookup datasource');
+        } catch(e) {
+            // assert
+            assert.ok(false, 'exception');
+        }
+    });
+
     // T652910
     QUnit.test('Colspan of the band column should be correct when all child columns are hidden in a nested band column', function(assert) {
         // arrange

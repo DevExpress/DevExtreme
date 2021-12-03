@@ -17,7 +17,10 @@ describe('AllDayPanelLayout', () => {
         isLastGroupCell: false,
         key: '1',
       }],
-      dateTable: [[]],
+      dateTable: [{
+        cells: [],
+        key: 0,
+      }],
       groupIndex: 1,
     }],
     leftVirtualCellWidth: 100,

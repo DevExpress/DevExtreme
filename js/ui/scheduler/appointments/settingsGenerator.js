@@ -33,10 +33,12 @@ export class DateGeneratorBaseStrategy {
     get endViewDate() { return this.options.endViewDate; }
     get viewType() { return this.options.viewType; }
     get isGroupedByDate() { return this.options.isGroupedByDate; }
-    get isVerticalOrientation() { return this.options.isVerticalOrientation; }
+    get isVerticalOrientation() { return this.options.isVerticalGroupOrientation; }
     get dataAccessors() { return this.options.dataAccessors; }
 
     get loadedResources() { return this.options.loadedResources; }
+
+    get isDateAppointment() { return !isDateAndTimeView(this.viewType) && this.appointmentTakesAllDay; }
 
     getIntervalDuration() {
         return this.appointmentTakesAllDay
@@ -419,8 +421,9 @@ export class DateGeneratorBaseStrategy {
             resultDate = dateUtils.normalizeDate(appointment.startDate, startDate);
         }
 
-
-        return dateUtils.roundDateByStartDayHour(resultDate, startDayHour);
+        return !this.isDateAppointment
+            ? dateUtils.roundDateByStartDayHour(resultDate, startDayHour)
+            : resultDate;
     }
 
     _getAppointmentFirstViewDate(appointment) {
@@ -430,7 +433,13 @@ export class DateGeneratorBaseStrategy {
             endDate
         } = appointment;
 
-        return this.viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, this.isAllDayRowAppointment);
+        return this.viewDataProvider.findGroupCellStartDate(
+            groupIndex,
+            startDate,
+            endDate,
+            this.isAllDayRowAppointment,
+            this.isDateAppointment
+        );
     }
 
     _getGroupIndices(appointmentResources) {
@@ -541,7 +550,7 @@ export class AppointmentSettingsGenerator {
     get dataAccessors() { return this.options.dataAccessors; }
     get timeZoneCalculator() { return this.options.timeZoneCalculator; }
     get isAllDayRowAppointment() { return this.options.appointmentTakesAllDay && this.options.supportAllDayRow; }
-    get modelGroups() { return this.options.modelGroups; }
+    get groups() { return this.options.groups; }
     get dateSettingsStrategy() {
         const options = {
             ...this.options,
@@ -622,7 +631,7 @@ export class AppointmentSettingsGenerator {
         const appointmentConfig = {
             itemData: this.rawAppointment,
             groupIndex,
-            groups: this.modelGroups
+            groups: this.groups
         };
 
         this.options.getAppointmentColor(appointmentConfig).done((color) => info.resourceColor = color);

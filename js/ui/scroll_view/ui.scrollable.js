@@ -506,7 +506,7 @@ const Scrollable = DOMComponent.inherit({
     },
 
     isRenovated: function() {
-        return false;
+        return !!Scrollable.IS_RENOVATED_WIDGET;
     }
 });
 

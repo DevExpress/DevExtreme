@@ -12,10 +12,6 @@ import {
 import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
 import { CellBase } from '../cell';
-import {
-  getKeyByGroup,
-  getIsGroupedAllDayPanel,
-} from '../../utils';
 import { Table } from '../table';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { DateTimeCellTemplateProps, TimePanelData } from '../../types';
@@ -24,7 +20,6 @@ import { TimePanel } from '../../../../../component_wrapper/scheduler/time_panel
 
 export const viewFunction = ({
   props: {
-    groupOrientation,
     timePanelData,
     timeCellTemplate,
     tableRef,
@@ -43,9 +38,14 @@ export const viewFunction = ({
     tableRef={tableRef}
   >
     {timePanelData
-      .groupedData.map(({ dateTable, groupIndex }, index) => (
-        <Fragment key={getKeyByGroup(groupIndex, groupOrientation)}>
-          {getIsGroupedAllDayPanel(timePanelData, index) && (
+      .groupedData.map(({
+        dateTable,
+        groupIndex,
+        key: fragmentKey,
+        isGroupedAllDayPanel,
+      }) => (
+        <Fragment key={fragmentKey}>
+          {isGroupedAllDayPanel && (
             <Row>
               <CellBase className="dx-scheduler-time-panel-title-cell">
                 <AllDayPanelTitle />

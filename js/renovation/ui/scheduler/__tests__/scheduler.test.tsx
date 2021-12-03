@@ -11,7 +11,8 @@ import { WorkSpace } from '../workspaces/base/work_space';
 import { SchedulerToolbar } from '../header/header';
 import * as resourceUtils from '../../../../ui/scheduler/resources/utils';
 import { getPreparedDataItems } from '../utils/data';
-import { getFilterStrategy } from '../utils/filter';
+import { getFilterStrategy } from '../utils/filtering/local';
+import combineRemoteFilter from '../utils/filtering/remote';
 import { getAppointmentsConfig, getAppointmentsModel } from '../model/appointments';
 import { getAppointmentsViewModel } from '../view_model/appointments/appointments';
 import { AppointmentLayout } from '../appointment/layout';
@@ -31,10 +32,18 @@ jest.mock('../utils/data', () => ({
   ...jest.requireActual('../utils/data'),
   getPreparedDataItems: jest.fn((items) => `Prepared_${items}`),
 }));
-jest.mock('../utils/filter', () => ({
-  ...jest.requireActual('../utils/filter'),
+
+jest.mock('../utils/filtering/local', () => ({
+  ...jest.requireActual('../utils/filtering/local'),
   getFilterStrategy: jest.fn(() => ({ filter: (items) => `Filter_${items}` })),
 }));
+
+jest.mock('../utils/filtering/remote', () => ({
+  __esModule: true,
+  ...jest.requireActual('../utils/filtering/remote'),
+  default: jest.fn(() => 'Test_combineRemoteFilter'),
+}));
+
 const getCurrentViewProps = jest.spyOn(viewsModel, 'getCurrentViewProps');
 const getCurrentViewConfig = jest.spyOn(viewsModel, 'getCurrentViewConfig');
 
@@ -219,6 +228,11 @@ describe('Scheduler', () => {
 
     describe('Appointments', () => {
       it('should render appointments as a property of workspace', () => {
+        const templates = {
+          appointmentTemplate: jest.fn(),
+          appointmentCollectorTemplate: jest.fn(),
+        };
+
         const props = {
           min: new Date(2021, 9, 7),
           max: new Date(2021, 9, 8),
@@ -236,6 +250,7 @@ describe('Scheduler', () => {
         const scheduler = renderComponent({
           props,
           appointmentsViewModel,
+          ...templates,
         });
 
         const workspace = scheduler.find(WorkSpace);
@@ -250,6 +265,8 @@ describe('Scheduler', () => {
             isAllDay: false,
             appointments: appointmentsViewModel.regular,
             overflowIndicators: appointmentsViewModel.regularCompact,
+            appointmentTemplate: templates.appointmentTemplate,
+            overflowIndicatorTemplate: templates.appointmentCollectorTemplate,
           });
 
         expect(allDayAppointments.type)
@@ -260,6 +277,8 @@ describe('Scheduler', () => {
             isAllDay: true,
             appointments: appointmentsViewModel.allDay,
             overflowIndicators: appointmentsViewModel.allDayCompact,
+            appointmentTemplate: templates.appointmentTemplate,
+            overflowIndicatorTemplate: templates.appointmentCollectorTemplate,
           });
       });
     });
@@ -397,6 +416,8 @@ describe('Scheduler', () => {
             dataSource: data,
           });
 
+          scheduler.workSpaceViewModel = {} as any;
+
           scheduler.loadDataSource();
 
           expect(scheduler.dataItems)
@@ -418,10 +439,28 @@ describe('Scheduler', () => {
             },
           });
 
+          scheduler.workSpaceViewModel = {} as any;
+
           scheduler.loadDataSource();
 
           expect(scheduler.dataItems)
             .toMatchObject(data);
+        });
+
+        it('loadDataSource should not load dataItems if workSpaceViewModel is not defined', () => {
+          const data = [{
+            startDate: new Date(2021, 9, 6, 15, 15),
+            endDate: new Date(2021, 9, 6, 16, 16),
+            allDay: false,
+          }];
+          const scheduler = new Scheduler({
+            dataSource: data,
+          });
+
+          scheduler.loadDataSource();
+
+          expect(scheduler.dataItems)
+            .toHaveLength(0);
         });
 
         it('loadDataSource should not load dataItems if internalDataSource is loaded', () => {
@@ -466,6 +505,49 @@ describe('Scheduler', () => {
 
           expect(scheduler.dataItems)
             .toHaveLength(0);
+        });
+
+        describe('Remote filtering', () => {
+          it('should apply remote filter', () => {
+            const userFilter = ['Some value', '>', 'Other value'];
+            const data = [{
+              startDate: new Date(2021, 9, 6, 15, 15),
+              endDate: new Date(2021, 9, 6, 16, 16),
+              allDay: false,
+            }];
+            const scheduler = new Scheduler({
+              ...new SchedulerProps(),
+              dataSource: data,
+              remoteFiltering: true,
+              dateSerializationFormat: 'Some format',
+            });
+
+            scheduler.workSpaceViewModel = {
+              viewDataProvider: {
+                getStartViewDate: () => new Date(2021, 10, 24, 9),
+                getLastViewDateByEndDayHour: () => new Date(2021, 10, 24, 18),
+              },
+            } as any;
+
+            const { internalDataSource } = scheduler;
+            internalDataSource.filter(userFilter);
+            jest.spyOn(scheduler, 'internalDataSource', 'get')
+              .mockReturnValue(internalDataSource);
+
+            scheduler.loadDataSource();
+
+            expect(scheduler.internalDataSource.filter())
+              .toBe('Test_combineRemoteFilter');
+
+            expect(combineRemoteFilter)
+              .toBeCalledWith({
+                dataAccessors: expect.anything(),
+                dataSourceFilter: userFilter,
+                min: new Date(2021, 10, 24, 9),
+                max: new Date(2021, 10, 24, 18),
+                dateSerializationFormat: 'Some format',
+              });
+          });
         });
       });
     });
@@ -1357,6 +1439,22 @@ describe('Scheduler', () => {
           expect(scheduler.workSpaceKey)
             .toBe('day_horizontal_3_0');
         });
+
+        it('should return key if cross-scrolling is not used but virtual scrolling is used', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            scrolling: { mode: 'virtual' },
+            currentView: 'day',
+            views: [{
+              type: 'day',
+              intervalCount: 3,
+              groupOrientation: 'horizontal',
+            }],
+          });
+
+          expect(scheduler.workSpaceKey)
+            .toBe('day_horizontal_3_0');
+        });
       });
 
       describe('Cell Templates', () => {
@@ -1381,6 +1479,52 @@ describe('Scheduler', () => {
             .toBe(templates.timeCellTemplate);
           expect(scheduler.resourceCellTemplate)
             .toBe(templates.resourceCellTemplate);
+        });
+      });
+
+      describe('Appointment templates', () => {
+        it('should return templates', () => {
+          const templates = {
+            appointmentTemplate: jest.fn(),
+            appointmentCollectorTemplate: jest.fn(),
+          };
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            ...templates,
+          });
+
+          expect(scheduler.appointmentTemplate)
+            .toBe(templates.appointmentTemplate);
+          expect(scheduler.appointmentCollectorTemplate)
+            .toBe(templates.appointmentCollectorTemplate);
+        });
+
+        it('should return templates from view', () => {
+          const templates = {
+            appointmentTemplate: jest.fn(),
+            appointmentCollectorTemplate: jest.fn(),
+          };
+
+          const viewTemplates = {
+            appointmentTemplate: jest.fn(),
+            appointmentCollectorTemplate: jest.fn(),
+          };
+
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            views: [{
+              type: 'day',
+              ...viewTemplates,
+            }],
+            currentView: 'day',
+            ...templates,
+          });
+
+          expect(scheduler.appointmentTemplate)
+            .toBe(viewTemplates.appointmentTemplate);
+          expect(scheduler.appointmentCollectorTemplate)
+            .toBe(viewTemplates.appointmentCollectorTemplate);
         });
       });
     });

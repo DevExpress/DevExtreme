@@ -382,9 +382,13 @@ export const ListBase = CollectionWidget.inherit({
         const autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataSource;
 
         this._scrollView = this._createComponent(this.$element(), getScrollView(), {
+            height: this.option('height'),
+            width: this.option('width'),
             disabled: this.option('disabled') || !scrollingEnabled,
             onScroll: this._scrollHandler.bind(this),
+            pullDownEnabled: pullRefreshEnabled,
             onPullDown: pullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
+            reachBottomEnabled: autoPagingEnabled,
             onReachBottom: autoPagingEnabled ? this._scrollBottomHandler.bind(this) : null,
             showScrollbar: this.option('showScrollbar'),
             useNative: this.option('useNativeScrolling'),
@@ -935,6 +939,7 @@ export const ListBase = CollectionWidget.inherit({
             case 'width':
             case 'height':
                 this.callBase(args);
+                this._scrollView.option(args.name, args.value);
                 this._scrollView.update();
                 break;
             case 'indicateLoading':

@@ -1296,7 +1296,7 @@ export class DataGridProps extends BaseWidgetProps /* implements Options */ {
 
   @Nested() selection?: DataGridSelection = {
     mode: 'none',
-    showCheckBoxesMode: 'onClick',
+    showCheckBoxesMode: isMaterial(current()) ? 'always' : 'onClick',
     allowSelectAll: true,
     selectAllMode: 'allPages',
     maxFilterLengthInRequest: 1500,
