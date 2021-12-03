@@ -101,9 +101,9 @@ QUnit.module('Nested scrollable styles', () => {
             new Scrollable(innerScrollableElement, extend(options, { width: 100, height: 100, direction: config.innerDirection, useNative: config.innerUseNative }));
 
             const expectedNative = {
-                both: { touchAction: 'pan-x pan-y', overflowX: 'auto', overflowY: 'auto', position: 'relative' },
-                vertical: { touchAction: 'pan-y', overflowX: 'hidden', overflowY: 'auto', position: 'relative' },
-                horizontal: { touchAction: 'pan-x', overflowX: 'auto', overflowY: 'hidden', position: 'relative' }
+                both: { touchAction: 'pan-x pan-y', overflowX: config.showScrollbar !== 'never' ? 'auto' : 'hidden', overflowY: config.showScrollbar !== 'never' ? 'auto' : 'hidden', position: 'relative' },
+                vertical: { touchAction: 'pan-y', overflowX: 'hidden', overflowY: config.showScrollbar !== 'never' ? 'auto' : 'hidden', position: 'relative' },
+                horizontal: { touchAction: 'pan-x', overflowX: config.showScrollbar !== 'never' ? 'auto' : 'hidden', overflowY: 'hidden', position: 'relative' }
             };
 
             const expectedSimulated = {

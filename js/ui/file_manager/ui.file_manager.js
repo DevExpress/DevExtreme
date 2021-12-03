@@ -124,6 +124,7 @@ class FileManager extends Widget {
             contentTemplate: container => this._createItemsPanel(container),
             onAdaptiveStateChanged: e => this._onAdaptiveStateChanged(e)
         });
+        this._editing.setUploaderSplitterElement(this._adaptivityControl.getSplitterElement());
     }
 
     _createEditing(notificationControl) {

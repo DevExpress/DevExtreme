@@ -147,6 +147,10 @@ export default class SplitterControl extends Widget {
         return this._$leftElement.get(0).clientWidth;
     }
 
+    getSplitterBorderElement() {
+        return this._$splitterBorder;
+    }
+
     _toggleActive(isActive) {
         this.$element().toggleClass(SPLITTER_INACTIVE_CLASS, !isActive);
         this._$splitter.toggleClass(SPLITTER_INACTIVE_CLASS, !isActive);

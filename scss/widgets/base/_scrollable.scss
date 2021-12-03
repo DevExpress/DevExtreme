@@ -66,10 +66,9 @@
     touch-action: auto;
   }
 
-  &.dx-scrollable-scrollbars-hidden {
-    ::-webkit-scrollbar {
-      opacity: 0;
-    }
+  &.dx-scrollable-scrollbars-hidden > .dx-scrollable-wrapper > .dx-scrollable-container,
+  &.dx-scrollable-scrollbars-hidden > div > .dx-scrollable-wrapper > .dx-scrollable-container {
+    overflow: hidden;
   }
 
   &.dx-scrollable-native-ios {
@@ -217,20 +216,6 @@
 
     &.dx-scrollbar-horizontal {
       direction: ltr;
-    }
-  }
-}
-
-.dx-device-ios-6 {
-  .dx-scrollable-content {
-    backface-visibility: hidden;
-  }
-}
-
-.dx-device-android {
-  .dx-scrollable-native.dx-scrollable-scrollbars-hidden {
-    ::-webkit-scrollbar {
-      display: none;
     }
   }
 }
