@@ -71,9 +71,13 @@ const ValidatingController = modules.Controller.inherit((function() {
             this.createAction('onRowValidating');
 
             if(!this._validationState) {
-                this._validationState = [];
-                this._validationStateCache = {};
+                this.initValidationState();
             }
+        },
+
+        initValidationState() {
+            this._validationState = [];
+            this._validationStateCache = {};
         },
 
         _rowIsValidated: function(change) {
@@ -878,9 +882,7 @@ export const validatingModule = {
                         }
 
                         if(shouldResetValidationState) {
-                            const validatingController = this.getController('validating');
-                            validatingController._validationState = [];
-                            validatingController._validationStateCache = {};
+                            this.getController('validating').initValidationState();
                         }
                     }
                 },
@@ -913,10 +915,7 @@ export const validatingModule = {
                 },
 
                 _beforeCancelEditData: function() {
-                    const validatingController = this.getController('validating');
-
-                    validatingController._validationState = [];
-                    validatingController._validationStateCache = {};
+                    this.getController('validating').initValidationState();
 
                     this.callBase();
                 },
