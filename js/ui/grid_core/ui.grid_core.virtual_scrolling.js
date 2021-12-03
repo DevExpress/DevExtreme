@@ -916,10 +916,11 @@ export const virtualScrollingModule = {
                                 });
                             },
                             items: function(countableOnly) {
-                                let result = that.items();
+                                let result = that._items;
 
                                 if(that.option(LEGACY_SCROLLING_MODE)) {
-                                    const virtualItemsCount = that.virtualItemsCount();
+                                    const dataSource = that.dataSource();
+                                    const virtualItemsCount = dataSource?.virtualItemsCount();
                                     const begin = virtualItemsCount ? virtualItemsCount.begin : 0;
                                     const rowPageSize = that.getRowPageSize();
 

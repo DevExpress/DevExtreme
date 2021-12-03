@@ -4714,6 +4714,61 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         assert.strictEqual(callCount, 0, 'load is not called');
     });
+
+    QUnit.test('Rows should be rendered in legacy scrolling mode', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 50; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(50),
+            height: 400,
+            keyExpr: 'id',
+            scrolling: {
+                rowRenderingMode: 'virtual',
+                useNative: false,
+                legacyMode: true,
+                mode: 'virtual',
+            }
+        });
+
+        this.clock.tick(300);
+        let visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 20, 'rows are rendered initially');
+        assert.equal(visibleRows[0].key, 1, 'initial first visible row');
+        assert.equal(visibleRows[visibleRows.length - 1].key, 20, 'initial last visible row');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 1350 });
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+
+
+        // assert
+        assert.equal(visibleRows.length, 20, 'rows are rendered at the bottom');
+        assert.equal(visibleRows[0].key, 31, 'first visible row at the bottom');
+        assert.equal(visibleRows[visibleRows.length - 1].key, 50, 'last visible row at the bottom');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 0 });
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 20, 'rows are rendered at the top');
+        assert.equal(visibleRows[0].key, 1, 'first visible row at the top');
+        assert.equal(visibleRows[visibleRows.length - 1].key, 20, 'last visible row at the top');
+    });
 });
 
 
