@@ -60,6 +60,9 @@ class FileManagerFileUploader extends Widget {
             abortUpload: (file, chunksData) => this._fileUploaderAbortUpload(fileUploader, file, chunksData)
         });
 
+        fileUploader._shouldRaiseDragLeaveBase = fileUploader._shouldRaiseDragLeave;
+        fileUploader._shouldRaiseDragLeave = e => this._shouldRaiseDragLeave(e, fileUploader);
+
         const uploaderInfo = {
             fileUploader
         };
@@ -186,6 +189,10 @@ class FileManagerFileUploader extends Widget {
         }
     }
 
+    _shouldRaiseDragLeave(e, uploaderInstance) {
+        return uploaderInstance.isMouseOverElement(e, this.option('splitterElement')) || uploaderInstance._shouldRaiseDragLeaveBase(e, true);
+    }
+
     _uploadFiles(uploaderInfo, files) {
         this._setDropZonePlaceholderVisible(false);
         const sessionId = new Guid().toString();
@@ -281,7 +288,8 @@ class FileManagerFileUploader extends Widget {
         return extend(super._getDefaultOptions(), {
             getController: null,
             onUploadSessionStarted: null,
-            onUploadProgress: null
+            onUploadProgress: null,
+            splitterElement: null
         });
     }
 
@@ -303,6 +311,8 @@ class FileManagerFileUploader extends Widget {
             case 'dropZonePlaceholderContainer':
                 this._$dropZonePlaceholder.detach();
                 this._$dropZonePlaceholder.appendTo(args.value);
+                break;
+            case 'splitterElement':
                 break;
             default:
                 super._optionChanged(args);
