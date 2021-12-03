@@ -1,5 +1,5 @@
 import {
-    positionConfig,
+    PositionConfig,
 } from '../animation/position';
 
 import {
@@ -67,7 +67,7 @@ export type OptionChangedEvent = EventInfo<dxContextMenu> & ChangedOptionInfo;
 
 /** @public */
 export type PositioningEvent = NativeEventInfo<dxContextMenu, MouseEvent | PointerEvent | TouchEvent> & {
-    readonly position: positionConfig;
+    readonly position: PositionConfig;
 };
 
 /** @public */
@@ -88,7 +88,6 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @docid
      * @default true
      * @type_function_param1 event:event
-     * @type_function_return Boolean
      * @public
      */
     closeOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
@@ -169,8 +168,9 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @default { my: 'top left', at: 'top left' }
      * @ref
      * @public
+     * @type positionConfig
      */
-    position?: positionConfig;
+    position?: PositionConfig;
     /**
      * @docid
      * @default "dxcontextmenu"

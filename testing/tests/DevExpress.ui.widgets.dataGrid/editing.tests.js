@@ -2961,6 +2961,9 @@ QUnit.module('Editing with real dataController', {
                 store: this.array,
                 paginate: true
             },
+            selection: {
+                mode: 'none'
+            },
             masterDetail: {
                 enabled: false,
                 template: function($container, options) {
@@ -8044,6 +8047,42 @@ QUnit.module('Editing with real dataController', {
 
         // assert
         assert.strictEqual(clickSpy.callCount, 1, 'click is fired once');
+    });
+
+    // T1045908
+    QUnit.test('The click event should not be prevented for custom command column', function(assert) {
+        // arrange
+        const event = $.Event('click');
+        const clickHandler = sinon.spy();
+        const $testElement = $('#container');
+
+        this.options.columns.push(
+            {
+                type: 'buttons',
+                cssClass: 'mybuttons',
+                buttons: [
+                    {
+                        template: function($cellElement, options) {
+                            return $('<div/>').addClass('mybutton').text('My button').on('click', clickHandler);
+                        }
+                    }
+                ]
+            }
+        );
+        this.columnsController.reset();
+        this.rowsView.render($testElement);
+
+        const $customCommandCell = $testElement.find('.mybuttons').first();
+        const $customButton = $customCommandCell.find('.mybutton');
+        assert.strictEqual($customCommandCell.length, 1, 'has custom command cell');
+        assert.strictEqual($customButton.length, 1, 'has custom button cssClass');
+
+        // act
+        $customButton.trigger(event);
+
+        // assert
+        assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
+        assert.strictEqual(clickHandler.callCount, 1, 'click is fired once');
     });
 
     QUnit.test('Changing edit icon in the \'buttons\' command column', function(assert) {

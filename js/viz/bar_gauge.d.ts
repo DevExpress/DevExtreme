@@ -182,7 +182,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
       connectorWidth?: number;
       /**
        * @docid
-       * @type_function_param1_field1 value:Number
        * @notUsedInTheme
        */
       customizeText?: ((barValue: { value?: number; valueText?: string }) => string);
@@ -348,7 +347,6 @@ export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
 export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxBarGaugeOptions.tooltip.contentTemplate
-     * @type_function_param1_field1 value:Number
      * @type_function_return string|Element|jQuery
      * @default undefined
      * @public
@@ -357,7 +355,6 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type_function_param1_field1 value:Number
      * @type_function_return object
      * @public
      */

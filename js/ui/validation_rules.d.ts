@@ -216,7 +216,6 @@ export interface PatternRule {
     message?: string;
     /**
      * @docid
-     * @type regexp|string
      * @public
      */
     pattern?: RegExp | string;

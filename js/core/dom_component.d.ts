@@ -113,8 +113,6 @@ export default class DOMComponent extends Component {
      * @static
      * @section uiWidgets
      * @publicName defaultOptions(rule)
-     * @param1 rule:Object
-     * @param1_field1 device:Device|Array<Device>|function
      * @param1_field2 options:Object
      * @public
      */

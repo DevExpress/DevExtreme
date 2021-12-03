@@ -2,6 +2,9 @@ import {
     UserDefinedElement,
 } from '../core/element';
 
+/** @public */
+export type PositionConfig = positionConfig;
+
 /**
  * @docid
  * @namespace DevExpress

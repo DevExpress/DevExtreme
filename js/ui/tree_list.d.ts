@@ -1,4 +1,8 @@
 import {
+    Skip,
+} from '../core/index';
+
+import {
     UserDefinedElement,
     DxElement,
     UserDefinedElementsArray,
@@ -72,6 +76,9 @@ interface CellInfo {
     readonly cellElement: DxElement;
     readonly row: Row;
 }
+
+/** @public */
+export type Scrollable = Skip<dxScrollable, '_templateManager' | '_getTemplate' | '_invalidate' | '_refresh'>;
 
 /** @public */
 export type AdaptiveDetailRowPreparingEvent = EventInfo<dxTreeList> & AdaptiveDetailRowPreparingInfo;
@@ -854,7 +861,6 @@ export interface Editing extends EditingBase {
      * @docid dxTreeListOptions.editing.allowAdding
      * @default false
      * @type_function_param1_field2 row:dxTreeListRowObject
-     * @type_function_return Boolean
      * @public
      */
     allowAdding?: boolean | ((options: { readonly component: dxTreeList; readonly row?: Row }) => boolean);
@@ -862,7 +868,6 @@ export interface Editing extends EditingBase {
      * @docid dxTreeListOptions.editing.allowDeleting
      * @default false
      * @type_function_param1_field2 row:dxTreeListRowObject
-     * @type_function_return Boolean
      * @public
      */
     allowDeleting?: boolean | ((options: { readonly component: dxTreeList; readonly row?: Row }) => boolean);
@@ -870,7 +875,6 @@ export interface Editing extends EditingBase {
      * @docid dxTreeListOptions.editing.allowUpdating
      * @default false
      * @type_function_param1_field2 row:dxTreeListRowObject
-     * @type_function_return Boolean
      * @public
      */
     allowUpdating?: boolean | ((options: { readonly component: dxTreeList; readonly row?: Row }) => boolean);
@@ -994,7 +998,6 @@ export default class dxTreeList extends Widget implements GridBase {
     /**
      * @docid
      * @publicName forEachNode(callback)
-     * @param1 callback:function
      * @public
      */
     forEachNode(callback: Function): void;
@@ -1002,7 +1005,6 @@ export default class dxTreeList extends Widget implements GridBase {
      * @docid
      * @publicName forEachNode(nodes, callback)
      * @param1 nodes:Array<dxTreeListNode>
-     * @param2 callback:function
      * @public
      */
     forEachNode(nodes: Array<Node>, callback: Function): void;
@@ -1133,7 +1135,7 @@ export default class dxTreeList extends Widget implements GridBase {
     getKeyByRowIndex(rowIndex: number): any;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: any | string | number): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
@@ -1287,7 +1289,6 @@ export interface dxTreeListColumnButton extends ColumnButtonBase {
      * @default true
      * @type_function_param1_field2 row:dxTreeListRowObject
      * @type_function_param1_field3 column:dxTreeListColumn
-     * @type_function_return Boolean
      * @public
      */
     visible?: boolean | ((options: { readonly component: dxTreeList; row?: Row; readonly column: Column }) => boolean);

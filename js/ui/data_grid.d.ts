@@ -1,4 +1,8 @@
 import {
+  Skip,
+} from '../core/index';
+
+import {
   UserDefinedElement,
   DxElement,
   UserDefinedElementsArray,
@@ -1826,7 +1830,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName beginCustomLoading(messageText)
-     * @param1 messageText:string
      * @public
      */
     beginCustomLoading(messageText: string): void;
@@ -1847,36 +1850,24 @@ export interface GridBase {
     /**
      * @docid
      * @publicName cellValue(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @return any
      * @public
      */
     cellValue(rowIndex: number, dataField: string): any;
     /**
      * @docid
      * @publicName cellValue(rowIndex, dataField, value)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @param3 value:any
      * @public
      */
     cellValue(rowIndex: number, dataField: string, value: any): void;
     /**
      * @docid
      * @publicName cellValue(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @return any
      * @public
      */
     cellValue(rowIndex: number, visibleColumnIndex: number): any;
     /**
      * @docid
      * @publicName cellValue(rowIndex, visibleColumnIndex, value)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @param3 value:any
      * @public
      */
     cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
@@ -1889,7 +1880,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName clearFilter(filterName)
-     * @param1 filterName:string
      * @public
      */
     clearFilter(filterName: string): void;
@@ -1920,14 +1910,12 @@ export interface GridBase {
     /**
      * @docid
      * @publicName columnCount()
-     * @return number
      * @public
      */
     columnCount(): number;
     /**
      * @docid
      * @publicName columnOption(id)
-     * @param1 id:number|string
      * @return object
      * @public
      */
@@ -1935,25 +1923,18 @@ export interface GridBase {
     /**
      * @docid
      * @publicName columnOption(id, optionName)
-     * @param1 id:number|string
-     * @param2 optionName:string
-     * @return any
      * @public
      */
     columnOption(id: number | string, optionName: string): any;
     /**
      * @docid
      * @publicName columnOption(id, optionName, optionValue)
-     * @param1 id:number|string
-     * @param2 optionName:string
-     * @param3 optionValue:any
      * @public
      */
     columnOption(id: number | string, optionName: string, optionValue: any): void;
     /**
      * @docid
      * @publicName columnOption(id, options)
-     * @param1 id:number|string
      * @param2 options:object
      * @public
      */
@@ -1961,14 +1942,12 @@ export interface GridBase {
     /**
      * @docid
      * @publicName deleteColumn(id)
-     * @param1 id:number|string
      * @public
      */
     deleteColumn(id: number | string): void;
     /**
      * @docid
      * @publicName deleteRow(rowIndex)
-     * @param1 rowIndex:number
      * @public
      */
     deleteRow(rowIndex: number): void;
@@ -1982,7 +1961,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName deselectRows(keys)
-     * @param1 keys:Array<any>
      * @return Promise<any>
      * @public
      */
@@ -1990,23 +1968,18 @@ export interface GridBase {
     /**
      * @docid
      * @publicName editCell(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
      * @public
      */
     editCell(rowIndex: number, dataField: string): void;
     /**
      * @docid
      * @publicName editCell(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
      * @public
      */
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     /**
      * @docid
      * @publicName editRow(rowIndex)
-     * @param1 rowIndex:number
      * @public
      */
     editRow(rowIndex: number): void;
@@ -2019,21 +1992,18 @@ export interface GridBase {
     /**
      * @docid
      * @publicName expandAdaptiveDetailRow(key)
-     * @param1 key:any
      * @public
      */
     expandAdaptiveDetailRow(key: any): void;
     /**
      * @docid
      * @publicName filter()
-     * @return any
      * @public
      */
     filter(): any;
     /**
      * @docid
      * @publicName filter(filterExpr)
-     * @param1 filterExpr:any
      * @public
      */
     filter(filterExpr: any): void;
@@ -2048,33 +2018,24 @@ export interface GridBase {
     /**
      * @docid
      * @publicName getCellElement(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @return DxElement|undefined
      * @public
      */
     getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
     /**
      * @docid
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @return DxElement|undefined
      * @public
      */
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     /**
      * @docid
      * @publicName getCombinedFilter()
-     * @return any
      * @public
      */
     getCombinedFilter(): any;
     /**
      * @docid
      * @publicName getCombinedFilter(returnDataField)
-     * @param1 returnDataField:boolean
-     * @return any
      * @public
      */
     getCombinedFilter(returnDataField: boolean): any;
@@ -2083,14 +2044,12 @@ export interface GridBase {
      * @docid
      * @publicName getKeyByRowIndex(rowIndex)
      * @param1 rowIndex:numeric
-     * @return any
      * @public
      */
     getKeyByRowIndex(rowIndex: number): any;
     /**
      * @docid
      * @publicName getRowElement(rowIndex)
-     * @param1 rowIndex:number
      * @return Array<Element>|jQuery|undefined
      * @public
      */
@@ -2109,19 +2068,16 @@ export interface GridBase {
      * @return dxScrollable
      * @public
      */
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     /**
      * @docid
      * @publicName getVisibleColumnIndex(id)
-     * @param1 id:number|string
-     * @return number
      * @public
      */
     getVisibleColumnIndex(id: number | string): number;
     /**
      * @docid
      * @publicName hasEditData()
-     * @return boolean
      * @public
      */
     hasEditData(): boolean;
@@ -2134,24 +2090,18 @@ export interface GridBase {
     /**
      * @docid
      * @publicName isAdaptiveDetailRowExpanded(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isAdaptiveDetailRowExpanded(key: any): boolean;
     /**
      * @docid
      * @publicName isRowFocused(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isRowFocused(key: any): boolean;
     /**
      * @docid
      * @publicName isRowSelected(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isRowSelected(key: any): boolean;
@@ -2159,14 +2109,12 @@ export interface GridBase {
      * @docid
      * @publicName keyOf(obj)
      * @param1 obj:object
-     * @return any
      * @public
      */
     keyOf(obj: any): any;
     /**
      * @docid
      * @publicName navigateToRow(key)
-     * @param1 key:any
      * @public
      */
     navigateToRow(key: any): void;
@@ -2216,7 +2164,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName refresh(changesOnly)
-     * @param1 changesOnly:boolean
      * @return Promise<void>
      * @public
      */
@@ -2224,7 +2171,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName repaintRows(rowIndexes)
-     * @param1 rowIndexes:Array<number>
      * @public
      */
     repaintRows(rowIndexes: Array<number>): void;
@@ -2238,7 +2184,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName searchByText(text)
-     * @param1 text:string
      * @public
      */
     searchByText(text: string): void;
@@ -2252,8 +2197,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName selectRows(keys, preserve)
-     * @param1 keys:Array<any>
-     * @param2 preserve:boolean
      * @return Promise<any>
      * @public
      */
@@ -2261,7 +2204,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName selectRowsByIndexes(indexes)
-     * @param1 indexes:Array<number>
      * @return Promise<any>
      * @public
      */
@@ -2289,7 +2231,6 @@ export interface GridBase {
     /**
      * @docid
      * @publicName undeleteRow(rowIndex)
-     * @param1 rowIndex:number
      * @public
      */
     undeleteRow(rowIndex: number): void;
@@ -2742,6 +2683,9 @@ export interface ColumnButtonBase {
      */
     text?: string;
 }
+
+/** @public */
+export type Scrollable = Skip<dxScrollable, '_templateManager' | '_getTemplate' | '_invalidate' | '_refresh'>;
 
 /** @public */
 export type AdaptiveDetailRowPreparingEvent = EventInfo<dxDataGrid> & AdaptiveDetailRowPreparingInfo;
@@ -3656,7 +3600,8 @@ export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
     summary?: Summary;
 }
 
-export interface ExcelCellInfo {
+/** @public */
+export type ExcelCellInfo = {
   readonly component: dxDataGrid;
   horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right';
   verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top';
@@ -3668,7 +3613,7 @@ export interface ExcelCellInfo {
   readonly value?: string | number | Date;
   numberFormat?: string;
   gridCell?: ExcelCell;
-}
+};
 
 /** @public */
 export interface Export {
@@ -3736,7 +3681,8 @@ export interface Export {
   texts?: ExportTexts;
 }
 
-export interface ExportTexts {
+/** @public */
+export type ExportTexts = {
   /**
    * @docid dxDataGridOptions.export.texts.exportAll
    * @default "Export all data"
@@ -3752,9 +3698,10 @@ export interface ExportTexts {
    * @default "Export"
    */
   exportTo?: string;
-}
+};
 
-export interface GroupPanel {
+/** @public */
+export type GroupPanel = {
   /**
    * @docid dxDataGridOptions.groupPanel.allowColumnDragging
    * @default true
@@ -3771,9 +3718,10 @@ export interface GroupPanel {
    * @default false
    */
   visible?: boolean | 'auto';
-}
+};
 
-export interface Grouping {
+/** @public */
+export type Grouping = {
   /**
    * @docid dxDataGridOptions.grouping.allowCollapsing
    * @default true
@@ -3801,9 +3749,10 @@ export interface Grouping {
    * @type object
    */
   texts?: GroupingTexts;
-}
+};
 
-export interface GroupingTexts {
+/** @public */
+export type GroupingTexts = {
   /**
    * @docid dxDataGridOptions.grouping.texts.groupByThisColumn
    * @default "Group by This Column"
@@ -3829,9 +3778,10 @@ export interface GroupingTexts {
    * @default "Ungroup All"
    */
   ungroupAll?: string;
-}
+};
 
-export interface MasterDetail {
+/** @public */
+export type MasterDetail = {
   /**
    * @docid dxDataGridOptions.masterDetail.autoExpandAll
    * @default false
@@ -3850,7 +3800,7 @@ export interface MasterDetail {
    * @type_function_param2_field3 watch:function
    */
   template?: template | ((detailElement: DxElement, detailInfo: MasterDetailTemplateData) => any);
-}
+};
 
 export interface dxDataGridSortByGroupSummaryInfoItem {
     /**
@@ -3872,17 +3822,18 @@ export interface dxDataGridSortByGroupSummaryInfoItem {
     summaryItem?: string | number;
 }
 
-export interface CustomSummaryInfo {
+/** @public */
+export type CustomSummaryInfo = {
   readonly component: dxDataGrid;
   readonly name?: string;
   readonly summaryProcess: string;
   readonly value?: any;
   totalValue?: any;
   readonly groupIndex?: number;
-}
+};
 
 /** @public */
-export interface Summary {
+export type Summary = {
   /**
    * @docid dxDataGridOptions.summary.calculateCustomSummary
    * @type_function_param1 options:object
@@ -3921,14 +3872,16 @@ export interface Summary {
    * @default undefined
    */
   totalItems?: Array<SummaryTotalItem>;
-}
+};
 
-export interface SummaryItemTextInfo {
+/** @public */
+export type SummaryItemTextInfo = {
   readonly value?: string | number | Date;
   readonly valueText: string;
-}
+};
 
-export interface SummaryGroupItem {
+/** @public */
+export type SummaryGroupItem = {
     /**
      * @docid dxDataGridOptions.summary.groupItems.alignByColumn
      * @default false
@@ -3981,9 +3934,10 @@ export interface SummaryGroupItem {
      * @default undefined
      */
     valueFormat?: format;
-}
+};
 
-export interface SummaryTotalItem {
+/** @public */
+export type SummaryTotalItem = {
   /**
    * @docid dxDataGridOptions.summary.totalItems.alignment
    * @type Enums.HorizontalAlignment
@@ -4037,9 +3991,10 @@ export interface SummaryTotalItem {
    * @default undefined
    */
   valueFormat?: format;
-}
+};
 
-export interface SummaryTexts {
+/** @public */
+export type SummaryTexts = {
     /**
      * @docid dxDataGridOptions.summary.texts.avg
      * @default "Avg={0}"
@@ -4085,7 +4040,7 @@ export interface SummaryTexts {
      * @default "Sum of {1} is {0}"
      */
     sumOtherColumn?: string;
-}
+};
 
 /**
  * @public
@@ -4095,7 +4050,7 @@ export interface SummaryTexts {
 export type dxDataGridEditing = Editing;
 
 /** @public */
-export interface Editing extends EditingBase {
+export type Editing = EditingBase & {
     /**
      * @docid dxDataGridOptions.editing.allowAdding
      * @default false
@@ -4106,7 +4061,6 @@ export interface Editing extends EditingBase {
      * @docid dxDataGridOptions.editing.allowDeleting
      * @default false
      * @type_function_param1_field2 row:dxDataGridRowObject
-     * @type_function_return Boolean
      * @public
      */
     allowDeleting?: boolean | ((options: { component?: dxDataGrid; row?: Row }) => boolean);
@@ -4114,7 +4068,6 @@ export interface Editing extends EditingBase {
      * @docid dxDataGridOptions.editing.allowUpdating
      * @default false
      * @type_function_param1_field2 row:dxDataGridRowObject
-     * @type_function_return Boolean
      * @public
      */
     allowUpdating?: boolean | ((options: { component?: dxDataGrid; row?: Row }) => boolean);
@@ -4123,7 +4076,7 @@ export interface Editing extends EditingBase {
      * @public
      */
     texts?: any;
-}
+};
 
 /**
  * @public
@@ -4133,7 +4086,7 @@ export interface Editing extends EditingBase {
 export type dxDataGridScrolling = Scrolling;
 
 /** @public */
-export interface Scrolling extends ScrollingBase {
+export type Scrolling = ScrollingBase & {
     /**
      * @docid dxDataGridOptions.scrolling.mode
      * @type Enums.GridScrollingMode
@@ -4141,7 +4094,7 @@ export interface Scrolling extends ScrollingBase {
      * @public
      */
     mode?: 'infinite' | 'standard' | 'virtual';
-}
+};
 
 /**
  * @public
@@ -4151,7 +4104,7 @@ export interface Scrolling extends ScrollingBase {
 export type dxDataGridSelection = Selection;
 
 /** @public */
-export interface Selection extends SelectionBase {
+export type Selection = SelectionBase & {
     /**
      * @docid dxDataGridOptions.selection.deferred
      * @default false
@@ -4172,7 +4125,7 @@ export interface Selection extends SelectionBase {
      * @public
      */
     showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';
-}
+};
 /**
  * @docid
  * @inherits GridBase
@@ -4253,7 +4206,6 @@ declare class dxDataGrid extends Widget implements GridBase {
     /**
      * @docid
      * @publicName getTotalSummaryValue(summaryItemName)
-     * @param1 summaryItemName:String
      * @public
      */
     getTotalSummaryValue(summaryItemName: string): any;
@@ -4338,7 +4290,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     getKeyByRowIndex(rowIndex: number): any;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: any | string | number): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
@@ -4545,7 +4497,6 @@ export interface dxDataGridColumnButton extends ColumnButtonBase {
      * @default true
      * @type_function_param1_field2 row:dxDataGridRowObject
      * @type_function_param1_field3 column:dxDataGridColumn
-     * @type_function_return Boolean
      * @public
      */
     visible?: boolean | ((options: { component?: dxDataGrid; row?: Row; column?: Column }) => boolean);
@@ -4562,7 +4513,7 @@ export type dxDataGridRowObject = Row;
  * @docid dxDataGridRowObject
  * @type object
  */
-export interface Row {
+export type Row = {
     /**
      * @docid dxDataGridRowObject.data
      * @public
@@ -4613,7 +4564,7 @@ export interface Row {
      * @public
      */
     readonly values: Array<any>;
-}
+};
 
 /** @public */
 export type Properties = dxDataGridOptions;
