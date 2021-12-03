@@ -327,6 +327,10 @@ export const VirtualScrollController = Class.inherit((function() {
             const end = this.getItemIndexByPosition(this._position + height);
 
             this.viewportSize(Math.ceil(end - begin));
+
+            if(this._viewportItemIndex !== begin) {
+                this._setViewportPositionCore(this._position);
+            }
         },
         reset: function(isRefresh) {
             this._dataLoader.reset();
@@ -365,9 +369,7 @@ export const VirtualScrollController = Class.inherit((function() {
         getViewportParams: function() {
             const virtualMode = this.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL;
             const totalItemsCount = this._dataOptions.totalItemsCount();
-            const topIndex = virtualMode
-                ? Math.min(this._viewportItemIndex, Math.max(0, totalItemsCount - this._viewportSize))
-                : this._viewportItemIndex;
+            const topIndex = this._viewportItemIndex;
             const bottomIndex = this._viewportSize + topIndex;
             const maxGap = this.option('scrolling.prerenderedRowChunkSize') || 1;
             const isScrollingBack = this.isScrollingBack();
