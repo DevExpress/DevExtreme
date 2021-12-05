@@ -15,6 +15,20 @@ const defaultProps: Partial<ScrollableProps> = {
   showScrollbar: 'always',
 };
 
+const config: Partial<ScrollableProps>[] = [];
+
+[true, false].forEach((useNative) => {
+  [true, false].forEach((rtlEnabled) => {
+    ([
+      DIRECTION_VERTICAL,
+      DIRECTION_HORIZONTAL,
+      DIRECTION_BOTH,
+    ] as ScrollableDirection[]).forEach((direction) => {
+      config.push({ useNative, rtlEnabled, direction });
+    });
+  });
+});
+
 const test = multiPlatformTest({
   page: 'declaration/scrollable',
   platforms: ['jquery', 'react', 'angular'],
@@ -22,27 +36,17 @@ const test = multiPlatformTest({
 
 fixture('Renovated scrollable - render strategies');
 
-const config: Partial<ScrollableProps>[] = [];
-
-[true, false].forEach((useNative) => {
-  ([
-    DIRECTION_VERTICAL,
-    DIRECTION_HORIZONTAL,
-    DIRECTION_BOTH,
-  ] as ScrollableDirection[]).forEach((direction) => {
-    config.push({ useNative, direction });
-  });
-});
-
 config.forEach((props) => {
+  // it repeats test scenario from common file. Used for demonstration purposes
   test(`Should render scrollable, ${JSON.stringify(props)}`,
     async (t, { screenshotComparerOptions }) => {
       const scrollable = new Scrollable(SCROLLABLE_SELECTOR, props);
+      const { direction, useNative, rtlEnabled } = props;
 
       await t
         .expect(await compareScreenshot(
           t,
-          `scrollable_render_dir=${props.direction}_useNative=${props.useNative}.png`,
+          `render_dir=${direction}_useNative=${useNative}_rtl=${rtlEnabled}.png`,
           scrollable.element,
           screenshotComparerOptions,
         ))
