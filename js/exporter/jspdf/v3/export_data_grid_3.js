@@ -74,6 +74,8 @@ function exportDataGrid(doc, dataGrid, options) {
             // when we know all rowSpans we can recalculate rowsHeight
             updateRowsAndCellsHeights(doc, rowsInfo);
 
+            applyBordersConfig(rowsInfo);
+
             const docStyles = getDocumentStyles(doc);
 
             // splitting to pages, split 'rowsInfo' into multiple 'rowsInfo's
@@ -91,8 +93,6 @@ function exportDataGrid(doc, dataGrid, options) {
 
                 // when we known all sizes we can calculate all coordinates
                 calculateCoordinates(doc, pageRowsInfo, options); // set/init/update 'pdfCell.top/left'
-
-                applyBordersConfig(pageRowsInfo);
 
                 const pdfCellsInfo = [].concat.apply([],
                     pageRowsInfo.map(rowInfo => {
