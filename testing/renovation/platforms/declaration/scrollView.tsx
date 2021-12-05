@@ -3,8 +3,8 @@ import {
   Component, ComponentBindings, JSXComponent, InternalState, Effect, Fragment,
 } from '@devextreme-generator/declarations';
 import React from 'react';
-import { ScrollableProps } from '../../../../js/renovation/ui/scroll_view/common/scrollable_props';
-import { Scrollable } from '../../../../js/renovation/ui/scroll_view/scrollable';
+import { ScrollViewProps } from '../../../../js/renovation/ui/scroll_view/common/scrollview_props';
+import { ScrollView } from '../../../../js/renovation/ui/scroll_view/scroll_view';
 
 const getContent = () => {
   let content = '';
@@ -23,7 +23,7 @@ export const viewFunction = ({ options }: App): JSX.Element => {
   return (
     <Fragment>
       {options && (
-      <Scrollable
+      <ScrollView
         id="container"
         width={width}
         height={height}
@@ -34,7 +34,7 @@ export const viewFunction = ({ options }: App): JSX.Element => {
         <div className="text-content" style={{ minHeight: 500, minWidth: 500 }}>
           {getContent()}
         </div>
-      </Scrollable>
+      </ScrollView>
       )}
     </Fragment>
   );
@@ -49,7 +49,7 @@ class AppProps { }
   jQuery: { register: true },
 })
 export class App extends JSXComponent<AppProps>() {
-  @InternalState() options?: Partial<ScrollableProps>;
+  @InternalState() options?: Partial<ScrollViewProps>;
 
   @Effect({ run: 'once' })
   optionsUpdated(): void {
