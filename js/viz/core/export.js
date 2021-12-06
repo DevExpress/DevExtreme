@@ -9,7 +9,7 @@ import { getTheme } from '../themes';
 import { start as hoverEventStart, end as hoverEventEnd } from '../../events/hover';
 import pointerEvents from '../../events/pointer';
 import { logger } from '../../core/utils/console';
-import { getWidth } from '../../core/utils/size';
+import { getSize } from '../../core/utils/size';
 
 const pointerActions = [pointerEvents.down, pointerEvents.move].join(' ');
 
@@ -83,7 +83,7 @@ function print(imageSrc, options) {
 function calculatePrintPageWidth(iFrameBody) {
     iFrameBody.style.width = A4WidthCm;
 
-    const width = getWidth(iFrameBody);
+    const width = getSize(iFrameBody, 'width', {});
 
     iFrameBody.style.width = '';
 
