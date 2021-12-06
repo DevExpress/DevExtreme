@@ -137,6 +137,7 @@ $scrollbar-size: 13px;
 .dx-scrollable-scrollbars-alwaysvisible {
   &.dx-scrollable-vertical,
   &.dx-scrollable-both {
+    > div > .dx-scrollable-wrapper,
     > .dx-scrollable-wrapper {
       > .dx-scrollable-container {
         > .dx-scrollable-content {
@@ -147,6 +148,7 @@ $scrollbar-size: 13px;
 
     &.dx-rtl,
     .dx-rtl & {
+      > div > .dx-scrollable-wrapper,
       > .dx-scrollable-wrapper {
         > .dx-scrollable-container {
           > .dx-scrollable-content {
@@ -160,6 +162,7 @@ $scrollbar-size: 13px;
 
   &.dx-scrollable-horizontal,
   &.dx-scrollable-both {
+    > div > .dx-scrollable-wrapper,
     > .dx-scrollable-wrapper {
       > .dx-scrollable-container {
         > .dx-scrollable-content {
