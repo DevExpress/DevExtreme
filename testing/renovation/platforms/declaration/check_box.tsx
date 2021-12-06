@@ -7,6 +7,7 @@ import { CheckBox, CheckBoxProps } from '../../../../js/renovation/ui/editors/ch
 
 export const viewFunction = ({ componentProps }: App): JSX.Element => (
   <CheckBox
+    focusStateEnabled
     id="container"
     value={componentProps.value}
     text="checkBox"
@@ -22,7 +23,7 @@ class AppProps { }
   jQuery: { register: true },
 })
 export class App extends JSXComponent<AppProps>() {
-  @InternalState() value = null;
+  @InternalState() value = false;
 
   valueChange(value: boolean | null): void {
     this.value = value;
