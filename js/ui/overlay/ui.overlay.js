@@ -937,7 +937,7 @@ const Overlay = Widget.inherit({
 
         if(visible && hasWindow()) {
             const isAnimated = this._showAnimationProcessing;
-            const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && options.useResizeObserver;
+            const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && options?.useResizeObserver;
             this._isAnimationPaused = shouldRepeatAnimation || undefined;
 
             this._stopAnimation();
