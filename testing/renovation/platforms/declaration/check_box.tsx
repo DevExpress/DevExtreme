@@ -22,7 +22,7 @@ class AppProps { }
   jQuery: { register: true },
 })
 export class App extends JSXComponent<AppProps>() {
-  @InternalState() value = false;
+  @InternalState() value = null;
 
   valueChange(value: boolean | null): void {
     this.value = value;
