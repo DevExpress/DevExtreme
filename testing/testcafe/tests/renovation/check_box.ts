@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import { multiPlatformTest, createWidget } from '../../helpers/multi-platform-test';
 
-const test = multiPlatformTest({ page: 'declaration/check_box', platforms: ['jquery', 'react', 'angular'] });
+const test = multiPlatformTest({ page: 'declaration/check_box', platforms: ['jquery', 'react'] });
 
 const defaultOptions = {
   text: 'checkBox',
