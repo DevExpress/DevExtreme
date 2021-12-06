@@ -1131,6 +1131,8 @@ const Overlay = Widget.inherit({
         }
 
         switch(args.name) {
+            case 'animation':
+                break;
             case 'shading':
                 this._toggleShading(this.option('visible'));
                 this._toggleSafariScrolling();
