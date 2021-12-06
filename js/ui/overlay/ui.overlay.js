@@ -936,29 +936,16 @@ const Overlay = Widget.inherit({
         const { visible } = this.option();
 
         if(visible && hasWindow()) {
-            const isAnimated = this._showAnimationProcessing;
-            const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && options?.useResizeObserver;
-            this._isAnimationPaused = shouldRepeatAnimation || undefined;
-
-            this._stopAnimation();
-            if(options?.shouldOnlyReposition) {
-                this._positionController.positionContent();
-            } else {
-                this._renderGeometryImpl();
-            }
-
-            if(shouldRepeatAnimation) {
-                this._animateShowing();
-                this._isAnimationPaused = undefined;
-            }
+            this._renderGeometryImpl();
         }
     },
 
-    _renderGeometryImpl: function() {
+    _renderGeometryImpl: function(shouldCacheDimensions) {
         // NOTE: position can be specified as a function which needs to be called strict on render start
         this._positionController.updatePosition(this._getOptionValue('position'));
         this._renderWrapper();
         this._renderDimensions();
+        shouldCacheDimensions && this._cacheDimensions();
         this._renderPosition();
     },
 

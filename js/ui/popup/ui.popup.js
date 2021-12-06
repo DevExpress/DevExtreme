@@ -584,8 +584,25 @@ const Popup = Overlay.inherit({
     },
 
     _renderGeometry: function(options) {
-        const { useResizeObserver } = this.option();
-        this.callBase({ ...options, useResizeObserver });
+        const { visible, useResizeObserver } = this.option();
+
+        if(visible && hasWindow()) {
+            const isAnimated = this._showAnimationProcessing;
+            const shouldRepeatAnimation = isAnimated && !options?.forceStopAnimation && useResizeObserver;
+            this._isAnimationPaused = shouldRepeatAnimation || undefined;
+
+            this._stopAnimation();
+            if(options?.shouldOnlyReposition) {
+                this._positionController.positionContent();
+            } else {
+                this._renderGeometryImpl();
+            }
+
+            if(shouldRepeatAnimation) {
+                this._animateShowing();
+                this._isAnimationPaused = undefined;
+            }
+        }
     },
 
     _cacheDimensions: function() {
@@ -602,8 +619,7 @@ const Popup = Overlay.inherit({
     _renderGeometryImpl: function() {
         // NOTE: for correct new position calculation
         this._resetContentHeight();
-        this.callBase();
-        this._cacheDimensions();
+        this.callBase(true);
         this._setContentHeight();
     },
 
