@@ -1170,6 +1170,51 @@ QUnit.test('Update editorOptions of an editor inside the tab', function(assert) 
     assert.equal(form.getEditor('firstName').option('disabled'), false, '\'disabled\' option was successfully changed');
 });
 
+QUnit.test('Update layout inside a tab (T1040296)', function(assert) {
+    const testContainer = $('#form');
+
+    const form = testContainer.dxForm({
+        deferRendering: false,
+        items: [
+            {
+                itemType: 'tabbed',
+                tabPanelOptions: { 'deferRendering': false },
+                tabs: [
+                    {
+                        title: 'General',
+                        items: [
+                            {
+                                itemType: 'group',
+                                items: [
+                                    { dataField: 'id', visible: false },
+                                    { itemType: 'group', items: [{ dataField: 'minWidth' }] }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }).dxForm('instance');
+
+    form.option('items[0].tabs[0].items[0].items[0].visible', true);
+    form.option('items[0].tabs', [
+        {
+            title: 'General',
+            items: [
+                {
+                    itemType: 'group',
+                    items: [
+                        { dataField: 'id', visible: true }, { itemType: 'group', items: [{ dataField: 'minWidth' }] }
+                    ]
+                }
+            ]
+        },
+        { title: 'Window' }
+    ]);
+
+    assert.deepEqual([...document.querySelectorAll('.dx-tab-text')].map(e => e.textContent), ['General', 'Window'], 'dx-tab-text elements');
+});
 
 QUnit.module('Align labels', {
     beforeEach: function() {

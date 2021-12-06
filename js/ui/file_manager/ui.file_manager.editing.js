@@ -75,6 +75,10 @@ class FileManagerEditingControl extends Widget {
         this._fileUploader.option('dropZone', $element);
     }
 
+    setUploaderSplitterElement(element) {
+        this._fileUploader.option('splitterElement', element);
+    }
+
     _getFileUploaderController() {
         const uploadDirectory = this.uploadDirectoryInfo.fileItem;
         return {

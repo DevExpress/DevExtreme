@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable rulesdir/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
@@ -9,9 +10,8 @@ import {
   Method,
 } from '@devextreme-generator/declarations';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
-import { DisposeEffectReturn } from '../../utils/effect_return';
 // eslint-disable-next-line import/named
-import dxScheduler, { Appointment } from '../../../ui/scheduler';
+import { Appointment } from '../../../ui/scheduler';
 import { ViewProps, SchedulerProps } from './props';
 
 import { Widget } from '../common/widget';
@@ -230,8 +230,6 @@ export const viewFunction = ({
   jQuery: { register: true },
 })
 export class Scheduler extends JSXComponent(SchedulerProps) {
-  @InternalState() instance!: dxScheduler;
-
   @InternalState() workSpaceViewModel?: ViewMetaData;
 
   @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
@@ -496,77 +494,75 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   @Method()
-  getComponentInstance(): dxScheduler {
-    return this.instance;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  addAppointment(_appointment: Appointment): void {
+    // TODO: implement
   }
 
   @Method()
-  addAppointment(appointment: Appointment): void {
-    this.instance.addAppointment(appointment);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  deleteAppointment(_appointment: Appointment): void {
+    // TODO: implement
   }
 
   @Method()
-  deleteAppointment(appointment: Appointment): void {
-    this.instance.deleteAppointment(appointment);
-  }
-
-  @Method()
-  updateAppointment(target: Appointment, appointment: Appointment): void {
-    this.instance.updateAppointment(target, appointment);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateAppointment(_target: Appointment, _appointment: Appointment): void {
+    // TODO: implement
   }
 
   @Method()
   getDataSource(): DataSource {
-    return this.instance.getDataSource();
+    return this.internalDataSource;
   }
 
   @Method()
   getEndViewDate(): Date {
-    return this.instance.getEndViewDate();
+    return this.workSpaceViewModel!.viewDataProvider.getLastCellEndDate();
   }
 
   @Method()
   getStartViewDate(): Date {
-    return this.instance.getStartViewDate();
+    return this.startViewDate;
   }
 
   @Method()
-  hideAppointmentPopup(saveChanges?: boolean): void {
-    this.instance.hideAppointmentPopup(saveChanges);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  hideAppointmentPopup(_saveChanges?: boolean): void {
+    // TODO: implement
   }
 
   @Method()
   hideAppointmentTooltip(): void {
-    this.instance.hideAppointmentTooltip();
+    this.hideTooltip();
   }
 
   @Method()
-  scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): void {
-    this.instance.scrollTo(date, group, allDay);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  scrollTo(_date: Date, _group?: Record<string, unknown>, _allDay?: boolean): void {
+    // TODO: implement
   }
 
   @Method()
-  scrollToTime(hours: number, minutes: number, date?: Date): void {
-    this.instance.scrollToTime(hours, minutes, date);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  scrollToTime(_hours: number, _minutes: number, _date?: Date): void {
+    // TODO: implement
   }
 
   @Method()
-  showAppointmentPopup(appointmentData?: Appointment, createNewAppointment?: boolean,
-    currentAppointmentData?: Appointment): void {
-    this.instance.showAppointmentPopup(appointmentData, createNewAppointment,
-      currentAppointmentData);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  showAppointmentPopup(_appointmentData?: Appointment, _createNewAppointment?: boolean,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _currentAppointmentData?: Appointment): void {
+    // TODO: implement
   }
 
   @Method()
-  showAppointmentTooltip(appointmentData: Appointment,
-    target: string | UserDefinedElement, currentAppointmentData?: Appointment): void {
-    this.instance.showAppointmentTooltip(appointmentData, target,
-      currentAppointmentData);
-  }
-
-  @Effect({ run: 'once' })
-  dispose(): DisposeEffectReturn {
-    return () => { this.instance.dispose(); };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  showAppointmentTooltip(_appointmentData: Appointment,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _target: string | UserDefinedElement, _currentAppointmentData?: Appointment): void {
+    // TODO: implement
   }
 
   @Effect()

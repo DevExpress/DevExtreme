@@ -2577,8 +2577,11 @@ describe('WorkSpace', () => {
     });
 
     describe('classes', () => {
+      afterEach(jest.clearAllMocks);
+
       it('should call combineClasses with correct parameters', () => {
         const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
           intervalCount: 35,
           type: 'day',
           hoursInterval: 0.5,
@@ -2606,11 +2609,14 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-virtual': false,
+            'dx-scheduler-work-space-both-scrollbar': false,
           });
       });
 
       it('should call combineClasses with correct parameters when all-day panel is not collapsed', () => {
         const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
           intervalCount: 35,
           type: 'day',
           groupByDate: true,
@@ -2638,11 +2644,14 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-virtual': false,
+            'dx-scheduler-work-space-both-scrollbar': false,
           });
       });
 
       it('should call combineClasses with correct parameters when all-day panel is not visible', () => {
         const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
           type: 'day',
           intervalCount: 35,
           showAllDayPanel: false,
@@ -2669,11 +2678,14 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-virtual': false,
+            'dx-scheduler-work-space-both-scrollbar': false,
           });
       });
 
       it('should call combineClasses with correct parameters when groups are empty', () => {
         const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
           type: 'day',
           intervalCount: 35,
           showAllDayPanel: true,
@@ -2700,11 +2712,14 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-virtual': false,
+            'dx-scheduler-work-space-both-scrollbar': false,
           });
       });
 
       it('should call combineClasses with correct parameters when groups are empty but groupOrientation is vertical', () => {
         const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
           type: 'day',
           intervalCount: 35,
           showAllDayPanel: true,
@@ -2731,6 +2746,8 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-two': false,
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-virtual': false,
+            'dx-scheduler-work-space-both-scrollbar': false,
           });
       });
 
@@ -2799,6 +2816,7 @@ describe('WorkSpace', () => {
               'dx-scheduler-group-column-count-three': false,
               'dx-scheduler-work-space': true,
               'dx-scheduler-work-space-both-scrollbar': false,
+              'dx-scheduler-work-space-virtual': false,
               [className]: true,
             });
         });
@@ -2830,6 +2848,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
             'dx-scheduler-work-space-both-scrollbar': true,
+            'dx-scheduler-work-space-virtual': false,
           });
       });
 
@@ -2861,6 +2880,7 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
             'dx-scheduler-work-space-both-scrollbar': true,
+            'dx-scheduler-work-space-virtual': false,
           });
       });
 
@@ -2892,6 +2912,40 @@ describe('WorkSpace', () => {
             'dx-scheduler-group-column-count-three': false,
             'dx-scheduler-work-space': true,
             'dx-scheduler-work-space-both-scrollbar': true,
+            'dx-scheduler-work-space-virtual': false,
+          });
+      });
+
+      it('should assign virtual scrolling class when scrolling is virtual', () => {
+        const workSpace = new WorkSpace({
+          ...new WorkSpaceProps(),
+          type: 'timelineDay',
+          crossScrollingEnabled: true,
+          groups,
+          groupOrientation: 'horizontal',
+          scrolling: { mode: 'virtual' },
+        } as any);
+
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        workSpace.classes;
+
+        expect(combineClasses)
+          .toBeCalledWith({
+            'dx-scheduler-timeline-day dx-scheduler-timeline': true,
+            'dx-scheduler-work-space-count': false,
+            'dx-scheduler-work-space-odd-cells': false,
+            'dx-scheduler-work-space-all-day-collapsed': false,
+            'dx-scheduler-work-space-all-day': false,
+            'dx-scheduler-work-space-group-by-date': false,
+            'dx-scheduler-work-space-grouped': true,
+            'dx-scheduler-work-space-vertical-grouped': false,
+            'dx-scheduler-work-space-horizontal-grouped': true,
+            'dx-scheduler-group-column-count-one': false,
+            'dx-scheduler-group-column-count-two': false,
+            'dx-scheduler-group-column-count-three': false,
+            'dx-scheduler-work-space': true,
+            'dx-scheduler-work-space-both-scrollbar': true,
+            'dx-scheduler-work-space-virtual': true,
           });
       });
     });
