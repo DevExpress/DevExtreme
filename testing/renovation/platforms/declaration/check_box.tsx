@@ -7,7 +7,6 @@ import { CheckBox, CheckBoxProps } from '../../../../js/renovation/ui/editors/ch
 
 export const viewFunction = ({ componentProps }: App): JSX.Element => (
   <CheckBox
-    focusStateEnabled
     id="container"
     value={componentProps.value}
     text="checkBox"
