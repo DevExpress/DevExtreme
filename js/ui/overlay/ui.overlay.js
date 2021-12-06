@@ -940,12 +940,11 @@ const Overlay = Widget.inherit({
         }
     },
 
-    _renderGeometryImpl: function(shouldCacheDimensions) {
+    _renderGeometryImpl: function() {
         // NOTE: position can be specified as a function which needs to be called strict on render start
         this._positionController.updatePosition(this._getOptionValue('position'));
         this._renderWrapper();
         this._renderDimensions();
-        shouldCacheDimensions && this._cacheDimensions();
         this._renderPosition();
     },
 
