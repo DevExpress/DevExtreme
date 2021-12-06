@@ -434,136 +434,43 @@ module('View Data Provider', {
             });
         });
 
-        module('getGroupData', () => {
-            module('Vertical grouping', {
-                beforeEach: function() {
-                    this.init('vertical');
-                }
-            }, () => {
-                [
-                    {
-                        groupIndex: 2,
-                        allDayPanelIndex: 0,
-                        dateTableIndex: 1
-                    },
-                    {
-                        groupIndex: 3,
-                        allDayPanelIndex: 2,
-                        dateTableIndex: 3
-                    }
-                ].forEach(({ groupIndex, allDayPanelIndex, dateTableIndex }) => {
-                    test(`getGroupData if groupIndex=${groupIndex}`, function(assert) {
-                        const groupData = this.viewDataProvider.getGroupData(groupIndex);
+        module('hasGroupAllDayPanel', () => {
+            test('it should work with vertical grouping', function(assert) {
+                this.init('vertical');
+                this.viewDataProvider.createGroupedDataMapProvider();
 
-                        assert.deepEqual(
-                            groupData,
-                            {
-                                allDayPanel: testViewDataMap.verticalGrouping[allDayPanelIndex],
-                                dateTable: [{
-                                    cells: testViewDataMap.verticalGrouping[dateTableIndex],
-                                    key: testViewDataMap.verticalGrouping[dateTableIndex][0].key,
-                                }],
-                                groupIndex,
-                                isGroupedAllDayPanel: true,
-                                key: `${groupIndex}`
-                            },
-                            'Group data is coorect'
-                        );
-                    });
-                });
+                assert.equal(this.viewDataProvider.hasGroupAllDayPanel(2), true, 'Correct value');
+                assert.equal(this.viewDataProvider.hasGroupAllDayPanel(3), true, 'Correct value');
             });
 
-            module('Horizontal grouping', {
-                beforeEach: function() {
-                    this.init('horizontal');
-                }
-            }, () => {
-                [
-                    {
-                        groupIndex: 2,
-                        allDayPanelIndex: 0,
-                        dateTableIndex: 0
-                    },
-                    {
-                        groupIndex: 3,
-                        allDayPanelIndex: 2,
-                        dateTableIndex: 2
-                    }
-                ].forEach(({ groupIndex, allDayPanelIndex, dateTableIndex }) => {
-                    test(`getGroupData if groupIndex=${groupIndex}`, function(assert) {
-                        const groupData = this.viewDataProvider.getGroupData(groupIndex);
-                        const { horizontalGrouping: testData } = testViewDataMap;
+            test('it should work with horizontal grouping', function(assert) {
+                this.init('horizontal');
+                this.viewDataProvider.createGroupedDataMapProvider();
 
-                        assert.deepEqual(
-                            groupData,
-                            {
-                                allDayPanel: [testData[0][allDayPanelIndex], testData[0][allDayPanelIndex + 1]],
-                                dateTable: [[testData[1][dateTableIndex], testData[1][dateTableIndex + 1]]]
-                            },
-                            'Group data is coorect'
-                        );
-                    });
-                });
-            });
-        });
-
-        module('getAllDayPanel', () => {
-            module('Vertical grouping', {
-                beforeEach: function() {
-                    this.init('vertical');
-                }
-            }, () => {
-                [
-                    {
-                        groupIndex: 2,
-                        allDayPanelIndex: 0
-                    },
-                    {
-                        groupIndex: 3,
-                        allDayPanelIndex: 2
-                    }
-                ].forEach(({ groupIndex, allDayPanelIndex }) => {
-                    test(`it should return allDayPanel data correctly if groupIndex=${groupIndex}`, function(assert) {
-                        const allDayPanel = this.viewDataProvider.getAllDayPanel(groupIndex);
-
-                        assert.deepEqual(
-                            allDayPanel,
-                            testViewDataMap.verticalGrouping[allDayPanelIndex],
-                            'All day panel is correct'
-                        );
-                    });
-                });
+                assert.equal(this.viewDataProvider.hasGroupAllDayPanel(2), true, 'Correct value');
+                assert.equal(this.viewDataProvider.hasGroupAllDayPanel(3), true, 'Correct value');
             });
 
-            module('Horizontal grouping', {
-                beforeEach: function() {
-                    this.init('horizontal');
-                }
-            }, () => {
-                [
-                    {
-                        groupIndex: 2,
-                        allDayPanelIndex: 0
-                    },
-                    {
-                        groupIndex: 3,
-                        allDayPanelIndex: 2
-                    }
-                ].forEach(({ groupIndex, allDayPanelIndex }) => {
-                    test(`it should return allDayPanel data correctly if groupIndex=${groupIndex}`, function(assert) {
-                        const allDayPanel = this.viewDataProvider.getAllDayPanel(groupIndex);
-                        const testData = testViewDataMap.horizontalGrouping;
-
-                        assert.deepEqual(
-                            allDayPanel,
-                            [
-                                testData[0][allDayPanelIndex],
-                                testData[0][allDayPanelIndex + 1]
-                            ],
-                            'All day panel is correct'
-                        );
-                    });
+            test('it should work with vertical grouping when all-day panel is not visible', function(assert) {
+                const viewDataProvider = createViewDataProvider({
+                    renderOptions: { ...verticalGroupingRenderOptions, isAllDayPanelVisible: false },
+                    completeViewDataMap: [testViewDataMap.verticalGrouping[1], testViewDataMap.verticalGrouping[3]],
                 });
+                viewDataProvider.createGroupedDataMapProvider();
+
+                assert.equal(viewDataProvider.hasGroupAllDayPanel(2), false, 'Correct value');
+                assert.equal(viewDataProvider.hasGroupAllDayPanel(3), false, 'Correct value');
+            });
+
+            test('it should work with horizontal grouping all-day panel is not visible', function(assert) {
+                const viewDataProvider = createViewDataProvider({
+                    renderOptions: { ...horizontalGroupingRenderOptions, isAllDayPanelVisible: false },
+                    completeViewDataMap: testViewDataMap.verticalGrouping.slice(1),
+                });
+                viewDataProvider.createGroupedDataMapProvider();
+
+                assert.equal(viewDataProvider.hasGroupAllDayPanel(2), false, 'Correct value');
+                assert.equal(viewDataProvider.hasGroupAllDayPanel(3), false, 'Correct value');
             });
         });
 

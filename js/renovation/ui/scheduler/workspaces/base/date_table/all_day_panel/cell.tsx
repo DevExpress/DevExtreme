@@ -1,6 +1,7 @@
 import {
   Component, JSXComponent,
 } from '@devextreme-generator/declarations';
+import { ALL_DAY_PANEL_CELL_CLASS } from '../../../const';
 import { DateTableCellBaseProps, DateTableCellBase } from '../cell';
 
 export const viewFunction = ({
@@ -19,7 +20,7 @@ export const viewFunction = ({
   },
 }: AllDayPanelCell): JSX.Element => (
   <DateTableCellBase
-    className={`dx-scheduler-all-day-table-cell ${className}`}
+    className={`${ALL_DAY_PANEL_CELL_CLASS} ${className}`}
     startDate={startDate}
     endDate={endDate}
     groups={groups}
