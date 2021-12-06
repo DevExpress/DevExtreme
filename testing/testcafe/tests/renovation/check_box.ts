@@ -18,18 +18,18 @@ test('CheckBox value', async (t, { screenshotComparerOptions }) => {
 
   await t
     .expect(checkBox.hasClass('dx-checkbox-indeterminate')).eql(true)
-    .expect(await takeScreenshot('check_box_indeterminate.png', null, screenshotComparerOptions)).ok()
+    .expect(await takeScreenshot('check_box_indeterminate.png', checkBox, screenshotComparerOptions)).ok()
 
     .click(checkBox)
     .expect(checkBox.hasClass('dx-checkbox-checked'))
     .eql(true)
-    .expect(await takeScreenshot('check_box_checked.png', null, screenshotComparerOptions))
+    .expect(await takeScreenshot('check_box_checked.png', checkBox, screenshotComparerOptions))
     .ok()
 
     .click(checkBox)
     .expect(checkBox.hasClass('dx-checkbox-checked'))
     .eql(false)
-    .expect(await takeScreenshot('check_box_unchecked.png', null, screenshotComparerOptions))
+    .expect(await takeScreenshot('check_box_unchecked.png', checkBox, screenshotComparerOptions))
     .ok()
 
     .expect(compareResults.isValid())
