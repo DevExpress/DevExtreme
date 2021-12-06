@@ -2,14 +2,17 @@
 import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
 import { RefObject } from '@devextreme-generator/declarations';
+import devices from '../../../../../core/devices';
 import {
   clear as clearEventHandlers,
 } from '../../../../test_utils/events_mock';
 import {
-  CheckBox, viewFunction,
+  CheckBox, CheckBoxProps, viewFunction,
 } from '../check_box';
 import { Editor } from '../../internal/editor';
 import { CheckBoxIcon } from '../check_box_icon';
+
+interface Mock extends jest.Mock {}
 
 jest.mock('../../../../utils/get_computed_style');
 
@@ -286,6 +289,31 @@ describe('CheckBox', () => {
           expect(new CheckBox({ text: 'text' }).cssClasses)
             .toEqual(expect.stringMatching('dx-checkbox-has-text'));
         });
+      });
+    });
+
+    describe('focusStateEnabled', () => {
+      afterEach(() => jest.resetAllMocks());
+
+      it('should be true on desktop', () => {
+        (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
+        (devices.isSimulator as Mock).mockImplementation(() => false);
+
+        expect(new CheckBoxProps()).toMatchObject({ focusStateEnabled: true });
+      });
+
+      it('should be false is simulator', () => {
+        (devices.real as Mock).mockImplementation(() => ({ deviceType: 'desktop' }));
+        (devices.isSimulator as Mock).mockImplementation(() => true);
+
+        expect(new CheckBoxProps()).toMatchObject({ focusStateEnabled: false });
+      });
+
+      it('should be false on not desktop', () => {
+        (devices.real as Mock).mockImplementation(() => ({ deviceType: 'modile' }));
+        (devices.isSimulator as Mock).mockImplementation(() => true);
+
+        expect(new CheckBoxProps()).toMatchObject({ focusStateEnabled: false });
       });
     });
   });
