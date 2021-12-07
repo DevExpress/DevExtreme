@@ -92,28 +92,7 @@ const Toast = Overlay.inherit({
 
             closeOnSwipe: true,
 
-            closeOnClick: false,
-
-            /**
-            * @name dxToastOptions.resizeEnabled
-            * @hidden
-            */
-            resizeEnabled: false
-
-            /**
-            * @name dxToastOptions.dragEnabled
-            * @hidden
-            */
-
-            /**
-            * @name dxToastOptions.dragOutsideBoundary
-            * @hidden
-            */
-
-            /**
-            * @name dxToastOptions.dragAndResizeArea
-            * @hidden
-            */
+            closeOnClick: false
         });
     },
 
@@ -122,7 +101,7 @@ const Toast = Overlay.inherit({
             {
                 device: { platform: 'android' },
                 options: {
-                    closeOnOutsideClick: true,
+                    hideOnOutsideClick: true,
 
                     width: 'auto',
 

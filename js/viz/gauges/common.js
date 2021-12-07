@@ -1,6 +1,5 @@
 import { BaseGauge, compareArrays as _compareArrays } from './base_gauge';
 import { isDefined as _isDefined, isNumeric as _isNumber } from '../../core/utils/type';
-import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 const _isArray = Array.isArray;
 import { Axis } from '../axes/base_axis';
@@ -12,7 +11,6 @@ const _min = Math.min;
 const _max = Math.max;
 
 const _extend = extend;
-const _each = each;
 import { noop as _noop } from '../../core/utils/common';
 const SHIFT_ANGLE = 90;
 
@@ -160,9 +158,7 @@ export const dxGauge = BaseGauge.inherit({
         });
 
         that._applyMainLayout(elements, that._measureScale(scaleOptions));
-        _each(elements, function(_, element) {
-            element.resize(that._getElementLayout(element.getOffset()));
-        });
+        elements.forEach(element => element.resize(that._getElementLayout(element.getOffset())));
         that._shiftScale(that._getElementLayout(0), scaleOptions);
 
         that._beginValueChanging();
@@ -460,7 +456,7 @@ function selectHardMode(that) {
 
 function updateActiveElements_hardMode() {
     const that = this;
-    _each(that._valueIndicators, function(_, valueIndicator) {
+    that._valueIndicators.forEach(valueIndicator => {
         valueIndicator.value(that._indicatorValues[valueIndicator.index], that._noAnimation);
     });
 }
@@ -479,7 +475,7 @@ function prepareValueIndicators_hardMode() {
         optionList.push(null);
     }
     const newValueIndicators = [];
-    _each(optionList, function(i, userSettings) {
+    optionList.forEach((userSettings, i) => {
         let valueIndicator = valueIndicators[i];
         if(!userSettings) {
             valueIndicator && valueIndicator.dispose();
@@ -504,12 +500,12 @@ function prepareValueIndicators_hardMode() {
 }
 
 function disposeValueIndicators_hardMode() {
-    _each(this._valueIndicators, function(_, valueIndicator) { valueIndicator.dispose(); });
+    this._valueIndicators.forEach(valueIndicator => valueIndicator.dispose());
     this._valueIndicators = null;
 }
 
 function cleanValueIndicators_hardMode() {
-    _each(this._valueIndicators, function(_, valueIndicator) { valueIndicator.clean(); });
+    this._valueIndicators.forEach(valueIndicator => valueIndicator.clean());
 }
 
 function indicatorValue_hardMode(index, value) {
@@ -538,9 +534,7 @@ ValueIndicatorsSet.prototype = {
 
     dispose: function() {
         const that = this;
-        _each(that._indicators, function(_, indicator) {
-            indicator.dispose();
-        });
+        that._indicators.forEach(indicator => indicator.dispose());
         that._parameters = that._options = that._indicators = that._colorPalette = that._palette = null;
         return that;
     },
@@ -548,9 +542,7 @@ ValueIndicatorsSet.prototype = {
     clean: function() {
         const that = this;
         that._sample && that._sample.clean().dispose();
-        _each(that._indicators, function(_, indicator) {
-            indicator.clean();
-        });
+        that._indicators.forEach(indicator => indicator.clean());
         that._sample = that._options = that._palette = null;
         return that;
     },
@@ -583,9 +575,7 @@ ValueIndicatorsSet.prototype = {
     resize: function(layout) {
         const that = this;
         that._layout = layout;
-        _each(that._indicators, function(_, indicator) {
-            indicator.resize(layout);
-        });
+        that._indicators.forEach(indicator => indicator.resize(layout));
         return that;
     },
 
@@ -644,9 +634,7 @@ ValueIndicatorsSet.prototype = {
             }
             if(arg) {
                 that._adjustIndicatorsCount(arg.length);
-                _each(that._indicators, function(i, indicator) {
-                    indicator.value(arg[i], _noAnimation);
-                });
+                that._indicators.forEach((indicator, i) => indicator.value(arg[i], _noAnimation));
             }
             return that;
         }

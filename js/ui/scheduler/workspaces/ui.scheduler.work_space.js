@@ -83,6 +83,7 @@ import {
 } from './helpers/positionHelper';
 
 import { utils } from '../utils';
+import { compileGetter } from '../../../core/utils/data';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -2007,6 +2008,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             attachGeneralEvents,
             detachGeneralEvents,
             () => this._getDroppableCell(),
+            () => this._getDateTables(),
             () => this.removeDroppableCellClass(),
             () => this.getCellWidth(),
             options)
@@ -2175,6 +2177,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             getSchedulerWidth: () => this.option('schedulerWidth'),
             getViewHeight: () => this.$element().height ? this.$element().height() : getHeight(this.$element()),
             getViewWidth: () => this.$element().width ? this.$element().width() : getWidth(this.$element()),
+            getWindowHeight: () => getWindow().innerHeight,
+            getWindowWidth: () => getWindow().innerWidth,
             getScrolling: () => this.option('scrolling'),
             getScrollableOuterWidth: this.getScrollableOuterWidth.bind(this),
             getScrollable: this.getScrollable.bind(this),
@@ -2991,6 +2995,7 @@ const createDragBehaviorConfig = (
     attachGeneralEvents,
     detachGeneralEvents,
     getDroppableCell,
+    getDateTables,
     removeDroppableCellClass,
     getCellWidth,
     options) => {
@@ -2998,6 +3003,17 @@ const createDragBehaviorConfig = (
     const state = {
         dragElement: undefined,
         itemData: undefined,
+    };
+
+    const isItemDisabled = () => {
+        const { itemData } = state;
+
+        if(itemData) {
+            const getter = compileGetter('disabled');
+            return getter(itemData);
+        }
+
+        return true;
     };
 
     const createDragAppointment = (itemData, settings, appointments) => {
@@ -3028,7 +3044,7 @@ const createDragBehaviorConfig = (
         const settings = options.getItemSettings($itemElement, e);
         const initialPosition = options.initialPosition;
 
-        if(state.itemData && !state.itemData.disabled) {
+        if(!isItemDisabled()) {
             event.data = event.data || {};
             if(!canceled) {
                 if(!settings.isCompact) {
@@ -3070,10 +3086,18 @@ const createDragBehaviorConfig = (
             domAdapter.elementsFromPoint(newX, newY) :
             domAdapter.elementsFromPoint(newX + appointmentWidth / 2, newY);
 
-        const droppableCell = elements.filter(el => {
+        const dateTables = getDateTables();
+        const droppableCell = elements.find(el => {
             const classList = el.classList;
-            return classList.contains(DATE_TABLE_CELL_CLASS) || classList.contains(ALL_DAY_TABLE_CELL_CLASS);
-        })[0];
+
+            const isCurrentSchedulerElement = dateTables.find(el).length === 1;
+
+            return isCurrentSchedulerElement &&
+                (
+                    classList.contains(DATE_TABLE_CELL_CLASS) ||
+                    classList.contains(ALL_DAY_TABLE_CELL_CLASS)
+                );
+        });
 
         if(droppableCell) {
             const oldDroppableCell = getDroppableCell();
@@ -3091,7 +3115,7 @@ const createDragBehaviorConfig = (
             attachGeneralEvents();
         }
 
-        if(state.itemData && !state.itemData.disabled) {
+        if(!isItemDisabled()) {
             dragBehavior.onDragEnd(e);
         }
 

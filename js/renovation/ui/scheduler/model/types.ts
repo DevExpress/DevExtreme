@@ -12,29 +12,29 @@ export interface AppointmentsConfigType {
   viewEndDayHour: number;
   currentDate: Date;
   resources: ResourceProps[];
-  maxAppointmentsPerCell: number | 'auto' | 'unlimited';
+  maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
   isVirtualScrolling: boolean;
   intervalCount: number;
   hoursInterval: number;
   showAllDayPanel: boolean;
   loadedResources: Group[];
-  modelGroups: string[];
+  groups: string[];
   groupByDate: boolean;
   appointmentCountPerCell: number;
   appointmentOffset: number;
   allowResizing: boolean;
   allowAllDayResizing: boolean;
-  dateTableOffset: number; // 0 always
+  dateTableOffset: number;
   groupOrientation: GroupOrientation;
   startViewDate?: Date;
   timeZone: string;
   firstDayOfWeek: number;
   viewType: ViewType;
   cellDurationInMinutes: number;
-  supportAllDayRow: boolean; // ?
-  isVerticalGroupOrientation: boolean; // ?
-  groupCount: number; // resource manager
-  dateRange: Date[]; // ? -> viewDataProvider
+  supportAllDayRow: boolean;
+  isVerticalGroupOrientation: boolean;
+  groupCount: number;
+  dateRange: Date[]; // TODO replace with min / max
 }
 
 export interface AppointmentsModelType extends AppointmentsConfigType {
@@ -44,7 +44,7 @@ export interface AppointmentsModelType extends AppointmentsConfigType {
   timeZoneCalculator: unknown;
   viewDataProvider: unknown;
   positionHelper: unknown;
-  resizableStep: number; // positionHelper.getResizableStep()
+  resizableStep: number;
   isGroupedAllDayPanel: boolean;
   rowCount: number;
   cellWidth: number;

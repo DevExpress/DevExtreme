@@ -134,7 +134,7 @@ const Lookup = DropDownList.inherit({
 
                 shading: true,
 
-                closeOnOutsideClick: false,
+                hideOnOutsideClick: false,
 
                 position: undefined,
 
@@ -295,7 +295,7 @@ const Lookup = DropDownList.inherit({
                     _scrollToSelectedItemEnabled: true,
 
                     dropDownOptions: {
-                        closeOnOutsideClick: true,
+                        hideOnOutsideClick: true,
                         _ignoreFunctionValueDeprecation: true,
 
                         width: () => getElementWidth(this.$element()),
@@ -698,7 +698,7 @@ const Lookup = DropDownList.inherit({
             onTitleRendered: this.option('dropDownOptions.onTitleRendered'),
             fullScreen: this.option('dropDownOptions.fullScreen'),
             shading: this.option('dropDownOptions.shading'),
-            closeOnOutsideClick: this.option('dropDownOptions.closeOnOutsideClick'),
+            hideOnOutsideClick: this.option('dropDownOptions.hideOnOutsideClick') || this.option('dropDownOptions.closeOnOutsideClick'),
         });
 
         delete result.animation;

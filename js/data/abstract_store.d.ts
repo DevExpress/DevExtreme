@@ -174,7 +174,6 @@ export default class Store<
      * @docid
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
-     * @param2 eventHandler:function
      * @return this
      * @public
      */
@@ -183,7 +182,6 @@ export default class Store<
      * @docid
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
-     * @param2 eventHandler:function
      * @return this
      * @public
      */

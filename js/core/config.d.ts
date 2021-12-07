@@ -29,7 +29,6 @@ declare function config(config: globalConfig): void;
  * @docid
  * @section commonObjectStructures
  * @namespace DevExpress
- * @export default
  * @type object
  */
 export interface globalConfig {

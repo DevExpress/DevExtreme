@@ -28,10 +28,16 @@ export interface DateHeaderCellData extends ViewCellData {
 interface ViewDataBase {
   groupIndex: number;
   isGroupedAllDayPanel?: boolean;
+  key: string;
+}
+
+interface RowData {
+  cells: ViewCellData[];
+  key: number;
 }
 
 interface ViewData extends ViewDataBase {
-  dateTable: ViewCellData[][];
+  dateTable: RowData[];
   allDayPanel?: ViewCellData[];
 }
 
@@ -61,7 +67,7 @@ interface CellPositionData {
 }
 
 interface CellInfo {
-  data: ViewCellData;
+  cellData: ViewCellData;
   position: CellPositionData;
 }
 
@@ -144,6 +150,16 @@ export interface ResourceCellTemplateProps extends BaseTemplateProps {
   data: ResourceCellTemplateData;
 }
 
+interface CellCoordinates {
+  rowIndex: number;
+  columnIndex: number;
+}
+
+interface FocusedCell {
+  cellData: ViewCellData;
+  position: CellCoordinates;
+}
+
 export interface DateHeaderData {
   dataMap: DateHeaderCellData[][];
   leftVirtualCellWidth: number;
@@ -169,6 +185,8 @@ interface ViewOptions {
   isVerticalGrouping: boolean;
   groupOrientation: GroupOrientation;
   isGroupedByDate: boolean;
+  startCellIndex: number;
+  startRowIndex: number;
 }
 
 export interface ViewDataProviderOptions {
@@ -202,8 +220,8 @@ export interface ViewDataProviderType {
   completeViewDataMap: ViewCellData[][];
   viewDataMap: ViewDataMap;
   timePanelData: TimePanelData;
-  viewData: GroupedViewData;
   dateHeaderData: DateHeaderData;
+  getCellData: (rowIndex: number, columnIndex: number, isAllDay) => ViewCellData;
   getCellCount: (config: CountGenerationConfig) => number;
   getRowCount: (config: CountGenerationConfig) => number;
   update: (options: unknown, isGenerateNewData: boolean) => void;
@@ -221,6 +239,7 @@ export interface ViewDataProviderType {
   setViewOptions: (options: ViewDataProviderOptions) => void;
   createGroupedDataMapProvider: () => void;
   isSkippedDate: (date: Date) => boolean;
+  getCellsByGroupIndexAndAllDay: (groupIndex: number, isAllDay: boolean) => ViewCellData[][];
 }
 
 interface CompleteViewDataGenerationOptions {
@@ -286,11 +305,20 @@ type GetViewDataFromMap = (
   options: ViewDataGenerationOptions,
 ) => GroupedViewData;
 
+type MarkSelectedAndFocusedCells = (
+  viewDataMap: ViewDataMap,
+  options: {
+    selectedCells: ViewCellData[];
+    focusedCell: FocusedCell;
+  }
+) => ViewDataMap;
+
 // TODO: use TS in ViewDataGenerators
 export interface ViewDataGeneratorType {
   getCompleteViewDataMap: (options: CompleteViewDataGenerationOptions) => ViewCellData[][];
   generateViewDataMap: GenerateViewDataMap;
   getViewDataFromMap: GetViewDataFromMap;
+  markSelectedAndFocusedCells: MarkSelectedAndFocusedCells;
   getInterval: (hoursInterval: number) => number;
   getCellCount: (options: GetCellCountOptions) => number;
 }
@@ -459,6 +487,8 @@ export interface VirtualScrollingOptions {
   getSchedulerWidth: () => (number | string | (() => string | number) | undefined);
   getViewHeight: () => number;
   getViewWidth: () => number;
+  getWindowHeight: () => number;
+  getWindowWidth: () => number;
   getScrolling: () => dxSchedulerScrolling;
   getScrollableOuterWidth: () => number;
   getGroupCount: () => number;
@@ -473,4 +503,27 @@ export interface VirtualScrollingDispatcherType {
   getRenderState: () => VirtualScrollingState;
   updateDimensions: (isForce?: boolean) => void;
   handleOnScrollEvent: (scrollOffset: ScrollOffset) => void;
+  verticalScrollingAllowed: boolean;
+  horizontalScrollingAllowed: boolean;
+  height: number;
+  isAttachWindowScrollEvent: () => boolean;
+  topVirtualRowsCount: number;
+  leftVirtualCellsCount: number;
+}
+
+interface MoveToCellOptions {
+  isMultiSelection: boolean;
+  isMultiSelectionAllowed: boolean;
+  focusedCellData: ViewCellData;
+  currentCellData: ViewCellData;
+}
+
+export interface CellsSelectionControllerType {
+  moveToCell: (options: MoveToCellOptions) => ViewCellData;
+}
+
+export interface CellsSelectionState {
+  focusedCell: FocusedCell;
+  selectedCells: ViewCellData[];
+  firstSelectedCell: ViewCellData;
 }

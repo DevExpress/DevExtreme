@@ -150,13 +150,15 @@ class Diagram extends Widget {
             this._createComponent($scrollViewWrapper, DiagramScrollView, {
                 useNativeScrolling: this.option('useNativeScrolling'),
                 onCreateDiagram: (e) => {
-                    this._diagramInstance.createDocument(e.$parent[0], e.scrollView);
+                    this._diagramInstance.createDocument(e.$parent[0], e.scrollView, $contentWrapper[0]);
                 }
             });
         }
 
         this._setCustomCommandChecked(DiagramCommandsManager.SHOW_PROPERTIES_PANEL_COMMAND_NAME, this._isPropertiesPanelVisible());
         this._setCustomCommandChecked(DiagramCommandsManager.SHOW_TOOLBOX_COMMAND_NAME, this._isToolboxVisible());
+
+        this._createOptionsUpdateBar();
     }
     _dimensionChanged() {
         this._isMobileScreenSize = undefined;
@@ -237,7 +239,6 @@ class Diagram extends Widget {
             onSubMenuVisibilityChanging: ({ component }) => this._diagramInstance.updateBarItemsState(component.bar),
             onPointerUp: this._onPanelPointerUp.bind(this),
             export: this.option('export'),
-            container: this.$element(),
             excludeCommands: this._getExcludeCommands(),
             onInternalCommand: this._onInternalCommand.bind(this),
             onCustomCommand: this._onCustomCommand.bind(this),
@@ -382,6 +383,7 @@ class Diagram extends Widget {
             },
             onPointerUp: this._onPanelPointerUp.bind(this)
         });
+        this._toolbox._popup.option('propagateOutsideClick', !this.option('fullScreen'));
         this._toolboxResizeCallback = () => {
             const bounds = this._getToolboxBounds($parent, isServerSide);
             this._toolbox.option('height', bounds.height);
@@ -721,8 +723,7 @@ class Diagram extends Widget {
             }
         }
 
-        this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
-        this._diagramInstance.registerBar(this.optionsUpdateBar);
+        this._createOptionsUpdateBar();
         if(hasWindow()) {
             // eslint-disable-next-line spellcheck/spell-checker
             this._diagramInstance.initMeasurer(this.$element()[0]);
@@ -730,11 +731,21 @@ class Diagram extends Widget {
         this._updateCustomShapes(this._getCustomShapes());
         this._refreshDataSources();
     }
+    _createOptionsUpdateBar() {
+        if(!this.optionsUpdateBar) {
+            this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
+            this._diagramInstance.registerBar(this.optionsUpdateBar);
+        }
+    }
+    _deleteOptionsUpdateBar() {
+        delete this.optionsUpdateBar;
+    }
     _clean() {
         if(this._diagramInstance) {
             this._diagramInstance.cleanMarkup((element) => {
                 $(element).empty();
             });
+            this._deleteOptionsUpdateBar();
         }
         super._clean();
     }
@@ -1193,6 +1204,7 @@ class Diagram extends Widget {
         this._processDiagramResize();
         if(this._toolbox) {
             this._toolbox.repaint();
+            this._toolbox._popup.option('propagateOutsideClick', !fullScreen);
         }
         if(this._propertiesPanel) {
             this._propertiesPanel.repaint();

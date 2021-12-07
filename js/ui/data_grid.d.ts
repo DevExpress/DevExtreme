@@ -15,6 +15,7 @@ import {
 
 import {
     DeepPartial,
+    Skip,
 } from '../core/index';
 
 import {
@@ -230,7 +231,7 @@ export interface ToolbarPreparingInfo {
 
 export interface RowDraggingEventInfo<T extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> {
   readonly component: T;
-  readonly event: DxEvent;
+  readonly event: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
   readonly itemData?: TRowData;
   readonly itemElement: DxElement;
   readonly fromIndex: number;
@@ -243,7 +244,7 @@ export interface RowDraggingEventInfo<T extends GridBase<TRowData, TKey>, TRowDa
 
 export interface DragStartEventInfo<T extends GridBase<TRowData, TKey>, TRowData = any, TKey = any> {
   readonly component: T;
-  readonly event: DxEvent;
+  readonly event: DxEvent<PointerEvent | MouseEvent | TouchEvent>;
   itemData?: TRowData;
   readonly itemElement: DxElement;
   readonly fromIndex: number;
@@ -785,7 +786,7 @@ export interface GridBaseOptions<TComponent extends GridBase<TRowData, TKey>, TR
      * @action
      * @public
      */
-    onKeyDown?: ((e: NativeEventInfo<TComponent> & KeyDownInfo) => void);
+    onKeyDown?: ((e: NativeEventInfo<TComponent, KeyboardEvent> & KeyDownInfo) => void);
     /**
      * @docid
      * @type_function_param1 e:object
@@ -1846,7 +1847,6 @@ export interface ScrollingBase {
     useNative?: boolean | Mode;
     /**
      * @docid GridBaseOptions.scrolling.renderAsync
-     * @type boolean
      * @default undefined
      * @public
      */
@@ -1877,8 +1877,6 @@ export interface SelectionBase {
 /**
  * @docid
  * @inherits Widget, DataHelperMixin
- * @module ui/grid_base
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */
@@ -1886,7 +1884,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName beginCustomLoading(messageText)
-     * @param1 messageText:string
      * @public
      */
     beginCustomLoading(messageText: string): void;
@@ -1907,36 +1904,24 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName cellValue(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @return any
      * @public
      */
     cellValue(rowIndex: number, dataField: string): any;
     /**
      * @docid
      * @publicName cellValue(rowIndex, dataField, value)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @param3 value:any
      * @public
      */
     cellValue(rowIndex: number, dataField: string, value: any): void;
     /**
      * @docid
      * @publicName cellValue(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @return any
      * @public
      */
     cellValue(rowIndex: number, visibleColumnIndex: number): any;
     /**
      * @docid
      * @publicName cellValue(rowIndex, visibleColumnIndex, value)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @param3 value:any
      * @public
      */
     cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
@@ -1949,7 +1934,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName clearFilter(filterName)
-     * @param1 filterName:string
      * @public
      */
     clearFilter(filterName: string): void;
@@ -1980,14 +1964,12 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName columnCount()
-     * @return number
      * @public
      */
     columnCount(): number;
     /**
      * @docid
      * @publicName columnOption(id)
-     * @param1 id:number|string
      * @return object
      * @public
      */
@@ -1995,25 +1977,18 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName columnOption(id, optionName)
-     * @param1 id:number|string
-     * @param2 optionName:string
-     * @return any
      * @public
      */
     columnOption(id: number | string, optionName: string): any;
     /**
      * @docid
      * @publicName columnOption(id, optionName, optionValue)
-     * @param1 id:number|string
-     * @param2 optionName:string
-     * @param3 optionValue:any
      * @public
      */
     columnOption(id: number | string, optionName: string, optionValue: any): void;
     /**
      * @docid
      * @publicName columnOption(id, options)
-     * @param1 id:number|string
      * @param2 options:object
      * @public
      */
@@ -2021,14 +1996,12 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName deleteColumn(id)
-     * @param1 id:number|string
      * @public
      */
     deleteColumn(id: number | string): void;
     /**
      * @docid
      * @publicName deleteRow(rowIndex)
-     * @param1 rowIndex:number
      * @public
      */
     deleteRow(rowIndex: number): void;
@@ -2042,7 +2015,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName deselectRows(keys)
-     * @param1 keys:Array<any>
      * @return Promise<any>
      * @public
      */
@@ -2050,23 +2022,18 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName editCell(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
      * @public
      */
     editCell(rowIndex: number, dataField: string): void;
     /**
      * @docid
      * @publicName editCell(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
      * @public
      */
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     /**
      * @docid
      * @publicName editRow(rowIndex)
-     * @param1 rowIndex:number
      * @public
      */
     editRow(rowIndex: number): void;
@@ -2079,21 +2046,18 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName expandAdaptiveDetailRow(key)
-     * @param1 key:any
      * @public
      */
     expandAdaptiveDetailRow(key: TKey): void;
     /**
      * @docid
      * @publicName filter()
-     * @return any
      * @public
      */
     filter(): any;
     /**
      * @docid
      * @publicName filter(filterExpr)
-     * @param1 filterExpr:any
      * @public
      */
     filter(filterExpr: any): void;
@@ -2108,33 +2072,24 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName getCellElement(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @return DxElement|undefined
      * @public
      */
     getCellElement(rowIndex: number, dataField: string): DxElement | undefined;
     /**
      * @docid
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @return DxElement|undefined
      * @public
      */
     getCellElement(rowIndex: number, visibleColumnIndex: number): DxElement | undefined;
     /**
      * @docid
      * @publicName getCombinedFilter()
-     * @return any
      * @public
      */
     getCombinedFilter(): any;
     /**
      * @docid
      * @publicName getCombinedFilter(returnDataField)
-     * @param1 returnDataField:boolean
-     * @return any
      * @public
      */
     getCombinedFilter(returnDataField: boolean): any;
@@ -2150,7 +2105,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName getRowElement(rowIndex)
-     * @param1 rowIndex:number
      * @return Array<Element>|jQuery|undefined
      * @public
      */
@@ -2166,22 +2120,19 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName getScrollable()
-     * @return dxScrollable
      * @public
+     * @return dxScrollable
      */
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     /**
      * @docid
      * @publicName getVisibleColumnIndex(id)
-     * @param1 id:number|string
-     * @return number
      * @public
      */
     getVisibleColumnIndex(id: number | string): number;
     /**
      * @docid
      * @publicName hasEditData()
-     * @return boolean
      * @public
      */
     hasEditData(): boolean;
@@ -2194,24 +2145,18 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName isAdaptiveDetailRowExpanded(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isAdaptiveDetailRowExpanded(key: TKey): boolean;
     /**
      * @docid
      * @publicName isRowFocused(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isRowFocused(key: TKey): boolean;
     /**
      * @docid
      * @publicName isRowSelected(key)
-     * @param1 key:any
-     * @return boolean
      * @public
      */
     isRowSelected(key: TKey): boolean;
@@ -2219,14 +2164,12 @@ export interface GridBase<TRowData = any, TKey = any> {
      * @docid
      * @publicName keyOf(obj)
      * @param1 obj:object
-     * @return any
      * @public
      */
     keyOf(obj: TRowData): TKey;
     /**
      * @docid
      * @publicName navigateToRow(key)
-     * @param1 key:any
      * @public
      * @return Promise<void>
      */
@@ -2277,7 +2220,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName refresh(changesOnly)
-     * @param1 changesOnly:boolean
      * @return Promise<void>
      * @public
      */
@@ -2285,7 +2227,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName repaintRows(rowIndexes)
-     * @param1 rowIndexes:Array<number>
      * @public
      */
     repaintRows(rowIndexes: Array<number>): void;
@@ -2299,7 +2240,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName searchByText(text)
-     * @param1 text:string
      * @public
      */
     searchByText(text: string): void;
@@ -2313,8 +2253,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName selectRows(keys, preserve)
-     * @param1 keys:Array<any>
-     * @param2 preserve:boolean
      * @return Promise<any>
      * @public
      */
@@ -2322,7 +2260,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName selectRowsByIndexes(indexes)
-     * @param1 indexes:Array<number>
      * @return Promise<any>
      * @public
      */
@@ -2350,7 +2287,6 @@ export interface GridBase<TRowData = any, TKey = any> {
     /**
      * @docid
      * @publicName undeleteRow(rowIndex)
-     * @param1 rowIndex:number
      * @public
      */
     undeleteRow(rowIndex: number): void;
@@ -2799,10 +2735,13 @@ export interface ColumnButtonBase {
 }
 
 /** @public */
+export type Scrollable = Skip<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
+
+/** @public */
 export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, PointerEvent | MouseEvent> & {
   readonly data: TRowData;
   readonly key: TKey;
   readonly value?: any;
@@ -2817,7 +2756,7 @@ export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataG
 };
 
 /** @public */
-export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, PointerEvent | MouseEvent> & {
   readonly data: TRowData;
   readonly key: TKey;
   readonly value?: any;
@@ -2960,7 +2899,7 @@ export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDa
 };
 
 /** @public */
-export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
   readonly cellElement: DxElement;
   readonly prevColumnIndex: number;
   readonly prevRowIndex: number;
@@ -2979,7 +2918,7 @@ export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDat
 };
 
 /** @public */
-export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
   readonly rowElement: DxElement;
   readonly prevRowIndex: number;
   newRowIndex: number;
@@ -2993,13 +2932,13 @@ export type InitializedEvent<TRowData = any, TKey = any> = InitializedEventInfo<
 export type InitNewRowEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & NewRowInfo<TRowData>;
 
 /** @public */
-export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & KeyDownInfo;
+export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, KeyboardEvent> & KeyDownInfo;
 
 /** @public */
 export type OptionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid<TRowData, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, PointerEvent | MouseEvent> & {
   readonly data: TRowData;
   readonly key: TKey;
   readonly values: Array<any>;
@@ -3021,7 +2960,7 @@ export type RowCollapsedEvent<TRowData = any, TKey = any> = EventInfo<dxDataGrid
 export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxDataGrid<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, PointerEvent | MouseEvent> & {
   readonly data: TRowData;
   readonly key: TKey;
   readonly values: Array<any>;
@@ -3111,7 +3050,7 @@ export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = RowDraggingEven
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxDataGrid<TRowData, TKey>, TRowData, TKey> & DragReorderInfo;
 
 /** @public */
-export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>> & {
+export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxDataGrid<TRowData, TKey>, PointerEvent | MouseEvent> & {
   row?: Row<TRowData, TKey>;
   column?: Column<TRowData, TKey>;
 };
@@ -4208,7 +4147,6 @@ export interface ToolbarItem extends dxToolbarItem {
 /**
  * @public
  * @docid dxDataGridToolbar
- * @type object
  * @namespace DevExpress.ui.dxDataGrid
  */
 export type Toolbar = {
@@ -4220,14 +4158,12 @@ export type Toolbar = {
   items?: Array<DataGridToolbarItem | ToolbarItem>;
   /**
    * @docid dxDataGridToolbar.visible
-   * @type boolean
    * @default undefined
    * @public
    */
   visible?: boolean;
   /**
    * @docid dxDataGridToolbar.disabled
-   * @type boolean
    * @default false
    * @public
    */
@@ -4324,6 +4260,7 @@ export type Selection = SelectionBase & {
     /**
      * @docid dxDataGridOptions.selection.showCheckBoxesMode
      * @default "onClick"
+     * @default "always" &for(Material)
      * @public
      */
     showCheckBoxesMode?: GridSelectionShowCheckBoxesMode;
@@ -4492,7 +4429,7 @@ declare class dxDataGrid<TRowData = any, TKey = any> extends Widget<dxDataGridOp
     getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
@@ -4725,7 +4662,6 @@ export type dxDataGridRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey
 /**
  * @public
  * @docid dxDataGridRowObject
- * @type object
  */
 export type Row<TRowData = any, TKey = any> = {
     /**

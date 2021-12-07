@@ -3,7 +3,6 @@ import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translat
 import animationFrame from 'animation/frame';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import pointerMock from '../../../helpers/pointerMock.js';
-import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
 
@@ -12,11 +11,12 @@ import {
     SCROLLABLE_CONTENT_CLASS,
     calculateInertiaDistance
 } from './scrollable.constants.js';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 const INERTIA_TIMEOUT = 100;
 
 const GESTURE_LOCK_KEY = 'dxGestureLock';
-const isRenovation = !!Scrollable.IS_RENOVATED_WIDGET;
+const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -319,6 +319,7 @@ QUnit.test('stop bounce on click', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
+            assert.ok(isRenovatedScrollable ? true : false, 'shouldn\'t fire end action');
         }
     });
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
@@ -351,6 +352,7 @@ QUnit.test('stop inertia bounce on after mouse up', function(assert) {
     const $scrollable = $('#scrollable').dxScrollable({
         useNative: false,
         onEnd: function() {
+            assert.ok(isRenovatedScrollable ? true : false, 'scroll complete shouldn`t be fired');
         }
     });
     const $content = $scrollable.find(`.${SCROLLABLE_CONTENT_CLASS}`);
@@ -546,8 +548,6 @@ QUnit.test('velocity calculated correctly when content height less than containe
 
 [true, false].forEach((useNative) => {
     QUnit.test(`window resize should call update, useNative: ${useNative}`, function(assert) {
-        assert.expect(1);
-
         const $scrollable = $('#scrollable');
 
         const updateHandler = sinon.spy();
@@ -561,7 +561,7 @@ QUnit.test('velocity calculated correctly when content height less than containe
 
         resizeCallbacks.fire();
 
-        assert.equal(updateHandler.callCount, isRenovation ? 0 : 1, 'onUpdate handler was fired once');
+        assert.equal(updateHandler.callCount, 1, 'onUpdate handler was fired once');
     });
 
 

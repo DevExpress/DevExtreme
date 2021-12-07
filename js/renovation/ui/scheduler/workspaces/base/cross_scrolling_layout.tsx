@@ -14,6 +14,11 @@ import { HeaderPanelEmptyCell } from './header_panel_empty_cell';
 import { MainLayoutProps } from './main_layout_props';
 import { Semaphore } from '../../semaphore';
 import { ScrollEventArgs } from '../../../scroll_view/common/types';
+import { TimePanelTableLayout } from './time_panel/layout';
+import { MonthDateTableLayout } from '../month/date_table/layout';
+import { DateTableLayoutBase } from './date_table/layout';
+import { TimelineHeaderPanelLayout } from '../timeline/header_panel/layout';
+import { HeaderPanelLayout } from './header_panel/layout';
 
 export const viewFunction = ({
   dateTableScrollableRef,
@@ -27,9 +32,9 @@ export const viewFunction = ({
   headerStyles,
 
   props: {
-    headerPanelTemplate: HeaderPanel,
-    dateTableTemplate: DateTable,
-    timePanelTemplate: TimePanel,
+    isUseTimelineHeader,
+    isUseMonthDateTable,
+    isRenderTimePanel,
 
     viewData,
     timePanelData,
@@ -63,119 +68,124 @@ export const viewFunction = ({
     appointments,
     allDayAppointments,
   },
-}: CrossScrollingLayout): JSX.Element => (
-  <Widget
-    className={className}
-    rootElementRef={widgetElementRef}
-  >
-    <div className="dx-scheduler-fixed-appointments" />
-    <div className="dx-scheduler-header-panel-container">
-      {isRenderHeaderEmptyCell && (
-        <HeaderPanelEmptyCell
-          width={headerEmptyCellWidth}
-          isRenderAllDayTitle={isStandaloneAllDayPanel}
-        />
-      )}
-      <div className="dx-scheduler-header-tables-container">
+}: CrossScrollingLayout): JSX.Element => {
+  const DateTable = isUseMonthDateTable ? MonthDateTableLayout : DateTableLayoutBase;
+  const HeaderPanel = isUseTimelineHeader ? TimelineHeaderPanelLayout : HeaderPanelLayout;
+
+  return (
+    <Widget
+      className={className}
+      rootElementRef={widgetElementRef}
+    >
+      <div className="dx-scheduler-fixed-appointments" />
+      <div className="dx-scheduler-header-panel-container">
+        {isRenderHeaderEmptyCell && (
+          <HeaderPanelEmptyCell
+            width={headerEmptyCellWidth}
+            isRenderAllDayTitle={isStandaloneAllDayPanel}
+          />
+        )}
+        <div className="dx-scheduler-header-tables-container">
+          <Scrollable
+            ref={headerScrollableRef}
+            className="dx-scheduler-header-scrollable"
+            useKeyboard={false}
+            showScrollbar="never"
+            direction="horizontal"
+            useNative={false}
+            bounceEnabled={false}
+            onScroll={onHeaderScroll}
+          >
+            <table
+              className="dx-scheduler-header-panel"
+              style={headerStyles}
+            >
+              <HeaderPanel
+                dateHeaderData={dateHeaderData}
+                groupPanelData={groupPanelData}
+                timeCellTemplate={timeCellTemplate}
+                dateCellTemplate={dateCellTemplate}
+                isRenderDateHeader={isRenderDateHeader}
+
+                groupOrientation={groupOrientation}
+                groupByDate={groupByDate}
+                groups={groups}
+                resourceCellTemplate={resourceCellTemplate}
+              />
+            </table>
+            {isStandaloneAllDayPanel && (
+              <AllDayPanelLayout
+                viewData={viewData}
+                dataCellTemplate={dataCellTemplate}
+                tableRef={allDayPanelRef}
+                allDayAppointments={allDayAppointments}
+                width={tablesWidth}
+              />
+            )}
+          </Scrollable>
+        </div>
+      </div>
+
+      <div className="dx-scheduler-work-space-flex-container">
         <Scrollable
-          ref={headerScrollableRef}
-          className="dx-scheduler-header-scrollable"
+          ref={sideBarScrollableRef}
+          className="dx-scheduler-sidebar-scrollable"
           useKeyboard={false}
           showScrollbar="never"
-          direction="horizontal"
+          direction="vertical"
           useNative={false}
           bounceEnabled={false}
-          onScroll={onHeaderScroll}
+          onScroll={onSideBarScroll}
         >
-          <table
-            className="dx-scheduler-header-panel"
-            style={headerStyles}
-          >
-            <HeaderPanel
-              dateHeaderData={dateHeaderData}
-              groupPanelData={groupPanelData}
-              timeCellTemplate={timeCellTemplate}
-              dateCellTemplate={dateCellTemplate}
-              isRenderDateHeader={isRenderDateHeader}
+          <div className="dx-scheduler-side-bar-scrollable-content">
+            {isRenderGroupPanel && (
+              <GroupPanel
+                groupPanelData={groupPanelData}
+                className={groupPanelClassName}
+                groupOrientation={groupOrientation}
+                groupByDate={groupByDate}
+                groups={groups}
+                resourceCellTemplate={resourceCellTemplate}
+                height={groupPanelHeight}
+                elementRef={groupPanelRef}
+              />
+            )}
+            {isRenderTimePanel && (
+              <TimePanelTableLayout
+                timePanelData={timePanelData}
+                timeCellTemplate={timeCellTemplate}
+                groupOrientation={groupOrientation}
+                tableRef={timePanelRef}
+              />
+            )}
+          </div>
+        </Scrollable>
 
-              groupOrientation={groupOrientation}
-              groupByDate={groupByDate}
-              groups={groups}
-              resourceCellTemplate={resourceCellTemplate}
-            />
-          </table>
-          {isStandaloneAllDayPanel && (
-            <AllDayPanelLayout
-              viewData={viewData}
-              dataCellTemplate={dataCellTemplate}
-              tableRef={allDayPanelRef}
-              allDayAppointments={allDayAppointments}
-              width={tablesWidth}
-            />
-          )}
+        <Scrollable
+          ref={dateTableScrollableRef}
+          useKeyboard={false}
+          bounceEnabled={false}
+          direction="both"
+          className="dx-scheduler-date-table-scrollable"
+          onScroll={onDateTableScroll}
+        >
+          <div className="dx-scheduler-date-table-scrollable-content">
+            <div className="dx-scheduler-date-table-container">
+              <DateTable
+                tableRef={dateTableRef}
+                viewData={viewData}
+                groupOrientation={groupOrientation}
+                dataCellTemplate={dataCellTemplate}
+                width={tablesWidth}
+              />
+              {appointments}
+            </div>
+          </div>
         </Scrollable>
       </div>
-    </div>
-
-    <div className="dx-scheduler-work-space-flex-container">
-      <Scrollable
-        ref={sideBarScrollableRef}
-        className="dx-scheduler-sidebar-scrollable"
-        useKeyboard={false}
-        showScrollbar="never"
-        direction="vertical"
-        useNative={false}
-        bounceEnabled={false}
-        onScroll={onSideBarScroll}
-      >
-        <div className="dx-scheduler-side-bar-scrollable-content">
-          {isRenderGroupPanel && (
-            <GroupPanel
-              groupPanelData={groupPanelData}
-              className={groupPanelClassName}
-              groupOrientation={groupOrientation}
-              groupByDate={groupByDate}
-              groups={groups}
-              resourceCellTemplate={resourceCellTemplate}
-              height={groupPanelHeight}
-              elementRef={groupPanelRef}
-            />
-          )}
-          {!!TimePanel && (
-            <TimePanel
-              timePanelData={timePanelData}
-              timeCellTemplate={timeCellTemplate}
-              groupOrientation={groupOrientation}
-              tableRef={timePanelRef}
-            />
-          )}
-        </div>
-      </Scrollable>
-
-      <Scrollable
-        ref={dateTableScrollableRef}
-        useKeyboard={false}
-        bounceEnabled={false}
-        direction="both"
-        className="dx-scheduler-date-table-scrollable"
-        onScroll={onDateTableScroll}
-      >
-        <div className="dx-scheduler-date-table-scrollable-content">
-          <div className="dx-scheduler-date-table-container">
-            <DateTable
-              tableRef={dateTableRef}
-              viewData={viewData}
-              groupOrientation={groupOrientation}
-              dataCellTemplate={dataCellTemplate}
-              width={tablesWidth}
-            />
-            {appointments}
-          </div>
-        </div>
-      </Scrollable>
-    </div>
-  </Widget>
-);
+    </Widget>
+  );
+};
 
 @Component({
   defaultOptionRules: null,

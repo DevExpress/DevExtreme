@@ -4,9 +4,18 @@ import { getGroupCount } from '../../../../../ui/scheduler/resources/utils';
 import { GroupOrientation } from '../../types';
 import { GetDateForHeaderText } from '../../view_model/to_test/views/types';
 import {
-  Group, TableWidthWorkSpaceConfig, ViewDataProviderType, VirtualScrollingOptions,
+  Group,
+  TableWidthWorkSpaceConfig,
+  ViewCellData,
+  ViewDataProviderType,
+  VirtualScrollingOptions,
 } from '../types';
 import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
+import {
+  ALL_DAY_PANEL_CELL_CLASS,
+  DATE_TABLE_CELL_CLASS,
+  DATE_TABLE_ROW_CLASS,
+} from '../const';
 
 const DAY_MS = dateUtils.dateToMilliseconds('day');
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');
@@ -119,12 +128,15 @@ export const createVirtualScrollingOptions = (
     isVerticalGrouping: boolean;
     completeRowCount: number;
     completeColumnCount: number;
+    windowHeight: number;
+    windowWidth: number;
+    rtlEnabled: boolean;
   },
 ): VirtualScrollingOptions => ({
   getCellHeight: (): number => options.cellHeight,
   getCellWidth: (): number => options.cellWidth,
   getCellMinWidth: (): number => DATE_TABLE_MIN_CELL_WIDTH,
-  isRTL: (): boolean => false, // TODO
+  isRTL: (): boolean => options.rtlEnabled,
   getSchedulerHeight: ():
   number | string | (() => number | string) | undefined => options.schedulerHeight,
   getSchedulerWidth: ():
@@ -137,4 +149,131 @@ export const createVirtualScrollingOptions = (
   isVerticalGrouping: (): boolean => options.isVerticalGrouping,
   getTotalRowCount: (): number => options.completeRowCount,
   getTotalCellCount: (): number => options.completeColumnCount,
+  getWindowHeight: (): number => options.windowHeight,
+  getWindowWidth: (): number => options.windowWidth,
 });
+
+export const getCellIndices = (cell: HTMLElement): {
+  columnIndex: number;
+  rowIndex: number;
+} => {
+  const row = cell.parentNode as HTMLElement;
+  const table = row.parentNode as HTMLElement;
+
+  const columnIndex = [...Array.from(row.children)]
+    .filter((child) => child.className.includes(DATE_TABLE_CELL_CLASS)
+      || child.className.includes(ALL_DAY_PANEL_CELL_CLASS))
+    .indexOf(cell);
+  const rowIndex = [...Array.from(table.children)]
+    .filter((child) => child.className.includes(DATE_TABLE_ROW_CLASS))
+    .indexOf(row);
+
+  return {
+    columnIndex,
+    rowIndex,
+  };
+};
+
+export const compareCellsByDateAndIndex = (daysAndIndexes: {
+  date: number;
+  index: number;
+  firstDate: number;
+  firstIndex: number;
+  lastDate: number;
+  lastIndex: number;
+}): boolean => {
+  const {
+    date, index,
+    firstDate, firstIndex,
+    lastDate, lastIndex,
+  } = daysAndIndexes;
+
+  if (firstDate === lastDate) {
+    let validFirstIndex = firstIndex;
+    let validLastIndex = lastIndex;
+    if (validFirstIndex > validLastIndex) {
+      [validFirstIndex, validLastIndex] = [validLastIndex, validFirstIndex];
+    }
+
+    return firstDate === date && index >= validFirstIndex && index <= validLastIndex;
+  }
+  return (date === firstDate && index >= firstIndex)
+          || (date === lastDate && index <= lastIndex)
+          || (firstDate < date && date < lastDate);
+};
+
+const filterCellsByDateAndIndex = (cellsRow: ViewCellData[], filterData: {
+  firstDate: Date;
+  lastDate: Date;
+  firstIndex: number;
+  lastIndex: number;
+}): ViewCellData[] => {
+  const {
+    firstDate, lastDate,
+    firstIndex, lastIndex,
+  } = filterData;
+
+  const firstDay = (dateUtils.trimTime(firstDate) as Date).getTime();
+  const lastDay = (dateUtils.trimTime(lastDate) as Date).getTime();
+
+  return cellsRow.filter((cell) => {
+    const { startDate, index } = cell;
+    const day = (dateUtils.trimTime(startDate) as Date).getTime();
+    const daysAndIndexes = {
+      date: day,
+      index,
+      firstDate: firstDay,
+      firstIndex,
+      lastDate: lastDay,
+      lastIndex,
+    };
+
+    return compareCellsByDateAndIndex(daysAndIndexes);
+  });
+};
+
+export const getSelectedCells = (
+  viewDataProvider: ViewDataProviderType,
+  firstSelectedCell: ViewCellData,
+  lastSelectedCell: ViewCellData,
+  isLastSelectedCellAllDay: boolean,
+): ViewCellData[] => {
+  let firstCell = firstSelectedCell;
+  let lastCell = lastSelectedCell;
+
+  if (firstCell.startDate.getTime() > lastCell.startDate.getTime()) {
+    [firstCell, lastCell] = [lastCell, firstCell];
+  }
+
+  const {
+    startDate: firstStartDate, groupIndex: firstGroupIndex, index: firstCellIndex,
+  } = firstCell;
+  const {
+    startDate: lastStartDate, index: lastCellIndex,
+  } = lastCell;
+
+  const cells = viewDataProvider
+    .getCellsByGroupIndexAndAllDay(firstGroupIndex ?? 0, isLastSelectedCellAllDay);
+
+  const filteredCells = cells.reduce((selectedCells, cellsRow) => {
+    const filterData = {
+      firstDate: firstStartDate,
+      lastDate: lastStartDate,
+      firstIndex: firstCellIndex,
+      lastIndex: lastCellIndex,
+    };
+    const filteredRow = filterCellsByDateAndIndex(cellsRow, filterData);
+    selectedCells.push(...filteredRow);
+
+    return selectedCells;
+  }, []);
+
+  const selectedCells = filteredCells.sort(
+    (firstArg, secondArg) => firstArg.startDate.getTime() - secondArg.startDate.getTime(),
+  );
+
+  return selectedCells;
+};
+
+export const isCellAllDay = (cell: HTMLElement): boolean => cell.className
+  .includes(ALL_DAY_PANEL_CELL_CLASS);

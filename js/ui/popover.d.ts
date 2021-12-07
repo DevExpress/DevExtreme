@@ -55,7 +55,7 @@ export type ShowingEvent = Cancelable & EventInfo<dxPopover>;
 export type ShownEvent = EventInfo<dxPopover>;
 
 /** @public */
-export type TitleRenderedEvent = EventInfo<dxPopup> & TitleRenderedInfo;
+export type TitleRenderedEvent = EventInfo<dxPopover> & TitleRenderedInfo;
 
 /**
  * @deprecated use Properties instead
@@ -71,6 +71,7 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
     animation?: dxPopoverAnimation;
     /**
      * @docid
+     * @deprecated dxPopoverOptions.hideOnOutsideClick
      * @type_function_param1 event:event
      * @type_function_return Boolean
      * @default true
@@ -100,6 +101,21 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
        */
       name?: string;
     } | string;
+    /**
+     * @docid
+     * @type boolean | function
+     * @type_function_param1 event:event
+     * @type_function_return Boolean
+     * @default true
+     * @public
+     */
+    hideOnOutsideClick?: boolean | ((event: DxEvent<MouseEvent | PointerEvent | TouchEvent>) => boolean);
+    /**
+     * @docid
+     * @default true
+     * @public
+     */
+    hideOnParentScroll?: boolean;
     /**
      * @docid
      * @default { my: 'top center', at: 'bottom center', collision: 'fit flip' }
@@ -147,12 +163,6 @@ export interface dxPopoverOptions<TComponent> extends dxPopupOptions<TComponent>
      * @public
      */
     width?: number | string | (() => number | string);
-    /**
-     * @docid
-     * @default true
-     * @public
-     */
-    hideOnParentScroll?: boolean;
 }
 /** @namespace DevExpress.ui */
 export interface dxPopoverAnimation extends dxPopupAnimation {

@@ -1,22 +1,16 @@
 /* eslint-disable no-restricted-globals */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable react/prop-types */
 import {
-  Component, ComponentBindings, JSXComponent, Fragment, InternalState, Effect,
+  Component, ComponentBindings, JSXComponent, InternalState, Effect,
 } from '@devextreme-generator/declarations';
 import React from 'react';
-import { getComponentOptions } from './helpers/getComponentOptions';
 import { Scheduler } from '../../../../js/renovation/ui/scheduler/scheduler';
 
-export const viewFunction = ({ options }): JSX.Element => (
-  <Fragment>
-    <Scheduler
-      className="test-scheduler"
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...options}
-    />
-  </Fragment>
+export const viewFunction = ({ componentProps }: App): JSX.Element => (
+  <Scheduler
+    id="container"
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...componentProps}
+  />
 );
 
 @ComponentBindings()
@@ -27,15 +21,53 @@ class AppProps { }
   view: viewFunction,
 })
 export class App extends JSXComponent<AppProps>() {
-  @InternalState() options = getComponentOptions();
+  @InternalState() options = {};
+
+  @InternalState() currentDate = new Date();
+
+  @InternalState() currentView: string;
+
+  currentDateChange(date: Date): void {
+    this.currentDate = date;
+  }
+
+  currentViewChange(view: string): void {
+    this.currentView = view;
+  }
 
   @Effect({ run: 'once' })
   optionsUpdated(): void {
-    (window as any).onOptionsUpdated = (newOptions) => {
-      this.options = {
-        ...this.options,
-        ...newOptions,
+    (window as unknown as { onOptionsUpdated: (unknown) => void })
+      .onOptionsUpdated = (newOptions) => {
+        const {
+          currentDate,
+          currentView,
+          ...restProps
+        } = newOptions;
+
+        if (currentDate) {
+          this.currentDate = currentDate;
+        }
+
+        if (currentView) {
+          this.currentView = currentView;
+        }
+
+        this.options = {
+          ...this.options,
+          ...restProps,
+        };
       };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get componentProps(): any {
+    return {
+      ...this.options,
+      currentDate: this.currentDate,
+      currentView: this.currentView,
+      currentDateChange: (date: Date): void => this.currentDateChange(date),
+      currentViewChange: (view: string): void => this.currentViewChange(view),
     };
   }
 }

@@ -7,6 +7,7 @@ import {
   Effect,
   Method,
   Mutable,
+  Consumer,
 } from '@devextreme-generator/declarations';
 
 import { combineClasses } from '../../../utils/combine_classes';
@@ -28,10 +29,10 @@ import {
   subscribeToMouseLeaveEvent,
 } from '../../../utils/subscribe_to_event';
 
-import { BaseWidgetProps } from '../../common/base_props';
 import { DxMouseEvent } from '../common/types';
 import { ScrollbarProps } from '../common/scrollbar_props';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
+import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 export const THUMB_MIN_SIZE = 15;
 
@@ -51,8 +52,6 @@ export const viewFunction = (viewModel: Scrollbar): JSX.Element => {
 
 export type ScrollbarPropsType = ScrollbarProps
 // eslint-disable-next-line @typescript-eslint/no-type-alias
-& Pick<BaseWidgetProps, 'rtlEnabled'>
-// eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<ScrollableSimulatedProps, 'bounceEnabled' | 'showScrollbar' | 'scrollByThumb' | 'scrollLocationChange'>;
 
 @Component({
@@ -61,6 +60,9 @@ export type ScrollbarPropsType = ScrollbarProps
 })
 
 export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
+
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
@@ -97,7 +99,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Effect()
   mouseEnterEffect(): EffectReturn {
-    if (this.isHoverMode) {
+    if (this.isExpandable) {
       return subscribeToMouseEnterEvent(
         this.scrollbarRef.current, () => {
           this.hovered = true;
@@ -110,7 +112,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   @Effect()
   mouseLeaveEffect(): EffectReturn {
-    if (this.isHoverMode) {
+    if (this.isExpandable) {
       return subscribeToMouseLeaveEvent(
         this.scrollbarRef.current, () => {
           this.hovered = false;
@@ -154,18 +156,18 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.props.scrollLocationChange?.({
       fullScrollProp: this.fullScrollProp,
       location: -location,
-      needFireScroll: scrollDelta >= 1,
+      needFireScroll: scrollDelta > 0,
     });
   }
 
   @Effect()
   syncScrollLocation(): void {
-    if (this.containerHasSizes) {
+    if (this.props.containerHasSizes) {
       let newScrollLocation = this.props.scrollLocation;
 
       const maxOffsetChanged = Math.abs(this.props.maxOffset - this.prevMaxOffset) > 0;
       this.prevMaxOffset = this.props.maxOffset;
-      if (maxOffsetChanged && this.isHorizontal && this.props.rtlEnabled) {
+      if (maxOffsetChanged && this.isHorizontal && this.config?.rtlEnabled) {
         if (this.props.maxOffset === 0) {
           this.rightScrollLocation = 0;
         }
@@ -177,10 +179,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
         this.moveTo(newScrollLocation);
       }
     }
-  }
-
-  get containerHasSizes(): boolean {
-    return this.props.containerSize > 0 && this.props.contentSize > 0;
   }
 
   get axis(): 'x' | 'y' {
@@ -233,7 +231,7 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
 
   get thumbStyles(): { [key: string]: string | number } {
     return {
-      [this.dimension]: this.scrollSize || THUMB_MIN_SIZE, // TODO: remove ||
+      [this.dimension]: Math.round(this.scrollSize) || THUMB_MIN_SIZE,
       transform: this.isNeverMode ? 'none' : this.thumbTransform,
     };
   }

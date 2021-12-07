@@ -2016,6 +2016,81 @@ QUnit.test('Chart with large scale break', function(assert) {
 
 });
 
+QUnit.test('Dispose unused axes (T1042940)', function(assert) {
+    this.$container.css({ width: '1000px', height: '600px' });
+
+    const chart = this.createChart({
+        valueAxis: [{
+            name: 'Total',
+            valueType: 'numeric',
+            pane: 'Total'
+        }, {
+            name: 'Count',
+            pane: 'Count'
+        }],
+        panes: [{
+            name: 'Total'
+        }, {
+            name: 'Count'
+        }],
+        dataSource: [{
+            'val': 43620,
+            'series': 'Africa | Total',
+            'arg': '2013'
+        }, {
+            'val': 101475,
+            'series': 'Australia | Total',
+            'arg': '2013'
+        }, {
+            'val': 100480,
+            'series': 'South America | Total',
+            'arg': '2014'
+        }, {
+            'val': 11,
+            'series': 'Africa | Count',
+            'arg': '2015'
+        }, {
+            'val': 38,
+            'series': 'South America | Count',
+            'arg': '2013'
+        }, {
+            'val': 44,
+            'series': 'Asia | Count',
+            'arg': '2014'
+        }],
+        seriesTemplate: {
+            nameField: 'series'
+        }
+    });
+
+    chart.option({
+        valueAxis: [{
+            name: 'Count',
+            pane: 'Count'
+        }],
+        panes: [{}],
+        dataSource: [{
+            'val': 26,
+            'series': 'Africa',
+            'arg': '2013'
+        }, {
+            'val': 41,
+            'series': 'Asia',
+            'arg': '2013'
+        }, {
+            'val': 13,
+            'series': 'Australia',
+            'arg': '2015'
+        }],
+        seriesTemplate: {
+            nameField: 'series'
+        }
+    });
+
+    assert.equal(chart.getValueAxis().pane, 'default0');
+    assert.equal($('.dxc-val-elements').length, 1);
+});
+
 QUnit.module('Legend title', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);

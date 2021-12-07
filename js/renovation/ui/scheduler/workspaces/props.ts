@@ -19,9 +19,9 @@ import {
 import { BaseWidgetProps } from '../../common/base_props';
 import { HeaderPanelLayoutProps } from './base/header_panel/layout';
 import { DateTableLayoutProps } from './base/date_table/layout';
-import { TimePanelLayoutProps } from './base/time_panel/layout';
 import { GetDateForHeaderText } from '../view_model/to_test/views/types';
 import { ScrollableDirection } from '../../scroll_view/common/types';
+import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from '../appointment/types';
 
 // TODO: WA for bug in generators: they use getters for default props
 const DEFAULT_GROUPS = [];
@@ -39,6 +39,10 @@ export class WorkSpaceProps extends BaseWidgetProps {
   @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
   @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
+
+  @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
+
+  @Template() appointmentCollectorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
 
   // -----------------
   // Public props
@@ -94,6 +98,8 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() type: ViewType = 'week';
 
+  @OneWay() maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
+
   @Event() onViewRendered!: (viewMetaData: ViewMetaData) => void;
 
   @Slot() appointments?: JSX.Element;
@@ -135,12 +141,14 @@ WorkSpaceProps,
 | 'dateCellTemplate'
 | 'timeCellTemplate'
 | 'resourceCellTemplate'
+| 'appointmentTemplate'
+| 'appointmentCollectorTemplate'
+| 'maxAppointmentsPerCell'
 >;
 
 export interface ViewRenderConfig {
   headerPanelTemplate: JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'>;
   dateTableTemplate: JSXTemplate<DateTableLayoutProps>;
-  timePanelTemplate?: JSXTemplate<TimePanelLayoutProps>;
   className: string;
   isAllDayPanelSupported: boolean;
   isProvideVirtualCellsWidth: boolean;
@@ -153,4 +161,8 @@ export interface ViewRenderConfig {
   scrollingDirection: ScrollableDirection;
   isCreateCrossScrolling: boolean;
   defaultGroupOrientation: GroupOrientation;
+
+  // This is a WA for this bug: https://github.com/DevExpress/devextreme-renovation/issues/814
+  isUseMonthDateTable: boolean;
+  isUseTimelineHeader: boolean;
 }

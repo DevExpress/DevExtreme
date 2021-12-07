@@ -1,11 +1,12 @@
 import {
-  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template,
+  Component, ComponentBindings, JSXComponent, JSXTemplate, OneWay, Template, Event,
 } from '@devextreme-generator/declarations';
 import {
   AppointmentTemplateProps,
   AppointmentViewModel,
   OverflowIndicatorTemplateProps,
   OverflowIndicatorViewModel,
+  AppointmentClickData,
 } from './types';
 import { Appointment } from './appointment';
 import { OverflowIndicator } from './overflow_indicator/layout';
@@ -17,6 +18,7 @@ export const viewFunction = ({
     appointments,
     overflowIndicators,
     appointmentTemplate,
+    onAppointmentClick,
     overflowIndicatorTemplate,
   },
 }: AppointmentLayout): JSX.Element => (
@@ -28,6 +30,7 @@ export const viewFunction = ({
           appointmentTemplate={appointmentTemplate}
           index={index}
           key={item.key}
+          onItemClick={onAppointmentClick}
         />
       ))
     }
@@ -54,6 +57,8 @@ export class AppointmentLayoutProps {
   @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
 
   @Template() overflowIndicatorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
+
+  @Event() onAppointmentClick?: (e: AppointmentClickData) => void;
 }
 
 @Component({

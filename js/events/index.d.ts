@@ -60,7 +60,7 @@ export type dxEvent = EventObject;
  * @section commonObjectStructures
  * @public
  */
-export class EventObject {
+export type EventObject = {
     /**
      * @docid
      * @public
@@ -120,7 +120,7 @@ export class EventObject {
      * @public
      */
     stopPropagation(): void;
-}
+};
 
 /**
  * @docid
@@ -142,7 +142,6 @@ export function eventsHandler(event: DxEvent, extraParameters: any): boolean;
  * @docid eventsMethods.off
  * @publicName off(element)
  * @namespace DevExpress.events
- * @module events
  * @public
  */
 export function off(element: Element | Array<Element>): void;
@@ -151,7 +150,6 @@ export function off(element: Element | Array<Element>): void;
  * @docid eventsMethods.off
  * @publicName off(element, eventName)
  * @namespace DevExpress.events
- * @module events
  * @public
  */
 export function off(element: Element | Array<Element>, eventName: string): void;
@@ -160,8 +158,6 @@ export function off(element: Element | Array<Element>, eventName: string): void;
  * @docid eventsMethods.off
  * @publicName off(element, eventName, handler)
  * @namespace DevExpress.events
- * @param3 handler:function
- * @module events
  * @public
  */
 export function off(element: Element | Array<Element>, eventName: string, handler: Function): void;
@@ -170,7 +166,6 @@ export function off(element: Element | Array<Element>, eventName: string, handle
  * @docid eventsMethods.off
  * @publicName off(element, eventName, selector)
  * @namespace DevExpress.events
- * @module events
  * @public
  */
 export function off(element: Element | Array<Element>, eventName: string, selector: string): void;
@@ -179,8 +174,6 @@ export function off(element: Element | Array<Element>, eventName: string, select
  * @docid eventsMethods.off
  * @publicName off(element, eventName, selector, handler)
  * @namespace DevExpress.events
- * @param4 handler:function
- * @module events
  * @public
  */
 export function off(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
@@ -190,8 +183,6 @@ export function off(element: Element | Array<Element>, eventName: string, select
  * @publicName on(element, eventName, data, handler)
  * @namespace DevExpress.events
  * @param3 data:object
- * @param4 handler:function
- * @module events
  * @public
  */
 export function on(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
@@ -200,8 +191,6 @@ export function on(element: Element | Array<Element>, eventName: string, data: a
  * @docid eventsMethods.on
  * @publicName on(element, eventName, handler)
  * @namespace DevExpress.events
- * @param3 handler:function
- * @module events
  * @public
  */
 export function on(element: Element | Array<Element>, eventName: string, handler: Function): void;
@@ -211,8 +200,6 @@ export function on(element: Element | Array<Element>, eventName: string, handler
  * @publicName on(element, eventName, selector, data, handler)
  * @namespace DevExpress.events
  * @param4 data:object
- * @param5 handler:function
- * @module events
  * @public
  */
 export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
@@ -221,8 +208,6 @@ export function on(element: Element | Array<Element>, eventName: string, selecto
  * @docid eventsMethods.on
  * @publicName on(element, eventName, selector, handler)
  * @namespace DevExpress.events
- * @param4 handler:function
- * @module events
  * @public
  */
 export function on(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
@@ -232,8 +217,6 @@ export function on(element: Element | Array<Element>, eventName: string, selecto
  * @publicName one(element, eventName, data, handler)
  * @namespace DevExpress.events
  * @param3 data:object
- * @param4 handler:function
- * @module events
  * @public
  */
 export function one(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
@@ -242,8 +225,6 @@ export function one(element: Element | Array<Element>, eventName: string, data: 
  * @docid eventsMethods.one
  * @publicName one(element, eventName, handler)
  * @namespace DevExpress.events
- * @param3 handler:function
- * @module events
  * @public
  */
 export function one(element: Element | Array<Element>, eventName: string, handler: Function): void;
@@ -253,8 +234,6 @@ export function one(element: Element | Array<Element>, eventName: string, handle
  * @publicName one(element, eventName, selector, data, handler)
  * @namespace DevExpress.events
  * @param4 data:object
- * @param5 handler:function
- * @module events
  * @public
  */
 export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
@@ -263,8 +242,6 @@ export function one(element: Element | Array<Element>, eventName: string, select
  * @docid eventsMethods.one
  * @publicName one(element, eventName, selector, handler)
  * @namespace DevExpress.events
- * @param4 handler:function
- * @module events
  * @public
  */
 export function one(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
@@ -274,7 +251,6 @@ export function one(element: Element | Array<Element>, eventName: string, select
  * @publicName trigger(element, event)
  * @namespace DevExpress.events
  * @param2 event:string|event
- * @module events
  * @public
  */
 export function trigger(element: Element | Array<Element>, event: string | DxEvent): void;
@@ -285,7 +261,6 @@ export function trigger(element: Element | Array<Element>, event: string | DxEve
  * @namespace DevExpress.events
  * @param2 event:string|event
  * @param3 extraParameters:object
- * @module events
  * @public
  */
 export function trigger(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;
@@ -295,7 +270,6 @@ export function trigger(element: Element | Array<Element>, event: string | DxEve
  * @publicName triggerHandler(element, event)
  * @namespace DevExpress.events
  * @param2 event:string|event
- * @module events
  * @hidden
  */
 export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent): void;
@@ -306,7 +280,6 @@ export function triggerHandler(element: Element | Array<Element>, event: string 
  * @namespace DevExpress.events
  * @param2 event:string|event
  * @param3 extraParameters:object
- * @module events
  * @hidden
  */
 export function triggerHandler(element: Element | Array<Element>, event: string | DxEvent, extraParameters: any): void;

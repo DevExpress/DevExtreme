@@ -27,27 +27,23 @@ const isDesktop = !(!devices.real().generic || devices.isSimulator());
 
 export const viewFunction = ({
   domComponentWrapperRef,
-  props,
+  componentProps,
   restAttributes,
-}: Popover): JSX.Element => {
-  const { children } = props;
-
-  return (
-    <DomComponentWrapper
-      componentType={LegacyPopover}
-      componentProps={props}
-      templateNames={[
-        'titleTemplate',
-        'contentTemplate',
-      ]}
-      ref={domComponentWrapperRef}
+}: Popover): JSX.Element => (
+  <DomComponentWrapper
+    componentType={LegacyPopover}
+    componentProps={componentProps.restProps}
+    templateNames={[
+      'titleTemplate',
+      'contentTemplate',
+    ]}
+    ref={domComponentWrapperRef}
       // eslint-disable-next-line react/jsx-props-no-spreading
-      {...restAttributes}
-    >
-      {children}
-    </DomComponentWrapper>
-  );
-};
+    {...restAttributes}
+  >
+    {componentProps.children}
+  </DomComponentWrapper>
+);
 
 @ComponentBindings()
 export class PopoverProps extends BaseWidgetProps {
@@ -59,7 +55,7 @@ export class PopoverProps extends BaseWidgetProps {
     hide: { type: 'fade', to: 0 },
   };
 
-  @OneWay() closeOnOutsideClick: boolean | (() => boolean) = false;
+  @OneWay() hideOnOutsideClick: boolean | (() => boolean) = false;
 
   @OneWay() container?: string | Element;
 
@@ -156,5 +152,14 @@ export class Popover extends JSXComponent(PopoverProps) {
     this.instance.option('onHiding', () => {
       this.props.visible = false;
     });
+  }
+
+  /* istanbul ignore next: WA for Angular */
+  get componentProps(): { children?: PopoverProps['children']; restProps: Partial<PopoverProps> } {
+    const { children, ...restProps } = this.props;
+    return {
+      children,
+      restProps,
+    };
   }
 }

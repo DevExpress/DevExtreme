@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable rulesdir/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
@@ -9,16 +10,15 @@ import {
   Method,
 } from '@devextreme-generator/declarations';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
-import { DisposeEffectReturn } from '../../utils/effect_return';
 // eslint-disable-next-line import/named
-import dxScheduler, { Appointment } from '../../../ui/scheduler';
+import { Appointment } from '../../../ui/scheduler';
 import { ViewProps, SchedulerProps } from './props';
 
 import { Widget } from '../common/widget';
 import { UserDefinedElement } from '../../../core/element'; // eslint-disable-line import/named
 import DataSource from '../../../data/data_source';
 import type { Options as DataSourceOptions } from '../../../data/data_source';
-import { getCurrentViewConfig, getCurrentViewProps } from './model/views';
+import { getCurrentViewConfig, getCurrentViewProps, getValidGroups } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import {
   DataCellTemplateProps,
@@ -30,17 +30,27 @@ import {
 import { WorkSpace } from './workspaces/base/work_space';
 import { SchedulerToolbar } from './header/header';
 import { getViewDataGeneratorByViewType } from '../../../ui/scheduler/workspaces/view_model/utils';
-import type { DataAccessorType, DataSourcePromise } from './types';
+import type { AppointmentDataItem, DataAccessorType, DataSourcePromise } from './types';
 import {
-  createDataAccessors, createTimeZoneCalculator, filterAppointments, isViewDataProviderConfigValid,
+  createDataAccessors, createTimeZoneCalculator, isViewDataProviderConfigValid,
 } from './common';
 import { getGroupCount, loadResources } from '../../../ui/scheduler/resources/utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
 import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
-import { AppointmentsViewModelType } from './appointment/types';
+import {
+  AppointmentsViewModelType,
+  AppointmentViewModel,
+  AppointmentClickData,
+  AppointmentTemplateProps,
+  OverflowIndicatorTemplateProps,
+} from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
+import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
 import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
+import { getPreparedDataItems, resolveDataItems } from './utils/data';
+import { getFilterStrategy } from './utils/filtering/local';
+import combineRemoteFilter from './utils/filtering/remote';
 
 export const viewFunction = ({
   restAttributes,
@@ -51,12 +61,19 @@ export const viewFunction = ({
   setCurrentView,
   startViewDate,
   appointmentsViewModel,
+  tooltipData,
+  tooltipTarget,
+  tooltipVisible,
+  changeTooltipVisible,
+  showTooltip,
   workSpaceKey,
 
   dataCellTemplate,
   dateCellTemplate,
   timeCellTemplate,
   resourceCellTemplate,
+  appointmentTemplate,
+  appointmentCollectorTemplate,
 
   props: {
     accessKey,
@@ -178,6 +195,9 @@ export const viewFunction = ({
               isAllDay
               appointments={appointmentsViewModel.allDay}
               overflowIndicators={appointmentsViewModel.allDayCompact}
+              appointmentTemplate={appointmentTemplate}
+              overflowIndicatorTemplate={appointmentCollectorTemplate}
+              onAppointmentClick={showTooltip}
             />
           )}
 
@@ -185,10 +205,19 @@ export const viewFunction = ({
             <AppointmentLayout
               appointments={appointmentsViewModel.regular}
               overflowIndicators={appointmentsViewModel.regularCompact}
+              appointmentTemplate={appointmentTemplate}
+              overflowIndicatorTemplate={appointmentCollectorTemplate}
+              onAppointmentClick={showTooltip}
             />
           )}
 
           key={workSpaceKey}
+        />
+        <AppointmentTooltip
+          visible={tooltipVisible}
+          onVisibleChange={changeTooltipVisible}
+          target={tooltipTarget}
+          dataList={tooltipData}
         />
       </div>
     </Widget>
@@ -201,8 +230,6 @@ export const viewFunction = ({
   jQuery: { register: true },
 })
 export class Scheduler extends JSXComponent(SchedulerProps) {
-  @InternalState() instance!: dxScheduler;
-
   @InternalState() workSpaceViewModel?: ViewMetaData;
 
   @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
@@ -210,6 +237,12 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   @InternalState() loadedResources?: Group[];
 
   @InternalState() dataItems: Appointment[] = [];
+
+  @InternalState() tooltipTarget!: HTMLElement;
+
+  @InternalState() tooltipVisible = false;
+
+  @InternalState() tooltipData: AppointmentViewModel[] = [];
 
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
@@ -332,24 +365,68 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       this.currentViewConfig.groupOrientation,
     );
 
+    const validGroups = getValidGroups(this.props.groups, this.currentViewProps.groups);
+
     return getAppointmentsConfig(
-      this.props, // TODO extract props for performace
-      this.currentViewConfig, // TODO extract props for performace
+      {
+        adaptivityEnabled: this.props.adaptivityEnabled,
+        rtlEnabled: this.props.rtlEnabled,
+        resources: this.props.resources,
+        timeZone: this.props.timeZone,
+        groups: validGroups,
+      },
+      {
+        startDayHour: this.currentViewConfig.startDayHour,
+        endDayHour: this.currentViewConfig.endDayHour,
+        currentDate: this.currentViewConfig.currentDate,
+        scrolling: this.currentViewConfig.scrolling,
+        intervalCount: this.currentViewConfig.intervalCount,
+        hoursInterval: this.currentViewConfig.hoursInterval,
+        showAllDayPanel: this.currentViewConfig.showAllDayPanel,
+        firstDayOfWeek: this.currentViewConfig.firstDayOfWeek,
+        type: this.currentViewConfig.type,
+        cellDuration: this.currentViewConfig.cellDuration,
+        maxAppointmentsPerCell: this.currentViewConfig.maxAppointmentsPerCell,
+      },
       this.loadedResources,
       this.workSpaceViewModel!.viewDataProvider,
       renderConfig.isAllDayPanelSupported,
     );
   }
 
-  get filteredItems(): Appointment[] {
-    return filterAppointments(
-      this.appointmentsConfig,
+  get preparedDataItems(): AppointmentDataItem[] {
+    return getPreparedDataItems(
       this.dataItems,
       this.dataAccessors,
+      this.currentViewConfig.cellDuration,
       this.timeZoneCalculator,
-      this.loadedResources!,
-      this.workSpaceViewModel?.viewDataProvider,
     );
+  }
+
+  get filteredItems(): Appointment[] {
+    if (!this.appointmentsConfig) {
+      return [];
+    }
+
+    const filterStrategy = getFilterStrategy(
+      this.appointmentsConfig.resources,
+      this.appointmentsConfig.startDayHour,
+      this.appointmentsConfig.endDayHour,
+      this.appointmentsConfig.cellDurationInMinutes,
+      this.appointmentsConfig.showAllDayPanel,
+      this.appointmentsConfig.supportAllDayRow,
+      this.appointmentsConfig.firstDayOfWeek,
+      this.appointmentsConfig.viewType,
+      this.appointmentsConfig.dateRange,
+      this.appointmentsConfig.groupCount,
+      this.appointmentsConfig.loadedResources,
+      this.appointmentsConfig.isVirtualScrolling,
+      this.timeZoneCalculator,
+      this.dataAccessors,
+      this.workSpaceViewModel!.viewDataProvider,
+    );
+
+    return filterStrategy.filter(this.preparedDataItems);
   }
 
   get appointmentsViewModel(): AppointmentsViewModelType {
@@ -379,8 +456,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   // TODO: This is a WA because we need to clean workspace completely to set table sizes correctly
   // We need to remove this after we refactor crossScrolling to set table sizes through CSS, not JS
   get workSpaceKey(): string {
-    const { currentView, crossScrollingEnabled } = this.props;
-    const { groupOrientation, intervalCount } = this.currentViewConfig;
+    const { currentView } = this.props;
+    const { groupOrientation, intervalCount, crossScrollingEnabled } = this.currentViewConfig;
 
     if (!crossScrollingEnabled) {
       return '';
@@ -408,89 +485,92 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     return this.currentViewConfig.resourceCellTemplate;
   }
 
-  @Method()
-  getComponentInstance(): dxScheduler {
-    return this.instance;
+  get appointmentTemplate(): JSXTemplate<AppointmentTemplateProps> | undefined {
+    return this.currentViewConfig.appointmentTemplate;
+  }
+
+  get appointmentCollectorTemplate(): JSXTemplate<OverflowIndicatorTemplateProps> | undefined {
+    return this.currentViewConfig.appointmentCollectorTemplate;
   }
 
   @Method()
-  addAppointment(appointment: Appointment): void {
-    this.instance.addAppointment(appointment);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  addAppointment(_appointment: Appointment): void {
+    // TODO: implement
   }
 
   @Method()
-  deleteAppointment(appointment: Appointment): void {
-    this.instance.deleteAppointment(appointment);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  deleteAppointment(_appointment: Appointment): void {
+    // TODO: implement
   }
 
   @Method()
-  updateAppointment(target: Appointment, appointment: Appointment): void {
-    this.instance.updateAppointment(target, appointment);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateAppointment(_target: Appointment, _appointment: Appointment): void {
+    // TODO: implement
   }
 
   @Method()
   getDataSource(): DataSource {
-    return this.instance.getDataSource();
+    return this.internalDataSource;
   }
 
   @Method()
   getEndViewDate(): Date {
-    return this.instance.getEndViewDate();
+    return this.workSpaceViewModel!.viewDataProvider.getLastCellEndDate();
   }
 
   @Method()
   getStartViewDate(): Date {
-    return this.instance.getStartViewDate();
+    return this.startViewDate;
   }
 
   @Method()
-  hideAppointmentPopup(saveChanges?: boolean): void {
-    this.instance.hideAppointmentPopup(saveChanges);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  hideAppointmentPopup(_saveChanges?: boolean): void {
+    // TODO: implement
   }
 
   @Method()
   hideAppointmentTooltip(): void {
-    this.instance.hideAppointmentTooltip();
+    this.hideTooltip();
   }
 
   @Method()
-  scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): void {
-    this.instance.scrollTo(date, group, allDay);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  scrollTo(_date: Date, _group?: Record<string, unknown>, _allDay?: boolean): void {
+    // TODO: implement
   }
 
   @Method()
-  scrollToTime(hours: number, minutes: number, date?: Date): void {
-    this.instance.scrollToTime(hours, minutes, date);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  scrollToTime(_hours: number, _minutes: number, _date?: Date): void {
+    // TODO: implement
   }
 
   @Method()
-  showAppointmentPopup(appointmentData?: Appointment, createNewAppointment?: boolean,
-    currentAppointmentData?: Appointment): void {
-    this.instance.showAppointmentPopup(appointmentData, createNewAppointment,
-      currentAppointmentData);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  showAppointmentPopup(_appointmentData?: Appointment, _createNewAppointment?: boolean,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _currentAppointmentData?: Appointment): void {
+    // TODO: implement
   }
 
   @Method()
-  showAppointmentTooltip(appointmentData: Appointment,
-    target: string | UserDefinedElement, currentAppointmentData?: Appointment): void {
-    this.instance.showAppointmentTooltip(appointmentData, target,
-      currentAppointmentData);
-  }
-
-  @Effect({ run: 'once' })
-  dispose(): DisposeEffectReturn {
-    return () => { this.instance.dispose(); };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  showAppointmentTooltip(_appointmentData: Appointment,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _target: string | UserDefinedElement, _currentAppointmentData?: Appointment): void {
+    // TODO: implement
   }
 
   @Effect()
   loadGroupResources(): void {
-    const { groups: schedulerGroups, resources } = this.props;
-    const { groups: currentViewProps } = this.currentViewProps;
-
-    const validGroups = currentViewProps ?? schedulerGroups;
+    const validGroups = getValidGroups(this.props.groups, this.currentViewProps.groups);
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    (loadResources(validGroups, resources, this.resourcePromisesMap) as Promise<Group[]>)
+    (loadResources(validGroups, this.props.resources, this.resourcePromisesMap) as Promise<Group[]>)
       .then((loadedResources) => {
         this.loadedResources = loadedResources;
       });
@@ -498,10 +578,32 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Effect()
   loadDataSource(): void {
-    if (!this.internalDataSource.isLoaded() && !this.internalDataSource.isLoading()) {
+    if (
+      !this.internalDataSource.isLoaded()
+      && !this.internalDataSource.isLoading()
+      && this.workSpaceViewModel
+    ) {
+      if (this.props.remoteFiltering) {
+        const { viewDataProvider } = this.workSpaceViewModel;
+        const startDate = viewDataProvider.getStartViewDate();
+        const endDate = viewDataProvider.getLastViewDateByEndDayHour(
+          this.currentViewConfig.endDayHour,
+        );
+
+        const combinedFilter = combineRemoteFilter({
+          dataAccessors: this.dataAccessors,
+          dataSourceFilter: this.internalDataSource.filter(),
+          min: startDate,
+          max: endDate,
+          dateSerializationFormat: this.props.dateSerializationFormat,
+        });
+
+        this.internalDataSource.filter(combinedFilter);
+      }
+
       (this.internalDataSource.load() as DataSourcePromise)
-        .done((items: Appointment[]) => {
-          this.dataItems = items;
+        .done((loadOptions: Appointment[] | { data: Appointment[] }) => {
+          this.dataItems = resolveDataItems(loadOptions);
         });
     }
   }
@@ -516,5 +618,19 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   setCurrentDate(date: Date): void {
     this.props.currentDate = date;
+  }
+
+  showTooltip(e: AppointmentClickData): void {
+    this.tooltipData = e.data;
+    this.tooltipTarget = e.target;
+    this.changeTooltipVisible(true);
+  }
+
+  hideTooltip(): void {
+    this.changeTooltipVisible(false);
+  }
+
+  changeTooltipVisible(value: boolean): void {
+    this.tooltipVisible = value;
   }
 }

@@ -201,6 +201,64 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
         assert.ok(lastArgs.items[0].values);
     });
 
+    QUnit.test('The pushed callback on initialize', function(assert) {
+        // arrange
+        const pushedSpy = sinon.spy();
+        const array = [
+            { id: 0, name: 'Alex', phone: '55-55-55' },
+            { id: 1, name: 'Dan', phone: '98-75-21' }
+        ];
+        const dataSource = createDataSource(array, { key: 'id' });
+
+        this.dataController.pushed.add(pushedSpy);
+
+        // assert
+        assert.strictEqual(pushedSpy.callCount, 0, 'the pushed callback was not called');
+
+        this.dataController.setDataSource(dataSource);
+        dataSource.load();
+
+        // act
+        dataSource.store().push([{ type: 'remove', key: 1 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(pushedSpy.callCount, 1, 'the pushed callback was called only once');
+        assert.deepEqual(pushedSpy.getCall(0).args[0], [{ type: 'remove', key: 1 }], 'the pushed callback args');
+    });
+
+    QUnit.test('The handler of the dataSource pushed callback should be removed after disposing dataSource', function(assert) {
+        // arrange
+        const dataPushedHandlerSpy = sinon.spy();
+        const array = [
+            { id: 0, name: 'Alex', phone: '55-55-55' },
+            { id: 1, name: 'Dan', phone: '98-75-21' }
+        ];
+        let dataSource = createDataSource(array, { key: 'id' });
+
+        this.dataController._dataPushedHandler = dataPushedHandlerSpy;
+        this.dataController.setDataSource(dataSource);
+        dataSource = this.dataController.dataSource();
+        dataSource.load();
+
+        // assert
+        assert.ok(dataSource.pushed.has(dataPushedHandlerSpy), 'the pushed callback has handler');
+        assert.strictEqual(dataPushedHandlerSpy.callCount, 0);
+
+        // act
+        dataSource.store().push([{ type: 'remove', key: 1 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(dataPushedHandlerSpy.callCount, 1, 'the handler of the pushed callback was called only once');
+
+        // act
+        this.dataController.dispose();
+
+        // assert
+        assert.notOk(dataSource.pushed.has(dataPushedHandlerSpy), 'the pushed callback has no handler');
+    });
+
     // B255430
     QUnit.test('Call changed after all columnsChanged', function(assert) {
     // arrange
@@ -954,6 +1012,37 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
             assert.equal(pageIndex, 1);
         });
         assert.equal(count, 1, 'Count');
+    });
+
+    QUnit.test('Get page index by group key if there is no groouping and remoteOperations is true and data (T1042661)', function(assert) {
+        // arrange
+        let count = 0;
+        const loadingSpy = sinon.spy();
+        const dataSource = createDataSource([
+            { team: 'internal', name: 'Alex', age: 30 },
+            { team: 'internal', name: 'Dan', age: 25 },
+            { team: 'internal', name: 'Bob', age: 20 },
+            { team: 'public', name: 'Alice', age: 19 }],
+        { key: 'name' },
+        { pageSize: 1, asyncLoadEnabled: false });
+
+        this.applyOptions({
+            remoteOperations: true,
+            dataSource: dataSource
+        });
+
+        dataSource.store().on('loading', loadingSpy);
+
+        // act
+        this.dataController._refreshDataSource();
+        assert.equal(loadingSpy.callCount, 1, 'loading count');
+
+        this.dataController.getPageIndexByKey(['Alice']).done(function(pageIndex) {
+            ++count;
+            assert.equal(pageIndex, -1);
+        });
+        assert.equal(count, 1, 'Count');
+        assert.equal(loadingSpy.callCount, 1, 'loading count is not changed');
     });
 
     QUnit.test('Get page index by composite key', function(assert) {
@@ -3888,11 +3977,15 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
             paging: true
         });
         this.dataController._refreshDataSource();
-        this.clock.tick();
+        this.clock.tick(300);
+
+        const rowsScrollController = this.dataController._rowsScrollController;
+        const defaultItemSize = rowsScrollController.getItemSize();
+        const bottomPosition = (this.dataController.totalItemsCount() - this.dataController.viewportSize()) * defaultItemSize;
 
         // act
-        this.dataController.setViewportPosition(100000);
-        this.clock.tick();
+        this.dataController.setViewportPosition(bottomPosition);
+        this.clock.tick(300);
 
         // assert
         const itemCount = this.dataController.items().length;
@@ -4608,7 +4701,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         // assert
         assert.deepEqual(this.getDataItems(), items);
-        assert.equal(dataController.itemsCount(), 10);
+        assert.equal(dataController.itemsCount(), 5);
         assert.ok(dataController.isLoaded());
         assert.ok(!dataController.isLoading(), 'loading completed');
         assert.ok(!isLoadingByEvent, 'loading completed');
@@ -4915,6 +5008,45 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.deepEqual(visibleItems[15].data, { id: 41, name: 'Name 41' }, 'last visible item');
     });
 
+    QUnit.test('New mode. Load params if pageSize is 0 (All) and scrolling mode is standart', function(assert) {
+        // arrange
+        const getData = function(count) {
+            const items = [];
+            for(let i = 0; i < count; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`
+                });
+            }
+            return items;
+        };
+        this.applyOptions({
+            scrolling: {
+                rowRenderingMode: 'virtual',
+                mode: 'standart',
+                legacyMode: false,
+                rowPageSize: 5,
+                prerenderedRowCount: 1
+            }
+        });
+
+        this.dataController.init();
+        this.setupDataSource({
+            data: getData(10),
+            pageSize: 0
+        });
+
+        // act
+        this.dataController.viewportSize(15);
+        this.dataController.setViewportPosition(100);
+        this.clock.tick();
+
+        // assert
+        assert.deepEqual(this.dataController.getLoadPageParams(), { pageIndex: 0, loadPageCount: 1, skipForCurrentPage: 5 }, 'load page params after scrolling');
+        assert.deepEqual(this.dataController.pageIndex(), 0, 'page index after scrolling');
+        assert.deepEqual(this.getVisibleRows()[0].data.id, 6, 'first visible row id');
+    });
+
     QUnit.test('New mode. View port items should be rendered partially on scroll', function(assert) {
         // arrange
         const getData = function(count) {
@@ -5154,7 +5286,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         this.dataController.init();
         this.setupDataSource({
-            data: [{ id: 1, name: 'test' }],
+            data: [
+                { id: 1, name: 'test' }
+            ],
             pageSize: 10
         });
 
@@ -5178,6 +5312,33 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             updateItemsSpy.restore();
         }
     });
+
+    QUnit.test('loadViewport should not throw an error when dataSource is null (T1045898)', function(assert) {
+        // arrange
+        this.applyOptions({
+            scrolling: {
+                legacyMode: false,
+                rowPageSize: 5,
+                prerenderedRowCount: 1
+            }
+        });
+        this.dataController.init();
+        this.setupDataSource({
+            data: [{ id: 1, name: 'test' }],
+            pageSize: 10
+        });
+
+        try {
+            // act
+            this.dataController.option('dataSource', null);
+            this.dataController.loadViewport();
+
+            assert.ok(true, 'error is not thrown');
+        } catch(e) {
+            assert.ok(false, `the error is thrown: ${e.message}`);
+        }
+    });
+
 
     QUnit.test('Scrolling timeout should be zero when renderAsync is false', function(assert) {
         // arrange
@@ -5402,6 +5563,51 @@ QUnit.module('Virtual scrolling preload', {
         assert.deepEqual(loadedItems[0].id, 1, 'first loaded item');
         assert.equal(visibleRows.length, 16, 'visible items count');
         assert.deepEqual(visibleRows[0].data.id, 50, 'first visible item');
+    });
+
+    QUnit.test('New mode. Rows should not be regenerated on scroll (T1046265)', function(assert) {
+        let calculateCellValueCallCount = 0;
+        this.applyOptions({
+            columns: [{
+                name: 'id',
+                calculateCellValue: function(data) {
+                    calculateCellValueCallCount++;
+                    return data.id;
+                }
+            }]
+        });
+        this.dataController.setViewportPosition(1);
+
+        assert.strictEqual(calculateCellValueCallCount, 100, 'rows are generated');
+
+        calculateCellValueCallCount = 0;
+
+        // act
+        this.dataController.setViewportPosition(2);
+
+        // assert
+        assert.strictEqual(calculateCellValueCallCount, 0, 'rows are not regenerated');
+    });
+
+    QUnit.test('New mode. selectAll after scrolling should select all items (T1044995)', function(assert) {
+        // act
+        this.dataController.setViewportPosition(10);
+        this.selectAll();
+
+        // assert
+        assert.deepEqual(this.getSelectedRowKeys().length, 100, 'all items are selected');
+    });
+
+    QUnit.test('New mode. loadAll after scrolling should return all items (T1045649)', function(assert) {
+        // act
+        this.dataController.setViewportPosition(10);
+        let loadedItems;
+        this.dataController.loadAll().done(items => {
+            loadedItems = items;
+        });
+
+        // assert
+        assert.deepEqual(loadedItems.length, 100, 'all items are selected');
     });
 });
 

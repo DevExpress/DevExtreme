@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 import { viewFunction as TooltipView, TooltipProps, Tooltip } from '../tooltip';
 import { DomComponentWrapper } from '../../common/dom_component_wrapper';
 import LegacyTooltip from '../../../../ui/tooltip';
+import { BaseWidgetProps } from '../../common/base_props';
 
 jest.mock('../../../../ui/tooltip', () => jest.fn());
 
@@ -11,7 +12,7 @@ describe('Tooltip', () => {
     it('default render', () => {
       const componentProps = new TooltipProps();
       const props = {
-        props: componentProps,
+        componentProps: { restProps: componentProps },
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Tooltip>;
       const tree = shallow(<TooltipView {...props as any} /> as any);
@@ -86,6 +87,39 @@ describe('Tooltip', () => {
 
           expect(tooltip.props.visible).toBe(false);
         });
+      });
+    });
+  });
+
+  describe('Default options', () => {
+    it('should define necessary properties', () => {
+      const defaultProps = new TooltipProps();
+
+      expect(defaultProps).toEqual({
+        ...new BaseWidgetProps(),
+        animation: {
+          show: { type: 'fade', from: 0, to: 1 },
+          hide: { type: 'fade', to: 0 },
+        },
+        hideOnOutsideClick: true,
+        contentTemplate: 'content',
+        deferRendering: true,
+        disabled: false,
+        wrapperAttr: {},
+        focusStateEnabled: true,
+        fullScreen: false,
+        height: 'auto',
+        hoverStateEnabled: false,
+        maxHeight: null,
+        maxWidth: null,
+        minHeight: null,
+        minWidth: null,
+        position: 'bottom',
+        rtlEnabled: false,
+        shading: false,
+        shadingColor: '',
+        visible: true,
+        width: 'auto',
       });
     });
   });

@@ -344,8 +344,9 @@ const EditingController = modules.ViewController.inherit((function() {
             return extend({
                 name: buttonName,
                 text: editingTexts[buttonName],
-                cssClass: EDIT_LINK_CLASS[buttonName],
-                onClick: (e) => {
+                cssClass: EDIT_LINK_CLASS[buttonName]
+            }, {
+                onClick: methodName && ((e) => {
                     const event = e.event;
 
                     event.stopPropagation();
@@ -353,7 +354,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     setTimeout(() => {
                         options.row && allowAction && this[methodName] && this[methodName](options.row.rowIndex);
                     });
-                }
+                })
             }, config);
         },
 
@@ -661,12 +662,11 @@ const EditingController = modules.ViewController.inherit((function() {
             if(loadedRowIndex < 0) {
                 const newRowPosition = this._getNewRowPosition();
                 const pageIndex = dataController.pageIndex();
-                const pageCount = dataController.pageCount();
                 const insertAfterOrBeforeKey = this._getInsertAfterOrBeforeKey(change);
 
                 if(newRowPosition !== LAST_NEW_ROW_POSITION && pageIndex === 0 && !isDefined(insertAfterOrBeforeKey)) {
                     loadedRowIndex = 0;
-                } else if(newRowPosition === LAST_NEW_ROW_POSITION && pageIndex === (pageCount - 1)) {
+                } else if(newRowPosition === LAST_NEW_ROW_POSITION && dataController.isLastPageLoaded()) {
                     loadedRowIndex = items.length;
                 }
             }
@@ -798,10 +798,12 @@ const EditingController = modules.ViewController.inherit((function() {
                 case LAST_NEW_ROW_POSITION:
                     break;
                 case PAGE_TOP_NEW_ROW_POSITION:
-                    change.insertBeforeKey = allItems[0].key;
-                    break;
                 case PAGE_BOTTOM_NEW_ROW_POSITION:
-                    change.insertAfterKey = allItems[allItems.length - 1].key;
+                    if(allItems.length) {
+                        const itemIndex = newRowPosition === PAGE_TOP_NEW_ROW_POSITION ? 0 : allItems.length - 1;
+
+                        change[itemIndex === 0 ? 'insertBeforeKey' : 'insertAfterKey'] = allItems[itemIndex].key;
+                    }
                     break;
                 default: {
                     const isViewportBottom = newRowPosition === VIEWPORT_BOTTOM_NEW_ROW_POSITION;
@@ -841,8 +843,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const newRowPosition = this._getNewRowPosition();
             const dataController = this._dataController;
             const pageIndex = dataController.pageIndex();
-            const pageCount = dataController.pageCount();
-            const lastPageIndex = pageCount - 1;
+            const lastPageIndex = dataController.pageCount() - 1;
 
             if(newRowPosition === FIRST_NEW_ROW_POSITION && pageIndex !== 0) {
                 return 0;
@@ -974,11 +975,13 @@ const EditingController = modules.ViewController.inherit((function() {
         _beforeFocusElementInRow: noop,
 
         _focusFirstEditableCellInRow: function(rowIndex) {
+            const dataController = this._dataController;
+            const key = dataController.getKeyByRowIndex(rowIndex);
             const $firstCell = this.getFirstEditableCellInRow(rowIndex);
 
             this._editCellInProgress = true;
-
             this._delayedInputFocus($firstCell, () => {
+                rowIndex = dataController.getRowIndexByKey(key);
                 this._editCellInProgress = false;
                 this._beforeFocusElementInRow(rowIndex);
             });
@@ -1867,10 +1870,12 @@ const EditingController = modules.ViewController.inherit((function() {
             return isCustomSetCellValue || isCustomCalculateCellValue;
         },
         _applyChange: function(options, params, forceUpdateRow) {
-            this._addChange(params, options.row);
+            const changeOptions = { ...options, forceUpdateRow };
+
+            this._addChange(params, changeOptions);
             this._updateEditButtons();
 
-            return this._applyChangeCore(options, forceUpdateRow);
+            return this._applyChangeCore(options, changeOptions.forceUpdateRow);
         },
         _applyChangeCore: function(options, forceUpdateRow) {
             const isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue;
@@ -1936,41 +1941,47 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _validateEditFormAfterUpdate: noop,
 
-        _addChange: function(options, row) {
+        _addChange: function(changeParams, options) {
+            const row = options?.row;
             const changes = [...this.getChanges()];
-            let index = gridCoreUtils.getIndexByKey(options.key, changes);
+            let index = gridCoreUtils.getIndexByKey(changeParams.key, changes);
 
             if(index < 0) {
                 index = changes.length;
 
                 this._addInternalData({
-                    key: options.key,
-                    oldData: options.oldData
+                    key: changeParams.key,
+                    oldData: changeParams.oldData
                 });
 
-                delete options.oldData;
+                delete changeParams.oldData;
 
-                changes.push(options);
+                changes.push(changeParams);
             }
 
             const change = { ...changes[index] };
 
             if(change) {
-                if(options.data) {
-                    change.data = createObjectWithChanges(change.data, options.data);
+                if(changeParams.data) {
+                    change.data = createObjectWithChanges(change.data, changeParams.data);
                 }
-                if((!change.type || !options.data) && options.type) {
-                    change.type = options.type;
+                if((!change.type || !changeParams.data) && changeParams.type) {
+                    change.type = changeParams.type;
                 }
                 if(row) {
                     row.oldData = this._getOldData(row.key);
-                    row.data = createObjectWithChanges(row.data, options.data);
+                    row.data = createObjectWithChanges(row.data, changeParams.data);
                 }
             }
 
             changes[index] = change;
 
             this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
+
+            // T1043517
+            if(options && change !== this.getChanges()?.[index]) {
+                options.forceUpdateRow = true;
+            }
 
             return change;
         },
@@ -2054,9 +2065,9 @@ const EditingController = modules.ViewController.inherit((function() {
 
                 if(this._isButtonDisabled(button, options)) {
                     $button.addClass('dx-state-disabled');
-                } else {
+                } else if(!button.template || button.onClick) {
                     eventsEngine.on($button, addNamespace('click', EDITING_NAMESPACE), this.createAction(function(e) {
-                        button.onClick.call(button, extend({}, e, { row: options.row, column: options.column }));
+                        button.onClick?.call(button, extend({}, e, { row: options.row, column: options.column }));
                         e.event.preventDefault();
                         e.event.stopPropagation();
                     }));

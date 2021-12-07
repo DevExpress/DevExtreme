@@ -31,7 +31,7 @@ import {
     getTextWithoutSpaces,
     isExpectedItem,
     isFullPathContainsTabs,
-    getItemPath,
+    getItemPath
 } from './ui.form.utils';
 
 import { convertToLabelMarkOptions } from './ui.form.layout_manager.utils'; // TODO: remove reference to 'ui.form.layout_manager.utils.js'
@@ -651,13 +651,25 @@ const Form = Widget.inherit({
     },
 
     _optionChanged: function(args) {
-        const rootNameOfComplexOption = this._getRootLevelOfExpectedComplexOption(args.fullName, ['formData', 'items']);
+        const splitFullName = args.fullName.split('.');
 
-        if(rootNameOfComplexOption) {
-            this._customHandlerOfComplexOption(args, rootNameOfComplexOption);
+        // search() is used because the string can be ['items', ' items ', ' items .', 'items[0]', 'items[ 10 ] .', ...]
+        if((splitFullName.length > 1)
+            && (splitFullName[0].search('items') !== -1)
+            && this._itemsOptionChangedHandler(args)) {
             return;
         }
 
+        if((splitFullName.length > 1)
+            && (splitFullName[0].search('formData') !== -1)
+            && this._formDataOptionChangedHandler(args)) {
+            return;
+        }
+
+        this._defaultOptionChangedHandler(args);
+    },
+
+    _defaultOptionChangedHandler: function(args) {
         switch(args.name) {
             case 'formData':
                 if(!this.option('items')) {
@@ -721,22 +733,38 @@ const Form = Widget.inherit({
         }
     },
 
-    _getRootLevelOfExpectedComplexOption: function(fullOptionName, expectedRootNames) {
-        const splitFullName = fullOptionName.split('.');
-        let result;
+    _itemsOptionChangedHandler: function(args) {
+        const nameParts = args.fullName.split('.');
+        const value = args.value;
+        const itemPath = this._getItemPath(nameParts);
+        const item = this.option(itemPath);
+        const optionNameWithoutPath = args.fullName.replace(itemPath + '.', '');
+        const simpleOptionName = optionNameWithoutPath.split('.')[0].replace(/\[\d+]/, '');
+        const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue, itemPath);
 
-        if(splitFullName.length > 1) {
-            let i;
-            const rootOptionName = splitFullName[0];
+        let result = this._tryExecuteItemOptionAction(itemAction) || this._tryChangeLayoutManagerItemOption(args.fullName, value);
 
-            for(i = 0; i < expectedRootNames.length; i++) {
-                if(rootOptionName.search(expectedRootNames[i]) !== -1) {
-                    result = expectedRootNames[i];
-                }
-            }
+        if(!result && item) {
+            this._changeItemOption(item, optionNameWithoutPath, value);
+            const items = this._generateItemsFromData(this.option('items'));
+            this.option('items', items);
+            result = true;
         }
 
         return result;
+    },
+
+    _formDataOptionChangedHandler: function(args) {
+        const nameParts = args.fullName.split('.');
+        const value = args.value;
+        const dataField = nameParts.slice(1).join('.');
+        const editor = this.getEditor(dataField);
+        if(editor) {
+            editor.option('value', value);
+        } else {
+            this._triggerOnFieldDataChanged({ dataField, value });
+        }
+        return true;
     },
 
     _tryCreateItemOptionAction: function(optionName, item, value, previousValue, itemPath) {
@@ -769,7 +797,7 @@ const Form = Widget.inherit({
     _setLayoutManagerItemOption(layoutManager, optionName, value, path) {
         if(this._updateLockCount > 0) {
             !layoutManager._updateLockCount && layoutManager.beginUpdate();
-            const key = this._itemsRunTimeInfo.getKeyByPath(path);
+            const key = this._itemsRunTimeInfo.findKeyByPath(path);
             this.postponedOperations.add(key, () => {
                 !layoutManager._disposed && layoutManager.endUpdate();
                 return new Deferred().resolve();
@@ -779,13 +807,15 @@ const Form = Widget.inherit({
             e.component.off('contentReady', contentReadyHandler);
             if(isFullPathContainsTabs(path)) {
                 const tabPath = tryGetTabPath(path);
-                const tabLayoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(tabPath);
-                this._alignLabelsInColumn({
-                    items: tabLayoutManager.option('items'),
-                    layoutManager: tabLayoutManager,
-                    $container: tabLayoutManager.$element(),
-                    inOneColumn: tabLayoutManager.isSingleColumnMode()
-                });
+                const tabLayoutManager = this._itemsRunTimeInfo.findGroupOrTabLayoutManagerByPath(tabPath);
+                if(tabLayoutManager) {
+                    this._alignLabelsInColumn({
+                        items: tabLayoutManager.option('items'),
+                        layoutManager: tabLayoutManager,
+                        $container: tabLayoutManager.$element(),
+                        inOneColumn: tabLayoutManager.isSingleColumnMode()
+                    });
+                }
             } else {
                 this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
             }
@@ -801,7 +831,7 @@ const Form = Widget.inherit({
 
         if(optionName === 'items' && nameParts.length > 1) {
             const itemPath = this._getItemPath(nameParts);
-            const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
+            const layoutManager = this._itemsRunTimeInfo.findGroupOrTabLayoutManagerByPath(itemPath);
 
             if(layoutManager) {
                 this._itemsRunTimeInfo.removeItemsByItems(layoutManager.getItemsRunTimeInfo());
@@ -812,7 +842,7 @@ const Form = Widget.inherit({
         } else if(nameParts.length > 2) {
             const endPartIndex = nameParts.length - 2;
             const itemPath = this._getItemPath(nameParts.slice(0, endPartIndex));
-            const layoutManager = this._itemsRunTimeInfo.getGroupOrTabLayoutManagerByPath(itemPath);
+            const layoutManager = this._itemsRunTimeInfo.findGroupOrTabLayoutManagerByPath(itemPath);
 
             if(layoutManager) {
                 const fullOptionName = getFullOptionName(nameParts[endPartIndex], optionName);
@@ -850,37 +880,6 @@ const Form = Widget.inherit({
         });
         this.endUpdate();
         return result;
-    },
-
-    _customHandlerOfComplexOption: function(args, rootOptionName) {
-        const nameParts = args.fullName.split('.');
-        const value = args.value;
-
-        if(rootOptionName === 'items') {
-            const itemPath = this._getItemPath(nameParts);
-            const item = this.option(itemPath);
-            const optionNameWithoutPath = args.fullName.replace(itemPath + '.', '');
-            const simpleOptionName = optionNameWithoutPath.split('.')[0].replace(/\[\d+]/, '');
-            const itemAction = this._tryCreateItemOptionAction(simpleOptionName, item, item[simpleOptionName], args.previousValue, itemPath);
-
-            if(!this._tryExecuteItemOptionAction(itemAction) && !this._tryChangeLayoutManagerItemOption(args.fullName, value)) {
-                if(item) {
-                    this._changeItemOption(item, optionNameWithoutPath, value);
-                    const items = this._generateItemsFromData(this.option('items'));
-                    this.option('items', items);
-                }
-            }
-        }
-
-        if(rootOptionName === 'formData') {
-            const dataField = nameParts.slice(1).join('.');
-            const editor = this.getEditor(dataField);
-            if(editor) {
-                editor.option('value', value);
-            } else {
-                this._triggerOnFieldDataChanged({ dataField, value });
-            }
-        }
     },
 
     _getItemPath: function(nameParts) {

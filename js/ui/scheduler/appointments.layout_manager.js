@@ -80,7 +80,7 @@ class AppointmentLayoutManager {
             hoursInterval: workspace.option('hoursInterval'),
             showAllDayPanel: workspace.option('showAllDayPanel'),
             isGroupedAllDayPanel: workspace.isGroupedAllDayPanel(),
-            modelGroups: this.modelProvider.getCurrentViewOption('groups'),
+            groups: this.modelProvider.getCurrentViewOption('groups'),
             groupCount,
             rowCount,
             appointmentCountPerCell: this.instance.option('_appointmentCountPerCell'),
@@ -111,7 +111,7 @@ class AppointmentLayoutManager {
             dateRange: workspace.getDateRange(),
             intervalDuration: workspace.getIntervalDuration(),
             allDayIntervalDuration: workspace.getIntervalDuration(true),
-            isVerticalOrientation: workspace.isVerticalOrientation(),
+            isVerticalGroupOrientation: workspace.isVerticalOrientation(),
             DOMMetaData,
             // agenda only
             instance: this.instance,

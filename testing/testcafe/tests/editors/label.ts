@@ -126,6 +126,31 @@ stylingMods.forEach((stylingMode) => {
 
 stylingMods.forEach((stylingMode) => {
   themes.forEach((theme) => {
+    test(`Floating label for opened Lookup ${theme} stylingMode=${stylingMode}`, async (t) => {
+      await setTheme(theme);
+
+      const componentOption = {
+        width: 300,
+        label: 'label text',
+        labelMode: 'floating',
+        dropDownCentered: false,
+        items: [...Array(10)].map((_, i) => `item${i}`),
+        stylingMode,
+      };
+
+      await createWidget('dxLookup', {
+        ...componentOption,
+      }, true);
+
+      await t.click(Selector('.dx-lookup-field'));
+
+      await t.expect(await compareScreenshot(t, `floating-label-opened-lookup-${theme}-styleMode=${stylingMode}.png`)).ok();
+    });
+  });
+});
+
+stylingMods.forEach((stylingMode) => {
+  themes.forEach((theme) => {
     test(`Label for dxNumberBox ${theme} stylingMode=${stylingMode}`, async (t) => {
       await setTheme(theme);
 
@@ -175,4 +200,23 @@ stylingMods.forEach((stylingMode) => {
       await t.expect(await compareScreenshot(t, `label-date-box-${theme}-styleMode=${stylingMode}.png`)).ok();
     });
   });
+});
+
+test('Label max-width changed with container size', async (t) => {
+  const componentOption = {
+    width: 100,
+    label: 'long label text long label text long label text long label text long label text',
+  };
+
+  await createWidget('dxTextBox', {
+    ...componentOption,
+  }, true);
+
+  await t
+    .expect(Selector('#container .dx-label').getStyleProperty('max-width')).eql('82px');
+
+  await t.eval(() => { $('#container').css('width', 400); });
+
+  await t
+    .expect(Selector('#container .dx-label').getStyleProperty('max-width')).eql('382px');
 });

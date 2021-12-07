@@ -2813,6 +2813,9 @@ QUnit.module('Editing with real dataController', {
                 store: this.array,
                 paginate: true
             },
+            selection: {
+                mode: 'none'
+            },
             masterDetail: {
                 enabled: false,
                 template: function($container, options) {
@@ -7897,6 +7900,42 @@ QUnit.module('Editing with real dataController', {
         assert.strictEqual(clickSpy.callCount, 1, 'click is fired once');
     });
 
+    // T1045908
+    QUnit.test('The click event should not be prevented for custom command column', function(assert) {
+        // arrange
+        const event = $.Event('click');
+        const clickHandler = sinon.spy();
+        const $testElement = $('#container');
+
+        this.options.columns.push(
+            {
+                type: 'buttons',
+                cssClass: 'mybuttons',
+                buttons: [
+                    {
+                        template: function($cellElement, options) {
+                            return $('<div/>').addClass('mybutton').text('My button').on('click', clickHandler);
+                        }
+                    }
+                ]
+            }
+        );
+        this.columnsController.reset();
+        this.rowsView.render($testElement);
+
+        const $customCommandCell = $testElement.find('.mybuttons').first();
+        const $customButton = $customCommandCell.find('.mybutton');
+        assert.strictEqual($customCommandCell.length, 1, 'has custom command cell');
+        assert.strictEqual($customButton.length, 1, 'has custom button cssClass');
+
+        // act
+        $customButton.trigger(event);
+
+        // assert
+        assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
+        assert.strictEqual(clickHandler.callCount, 1, 'click is fired once');
+    });
+
     QUnit.test('Changing edit icon in the \'buttons\' command column', function(assert) {
         // arrange
         const that = this;
@@ -11548,7 +11587,7 @@ QUnit.module('Editing with validation', {
         // T335660
         const overlayInstance = $overlayElement.dxOverlay('instance');
         assert.ok(overlayInstance, 'has overlay instance');
-        assert.ok(overlayInstance.option('target').hasClass('dx-editor-cell'), 'target of the overlay');
+        assert.ok(overlayInstance.option('position.of').hasClass('dx-editor-cell'), 'target of the overlay');
 
         // act
         $inputElement = getInputElements($testElement).first();
@@ -16693,7 +16732,8 @@ QUnit.module('Editing with scrolling', {
                 scrolling: {
                     mode: rowRenderingMode,
                     rowRenderingMode: rowRenderingMode,
-                    rowPageSize: 5
+                    rowPageSize: 5,
+                    legacyMode: false
                 }
             });
 
@@ -17456,6 +17496,87 @@ QUnit.module('Edit Form', {
         assert.equal($textEditors.length, 3, 'text editor count');
         assert.equal($textEditors.eq(0).dxTextBox('instance').option('readOnly'), true, 'item 0 readOnly true from column editorOptions');
         assert.equal($textEditors.eq(1).dxTextBox('instance').option('readOnly'), false, 'item 1 readOnly false by default');
+    });
+
+    QUnit.test('editing.form.labelMode should be passed to editors', function(assert) {
+        this.setupModules(this);
+
+        const that = this;
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        $.extend(that.options.editing, {
+            mode: 'form',
+            allowUpdating: true,
+            form: {
+                labelMode: 'floating',
+                items: [{
+                    dataField: 'name'
+                }, {
+                    dataField: 'phone',
+                    editorOptions: {
+                        labelMode: 'hidden'
+                    }
+                }, {
+                    dataField: 'custom'
+                }]
+            }
+        });
+
+        rowsView.render(testElement);
+
+        // act
+        that.editRow(0);
+
+        // assert
+        const $textEditors = testElement.find('.dx-form .dx-texteditor');
+
+        assert.equal($textEditors.length, 3, 'text editor count');
+        assert.equal($textEditors.eq(0).dxTextBox('instance').option('labelMode'), 'floating', 'item 0 labelMode');
+        assert.equal($textEditors.eq(0).dxTextBox('instance').option('label'), 'Name', 'item 0 label');
+        assert.equal($textEditors.eq(1).dxTextBox('instance').option('labelMode'), 'hidden', 'item 1 labelMode');
+        assert.equal($textEditors.eq(1).dxTextBox('instance').option('label'), 'Phone', 'item 1 label');
+    });
+
+    ['static', 'floating'].forEach(labelMode => {
+        QUnit.test(`Form item with boolean editor should have visible label if editing.form.labelMode is ${labelMode}`, function(assert) {
+            this.setupModules(this);
+
+            const that = this;
+            const rowsView = this.rowsView;
+            const testElement = $('#container');
+
+            $.extend(that.options.editing, {
+                mode: 'form',
+                allowUpdating: true,
+                form: {
+                    labelMode,
+                    items: [{
+                        dataField: 'name'
+                    }, {
+                        dataField: 'phone',
+                        editorOptions: {
+                            labelMode: 'hidden'
+                        }
+                    }, {
+                        dataField: 'custom'
+                    }]
+                }
+            });
+
+            rowsView.render(testElement);
+
+            that.columnOption(0, 'dataType', 'boolean');
+
+            // act
+            that.editRow(0);
+
+            // assert
+            const formLayoutItems = testElement.find('.dx-form').dxForm('instance')._rootLayoutManager.option('items');
+
+            assert.strictEqual(formLayoutItems[0].label.visible, true, 'item 0 label.visible is assigned');
+            assert.strictEqual(formLayoutItems[1].label.visible, undefined, 'item 1 label.visible is not assigned');
+        });
     });
 
     QUnit.testInActiveWindow('Focus editor after click on a label', function(assert) {
@@ -20246,6 +20367,7 @@ QUnit.module('Editing - new row position', {
                 assert.strictEqual(rows.length, 10, 'row count');
 
                 // act
+                config.name === 'virtual scrolling' && this.dataController._rowsScrollController.viewportSize(rows.length);
                 this.addRow();
                 this.clock.tick();
 
@@ -20286,7 +20408,7 @@ QUnit.module('Editing - new row position', {
                 // assert
                 rows = this.getVisibleRows();
                 assert.strictEqual(this.pageIndex(), 9, 'pageIndex');
-                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 6 : 11, 'row count');
+                assert.strictEqual(rows.length, config.name === 'virtual scrolling' ? 7 : 11, 'row count');
                 assert.ok(rows[rows.length - 1].isNewRow, 'new row');
             });
 
@@ -20425,6 +20547,66 @@ QUnit.module('Editing - new row position', {
                 assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
                 assert.strictEqual(rows.length, isVirtualScrolling ? 9 : 11, 'row count');
                 assert.ok(rows[isVirtualScrolling ? 0 : 1].isNewRow, 'new row');
+            });
+
+            QUnit.test('newRowPosition = pageBottom when there are no items', function(assert) {
+                // arrange
+                const $testElement = $('#container').height(200);
+
+                this.options.height = 200;
+                this.options.dataSource.store.data = [];
+                this.options.editing.newRowPosition = 'pageBottom';
+                this.setupModules();
+                this.clock.tick();
+                this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 0, 'row count');
+
+                // act
+                this.addRow();
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 1, 'row count');
+                assert.ok(rows[0].isNewRow, 'new row');
+            });
+
+            QUnit.test('newRowPosition = pageTop when there are no items', function(assert) {
+                // arrange
+                const $testElement = $('#container').height(200);
+
+                this.options.height = 200;
+                this.options.dataSource.store.data = [];
+                this.options.editing.newRowPosition = 'pageTop';
+                this.setupModules();
+                this.clock.tick();
+                this.rowsView.render($testElement);
+                this.rowsView.height(200);
+                this.rowsView.resize();
+                this.clock.tick();
+
+                // assert
+                let rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 0, 'row count');
+
+                // act
+                this.addRow();
+                this.clock.tick();
+
+                // assert
+                rows = this.getVisibleRows();
+                assert.strictEqual(this.pageIndex(), 0, 'pageIndex');
+                assert.strictEqual(rows.length, 1, 'row count');
+                assert.ok(rows[0].isNewRow, 'new row');
             });
         });
     });

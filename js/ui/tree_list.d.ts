@@ -5,6 +5,10 @@ import {
 } from '../core/element';
 
 import {
+    Skip,
+} from '../core/index';
+
+import {
     template,
 } from '../core/templates/template';
 
@@ -86,13 +90,16 @@ interface CellInfo<TRowData = any, TKey = any> {
 }
 
 /** @public */
+export type Scrollable = Skip<dxScrollable, '_templateManager' | '_cancelOptionChange' | '_getTemplate' | '_invalidate' | '_refresh' | '_notifyOptionChanged' | '_createElement'>;
+
+/** @public */
 export type AdaptiveDetailRowPreparingEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & AdaptiveDetailRowPreparingInfo;
 
 /** @public */
-export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey>;
+export type CellClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & CellInfo<TRowData, TKey>;
 
 /** @public */
-export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey>;
+export type CellDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & CellInfo<TRowData, TKey>;
 
 /** @public */
 export type CellHoverChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & CellInfo<TRowData, TKey> & {
@@ -183,7 +190,7 @@ export type FocusedCellChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTr
 };
 
 /** @public */
-export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type FocusedCellChangingEvent<TRowData = any, TKey = any> = Cancelable & NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
     readonly cellElement: DxElement;
     readonly prevColumnIndex: number;
     readonly prevRowIndex: number;
@@ -202,7 +209,7 @@ export type FocusedRowChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTre
 };
 
 /** @public */
-export type FocusedRowChangingEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type FocusedRowChangingEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & {
     readonly rowElement: DxElement;
     readonly prevRowIndex: number;
     newRowIndex: number;
@@ -216,7 +223,7 @@ export type InitializedEvent<TRowData = any, TKey = any> = InitializedEventInfo<
 export type InitNewRowEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & NewRowInfo<TRowData>;
 
 /** @public */
-export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & KeyDownInfo;
+export type KeyDownEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, KeyboardEvent> & KeyDownInfo;
 
 /** @public */
 export type NodesInitializedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & {
@@ -227,7 +234,7 @@ export type NodesInitializedEvent<TRowData = any, TKey = any> = EventInfo<dxTree
 export type OptionChangedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList<TRowData, TKey>> & ChangedOptionInfo;
 
 /** @public */
-export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type RowClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
     readonly data: TRowData;
     readonly key: TKey;
     readonly values: Array<any>;
@@ -250,7 +257,7 @@ export type RowCollapsedEvent<TRowData = any, TKey = any> = EventInfo<dxTreeList
 export type RowCollapsingEvent<TRowData = any, TKey = any> = Cancelable & EventInfo<dxTreeList<TRowData, TKey>> & RowKeyInfo<TKey>;
 
 /** @public */
-export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type RowDblClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
     readonly data: TRowData;
     readonly key: TKey;
     readonly values: Array<any>;
@@ -340,7 +347,7 @@ export type RowDraggingRemoveEvent<TRowData = any, TKey = any> = RowDraggingEven
 export type RowDraggingReorderEvent<TRowData = any, TKey = any> = RowDraggingEventInfo<dxTreeList<TRowData, TKey>, TRowData, TKey> & DragReorderInfo;
 
 /** @public */
-export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>> & {
+export type ColumnButtonClickEvent<TRowData = any, TKey = any> = NativeEventInfo<dxTreeList<TRowData, TKey>, PointerEvent | MouseEvent> & {
     row?: Row<TRowData, TKey>;
     column?: Column<TRowData, TKey>;
 };
@@ -1015,7 +1022,6 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
     /**
      * @docid
      * @publicName forEachNode(callback)
-     * @param1 callback:function
      * @public
      */
     forEachNode(callback: Function): void;
@@ -1023,7 +1029,6 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
      * @docid
      * @publicName forEachNode(nodes, callback)
      * @param1 nodes:Array<dxTreeListNode>
-     * @param2 callback:function
      * @public
      */
     forEachNode(nodes: Array<Node<TRowData, TKey>>, callback: Function): void;
@@ -1154,7 +1159,7 @@ export default class dxTreeList<TRowData = any, TKey = any> extends Widget<dxTre
     getKeyByRowIndex(rowIndex: number): TKey | undefined;
     getRowElement(rowIndex: number): UserDefinedElementsArray | undefined;
     getRowIndexByKey(key: TKey): number;
-    getScrollable(): dxScrollable;
+    getScrollable(): Scrollable;
     getVisibleColumnIndex(id: number | string): number;
     hasEditData(): boolean;
     hideColumnChooser(): void;
@@ -1210,7 +1215,6 @@ export interface ToolbarItem extends dxToolbarItem {
 /**
  * @public
  * @docid dxTreeListToolbar
- * @type object
  * @namespace DevExpress.ui.dxTreeList
  */
 export type Toolbar = {
@@ -1222,14 +1226,12 @@ export type Toolbar = {
     items?: Array<TreeListToolbarItem | ToolbarItem>;
     /**
      * @docid dxTreeListToolbar.visible
-     * @type boolean
      * @default undefined
      * @public
      */
     visible?: boolean;
     /**
      * @docid dxTreeListToolbar.disabled
-     * @type boolean
      * @default false
      * @public
      */
@@ -1387,7 +1389,6 @@ export type dxTreeListNode<TRowData = any, TKey = any> = Node<TRowData, TKey>;
 /**
  * @public
  * @docid dxTreeListNode
- * @type object
  */
 export type Node<TRowData = any, TKey = any> = {
     /**
@@ -1438,7 +1439,6 @@ export type dxTreeListRowObject<TRowData = any, TKey = any> = Row<TRowData, TKey
 /**
  * @public
  * @docid dxTreeListRowObject
- * @type object
  */
 export type Row<TRowData = any, TKey = any> = {
     /**

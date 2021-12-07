@@ -50,7 +50,7 @@ export const getCurrentViewProps = (
     : currentViewProps;
 };
 
-function getViewConfigProp<T extends unknown>(schedulerProp: T, viewProp: T | undefined): T {
+export function getViewConfigProp<T extends unknown>(schedulerProp: T, viewProp: T | undefined): T {
   return viewProp !== undefined ? viewProp : schedulerProp;
 }
 
@@ -76,6 +76,9 @@ export const getCurrentViewConfig = (
     timeCellTemplate,
     resourceCellTemplate,
     dateCellTemplate,
+    appointmentTemplate,
+    appointmentCollectorTemplate,
+    maxAppointmentsPerCell,
   } = currentViewProps;
 
   const isVirtualScrolling = schedulerScrolling.mode === 'virtual'
@@ -97,6 +100,15 @@ export const getCurrentViewConfig = (
       schedulerProps.resourceCellTemplate, resourceCellTemplate,
     ),
     dateCellTemplate: getViewConfigProp(schedulerProps.dateCellTemplate, dateCellTemplate),
+    appointmentTemplate: getViewConfigProp(schedulerProps.appointmentTemplate, appointmentTemplate),
+    appointmentCollectorTemplate: getViewConfigProp(
+      schedulerProps.appointmentCollectorTemplate,
+      appointmentCollectorTemplate,
+    ),
+    maxAppointmentsPerCell: getViewConfigProp(
+      schedulerProps.maxAppointmentsPerCell,
+      maxAppointmentsPerCell,
+    ),
 
     // currentDate: dateUtils.trimTime(new Date(schedulerProps.currentDate)), // TODO
     currentDate: schedulerProps.currentDate,
@@ -140,3 +152,8 @@ export const getCurrentViewConfig = (
     // selectedCellData: [], // TODO
   } as CurrentViewConfigType;
 };
+
+export const getValidGroups = (
+  schedulerGroups: string[],
+  viewGroups?: string[],
+): string[] => getViewConfigProp(schedulerGroups, viewGroups);

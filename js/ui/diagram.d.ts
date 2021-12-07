@@ -1100,7 +1100,6 @@ export default class dxDiagram extends Widget<dxDiagramOptions> {
      * @docid
      * @publicName exportTo(format, callback)
      * @param1 format:Enums.DiagramExportFormat
-     * @param2 callback:function
      * @public
      */
     exportTo(format: DiagramExportFormat, callback: Function): void;
@@ -1317,6 +1316,13 @@ export interface dxDiagramCustomCommand {
      * @public
      */
     items?: Array<dxDiagramCustomCommand>;
+    /**
+     * @docid
+     * @default "before"
+     * @type Enums.ToolbarItemLocation
+     * @public
+     */
+    location?: 'after' | 'before' | 'center';
 }
 
 /**

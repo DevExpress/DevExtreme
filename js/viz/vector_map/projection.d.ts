@@ -39,7 +39,6 @@ export const projection: {
     /**
      * @docid viz.map.projection.add
      * @publicName add(name, projection)
-     * @param1 name:string
      * @param2 projection:VectorMapProjectionConfig|object
      * @namespace DevExpress.viz.map.projection
      * @static

@@ -125,14 +125,12 @@ export interface MapLayer {
     /**
      * @docid
      * @publicName getDataSource()
-     * @return DataSource
      * @public
      */
     getDataSource(): DataSource;
     /**
      * @docid
      * @publicName getElements()
-     * @return Array<MapLayerElement>
      * @public
      */
     getElements(): Array<MapLayerElement>;
@@ -169,16 +167,12 @@ export interface MapLayerElement {
     /**
      * @docid
      * @publicName attribute(name)
-     * @return any
-     * @param1 name:string
      * @public
      */
     attribute(name: string): any;
     /**
      * @docid
      * @publicName attribute(name, value)
-     * @param1 name:string
-     * @param2 value:any
      * @public
      */
     attribute(name: string, value: any): void;
@@ -197,14 +191,12 @@ export interface MapLayerElement {
     /**
      * @docid
      * @publicName selected()
-     * @return boolean
      * @public
      */
     selected(): boolean;
     /**
      * @docid
      * @publicName selected(state)
-     * @param1 state:boolean
      * @public
      */
     selected(state: boolean): void;

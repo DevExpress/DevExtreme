@@ -10,8 +10,6 @@ import {
 } from '@devextreme-generator/declarations';
 
 import { DisposeEffectReturn } from '../../../utils/effect_return';
-import { BaseWidgetProps } from '../../common/base_props';
-
 import { Scrollbar } from './scrollbar';
 import { requestAnimationFrame, cancelAnimationFrame } from '../../../../animation/frame';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
@@ -39,8 +37,9 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       direction,
       contentSize, containerSize,
       showScrollbar, scrollByThumb, bounceEnabled, scrollLocationChange,
-      visible, rtlEnabled,
+      visible,
       minOffset, maxOffset,
+      containerHasSizes,
     },
   } = viewModel;
 
@@ -58,15 +57,12 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       scrollByThumb={scrollByThumb}
       bounceEnabled={bounceEnabled}
       showScrollbar={showScrollbar}
-      // Horizontal
-      rtlEnabled={rtlEnabled}
+      containerHasSizes={containerHasSizes}
     />
   );
 };
 
 type AnimatedScrollbarPropsType = AnimatedScrollbarProps
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-& Pick<BaseWidgetProps, 'rtlEnabled'>
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 & Pick<ScrollableSimulatedProps, 'pullDownEnabled' | 'reachBottomEnabled' | 'forceGeneratePockets'
 | 'inertiaEnabled' | 'showScrollbar' | 'scrollByThumb' | 'bounceEnabled' | 'scrollLocationChange'>;
@@ -141,10 +137,10 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     this.loading = false;
 
     if (!isDxMouseWheelEvent(event.originalEvent)) {
-      this.calcThumbScrolling(event, crossThumbScrolling);
-
       const { target } = event.originalEvent;
       const scrollbarClicked = this.props.scrollByThumb && this.isScrollbar(target);
+
+      this.calcThumbScrolling(event, crossThumbScrolling, scrollbarClicked);
 
       if (scrollbarClicked) {
         this.moveToMouseLocation(event, offset);
@@ -157,7 +153,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   @Method()
-  moveHandler(delta: number): void {
+  moveHandler(delta: number, isDxMouseWheel: boolean): void {
     if (this.crossThumbScrolling) {
       return;
     }
@@ -175,7 +171,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
     const scrollValue = this.props.scrollLocation + resultDelta;
 
-    this.moveTo(this.props.bounceEnabled
+    this.moveTo(this.props.bounceEnabled && !isDxMouseWheel
       ? scrollValue
       : clampIntoRange(scrollValue, this.props.minOffset, this.maxOffset));
   }
@@ -285,7 +281,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     if (this.isReadyToStart) {
       this.canceled = false;
 
-      if (!this.inRange) {
+      if (!this.inRange && this.props.bounceEnabled) {
         const distanceToBound = clampIntoRange(
           this.props.scrollLocation, this.props.minOffset, this.maxOffset,
         ) - this.props.scrollLocation;
@@ -353,8 +349,8 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   get isReadyToStart(): boolean {
     return this.needRiseEnd
       && !this.inProgress
-      && !(this.pendingRefreshing || this.pendingLoading)
-      && this.props.maxOffset < 0;
+      && !(this.pendingRefreshing || this.pendingLoading);
+    // && this.props.maxOffset < 0; // TODO: try without it
   }
 
   get distanceToNearestBoundary(): number {
@@ -410,11 +406,14 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
     cancelAnimationFrame(this.stepAnimationFrame);
   }
 
-  calcThumbScrolling(event: DxMouseEvent, currentCrossThumbScrolling: boolean): void {
+  calcThumbScrolling(
+    event: DxMouseEvent,
+    currentCrossThumbScrolling: boolean,
+    isScrollbarClicked: boolean,
+  ): void {
     const { target } = event.originalEvent;
-    const scrollbarClicked = this.props.scrollByThumb && this.isScrollbar(target);
 
-    this.thumbScrolling = scrollbarClicked || (this.props.scrollByThumb && this.isThumb(target));
+    this.thumbScrolling = isScrollbarClicked || (this.props.scrollByThumb && this.isThumb(target));
     this.crossThumbScrolling = !this.thumbScrolling && currentCrossThumbScrolling;
   }
 
@@ -469,9 +468,4 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
     return this.props.maxOffset;
   }
-
-  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
-  // get scrollbar(): any { // set Scrollbar type is technical limitation in the generator
-  //   return this.scrollbarRef.current!;
-  // }
 }

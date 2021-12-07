@@ -142,8 +142,8 @@ export default class ViewDataProvider {
         return this._groupedDataMapProvider.getGroupEndDate(groupIndex);
     }
 
-    findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay) {
-        return this._groupedDataMapProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay);
+    findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay, isFindByDate) {
+        return this._groupedDataMapProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay, isFindByDate);
     }
 
     findAllDayGroupCellStartDate(groupIndex, startDate) {
@@ -205,33 +205,6 @@ export default class ViewDataProvider {
             .map(row => row.filter(({ groupIndex: currentGroupIndex }) => groupIndex === currentGroupIndex));
     }
 
-    getGroupData(groupIndex) {
-        const { groupedData } = this.viewData;
-
-        if(this._options.isVerticalGrouping) {
-            return groupedData.filter(item => item.groupIndex === groupIndex)[0];
-        }
-
-        const filterCells = row => row?.filter(cell => cell.groupIndex === groupIndex);
-
-        const {
-            allDayPanel,
-            dateTable
-        } = groupedData[0];
-        const filteredDateTable = [];
-
-        dateTable.forEach(row => {
-            filteredDateTable.push(
-                filterCells(row)
-            );
-        });
-
-        return {
-            allDayPanel: filterCells(allDayPanel),
-            dateTable: filteredDateTable
-        };
-    }
-
     getCellCountWithGroup(groupIndex, rowIndex = 0) {
         const { dateTableGroupedMap } = this.groupedDataMap;
 
@@ -243,10 +216,12 @@ export default class ViewDataProvider {
             );
     }
 
-    getAllDayPanel(groupIndex) {
-        const groupData = this.getGroupData(groupIndex);
+    hasGroupAllDayPanel(groupIndex) {
+        if(this._options.isVerticalGrouping) {
+            return !!this.groupedDataMap.dateTableGroupedMap[groupIndex]?.[0][0].cellData.allDay;
+        }
 
-        return groupData?.allDayPanel;
+        return this.groupedDataMap.allDayPanelGroupedMap[groupIndex]?.length > 0;
     }
 
     isGroupIntersectDateInterval(groupIndex, startDate, endDate) {

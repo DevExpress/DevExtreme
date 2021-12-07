@@ -12,7 +12,8 @@ const SLIDER_TOOLTIP_DEFAULT_BOUNDARY_OFFSET = { h: 2, v: 1 };
 const SLIDER_CLASS = 'dx-slider';
 
 class SliderTooltipPositionController extends PopoverPositionController {
-    _normalizePosition(positionProp, $sliderHandle) {
+    _normalizePosition(positionProp) {
+        const $sliderHandle = this._props.target;
         const sliderClass = `.${SLIDER_CLASS}`;
         const $slider = $sliderHandle?.closest(sliderClass);
         const defaultPositionConfig = {

@@ -4,6 +4,7 @@ import {
   Ref,
   Method,
   RefObject,
+  Consumer,
 } from '@devextreme-generator/declarations';
 
 import {
@@ -19,11 +20,14 @@ import { ScrollableWrapper } from '../../component_wrapper/navigation/scrollable
 import { getElementLocationInternal } from './utils/get_element_location_internal';
 import { convertToLocation } from './utils/convert_location';
 import { getOffsetDistance } from './utils/get_offset_distance';
-import { isDefined } from '../../../core/utils/type';
+import { isDefined, isNumeric } from '../../../core/utils/type';
 
 import { hasWindow } from '../../../core/utils/window';
 import { DIRECTION_HORIZONTAL, DIRECTION_VERTICAL } from './common/consts';
 import { ScrollableProps } from './common/scrollable_props';
+
+import { resolveRtlEnabled } from '../../utils/resolve_rtl';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 
 let isServerSide = !hasWindow();
 
@@ -31,9 +35,10 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
   const {
     scrollableNativeRef,
     scrollableSimulatedRef,
+    rtlEnabled,
     props: {
       useNative, children, classes,
-      aria, disabled, width, height, visible, rtlEnabled,
+      aria, disabled, width, height, visible,
       direction, showScrollbar, scrollByThumb, bounceEnabled,
       scrollByContent, useKeyboard, pullDownEnabled,
       reachBottomEnabled, forceGeneratePockets, needScrollViewContentWrapper,
@@ -138,6 +143,9 @@ export const viewFunction = (viewModel: Scrollable): JSX.Element => {
 })
 
 export class Scrollable extends JSXComponent<ScrollableProps>() {
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
+
   @Ref() scrollableNativeRef!: RefObject<ScrollableNative>;
 
   @Ref() scrollableSimulatedRef!: RefObject<ScrollableSimulated>;
@@ -175,11 +183,11 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
     // destructuring assignment with default values not working
     // TODO: delete next two conditions after fix - https://github.com/DevExpress/devextreme-renovation/issues/734
     /* istanbul ignore next */
-    if (!isDefined(top)) {
+    if (!isDefined(top) || !isNumeric(top)) {
       top = 0;
     }
     /* istanbul ignore next */
-    if (!isDefined(left)) {
+    if (!isDefined(left) || !isNumeric(top)) {
       left = 0;
     }
 
@@ -293,22 +301,20 @@ export class Scrollable extends JSXComponent<ScrollableProps>() {
     }
   }
 
-  @Method()
-  // eslint-disable-next-line class-methods-use-this
-  isRenovated(): boolean {
-    return true;
-  }
-
   validate(event: DxMouseEvent): boolean {
     return this.scrollableRef.validate(event) as boolean;
   }
 
-  // https://trello.com/c/6TBHZulk/2672-renovation-cannot-use-getter-to-get-access-to-components-methods-react
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get scrollableRef(): any {
     if (this.props.useNative) {
       return this.scrollableNativeRef.current!;
     }
     return this.scrollableSimulatedRef.current!;
+  }
+
+  get rtlEnabled(): boolean {
+    const { rtlEnabled } = this.props;
+    return !!resolveRtlEnabled(rtlEnabled, this.config);
   }
 }

@@ -30,6 +30,5 @@ export class ScrollableSimulatedProps extends BaseScrollableProps {
 
   @Event() onBounce?: EventCallback<ScrollEventArgs>;
 
-  // https://trello.com/c/0Wi4K1lv/2876-angular-event-with-multiple-arguments
   @Event() scrollLocationChange?: EventCallback<ScrollLocationChangeArgs>;
 }

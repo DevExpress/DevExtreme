@@ -103,7 +103,6 @@ export interface DraggableBaseOptions<TComponent> extends DOMComponentOptions<TC
 /**
  * @docid
  * @inherits DOMComponent
- * @export default
  * @hidden
  * @namespace DevExpress.ui
  */
@@ -114,7 +113,7 @@ export interface DraggableBase { }
 export type DisposingEvent = EventInfo<dxDraggable>;
 
 /** @public */
-export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable> & {
+export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -124,7 +123,7 @@ export type DragEndEvent = Cancelable & NativeEventInfo<dxDraggable> & {
 };
 
 /** @public */
-export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable> & {
+export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
     readonly itemData?: any;
     readonly itemElement?: DxElement;
     readonly fromComponent: dxSortable | dxDraggable;
@@ -134,7 +133,7 @@ export type DragMoveEvent = Cancelable & NativeEventInfo<dxDraggable> & {
 };
 
 /** @public */
-export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable> & {
+export type DragStartEvent = Cancelable & NativeEventInfo<dxDraggable, PointerEvent | MouseEvent | TouchEvent> & {
     itemData?: any;
     readonly itemElement?: DxElement;
     readonly fromData?: any;

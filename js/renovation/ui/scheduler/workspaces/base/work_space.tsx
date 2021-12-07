@@ -2,16 +2,23 @@
 /* eslint-disable class-methods-use-this */
 import {
   Component,
+  Consumer,
   Effect,
   ForwardRef,
   InternalState,
   JSXComponent,
-  JSXTemplate,
   Ref,
   RefObject,
 } from '@devextreme-generator/declarations';
+import {
+  subscribeToDXPointerDownEvent,
+  subscribeToDXPointerMoveEvent,
+  subscribeToScrollEvent,
+} from '../../../../utils/subscribe_to_event';
 import { combineClasses } from '../../../../utils/combine_classes';
 import {
+  CellsSelectionControllerType,
+  CellsSelectionState,
   CorrectedVirtualScrollingState,
   DateHeaderCellData,
   DateHeaderData,
@@ -37,24 +44,34 @@ import {
   createCellElementMetaData,
   createVirtualScrollingOptions,
   DATE_TABLE_MIN_CELL_WIDTH,
+  getCellIndices,
   getDateTableWidth,
+  getSelectedCells,
+  isCellAllDay,
 } from './utils';
 import { ViewRenderConfig, WorkSpaceProps } from '../props';
 import { getViewRenderConfigByType } from './work_space_config';
-import { HeaderPanelLayoutProps } from './header_panel/layout';
-import { DateTableLayoutProps } from './date_table/layout';
-import { TimePanelLayoutProps } from './time_panel/layout';
 import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 import { CrossScrollingLayout } from './cross_scrolling_layout';
-import { MainLayoutProps } from './main_layout_props';
 import { GroupOrientation } from '../../types';
 import { getViewDataGeneratorByViewType } from '../../../../../ui/scheduler/workspaces/view_model/utils';
 import { calculateIsGroupedAllDayPanel } from '../../view_model/to_test/views/utils/base';
 import { DateHeaderDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/date_header_data_generator';
 import { TimePanelDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
+import { CellsSelectionController } from '../../../../../ui/scheduler/workspaces/cells_selection_controller';
 import { getGroupPanelData } from '../../view_model/group_panel/utils';
-import { ScrollEventArgs } from '../../../scroll_view/common/types';
+import { ScrollEventArgs, ScrollOffset } from '../../../scroll_view/common/types';
 import type { dxSchedulerScrolling } from '../../../../../ui/scheduler';
+import { getWindow } from '../../../../../core/utils/window';
+import domAdapter from '../../../../../core/dom_adapter';
+import { EffectReturn } from '../../../../utils/effect_return';
+import { ConfigContext, ConfigContextValue } from '../../../../common/config_context';
+import pointerEvents from '../../../../../events/pointer';
+import eventsEngine from '../../../../../events/core/events_engine';
+import { isMouseEvent } from '../../../../../events/utils';
+import { ALL_DAY_PANEL_CELL_CLASS, DATE_TABLE_CELL_CLASS } from '../const';
+
+const DATA_CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_PANEL_CELL_CLASS}`;
 
 interface VirtualScrollingSizes {
   cellHeight: number;
@@ -62,6 +79,8 @@ interface VirtualScrollingSizes {
   viewWidth: number;
   viewHeight: number;
   scrollableWidth: number;
+  windowHeight: number;
+  windowWidth: number;
 }
 
 interface VirtualScrollingData {
@@ -75,6 +94,8 @@ const defaultVirtualScrollingMetaData = {
   viewWidth: 300,
   viewHeight: 300,
   scrollableWidth: 300,
+  windowHeight: 300,
+  windowWidth: 300,
 };
 
 const calculateDefaultVirtualScrollingState = (
@@ -86,6 +107,7 @@ const calculateDefaultVirtualScrollingState = (
     isVerticalGrouping: boolean;
     schedulerHeight?: number | string | (() => number | string);
     schedulerWidth?: number | string | (() => number | string);
+    rtlEnabled: boolean;
   },
 ): VirtualScrollingState => {
   const completeColumnCount = options.completeViewDataMap[0].length;
@@ -104,6 +126,9 @@ const calculateDefaultVirtualScrollingState = (
     isVerticalGrouping: options.isVerticalGrouping,
     completeRowCount,
     completeColumnCount,
+    windowHeight: defaultVirtualScrollingMetaData.windowHeight,
+    windowWidth: defaultVirtualScrollingMetaData.windowWidth,
+    rtlEnabled: options.rtlEnabled,
   }));
   options.virtualScrollingDispatcher.createVirtualScrolling();
   options.virtualScrollingDispatcher.updateDimensions(true);
@@ -171,7 +196,6 @@ export const viewFunction = ({
   viewData,
   timePanelData,
   groupPanelData,
-  layout: Layout,
   isAllDayPanelVisible,
   isRenderHeaderEmptyCell,
 
@@ -192,7 +216,7 @@ export const viewFunction = ({
   tablesWidth,
   classes,
 
-  onScroll,
+  onScrollableScroll,
 
   props: {
     dataCellTemplate,
@@ -212,59 +236,63 @@ export const viewFunction = ({
     isRenderDateHeader,
     scrollingDirection,
     groupPanelClassName,
+    isCreateCrossScrolling,
+    isUseMonthDateTable,
+    isUseTimelineHeader,
+    isRenderTimePanel,
   },
-  headerPanelTemplate,
-  dateTableTemplate,
-  timePanelTemplate,
-}: WorkSpace): JSX.Element => (
-  <Layout
-    ref={layoutRef}
+}: WorkSpace): JSX.Element => {
+  const Layout = isCreateCrossScrolling ? CrossScrollingLayout : OrdinaryLayout;
+  return (
+    <Layout
+      ref={layoutRef}
 
-    viewData={viewData}
-    dateHeaderData={dateHeaderData}
-    timePanelData={timePanelData}
-    groupPanelData={groupPanelData}
-    dataCellTemplate={dataCellTemplate}
-    dateCellTemplate={dateCellTemplate}
-    timeCellTemplate={timeCellTemplate}
-    resourceCellTemplate={resourceCellTemplate}
+      viewData={viewData}
+      dateHeaderData={dateHeaderData}
+      timePanelData={timePanelData}
+      groupPanelData={groupPanelData}
+      dataCellTemplate={dataCellTemplate}
+      dateCellTemplate={dateCellTemplate}
+      timeCellTemplate={timeCellTemplate}
+      resourceCellTemplate={resourceCellTemplate}
 
-    groups={groups}
-    groupByDate={isGroupedByDate}
-    groupOrientation={groupOrientation}
-    groupPanelClassName={groupPanelClassName}
+      groups={groups}
+      groupByDate={isGroupedByDate}
+      groupOrientation={groupOrientation}
+      groupPanelClassName={groupPanelClassName}
 
-    intervalCount={intervalCount}
+      intervalCount={intervalCount}
 
-    headerPanelTemplate={headerPanelTemplate}
-    dateTableTemplate={dateTableTemplate}
-    timePanelTemplate={timePanelTemplate}
+      isUseMonthDateTable={isUseMonthDateTable}
+      isUseTimelineHeader={isUseTimelineHeader}
+      isRenderTimePanel={isRenderTimePanel}
 
-    isAllDayPanelCollapsed={!allDayPanelExpanded}
-    isAllDayPanelVisible={isAllDayPanelVisible}
-    isRenderDateHeader={isRenderDateHeader}
-    isRenderHeaderEmptyCell={isRenderHeaderEmptyCell}
-    isRenderGroupPanel={isVerticalGrouping}
-    isStandaloneAllDayPanel={isStandaloneAllDayPanel}
+      isAllDayPanelCollapsed={!allDayPanelExpanded}
+      isAllDayPanelVisible={isAllDayPanelVisible}
+      isRenderDateHeader={isRenderDateHeader}
+      isRenderHeaderEmptyCell={isRenderHeaderEmptyCell}
+      isRenderGroupPanel={isVerticalGrouping}
+      isStandaloneAllDayPanel={isStandaloneAllDayPanel}
 
-    scrollingDirection={scrollingDirection}
-    groupPanelHeight={groupPanelHeight}
-    headerEmptyCellWidth={headerEmptyCellWidth}
-    tablesWidth={tablesWidth}
+      scrollingDirection={scrollingDirection}
+      groupPanelHeight={groupPanelHeight}
+      headerEmptyCellWidth={headerEmptyCellWidth}
+      tablesWidth={tablesWidth}
 
-    onScroll={onScroll}
+      onScroll={onScrollableScroll}
 
-    className={classes}
-    dateTableRef={dateTableRef}
-    allDayPanelRef={allDayPanelRef}
-    timePanelRef={timePanelRef}
-    groupPanelRef={groupPanelRef}
-    widgetElementRef={widgetElementRef}
+      className={classes}
+      dateTableRef={dateTableRef}
+      allDayPanelRef={allDayPanelRef}
+      timePanelRef={timePanelRef}
+      groupPanelRef={groupPanelRef}
+      widgetElementRef={widgetElementRef}
 
-    appointments={appointments}
-    allDayAppointments={allDayAppointments}
-  />
-);
+      appointments={appointments}
+      allDayAppointments={allDayAppointments}
+    />
+  );
+};
 
 @Component({
   defaultOptionRules: null,
@@ -287,6 +315,12 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   @InternalState()
   virtualScrollingData?: VirtualScrollingData;
 
+  @InternalState()
+  cellsSelectionState: CellsSelectionState | null = null;
+
+  @InternalState()
+  isPointerDown = false;
+
   @ForwardRef()
   dateTableRef!: RefObject<HTMLTableElement>;
 
@@ -306,6 +340,9 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
   @ForwardRef()
   widgetElementRef!: RefObject<HTMLDivElement>;
+
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
 
   get renderConfig(): ViewRenderConfig {
     return getViewRenderConfigByType(
@@ -338,14 +375,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       this.groupOrientation,
       this.props.groupByDate,
     );
-  }
-
-  get layout(): JSXTemplate<
-  MainLayoutProps, 'headerPanelTemplate' | 'dateTableTemplate' | 'dateHeaderData' | 'dateTableRef' | 'onScroll'
-  > {
-    return this.renderConfig.isCreateCrossScrolling
-      ? CrossScrollingLayout
-      : OrdinaryLayout;
   }
 
   get isAllDayPanelVisible(): boolean {
@@ -454,6 +483,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         isVerticalGrouping: this.isVerticalGrouping,
         schedulerHeight,
         schedulerWidth,
+        rtlEnabled: false, // Necessary for initialization
       });
     }
 
@@ -475,11 +505,22 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     );
   }
 
+  get viewDataMapWithSelection(): ViewDataMap {
+    if (!this.cellsSelectionState) {
+      return this.viewDataMap;
+    }
+
+    return this.viewDataGenerator.markSelectedAndFocusedCells(
+      this.viewDataMap,
+      this.cellsSelectionState,
+    );
+  }
+
   get viewData(): GroupedViewData {
     const { groups } = this.props;
     const result = this.viewDataGenerator.getViewDataFromMap(
       this.completeViewDataMap,
-      this.viewDataMap,
+      this.viewDataMapWithSelection,
       {
         ...this.correctedVirtualScrollingState,
         isProvideVirtualCellsWidth: this.renderConfig.isProvideVirtualCellsWidth,
@@ -619,7 +660,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
     viewDataProvider.completeViewDataMap = this.completeViewDataMap;
     viewDataProvider.viewDataMap = this.viewDataMap;
-    viewDataProvider.viewData = this.viewData;
 
     const generationOptions = prepareGenerationOptions(
       {
@@ -677,23 +717,8 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return groupPanelData;
   }
 
-  get headerPanelTemplate(): JSXTemplate<HeaderPanelLayoutProps, 'dateHeaderData'> {
-    const { headerPanelTemplate } = this.renderConfig;
-    return headerPanelTemplate;
-  }
-
-  get dateTableTemplate(): JSXTemplate<DateTableLayoutProps> {
-    const { dateTableTemplate } = this.renderConfig;
-    return dateTableTemplate;
-  }
-
-  get timePanelTemplate(): JSXTemplate<TimePanelLayoutProps> | undefined {
-    const { timePanelTemplate } = this.renderConfig;
-    return timePanelTemplate;
-  }
-
   get isRenderHeaderEmptyCell(): boolean {
-    return this.isVerticalGrouping || !!this.timePanelTemplate;
+    return this.isVerticalGrouping || !!this.renderConfig.isRenderTimePanel;
   }
 
   // eslint-disable-next-line @typescript-eslint/class-literal-property-style
@@ -706,6 +731,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       intervalCount,
       allDayPanelExpanded,
       groups,
+      scrolling,
     } = this.props;
 
     return combineClasses({
@@ -724,6 +750,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       'dx-scheduler-group-column-count-two': this.isVerticalGrouping && groups.length === 2,
       'dx-scheduler-group-column-count-three': this.isVerticalGrouping && groups.length === 3,
       'dx-scheduler-work-space-both-scrollbar': this.props.crossScrollingEnabled,
+      'dx-scheduler-work-space-virtual': scrolling.mode === 'virtual',
       'dx-scheduler-work-space': true,
     });
   }
@@ -738,11 +765,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
   get isCalculateTablesWidth(): boolean {
     return this.props.crossScrollingEnabled && this.renderConfig.defaultGroupOrientation !== 'vertical';
-  }
-
-  @Effect({ run: 'always' })
-  groupPanelHeightEffect(): void {
-    this.groupPanelHeight = this.dateTableRef.current?.getBoundingClientRect().height;
   }
 
   @Effect({ run: 'always' })
@@ -797,12 +819,17 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     const viewHeight = widgetRect.height;
     const viewWidth = widgetRect.width;
 
+    const windowHeight = getWindow().innerHeight;
+    const windowWidth = getWindow().innerWidth;
+
     const nextSizes = {
       cellHeight,
       cellWidth,
       scrollableWidth,
-      viewWidth,
       viewHeight,
+      viewWidth,
+      windowHeight,
+      windowWidth,
     };
 
     const isNextMetaDataNotEqualToCurrent = !this.virtualScrollingData || Object.entries(nextSizes)
@@ -831,6 +858,9 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         isVerticalGrouping: this.isVerticalGrouping,
         completeRowCount,
         completeColumnCount,
+        windowHeight: nextSizes.windowHeight,
+        windowWidth: nextSizes.windowWidth,
+        rtlEnabled: !!this.config?.rtlEnabled,
       }));
       this.virtualScrolling.createVirtualScrolling();
       this.virtualScrolling.updateDimensions(true);
@@ -840,6 +870,40 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         sizes: nextSizes,
       };
     }
+  }
+
+  @Effect({ run: 'always' })
+  groupPanelHeightEffect(): void {
+    this.groupPanelHeight = this.dateTableRef.current?.getBoundingClientRect().height;
+  }
+
+  @Effect()
+  onWindowScrollEffect(): EffectReturn {
+    if (this.virtualScrolling.isAttachWindowScrollEvent()) {
+      return subscribeToScrollEvent(
+        domAdapter.getDocument(),
+        this.onWindowScroll,
+      );
+    }
+
+    return undefined;
+  }
+
+  @Effect()
+  pointerEventsEffect(): EffectReturn {
+    const disposePointerDown = subscribeToDXPointerDownEvent(
+      this.widgetElementRef.current,
+      this.onPointerDown,
+    );
+    const disposePointerMove = subscribeToDXPointerMoveEvent(
+      this.widgetElementRef.current,
+      this.onPointerMove,
+    );
+
+    return (): void => {
+      disposePointerDown!();
+      disposePointerMove!();
+    };
   }
 
   @Effect()
@@ -915,6 +979,11 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     }
   }
 
+  @Effect({ run: 'once' })
+  disposeEffect(): void {
+    eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this.onPointerUp);
+  }
+
   createDateTableElementsMeta(totalCellCount: number): DOMRect[][] {
     const dateTableCells = this.dateTableRef.current!.querySelectorAll('td:not(.dx-scheduler-virtual-cell)');
     const dateTableRect = this.dateTableRef.current!.getBoundingClientRect();
@@ -958,18 +1027,109 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     return allDayPanelCellsMeta;
   }
 
-  onScroll(event: ScrollEventArgs): void {
+  onWindowScroll(): void {
+    const { scrollX, scrollY } = getWindow();
+
+    this.onScroll({
+      top: scrollY,
+      left: scrollX,
+    });
+  }
+
+  onScrollableScroll(event: ScrollEventArgs): void {
     if (this.props.scrolling.mode === 'virtual') {
-      this.virtualScrolling.handleOnScrollEvent(event.scrollOffset);
-      const nextState = this.virtualScrolling.getRenderState();
+      this.onScroll(event.scrollOffset);
+    }
+  }
 
-      const isUpdateState = Object.entries(nextState)
-        .some(([key, value]) => value !== this.virtualScrollingData!.state[key]);
+  onScroll(scrollOffset: ScrollOffset): void {
+    this.virtualScrolling.handleOnScrollEvent(scrollOffset);
+    const nextState = this.virtualScrolling.getRenderState();
 
-      if (isUpdateState) {
-        this.virtualScrollingData = {
-          state: nextState,
-          sizes: this.virtualScrollingData!.sizes,
+    const isUpdateState = Object.entries(nextState)
+      .some(([key, value]) => value !== this.virtualScrollingData!.state[key]);
+
+    if (isUpdateState) {
+      this.virtualScrollingData = {
+        state: nextState,
+        sizes: this.virtualScrollingData!.sizes,
+      };
+    }
+  }
+
+  onPointerDown(e: MouseEvent | TouchEvent): void {
+    const cell = (e.target as HTMLElement).closest(DATA_CELL_SELECTOR) as HTMLElement;
+
+    if (cell && isMouseEvent(e) && (e as MouseEvent).button === 0) {
+      const isAllDay = isCellAllDay(cell);
+      const cellIndices = getCellIndices(cell);
+
+      const cellData = this.viewDataProvider.getCellData(
+        cellIndices.rowIndex, cellIndices.columnIndex, isAllDay,
+      );
+
+      eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this.onPointerUp);
+      eventsEngine.on(domAdapter.getDocument(), pointerEvents.up, this.onPointerUp);
+
+      this.cellsSelectionState = {
+        focusedCell: {
+          cellData,
+          position: cellIndices,
+        },
+        selectedCells: [cellData],
+        firstSelectedCell: cellData,
+      };
+      this.isPointerDown = true;
+    }
+  }
+
+  onPointerUp(e: MouseEvent | TouchEvent): void {
+    if (isMouseEvent(e) && (e as MouseEvent).button === 0) {
+      this.isPointerDown = false;
+    }
+  }
+
+  onPointerMove(e: Event): void {
+    const cell = (e.target as HTMLElement).closest(DATA_CELL_SELECTOR) as HTMLElement;
+
+    if (cell && this.isPointerDown) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const cellsSelectionController: CellsSelectionControllerType = new CellsSelectionController();
+      const cellIndices = getCellIndices(cell);
+
+      const isAllDay = isCellAllDay(cell);
+      const cellData = this.viewDataProvider.getCellData(
+        cellIndices.rowIndex, cellIndices.columnIndex, isAllDay,
+      );
+
+      const nextFocusedCell = cellsSelectionController.moveToCell({
+        isMultiSelection: true,
+        isMultiSelectionAllowed: true, // TODO
+        focusedCellData: this.cellsSelectionState!.focusedCell.cellData,
+        currentCellData: cellData,
+      });
+
+      if (nextFocusedCell === cellData
+          && this.cellsSelectionState!.focusedCell.cellData.index !== cellData.index) {
+        const firstCell = this.cellsSelectionState!.firstSelectedCell;
+        const lastCell = cellData;
+
+        const selectedCells = getSelectedCells(
+          this.viewDataProvider,
+          firstCell,
+          lastCell,
+          !!firstCell.allDay,
+        );
+
+        this.cellsSelectionState = {
+          focusedCell: {
+            cellData,
+            position: cellIndices,
+          },
+          selectedCells,
+          firstSelectedCell: this.cellsSelectionState!.firstSelectedCell,
         };
       }
     }

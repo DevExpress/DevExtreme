@@ -11,38 +11,53 @@ import { AllDayPanelLayout, AllDayPanelLayoutProps } from '../date_table/all_day
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { HeaderPanelEmptyCell } from '../header_panel_empty_cell';
 import { Semaphore } from '../../../semaphore';
+import { HeaderPanelLayout } from '../header_panel/layout';
+import { TimelineHeaderPanelLayout } from '../../timeline/header_panel/layout';
+import { DateTableLayoutBase, DateTableLayoutProps } from '../date_table/layout';
+import { MonthDateTableLayout } from '../../month/date_table/layout';
+import { TimePanelTableLayout } from '../time_panel/layout';
 
 describe('OrdinaryLayout', () => {
   const viewData = {
     groupedData: [{
       allDayPane: [],
-      dateTable: [[
-        {
-          startDate: new Date(2020, 6, 9),
-          endDate: new Date(2020, 6, 10),
-          today: true,
-          groups: 1,
-        },
-        {
-          startDate: new Date(2020, 6, 10),
-          endDate: new Date(2020, 6, 11),
-          today: false,
-          groups: 2,
-        },
-      ], [
-        {
-          startDate: new Date(2020, 6, 11),
-          endDate: new Date(2020, 6, 12),
-          today: false,
-          groups: 3,
-        },
-        {
-          startDate: new Date(2020, 6, 12),
-          endDate: new Date(2020, 6, 13),
-          today: false,
-          groups: 4,
-        },
-      ]],
+      dateTable: [{
+        cells: [
+          {
+            startDate: new Date(2020, 6, 9),
+            endDate: new Date(2020, 6, 10),
+            today: true,
+            groups: 1,
+            key: 0,
+          },
+          {
+            startDate: new Date(2020, 6, 10),
+            endDate: new Date(2020, 6, 11),
+            today: false,
+            groups: 2,
+            key: 1,
+          },
+        ],
+        key: 0,
+      }, {
+        cells: [
+          {
+            startDate: new Date(2020, 6, 11),
+            endDate: new Date(2020, 6, 12),
+            today: false,
+            groups: 3,
+            key: 0,
+          },
+          {
+            startDate: new Date(2020, 6, 12),
+            endDate: new Date(2020, 6, 13),
+            today: false,
+            groups: 4,
+            key: 1,
+          },
+        ],
+        key: 1,
+      }],
     }],
   };
   const dateHeaderData = {
@@ -78,11 +93,9 @@ describe('OrdinaryLayout', () => {
   }];
 
   describe('Render', () => {
-    const headerPanelTemplate = () => null;
-    const dateTableTemplate = () => null;
     const commonProps = {
-      headerPanelTemplate,
-      dateTableTemplate,
+      isUseTimelineHeader: false,
+      isUseMonthDateTable: false,
       viewData,
       dateHeaderData,
       timePanelData,
@@ -214,10 +227,28 @@ describe('OrdinaryLayout', () => {
 
       expect(headerPanel.exists())
         .toBe(true);
-      expect(headerPanel.is(headerPanelTemplate))
+      expect(headerPanel.is(HeaderPanelLayout))
         .toBe(true);
       expect(headerPanel.props())
         .toEqual(props);
+    });
+
+    it('should render TimelineHeaderPanel', () => {
+      const props = {
+        dateHeaderData,
+        groupPanelData: {
+          groupPanelItems: [],
+          baseColSpan: 34,
+        },
+        isRenderDateHeader: true,
+        isUseTimelineHeader: true,
+      };
+      const layout = render({ props, headerStyles: { width: 324 } });
+
+      const headerPanel = layout.find(TimelineHeaderPanelLayout);
+
+      expect(headerPanel.exists())
+        .toBe(true);
     });
 
     it('should render date-table scrollable and pass correct props to it', () => {
@@ -255,16 +286,30 @@ describe('OrdinaryLayout', () => {
         },
       });
 
-      const dateTable = layout.find(dateTableTemplate);
+      const dateTable = layout.find(DateTableLayoutBase);
 
       expect(dateTable.exists())
         .toBe(true);
       expect(dateTable.props())
         .toEqual({
+          ...new DateTableLayoutProps(),
           ...props,
           tableRef: 'dateTableRef',
           width: 543,
         });
+    });
+
+    it('should render month date-table', () => {
+      const layout = render({
+        props: {
+          isUseMonthDateTable: true,
+        },
+      });
+
+      const dateTable = layout.find(MonthDateTableLayout);
+
+      expect(dateTable.exists())
+        .toBe(true);
     });
 
     it('should render date-table scrollable content', () => {
@@ -317,9 +362,8 @@ describe('OrdinaryLayout', () => {
         .toBe(0);
     });
 
-    it('should render time panel when it is passed as a prop', () => {
+    it('should render time panel', () => {
       const timePanelRef = React.createRef();
-      const timePanelTemplate = () => null;
       const props = {
         timeCellTemplate: () => {},
         groupOrientation: 'vertical',
@@ -328,7 +372,7 @@ describe('OrdinaryLayout', () => {
 
       const layout = render({
         props: {
-          timePanelTemplate,
+          isRenderTimePanel: true,
           timePanelRef,
           ...props,
         },
@@ -342,7 +386,7 @@ describe('OrdinaryLayout', () => {
 
       const timePanel = scrollableContent.childAt(0);
 
-      expect(timePanel.is(timePanelTemplate))
+      expect(timePanel.is(TimePanelTableLayout))
         .toBe(true);
       expect(timePanel.props())
         .toEqual({

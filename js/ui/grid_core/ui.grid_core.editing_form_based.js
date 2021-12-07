@@ -21,9 +21,11 @@ import {
     EDITING_FORM_OPTION_NAME
 } from './ui.grid_core.editing_constants';
 
+const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
+
 const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
 const EDIT_POPUP_CLASS = 'edit-popup';
-const SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+const FOCUSABLE_ELEMENT_CLASS = isRenovatedScrollable ? 'dx-scrollable' : 'dx-scrollable-container';
 const BUTTON_CLASS = 'dx-button';
 
 const FORM_BUTTONS_CONTAINER_CLASS = 'form-buttons-container';
@@ -169,7 +171,7 @@ export const editingFormBasedModule = {
                         this._editPopup = this._createComponent($popupContainer, Popup, { copyRootClassesToWrapper: true, _ignoreCopyRootClassesToWrapperDeprecation: true });
                         this._editPopup.on('hiding', this._getEditPopupHiddenHandler());
                         this._editPopup.on('shown', (e) => {
-                            eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).not('.' + SCROLLABLE_CONTAINER_CLASS).first(), 'focus');
+                            eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).not(`.${FOCUSABLE_ELEMENT_CLASS}`).first(), 'focus');
 
                             if(repaintForm) {
                                 this._editForm?.repaint();
@@ -195,7 +197,7 @@ export const editingFormBasedModule = {
                         const formTemplate = this.getEditFormTemplate();
                         const scrollable = this._createComponent($('<div>').appendTo(container), Scrollable);
 
-                        this._$popupContent = scrollable.$content();
+                        this._$popupContent = $(scrollable.content());
 
                         formTemplate(this._$popupContent, templateOptions, { renderFormOnly: true });
                     };
@@ -258,19 +260,23 @@ export const editingFormBasedModule = {
                         }
                     }
                 },
-                renderFormEditTemplate: function(detailCellOptions, item, form, container, isReadOnly) {
+                renderFormEditTemplate: function(detailCellOptions, item, formTemplateOptions, container, isReadOnly) {
                     const that = this;
                     const $container = $(container);
                     const column = item.column;
                     const editorType = getEditorType(item);
                     const rowData = detailCellOptions?.row.data;
+                    const form = formTemplateOptions.component;
                     const cellOptions = extend({}, detailCellOptions, {
                         data: rowData,
                         cellElement: null,
                         isOnForm: true,
                         item: item,
-                        column: extend({}, column, { editorType: editorType, editorOptions: item.editorOptions }),
                         id: form.getItemID(item.name || item.dataField),
+                        column: extend({}, column, {
+                            editorType: editorType,
+                            editorOptions: extend({}, formTemplateOptions.editorOptions, column.editorOptions, item.editorOptions)
+                        }),
                         columnIndex: column.index,
                         setValue: !isReadOnly && column.allowEditing && function(value) {
                             that.updateFieldValue(cellOptions, value);
@@ -300,7 +306,7 @@ export const editingFormBasedModule = {
                             const validatorOptions = validator?.option();
 
                             $container.contents().remove();
-                            cellOptions = this.renderFormEditTemplate.bind(this)(cellOptions, item, options.component, $container);
+                            cellOptions = this.renderFormEditTemplate.bind(this)(cellOptions, item, options, $container);
 
                             $editorElement = $container.find('.dx-widget').first();
                             validator = $editorElement.data('dxValidator');
@@ -313,7 +319,7 @@ export const editingFormBasedModule = {
                             }
                         });
 
-                        cellOptions = this.renderFormEditTemplate.bind(this)(cellOptions, item, options.component, $container);
+                        cellOptions = this.renderFormEditTemplate.bind(this)(cellOptions, item, options, $container);
                     };
                 },
 
@@ -359,6 +365,12 @@ export const editingFormBasedModule = {
                             if(column) {
                                 item.label = item.label || {};
                                 item.label.text = item.label.text || column.caption;
+                                if(column.dataType === 'boolean' && item.label.visible === undefined) {
+                                    const labelMode = this.option('editing.form.labelMode');
+                                    if(labelMode === 'floating' || labelMode === 'static') {
+                                        item.label.visible = true;
+                                    }
+                                }
                                 item.template = item.template || this.getFormEditorTemplate(detailOptions, item);
                                 item.column = column;
                                 item.isCustomEditorType = isCustomEditorType[itemId];

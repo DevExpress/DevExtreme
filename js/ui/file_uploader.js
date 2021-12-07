@@ -1,4 +1,4 @@
-import { getWidth } from '../core/utils/size';
+import { getOffset, getWidth } from '../core/utils/size';
 import $ from '../core/renderer';
 import Guid from '../core/guid';
 import { getWindow } from '../core/utils/window';
@@ -15,10 +15,11 @@ import Editor from './editor/editor';
 import Button from './button';
 import ProgressBar from './progress_bar';
 import devices from '../core/devices';
-import { addNamespace } from '../events/utils/index';
+import { addNamespace, isTouchEvent } from '../events/utils/index';
 import { name as clickEventName } from '../events/click';
 import messageLocalization from '../localization/message';
 import { isMaterial } from './themes';
+import domAdapter from '../core/dom_adapter';
 
 // STYLE fileUploader
 
@@ -374,6 +375,7 @@ class FileUploader extends Editor {
         this._renderUploadButton();
 
         this._preventRecreatingFiles = true;
+        this._activeDropZone = null;
     }
 
     _render() {
@@ -893,10 +895,8 @@ class FileUploader extends Editor {
         this._detachDragEventHandlers(target);
         target = $(target);
 
-        this._dragEventsTargets = [];
-
         eventsEngine.on(target, addNamespace('dragenter', this.NAME), this._dragEnterHandler.bind(this, isCustomTarget));
-        eventsEngine.on(target, addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this));
+        eventsEngine.on(target, addNamespace('dragover', this.NAME), this._dragOverHandler.bind(this, isCustomTarget));
         eventsEngine.on(target, addNamespace('dragleave', this.NAME), this._dragLeaveHandler.bind(this, isCustomTarget));
         eventsEngine.on(target, addNamespace('drop', this.NAME), this._dropHandler.bind(this, isCustomTarget));
     }
@@ -909,6 +909,12 @@ class FileUploader extends Editor {
         return this.option('nativeDropSupported') && this.option('uploadMode') === 'useForm';
     }
 
+    _getDropZoneElement(isCustomTarget, e) {
+        let targetList = isCustomTarget ? Array.from($(this.option('dropZone'))) : [this._$inputWrapper];
+        targetList = targetList.map(element => $(element).get(0));
+        return targetList[targetList.indexOf(e.currentTarget)];
+    }
+
     _dragEnterHandler(isCustomTarget, e) {
         if(this.option('disabled')) {
             return false;
@@ -918,54 +924,64 @@ class FileUploader extends Editor {
             e.preventDefault();
         }
 
-        this._tryToggleDropZoneActive(true, isCustomTarget, e);
-        this._updateEventTargets(e);
+        const dropZoneElement = this._getDropZoneElement(isCustomTarget, e);
+        if(isDefined(dropZoneElement) && this._activeDropZone === null && this.isMouseOverElement(e, dropZoneElement, false)) {
+            this._activeDropZone = dropZoneElement;
+            this._tryToggleDropZoneActive(true, isCustomTarget, e);
+        }
     }
 
-    _dragOverHandler(e) {
+    _dragOverHandler(isCustomTarget, e) {
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
         e.originalEvent.dataTransfer.dropEffect = 'copy';
+
+        if(!isCustomTarget) { // only default dropzone has pseudoelements
+            const dropZoneElement = this._getDropZoneElement(false, e);
+            if(this._activeDropZone === null && this.isMouseOverElement(e, dropZoneElement, false)) {
+                this._dragEnterHandler(false, e);
+            }
+            if(this._activeDropZone !== null && this._shouldRaiseDragLeave(e, false)) {
+                this._dragLeaveHandler(false, e);
+            }
+        }
     }
 
     _dragLeaveHandler(isCustomTarget, e) {
         if(!this._useInputForDrop()) {
             e.preventDefault();
         }
+        if(this._activeDropZone === null) {
+            return;
+        }
 
-        this._updateEventTargets(e);
-        this._tryToggleDropZoneActive(false, isCustomTarget, e);
+        if(this._shouldRaiseDragLeave(e, isCustomTarget)) {
+            this._tryToggleDropZoneActive(false, isCustomTarget, e);
+            this._activeDropZone = null;
+        }
     }
 
-    _updateEventTargets(e) {
-        const targetIndex = this._dragEventsTargets.indexOf(e.target);
-        const isTargetExists = targetIndex !== -1;
-
-        if(e.type === 'dragenter') {
-            !isTargetExists && this._dragEventsTargets.push(e.target);
-        } else {
-            isTargetExists && this._dragEventsTargets.splice(targetIndex, 1);
-        }
+    _shouldRaiseDragLeave(e, isCustomTarget) {
+        return !this.isMouseOverElement(e, this._activeDropZone, !isCustomTarget);
     }
 
     _tryToggleDropZoneActive(active, isCustom, event) {
         const classAction = active ? 'addClass' : 'removeClass';
         const mouseAction = active ? '_dropZoneEnterAction' : '_dropZoneLeaveAction';
 
-        if(!this._dragEventsTargets.length) {
-            this[mouseAction]({
-                event,
-                dropZoneElement: event.currentTarget
-            });
-            if(!isCustom) {
-                this.$element()[classAction](FILEUPLOADER_DRAGOVER_CLASS);
-            }
+        this[mouseAction]({
+            event,
+            dropZoneElement: this._activeDropZone
+        });
+        if(!isCustom) {
+            this.$element()[classAction](FILEUPLOADER_DRAGOVER_CLASS);
         }
     }
 
     _dropHandler(isCustomTarget, e) {
-        this._dragEventsTargets = [];
+        this._activeDropZone = null;
+
         if(!isCustomTarget) {
             this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
         }
@@ -1204,6 +1220,53 @@ class FileUploader extends Editor {
         this._totalFilesSize = 0;
         this._totalLoadedFilesSize = 0;
         this._updateTotalProgress(this._getTotalFilesSize(), this._getTotalLoadedFilesSize());
+    }
+
+    isMouseOverElement(mouseEvent, element, correctPseudoElements) {
+        if(!element) return false;
+
+        const beforeHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':before').height) : 0;
+        const afterHeight = correctPseudoElements ? parseFloat(window.getComputedStyle(element, ':after').height) : 0;
+        const x = getOffset(element).left;
+        const y = getOffset(element).top + beforeHeight;
+        const w = element.offsetWidth;
+        const h = element.offsetHeight - beforeHeight - afterHeight;
+        const eventX = this._getEventX(mouseEvent);
+        const eventY = this._getEventY(mouseEvent);
+
+        return eventX >= x && eventX < (x + w) && eventY >= y && eventY < (y + h);
+    }
+    _getEventX(e) {
+        return isTouchEvent(e) ? this._getTouchEventX(e) : e.clientX + this._getDocumentScrollLeft();
+    }
+    _getEventY(e) {
+        return isTouchEvent(e) ? this._getTouchEventY(e) : e.clientY + this._getDocumentScrollTop();
+    }
+    _getTouchEventX(e) {
+        let touchPoint = null;
+        if(e.changedTouches.length > 0) {
+            touchPoint = e.changedTouches;
+        } else if(e.targetTouches.length > 0) {
+            touchPoint = e.targetTouches;
+        }
+        return touchPoint ? touchPoint[0].pageX : 0;
+    }
+    _getTouchEventY(e) {
+        let touchPoint = null;
+        if(e.changedTouches.length > 0) {
+            touchPoint = e.changedTouches;
+        } else if(e.targetTouches.length > 0) {
+            touchPoint = e.targetTouches;
+        }
+        return touchPoint ? touchPoint[0].pageY : 0;
+    }
+    _getDocumentScrollTop() {
+        const document = domAdapter.getDocument();
+        return document.documentElement.scrollTop || document.body.scrollTop;
+    }
+    _getDocumentScrollLeft() {
+        const document = domAdapter.getDocument();
+        return document.documentElement.scrollLeft || document.body.scrollLeft;
     }
 
     _updateReadOnlyState() {

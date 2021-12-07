@@ -66,15 +66,6 @@ export const compareDateWithEndDayHour = (options) => {
     return result;
 };
 
-export const getTrimDates = (min, max) => {
-    const newMin = dateUtils.trimTime(min);
-    const newMax = dateUtils.trimTime(max);
-
-    newMax.setDate(newMax.getDate() + 1);
-
-    return [newMin, newMax];
-};
-
 export const _getAppointmentDurationInHours = (startDate, endDate) => {
     return (endDate.getTime() - startDate.getTime()) / toMs('hour');
 };
