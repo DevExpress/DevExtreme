@@ -620,6 +620,7 @@ const Popup = Overlay.inherit({
         // NOTE: for correct new position calculation
         this._resetContentHeight();
         this.callBase();
+        this._cacheDimensions();
         this._setContentHeight();
     },
 
@@ -809,8 +810,6 @@ const Popup = Overlay.inherit({
         if(hasWindow()) {
             this._renderFullscreenWidthClass();
         }
-
-        this._cacheDimensions();
     },
 
     _clean: function() {
