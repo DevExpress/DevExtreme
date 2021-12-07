@@ -172,7 +172,9 @@ export const stateStoringModule = {
                         exportController.selectionOnly(state.exportSelectionOnly);
                     }
 
-                    that.option('selectedRowKeys', selectedRowKeys || []);
+                    if(!that.option('selection.deferred')) {
+                        that.option('selectedRowKeys', selectedRowKeys || []);
+                    }
 
                     that.option('selectionFilter', selectionFilter);
 
