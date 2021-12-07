@@ -24,7 +24,7 @@ To specify the first day of the week, pass its index (0 - for Sunday, 1 - for Mo
 
 ## Handle Value Change
 
-Set the [onValueChanged](/Documentation/ApiReference/UI_Components/dxCalendar/Configuration/#onValueChanged) property to handle the **value** change. In this demo, the [DateBox](/Documentation/Guide/UI_Components/DateBox/Getting_Started_with_DateBox/) and the Calendar both use this property to pass values between each other. You can use one of these components to change the date. See how it affects the other.
+To handle value changes, use two-way binding to bind the **value** properties of different components . In this demo, you can use the [DateBox](/Documentation/Guide/UI_Components/DateBox/Getting_Started_with_DateBox/) or Calendar component to change the date because their **value** properties are bound.
 
 ## Customize Cell Appearance
 
