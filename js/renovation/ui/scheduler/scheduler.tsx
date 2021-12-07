@@ -278,7 +278,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         appointmentTemplate,
         appointmentCollectorTemplate,
         maxAppointmentsPerCell,
-        currentDate,
         showAllDayPanel,
         showCurrentTimeIndicator,
         indicatorUpdateInterval,
@@ -290,6 +289,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         accessKey,
         focusStateEnabled,
       },
+      currentDate,
     );
   }
 

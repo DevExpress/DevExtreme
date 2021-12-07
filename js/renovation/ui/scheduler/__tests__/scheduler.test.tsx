@@ -803,6 +803,7 @@ describe('Scheduler', () => {
             ...new SchedulerProps(),
             views,
             currentView: 'week',
+            currentDate: new Date(2021, 1, 1),
           });
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
@@ -825,7 +826,6 @@ describe('Scheduler', () => {
                 appointmentTemplate: undefined,
                 appointmentCollectorTemplate: undefined,
                 maxAppointmentsPerCell: 'auto',
-                currentDate: expect.any(Date),
                 showAllDayPanel: true,
                 showCurrentTimeIndicator: true,
                 indicatorUpdateInterval: 300000,
@@ -837,6 +837,7 @@ describe('Scheduler', () => {
                 accessKey: undefined,
                 focusStateEnabled: true,
               },
+              new Date(2021, 1, 1),
             );
         });
       });

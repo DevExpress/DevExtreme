@@ -57,6 +57,10 @@ export const getCurrentViewConfig = (
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   currentViewProps: Partial<ViewProps>,
   schedulerProps: CurrentViewConfigProps,
+  // This is a WA for:
+  // https://github.com/DevExpress/devextreme-renovation/issues/832
+  // https://github.com/DevExpress/devextreme-renovation/issues/831
+  currentDate: Date | string | number,
 ): CurrentViewConfigType => {
   const { scrolling: schedulerScrolling } = schedulerProps;
 
@@ -111,7 +115,7 @@ export const getCurrentViewConfig = (
     ),
 
     // currentDate: dateUtils.trimTime(new Date(schedulerProps.currentDate)), // TODO
-    currentDate: schedulerProps.currentDate,
+    currentDate,
     intervalCount,
     groupOrientation,
     startDate,

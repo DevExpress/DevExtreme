@@ -478,7 +478,6 @@ SchedulerProps,
 | 'appointmentTemplate'
 | 'appointmentCollectorTemplate'
 | 'maxAppointmentsPerCell'
-| 'currentDate'
 | 'showAllDayPanel'
 | 'showCurrentTimeIndicator'
 | 'indicatorUpdateInterval'
