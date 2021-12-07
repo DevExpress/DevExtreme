@@ -13,7 +13,7 @@ import type { RowData } from './types';
 import { TableContent } from './views/table_content';
 import { TableHeader } from './views/table_header';
 
-import { GridPager, BaseGridPagerProps } from './widgets/pager';
+import { GridPager, GridPagerUserProps as PagerProps } from './widgets/pager';
 
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -71,7 +71,7 @@ export class DataGridLightProps extends BaseWidgetProps {
   columns: string[] = [];
 
   @Nested()
-  pager: BaseGridPagerProps = {
+  pager: PagerProps = {
     allowedPageSizes: 'auto',
     displayMode: 'adaptive',
     infoText: messageLocalization.format('dxPager-infoText'),

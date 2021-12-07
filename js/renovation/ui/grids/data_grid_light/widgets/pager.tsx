@@ -29,7 +29,7 @@ export const viewFunction = (viewModel: GridPager): JSX.Element => (
 );
 
 @ComponentBindings()
-export class BaseGridPagerProps {
+export class GridPagerUserProps {
   @OneWay()
   allowedPageSizes: (number | 'all')[] | 'auto' = 'auto';
 
@@ -53,7 +53,7 @@ export class BaseGridPagerProps {
 }
 
 @ComponentBindings()
-export class GridPagerProps extends BaseGridPagerProps {
+export class GridPagerProps extends GridPagerUserProps {
   @TwoWay()
   pageSize: number | 'all' = 20;
 
