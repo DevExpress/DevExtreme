@@ -244,6 +244,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() tooltipData: AppointmentViewModel[] = [];
 
+  @InternalState() lastViewDateByEndDayHour?: Date;
+
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
     const { views, currentView } = this.props;
@@ -581,20 +583,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     if (
       !this.internalDataSource.isLoaded()
       && !this.internalDataSource.isLoading()
-      && this.workSpaceViewModel
     ) {
-      if (this.props.remoteFiltering) {
-        const { viewDataProvider } = this.workSpaceViewModel;
-        const startDate = viewDataProvider.getStartViewDate();
-        const endDate = viewDataProvider.getLastViewDateByEndDayHour(
-          this.currentViewConfig.endDayHour,
-        );
-
+      if (this.props.remoteFiltering && this.lastViewDateByEndDayHour) {
         const combinedFilter = combineRemoteFilter({
           dataAccessors: this.dataAccessors,
           dataSourceFilter: this.internalDataSource.filter(),
-          min: startDate,
-          max: endDate,
+          min: this.startViewDate,
+          max: this.lastViewDateByEndDayHour,
           dateSerializationFormat: this.props.dateSerializationFormat,
         });
 
@@ -610,6 +605,14 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   onViewRendered(viewMetaData: ViewMetaData): void {
     this.workSpaceViewModel = viewMetaData;
+    const { viewDataProvider } = viewMetaData;
+
+    const lastViewDate = viewDataProvider.getLastViewDateByEndDayHour(
+      this.currentViewConfig.endDayHour,
+    );
+    if (lastViewDate.getTime() !== this.lastViewDateByEndDayHour?.getTime()) {
+      this.lastViewDateByEndDayHour = lastViewDate;
+    }
   }
 
   setCurrentView(view: string): void {
