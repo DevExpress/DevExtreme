@@ -4,6 +4,7 @@ const gulp = require('gulp');
 const path = require('path');
 const createVinyl = require('./utils/create-gulp-file');
 const { getComponentsSpecification } = require('./utils');
+const fs = require('fs');
 const del = require('del');
 
 function createNgEntryPoint(context) {
@@ -71,6 +72,14 @@ function preparePackageForPackagr(packageObject, basePackageObject, context) {
         "@angular/core": "^11.0.0 || ^13.0.0",
         "@angular/common": "^11.0.0 || ^13.0.0",
         "@angular/forms": "^11.0.0 || ^13.0.0",
+    }
+
+    // TODO: we should do this in a better way
+    packageObject.devDependencies = {
+        ...packageObject.devDependencies,
+        "@angular/core": "^11.0.0",
+        "@angular/common": "^11.0.0",
+        "@angular/forms": "^11.0.0",
     }
 }
 function runPackagr(context) {
