@@ -178,7 +178,9 @@ export const getAppointmentsModel = (
     appointmentsConfig.hoursInterval,
   );
 
-  const { leftVirtualCellCount, topVirtualRowCount } = viewDataProvider.viewData;
+  const {
+    startCellIndex: leftVirtualCellCount, startRowIndex: topVirtualRowCount,
+  } = viewDataProvider.getViewOptions();
   const cellDuration = getCellDuration(
     appointmentsConfig.viewType,
     appointmentsConfig.startDayHour,

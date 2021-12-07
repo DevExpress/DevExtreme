@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import '@devextreme/react/scss/dx.light.scss';
+import 'devextreme/dist/css/dx.light.css';
 import Button from '@devextreme/react/button';
 import Scheduler from '@devextreme/react/scheduler';
 

@@ -394,9 +394,9 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
 
             const resources = this._getPrerenderFilterResources(groupIndex);
 
-            const allDayPanel = this.viewDataProvider.getAllDayPanel(groupIndex);
+            const hasAllDayPanel = this.viewDataProvider.hasGroupAllDayPanel(groupIndex);
 
-            const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && allDayPanel?.length > 0);
+            const supportAllDayAppointment = isAllDayWorkspace || (!!showAllDayAppointments && hasAllDayPanel);
 
             filterOptions.push({
                 isVirtualScrolling: true,
