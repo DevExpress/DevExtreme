@@ -3,6 +3,7 @@ import { ClientFunction } from 'testcafe';
 export type WidgetName =
 'dxGallery' |
 'dxButtonGroup' |
+'dxCheckBox' |
 'dxTabPanel' |
 'dxForm' |
 'dxTabPanel' |
