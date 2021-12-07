@@ -6,6 +6,7 @@ import {
 
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
+import messageLocalization from '../../../../localization/message';
 
 import type { RowData } from './types';
 
@@ -78,7 +79,7 @@ export class DataGridLightProps extends BaseWidgetProps {
   pager: BaseGridPagerProps = {
     allowedPageSizes: 'auto',
     displayMode: 'adaptive',
-    infoText: 'Page {0} of {1} ({2} items)',
+    infoText: messageLocalization.format('dxPager-infoText'),
     showInfo: false,
     showNavigationButtons: false,
     showPageSizeSelector: false,

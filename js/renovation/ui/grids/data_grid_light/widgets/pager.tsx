@@ -4,6 +4,8 @@ import {
   Component, JSXComponent, ComponentBindings, OneWay, TwoWay,
 } from '@devextreme-generator/declarations';
 
+import messageLocalization from '../../../../../localization/message';
+
 import { Pager as BasePager } from '../../../pager/pager';
 
 export const viewFunction = (viewModel: GridPager): JSX.Element => (
@@ -35,7 +37,7 @@ export class BaseGridPagerProps {
   displayMode: 'adaptive' | 'compact' | 'full' = 'adaptive';
 
   @OneWay()
-  infoText = 'Page {0} of {1} ({2} items)';
+  infoText = messageLocalization.format('dxPager-infoText');
 
   @OneWay()
   showInfo = false;
