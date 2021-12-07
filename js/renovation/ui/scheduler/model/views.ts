@@ -87,7 +87,6 @@ export const getCurrentViewConfig = (
   const isVirtualScrolling = schedulerScrolling.mode === 'virtual'
         || scrolling?.mode === 'virtual';
   const crossScrollingEnabled = schedulerProps.crossScrollingEnabled
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         || isVirtualScrolling;
 
   const result = {
