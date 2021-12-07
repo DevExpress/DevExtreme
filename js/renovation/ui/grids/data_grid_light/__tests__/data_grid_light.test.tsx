@@ -71,9 +71,9 @@ describe('DataGridLight', () => {
 
       // todo: move when paging will be in different module
       describe('paging', () => {
-        const dataSource = generateData(20);
-
         describe('visibleItems', () => {
+          const dataSource = generateData(20);
+
           it('should be calculated on first page', () => {
             const dataGrid = new DataGridLight({
               dataSource,
@@ -118,13 +118,15 @@ describe('DataGridLight', () => {
         });
 
         describe('pageCount', () => {
+          const dataSource = generateData(22);
+
           it('should be calculated when pageSize is a number', () => {
             const dataGrid = new DataGridLight({
               dataSource,
             });
 
             dataGrid.pagingPageSize = 10;
-            expect(dataGrid.pagingPageCount).toEqual(6);
+            expect(dataGrid.pagingPageCount).toEqual(3);
           });
 
           it('should be calculated when pageSize is "all"', () => {
