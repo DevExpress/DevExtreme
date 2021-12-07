@@ -2,10 +2,10 @@ import React from 'react';
 import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  DataGridLight, viewFunction as DataGridView, DataGridLightProps, PagingProps,
+  DataGridLight, viewFunction as DataGridView, DataGridLightProps,
 } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
-import { customers } from './test_data';
+import { columns, generateData } from './test_data';
 
 describe('DataGridLight', () => {
   describe('View', () => {
@@ -71,41 +71,70 @@ describe('DataGridLight', () => {
 
       // todo: move when paging will be in different module
       describe('paging', () => {
-        it('should calculate visibleItems', () => {
-          const pagingProps = new PagingProps();
-          pagingProps.pageSize = 5;
+        const dataSource = generateData(20);
 
-          const gridProps = new DataGridLightProps();
-          gridProps.paging = pagingProps;
-          gridProps.dataSource = customers;
-
-          const dataGrid = new DataGridLight(gridProps);
-
-          pagingProps.pageIndex = 0;
-          dataGrid.updatePagingProps();
-          expect(dataGrid.visibleItems).toEqual(customers.slice(0, 5));
-
-          pagingProps.pageIndex = 1;
-          dataGrid.updatePagingProps();
-          expect(dataGrid.pagingPageSize).toEqual(5);
-          expect(dataGrid.pagingPageIndex).toEqual(1);
-          expect(dataGrid.visibleItems).toEqual(customers.slice(5, 10));
-
-          pagingProps.pageSize = 'all';
-          dataGrid.updatePagingProps();
-          expect(dataGrid.visibleItems).toEqual(customers);
-        });
-
-        it('should calculate pageCount', () => {
-          const dataGrid = new DataGridLight({
-            dataSource: customers,
+        describe('visibleItems', () => {
+          it('should be calculated on first page', () => {
+            const dataGrid = new DataGridLight({
+              dataSource,
+              columns,
+              paging: {
+                enabled: true,
+                pageIndex: 0,
+                pageSize: 5,
+              },
+            });
+            dataGrid.updatePagingProps();
+            expect(dataGrid.visibleItems).toEqual(dataSource.slice(0, 5));
           });
 
-          dataGrid.pagingPageSize = 10;
-          expect(dataGrid.pagingPageCount).toEqual(6);
+          it('should be calculated on second page', () => {
+            const dataGrid = new DataGridLight({
+              dataSource,
+              columns,
+              paging: {
+                enabled: true,
+                pageIndex: 1,
+                pageSize: 5,
+              },
+            });
+            dataGrid.updatePagingProps();
+            expect(dataGrid.visibleItems).toEqual(dataSource.slice(5, 10));
+          });
 
-          dataGrid.pagingPageSize = 'all';
-          expect(dataGrid.pagingPageCount).toEqual(1);
+          it('should be calculated when pageSize is "all"', () => {
+            const dataGrid = new DataGridLight({
+              dataSource,
+              columns,
+              paging: {
+                enabled: true,
+                pageIndex: 1,
+                pageSize: 'all',
+              },
+            });
+            dataGrid.updatePagingProps();
+            expect(dataGrid.visibleItems).toEqual(dataSource);
+          });
+        });
+
+        describe('pageCount', () => {
+          it('should be calculated when pageSize is a number', () => {
+            const dataGrid = new DataGridLight({
+              dataSource,
+            });
+
+            dataGrid.pagingPageSize = 10;
+            expect(dataGrid.pagingPageCount).toEqual(6);
+          });
+
+          it('should be calculated when pageSize is "all"', () => {
+            const dataGrid = new DataGridLight({
+              dataSource,
+            });
+
+            dataGrid.pagingPageSize = 'all';
+            expect(dataGrid.pagingPageCount).toEqual(1);
+          });
         });
       });
     });
