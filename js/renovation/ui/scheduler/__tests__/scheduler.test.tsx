@@ -809,7 +809,35 @@ describe('Scheduler', () => {
           scheduler.currentViewConfig;
 
           expect(getCurrentViewConfig)
-            .toHaveBeenCalledWith({ type: 'week' }, scheduler.props);
+            .toHaveBeenCalledWith(
+              { type: 'week' },
+              {
+                firstDayOfWeek: 0,
+                startDayHour: 0,
+                endDayHour: 24,
+                cellDuration: 30,
+                groupByDate: false,
+                scrolling: { mode: 'standard' },
+                dataCellTemplate: undefined,
+                timeCellTemplate: undefined,
+                resourceCellTemplate: undefined,
+                dateCellTemplate: undefined,
+                appointmentTemplate: undefined,
+                appointmentCollectorTemplate: undefined,
+                maxAppointmentsPerCell: 'auto',
+                currentDate: expect.any(Date),
+                showAllDayPanel: true,
+                showCurrentTimeIndicator: true,
+                indicatorUpdateInterval: 300000,
+                shadeUntilCurrentTime: false,
+                crossScrollingEnabled: false,
+                height: undefined,
+                width: undefined,
+                tabIndex: 0,
+                accessKey: undefined,
+                focusStateEnabled: true,
+              },
+            );
         });
       });
 

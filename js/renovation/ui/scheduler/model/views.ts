@@ -1,7 +1,5 @@
-/* eslint-disable rulesdir/no-non-null-assertion */
-// import dateUtils from '../../../../core/utils/date';
 import { isObject, isString } from '../../../../core/utils/type';
-import { SchedulerProps, ViewProps } from '../props';
+import { CurrentViewConfigProps, ViewProps } from '../props';
 import { ViewType } from '../types';
 import { CurrentViewConfigType } from '../workspaces/props';
 
@@ -58,7 +56,7 @@ export function getViewConfigProp<T extends unknown>(schedulerProp: T, viewProp:
 export const getCurrentViewConfig = (
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   currentViewProps: Partial<ViewProps>,
-  schedulerProps: Partial<SchedulerProps>,
+  schedulerProps: CurrentViewConfigProps,
 ): CurrentViewConfigType => {
   const { scrolling: schedulerScrolling } = schedulerProps;
 
@@ -82,7 +80,7 @@ export const getCurrentViewConfig = (
     maxAppointmentsPerCell,
   } = currentViewProps;
 
-  const isVirtualScrolling = schedulerScrolling!.mode === 'virtual'
+  const isVirtualScrolling = schedulerScrolling.mode === 'virtual'
         || scrolling?.mode === 'virtual';
   const crossScrollingEnabled = schedulerProps.crossScrollingEnabled
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing

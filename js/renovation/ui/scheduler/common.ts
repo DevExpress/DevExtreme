@@ -1,5 +1,5 @@
 import { utils } from '../../../ui/scheduler/utils';
-import { SchedulerProps } from './props';
+import { DataAccessorsProps } from './props';
 import { DataAccessorType } from './types';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
 import timeZoneUtils from '../../../ui/scheduler/utils.timeZone';
@@ -7,7 +7,7 @@ import { ViewDataProviderValidationOptions } from './workspaces/types';
 import { createExpressions } from '../../../ui/scheduler/resources/utils';
 
 export const createDataAccessors = (
-  dataAccessorsProps: Partial<SchedulerProps>,
+  dataAccessorsProps: DataAccessorsProps,
   forceIsoDateParsing = false,
 ): DataAccessorType => {
   const dataAccessors = utils.dataAccessors.create(
