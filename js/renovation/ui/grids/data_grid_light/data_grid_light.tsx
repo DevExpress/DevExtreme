@@ -7,7 +7,7 @@ import {
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
-import type { TRowData } from './types';
+import type { RowData } from './types';
 
 import { TableContent } from './views/table_content';
 import { TableHeader } from './views/table_header';
@@ -69,7 +69,7 @@ export class PagingProps {
 @ComponentBindings()
 export class DataGridLightProps extends BaseWidgetProps {
   @OneWay()
-  dataSource: TRowData[] = [];
+  dataSource: RowData[] = [];
 
   @OneWay()
   columns: string[] = [];
@@ -108,7 +108,7 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
     return aria;
   }
 
-  get visibleItems(): TRowData[] {
+  get visibleItems(): RowData[] {
     if (!this.props.paging.enabled || this.pagingPageSize === 'all') {
       return this.props.dataSource;
     }
