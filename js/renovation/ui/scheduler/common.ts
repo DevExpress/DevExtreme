@@ -7,28 +7,28 @@ import { ViewDataProviderValidationOptions } from './workspaces/types';
 import { createExpressions } from '../../../ui/scheduler/resources/utils';
 
 export const createDataAccessors = (
-  props: SchedulerProps,
+  dataAccessorsProps: Partial<SchedulerProps>,
   forceIsoDateParsing = false,
 ): DataAccessorType => {
   const dataAccessors = utils.dataAccessors.create(
     {
-      startDate: props.startDateExpr,
-      endDate: props.endDateExpr,
-      startDateTimeZone: props.startDateTimeZoneExpr,
-      endDateTimeZone: props.endDateTimeZoneExpr,
-      allDay: props.allDayExpr,
-      text: props.textExpr,
-      description: props.descriptionExpr,
-      recurrenceRule: props.recurrenceRuleExpr,
-      recurrenceException: props.recurrenceExceptionExpr,
+      startDate: dataAccessorsProps.startDateExpr,
+      endDate: dataAccessorsProps.endDateExpr,
+      startDateTimeZone: dataAccessorsProps.startDateTimeZoneExpr,
+      endDateTimeZone: dataAccessorsProps.endDateTimeZoneExpr,
+      allDay: dataAccessorsProps.allDayExpr,
+      text: dataAccessorsProps.textExpr,
+      description: dataAccessorsProps.descriptionExpr,
+      recurrenceRule: dataAccessorsProps.recurrenceRuleExpr,
+      recurrenceException: dataAccessorsProps.recurrenceExceptionExpr,
     },
     null,
     forceIsoDateParsing,
-    props.dateSerializationFormat,
+    dataAccessorsProps.dateSerializationFormat,
   ) as DataAccessorType;
 
   // TODO move to the 'utils.dataAccessors.create'
-  dataAccessors.resources = createExpressions(props.resources) as DataAccessorType;
+  dataAccessors.resources = createExpressions(dataAccessorsProps.resources) as DataAccessorType;
 
   return dataAccessors;
 };
