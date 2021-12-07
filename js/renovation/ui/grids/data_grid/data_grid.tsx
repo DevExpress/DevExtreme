@@ -523,7 +523,7 @@ export class DataGrid extends JSXComponent(DataGridProps) implements DataGridFor
 
   @Effect({ run: 'once' })
   setupInstance(): void {
-    const element = this.widgetElementRef.current as HTMLElement;
+    const element = this.widgetElementRef?.current as HTMLElement;
     // TODO Vitik: Not only optionChanged should be rewrited.
     // All other events should be re-raised by renovated grid.
 
