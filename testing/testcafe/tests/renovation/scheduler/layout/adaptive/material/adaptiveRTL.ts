@@ -15,6 +15,11 @@ const test = multiPlatformTest({
   platforms: ['jquery', 'react'],
 });
 
+const testJQuery = multiPlatformTest({
+  page: 'declaration/schedulerMaterial',
+  platforms: ['jquery'],
+});
+
 fixture('Scheduler: Adaptive Material theme layout in RTL');
 
 const createScheduler = async (
@@ -87,7 +92,7 @@ const createScheduler = async (
     });
   });
 
-  test(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t, { platform, screenshotComparerOptions }) => {
+  testJQuery(`Adaptive views layout test in material theme, crossScrollingEnabled=${crossScrollingEnabled} when vertical grouping and RTL are used`, async (t, { platform, screenshotComparerOptions }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
