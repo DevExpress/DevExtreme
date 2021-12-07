@@ -68,9 +68,9 @@ function preparePackageForPackagr(packageObject, basePackageObject, context) {
     // TODO: We've hardcoded angular-specific refs because we're unable to refer them inside devextreme's package.json
     packageObject.peerDependencies = {
         ...packageObject.peerDependencies,
-        "@angular/core": "^11.0.0",
-        "@angular/common": "^11.0.0",
-        "@angular/forms": "^11.0.0",
+        "@angular/core": "^11.0.0 || ^13.0.0",
+        "@angular/common": "^11.0.0 || ^13.0.0",
+        "@angular/forms": "^11.0.0 || ^13.0.0",
     }
 }
 function runPackagr(context) {
