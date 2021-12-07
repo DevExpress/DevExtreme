@@ -4774,6 +4774,67 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(visibleRows[0].key, 1, 'first visible row at the top');
         assert.equal(visibleRows[visibleRows.length - 1].key, 20, 'last visible row at the top');
     });
+
+    QUnit.test('Last row should be visible when wordWrap is enabled (T1047239)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 349; i++) {
+                items.push({
+                    id: i + 1,
+                    name: i % 5 === 0 || i === 348 ? 'long long long long text' : 'text',
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            height: 500,
+            width: 250,
+            keyExpr: 'id',
+            wordWrapEnabled: true,
+            columns: ['id', { dataField: 'name', caption: 'Long caption' }, {
+                type: 'buttons',
+                caption: 'Buttons'
+            }],
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            }
+        });
+
+        this.clock.tick(300);
+        let visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 16, 'rows are rendered initially');
+        assert.equal(visibleRows[0].key, 1, 'initial first visible row');
+        assert.equal(visibleRows[visibleRows.length - 1].key, 16, 'initial last visible row');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 100000 });
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+
+
+        // assert
+        assert.equal(visibleRows.length, 11, 'rows are rendered at the bottom');
+        assert.equal(visibleRows[0].key, 339, 'first visible row at the bottom');
+        assert.equal(visibleRows[visibleRows.length - 1].key, 349, 'last visible row at the bottom');
+        assert.ok(dataGridWrapper.rowsView.isElementIntersectViewport($(dataGrid.getRowElement(10))), 'last row intersects the viewport');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 100000 });
+        this.clock.tick(300);
+        visibleRows = dataGrid.getVisibleRows();
+
+        // assert
+        assert.equal(visibleRows.length, 10, 'rows are rendered at the bottom second time');
+        assert.equal(visibleRows[0].key, 340, 'first visible row at the bottom second time');
+        assert.equal(visibleRows[visibleRows.length - 1].key, 349, 'last visible row at the bottom second time');
+        assert.ok(dataGridWrapper.rowsView.isRowVisible(10), 'last row visible');
+    });
 });
 
 

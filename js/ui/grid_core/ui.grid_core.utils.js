@@ -450,7 +450,7 @@ export default {
                     selectionEnd: focusedElement.selectionEnd
                 };
             }
-        } catch(e) {}
+        } catch(e) { }
 
         return {};
     },
@@ -460,7 +460,7 @@ export default {
             if(focusedElement && focusedElement.setSelectionRange) {
                 focusedElement.setSelectionRange(selectionRange.selectionStart, selectionRange.selectionEnd);
             }
-        } catch(e) {}
+        } catch(e) { }
     },
 
     focusAndSelectElement: function(component, $element) {
@@ -517,5 +517,23 @@ export default {
         } else {
             return rowRenderingMode === SCROLLING_MODE_VIRTUAL;
         }
+    },
+
+    getPixelRatio: function(window) {
+        return window.devicePixelRatio || 1;
+    },
+
+    ///#DEBUG
+    _setPixelRatioFn: function(value) {
+        this.getPixelRatio = value;
+    },
+    ///#ENDDEBUG
+
+    getContentHeightLimit(browser) {
+        if(browser.mozilla) {
+            return 8000000;
+        }
+
+        return 15000000 / this.getPixelRatio(getWindow());
     }
 };
