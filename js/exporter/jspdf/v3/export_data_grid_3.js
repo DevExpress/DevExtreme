@@ -84,10 +84,8 @@ function exportDataGrid(doc, dataGrid, options) {
             // TODO: reinitialize cells widths ???
             // TODO: splitRowsInfosVertically
 
-            rowsInfosByPages.forEach((pageRowsInfo) => {
-
-                const isFirstPage = rowsInfosByPages.indexOf(pageRowsInfo) === 0;
-                if(!isFirstPage) {
+            rowsInfosByPages.forEach((pageRowsInfo, pageIndex) => {
+                if(pageIndex > 0) {
                     doc.addPage();
                 }
 
