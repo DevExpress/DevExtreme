@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  DataGridLight, viewFunction as DataGridView, DataGridLightProps,
+  DataGridLight, viewFunction as DataGridView, DataGridLightProps, PagingProps,
 } from '../data_grid_light';
 import { Widget } from '../../../common/widget';
 import { columns, generateData } from './test_data';
@@ -73,44 +73,41 @@ describe('DataGridLight', () => {
       describe('paging', () => {
         describe('visibleItems', () => {
           const dataSource = generateData(20);
+          const paging = new PagingProps();
 
           it('should be calculated on first page', () => {
+            paging.pageIndex = 0;
+            paging.pageSize = 5;
+
             const dataGrid = new DataGridLight({
               dataSource,
               columns,
-              paging: {
-                enabled: true,
-                pageIndex: 0,
-                pageSize: 5,
-              },
+              paging,
             });
             dataGrid.updatePagingProps();
             expect(dataGrid.visibleItems).toEqual(dataSource.slice(0, 5));
           });
 
           it('should be calculated on second page', () => {
+            paging.pageIndex = 1;
+            paging.pageSize = 5;
+
             const dataGrid = new DataGridLight({
               dataSource,
               columns,
-              paging: {
-                enabled: true,
-                pageIndex: 1,
-                pageSize: 5,
-              },
+              paging,
             });
             dataGrid.updatePagingProps();
             expect(dataGrid.visibleItems).toEqual(dataSource.slice(5, 10));
           });
 
           it('should be calculated when pageSize is "all"', () => {
+            paging.pageSize = 'all';
+
             const dataGrid = new DataGridLight({
               dataSource,
               columns,
-              paging: {
-                enabled: true,
-                pageIndex: 1,
-                pageSize: 'all',
-              },
+              paging,
             });
             dataGrid.updatePagingProps();
             expect(dataGrid.visibleItems).toEqual(dataSource);
