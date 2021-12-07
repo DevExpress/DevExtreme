@@ -35,13 +35,8 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
       <TableHeader columns={viewModel.props.columns} />
       <TableContent columns={viewModel.props.columns} dataSource={viewModel.visibleItems} />
       <GridPager
-        allowedPageSizes={viewModel.props.pager.allowedPageSizes}
-        displayMode={viewModel.props.pager.displayMode}
-        infoText={viewModel.props.pager.infoText}
-        showInfo={viewModel.props.pager.showInfo}
-        showNavigationButtons={viewModel.props.pager.showNavigationButtons}
-        showPageSizeSelector={viewModel.props.pager.showPageSizeSelector}
-        visible={viewModel.props.pager.visible}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...viewModel.props.pager}
         pageCount={viewModel.pagingPageCount}
         totalCount={viewModel.props.dataSource.length}
 
