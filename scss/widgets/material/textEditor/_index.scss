@@ -538,6 +538,10 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
         display: none;
       }
 
+      .dx-lookup-field {
+        font-size: 0;
+      }
+
       .dx-texteditor-label {
         transition: $material-editor-label-transition;
         font-size: $material-texteditor-font-size;
@@ -567,6 +571,10 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     &.dx-textarea.dx-state-focused {
       .dx-placeholder {
         display: block;
+      }
+
+      .dx-lookup-field {
+        font-size: $material-texteditor-font-size;
       }
 
       .dx-texteditor-label {
@@ -636,6 +644,10 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       .dx-label-after {
         height: 100%;
       }
+    }
+
+    .dx-lookup-field {
+      font-size: $material-texteditor-font-size;
     }
 
     &.dx-rtl,
@@ -714,6 +726,10 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
 
     .dx-placeholder {
       display: none;
+    }
+
+    .dx-lookup-field {
+      font-size: 0;
     }
 
     &.dx-rtl,
@@ -817,9 +833,17 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       &.dx-state-hover {
         @include dx-state-empty($texteditor-hover-border-color, 1);
 
+        &.dx-dropdowneditor-active {
+          @include dx-state($texteditor-hover-border-color, 1);
+        }
+
         &.dx-invalid {
           @include dx-state-empty($texteditor-invalid-focused-border-color, 1);
         }
+      }
+
+      &.dx-dropdowneditor-active {
+        @include dx-state($texteditor-border-color, 1);
       }
     }
   }
@@ -925,10 +949,10 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
       }
     }
 
-    &.dx-dropdowneditor-active,
-    &.dx-dropdowneditor-active.dx-state-hover,
     &.dx-textarea.dx-state-focused,
     &.dx-textarea.dx-state-focused.dx-state-hover,
+    &.dx-dropdowneditor-active.dx-state-focused,
+    &.dx-dropdowneditor-active.dx-state-focused.dx-state-hover,
     &.dx-state-focused,
     &.dx-state-focused.dx-state-hover {
       @include dx-state($texteditor-focused-border-color, 2);
@@ -983,6 +1007,10 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     &.dx-textarea.dx-state-focused {
       .dx-placeholder {
         display: block;
+      }
+
+      .dx-lookup-field {
+        font-size: $material-texteditor-font-size;
       }
 
       .dx-texteditor-label {
@@ -1085,6 +1113,10 @@ $material-editor-label-transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1) 0ms
     &.dx-lookup-empty.dx-state-readonly {
       .dx-placeholder {
         display: none;
+      }
+
+      .dx-lookup-field {
+        font-size: 0;
       }
 
       .dx-texteditor-label {
