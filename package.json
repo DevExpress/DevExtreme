@@ -215,7 +215,7 @@
     "build:angular:watch": "gulp generate-angular-watch",
     "build:vue": "gulp generate-vue",
     "build:vue:watch": "gulp generate-vue-watch",
-    "prepare-npm-renovation": "cd ./build/gulp/renovation-npm && npm i --no-audit --no-fund",
+    "prepare-npm-renovation": "cd ./build/gulp/renovation-npm && npm i --no-audit --no-fund --no-package-lock",
     "build-npm-renovation:react": "npm run prepare-npm-renovation && gulp renovation-npm-react",
     "build-npm-renovation:angular": "npm run prepare-npm-renovation && gulp renovation-npm-angular",
     "build:modular": "cd ./playground/modular && webpack",

@@ -5,7 +5,6 @@ const path = require('path');
 const createVinyl = require('./utils/create-gulp-file');
 const { camelCase, run, getComponentsSpecification } = require('./utils');
 const del = require('del');
-const ngPackage = require('ng-packagr');
 
 function createNgEntryPoint(context) {
     return () => {
@@ -25,7 +24,7 @@ function createTSConfig(context) {
                 "annotateForClosureCompiler": true,
                 "fullTemplateTypeCheck": true,
                 // TODO: Ivy should be enabled.
-                "enableIvy": false
+                // "enableIvy": false
             },
             "buildOnSave": false,
             "compileOnSave": false,
@@ -81,7 +80,7 @@ function runPackagr(context) {
     const destinationDir = path.resolve(rootDir, context.destination);
     
     const runPackagr = function runPackagr(cb) {
-        ngPackage
+        require('ng-packagr')
             .ngPackagr()
             .forProject(path.join(destinationDir, 'package.json'))
             .withTsConfig(path.join(destinationDir, 'tsconfig.lib.json'))
