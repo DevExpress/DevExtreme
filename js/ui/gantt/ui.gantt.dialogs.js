@@ -335,15 +335,16 @@ class ConfirmDialogInfo extends DialogInfoBase {
 
 class ConstraintViolationDialogInfo extends DialogInfoBase {
     _getFormItems() {
+        const hasCriticalErrors = this._parameters.hasCriticalErrors;
         const items = [];
         items.push({ text: messageLocalization.format('dxGantt-dialogCancelOperationMessage'), value: 0 });
         items.push({ text: messageLocalization.format('dxGantt-dialogDeleteDependencyMessage'), value: 1 });
-        if(!this._parameters.validationError.critical) {
+        if(!hasCriticalErrors) {
             items.push({ text: messageLocalization.format('dxGantt-dialogMoveTaskAndKeepDependencyMessage'), value: 2 });
         }
 
         return [{
-            template: this._parameters.validationError.critical ?
+            template: hasCriticalErrors ?
                 messageLocalization.format('dxGantt-dialogConstraintCriticalViolationMessage') :
                 messageLocalization.format('dxGantt-dialogConstraintViolationMessage')
         }, {
