@@ -69,9 +69,14 @@ export default class FileItemsController {
     }
 
     updateProvider(fileProvider, currentPath) {
-        this._resetCurrentDirectory();
-        this._setProvider(fileProvider);
-        return this.refresh().then(() => this.setCurrentPath(currentPath));
+        const pathParts = getPathParts(currentPath);
+        return this._getDirectoryByPathParts(this._rootDirectoryInfo, pathParts).then(newDirectory => {
+            if(newDirectory !== this._rootDirectoryInfo) {
+                this._resetCurrentDirectory();
+            }
+            this._setProvider(fileProvider);
+            return this.refresh().then(() => this.setCurrentPath(currentPath));
+        });
     }
 
     _createFileProvider(fileProvider) {
