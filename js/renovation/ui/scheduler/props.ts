@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-type-alias */
 /* eslint-disable max-classes-per-file */
 import {
   ComponentBindings,
@@ -446,6 +447,48 @@ export class SchedulerProps extends BaseWidgetProps {
     },
   ] as SchedulerToolbarItem[];
 }
+
+export type DataAccessorsProps = Pick<
+SchedulerProps,
+'startDateExpr'
+| 'endDateExpr'
+| 'startDateTimeZoneExpr'
+| 'endDateTimeZoneExpr'
+| 'allDayExpr'
+| 'textExpr'
+| 'descriptionExpr'
+| 'recurrenceRuleExpr'
+| 'recurrenceExceptionExpr'
+| 'resources'
+| 'dateSerializationFormat'
+>;
+
+export type CurrentViewConfigProps = Pick<
+SchedulerProps,
+'firstDayOfWeek'
+| 'startDayHour'
+| 'endDayHour'
+| 'cellDuration'
+| 'groupByDate'
+| 'scrolling'
+| 'dataCellTemplate'
+| 'timeCellTemplate'
+| 'resourceCellTemplate'
+| 'dateCellTemplate'
+| 'appointmentTemplate'
+| 'appointmentCollectorTemplate'
+| 'maxAppointmentsPerCell'
+| 'showAllDayPanel'
+| 'showCurrentTimeIndicator'
+| 'indicatorUpdateInterval'
+| 'shadeUntilCurrentTime'
+| 'crossScrollingEnabled'
+| 'height'
+| 'width'
+| 'tabIndex'
+| 'accessKey'
+| 'focusStateEnabled'
+>;
 
 // TODO: https://github.com/DevExpress/devextreme-renovation/issues/751
 // export type SchedulerPropsType = SchedulerProps & Pick<
