@@ -731,6 +731,15 @@ const VirtualScrollingRowsViewExtender = (function() {
             }
         },
 
+        _restoreErrorRow: function() {
+            if(this.option(LEGACY_SCROLLING_MODE) === false) {
+                const errorHandling = this.getController('errorHandling');
+                errorHandling?.removeErrorRow();
+            }
+
+            this.callBase.apply(this, arguments);
+        },
+
         dispose: function() {
             clearTimeout(this._scrollTimeoutID);
             this.callBase();
