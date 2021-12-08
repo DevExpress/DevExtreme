@@ -4835,6 +4835,73 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(visibleRows[visibleRows.length - 1].key, 349, 'last visible row at the bottom second time');
         assert.ok(dataGridWrapper.rowsView.isRowVisible(10), 'last row visible');
     });
+
+    QUnit.test('Error row should not be duplicated (T1048220)', function(assert) {
+        // arrange
+        const getData = function() {
+            const items = [];
+            for(let i = 0; i < 100; i++) {
+                items.push({
+                    id: i + 1,
+                    name: `Name ${i + 1}`,
+                });
+            }
+            return items;
+        };
+
+        const dataGrid = createDataGrid({
+            dataSource: getData(),
+            height: 500,
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'name',
+                    validationRules: [{
+                        type: 'required'
+                    }]
+                }
+            ],
+            onRowValidating: function(e) {
+                if(e.brokenRules != null) {
+                    e.errorText = 'error';
+                }
+            }
+        });
+
+        this.clock.tick(300);
+
+        // act
+        dataGrid.editCell(0, 0);
+        this.clock.tick();
+        $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').val('').trigger('change');
+        dataGrid.saveEditData();
+        this.clock.tick();
+
+        // assert
+        assert.equal($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-error-row').length, 1, 'error row is rendered');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 3500 });
+        this.clock.tick(300);
+
+        // assert
+        assert.equal($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-error-row').length, 0, 'error row is not rendered');
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 0 });
+        this.clock.tick(300);
+
+        // assert
+        assert.equal($(dataGrid.element()).find('.dx-datagrid-rowsview .dx-error-row').length, 1, 'error row is rendered');
+    });
 });
 
 
