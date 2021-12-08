@@ -464,6 +464,24 @@ QUnit.module('Checkbox', function() {
 
                 assert.ok(blurSpy.calledOnce, 'element was blurred');
             });
+
+            QUnit.module('_isFocused method', () => {
+                QUnit.test('should return true if element has dx-state-focused class', function(assert) {
+                    const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
+                    const instance = $element.dxCheckBox('instance');
+
+                    $element.addClass('dx-state-focused');
+
+                    assert.ok(instance._isFocused(), 'checkBox is focused');
+                });
+
+                QUnit.test('should return false if element does not have dx-state-focused class', function(assert) {
+                    const $element = $('#checkBox').dxCheckBox({ focusStateEnabled: true });
+                    const instance = $element.dxCheckBox('instance');
+
+                    assert.notOk(instance._isFocused(), 'checkBox is not focused');
+                });
+            });
         }
     });
 });
