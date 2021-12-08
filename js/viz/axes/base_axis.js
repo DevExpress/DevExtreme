@@ -304,6 +304,7 @@ export const Axis = function(renderSettings) {
     that._translator = that._createTranslator();
     that.isArgumentAxis = renderSettings.isArgumentAxis;
     that._viewport = {};
+    that._prevDataInfo = {};
 
     that._firstDrawing = true;
 
@@ -1182,6 +1183,10 @@ Axis.prototype = {
                         value = KEEP;
                     }
                 }
+
+                if(value === KEEP && this._prevDataInfo.isEmpty && this._prevDataInfo.containsConstantLine) {
+                    value = RESET;
+                }
             }
         } else {
             if([KEEP, RESET].indexOf(value) === -1) {
@@ -1205,15 +1210,17 @@ Axis.prototype = {
         }
 
         let visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(visualRange, newRange, oppositeVisualRangeUpdateMode);
-        const viewport = that.getViewport();
 
-        if(!isDefined(viewport.startValue) &&
+        if(!that.isArgumentAxis) {
+            const viewport = that.getViewport();
+            if(!isDefined(viewport.startValue) &&
                 !isDefined(viewport.endValue) &&
                 !isDefined(viewport.length)) {
-            visualRangeUpdateMode = RESET;
-        } else {
-            that._prevDataWasEmpty && (visualRangeUpdateMode = KEEP);
+                visualRangeUpdateMode = RESET;
+            }
         }
+
+        that._prevDataInfo.isEmpty && !that._prevDataInfo.containsConstantLine && (visualRangeUpdateMode = KEEP);
 
         if(visualRangeUpdateMode === KEEP) {
             that._setVisualRange([visualRange.startValue, visualRange.endValue]);
@@ -1273,7 +1280,14 @@ Axis.prototype = {
         that._handleBusinessRangeChanged(oppositeVisualRangeUpdateMode, axisReinitialized, range);
         that._seriesData = new Range(range);
         const dataIsEmpty = that._seriesData.isEmpty();
-        that._prevDataWasEmpty = dataIsEmpty;
+
+        const rangeWithConstantLines = new Range(that._seriesData);
+
+        that._addConstantLinesToRange(rangeWithConstantLines, 'minVisible', 'maxVisible');
+        that._prevDataInfo = {
+            isEmpty: dataIsEmpty,
+            containsConstantLine: rangeWithConstantLines.containsConstantLine
+        };
 
         that._seriesData.addRange({
             categories: options.categories,
@@ -1320,6 +1334,7 @@ Axis.prototype = {
             if(cl.options.extendAxis) {
                 const value = cl.getParsedValue();
                 dataRange.addRange({
+                    containsConstantLine: true,
                     [minValueField]: value,
                     [maxValueField]: value
                 });
