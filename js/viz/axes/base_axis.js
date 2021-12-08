@@ -1150,6 +1150,20 @@ Axis.prototype = {
         let value = this._options.visualRangeUpdateMode;
         const translator = this._translator;
         const range = this._seriesData;
+        const prevDataInfo = this._prevDataInfo;
+
+        if(prevDataInfo.isEmpty && !prevDataInfo.containsConstantLine) {
+            return KEEP;
+        }
+
+        if(!this.isArgumentAxis) {
+            const viewport = this.getViewport();
+            if(!isDefined(viewport.startValue) &&
+                !isDefined(viewport.endValue) &&
+                !isDefined(viewport.length)) {
+                return RESET;
+            }
+        }
 
         if(this.isArgumentAxis) {
             if([SHIFT, KEEP, RESET].indexOf(value) === -1) {
@@ -1184,7 +1198,7 @@ Axis.prototype = {
                     }
                 }
 
-                if(value === KEEP && this._prevDataInfo.isEmpty && this._prevDataInfo.containsConstantLine) {
+                if(value === KEEP && prevDataInfo.isEmpty && prevDataInfo.containsConstantLine) {
                     value = RESET;
                 }
             }
@@ -1209,26 +1223,13 @@ Axis.prototype = {
             return;
         }
 
-        let visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(visualRange, newRange, oppositeVisualRangeUpdateMode);
-
-        if(!that.isArgumentAxis) {
-            const viewport = that.getViewport();
-            if(!isDefined(viewport.startValue) &&
-                !isDefined(viewport.endValue) &&
-                !isDefined(viewport.length)) {
-                visualRangeUpdateMode = RESET;
-            }
-        }
-
-        that._prevDataInfo.isEmpty && !that._prevDataInfo.containsConstantLine && (visualRangeUpdateMode = KEEP);
+        const visualRangeUpdateMode = that._lastVisualRangeUpdateMode = that._getVisualRangeUpdateMode(visualRange, newRange, oppositeVisualRangeUpdateMode);
 
         if(visualRangeUpdateMode === KEEP) {
             that._setVisualRange([visualRange.startValue, visualRange.endValue]);
-        }
-        if(visualRangeUpdateMode === RESET) {
+        } else if(visualRangeUpdateMode === RESET) {
             that._setVisualRange([null, null]);
-        }
-        if(visualRangeUpdateMode === SHIFT) {
+        } else if(visualRangeUpdateMode === SHIFT) {
             that._setVisualRange({ length: that.getVisualRangeLength() });
         }
     },
