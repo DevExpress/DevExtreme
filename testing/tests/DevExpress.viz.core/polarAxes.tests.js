@@ -1279,8 +1279,7 @@ QUnit.test('Update grid on second draw. Remove grid element if its value out of 
     assert.deepEqual(grid.remove.callCount, 1);
 });
 
-
-QUnit.test('Update grid on second draw. Remove grid element if its value out of range', function(assert) {
+QUnit.test('Update grid on second draw. Remove grid element if its value out of range. linearSpider', function(assert) {
     this.generatedTicks = [500];
     this.renderSettings.drawingType = 'linearSpider';
     const axis = this.createSimpleAxis({ grid: { visible: true, color: 'black', width: 1, opacity: 1 }, label: { overlappingBehavior: 'ignore' } });
