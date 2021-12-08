@@ -7,6 +7,9 @@ import { Row } from '../../../base/row';
 import { isHorizontalGroupingApplied } from '../../../utils';
 import { DateHeaderCell } from '../../../base/header_panel/date_header/cell';
 import { DateHeaderLayoutProps } from '../../../base/header_panel/date_header/layout';
+import getThemeType from '../../../../../../utils/getThemeType';
+
+const { isMaterial } = getThemeType();
 
 export const viewFunction = ({
   isHorizontalGrouping,
@@ -26,6 +29,7 @@ export const viewFunction = ({
     weekDayRightVirtualCellWidth,
     weekDayLeftVirtualCellCount,
     weekDayRightVirtualCellCount,
+    isMonthDateHeader,
   } = dateHeaderData;
 
   return (
@@ -34,6 +38,7 @@ export const viewFunction = ({
         const rowsCount = dataMap.length;
         const isTimeCellTemplate = rowsCount - 1 === rowIndex;
         const isWeekDayRow = rowsCount > 1 && rowIndex === 0;
+        const splitText = isMaterial && (isMonthDateHeader || isWeekDayRow);
 
         let validLeftVirtualCellCount: number | undefined = leftVirtualCellCount;
         let validRightVirtualCellCount: number | undefined = rightVirtualCellCount;
@@ -82,6 +87,7 @@ export const viewFunction = ({
                 isWeekDayCell={isWeekDayRow}
                 key={key}
                 colSpan={colSpan}
+                splitText={splitText}
 
                 // TODO: this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
                 dateCellTemplate={dateCellTemplate}
