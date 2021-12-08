@@ -13,7 +13,7 @@ function createNgEntryPoint(context) {
             .map(x => x.pathInRenovationFolder.slice(0, -2))
             .map(x => `export * from './${x}';`)
             .join('\n');
-    
+
         return createVinyl('ngentrypoint.ts', contents)
             .pipe(gulp.dest(context.destination));
     };
@@ -69,17 +69,17 @@ function preparePackageForPackagr(packageObject, basePackageObject, context) {
     // TODO: We've hardcoded angular-specific refs because we're unable to refer them inside devextreme's package.json
     packageObject.peerDependencies = {
         ...packageObject.peerDependencies,
-        "@angular/core": "^11.0.0 || ^13.0.0",
-        "@angular/common": "^11.0.0 || ^13.0.0",
-        "@angular/forms": "^11.0.0 || ^13.0.0",
+        "@angular/core": "^11.0.0 || ^12.0.0 || ^13.0.0",
+        "@angular/common": "^11.0.0 || ^12.0.0 || ^13.0.0",
+        "@angular/forms": "^11.0.0 || ^12.0.0 || ^13.0.0",
     }
 
     // TODO: we should do this in a better way
     packageObject.devDependencies = {
         ...packageObject.devDependencies,
-        "@angular/core": "^11.0.0",
-        "@angular/common": "^11.0.0",
-        "@angular/forms": "^11.0.0",
+        "@angular/core": "11.2.14",
+        "@angular/common": "11.2.14",
+        "@angular/forms": "11.2.14",
     }
 }
 function runPackagr(context) {
@@ -87,7 +87,7 @@ function runPackagr(context) {
     const distDir = path.resolve(rootDir, context.destination, 'dist');
     const tempDir = path.resolve(rootDir, context.destination, '../npm-angular-temp/');
     const destinationDir = path.resolve(rootDir, context.destination);
-    
+
     const runPackagr = function runPackagr(cb) {
         require('ng-packagr')
             .ngPackagr()
@@ -100,7 +100,7 @@ function runPackagr(context) {
 
     const copyBuildResultToTempFolder = () => gulp.src(path.join(distDir, '/**/*'))
         .pipe(gulp.dest(tempDir));
-    
+
     const deleteNpmAngularFolder = function delNpmAngular(cb) {
         del.sync(destinationDir);
         cb();
