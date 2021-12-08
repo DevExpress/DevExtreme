@@ -105,7 +105,7 @@ export const viewFunction = ({
   view: viewFunction,
 })
 export class DataGrid extends JSXComponent(DataGridProps) implements DataGridForComponentWrapper {
-  @ForwardRef() widgetElementRef?: RefObject<HTMLDivElement>;
+  @ForwardRef() widgetElementRef!: RefObject<HTMLDivElement>;
 
   @Mutable() instance!: GridInstance;
 
