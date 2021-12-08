@@ -12,7 +12,6 @@ const { removeUnusedModules, cleanEmptyFolders } = require('./remove-unused-modu
 const babel = require('gulp-babel');
 const transpileConfig = require('../transpile-config');
 const { run } = require('./utils');
-const argv = require('yargs').argv;
 
 function copyMiscFiles(context, additionalReplacements) {
     return () => merge(
@@ -83,7 +82,7 @@ function addCompilationTask(frameworkData) {
         source: `artifacts/${frameworkData.name}/renovation`,
         destination: `artifacts/npm-${frameworkData.name}`,
         extensions: ['.js', '.ts', '.d.ts', '.tsx'],
-        production: argv.production,
+        production: (process.env['NPM_PRODUCTION'] || '').toLowerCase() === 'true',
         ...frameworkData,
     }
     const steps = [
