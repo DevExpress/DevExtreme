@@ -53,7 +53,7 @@ import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './ui.sched
 import ViewDataProvider from './view_model/view_data_provider';
 
 import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/layout.j';
-import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/layout.j';
+import dxrAllDayPanelTable from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/table.j';
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
@@ -449,7 +449,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     createRAllDayPanelElements() {
-        this._$allDayPanel = $('<div>');
+        this._$allDayPanel = $('<div>').addClass(ALL_DAY_PANEL_CLASS);
         this._$allDayTitle = $('<div>').appendTo(this._$headerPanelEmptyCell);
     }
 
@@ -1913,12 +1913,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 ...(this.virtualScrollingDispatcher.horizontalVirtualScrolling?.getRenderState() || {}),
             };
 
-            utils.renovation.renderComponent(this, this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
+            utils.renovation.renderComponent(this, this._$allDayTable, dxrAllDayPanelTable, 'renovatedAllDayPanel', options);
             utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', {});
-
-            this._$allDayTable = this.renovatedAllDayPanel.$element().find(`.${ALL_DAY_TABLE_CLASS}`);
-
-            this._$allDayPanel.prepend(this._$allDayContainer);
         }
         this._toggleAllDayVisibility(true);
     }
@@ -2308,6 +2304,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._$headerPanel = $('<table>');
         this._$thead = $('<thead>').appendTo(this._$headerPanel);
         this._$headerPanelEmptyCell = $('<div>').addClass('dx-scheduler-header-panel-empty-cell');
+        this._$allDayTable = $('<table>');
 
         this._$fixedContainer = $('<div>').addClass(FIXED_CONTAINER_CLASS);
         this._$allDayContainer = $('<div>').addClass(ALL_DAY_CONTAINER_CLASS);
@@ -2370,7 +2367,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             );
             this._dateTableScrollable.$content().append(this._$dateTableScrollableContent);
 
-            this._$headerTablesContainer.append(this._$allDayContainer, this._$headerPanel, this._$allDayPanel);
+            this._$headerTablesContainer.append(this._$headerPanel, this._$allDayPanel);
+            this._$allDayPanel.append(this._$allDayContainer, this._$allDayTable);
         }
 
         this._appendHeaderPanelEmptyCellIfNecessary();
@@ -2409,7 +2407,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._$dateTableContainer.append(this._$allDayContainer);
             this._$sidebarScrollableContent.append(this._$groupTable, this._$timePanel);
         } else {
-            this._headerScrollable.$content().append(this._$allDayContainer, this._$allDayPanel);
+            this._headerScrollable.$content().append(this._$allDayPanel);
+            this._$allDayPanel.append(this._$allDayContainer, this._$allDayTable);
             this._$sidebarScrollableContent.append(this._$timePanel);
         }
 
