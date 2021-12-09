@@ -462,7 +462,7 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
         $('.dx-htmleditor-toolbar .dx-button').trigger('dxclick');
     });
 
-    test('dxpointermove event propagation should be stopped on HtmlEditor container to fix selection (T1045869)', function(assert) {
+    test('dxpointermove event propagation should be stopped on HtmlEditor content to fix selection (T1045869)', function(assert) {
         const isIos = devices.current().platform === 'ios';
         assert.expect(1);
         this.createEditor();
