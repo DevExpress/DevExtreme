@@ -23,7 +23,7 @@ export const viewFunction = (viewModel: GridPager): JSX.Element => (
     pageIndex={viewModel.props.pageIndex + 1}
     pageIndexChange={viewModel.onPageIndexChange}
 
-    pageSize={viewModel.props.pageSize === 'all' ? 0 : viewModel.props.pageSize}
+    pageSize={viewModel.pageSize === 'all' ? 0 : viewModel.pageSize}
     pageSizeChange={viewModel.onPageSizeChange}
   />
 );
@@ -94,18 +94,26 @@ export class GridPager extends JSXComponent(GridPagerProps) {
 
   get allowedPageSizes(): (number | 'all')[] {
     if (this.props.allowedPageSizes === 'auto') {
-      if (this.props.pageSize === 'all') {
+      if (this.pageSize === 'all') {
         return [];
         // eslint-disable-next-line no-else-return
       } else {
         return [
-          Math.floor((this.props.pageSize as number) / 2),
-          this.props.pageSize as number,
-          (this.props.pageSize as number) * 2,
+          Math.floor((this.pageSize as number) / 2),
+          this.pageSize as number,
+          (this.pageSize as number) * 2,
         ];
       }
     }
 
     return this.props.allowedPageSizes;
+  }
+
+  get pageSize(): number | 'all' {
+    if (this.props.pageSize === 0) {
+      return 'all';
+    }
+
+    return this.props.pageSize;
   }
 }

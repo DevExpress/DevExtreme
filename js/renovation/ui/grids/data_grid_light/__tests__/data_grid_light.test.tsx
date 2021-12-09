@@ -153,5 +153,31 @@ describe('DataGridLight', () => {
         expect(grid.pagingPageSize).toEqual(100);
       });
     });
+
+    describe('Effects', () => {
+      describe('updatePagingProps', () => {
+        it('should update two way props', () => {
+          const paging = new PagingProps();
+          paging.pageSize = 10;
+          paging.pageIndex = 20;
+          const dataGrid = new DataGridLight({
+            paging,
+          });
+          dataGrid.updatePagingProps();
+          expect(dataGrid.pagingPageSize).toEqual(10);
+          expect(dataGrid.pagingPageIndex).toEqual(20);
+        });
+
+        it('should set pageSize to "all" if prop is zero', () => {
+          const paging = new PagingProps();
+          paging.pageSize = 0;
+          const dataGrid = new DataGridLight({
+            paging,
+          });
+          dataGrid.updatePagingProps();
+          expect(dataGrid.pagingPageSize).toEqual('all');
+        });
+      });
+    });
   });
 });

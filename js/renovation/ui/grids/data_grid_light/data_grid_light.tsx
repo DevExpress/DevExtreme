@@ -132,7 +132,12 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
   @Effect()
   updatePagingProps(): void {
     this.pagingPageIndex = this.props.paging.pageIndex;
-    this.pagingPageSize = this.props.paging.pageSize;
+
+    if (this.props.paging.pageSize === 0) {
+      this.pagingPageSize = 'all';
+    } else {
+      this.pagingPageSize = this.props.paging.pageSize;
+    }
   }
 
   onPageSizeChange(pageSize: number | 'all'): void {
