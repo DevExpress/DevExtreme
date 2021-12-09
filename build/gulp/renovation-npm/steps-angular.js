@@ -63,7 +63,10 @@ function preparePackageForPackagr(packageObject, basePackageObject, context) {
     packageObject.ngPackage = {
         lib: {
             entryFile: 'ngentrypoint.ts'
-        }
+        },
+        allowedNonPeerDependencies: [
+            "devextreme"
+        ]
     }
 
     // TODO: We've hardcoded angular-specific refs because we're unable to refer them inside devextreme's package.json

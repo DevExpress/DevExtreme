@@ -35,8 +35,7 @@ function preparePackage(packageObject, basePackageObject, context) {
     packageObject.peerDependencies["react"] = `>= ${packageObject.devDependencies["react"]}`;
     packageObject.peerDependencies["react-dom"] = `>= ${packageObject.devDependencies["react-dom"]}`;
 
-    delete packageObject.devDependencies["react"];
-    delete packageObject.devDependencies["react-dom"];
+    delete packageObject.devDependencies;
 }
 
 module.exports = {

@@ -803,13 +803,42 @@ describe('Scheduler', () => {
             ...new SchedulerProps(),
             views,
             currentView: 'week',
+            currentDate: new Date(2021, 1, 1),
           });
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           scheduler.currentViewConfig;
 
           expect(getCurrentViewConfig)
-            .toHaveBeenCalledWith({ type: 'week' }, scheduler.props);
+            .toHaveBeenCalledWith(
+              { type: 'week' },
+              {
+                firstDayOfWeek: 0,
+                startDayHour: 0,
+                endDayHour: 24,
+                cellDuration: 30,
+                groupByDate: false,
+                scrolling: { mode: 'standard' },
+                dataCellTemplate: undefined,
+                timeCellTemplate: undefined,
+                resourceCellTemplate: undefined,
+                dateCellTemplate: undefined,
+                appointmentTemplate: undefined,
+                appointmentCollectorTemplate: undefined,
+                maxAppointmentsPerCell: 'auto',
+                showAllDayPanel: true,
+                showCurrentTimeIndicator: true,
+                indicatorUpdateInterval: 300000,
+                shadeUntilCurrentTime: false,
+                crossScrollingEnabled: false,
+                height: undefined,
+                width: undefined,
+                tabIndex: 0,
+                accessKey: undefined,
+                focusStateEnabled: true,
+              },
+              new Date(2021, 1, 1),
+            );
         });
       });
 

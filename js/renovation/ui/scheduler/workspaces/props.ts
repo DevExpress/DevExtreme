@@ -162,6 +162,8 @@ export interface ViewRenderConfig {
   isCreateCrossScrolling: boolean;
   defaultGroupOrientation: GroupOrientation;
 
+  isMonthDateHeader: boolean;
+
   // This is a WA for this bug: https://github.com/DevExpress/devextreme-renovation/issues/814
   isUseMonthDateTable: boolean;
   isUseTimelineHeader: boolean;

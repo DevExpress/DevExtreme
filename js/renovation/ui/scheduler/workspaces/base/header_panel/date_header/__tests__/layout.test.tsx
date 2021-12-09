@@ -9,6 +9,13 @@ import { Row } from '../../../row';
 import * as utilsModule from '../../../../utils';
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../consts';
 import { DateHeaderCell } from '../cell';
+import getThemeType from '../../../../../../../utils/getThemeType';
+
+jest.mock('../../../../../../../utils/getThemeType', () => ({
+  __esModule: true,
+  ...jest.requireActual('../../../../../../../utils/getThemeType'),
+  default: jest.fn(() => 'test_isMaterial'),
+}));
 
 const isHorizontalGroupingApplied = jest.spyOn(utilsModule, 'isHorizontalGroupingApplied');
 
@@ -108,6 +115,9 @@ describe('DateHeaderLayout', () => {
         });
       expect(firstCell.key())
         .toBe(firstCellData.key);
+
+      expect(getThemeType)
+        .toBeCalledTimes(1);
 
       const secondCell = cells.at(1);
       const secondCellData = dateHeaderData.dataMap[0][1];

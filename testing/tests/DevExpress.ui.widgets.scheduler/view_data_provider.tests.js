@@ -1576,6 +1576,7 @@ module('View Data Provider', {
                     weekDayLeftVirtualCellWidth: undefined,
                     weekDayRightVirtualCellCount: undefined,
                     weekDayRightVirtualCellWidth: undefined,
+                    isMonthDateHeader: undefined
                 };
 
                 assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
@@ -2800,6 +2801,7 @@ module('View Data Provider', {
                     weekDayLeftVirtualCellWidth: undefined,
                     weekDayRightVirtualCellCount: undefined,
                     weekDayRightVirtualCellWidth: undefined,
+                    isMonthDateHeader: undefined
                 };
 
                 assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
@@ -2827,6 +2829,7 @@ module('View Data Provider', {
                     weekDayLeftVirtualCellWidth: undefined,
                     weekDayRightVirtualCellCount: undefined,
                     weekDayRightVirtualCellWidth: undefined,
+                    isMonthDateHeader: undefined
                 };
 
                 assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
@@ -2873,6 +2876,7 @@ module('View Data Provider', {
                     weekDayLeftVirtualCellWidth: 0,
                     weekDayRightVirtualCellCount: 8,
                     weekDayRightVirtualCellWidth: 800,
+                    isMonthDateHeader: undefined
                 };
 
                 assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
@@ -2922,6 +2926,7 @@ module('View Data Provider', {
                     weekDayLeftVirtualCellWidth: 0,
                     weekDayRightVirtualCellCount: 4,
                     weekDayRightVirtualCellWidth: 400,
+                    isMonthDateHeader: undefined
                 };
 
                 assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');
@@ -3020,6 +3025,7 @@ module('View Data Provider', {
                     weekDayLeftVirtualCellWidth: 0,
                     weekDayRightVirtualCellCount: 4,
                     weekDayRightVirtualCellWidth: 400,
+                    isMonthDateHeader: undefined
                 };
 
                 assert.deepEqual(viewDataProvider.dateHeaderData, dateHeaderData, 'Correct dateHeaderData');

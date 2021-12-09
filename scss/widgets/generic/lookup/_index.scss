@@ -54,14 +54,6 @@ $generic-lookup-field-padding-rtl:
       }
     }
   }
-
-  &.dx-texteditor-with-floating-label {
-    &.dx-lookup-empty {
-      .dx-lookup-field {
-        font-size: 0;
-      }
-    }
-  }
 }
 
 .dx-lookup-field {

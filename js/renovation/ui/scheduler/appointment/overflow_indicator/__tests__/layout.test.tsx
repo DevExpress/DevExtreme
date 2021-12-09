@@ -50,11 +50,32 @@ describe('OverflowIndicator', () => {
 
       expect(button.props)
         .toMatchObject({
-          text: 'some-text',
+          text: '',
           style: 'some-styles',
           className: 'some-class',
           type: 'default',
           stylingMode: 'contained',
+        });
+    });
+
+    it('it should has correct render', () => {
+      const overflowIndicator = render({
+        text: 'some-text',
+        styles: 'some-styles',
+        classes: 'some-class',
+      });
+
+      const button = overflowIndicator.childAt(0);
+
+      expect(button.children)
+        .toHaveLength(1);
+
+      expect(button.childAt(0).type())
+        .toBe('span');
+
+      expect(button.childAt(0).props())
+        .toMatchObject({
+          children: 'some-text',
         });
     });
 
