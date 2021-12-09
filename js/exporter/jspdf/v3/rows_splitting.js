@@ -1,37 +1,41 @@
 import { isDefined } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 
-function splitRowsInfosHorizontally(rowsInfosByPages, splitByColumns) {
-    if(!isDefined(splitByColumns)) {
-        return rowsInfosByPages;
+function applySplitting(pdfCellsInfo, options) {
+    if(!isDefined(options.horizontalSplitWidth)) {
+        return [ pdfCellsInfo ];
     }
 
-    const newRowsInfosByPages = [];
-    const columnIndexes = splitByColumns;
+    const pdfCellsInfoByPage = [
+        [] // Empty Page
+    ];
 
-    for(let i = 0; i <= columnIndexes.length; i++) {
-        const newRowsInfos = [];
+    pdfCellsInfo
+        .forEach(pdfCellInfo => {
+            const { _rect, pdfRowInfo, gridCell, ...pdfCell } = pdfCellInfo;
+            const _newRect = extend({}, pdfCellInfo._rect);
+            const splitWidth = options.horizontalSplitWidth;
 
-        rowsInfosByPages.forEach((rowsInfos) => rowsInfos.forEach(rowInfo => {
-            const newRowsInfo = extend({}, rowInfo);
-            newRowsInfo.cells = [];
-
-            const startColumn = i === 0 ? 0 : columnIndexes[i - 1];
-            const length = i < columnIndexes.length ? columnIndexes[i] - startColumn : rowInfo.cells.length - startColumn;
-            if(length > 0) {
-                for(let cellIndex = startColumn; cellIndex < startColumn + length; cellIndex++) {
-                    newRowsInfo.cells.push(rowInfo.cells[cellIndex]);
-                }
-                newRowsInfos.push(newRowsInfo);
+            let pageIndex = 0;
+            if((_rect.x + _rect.w) > splitWidth) {
+                const moveToPage = Math.floor((_rect.x + _rect.w) / splitWidth);
+                pageIndex += moveToPage;
+                _newRect.x = options?.topLeft?.x ?? 0;
             }
-        }));
 
-        if(newRowsInfos.length > 0) {
-            newRowsInfosByPages.push(newRowsInfos);
-        }
-    }
+            const newPdfCellInfo = {
+                _rect: _newRect,
+                pdfRowInfo,
+                gridCell,
+                ...pdfCell
+            };
 
-    return newRowsInfosByPages;
+            // const pageIndex = cellInfo.pageIndex;
+            pdfCellsInfoByPage[pageIndex] = pdfCellsInfoByPage[pageIndex] ?? [];
+            pdfCellsInfoByPage[pageIndex].push(newPdfCellInfo);
+        });
+
+    return pdfCellsInfoByPage;
 }
 
-export { splitRowsInfosHorizontally };
+export { applySplitting };
