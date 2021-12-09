@@ -117,4 +117,11 @@ type ExternalFormat = never;
  * @namespace DevExpress.ui
  * @public
  */
-export type Format = FormatObject | PredefinedFormat | string | ((value: number | Date) => string) | ExternalFormat;
+export type Format =
+  FormatObject |
+  PredefinedFormat |
+  string |
+  ((value: number | Date) => string) |
+  ((value: Date) => string) |
+  ((value: number) => string) |
+  ExternalFormat;
