@@ -80,9 +80,9 @@ function preparePackageForPackagr(packageObject, basePackageObject, context) {
     // TODO: we should do this in a better way
     packageObject.devDependencies = {
         ...packageObject.devDependencies,
-        "@angular/core": "11.2.14",
-        "@angular/common": "11.2.14",
-        "@angular/forms": "11.2.14",
+        "@angular/core": "^12.2.14",
+        "@angular/common": "^12.2.14",
+        "@angular/forms": "^12.2.14",
     }
 }
 function runPackagr(context) {
