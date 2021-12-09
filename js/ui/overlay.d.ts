@@ -67,7 +67,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     deferRendering?: boolean;
     /**
      * @docid
-     * @deprecated
+     * @deprecated dxOverlayOptions.wrapperAttr
      * @default {}
      * @public
      */
