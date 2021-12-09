@@ -11,11 +11,11 @@ import { Pager as BasePager } from '../../../pager/pager';
 export const viewFunction = (viewModel: GridPager): JSX.Element => (
   <BasePager
     pageSizes={viewModel.allowedPageSizes}
-    displayMode={viewModel.props.displayMode}
-    infoText={viewModel.props.infoText}
-    showInfo={viewModel.props.showInfo}
-    showNavigationButtons={viewModel.props.showNavigationButtons}
-    showPageSizes={viewModel.props.showPageSizeSelector}
+    displayMode={viewModel.props.pager.displayMode}
+    infoText={viewModel.props.pager.infoText}
+    showInfo={viewModel.props.pager.showInfo}
+    showNavigationButtons={viewModel.props.pager.showNavigationButtons}
+    showPageSizes={viewModel.props.pager.showPageSizeSelector}
     pageCount={viewModel.props.pageCount}
     visible={viewModel.visible}
     totalCount={viewModel.props.totalCount}
@@ -53,7 +53,10 @@ export class GridPagerUserProps {
 }
 
 @ComponentBindings()
-export class GridPagerProps extends GridPagerUserProps {
+export class GridPagerProps {
+  @OneWay()
+  pager: GridPagerUserProps = new GridPagerUserProps();
+
   @TwoWay()
   pageSize: number | 'all' = 20;
 
@@ -85,28 +88,26 @@ export class GridPager extends JSXComponent(GridPagerProps) {
   }
 
   get visible(): boolean {
-    if (this.props.visible === 'auto') {
+    if (this.props.pager.visible === 'auto') {
       return this.props.pageCount > 1;
     }
 
-    return this.props.visible;
+    return this.props.pager.visible;
   }
 
   get allowedPageSizes(): (number | 'all')[] {
-    if (this.props.allowedPageSizes === 'auto') {
+    if (this.props.pager.allowedPageSizes === 'auto') {
       if (this.pageSize === 'all') {
         return [];
-        // eslint-disable-next-line no-else-return
-      } else {
-        return [
-          Math.floor((this.pageSize as number) / 2),
-          this.pageSize as number,
-          (this.pageSize as number) * 2,
-        ];
       }
+      return [
+        Math.floor((this.pageSize as number) / 2),
+        this.pageSize as number,
+        (this.pageSize as number) * 2,
+      ];
     }
 
-    return this.props.allowedPageSizes;
+    return this.props.pager.allowedPageSizes;
   }
 
   get pageSize(): number | 'all' {

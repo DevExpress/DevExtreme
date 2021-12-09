@@ -6,14 +6,13 @@ import {
 
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
-import messageLocalization from '../../../../localization/message';
 
 import type { RowData } from './types';
 
 import { TableContent } from './views/table_content';
 import { TableHeader } from './views/table_header';
 
-import { GridPager, GridPagerUserProps as PagerProps } from './widgets/pager';
+import { GridPager, GridPagerUserProps } from './widgets/pager';
 
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -36,7 +35,7 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
       <TableContent columns={viewModel.props.columns} dataSource={viewModel.visibleItems} />
       <GridPager
         // eslint-disable-next-line react/jsx-props-no-spreading
-        {...viewModel.props.pager}
+        pager={viewModel.props.pager}
         pageCount={viewModel.pagingPageCount}
         totalCount={viewModel.props.dataSource.length}
 
@@ -71,15 +70,7 @@ export class DataGridLightProps extends BaseWidgetProps {
   columns: string[] = [];
 
   @Nested()
-  pager: PagerProps = {
-    allowedPageSizes: 'auto',
-    displayMode: 'adaptive',
-    infoText: messageLocalization.format('dxPager-infoText'),
-    showInfo: false,
-    showNavigationButtons: false,
-    showPageSizeSelector: false,
-    visible: 'auto',
-  };
+  pager: GridPagerUserProps = new GridPagerUserProps();
 
   @Nested()
   paging: PagingProps = {
