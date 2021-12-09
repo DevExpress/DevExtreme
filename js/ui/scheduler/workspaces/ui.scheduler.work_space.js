@@ -2457,7 +2457,9 @@ class SchedulerWorkSpace extends WidgetObserver {
                 this._addTableClass(this._allDayTables[i], ALL_DAY_TABLE_CLASS);
             }
         } else {
-            this._addTableClass(this._$allDayTable, ALL_DAY_TABLE_CLASS);
+            if(!this.isRenovatedRender()) {
+                this._addTableClass(this._$allDayTable, ALL_DAY_TABLE_CLASS);
+            }
         }
     }
 
