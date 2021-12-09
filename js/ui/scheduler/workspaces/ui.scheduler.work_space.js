@@ -2408,7 +2408,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._$sidebarScrollableContent.append(this._$groupTable, this._$timePanel);
         } else {
             this._headerScrollable.$content().append(this._$allDayPanel);
-            this._$allDayPanel.append(this._$allDayContainer, this._$allDayTable);
+            this._$allDayPanel?.append(this._$allDayContainer, this._$allDayTable);
             this._$sidebarScrollableContent.append(this._$timePanel);
         }
 
