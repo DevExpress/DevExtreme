@@ -23860,6 +23860,8 @@ declare module DevExpress.ui {
     | PredefinedFormat
     | string
     | ((value: number | Date) => string)
+    | ((value: Date) => string)
+    | ((value: number) => string)
     | ExternalFormat;
   /**
    * [descr:GridBase]
