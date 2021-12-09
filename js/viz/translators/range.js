@@ -60,6 +60,7 @@ _Range.prototype = {
         };
 
         checkField('invert');
+        checkField('containsConstantLine');
         checkField(axisTypeSelector);
         checkField('dataType');
         checkField('isSpacedMargin');
