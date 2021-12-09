@@ -1,6 +1,8 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import { GridPager, viewFunction as GridPagerView, GridPagerProps } from '../pager';
+import {
+  GridPager, viewFunction as GridPagerView, GridPagerProps, GridPagerUserProps,
+} from '../pager';
 import { Pager } from '../../../../pager/pager';
 
 describe('Pager', () => {
@@ -61,21 +63,30 @@ describe('Pager', () => {
     describe('Getters', () => {
       describe('visible', () => {
         it('should be boolean if prop is boolean', () => {
+          const pager = new GridPagerUserProps();
+          pager.visible = true;
+
           expect(new GridPager({
-            visible: true,
+            pager,
           }).visible).toEqual(true);
         });
 
         it('should be false when auto and pageCount is 1', () => {
+          const pager = new GridPagerUserProps();
+          pager.visible = 'auto';
+
           expect(new GridPager({
-            visible: 'auto',
+            pager,
             pageCount: 1,
           }).visible).toEqual(false);
         });
 
         it('should be true when auto and pageCount is more than 1', () => {
+          const pager = new GridPagerUserProps();
+          pager.visible = 'auto';
+
           expect(new GridPager({
-            visible: 'auto',
+            pager,
             pageCount: 2,
           }).visible).toEqual(true);
         });
@@ -83,21 +94,30 @@ describe('Pager', () => {
 
       describe('allowedPageSizes', () => {
         it('should be equal to prop if it is array', () => {
+          const pager = new GridPagerUserProps();
+          pager.allowedPageSizes = [1, 2, 3];
+
           expect(new GridPager({
-            allowedPageSizes: [1, 2, 3],
+            pager,
           }).allowedPageSizes).toEqual([1, 2, 3]);
         });
 
         it('should be calculated when auto', () => {
+          const pager = new GridPagerUserProps();
+          pager.allowedPageSizes = 'auto';
+
           expect(new GridPager({
-            allowedPageSizes: 'auto',
+            pager,
             pageSize: 20,
           }).allowedPageSizes).toEqual([10, 20, 40]);
         });
 
         it('should be empty when auto and pageSize is all', () => {
+          const pager = new GridPagerUserProps();
+          pager.allowedPageSizes = 'auto';
+
           expect(new GridPager({
-            allowedPageSizes: 'auto',
+            pager,
             pageSize: 'all',
           }).allowedPageSizes).toEqual([]);
         });
