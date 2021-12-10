@@ -132,7 +132,7 @@ const Validator = DOMComponent.inherit({
         if(dxStandardEditor) {
             const rules = this.option('validationRules') || [];
             const isRequired = rules.some(({ type }) => type === 'required') || null;
-            dxStandardEditor.setAria('required', isRequired);
+            dxStandardEditor.option('elementAttr', { 'aria-required': isRequired });
         }
     },
 
