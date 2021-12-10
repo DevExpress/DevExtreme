@@ -1,16 +1,10 @@
 import {
-  Component, ComponentBindings, ForwardRef, JSXComponent, OneWay, RefObject, Slot,
+  Component, ComponentBindings, ForwardRef, JSXComponent, RefObject, Slot,
 } from '@devextreme-generator/declarations';
-import { Table } from '../../table';
-import { AllDayPanelTableBody } from './table_body';
-import { ViewCellData } from '../../../types';
 import { LayoutProps } from '../../layout_props';
-import { DefaultSizes } from '../../../const';
-import { DateTable } from '../../../../../../component_wrapper/scheduler/date_table';
+import { AllDayTable } from './table';
 
 export const viewFunction = ({
-  emptyTableHeight,
-  allDayPanelData,
   props: {
     tableRef,
     viewData,
@@ -23,28 +17,17 @@ export const viewFunction = ({
     className="dx-scheduler-all-day-panel"
   >
     {allDayAppointments}
-    <Table
-      className="dx-scheduler-all-day-table"
-      height={emptyTableHeight}
-      width={width}
+    <AllDayTable
       tableRef={tableRef}
-    >
-      <AllDayPanelTableBody
-        viewData={allDayPanelData}
-        leftVirtualCellWidth={viewData.leftVirtualCellWidth}
-        rightVirtualCellWidth={viewData.rightVirtualCellWidth}
-        leftVirtualCellCount={viewData.leftVirtualCellCount}
-        rightVirtualCellCount={viewData.rightVirtualCellCount}
-        dataCellTemplate={dataCellTemplate}
-      />
-    </Table>
+      viewData={viewData}
+      dataCellTemplate={dataCellTemplate}
+      width={width}
+    />
   </div>
 );
 
 @ComponentBindings()
 export class AllDayPanelLayoutProps extends LayoutProps {
-  @OneWay() className = '';
-
   @ForwardRef() tableRef?: RefObject<HTMLTableElement>;
 
   @Slot() allDayAppointments?: JSX.Element;
@@ -53,19 +36,5 @@ export class AllDayPanelLayoutProps extends LayoutProps {
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: {
-    register: true,
-    component: DateTable,
-  },
 })
-export class AllDayPanelLayout extends JSXComponent(AllDayPanelLayoutProps) {
-  get allDayPanelData(): ViewCellData[] | undefined {
-    return this.props.viewData.groupedData[0].allDayPanel;
-  }
-
-  get emptyTableHeight(): number | undefined {
-    return this.allDayPanelData
-      ? undefined
-      : DefaultSizes.allDayPanelHeight;
-  }
-}
+export class AllDayPanelLayout extends JSXComponent(AllDayPanelLayoutProps) {}
