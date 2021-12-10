@@ -9,6 +9,12 @@ import * as utilsModule from '../../../../utils';
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../consts';
 import { DateHeaderCell } from '../../../../base/header_panel/date_header/cell';
 
+jest.mock('../../../../../../../utils/getThemeType', () => ({
+  __esModule: true,
+  ...jest.requireActual('../../../../../../../utils/getThemeType'),
+  default: jest.fn(() => ({ isMaterial: true })),
+}));
+
 const isHorizontalGroupingApplied = jest.spyOn(utilsModule, 'isHorizontalGroupingApplied');
 
 describe('TimelineDateHeaderLayout', () => {
@@ -235,6 +241,67 @@ describe('TimelineDateHeaderLayout', () => {
             expect(row.props())
               .toMatchObject(expectedRowProps[index]);
           });
+        });
+      });
+    });
+
+    describe('Material theme', () => {
+      const defaultHeaderRow = {
+        leftVirtualCellCount: 1,
+        leftVirtualCellWidth: 2,
+        rightVirtualCellCount: 3,
+        rightVirtualCellWidth: 4,
+        weekDayLeftVirtualCellCount: 5,
+        weekDayLeftVirtualCellWidth: 6,
+        weekDayRightVirtualCellCount: 7,
+        weekDayRightVirtualCellWidth: 8,
+      };
+
+      const headerRow1 = {
+        ...defaultHeaderRow,
+        dataMap: [[dateHeaderData.dataMap[0][0]]],
+      };
+
+      const headerRow2 = {
+        ...defaultHeaderRow,
+        dataMap: [[dateHeaderData.dataMap[0][0]], [dateHeaderData.dataMap[0][1]]],
+      };
+
+      [
+        {
+          rowCount: 1, data: headerRow1, isMonthDateHeader: false, expected: false,
+        },
+        {
+          rowCount: 1, data: headerRow1, isMonthDateHeader: true, expected: true,
+        },
+        {
+          rowCount: 2, data: headerRow2, isMonthDateHeader: false, expected: true,
+        },
+        {
+          rowCount: 2, data: headerRow2, isMonthDateHeader: true, expected: true,
+        },
+      ].forEach(({
+        rowCount, data, isMonthDateHeader, expected,
+      }) => {
+        it(`should correctly determine split text if rowCount=${rowCount}, isMonthDateHeader=${isMonthDateHeader}`, () => {
+          const layout = render({
+            isHorizontalGrouping: true,
+            props: {
+              dateHeaderData: {
+                ...data,
+                isMonthDateHeader,
+              },
+              dateCellTemplate: () => null,
+              timeCellTemplate: () => null,
+            },
+          });
+
+          const cells = layout.find(DateHeaderCell);
+
+          expect(cells.at(0).props())
+            .toMatchObject({
+              splitText: expected,
+            });
         });
       });
     });

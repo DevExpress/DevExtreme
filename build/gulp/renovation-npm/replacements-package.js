@@ -64,7 +64,7 @@ function performPackageReplacements(context, additionalReplacements) {
         if (context.production) {
             delete packageObject.peerDependencies.devextreme;
             packageObject.dependencies = {
-                devextreme: ctx.version
+                devextreme: dxversion
             };
         }
 

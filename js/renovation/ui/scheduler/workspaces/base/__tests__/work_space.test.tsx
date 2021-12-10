@@ -2614,6 +2614,7 @@ describe('WorkSpace', () => {
               weekDayLeftVirtualCellWidth: undefined,
               weekDayRightVirtualCellCount: undefined,
               weekDayRightVirtualCellWidth: undefined,
+              isMonthDateHeader: false,
             });
         });
 
@@ -2705,6 +2706,7 @@ describe('WorkSpace', () => {
               weekDayLeftVirtualCellWidth: 0,
               weekDayRightVirtualCellCount: 0,
               weekDayRightVirtualCellWidth: 0,
+              isMonthDateHeader: false,
             });
         });
       });
@@ -3019,6 +3021,7 @@ describe('WorkSpace', () => {
               isAllDayPanelSupported: true,
               isProvideVirtualCellsWidth: false,
               isRenderTimePanel: true,
+              isMonthDateHeader: false,
               groupPanelClassName: 'dx-scheduler-work-space-vertical-group-table',
               headerCellTextFormat: formatWeekdayAndDay,
               getDateForHeaderText: expect.any(Function),

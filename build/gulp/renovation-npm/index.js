@@ -12,7 +12,6 @@ const { removeUnusedModules, cleanEmptyFolders } = require('./remove-unused-modu
 const babel = require('gulp-babel');
 const transpileConfig = require('../transpile-config');
 const { run } = require('./utils');
-const argv = require('yargs').argv;
 
 function copyMiscFiles(context, additionalReplacements) {
     return () => merge(
@@ -45,7 +44,7 @@ function transpileJSModules(context) {
                     .pipe(gulp.dest(context.destination));
 }
 function installPackages(context) {
-    return run('npm i', { cwd: context.destination });
+    return run('npm i --no-audit --no-fund', { cwd: context.destination });
 }
 function generateRenovation(context, generator) {
     return generator;
@@ -83,7 +82,7 @@ function addCompilationTask(frameworkData) {
         source: `artifacts/${frameworkData.name}/renovation`,
         destination: `artifacts/npm-${frameworkData.name}`,
         extensions: ['.js', '.ts', '.d.ts', '.tsx'],
-        production: argv.production,
+        production: (process.env['NPM_PRODUCTION'] || '').toLowerCase() === 'true',
         ...frameworkData,
     }
     const steps = [
@@ -128,7 +127,8 @@ function addCompilationTask(frameworkData) {
     ];
 
     const builtSteps = buildSeries(steps, context)
-    gulp.task(`renovation-npm-${context.name}`, gulp.series(...buildSeries(steps, context)));
+    const result = builtSteps.length>1 ? gulp.series(...buildSeries(steps, context)) : builtSteps[0]
+    gulp.task(`renovation-npm-${context.name}`, result);
 }
 
 addCompilationTask({
@@ -156,10 +156,20 @@ addCompilationTask({
     },
     components: 'Button',
     steps: {
+        installPackages: {
+            before: {
+                condition: (ctx) => !ctx.production,
+                actions: [require('./steps-angular').beforeNpmInstall]
+            },
+            after: {
+                condition: (ctx) => !ctx.production,
+                actions: [require('./steps-angular').afterNpmInstall]
+            }
+        },
         copyMiscFiles: {
             arg: (ctx) => require('./steps-angular').preparePackageForPackagr,
             after: {
-                actions: [require('./steps-angular').createNgEntryPoint]
+                actions: [require('./steps-angular').createNgEntryPoint, require('./steps-angular').createTSConfig]
             }
         },
         teardown: {

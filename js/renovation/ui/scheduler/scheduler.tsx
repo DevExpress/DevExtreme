@@ -244,6 +244,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() tooltipData: AppointmentViewModel[] = [];
 
+  @InternalState() lastViewDateByEndDayHour?: Date;
+
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
     const { views, currentView } = this.props;
@@ -252,7 +254,43 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get currentViewConfig(): CurrentViewConfigType {
-    return getCurrentViewConfig(this.currentViewProps, this.props);
+    const {
+      firstDayOfWeek, startDayHour, endDayHour, cellDuration, groupByDate, scrolling,
+      dataCellTemplate, timeCellTemplate, resourceCellTemplate, dateCellTemplate,
+      appointmentTemplate, appointmentCollectorTemplate, maxAppointmentsPerCell, currentDate,
+      showAllDayPanel, showCurrentTimeIndicator, indicatorUpdateInterval, shadeUntilCurrentTime,
+      crossScrollingEnabled, height, width, tabIndex, accessKey, focusStateEnabled,
+    } = this.props;
+
+    return getCurrentViewConfig(
+      this.currentViewProps,
+      {
+        firstDayOfWeek,
+        startDayHour,
+        endDayHour,
+        cellDuration,
+        groupByDate,
+        scrolling,
+        dataCellTemplate,
+        timeCellTemplate,
+        resourceCellTemplate,
+        dateCellTemplate,
+        appointmentTemplate,
+        appointmentCollectorTemplate,
+        maxAppointmentsPerCell,
+        showAllDayPanel,
+        showCurrentTimeIndicator,
+        indicatorUpdateInterval,
+        shadeUntilCurrentTime,
+        crossScrollingEnabled,
+        height,
+        width,
+        tabIndex,
+        accessKey,
+        focusStateEnabled,
+      },
+      currentDate,
+    );
   }
 
   get isValidViewDataProvider(): boolean {
@@ -298,7 +336,18 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get dataAccessors(): DataAccessorType {
-    return createDataAccessors(this.props);
+    return createDataAccessors({
+      startDateExpr: this.props.startDateExpr,
+      endDateExpr: this.props.endDateExpr,
+      startDateTimeZoneExpr: this.props.startDateTimeZoneExpr,
+      endDateTimeZoneExpr: this.props.endDateTimeZoneExpr,
+      allDayExpr: this.props.allDayExpr,
+      textExpr: this.props.textExpr,
+      descriptionExpr: this.props.descriptionExpr,
+      recurrenceRuleExpr: this.props.recurrenceRuleExpr,
+      recurrenceExceptionExpr: this.props.recurrenceExceptionExpr,
+      resources: this.props.resources,
+    });
   }
 
   get startViewDate(): Date {
@@ -581,20 +630,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     if (
       !this.internalDataSource.isLoaded()
       && !this.internalDataSource.isLoading()
-      && this.workSpaceViewModel
     ) {
-      if (this.props.remoteFiltering) {
-        const { viewDataProvider } = this.workSpaceViewModel;
-        const startDate = viewDataProvider.getStartViewDate();
-        const endDate = viewDataProvider.getLastViewDateByEndDayHour(
-          this.currentViewConfig.endDayHour,
-        );
-
+      if (this.props.remoteFiltering && this.lastViewDateByEndDayHour) {
         const combinedFilter = combineRemoteFilter({
           dataAccessors: this.dataAccessors,
           dataSourceFilter: this.internalDataSource.filter(),
-          min: startDate,
-          max: endDate,
+          min: this.startViewDate,
+          max: this.lastViewDateByEndDayHour,
           dateSerializationFormat: this.props.dateSerializationFormat,
         });
 
@@ -610,6 +652,14 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   onViewRendered(viewMetaData: ViewMetaData): void {
     this.workSpaceViewModel = viewMetaData;
+    const { viewDataProvider } = viewMetaData;
+
+    const lastViewDate = viewDataProvider.getLastViewDateByEndDayHour(
+      this.currentViewConfig.endDayHour,
+    );
+    if (lastViewDate.getTime() !== this.lastViewDateByEndDayHour?.getTime()) {
+      this.lastViewDateByEndDayHour = lastViewDate;
+    }
   }
 
   setCurrentView(view: string): void {

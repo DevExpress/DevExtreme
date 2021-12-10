@@ -1,6 +1,6 @@
 import { formatWeekday, formatWeekdayAndDay } from '../../view_model/to_test/views/utils/base';
 import {
-  getDateForHeaderText as timelineGetDateFrHeaderText,
+  getDateForHeaderText as timelineGetDateForHeaderText,
 } from '../../view_model/to_test/views/utils/timeline_week';
 import { GroupOrientation, ViewType } from '../../types';
 import { MonthDateTableLayout } from '../month/date_table/layout';
@@ -32,6 +32,7 @@ const verticalViewConfig: ViewRenderConfig = {
   getDateForHeaderText,
   isRenderDateHeader: true,
   isGenerateWeekDaysHeaderData: false,
+  isMonthDateHeader: false,
   scrollingDirection: 'vertical',
   className: 'dx-scheduler-work-space-day',
   isCreateCrossScrolling: false,
@@ -47,13 +48,14 @@ const timelineViewConfig: ViewRenderConfig = {
   isRenderTimePanel: false,
   groupPanelClassName: 'dx-scheduler-group-table',
   headerCellTextFormat: 'shorttime',
-  getDateForHeaderText: timelineGetDateFrHeaderText,
+  getDateForHeaderText: timelineGetDateForHeaderText,
   isRenderDateHeader: true,
   isGenerateWeekDaysHeaderData: true,
   scrollingDirection: 'horizontal',
   className: `dx-scheduler-timeline-day ${TIMELINE_CLASS}`,
   isCreateCrossScrolling: true,
   defaultGroupOrientation: 'vertical',
+  isMonthDateHeader: false,
   isUseMonthDateTable: false,
   isUseTimelineHeader: true,
 };
@@ -110,6 +112,7 @@ const getMonthViewConfig: GetRenderConfig = (
   isCreateCrossScrolling: crossScrollingEnabled
     || isVerticalGroupingApplied(groups, groupOrientation),
   defaultGroupOrientation: 'horizontal',
+  isMonthDateHeader: true,
   isUseMonthDateTable: true,
   isUseTimelineHeader: false,
 });
@@ -131,6 +134,7 @@ const getTimelineMonthViewConfig: GetRenderConfig = () => ({
   className: `dx-scheduler-timeline-month ${TIMELINE_CLASS}`,
   headerCellTextFormat: formatWeekdayAndDay,
   isGenerateWeekDaysHeaderData: false,
+  isMonthDateHeader: true,
   getDateForHeaderText,
 });
 
