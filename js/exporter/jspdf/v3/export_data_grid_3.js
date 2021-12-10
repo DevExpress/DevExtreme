@@ -82,6 +82,10 @@ function exportDataGrid(doc, dataGrid, options) {
 
             applyBordersConfig(rowsInfo);
 
+            // splitting to pages
+            // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
+            // TODO: applySplitting()
+
             const pdfCellsInfo = [].concat.apply([],
                 rowsInfo.map(rowInfo => {
                     return rowInfo.cells
@@ -91,10 +95,6 @@ function exportDataGrid(doc, dataGrid, options) {
                         });
                 })
             );
-
-            // splitting to pages
-            // ?? TODO: Does split a cell which have an attribute 'colSpan/rowSpan > 0' into two cells and place the first cell on the first page and second cell on the second page. And show initial 'text' in the both new cells ??
-            // TODO: applySplitting()
 
             const docStyles = getDocumentStyles(doc);
 

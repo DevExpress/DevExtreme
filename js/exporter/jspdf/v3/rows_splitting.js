@@ -30,7 +30,6 @@ function applySplitting(pdfCellsInfo, options) {
                 ...pdfCell
             };
 
-            // const pageIndex = cellInfo.pageIndex;
             pdfCellsInfoByPage[pageIndex] = pdfCellsInfoByPage[pageIndex] ?? [];
             pdfCellsInfoByPage[pageIndex].push(newPdfCellInfo);
         });
