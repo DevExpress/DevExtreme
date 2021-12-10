@@ -1,4 +1,5 @@
 import $ from '../../core/renderer';
+import Guid from '../../core/guid';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { focused } from '../widget/selectors';
@@ -473,6 +474,10 @@ const TextEditorBase = Editor.inherit({
         this._label.updateMaxWidth(this._getLabelContainerWidth());
     },
 
+    _setLabelContainerAria: function(labelId) {
+        this.setAria('labelledby', labelId, this._getLabelContainer());
+    },
+
     _renderLabel: function() {
         this._cleanLabelObservable();
 
@@ -480,7 +485,10 @@ const TextEditorBase = Editor.inherit({
 
         const { label, labelMode, labelMark } = this.option();
 
+        const labelId = `dx-texteditor-label-${new Guid()}`;
+
         const labelConfig = {
+            id: labelId,
             $editor: this.$element(),
             text: label,
             mark: labelMark,
@@ -492,7 +500,9 @@ const TextEditorBase = Editor.inherit({
 
         this._label = new TextEditorLabelCreator(labelConfig);
 
-        if(this._labelContainerElement) {
+        if(this._label.isVisible()) {
+            this._setLabelContainerAria(labelId);
+
             resizeObserverSingleton.observe(this._labelContainerElement, this._updateLabelWidth.bind(this));
         }
     },

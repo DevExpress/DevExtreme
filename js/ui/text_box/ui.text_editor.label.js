@@ -11,6 +11,7 @@ const LABEL_AFTER_CLASS = 'dx-label-after';
 
 class TextEditorLabel {
     constructor({
+        id,
         $editor,
         text, mode, mark,
         containsButtonsBefore,
@@ -18,6 +19,7 @@ class TextEditorLabel {
         beforeWidth
     }) {
         this._props = {
+            id,
             $editor,
             text, mode, mark,
             containsButtonsBefore,
@@ -45,6 +47,7 @@ class TextEditorLabel {
 
         this._$root = $('<div>')
             .addClass(TEXTEDITOR_LABEL_CLASS)
+            .attr('id', this._props.id)
             .append(this._$before)
             .append(this._$label)
             .append(this._$after);
