@@ -27,7 +27,7 @@ import {
     SearchBoxMixinOptions,
 } from './widget/ui.search_box_mixin';
 
-interface ItemInfo<TKey = any> {
+export interface ItemInfo<TKey = any> {
     readonly itemData?: Item;
     readonly itemElement?: DxElement;
     readonly itemIndex?: number;
