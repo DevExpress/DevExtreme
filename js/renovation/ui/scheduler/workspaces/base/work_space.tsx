@@ -68,7 +68,7 @@ import { EffectReturn } from '../../../../utils/effect_return';
 import { ConfigContext, ConfigContextValue } from '../../../../common/config_context';
 import pointerEvents from '../../../../../events/pointer';
 import eventsEngine from '../../../../../events/core/events_engine';
-import { isMouseEvent } from '../../../../../events/utils';
+import { isMouseEvent } from '../../../../../events/utils/index';
 import { ALL_DAY_PANEL_CELL_CLASS, DATE_TABLE_CELL_CLASS } from '../const';
 
 const DATA_CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_PANEL_CELL_CLASS}`;
