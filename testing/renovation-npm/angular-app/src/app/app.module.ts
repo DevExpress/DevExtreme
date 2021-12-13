@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { DxButtonModule } from '@devextreme/angular';
+/* eslint-disable */
 import { AppComponent } from './app.component';
+import { DxButtonModule } from '@devextreme/angular';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    DxButtonModule,
+    DxButtonModule
   ],
   providers: [],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class AppModule { }
