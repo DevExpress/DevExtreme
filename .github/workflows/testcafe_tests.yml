@@ -1,5 +1,9 @@
 name: TestCafe tests
 
+env:
+  TESTCAFE_DASHBOARD_URL: https://ddev.testcafe.io
+  TESTCAFE_DASHBOARD_AUTHENTICATION_TOKEN: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9qZWN0SWQiOiJhNDg1YzQzZS02OGEwLTQ2NzctYTU5YS0xMzRjZDMwY2RlNDQiLCJpYXQiOjE2MzkxMzE5Mzh9.YiQgj8pQ2xnLlkdmHbQowqOuoG6TUeAS18N0HzxoeDc
+
 concurrency:
   group: wf-${{github.event.pull_request.number}}-${{github.workflow}}
   cancel-in-progress: true
@@ -74,6 +78,7 @@ jobs:
           { componentFolder: "renovation", name: "renovation (jquery) (2/2)", platform: "jquery", quarantineMode: false, inProgressRenovation: true, indices: "2/2" },
           { componentFolder: "renovation", name: "renovation (react)", platform: "react", quarantineMode: false, inProgressRenovation: true },
           { componentFolder: "renovation", name: "renovation (angular)", platform: "angular", quarantineMode: false, inProgressRenovation: true }
+          { componentFolder: "renovation", name: "renovation", reported: true, quarantineMode: false, inProgressRenovation: true }
         ]
     runs-on: shr-ubuntu-m5a-instance-cpu2ram8
     timeout-minutes: 90
@@ -124,6 +129,8 @@ jobs:
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
         all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION $INDICES $PLATFORM"
+        [ "${{ matrix.ARGS.reported }}" == true ] && DASHBOARD_REPORTER="--dashboard"
+        all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION $INDICES $DASHBOARD_REPORTER"
         echo "$all_args"
         npm run test-testcafe -- $all_args
 

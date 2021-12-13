@@ -25,12 +25,12 @@ createTestCafe('localhost', 1437, 1438)
         }
         const runner = testCafe.createRunner()
             .browsers(args.browsers.split(' '))
-
             .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
 
         if(args.concurrency > 0) {
             runner.concurrency(args.concurrency);
         }
+
         const filters = [];
         if(indices) {
             const [current, total] = indices.split(/_|of|\\|\//ig).map(x => +x);
@@ -59,9 +59,15 @@ createTestCafe('localhost', 1437, 1438)
                 return true;
             });
         }
+
         if(args.cache) {
             runner.cache = args.cache;
         }
+
+        if(args.dashboard) {
+            runner.reporter('dashboard');
+        }
+
         return runner.run({
             quarantineMode: args.quarantineMode
         });
@@ -89,7 +95,8 @@ function getArgs() {
             cache: true,
             quarantineMode: false,
             indices: '',
-            platform: ''
+            platform: '',
+            dashboard: false,
         }
     });
 }
