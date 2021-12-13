@@ -1190,7 +1190,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
     const realSetTimeout = window.setTimeout;
 
     // T644981
-    QUnit.test('ungrouping after grouping and scrolling should work correctly with large amount of data if row rendering mode is virtual', function(assert) {
+    QUnit[isRenovatedScrollable ? 'skip' : 'test']('ungrouping after grouping and scrolling should work correctly with large amount of data if row rendering mode is virtual', function(assert) {
         this.clock.restore();
         const done = assert.async();
         // arrange, act

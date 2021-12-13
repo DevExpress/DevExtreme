@@ -1361,6 +1361,10 @@ const PivotGrid = Widget.inherit({
                     rtlEnabled: that.option('rtlEnabled')
                 });
 
+                that._columnsArea.updateScrollableOptions({
+                    rtlEnabled: that.option('rtlEnabled')
+                });
+
                 each([that._columnsArea, that._rowsArea, that._dataArea], function(_, area) {
                     updateScrollableResults.push(area && area.updateScrollable());
                 });

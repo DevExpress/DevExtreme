@@ -9,12 +9,17 @@ QUnit.module('Widget creation', {
         fixture.appendChild(this.element);
     },
     afterEach: function() {
-        this.instance.dispose();
+        this.instance?.dispose();
     }
 });
 
 Object.keys(widgets).forEach(function(widget) {
     QUnit.test(widget + ' creating and optionChanged', function(assert) {
+        if(widget === 'Scheduler' && widgets[widget].IS_RENOVATED_WIDGET) {
+            assert.ok('Renovated scheduler doesn`t support server-side rendering');
+            return;
+        }
+
         this.instance = new widgets[widget](this.element);
 
         assert.ok(true, 'it\'s possible to create ' + widget);
