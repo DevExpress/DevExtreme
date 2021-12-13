@@ -35,12 +35,12 @@ jobs:
       with:
         node-version: '15'
 
-    # - name: Restore npm cache
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: ./node_modules
-    #     key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-    #     restore-keys: ${{ runner.os }}-node-modules
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
       run: npm install --no-audit --no-fund
@@ -92,12 +92,12 @@ jobs:
       with:
         node-version: '15'
 
-    # - name: Restore npm cache
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: ./node_modules
-    #     key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-    #     restore-keys: ${{ runner.os }}-node-modules
+    - name: Restore npm cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
       run: npm install --no-audit --no-fund
@@ -132,6 +132,8 @@ jobs:
         [ "${{ matrix.ARGS.reported }}" == true ] && DASHBOARD_REPORTER="--dashboard"
         all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION $INDICES $DASHBOARD_REPORTER"
         echo "$all_args"
+        echo "-> npm ls testcafe-reporter-dashboard <-"
+        npm ls testcafe-reporter-dashboard
         npm run test-testcafe -- $all_args
 
     - name: Copy compared screenshot artifacts
