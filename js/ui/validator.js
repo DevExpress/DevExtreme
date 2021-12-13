@@ -132,7 +132,11 @@ const Validator = DOMComponent.inherit({
         if(dxStandardEditor) {
             const rules = this.option('validationRules') || [];
             const isRequired = rules.some(({ type }) => type === 'required') || null;
-            dxStandardEditor.option('elementAttr', { 'aria-required': isRequired });
+
+            if(dxStandardEditor.isInitialized()) {
+                dxStandardEditor.setAria('required', isRequired);
+            }
+            dxStandardEditor.option('_onMarkupRendered', () => dxStandardEditor.setAria('required', isRequired));
         }
     },
 
@@ -234,6 +238,7 @@ const Validator = DOMComponent.inherit({
         this._validationInfo.skipValidation = false;
         this._resetValidationRules();
         this._applyValidationResult(result, adapter);
+        this._getEditor().off('contentReady', this._editorContentReadyHandler);
     },
 
     _updateValidationResult(result) {
