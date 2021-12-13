@@ -647,10 +647,7 @@ export class ViewDataGenerator {
     }
 
     getInterval(hoursInterval) {
-        if(this._interval === undefined) {
-            this._interval = hoursInterval * HOUR_MS;
-        }
-        return this._interval;
+        return hoursInterval * HOUR_MS;
     }
 
     _getIntervalDuration(intervalCount) {

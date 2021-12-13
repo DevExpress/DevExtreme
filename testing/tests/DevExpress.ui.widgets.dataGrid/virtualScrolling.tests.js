@@ -3,7 +3,8 @@ import 'ui/scroll_view/ui.scrollable';
 
 import $ from 'jquery';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
-import virtualScrollingCore, { VirtualScrollController, getPixelRatio } from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
+import { VirtualScrollController } from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
+import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
 import browser from 'core/utils/browser';
 import devices from 'core/devices';
 import renderer from 'core/renderer';
@@ -43,7 +44,7 @@ const mockDataSource = {
 const DEFAULT_TOTAL_ITEMS_COUNT = 20000;
 
 const DEFAULT_PAGE_SIZE = 20;
-const CONTENT_HEIGHT_LIMIT = virtualScrollingCore.getContentHeightLimit(browser);
+const CONTENT_HEIGHT_LIMIT = gridCoreUtils.getContentHeightLimit(browser);
 
 function resetMock(mock) {
     $.each(mock, function(_, method) {
@@ -548,7 +549,7 @@ QUnit.module('Virtual scrolling', {
         assert.strictEqual(this.scrollController.beginPageIndex(), mockDataSource.pageCount() / 2);
         assert.strictEqual(this.scrollController.endPageIndex(), mockDataSource.pageCount() / 2 + 1);
 
-        assert.strictEqual(this.scrollController.getContentOffset() * getPixelRatio(window), browser.mozilla ? 4000000 : 7500000);
+        assert.strictEqual(this.scrollController.getContentOffset() * gridCoreUtils.getPixelRatio(window), browser.mozilla ? 4000000 : 7500000);
         assert.ok(mockDataSource.load.called);
 
         assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
@@ -845,11 +846,11 @@ QUnit.module('Subscribe to external scrollable events', {
     // T470971
     QUnit.test('Content height limit for different browsers', function(assert) {
     // act, assert
-        assert.equal(virtualScrollingCore.getContentHeightLimit({ mozilla: true }), 8000000, 'content height limit for firefox');
-        virtualScrollingCore._setPixelRatioFn(function() { return 1; });
-        assert.equal(virtualScrollingCore.getContentHeightLimit({}), 15000000, 'content height limit for other browsers');
-        virtualScrollingCore._setPixelRatioFn(function() { return 2; });
-        assert.equal(virtualScrollingCore.getContentHeightLimit({}), 7500000, 'content height limit depends on devicePixelRatio for other browsers'); // T692460
+        assert.equal(gridCoreUtils.getContentHeightLimit({ mozilla: true }), 8000000, 'content height limit for firefox');
+        gridCoreUtils._setPixelRatioFn(function() { return 1; });
+        assert.equal(gridCoreUtils.getContentHeightLimit({}), 15000000, 'content height limit for other browsers');
+        gridCoreUtils._setPixelRatioFn(function() { return 2; });
+        assert.equal(gridCoreUtils.getContentHeightLimit({}), 7500000, 'content height limit depends on devicePixelRatio for other browsers'); // T692460
     });
 });
 

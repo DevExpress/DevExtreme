@@ -2,6 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as CellView } from '../cell';
 import { DateTableCellBase, DateTableCellBaseProps } from '../../cell';
+import { ALL_DAY_PANEL_CELL_CLASS } from '../../../../const';
 
 describe('AllDayPanelCell', () => {
   describe('Render', () => {
@@ -20,7 +21,7 @@ describe('AllDayPanelCell', () => {
       expect(cell.children())
         .toHaveLength(0);
 
-      expect(cell.hasClass('dx-scheduler-all-day-table-cell'))
+      expect(cell.hasClass(ALL_DAY_PANEL_CELL_CLASS))
         .toBe(true);
       expect(cell.hasClass('test-class'))
         .toBe(true);

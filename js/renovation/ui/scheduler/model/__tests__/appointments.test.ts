@@ -27,7 +27,7 @@ const prepareInstances = (
   viewDataProvider: ViewDataProviderType;
   DOMMetaData: CellsMetaData;
 } => {
-  const schedulerProps = new SchedulerProps();
+  const schedulerProps: any = new SchedulerProps();
   schedulerProps.currentDate = currentDate;
   let workspaceProps = new WorkSpaceProps();
   workspaceProps.type = viewType;
@@ -40,6 +40,7 @@ const prepareInstances = (
     ...getCurrentViewConfig(
       workspaceProps as unknown as Partial<ViewProps>,
       schedulerProps,
+      currentDate,
     ),
   };
 

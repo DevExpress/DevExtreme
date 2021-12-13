@@ -4,38 +4,36 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "build": "ng build"
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~13.0.0",
-    "@angular/common": "~13.0.0",
-    "@angular/compiler": "~13.0.0",
-    "@angular/core": "~13.0.0",
-    "@angular/forms": "~13.0.0",
-    "@angular/platform-browser": "~13.0.0",
-    "@angular/platform-browser-dynamic": "~13.0.0",
-    "@angular/router": "~13.0.0",
-    "@devextreme/angular": "file:../../../artifacts/npm-angular",
-    "devextreme": "file:../../../artifacts/npm/devextreme",
-    "rxjs": "~7.4.0",
+    "@angular/animations": "12.2.3",
+    "@angular/common": "12.2.3",
+    "@angular/compiler": "12.2.3",
+    "@angular/core": "12.2.3",
+    "@angular/forms": "12.2.3",
+    "@angular/platform-browser": "12.2.3",
+    "@angular/platform-browser-dynamic": "12.2.3",
+    "@angular/router": "12.2.3",
+    "@devextreme/angular": "file:devextreme-angular-22.1.0-dev.tgz",
+    "devextreme": "file:devextreme-22.1.0-dev.tgz",
+    "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~13.0.3",
-    "@angular/cli": "~13.0.3",
-    "@angular/compiler-cli": "~13.0.0",
-    "@types/jasmine": "~3.10.0",
+    "@angular-devkit/build-angular": "12.2.3",
+    "@angular/cli": "12.2.3",
+    "@angular/compiler-cli": "12.2.3",
+    "@types/jasmine": "~3.8.0",
     "@types/node": "^12.11.1",
-    "jasmine-core": "~3.10.0",
+    "jasmine-core": "~3.8.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "~4.4.3"
+    "typescript": "~4.3.5"
   }
 }

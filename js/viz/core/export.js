@@ -9,6 +9,7 @@ import { getTheme } from '../themes';
 import { start as hoverEventStart, end as hoverEventEnd } from '../../events/hover';
 import pointerEvents from '../../events/pointer';
 import { logger } from '../../core/utils/console';
+import { getWidth } from '../../core/utils/size';
 
 const pointerActions = [pointerEvents.down, pointerEvents.move].join(' ');
 
@@ -29,6 +30,8 @@ const DEFAULT_EXPORT_FORMAT = 'PNG';
 const ALLOWED_IMAGE_FORMATS = [DEFAULT_EXPORT_FORMAT, 'JPEG', 'GIF'];
 const ALLOWED_EXTRA_FORMATS = ['PDF', 'SVG'];
 const EXPORT_CSS_CLASS = 'dx-export-menu';
+
+const A4WidthCm = '21cm';
 
 const EXPORT_DATA_KEY = 'export-element-type';
 const FORMAT_DATA_KEY = 'export-element-format';
@@ -77,11 +80,23 @@ function print(imageSrc, options) {
     document.body.appendChild(iFrame);
 }
 
+function calculatePrintPageWidth(iFrameBody) {
+    iFrameBody.style.width = A4WidthCm;
+
+    const width = getWidth(iFrameBody);
+
+    iFrameBody.style.width = '';
+
+    return width;
+}
+
 function setPrint(imageSrc, options) {
     return function() {
         let window = this.contentWindow;
         const img = window.document.createElement('img');
         window.document.body.appendChild(img);
+
+        const widthRatio = calculatePrintPageWidth(window.document.body) / options.width;
 
         ///#DEBUG
         const origImageSrc = imageSrc;
@@ -91,13 +106,18 @@ function setPrint(imageSrc, options) {
         }
         ///#ENDDEBUG
 
+        if(widthRatio < 1) {
+            window.document.body.style.transform = `scale(${widthRatio})`;
+            window.document.body.style['transform-origin'] = '0 0';
+        }
+
         const removeFrame = () => {
             ///#DEBUG
             options.__test && options.__test.checkAssertions();
             ///#ENDDEBUG
             this.parentElement.removeChild(this);
             ///#DEBUG
-            options.__test && options.__test.deferred.resolve(origImageSrc);
+            options.__test && options.__test.deferred.resolve(origImageSrc, window?.document?.body?.style);
             ///#ENDDEBUG
         };
 
@@ -663,7 +683,7 @@ export const plugin = {
             options.format = 'PNG';
             options.forceProxy = true;
             options.fileSavingAction = eventArgs => {
-                print(`data:image/png;base64,${eventArgs.data}`, { __test: options.__test });
+                print(`data:image/png;base64,${eventArgs.data}`, { width: options.width, __test: options.__test });
                 eventArgs.cancel = true;
             };
 

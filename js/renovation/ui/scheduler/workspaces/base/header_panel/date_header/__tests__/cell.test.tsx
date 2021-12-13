@@ -5,6 +5,7 @@ import {
   DateHeaderCell,
   viewFunction as CellView,
 } from '../cell';
+import { DateHeaderText } from '../dateHeaderText';
 
 jest.mock('../../../../../../../utils/combine_classes', () => ({
   combineClasses: jest.fn(() => 'combineClasses'),
@@ -42,13 +43,23 @@ describe('DateHeaderCell', () => {
         .toBe('Test');
     });
 
-    it('should render text', () => {
-      const cell = render({ props: { text: 'Test text' } });
+    [true, false].forEach((splitText) => {
+      it(`should render date header text correctly if split text is ${splitText}`, () => {
+        const props = {
+          splitText,
+          text: 'Test text',
+        };
+        const cell = render({ props });
 
-      expect(cell.children())
-        .toHaveLength(1);
-      expect(cell.childAt(0).text())
-        .toBe('Test text');
+        expect(cell.children())
+          .toHaveLength(1);
+
+        expect(cell.childAt(0).type())
+          .toBe(DateHeaderText);
+
+        expect(cell.childAt(0).props())
+          .toEqual(props);
+      });
     });
 
     describe('templates', () => {

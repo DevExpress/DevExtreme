@@ -447,22 +447,6 @@ describe('Scheduler', () => {
             .toMatchObject(data);
         });
 
-        it('loadDataSource should not load dataItems if workSpaceViewModel is not defined', () => {
-          const data = [{
-            startDate: new Date(2021, 9, 6, 15, 15),
-            endDate: new Date(2021, 9, 6, 16, 16),
-            allDay: false,
-          }];
-          const scheduler = new Scheduler({
-            dataSource: data,
-          });
-
-          scheduler.loadDataSource();
-
-          expect(scheduler.dataItems)
-            .toHaveLength(0);
-        });
-
         it('loadDataSource should not load dataItems if internalDataSource is loaded', () => {
           const data = [{
             startDate: new Date(2021, 9, 6, 15, 15),
@@ -522,12 +506,9 @@ describe('Scheduler', () => {
               dateSerializationFormat: 'Some format',
             });
 
-            scheduler.workSpaceViewModel = {
-              viewDataProvider: {
-                getStartViewDate: () => new Date(2021, 10, 24, 9),
-                getLastViewDateByEndDayHour: () => new Date(2021, 10, 24, 18),
-              },
-            } as any;
+            jest.spyOn(scheduler, 'startViewDate', 'get')
+              .mockReturnValue(new Date(2021, 10, 24, 9));
+            scheduler.lastViewDateByEndDayHour = new Date(2021, 10, 24, 18);
 
             const { internalDataSource } = scheduler;
             internalDataSource.filter(userFilter);
@@ -553,142 +534,80 @@ describe('Scheduler', () => {
     });
 
     describe('Methods', () => {
-      it('dispose should pass call to instance', () => {
-        const scheduler = new Scheduler(new SchedulerProps());
-        const dispose = jest.fn();
+      describe('Public API', () => {
+        it('Non-implemented methods should not throw errors', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
 
-        scheduler.instance = {
-          dispose,
-        } as any;
+          expect(() => scheduler.addAppointment({
+            startDate: new Date(2021, 5, 15, 12),
+            endDate: new Date(2021, 5, 15, 14),
+            text: 'temp',
+          }))
+            .not.toThrow();
+          expect(() => scheduler.deleteAppointment({
+            startDate: new Date(2021, 5, 15, 12),
+            endDate: new Date(2021, 5, 15, 14),
+            text: 'temp',
+          }))
+            .not.toThrow();
+          expect(() => scheduler.updateAppointment({
+            startDate: new Date(2021, 5, 15, 12),
+            endDate: new Date(2021, 5, 15, 14),
+            text: 'temp',
+          }, {
+            startDate: new Date(2021, 5, 15, 12),
+            endDate: new Date(2021, 5, 15, 14),
+            text: 'changed',
+          }))
+            .not.toThrow();
 
-        scheduler.dispose()();
+          expect(() => scheduler.showAppointmentPopup())
+            .not.toThrow();
+          expect(() => scheduler.showAppointmentTooltip({}, ''))
+            .not.toThrow();
+          expect(() => scheduler.hideAppointmentPopup())
+            .not.toThrow();
 
-        expect(dispose).toBeCalledTimes(1);
-      });
-
-      it('getComponentInstance should pass call to instance', () => {
-        const scheduler = new Scheduler(new SchedulerProps());
-        const mockInstance = {};
-
-        scheduler.instance = mockInstance as any;
-        expect(scheduler.getComponentInstance()).toMatchObject(mockInstance);
-      });
-
-      it('*Appointment\'s methods should pass call to instance', () => {
-        const addAppointment = jest.fn();
-        const deleteAppointment = jest.fn();
-        const updateAppointment = jest.fn();
-
-        const scheduler = new Scheduler(new SchedulerProps());
-
-        scheduler.instance = {
-          addAppointment,
-          deleteAppointment,
-          updateAppointment,
-        } as any;
-
-        scheduler.addAppointment({
-          startDate: new Date(2021, 5, 15, 12),
-          endDate: new Date(2021, 5, 15, 14),
-          text: 'temp',
+          expect(() => scheduler.scrollTo(new Date()))
+            .not.toThrow();
+          expect(() => scheduler.scrollToTime(12, 12))
+            .not.toThrow();
         });
-        expect(addAppointment).toHaveBeenCalled();
 
-        scheduler.deleteAppointment({
-          startDate: new Date(2021, 5, 15, 12),
-          endDate: new Date(2021, 5, 15, 14),
-          text: 'temp',
+        it('getDataSource should return an instance of DataSource', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          expect(scheduler.getDataSource())
+            .toEqual(expect.any(DataSource));
         });
-        expect(deleteAppointment).toHaveBeenCalled();
 
-        scheduler.updateAppointment({
-          startDate: new Date(2021, 5, 15, 12),
-          endDate: new Date(2021, 5, 15, 14),
-          text: 'temp',
-        }, {
-          startDate: new Date(2021, 5, 15, 12),
-          endDate: new Date(2021, 5, 15, 14),
-          text: 'changed',
+        it('hideAppointmentTooltip should hide tooltip', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+
+          scheduler.tooltipVisible = true;
+          scheduler.hideAppointmentTooltip();
+
+          expect(scheduler.tooltipVisible)
+            .toBe(false);
         });
-        expect(updateAppointment).toHaveBeenCalled();
-      });
 
-      it('getDataSource should pass call to instance', () => {
-        const getDataSource = jest.fn();
-        const scheduler = new Scheduler(new SchedulerProps());
+        it('getEndViewDate and getStartViewDate should work correctly', () => {
+          const scheduler = new Scheduler({
+            ...new SchedulerProps(),
+            currentDate: new Date(2021, 11, 3),
+          });
 
-        scheduler.instance = {
-          getDataSource,
-        } as any;
+          scheduler.workSpaceViewModel = {
+            viewDataProvider: {
+              getLastCellEndDate: () => new Date(2021, 11, 4),
+            },
+          } as any;
 
-        scheduler.getDataSource();
-
-        expect(getDataSource).toHaveBeenCalled();
-      });
-
-      it('*appointmentPopup and *appointmentTooltip should pass call to instance', () => {
-        const hideAppointmentPopup = jest.fn();
-        const hideAppointmentTooltip = jest.fn();
-
-        const showAppointmentPopup = jest.fn();
-        const showAppointmentTooltip = jest.fn();
-
-        const scheduler = new Scheduler(new SchedulerProps());
-
-        scheduler.instance = {
-          hideAppointmentPopup,
-          hideAppointmentTooltip,
-          showAppointmentPopup,
-          showAppointmentTooltip,
-        } as any;
-
-        scheduler.hideAppointmentPopup();
-        expect(hideAppointmentPopup).toHaveBeenCalled();
-
-        scheduler.hideAppointmentTooltip();
-        expect(hideAppointmentTooltip).toHaveBeenCalled();
-
-        scheduler.showAppointmentPopup();
-        expect(showAppointmentPopup).toHaveBeenCalled();
-
-        scheduler.showAppointmentTooltip({}, '');
-        expect(showAppointmentTooltip).toHaveBeenCalled();
-      });
-
-      it('getEndViewDate and getStartViewDate should pass call to instance', () => {
-        const getEndViewDate = jest.fn();
-        const getStartViewDate = jest.fn();
-
-        const scheduler = new Scheduler(new SchedulerProps());
-
-        scheduler.instance = {
-          getEndViewDate,
-          getStartViewDate,
-        } as any;
-
-        scheduler.getEndViewDate();
-        expect(getEndViewDate).toHaveBeenCalled();
-
-        scheduler.getStartViewDate();
-        expect(getStartViewDate).toHaveBeenCalled();
-      });
-
-      it('scroll* methods should pass call to instance', () => {
-        const scrollTo = jest.fn();
-        const scrollToTime = jest.fn();
-
-        const scheduler = new Scheduler(new SchedulerProps());
-
-        scheduler.instance = {
-          scrollTo,
-          scrollToTime,
-        } as any;
-
-        scheduler.scrollTo(new Date());
-        expect(scrollTo).toHaveBeenCalled();
-
-        scheduler.scrollToTime(12, 12);
-        expect(scrollToTime).toHaveBeenCalled();
+          expect(scheduler.getStartViewDate())
+            .toEqual(new Date(2021, 11, 3));
+          expect(scheduler.getEndViewDate())
+            .toEqual(new Date(2021, 11, 4));
+        });
       });
 
       it('dataAccessors should be correctly created', () => {
@@ -720,6 +639,7 @@ describe('Scheduler', () => {
             .toBe(undefined);
 
           const viewDataProvider = new ViewDataProvider('week') as any;
+          viewDataProvider.getLastViewDateByEndDayHour = () => new Date(2021, 11, 6, 15, 15);
           const cellsMetaData = {
             dateTableCellsMeta: [],
             allDayPanelCellsMeta: [],
@@ -736,6 +656,61 @@ describe('Scheduler', () => {
 
           expect(scheduler.workSpaceViewModel)
             .toBe(workSpaceViewModel);
+        });
+
+        it('should save lastViewDateByEndDayHour into the state', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+          const expectedDate = new Date(2021, 11, 6, 15, 15);
+
+          expect(scheduler.workSpaceViewModel)
+            .toBe(undefined);
+
+          const viewDataProvider = new ViewDataProvider('week') as any;
+          viewDataProvider.getLastViewDateByEndDayHour = () => expectedDate;
+          const cellsMetaData = {
+            dateTableCellsMeta: [],
+            allDayPanelCellsMeta: [],
+          };
+          const viewDataProviderValidationOptions: any = {};
+
+          const workSpaceViewModel = {
+            viewDataProvider,
+            cellsMetaData,
+            viewDataProviderValidationOptions,
+          };
+
+          scheduler.onViewRendered(workSpaceViewModel);
+
+          expect(scheduler.lastViewDateByEndDayHour)
+            .toBe(expectedDate);
+        });
+
+        it('should not save lastViewDateByEndDayHour into the state if lastViewDateByEndDayHour has the same value', () => {
+          const scheduler = new Scheduler(new SchedulerProps());
+          const testDate = new Date(2021, 11, 6, 15, 15);
+
+          expect(scheduler.workSpaceViewModel)
+            .toBe(undefined);
+
+          const viewDataProvider = new ViewDataProvider('week') as any;
+          viewDataProvider.getLastViewDateByEndDayHour = () => new Date(2021, 11, 6, 15, 15);
+          const cellsMetaData = {
+            dateTableCellsMeta: [],
+            allDayPanelCellsMeta: [],
+          };
+          const viewDataProviderValidationOptions: any = {};
+
+          const workSpaceViewModel = {
+            viewDataProvider,
+            cellsMetaData,
+            viewDataProviderValidationOptions,
+          };
+
+          scheduler.lastViewDateByEndDayHour = testDate;
+          scheduler.onViewRendered(workSpaceViewModel);
+
+          expect(scheduler.lastViewDateByEndDayHour)
+            .toBe(testDate);
         });
       });
 
@@ -828,13 +803,42 @@ describe('Scheduler', () => {
             ...new SchedulerProps(),
             views,
             currentView: 'week',
+            currentDate: new Date(2021, 1, 1),
           });
 
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
           scheduler.currentViewConfig;
 
           expect(getCurrentViewConfig)
-            .toHaveBeenCalledWith({ type: 'week' }, scheduler.props);
+            .toHaveBeenCalledWith(
+              { type: 'week' },
+              {
+                firstDayOfWeek: 0,
+                startDayHour: 0,
+                endDayHour: 24,
+                cellDuration: 30,
+                groupByDate: false,
+                scrolling: { mode: 'standard' },
+                dataCellTemplate: undefined,
+                timeCellTemplate: undefined,
+                resourceCellTemplate: undefined,
+                dateCellTemplate: undefined,
+                appointmentTemplate: undefined,
+                appointmentCollectorTemplate: undefined,
+                maxAppointmentsPerCell: 'auto',
+                showAllDayPanel: true,
+                showCurrentTimeIndicator: true,
+                indicatorUpdateInterval: 300000,
+                shadeUntilCurrentTime: false,
+                crossScrollingEnabled: false,
+                height: undefined,
+                width: undefined,
+                tabIndex: 0,
+                accessKey: undefined,
+                focusStateEnabled: true,
+              },
+              new Date(2021, 1, 1),
+            );
         });
       });
 

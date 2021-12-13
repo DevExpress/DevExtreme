@@ -103,7 +103,7 @@ describe('Model views', () => {
 
       const { height, width, ...viewProps } = schedulerProps;
 
-      expect(getCurrentViewConfig({ type: 'week' }, schedulerProps))
+      expect(getCurrentViewConfig({ type: 'week' }, schedulerProps, schedulerProps.currentDate))
         .toEqual({
           ...viewProps,
           hoursInterval: 0.25,
@@ -164,7 +164,7 @@ describe('Model views', () => {
 
       const { height, width, ...viewProps } = schedulerProps;
 
-      expect(getCurrentViewConfig(currentViewProps, schedulerProps))
+      expect(getCurrentViewConfig(currentViewProps, schedulerProps, schedulerProps.currentDate))
         .toEqual({
           ...viewProps,
           ...currentViewProps,
@@ -203,7 +203,7 @@ describe('Model views', () => {
 
       const { height, width, ...viewProps } = schedulerProps;
 
-      expect(getCurrentViewConfig(currentViewProps, schedulerProps))
+      expect(getCurrentViewConfig(currentViewProps, schedulerProps, schedulerProps.currentDate))
         .toEqual({
           ...viewProps,
           ...currentViewProps,
@@ -244,7 +244,7 @@ describe('Model views', () => {
 
       const { height, width, ...viewProps } = schedulerProps;
 
-      expect(getCurrentViewConfig(currentViewProps, schedulerProps))
+      expect(getCurrentViewConfig(currentViewProps, schedulerProps, schedulerProps.currentDate))
         .toEqual({
           ...viewProps,
           ...currentViewProps,

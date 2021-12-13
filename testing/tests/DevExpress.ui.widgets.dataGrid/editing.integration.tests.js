@@ -2050,6 +2050,9 @@ QUnit.module('Editing', baseModuleConfig, () => {
         grid.addRow();
         this.clock.tick();
 
+        $(document).trigger('dxpointerdown');
+        $(document).trigger('dxclick');
+
         let $secondCell = $(grid.getCellElement(0, 1));
         $secondCell.trigger(pointerEvents.down).trigger('dxclick');
         this.clock.tick(1000);
@@ -2061,6 +2064,44 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
         assert.equal($(grid.element()).find('.dx-datagrid-revert-tooltip .dx-overlay-content').length, 1, 'one revert button is visible');
         assert.equal($(grid.element()).find('.dx-invalid-message .dx-overlay-content').length, 1, 'one error message is visible');
+    });
+
+    QUnit.testInActiveWindow('Cell mode - New row should not be saved after click in another added row cell if startEditAction is dblclick (T1041291)', function(assert) {
+        // arrange
+        const items = [{ id: 1, a: 'a', b: 'b' }];
+        const gridConfig = {
+            dataSource: items,
+            keyExpr: 'id',
+            editing: {
+                mode: 'cell',
+                allowAdding: true,
+                allowUpdating: true,
+                startEditAction: 'dblClick',
+            },
+            columns: [
+                {
+                    dataField: 'a'
+                }, {
+                    dataField: 'b'
+                }
+            ]
+        };
+
+        const grid = createDataGrid(gridConfig);
+        this.clock.tick();
+
+        grid.addRow();
+        this.clock.tick();
+
+        const $secondCell = $(grid.getCellElement(0, 1));
+        $secondCell.trigger(pointerEvents.down).trigger('dxclick');
+        this.clock.tick(1000);
+
+        // assert
+        const $firstCellInput = $(grid.getCellElement(0, 0)).find('.dx-texteditor-input');
+        assert.equal($firstCellInput.length, 1, 'editor is not closed');
+        assert.ok($firstCellInput.is(':focus'), 'editor is focused');
+        assert.equal(items.length, 1, 'new item is not saved');
     });
 
     QUnit.testInActiveWindow('Cell mode - Cell validation message should be shown when a user clicks outside the cell (T869854)', function(assert) {
@@ -3108,6 +3149,40 @@ QUnit.module('Editing', baseModuleConfig, () => {
         // assert
 
         assert.strictEqual(onSelectedSpy.callCount, 0, 'is not selected after change');
+    });
+
+    QUnit.testInActiveWindow('key should not be compared many times on paging (T1047506)', function(assert) {
+        // arrange
+        let idCallCount = 0;
+        const items = Array.from({ length: 50 }).map((_, index) => {
+            return {
+                id: {
+                    get value() {
+                        idCallCount++;
+                        return index;
+                    }
+                }
+            };
+        });
+        const dataGrid = createDataGrid({
+            height: 500,
+            dataSource: items,
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            },
+        });
+
+        this.clock.tick();
+
+        idCallCount = 0;
+
+        // act
+        dataGrid.pageIndex(1);
+
+        // assert
+        assert.equal(idCallCount, 200, 'key call count after paging');
     });
 });
 
