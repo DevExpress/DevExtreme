@@ -4,7 +4,7 @@ const JSPdfSplittingTests = {
     runTests(moduleConfig, createMockPdfDoc, createDataGrid) {
 
         QUnit.module('Splitting - Simple table', moduleConfig, () => {
-            QUnit.test('1 cols - 1 rows, columnWidth = 200, horizontalSplitWidth = 600', function(assert) {
+            QUnit.test('1 cols - 1 rows, columnWidth = 200, pageWidth = 600', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -25,14 +25,14 @@ const JSPdfSplittingTests = {
                     'rect,10,33.4,200,18.4'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], horizontalSplitWidth: 600 }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200 ], pageWidth: 600 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });
             });
 
-            QUnit.test('2 cols - 1 rows, columnWidth = 200, horizontalSplitWidth = 300', function(assert) {
+            QUnit.test('2 cols - 1 rows, columnWidth = 200, pageWidth = 300', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -61,14 +61,14 @@ const JSPdfSplittingTests = {
                     'rect,10,33.4,200,18.4'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ], horizontalSplitWidth: 300 }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ], pageWidth: 300 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });
             });
 
-            QUnit.test('3 cols - 1 rows, columnWidth = 200, horizontalSplitWidth = 300', function(assert) {
+            QUnit.test('3 cols - 1 rows, columnWidth = 200, pageWidth = 300', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -105,14 +105,14 @@ const JSPdfSplittingTests = {
                     'rect,10,33.4,200,18.4'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], horizontalSplitWidth: 300 }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200, 200 ], pageWidth: 300 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });
             });
 
-            QUnit.test('3 cols - 1 rows, cells[1,0] & [1,1] - no right border, columnWidth = 200, horizontalSplitWidth = 300', function(assert) {
+            QUnit.test('3 cols - 1 rows, cells[1,0] & [1,1] - no right border, columnWidth = 200, pageWidth = 300', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -160,14 +160,14 @@ const JSPdfSplittingTests = {
                     'line,10,51.8,210,51.8'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200, 200 ], horizontalSplitWidth: 300 }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200, 200 ], pageWidth: 300 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });
             });
 
-            QUnit.test('3 cols - 1 rows, cells[2,1] & [3,1] - no left border, columnWidth = 200, horizontalSplitWidth = 300', function(assert) {
+            QUnit.test('3 cols - 1 rows, cells[2,1] & [3,1] - no left border, columnWidth = 200, pageWidth = 300', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -215,14 +215,14 @@ const JSPdfSplittingTests = {
                     'line,10,51.8,210,51.8'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200, 200 ], horizontalSplitWidth: 300 }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200, 200 ], pageWidth: 300 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
                 });
             });
 
-            QUnit.test('3 cols - 2 rows, cells[1,1] - no borders, columnWidth = 200, horizontalSplitWidth = 300', function(assert) {
+            QUnit.test('3 cols - 2 rows, cells[1,1] - no borders, columnWidth = 200, pageWidth = 300', function(assert) {
                 const done = assert.async();
                 const doc = createMockPdfDoc();
 
@@ -283,7 +283,95 @@ const JSPdfSplittingTests = {
                     'rect,10,51.8,200,18.4'
                 ];
 
-                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200, 200 ], horizontalSplitWidth: 300 }).then(() => {
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, customizeCell, columnWidths: [ 200, 200, 200 ], pageWidth: 300 }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 1 rows, topLeft.x = 0, columnWidths = [100, 200, 100], pageWidth = 250', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    width: 600,
+                    columns: [
+                        { dataField: 'f1' },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v2_1', f3: 'v3_1' }]
+                });
+
+                const expectedLog = [
+                    'text,F1,0,24.2,{baseline:middle}',
+                    'text,v1_1,0,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,100,18.4',
+                    'addPage,',
+                    'text,F2,0,24.2,{baseline:middle}',
+                    'text,v2_1,0,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,200,18.4',
+                    'addPage,',
+                    'text,F3,0,24.2,{baseline:middle}',
+                    'text,v3_1,0,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,100,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 }, columnWidths: [ 100, 200, 100 ], pageWidth: 250 }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('3 cols - 1 rows, topLeft.x = 0, columnWidths = [100, 100, 100], pageWidth = 110', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    width: 600,
+                    columns: [
+                        { dataField: 'f1' },
+                        { dataField: 'f2' },
+                        { dataField: 'f3' },
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v2_1', f3: 'v3_1' }]
+                });
+
+                const expectedLog = [
+                    'text,F1,0,24.2,{baseline:middle}',
+                    'text,v1_1,0,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,100,18.4',
+                    'addPage,',
+                    'text,F2,0,24.2,{baseline:middle}',
+                    'text,v2_1,0,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,100,18.4',
+                    'addPage,',
+                    'text,F3,0,24.2,{baseline:middle}',
+                    'text,v3_1,0,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,15,100,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,100,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 }, columnWidths: [ 100, 100, 100 ], pageWidth: 110 }).then(() => {
                     // doc.save(assert.test.testName + '.pdf');
                     assert.deepEqual(doc.__log, expectedLog);
                     done();
