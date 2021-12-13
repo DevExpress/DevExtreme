@@ -402,6 +402,14 @@ QUnit.module('default', {
         assert.strictEqual(instance.option('disabled'), false);
     });
 
+    QUnit.test('"onMarkupRendered" is called after markup initialization', function(assert) {
+        const markupRenderedStub = sinon.stub();
+
+        $('#component').TestComponent({ _onMarkupRendered: markupRenderedStub });
+
+        assert.ok(markupRenderedStub.called);
+    });
+
     QUnit.test('\'disabled\' option is passed to createComponent', function(assert) {
         const $firstElement = $('#component');
         const $secondElement = $('#anotherComponent');

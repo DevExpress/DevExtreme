@@ -470,5 +470,35 @@ QUnit.module('Editors Standard Adapter', {
         validator.option('validationRules', [{ type: 'required' }]);
         assert.ok(Boolean($input.attr('aria-required')), 'input have an "aria-required" attribute');
     });
+
+    QUnit.test('Editor should not toggle an "aria-required" attribute if the "required" rule is added, but editor is not initialized yet', function(assert) {
+        const editor = this.fixture.createTextEditor();
+        editor._initialized = false; // to not render attributed
+        editor._initializing = true; // to not call initMarkup after onMarkupRendered option update
+
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: null
+        });
+
+        const $input = this.fixture.$element.find('.dx-texteditor-input');
+        validator.option('validationRules', [{ type: 'required' }]);
+        assert.notOk(Boolean($input.attr('aria-required')), 'input still does not have an "aria-required" attribute');
+    });
+
+    QUnit.test('Editor should toggle an "aria-required" attribute if the "required" rule is added after markup render', function(assert) {
+        const editor = this.fixture.createTextEditor();
+        editor._initialized = false;
+
+        const validator = this.fixture.createValidator({
+            adapter: null,
+            validationRules: null
+        });
+
+        const $input = this.fixture.$element.find('.dx-texteditor-input');
+        validator.option('validationRules', [{ type: 'required' }]); // initMarkup is called on endUpdate
+
+        assert.ok(Boolean($input.attr('aria-required')), '"aria-required" is rendered after editor initialization');
+    });
 });
 

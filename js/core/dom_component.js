@@ -102,7 +102,7 @@ const DOMComponent = Component.inherit({
         this._renderElementAttributes();
         this._toggleRTLDirection(rtlEnabled);
         this._renderVisibilityChange();
-        this._renderDimensions();
+        this.option('_onMarkupRendered')?.();
     },
 
     _render() {

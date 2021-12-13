@@ -186,6 +186,10 @@ const Component = Class.inherit({
         return !this._initializing && !this._initialized;
     },
 
+    isInitialized() {
+        return this._initialized;
+    },
+
     _commitUpdate() {
         this.postponedOperations.callPostponedOperations();
         this._isInitializingRequired() && this._initializeComponent();
