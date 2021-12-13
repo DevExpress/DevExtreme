@@ -13,7 +13,7 @@ export const EDITORS_WITHOUT_LABELS = ['dxCalendar', 'dxCheckBox', 'dxHtmlEditor
 export function convertToRenderFieldItemOptions({
     $parent,
     rootElementCssClassList,
-    parentComponent,
+    formOrLayoutManager,
     createComponentCallback,
     useFlexLayout,
     item,
@@ -81,7 +81,7 @@ export function convertToRenderFieldItemOptions({
     return {
         $parent,
         rootElementCssClassList,
-        parentComponent,
+        formOrLayoutManager,
         createComponentCallback,
         useFlexLayout,
         labelOptions, labelNeedBaselineAlign, labelLocation, needRenderLabel,

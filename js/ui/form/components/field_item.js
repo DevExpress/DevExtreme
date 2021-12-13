@@ -31,7 +31,7 @@ const INVALID_CLASS = 'dx-invalid';
 export function renderFieldItem({
     $parent,
     rootElementCssClassList,
-    parentComponent,
+    formOrLayoutManager,
     createComponentCallback,
     useFlexLayout,
 
@@ -111,7 +111,7 @@ export function renderFieldItem({
                 dataField: item.dataField,
                 editorType: item.editorType,
                 editorOptions,
-                component: parentComponent,
+                component: formOrLayoutManager,
                 name: item.name
             },
         });
