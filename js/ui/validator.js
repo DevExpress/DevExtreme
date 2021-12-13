@@ -238,7 +238,6 @@ const Validator = DOMComponent.inherit({
         this._validationInfo.skipValidation = false;
         this._resetValidationRules();
         this._applyValidationResult(result, adapter);
-        this._getEditor().off('contentReady', this._editorContentReadyHandler);
     },
 
     _updateValidationResult(result) {
