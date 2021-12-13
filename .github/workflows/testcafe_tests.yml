@@ -132,8 +132,8 @@ jobs:
         [ "${{ matrix.ARGS.reported }}" == true ] && DASHBOARD_REPORTER="--dashboard"
         all_args="--concurrency 2 --browsers=chrome:headless --componentFolder ${{ matrix.ARGS.componentFolder }} --quarantineMode ${{ matrix.ARGS.quarantineMode}} $META_RENOVATION $INDICES $DASHBOARD_REPORTER"
         echo "$all_args"
-        echo "-> npm ls testcafe-reporter-dashboard <-"
-        npm ls testcafe-reporter-dashboard
+        echo "-> npm ls testcafe testcafe-reporter-dashboard <-"
+        npm ls testcafe testcafe-reporter-dashboard
         npm run test-testcafe -- $all_args
 
     - name: Copy compared screenshot artifacts
