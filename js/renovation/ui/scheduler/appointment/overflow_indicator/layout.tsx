@@ -18,16 +18,15 @@ export const viewFunction = ({
   },
 }: OverflowIndicator): JSX.Element => (
   <Button
-    text={text}
     style={styles}
     className={classes}
     type="default"
     stylingMode="contained"
   >
     {
-      OverflowIndicatorTemplate && (
-        <OverflowIndicatorTemplate data={data} />
-      )
+      OverflowIndicatorTemplate
+        ? (<OverflowIndicatorTemplate data={data} />)
+        : (<span>{text}</span>)
     }
   </Button>
 );

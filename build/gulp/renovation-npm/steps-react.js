@@ -1,25 +1,12 @@
 const createVinyl = require('./utils/create-gulp-file');
-const { camelCase, getComponentsSpecification } = require('./utils')
+const { getComponentsSpecification } = require('./utils')
 const path = require('path');
 const gulp = require('gulp');
 const merge = require('merge-stream');
+const { createEntryPoint } = require('./common-steps');
 
 function createReactEntryPoint(context) {
-    return () => {
-        const contents = getComponentsSpecification(context.destination, context.components)
-            .map(x => x.pathInRenovationFolder.slice(0, -2))
-            .map(x => `    ${camelCase(x.split('/').splice(-1)[0])}: require('./${x}')`)
-            .join(',\n');
-        const entryPointTemplate =
-            `const modules = {
-${contents}
-}
-module.exports = modules;
-`
-    
-        return createVinyl('entrypoint.js', entryPointTemplate)
-            .pipe(gulp.dest(context.destination));
-    };
+    return createEntryPoint(context, 'entrypoint.js');
 }
 
 function createModuleEntryPointers(context) {
@@ -27,10 +14,13 @@ function createModuleEntryPointers(context) {
         const vinyls = getComponentsSpecification(context.destination, context.components)
             .map(c => {
                 const name = (c.name.charAt(0).toLowerCase() + c.name.slice(1)).replace(/[A-Z]/g, m => "-" + m.toLowerCase());
+                const componentPath = `./${c.pathInRenovationFolder.slice(0, -2)}`;
                 return {
                     fileName: `${name}.js`,
-                    content: `import ${c.name} from './${c.pathInRenovationFolder.slice(0, -2)}';
-    export default ${c.name};`
+                    content: `import ${c.name} from '${componentPath}';
+    export * from '${componentPath}';
+    export default ${c.name};
+    `
                 };
             }).map(ef => {
                 return createVinyl(ef.fileName, ef.content)
@@ -45,8 +35,7 @@ function preparePackage(packageObject, basePackageObject, context) {
     packageObject.peerDependencies["react"] = `>= ${packageObject.devDependencies["react"]}`;
     packageObject.peerDependencies["react-dom"] = `>= ${packageObject.devDependencies["react-dom"]}`;
 
-    delete packageObject.devDependencies["react"];
-    delete packageObject.devDependencies["react-dom"];
+    delete packageObject.devDependencies;
 }
 
 module.exports = {

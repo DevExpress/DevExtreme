@@ -1,12 +1,15 @@
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../consts';
 import { Group, TableWidthWorkSpaceConfig } from '../../types';
 import {
+  compareCellsByDateAndIndex,
   createCellElementMetaData,
   createVirtualScrollingOptions,
+  getCellIndices,
   getDateForHeaderText,
   getDateTableWidth,
   getHiddenInterval,
   getRowCountWithAllDayRow,
+  getSelectedCells,
   getTotalCellCount,
   getTotalRowCount,
 } from '../utils';
@@ -294,6 +297,297 @@ describe('Workspace base utils', () => {
         .toBe(100);
       expect(result.getWindowWidth())
         .toBe(200);
+    });
+  });
+
+  describe('getCellIndices', () => {
+    it('should work correctly', () => {
+      const cell: any = { className: '.dx-scheduler-date-table-cell' };
+      cell.parentNode = {
+        children: [{
+          className: '.dx-scheduler-date-table-cell',
+        }, {
+          className: '.dx-scheduler-date-table-cell',
+        }, {
+          className: '.dx-scheduler-all-day-table-cell',
+        }, cell],
+        className: '.dx-scheduler-date-table-row',
+      };
+
+      cell.parentNode.parentNode = {
+        children: [{
+          className: '.dx-scheduler-date-table-row',
+        }, {
+          className: '.dx-scheduler-date-table-row',
+        }, cell.parentNode],
+      };
+
+      expect(getCellIndices(cell))
+        .toEqual({
+          rowIndex: 2,
+          columnIndex: 3,
+        });
+    });
+
+    it('should work correctly when non-data-cell elements are present', () => {
+      const cell: any = { className: '.dx-scheduler-date-table-cell' };
+      cell.parentNode = {
+        children: [{
+          className: '.dx-scheduler-virtual-cell',
+        }, {
+          className: '.dx-scheduler-date-table-cell',
+        }, {
+          className: '.dx-scheduler-date-table-cell',
+        }, {
+          className: '.dx-scheduler-all-day-table-cell',
+        }, cell],
+        className: '.dx-scheduler-date-table-row',
+      };
+
+      cell.parentNode.parentNode = {
+        children: [{
+          className: '.dx-scheduler-virtual-row',
+        }, {
+          className: '.dx-scheduler-date-table-row',
+        }, {
+          className: '.dx-scheduler-date-table-row',
+        }, cell.parentNode],
+      };
+
+      expect(getCellIndices(cell))
+        .toEqual({
+          rowIndex: 2,
+          columnIndex: 3,
+        });
+    });
+  });
+
+  describe('compareCellsByDateAndIndex', () => {
+    it('should return true when date is between first date and last date', () => {
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 10, 30).getTime(),
+        index: 1,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 0,
+        lastDate: new Date(2021, 11, 1).getTime(),
+        lastIndex: 2,
+      }))
+        .toBe(true);
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 10, 30).getTime(),
+        index: 1,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 3,
+        lastDate: new Date(2021, 11, 1).getTime(),
+        lastIndex: 4,
+      }))
+        .toBe(true);
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 10, 30).getTime(),
+        index: 5,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 3,
+        lastDate: new Date(2021, 11, 1).getTime(),
+        lastIndex: 6,
+      }))
+        .toBe(true);
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 10, 30).getTime(),
+        index: 8,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 3,
+        lastDate: new Date(2021, 11, 1).getTime(),
+        lastIndex: 6,
+      }))
+        .toBe(true);
+    });
+
+    it('should return true when date is equal to last date but index is less than last index', () => {
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 11, 1).getTime(),
+        index: 2,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 0,
+        lastDate: new Date(2021, 11, 1).getTime(),
+        lastIndex: 2,
+      }))
+        .toBe(true);
+    });
+
+    it('should return true when date is equal to first date but index is greater than first index', () => {
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 10, 29).getTime(),
+        index: 1,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 0,
+        lastDate: new Date(2021, 11, 1).getTime(),
+        lastIndex: 2,
+      }))
+        .toBe(true);
+    });
+
+    it('should return false if date is less than first date', () => {
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 10, 20).getTime(),
+        index: 1,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 0,
+        lastDate: new Date(2021, 11, 1).getTime(),
+        lastIndex: 2,
+      }))
+        .toBe(false);
+    });
+
+    it('should return false if date is greater than last date', () => {
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 11, 20).getTime(),
+        index: 1,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 0,
+        lastDate: new Date(2021, 11, 1).getTime(),
+        lastIndex: 2,
+      }))
+        .toBe(false);
+    });
+
+    it('should return false if date is equal to first date but index is less than first index', () => {
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 10, 29).getTime(),
+        index: 1,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 3,
+        lastDate: new Date(2021, 11, 1).getTime(),
+        lastIndex: 5,
+      }))
+        .toBe(false);
+    });
+
+    it('should return false if date is equal to last date but index is greater than last index', () => {
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 11, 1).getTime(),
+        index: 11,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 3,
+        lastDate: new Date(2021, 11, 1).getTime(),
+        lastIndex: 5,
+      }))
+        .toBe(false);
+    });
+
+    it('should work in case first date and last date are equal', () => {
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 10, 29).getTime(),
+        index: 5,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 0,
+        lastDate: new Date(2021, 10, 29).getTime(),
+        lastIndex: 10,
+      }))
+        .toBe(true);
+
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 10, 29).getTime(),
+        index: 5,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 10,
+        lastDate: new Date(2021, 10, 29).getTime(),
+        lastIndex: 0,
+      }))
+        .toBe(true);
+
+      expect(compareCellsByDateAndIndex({
+        date: new Date(2021, 10, 29).getTime(),
+        index: 51,
+        firstDate: new Date(2021, 10, 29).getTime(),
+        firstIndex: 0,
+        lastDate: new Date(2021, 10, 29).getTime(),
+        lastIndex: 10,
+      }))
+        .toBe(false);
+    });
+  });
+
+  describe('getSelectedCells', () => {
+    const cells = [[{
+      startDate: new Date(2021, 10, 20),
+      endDate: new Date(2021, 10, 21),
+      index: 0,
+    }, {
+      startDate: new Date(2021, 10, 21),
+      endDate: new Date(2021, 10, 22),
+      index: 1,
+    }, {
+      startDate: new Date(2021, 10, 22),
+      endDate: new Date(2021, 10, 23),
+      index: 2,
+    }, {
+      startDate: new Date(2021, 10, 23),
+      endDate: new Date(2021, 10, 24),
+      index: 3,
+    }, {
+      startDate: new Date(2021, 10, 24),
+      endDate: new Date(2021, 10, 25),
+      index: 4,
+    }, {
+      startDate: new Date(2021, 10, 25),
+      endDate: new Date(2021, 10, 26),
+      index: 5,
+    }]];
+
+    it('should return correct selected cells', () => {
+      const viewDataProvider: any = {
+        getCellsByGroupIndexAndAllDay: jest.fn(() => cells),
+      };
+      const firstCell: any = cells[0][1];
+      const lastCell: any = cells[0][4];
+
+      expect(getSelectedCells(viewDataProvider, firstCell, lastCell, false))
+        .toEqual([{
+          startDate: new Date(2021, 10, 21),
+          endDate: new Date(2021, 10, 22),
+          index: 1,
+        }, {
+          startDate: new Date(2021, 10, 22),
+          endDate: new Date(2021, 10, 23),
+          index: 2,
+        }, {
+          startDate: new Date(2021, 10, 23),
+          endDate: new Date(2021, 10, 24),
+          index: 3,
+        }, {
+          startDate: new Date(2021, 10, 24),
+          endDate: new Date(2021, 10, 25),
+          index: 4,
+        }]);
+      expect(viewDataProvider.getCellsByGroupIndexAndAllDay)
+        .toHaveBeenCalledWith(0, false);
+    });
+
+    it('should return correct selected cells when first cell is after last cell', () => {
+      const viewDataProvider: any = {
+        getCellsByGroupIndexAndAllDay: jest.fn(() => cells),
+      };
+      const firstCell: any = cells[0][4];
+      const lastCell: any = cells[0][1];
+
+      expect(getSelectedCells(viewDataProvider, firstCell, lastCell, false))
+        .toEqual([{
+          startDate: new Date(2021, 10, 21),
+          endDate: new Date(2021, 10, 22),
+          index: 1,
+        }, {
+          startDate: new Date(2021, 10, 22),
+          endDate: new Date(2021, 10, 23),
+          index: 2,
+        }, {
+          startDate: new Date(2021, 10, 23),
+          endDate: new Date(2021, 10, 24),
+          index: 3,
+        }, {
+          startDate: new Date(2021, 10, 24),
+          endDate: new Date(2021, 10, 25),
+          index: 4,
+        }]);
     });
   });
 });

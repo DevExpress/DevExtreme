@@ -1,6 +1,5 @@
-// import dateUtils from '../../../../core/utils/date';
 import { isObject, isString } from '../../../../core/utils/type';
-import { SchedulerProps, ViewProps } from '../props';
+import { CurrentViewConfigProps, ViewProps } from '../props';
 import { ViewType } from '../types';
 import { CurrentViewConfigType } from '../workspaces/props';
 
@@ -50,14 +49,18 @@ export const getCurrentViewProps = (
     : currentViewProps;
 };
 
-function getViewConfigProp<T extends unknown>(schedulerProp: T, viewProp: T | undefined): T {
+export function getViewConfigProp<T extends unknown>(schedulerProp: T, viewProp: T | undefined): T {
   return viewProp !== undefined ? viewProp : schedulerProp;
 }
 
 export const getCurrentViewConfig = (
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   currentViewProps: Partial<ViewProps>,
-  schedulerProps: SchedulerProps,
+  schedulerProps: CurrentViewConfigProps,
+  // This is a WA for:
+  // https://github.com/DevExpress/devextreme-renovation/issues/832
+  // https://github.com/DevExpress/devextreme-renovation/issues/831
+  currentDate: Date | string | number,
 ): CurrentViewConfigType => {
   const { scrolling: schedulerScrolling } = schedulerProps;
 
@@ -78,6 +81,7 @@ export const getCurrentViewConfig = (
     dateCellTemplate,
     appointmentTemplate,
     appointmentCollectorTemplate,
+    maxAppointmentsPerCell,
   } = currentViewProps;
 
   const isVirtualScrolling = schedulerScrolling.mode === 'virtual'
@@ -104,9 +108,13 @@ export const getCurrentViewConfig = (
       schedulerProps.appointmentCollectorTemplate,
       appointmentCollectorTemplate,
     ),
+    maxAppointmentsPerCell: getViewConfigProp(
+      schedulerProps.maxAppointmentsPerCell,
+      maxAppointmentsPerCell,
+    ),
 
     // currentDate: dateUtils.trimTime(new Date(schedulerProps.currentDate)), // TODO
-    currentDate: schedulerProps.currentDate,
+    currentDate,
     intervalCount,
     groupOrientation,
     startDate,

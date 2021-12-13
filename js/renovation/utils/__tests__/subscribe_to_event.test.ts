@@ -17,6 +17,7 @@ import {
   subscribeToKeyDownEvent,
   subscribeToMouseEnterEvent,
   subscribeToMouseLeaveEvent,
+  subscribeToDXPointerMoveEvent,
 } from '../subscribe_to_event';
 
 describe('subscribeToEvent', () => {
@@ -34,6 +35,7 @@ describe('subscribeToEvent', () => {
     { name: EVENT.scrollStop, subscribeFn: subscribeToDXScrollStopEvent },
     { name: EVENT.pointerDown, subscribeFn: subscribeToDXPointerDownEvent },
     { name: EVENT.pointerUp, subscribeFn: subscribeToDXPointerUpEvent },
+    { name: EVENT.pointerMove, subscribeFn: subscribeToDXPointerMoveEvent },
     { name: 'keydown', subscribeFn: subscribeToKeyDownEvent },
     { name: 'mouseenter', subscribeFn: subscribeToMouseEnterEvent },
     { name: 'mouseleave', subscribeFn: subscribeToMouseLeaveEvent },

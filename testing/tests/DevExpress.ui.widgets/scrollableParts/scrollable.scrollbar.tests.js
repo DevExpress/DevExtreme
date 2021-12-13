@@ -5,8 +5,15 @@ import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
+import { getElementOverflowY, getElementOverflowX } from 'renovation/ui/scroll_view/utils/get_element_style';
 
 import 'generic_light.css!';
+
+import {
+    DIRECTION_HORIZONTAL,
+    DIRECTION_VERTICAL,
+    DIRECTION_BOTH,
+} from 'renovation/ui/scroll_view/common/consts.js';
 
 import {
     SCROLLABLE_CONTAINER_CLASS,
@@ -16,7 +23,9 @@ import {
     SCROLLABLE_SCROLL_CONTENT_CLASS,
     SCROLLBAR_VERTICAL_CLASS,
     SCROLLBAR_HORIZONTAL_CLASS,
-    SCROLLABLE_SCROLLBAR_ACTIVE_CLASS
+    SCROLLABLE_SCROLLBAR_ACTIVE_CLASS,
+    SCROLLABLE_SCROLLBARS_HIDDEN,
+    SCROLLABLE_CLASS,
 } from './scrollable.constants.js';
 
 const SCROLLBAR_MIN_HEIGHT = 15;
@@ -632,4 +641,75 @@ QUnit.test('scrollbar should be hidden when container size is almost similar to 
     scrollable.update();
 
     assert.notOk(scroller._scrollbar._needScrollbar(), 'scrollbar is hidden');
+});
+
+// T1043437
+QUnit.module('scrollbar visibility', {
+    beforeEach: function() {
+        this.$outerScrollable = $('<div>').height(250).width(250);
+        this.$innerScrollable = $('<div>').height(500).width(500).appendTo(this.$outerScrollable);
+        this.$innerScrollable.append('<div>').children().height(750).width(750);
+
+        this.$outerScrollable.appendTo('#qunit-fixture');
+    }
+}, () => {
+    const checkScrollbarStyles = (assert, scrollbarClass, $scrollable, useNative, showScrollbar, shouldRenderScrollbar) => {
+        const $scrollbar = useNative
+            ? $scrollable.closest(`.${SCROLLABLE_CLASS}`).find(`> .${scrollbarClass}`)
+            : $scrollable.find(`.${SCROLLABLE_CONTAINER_CLASS}`).first().find(`> .${scrollbarClass}`);
+
+        if(shouldRenderScrollbar) {
+            const $verticalScroll = $scrollbar.find(`.${SCROLLABLE_SCROLL_CLASS}`);
+
+            assert.equal($scrollbar.length, 1, 'scrollbar exist');
+            assert.equal($scrollbar.is(':hidden'), showScrollbar === 'never', 'scrollbar visibility');
+            assert.equal($scrollbar.hasClass('dx-state-invisible'), isRenovatedScrollable ? showScrollbar === 'never' : false, 'scrollbar dx-state-invisible class');
+            assert.equal($verticalScroll.hasClass('dx-state-invisible'), useNative || showScrollbar !== 'always', 'thumb visibility');
+        } else {
+            assert.equal($scrollbar.length, 0, 'scrollbar not rendered');
+        }
+    };
+
+    const checkStyles = (assert, $scrollable, { useNative, direction, showScrollbar, useSimulatedScrollbar }) => {
+        const scrollable = $scrollable.dxScrollable('instance');
+        const outerScrollableContainerEl = $(scrollable.container()).get(0);
+
+        const expectedOverflowX = useNative && direction !== DIRECTION_VERTICAL && showScrollbar !== 'never' ? 'auto' : 'hidden';
+        const expectedOverflowY = useNative && direction !== DIRECTION_HORIZONTAL && showScrollbar !== 'never' ? 'auto' : 'hidden';
+
+        assert.equal(getElementOverflowX(outerScrollableContainerEl), expectedOverflowX, 'container.overflowX');
+        assert.equal(getElementOverflowY(outerScrollableContainerEl), expectedOverflowY, 'container.overflowY');
+
+        useNative && assert.equal($scrollable.hasClass(SCROLLABLE_SCROLLBARS_HIDDEN), showScrollbar === 'never');
+
+        const shouldRenderScrollbars = (!useNative || useSimulatedScrollbar) && !(useNative && showScrollbar === 'never');
+        const shouldRenderVerticalScrollbar = shouldRenderScrollbars && direction !== DIRECTION_HORIZONTAL;
+        const shouldRenderHorizontalScrollbar = shouldRenderScrollbars && direction !== DIRECTION_VERTICAL;
+
+        checkScrollbarStyles(assert, SCROLLBAR_VERTICAL_CLASS, $scrollable, useNative, showScrollbar, shouldRenderVerticalScrollbar);
+        checkScrollbarStyles(assert, SCROLLBAR_HORIZONTAL_CLASS, $scrollable, useNative, showScrollbar, shouldRenderHorizontalScrollbar);
+    };
+
+    const configs = [];
+    [true, false].forEach((useNative) => {
+        ['onScroll', 'onHover', 'always', 'never'].forEach((showScrollbar) => {
+            [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BOTH].forEach((direction) => {
+                [true, false].forEach((useSimulatedScrollbar) => {
+                    configs.push({ useNative, direction, showScrollbar, useSimulatedScrollbar });
+                });
+            });
+        });
+    });
+
+    configs.forEach(outerScrollableOptions => {
+        configs.forEach(innerScrollableOptions => {
+            QUnit.test(`check scrollbar visibility: outerScrollable: ${JSON.stringify(outerScrollableOptions)}, innerScrollable: ${JSON.stringify(innerScrollableOptions)}`, function(assert) {
+                this.$outerScrollable.dxScrollable(outerScrollableOptions);
+                this.$innerScrollable.dxScrollable(innerScrollableOptions);
+
+                checkStyles(assert, this.$outerScrollable, outerScrollableOptions);
+                checkStyles(assert, this.$innerScrollable, innerScrollableOptions);
+            });
+        });
+    });
 });

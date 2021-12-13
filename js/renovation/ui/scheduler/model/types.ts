@@ -12,7 +12,7 @@ export interface AppointmentsConfigType {
   viewEndDayHour: number;
   currentDate: Date;
   resources: ResourceProps[];
-  maxAppointmentsPerCell: number | 'auto' | 'unlimited';
+  maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
   isVirtualScrolling: boolean;
   intervalCount: number;
   hoursInterval: number;

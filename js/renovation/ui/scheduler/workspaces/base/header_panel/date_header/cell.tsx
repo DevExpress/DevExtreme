@@ -11,6 +11,7 @@ import { CellBaseProps } from '../../cell';
 import { DateTimeCellTemplateProps } from '../../../types';
 import { combineClasses } from '../../../../../../utils/combine_classes';
 import { getGroupCellClasses } from '../../../utils';
+import { DateHeaderText } from './dateHeaderText';
 
 export const viewFunction = ({
   classes,
@@ -25,6 +26,7 @@ export const viewFunction = ({
     groups,
     groupIndex,
     index,
+    splitText,
   },
 }: DateHeaderCell): JSX.Element => (
   <th
@@ -59,7 +61,12 @@ export const viewFunction = ({
         )}
       </Fragment>
     )
-      : text}
+      : (
+        <DateHeaderText
+          splitText={splitText}
+          text={text}
+        />
+      )}
   </th>
 );
 
@@ -70,6 +77,8 @@ export class DateHeaderCellProps extends CellBaseProps {
   @OneWay() colSpan = 1;
 
   @OneWay() isWeekDayCell = false;
+
+  @OneWay() splitText = false;
 
   // TODO: this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
   @OneWay() isTimeCellTemplate = false;

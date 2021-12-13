@@ -52,5 +52,19 @@ describe('TimelineHeaderPanelLayout', () => {
           dateHeaderTemplate: TimelineDateHeaderLayout,
         });
     });
+
+    it('should pass correct props to base Header Layout if month date header', () => {
+      const layout = render({
+        props: {
+          isMonthDateHeader: true,
+        },
+      });
+
+      expect(layout.props())
+        .toMatchObject({
+          ...baseProps,
+          dateHeaderTemplate: TimelineDateHeaderLayout,
+        });
+    });
   });
 });

@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable rulesdir/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
@@ -9,9 +10,8 @@ import {
   Method,
 } from '@devextreme-generator/declarations';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
-import { DisposeEffectReturn } from '../../utils/effect_return';
 // eslint-disable-next-line import/named
-import dxScheduler, { Appointment } from '../../../ui/scheduler';
+import { Appointment } from '../../../ui/scheduler';
 import { ViewProps, SchedulerProps } from './props';
 
 import { Widget } from '../common/widget';
@@ -230,8 +230,6 @@ export const viewFunction = ({
   jQuery: { register: true },
 })
 export class Scheduler extends JSXComponent(SchedulerProps) {
-  @InternalState() instance!: dxScheduler;
-
   @InternalState() workSpaceViewModel?: ViewMetaData;
 
   @InternalState() resourcePromisesMap: Map<string, Promise<Group[]>> = new Map();
@@ -246,6 +244,8 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @InternalState() tooltipData: AppointmentViewModel[] = [];
 
+  @InternalState() lastViewDateByEndDayHour?: Date;
+
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   get currentViewProps(): Partial<ViewProps> {
     const { views, currentView } = this.props;
@@ -254,7 +254,43 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get currentViewConfig(): CurrentViewConfigType {
-    return getCurrentViewConfig(this.currentViewProps, this.props);
+    const {
+      firstDayOfWeek, startDayHour, endDayHour, cellDuration, groupByDate, scrolling,
+      dataCellTemplate, timeCellTemplate, resourceCellTemplate, dateCellTemplate,
+      appointmentTemplate, appointmentCollectorTemplate, maxAppointmentsPerCell, currentDate,
+      showAllDayPanel, showCurrentTimeIndicator, indicatorUpdateInterval, shadeUntilCurrentTime,
+      crossScrollingEnabled, height, width, tabIndex, accessKey, focusStateEnabled,
+    } = this.props;
+
+    return getCurrentViewConfig(
+      this.currentViewProps,
+      {
+        firstDayOfWeek,
+        startDayHour,
+        endDayHour,
+        cellDuration,
+        groupByDate,
+        scrolling,
+        dataCellTemplate,
+        timeCellTemplate,
+        resourceCellTemplate,
+        dateCellTemplate,
+        appointmentTemplate,
+        appointmentCollectorTemplate,
+        maxAppointmentsPerCell,
+        showAllDayPanel,
+        showCurrentTimeIndicator,
+        indicatorUpdateInterval,
+        shadeUntilCurrentTime,
+        crossScrollingEnabled,
+        height,
+        width,
+        tabIndex,
+        accessKey,
+        focusStateEnabled,
+      },
+      currentDate,
+    );
   }
 
   get isValidViewDataProvider(): boolean {
@@ -300,7 +336,18 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   get dataAccessors(): DataAccessorType {
-    return createDataAccessors(this.props);
+    return createDataAccessors({
+      startDateExpr: this.props.startDateExpr,
+      endDateExpr: this.props.endDateExpr,
+      startDateTimeZoneExpr: this.props.startDateTimeZoneExpr,
+      endDateTimeZoneExpr: this.props.endDateTimeZoneExpr,
+      allDayExpr: this.props.allDayExpr,
+      textExpr: this.props.textExpr,
+      descriptionExpr: this.props.descriptionExpr,
+      recurrenceRuleExpr: this.props.recurrenceRuleExpr,
+      recurrenceExceptionExpr: this.props.recurrenceExceptionExpr,
+      resources: this.props.resources,
+    });
   }
 
   get startViewDate(): Date {
@@ -374,7 +421,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         adaptivityEnabled: this.props.adaptivityEnabled,
         rtlEnabled: this.props.rtlEnabled,
         resources: this.props.resources,
-        maxAppointmentsPerCell: this.props.maxAppointmentsPerCell,
         timeZone: this.props.timeZone,
         groups: validGroups,
       },
@@ -389,6 +435,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         firstDayOfWeek: this.currentViewConfig.firstDayOfWeek,
         type: this.currentViewConfig.type,
         cellDuration: this.currentViewConfig.cellDuration,
+        maxAppointmentsPerCell: this.currentViewConfig.maxAppointmentsPerCell,
       },
       this.loadedResources,
       this.workSpaceViewModel!.viewDataProvider,
@@ -496,77 +543,75 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
   }
 
   @Method()
-  getComponentInstance(): dxScheduler {
-    return this.instance;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  addAppointment(_appointment: Appointment): void {
+    // TODO: implement
   }
 
   @Method()
-  addAppointment(appointment: Appointment): void {
-    this.instance.addAppointment(appointment);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  deleteAppointment(_appointment: Appointment): void {
+    // TODO: implement
   }
 
   @Method()
-  deleteAppointment(appointment: Appointment): void {
-    this.instance.deleteAppointment(appointment);
-  }
-
-  @Method()
-  updateAppointment(target: Appointment, appointment: Appointment): void {
-    this.instance.updateAppointment(target, appointment);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updateAppointment(_target: Appointment, _appointment: Appointment): void {
+    // TODO: implement
   }
 
   @Method()
   getDataSource(): DataSource {
-    return this.instance.getDataSource();
+    return this.internalDataSource;
   }
 
   @Method()
   getEndViewDate(): Date {
-    return this.instance.getEndViewDate();
+    return this.workSpaceViewModel!.viewDataProvider.getLastCellEndDate();
   }
 
   @Method()
   getStartViewDate(): Date {
-    return this.instance.getStartViewDate();
+    return this.startViewDate;
   }
 
   @Method()
-  hideAppointmentPopup(saveChanges?: boolean): void {
-    this.instance.hideAppointmentPopup(saveChanges);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  hideAppointmentPopup(_saveChanges?: boolean): void {
+    // TODO: implement
   }
 
   @Method()
   hideAppointmentTooltip(): void {
-    this.instance.hideAppointmentTooltip();
+    this.hideTooltip();
   }
 
   @Method()
-  scrollTo(date: Date, group?: Record<string, unknown>, allDay?: boolean): void {
-    this.instance.scrollTo(date, group, allDay);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  scrollTo(_date: Date, _group?: Record<string, unknown>, _allDay?: boolean): void {
+    // TODO: implement
   }
 
   @Method()
-  scrollToTime(hours: number, minutes: number, date?: Date): void {
-    this.instance.scrollToTime(hours, minutes, date);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  scrollToTime(_hours: number, _minutes: number, _date?: Date): void {
+    // TODO: implement
   }
 
   @Method()
-  showAppointmentPopup(appointmentData?: Appointment, createNewAppointment?: boolean,
-    currentAppointmentData?: Appointment): void {
-    this.instance.showAppointmentPopup(appointmentData, createNewAppointment,
-      currentAppointmentData);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  showAppointmentPopup(_appointmentData?: Appointment, _createNewAppointment?: boolean,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _currentAppointmentData?: Appointment): void {
+    // TODO: implement
   }
 
   @Method()
-  showAppointmentTooltip(appointmentData: Appointment,
-    target: string | UserDefinedElement, currentAppointmentData?: Appointment): void {
-    this.instance.showAppointmentTooltip(appointmentData, target,
-      currentAppointmentData);
-  }
-
-  @Effect({ run: 'once' })
-  dispose(): DisposeEffectReturn {
-    return () => { this.instance.dispose(); };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  showAppointmentTooltip(_appointmentData: Appointment,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _target: string | UserDefinedElement, _currentAppointmentData?: Appointment): void {
+    // TODO: implement
   }
 
   @Effect()
@@ -585,20 +630,13 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     if (
       !this.internalDataSource.isLoaded()
       && !this.internalDataSource.isLoading()
-      && this.workSpaceViewModel
     ) {
-      if (this.props.remoteFiltering) {
-        const { viewDataProvider } = this.workSpaceViewModel;
-        const startDate = viewDataProvider.getStartViewDate();
-        const endDate = viewDataProvider.getLastViewDateByEndDayHour(
-          this.currentViewConfig.endDayHour,
-        );
-
+      if (this.props.remoteFiltering && this.lastViewDateByEndDayHour) {
         const combinedFilter = combineRemoteFilter({
           dataAccessors: this.dataAccessors,
           dataSourceFilter: this.internalDataSource.filter(),
-          min: startDate,
-          max: endDate,
+          min: this.startViewDate,
+          max: this.lastViewDateByEndDayHour,
           dateSerializationFormat: this.props.dateSerializationFormat,
         });
 
@@ -614,6 +652,14 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   onViewRendered(viewMetaData: ViewMetaData): void {
     this.workSpaceViewModel = viewMetaData;
+    const { viewDataProvider } = viewMetaData;
+
+    const lastViewDate = viewDataProvider.getLastViewDateByEndDayHour(
+      this.currentViewConfig.endDayHour,
+    );
+    if (lastViewDate.getTime() !== this.lastViewDateByEndDayHour?.getTime()) {
+      this.lastViewDateByEndDayHour = lastViewDate;
+    }
   }
 
   setCurrentView(view: string): void {
