@@ -29,13 +29,11 @@ import $ from 'jquery';
 import 'ui/data_grid';
 import gridCore from 'ui/data_grid/ui.data_grid.core';
 import { getCells, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
-import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import { getHeight, getOuterWidth, getWidth } from 'core/utils/size';
 
 function getTextFromCell(cell) {
     return $(cell).text();
 }
-
 
 function createGridView(options, userOptions) {
     this.options = $.extend({}, {
@@ -1587,7 +1585,6 @@ QUnit.module('Synchronize columns', {
     // T389309
     QUnit.test('Scroll position headers when rtl mode is enabled', function(assert) {
         // arrange
-        const isRtlNegative = !(getScrollRtlBehavior().positive && getScrollRtlBehavior().decreasing);
         const defaultOptions = {
             columnsController: new MockColumnsController([{ caption: 'Column 1', width: 500 }, { caption: 'Column 2', width: 500 }]),
             dataController: new MockDataController({
@@ -1606,7 +1603,7 @@ QUnit.module('Synchronize columns', {
         const $scrollContainer = $testElement.find('.dx-datagrid-scroll-container').first();
         assert.equal($scrollContainer.scrollLeft(), 0);
         assert.equal($scrollContainer.scrollLeft(), $testElement.find('.dx-scrollable-container').scrollLeft());
-        assert.equal(Math.round($scrollContainer.find('.dx-datagrid-table').position().left), isRtlNegative ? 0 : -700, 'left position of the table');
+        assert.equal(Math.round($scrollContainer.find('.dx-datagrid-table').position().left), 0, 'left position of the table');
     });
 
     QUnit.test('Scroll position summary footer and container with columnWidth auto', function(assert) {
