@@ -287,6 +287,7 @@ export const editingFormBasedModule = {
                     this._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(getWindow().document).length).done(() => {
                         this._rowsView._updateCell($container, cellOptions);
                     });
+                    this._rowsView.renderDelayedTemplates();
                     return cellOptions;
                 },
 
