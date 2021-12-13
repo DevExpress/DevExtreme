@@ -59,6 +59,10 @@ export default class Editor extends Component {
     data(this.$element()[0], VALIDATION_TARGET, this);
   }
 
+  _render(): void {
+    (this.option('_onMarkupRendered') as () => void)?.();
+  }
+
   _init(): void {
     super._init();
 
