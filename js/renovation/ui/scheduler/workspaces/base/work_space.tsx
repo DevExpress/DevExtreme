@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 /* eslint-disable rulesdir/no-non-null-assertion */
 /* eslint-disable class-methods-use-this */
 import {
@@ -70,7 +71,9 @@ import pointerEvents from '../../../../../events/pointer';
 import eventsEngine from '../../../../../events/core/events_engine';
 import { isMouseEvent } from '../../../../../events/utils';
 import { ALL_DAY_PANEL_CELL_CLASS, DATE_TABLE_CELL_CLASS } from '../const';
-
+///#DEBUG
+import { DiagnosticUtils } from '../../../../utils/diagnostic';
+///#ENDDEBUG
 const DATA_CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_PANEL_CELL_CLASS}`;
 
 interface VirtualScrollingSizes {
@@ -767,6 +770,14 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   get isCalculateTablesWidth(): boolean {
     return this.props.crossScrollingEnabled && this.renderConfig.defaultGroupOrientation !== 'vertical';
   }
+
+  ///#DEBUG
+  /* istanbul ignore next: Test performace */
+  @Effect({ run: 'always' })
+  diagnosticEffect(): void {
+    DiagnosticUtils.incrementRenderCount('scheduler_workspace');
+  }
+  ///#ENDDEBUG
 
   @Effect({ run: 'always' })
   headerEmptyCellWidthEffect(): void {
