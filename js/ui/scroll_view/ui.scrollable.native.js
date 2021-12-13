@@ -6,6 +6,7 @@ import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
 import Class from '../../core/class';
 import Scrollbar from './ui.scrollbar';
+import browser from '../../core/utils/browser';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
@@ -16,7 +17,7 @@ const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
-
+const isIE = browser.msie && browser.version < 12;
 
 const NativeStrategy = Class.inherit({
 
@@ -39,7 +40,6 @@ const NativeStrategy = Class.inherit({
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
         this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
-        this._getScrollSign = scrollable._getScrollSign.bind(scrollable);
         this._isRtlNativeStrategy = scrollable._isRtlNativeStrategy.bind(scrollable);
     },
 
@@ -263,6 +263,10 @@ const NativeStrategy = Class.inherit({
         const location = this.location();
         this._$container.scrollTop(Math.round(-location.top - distance.top));
         this._$container.scrollLeft(Math.round(-location.left - this._getScrollSign() * distance.left));
+    },
+
+    _getScrollSign() {
+        return isIE && this._isRtlNativeStrategy() ? -1 : 1;
     },
 
     validate: function(e) {

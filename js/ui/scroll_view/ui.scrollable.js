@@ -434,7 +434,8 @@ const Scrollable = DOMComponent.inherit({
         }
 
         if(this._isRtlNativeStrategy()) {
-            location.left = this._getScrollSign() * location.left - this._getMaxOffset().left;
+            const scrollSign = isIE ? -1 : 1;
+            location.left = scrollSign * location.left - this._getMaxOffset().left;
         }
 
         const distance = this._normalizeLocation({
@@ -447,10 +448,6 @@ const Scrollable = DOMComponent.inherit({
         }
 
         this._strategy.scrollBy(distance);
-    },
-
-    _getScrollSign() {
-        return isIE ? -1 : 1;
     },
 
     scrollToElement: function(element, offset) {
