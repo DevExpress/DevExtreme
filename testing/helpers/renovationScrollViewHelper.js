@@ -18,10 +18,17 @@ exports.WrappedWidget = class WrappedWidget extends RenovatedScrollView {
             reRender();
         };
 
-        const setContentDimensions = scrollable.setContentDimensions;
+        const setContentHeight = scrollable.setContentHeight;
 
-        scrollable.setContentDimensions = function() {
-            setContentDimensions.apply(this, arguments);
+        scrollable.setContentHeight = function() {
+            setContentHeight.apply(this, arguments);
+            reRender();
+        };
+
+        const setContentWidth = scrollable.setContentWidth;
+
+        scrollable.setContentWidth = function() {
+            setContentWidth.apply(this, arguments);
             reRender();
         };
 

@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-globals */
 import {
   Component, ComponentBindings, JSXComponent, InternalState, Effect, Fragment,
 } from '@devextreme-generator/declarations';
@@ -15,30 +14,28 @@ const getContent = () => {
   return content;
 };
 
-export const viewFunction = ({ options }: App): JSX.Element => {
-  const {
-    width, height, useNative, direction, showScrollbar,
-  } = options;
-
-  return (
-    <Fragment>
-      {options && (
-      <ScrollView
-        id="container"
-        width={width}
-        height={height}
-        useNative={useNative}
-        direction={direction}
-        showScrollbar={showScrollbar}
-      >
-        <div className="text-content" style={{ minHeight: 500, minWidth: 500 }}>
-          {getContent()}
-        </div>
-      </ScrollView>
-      )}
-    </Fragment>
-  );
-};
+export const viewFunction = ({ options }: App): JSX.Element => (
+  <Fragment>
+    {options && (
+    <ScrollView
+      id="container"
+      width={options.width}
+      height={options.height}
+      useNative={options.useNative}
+      rtlEnabled={options.rtlEnabled}
+      direction={options.direction}
+      showScrollbar={options.showScrollbar}
+    >
+      <div className="text-content" style={{ minHeight: 500, minWidth: 500 }}>
+        {getContent()}
+      </div>
+    </ScrollView>
+    )}
+    {!options && (
+    <div>Something went wrong...</div>
+    )}
+  </Fragment>
+);
 
 @ComponentBindings()
 class AppProps { }
@@ -53,6 +50,7 @@ export class App extends JSXComponent<AppProps>() {
 
   @Effect({ run: 'once' })
   optionsUpdated(): void {
+    // eslint-disable-next-line no-restricted-globals
     (window as unknown as { onOptionsUpdated: (unknown) => void })
       .onOptionsUpdated = (newOptions) => {
         this.options = {

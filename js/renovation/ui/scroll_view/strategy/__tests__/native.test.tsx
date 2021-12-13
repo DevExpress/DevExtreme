@@ -38,6 +38,7 @@ import { ScrollableNativeProps } from '../../common/native_strategy_props';
 import {
   allowedDirection,
 } from '../../utils/get_allowed_direction';
+import { subscribeToResize } from '../../utils/subscribe_to_resize';
 
 interface Mock extends jest.Mock {}
 
@@ -55,6 +56,11 @@ jest.mock('../../../../../core/devices', () => {
 jest.mock('../../utils/get_allowed_direction', () => ({
   ...jest.requireActual('../../utils/get_allowed_direction'),
   allowedDirection: jest.fn(() => 'vertical'),
+}));
+
+jest.mock('../../utils/subscribe_to_resize', () => ({
+  ...jest.requireActual('../../utils/subscribe_to_resize'),
+  subscribeToResize: jest.fn(),
 }));
 
 describe('Native > View', () => {
@@ -718,28 +724,51 @@ describe('Getters', () => {
     });
   });
 
-  test.each([true, false])('setContentDimensions(), forceGeneratePockets: %o', (forceGeneratePockets) => {
+  test.each([true, false])('setContentHeight(), forceGeneratePockets: %o', (forceGeneratePockets) => {
     const viewModel = new Scrollable({ direction: 'vertical', forceGeneratePockets });
 
     viewModel.topPocketRef = { current: { clientHeight: 80 } } as RefObject<HTMLDivElement>;
     viewModel.bottomPocketRef = { current: { clientHeight: 50 } } as RefObject<HTMLDivElement>;
 
-    viewModel.setContentDimensions({} as HTMLDivElement);
+    viewModel.setContentHeight({} as HTMLDivElement);
 
     expect(viewModel.topPocketHeight).toEqual(forceGeneratePockets ? 80 : 0);
     expect(viewModel.bottomPocketHeight).toEqual(forceGeneratePockets ? 50 : 0);
   });
 
-  test.each([true, false])('setContentDimensions(), pockets are not defined, forceGeneratePockets: %o', (forceGeneratePockets) => {
+  test.each([true, false])('setContentHeight(), pockets are not defined, forceGeneratePockets: %o', (forceGeneratePockets) => {
     const viewModel = new Scrollable({ direction: 'vertical', forceGeneratePockets });
 
     viewModel.topPocketRef = undefined as any;
     viewModel.bottomPocketRef = undefined as any;
 
-    viewModel.setContentDimensions({} as HTMLDivElement);
+    viewModel.setContentHeight({} as HTMLDivElement);
 
     expect(viewModel.topPocketHeight).toEqual(0);
     expect(viewModel.bottomPocketHeight).toEqual(0);
+  });
+
+  it('should subscribe contentElement to resize event', () => {
+    const subscribeToResizeHandler = jest.fn();
+    (subscribeToResize as jest.Mock).mockImplementation(subscribeToResizeHandler);
+
+    const viewModel = new Scrollable({ });
+    viewModel.contentRef = { current: { clientHeight: 10 } as HTMLElement } as RefObject;
+    viewModel.setContentHeight = jest.fn();
+    viewModel.setContentWidth = jest.fn();
+
+    viewModel.subscribeContentToResize();
+
+    expect(subscribeToResizeHandler).toBeCalledTimes(1);
+    expect(subscribeToResizeHandler.mock.calls[0][0]).toEqual({ clientHeight: 10 });
+
+    subscribeToResizeHandler.mock.calls[0][1](viewModel.contentRef);
+
+    expect(viewModel.setContentHeight).toBeCalledTimes(1);
+    expect(viewModel.setContentWidth).toBeCalledWith(viewModel.contentRef);
+
+    expect(viewModel.setContentHeight).toBeCalledTimes(1);
+    expect(viewModel.setContentWidth).toBeCalledWith(viewModel.contentRef);
   });
 
   test.each(getPermutations([

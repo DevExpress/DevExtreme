@@ -397,17 +397,61 @@ describe('Simulated > Behavior', () => {
       });
     });
 
+    each([true, false]).describe('needScrollViewContentWrapper: %o', (needScrollViewContentWrapper) => {
+      it('should subscribe contentElement to resize width', () => {
+        const subscribeToResizeHandler = jest.fn();
+        (subscribeToResize as jest.Mock).mockImplementation(subscribeToResizeHandler);
+
+        const viewModel = new Scrollable({ needScrollViewContentWrapper });
+        viewModel.contentRef = { current: { clientHeight: 10 } as HTMLElement } as RefObject;
+        viewModel.setContentWidth = jest.fn();
+
+        viewModel.subscribeToResizeContentWidth();
+
+        expect(subscribeToResizeHandler).toBeCalledTimes(1);
+        expect(subscribeToResizeHandler.mock.calls[0][0]).toEqual({ clientHeight: 10 });
+
+        subscribeToResizeHandler.mock.calls[0][1](viewModel.contentRef);
+
+        expect(viewModel.setContentWidth).toBeCalledTimes(1);
+        expect(viewModel.setContentWidth).toBeCalledWith(viewModel.contentRef);
+      });
+
+      it('should subscribe contentElement to resize height', () => {
+        const subscribeToResizeHandler = jest.fn();
+        (subscribeToResize as jest.Mock).mockImplementation(subscribeToResizeHandler);
+
+        const viewModel = new Scrollable({ needScrollViewContentWrapper });
+        viewModel.contentRef = { current: { clientHeight: 10 } as HTMLElement } as RefObject;
+        viewModel.scrollViewContentRef = {
+          current: { clientHeight: 6 } as HTMLElement,
+        } as RefObject;
+        viewModel.setContentHeight = jest.fn();
+
+        viewModel.subscribeToResizeContentHeight();
+
+        expect(subscribeToResizeHandler).toBeCalledTimes(1);
+
+        const expectedContentElement = needScrollViewContentWrapper
+          ? viewModel.scrollViewContentRef
+          : viewModel.contentRef;
+        const expectedContentHeight = needScrollViewContentWrapper ? 6 : 10;
+
+        expect(subscribeToResizeHandler.mock.calls[0][0])
+          .toEqual({ clientHeight: expectedContentHeight });
+        subscribeToResizeHandler.mock.calls[0][1](expectedContentElement);
+        expect(viewModel.setContentHeight).toBeCalledTimes(1);
+        expect(viewModel.setContentHeight).toBeCalledWith(expectedContentElement);
+      });
+    });
+
     each([true, false]).describe('Disabled: %o', (disabled) => {
       it('effectDisabledState()', () => {
         const viewModel = new Scrollable({ disabled });
 
         viewModel.effectDisabledState();
 
-        if (disabled) {
-          expect(viewModel.locked).toEqual(true);
-        } else {
-          expect(viewModel.locked).toEqual(false);
-        }
+        expect(viewModel.locked).toEqual(disabled);
       });
     });
 
