@@ -6,7 +6,6 @@ import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
 import Class from '../../core/class';
 import Scrollbar from './ui.scrollbar';
-import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
@@ -40,7 +39,8 @@ const NativeStrategy = Class.inherit({
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
         this._getMaxOffset = scrollable._getMaxOffset.bind(scrollable);
-        this._isScrollInverted = scrollable._isScrollInverted.bind(scrollable);
+        this._getScrollSign = scrollable._getScrollSign.bind(scrollable);
+        this._isRtlNativeStrategy = scrollable._isRtlNativeStrategy.bind(scrollable);
     },
 
     render: function() {
@@ -122,8 +122,8 @@ const NativeStrategy = Class.inherit({
         return {
             event: this._eventForUserAction,
             scrollOffset: this._getScrollOffset(),
-            reachedLeft: this._isScrollInverted() ? this._isReachedRight(-left) : this._isReachedLeft(left),
-            reachedRight: this._isScrollInverted() ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
+            reachedLeft: this._isRtlNativeStrategy() ? this._isReachedRight(-left) : this._isReachedLeft(left),
+            reachedRight: this._isRtlNativeStrategy() ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
             reachedTop: this._isDirection(VERTICAL) ? Math.round(top) >= 0 : undefined,
             reachedBottom: this._isDirection(VERTICAL) ? Math.round(Math.abs(top) - this._getMaxOffset().top) >= 0 : undefined
         };
@@ -139,13 +139,8 @@ const NativeStrategy = Class.inherit({
     },
 
     _normalizeOffsetLeft(scrollLeft) {
-        if(this._isScrollInverted()) {
-            if(getScrollRtlBehavior().positive) {
-                // for ie11 support
-                return this._getMaxOffset().left - scrollLeft;
-            }
-
-            return this._getMaxOffset().left + scrollLeft;
+        if(this._isRtlNativeStrategy()) {
+            return this._getMaxOffset().left + this._getScrollSign() * scrollLeft;
         }
 
         return scrollLeft;
@@ -268,10 +263,6 @@ const NativeStrategy = Class.inherit({
         const location = this.location();
         this._$container.scrollTop(Math.round(-location.top - distance.top));
         this._$container.scrollLeft(Math.round(-location.left - this._getScrollSign() * distance.left));
-    },
-
-    _getScrollSign() {
-        return this._isScrollInverted() && getScrollRtlBehavior().positive ? -1 : 1;
     },
 
     validate: function(e) {
