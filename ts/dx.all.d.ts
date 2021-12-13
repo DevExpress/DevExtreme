@@ -972,7 +972,7 @@ declare module DevExpress {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
-  type ExternalFormat = any;
+  type ExternalFormat = never;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please describe your scenario in the following GitHub Issue, and we will suggest a public alternative: {@link https://github.com/DevExpress/DevExtreme/issues/17885|Internal Types}.
    */
@@ -23881,6 +23881,8 @@ declare module DevExpress.ui {
     | PredefinedFormat
     | string
     | ((value: number | Date) => string)
+    | ((value: Date) => string)
+    | ((value: number) => string)
     | ExternalFormat;
   /**
    * [descr:GridBase]
