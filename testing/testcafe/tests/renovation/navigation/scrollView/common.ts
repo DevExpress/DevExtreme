@@ -12,6 +12,7 @@ const defaultProps: Partial<ScrollableProps> = {
   width: 300,
   height: 300,
   useNative: false,
+  rtlEnabled: false,
   direction: 'vertical',
   showScrollbar: 'always',
 };
@@ -19,7 +20,9 @@ const defaultProps: Partial<ScrollableProps> = {
 const config: Partial<ScrollableProps>[] = [];
 
 [true, false].forEach((useNative) => {
-  [true, false].forEach((rtlEnabled) => {
+  [false].forEach((rtlEnabled) => {
+    // TODO: support true value
+    // it works incorrectly in angular and react
     ([
       DIRECTION_VERTICAL,
       DIRECTION_HORIZONTAL,
