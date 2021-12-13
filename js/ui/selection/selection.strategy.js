@@ -69,8 +69,21 @@ export default Class.inherit({
         return this.selectedItemKeys(keys, preserve, isDeselect, isSelectAll);
     },
 
+    _prepareFilterValue: function(remoteFilter) {
+        if(Array.isArray(remoteFilter)) {
+            remoteFilter.forEach((filterItem, index) => {
+                const filterValue = filterItem[2];
+                if(isObject(filterValue) && Object.prototype.hasOwnProperty.call(filterValue, 'template')) {
+                    delete filterValue.template;
+                }
+            });
+        }
+
+        return remoteFilter;
+    },
+
     _loadFilteredData: function(remoteFilter, localFilter, select, isSelectAll) {
-        const filterLength = encodeURI(JSON.stringify(remoteFilter)).length;
+        const filterLength = encodeURI(JSON.stringify(this._prepareFilterValue(remoteFilter))).length;
         const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
         const deferred = new Deferred();
         const loadOptions = {
