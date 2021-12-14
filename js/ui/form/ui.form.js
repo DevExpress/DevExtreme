@@ -29,7 +29,7 @@ import {
     getOptionNameFromFullName,
     tryGetTabPath,
     getTextWithoutSpaces,
-    isExpectedItem,
+    isEqualToDataFieldOrNameOrTitleOrCaption,
     isFullPathContainsTabs,
     getItemPath,
     convertToLayoutManagerOptions
@@ -954,7 +954,7 @@ const Form = Widget.inherit({
                     item = that._getItemByField({ fieldName: fieldName, fieldPath: fieldPath }, item[subItemsField]);
                 }
 
-                if(isExpectedItem(item, fieldName)) {
+                if(isEqualToDataFieldOrNameOrTitleOrCaption(item, fieldName)) {
                     resultItem = item;
                     return false;
                 }
