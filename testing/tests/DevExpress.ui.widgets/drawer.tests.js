@@ -2152,7 +2152,7 @@ QUnit.module('Deprecated options', {
     ['shrink', 'overlap', 'push'].forEach((openedStateMode) => {
         QUnit.test(`warnings for deprecated 'target' option, ${openedStateMode}, target: notInitialized`, function(assert) {
             assert.expect(1);
-            this.stub = sinon.stub(errors, 'log', () => {
+            this.stub = sinon.stub(errors, 'log').callsFake(() => {
                 assert.strictEqual(true, false, 'error.log should not be called');
             });
 
@@ -2166,7 +2166,7 @@ QUnit.module('Deprecated options', {
         [null, undefined, '#someID'].forEach((target) => {
             QUnit.test(`warnings for deprecated 'target' option, openedStateMode: ${openedStateMode}, target: ${target}`, function(assert) {
                 assert.expect(2);
-                this.stub = sinon.stub(errors, 'log', () => {
+                this.stub = sinon.stub(errors, 'log').callsFake(() => {
                     assert.deepEqual(errors.log.lastCall.args, [
                         'W0001',
                         'dxDrawer',

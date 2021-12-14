@@ -15395,7 +15395,7 @@ QUnit.module('onOptionChanged', {
         const that = this;
 
         that.option.restore();
-        sinon.stub(that, 'option', function(optionName, value) {
+        sinon.stub(that, 'option').callsFake(function(optionName, value) {
             if(optionName === 'paging.pageSize' && value === 3) {
                 pageSize = that.dataController.dataSource().pageSize();
             }

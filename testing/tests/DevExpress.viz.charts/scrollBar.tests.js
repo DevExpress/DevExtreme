@@ -30,7 +30,7 @@ const environment = {
 
         this.group = this.renderer.g();
 
-        sinon.stub(translator2DModule, 'Translator2D', function() {
+        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             const stub = new Translator();
             stub.getScale = sinon.stub().returns(1);
             stub.stub('getCanvasVisibleArea');

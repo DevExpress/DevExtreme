@@ -28,7 +28,7 @@ const environment = {
             getMargins: sinon.stub()
         };
 
-        this.scrollBarStub = sinon.stub(scrollBarModule, 'ScrollBar', function(renderer, group) {
+        this.scrollBarStub = sinon.stub(scrollBarModule, 'ScrollBar').callsFake(function(renderer, group) {
             const scrollBar = new originalScrollBar(renderer, group);
             const originalUpdateSize = scrollBar.updateSize;
 
@@ -44,7 +44,7 @@ const environment = {
         let axisIndex = 0;
         const originalAxis = axisModule.Axis;
 
-        this.axisStub = sinon.stub(axisModule, 'Axis', function(renderingSettings) {
+        this.axisStub = sinon.stub(axisModule, 'Axis').callsFake(function(renderingSettings) {
             const axis = new originalAxis(renderingSettings);
 
             for(const stubName in axesStubs[axisIndex]) {
@@ -57,7 +57,7 @@ const environment = {
         this.title = new vizMocks.Title();
         this.legend = new vizMocks.Legend();
 
-        this.legendStub = sinon.stub(legendModule, 'Legend', () =>{
+        this.legendStub = sinon.stub(legendModule, 'Legend').callsFake(() =>{
             this.legend.getTemplatesGroups = sinon.spy(function() {
                 return [];
             });

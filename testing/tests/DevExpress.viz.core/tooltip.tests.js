@@ -568,7 +568,7 @@ QUnit.module('Manipulation', {
         }
 
         if(getComputedStyle) {
-            this.getComputedStyle = sinon.stub(window, 'getComputedStyle', function(elem) {
+            this.getComputedStyle = sinon.stub(window, 'getComputedStyle').callsFake(function(elem) {
                 if(elem === tooltip._textHtml.get(0)) {
                     return { width: '83.13px', height: '23.45px', getPropertyValue: () => {} };
                 }
@@ -1689,7 +1689,7 @@ QUnit.module('Movements', {
         that.canvas = CANVAS;
         tooltip._getCanvas = function() { return that.canvas; };
         if(getComputedStyle) {
-            this.getComputedStyle = sinon.stub(window, 'getComputedStyle', function(elem) {
+            this.getComputedStyle = sinon.stub(window, 'getComputedStyle').callsFake(function(elem) {
                 if(elem === tooltip._textHtml.get(0)) {
                     return { width: '60px', height: '40px', getPropertyValue: () => {} };
                 }

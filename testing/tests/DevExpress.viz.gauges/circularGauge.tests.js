@@ -104,7 +104,7 @@ const TestPointerElement = TestElement.inherit({
 (function circularGauge() {
     rendererModule.Renderer = sinon.stub();
 
-    sinon.stub(axisModule, 'Axis', function(parameters) {
+    sinon.stub(axisModule, 'Axis').callsFake(function(parameters) {
         const axis = new vizMocks.Axis(parameters);
         axis.measureLabels = sinon.stub().returns({
             width: 30,

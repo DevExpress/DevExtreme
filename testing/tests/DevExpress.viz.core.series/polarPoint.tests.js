@@ -58,7 +58,7 @@ const environment = {
         series._argumentChecker.returns(true);
         series._valueChecker.returns(true);
 
-        this.createLabel = sinon.stub(labelModule, 'Label', function() {
+        this.createLabel = sinon.stub(labelModule, 'Label').callsFake(function() {
             label.getBoundingRect.returns({ x: 1, y: 2, width: 20, height: 10 });
             label.getLayoutOptions.returns({ alignment: 'center', radialOffset: 0 });
             resetStub(label);

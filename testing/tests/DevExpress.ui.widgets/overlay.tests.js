@@ -306,7 +306,7 @@ testModule('render', moduleConfig, () => {
     });
 
     test('Overlay does not fail if swatch is undefined (render before documentReady, T713615)', function(assert) {
-        const stub = sinon.stub(swatch, 'getSwatchContainer', () => {
+        const stub = sinon.stub(swatch, 'getSwatchContainer').callsFake(() => {
             stub.restore();
             return undefined;
         });

@@ -37,12 +37,12 @@ const environment = {
         };
 
         const that = this;
-        sinon.stub(translator2DModule, 'Translator2D', function() {
+        sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             return that.translator;
         });
         this.renderer = new vizMocks.Renderer();
 
-        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator', function() {
+        this.tickGenerator = sinon.stub(tickGeneratorModule, 'tickGenerator').callsFake(function() {
             return function() {
                 return {
                     ticks: that.generatedTicks || [],

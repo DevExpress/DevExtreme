@@ -459,7 +459,7 @@ QUnit.module('typing', moduleConfig, () => {
                 useMaskedValue: true
             });
             const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            inputMatchesStub = sinon.stub($input.get(0), 'matches', () => true);
+            inputMatchesStub = sinon.stub($input.get(0), 'matches').callsFake(() => true);
 
             const textEditor = $textEditor.dxTextEditor('instance');
             const keyboard = keyboardMock($input, true);

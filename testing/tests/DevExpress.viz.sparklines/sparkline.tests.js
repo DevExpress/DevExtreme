@@ -90,7 +90,7 @@ QUnit.begin(function() {
         return $.extend({}, environment, {
             beforeEach: function() {
                 environment.beforeEach.apply(this, arguments);
-                this.validateData = sinon.stub(dataValidatorModule, 'validateData', function() {
+                this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function() {
                     return {
                         arg: [{
                             argument: 1,
@@ -2059,7 +2059,7 @@ QUnit.begin(function() {
     QUnit.module('drawn', {
         beforeEach: function() {
             environment.beforeEach.call(this);
-            sinon.stub(BaseWidget.prototype, '_drawn', sinon.spy());
+            sinon.stub(BaseWidget.prototype, '_drawn').callsFake(sinon.spy());
         },
         afterEach: function() {
             environment.afterEach.call(this);
@@ -2093,7 +2093,7 @@ QUnit.begin(function() {
     QUnit.module('drawn with async data', {
         beforeEach: function() {
             environment.beforeEach.call(this);
-            sinon.stub(BaseWidget.prototype, '_drawn', sinon.spy());
+            sinon.stub(BaseWidget.prototype, '_drawn').callsFake(sinon.spy());
             this.data = new DataSource();
             this.isLoadedStub = sinon.stub(this.data, 'isLoaded');
         },
@@ -2140,7 +2140,7 @@ QUnit.begin(function() {
 
     QUnit.test('isReady with not loaded dataSource', function(assert) {
         const data = new DataSource();
-        sinon.stub(data, 'isLoaded', function() { return false; });
+        sinon.stub(data, 'isLoaded').callsFake(function() { return false; });
 
         const sparkline = this.createSparkline({ dataSource: data });
 

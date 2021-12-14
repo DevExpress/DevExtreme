@@ -36,7 +36,7 @@ QUnit.module('dxChart Translators', $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.call(this);
 
-        this.createTranslator2D = sinon.stub(translator2DModule, 'Translator2D', function() {
+        this.createTranslator2D = sinon.stub(translator2DModule, 'Translator2D').callsFake(function() {
             return new Translator();
         });
     },

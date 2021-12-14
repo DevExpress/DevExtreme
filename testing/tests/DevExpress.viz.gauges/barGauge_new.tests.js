@@ -138,7 +138,7 @@ QUnit.module('Legend', {
     beforeEach() {
         this.renderer = new vizMocks.Renderer();
 
-        sinon.stub(rendererModule, 'Renderer', () => {
+        sinon.stub(rendererModule, 'Renderer').callsFake(() => {
             return this.renderer;
         });
 

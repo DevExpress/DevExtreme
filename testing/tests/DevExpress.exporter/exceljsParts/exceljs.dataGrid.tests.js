@@ -46,7 +46,7 @@ const moduleConfig = {
     beforeEach: function() {
         this.worksheet = new ExcelJS.Workbook().addWorksheet('Test sheet');
         this.customizeCellCallCount = 0;
-        this.stub = sinon.stub(errors, 'log', () => {
+        this.stub = sinon.stub(errors, 'log').callsFake(() => {
             QUnit.assert.strictEqual(true, false, 'error.log should not be called');
         });
 
@@ -6449,7 +6449,7 @@ QUnit.module('Deprecated warnings', moduleConfig, () => {
     QUnit.test('CustomizeCell handler - warnings when \'cell\' field is used', function(assert) {
         assert.expect(4);
         this.stub.restore();
-        this.stub = sinon.stub(errors, 'log', () => {
+        this.stub = sinon.stub(errors, 'log').callsFake(() => {
             assert.deepEqual(errors.log.lastCall.args, [
                 'W0003',
                 'CustomizeCell handler argument',

@@ -1781,7 +1781,7 @@ QUnit.module('Synchronize columns', {
         const gridView = this.createGridView(defaultOptions, { columnAutoWidth: true });
         const testElement = $('<div />').width(300).appendTo($('#container'));
 
-        const stub = sinon.stub(this.resizingController, '_correctColumnWidths', function() {
+        const stub = sinon.stub(this.resizingController, '_correctColumnWidths').callsFake(function() {
             const $tables = gridView.element().find('.dx-datagrid-table');
             assert.ok($tables.hasClass('dx-datagrid-table-fixed'), 'the best fit mode is disabled');
         });

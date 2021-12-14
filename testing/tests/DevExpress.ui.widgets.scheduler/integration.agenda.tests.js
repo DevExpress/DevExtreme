@@ -243,7 +243,7 @@ module('Integration: Agenda', moduleConfig, () => {
 
         let appointmentIndex = 0;
 
-        sinon.stub(scheduler.instance, 'showAppointmentPopup', (rawAppointment, isNew, targetedRawAppointment) => {
+        sinon.stub(scheduler.instance, 'showAppointmentPopup').callsFake((rawAppointment, isNew, targetedRawAppointment) => {
             const expectedDate = new Date(2015, 2, 23 + appointmentIndex);
             expectedDate.setHours(1);
 

@@ -4947,7 +4947,7 @@ QUnit.module('Tests with stubs', {
         that.horizontalArea.on.returns(that.horizontalArea);
         that.horizontalArea.off.returns(that.horizontalArea);
 
-        sinon.stub(headersArea, 'HorizontalHeadersArea', function() {
+        sinon.stub(headersArea, 'HorizontalHeadersArea').callsFake(function() {
             return that.horizontalArea;
         });
 
@@ -4960,7 +4960,7 @@ QUnit.module('Tests with stubs', {
         that.verticalArea.on.returns(that.verticalArea);
         that.verticalArea.off.returns(that.verticalArea);
 
-        sinon.stub(headersArea, 'VerticalHeadersArea', function() {
+        sinon.stub(headersArea, 'VerticalHeadersArea').callsFake(function() {
             return that.verticalArea;
         });
 
@@ -4974,7 +4974,7 @@ QUnit.module('Tests with stubs', {
         that.dataArea.on.returns(that.dataArea);
         that.dataArea.off.returns(that.dataArea);
 
-        sinon.stub(dataArea, 'DataArea', function() {
+        sinon.stub(dataArea, 'DataArea').callsFake(function() {
             return that.dataArea;
         });
 
@@ -5012,7 +5012,7 @@ QUnit.module('Tests with stubs', {
         that.dataController.getColumnsInfo.returns([]);
         that.dataController.getRowsInfo.returns([]);
 
-        sinon.stub(pivotGridDataController, 'DataController', function(options) {
+        sinon.stub(pivotGridDataController, 'DataController').callsFake(function(options) {
             const dataController = that.dataController;
             const dataSource = createMockDataSource(options.dataSource);
 

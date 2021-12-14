@@ -1092,7 +1092,7 @@ QUnit.test('Change size if size = 0,10 - B239871', function(assert) {
 QUnit.module('drawn', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        sinon.stub(BaseWidget.prototype, '_drawn', sinon.spy());
+        sinon.stub(BaseWidget.prototype, '_drawn').callsFake(sinon.spy());
     },
     createBullet: environment.createBullet,
     resetTranslators: environment.resetTranslators,

@@ -143,7 +143,7 @@ const environment = {
 
         that.$container = $('#chartContainer');
 
-        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager', function() {
+        this.createThemeManager = sinon.stub(chartThemeManagerModule, 'ThemeManager').callsFake(function() {
             resetStub(stubThemeManager);
             that.themeManager = stubThemeManager;
             return stubThemeManager;
@@ -160,25 +160,25 @@ const environment = {
             };
         };
 
-        that.createRenderer = sinon.stub(rendererModule, 'Renderer', function() {
+        that.createRenderer = sinon.stub(rendererModule, 'Renderer').callsFake(function() {
             const stubRenderer = new vizMocks.Renderer();
             stubRenderer.clipCircle = that.clipFunc;
             stubRenderer.clipRect = that.clipFunc;
             return stubRenderer;
         });
 
-        that.createTooltip = sinon.stub(tooltipModule, 'Tooltip', function() {
+        that.createTooltip = sinon.stub(tooltipModule, 'Tooltip').callsFake(function() {
             resetStub(stubTooltip);
             return stubTooltip;
         });
 
-        that.range = sinon.stub(rangeModule, 'Range', function() {
+        that.range = sinon.stub(rangeModule, 'Range').callsFake(function() {
             resetStub(stubRange);
             stubRange.addRange = function() { this.min = 2; };
             return stubRange;
         });
 
-        that.createSeries = sinon.stub(seriesModule, 'Series', function(settings, seriesTheme) {
+        that.createSeries = sinon.stub(seriesModule, 'Series').callsFake(function(settings, seriesTheme) {
             resetStub(stubSeries[seriesIndex]);
             stubSeries[seriesIndex].getValueAxis.returns(settings.valueAxis);
             if(seriesTheme.valueErrorBar) {
@@ -187,7 +187,7 @@ const environment = {
             return $.extend(true, stubSeries[seriesIndex++], seriesTheme);
         });
 
-        that.createAxis = sinon.stub(axisModule, 'Axis', function() {
+        that.createAxis = sinon.stub(axisModule, 'Axis').callsFake(function() {
             resetStub(stubAxes[axesIndex]);
 
             stubAxes[axesIndex].getMargins.returns({
@@ -200,12 +200,12 @@ const environment = {
             return stubAxes[axesIndex++];
         });
 
-        that.createSeriesFamily = sinon.stub(seriesFamilyModule, 'SeriesFamily', function() {
+        that.createSeriesFamily = sinon.stub(seriesFamilyModule, 'SeriesFamily').callsFake(function() {
             resetStub(stubSeriesFamily);
             return stubSeriesFamily;
         });
 
-        that.createLayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager', function() {
+        that.createLayoutManager = sinon.stub(layoutManagerModule, 'LayoutManager').callsFake(function() {
             resetStub(stubLayoutManager);
             return stubLayoutManager;
         });
@@ -279,7 +279,7 @@ QUnit.test('create series with panes', function(assert) {
 });
 
 QUnit.test('give series in groups to data validator', function(assert) {
-    const validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
+    const validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
         return data || [];
     });
     try {

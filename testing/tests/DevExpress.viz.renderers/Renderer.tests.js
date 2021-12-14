@@ -397,7 +397,7 @@ QUnit.module('Fix sharping', {
         const that = this;
         this.boundingRect = { left: 123.76, top: 2.15 };
         this.container = document.createElement('div');
-        sinon.stub(this.container, 'getBoundingClientRect', function() {
+        sinon.stub(this.container, 'getBoundingClientRect').callsFake(function() {
             return that.boundingRect;
         });
     }

@@ -257,7 +257,7 @@ QUnit.test('dxactive should be fired on parent element if child was active befor
 QUnit.module('feedback simulator', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        this.isSimulator = sinon.stub(devices, 'isSimulator', function() { return true; });
+        this.isSimulator = sinon.stub(devices, 'isSimulator').callsFake(function() { return true; });
     },
 
     afterEach: function() {

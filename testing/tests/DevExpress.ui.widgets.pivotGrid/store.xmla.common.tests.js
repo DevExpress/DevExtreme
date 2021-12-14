@@ -18,7 +18,7 @@ const stubsEnvironment = {
         this.store = new Store(this.dataSource);
         that.sendDeferred = $.Deferred();
 
-        that.sendRequest = sinon.stub(pivotGridUtils, 'sendRequest', function() {
+        that.sendRequest = sinon.stub(pivotGridUtils).callsFake('sendRequest', function() {
             return that.sendDeferred;
         });
     },

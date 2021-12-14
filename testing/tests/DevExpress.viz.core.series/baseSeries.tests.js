@@ -177,7 +177,7 @@ const environmentWithSinonStubPoint = {
     beforeEach: function() {
         environment.beforeEach.call(this);
         let mockPointIndex = 0;
-        this.createPoint = sinon.stub(pointModule, 'Point', function(series, data) {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(series, data) {
             const stub = mockPoints[mockPointIndex++];
             stub.series = series;
             stub.argument = data.argument || 1;
@@ -2188,7 +2188,7 @@ QUnit.test('Points count > maxLabelCount', function(assert) {
 QUnit.module('Series states - excludePointsMode', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.createPoint = sinon.stub(pointModule, 'Point', function() {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
             const stub = sinon.createStubInstance(originalPoint);
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -2562,7 +2562,7 @@ QUnit.test('setHoverState after Selected State in includePointsMode', function(a
 QUnit.module('Series states - nearestPoint Mode', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.createPoint = sinon.stub(pointModule, 'Point', function(_, data) {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function(_, data) {
             const stub = sinon.createStubInstance(originalPoint);
             stub.argument = 1;
 
@@ -2936,7 +2936,7 @@ QUnit.test('reset nearest point on select', function(assert) {
 QUnit.module('Series states - includePointsMode', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.createPoint = sinon.stub(pointModule, 'Point', function() {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
             const stub = sinon.createStubInstance(originalPoint);
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -3298,7 +3298,7 @@ QUnit.test('clear selection hovered', function(assert) {
 QUnit.module('Series states - none mode', {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.createPoint = sinon.stub(pointModule, 'Point', function() {
+        this.createPoint = sinon.stub(pointModule, 'Point').callsFake(function() {
             const stub = sinon.createStubInstance(originalPoint);
             stub.argument = 1;
             stub.hasValue.returns(true);
@@ -4980,7 +4980,7 @@ QUnit.module('Legend states', {
     beforeEach: function() {
         this.legendCallback = sinon.stub();
         environment.beforeEach.call(this);
-        sinon.stub(pointModule, 'Point', function(series) {
+        sinon.stub(pointModule, 'Point').callsFake(function(series) {
             const point = new vizMocks.Point();
             point.argument = 1;
             point.series = series;

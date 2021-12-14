@@ -6727,7 +6727,7 @@ QUnit.module('maxFilterQueryLength', {
         };
 
         this.stubLogger = (assert) => {
-            this.stub = sinon.stub(uiErrors, 'log', (warning) => {
+            this.stub = sinon.stub(uiErrors, 'log').callsFake((warning) => {
                 assert.strictEqual(warning, 'W1019', 'warning is correct');
             });
         };

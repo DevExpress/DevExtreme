@@ -59,7 +59,7 @@ QUnit.begin(function() {
 
     registerComponent('dxBaseWidgetTester', dxBaseWidgetTester);
 
-    sinon.stub(rendererModule, 'Renderer', function() {
+    sinon.stub(rendererModule, 'Renderer').callsFake(function() {
         return currentTest().renderer;
     });
 
@@ -272,7 +272,7 @@ QUnit.test('Handler is called inside the renderer lock', function(assert) {
 QUnit.test('Another handler is called if option is changed inside the handler', function(assert) {
     this.createWidget();
     let lock = false;
-    const spy = sinon.stub(this.widget, '_applyChanges', function(options) {
+    const spy = sinon.stub(this.widget, '_applyChanges').callsFake(function(options) {
         if(!lock) {
             lock = true;
             this.option('rtlEnabled', 'rtl-enabled');
@@ -290,7 +290,7 @@ QUnit.test('Another handler is called if option is changed inside the handler', 
 QUnit.test('Count the actual number of changes', function(assert) {
     const widget = this.createWidget();
     const counts = [];
-    const spy = sinon.stub(widget, '_applyChanges', function() {
+    const spy = sinon.stub(widget, '_applyChanges').callsFake(function() {
         counts.push(widget._changes.count());
     });
 

@@ -34,7 +34,7 @@ export const environment = {
 
         this.itemGroupNumber = 0;
 
-        sinon.stub(rendererModule, 'Renderer', function() {
+        sinon.stub(rendererModule, 'Renderer').callsFake(function() {
             return that.renderer;
         });
     },

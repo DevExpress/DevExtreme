@@ -786,7 +786,7 @@ define(function(require) {
 
         QUnit.test('T677334. Correct parse result with empty member value', function(assert) {
             const send = pivotGridUtils.sendRequest;
-            sinon.stub(pivotGridUtils, 'sendRequest', function() {
+            sinon.stub(pivotGridUtils, 'sendRequest').callsFake(function() {
                 const deferred = $.Deferred();
                 send.apply(this, arguments)
                     .then(function() {

@@ -444,7 +444,7 @@ QUnit.module('Deprecated options', {
 }, () => {
     QUnit.test('show warning if deprecated "height" option is used', function(assert) {
         assert.expect(2);
-        this.stub = sinon.stub(errors, 'log', () => {
+        this.stub = sinon.stub(errors, 'log').callsFake(() => {
             assert.deepEqual(errors.log.lastCall.args, [
                 'W0001',
                 'dxToolbar',
@@ -464,7 +464,7 @@ QUnit.module('Deprecated options', {
 
     QUnit.test('Warning messages not displaying if deprecated "height" option not used', function(assert) {
         assert.expect(1);
-        this.stub = sinon.stub(errors, 'log', () => {
+        this.stub = sinon.stub(errors).callsFake('log', () => {
             assert.strictEqual(true, false, 'error.log should not be called');
         });
 

@@ -53,7 +53,7 @@ const moduleConfig = {
 
         this.rootItem = new FileSystemItem('', true);
 
-        sinon.stub(fileSaver, 'saveAs', (fileName, format, data) => {
+        sinon.stub(fileSaver, 'saveAs').callsFake((fileName, format, data) => {
             if(fileSaver._onTestSaveAs) {
                 fileSaver._onTestSaveAs(fileName, format, data);
             }

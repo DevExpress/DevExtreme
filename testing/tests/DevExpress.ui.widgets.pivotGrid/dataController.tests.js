@@ -14,7 +14,7 @@ const moduleConfig = {
         const stateStoringController = sinon.createStubInstance(StateStoringController);
         stateStoringController.init.returns(stateStoringController);
 
-        sinon.stub(stateStoring, 'StateStoringController', function() {
+        sinon.stub(stateStoring, 'StateStoringController').callsFake(function() {
             return stateStoringController;
         });
 
@@ -4381,7 +4381,7 @@ QUnit.module('Virtual scrolling', {
 
         const VirtualScrollController = virtualScrolling.VirtualScrollController;
 
-        this.VirtualScrollController = sinon.stub(virtualScrolling, 'VirtualScrollController', function() {
+        this.VirtualScrollController = sinon.stub(virtualScrolling, 'VirtualScrollController').callsFake(function() {
             return sinon.createStubInstance(VirtualScrollController);
         });
 

@@ -19,11 +19,11 @@ const mockWorkSpaceRendering = function(schedulerInst, cellSize, bounds) {
         return bounds[groupIndex];
     };
 
-    sinon.stub(schedulerInst, '_renderWorkSpace', function(groups) {
+    sinon.stub(schedulerInst, '_renderWorkSpace').callsFake(function(groups) {
         base.call(this, groups);
 
         sinon.stub(this._workSpace, 'getCellWidth').returns(cellSize);
-        sinon.stub(this._workSpace, 'getMaxAllowedPosition', getMaxAllowedPosition);
+        sinon.stub(this._workSpace, 'getMaxAllowedPosition').callsFake(getMaxAllowedPosition);
     });
 };
 

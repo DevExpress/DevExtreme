@@ -1859,7 +1859,7 @@ QUnit.module('ExportController', {
                 proxyUrl: 'testProxy'
             }
         });
-        sinon.stub(this.exportController, 'getAction', function(arg) {
+        sinon.stub(this.exportController, 'getAction').callsFake(function(arg) {
             if(arg === 'onExporting') {
                 return onExportingStub;
             } else if(arg === 'onExported') {
