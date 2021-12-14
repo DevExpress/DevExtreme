@@ -8,6 +8,10 @@ const test = multiPlatformTest({
   page: 'declaration/scheduler',
   platforms: [/* 'jquery' , */'react'],
 });
+const testReact = multiPlatformTest({
+  page: 'declaration/scheduler',
+  platforms: ['react'],
+});
 
 const data = [
   {
@@ -89,6 +93,74 @@ fixture('Renovated scheduler - Appointment templates');
         showCurrentTimeIndicator: false,
         appointmentTemplate: () => 'Test-Appt',
         appointmentCollectorTemplate: () => 'Test',
+      });
+    },
+  );
+
+  testReact(`appointment renders should work in ${currentView}`,
+    async (t, { screenshotComparerOptions }) => {
+      const { element } = new Scheduler(SCHEDULER_SELECTOR);
+
+      await t
+        .expect(await compareScreenshot(
+          t,
+          `scheduler_appointment_template_${currentView}.png`,
+          element,
+          screenshotComparerOptions,
+        ))
+        .ok();
+    }).before(
+    async (t, { platform }) => {
+      await t.resizeWindow(1200, 800);
+      await createWidget(platform, 'dxScheduler', {
+        dataSource: data,
+        maxAppointmentsPerCell: 1,
+        views: [{
+          type: currentView,
+        }],
+        currentView,
+        currentDate: new Date(2021, 3, 4),
+        startDayHour: 9,
+        endDayHour: 14,
+        groups: ['groupId'],
+        resources,
+        showCurrentTimeIndicator: false,
+        appointmentRender: () => 'Test-Appt',
+        appointmentCollectorRender: () => 'Test',
+      });
+    },
+  );
+
+  testReact(`appointment components should work in ${currentView}`,
+    async (t, { screenshotComparerOptions }) => {
+      const { element } = new Scheduler(SCHEDULER_SELECTOR);
+
+      await t
+        .expect(await compareScreenshot(
+          t,
+          `scheduler_appointment_template_${currentView}.png`,
+          element,
+          screenshotComparerOptions,
+        ))
+        .ok();
+    }).before(
+    async (t, { platform }) => {
+      await t.resizeWindow(1200, 800);
+      await createWidget(platform, 'dxScheduler', {
+        dataSource: data,
+        maxAppointmentsPerCell: 1,
+        views: [{
+          type: currentView,
+        }],
+        currentView,
+        currentDate: new Date(2021, 3, 4),
+        startDayHour: 9,
+        endDayHour: 14,
+        groups: ['groupId'],
+        resources,
+        showCurrentTimeIndicator: false,
+        appointmentComponent: () => 'Test-Appt',
+        appointmentCollectorComponent: () => 'Test',
       });
     },
   );
