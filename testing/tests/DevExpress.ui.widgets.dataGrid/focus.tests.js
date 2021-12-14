@@ -3384,7 +3384,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
 
         // act
-        loadSpy.reset();
+        loadSpy.resetHistory();
         this.getController('columns').changeSortOrder(2, 'asc');
         this.clock.tick();
 
@@ -4096,7 +4096,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.ok(newRow.isNewRow, 'new row');
 
         // act
-        onFocusedRowChangedSpy.reset();
+        onFocusedRowChangedSpy.resetHistory();
         $(this.getRowElement(newRowIndex)).find('.dx-texteditor-input').trigger(pointerEvents.down).click();
         this.clock.tick();
 

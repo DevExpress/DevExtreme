@@ -964,7 +964,7 @@ QUnit.test('selection changed event in single mode fire only for selected elemen
     const item = funnel.getAllItems()[0];
 
     item.select(true);
-    spy.reset();
+    spy.resetHistory();
     funnel.getAllItems()[1].select(true);
 
     assert.equal(spy.callCount, 2);

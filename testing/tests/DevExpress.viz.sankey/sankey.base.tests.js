@@ -110,7 +110,7 @@ QUnit.test('Trigger error on invalid source data', function(assert) {
     const spy = sinon.spy();
 
     invalidDataSets.forEach(function(data, dataIdx) {
-        spy.reset();
+        spy.resetHistory();
         createSankey({
             layoutBuilder: layoutBuilder,
             dataSource: data,
@@ -131,7 +131,7 @@ QUnit.test('Trigger "cycle detected" error on invalid source data', function(ass
     const spy = sinon.spy();
 
     invalidDataSets.forEach(function(data) {
-        spy.reset();
+        spy.resetHistory();
         createSankey({
             layoutBuilder: layoutBuilder,
             dataSource: data,

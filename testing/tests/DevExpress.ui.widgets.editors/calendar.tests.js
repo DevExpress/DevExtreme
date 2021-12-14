@@ -2284,7 +2284,7 @@ QUnit.module('disabledDates option', {
             });
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             const lastAvailableDateOnJanuary = new Date(2020, 0, 19);
             const firstAvailableDateOnFebruary = new Date(2020, 1, 20);
@@ -2339,7 +2339,7 @@ QUnit.module('disabledDates option', {
             });
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             this.$element.trigger('focusin');
 
@@ -2577,7 +2577,7 @@ QUnit.module('disabledDates option', {
             });
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             this.$element.trigger('focusin');
 
@@ -2703,7 +2703,7 @@ QUnit.module('disabledDates option', {
             });
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             this.$element.trigger('focusin');
 
@@ -2739,7 +2739,7 @@ QUnit.module('disabledDates option', {
             });
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             this.$element.trigger('focusin');
 

@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import SinonTest from 'sinon-test';
 
 import { getWindow } from 'core/utils/window';
 
@@ -15,6 +16,7 @@ import {
 
 const supportedViews = ['day', 'week', 'workWeek', 'month']; // TODO: add timelines
 
+const sinonTest = SinonTest(sinon);
 const {
     testStart,
     module
@@ -24,7 +26,7 @@ const test = (description, callback) => {
     const testFunc = !isDesktopEnvironment()
         ? QUnit.skip
         : QUnit.test;
-    return testFunc(description, sinon.test(callback));
+    return testFunc(description, sinonTest(callback));
 };
 
 testStart(() => initTestMarkup());

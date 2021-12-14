@@ -709,7 +709,7 @@ QUnit.module('Events', moduleConfig, () => {
         }, $('#items'));
 
         const pointer = this.pointer.down().move(0, 50);
-        onDragEnterSpy.reset();
+        onDragEnterSpy.resetHistory();
 
         // act
         pointer.move(0, 250).move(0, 50);
@@ -735,7 +735,7 @@ QUnit.module('Events', moduleConfig, () => {
         }, $('#items'));
 
         const pointer = this.pointer.down().move(0, 300).move(0, 50);
-        onDragLeaveSpy.reset();
+        onDragLeaveSpy.resetHistory();
 
         // act
         pointer.move(0, -200);

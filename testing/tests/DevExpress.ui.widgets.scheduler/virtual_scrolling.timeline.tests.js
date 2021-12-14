@@ -1,3 +1,5 @@
+import SinonTest from 'sinon-test';
+
 import 'generic_light.css!';
 
 import {
@@ -12,13 +14,14 @@ const {
     testStart,
     module
 } = QUnit;
+const sinonTest = SinonTest(sinon);
 
 const test = (description, callback) => {
     const testFunc = !isDesktopEnvironment()
         ? QUnit.skip
         : QUnit.test;
 
-    return testFunc(description, sinon.test(callback));
+    return testFunc(description, sinonTest(callback));
 };
 const printOffset = offset => [
     offset.x >= 0 ? `offset.x: ${offset.x}` : '',

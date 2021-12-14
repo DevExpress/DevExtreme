@@ -401,7 +401,7 @@ QUnit.module('Raise context menu', moduleConfig, () => {
         this.clock.tick(800);
 
         this.wrapper.getContextMenuItems().eq(0).trigger('dxclick');
-        spy.reset();
+        spy.resetHistory();
         this.clock.tick(800);
 
         const $subItems = this.wrapper.getContextMenuSubMenuItems();

@@ -106,7 +106,7 @@ QUnit.test('Turn tile hover on when another tile is hovered', function(assert) {
         onHoverChanged: spy
     }).getRootNode();
     root.getChild(1).setHover();
-    spy.reset();
+    spy.resetHistory();
 
     root.getChild(0).setHover();
 
@@ -200,7 +200,7 @@ QUnit.test('Turn group hover off', function(assert) {
     inner.smartAttr.reset();
     tile1.smartAttr.reset();
     tile2.smartAttr.reset();
-    spy.reset();
+    spy.resetHistory();
 
     widget.clearHover();
 
@@ -238,7 +238,7 @@ QUnit.test('Turn group hover on when another group is hovered', function(assert)
         onHoverChanged: spy
     }).getRootNode();
     root.getChild(1).setHover();
-    spy.reset();
+    spy.resetHistory();
 
     root.getChild(0).setHover();
 
@@ -367,7 +367,7 @@ QUnit.test('Change hover mode', function(assert) {
         onHoverChanged: spy
     });
     widget.getRootNode().getChild(0).setHover();
-    spy.reset();
+    spy.resetHistory();
 
     widget.option('hoverEnabled', false);
 
@@ -383,7 +383,7 @@ QUnit.test('Change hover mode of the group', function(assert) {
         onHoverChanged: spy
     });
     widget.getRootNode().getChild(0).setHover();
-    spy.reset();
+    spy.resetHistory();
 
     widget.option({ group: { hoverEnabled: false } });
 

@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import SinonTest from 'sinon-test';
 import { VirtualScrollingDispatcher } from 'ui/scheduler/workspaces/ui.scheduler.virtual_scrolling';
 import domAdapter from 'core/dom_adapter';
 import eventsEngine from 'events/core/events_engine';
@@ -7,9 +8,10 @@ import { addNamespace } from 'events/utils/index';
 const {
     module
 } = QUnit;
+const sinonTest = SinonTest(sinon);
 
 const test = (description, callback) => {
-    return QUnit.test(description, sinon.test(callback));
+    return QUnit.test(description, sinonTest(callback));
 };
 
 module('Virtual Scrolling', {

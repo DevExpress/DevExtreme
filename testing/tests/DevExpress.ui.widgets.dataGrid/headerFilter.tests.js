@@ -4193,7 +4193,7 @@ QUnit.module('Header Filter with real columnsController', {
         }];
         this.options.dataSource = { load: spy };
         this.setupDataGrid();
-        spy.reset();
+        spy.resetHistory();
 
         // act
         this.columnOption('date', 'filterValues', [['date', '=', '2018/01/01']]);

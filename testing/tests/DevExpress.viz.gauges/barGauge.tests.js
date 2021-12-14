@@ -944,7 +944,7 @@ QUnit.test('set values', function(assert) {
         values: [50],
         onDrawn: spy
     });
-    spy.reset();
+    spy.resetHistory();
 
     gauge.values([10, '20', 30]);
 
@@ -959,7 +959,7 @@ QUnit.test('set "values" option', function(assert) {
         values: [50],
         onDrawn: spy
     });
-    spy.reset();
+    spy.resetHistory();
 
     gauge.option('values', [10, '20', 30]);
 
@@ -974,7 +974,7 @@ QUnit.test('set values - scalar', function(assert) {
         values: [50],
         onDrawn: spy
     });
-    spy.reset();
+    spy.resetHistory();
 
     gauge.values(80);
 
@@ -989,7 +989,7 @@ QUnit.test('set values - not valid', function(assert) {
         values: [60, 70],
         onDrawn: spy
     });
-    spy.reset();
+    spy.resetHistory();
 
     gauge.values({});
 

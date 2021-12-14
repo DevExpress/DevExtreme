@@ -55,7 +55,7 @@ QUnit.test('Drilldown to sibling', function(assert) {
     });
     widget.getRootNode().getChild(0).drillDown();
     this.renderer.simpleRect.reset();
-    spy.reset();
+    spy.resetHistory();
 
     widget.getRootNode().getChild(1).drillDown();
 
@@ -106,7 +106,7 @@ QUnit.test('Reset drilldown', function(assert) {
     });
     widget.getRootNode().getChild(0).getChild(0).drillDown();
     this.renderer.simpleRect.reset();
-    spy.reset();
+    spy.resetHistory();
 
     widget.resetDrillDown();
 
@@ -135,7 +135,7 @@ QUnit.test('Drill up', function(assert) {
     });
     widget.getRootNode().getChild(0).getChild(0).drillDown();
     this.renderer.simpleRect.reset();
-    spy.reset();
+    spy.resetHistory();
 
     widget.drillUp();
 

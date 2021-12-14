@@ -4966,7 +4966,7 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
             focusStateEnabled: true
         });
 
-        fieldTemplateSpy.reset();
+        fieldTemplateSpy.resetHistory();
         keyboardMock($tagBox.find('.dx-texteditor-input'))
             .focus()
             .press('down');

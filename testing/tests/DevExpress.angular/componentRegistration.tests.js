@@ -625,7 +625,7 @@ QUnit.test('binding should fired once when option is a plain object', function(a
 
     const instance = $markup.dxTest('instance');
 
-    spy.reset();
+    spy.resetHistory();
     instance.option('testOption', { value: 2 });
 
     assert.equal(spy.callCount, 1, 'optionChanged action fired once');
@@ -683,7 +683,7 @@ QUnit.test('option changed fired after value was set in the same value(plain obj
 
     instance.option('testOption', value);
 
-    spy.reset();
+    spy.resetHistory();
     scope.$apply(() => {
         scope.dataValue.value = 3;
     });

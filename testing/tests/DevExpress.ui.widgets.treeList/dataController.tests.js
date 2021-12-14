@@ -1203,7 +1203,7 @@ QUnit.module('Expand/Collapse nodes', { beforeEach: setupModule, afterEach: tear
             }
         });
         clock.tick(30);
-        loadSpy.reset();
+        loadSpy.resetHistory();
 
         // act
         this.expandRow(1);

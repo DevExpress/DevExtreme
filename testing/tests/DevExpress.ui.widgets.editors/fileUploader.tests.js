@@ -745,9 +745,9 @@ QUnit.module('custom uploading', moduleConfig, () => {
         assert.strictEqual(onUploadedSpy.callCount, 1, 'uploaded event raised');
         assert.strictEqual(onAbortedSpy.callCount, 0, 'upload aborted event is not called');
 
-        uploadChunkSpy.reset();
-        onUploadedSpy.reset();
-        onAbortedSpy.reset();
+        uploadChunkSpy.resetHistory();
+        onUploadedSpy.resetHistory();
+        onAbortedSpy.resetHistory();
 
         fileUploader.option('value', []);
 
@@ -1606,8 +1606,8 @@ QUnit.module('allowCanceling', moduleConfig, () => {
         assert.ok(onUploadAbortedSpy.calledOnce, 'upload is cancelled');
         assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
 
-        onUploadAbortedSpy.reset();
-        onUploadedSpy.reset();
+        onUploadAbortedSpy.resetHistory();
+        onUploadedSpy.resetHistory();
 
         let $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
         let $progressBar = $element.find('.dx-progressbar');
@@ -2979,7 +2979,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadedSpy.calledOnce, 'file 1 uploaded');
         assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called');
 
-        onUploadedSpy.reset();
+        onUploadedSpy.resetHistory();
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
         this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
 
@@ -3013,7 +3013,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadAbortedSpy.notCalled, 'none files was aborted');
         assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called');
 
-        onUploadedSpy.reset();
+        onUploadedSpy.resetHistory();
         $element.dxFileUploader('instance').abortUpload();
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
         this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
@@ -3055,7 +3055,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadErrorSpy.notCalled, 'none files has error');
         assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called');
 
-        onUploadedSpy.reset();
+        onUploadedSpy.resetHistory();
         this.clock.tick(1000);
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
         this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
@@ -3092,8 +3092,8 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadedSpy.calledOnce, 'file 1 was uploaded');
         assert.ok(onUploadCompletedSpy.calledOnce, 'onUploadCompletedSpy was called in right time');
 
-        onUploadedSpy.reset();
-        onUploadCompletedSpy.reset();
+        onUploadedSpy.resetHistory();
+        onUploadCompletedSpy.resetHistory();
         this.clock.tick(1000);
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
         this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
@@ -3139,7 +3139,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadErrorSpy.notCalled, 'none files has error');
         assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called');
 
-        onUploadedSpy.reset();
+        onUploadedSpy.resetHistory();
         this.clock.tick(1000);
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
         this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
@@ -3591,8 +3591,8 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called on first dropZone');
         assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone1[0], 'dropZone argument is correct');
 
-        onDropZoneEnterSpy.reset();
-        onDropZoneLeaveSpy.reset();
+        onDropZoneEnterSpy.resetHistory();
+        onDropZoneLeaveSpy.resetHistory();
 
         triggerDragEvent(customDropZone2, 'dragenter');
         assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called on second dropZone');
@@ -3749,7 +3749,7 @@ QUnit.module('files selection', moduleConfig, () => {
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
         assert.ok(uploadedSpy.calledTwice, 'two files are loaded');
 
-        uploadedSpy.reset();
+        uploadedSpy.resetHistory();
         simulateFileChoose($fileUploader, files);
         instance.upload();
 

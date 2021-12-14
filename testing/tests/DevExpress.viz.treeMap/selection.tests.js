@@ -114,7 +114,7 @@ QUnit.test('Unselect group', function(assert) {
     root.getChild(0).select(true);
     outer.attr.reset();
     inner.smartAttr.reset();
-    spy.reset();
+    spy.resetHistory();
 
     root.getChild(0).select(false);
 
@@ -132,7 +132,7 @@ QUnit.test('Select tile when another one is selected', function(assert) {
         onSelectionChanged: spy
     }).getRootNode();
     root.getChild(0).select(true);
-    spy.reset();
+    spy.resetHistory();
 
     root.getChild(1).select(true);
 
@@ -151,7 +151,7 @@ QUnit.test('Select tile when another one is selected - multiple selection', func
         selectionMode: 'MULTIPLE'
     }).getRootNode();
     root.getChild(0).select(true);
-    spy.reset();
+    spy.resetHistory();
 
     root.getChild(1).select(true);
 
@@ -183,7 +183,7 @@ QUnit.test('Clear selection', function(assert) {
     const root = widget.getRootNode();
     root.getChild(0).select(true);
     root.getChild(1).select(true);
-    spy.reset();
+    spy.resetHistory();
 
     widget.clearSelection();
 
@@ -204,7 +204,7 @@ QUnit.test('Change from multiple to single', function(assert) {
     const root = widget.getRootNode();
     root.getChild(1).select(true);
     root.getChild(0).select(true);
-    spy.reset();
+    spy.resetHistory();
 
     widget.option('selectionMode', 'SINGLE');
 
@@ -223,7 +223,7 @@ QUnit.test('Change from multiple to none', function(assert) {
     const root = widget.getRootNode();
     root.getChild(0).select(true);
     root.getChild(1).select(true);
-    spy.reset();
+    spy.resetHistory();
 
     widget.option('selectionMode', 'NONE');
 

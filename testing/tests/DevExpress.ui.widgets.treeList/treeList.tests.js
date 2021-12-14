@@ -1940,7 +1940,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         assert.equal($(treeList.getCellElement(0, 0)).text(), '0', 'first row first cell');
         assert.equal($(treeList.getCellElement(1, 0)).text(), '1', 'second row first cell');
 
-        loadSpy.reset();
+        loadSpy.resetHistory();
     });
 
     // T991320
