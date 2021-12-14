@@ -182,7 +182,7 @@ QUnit.test('callbacks should be fired with changed dimensions', function(assert)
 
     assert.ok(callback.calledWith('width'), 'callback is called for width only');
 
-    callback.reset();
+    callback.resetHistory();
     this.fakeWindow.innerHeight = 500;
     this.triggerResize(false);
 
