@@ -5,7 +5,7 @@ import {
 export interface FormatHelper {
   format(
     value: number | Date | null | undefined | string,
-    format?: Format): string;
+    format?: Format | Record<string, unknown>): string;
 }
 
 declare const formatHelper: FormatHelper;
