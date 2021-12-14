@@ -521,7 +521,7 @@ export default function() {
 
             $okDialogButton.trigger('dxclick');
             this.clock.tick();
-            this.clock.tick();
+            this.clock.tick(1);
         });
 
         test('Add a link with empty text', function(assert) {
