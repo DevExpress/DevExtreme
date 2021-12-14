@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-
+/* eslint-disable */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  // eslint-disable-next-line spellcheck/spell-checker
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {

@@ -1,7 +1,11 @@
+import {
+  Format,
+} from './localization';
+
 export interface FormatHelper {
   format(
     value: number | Date | null | undefined | string,
-    format: string | ((value: unknown) => string) | Record<string, unknown>): string;
+    format?: Format | Record<string, unknown>): string;
 }
 
 declare const formatHelper: FormatHelper;

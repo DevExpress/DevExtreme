@@ -29,9 +29,10 @@ import {
     getOptionNameFromFullName,
     tryGetTabPath,
     getTextWithoutSpaces,
-    isExpectedItem,
+    isEqualToDataFieldOrNameOrTitleOrCaption,
     isFullPathContainsTabs,
-    getItemPath
+    getItemPath,
+    convertToLayoutManagerOptions
 } from './ui.form.utils';
 
 import { convertToLabelMarkOptions } from './ui.form.layout_manager.utils'; // TODO: remove reference to 'ui.form.layout_manager.utils.js'
@@ -413,7 +414,7 @@ const Form = Widget.inherit({
         that._testResultItems = items;
         //#ENDDEBUG
 
-        that._rootLayoutManager = that._renderLayoutManager(items, $content, {
+        that._rootLayoutManager = that._renderLayoutManager($content, this._createLayoutManagerOptions(items, {
             isRoot: true,
             colCount: that.option('colCount'),
             alignItemLabels: that.option('alignItemLabels'),
@@ -425,7 +426,7 @@ const Form = Widget.inherit({
             onContentReady: function(e) {
                 that._alignLabels(e.component, e.component.isSingleColumnMode());
             }
-        });
+        }));
     },
 
     _tryGetItemsForTemplate: function(item) {
@@ -440,7 +441,7 @@ const Form = Widget.inherit({
             itemTemplate: (itemData, e, container) => {
                 const $container = $(container);
                 const alignItemLabels = ensureDefined(itemData.alignItemLabels, true);
-                const layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(itemData), $container, {
+                const layoutManager = this._renderLayoutManager($container, this._createLayoutManagerOptions(this._tryGetItemsForTemplate(itemData), {
                     colCount: itemData.colCount,
                     alignItemLabels: alignItemLabels,
                     screenByWidth: this.option('screenByWidth'),
@@ -454,7 +455,7 @@ const Form = Widget.inherit({
                             inOneColumn
                         });
                     }
-                });
+                }));
 
                 if(this._itemsRunTimeInfo) {
                     this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(itemData.guid, { layoutManager });
@@ -522,12 +523,12 @@ const Form = Widget.inherit({
                 container: getPublicElement($groupContent)
             });
         } else {
-            layoutManager = this._renderLayoutManager(this._tryGetItemsForTemplate(item), $groupContent, {
+            layoutManager = this._renderLayoutManager($groupContent, this._createLayoutManagerOptions(this._tryGetItemsForTemplate(item), {
                 colCount: item.colCount,
                 colCountByScreen: item.colCountByScreen,
                 alignItemLabels: item.alignItemLabels,
                 cssItemClass: item.cssItemClass,
-            });
+            }));
 
             this._itemsRunTimeInfo && this._itemsRunTimeInfo.extendRunTimeItemInfoByKey(item.guid, { layoutManager });
 
@@ -540,73 +541,50 @@ const Form = Widget.inherit({
         }
     },
 
-    _renderLayoutManager: function(items, $rootElement, options) {
-        const $element = $('<div>');
-        const that = this;
-        const config = that._getLayoutManagerConfig(items, options);
-        const baseColCountByScreen = {
-            lg: options.colCount,
-            md: options.colCount,
-            sm: options.colCount,
-            xs: 1
-        };
-
-        that._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, options.colCountByScreen) });
-        $element.appendTo($rootElement);
-
-        const instance = that._createComponent($element, 'dxLayoutManager', config);
-        instance.on('autoColCountChanged', function() { that._refresh(); });
-        that._cachedLayoutManagers.push(instance);
-        return instance;
-    },
-
-    _getValidationGroup: function() {
-        return this.option('validationGroup') || this;
-    },
-
-    _getLayoutManagerConfig: function(items, options) {
-        const baseConfig = {
+    _createLayoutManagerOptions: function(items, extendedLayoutManagerOptions) {
+        return convertToLayoutManagerOptions({
             form: this,
-            isRoot: options.isRoot,
+            formOptions: this.option(),
+            $formElement: this.$element(),
+            items,
             validationGroup: this._getValidationGroup(),
-            showRequiredMark: this.option('showRequiredMark'),
-            showOptionalMark: this.option('showOptionalMark'),
-            requiredMark: this.option('requiredMark'),
-            optionalMark: this.option('optionalMark'),
-            requiredMessage: this.option('requiredMessage'),
-            screenByWidth: this.option('screenByWidth'),
-            layoutData: this.option('formData'),
-            labelLocation: this.option('labelLocation'),
-            customizeItem: this.option('customizeItem'),
-            minColWidth: this.option('minColWidth'),
-            showColonAfterLabel: this.option('showColonAfterLabel'),
-            onEditorEnterKey: this.option('onEditorEnterKey'),
-            labelMode: this.option('labelMode'),
+            extendedLayoutManagerOptions,
             onFieldDataChanged: args => {
                 if(!this._isDataUpdating) {
                     this._triggerOnFieldDataChanged(args);
                 }
             },
-            validationBoundary: this.option('scrollingEnabled') ? this.$element() : undefined
-        };
-
-        return extend(baseConfig, {
-            items: items,
             onContentReady: args => {
                 this._itemsRunTimeInfo.addItemsOrExtendFrom(args.component._itemsRunTimeInfo);
-                options.onContentReady && options.onContentReady(args);
+                extendedLayoutManagerOptions.onContentReady && extendedLayoutManagerOptions.onContentReady(args);
             },
             onDisposing: ({ component }) => {
                 const nestedItemsRunTimeInfo = component.getItemsRunTimeInfo();
                 this._itemsRunTimeInfo.removeItemsByItems(nestedItemsRunTimeInfo);
             },
-            colCount: options.colCount,
-            alignItemLabels: options.alignItemLabels,
-            cssItemClass: options.cssItemClass,
-            colCountByScreen: options.colCountByScreen,
-            onLayoutChanged: options.onLayoutChanged,
-            width: options.width
         });
+    },
+
+    _renderLayoutManager: function($parent, layoutManagerOptions) {
+        const baseColCountByScreen = {
+            lg: layoutManagerOptions.colCount,
+            md: layoutManagerOptions.colCount,
+            sm: layoutManagerOptions.colCount,
+            xs: 1
+        };
+
+        this._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, layoutManagerOptions.colCountByScreen) });
+
+        const $element = $('<div>');
+        $element.appendTo($parent);
+        const instance = this._createComponent($element, 'dxLayoutManager', layoutManagerOptions);
+        instance.on('autoColCountChanged', () => this._refresh());
+        this._cachedLayoutManagers.push(instance);
+        return instance;
+    },
+
+    _getValidationGroup: function() {
+        return this.option('validationGroup') || this;
     },
 
     _createComponent: function($element, type, config) {
@@ -976,7 +954,7 @@ const Form = Widget.inherit({
                     item = that._getItemByField({ fieldName: fieldName, fieldPath: fieldPath }, item[subItemsField]);
                 }
 
-                if(isExpectedItem(item, fieldName)) {
+                if(isEqualToDataFieldOrNameOrTitleOrCaption(item, fieldName)) {
                     resultItem = item;
                     return false;
                 }
