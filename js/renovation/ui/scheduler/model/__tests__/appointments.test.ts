@@ -44,7 +44,6 @@ const prepareInstances = (
     ),
     showAllDayPanel: supportAllDayRow,
   };
-  console.log(workspaceProps);
 
   // TODO: convert ViewdataProvider to TS
   const viewDataProvider = (new ViewDataProvider('week') as unknown) as ViewDataProviderType;
