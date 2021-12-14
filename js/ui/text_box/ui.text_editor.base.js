@@ -448,7 +448,7 @@ const TextEditorBase = Editor.inherit({
 
 
     _cleanLabelObservable: function() {
-        if(this._labelContainerElement) {
+        if(this._labelContainerElement && this._label.isVisible()) {
             resizeObserverSingleton.unobserve(this._labelContainerElement);
 
             this._labelContainerElement = null;

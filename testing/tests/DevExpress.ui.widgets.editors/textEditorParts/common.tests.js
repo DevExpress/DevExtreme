@@ -12,6 +12,7 @@ import { normalizeKeyName } from 'events/utils/index';
 import { getWidth } from 'core/utils/size';
 
 import TextEditor from 'ui/text_box/ui.text_editor';
+import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const INPUT_CLASS = 'dx-texteditor-input';
@@ -477,17 +478,31 @@ QUnit.module('label integration', {
                 .dxTextEditor('instance');
             this.$input = this.$textEditor.find(`.${INPUT_CLASS}`);
         };
+
+        class TextEditorLabelMock extends TextEditorLabel {
+            updateMaxWidth = sinon.stub()
+            updateBeforeWidth = sinon.stub()
+            updateMode = sinon.stub()
+            updateText = sinon.stub()
+            updateMark = sinon.stub()
+            updateContainsButtonsBefore = sinon.stub()
+        }
+
+        this.TextEditorLabelMock = (args) => { this.labelArgs = args; return this.labelMock = new TextEditorLabelMock(args); };
+
+        TextEditor.mockTextEditorLabel(this.TextEditorLabelMock);
+    },
+    afterEach: function() {
+        Object.values(this.labelMock, (stub) => {
+            stub.reset();
+        });
+
+        TextEditor.restoreTextEditorLabel();
     }
 }, () => {
     QUnit.module('init', {
         beforeEach: function() {
-            this.constructorStub = sinon.stub();
-            TextEditor.mockTextEditorLabel(this.constructorStub);
-            this.getProps = () => this.constructorStub.getCall(0).args[0];
-        },
-        afterEach: function() {
-            this.constructorStub.reset();
-            TextEditor.restoreTextEditorLabel();
+            this.getProps = () => this.labelArgs;
         }
     }, () => {
         QUnit.test('correct props are passed to TextEditorLabel', function(assert) {
@@ -521,8 +536,9 @@ QUnit.module('label integration', {
         QUnit.test('editor should pass containerWidth equal to input width', function(assert) {
             this.init();
             const inputWidth = getWidth(this.$input);
+            const borderWidth = 2;
 
-            assert.strictEqual(this.getProps().containerWidth, inputWidth);
+            assert.strictEqual(this.getProps().containerWidth + borderWidth, inputWidth);
         });
 
         QUnit.test('editor should pass beforeWidth equal to before buttons container width', function(assert) {
@@ -531,36 +547,44 @@ QUnit.module('label integration', {
 
             assert.strictEqual(this.getProps().beforeWidth, beforeButtonsContainerWidth);
         });
+
+        QUnit.test('editor should have aria-labelledby atrribute equal to label id', function(assert) {
+            this.init();
+            const inputAttr = this.$input.attr('aria-labelledby');
+
+            assert.strictEqual(this.getProps().id, inputAttr);
+        });
+
+        QUnit.test('editor should not have aria-labelledby atrribute if label is not defined', function(assert) {
+            this.init({
+                label: ''
+            });
+            const inputAttr = this.$input.attr('aria-labelledby');
+
+            assert.notOk(inputAttr);
+        });
+
+        QUnit.test('editor should not have aria-labelledby atrribute if labelMode is hidden', function(assert) {
+            this.init({
+                labelMode: 'hidden'
+            });
+            const inputAttr = this.$input.attr('aria-labelledby');
+
+            assert.notOk(inputAttr);
+        });
     });
 
     QUnit.module('option change', {
         beforeEach: function() {
-            this.LabelMock = {
-                updateMaxWidth: sinon.stub(),
-                updateBeforeWidth: sinon.stub(),
-                updateMode: sinon.stub(),
-                updateText: sinon.stub(),
-                updateMark: sinon.stub(),
-                updateContainsButtonsBefore: sinon.stub()
-            };
-            const constructorMock = () => {
-                return this.LabelMock;
-            };
-            TextEditor.mockTextEditorLabel(constructorMock);
             this.init();
-        },
-        afterEach: function() {
-            Object.values(this.LabelMock, (stub) => {
-                stub.reset();
-            });
-            TextEditor.restoreTextEditorLabel();
         }
     }, () => {
         QUnit.test('width', function(assert) {
+            this.init();
             this.textEditor.option('width', 300);
             const inputWidth = getWidth(this.$input);
 
-            const updateMaxWidthCall = this.LabelMock.updateMaxWidth.getCall(0);
+            const updateMaxWidthCall = this.labelMock.updateMaxWidth.getCall(0);
             assert.strictEqual(updateMaxWidthCall.args[0], inputWidth);
         });
 
@@ -569,7 +593,7 @@ QUnit.module('label integration', {
             const labelText = 'new text';
             this.textEditor.option('label', labelText);
 
-            const updateTextCall = this.LabelMock.updateText.getCall(0);
+            const updateTextCall = this.labelMock.updateText.getCall(0);
             assert.strictEqual(updateTextCall.args[0], labelText);
         });
 
@@ -577,7 +601,7 @@ QUnit.module('label integration', {
             const newLabelMark = '*';
             this.textEditor.option('labelMark', newLabelMark);
 
-            const updateMarkCall = this.LabelMock.updateMark.getCall(0);
+            const updateMarkCall = this.labelMock.updateMark.getCall(0);
             assert.strictEqual(updateMarkCall.args[0], newLabelMark);
         });
 
@@ -585,7 +609,7 @@ QUnit.module('label integration', {
             const newLabelMode = 'floating';
             this.textEditor.option('labelMode', newLabelMode);
 
-            const updateModeCall = this.LabelMock.updateMode.getCall(0);
+            const updateModeCall = this.labelMock.updateMode.getCall(0);
             assert.strictEqual(updateModeCall.args[0], newLabelMode);
         });
 
@@ -594,9 +618,9 @@ QUnit.module('label integration', {
                 name: 'button',
                 location: 'before',
             }]);
-            const updateMaxWidthCall = this.LabelMock.updateMaxWidth.getCall(0);
-            const updateBeforeWidthCall = this.LabelMock.updateBeforeWidth.getCall(0);
-            const updateContainsButtonsBeforeCall = this.LabelMock.updateContainsButtonsBefore.getCall(0);
+            const updateMaxWidthCall = this.labelMock.updateMaxWidth.getCall(0);
+            const updateBeforeWidthCall = this.labelMock.updateBeforeWidth.getCall(0);
+            const updateContainsButtonsBeforeCall = this.labelMock.updateContainsButtonsBefore.getCall(0);
 
             const newLabelMaxWidth = getWidth(this.$input);
             const newLabelBeforeWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
@@ -609,8 +633,8 @@ QUnit.module('label integration', {
         QUnit.test('stylingMode', function(assert) {
             this.textEditor.option('stylingMode', 'underlined');
 
-            const updateMaxWidthCall = this.LabelMock.updateMaxWidth.getCall(0);
-            const updateBeforeWidthCall = this.LabelMock.updateBeforeWidth.getCall(0);
+            const updateMaxWidthCall = this.labelMock.updateMaxWidth.getCall(0);
+            const updateBeforeWidthCall = this.labelMock.updateBeforeWidth.getCall(0);
 
             const newLabelMaxWidth = getWidth(this.$input);
             const newLabelBeforeWidth = 0;

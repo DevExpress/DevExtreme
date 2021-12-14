@@ -25,6 +25,8 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
+import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
+
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
@@ -1378,16 +1380,18 @@ QUnit.module('Lookup', {
 
 QUnit.module('label integration', () => {
     QUnit.test('lookup should pass containerWidth equal to field width', function(assert) {
-        const constructorMock = sinon.stub();
-        Lookup.mockTextEditorLabel(constructorMock);
+        this.TextEditorLabelMock = (args) => { this.labelArgs = args; return new TextEditorLabel(args); };
+        Lookup.mockTextEditorLabel(this.TextEditorLabelMock);
 
         try {
             $('#lookup').dxLookup({
                 label: 'some'
             });
 
+            const borderWidth = 2;
+
             const fieldWidth = getWidth($(`.${LOOKUP_FIELD_CLASS}`));
-            assert.strictEqual(constructorMock.getCall(0).args[0].containerWidth, fieldWidth);
+            assert.strictEqual(this.labelArgs.containerWidth + borderWidth, fieldWidth);
         } finally {
             Lookup.restoreTextEditorLabel();
         }
