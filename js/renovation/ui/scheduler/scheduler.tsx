@@ -6,7 +6,6 @@ import {
   Effect,
   InternalState,
   JSXComponent,
-  JSXTemplate,
   Method,
 } from '@devextreme-generator/declarations';
 import { TimeZoneCalculator } from './timeZoneCalculator/utils';
@@ -21,10 +20,7 @@ import type { Options as DataSourceOptions } from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps, getValidGroups } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import {
-  DataCellTemplateProps,
-  DateTimeCellTemplateProps,
   Group,
-  ResourceCellTemplateProps,
   ViewMetaData,
 } from './workspaces/types';
 import { WorkSpace } from './workspaces/base/work_space';
@@ -41,8 +37,6 @@ import {
   AppointmentsViewModelType,
   AppointmentViewModel,
   AppointmentClickData,
-  AppointmentTemplateProps,
-  OverflowIndicatorTemplateProps,
 } from './appointment/types';
 import { AppointmentLayout } from './appointment/layout';
 import { AppointmentsConfigType } from './model/types';
@@ -55,6 +49,7 @@ import combineRemoteFilter from './utils/filtering/remote';
 export const viewFunction = ({
   restAttributes,
   loadedResources,
+  currentViewProps,
   currentViewConfig,
   onViewRendered,
   setCurrentDate,
@@ -67,13 +62,6 @@ export const viewFunction = ({
   changeTooltipVisible,
   showTooltip,
   workSpaceKey,
-
-  dataCellTemplate,
-  dateCellTemplate,
-  timeCellTemplate,
-  resourceCellTemplate,
-  appointmentTemplate,
-  appointmentCollectorTemplate,
 
   props: {
     accessKey,
@@ -95,6 +83,12 @@ export const viewFunction = ({
     min,
     max,
     focusStateEnabled,
+    dataCellTemplate,
+    dateCellTemplate,
+    timeCellTemplate,
+    resourceCellTemplate,
+    appointmentTemplate,
+    appointmentCollectorTemplate,
   },
 }: Scheduler): JSX.Element => {
   const {
@@ -115,11 +109,19 @@ export const viewFunction = ({
     crossScrollingEnabled,
     hoursInterval,
 
-    indicatorTime,
     allowMultipleCellSelection,
     allDayPanelExpanded,
     type,
   } = currentViewConfig;
+
+  const validDataCellTemplate = currentViewProps.dataCellTemplate ?? dataCellTemplate;
+  const validDateCellTemplate = currentViewProps.dateCellTemplate ?? dateCellTemplate;
+  const validTimeCellTemplate = currentViewProps.timeCellTemplate ?? timeCellTemplate;
+  const validResourceCellTemplate = currentViewProps.resourceCellTemplate ?? resourceCellTemplate;
+  const validAppointmentTemplate = currentViewProps.appointmentTemplate ?? appointmentTemplate;
+  const validAppointmentCollectorTemplate = currentViewProps.appointmentCollectorTemplate
+    ?? appointmentCollectorTemplate;
+
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
       classes="dx-scheduler dx-scheduler-native"
@@ -180,23 +182,22 @@ export const viewFunction = ({
           schedulerHeight={height}
           schedulerWidth={width}
 
-          indicatorTime={indicatorTime}
           allowMultipleCellSelection={allowMultipleCellSelection}
           allDayPanelExpanded={allDayPanelExpanded}
           onViewRendered={onViewRendered}
 
-          dataCellTemplate={dataCellTemplate}
-          timeCellTemplate={timeCellTemplate}
-          dateCellTemplate={dateCellTemplate}
-          resourceCellTemplate={resourceCellTemplate}
+          dataCellTemplate={validDataCellTemplate}
+          timeCellTemplate={validTimeCellTemplate}
+          dateCellTemplate={validDateCellTemplate}
+          resourceCellTemplate={validResourceCellTemplate}
 
           allDayAppointments={(
             <AppointmentLayout
               isAllDay
               appointments={appointmentsViewModel.allDay}
               overflowIndicators={appointmentsViewModel.allDayCompact}
-              appointmentTemplate={appointmentTemplate}
-              overflowIndicatorTemplate={appointmentCollectorTemplate}
+              appointmentTemplate={validAppointmentTemplate}
+              overflowIndicatorTemplate={validAppointmentCollectorTemplate}
               onAppointmentClick={showTooltip}
             />
           )}
@@ -205,8 +206,8 @@ export const viewFunction = ({
             <AppointmentLayout
               appointments={appointmentsViewModel.regular}
               overflowIndicators={appointmentsViewModel.regularCompact}
-              appointmentTemplate={appointmentTemplate}
-              overflowIndicatorTemplate={appointmentCollectorTemplate}
+              appointmentTemplate={validAppointmentTemplate}
+              overflowIndicatorTemplate={validAppointmentCollectorTemplate}
               onAppointmentClick={showTooltip}
             />
           )}
@@ -259,7 +260,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
       dataCellTemplate, timeCellTemplate, resourceCellTemplate, dateCellTemplate,
       appointmentTemplate, appointmentCollectorTemplate, maxAppointmentsPerCell, currentDate,
       showAllDayPanel, showCurrentTimeIndicator, indicatorUpdateInterval, shadeUntilCurrentTime,
-      crossScrollingEnabled, height, width, tabIndex, accessKey, focusStateEnabled,
+      crossScrollingEnabled, height, width,
     } = this.props;
 
     return getCurrentViewConfig(
@@ -285,9 +286,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
         crossScrollingEnabled,
         height,
         width,
-        tabIndex,
-        accessKey,
-        focusStateEnabled,
       },
       currentDate,
     );
@@ -515,31 +513,6 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
     const groupCount = getGroupCount(this.loadedResources ?? []);
 
     return `${currentView}_${groupOrientation}_${intervalCount}_${groupCount}`;
-  }
-
-  // TODO: 4 getters below are a WA for Vue generator
-  get dataCellTemplate(): JSXTemplate<DataCellTemplateProps> | undefined {
-    return this.currentViewConfig.dataCellTemplate;
-  }
-
-  get dateCellTemplate(): JSXTemplate<DateTimeCellTemplateProps> | undefined {
-    return this.currentViewConfig.dateCellTemplate;
-  }
-
-  get timeCellTemplate(): JSXTemplate<DateTimeCellTemplateProps> | undefined {
-    return this.currentViewConfig.timeCellTemplate;
-  }
-
-  get resourceCellTemplate(): JSXTemplate<ResourceCellTemplateProps> | undefined {
-    return this.currentViewConfig.resourceCellTemplate;
-  }
-
-  get appointmentTemplate(): JSXTemplate<AppointmentTemplateProps> | undefined {
-    return this.currentViewConfig.appointmentTemplate;
-  }
-
-  get appointmentCollectorTemplate(): JSXTemplate<OverflowIndicatorTemplateProps> | undefined {
-    return this.currentViewConfig.appointmentCollectorTemplate;
   }
 
   @Method()

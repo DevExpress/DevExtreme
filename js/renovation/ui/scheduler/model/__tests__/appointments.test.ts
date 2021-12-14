@@ -42,7 +42,9 @@ const prepareInstances = (
       schedulerProps,
       currentDate,
     ),
+    showAllDayPanel: supportAllDayRow,
   };
+  console.log(workspaceProps);
 
   // TODO: convert ViewdataProvider to TS
   const viewDataProvider = (new ViewDataProvider('week') as unknown) as ViewDataProviderType;
@@ -131,7 +133,7 @@ describe('Appointments model', () => {
               isVirtualScrolling: false,
               intervalCount: 7,
               hoursInterval: 0.5,
-              showAllDayPanel: true,
+              showAllDayPanel: supportAllDayRow,
               groups: [],
               appointmentCountPerCell: 2, // TODO default
               appointmentOffset: 26, // TODO default

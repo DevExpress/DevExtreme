@@ -81,6 +81,7 @@ describe('Scheduler', () => {
     };
     const renderComponent = (viewModel) => shallow(
       <ViewFunction
+        currentViewProps={{}}
         currentViewConfig={defaultCurrentViewConfig}
         appointmentsViewModel={defaultAppointmentViewModel}
         {...viewModel}
@@ -144,11 +145,55 @@ describe('Scheduler', () => {
       const tree = renderComponent({
         onViewRendered: () => {},
         workSpaceKey: 'workSpaceKey',
+        currentViewProps: {},
         props: {
           height: 500,
           width: 600,
+          ...templates,
         },
-        ...templates,
+      });
+
+      const workSpace = tree.find(WorkSpace);
+
+      expect(workSpace.exists())
+        .toBe(true);
+      expect(workSpace.props())
+        .toEqual({
+          ...defaultCurrentViewConfig,
+          ...templates,
+          onViewRendered: expect.any(Function),
+          appointments: expect.anything(),
+          allDayAppointments: expect.anything(),
+          schedulerHeight: 500,
+          schedulerWidth: 600,
+        });
+      expect(workSpace.key())
+        .toBe('workSpaceKey');
+    });
+
+    it('should pass templates from current view props', () => {
+      const templates = {
+        dateCellTemplate: jest.fn(),
+        dataCellTemplate: jest.fn(),
+        timeCellTemplate: jest.fn(),
+        resourceCellTemplate: jest.fn(),
+      };
+      const templatesInSchedulerConfig = {
+        dateCellTemplate: jest.fn(),
+        dataCellTemplate: jest.fn(),
+        timeCellTemplate: jest.fn(),
+        resourceCellTemplate: jest.fn(),
+      };
+
+      const tree = renderComponent({
+        onViewRendered: () => {},
+        workSpaceKey: 'workSpaceKey',
+        currentViewProps: templates,
+        props: {
+          height: 500,
+          width: 600,
+          ...templatesInSchedulerConfig,
+        },
       });
 
       const workSpace = tree.find(WorkSpace);
@@ -238,6 +283,7 @@ describe('Scheduler', () => {
           max: new Date(2021, 9, 8),
           views: ['day'],
           currentView: 'day',
+          ...templates,
         };
 
         const appointmentsViewModel = {
@@ -250,7 +296,66 @@ describe('Scheduler', () => {
         const scheduler = renderComponent({
           props,
           appointmentsViewModel,
-          ...templates,
+        });
+
+        const workspace = scheduler.find(WorkSpace);
+        const appointments = workspace.prop('appointments');
+        const allDayAppointments = workspace.prop('allDayAppointments');
+
+        expect(appointments.type)
+          .toBe(AppointmentLayout);
+
+        expect(appointments.props)
+          .toEqual({
+            isAllDay: false,
+            appointments: appointmentsViewModel.regular,
+            overflowIndicators: appointmentsViewModel.regularCompact,
+            appointmentTemplate: templates.appointmentTemplate,
+            overflowIndicatorTemplate: templates.appointmentCollectorTemplate,
+          });
+
+        expect(allDayAppointments.type)
+          .toBe(AppointmentLayout);
+
+        expect(allDayAppointments.props)
+          .toEqual({
+            isAllDay: true,
+            appointments: appointmentsViewModel.allDay,
+            overflowIndicators: appointmentsViewModel.allDayCompact,
+            appointmentTemplate: templates.appointmentTemplate,
+            overflowIndicatorTemplate: templates.appointmentCollectorTemplate,
+          });
+      });
+
+      it('should pass templates from current view props to appointments', () => {
+        const templates = {
+          appointmentTemplate: jest.fn(),
+          appointmentCollectorTemplate: jest.fn(),
+        };
+        const schedulerTemplates = {
+          appointmentTemplate: jest.fn(),
+          appointmentCollectorTemplate: jest.fn(),
+        };
+
+        const props = {
+          min: new Date(2021, 9, 7),
+          max: new Date(2021, 9, 8),
+          views: ['day'],
+          currentView: 'day',
+          ...schedulerTemplates,
+        };
+
+        const appointmentsViewModel = {
+          regular: [{}],
+          regularCompact: [{}, {}],
+          allDay: [{}, {}, {}],
+          allDayCompact: [{}, {}, {}, {}],
+        };
+
+        const scheduler = renderComponent({
+          props,
+          appointmentsViewModel,
+          currentViewProps: templates,
         });
 
         const workspace = scheduler.find(WorkSpace);
@@ -833,9 +938,6 @@ describe('Scheduler', () => {
                 crossScrollingEnabled: false,
                 height: undefined,
                 width: undefined,
-                tabIndex: 0,
-                accessKey: undefined,
-                focusStateEnabled: true,
               },
               new Date(2021, 1, 1),
             );
@@ -1458,77 +1560,6 @@ describe('Scheduler', () => {
 
           expect(scheduler.workSpaceKey)
             .toBe('day_horizontal_3_0');
-        });
-      });
-
-      describe('Cell Templates', () => {
-        it('should return cell templates', () => {
-          const templates = {
-            dateCellTemplate: jest.fn(),
-            dataCellTemplate: jest.fn(),
-            timeCellTemplate: jest.fn(),
-            resourceCellTemplate: jest.fn(),
-          };
-
-          const scheduler = new Scheduler({
-            ...new SchedulerProps(),
-            ...templates,
-          });
-
-          expect(scheduler.dateCellTemplate)
-            .toBe(templates.dateCellTemplate);
-          expect(scheduler.dataCellTemplate)
-            .toBe(templates.dataCellTemplate);
-          expect(scheduler.timeCellTemplate)
-            .toBe(templates.timeCellTemplate);
-          expect(scheduler.resourceCellTemplate)
-            .toBe(templates.resourceCellTemplate);
-        });
-      });
-
-      describe('Appointment templates', () => {
-        it('should return templates', () => {
-          const templates = {
-            appointmentTemplate: jest.fn(),
-            appointmentCollectorTemplate: jest.fn(),
-          };
-
-          const scheduler = new Scheduler({
-            ...new SchedulerProps(),
-            ...templates,
-          });
-
-          expect(scheduler.appointmentTemplate)
-            .toBe(templates.appointmentTemplate);
-          expect(scheduler.appointmentCollectorTemplate)
-            .toBe(templates.appointmentCollectorTemplate);
-        });
-
-        it('should return templates from view', () => {
-          const templates = {
-            appointmentTemplate: jest.fn(),
-            appointmentCollectorTemplate: jest.fn(),
-          };
-
-          const viewTemplates = {
-            appointmentTemplate: jest.fn(),
-            appointmentCollectorTemplate: jest.fn(),
-          };
-
-          const scheduler = new Scheduler({
-            ...new SchedulerProps(),
-            views: [{
-              type: 'day',
-              ...viewTemplates,
-            }],
-            currentView: 'day',
-            ...templates,
-          });
-
-          expect(scheduler.appointmentTemplate)
-            .toBe(viewTemplates.appointmentTemplate);
-          expect(scheduler.appointmentCollectorTemplate)
-            .toBe(viewTemplates.appointmentCollectorTemplate);
         });
       });
     });
