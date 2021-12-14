@@ -1,5 +1,4 @@
 import $ from 'jquery';
-import SinonTest from 'sinon-test';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import {
@@ -12,15 +11,10 @@ import {
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
 
-const sinonTest = SinonTest(sinon);
 const {
-    module
+    module,
+    test
 } = QUnit;
-
-
-const test = (description, callback) => {
-    return QUnit.test(description, sinonTest(callback));
-};
 
 QUnit.testStart(() => initTestMarkup());
 
@@ -40,10 +34,12 @@ const createInstance = (options, clock) => {
 
 module('Integration: Appointment templates', {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
         fx.off = true;
     },
     afterEach: function() {
         fx.off = false;
+        this.clock.restore();
     }
 }, () => {
     let eventCallCount = 0;

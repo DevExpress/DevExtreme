@@ -1,6 +1,5 @@
 import 'generic_light.css!';
 import $ from 'jquery';
-import SinonTest from 'sinon-test';
 
 import dateUtils from 'core/utils/date';
 import {
@@ -11,7 +10,6 @@ import {
     isDesktopEnvironment,
 } from '../../helpers/scheduler/helpers.js';
 
-const sinonTest = SinonTest(sinon);
 const {
     testStart,
     module
@@ -22,7 +20,7 @@ const test = (description, callback) => {
         ? QUnit.skip
         : QUnit.test;
 
-    return testFunc(description, sinonTest(callback));
+    return testFunc(description, callback);
 };
 const printOffset = offset => [
     offset.x >= 0 ? `offset.x: ${offset.x}` : '',

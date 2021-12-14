@@ -1,18 +1,13 @@
 import $ from 'jquery';
-import SinonTest from 'sinon-test';
 import { VirtualScrollingDispatcher } from 'ui/scheduler/workspaces/ui.scheduler.virtual_scrolling';
 import domAdapter from 'core/dom_adapter';
 import eventsEngine from 'events/core/events_engine';
 import { addNamespace } from 'events/utils/index';
 
 const {
-    module
+    module,
+    test
 } = QUnit;
-const sinonTest = SinonTest(sinon);
-
-const test = (description, callback) => {
-    return QUnit.test(description, sinonTest(callback));
-};
 
 module('Virtual Scrolling', {
     beforeEach: function() {
@@ -73,6 +68,7 @@ module('Virtual Scrolling', {
     },
     afterEach: function() {
         this.virtualScrollingDispatcher.dispose();
+        sinon.restore();
     }
 },
 () => {
@@ -100,7 +96,7 @@ module('Virtual Scrolling', {
             test('document scroll event should be subscribed correctly if heigth option is undefined', function(assert) {
                 const SCROLL_EVENT_NAME = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
 
-                const spyEventsOn = this.spy(eventsEngine, 'on');
+                const spyEventsOn = sinon.spy(eventsEngine, 'on');
 
                 this.prepareInstance({ height: null });
 
@@ -111,7 +107,7 @@ module('Virtual Scrolling', {
 
             test('document scroll event should be unsubscribed correctly if heigth option is undefined', function(assert) {
                 const SCROLL_EVENT_NAME = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
-                const spyEventsOff = this.spy(eventsEngine, 'off');
+                const spyEventsOff = sinon.spy(eventsEngine, 'off');
 
                 this.prepareInstance({ height: null });
 
@@ -127,8 +123,8 @@ module('Virtual Scrolling', {
             test('It should call getTotalRowCount with correct parameters', function(assert) {
                 this.prepareInstance();
 
-                const getTotalRowCountSpy = this.spy(this.verticalVirtualScrolling.options, 'getTotalRowCount');
-                const isVerticalGroupingSpy = this.spy(this.verticalVirtualScrolling.options, 'isVerticalGrouping');
+                const getTotalRowCountSpy = sinon.spy(this.verticalVirtualScrolling.options, 'getTotalRowCount');
+                const isVerticalGroupingSpy = sinon.spy(this.verticalVirtualScrolling.options, 'isVerticalGrouping');
 
                 // TODO
                 this.verticalVirtualScrolling.updateState(200);
@@ -177,7 +173,7 @@ module('Virtual Scrolling', {
             });
 
             test('document scroll event should not been subscribed if the "width" option is not defined', function(assert) {
-                const spyEventsOn = this.spy(eventsEngine, 'on');
+                const spyEventsOn = sinon.spy(eventsEngine, 'on');
 
                 this.prepareInstance({ width: null });
 
@@ -187,8 +183,8 @@ module('Virtual Scrolling', {
             test('It should call getTotalCellCount with correct parameters', function(assert) {
                 this.prepareInstance();
 
-                const getTotalCellCountSpy = this.spy(this.horizontalVirtualScrolling.options, 'getTotalCellCount');
-                const isVerticalGroupingSpy = this.spy(this.horizontalVirtualScrolling.options, 'isVerticalGrouping');
+                const getTotalCellCountSpy = sinon.spy(this.horizontalVirtualScrolling.options, 'getTotalCellCount');
+                const isVerticalGroupingSpy = sinon.spy(this.horizontalVirtualScrolling.options, 'isVerticalGrouping');
 
                 this.horizontalVirtualScrolling.updateState(600);
 
@@ -358,8 +354,8 @@ module('Virtual Scrolling', {
             test(`it should not call virtual scrolling instances if scrollOffset is "${offset}"`, function(assert) {
                 this.prepareInstance();
 
-                const spyUpdateVerticalState = this.spy(this.verticalVirtualScrolling, 'updateState');
-                const spyUpdateHorizontalState = this.spy(this.horizontalVirtualScrolling, 'updateState');
+                const spyUpdateVerticalState = sinon.spy(this.verticalVirtualScrolling, 'updateState');
+                const spyUpdateHorizontalState = sinon.spy(this.horizontalVirtualScrolling, 'updateState');
 
                 this.virtualScrollingDispatcher.handleOnScrollEvent({
                     left: offset,
@@ -374,7 +370,7 @@ module('Virtual Scrolling', {
         test('it should not update render if scroll position has not been changed', function(assert) {
             this.prepareInstance();
 
-            const spy = this.spy(this.options, 'updateRender');
+            const spy = sinon.spy(this.options, 'updateRender');
 
             const scrollOffset = { left: 300, top: 200 };
 
@@ -398,7 +394,7 @@ module('Virtual Scrolling', {
 
             this.virtualScrollingDispatcher.getCellHeight = () => 200;
 
-            const spy = this.spy(this.virtualScrollingDispatcher.verticalVirtualScrolling, 'reinitState');
+            const spy = sinon.spy(this.virtualScrollingDispatcher.verticalVirtualScrolling, 'reinitState');
             this.virtualScrollingDispatcher.updateDimensions();
 
             assert.ok(spy.calledOnce, 'reinitState called once');
@@ -411,7 +407,7 @@ module('Virtual Scrolling', {
 
             this.virtualScrollingDispatcher.getCellWidth = () => 200;
 
-            const spy = this.spy(this.virtualScrollingDispatcher.horizontalVirtualScrolling, 'reinitState');
+            const spy = sinon.spy(this.virtualScrollingDispatcher.horizontalVirtualScrolling, 'reinitState');
             this.virtualScrollingDispatcher.updateDimensions();
 
             assert.ok(spy.calledOnce, 'reinitState called once');
@@ -424,16 +420,16 @@ module('Virtual Scrolling', {
 
             this.virtualScrollingDispatcher.getCellWidth = () => 200;
 
-            const spyHorizontalReinit = this.spy(this.horizontalVirtualScrolling, 'reinitState');
-            const spyVerticalReinit = this.spy(this.verticalVirtualScrolling, 'reinitState');
+            const spyHorizontalReinit = sinon.spy(this.horizontalVirtualScrolling, 'reinitState');
+            const spyVerticalReinit = sinon.spy(this.verticalVirtualScrolling, 'reinitState');
 
             this.virtualScrollingDispatcher.updateDimensions();
 
             assert.ok(spyHorizontalReinit.calledOnce, 'Horizintal scrolling reinitState called once');
             assert.ok(spyVerticalReinit.notCalled, 'Vertical scrolling reinitState not called');
 
-            spyHorizontalReinit.reset();
-            spyVerticalReinit.reset();
+            spyHorizontalReinit.resetHistory();
+            spyVerticalReinit.resetHistory();
 
             this.virtualScrollingDispatcher.getCellHeight = () => 500;
 
@@ -763,7 +759,7 @@ module('Virtual Scrolling', {
 
             test('Scroll event position should be checked correctly before update state', function(assert) {
                 this.prepareInstance();
-                const spy = this.spy(this.verticalVirtualScrolling, 'needUpdateState');
+                const spy = sinon.spy(this.verticalVirtualScrolling, 'needUpdateState');
 
                 [
                     { y: 0, expectedNeedUpdate: true },
@@ -875,7 +871,7 @@ module('Virtual Scrolling', {
 
                 this.prepareInstance();
 
-                const spy = this.spy(this.horizontalVirtualScrolling, 'needUpdateState');
+                const spy = sinon.spy(this.horizontalVirtualScrolling, 'needUpdateState');
 
                 [
                     { left: 0, expectedNeedUpdate: true },
