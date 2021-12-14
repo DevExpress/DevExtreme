@@ -160,26 +160,30 @@ export class Widget extends JSXComponent(WidgetProps) {
       // eslint-disable-next-line @typescript-eslint/naming-convention
       _feedbackShowTimeout, _feedbackHideTimeout, onActive,
     } = this.props;
-    const selector = activeStateUnit;
     const namespace = 'UIFeedback';
+    const selector = activeStateUnit;
 
-    if (activeStateEnabled && !disabled) {
-      active.on(this.widgetElementRef.current,
-        ({ event }: { event: Event }) => {
-          this.active = true;
-          onActive?.(event);
-        },
-        ({ event }: { event: Event }) => {
-          this.active = false;
-          onInactive?.(event);
-        }, {
-          hideTimeout: _feedbackHideTimeout,
-          namespace,
-          selector,
-          showTimeout: _feedbackShowTimeout,
-        });
+    if (activeStateEnabled) {
+      if (!disabled) {
+        this.active = false;
+      } else {
+        active.on(this.widgetElementRef.current,
+          ({ event }: { event: Event }) => {
+            this.active = true;
+            onActive?.(event);
+          },
+          ({ event }: { event: Event }) => {
+            this.active = false;
+            onInactive?.(event);
+          }, {
+            hideTimeout: _feedbackHideTimeout,
+            namespace,
+            selector,
+            showTimeout: _feedbackShowTimeout,
+          });
 
-      return (): void => active.off(this.widgetElementRef.current, { selector, namespace });
+        return (): void => active.off(this.widgetElementRef.current, { selector, namespace });
+      }
     }
 
     return undefined;
@@ -228,27 +232,30 @@ export class Widget extends JSXComponent(WidgetProps) {
       disabled, focusStateEnabled, name, onFocusIn, onFocusOut,
     } = this.props;
     const namespace = `${name}Focus`;
-    const isFocusable = focusStateEnabled && !disabled;
 
-    if (isFocusable) {
-      focus.on(this.widgetElementRef.current,
-        (e: Event & { isDefaultPrevented: () => boolean }) => {
-          if (!e.isDefaultPrevented()) {
-            this.focused = true;
-            onFocusIn?.(e);
-          }
-        },
-        (e: Event & { isDefaultPrevented: () => boolean }) => {
-          if (!e.isDefaultPrevented()) {
-            this.focused = false;
-            onFocusOut?.(e);
-          }
-        },
-        {
-          isFocusable: focusable,
-          namespace,
-        });
-      return (): void => focus.off(this.widgetElementRef.current, { namespace });
+    if (focusStateEnabled) {
+      if (disabled) {
+        this.focused = false;
+      } else {
+        focus.on(this.widgetElementRef.current,
+          (e: Event & { isDefaultPrevented: () => boolean }) => {
+            if (!e.isDefaultPrevented()) {
+              this.focused = true;
+              onFocusIn?.(e);
+            }
+          },
+          (e: Event & { isDefaultPrevented: () => boolean }) => {
+            if (!e.isDefaultPrevented()) {
+              this.focused = false;
+              onFocusOut?.(e);
+            }
+          },
+          {
+            isFocusable: focusable,
+            namespace,
+          });
+        return (): void => focus.off(this.widgetElementRef.current, { namespace });
+      }
     }
 
     return undefined;
@@ -256,24 +263,29 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Effect()
   hoverEffect(): EffectReturn {
-    const namespace = 'UIFeedback';
     const {
       activeStateUnit, hoverStateEnabled, disabled, onHoverStart, onHoverEnd,
     } = this.props;
+    const namespace = 'UIFeedback';
     const selector = activeStateUnit;
-    const isHoverable = hoverStateEnabled && !disabled;
-    if (isHoverable) {
-      hover.on(this.widgetElementRef.current,
-        ({ event }: { event: Event }) => {
-          !this.active && (this.hovered = true);
-          onHoverStart?.(event);
-        },
-        (event: Event) => {
-          this.hovered = false;
-          onHoverEnd?.(event);
-        },
-        { selector, namespace });
-      return (): void => hover.off(this.widgetElementRef.current, { selector, namespace });
+
+    if (hoverStateEnabled) {
+      if (disabled) {
+        this.hovered = false;
+      } else {
+        hover.on(this.widgetElementRef.current,
+          ({ event }: { event: Event }) => {
+            !this.active && (this.hovered = true);
+            onHoverStart?.(event);
+          },
+          (event: Event) => {
+            this.hovered = false;
+            onHoverEnd?.(event);
+          },
+          { selector, namespace });
+
+        return (): void => hover.off(this.widgetElementRef.current, { selector, namespace });
+      }
     }
 
     return undefined;
