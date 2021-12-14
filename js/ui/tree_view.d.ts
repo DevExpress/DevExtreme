@@ -563,6 +563,8 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
      * @public
      */
     selected?: boolean;
+
+    [key: string]: any;
 }
 
 /** @public */
