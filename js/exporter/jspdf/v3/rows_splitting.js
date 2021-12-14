@@ -1,5 +1,4 @@
 import { isDefined } from '../../../core/utils/type';
-import { extend } from '../../../core/utils/extend';
 
 function applySplitting(pdfCellsInfo, options) {
     if(!isDefined(options.pageWidth)) {
@@ -8,58 +7,57 @@ function applySplitting(pdfCellsInfo, options) {
 
     const topLeft = options?.topLeft ?? { x: 0, y: 0 };
     const pageWidth = options.pageWidth;
-    const cells = extend([], pdfCellsInfo);
-    const cellsByPage = [
-        [] // Empty Page
-    ];
 
-    shiftCellsHorizontalByPages(cells, pageWidth);
-    splitCellsHorizontalByPages(cells, cellsByPage, pageWidth, topLeft);
+    const cellsByPage = splitCellsHorizontalByPages(pdfCellsInfo, pageWidth, topLeft);
+    // TODO: splitCellsVerticalByPages
 
     return cellsByPage;
 }
 
-function splitCellsHorizontalByPages(cells, cellsByPage, pageWidth, topLeft) {
-    cells
-        .forEach(cell => {
-            const { _rect, pdfRowInfo, gridCell, ...pdfCell } = cell;
-            const _newRect = extend({}, cell._rect);
+function splitCellsHorizontalByPages(cells, pageWidth, topLeft) {
+    const cellsByPage = [
+        [] // Empty Page
+    ];
+    const buffer = cells.map(cell => cell);
+    let pageIndex = 0;
 
-            let pageIndex = 0;
-            if((_rect.x + _rect.w) > pageWidth) {
-                pageIndex = Math.floor((_rect.x + _rect.w) / pageWidth);
-                _newRect.x = topLeft.x;
-            }
+    while(buffer.length > 0) {
+        cellsByPage[pageIndex] = cellsByPage[pageIndex] ?? [];
 
-            const newPdfCellInfo = {
-                _rect: _newRect,
-                pdfRowInfo,
-                gridCell,
-                ...pdfCell
-            };
-
-            cellsByPage[pageIndex] = cellsByPage[pageIndex] ?? [];
-            cellsByPage[pageIndex].push(newPdfCellInfo);
+        // Detect cell for current page
+        const pageCells = buffer.filter(cell => {
+            const cellLeftPos = cell._rect.x;
+            const cellRightPos = cell._rect.x + cell._rect.w;
+            return cellLeftPos === topLeft.x || cellRightPos <= pageWidth;
         });
-}
 
-function shiftCellsHorizontalByPages(cells, pageWidth) {
-    cells
-        .forEach(cell => {
-            let pageIndex = 0;
-            if((cell._rect.x + cell._rect.w) > pageWidth) {
-                pageIndex = Math.floor((cell._rect.x + cell._rect.w) / pageWidth);
+        // Move cells from buffer to page array
+        pageCells.forEach(cell => {
+            cellsByPage[pageIndex].push(cell);
 
-                const offset = (pageWidth * pageIndex) - cell._rect.x;
-                shiftCellsToTheRight(cells, cell._rect.y, cell._rect.x, offset);
+            const index = buffer.indexOf(cell);
+            if(index !== -1) {
+                buffer.splice(index, 1);
             }
         });
-}
 
-function shiftCellsToTheRight(pdfCellsInfo, yPos, xPos, xOffset) {
-    pdfCellsInfo
-        .filter((cell) => cell._rect.y === yPos && cell._rect.x >= xPos)
-        .forEach(cell => cell._rect.x += xOffset);
+        // Cells that are outside the page move to the left
+        let leftOffset;
+        buffer.forEach(cell => {
+            if(!isDefined(leftOffset) || leftOffset > cell._rect.x) {
+                leftOffset = cell._rect.x - topLeft.x;
+            }
+        });
+
+        if(leftOffset > 0) {
+            buffer.forEach(cell => {
+                cell._rect.x -= leftOffset;
+            });
+        }
+        pageIndex += 1;
+    }
+
+    return cellsByPage;
 }
 
 export { applySplitting };
