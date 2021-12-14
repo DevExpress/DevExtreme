@@ -164,7 +164,7 @@ export class Widget extends JSXComponent(WidgetProps) {
     const selector = activeStateUnit;
 
     if (activeStateEnabled) {
-      if (!disabled) {
+      if (disabled) {
         this.active = false;
       } else {
         active.on(this.widgetElementRef.current,
