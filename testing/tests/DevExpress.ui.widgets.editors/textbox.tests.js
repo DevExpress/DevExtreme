@@ -353,8 +353,9 @@ QUnit.module('label integration', {
         const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
         const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
         const expectedContainerWidth = inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth;
+        const borderWidth = 2;
 
-        assert.strictEqual(this.labelArgs.containerWidth, expectedContainerWidth);
+        assert.strictEqual(this.labelArgs.containerWidth + borderWidth, expectedContainerWidth);
     });
 
     QUnit.test('mode option change should call label updateMaxWidth and updateBeforeWidth methods with correct parameters', function(assert) {
