@@ -15,6 +15,9 @@ import { Event as dxEvent } from '../../events/index';
 import scrollEvents from '../../events/gesture/emitter.gesture.scroll';
 import { prepareScrollData } from '../text_box/utils.scroll';
 
+import pointerEvents from '../../events/pointer';
+import devices from '../../core/devices';
+
 import QuillRegistrator from './quill_registrator';
 import './converters/delta';
 import ConverterController from './converterController';
@@ -32,6 +35,8 @@ const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 const MARKDOWN_VALUE_TYPE = 'markdown';
 
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
+
+const isIos = devices.current().platform === 'ios';
 
 const HtmlEditor = Editor.inherit({
 
@@ -215,6 +220,12 @@ const HtmlEditor = Editor.inherit({
         return renderContentPromise;
     },
 
+    _pointerMoveHandler: function(e) {
+        if(isIos) {
+            e.stopPropagation();
+        }
+    },
+
     _attachFocusEvents: function() {
         deferRender(this.callBase.bind(this));
     },
@@ -263,6 +274,8 @@ const HtmlEditor = Editor.inherit({
         const initScrollData = prepareScrollData($scrollContainer);
 
         eventsEngine.on($scrollContainer, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
+
+        eventsEngine.on($scrollContainer, addNamespace(pointerEvents.move, this.NAME), this._pointerMoveHandler.bind(this));
     },
 
     _applyTranscludedContent: function() {

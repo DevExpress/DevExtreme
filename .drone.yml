@@ -12,6 +12,8 @@ clone:
     when:
       event: [ pull_request ]
 
+branches: DONT_BUILD_ANYTHING
+
 pipeline:
 
   build:

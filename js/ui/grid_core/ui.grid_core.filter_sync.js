@@ -15,7 +15,7 @@ const FILTER_TYPES_INCLUDE = 'include';
 const FILTER_TYPES_EXCLUDE = 'exclude';
 
 function getColumnIdentifier(column) {
-    return column.dataField || column.name;
+    return column.name || column.dataField;
 }
 
 function checkForErrors(columns) {

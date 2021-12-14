@@ -23,7 +23,7 @@ import { ScrollViewLoadPanel } from '../internal/load_panel';
 import { combineClasses } from '../../../utils/combine_classes';
 import { getScrollLeftMax } from '../utils/get_scroll_left_max';
 import { getBoundaryProps } from '../utils/get_boundary_props';
-import { getScrollSign, normalizeOffsetLeft } from '../utils/normalize_offset_left';
+import { normalizeOffsetLeft } from '../utils/normalize_offset_left';
 import {
   getElementOverflowX,
   getElementOverflowY,
@@ -460,7 +460,7 @@ export class ScrollableNative extends JSXComponent<ScrollableNativeProps>() {
       containerEl.scrollTop += location.top;
     }
     if (this.direction.isHorizontal) {
-      containerEl.scrollLeft += getScrollSign(!!this.props.rtlEnabled) * location.left;
+      containerEl.scrollLeft += location.left;
     }
   }
 
