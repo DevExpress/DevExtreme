@@ -1171,7 +1171,7 @@ QUnit.module('value', moduleConfig, () => {
         const textEditor = $textEditor.dxTextEditor('instance');
 
         textEditor.option('value', '1');
-        valueChangedHandler.reset();
+        valueChangedHandler.resetHistory();
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
