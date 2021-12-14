@@ -5,7 +5,6 @@ import { Range } from '../translators/range';
 import { Axis } from '../axes/base_axis';
 import { SeriesFamily } from '../core/series_family';
 import { BaseChart } from './base_chart';
-import { getMargins } from './crosshair';
 import rangeDataCalculator from '../series/helpers/range_data_calculator';
 import { isDefined as _isDefined, type } from '../../core/utils/type';
 import { noop as _noop } from '../../core/utils/common';
@@ -169,17 +168,6 @@ export const AdvancedChart = BaseChart.inherit({
         this.panes = this._createPanes();
         this._populateAxes();
         this._axesReinitialized = true;
-    },
-
-    _getCrosshairMargins: function() {
-        const crosshairOptions = this._getCrosshairOptions() || {};
-        const crosshairEnabled = crosshairOptions.enabled;
-        const margins = getMargins();
-
-        return {
-            x: crosshairEnabled && crosshairOptions.horizontalLine.visible ? margins.x : 0,
-            y: crosshairEnabled && crosshairOptions.verticalLine.visible ? margins.y : 0
-        };
     },
 
     _populateAxes() {
@@ -854,6 +842,10 @@ export const AdvancedChart = BaseChart.inherit({
             that._applyCustomVisualRangeOption(axis);
         });
         that._requestChange([VISUAL_RANGE]);
+    },
+
+    _getCrosshairMargins() {
+        return { x: 0, y: 0 };
     },
 
     _legendDataField: 'series',
