@@ -69,12 +69,19 @@ export default Class.inherit({
         return this.selectedItemKeys(keys, preserve, isDeselect, isSelectAll);
     },
 
+    _removeTemplateProp: function(filterItem) {
+        if(isObject(filterItem) && Object.prototype.hasOwnProperty.call(filterItem, 'template')) {
+            delete filterItem.template;
+        }
+    },
+
     _prepareFilterValue: function(remoteFilter) {
         if(Array.isArray(remoteFilter)) {
-            remoteFilter.forEach((filterItem, index) => {
-                const filterValue = filterItem[2];
-                if(isObject(filterValue) && Object.prototype.hasOwnProperty.call(filterValue, 'template')) {
-                    delete filterValue.template;
+            remoteFilter.forEach((filterItem) => {
+                if(Array.isArray(filterItem)) {
+                    this._prepareFilterValue(filterItem);
+                } else {
+                    this._removeTemplateProp(filterItem);
                 }
             });
         }
