@@ -114,6 +114,7 @@ export const viewFunction = ({
     type,
   } = currentViewConfig;
 
+  // TODO: https://github.com/DevExpress/devextreme-renovation/issues/837
   const validDataCellTemplate = currentViewProps.dataCellTemplate ?? dataCellTemplate;
   const validDateCellTemplate = currentViewProps.dateCellTemplate ?? dateCellTemplate;
   const validTimeCellTemplate = currentViewProps.timeCellTemplate ?? timeCellTemplate;
