@@ -3068,7 +3068,7 @@ QUnit.module('dataSource integration', {
         keyboard.type('1');
         this.clock.tick(loadDelay * 2);
         keyboard.type('2');
-        this.clock.tick(loadDelay / 2);
+        this.clock.tick(loadDelay / 2 + 10);
         const $loadPanel = $content.find(`.${SCROLL_VIEW_LOAD_PANEL_CLASS}`);
 
         assert.ok($loadPanel.is(':visible'), 'load panel is visible');

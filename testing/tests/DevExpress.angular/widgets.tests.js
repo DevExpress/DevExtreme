@@ -208,7 +208,7 @@ QUnit.test('dxDataGrid - search with row template should highlight data without 
     };
 
     initMarkup($markup, controller, this);
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     assert.equal($($('.mycell')[0]).text(), 'text.1');
 
@@ -267,7 +267,7 @@ QUnit.test('dxDataGrid - search with cell template should highlight data without
     };
 
     initMarkup($markup, controller, this);
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     assert.equal($($('.mycell')[0]).text(), 'text1');
 
@@ -432,7 +432,7 @@ QUnit.test('Two-way binding', function(assert) {
 
     const scope = $markup.scope();
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     let $rows = $markup.find('.dx-data-row');
     assert.equal($rows.length, 2, 'row count');
@@ -469,7 +469,7 @@ QUnit.test('Two-way binding when columnFixing', function(assert) {
 
     const scope = $markup.scope();
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     let $rows = $markup.find('.dx-datagrid-content-fixed .dx-data-row');
     assert.equal($rows.length, 2, 'row count');
@@ -628,7 +628,7 @@ QUnit.test('Scope refreshing count on init', function(assert) {
 
     initMarkup($markup, controller, this);
 
-    this.clock.tick(30);
+    this.clock.tick(40);
 
     assert.equal(refreshingCount, 4);
 });
@@ -931,7 +931,7 @@ QUnit.test('dxDateBox with list strategy automatically scrolls to selected item 
 
     initMarkup($markup, function() {}, this);
 
-    this.clock.tick();
+    this.clock.tick(40);
 
     const $popupContent = $('.dx-popup-content');
     const $selectedItem = $popupContent.find('.dx-list-item-selected');
