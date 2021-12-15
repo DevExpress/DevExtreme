@@ -9,7 +9,7 @@ import { normalizeKey, grep } from '../../../core/utils/common';
 import { isDefined, isDeferred, isString, isPlainObject } from '../../../core/utils/type';
 import { each } from '../../../core/utils/iterator';
 import { deepExtendArraySafe } from '../../../core/utils/object';
-import { merge, inArray } from '../../../core/utils/array';
+import { merge, inArray, wrapToArray } from '../../../core/utils/array';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import { getRecurrenceProcessor } from '../recurrence';
@@ -25,7 +25,7 @@ import { createAgendaAppointmentLayout, createAppointmentLayout } from './appoin
 import { getTimeZoneCalculator } from '../instanceFactory';
 import { ExpressionUtils } from '../expressionUtils';
 import { createAppointmentAdapter } from '../appointmentAdapter';
-import { getResourcesFromItem } from '../resources/utils';
+import { getDataAccessors, getFieldExpr } from '../resources/utils';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './dataProvider/utils';
 
 const COMPONENT_CLASS = 'dx-scheduler-scrollable-appointments';
@@ -580,17 +580,21 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     _applyResourceDataAttr($appointment) {
+        const rawAppointment = this._getItemData($appointment);
         const resourceList = this.option('getResources')();
-        const resources = getResourcesFromItem(resourceList, this.option('getResourceDataAccessors')(), this._getItemData($appointment));
 
-        if(resources) {
-            each(resources, function(name, values) {
-                const attr = 'data-' + normalizeKey(name.toLowerCase()) + '-';
-                for(let i = 0; i < values.length; i++) {
-                    $appointment.attr(attr + normalizeKey(values[i]), true);
-                }
-            });
-        }
+        const resourceFields = resourceList.map(resource => getFieldExpr(resource));
+
+        resourceFields.forEach(fieldName => {
+            const resourceValue = getDataAccessors(this.option('getResourceDataAccessors')(), fieldName, 'getter')(rawAppointment);
+            const values = wrapToArray(resourceValue);
+
+
+            const attr = `data-${normalizeKey(fieldName.toLowerCase())}-`;
+            for(let i = 0; i < values.length; i++) {
+                $appointment.attr(attr + normalizeKey(values[i]), true);
+            }
+        });
     }
 
     _resizableConfig(appointmentData, itemSetting) {

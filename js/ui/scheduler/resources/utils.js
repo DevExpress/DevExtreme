@@ -254,6 +254,7 @@ export const getDataAccessors = (dataAccessors, fieldName, type) => {
 
 export const getResourcesFromItem = (resources = [], dataAccessors, itemData, wrapOnlyMultipleResources = false) => {
     let result = null;
+
     const resourceFields = resources.map(resource => getFieldExpr(resource));
 
     resourceFields.forEach(field => {
@@ -266,14 +267,16 @@ export const getResourcesFromItem = (resources = [], dataAccessors, itemData, wr
                 if(!result) {
                     result = {};
                 }
+
                 if(resourceData.length === 1) {
                     resourceData = resourceData[0];
                 }
-                if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(resources, field))) {
-                    getDataAccessors(dataAccessors, field, 'setter')(tempObject, wrapToArray(resourceData));
-                } else {
-                    getDataAccessors(dataAccessors, field, 'setter')(tempObject, resourceData);
-                }
+
+                const setDataByAccessors = getDataAccessors(dataAccessors, field, 'setter');
+                const isWrap = !wrapOnlyMultipleResources || (wrapOnlyMultipleResources && isResourceMultiple(resources, field));
+                const value = isWrap ? wrapToArray(resourceData) : resourceData;
+
+                setDataByAccessors(tempObject, value);
 
                 extend(result, tempObject);
 
@@ -341,11 +344,11 @@ export const groupAppointmentsByResourcesCore = (config, appointments, resources
     return result;
 };
 
-export const getResourceTreeLeaves = (getDataAccessors, tree, appointmentResources, result) => {
+export const getResourceTreeLeaves = (getDataAccessors, tree, rawAppointment, result) => {
     result = result || [];
 
     for(let i = 0; i < tree.length; i++) {
-        if(!hasGroupItem(getDataAccessors, appointmentResources, tree[i].name, tree[i].value)) {
+        if(!hasGroupItem(getDataAccessors, rawAppointment, tree[i].name, tree[i].value)) {
             continue;
         }
 
@@ -354,15 +357,15 @@ export const getResourceTreeLeaves = (getDataAccessors, tree, appointmentResourc
         }
 
         if(tree[i].children) {
-            getResourceTreeLeaves(getDataAccessors, tree[i].children, appointmentResources, result);
+            getResourceTreeLeaves(getDataAccessors, tree[i].children, rawAppointment, result);
         }
     }
 
     return result;
 };
 
-const hasGroupItem = (getDataAccessors, appointmentResources, groupName, itemValue) => {
-    const group = getDataAccessors(groupName, 'getter')(appointmentResources);
+const hasGroupItem = (getDataAccessors, rawAppointment, groupName, itemValue) => {
+    const group = wrapToArray(getDataAccessors(groupName, 'getter')(rawAppointment));
 
     if(group) {
         if(inArray(itemValue, group) > -1) {
