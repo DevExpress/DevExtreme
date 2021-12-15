@@ -28,11 +28,13 @@ export interface PagingPluginData {
 
   totalCount: number;
 
-  pageSize: number | 'all';
-
   pageIndex: number;
 
-  enabled: boolean;
+  setPageIndex: (pageIndex: number) => void;
+
+  pageSize: number | 'all';
+
+  setPageSize: (pageSize: number | 'all') => void;
 }
 
 export const PagingPlugin = createValue<PagingPluginData>();
@@ -57,23 +59,26 @@ export class Paging extends JSXComponent(PagingProps) {
   }
 
   @Effect()
-  subscribeToPagingPluginUpdates(): void {
-    this.plugins.watch(PagingPlugin, (prop: PagingPluginData) => {
-      this.props.pageIndex = prop.pageIndex;
-      this.props.pageSize = prop.pageSize;
+  updatePagingProps(): void {
+    this.plugins.set(PagingPlugin, {
+      pageIndex: this.props.pageIndex,
+      setPageIndex: this.setPageIndex.bind(this),
+
+      pageSize: this.pageSize,
+      setPageSize: this.setPageSize.bind(this),
+
+      totalCount: this.totalCount,
+
+      pageCount: this.pageCount,
     });
   }
 
-  @Effect()
-  updatePagingProps(): void {
-    this.plugins.set(PagingPlugin, {
-      ...this.plugins.getValue(PagingPlugin),
-      enabled: this.props.enabled,
-      pageSize: this.pageSize,
-      pageIndex: this.props.pageIndex,
-      totalCount: this.totalCount,
-      pageCount: this.pageCount,
-    });
+  setPageIndex(pageIndex: number): void {
+    this.props.pageIndex = pageIndex;
+  }
+
+  setPageSize(pageSize: number | 'all'): void {
+    this.props.pageSize = pageSize;
   }
 
   calculateVisibleItems(dataSource: RowData[]): RowData[] {

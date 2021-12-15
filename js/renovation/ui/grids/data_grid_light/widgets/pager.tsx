@@ -83,15 +83,6 @@ export class GridPager extends JSXComponent(GridPagerProps) {
   pageCount = 0;
 
   @Effect()
-  updatePagingProps(): void {
-    this.plugins.set(PagingPlugin, {
-      ...this.plugins.getValue(PagingPlugin),
-      pageIndex: this.pageIndex,
-      pageSize: this.pageSize,
-    });
-  }
-
-  @Effect()
   subscribeToPagingPluginUpdates(): void {
     this.plugins.watch(PagingPlugin, (prop: PagingPluginData) => {
       this.pageIndex = prop.pageIndex;
@@ -102,26 +93,31 @@ export class GridPager extends JSXComponent(GridPagerProps) {
   }
 
   onPageSizeChange(pageSize: number): void {
+    const setPageSize = this.plugins.getValue(PagingPlugin)?.setPageSize;
+
     if (pageSize === 0) {
-      this.pageSize = 'all';
+      setPageSize('all');
     } else {
-      this.pageSize = pageSize;
+      setPageSize(pageSize);
     }
   }
 
   onPageIndexChange(pageIndex: number): void {
-    this.pageIndex = pageIndex - 1;
+    this.plugins.getValue(PagingPlugin)?.setPageIndex?.(pageIndex - 1);
   }
 
   get allowedPageSizes(): (number | 'all')[] {
+    // eslint-disable-next-line prefer-destructuring
+    const pageSize = this.pageSize;
+
     if (this.props.allowedPageSizes === 'auto') {
-      if (this.pageSize === 'all') {
+      if (pageSize === 'all') {
         return [];
       }
       return [
-        Math.floor((this.pageSize as number) / 2),
-        this.pageSize as number,
-        (this.pageSize as number) * 2,
+        Math.floor(pageSize / 2),
+        pageSize,
+        pageSize * 2,
       ];
     }
 
