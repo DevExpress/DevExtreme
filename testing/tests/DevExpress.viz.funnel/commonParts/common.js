@@ -27,8 +27,8 @@ export const environment = {
         const that = this;
         this.renderer = new vizMocks.Renderer();
 
-        stubAlgorithm.normalizeValues.reset();
-        stubAlgorithm.getFigures.reset();
+        stubAlgorithm.normalizeValues.resetHistory();
+        stubAlgorithm.getFigures.resetHistory();
         stubAlgorithm.normalizeValues.returns([]);
         stubAlgorithm.getFigures.returns([]);
 

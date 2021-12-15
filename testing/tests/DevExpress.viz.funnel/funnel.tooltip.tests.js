@@ -102,7 +102,7 @@ QUnit.test('Only move tooltip if it shown on item', function(assert) {
 
     widget.getAllItems()[0].showTooltip();
 
-    this.tooltip.show.reset();
+    this.tooltip.show.resetHistory();
 
     widget.getAllItems()[0].showTooltip([100, 100]);
 
@@ -122,7 +122,7 @@ QUnit.test('Show tooltip on different items', function(assert) {
 
     this.tooltip.stub('formatValue').withArgs(0.5, 'percent').returns('percent-formatted');
 
-    this.tooltip.show.reset();
+    this.tooltip.show.resetHistory();
 
     testItem.showTooltip([100, 100]);
 

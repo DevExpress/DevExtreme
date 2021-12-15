@@ -813,7 +813,7 @@ QUnit.test('change label option', function(assert) {
         }
     });
 
-    this.labelGroup().clear.reset();
+    this.labelGroup().clear.resetHistory();
 
     funnel.option({
         label: {
@@ -877,8 +877,8 @@ QUnit.test('Show hidden labels', function(assert) {
     });
     const label = labelModule.Label.getCall(0).returnValue;
 
-    label.resetEllipsis.reset();
-    label.draw.reset();
+    label.resetEllipsis.resetHistory();
+    label.draw.resetHistory();
 
     funnel.option({
         size: {
@@ -1254,7 +1254,7 @@ QUnit.test('Redraw hidden labels on resize', function(assert) {
 
     labels.forEach((l, i) => {
         l.stub('isVisible').returns(i !== 1);
-        l.draw.reset();
+        l.draw.resetHistory();
     });
 
     this.funnel.option({
@@ -1287,8 +1287,8 @@ QUnit.test('change resolveLabelOverlapping option', function(assert) {
         }
     });
 
-    this.labelGroup().clear.reset();
-    labelModule.Label.reset();
+    this.labelGroup().clear.resetHistory();
+    labelModule.Label.resetHistory();
 
     funnel.option({
         resolveLabelOverlapping: 'shift',
