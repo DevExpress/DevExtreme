@@ -303,7 +303,7 @@ QUnit.test('bounce up', function(assert) {
         .move(0, 100)
         .up();
 
-    this.clock.tick();
+    this.clock.tick(10);
 });
 
 QUnit.test('stop bounce on click', function(assert) {
