@@ -748,7 +748,7 @@ const Form = Widget.inherit({
     _tryCreateItemOptionAction: function(optionName, item, value, previousValue, itemPath) {
         if(optionName === 'tabs') {
             this._itemsRunTimeInfo.removeItemsByPathStartWith(`${itemPath}.tabs`);
-            value = this._prepareItems(value, true, itemPath, true);
+            value = this._prepareItems(value, true, itemPath, true); // preprocess user value as in _tryPrepareTabbedItem
         }
         return tryCreateItemOptionAction(optionName, {
             item,
@@ -806,6 +806,10 @@ const Form = Widget.inherit({
     _tryChangeLayoutManagerItemOption(fullName, value) {
         const nameParts = fullName.split('.');
         const optionName = getOptionNameFromFullName(fullName);
+
+        if(optionName === 'template') {
+            return false; // force rerender to call _tryPrepareGroupItem and rerender template
+        }
 
         if(optionName === 'items' && nameParts.length > 1) {
             const itemPath = this._getItemPath(nameParts);
