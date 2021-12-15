@@ -54,8 +54,8 @@ QUnit.test('change dataSource only - reinitialized series data', function(assert
         dataSource: dataSource1
     });
     const oldChartSeries = chart.series;
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
     // Act
     chart.option('dataSource', dataSource2);
     // Assert
@@ -81,8 +81,8 @@ QUnit.test('change dataSource only. render call', function(assert) {
     chart._doRender = function() {
         this._renderCalled = true;
     };
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
     // act
     chart.option('dataSource', dataSource2);
@@ -132,8 +132,8 @@ QUnit.test('change series options only - populateSeries', function(assert) {
     $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
     $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
     // Act
     chart.option({
@@ -170,8 +170,8 @@ QUnit.test('change series options only', function(assert) {
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
     // Act
     chart.option({
@@ -208,8 +208,8 @@ QUnit.test('change series order only', function(assert) {
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
     // Act
     chart.option({
@@ -246,8 +246,8 @@ QUnit.test('change series - pass less series than chart has', function(assert) {
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
     // Act
     chart.option({
@@ -281,8 +281,8 @@ QUnit.test('change series - pass more series than chart has', function(assert) {
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
     // Act
     chart.option({
@@ -436,8 +436,8 @@ QUnit.test('change series options only. render called', function(assert) {
         family.dispose = function() { chart.seriesFamiliesDisposed = true; };
     });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
     // Act
     chart.option({
@@ -466,7 +466,7 @@ QUnit.test('change containerBackgroundColor option only', function(assert) {
     const valAxis = chart._valueAxes[0];
     const argAxis = chart._argumentAxes[0];
 
-    this.validateData.reset();
+    this.validateData.resetHistory();
     // Act
     chart.option({
         containerBackgroundColor: 'red'
@@ -497,7 +497,7 @@ QUnit.test('change resolveLabelsOverlapping option only', function(assert) {
     const valAxis = chart._valueAxes[0];
     const argAxis = chart._argumentAxes[0];
 
-    this.validateData.reset();
+    this.validateData.resetHistory();
     // Act
     chart.option({
         resolveLabelsOverlapping: false
@@ -574,8 +574,8 @@ QUnit.test('change panes option only', function(assert) {
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
     this.themeManager.getOptions.withArgs('panes').returns([{ name: 'pane1' }]);
     // Act
     chart.option({
@@ -611,8 +611,8 @@ QUnit.test('change default Pane', function(assert) {
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
     this.themeManager.getOptions.withArgs('defaultPane').returns('top');
     // Act
     chart.option({
@@ -655,8 +655,8 @@ QUnit.test('change valueAxis option', function(assert) {
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
     // Act
     chart.option({
         valueAxis: {
@@ -733,7 +733,7 @@ QUnit.test('change some options check calls', function(assert) {
 
     const spy = chart._doRender = sinon.spy();
     // Act
-    this.validateData.reset();
+    this.validateData.resetHistory();
     chart.option($.extend({}, newOptions));
     // assert
     assert.equal(spy.callCount, 1);
@@ -759,7 +759,7 @@ QUnit.test('change some options', function(assert) {
     };
     this.themeManager.getOptions.withArgs('panes').returns([{ name: 'top' }, { name: 'bottom' }]);
     // Act
-    this.validateData.reset();
+    this.validateData.resetHistory();
     chart.option({
         valueAxis: [{ name: 'axis1' }],
         panes: [{ name: 'top' }, { name: 'bottom' }],
@@ -879,8 +879,8 @@ QUnit.test('palette option changed', function(assert) {
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
     // Act
     chart.option({
@@ -913,8 +913,8 @@ QUnit.test('paletteExtensionMode option changed', function(assert) {
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
 
     // Act
     chart.option({
@@ -946,8 +946,8 @@ QUnit.test('palette option changed. palette as array', function(assert) {
     $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
     $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
     // Act
     chart.option({
         palette: ['black', 'blue']
@@ -1201,8 +1201,8 @@ QUnit.test('SeriesTemplate.', function(assert) {
     $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
     $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
 
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
+    this.validateData.resetHistory();
+    chart.seriesFamilies[0].adjustSeriesValues.resetHistory();
     this.themeManager.getOptions.withArgs('seriesTemplate').returns({ nameField: 'series', customizeSeries: function(sName) { return { type: 'spline-' + sName }; } });
     // Act
     chart.option({
@@ -1257,7 +1257,7 @@ QUnit.test('SeriesTemplate. render called', function(assert) {
     };
     this.themeManager.getOptions.withArgs('seriesTemplate').returns({ nameField: 'series', customizeSeries: function(sName) { return { type: 'spline-' + sName }; } });
     // Act
-    this.validateData.reset();
+    this.validateData.resetHistory();
     chart.option({
         seriesTemplate: { nameField: 'series', customizeSeries: function(sName) { return { type: 'spline-' + sName }; } }
     });
@@ -1279,7 +1279,7 @@ QUnit.test('Ignore Series update if SeriesTemplate presents.', function(assert) 
     });
     chartMocks.seriesMockData.series.push(new MockSeries(), new MockSeries(), new MockSeries());
     // Act
-    this.validateData.reset();
+    this.validateData.resetHistory();
     chart.option({
         series: [{ name: 'first', type: 'spline' }]
     });
@@ -1324,7 +1324,7 @@ QUnit.test('\'done\' event is triggered after all \'_render\' calls when async s
         series: { type: 'line' },
         onDone: onDone
     });
-    onDone.reset();
+    onDone.resetHistory();
     commons.getTrackerStub().stub('update').reset();
     chartMocks.seriesMockData.series[1].canRenderCompleteHandle = function() {
         this.canRenderCompleteHandle = function() {
@@ -1378,7 +1378,7 @@ QUnit.test('title option', function(assert) {
     const series = chart.getAllSeries()[0];
     const valAxis = chart._valueAxes[0];
     const argAxis = chart._argumentAxes[0];
-    onDrawn.reset();
+    onDrawn.resetHistory();
     // Act
     chart.option({
         title: 'changed title'
@@ -1464,7 +1464,7 @@ QUnit.test('adjustOnZoom option', function(assert) {
         max: 2
     });
 
-    valAxis.adjust.reset();
+    valAxis.adjust.resetHistory();
 
     // act
     chart.option({

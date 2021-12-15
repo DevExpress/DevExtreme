@@ -133,7 +133,7 @@ const TestPointerElement = TestElement.inherit({
             this.container.remove();
             this.renderer = null;
             axisModule.Axis.reset();
-            rendererModule.Renderer.reset();
+            rendererModule.Renderer.resetHistory();
         }
     };
     const canvas = {

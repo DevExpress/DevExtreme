@@ -2112,7 +2112,7 @@ QUnit.test('Drag. Small chart rendering time on start and big time in the middle
 
     // act
     // drag1
-    onZoomStart.reset();
+    onZoomStart.resetHistory();
     this.pointer.drag(50, 50);
 
     // assert
@@ -2231,7 +2231,7 @@ QUnit.test('Drag. Big chart rendering time on start and small time in the middle
 
     // act
     // drag1
-    onZoomStart.reset();
+    onZoomStart.resetHistory();
     this.pointer.drag(50, 50);
 
     // assert
@@ -2347,7 +2347,7 @@ QUnit.test('Pinch zoom. Small chart rendering time on start and big time in the 
 
     // act
     // pinch1
-    onZoomStart.reset();
+    onZoomStart.resetHistory();
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 150 }, { pointerId: 2, pageX: 800, pageY: 150 }] }));
 
     // assert
@@ -2363,7 +2363,7 @@ QUnit.test('Pinch zoom. Small chart rendering time on start and big time in the 
     // act
     // pinch2
     chart._lastRenderingTime = 1000;
-    onZoomStart.reset();
+    onZoomStart.resetHistory();
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 200, pageY: 150 }, { pointerId: 2, pageX: 600, pageY: 150 }] }));
 
     // assert
@@ -2464,7 +2464,7 @@ QUnit.test('Pinch zoom. Big chart rendering time on start and small time in the 
 
     // act
     // pinch1
-    onZoomStart.reset();
+    onZoomStart.resetHistory();
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 0, pageY: 150 }, { pointerId: 2, pageX: 800, pageY: 150 }] }));
 
     // assert
@@ -2480,7 +2480,7 @@ QUnit.test('Pinch zoom. Big chart rendering time on start and small time in the 
     // act
     // pinch2
     chart._lastRenderingTime = 10;
-    onZoomStart.reset();
+    onZoomStart.resetHistory();
     $root.trigger($.Event('dxpointermove', { pointerType: 'touch', pointers: [{ pointerId: 1, pageX: 200, pageY: 150 }, { pointerId: 2, pageX: 600, pageY: 150 }] }));
 
     // assert

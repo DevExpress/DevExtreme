@@ -103,7 +103,7 @@ const environment = {
     },
     afterEach: function() {
         this.$container.remove();
-        rendererModule.Renderer.reset();
+        rendererModule.Renderer.resetHistory();
         this.renderer = null;
 
     },

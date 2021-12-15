@@ -1098,7 +1098,7 @@ export const MockAxis = function(renderOptions) {
         isFirstDrawing() {
             return true;
         },
-        getMarginOptions: sinon.stub.returns({}),
+        getMarginOptions: sinon.stub().returns({}),
         applyVisualRangeSetter: sinon.spy(),
         _setVisualRange: sinon.spy(),
         _getAdjustedBusinessRange: sinon.spy(),

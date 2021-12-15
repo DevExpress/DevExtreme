@@ -88,14 +88,14 @@ const trackerModule = mock('viz/chart_components/tracker', {
 });
 
 const resetModules = exports.resetModules = function() {
-    trackerModule.ChartTracker.reset();
-    trackerModule.PieTracker.reset();
+    trackerModule.ChartTracker.resetHistory();
+    trackerModule.PieTracker.resetHistory();
 
-    legendModule.Legend.reset();
+    legendModule.Legend.resetHistory();
 
-    rendererModule.Renderer.reset();
-    exportModule.ExportMenu.reset();
-    titleModule.Title.reset();
+    rendererModule.Renderer.resetHistory();
+    exportModule.ExportMenu.resetHistory();
+    titleModule.Title.resetHistory();
 };
 
 // stubs getters
@@ -242,21 +242,21 @@ exports.environment = {
         this.$container.remove();
         restoreMockFactory();
         resetMockFactory();
-        this.createThemeManager.reset();
+        this.createThemeManager.resetHistory();
         this.createThemeManager.restore();
-        window.vizMocks.Element.prototype.updateRectangle.reset();
+        window.vizMocks.Element.prototype.updateRectangle.resetHistory();
         scrollBarClassModule.ScrollBar.restore();
         this.createSeriesFamily.restore();
         this.prepareSegmentRectPoints.restore();
         this.createCrosshair.restore();
         vizUtils.updatePanesCanvases.restore();
 
-        this.layoutManager.layoutElements.reset();
+        this.layoutManager.layoutElements.resetHistory();
         this.layoutManager = null;
-        this.StubLayoutManager.reset();
+        this.StubLayoutManager.resetHistory();
         this.StubLayoutManager.restore();
 
-        this.themeManager.getOptions.reset();
+        this.themeManager.getOptions.resetHistory();
         this.themeManager = null;
 
         this.restoreValidateData();

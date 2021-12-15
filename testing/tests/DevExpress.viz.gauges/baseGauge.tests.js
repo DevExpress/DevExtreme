@@ -120,7 +120,7 @@ const environment = {
             BaseGauge.prototype[name].reset();
         });
 
-        rendererModule.Renderer.reset();
+        rendererModule.Renderer.resetHistory();
         themeManagerModule.ThemeManager.reset();
         factory.createTranslator.reset();
         factory.createTracker.reset();

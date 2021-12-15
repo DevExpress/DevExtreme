@@ -55,7 +55,7 @@ stubExport();
 
 function resetStub(stub) {
     $.each(stub, function(_, stubFunc) {
-        stubFunc && stubFunc.reset && stubFunc.reset();
+        stubFunc && stubFunc.reset && stubFunc.resetHistory();
     });
 }
 function createStubThemeManager() {
@@ -218,35 +218,35 @@ const environment = {
         });
     },
     afterEach: function() {
-        this.createThemeManager.reset();
+        this.createThemeManager.resetHistory();
         this.createThemeManager.restore();
 
-        this.createSeries.reset();
+        this.createSeries.resetHistory();
         this.createSeries.restore();
 
-        this.createRenderer.reset();
+        this.createRenderer.resetHistory();
         this.createRenderer.restore();
 
-        this.range.reset();
+        this.range.resetHistory();
         this.range.restore();
 
-        this.createTooltip.reset();
+        this.createTooltip.resetHistory();
         this.createTooltip.restore();
 
-        this.createAxis.reset();
+        this.createAxis.resetHistory();
         this.createAxis.restore();
 
-        this.createSeriesFamily.reset();
+        this.createSeriesFamily.resetHistory();
         this.createSeriesFamily.restore();
 
-        this.createLayoutManager.reset();
+        this.createLayoutManager.resetHistory();
         this.createLayoutManager.restore();
 
-        trackerModule.ChartTracker.reset();
-        legendModule.Legend.reset();
-        exportModule.ExportMenu.reset();
+        trackerModule.ChartTracker.resetHistory();
+        legendModule.Legend.resetHistory();
+        exportModule.ExportMenu.resetHistory();
 
-        stubLayoutManager.layoutElements.reset();
+        stubLayoutManager.layoutElements.resetHistory();
     },
     createPolarChart: function(options) {
         const polarChart = new dxPolarChart(this.$container, options);

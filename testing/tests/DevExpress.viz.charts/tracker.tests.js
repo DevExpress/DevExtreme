@@ -209,7 +209,7 @@ const chartEnvironment = {
 
     createTracker(options) {
         const tracker = createTracker('dxChart', options);
-        options.tooltip.stub('hide').reset();
+        options.tooltip.stub('hide').resetHistory();
         return tracker;
     },
 
@@ -724,7 +724,7 @@ QUnit.test('Mouseout from canvas after dxpointermove on series. Tooltip disabled
     // arrange
     this.options.tooltip.isEnabled.returns(false);
     this.tracker.update(this.options);
-    this.options.tooltip.stub('hide').reset();
+    this.options.tooltip.stub('hide').resetHistory();
 
     // act
     $(this.seriesGroup.element).trigger(getEvent('showpointtooltip'), this.point);
@@ -760,10 +760,10 @@ QUnit.test('mouseout from canvas after dxpointermove on series some times. Check
                 assert.strictEqual(that.point.hover.callCount, 1, 'point hovered: ' + testSettings.name);
         }
 
-        that.series.stub('hover').reset();
-        that.point.stub('hover').reset();
-        that.point.stub('clearHover').reset();
-        that.series.stub('clearHover').reset();
+        that.series.stub('hover').resetHistory();
+        that.point.stub('hover').resetHistory();
+        that.point.stub('clearHover').resetHistory();
+        that.series.stub('clearHover').resetHistory();
     });
 
     // act
@@ -1749,7 +1749,7 @@ QUnit.test('update with old series', function(assert) {
     series2.stub('getPoints').returns([]);
 
     this.updateTracker(series);
-    this.options.tooltip.stub('hide').reset();
+    this.options.tooltip.stub('hide').resetHistory();
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
@@ -1770,7 +1770,7 @@ QUnit.test('update with old series when point is hovered', function(assert) {
     this.series.stub('getPoints').returns([point]);
 
     this.updateTracker(series);
-    this.options.tooltip.stub('hide').reset();
+    this.options.tooltip.stub('hide').resetHistory();
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
 
@@ -1809,7 +1809,7 @@ QUnit.test('Work after update with old series', function(assert) {
     const series = [this.series];
 
     this.updateTracker(series);
-    this.options.tooltip.stub('hide').reset();
+    this.options.tooltip.stub('hide').resetHistory();
     this.series.getNeighborPoint.withArgs(97, 45).returns(point);
 
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
@@ -1819,7 +1819,7 @@ QUnit.test('Work after update with old series', function(assert) {
 
     this.series.getNeighborPoint.withArgs(97, 45).returns(null);
 
-    this.series.hover.reset();
+    this.series.hover.resetHistory();
     // act
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
     this.clock.tick(this.tracker.__trackerDelay);
@@ -1861,8 +1861,8 @@ QUnit.test('update with new series', function(assert) {
     $(this.options.seriesGroup.element).trigger(getEvent('selectpoint'), point);
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
 
-    this.options.tooltip.stub('hide').reset();
-    this.options.tooltip.stub('show').reset();
+    this.options.tooltip.stub('hide').resetHistory();
+    this.options.tooltip.stub('show').resetHistory();
 
     // act
     this.tracker.updateSeries([newSeries]);
@@ -1982,8 +1982,8 @@ QUnit.test('repairTooltip', function(assert) {
     const point = createPoint(this.series);
 
     $(this.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), point);
-    this.options.tooltip.show.reset();
-    point.getTooltipParams.reset();
+    this.options.tooltip.show.resetHistory();
+    point.getTooltipParams.resetHistory();
 
     // act
     this.tracker.repairTooltip();
@@ -2004,8 +2004,8 @@ QUnit.test('clearHover', function(assert) {
 
 QUnit.test('Can be disposed', function(assert) {
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, pointers: [], target: this.seriesGroup.element }));
-    this.renderer.root.off.reset();
-    this.seriesGroup.off.reset();
+    this.renderer.root.off.resetHistory();
+    this.seriesGroup.off.resetHistory();
 
     // Act
     this.tracker.dispose();
@@ -2129,7 +2129,7 @@ QUnit.module('Root events. Pie chart', {
         };
 
         that.tracker = that.createTracker(that.options);
-        that.options.tooltip.stub('hide').reset();
+        that.options.tooltip.stub('hide').resetHistory();
     },
 
     afterEach: function() {
@@ -2311,7 +2311,7 @@ QUnit.test('mouseout from legend item', function(assert) {
     this.legend.getItemByCoord.withArgs(97, 45).returns({ id: 0, argument: 'argument1', argumentIndex: 11 });
 
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
-    this.series.notify.reset();
+    this.series.notify.resetHistory();
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 80, pageY: 50 }));
 
     assert.strictEqual(this.series.notify.callCount, 1);
@@ -2328,7 +2328,7 @@ QUnit.test('mousedown on legend item', function(assert) {
     this.legend.getItemByCoord.withArgs(97, 45).returns({ id: 0, argument: 'argument1', argumentIndex: 11 });
 
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
-    this.series.notify.reset();
+    this.series.notify.resetHistory();
     $(this.renderer.root.element).trigger(getEvent('dxpointerdown', { pageX: 100, pageY: 50 }));
 
     assert.strictEqual(this.series.notify.callCount, 0);
@@ -2339,7 +2339,7 @@ QUnit.test('mouseout from chart after hover point on legend', function(assert) {
     this.legend.getItemByCoord.withArgs(97, 45).returns({ id: 0, argument: 'argument1', argumentIndex: 11 });
 
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
-    this.series.notify.reset();
+    this.series.notify.resetHistory();
     $(document).trigger(getEvent('dxpointermove', { pageX: 500, pageY: 50 }));
 
     assert.strictEqual(this.series.notify.callCount, 1);
@@ -2356,7 +2356,7 @@ QUnit.test('mousemove from legend item to another one', function(assert) {
     this.legend.getItemByCoord.withArgs(97 + 10, 45 + 10).returns({ id: 0, argument: 'argument2', argumentIndex: 12 });
 
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
-    this.series.notify.reset();
+    this.series.notify.resetHistory();
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 110, pageY: 60 }));
 
     assert.strictEqual(this.series.notify.callCount, 2);
@@ -2396,7 +2396,7 @@ QUnit.test('mouseout from chart after hover point on legend. legend hoverMode is
     this.legend.getItemByCoord.withArgs(97, 45).returns({ id: 0, argument: 'argument1' });
 
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50 }));
-    this.series.notify.reset();
+    this.series.notify.resetHistory();
     $(document).trigger(getEvent('dxpointermove', { pageX: 500, pageY: 50 }));
 
     assert.strictEqual(this.series.notify.callCount, 1);
@@ -2581,7 +2581,7 @@ QUnit.module('Tooltip', {
 });
 
 QUnit.test('show Tooltip event. TooltipShown fired', function(assert) {
-    this.tooltip.stub('hide').reset();
+    this.tooltip.stub('hide').resetHistory();
     this.environment.options.seriesGroup.trigger(getEvent('showpointtooltip'), this.environment.point1);
 
     const showTooltip = this.tooltip.stub('show');
@@ -2602,7 +2602,7 @@ QUnit.test('Tooltip is disabled. Show tooltip on point, stopCurrentHandling, sho
     this.environment.options.seriesGroup.trigger(getEvent('showpointtooltip'), this.environment.point1);
 
     this.tracker.stopCurrentHandling();
-    this.tooltip.stub('show').reset();
+    this.tooltip.stub('show').resetHistory();
 
     this.environment.options.seriesGroup.trigger(getEvent('showpointtooltip'), this.environment.point1);
 
@@ -2611,8 +2611,8 @@ QUnit.test('Tooltip is disabled. Show tooltip on point, stopCurrentHandling, sho
 
 QUnit.test('show Tooltip event when there is tooltip on another point. TooltipHidden fired, TooltipShown fired', function(assert) {
     this.environment.options.seriesGroup.trigger(getEvent('showpointtooltip'), this.environment.point2);
-    this.tooltip.stub('hide').reset();
-    this.tooltip.stub('show').reset();
+    this.tooltip.stub('hide').resetHistory();
+    this.tooltip.stub('show').resetHistory();
 
     // act
     this.environment.options.seriesGroup.trigger(getEvent('showpointtooltip'), this.environment.point1);
@@ -2655,7 +2655,7 @@ QUnit.test('show Tooltip event without text', function(assert) {
 });
 
 QUnit.test('hide Tooltip event. TooltipHidden fired', function(assert) {
-    this.tooltip.stub('hide').reset();
+    this.tooltip.stub('hide').resetHistory();
     $(this.environment.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), this.environment.point1);
     $(this.environment.options.seriesGroup.element).trigger(getEvent('hidepointtooltip'), this.environment.point1);
 
@@ -2664,7 +2664,7 @@ QUnit.test('hide Tooltip event. TooltipHidden fired', function(assert) {
 });
 
 QUnit.test('tooltipShown call', function(assert) {
-    this.tooltip.stub('show').reset();
+    this.tooltip.stub('show').resetHistory();
     $(this.environment.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), this.environment.point1);
 
     assert.equal(this.tooltip.show.callCount, 1);
@@ -2672,14 +2672,14 @@ QUnit.test('tooltipShown call', function(assert) {
 });
 
 QUnit.test('tooltipHidden, tooltip not shown - not call', function(assert) {
-    this.tooltip.stub('hide').reset();
+    this.tooltip.stub('hide').resetHistory();
     $(this.environment.options.seriesGroup.element).trigger(getEvent('hidepointtooltip'), this.environment.point1);
 
     assert.equal(this.tooltip.hide.callCount, 0);
 });
 
 QUnit.test('tooltipHidden from chart', function(assert) {
-    this.tooltip.stub('hide').reset();
+    this.tooltip.stub('hide').resetHistory();
     $(this.environment.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), this.environment.point1);
     $(this.environment.options.seriesGroup.element).trigger(getEvent('hidepointtooltip'));
 
@@ -2690,8 +2690,8 @@ QUnit.test('tooltipHidden from chart', function(assert) {
 QUnit.test('repairTooltip. Point got invisible, tooltipHidden not fired', function(assert) {
     $(this.environment.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), this.environment.point1);
     this.environment.point1.isVisible = function() { return false; };
-    this.tooltip.stub('hide').reset();
-    this.tooltip.stub('show').reset();
+    this.tooltip.stub('hide').resetHistory();
+    this.tooltip.stub('show').resetHistory();
 
     // act
     this.tracker.repairTooltip();
@@ -2706,8 +2706,8 @@ QUnit.test('repairTooltip. Point got visible after invisible, tooltipShown fired
     this.environment.point1.isVisible = function() { return false; };
     this.tracker.repairTooltip();
     this.environment.point1.isVisible = function() { return true; };
-    this.tooltip.stub('hide').reset();
-    this.tooltip.stub('show').reset();
+    this.tooltip.stub('hide').resetHistory();
+    this.tooltip.stub('show').resetHistory();
 
     // act
     this.tracker.repairTooltip();
@@ -2721,8 +2721,8 @@ QUnit.test('show tooltip on point. Point with tooltip is invisible', function(as
     $(this.environment.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), this.environment.point1);
     this.environment.point1.isVisible = function() { return false; };
     this.tracker.repairTooltip();
-    this.tooltip.stub('hide').reset();
-    this.tooltip.stub('show').reset();
+    this.tooltip.stub('hide').resetHistory();
+    this.tooltip.stub('show').resetHistory();
 
     // act
     $(this.environment.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), this.environment.point2);

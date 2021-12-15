@@ -900,7 +900,7 @@ QUnit.module('Lifecycle', {
     },
     afterEach() {
         __test_utils.restore_createAnnotations();
-        rendererModule.Renderer.reset();
+        rendererModule.Renderer.resetHistory();
     }
 }, function() {
     QUnit.module('Chart plugin', {

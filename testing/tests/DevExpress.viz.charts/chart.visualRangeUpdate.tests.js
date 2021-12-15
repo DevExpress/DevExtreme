@@ -60,7 +60,7 @@ QUnit.test('No data -> set visualRange - take given range', function(assert) {
 
     // Case 3
     [chart, onOptionChanged] = this.createChart({});
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
 
@@ -76,7 +76,7 @@ QUnit.test('No data -> set visualRange - take given range', function(assert) {
 
     // Case 4
     [chart, onOptionChanged] = this.createChart({});
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [2, 4]);
 
@@ -92,7 +92,7 @@ QUnit.test('No data -> set visualRange - take given range', function(assert) {
 
     // Case 5
     [chart, onOptionChanged] = this.createChart({});
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getArgumentAxis().visualRange([2, 4]);
 
@@ -120,7 +120,7 @@ QUnit.test('No data -> set visualRange -> set data - keep visual range', functio
     let [chart, onOptionChanged] = this.createChart({
         argumentAxis: { visualRange: [2, 4] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -137,7 +137,7 @@ QUnit.test('No data -> set visualRange -> set data - keep visual range', functio
     [chart, onOptionChanged] = this.createChart({
         argumentAxis: { visualRange: { startValue: 2, endValue: 4 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -153,7 +153,7 @@ QUnit.test('No data -> set visualRange -> set data - keep visual range', functio
     // Case 3
     [chart, onOptionChanged] = this.createChart({});
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -169,7 +169,7 @@ QUnit.test('No data -> set visualRange -> set data - keep visual range', functio
     // Case 4
     [chart, onOptionChanged] = this.createChart({});
     chart.option('argumentAxis.visualRange', [2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -185,7 +185,7 @@ QUnit.test('No data -> set visualRange -> set data - keep visual range', functio
     // Case 5
     [chart, onOptionChanged] = this.createChart({});
     chart.getArgumentAxis().visualRange([2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -249,7 +249,7 @@ QUnit.test('No data -> set visualRange < wholeRange -> set data - keep visual ra
     let [chart, onOptionChanged] = this.createChart({
         argumentAxis: { visualRange: [2, 4], wholeRange: [0, 10] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -266,7 +266,7 @@ QUnit.test('No data -> set visualRange < wholeRange -> set data - keep visual ra
     [chart, onOptionChanged] = this.createChart({
         argumentAxis: { visualRange: { startValue: 2, endValue: 4 }, wholeRange: { startValue: 0, endValue: 10 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -282,7 +282,7 @@ QUnit.test('No data -> set visualRange < wholeRange -> set data - keep visual ra
     // Case 3
     [chart, onOptionChanged] = this.createChart({});
     chart.option({ argumentAxis: { visualRange: [2, 4], wholeRange: [0, 10] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -299,7 +299,7 @@ QUnit.test('No data -> set visualRange < wholeRange -> set data - keep visual ra
     [chart, onOptionChanged] = this.createChart({});
     chart.option('argumentAxis.wholeRange', [0, 10]);
     chart.option('argumentAxis.visualRange', [2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -316,7 +316,7 @@ QUnit.test('No data -> set visualRange < wholeRange -> set data - keep visual ra
     [chart, onOptionChanged] = this.createChart({});
     chart.option('argumentAxis.wholeRange', [0, 10]);
     chart.getArgumentAxis().visualRange([2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -345,7 +345,7 @@ QUnit.test('No data -> set visualRange = wholeRange -> set data > wholeRange - t
     let [chart, onOptionChanged] = this.createChart({
         argumentAxis: { visualRange: [1, 5], wholeRange: [1, 5] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -362,7 +362,7 @@ QUnit.test('No data -> set visualRange = wholeRange -> set data > wholeRange - t
     [chart, onOptionChanged] = this.createChart({
         argumentAxis: { visualRange: { startValue: 1, endValue: 5 }, wholeRange: { startValue: 1, endValue: 5 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -378,7 +378,7 @@ QUnit.test('No data -> set visualRange = wholeRange -> set data > wholeRange - t
     // Case 3
     [chart, onOptionChanged] = this.createChart({});
     chart.option({ argumentAxis: { visualRange: [1, 5], wholeRange: [1, 5] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -395,7 +395,7 @@ QUnit.test('No data -> set visualRange = wholeRange -> set data > wholeRange - t
     [chart, onOptionChanged] = this.createChart({});
     chart.option('argumentAxis.wholeRange', [1, 5]);
     chart.option('argumentAxis.visualRange', [1, 5]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -412,7 +412,7 @@ QUnit.test('No data -> set visualRange = wholeRange -> set data > wholeRange - t
     [chart, onOptionChanged] = this.createChart({});
     chart.option('argumentAxis.wholeRange', [1, 5]);
     chart.getArgumentAxis().visualRange([1, 5]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -439,7 +439,7 @@ QUnit.test('No data -> set visualRange = wholeRange -> set data < wholeRange - t
     let [chart, onOptionChanged] = this.createChart({
         argumentAxis: { visualRange: [0, 6], wholeRange: [0, 6] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -456,7 +456,7 @@ QUnit.test('No data -> set visualRange = wholeRange -> set data < wholeRange - t
     [chart, onOptionChanged] = this.createChart({
         argumentAxis: { visualRange: { startValue: 0, endValue: 6 }, wholeRange: { startValue: 0, endValue: 6 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -472,7 +472,7 @@ QUnit.test('No data -> set visualRange = wholeRange -> set data < wholeRange - t
     // Case 3
     [chart, onOptionChanged] = this.createChart({});
     chart.option({ argumentAxis: { visualRange: [0, 6], wholeRange: [0, 6] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -489,7 +489,7 @@ QUnit.test('No data -> set visualRange = wholeRange -> set data < wholeRange - t
     [chart, onOptionChanged] = this.createChart({});
     chart.option('argumentAxis.wholeRange', [0, 6]);
     chart.option('argumentAxis.visualRange', [0, 6]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -506,7 +506,7 @@ QUnit.test('No data -> set visualRange = wholeRange -> set data < wholeRange - t
     [chart, onOptionChanged] = this.createChart({});
     chart.option('argumentAxis.wholeRange', [0, 6]);
     chart.getArgumentAxis().visualRange([0, 6]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -545,7 +545,7 @@ QUnit.test('Data -> set visualRange in the middle of data - take given range', f
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: 20, endValue: 40 }, 'Case 1');
 
     // Case 2
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
     [chart, onOptionChanged] = this.createChart({
         dataSource,
         argumentAxis: { visualRange: { startValue: 2, endValue: 4 } }
@@ -564,7 +564,7 @@ QUnit.test('Data -> set visualRange in the middle of data - take given range', f
     [chart, onOptionChanged] = this.createChart({
         dataSource
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
 
@@ -581,7 +581,7 @@ QUnit.test('Data -> set visualRange in the middle of data - take given range', f
     [chart, onOptionChanged] = this.createChart({
         dataSource
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [2, 4]);
 
@@ -598,7 +598,7 @@ QUnit.test('Data -> set visualRange in the middle of data - take given range', f
     [chart, onOptionChanged] = this.createChart({
         dataSource
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getArgumentAxis().visualRange([2, 4]);
 
@@ -637,7 +637,7 @@ QUnit.test('Data -> set visualRange at the end of data - take given range', func
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: 40, endValue: 50 }, 'Case 1');
 
     // Case 2
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
     [chart, onOptionChanged] = this.createChart({
         dataSource,
         argumentAxis: { visualRange: { startValue: 4, endValue: 5 } }
@@ -656,7 +656,7 @@ QUnit.test('Data -> set visualRange at the end of data - take given range', func
     [chart, onOptionChanged] = this.createChart({
         dataSource
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [4, 5] } });
 
@@ -673,7 +673,7 @@ QUnit.test('Data -> set visualRange at the end of data - take given range', func
     [chart, onOptionChanged] = this.createChart({
         dataSource
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [4, 5]);
 
@@ -690,7 +690,7 @@ QUnit.test('Data -> set visualRange at the end of data - take given range', func
     [chart, onOptionChanged] = this.createChart({
         dataSource
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getArgumentAxis().visualRange([4, 5]);
 
@@ -726,7 +726,7 @@ QUnit.test('Data -> set visualRange < data range -> update data - keep visual ra
         dataSource,
         argumentAxis: { visualRange: [2, 4] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -744,7 +744,7 @@ QUnit.test('Data -> set visualRange < data range -> update data - keep visual ra
         dataSource,
         argumentAxis: { visualRange: { startValue: 2, endValue: 4 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -763,7 +763,7 @@ QUnit.test('Data -> set visualRange < data range -> update data - keep visual ra
     });
 
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -781,7 +781,7 @@ QUnit.test('Data -> set visualRange < data range -> update data - keep visual ra
         dataSource
     });
     chart.option('argumentAxis.visualRange', [2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -799,7 +799,7 @@ QUnit.test('Data -> set visualRange < data range -> update data - keep visual ra
         dataSource
     });
     chart.getArgumentAxis().visualRange([2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -832,7 +832,7 @@ QUnit.test('Data -> set visualRange = data range -> update data - take new data 
         dataSource,
         argumentAxis: { visualRange: [2, 4] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -850,7 +850,7 @@ QUnit.test('Data -> set visualRange = data range -> update data - take new data 
         dataSource,
         argumentAxis: { visualRange: { startValue: 2, endValue: 4 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -868,7 +868,7 @@ QUnit.test('Data -> set visualRange = data range -> update data - take new data 
         dataSource
     });
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -886,7 +886,7 @@ QUnit.test('Data -> set visualRange = data range -> update data - take new data 
         dataSource
     });
     chart.option('argumentAxis.visualRange', [2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -904,7 +904,7 @@ QUnit.test('Data -> set visualRange = data range -> update data - take new data 
         dataSource
     });
     chart.getArgumentAxis().visualRange([2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -929,7 +929,7 @@ QUnit.test('No data -> set Data(one point)', function(assert) {
         dataSource,
         argumentAxis: { visualRange: { length: 2 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -963,7 +963,7 @@ QUnit.test('No data -> set visualRange - take given range', function(assert) {
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: undefined, endValue: undefined }, 'Case 1');
 
     // Case 2
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
     [chart, onOptionChanged] = this.createChart({
         argumentAxis: {
             type: 'discrete',
@@ -989,7 +989,7 @@ QUnit.test('No data -> set visualRange - take given range', function(assert) {
             argumentType: 'numeric'
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
 
@@ -1010,7 +1010,7 @@ QUnit.test('No data -> set visualRange - take given range', function(assert) {
             argumentType: 'numeric'
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [2, 4]);
 
@@ -1031,7 +1031,7 @@ QUnit.test('No data -> set visualRange - take given range', function(assert) {
             argumentType: 'numeric'
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getArgumentAxis().visualRange([2, 4]);
 
@@ -1063,7 +1063,7 @@ QUnit.test('No data -> set visualRange -> set data - keep visual range', functio
             visualRange: [2, 4]
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1084,7 +1084,7 @@ QUnit.test('No data -> set visualRange -> set data - keep visual range', functio
             visualRange: { startValue: 2, endValue: 4 }
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1106,7 +1106,7 @@ QUnit.test('No data -> set visualRange -> set data - keep visual range', functio
     });
 
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1128,7 +1128,7 @@ QUnit.test('No data -> set visualRange -> set data - keep visual range', functio
     });
 
     chart.option('argumentAxis.visualRange', [2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1149,7 +1149,7 @@ QUnit.test('No data -> set visualRange -> set data - keep visual range', functio
         }
     });
     chart.getArgumentAxis().visualRange([2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1192,7 +1192,7 @@ QUnit.test('Data -> set visualRange in the middle of data - take given range', f
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: 20, endValue: 40 }, 'Case 1');
 
     // Case 2
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
     [chart, onOptionChanged] = this.createChart({
         dataSource,
         argumentAxis: {
@@ -1219,7 +1219,7 @@ QUnit.test('Data -> set visualRange in the middle of data - take given range', f
             argumentType: 'numeric'
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
 
@@ -1240,7 +1240,7 @@ QUnit.test('Data -> set visualRange in the middle of data - take given range', f
             argumentType: 'numeric'
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [2, 4]);
 
@@ -1261,7 +1261,7 @@ QUnit.test('Data -> set visualRange in the middle of data - take given range', f
             argumentType: 'numeric'
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getArgumentAxis().visualRange([2, 4]);
 
@@ -1304,7 +1304,7 @@ QUnit.test('Data -> set visualRange at the end of data - take given range', func
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: 40, endValue: 50 }, 'Case 1');
 
     // Case 2
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
     [chart, onOptionChanged] = this.createChart({
         dataSource,
         argumentAxis: {
@@ -1331,7 +1331,7 @@ QUnit.test('Data -> set visualRange at the end of data - take given range', func
             argumentType: 'numeric'
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [4, 5] } });
 
@@ -1352,7 +1352,7 @@ QUnit.test('Data -> set visualRange at the end of data - take given range', func
             argumentType: 'numeric'
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [4, 5]);
 
@@ -1373,7 +1373,7 @@ QUnit.test('Data -> set visualRange at the end of data - take given range', func
             argumentType: 'numeric'
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getArgumentAxis().visualRange([4, 5]);
 
@@ -1413,7 +1413,7 @@ QUnit.test('Data -> set visualRange < data range -> update data - keep visual ra
             visualRange: [2, 4]
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1435,7 +1435,7 @@ QUnit.test('Data -> set visualRange < data range -> update data - keep visual ra
             visualRange: { startValue: 2, endValue: 4 }
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1458,7 +1458,7 @@ QUnit.test('Data -> set visualRange < data range -> update data - keep visual ra
     });
 
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1480,7 +1480,7 @@ QUnit.test('Data -> set visualRange < data range -> update data - keep visual ra
         }
     });
     chart.option('argumentAxis.visualRange', [2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1502,7 +1502,7 @@ QUnit.test('Data -> set visualRange < data range -> update data - keep visual ra
         }
     });
     chart.getArgumentAxis().visualRange([2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1539,7 +1539,7 @@ QUnit.test('Data -> set visualRange = data range -> update data - take new data 
             visualRange: [2, 4]
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1561,7 +1561,7 @@ QUnit.test('Data -> set visualRange = data range -> update data - take new data 
             visualRange: { startValue: 2, endValue: 4 }
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1583,7 +1583,7 @@ QUnit.test('Data -> set visualRange = data range -> update data - take new data 
         }
     });
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1605,7 +1605,7 @@ QUnit.test('Data -> set visualRange = data range -> update data - take new data 
         }
     });
     chart.option('argumentAxis.visualRange', [2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1627,7 +1627,7 @@ QUnit.test('Data -> set visualRange = data range -> update data - take new data 
         }
     });
     chart.getArgumentAxis().visualRange([2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1660,7 +1660,7 @@ QUnit.test('No data, keep mode -> set visualRange = wholeRange -> set data < who
             wholeRange: [0, 6]
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1681,7 +1681,7 @@ QUnit.test('No data, keep mode -> set visualRange = wholeRange -> set data < who
             wholeRange: { startValue: 0, endValue: 6 }
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1701,7 +1701,7 @@ QUnit.test('No data, keep mode -> set visualRange = wholeRange -> set data < who
         }
     });
     chart.option({ argumentAxis: { visualRange: [0, 6], wholeRange: [0, 6] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1722,7 +1722,7 @@ QUnit.test('No data, keep mode -> set visualRange = wholeRange -> set data < who
     });
     chart.option('argumentAxis.wholeRange', [0, 6]);
     chart.option('argumentAxis.visualRange', [0, 6]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1743,7 +1743,7 @@ QUnit.test('No data, keep mode -> set visualRange = wholeRange -> set data < who
     });
     chart.option('argumentAxis.wholeRange', [0, 6]);
     chart.getArgumentAxis().visualRange([0, 6]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1774,7 +1774,7 @@ QUnit.test('No data, reset mode -> set visualRange < wholeRange -> set data - re
             wholeRange: [0, 10]
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1795,7 +1795,7 @@ QUnit.test('No data, reset mode -> set visualRange < wholeRange -> set data - re
             wholeRange: { startValue: 0, endValue: 10 }
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1815,7 +1815,7 @@ QUnit.test('No data, reset mode -> set visualRange < wholeRange -> set data - re
         }
     });
     chart.option({ argumentAxis: { visualRange: [2, 4], wholeRange: [0, 10] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1836,7 +1836,7 @@ QUnit.test('No data, reset mode -> set visualRange < wholeRange -> set data - re
     });
     chart.option('argumentAxis.wholeRange', [0, 10]);
     chart.option('argumentAxis.visualRange', [2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1857,7 +1857,7 @@ QUnit.test('No data, reset mode -> set visualRange < wholeRange -> set data - re
     });
     chart.option('argumentAxis.wholeRange', [0, 10]);
     chart.getArgumentAxis().visualRange([2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -1896,7 +1896,7 @@ QUnit.test('Data, shift mode -> set visualRange < data range -> update data - sh
             visualRange: [2, 4]
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1917,7 +1917,7 @@ QUnit.test('Data, shift mode -> set visualRange < data range -> update data - sh
             visualRange: { startValue: 2, endValue: 4 }
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1939,7 +1939,7 @@ QUnit.test('Data, shift mode -> set visualRange < data range -> update data - sh
     });
 
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1960,7 +1960,7 @@ QUnit.test('Data, shift mode -> set visualRange < data range -> update data - sh
         }
     });
     chart.option('argumentAxis.visualRange', [2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -1981,7 +1981,7 @@ QUnit.test('Data, shift mode -> set visualRange < data range -> update data - sh
         }
     });
     chart.getArgumentAxis().visualRange([2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -2015,7 +2015,7 @@ QUnit.test('No data, keep mode -> set visualRange -> set data - keep visual rang
             visualRange: [2, 4]
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -2037,7 +2037,7 @@ QUnit.test('No data, keep mode -> set visualRange -> set data - keep visual rang
             visualRange: { startValue: 2, endValue: 4 }
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -2060,7 +2060,7 @@ QUnit.test('No data, keep mode -> set visualRange -> set data - keep visual rang
     });
 
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -2083,7 +2083,7 @@ QUnit.test('No data, keep mode -> set visualRange -> set data - keep visual rang
     });
 
     chart.option('argumentAxis.visualRange', [2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -2105,7 +2105,7 @@ QUnit.test('No data, keep mode -> set visualRange -> set data - keep visual rang
         }
     });
     chart.getArgumentAxis().visualRange([2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -2138,7 +2138,7 @@ QUnit.test('No data, reset mode -> set visualRange < wholeRange -> set data - re
             wholeRange: [0, 10]
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -2161,7 +2161,7 @@ QUnit.test('No data, reset mode -> set visualRange < wholeRange -> set data - re
             wholeRange: { startValue: 0, endValue: 10 }
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -2183,7 +2183,7 @@ QUnit.test('No data, reset mode -> set visualRange < wholeRange -> set data - re
         }
     });
     chart.option({ argumentAxis: { visualRange: [2, 4], wholeRange: [0, 10] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -2206,7 +2206,7 @@ QUnit.test('No data, reset mode -> set visualRange < wholeRange -> set data - re
     });
     chart.option('argumentAxis.wholeRange', [0, 10]);
     chart.option('argumentAxis.visualRange', [2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -2229,7 +2229,7 @@ QUnit.test('No data, reset mode -> set visualRange < wholeRange -> set data - re
     });
     chart.option('argumentAxis.wholeRange', [0, 10]);
     chart.getArgumentAxis().visualRange([2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource });
 
@@ -2270,7 +2270,7 @@ QUnit.test('Data, shift mode -> set visualRange < data range -> update data - sh
             visualRange: [2, 4]
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -2293,7 +2293,7 @@ QUnit.test('Data, shift mode -> set visualRange < data range -> update data - sh
             visualRange: { startValue: 2, endValue: 4 }
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -2317,7 +2317,7 @@ QUnit.test('Data, shift mode -> set visualRange < data range -> update data - sh
     });
 
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -2340,7 +2340,7 @@ QUnit.test('Data, shift mode -> set visualRange < data range -> update data - sh
         }
     });
     chart.option('argumentAxis.visualRange', [2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -2363,7 +2363,7 @@ QUnit.test('Data, shift mode -> set visualRange < data range -> update data - sh
         }
     });
     chart.getArgumentAxis().visualRange([2, 4]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -2405,7 +2405,7 @@ QUnit.test('Without visualRange, adjustOnZoom true -> set argument visualRange -
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: 20, endValue: 40 }, 'Case 1');
 
     // Case 2
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
     [chart, onOptionChanged] = this.createChart({
         dataSource,
         argumentAxis: { visualRange: { startValue: 2, endValue: 4 } }
@@ -2424,7 +2424,7 @@ QUnit.test('Without visualRange, adjustOnZoom true -> set argument visualRange -
     [chart, onOptionChanged] = this.createChart({
         dataSource
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
 
@@ -2441,7 +2441,7 @@ QUnit.test('Without visualRange, adjustOnZoom true -> set argument visualRange -
     [chart, onOptionChanged] = this.createChart({
         dataSource
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [2, 4]);
 
@@ -2458,7 +2458,7 @@ QUnit.test('Without visualRange, adjustOnZoom true -> set argument visualRange -
     [chart, onOptionChanged] = this.createChart({
         dataSource
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getArgumentAxis().visualRange([2, 4]);
 
@@ -2487,7 +2487,7 @@ QUnit.test('Without visualRange, argument visualRange, adjustOnZoom true -> chan
         dataSource,
         argumentAxis: { visualRange: [2, 4] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [3, 5] } });
 
@@ -2505,7 +2505,7 @@ QUnit.test('Without visualRange, argument visualRange, adjustOnZoom true -> chan
         dataSource,
         argumentAxis: { visualRange: [2, 4] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [3, 5]);
 
@@ -2523,7 +2523,7 @@ QUnit.test('Without visualRange, argument visualRange, adjustOnZoom true -> chan
         dataSource,
         argumentAxis: { visualRange: [2, 4] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getArgumentAxis().visualRange([3, 5]);
 
@@ -2552,7 +2552,7 @@ QUnit.test('Without visualRange, argument visualRange, adjustOnZoom false -> cha
         dataSource,
         argumentAxis: { visualRange: [2, 4] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [3, 5] } });
 
@@ -2571,7 +2571,7 @@ QUnit.test('Without visualRange, argument visualRange, adjustOnZoom false -> cha
         dataSource,
         argumentAxis: { visualRange: [2, 4] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [3, 5]);
 
@@ -2590,7 +2590,7 @@ QUnit.test('Without visualRange, argument visualRange, adjustOnZoom false -> cha
         dataSource,
         argumentAxis: { visualRange: [2, 4] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getArgumentAxis().visualRange([3, 5]);
 
@@ -2629,7 +2629,7 @@ QUnit.test('Data -> set visualRange - take given range', function(assert) {
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, [10, 30], 'Case 1');
 
     // Case 2
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
     [chart, onOptionChanged] = this.createChart({
         dataSource,
         valueAxis: { visualRange: { startValue: 10, endValue: 30 } }
@@ -2648,7 +2648,7 @@ QUnit.test('Data -> set visualRange - take given range', function(assert) {
     [chart, onOptionChanged] = this.createChart({
         dataSource
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ valueAxis: { visualRange: [10, 30] } });
 
@@ -2667,7 +2667,7 @@ QUnit.test('Data -> set visualRange - take given range', function(assert) {
     [chart, onOptionChanged] = this.createChart({
         dataSource
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('valueAxis.visualRange', [10, 30]);
 
@@ -2684,7 +2684,7 @@ QUnit.test('Data -> set visualRange - take given range', function(assert) {
     [chart, onOptionChanged] = this.createChart({
         dataSource
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getValueAxis().visualRange([10, 30]);
 
@@ -2712,7 +2712,7 @@ QUnit.test('Data -> set value visualRange -> set argument VisualRange - keep val
         dataSource,
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [4, 5] } });
 
@@ -2730,7 +2730,7 @@ QUnit.test('Data -> set value visualRange -> set argument VisualRange - keep val
         dataSource
     });
     chart.option({ valueAxis: { visualRange: [10, 30] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [4, 5] } });
 
@@ -2748,7 +2748,7 @@ QUnit.test('Data -> set value visualRange -> set argument VisualRange - keep val
         dataSource
     });
     chart.option({ valueAxis: { visualRange: [10, 30] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [4, 5]);
 
@@ -2766,7 +2766,7 @@ QUnit.test('Data -> set value visualRange -> set argument VisualRange - keep val
         dataSource
     });
     chart.option('valueAxis.visualRange', [10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [4, 5]);
 
@@ -2835,7 +2835,7 @@ QUnit.test('AdjustOnZoom true - show adjusted value range for every argument ran
         dataSource,
         argumentAxis: { visualRange: [2, 4] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -2854,7 +2854,7 @@ QUnit.test('AdjustOnZoom true - show adjusted value range for every argument ran
         dataSource,
         argumentAxis: { visualRange: [3, 5] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -2873,7 +2873,7 @@ QUnit.test('AdjustOnZoom true - show adjusted value range for every argument ran
         dataSource,
         argumentAxis: { visualRange: [1, 5] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -2909,7 +2909,7 @@ QUnit.test('AdjustOnZoom false - show full value range for every argument range 
         dataSource,
         argumentAxis: { visualRange: [2, 4] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -2928,7 +2928,7 @@ QUnit.test('AdjustOnZoom false - show full value range for every argument range 
         dataSource,
         argumentAxis: { visualRange: [3, 5] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -2947,7 +2947,7 @@ QUnit.test('AdjustOnZoom false - show full value range for every argument range 
         dataSource,
         argumentAxis: { visualRange: [1, 5] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -2986,7 +2986,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode - keep vi
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3005,7 +3005,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode - keep vi
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: { startValue: 10, endValue: 30 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3024,7 +3024,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode - keep vi
         argumentAxis: { visualRange: [2, 4] }
     });
     chart.option({ valueAxis: { visualRange: [10, 30] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3043,7 +3043,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode - keep vi
         argumentAxis: { visualRange: [2, 4] }
     });
     chart.option('valueAxis.visualRange', [10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3062,7 +3062,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode - keep vi
         argumentAxis: { visualRange: [2, 4] }
     });
     chart.getValueAxis().visualRange([10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3099,7 +3099,7 @@ QUnit.test('Data -> set visualRange -> update data, argument reset mode - show f
         argumentAxis: { visualRange: [1, 5] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3118,7 +3118,7 @@ QUnit.test('Data -> set visualRange -> update data, argument reset mode - show f
         argumentAxis: { visualRange: [1, 5] },
         valueAxis: { visualRange: { startValue: 10, endValue: 30 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3137,7 +3137,7 @@ QUnit.test('Data -> set visualRange -> update data, argument reset mode - show f
         argumentAxis: { visualRange: [1, 5] }
     });
     chart.option({ valueAxis: { visualRange: [10, 30] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3156,7 +3156,7 @@ QUnit.test('Data -> set visualRange -> update data, argument reset mode - show f
         argumentAxis: { visualRange: [1, 5] }
     });
     chart.option('valueAxis.visualRange', [10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3175,7 +3175,7 @@ QUnit.test('Data -> set visualRange -> update data, argument reset mode - show f
         argumentAxis: { visualRange: [1, 5] }
     });
     chart.getValueAxis().visualRange([10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3213,7 +3213,7 @@ QUnit.test('Data -> set visualRange -> update data, argument shift mode, adjustO
         argumentAxis: { visualRange: [3, 5] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3233,7 +3233,7 @@ QUnit.test('Data -> set visualRange -> update data, argument shift mode, adjustO
         argumentAxis: { visualRange: [3, 5] },
         valueAxis: { visualRange: { startValue: 10, endValue: 30 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3253,7 +3253,7 @@ QUnit.test('Data -> set visualRange -> update data, argument shift mode, adjustO
         argumentAxis: { visualRange: [3, 5] }
     });
     chart.option({ valueAxis: { visualRange: [10, 30] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3273,7 +3273,7 @@ QUnit.test('Data -> set visualRange -> update data, argument shift mode, adjustO
         argumentAxis: { visualRange: [3, 5] }
     });
     chart.option('valueAxis.visualRange', [10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3293,7 +3293,7 @@ QUnit.test('Data -> set visualRange -> update data, argument shift mode, adjustO
         argumentAxis: { visualRange: [3, 5] }
     });
     chart.getValueAxis().visualRange([10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3331,7 +3331,7 @@ QUnit.test('Data -> set visualRange -> update data, argument shift mode, adjustO
         argumentAxis: { visualRange: [3, 5] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3351,7 +3351,7 @@ QUnit.test('Data -> set visualRange -> update data, argument shift mode, adjustO
         argumentAxis: { visualRange: [3, 5] },
         valueAxis: { visualRange: { startValue: 10, endValue: 30 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3371,7 +3371,7 @@ QUnit.test('Data -> set visualRange -> update data, argument shift mode, adjustO
         argumentAxis: { visualRange: [3, 5] }
     });
     chart.option({ valueAxis: { visualRange: [10, 30] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3391,7 +3391,7 @@ QUnit.test('Data -> set visualRange -> update data, argument shift mode, adjustO
         argumentAxis: { visualRange: [3, 5] }
     });
     chart.option('valueAxis.visualRange', [10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3411,7 +3411,7 @@ QUnit.test('Data -> set visualRange -> update data, argument shift mode, adjustO
         argumentAxis: { visualRange: [3, 5] }
     });
     chart.getValueAxis().visualRange([10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3453,7 +3453,7 @@ QUnit.test('Data -> set visualRange -> update data, argument reset mode, value k
             visualRange: [10, 30]
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3475,7 +3475,7 @@ QUnit.test('Data -> set visualRange -> update data, argument reset mode, value k
             visualRange: { startValue: 10, endValue: 30 }
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3497,7 +3497,7 @@ QUnit.test('Data -> set visualRange -> update data, argument reset mode, value k
         }
     });
     chart.option({ valueAxis: { visualRange: [10, 30] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3519,7 +3519,7 @@ QUnit.test('Data -> set visualRange -> update data, argument reset mode, value k
         }
     });
     chart.option('valueAxis.visualRange', [10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3541,7 +3541,7 @@ QUnit.test('Data -> set visualRange -> update data, argument reset mode, value k
         }
     });
     chart.getValueAxis().visualRange([10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3582,7 +3582,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode, value re
             visualRange: [10, 30]
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3605,7 +3605,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode, value re
             visualRange: { startValue: 10, endValue: 30 }
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3628,7 +3628,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode, value re
         }
     });
     chart.option({ valueAxis: { visualRange: [10, 30] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3651,7 +3651,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode, value re
         }
     });
     chart.option('valueAxis.visualRange', [10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3674,7 +3674,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode, value re
         }
     });
     chart.getValueAxis().visualRange([10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3715,7 +3715,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode, value re
             visualRange: [10, 30]
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3738,7 +3738,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode, value re
             visualRange: { startValue: 10, endValue: 30 }
         }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3761,7 +3761,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode, value re
         }
     });
     chart.option({ valueAxis: { visualRange: [10, 30] } });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3784,7 +3784,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode, value re
         }
     });
     chart.option('valueAxis.visualRange', [10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3807,7 +3807,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode, value re
         }
     });
     chart.getValueAxis().visualRange([10, 30]);
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource });
 
@@ -3846,7 +3846,7 @@ QUnit.test('Data -> update data and visualRange, argument reset mode - take give
         argumentAxis: { visualRange: [1, 5] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({
         dataSource: newDataSource,
@@ -3895,7 +3895,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode -> reset 
     });
     chart.option({ dataSource: newDataSource1 });
     chart.resetVisualRange();
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource2 });
 
@@ -3916,7 +3916,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode -> reset 
     });
     chart.option({ dataSource: newDataSource1 });
     chart.resetVisualRange();
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource2 });
 
@@ -3937,7 +3937,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode -> reset 
     chart.option({ valueAxis: { visualRange: [10, 30] } });
     chart.option({ dataSource: newDataSource1 });
     chart.resetVisualRange();
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource2 });
 
@@ -3958,7 +3958,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode -> reset 
     chart.option('valueAxis.visualRange', [10, 30]);
     chart.option({ dataSource: newDataSource1 });
     chart.resetVisualRange();
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource2 });
 
@@ -3979,7 +3979,7 @@ QUnit.test('Data -> set visualRange -> update data, argument keep mode -> reset 
     chart.getValueAxis().visualRange([10, 30]);
     chart.option({ dataSource: newDataSource1 });
     chart.resetVisualRange();
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ dataSource: newDataSource2 });
 
@@ -4016,7 +4016,7 @@ QUnit.test('Data -> update data -> scroll argument, adjustOnZoom true - show adj
         argumentAxis: { visualRange: [3, 5] }
     });
     chart.option({ dataSource: newDataSource1 });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [2, 4] } });
 
@@ -4034,7 +4034,7 @@ QUnit.test('Data -> update data -> scroll argument, adjustOnZoom true - show adj
         argumentAxis: { visualRange: [3, 5] }
     });
     chart.option({ dataSource: newDataSource1 });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: { startValue: 2, endValue: 4 } } });
 
@@ -4054,7 +4054,7 @@ QUnit.test('Data -> update data -> scroll argument, adjustOnZoom true - show adj
         argumentAxis: { visualRange: [3, 5] }
     });
     chart.option({ dataSource: newDataSource1 });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [2, 4]);
 
@@ -4074,7 +4074,7 @@ QUnit.test('Data -> update data -> scroll argument, adjustOnZoom true - show adj
         argumentAxis: { visualRange: [3, 5] }
     });
     chart.option({ dataSource: newDataSource1 });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getArgumentAxis().visualRange([2, 4]);
 
@@ -4103,7 +4103,7 @@ QUnit.test('Argument Axis. Reset visualRange with null option', function(assert)
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [null, null] } });
 
@@ -4122,7 +4122,7 @@ QUnit.test('Argument Axis. Reset visualRange with null option', function(assert)
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: { startValue: 10, endValue: 30 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: [null, null] } });
 
@@ -4141,7 +4141,7 @@ QUnit.test('Argument Axis. Reset visualRange with null option', function(assert)
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', [null, null]);
 
@@ -4160,7 +4160,7 @@ QUnit.test('Argument Axis. Reset visualRange with null option', function(assert)
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getArgumentAxis().visualRange([null, null]);
 
@@ -4180,7 +4180,7 @@ QUnit.test('Argument Axis. Reset visualRange with null option', function(assert)
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: { startValue: null, endValue: null } } });
 
@@ -4199,7 +4199,7 @@ QUnit.test('Argument Axis. Reset visualRange with null option', function(assert)
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: { startValue: 10, endValue: 30 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ argumentAxis: { visualRange: { startValue: null, endValue: null } } });
 
@@ -4218,7 +4218,7 @@ QUnit.test('Argument Axis. Reset visualRange with null option', function(assert)
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('argumentAxis.visualRange', { startValue: null, endValue: null });
 
@@ -4237,7 +4237,7 @@ QUnit.test('Argument Axis. Reset visualRange with null option', function(assert)
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getArgumentAxis().visualRange({ startValue: null, endValue: null });
 
@@ -4266,7 +4266,7 @@ QUnit.test('Value Axis. Reset visualRange with null option', function(assert) {
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ valueAxis: { visualRange: [null, null] } });
 
@@ -4285,7 +4285,7 @@ QUnit.test('Value Axis. Reset visualRange with null option', function(assert) {
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: { startValue: 10, endValue: 30 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ valueAxis: { visualRange: [null, null] } });
 
@@ -4304,7 +4304,7 @@ QUnit.test('Value Axis. Reset visualRange with null option', function(assert) {
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('valueAxis.visualRange', [null, null]);
 
@@ -4323,7 +4323,7 @@ QUnit.test('Value Axis. Reset visualRange with null option', function(assert) {
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getValueAxis().visualRange([null, null]);
 
@@ -4342,7 +4342,7 @@ QUnit.test('Value Axis. Reset visualRange with null option', function(assert) {
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ valueAxis: { visualRange: { startValue: null, endValue: null } } });
 
@@ -4361,7 +4361,7 @@ QUnit.test('Value Axis. Reset visualRange with null option', function(assert) {
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: { startValue: 10, endValue: 30 } }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option({ valueAxis: { visualRange: { startValue: null, endValue: null } } });
 
@@ -4380,7 +4380,7 @@ QUnit.test('Value Axis. Reset visualRange with null option', function(assert) {
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.option('valueAxis.visualRange', { startValue: null, endValue: null });
 
@@ -4399,7 +4399,7 @@ QUnit.test('Value Axis. Reset visualRange with null option', function(assert) {
         argumentAxis: { visualRange: [2, 4] },
         valueAxis: { visualRange: [10, 30] }
     });
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
 
     chart.getValueAxis().visualRange({ startValue: null, endValue: null });
 
