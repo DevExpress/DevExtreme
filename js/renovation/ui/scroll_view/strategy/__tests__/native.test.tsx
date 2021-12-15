@@ -67,7 +67,6 @@ describe('Native > View', () => {
       disabled: false,
       forceGeneratePockets: false,
       needScrollViewContentWrapper: false,
-      needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
       pullDownEnabled: false,
       pulledDownText: 'Release to refresh...',
