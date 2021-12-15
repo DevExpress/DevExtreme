@@ -2201,7 +2201,7 @@ QUnit.module('filter length restriction', {
 
         this.dataSource.load();
 
-        this.load.reset();
+        this.load.resetHistory();
 
         this.createDeferredSelection = function(data, options) {
             return createDeferredSelection(data, options, this.dataSource);

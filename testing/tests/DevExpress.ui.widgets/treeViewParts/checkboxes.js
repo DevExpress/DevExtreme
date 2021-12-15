@@ -309,7 +309,7 @@ QUnit.module('T988756', () => {
         assert.ok('no error is thrown');
         assert.equal(selectAllStub.callCount, 1, 'onSelectAllValueChanged is fired only once');
 
-        selectAllStub.reset();
+        selectAllStub.resetHistory();
         wrapper.instance.option('showCheckBoxesMode', 'none');
         clickByItemCheckbox(wrapper, 'item1');
         assert.ok('no error is thrown');
@@ -334,7 +334,7 @@ QUnit.module('T988756', () => {
         assert.ok('no error is thrown');
         assert.equal(selectAllStub.callCount, 1, 'onSelectAllValueChanged is fired only once');
 
-        selectAllStub.reset();
+        selectAllStub.resetHistory();
         wrapper.instance.option('showCheckBoxesMode', 'normal');
         clickByItemCheckbox(wrapper, 'item1');
         assert.ok('no error is thrown');

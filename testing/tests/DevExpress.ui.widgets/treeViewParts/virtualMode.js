@@ -1466,7 +1466,7 @@ module('Loadindicator', () => {
                     clock.tick(400);
 
                     const $toggleItem = treeView.getToggleItemVisibility(treeView.getNodes().eq(0));
-                    contentReadyHandler.reset();
+                    contentReadyHandler.resetHistory();
 
                     eventsEngine.trigger($toggleItem, 'dxclick');
                     eventsEngine.trigger($toggleItem, 'dxclick');

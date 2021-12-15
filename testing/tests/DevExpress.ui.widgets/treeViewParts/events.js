@@ -945,7 +945,7 @@ QUnit.test('onItemRendered event arguments', function(assert) {
         node: treeView.instance.getNodes()[0]
     });
 
-    onItemRenderedHandler.reset();
+    onItemRenderedHandler.resetHistory();
     treeView.instance.expandItem('1');
 
     assert.strictEqual(onItemRenderedHandler.callCount, 2);

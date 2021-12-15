@@ -1572,7 +1572,7 @@ QUnit.module('keyboard navigation', {
 
         assert.equal(itemClickHandler.callCount, 1, 'handler.callCount');
         assert.equal(itemClickHandler.args[0][0].itemData.id, '1_2', 'handler.itemData');
-        itemClickHandler.reset();
+        itemClickHandler.resetHistory();
 
         this.keyboard
             .press('down')
@@ -1584,7 +1584,7 @@ QUnit.module('keyboard navigation', {
 
         assert.equal(itemClickHandler.callCount, 1, 'handler.callCount');
         assert.equal(itemClickHandler.args[0][0].itemData.id, '2_2', 'handler.itemData');
-        itemClickHandler.reset();
+        itemClickHandler.resetHistory();
 
         this.keyboard
             .press('down')
@@ -2857,7 +2857,7 @@ function transferActionTest(eventName, expectedArgs, triggerFunc) {
             assert.ok(handler.getCall(0).args[0], argument + ' is exist in parameters');
         });
 
-        handler.reset();
+        handler.resetHistory();
         menu.off(eventName);
         triggerFunc(treeView);
         assert.equal(handler.callCount, 0, 'handler for \'on\' was not executed after unsubscribe');
@@ -2880,7 +2880,7 @@ function transferActionTest(eventName, expectedArgs, triggerFunc) {
             assert.ok(handler.getCall(0).args[0][argument], argument + ' is exist in parameters');
         });
 
-        handler.reset();
+        handler.resetHistory();
         menu.option(optionName, undefined);
         triggerFunc(treeView);
         assert.equal(handler.callCount, 0, 'handler for option was not executed after unsubscribe');

@@ -350,12 +350,12 @@ QUnit.module('Edit data sources (T887281)', moduleConfig, () => {
             validation: { autoUpdateParentTasks: true }
         };
         this.createInstance(options);
-        this.clock.tick(200);
+        this.clock.tick(210);
 
         const titleText = $(this.instance._treeList.getCellElement(0, 0)).text();
         assert.equal(titleText, tasks[0].title, 'title cell text is right');
 
-        this.clock.tick(200);
+        this.clock.tick(210);
         const taskText = this.$element.find(Consts.TASK_WRAPPER_SELECTOR).first().text();
         assert.equal(taskText, tasks[0].title, 'Custom task text works correctly');
     });

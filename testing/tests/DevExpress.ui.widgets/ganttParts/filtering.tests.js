@@ -91,7 +91,7 @@ QUnit.module('Filtering', moduleConfig, () => {
         };
 
         this.createInstance(options);
-        this.clock.tick();
+        this.clock.tick(300);
         assert.equal(this.$element.find(Consts.TASK_SELECTOR).length, 2);
         this.instance._treeList.clearFilter();
         this.clock.tick(300);
