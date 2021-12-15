@@ -43,7 +43,7 @@ const createSeries = function(options, renderSettings) {
         seriesGroup: renderer.g()
     }, renderSettings);
 
-    renderer.stub('g').reset();
+    renderer.stub('g').resetHistory();
     return new Series(renderSettings, options);
 };
 
@@ -60,7 +60,7 @@ const createPoint = function(series, data) {
 
 function resetStub(stub) {
     $.each(stub, function(_, stubFunc) {
-        stubFunc && stubFunc.reset && stubFunc.reset();
+        stubFunc && stubFunc.reset && stubFunc.resetHistory();
     });
 }
 
@@ -391,8 +391,8 @@ const checkTwoGroups = function(assert, series) {
 
         series.draw(true);
         $.each(series.getPoints(), function(_, p) {
-            p.animate.reset();
-            p.draw.reset();
+            p.animate.resetHistory();
+            p.draw.resetHistory();
         });
         // Act
         series.draw(true);
@@ -713,7 +713,7 @@ const checkTwoGroups = function(assert, series) {
         series.setMaxPointsCount(data.length);
         series.updateData(data);
         series.createPoints();
-        series.getOptions().mainSeriesColor.reset();
+        series.getOptions().mainSeriesColor.resetHistory();
         series.updateData(data);
         series.createPoints();
 

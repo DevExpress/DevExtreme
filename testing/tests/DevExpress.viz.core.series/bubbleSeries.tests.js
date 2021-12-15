@@ -39,7 +39,7 @@ const createSeries = function(options, renderSettings) {
         incidentOccurred: $.noop
     }, renderSettings);
 
-    renderer.stub('g').reset();
+    renderer.stub('g').resetHistory();
     return new Series(renderSettings, options);
 };
 
@@ -69,8 +69,8 @@ const environment = {
             stub.argument = 1;
             stub.hasValue.returns(true);
             stub.isInVisibleArea.returns(true);
-            stub.draw.reset();
-            stub.animate.reset();
+            stub.draw.resetHistory();
+            stub.animate.resetHistory();
             return stub;
         });
     },

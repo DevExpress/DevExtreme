@@ -165,7 +165,7 @@ QUnit.test('Hide', function(assert) {
     const label = this.createLabel();
 
     label.show();
-    label._group.stub('attr').reset();
+    label._group.stub('attr').resetHistory();
 
     // act
     label.hide();
@@ -178,7 +178,7 @@ QUnit.test('T561563. Show already shown label - do not correct label position', 
     const label = this.createLabel();
     label.show();
     label.hide();
-    label._point.correctLabelPosition.reset();
+    label._point.correctLabelPosition.resetHistory();
     label.show();
 
     assert.equal(label._group.stub('attr').callCount, 3);
@@ -190,7 +190,7 @@ QUnit.test('Draw(true) -> draw(false) -> show - correct label position (containe
     const label = this.createLabel();
     label.draw(true);
     label.draw(false);
-    label._point.correctLabelPosition.reset();
+    label._point.correctLabelPosition.resetHistory();
     label.show();
 
     assert.equal(label._group.stub('attr').callCount, 3);
@@ -234,7 +234,7 @@ QUnit.test('Rotation angle can be reseted', function(assert) {
 
 QUnit.test('Draw() - hide label', function(assert) {
     const label = this.createLabel().draw(true);
-    label._point.correctLabelPosition.reset();
+    label._point.correctLabelPosition.resetHistory();
 
     label.draw();
 
@@ -972,7 +972,7 @@ QUnit.test('Set options on empty text', function(assert) {
         return '';
     };
     label.setData({ argument: 10, value: 10 });
-    label._group.stub('attr').reset();
+    label._group.stub('attr').resetHistory();
     label.setOptions(this.options);
     label.show();
 

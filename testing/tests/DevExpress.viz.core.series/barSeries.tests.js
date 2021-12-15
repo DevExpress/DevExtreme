@@ -41,7 +41,7 @@ const createSeries = function(options, renderSettings) {
         seriesGroup: renderer.g(),
     }, renderSettings);
 
-    renderer.stub('g').reset();
+    renderer.stub('g').resetHistory();
     return new Series(renderSettings, options);
 };
 
@@ -71,8 +71,8 @@ const environment = {
             stub.hasValue.returns(true);
             stub.hasCoords.returns(true);
             stub.isInVisibleArea.returns(true);
-            stub.draw.reset();
-            stub.animate.reset();
+            stub.draw.resetHistory();
+            stub.animate.resetHistory();
             return stub;
         });
     },

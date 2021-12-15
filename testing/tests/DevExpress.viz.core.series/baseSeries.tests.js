@@ -186,19 +186,19 @@ const environmentWithSinonStubPoint = {
             stub.hasValue.returns(true);
             stub.hasCoords.returns(true);
             stub.isInVisibleArea.returns(true);
-            stub.draw.reset();
-            stub.update.reset();
-            stub.coordsIn.reset();
-            stub.applyView.reset();
-            stub.setView.reset();
-            stub.resetView.reset();
-            stub.animate.reset();
-            stub.clearVisibility.reset();
-            stub.setInvisibility.reset();
-            stub.hideMarker.reset();
+            stub.draw.resetHistory();
+            stub.update.resetHistory();
+            stub.coordsIn.resetHistory();
+            stub.applyView.resetHistory();
+            stub.setView.resetHistory();
+            stub.resetView.resetHistory();
+            stub.animate.resetHistory();
+            stub.clearVisibility.resetHistory();
+            stub.setInvisibility.resetHistory();
+            stub.hideMarker.resetHistory();
             stub.visibleTopMarker = true;
             stub.visibleBottomMarker = true;
-            stub.hide.reset();
+            stub.hide.resetHistory();
             stub.isHovered.returns(false);
             stub.isSelected.returns(false);
             stub.coordsIn.returns(false);
@@ -1264,8 +1264,8 @@ QUnit.test('Update marker group', function(assert) {
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
 
     series.draw(true);
-    series._markersGroup.stub('attr').reset();
-    this.renderer.stub('g').reset();
+    series._markersGroup.stub('attr').resetHistory();
+    this.renderer.stub('g').resetHistory();
 
     series.draw(true);
 
@@ -1295,8 +1295,8 @@ QUnit.test('marker group style after updating', function(assert) {
 
     series.draw(true);
 
-    series._markersGroup.stub('attr').reset();
-    this.renderer.stub('g').reset();
+    series._markersGroup.stub('attr').resetHistory();
+    this.renderer.stub('g').resetHistory();
 
     const newOptions = $.extend(true, {}, appliedOptions);
     newOptions.point.color = 'green';
@@ -1365,11 +1365,11 @@ QUnit.test('Update marker group. Financial', function(assert) {
 
     series.draw(true);
 
-    series._markersGroup.defaultMarkersGroup.stub('attr').reset();
-    series._markersGroup.reductionMarkersGroup.stub('attr').reset();
-    series._markersGroup.defaultPositiveMarkersGroup.stub('attr').reset();
-    series._markersGroup.reductionPositiveMarkersGroup.stub('attr').reset();
-    this.renderer.stub('g').reset();
+    series._markersGroup.defaultMarkersGroup.stub('attr').resetHistory();
+    series._markersGroup.reductionMarkersGroup.stub('attr').resetHistory();
+    series._markersGroup.defaultPositiveMarkersGroup.stub('attr').resetHistory();
+    series._markersGroup.reductionPositiveMarkersGroup.stub('attr').resetHistory();
+    this.renderer.stub('g').resetHistory();
 
     series.draw(true);
 
@@ -1398,11 +1398,11 @@ QUnit.test('marker group style after updating. Financial', function(assert) {
 
     series.draw(true);
 
-    series._markersGroup.defaultMarkersGroup.stub('attr').reset();
-    series._markersGroup.reductionMarkersGroup.stub('attr').reset();
-    series._markersGroup.defaultPositiveMarkersGroup.stub('attr').reset();
-    series._markersGroup.reductionPositiveMarkersGroup.stub('attr').reset();
-    this.renderer.stub('g').reset();
+    series._markersGroup.defaultMarkersGroup.stub('attr').resetHistory();
+    series._markersGroup.reductionMarkersGroup.stub('attr').resetHistory();
+    series._markersGroup.defaultPositiveMarkersGroup.stub('attr').resetHistory();
+    series._markersGroup.reductionPositiveMarkersGroup.stub('attr').resetHistory();
+    this.renderer.stub('g').resetHistory();
 
     const newOptions = $.extend(true, {}, appliedOptions);
     newOptions.color = 'green';
@@ -1454,8 +1454,8 @@ QUnit.test('Update label group', function(assert) {
 
     series.draw(false);
 
-    series._labelsGroup.stub('attr').reset();
-    this.renderer.stub('g').reset();
+    series._labelsGroup.stub('attr').resetHistory();
+    this.renderer.stub('g').resetHistory();
 
     series.draw(false);
 
@@ -2282,8 +2282,8 @@ QUnit.test('setSelectionState when hover with includePointState', function(asser
     series.createPoints();
 
     series.hover('includePoints');
-    series.getAllPoints()[0].setView.reset();
-    series.getAllPoints()[0].resetView.reset();
+    series.getAllPoints()[0].setView.resetHistory();
+    series.getAllPoints()[0].resetView.resetHistory();
 
     // act
     series.select();
@@ -2307,8 +2307,8 @@ QUnit.test('clean hover with \'includePoints mode\' after select series', functi
     series.hover('includePoints');
     series.select();
 
-    series.getAllPoints()[0].setView.reset();
-    series.getAllPoints()[0].resetView.reset();
+    series.getAllPoints()[0].setView.resetHistory();
+    series.getAllPoints()[0].resetView.resetHistory();
     // act
     series.clearHover();
 
@@ -2329,8 +2329,8 @@ QUnit.test('clean selection with \'excludePoints mode\' if series is hovered', f
     series.hover('includePoints');
     series.select();
 
-    series.getAllPoints()[0].setView.reset();
-    series.getAllPoints()[0].resetView.reset();
+    series.getAllPoints()[0].setView.resetHistory();
+    series.getAllPoints()[0].resetView.resetHistory();
     // act
     series.clearSelection();
 
@@ -2350,8 +2350,8 @@ QUnit.test('select series when hover with allSeriesPoints', function(assert) {
     series.createPoints();
 
     series.hover('allSeriesPoints');
-    series.getAllPoints()[0].setView.reset();
-    series.getAllPoints()[0].resetView.reset();
+    series.getAllPoints()[0].setView.resetHistory();
+    series.getAllPoints()[0].resetView.resetHistory();
     // act
     series.select();
 
@@ -2865,8 +2865,8 @@ QUnit.test('updateHover after release series hover', function(assert) {
     series.updateHover(10, 20);
     series.clearHover();
     $.each(series.getPoints(), function(i, p) {
-        p.setView.reset();
-        p.resetView.reset();
+        p.setView.resetHistory();
+        p.resetView.resetHistory();
     });
     // act
 
@@ -2897,7 +2897,7 @@ QUnit.test('Set hover state - update - release hover - set hover update', functi
 
     series.updateHover(10, 20);
     series.clearHover();
-    series.getPoints()[1].setView.reset();
+    series.getPoints()[1].setView.resetHistory();
     series.hover();
     // act
 
@@ -2924,8 +2924,8 @@ QUnit.test('reset nearest point on select', function(assert) {
     series.hover();
     series.updateHover(10, 20);
 
-    series.getPoints()[1].setView.reset();
-    series.getPoints()[1].resetView.reset();
+    series.getPoints()[1].setView.resetHistory();
+    series.getPoints()[1].resetView.resetHistory();
     // act
     series.select();
 
@@ -3205,8 +3205,8 @@ QUnit.test('hover selected series with excludePoints mode', function(assert) {
     series.createPoints();
 
     series.select();
-    series.getAllPoints()[0].setView.reset();
-    series.getAllPoints()[0].resetView.reset();
+    series.getAllPoints()[0].setView.resetHistory();
+    series.getAllPoints()[0].resetView.resetHistory();
     // act
     series.hover();
 
@@ -3261,8 +3261,8 @@ QUnit.test('hover selected series', function(assert) {
     const point = series.getAllPoints()[0];
 
     series.select();
-    point.setView.reset();
-    point.resetView.reset();
+    point.setView.resetHistory();
+    point.resetView.resetHistory();
     // act
     series.hover();
 
@@ -3283,8 +3283,8 @@ QUnit.test('clear selection hovered', function(assert) {
     series.select();
     series.hover();
 
-    point.setView.reset();
-    point.resetView.reset();
+    point.setView.resetHistory();
+    point.resetView.resetHistory();
     // act
     series.clearSelection();
 
@@ -3397,8 +3397,8 @@ QUnit.test('hover with includePoints mode selected series', function(assert) {
 
     series.select();
     const point = series.getAllPoints()[0];
-    point.setView.reset();
-    point.resetView.reset();
+    point.setView.resetHistory();
+    point.resetView.resetHistory();
     // act
     series.hover();
 
@@ -3420,8 +3420,8 @@ QUnit.test('Select hovered with include series mode', function(assert) {
 
     series.hover();
 
-    point.setView.reset();
-    point.resetView.reset();
+    point.setView.resetHistory();
+    point.resetView.resetHistory();
     // act
     series.select();
 
@@ -3443,8 +3443,8 @@ QUnit.test('Clear selection when series is hovered with \'includePoints\' mode',
     series.hover();
     series.select();
 
-    point.setView.reset();
-    point.resetView.reset();
+    point.setView.resetHistory();
+    point.resetView.resetHistory();
 
     // act
     series.clearSelection();
@@ -3472,8 +3472,8 @@ QUnit.test('Clear hover selected series', function(assert) {
     series.select();
     series.hover();
 
-    point.setView.reset();
-    point.resetView.reset();
+    point.setView.resetHistory();
+    point.resetView.resetHistory();
     // act
     series.clearHover();
 
@@ -3499,8 +3499,8 @@ QUnit.test('Update hover selected series', function(assert) {
     series.select();
     series.hover();
 
-    point.setView.reset();
-    point.resetView.reset();
+    point.setView.resetHistory();
+    point.resetView.resetHistory();
     // act
     series.updateHover(5, 20);
 
@@ -3536,7 +3536,7 @@ QUnit.test('Select point', function(assert) {
 
 QUnit.test('Select point - hovered point', function(assert) {
     this.series.hoverPoint(this.point);
-    this.point.applyView.reset();
+    this.point.applyView.resetHistory();
     // act
     this.series.selectPoint(this.point);
 
@@ -3546,7 +3546,7 @@ QUnit.test('Select point - hovered point', function(assert) {
 
 QUnit.test('Select point - not hovered point - hovered series - not selected series', function(assert) {
     this.series.hover('includePoints');
-    this.point.applyView.reset();
+    this.point.applyView.resetHistory();
     // act
     this.series.selectPoint(this.point);
 
@@ -3603,7 +3603,7 @@ QUnit.test('setHoverState with selected view', function(assert) {
 QUnit.test('Release selected point - not hovered point - not hovered series - not selected series', function(assert) {
     this.series.selectPoint(this.point);
     this.point.isSelected.returns(true);
-    this.point.applyView.reset();
+    this.point.applyView.resetHistory();
     // act
     this.series.deselectPoint(this.point);
 
@@ -3616,7 +3616,7 @@ QUnit.test('Release selected point - hovered point - not hovered series - not se
     this.point.isSelected.returns(true);
     this.series.hoverPoint(this.point);
     this.point.isHovered.returns(true);
-    this.point.applyView.reset();
+    this.point.applyView.resetHistory();
     // act
     this.series.deselectPoint(this.point);
 
@@ -4789,7 +4789,7 @@ QUnit.test('call event pipe on clearHover', function(assert) {
     series.updateData([{ arg: 1, val: 1 }]);
     series.createPoints();
     series.getAllPoints()[0].isHovered.returns(true);
-    eventPipe.reset();
+    eventPipe.resetHistory();
     // act
     series.clearPointHover();
     // assert
@@ -4938,7 +4938,7 @@ QUnit.test('Hover series in hovered state', function(assert) {
     const eventTrigger = sinon.spy();
     const series = createSeries({}, { eventTrigger: eventTrigger });
     series.hover();
-    eventTrigger.reset();
+    eventTrigger.resetHistory();
     // act
     series.hover();
     // assert
@@ -4963,7 +4963,7 @@ QUnit.test('Call pointHover twice', function(assert) {
     series.createPoints();
 
     series.getAllPoints()[0].isHovered.returns(true);
-    eventTrigger.reset();
+    eventTrigger.resetHistory();
     // act
     series.hoverPoint(series.getAllPoints()[0]);
     // assert
@@ -5192,7 +5192,7 @@ QUnit.test('reset hovered series with aggregation', function(assert) {
     series.createPoints();
     series.getPointByPos(0).isHovered.returns(true);
     series.hover();
-    series.getPointByPos(0).resetView.reset();
+    series.getPointByPos(0).resetView.resetHistory();
     series.clearHover();
     assert.equal(series.getPointByPos(0).resetView.callCount, 1);
 });

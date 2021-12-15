@@ -1468,7 +1468,7 @@ QUnit.test('show after hide point', function(assert) {
     const point = createPoint(this.series, { argument: 'cat2', value: 10, minValue: 0 }, this.opt);
 
     point.hide();
-    this.visibilityChanged.reset();
+    this.visibilityChanged.resetHistory();
     point.show();
 
     assert.ok(point.isVisible());

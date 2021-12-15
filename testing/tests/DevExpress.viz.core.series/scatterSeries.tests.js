@@ -46,7 +46,7 @@ const createSeries = function(options, renderSettings) {
         argumentAxis: new MockAxis({ renderer: renderer })
     }, renderSettings);
 
-    renderer.stub('g').reset();
+    renderer.stub('g').resetHistory();
     return new Series(renderSettings, options);
 };
 
@@ -65,7 +65,7 @@ const mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), 
 
 function resetStub(stub) {
     $.each(stub, function(_, stubFunc) {
-        stubFunc && stubFunc.reset && stubFunc.reset();
+        stubFunc && stubFunc.reset && stubFunc.resetHistory();
     });
 }
 

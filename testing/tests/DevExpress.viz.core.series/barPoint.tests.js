@@ -1493,7 +1493,7 @@ QUnit.module('Draw label', $.extend({}, environment, {
     createPoint: function() {
         const p = createPoint(this.series, this.data, this.options);
         p._drawLabel(this.renderer, this.group);
-        p._label.draw.reset();
+        p._label.draw.resetHistory();
         return p;
     }
 }));

@@ -75,7 +75,7 @@ const environment = {
 
 function resetStub(stub) {
     $.each(stub, function(_, stubFunc) {
-        stubFunc && stubFunc.reset && stubFunc.reset();
+        stubFunc && stubFunc.reset && stubFunc.resetHistory();
     });
 }
 

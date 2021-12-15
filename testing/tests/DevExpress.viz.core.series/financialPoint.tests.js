@@ -1155,7 +1155,7 @@ QUnit.test('Update marker location', function(assert) {
     point.openY = 20;
     point.closeY = 30;
     point.highY = 40;
-    point.graphic.stub('attr').reset();
+    point.graphic.stub('attr').resetHistory();
 
     point.draw(this.renderer, this.groups);
 
@@ -1418,7 +1418,7 @@ QUnit.test('Update marker location', function(assert) {
     point.openY = 30;
     point.closeY = 40;
     point.highY = 50;
-    point.graphic.stub('attr').reset();
+    point.graphic.stub('attr').resetHistory();
 
     point.draw(this.renderer, this.groups);
 
@@ -1824,7 +1824,7 @@ QUnit.test('Update marker group', function(assert) {
     point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
-    point.graphic.stub('append').reset();
+    point.graphic.stub('append').resetHistory();
 
     point.fullState = 1;
     point.applyView();
