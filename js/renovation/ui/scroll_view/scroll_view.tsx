@@ -65,7 +65,6 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       reachBottomText={reachBottomText}
       forceGeneratePockets
       needScrollViewContentWrapper
-      needScrollViewLoadPanel
       // Native
       useSimulatedScrollbar={useSimulatedScrollbar}
       // Simulated
