@@ -62,10 +62,10 @@ export class Paging extends JSXComponent(PagingProps) {
   updatePagingProps(): void {
     this.plugins.set(PagingPlugin, {
       pageIndex: this.props.pageIndex,
-      setPageIndex: this.setPageIndex.bind(this),
+      setPageIndex: this.setPageIndex,
 
       pageSize: this.pageSize,
-      setPageSize: this.setPageSize.bind(this),
+      setPageSize: this.setPageSize,
 
       totalCount: this.totalCount,
 
