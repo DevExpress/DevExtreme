@@ -810,7 +810,7 @@ const Form = Widget.inherit({
         const optionName = getOptionNameFromFullName(fullName);
 
         if(optionName === 'template') {
-            // return false; // force rerender to call _tryPrepareGroupItem and rerender template
+            return false; // force rerender to call _tryPrepareGroupItem and rerender template
         }
 
         if(optionName === 'items' && nameParts.length > 1) {
