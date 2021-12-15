@@ -464,7 +464,7 @@ QUnit.module('Deprecated options', {
 
     QUnit.test('Warning messages not displaying if deprecated "height" option not used', function(assert) {
         assert.expect(1);
-        this.stub = sinon.stub(errors).callsFake('log', () => {
+        this.stub = sinon.stub(errors, 'log').callsFake(() => {
             assert.strictEqual(true, false, 'error.log should not be called');
         });
 
@@ -768,8 +768,8 @@ QUnit.module('disabled state', () => {
                                 eventsEngine.trigger($button, 'dxclick');
                                 checkClickHandlers(assert, itemClickHandler, buttonClickHandler, expectedButtonValue, expectedToolbarValue, locateInMenu);
 
-                                itemClickHandler.reset();
-                                buttonClickHandler.reset();
+                                itemClickHandler.resetHistory();
+                                buttonClickHandler.resetHistory();
 
                                 if(changeDisabledOrder) {
                                     $button.dxButton('option', 'disabled', isButtonDisabledNew);

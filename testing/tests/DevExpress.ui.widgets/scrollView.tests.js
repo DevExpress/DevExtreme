@@ -505,7 +505,7 @@ QUnit.module('actions', moduleConfig, () => {
             disabled: true
         });
 
-        onUpdatedHandler.reset();
+        onUpdatedHandler.resetHistory();
 
         $scrollView.dxScrollView('instance').finishLoading();
         pointerMock($scrollView.find('.content1')).start().down();
@@ -1240,7 +1240,7 @@ QUnit.module('api', moduleConfig, () => {
             useNative: false,
             onUpdated: onUpdatedHandler
         });
-        onUpdatedHandler.reset();
+        onUpdatedHandler.resetHistory();
 
         $scrollView.dxScrollView('release');
 
@@ -1287,7 +1287,7 @@ QUnit.module('api', moduleConfig, () => {
             .move(0, $topPocket.height() + 1)
             .up();
 
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     QUnit.test('release calls update for scrollbar', function(assert) {
@@ -1320,7 +1320,7 @@ QUnit.module('api', moduleConfig, () => {
             .move(0, $container.height() - $content.height() - $topPocket.height() - 10)
             .up();
 
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     QUnit.test('release calls moveToBound location immediately when state is released', function(assert) {
@@ -1849,7 +1849,7 @@ QUnit.module('native pullDown strategy', {
             onUpdated: onUpdatedHandler
         });
 
-        onUpdatedHandler.reset();
+        onUpdatedHandler.resetHistory();
 
         const clock = sinon.useFakeTimers();
         try {
@@ -2177,7 +2177,7 @@ QUnit.module('native swipeDown strategy', {
             onUpdated: onUpdatedHandler
         });
 
-        onUpdatedHandler.reset();
+        onUpdatedHandler.resetHistory();
 
         const clock = sinon.useFakeTimers();
         try {
