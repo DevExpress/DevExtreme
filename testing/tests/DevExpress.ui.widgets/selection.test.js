@@ -2231,10 +2231,25 @@ QUnit.test('Remove template property from filter value', function(assert) {
         selectionFilter: [['id', '=', { id: 2, template: 'content' }]]
     });
 
-    // act
     selection.getSelectedItemKeys().done();
-    // assert
+
     assert.equal(this.load.lastCall.args[0].filter[0][2].template, undefined);
+});
+
+QUnit.test('Remove template property from each filter value', function(assert) {
+    const selection = this.createDeferredSelection(this.data, {
+        selectionFilter: [
+            ['id', '=', { id: 1, template: 'content' }],
+            ['id', '=', { id: 2, template: 'content' }],
+            ['id', '=', { id: 3, template: 'content' }]
+        ]
+    });
+
+    selection.getSelectedItemKeys().done();
+
+    assert.equal(this.load.lastCall.args[0].filter[0][2].template, undefined);
+    assert.equal(this.load.lastCall.args[0].filter[1][2].template, undefined);
+    assert.equal(this.load.lastCall.args[0].filter[2][2].template, undefined);
 });
 
 QUnit.test('not pass filter to loadOptions', function(assert) {

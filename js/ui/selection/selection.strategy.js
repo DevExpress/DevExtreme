@@ -69,28 +69,20 @@ export default Class.inherit({
         return this.selectedItemKeys(keys, preserve, isDeselect, isSelectAll);
     },
 
-    _removeTemplateProp: function(filterItem) {
-        if(isObject(filterItem) && Object.prototype.hasOwnProperty.call(filterItem, 'template')) {
-            delete filterItem.template;
-        }
-    },
-
-    _prepareFilterValue: function(remoteFilter) {
+    _removeTemplateProperty: function(remoteFilter) {
         if(Array.isArray(remoteFilter)) {
-            remoteFilter.forEach((filterItem) => {
-                if(Array.isArray(filterItem)) {
-                    this._prepareFilterValue(filterItem);
-                } else {
-                    this._removeTemplateProp(filterItem);
-                }
-            });
+            return remoteFilter.map((f) => this._removeTemplateProperty(f));
+        }
+
+        if(isObject(remoteFilter)) {
+            delete remoteFilter.template;
         }
 
         return remoteFilter;
     },
 
     _loadFilteredData: function(remoteFilter, localFilter, select, isSelectAll) {
-        const filterLength = encodeURI(JSON.stringify(this._prepareFilterValue(remoteFilter))).length;
+        const filterLength = encodeURI(JSON.stringify(this._removeTemplateProperty(remoteFilter))).length;
         const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
         const deferred = new Deferred();
         const loadOptions = {
