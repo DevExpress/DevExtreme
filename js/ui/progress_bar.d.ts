@@ -65,7 +65,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      * @default 0
      * @public
      */
-    value?: number | boolean;
+    value?: number | false;
 }
 /**
  * @docid

@@ -84,7 +84,7 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
      dragOutsideBoundary?: boolean;
     /**
      * @docid
-     * @deprecated
+     * @deprecated dxOverlayOptions.wrapperAttr
      * @default {}
      * @public
      */

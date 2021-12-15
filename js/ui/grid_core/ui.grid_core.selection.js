@@ -192,15 +192,15 @@ const SelectionController = gridCore.Controller.inherit((function() {
         },
 
         _fireSelectionChanged: function(options) {
-            if(options) {
-                this.executeAction('onSelectionChanged', options);
-            }
-
             const argument = this.option('selection.deferred') ?
                 { selectionFilter: this.option('selectionFilter') } :
                 { selectedRowKeys: this.option('selectedRowKeys') };
 
             this.selectionChanged.fire(argument);
+
+            if(options) {
+                this.executeAction('onSelectionChanged', options);
+            }
         },
 
         _updateCheckboxesState: function(options) {

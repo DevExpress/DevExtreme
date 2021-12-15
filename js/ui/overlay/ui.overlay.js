@@ -1116,8 +1116,8 @@ const Overlay = Widget.inherit({
         this._positionController.updatePosition(this._getOptionValue('position'));
         this._renderWrapper();
         this._renderDimensions();
-        this._cacheDimensions();
         this._renderPosition();
+        this._cacheDimensions();
     },
 
     _renderPosition() {

@@ -803,6 +803,15 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.strictEqual($editor.attr('aria-invalid'), expectedFalseValue, 'aria-invalid does not exist in valid state');
         assert.strictEqual($editor.attr('aria-describedby'), undefined, 'aria-describedby does not exist in valid state');
     });
+
+    QUnit.test('"onMarkupRendered" is called after markup render (for validator integration)', function(assert) {
+        const markupRenderedStub = sinon.stub();
+        this.fixture.createEditor({
+            _onMarkupRendered: markupRenderedStub
+        });
+
+        assert.ok(markupRenderedStub.calledOnce);
+    });
 });
 
 QUnit.module('private api', moduleConfig, () => {

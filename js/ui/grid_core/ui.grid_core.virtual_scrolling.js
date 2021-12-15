@@ -291,10 +291,11 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
         },
         _handleDataLoading: function(options) {
             const loadPageCount = this.loadPageCount();
+            const pageSize = this.pageSize();
 
             options.loadPageCount = loadPageCount;
-            if(!options.isCustomLoading && this.option(LEGACY_SCROLLING_MODE) === false && loadPageCount > 1) {
-                options.storeLoadOptions.take = loadPageCount * this.pageSize();
+            if(!options.isCustomLoading && this.option(LEGACY_SCROLLING_MODE) === false && loadPageCount > 1 && pageSize > 0) {
+                options.storeLoadOptions.take = loadPageCount * pageSize;
             }
             this.callBase.apply(this, arguments);
         },
@@ -729,6 +730,15 @@ const VirtualScrollingRowsViewExtender = (function() {
                 $content = scrollable ? $(scrollable.content()) : this.element();
                 this.callBase(widths, $content.children('.' + this.addWidgetPrefix(CONTENT_CLASS)).children(':not(.' + this.addWidgetPrefix(TABLE_CONTENT_CLASS) + ')'));
             }
+        },
+
+        _restoreErrorRow: function() {
+            if(this.option(LEGACY_SCROLLING_MODE) === false) {
+                const errorHandling = this.getController('errorHandling');
+                errorHandling?.removeErrorRow();
+            }
+
+            this.callBase.apply(this, arguments);
         },
 
         dispose: function() {
