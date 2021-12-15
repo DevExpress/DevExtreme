@@ -1071,7 +1071,7 @@ QUnit.module('Appointments Keyboard Navigation', moduleOptions, () => {
 
         this.clock.tick();
         assert.ok(focusSpy.called, 'focus is called');
-        focusSpy.reset();
+        focusSpy.resetHistory();
 
         eventsEngine.trigger = initialTrigger;
     });
