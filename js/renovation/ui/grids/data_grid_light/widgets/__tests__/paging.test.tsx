@@ -164,5 +164,51 @@ describe('Paging', () => {
         expect(paging.dataSource).toEqual(dataSource);
       });
     });
+
+    describe('updatePagingProps', () => {
+      it('should set paging data for plugin', () => {
+        const setMock = jest.fn();
+
+        const paging = new Paging({
+          pageIndex: 1,
+          pageSize: 5,
+        });
+        paging.dataSource = generateData(10);
+
+        paging.plugins = {
+          set: setMock,
+        } as any;
+
+        paging.updatePagingProps();
+        expect(setMock.mock.calls[0][1]).toMatchObject({
+          pageIndex: 1,
+          pageSize: 5,
+          pageCount: 2,
+          totalCount: 10,
+          setPageIndex: paging.setPageIndex,
+          setPageSize: paging.setPageSize,
+        });
+      });
+    });
+  });
+
+  describe('Callbacks', () => {
+    describe('setPageIndex', () => {
+      it('should update props.pageIndex', () => {
+        const paging = new Paging({});
+        paging.setPageIndex(10);
+
+        expect(paging.props.pageIndex).toEqual(10);
+      });
+    });
+
+    describe('setPageSize', () => {
+      it('should update props.pageSize', () => {
+        const paging = new Paging({});
+        paging.setPageSize(10);
+
+        expect(paging.props.pageSize).toEqual(10);
+      });
+    });
   });
 });
