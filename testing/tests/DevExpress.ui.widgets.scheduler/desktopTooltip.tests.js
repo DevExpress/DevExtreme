@@ -43,14 +43,14 @@ const environment = {
         isButtonClick: false,
     },
     afterEach: function() {
-        stubCreateComponent.reset();
-        stubComponent.option.reset();
-        stubShowAppointmentPopup.reset();
-        stubAddDefaultTemplates.reset();
-        stubGetAppointmentTemplate.reset();
-        stubCreateFormattedDateText.reset();
-        stubCreateFormattedDateText.reset();
-        stubCheckAndDeleteAppointment.reset();
+        stubCreateComponent.resetHistory();
+        stubComponent.option.resetHistory();
+        stubShowAppointmentPopup.resetHistory();
+        stubAddDefaultTemplates.resetHistory();
+        stubGetAppointmentTemplate.resetHistory();
+        stubCreateFormattedDateText.resetHistory();
+        stubCreateFormattedDateText.resetHistory();
+        stubCheckAndDeleteAppointment.resetHistory();
     }
 };
 
