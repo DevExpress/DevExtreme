@@ -408,6 +408,8 @@ const Form = Widget.inherit({
         let items = that.option('items');
         const $content = that._getContent();
 
+        // TODO: Introduce this.preparedItems and use it for partial rerender???
+        // Compare new preparedItems with old preparedItems to detect what should be rerendered?
         items = that._prepareItems(items);
 
         //#DEBUG
