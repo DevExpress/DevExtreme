@@ -49,7 +49,6 @@ import combineRemoteFilter from './utils/filtering/remote';
 export const viewFunction = ({
   restAttributes,
   loadedResources,
-  currentViewProps,
   currentViewConfig,
   onViewRendered,
   setCurrentDate,
@@ -83,12 +82,6 @@ export const viewFunction = ({
     min,
     max,
     focusStateEnabled,
-    dataCellTemplate,
-    dateCellTemplate,
-    timeCellTemplate,
-    resourceCellTemplate,
-    appointmentTemplate,
-    appointmentCollectorTemplate,
   },
 }: Scheduler): JSX.Element => {
   const {
@@ -112,16 +105,14 @@ export const viewFunction = ({
     allowMultipleCellSelection,
     allDayPanelExpanded,
     type,
-  } = currentViewConfig;
 
-  // TODO: https://github.com/DevExpress/devextreme-renovation/issues/837
-  const validDataCellTemplate = currentViewProps.dataCellTemplate ?? dataCellTemplate;
-  const validDateCellTemplate = currentViewProps.dateCellTemplate ?? dateCellTemplate;
-  const validTimeCellTemplate = currentViewProps.timeCellTemplate ?? timeCellTemplate;
-  const validResourceCellTemplate = currentViewProps.resourceCellTemplate ?? resourceCellTemplate;
-  const validAppointmentTemplate = currentViewProps.appointmentTemplate ?? appointmentTemplate;
-  const validAppointmentCollectorTemplate = currentViewProps.appointmentCollectorTemplate
-    ?? appointmentCollectorTemplate;
+    dataCellTemplate,
+    dateCellTemplate,
+    timeCellTemplate,
+    resourceCellTemplate,
+    appointmentTemplate,
+    appointmentCollectorTemplate,
+  } = currentViewConfig;
 
   return (
     <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -187,18 +178,18 @@ export const viewFunction = ({
           allDayPanelExpanded={allDayPanelExpanded}
           onViewRendered={onViewRendered}
 
-          dataCellTemplate={validDataCellTemplate}
-          timeCellTemplate={validTimeCellTemplate}
-          dateCellTemplate={validDateCellTemplate}
-          resourceCellTemplate={validResourceCellTemplate}
+          dataCellTemplate={dataCellTemplate}
+          timeCellTemplate={timeCellTemplate}
+          dateCellTemplate={dateCellTemplate}
+          resourceCellTemplate={resourceCellTemplate}
 
           allDayAppointments={(
             <AppointmentLayout
               isAllDay
               appointments={appointmentsViewModel.allDay}
               overflowIndicators={appointmentsViewModel.allDayCompact}
-              appointmentTemplate={validAppointmentTemplate}
-              overflowIndicatorTemplate={validAppointmentCollectorTemplate}
+              appointmentTemplate={appointmentTemplate}
+              overflowIndicatorTemplate={appointmentCollectorTemplate}
               onAppointmentClick={showTooltip}
             />
           )}
@@ -207,8 +198,8 @@ export const viewFunction = ({
             <AppointmentLayout
               appointments={appointmentsViewModel.regular}
               overflowIndicators={appointmentsViewModel.regularCompact}
-              appointmentTemplate={validAppointmentTemplate}
-              overflowIndicatorTemplate={validAppointmentCollectorTemplate}
+              appointmentTemplate={appointmentTemplate}
+              overflowIndicatorTemplate={appointmentCollectorTemplate}
               onAppointmentClick={showTooltip}
             />
           )}
