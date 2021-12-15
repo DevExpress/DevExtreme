@@ -60,7 +60,7 @@ QUnit.module('DataSource processing', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
         Object.keys(spiesLayoutBuilder).forEach(function(spyKey) {
-            spiesLayoutBuilder[spyKey].reset();
+            spiesLayoutBuilder[spyKey].resetHistory();
         });
     }
 }));
@@ -189,7 +189,7 @@ QUnit.module('Layout building', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
         Object.keys(spiesLayoutBuilder).forEach(function(spyKey) {
-            spiesLayoutBuilder[spyKey].reset();
+            spiesLayoutBuilder[spyKey].resetHistory();
         });
     }
 }));
@@ -417,7 +417,7 @@ QUnit.module('Returning correct layout data', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
         Object.keys(spiesLayoutBuilder).forEach(function(spyKey) {
-            spiesLayoutBuilder[spyKey].reset();
+            spiesLayoutBuilder[spyKey].resetHistory();
         });
     }
 }));
@@ -552,7 +552,7 @@ QUnit.test('Resize', function(assert) {
     const sankey = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }],
     });
-    this.nodesGroup().clear.reset();
+    this.nodesGroup().clear.resetHistory();
 
     sankey.option('size', { width: 900, height: 600 });
 

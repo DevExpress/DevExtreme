@@ -123,7 +123,7 @@ QUnit.test('Sankey does not fire drawn event on link hover', function(assert) {
         onDrawn: drawn
     });
 
-    drawn.reset();
+    drawn.resetHistory();
 
     sankey.getAllLinks()[0].hover(true);
 
@@ -248,7 +248,7 @@ QUnit.test('hover changed event after hover second item', function(assert) {
     const link = sankey.getAllLinks()[0];
 
     link.hover(true);
-    hoverChanged.reset();
+    hoverChanged.resetHistory();
 
     sankey.getAllLinks()[1].hover(true);
 
