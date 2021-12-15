@@ -12,8 +12,15 @@ export const concatPaths = (path1, path2) => {
 
 export const getTextWithoutSpaces = text => text ? text.replace(/\s/g, '') : undefined;
 
-export const isExpectedItem = (item, fieldName) => item && (item.dataField === fieldName || item.name === fieldName ||
-    getTextWithoutSpaces(item.title) === fieldName || (item.itemType === 'group' && getTextWithoutSpaces(item.caption) === fieldName));
+export const isEqualToDataFieldOrNameOrTitleOrCaption = (item, fieldName) => {
+    if(item) {
+        return item.dataField === fieldName
+            || item.name === fieldName
+            || getTextWithoutSpaces(item.title) === fieldName
+            || (item.itemType === 'group' && getTextWithoutSpaces(item.caption) === fieldName);
+    }
+    return false;
+};
 
 export const getFullOptionName = (path, optionName) => `${path}.${optionName}`;
 
