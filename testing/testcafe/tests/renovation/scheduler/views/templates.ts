@@ -4,9 +4,13 @@ import { multiPlatformTest, createWidget } from '../../../../helpers/multi-platf
 
 const SCHEDULER_SELECTOR = '#container';
 
-const test = multiPlatformTest({
+const testJquery = multiPlatformTest({
   page: 'declaration/scheduler',
-  platforms: ['jquery', 'react'],
+  platforms: ['jquery'],
+});
+const testReact = multiPlatformTest({
+  page: 'declaration/scheduler',
+  platforms: ['react'],
 });
 
 fixture('Renovated scheduler - Templates');
@@ -22,7 +26,7 @@ const resources = [{
 }];
 
 ['week', 'month', 'timelineDay', 'timelineMonth'].forEach((view) => {
-  test(`cell templates should work in ${view}`,
+  testJquery(`cell templates should work in JQuery in ${view}`,
     async (t, { screenshotComparerOptions }) => {
       const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
@@ -54,6 +58,42 @@ const resources = [{
         dateCellTemplate: (props) => props.date.getTime(),
         timeCellTemplate: (props) => props.date.getTime(),
         resourceCellTemplate: (props) => props.text,
+      });
+    },
+  );
+
+  testReact(`cell templates should work in React in ${view}`,
+    async (t, { screenshotComparerOptions }) => {
+      const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+      await t.expect(await compareScreenshot(
+        t,
+        `cell_templates_in_${view}.png`,
+        scheduler.workSpace,
+        screenshotComparerOptions,
+      ))
+        .ok();
+    }).before(
+    async (t, { platform }) => {
+      await t.resizeWindow(1200, 800);
+      await createWidget(platform, 'dxScheduler', {
+        views: [view],
+        currentView: view,
+        currentDate: new Date(2021, 3, 4),
+        startDayHour: 9,
+        endDayHour: 14,
+        cellDuration: 60,
+        height: 500,
+        groups: ['personId'],
+        resources: [{
+          fieldExpr: 'personId',
+          dataSource: resources,
+          label: 'Person',
+        }],
+        dataCellTemplate: ({ data }) => data.startDate.getTime(),
+        dateCellTemplate: ({ data }) => data.date.getTime(),
+        timeCellTemplate: ({ data }) => data.date.getTime(),
+        resourceCellTemplate: ({ data }) => data.text,
       });
     },
   );
