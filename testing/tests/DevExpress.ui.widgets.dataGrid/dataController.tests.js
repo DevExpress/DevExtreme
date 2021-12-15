@@ -4371,13 +4371,13 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         this.dataController.setViewportItemIndex(7);
         // act
-        this.clock.callTimer(this.clock.firstTimerInRange());
+        this.clock.next();
 
         // assert
         assert.equal(changedArgs.length, 0);
 
         // act
-        this.clock.callTimer(this.clock.firstTimerInRange());
+        this.clock.next();
 
         // assert
         assert.equal(changedArgs.length, 2);
@@ -4452,9 +4452,9 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const dataController = this.dataController;
 
 
-        this.clock.tick();
+        this.clock.tick(10);
         dataController.setViewportItemIndex(7);
-        this.clock.tick();
+        this.clock.tick(10);
         dataController.changed.add(function(e) {
             changedArgs.push(e);
             virtualItems.push(dataController.virtualItemsCount());
@@ -4462,7 +4462,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         // act
         dataController.reload(true);
-        this.clock.callTimer(this.clock.firstTimerInRange());
+        this.clock.next();
 
         // assert
         assert.deepEqual(changedArgs, []);
@@ -4470,7 +4470,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         assert.ok(dataController.isLoaded());
 
         // act
-        this.clock.callTimer(this.clock.firstTimerInRange());
+        this.clock.next();
 
         // assert
         assert.equal(changedArgs.length, 2);
@@ -4581,8 +4581,6 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         let finalized;
         let loadResult;
 
-        const clock = this.clock;
-
         this.options.loadingTimeout = 0;
 
         this.dataSource = new DataSource({
@@ -4621,11 +4619,11 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             finalized = true;
         });
 
-        clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(finalized);
-        clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!dataController.isLoaded(), 'isLoaded after error');
@@ -4806,7 +4804,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
 
         dataController.load();
         dataController.viewportSize(3);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(!isLoading, 'not loading');
@@ -4817,7 +4815,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         dataController.changeRowExpand([0]);
 
         assert.ok(isLoading, 'loading started');
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(!isLoading, 'loading ended');
     });
 
@@ -6927,7 +6925,7 @@ QUnit.module('Filtering', {
         that.dataController.setDataSource(that.dataSource);
         that.dataSource.load();
         that.dataController.searchByText('Bob');
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         const items = that.dataController.items();
@@ -6947,7 +6945,7 @@ QUnit.module('Filtering', {
 
         // act
         that.dataController.clearFilter();
-        that.clock.tick();
+        that.clock.tick(10);
 
         // assert
         columns = that.columnsController.getColumns();
@@ -14981,14 +14979,14 @@ QUnit.module('Exporting', {
             columns: ['field1', { dataField: 'field2', filterValue: 3 }, 'field3']
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.dataController.loadAll().done(function(items) {
             allItems = items;
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(allItems.length, 2, 'all items count');
