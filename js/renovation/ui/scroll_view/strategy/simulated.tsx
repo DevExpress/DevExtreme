@@ -596,7 +596,7 @@ export class ScrollableSimulated extends JSXComponent<ScrollableSimulatedProps>(
 
   // if delete this effect we need to wait changing size inside resizeObservable
   // it needs for support qunit tests
-  @Effect({ run: 'always' }) updateDimensions(): void {
+  @Effect({ run: 'once' }) updateDimensions(): void {
     this.updateElementDimensions();
   }
 
