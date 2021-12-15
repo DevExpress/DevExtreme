@@ -431,7 +431,7 @@ QUnit.module('onValueChanged event', function(assert) {
 
 
         rangeSelector.option('scale.endValue', 25000);
-        eventHandler.reset();
+        eventHandler.resetHistory();
 
         // act
         rangeSelector.option('scale.endValue', 40000000);
