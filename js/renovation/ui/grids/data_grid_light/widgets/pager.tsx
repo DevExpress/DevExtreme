@@ -7,17 +7,20 @@ import { PlaceholderExtender } from '../../../../utils/plugin/placeholder_extend
 
 import messageLocalization from '../../../../../localization/message';
 
-import { Pager as BasePager } from '../../../pager/pager';
+import { PagerContent } from '../../../pager/content';
 import { PagingPlugin, PagingPluginData } from './paging';
 import { FooterPlaceholder } from '../views/footer';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
+
+const DATAGRID_PAGER_CLASS = 'dx-datagrid-pager';
 
 export const viewFunction = (viewModel: GridPager): JSX.Element => (
   <PlaceholderExtender
     type={FooterPlaceholder}
     order={1}
     template={(): JSX.Element => (
-      <BasePager
+      <PagerContent
+        className={DATAGRID_PAGER_CLASS}
         pageSizes={viewModel.allowedPageSizes}
         displayMode={viewModel.props.displayMode}
         infoText={viewModel.props.infoText}
@@ -28,7 +31,7 @@ export const viewFunction = (viewModel: GridPager): JSX.Element => (
         visible={viewModel.props.visible}
         totalCount={viewModel.totalCount}
 
-        pageIndex={viewModel.pageIndex + 1}
+        pageIndex={viewModel.pageIndex}
         pageIndexChange={viewModel.onPageIndexChange}
 
         pageSize={viewModel.pageSize === 'all' ? 0 : viewModel.pageSize}

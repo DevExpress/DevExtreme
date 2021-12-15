@@ -1167,13 +1167,18 @@ QUnit.module('dxPivotGrid', {
                 });
 
                 const $scrollable = pivotGrid.$element().find('.dx-pivotgrid-area-data');
+                const $headersAreaScrollable = pivotGrid.$element().find('.dx-scrollable.dx-pivotgrid-horizontal-headers');
+                const $rowsAreaScrollable = pivotGrid.$element().find('.dx-scrollable.dx-pivotgrid-vertical-headers');
 
-                assert.strictEqual($scrollable.hasClass('dx-rtl'), rtlEnabled ? true : false, 'dx-rtl class');
+                assert.strictEqual($scrollable.hasClass('dx-rtl'), rtlEnabled);
+                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), isRenovatedScrollable && rtlEnabled);
+                assert.strictEqual($rowsAreaScrollable.hasClass('dx-rtl'), false);
 
                 pivotGrid.option('rtlEnabled', !rtlEnabled);
 
-                assert.strictEqual($scrollable.hasClass('dx-rtl'), rtlEnabled ? false : true, 'dx-rtl class');
-
+                assert.strictEqual($scrollable.hasClass('dx-rtl'), !rtlEnabled);
+                assert.strictEqual($headersAreaScrollable.hasClass('dx-rtl'), isRenovatedScrollable && !rtlEnabled);
+                assert.strictEqual($rowsAreaScrollable.hasClass('dx-rtl'), false);
             });
         });
     });

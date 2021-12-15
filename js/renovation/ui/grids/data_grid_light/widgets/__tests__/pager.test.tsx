@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import {
   GridPager, viewFunction as GridPagerView, GridPagerProps,
 } from '../pager';
-import { Pager } from '../../../../pager/pager';
+import { PagerContent } from '../../../../pager/content';
 import { Plugins } from '../../../../../utils/plugin/context';
 import { PlaceholderExtender } from '../../../../../utils/plugin/placeholder_extender';
 
@@ -24,12 +24,12 @@ describe('Pager', () => {
       const { template: PagerTemplate } = placeholderTree.find(PlaceholderExtender).props();
 
       const tree = mount(<PagerTemplate />);
-      expect(tree.find(Pager).props()).toMatchObject({
+      expect(tree.find(PagerContent).props()).toMatchObject({
         displayMode: 'adaptive',
         infoText: 'Page {0} of {1} ({2} items)',
         pageCount: 10,
         totalCount: 20,
-        pageIndex: 31,
+        pageIndex: 30,
         pageSize: 40,
         showInfo: false,
         showNavigationButtons: false,
@@ -53,12 +53,12 @@ describe('Pager', () => {
       const { template: PagerTemplate } = placeholderTree.find(PlaceholderExtender).props();
 
       const tree = mount(<PagerTemplate />);
-      expect(tree.find(Pager).props()).toMatchObject({
+      expect(tree.find(PagerContent).props()).toMatchObject({
         displayMode: 'adaptive',
         infoText: 'Page {0} of {1} ({2} items)',
         pageCount: 10,
         totalCount: 20,
-        pageIndex: 31,
+        pageIndex: 30,
         pageSize: 0,
         showInfo: false,
         showNavigationButtons: false,

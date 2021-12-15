@@ -848,7 +848,8 @@ $grid-masterdetail-padding: 16px;
   .dx-#{$widget-name}-rowsview {
     border-top: 1px solid $material-grid-base-border-color;
 
-    .dx-#{$widget-name}-headers + & {
+    .dx-#{$widget-name}-headers + &,
+    &.dx-#{$widget-name}-after-headers {
       border-top: none;
     }
 

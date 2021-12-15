@@ -59,7 +59,7 @@ const aria = {
 
 @Component({
   defaultOptionRules: null,
-  jQuery: { register: false },
+  jQuery: { register: true },
   view: viewFunction,
 })
 export class DataGridLight extends JSXComponent(DataGridLightProps) {
