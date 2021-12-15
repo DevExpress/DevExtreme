@@ -24,8 +24,8 @@ const environment = {
         this.projection.setEngine(this.engine);
         this.projection.setCenter([20, -10]);
         this.projection.setZoom(2);
-        this.centerChanged.resetHistory();
-        this.zoomChanged.resetHistory();
+        this.centerChanged.reset();
+        this.zoomChanged.reset();
     },
 
     afterEach: function() {
@@ -127,8 +127,8 @@ QUnit.test('setEngine / center is not changed', function(assert) {
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setCenter(engine.center());
     this.projection.setZoom(1);
-    this.centerChanged.resetHistory();
-    this.zoomChanged.resetHistory();
+    this.centerChanged.reset();
+    this.zoomChanged.reset();
     this.projection.on({ engine: onEngine, screen: onScreen, center: onCenter, zoom: onZoom });
 
     this.projection.setEngine(engine);
@@ -446,7 +446,7 @@ QUnit.test('setZoom / not changed', function(assert) {
     const onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setZoom(3);
-    this.zoomChanged.resetHistory();
+    this.zoomChanged.reset();
     this.projection.on({ zoom: onZoom });
 
     this.projection.setZoom(3);
@@ -461,7 +461,7 @@ QUnit.test('setZoom / out of bounds', function(assert) {
     const onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setMaxZoom(5);
-    this.zoomChanged.resetHistory();
+    this.zoomChanged.reset();
     this.projection.on({ zoom: onZoom });
 
     this.projection.setZoom(10);
@@ -476,7 +476,7 @@ QUnit.test('setZoom / not valid', function(assert) {
     const onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setZoom(3);
-    this.zoomChanged.resetHistory();
+    this.zoomChanged.reset();
     this.projection.on({ zoom: onZoom });
 
     this.projection.setZoom('test');
@@ -1214,10 +1214,10 @@ QUnit.test('creation / validation', function(assert) {
 QUnit.test('creation', function(assert) {
     const to = sinon.stub().returns([1000, 2000]);
     const from = sinon.stub().returns([3000, 4000]);
-    from.withArgs([0, 0]).returns([300, 400]);
-    from.withArgs([-1, 0]).returns([10, 20]);
+    from.withArgs([0, -0]).returns([300, 400]);
+    from.withArgs([-1, -0]).returns([10, 20]);
     from.withArgs([0, +1]).returns([30, 40]);
-    from.withArgs([+1, 0]).returns([50, 60]);
+    from.withArgs([+1, -0]).returns([50, 60]);
     from.withArgs([0, -1]).returns([70, 80]);
 
     const proj = projection({
