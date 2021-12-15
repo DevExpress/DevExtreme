@@ -163,7 +163,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             ]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal($('.dx-widget').attr('role'), 'presentation', 'Widget role');
 
@@ -628,7 +628,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.navigateToRow('Zeb');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.pageIndex(), 2, 'Page index');
@@ -1336,7 +1336,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
 
         assert.equal(buttonTemplateCallCount, 0, 'template is not rendered');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(buttonTemplateCallCount, 1, 'template is rendered asynchronously');
         assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test\u00A0', 'template is applied');
@@ -3204,7 +3204,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [],
             columns: ['id', 'name']
         });
-        onColumnsChanging.reset();
+        onColumnsChanging.resetHistory();
 
         // act
         dataGrid.columnOption('name', 'visible', false);
@@ -4418,11 +4418,11 @@ QUnit.module('templates', baseModuleConfig, () => {
                 },
             });
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // act
             dataGrid.pageIndex(1);
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $rows = $(dataGrid.element()).find('.dx-row');
             assert.equal($rows.length, 4, 'row count');

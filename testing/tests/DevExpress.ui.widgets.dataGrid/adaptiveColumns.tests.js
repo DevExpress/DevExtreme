@@ -4002,7 +4002,7 @@ QUnit.module('Validation', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -4010,13 +4010,13 @@ QUnit.module('Validation', {
         let $itemsContent = $('.dx-field-item-content');
 
         $($itemsContent.first()).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
         editor.option('value', '');
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('.dx-field-item-content.dx-validator').length === 1, 'item element has a validation styles');
@@ -4025,7 +4025,7 @@ QUnit.module('Validation', {
         // act
         $itemsContent = $('.dx-field-item-content');
         $($itemsContent.first()).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('.dx-field-item-content > .dx-widget.dx-validator').length === 1, 'editor into a form item has a validation styles');
@@ -4062,7 +4062,7 @@ QUnit.module('Validation', {
         setupDataGrid(this);
         this.rowsView.render($('#container'));
         this.resizingController.updateDimensions();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
@@ -4070,13 +4070,13 @@ QUnit.module('Validation', {
         let $itemsContent = $('.dx-field-item-content');
 
         $itemsContent.first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const editor = $('.dx-form .dx-texteditor').first().dxTextBox('instance');
         editor.option('value', '');
         $(document).trigger('dxpointerdown');
         $(document).trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('.dx-field-item-content.dx-validator').length === 1, 'item element has a validation styles');
@@ -4085,7 +4085,7 @@ QUnit.module('Validation', {
         // act
         $itemsContent = $('.dx-field-item-content');
         $itemsContent.first().trigger('dxclick');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($('.dx-field-item-content > .dx-widget.dx-validator').length === 1, 'editor into a form item has a validation styles');

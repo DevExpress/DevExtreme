@@ -358,8 +358,8 @@ QUnit.test('On/trigger/off event listeners', function(assert) {
     const removeListener = sinon.spy(HTMLElement.prototype, 'removeEventListener');
 
     eventNames.forEach(function(eventName) {
-        addListener.reset();
-        removeListener.reset();
+        addListener.resetHistory();
+        removeListener.resetHistory();
         eventsEngine.on(div, eventName, function(e) {
             callbackIsCalled = true;
         });

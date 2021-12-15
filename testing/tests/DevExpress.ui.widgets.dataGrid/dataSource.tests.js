@@ -105,7 +105,7 @@ QUnit.module('Grid DataSource', {
             source.load();
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.equal(changeCallCount, 1);
         assert.equal(source.pageIndex(), 3);
@@ -1802,18 +1802,18 @@ QUnit.module('Grouping with basic remoteOperations', {
 
         source.load();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         source.changeRowExpand([1]);
         source.load();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         source.filter(['field2', '>', 3]);
         source.reload();
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(source.totalItemsCount(), 1, 'total items count');
@@ -2130,23 +2130,23 @@ QUnit.module('Grouping with basic remoteOperations. Second level', {
 
 
         source.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         source.changeRowExpand([1, 2]);
-        this.clock.tick();
+        this.clock.tick(10);
         source.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         source.changeRowExpand([1, 3]);
-        this.clock.tick();
+        this.clock.tick(10);
         source.load();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         source.group(['field1', { selector: 'field2', desc: true }]);
 
         source.reload();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(source.totalItemsCount(), 3);

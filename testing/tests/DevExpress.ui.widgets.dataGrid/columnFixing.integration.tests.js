@@ -555,7 +555,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 }
             ]
         });
-        this.clock.tick();
+        this.clock.tick(10);
 
         for(let rowIndex = 0; rowIndex < 5; rowIndex++) {
             for(let columnIndex = 0; columnIndex < 5; columnIndex++) {
@@ -563,7 +563,7 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
 
                 // act
                 $cell.trigger('dxclick');
-                this.clock.tick();
+                this.clock.tick(10);
                 $cell = $(dataGrid.getCellElement(rowIndex, columnIndex));
 
                 // assert
