@@ -6,10 +6,13 @@ import {
 
 import messageLocalization from '../../../../../localization/message';
 
-import { Pager as BasePager } from '../../../pager/pager';
+import { PagerContent } from '../../../pager/content';
+
+const DATAGRID_PAGER_CLASS = 'dx-datagrid-pager';
 
 export const viewFunction = (viewModel: GridPager): JSX.Element => (
-  <BasePager
+  <PagerContent
+    className={DATAGRID_PAGER_CLASS}
     pageSizes={viewModel.allowedPageSizes}
     displayMode={viewModel.props.pager.displayMode}
     infoText={viewModel.props.pager.infoText}
@@ -20,7 +23,7 @@ export const viewFunction = (viewModel: GridPager): JSX.Element => (
     visible={viewModel.visible}
     totalCount={viewModel.props.totalCount}
 
-    pageIndex={viewModel.props.pageIndex + 1}
+    pageIndex={viewModel.props.pageIndex}
     pageIndexChange={viewModel.onPageIndexChange}
 
     pageSize={viewModel.pageSize === 'all' ? 0 : viewModel.pageSize}
@@ -84,7 +87,7 @@ export class GridPager extends JSXComponent(GridPagerProps) {
   }
 
   onPageIndexChange(pageIndex: number): void {
-    this.props.pageIndex = pageIndex - 1;
+    this.props.pageIndex = pageIndex;
   }
 
   get visible(): boolean {

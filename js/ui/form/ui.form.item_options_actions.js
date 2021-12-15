@@ -74,21 +74,21 @@ class CssClassItemOptionAction extends ItemOptionAction {
 
 const tryCreateItemOptionAction = (optionName, itemActionOptions) => {
     switch(optionName) {
-        case 'editorOptions':
-        case 'buttonOptions':
+        case 'editorOptions': // SimpleItem/#editorOptions
+        case 'buttonOptions': // ButtonItem/#buttonOptions
             return new WidgetOptionItemOptionAction(itemActionOptions);
-        case 'validationRules':
+        case 'validationRules': // SimpleItem/#validationRules
             return new ValidationRulesItemOptionAction(itemActionOptions);
-        case 'cssClass':
+        case 'cssClass': // ButtonItem/#cssClass or EmptyItem/#cssClass or GroupItem/#cssClass or SimpleItem/#cssClass or TabbedItem/#cssClass
             return new CssClassItemOptionAction(itemActionOptions);
-        case 'badge':
-        case 'disabled':
-        case 'icon':
-        case 'template':
-        case 'tabTemplate':
-        case 'title':
+        case 'badge': // TabbedItem/tabs/#badge
+        case 'disabled': // TabbedItem/tabs/#disabled
+        case 'icon': // TabbedItem/tabs/#icon
+        case 'template': // TODO: TabbedItem/tabs/#template or SimpleItem/#template or GroupItem/#template
+        case 'tabTemplate': // TabbedItem/tabs/#tabTemplate
+        case 'title': // TabbedItem/tabs/#title
             return new TabOptionItemOptionAction(extend(itemActionOptions, { optionName }));
-        case 'tabs':
+        case 'tabs': // TabbedItem/tabs
             return new TabsOptionItemOptionAction(itemActionOptions);
         default:
             return null;

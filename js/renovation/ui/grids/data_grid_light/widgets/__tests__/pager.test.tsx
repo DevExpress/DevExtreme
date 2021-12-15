@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import {
   GridPager, viewFunction as GridPagerView, GridPagerProps, GridPagerUserProps,
 } from '../pager';
-import { Pager } from '../../../../pager/pager';
+import { PagerContent } from '../../../../pager/content';
 
 describe('Pager', () => {
   describe('View', () => {
@@ -18,11 +18,11 @@ describe('Pager', () => {
       } as Partial<GridPager>;
 
       const tree = mount(<GridPagerView {...viewProps as any} /> as any);
-      expect(tree.find(Pager).props()).toMatchObject({
+      expect(tree.find(PagerContent).props()).toMatchObject({
         displayMode: 'adaptive',
         infoText: 'Page {0} of {1} ({2} items)',
         pageCount: 4,
-        pageIndex: 1,
+        pageIndex: 0,
         pageSize: 20,
         showInfo: false,
         showNavigationButtons: false,
@@ -44,11 +44,11 @@ describe('Pager', () => {
       } as Partial<GridPager>;
 
       const tree = mount(<GridPagerView {...viewProps as any} /> as any);
-      expect(tree.find(Pager).props()).toMatchObject({
+      expect(tree.find(PagerContent).props()).toMatchObject({
         displayMode: 'adaptive',
         infoText: 'Page {0} of {1} ({2} items)',
         pageCount: 4,
-        pageIndex: 1,
+        pageIndex: 0,
         pageSize: 0,
         showInfo: false,
         showNavigationButtons: false,
@@ -149,7 +149,7 @@ describe('Pager', () => {
         const pager = new GridPager({});
         pager.onPageIndexChange(10);
 
-        expect(pager.props.pageIndex).toEqual(9); // zero-based in grid, one-based in pager
+        expect(pager.props.pageIndex).toEqual(10);
       });
 
       it('onPageSizeChange', () => {

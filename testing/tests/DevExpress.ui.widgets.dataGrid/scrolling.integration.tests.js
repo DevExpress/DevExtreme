@@ -32,7 +32,6 @@ import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
-import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
@@ -48,8 +47,6 @@ if('chrome' in window && devices.real().deviceType !== 'desktop') {
 
 QUnit.module('Scrolling', baseModuleConfig, () => {
     [true, false].forEach(nativeScrolling => {
-        const isRtlNegative = nativeScrolling && !(getScrollRtlBehavior().positive && getScrollRtlBehavior().decreasing);
-
         QUnit.test(`Correct start scroll position when RTL with nativeScrolling: ${nativeScrolling}`, function(assert) {
             // arrange, act
             const dataGrid = createDataGrid({
@@ -71,7 +68,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
             // assert
             assert.equal(scrollLeft, 0);
-            assert.equal($headerScrollContainer.scrollLeft(), isRtlNegative ? 0 : 100);
+            assert.equal($headerScrollContainer.scrollLeft(), nativeScrolling ? 0 : 100);
         });
 
         QUnit.test(`Correct start scroll position when RTL with vertical scrollbar and nativeScrolling: ${nativeScrolling}`, function(assert) {
@@ -102,7 +99,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
             // assert
             assert.equal(scrollLeft, 0);
-            assert.equal($headerScrollContainer.scrollLeft(), isRtlNegative ? 0 : 100);
+            assert.equal($headerScrollContainer.scrollLeft(), nativeScrolling ? 0 : 100);
         });
 
         QUnit.test(`Correct scroll position after resizing when RTL with vertical scrollbar and nativeScrolling: ${nativeScrolling}`, function(assert) {
@@ -153,7 +150,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             assert.equal(scrollable.scrollLeft(), $scrollableContainer.get(0).scrollWidth - $scrollableContainer.get(0).clientWidth, 'scrollable');
 
             const $headerScrollContainer = dataGrid.$element().find('.dx-datagrid-headers .dx-datagrid-scroll-container');
-            assert.equal($headerScrollContainer.scrollLeft(), isRtlNegative ? 0 : 100, 'headers');
+            assert.equal($headerScrollContainer.scrollLeft(), nativeScrolling ? 0 : 100, 'headers');
         });
     });
 

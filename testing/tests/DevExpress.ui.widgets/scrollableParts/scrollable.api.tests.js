@@ -6,7 +6,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { isRenderer } from 'core/utils/type';
-import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
+import browser from 'core/utils/browser';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'generic_light.css!';
@@ -898,16 +898,14 @@ class ScrollableTestHelper {
     checkScrollOffset({ left, top, maxScrollOffset, epsilon = 0.001 }, message) {
         const scrollOffset = getScrollOffset(this.$scrollable);
 
-        const { decreasing, positive } = getScrollRtlBehavior();
-
         QUnit.assert.roughEqual(this.getMaxScrollOffset().horizontal, maxScrollOffset, epsilon, 'horizontal maxScrollOffset');
 
         let expectedScrollOffsetLeft = left;
 
-        if(this._useNative && this._rtlEnabled && (decreasing ^ positive)) {
+        if(this._useNative && this._rtlEnabled) {
             expectedScrollOffsetLeft = left - this.getMaxScrollOffset().horizontal;
 
-            if(positive) {
+            if(browser.msie && browser.version < 12) {
                 expectedScrollOffsetLeft = Math.abs(expectedScrollOffsetLeft);
             }
         }
