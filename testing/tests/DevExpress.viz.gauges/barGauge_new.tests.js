@@ -39,7 +39,7 @@ QUnit.test('palette in repeat mode', function(assert) {
         values: [1, 2, 3, 4],
         paletteExtensionMode: 'alternate'
     });
-    this.renderer.arc.reset();
+    this.renderer.arc.resetHistory();
 
     this.widget.option('palette', ['red', 'green', 'yellow']);
 
@@ -54,7 +54,7 @@ QUnit.test('palette in blend mode', function(assert) {
         values: [1, 2, 3, 4],
         paletteExtensionMode: 'blend'
     });
-    this.renderer.arc.reset();
+    this.renderer.arc.resetHistory();
 
     this.widget.option('palette', ['red', 'green', 'yellow']);
 
@@ -71,7 +71,7 @@ QUnit.test('palette extension mode can be changed', function(assert) {
         paletteExtensionMode: 'blend',
         palette: ['red', 'green', 'yellow']
     });
-    this.renderer.arc.reset();
+    this.renderer.arc.resetHistory();
 
     this.widget.option({ paletteExtensionMode: 'alternate' });
 
@@ -85,7 +85,7 @@ QUnit.test('Animation after false resizing', function(assert) {
     this.create({ values: [1, 2] });
     this.widget.option('size', { width: 400, height: 400 });
 
-    this.renderer.g.returnValues[5].animate.reset();
+    this.renderer.g.returnValues[5].animate.resetHistory();
 
     this.widget.values([2, 3]);
 

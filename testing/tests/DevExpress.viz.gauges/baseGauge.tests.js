@@ -113,17 +113,17 @@ const environment = {
         this.title = null;
 
         $.each(BASE_METHODS, function(_, name) {
-            BaseGauge.prototype[name].reset();
+            BaseGauge.prototype[name].resetHistory();
         });
 
         $.each(ABSTRACT_METHODS, function(_, name) {
-            BaseGauge.prototype[name].reset();
+            BaseGauge.prototype[name].resetHistory();
         });
 
         rendererModule.Renderer.resetHistory();
-        themeManagerModule.ThemeManager.reset();
-        factory.createTranslator.reset();
-        factory.createTracker.reset();
+        themeManagerModule.ThemeManager.resetHistory();
+        factory.createTranslator.resetHistory();
+        factory.createTracker.resetHistory();
     },
     createGauge: function(options) {
         return new BaseGauge(this.$container, options);
@@ -381,8 +381,8 @@ QUnit.test('Hide loadingIndicator after beginValueChanging - endValueChanging', 
 
     gauge.showLoadingIndicator();
 
-    gauge._loadingIndicator.fulfillHiding.reset();
-    gauge._loadingIndicator.scheduleHiding.reset();
+    gauge._loadingIndicator.fulfillHiding.resetHistory();
+    gauge._loadingIndicator.scheduleHiding.resetHistory();
     gauge._beginValueChanging();
     gauge._endValueChanging();
     assert.equal(gauge._loadingIndicator.scheduleHiding.callCount, 1);

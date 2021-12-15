@@ -128,7 +128,7 @@ const TestPointerElement = TestElement.inherit({
         },
         afterEach: function() {
             this.container.remove();
-            axisModule.Axis.reset();
+            axisModule.Axis.resetHistory();
             rendererModule.Renderer.resetHistory();
             this.renderer = null;
             delete this.container;

@@ -29,7 +29,7 @@ const environment = {
         this.container = new vizMocks.Element();
         this.translator = new Translator1D();
         this.themeManager = new themeManagerModule.ThemeManager({});
-        sinon.stub(this.themeManager, 'createPalette').callsFake(this.themeManager.createPalette);
+        this.paletteCreatingSpy = sinon.spy(this.themeManager, 'createPalette');
         this.rangeContainer = new TestRangeContainer({
             renderer: this.renderer,
             container: this.container,
@@ -39,6 +39,7 @@ const environment = {
     },
 
     afterEach: function() {
+        this.paletteCreatingSpy.restore();
         this.rangeContainer.dispose();
     }
 };
@@ -471,8 +472,8 @@ QUnit.module('BaseRangeContainer - palette', $.extend({}, environment, {
         });
         assert.strictEqual(list[list.length - 1].range.color, 'none', 'background color');
 
-        assert.strictEqual(this.themeManager.createPalette.callCount, 1);
-        assert.deepEqual(this.themeManager.createPalette.firstCall.args, [palette, { type: 'indicatingSet', keepLastColorInEnd: true, extensionMode: paletteExtensionMode, count: ranges.length }]);
+        assert.strictEqual(this.paletteCreatingSpy.callCount, 1);
+        assert.deepEqual(this.paletteCreatingSpy.firstCall.args, [palette, { type: 'indicatingSet', keepLastColorInEnd: true, extensionMode: paletteExtensionMode, count: ranges.length }]);
     }
 }));
 

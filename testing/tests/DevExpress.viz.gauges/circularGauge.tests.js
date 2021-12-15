@@ -132,7 +132,7 @@ const TestPointerElement = TestElement.inherit({
         afterEach: function() {
             this.container.remove();
             this.renderer = null;
-            axisModule.Axis.reset();
+            axisModule.Axis.resetHistory();
             rendererModule.Renderer.resetHistory();
         }
     };
