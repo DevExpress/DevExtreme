@@ -120,14 +120,14 @@ QUnit.module('Keyboard navigation accessibility', {
         // act
         this.focusCell(1, 1);
         this.triggerKeyDown('ArrowRight');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok(this.columnsController.getColumns()[2].type, 'buttons', 'Column type');
         assert.ok($(this.getCellElement(1, 2)).hasClass('dx-focused'), 'cell focused');
 
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 2)));
-        this.clock.tick();
+        this.clock.tick(10);
     });
 
     testInDesktop('Focus command elements if row editing', function(assert) {
@@ -150,10 +150,10 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         this.editRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
         $(this.getCellElement(1, 1)).focus().trigger('dxclick');
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(':focus').hasClass('dx-link'), 'focused element');
@@ -235,18 +235,18 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         this.editCell(1, 1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getCellElement(1, 3)).hasClass('dx-focused'), 'cell focused');
 
         // act
         this.editCell(1, 4);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 4)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getCellElement(2, 0)).hasClass('dx-focused'), 'cell focused');
@@ -267,16 +267,16 @@ QUnit.module('Keyboard navigation accessibility', {
         this.editCell(1, 1);
         this.clock.tick();
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 1)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getCellElement(1, 3)).hasClass('dx-focused'), 'cell focused');
 
         // act
         this.editCell(1, 4);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('tab', false, false, $(this.getCellElement(1, 4)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getCellElement(2, 0)).hasClass('dx-focused'), 'cell focused');

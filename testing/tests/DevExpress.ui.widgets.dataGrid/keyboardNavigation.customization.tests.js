@@ -225,7 +225,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -233,7 +233,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -260,11 +260,11 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'row is editing');
@@ -272,7 +272,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter', undefined, true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -299,7 +299,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -307,7 +307,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -335,7 +335,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -343,7 +343,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -370,11 +370,11 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -382,7 +382,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter', undefined, true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -410,11 +410,11 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -422,7 +422,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter', undefined, true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -449,7 +449,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -457,7 +457,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -487,7 +487,7 @@ QUnit.module('Customize keyboard navigation', {
         this.renderGridView();
 
 
-        this.clock.tick();
+        this.clock.tick(10);
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
@@ -503,7 +503,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(changedSpy.callCount, 2, 'changed count');
@@ -529,11 +529,11 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 1, 'row is editing');
@@ -541,7 +541,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter', undefined, true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -568,7 +568,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -576,7 +576,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -603,11 +603,11 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -615,7 +615,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter', undefined, true);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -648,7 +648,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -678,7 +678,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -711,7 +711,7 @@ QUnit.module('Customize keyboard navigation', {
         const $input = $('.dx-row .dx-texteditor-input').eq(0);
         $input.val('Test');
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -744,7 +744,7 @@ QUnit.module('Customize keyboard navigation', {
         const $input = $('.dx-row .dx-texteditor-input').eq(0);
         $input.val('Test');
         this.triggerKeyDown('enter');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), -1, 'row is editing');
@@ -765,7 +765,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -776,7 +776,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -799,7 +799,7 @@ QUnit.module('Customize keyboard navigation', {
         // act
         this.focusFirstCell();
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');
@@ -810,7 +810,7 @@ QUnit.module('Customize keyboard navigation', {
 
         // act
         this.triggerKeyDown('F2');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'row is editing');

@@ -720,7 +720,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
         }).dxDataGrid('instance');
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         const cell0_0 = $(dataGrid.getCellElement(0, 0)).get(0);
         const cell1_1 = $(dataGrid.getCellElement(1, 1)).get(0);
@@ -729,7 +729,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         dataGrid.getDataSource().store().push([
             { type: 'update', key: 1, data: { Count: 100 } }
         ]);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.strictEqual($(dataGrid.getCellElement(0, 0)).get(0), cell0_0, 'expand cell in the first row is not re-rendered');
@@ -999,12 +999,12 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [{ field1: 'test1', field2: 'test2' }, { field1: 'test3', field2: 'test4' }]
         });
 
-        this.clock.tick(0);
-        calculateCellValue.reset();
+        this.clock.tick(10);
+        calculateCellValue.resetHistory();
 
         // act
         dataGrid.state(null);
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(calculateCellValue.getCall(0).args[0], { field1: 'test1', field2: 'test2' }, 'calculateCellValue - first call arguments');

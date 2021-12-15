@@ -230,11 +230,11 @@ QUnit.module('State storing', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // act
         dataGrid.state({});
-        this.clock.tick(0);
+        this.clock.tick(10);
 
         // assert
         const $firstCell = $($(dataGrid.$element()).find('.dx-data-row').eq(0).children().eq(0));

@@ -424,7 +424,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.navigateToRow('Zeb');
-        this.clock.tick();
+        this.clock.tick(10);
 
         const rowsView = dataGrid.getView('rowsView');
 
@@ -1020,7 +1020,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         // act
 
         dataGrid.focus($(dataGrid.getCellElement(0, 2)));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.getView('rowsView').getScrollable().scrollLeft(), 400, 'Correct offset');

@@ -105,7 +105,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }, { id: 9 }, { id: 10 }]
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         const scrollTop = dataGrid.getScrollable().scrollTop();
@@ -419,7 +419,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
 
         // act
         dataGrid.navigateToRow('Zeb');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(dataGrid.pageIndex(), 2, 'Page index');
@@ -1841,7 +1841,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick(300);
+        this.clock.tick(310);
 
         // act
         dataGrid.getScrollable().scrollTo(2500);
@@ -1850,7 +1850,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 1, 'first visible row is correct');
 
         // act
-        this.clock.tick(300);
+        this.clock.tick(310);
 
         // assert
         assert.equal(dataGrid.getVisibleRows()[0].data.id, 51, 'first visible row is correct');
@@ -4531,7 +4531,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick(300);
+        this.clock.tick(310);
         let $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
 
         // assert
@@ -4547,7 +4547,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.ok(dataGridWrapper.rowsView.isElementIntersectViewport($virtualRowElement), 'virtual row is rendered inside viewport after scrolling to bottom');
 
         // act
-        this.clock.tick(300);
+        this.clock.tick(310);
         $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
 
         // assert
@@ -4565,7 +4565,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.notOk(dataGridWrapper.rowsView.isElementIntersectViewport($($virtualRowElement.get(1))), 'bottom virtual row is rendered outside viewport after scrolling to top');
 
         // act
-        this.clock.tick(300);
+        this.clock.tick(310);
         $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
 
         // assert
@@ -4598,7 +4598,7 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
             }
         });
 
-        this.clock.tick(300);
+        this.clock.tick(310);
         let $virtualRowElement = $(dataGrid.element()).find('.dx-virtual-row');
 
         // assert

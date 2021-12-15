@@ -158,12 +158,12 @@ QUnit.module('Rows view', {
         const testElement = $('#container');
 
         rowsView.render(testElement);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // act
         const $focusable = testElement.find('[tabIndex]').first();
         $focusable.focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($focusable.is('td'), 'focusable is cell');

@@ -100,9 +100,9 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         $expandCell.trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('rightArrow');
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.deepEqual(keyboardController._focusedCellPosition, { rowIndex: 0, columnIndex: 1 }, 'focusedCellPosition is a first column');
@@ -132,7 +132,7 @@ QUnit.module('Real DataController and ColumnsController', {
             this.gridView.render($('#container'));
 
             this.editingController.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
             const $newRow = $('#container').find('.dx-data-row').first();
 
             assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
@@ -141,7 +141,7 @@ QUnit.module('Real DataController and ColumnsController', {
             // act
             this.triggerKeyDown('tab', false, false, $('#container').find('input'));
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
@@ -162,7 +162,7 @@ QUnit.module('Real DataController and ColumnsController', {
             this.gridView.render($('#container'));
 
             this.editingController.addRow();
-            this.clock.tick();
+            this.clock.tick(10);
 
             const $newRow = $('#container').find('.dx-data-row').first();
 
@@ -172,7 +172,7 @@ QUnit.module('Real DataController and ColumnsController', {
             // act
             this.triggerKeyDown('tab', false, false, $('#container').find('input'));
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             // assert
             assert.equal(this.editingController._getVisibleEditRowIndex(), 0, 'edit row index');
@@ -290,10 +290,10 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         this.editRow(1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         this.triggerKeyDown('tab', false, false, $(':focus'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         assert.deepEqual(navigationController._focusedCellPosition, { rowIndex: 1, columnIndex: 1 });
         const cell = dataGridWrapper.rowsView.getDataRow(1).getCell(1);
@@ -557,16 +557,16 @@ QUnit.module('Real DataController and ColumnsController', {
         // act
         this.gridView.render($('#container'));
         $(this.getCellElement(1, 1)).trigger(CLICK_EVENT);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('upArrow', false, false, $(':focus'));
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($(this.getCellElement(0, 1)).hasClass('dx-focused'), 'Cell has focus overlay');
 
         // act
         this.editCell(0, 1);
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(editingStartFiresCount, 1, 'onEditingStart fires count');
@@ -754,10 +754,10 @@ QUnit.module('Real DataController and ColumnsController', {
 
         // act
         this.editCell(0, 1);
-        this.clock.tick();
+        this.clock.tick(10);
         this.triggerKeyDown('enter', false, false, $(this.rowsView.element().find('.dx-data-row:nth-child(1) td:nth-child(2)')));
         this.gridView.component.editorFactoryController._$focusedElement = undefined;
-        this.clock.tick();
+        this.clock.tick(10);
 
         const $cell = $(this.rowsView.element().find('.dx-data-row:nth-child(1) td:nth-child(2)'));
 
@@ -1553,18 +1553,18 @@ QUnit.module('Real DataController and ColumnsController', {
 
         this.setupModule();
         this.gridView.render($container);
-        this.clock.tick();
+        this.clock.tick(10);
 
         let $commandCell = $(this.getCellElement(0, 0));
         $commandCell.focus();
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.ok($commandCell.is(':focus'), 'command cell is focused');
         assert.equal($commandCell.find('.dx-datagrid-group-closed').length, 1, 'cell is rendered as collapsed');
 
         this.triggerKeyDown('enter', false, false, $commandCell);
-        this.clock.tick();
+        this.clock.tick(10);
 
         $commandCell = $(this.getCellElement(0, 0));
 
