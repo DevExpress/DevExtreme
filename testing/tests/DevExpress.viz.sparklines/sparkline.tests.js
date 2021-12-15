@@ -42,9 +42,9 @@ QUnit.begin(function() {
     }));
 
     QUnit.testStart(function() {
-        translator2DModule.Translator2D.reset();
+        translator2DModule.Translator2D.resetHistory();
         rendererModule.Renderer.resetHistory();
-        seriesModule.Series.reset();
+        seriesModule.Series.resetHistory();
     });
 
     const environment = {
@@ -1886,7 +1886,7 @@ QUnit.begin(function() {
         };
         const sparkline = this.createSparkline(options);
 
-        this.renderer.resize.reset();
+        this.renderer.resize.resetHistory();
 
         this.$container.width(300);
         this.$container.height(40);
@@ -1909,7 +1909,7 @@ QUnit.begin(function() {
             dataSource: [4, 8, 6, 9, 1, 3, 5, 6, 1, 2, 5, 4]
         });
 
-        this.renderer.resize.reset();
+        this.renderer.resize.resetHistory();
 
         sparkline.option('size', { width: 300, height: 100 });
 
