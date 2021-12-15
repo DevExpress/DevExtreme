@@ -2233,7 +2233,7 @@ QUnit.test('Remove template property from filter value', function(assert) {
 
     selection.getSelectedItemKeys().done();
 
-    assert.equal(this.load.lastCall.args[0].filter[0][2].template, undefined);
+    assert.strictEqual(this.load.lastCall.args[0].filter[0][2].template, undefined);
 });
 
 QUnit.test('Remove template property from each filter value', function(assert) {
@@ -2247,9 +2247,9 @@ QUnit.test('Remove template property from each filter value', function(assert) {
 
     selection.getSelectedItemKeys().done();
 
-    assert.equal(this.load.lastCall.args[0].filter[0][2].template, undefined);
-    assert.equal(this.load.lastCall.args[0].filter[1][2].template, undefined);
-    assert.equal(this.load.lastCall.args[0].filter[2][2].template, undefined);
+    assert.strictEqual(this.load.lastCall.args[0].filter[0][2].template, undefined);
+    assert.strictEqual(this.load.lastCall.args[0].filter[1][2].template, undefined);
+    assert.strictEqual(this.load.lastCall.args[0].filter[2][2].template, undefined);
 });
 
 QUnit.test('not pass filter to loadOptions', function(assert) {
