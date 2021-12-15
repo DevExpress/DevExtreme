@@ -331,7 +331,7 @@ QUnit.test('Set visualRange via array', function(assert) {
         onOptionChanged: visualRangeChanged
     });
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.getArgumentAxis().visualRange([2, 8]);
 
     assert.deepEqual(chart.getArgumentAxis().getViewport(), { startValue: 2, endValue: 8 });
@@ -371,7 +371,7 @@ QUnit.test('Set visualRange for indexed valueAxis (check onOptionChanged fired)'
 
     assert.ok(chart);
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.getValueAxis().visualRange([3, 6]);
 
     assert.deepEqual(visualRangeChanged.lastCall.args[0].value, { startValue: 3, endValue: 6 });
@@ -415,7 +415,7 @@ QUnit.test('Set visualRange for multi axis (exists single option collection for 
 
     assert.ok(chart);
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.getArgumentAxis().visualRange([2, 8]);
 
     assert.equal(visualRangeChanged.callCount, 2);
@@ -460,7 +460,7 @@ QUnit.test('Set visualRange for multi axis/pane (exists option collection for ea
 
     assert.ok(chart);
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.getArgumentAxis().visualRange([2, 8]);
 
     assert.equal(visualRangeChanged.callCount, 3);
@@ -501,7 +501,7 @@ QUnit.test('Pass visualRange array if options is set using array', function(asse
         onOptionChanged: visualRangeChanged
     });
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.getArgumentAxis().visualRange([3, 6]);
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, [3, 6]);
@@ -762,7 +762,7 @@ QUnit.test('Set value visual range using option. only one edge was set. other un
         onOptionChanged: onOptionChanged
     });
 
-    onOptionChanged.reset();
+    onOptionChanged.resetHistory();
     chart.option('valueAxis.visualRange.startValue', 50);
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 50, endValue: 90 });
     assert.equal(onOptionChanged.callCount, 3);
@@ -837,7 +837,7 @@ QUnit.test('Using the single section of axis options for some panes (check custo
 
     chart.getArgumentAxis().visualRange([4, 6]);
     panes.push({ name: 'p2' });
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option('panes', panes);
 
     assert.deepEqual(chart.option('valueAxis.visualRange'), chart.getValueAxis().visualRange());
@@ -967,21 +967,21 @@ QUnit.test('Set the visualRange option by the different ways', function(assert) 
     assert.deepEqual(chart.getArgumentAxis().visualRange(), { startValue: 3, endValue: 10 });
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 4, endValue: 7 });
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option('valueAxis.visualRange', [3, 6]);
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, [3, 6]);
     assert.deepEqual(chart.option('valueAxis.visualRange'), [3, 6]);
     assert.deepEqual(chart.option('valueAxis._customVisualRange'), [3, 6]);
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option('valueAxis', { visualRange: [1, 4] });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: [1, 4] });
     assert.deepEqual(chart.option('valueAxis.visualRange'), [1, 4]);
     assert.deepEqual(chart.option('valueAxis._customVisualRange'), [1, 4]);
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option({
         size: {
             width: 1000,
@@ -997,21 +997,21 @@ QUnit.test('Set the visualRange option by the different ways', function(assert) 
     assert.deepEqual(chart.option('valueAxis.visualRange'), [2, 7]);
     assert.deepEqual(chart.option('valueAxis._customVisualRange'), [2, 7]);
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option('valueAxis', { visualRange: { startValue: 3 } });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { startValue: 3 } });
     assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 3, endValue: 7 });
     assert.deepEqual(chart.option('valueAxis._customVisualRange'), { startValue: 3 });
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option('valueAxis', { visualRange: { endValue: 10 } });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { endValue: 10 } });
     assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 3, endValue: 10 });
     assert.deepEqual(chart.option('valueAxis._customVisualRange'), { endValue: 10 });
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option('valueAxis', { visualRange: { length: 2 } });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { length: 2 } });
@@ -1048,7 +1048,7 @@ QUnit.test('Reload dataSource - visualRange option should be changed', function(
         argumentAxis: { valueMarginsEnabled: false }
     });
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
 
     // act
     const ds = chart.getDataSource();
@@ -1219,7 +1219,7 @@ QUnit.test('Reject the visualRange less then minVisualRangeLength, categories', 
     const argumentAxis = chart.getArgumentAxis();
     const visualRange = argumentAxis.visualRange();
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     argumentAxis.visualRange({ startValue: 'a4' });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, visualRange);
@@ -1276,7 +1276,7 @@ QUnit.test('Reject the visualRange less then minVisualRangeLength, numeric, star
     const argumentAxis = chart.getArgumentAxis();
     const visualRange = argumentAxis.visualRange();
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     argumentAxis.visualRange({ startValue: 3, endValue: 3 });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, visualRange);
@@ -1474,8 +1474,8 @@ QUnit.test('Reset chart viewport', function(assert) {
     chart.getValueAxis().visualRange([-20, 40]);
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: -20, endValue: 40 });
 
-    zoomStart.reset();
-    zoomEnd.reset();
+    zoomStart.resetHistory();
+    zoomEnd.resetHistory();
     chart.resetVisualRange();
 
     assert.equal(zoomStart.callCount, 3);
@@ -2971,14 +2971,14 @@ QUnit.module('Option changing in onDrawn after zooming', {
     beforeEach: function() {
         this.legendShiftSpy = sinon.spy(legendModule.Legend.prototype, 'move');
         this.titleShiftSpy = sinon.spy(titleModule.Title.prototype, 'move');
-        sinon.spy(rendererModule, 'Renderer', function() {
+        this.rendererSpy = sinon.spy(rendererModule, 'Renderer', function() {
             return new vizMocks.Renderer();
         });
     },
     afterEach: function() {
         legendModule.Legend.prototype.move.restore();
         titleModule.Title.prototype.move.restore();
-        rendererModule.Renderer.restore();
+        this.rendererSpy.restore();
     }
 });
 
@@ -3305,7 +3305,7 @@ QUnit.test('Set/reset the visualRange by API methods', function(assert) {
     const valueAxis = chart.getValueAxis();
     let visualRange = { startValue: 4, endValue: 7 };
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     valueAxis.visualRange(visualRange);
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, visualRange);
@@ -3313,7 +3313,7 @@ QUnit.test('Set/reset the visualRange by API methods', function(assert) {
     assert.deepEqual(chart.option('valueAxis.visualRange'), visualRange);
     assert.deepEqual(chart.option().valueAxis._customVisualRange, $.extend({ action: undefined }, visualRange));
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     visualRange = { startValue: 3, endValue: 8 };
     chart.resetVisualRange();
 
@@ -3355,28 +3355,28 @@ QUnit.test('Set the visualRange option by the different ways', function(assert) 
     assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 4, endValue: 7 });
     assert.deepEqual(chart.getValueAxis().visualRange(), { startValue: 4, endValue: 7 });
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option('valueAxis.visualRange', [null, null]);
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, [null, null]);
     assert.deepEqual(chart.option('valueAxis.visualRange'), [3, 8]);
     assert.deepEqual(chart.option().valueAxis._customVisualRange, [null, null]);
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option('valueAxis.visualRange', [3, 6]);
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, [3, 6]);
     assert.deepEqual(chart.option('valueAxis.visualRange'), [3, 6]);
     assert.deepEqual(chart.option().valueAxis._customVisualRange, [3, 6]);
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option('valueAxis', { visualRange: [1, 4] });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: [1, 4] });
     assert.deepEqual(chart.option('valueAxis.visualRange'), [1, 4]);
     assert.deepEqual(chart.option().valueAxis._customVisualRange, [1, 4]);
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option({
         dataSource: dataSource,
         series: { type: 'line' },
@@ -3388,21 +3388,21 @@ QUnit.test('Set the visualRange option by the different ways', function(assert) 
     assert.deepEqual(chart.option('valueAxis.visualRange'), [2, 7]);
     assert.deepEqual(chart.option().valueAxis._customVisualRange, [2, 7]);
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option('valueAxis', { visualRange: { startValue: 4 } });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { startValue: 4 } });
     assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 4, endValue: 8 });
     assert.deepEqual(chart.option().valueAxis._customVisualRange, { startValue: 4 });
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option('valueAxis', { visualRange: { endValue: 10 } });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { endValue: 10 } });
     assert.deepEqual(chart.option('valueAxis.visualRange'), { startValue: 3, endValue: 10 });
     assert.deepEqual(chart.option().valueAxis._customVisualRange, { endValue: 10 });
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     chart.option('valueAxis', { visualRange: { length: 2 } });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, { visualRange: { length: 2 } });
@@ -3444,7 +3444,7 @@ QUnit.test('Try to set the visualRange less then minVisualRangeLength', function
     const valueAxis = chart.getValueAxis();
     const visualRange = valueAxis.visualRange();
 
-    visualRangeChanged.reset();
+    visualRangeChanged.resetHistory();
     valueAxis.visualRange({ startValue: 7 });
 
     assert.deepEqual(visualRangeChanged.firstCall.args[0].value, visualRange);
