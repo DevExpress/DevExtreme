@@ -503,7 +503,7 @@ QUnit.module('focus / mouse', $.extend({}, environment, {
         trackerModule._DEBUG_stubFocusType(StubFocus);
         environment.beforeEach.apply(this, arguments);
 
-        this.focus.cancel.reset();
+        this.focus.cancel.resetHistory();
     },
     afterEach: function() {
         environment.afterEach.apply(this, arguments);
@@ -543,7 +543,7 @@ $.each(['touch', 'MSPointer', 'pointer'], function(_, type) {
         beforeEach: function() {
             trackerModule._DEBUG_stubFocusType(StubFocus);
             environment.beforeEach.apply(this, arguments);
-            this.focus.cancel.reset();
+            this.focus.cancel.resetHistory();
         },
         afterEach: function() {
             environment.afterEach.apply(this, arguments);

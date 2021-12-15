@@ -25,7 +25,7 @@ QUnit.module('GestureHandler', {
             centeringEnabled: true,
             zoomingEnabled: true
         });
-        this.renderer.root.stub('attr').reset();
+        this.renderer.root.stub('attr').resetHistory();
     },
 
     afterEach: function() {
@@ -74,7 +74,7 @@ QUnit.test('processMove', function(assert) {
 
 QUnit.test('processMove / centering is disabled', function(assert) {
     this.gestureHandler.setInteraction({ centeringEnabled: false, zoomingEnabled: true });
-    this.renderer.root.attr.reset();
+    this.renderer.root.attr.resetHistory();
     this.trigger('start', { x: 10, y: 20 });
     this.trigger('move', { x: 12, y: 19 });
 
@@ -100,8 +100,8 @@ QUnit.test('processEnd', function(assert) {
 
 QUnit.test('processEnd / centering is disabled', function(assert) {
     this.gestureHandler.setInteraction({ centeringEnabled: false, zoomingEnabled: true });
-    this.renderer.root.attr.reset();
-    this.projection.endMoveCenter.reset();
+    this.renderer.root.attr.resetHistory();
+    this.projection.endMoveCenter.resetHistory();
     this.trigger('start', { x: 10, y: 20 });
     this.trigger('end');
 
