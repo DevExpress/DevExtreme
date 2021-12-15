@@ -557,7 +557,7 @@ QUnit.test('velocity calculated correctly when content height less than containe
             onUpdated: updateHandler
         });
 
-        updateHandler.reset();
+        updateHandler.resetHistory();
 
         resizeCallbacks.fire();
 

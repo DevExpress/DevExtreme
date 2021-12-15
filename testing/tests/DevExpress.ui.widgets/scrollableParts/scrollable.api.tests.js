@@ -1263,22 +1263,22 @@ class ScrollableTestHelper {
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: true, reachedBottom: false, reachedLeft: undefined, reachedRight: undefined });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: 1 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: undefined, reachedRight: undefined });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: 25 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: undefined, reachedRight: undefined });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: maxOffset.vertical - 1 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: undefined, reachedRight: undefined });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: maxOffset.vertical });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: true, reachedLeft: undefined, reachedRight: undefined });
@@ -1291,22 +1291,22 @@ class ScrollableTestHelper {
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: true, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ left: 1 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ left: 25 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ left: maxOffset.horizontal - 1 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ left: maxOffset.horizontal });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: true });
@@ -1319,22 +1319,22 @@ class ScrollableTestHelper {
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: true, reachedBottom: false, reachedLeft: true, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: 1, left: 1 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: false, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: 25, left: 25 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: false, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: maxOffset.vertical - 1, left: maxOffset.horizontal - 1 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: false, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: maxOffset.vertical, left: maxOffset.horizontal });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: true, reachedLeft: false, reachedRight: true });
@@ -1347,22 +1347,22 @@ class ScrollableTestHelper {
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: true, reachedBottom: false, reachedLeft: undefined, reachedRight: undefined });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: 1 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: undefined, reachedRight: undefined });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: 25 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: undefined, reachedRight: undefined });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: maxOffset.vertical - 1 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: undefined, reachedRight: undefined });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: maxOffset.vertical });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: true, reachedLeft: undefined, reachedRight: undefined });
@@ -1375,22 +1375,22 @@ class ScrollableTestHelper {
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: true });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ left: maxOffset.horizontal - 1 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ left: 25 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ left: 1 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: false, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ left: 0 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: undefined, reachedBottom: undefined, reachedLeft: true, reachedRight: false });
@@ -1403,22 +1403,22 @@ class ScrollableTestHelper {
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: true, reachedBottom: false, reachedLeft: false, reachedRight: true });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: 1, left: maxOffset.horizontal - 1 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: false, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: 25, left: 25 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: false, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: maxOffset.vertical - 1, left: 1 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: false, reachedLeft: false, reachedRight: false });
 
-            helper.onScrollHandler.reset();
+            helper.onScrollHandler.resetHistory();
             helper.scrollable.scrollTo({ top: maxOffset.vertical, left: 0 });
             helper.$container.trigger('scroll');
             helper.checkScrollEvent({ reachedTop: false, reachedBottom: true, reachedLeft: true, reachedRight: false });

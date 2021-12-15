@@ -158,7 +158,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
 
         // act
-        this.clock.tick();
+        this.clock.tick(10);
 
         // assert
         assert.equal(onEditorPreparingCallCount, 2, 'onEditorPreparing call count');
@@ -333,7 +333,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         });
 
-        this.clock.tick();
+        this.clock.tick(10);
         assert.ok(dataGrid);
         assert.equal(contentReadyCallCount, 1, 'contentReady is called once');
         assert.equal(loadCallCount, 1, '1 load count on start');
@@ -644,7 +644,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'name', filterValue }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -653,7 +653,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValue, selectedFilterOperation: '<>' }]);
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -677,7 +677,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'name', filterValue }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -693,7 +693,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValue, selectedFilterOperation: '<>' }]);
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -717,7 +717,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'name', filterValue }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -725,7 +725,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValue, allowFiltering: false }]);
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -748,7 +748,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'name', filterValue }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -763,7 +763,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValue, allowFiltering: false }]);
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -849,7 +849,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'name', filterValues }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -858,7 +858,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValues, filterType: 'exclude' }]);
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -882,7 +882,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             columns: ['id', { dataField: 'name', filterValues }]
         });
-        this.clock.tick();
+        this.clock.tick(10);
         let visibleRows = dataGrid.getVisibleRows();
 
         // assert
@@ -898,7 +898,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         // act
         dataGrid.option('columns', ['id', { dataField: 'name', filterValues, filterType: 'exclude' }]);
-        this.clock.tick();
+        this.clock.tick(10);
         visibleRows = dataGrid.getVisibleRows();
 
         // assert
