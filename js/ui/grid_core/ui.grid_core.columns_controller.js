@@ -1486,7 +1486,8 @@ module.exports = {
                         let isPlain = true;
 
                         columns.forEach(function(column) {
-                            let parentIndex = column.ownerBand;
+                            const ownerBand = column.ownerBand;
+                            let parentIndex = isObject(ownerBand) ? ownerBand.index : ownerBand;
                             const parent = columns[parentIndex];
 
                             if(column.hasColumns) {
