@@ -6,7 +6,7 @@ import { Table } from '../widgets/table';
 import { DataRow } from '../widgets/data_row';
 
 export const viewFunction = (viewModel: TableContent): JSX.Element => (
-  <div className="dx-datagrid-rowsview dx-datagrid-nowrap" role="presentation">
+  <div className="dx-datagrid-rowsview dx-datagrid-nowrap dx-datagrid-after-headers" role="presentation">
     <div className="dx-datagrid-content">
       <Table>
         <Fragment>
