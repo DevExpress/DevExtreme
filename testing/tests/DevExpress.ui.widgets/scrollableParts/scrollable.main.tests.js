@@ -798,6 +798,7 @@ QUnit.module('visibility events integration', {
         setTimeout(() => {
             scrollable.scrollTo({ left: 0, top: 0 });
             $scrollable.show();
+            scrollable.update();
             setTimeout(() => {
                 assert.deepEqual(scrollable.scrollOffset(), { left: 10, top: 20 }, 'scroll position restored after shown');
                 done();

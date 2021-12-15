@@ -674,6 +674,8 @@ QUnit.module('scrollbar visibility', {
         const scrollable = $scrollable.dxScrollable('instance');
         const outerScrollableContainerEl = $(scrollable.container()).get(0);
 
+        assert.ok(true, `showScrollbar: ${showScrollbar}`);
+
         const expectedOverflowX = useNative && direction !== DIRECTION_VERTICAL && showScrollbar !== 'never' ? 'auto' : 'hidden';
         const expectedOverflowY = useNative && direction !== DIRECTION_HORIZONTAL && showScrollbar !== 'never' ? 'auto' : 'hidden';
 
@@ -692,11 +694,9 @@ QUnit.module('scrollbar visibility', {
 
     const configs = [];
     [true, false].forEach((useNative) => {
-        ['onScroll', 'onHover', 'always', 'never'].forEach((showScrollbar) => {
-            [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BOTH].forEach((direction) => {
-                [true, false].forEach((useSimulatedScrollbar) => {
-                    configs.push({ useNative, direction, showScrollbar, useSimulatedScrollbar });
-                });
+        [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BOTH].forEach((direction) => {
+            [true, false].forEach((useSimulatedScrollbar) => {
+                configs.push({ useNative, direction, useSimulatedScrollbar });
             });
         });
     });
@@ -704,11 +704,20 @@ QUnit.module('scrollbar visibility', {
     configs.forEach(outerScrollableOptions => {
         configs.forEach(innerScrollableOptions => {
             QUnit.test(`check scrollbar visibility: outerScrollable: ${JSON.stringify(outerScrollableOptions)}, innerScrollable: ${JSON.stringify(innerScrollableOptions)}`, function(assert) {
-                this.$outerScrollable.dxScrollable(outerScrollableOptions);
-                this.$innerScrollable.dxScrollable(innerScrollableOptions);
+                const showScrollbarValues = ['onScroll', 'onHover', 'always', 'never'];
 
-                checkStyles(assert, this.$outerScrollable, outerScrollableOptions);
-                checkStyles(assert, this.$innerScrollable, innerScrollableOptions);
+                showScrollbarValues.forEach((outerShowScrollbarValue) => {
+                    this.$outerScrollable.dxScrollable({ showScrollbar: outerShowScrollbarValue, ...outerScrollableOptions });
+
+                    showScrollbarValues.forEach((innerShowScrollbarValue) => {
+                        this.$innerScrollable.dxScrollable({ showScrollbar: innerShowScrollbarValue, ...innerScrollableOptions });
+
+                        checkStyles(assert, this.$outerScrollable, { showScrollbar: outerShowScrollbarValue, ...outerScrollableOptions });
+                        checkStyles(assert, this.$innerScrollable, { showScrollbar: innerShowScrollbarValue, ...innerScrollableOptions });
+                    });
+                });
+
+
             });
         });
     });

@@ -330,6 +330,8 @@ QUnit.test('scrollTo to location', function(assert) {
 });
 
 QUnit.test('scrollTo to location with dynamic content', function(assert) {
+    this.clock.restore();
+    const done = assert.async();
     let wasFirstMove = false;
 
     const $scrollable = $('#scrollable').empty().append($('<div>').height(150)).dxScrollable({
@@ -338,6 +340,7 @@ QUnit.test('scrollTo to location with dynamic content', function(assert) {
             if(wasFirstMove) {
                 const location = getScrollOffset($scrollable);
                 assert.roughEqual(location.top, -50, 1.01, 'scroll to correctly vertical position');
+                done();
             }
             wasFirstMove = true;
         }
@@ -348,7 +351,11 @@ QUnit.test('scrollTo to location with dynamic content', function(assert) {
 
     scrollable.scrollTo(100);
     $content.empty().append($('<div>').height(101));
-    scrollable.scrollTo(50);
+
+    const resizeTimeout = 50;
+    setTimeout(() => {
+        scrollable.scrollTo(50);
+    }, resizeTimeout);
 });
 
 
