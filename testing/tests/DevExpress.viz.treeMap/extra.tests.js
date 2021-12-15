@@ -25,7 +25,7 @@ QUnit.test('After change options that reset nodes (e.g. maxDepth)', function(ass
     });
     this.renderer = renderer;
 
-    this.renderer.simpleRect.reset();
+    this.renderer.simpleRect.resetHistory();
     widget.option({ maxDepth: 2 });
 
     assert.deepEqual(this.tile(3).data.lastCall.args, args);

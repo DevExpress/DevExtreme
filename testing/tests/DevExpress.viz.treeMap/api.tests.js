@@ -211,7 +211,7 @@ QUnit.test('Update labels', function(assert) {
             value: 2, name: 'old 2'
         }]
     });
-    this.renderer.text.reset();
+    this.renderer.text.resetHistory();
 
     widget.beginUpdate();
     widget.getRootNode().getChild(0).label('new 1');
@@ -252,8 +252,8 @@ QUnit.test('Customize node / tile', function(assert) {
             value: 2
         }]
     });
-    this.tile(1).attr.reset();
-    this.renderer.text.reset();
+    this.tile(1).attr.resetHistory();
+    this.renderer.text.resetHistory();
 
     widget.getRootNode().getChild(1).data.name = 'Hello';
     widget.getRootNode().getChild(1).customize({
@@ -282,9 +282,9 @@ QUnit.test('Customize node / group', function(assert) {
             }]
         }]
     });
-    this.tile(3).attr.reset();
-    this.tile(4).attr.reset();
-    this.renderer.text.reset();
+    this.tile(3).attr.resetHistory();
+    this.tile(4).attr.resetHistory();
+    this.renderer.text.resetHistory();
 
     widget.getRootNode().getChild(1).data.name = 'Hello';
     widget.getRootNode().getChild(1).customize({
@@ -321,8 +321,8 @@ QUnit.test('Customize / changes are accumulated', function(assert) {
             }
         }
     });
-    this.tile(1).attr.reset();
-    this.renderer.text.reset();
+    this.tile(1).attr.resetHistory();
+    this.renderer.text.resetHistory();
 
     node.customize({
         border: { color: 'black' },
@@ -366,7 +366,7 @@ QUnit.test('Reset customization', function(assert) {
             e.root.getChild(0).customize({ color: 'red' });
         }
     }).getRootNode();
-    this.tile(0).attr.reset();
+    this.tile(0).attr.resetHistory();
 
     root.getChild(0).resetCustomization();
 
@@ -408,7 +408,7 @@ QUnit.test('Customize - disabled labels', function(assert) {
             label: { visible: false }
         }
     }).getRootNode();
-    this.renderer.text.reset();
+    this.renderer.text.resetHistory();
 
     root.getChild(0).customize({
         label: {
@@ -425,7 +425,7 @@ QUnit.test('Customize - hide label', function(assert) {
             value: 1, name: 'Tile 1'
         }]
     }).getRootNode();
-    this.renderer.text.reset();
+    this.renderer.text.resetHistory();
 
     root.getChild(0).customize({
         label: { visible: false }
@@ -443,7 +443,7 @@ QUnit.test('Customize - show initially hidden label', function(assert) {
             label: { visible: false }
         }
     }).getRootNode();
-    this.renderer.text.reset();
+    this.renderer.text.resetHistory();
 
     root.getChild(0).customize({
         label: { visible: true }

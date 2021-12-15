@@ -88,7 +88,7 @@ QUnit.test('idField & parentField changing', function(assert) {
         }]
     });
 
-    this.renderer.simpleRect.reset();
+    this.renderer.simpleRect.resetHistory();
 
     widget.option({ idField: 'id', parentField: 'parentId' });
 

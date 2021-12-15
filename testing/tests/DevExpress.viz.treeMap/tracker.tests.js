@@ -346,7 +346,7 @@ QUnit.test('Hovering same element several times does not cause several tooltip s
         }
     }).getRootNode();
     root.getChild(1).showTooltip();
-    this.tooltip.show.reset();
+    this.tooltip.show.resetHistory();
 
     this.trigger(pointerEvents.move, 2, { pageX: 200, pageY: 100 });
     this.trigger(pointerEvents.move, 2, { pageX: 210, pageY: 120 });

@@ -49,7 +49,7 @@ exports.environment = {
         const ii = this.tileCount();
 
         for(i = 0; i < ii; ++i) {
-            this.tile(i).attr.reset();
+            this.tile(i).attr.resetHistory();
         }
     }
 };
