@@ -1478,7 +1478,7 @@ QUnit.test('Do not update removed label position on update size', function(asser
 
     const removedLabel = this.renderer.text.getCall(1).returnValue;
 
-    removedLabel.attr.reset();
+    removedLabel.attr.resetHistory();
 
     // act
     axis.updateSize(this.canvas);
@@ -1700,7 +1700,7 @@ QUnit.test('Auto mode. After first draw - rotate, after second - stagger. Reset 
 
     let texts = this.renderer.text;
     for(i = 0; i < texts.callCount; i++) {
-        texts.getCall(i).returnValue.rotate.reset();
+        texts.getCall(i).returnValue.rotate.resetHistory();
     }
     markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
@@ -1815,7 +1815,7 @@ QUnit.test('Rotated mode with positive angle. No overlapping after second draw. 
 
     let texts = this.renderer.text;
     for(i = 0; i < texts.callCount; i++) {
-        texts.getCall(i).returnValue.rotate.reset();
+        texts.getCall(i).returnValue.rotate.resetHistory();
     }
     markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
@@ -2607,7 +2607,7 @@ QUnit.test('Estimate draws constant lines with outside labels', function(assert)
         }]
     });
 
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     axis.estimateMargins(this.canvas);
 
@@ -2670,7 +2670,7 @@ QUnit.test('Include constant line labels in bottom margin', function(assert) {
         }]
     });
 
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     const margins = axis.estimateMargins(this.canvas);
 
@@ -2696,7 +2696,7 @@ QUnit.test('Include constant line labels in top margin', function(assert) {
         }]
     });
 
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     const margins = axis.estimateMargins(this.canvas);
 
@@ -2731,7 +2731,7 @@ QUnit.test('Label is wider than constant line label - get label as margin', func
         width: 16
     }];
 
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     const margins = axis.estimateMargins(this.canvas);
 
@@ -2767,7 +2767,7 @@ QUnit.test('Constant line label is wider than label - get constant line label as
         width: 44
     }];
 
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     const margins = axis.estimateMargins(this.canvas);
 
@@ -2915,7 +2915,7 @@ QUnit.test('All margins are zero', function(assert) {
     this.options.multipleAxesSpacing = 5;
     const axis = this.createDrawnAxis();
 
-    this.renderer.g.getCall(6).returnValue.attr.reset();
+    this.renderer.g.getCall(6).returnValue.attr.resetHistory();
 
     axis.shift({ top: 0, bottom: 0, left: 0, right: 0 });
     // T548860
@@ -3042,7 +3042,7 @@ QUnit.test('Inside constant line group is not shifted', function(assert) {
     this.options.isHorizontal = true;
     const axis = this.createDrawnAxis();
     const group = this.renderer.g.getCall(11).returnValue;
-    group.attr.reset();
+    group.attr.resetHistory();
 
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
@@ -3338,7 +3338,7 @@ QUnit.test('Remove groups on disposing', function(assert) {
     axis.createTicks(this.canvas);
 
     axis.shift({ left: -10 });
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     axis.drawScaleBreaks();
     // act
@@ -3362,7 +3362,7 @@ QUnit.test('T889259. Scale breaks should be into account in the translator after
     this.axis.createTicks(this.canvas);
 
     // second render
-    this.translator.updateBusinessRange.reset();
+    this.translator.updateBusinessRange.resetHistory();
     this.updateOptions({
         breaks: [{ startValue: 300, endValue: 400 }]
     });
@@ -4737,7 +4737,7 @@ QUnit.test('Calculate common range from series on adjust', function(assert) {
     this.axis.setMarginOptions({});
 
     this.axis.adjust();
-    this.translator.updateBusinessRange.reset();
+    this.translator.updateBusinessRange.resetHistory();
 
     this.axis.createTicks(this.canvas);
 
@@ -4771,7 +4771,7 @@ QUnit.test('Calculate common range from series on adjust. series with show zero'
     this.axis.setMarginOptions({});
 
     this.axis.adjust();
-    this.translator.updateBusinessRange.reset();
+    this.translator.updateBusinessRange.resetHistory();
 
     this.axis.createTicks(this.canvas);
 
@@ -4857,7 +4857,7 @@ QUnit.test('Calculate common range from series on adjust when one series is not 
     this.axis.setMarginOptions({});
 
     this.axis.adjust();
-    this.translator.updateBusinessRange.reset();
+    this.translator.updateBusinessRange.resetHistory();
 
     this.axis.createTicks(this.canvas);
 
@@ -4879,7 +4879,7 @@ QUnit.test('min and are undefined in common range', function(assert) {
     this.axis.setMarginOptions({});
 
     this.axis.adjust();
-    this.translator.updateBusinessRange.reset();
+    this.translator.updateBusinessRange.resetHistory();
 
     this.axis.createTicks(this.canvas);
 
@@ -4909,7 +4909,7 @@ QUnit.test('Do not adjust axis if it has min/max', function(assert) {
     this.axis.setMarginOptions({});
 
     this.axis.adjust();
-    this.translator.updateBusinessRange.reset();
+    this.translator.updateBusinessRange.resetHistory();
 
     this.axis.createTicks(this.canvas);
 
@@ -4940,7 +4940,7 @@ QUnit.test('Do not adjust axis if it was zoomed', function(assert) {
     this.axis.visualRange(-20, 60);
 
     this.axis.adjust();
-    this.translator.updateBusinessRange.reset();
+    this.translator.updateBusinessRange.resetHistory();
 
     this.axis.createTicks(this.canvas);
 
@@ -4972,7 +4972,7 @@ QUnit.test('Adjust axis after reset zoom', function(assert) {
     this.axis.resetVisualRange();
 
     this.axis.adjust();
-    this.translator.updateBusinessRange.reset();
+    this.translator.updateBusinessRange.resetHistory();
 
     this.axis.createTicks(this.canvas);
 
@@ -4999,7 +4999,7 @@ QUnit.test('Adjusting with constant lines', function(assert) {
     this.axis.setMarginOptions({});
 
     this.axis.adjust();
-    this.translator.updateBusinessRange.reset();
+    this.translator.updateBusinessRange.resetHistory();
 
     this.axis.createTicks(this.canvas);
 
@@ -5017,7 +5017,7 @@ QUnit.test('Update translator business range after adjust axis', function(assert
 
     this.axis.setBusinessRange({ min: 100, max: 200 });
 
-    this.translator.updateBusinessRange.reset();
+    this.translator.updateBusinessRange.resetHistory();
     this.axis.adjust();
 
     const { min, max, minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];
@@ -5040,7 +5040,7 @@ QUnit.test('Update discrete translator business range after adjust axis', functi
 
     this.axis.setBusinessRange({ min: '100', max: '200' });
 
-    this.translator.updateBusinessRange.reset();
+    this.translator.updateBusinessRange.resetHistory();
     this.axis.adjust();
 
     const { min, max, minVisible, maxVisible } = this.translator.updateBusinessRange.lastCall.args[0];

@@ -113,8 +113,8 @@ QUnit.test('Hidden when option is set to the same value', function(assert) {
         theme: 'test-theme'
     });
     widget.showLoadingIndicator();
-    this.loadingIndicator.scheduleHiding.reset();
-    this.loadingIndicator.fulfillHiding.reset();
+    this.loadingIndicator.scheduleHiding.resetHistory();
+    this.loadingIndicator.fulfillHiding.resetHistory();
     widget.option('theme', 'test-theme');
     assert.deepEqual(this.loadingIndicator.scheduleHiding.lastCall.args, [], 'schedule');
     assert.deepEqual(this.loadingIndicator.fulfillHiding.lastCall.args, [], 'fulfilled');
@@ -140,7 +140,7 @@ QUnit.test('Hiding is scheduled on any option change', function(assert) {
 
 QUnit.test('Depends on theme', function(assert) {
     const widget = this.createWidget();
-    this.loadingIndicator.setOptions.reset();
+    this.loadingIndicator.setOptions.resetHistory();
 
     widget.option('theme', 'test-theme');
 
@@ -185,7 +185,7 @@ QUnit.test('Show loading indicator on each loading of data', function(assert) {
         }
     });
 
-    this.loadingIndicator.show.reset();
+    this.loadingIndicator.show.resetHistory();
 
     const N = 10;
     for(let i = 0; i < N; i++) {

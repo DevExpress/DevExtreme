@@ -441,7 +441,7 @@ QUnit.test('Export menu disposing', function(assert) {
 
 QUnit.test('Depends on theme', function(assert) {
     const widget = this.createWidget();
-    this.exportMenu.setOptions.reset();
+    this.exportMenu.setOptions.resetHistory();
 
     widget.option('theme', 'test-theme');
 

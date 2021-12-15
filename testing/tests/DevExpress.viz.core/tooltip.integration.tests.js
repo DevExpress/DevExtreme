@@ -51,8 +51,8 @@ QUnit.test('Options', function(assert) {
 
 QUnit.test('Depends on theme', function(assert) {
     const widget = this.createWidget();
-    this.tooltip.update.reset();
-    this.tooltip.setRendererOptions.reset();
+    this.tooltip.update.resetHistory();
+    this.tooltip.setRendererOptions.resetHistory();
 
     widget.option('theme', 'test-theme');
 

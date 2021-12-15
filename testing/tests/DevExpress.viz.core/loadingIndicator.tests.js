@@ -23,12 +23,12 @@ QUnit.module('Common', {
     },
 
     reset: function() {
-        this.eventTrigger.reset();
-        this.notify.reset();
-        this.renderer.root.stub('attr').reset();
-        this.rect.stub('animate').reset();
-        this.group.stub('linkAppend').reset();
-        this.group.stub('linkRemove').reset();
+        this.eventTrigger.resetHistory();
+        this.notify.resetHistory();
+        this.renderer.root.stub('attr').resetHistory();
+        this.rect.stub('animate').resetHistory();
+        this.group.stub('linkAppend').resetHistory();
+        this.group.stub('linkRemove').resetHistory();
     }
 });
 
@@ -187,7 +187,7 @@ QUnit.test('Fulfill hiding canceled by \'hide\'', function(assert) {
     this.loadingIndicator.show();
     this.loadingIndicator.scheduleHiding();
     this.loadingIndicator.hide();
-    this.hide.reset();
+    this.hide.resetHistory();
 
     this.loadingIndicator.fulfillHiding();
 
@@ -214,7 +214,7 @@ QUnit.test('Hiding is not scheduled on hide', function(assert) {
     };
 
     loadingIndicator.hide();
-    this.hide.reset();
+    this.hide.resetHistory();
     loadingIndicator.fulfillHiding();
 
     assert.strictEqual(this.hide.lastCall, null);

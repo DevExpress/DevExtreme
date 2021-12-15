@@ -1043,8 +1043,8 @@ QUnit.module('Lifecycle', {
             { value: 1, argument: 2 }
         ];
         const chart = this.chart(annotationOptions, items);
-        this.createAnnotationStub.getCall(0).returnValue[0].draw.reset();
-        this.createAnnotationStub.reset();
+        this.createAnnotationStub.getCall(0).returnValue[0].draw.resetHistory();
+        this.createAnnotationStub.resetHistory();
 
         const newItems = [
             { some: 'newItem' }
@@ -1074,8 +1074,8 @@ QUnit.module('Lifecycle', {
             { value: 1, argument: 2 }
         ];
         const chart = this.chart(annotationOptions, items);
-        this.createAnnotationStub.getCall(0).returnValue[0].draw.reset();
-        this.createAnnotationStub.reset();
+        this.createAnnotationStub.getCall(0).returnValue[0].draw.resetHistory();
+        this.createAnnotationStub.resetHistory();
 
         const newAnnotationOptions = {
             some: 'otherOptions'
@@ -1233,8 +1233,8 @@ QUnit.module('Lifecycle', {
             { value: 1, argument: 2 }
         ];
         const polarChart = this.polarChart(annotationOptions, items);
-        this.createAnnotationStub.getCall(0).returnValue[0].draw.reset();
-        this.createAnnotationStub.reset();
+        this.createAnnotationStub.getCall(0).returnValue[0].draw.resetHistory();
+        this.createAnnotationStub.resetHistory();
 
         const newItems = [
             { some: 'newItem' }
@@ -1264,8 +1264,8 @@ QUnit.module('Lifecycle', {
             { value: 1, argument: 2 }
         ];
         const polarChart = this.polarChart(annotationOptions, items);
-        this.createAnnotationStub.getCall(0).returnValue[0].draw.reset();
-        this.createAnnotationStub.reset();
+        this.createAnnotationStub.getCall(0).returnValue[0].draw.resetHistory();
+        this.createAnnotationStub.resetHistory();
 
         const newAnnotationOptions = {
             some: 'otherOptions'

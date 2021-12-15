@@ -101,7 +101,7 @@ const environment = {
             translator.stub('translate').withArgs(tick).returns(100);
         });
 
-        this.renderer.stub('text').reset();
+        this.renderer.stub('text').resetHistory();
 
         // act
         this.axis.draw(this.canvas);

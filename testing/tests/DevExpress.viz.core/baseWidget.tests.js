@@ -154,8 +154,8 @@ QUnit.test('Theme manager callback', function(assert) {
         rtlEnabled: 'rtl-enabled-option',
         encodeHtml: 'encode-html-option'
     });
-    this.renderer.lock.reset();
-    this.renderer.unlock.reset();
+    this.renderer.lock.resetHistory();
+    this.renderer.unlock.resetHistory();
 
     this.themeManager.setCallback.lastCall.args[0]();
 
@@ -438,9 +438,9 @@ QUnit.module('Order of methods calls', $.extend({}, environment, {
     reset: function() {
         const test = this;
         $.each(test.spies, function(_, name) {
-            test[name].reset();
+            test[name].resetHistory();
         });
-        this.renderer.stub('resize').reset();
+        this.renderer.stub('resize').resetHistory();
     },
     checkResized: function(assert) {
         this.checkOrder(assert, [
@@ -863,7 +863,7 @@ QUnit.module('Redraw on resize', $.extend({}, environment, {
 
     createWidget: function() {
         const result = environment.createWidget.apply(this, arguments);
-        this.onApplySize.reset();
+        this.onApplySize.resetHistory();
         return result;
     }
 }));
@@ -942,7 +942,7 @@ QUnit.test('Hide', function(assert) {
 QUnit.test('Show', function(assert) {
     // arrange
     this.$container.trigger('dxhiding').hide();
-    this.renderStub.reset();
+    this.renderStub.resetHistory();
 
     // act
     this.$container.show().trigger('dxshown');
@@ -1461,7 +1461,7 @@ QUnit.test('updating', function(assert) {
     const trigger = this.create({
         'name-1': {}
     });
-    this.callbackGetter.reset();
+    this.callbackGetter.resetHistory();
 
     assert.strictEqual(trigger.change('name-1'), true, 'common');
     assert.strictEqual(trigger.change('name-3'), false, 'unknown');

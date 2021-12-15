@@ -183,7 +183,7 @@ QUnit.test('Draw image inside a plaque with borders and arrow', function(assert)
         },
         font: { size: 20 }
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -246,7 +246,7 @@ QUnit.test('Get size from annotation setting if it less than image size', functi
         width: 20,
         height: 30
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -267,7 +267,7 @@ QUnit.test('Draw image inside a plaque without borders', function(assert) {
         color: '#AAAAAA',
         opacity: 0.5
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
     annotation.draw(this.widget, this.group);
 
     // assert
@@ -291,7 +291,7 @@ QUnit.test('Draw annotation with anchor and x/y', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 15
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -316,7 +316,7 @@ QUnit.test('Draw annotation with anchor and only x', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 15
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -344,7 +344,7 @@ QUnit.test('Draw annotation with anchor and only y', function(assert) {
             blur: 5,
         }
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -368,7 +368,7 @@ QUnit.test('Draw annotation with x/y and without anchor', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 15
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -393,7 +393,7 @@ QUnit.test('Draw annotation with offsetX/offsetY with anchor', function(assert) 
         paddingLeftRight: 10,
         paddingTopBottom: 15
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -417,7 +417,7 @@ QUnit.test('Draw annotation with offsetX/offsetY and without anchor', function(a
         paddingLeftRight: 10,
         paddingTopBottom: 15
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -440,7 +440,7 @@ QUnit.test('Arrow on the top, left side', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -464,7 +464,7 @@ QUnit.test('Arrow on the top, center', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -488,7 +488,7 @@ QUnit.test('Arrow on the top, right side', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -512,7 +512,7 @@ QUnit.test('Arrow on the bottom, left side', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -536,7 +536,7 @@ QUnit.test('Arrow on the bottom, center', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -560,7 +560,7 @@ QUnit.test('Arrow on the bottom, right side', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -584,7 +584,7 @@ QUnit.test('Arrow on the left, top side', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -608,7 +608,7 @@ QUnit.test('Arrow on the left, center', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -633,7 +633,7 @@ QUnit.test('Arrow on the left, bottom side', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -657,7 +657,7 @@ QUnit.test('Arrow on the right, top side', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -681,7 +681,7 @@ QUnit.test('Arrow on the right, center', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -705,7 +705,7 @@ QUnit.test('Arrow on the right, bottom side', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -729,7 +729,7 @@ QUnit.test('Arrow on top-left corner', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -753,7 +753,7 @@ QUnit.test('Arrow on top-right corner', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -777,7 +777,7 @@ QUnit.test('Arrow on bottom-right corner', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -801,7 +801,7 @@ QUnit.test('Arrow on bottom-left corner', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -825,7 +825,7 @@ QUnit.test('Anchor is inside plaque', function(assert) {
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -849,7 +849,7 @@ QUnit.test('Arrow on the left, center. Arrow width is bigger than annotation hei
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -872,7 +872,7 @@ QUnit.test('Arrow on the bottom, center. Arrow width is bigger than annotation w
         paddingLeftRight: 10,
         paddingTopBottom: 10
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -919,7 +919,7 @@ QUnit.test('Out of right bound - draw plaque from right border', function(assert
             blur: 5
         }
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -941,7 +941,7 @@ QUnit.test('Out of left bound - draw plaque from left border', function(assert) 
             blur: 10
         }
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -957,7 +957,7 @@ QUnit.test('Plaque width more than canvas - draw plaque in center', function(ass
     this.widget._getAnnotationCoords.returns({ x: 5, y: 200, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 20, height: 500 } });
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
     const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }])[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -979,7 +979,7 @@ QUnit.test('Out of top bound - draw plaque under anchor', function(assert) {
             blur: 10
         }
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -1001,7 +1001,7 @@ QUnit.test('Out of top bound, but does not fit under anchor - draw plaque from t
             blur: 5
         }
     })[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -1017,7 +1017,7 @@ QUnit.test('Plaque height more than canvas - draw plaque from top border', funct
     this.widget._getAnnotationCoords.returns({ x: 200, y: 10, canvas: { left: 0, top: 0, right: 0, bottom: 0, width: 500, height: 30 } });
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 20, height: 20 };
     const annotation = this.createAnnotations([{ type: 'image', image: { url: 'some_url' } }])[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -1037,7 +1037,7 @@ QUnit.test('Round x, y', function(assert) {
         x: 201.3,
         y: 20.6
     }])[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -1053,7 +1053,7 @@ QUnit.module('Text annotaion', environment);
 
 QUnit.test('Draw text inside plaque', function(assert) {
     const annotation = this.createAnnotations([{ x: 0, y: 0, type: 'text', text: 'some text', font: {}, cssClass: 'annotation_class' } ], {})[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -1082,7 +1082,7 @@ QUnit.test('Draw text with width/height', function(assert) {
         paddingTopBottom: 20,
         arrowWidth: 0
     }], {})[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -1112,7 +1112,7 @@ QUnit.test('Do not call setMax size is less than 0', function(assert) {
         paddingTopBottom: 20,
         arrowWidth: 0
     }], {})[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
@@ -1138,7 +1138,7 @@ QUnit.test('Draw plague bound text bbox if it greater than passed size', functio
         paddingTopBottom: 0,
         arrowWidth: 0
     }], {})[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 100, height: 200 };
 
     annotation.draw(this.widget, this.group);
@@ -1152,7 +1152,7 @@ QUnit.module('Custom annotaion', environment);
 QUnit.test('Use functional template to draw custom annotation', function(assert) {
     const template = sinon.spy();
     const annotation = this.createAnnotations([{ x: 0, y: 0, type: 'custom', template, data: { isCustomData: true } } ], {})[0];
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     annotation.draw(this.widget, this.group);
 
