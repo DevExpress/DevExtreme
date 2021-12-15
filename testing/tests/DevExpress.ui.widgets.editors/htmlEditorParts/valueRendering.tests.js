@@ -180,7 +180,7 @@ export default function() {
                 });
             }
 
-            this.clock.tick();
+            this.clock.tick(10);
 
             assert.equal(instance.option('value'), '<h1>Hi!</h1><p>Test</p>');
             assert.equal(markup, '<h1>Hi!</h1><p>Test</p>');
