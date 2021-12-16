@@ -16,6 +16,8 @@ createTestCafe('localhost', 1437, 1438)
         let componentFolder = args.componentFolder.trim();
         const file = args.file.trim();
 
+        setTestingPlatform(args);
+
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
         // eslint-disable-next-line spellcheck/spell-checker
@@ -71,6 +73,10 @@ createTestCafe('localhost', 1437, 1438)
         }
     });
 
+function setTestingPlatform(args) {
+    process.env.platform = args.platform;
+}
+
 function getArgs() {
     return parseArgs(process.argv.slice(1), {
         default: {
@@ -82,7 +88,8 @@ function getArgs() {
             file: '*',
             cache: true,
             quarantineMode: false,
-            indices: ''
+            indices: '',
+            platform: ''
         }
     });
 }
