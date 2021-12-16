@@ -15,49 +15,44 @@ function applySplitting(pdfCellsInfo, options) {
 }
 
 function splitCellsHorizontalByPages(cells, pageWidth, topLeft) {
-    const cellsByPage = [
-        [] // Empty Page
-    ];
-    const buffer = cells.map(cell => cell);
-    let pageIndex = 0;
+    const pages = [];
+    const cellsToSplit = cells.map(cell => {
+        const result = Object.assign({}, cell);
+        result.rect = Object.assign({}, cell.rect);
+        return result;
+    });
 
-    while(buffer.length > 0) {
-        cellsByPage[pageIndex] = cellsByPage[pageIndex] ?? [];
+    while(cellsToSplit.length > 0) {
+        const currentPageCells = [];
+        cellsToSplit.filter(cell => {
+            return (cell._rect.x + cell._rect.w) <= pageWidth;
+        }).forEach(cell => currentPageCells.push(cell));
 
-        // Detect cell for current page
-        const pageCells = buffer.filter(cell => {
-            const cellLeftPos = cell._rect.x;
-            const cellRightPos = cell._rect.x + cell._rect.w;
-            return cellLeftPos === topLeft.x || cellRightPos <= pageWidth;
-        });
-
-        // Move cells from buffer to page array
-        pageCells.forEach(cell => {
-            cellsByPage[pageIndex].push(cell);
-
-            const index = buffer.indexOf(cell);
+        currentPageCells.forEach(cell => {
+            const index = cellsToSplit.indexOf(cell);
             if(index !== -1) {
-                buffer.splice(index, 1);
+                cellsToSplit.splice(index, 1);
             }
         });
 
-        // Cells that are outside the page move to the left
-        let leftOffset;
-        buffer.forEach(cell => {
-            if(!isDefined(leftOffset) || leftOffset > cell._rect.x) {
-                leftOffset = cell._rect.x - topLeft.x;
-            }
+        let moveBufferCellsToLeftOffset = 0;
+        currentPageCells.forEach((cell) => {
+            const offset = (cell._rect.x + cell._rect.w) - topLeft.x;
+            moveBufferCellsToLeftOffset = moveBufferCellsToLeftOffset > offset ? moveBufferCellsToLeftOffset : offset;
         });
 
-        if(leftOffset > 0) {
-            buffer.forEach(cell => {
-                cell._rect.x -= leftOffset;
-            });
+        cellsToSplit.forEach(cell => {
+            cell._rect.x = moveBufferCellsToLeftOffset ? (cell._rect.x - moveBufferCellsToLeftOffset) : cell._rect.x;
+        });
+
+        if(currentPageCells.length > 0) {
+            pages.push(currentPageCells);
+        } else {
+            break;
         }
-        pageIndex += 1;
     }
 
-    return cellsByPage;
+    return pages;
 }
 
 export { applySplitting };
