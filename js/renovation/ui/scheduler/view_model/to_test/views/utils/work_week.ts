@@ -27,8 +27,10 @@ export const calculateStartViewDate: CalculateStartViewDate = (
     getValidStartDate(startDate, firstDayOfWeek),
   );
 
-  const firstViewDate = dateUtils.getFirstWeekDate(viewStart, firstDayOfWeek);
-  const normalizedDate = dateUtils.normalizeDateByWeek(firstViewDate, viewStart);
+  // debugger;
 
-  return setOptionHour(normalizedDate, startDayHour);
+  const firstViewDate = dateUtils.getFirstWeekDate(viewStart, firstDayOfWeek);
+  // const normalizedDate = dateUtils.normalizeDateByWeek(firstViewDate, viewStart);
+
+  return setOptionHour(firstViewDate, startDayHour);
 };
