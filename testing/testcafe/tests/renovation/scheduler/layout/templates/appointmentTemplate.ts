@@ -10,7 +10,7 @@ const test = multiPlatformTest({
 
 fixture('Layout:Templates:appointmentTemplate');
 
-['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek', 'agenda'].forEach((currentView) => {
+['day', 'workWeek', 'month', 'timelineDay', 'timelineWorkWeek'/* , 'agenda' */].forEach((currentView) => {
   test(`appointmentTemplate layout should be rendered right in '${currentView}'`, async (t, { screenshotComparerOptions }) => {
     const scheduler = new Scheduler('#container');
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
