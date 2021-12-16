@@ -100,14 +100,14 @@ describe('Pager', () => {
 
   describe('Callbacks', () => {
     describe('onPageIndexChange', () => {
-      it('should be zero based', () => {
+      it('should update pageIndex', () => {
         const pager = new GridPager({});
         pager.plugins = {
           getValue: () => ({ setPageIndex: (n) => { pager.pageIndex = n; } }),
         } as any;
 
         pager.onPageIndexChange(10);
-        expect(pager.pageIndex).toEqual(9);
+        expect(pager.pageIndex).toEqual(10);
       });
 
       it('should work when paging plugin is empty', () => {

@@ -97,16 +97,19 @@ export class GridPager extends JSXComponent(GridPagerProps) {
 
   onPageSizeChange(pageSize: number): void {
     const setPageSize = this.plugins.getValue(PagingPlugin)?.setPageSize;
+    if (!setPageSize) {
+      return;
+    }
 
     if (pageSize === 0) {
-      setPageSize?.('all');
+      setPageSize('all');
     } else {
-      setPageSize?.(pageSize);
+      setPageSize(pageSize);
     }
   }
 
   onPageIndexChange(pageIndex: number): void {
-    this.plugins.getValue(PagingPlugin)?.setPageIndex?.(pageIndex - 1);
+    this.plugins.getValue(PagingPlugin)?.setPageIndex?.(pageIndex);
   }
 
   get allowedPageSizes(): (number | 'all')[] {

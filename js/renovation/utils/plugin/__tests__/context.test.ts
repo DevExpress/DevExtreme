@@ -44,7 +44,7 @@ describe('PluginGetter', () => {
 describe('Plugins', () => {
   const someValuePlugin = createValue();
   const someGetterPlugin = createGetter(0);
-  const somePlaceholderPlugin = createPlaceholder(0);
+  const somePlaceholderPlugin = createPlaceholder();
 
   describe('set', () => {
     it('should save value', () => {

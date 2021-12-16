@@ -8,17 +8,26 @@ import { GridPager, GridPagerProps } from '../../../../js/renovation/ui/grids/da
 import { Paging, PagingProps } from '../../../../js/renovation/ui/grids/data_grid_light/widgets/paging';
 
 export const viewFunction = ({
-  options, pager, paging,
+  options, pager, paging, setPageIndex, setPageSize,
 }: App): JSX.Element => (
   <DataGridLight
     id="container"
     dataSource={options.dataSource}
     columns={options.columns}
   >
-    { /* eslint-disable-next-line react/jsx-props-no-spreading */ }
-    <Paging {...paging} />
-    { /* eslint-disable-next-line react/jsx-props-no-spreading */ }
-    <GridPager {...pager} />
+    <Paging
+      enabled={paging.enabled}
+      pageIndex={paging.pageIndex}
+      pageIndexChange={setPageIndex}
+      pageSize={paging.pageSize}
+      pageSizeChange={setPageSize}
+    />
+    <GridPager
+      visible={pager.visible}
+      allowedPageSizes={pager.allowedPageSizes}
+      showPageSizeSelector={pager.showPageSizeSelector}
+      displayMode={pager.displayMode}
+    />
   </DataGridLight>
 );
 @ComponentBindings()
@@ -55,6 +64,20 @@ export class App extends JSXComponent<AppProps>() {
     showPageSizeSelector: true,
     displayMode: 'full',
   };
+
+  setPageIndex(pageIndex: number): void {
+    this.paging = {
+      ...this.paging,
+      pageIndex,
+    };
+  }
+
+  setPageSize(pageSize: number | 'all'): void {
+    this.paging = {
+      ...this.paging,
+      pageSize,
+    };
+  }
 
   @Effect({ run: 'once' })
   optionsUpdated(): void {
