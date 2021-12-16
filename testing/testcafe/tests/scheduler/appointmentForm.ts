@@ -183,10 +183,10 @@ test('AppointmentForm should display correct dates in work-week when firstDayOfW
     .doubleClick(scheduler.getDateTableCell(2, 4))
 
     .expect(appointmentPopup.startDateElement.value)
-    .eql('7/5/2021, 6:00 AM')
+    .eql('6/28/2021, 6:00 AM')
 
     .expect(appointmentPopup.endDateElement.value)
-    .eql('7/5/2021, 6:30 AM');
+    .eql('6/28/2021, 6:30 AM');
 }).before(async () => createWidget('dxScheduler', {
   views: ['workWeek'],
   currentView: 'workWeek',
