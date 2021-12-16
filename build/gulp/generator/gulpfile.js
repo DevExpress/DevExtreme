@@ -194,7 +194,7 @@ function addGenerationTaskWithSuffix(
     copyArtifacts = false,
     babelGeneratedFiles = true
 ) {
-    const frameworkDest = `artifacts/${frameworkName}`;
+    const frameworkDest = `artifacts/${frameworkName}${suffix}`;
     const generator = require(`@devextreme-generator/${frameworkName}`).default;
     let tsProject = () => () => { };
     if(compileTs) {
@@ -230,7 +230,7 @@ function addGenerationTaskWithSuffix(
             .pipe(gulp.dest(frameworkDest));
     });
 
-    const frameworkSrc = `./artifacts/${frameworkName}`;
+    const frameworkSrc = `./artifacts/${frameworkName}${suffix}`;
     const artifactsSrc = ['./artifacts/css/**/*', `${frameworkSrc}/**/*`];
 
     const generateSeries = [
@@ -299,11 +299,13 @@ function addGenerationTaskWithSuffix(
 }
 
 addGenerationTask('react',
-    ['Cannot find module \'csstype\'.'].concat(knownErrors),
+    knownErrors,
     true,
     true,
     false
 );
+addGenerationTaskWithSuffix('react', '-typescript', knownErrors, false, false, false);
+
 const ngErrors = [
     'Cannot find module \'@angular/core\'',
     'Cannot find module \'@angular/common\'',
