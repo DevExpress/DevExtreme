@@ -76,14 +76,22 @@ jobs:
     - name: Install packages in devextreme repo
       run: npm install --no-audit --no-fund
 
-    - name: Build Renovated NPM
-      run: npm run build-npm-renovation:${{ matrix.framework }}
-
     - name: Download DevExtreme package
       uses: actions/download-artifact@v2
       with:
         name: devextreme-npm
         path: ./testing/renovation-npm/${{ matrix.framework }}-app
+
+    - name: Prepare artifacts
+      run: |
+        mkdir -p ./artifacts/npm
+        cp $(ls ./testing/renovation-npm/${{ matrix.framework }}-app/devextreme-*.tgz) ./artifacts/npm/devextreme.tgz
+        cd ./artifacts/npm
+        tar -xzf devextreme.tgz
+        mv package devextreme
+
+    - name: Build Renovated NPM
+      run: npm run build-npm-renovation:${{ matrix.framework }}
 
     - name: Prepare test project
       working-directory: ./testing/renovation-npm
