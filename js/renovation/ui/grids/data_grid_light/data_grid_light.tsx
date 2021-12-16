@@ -50,7 +50,7 @@ export class DataGridLightProps extends BaseWidgetProps {
   columns: string[] = [];
 
   @Slot()
-  children?: JSX.Element;
+  children?: JSX.Element | JSX.Element[];
 }
 
 const aria = {

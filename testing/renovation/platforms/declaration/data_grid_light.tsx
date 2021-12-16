@@ -4,17 +4,22 @@ import {
 } from '@devextreme-generator/declarations';
 import React from 'react';
 import { DataGridLight, DataGridLightProps } from '../../../../js/renovation/ui/grids/data_grid_light/data_grid_light';
+import { GridPager, GridPagerProps } from '../../../../js/renovation/ui/grids/data_grid_light/widgets/pager';
+import { Paging, PagingProps } from '../../../../js/renovation/ui/grids/data_grid_light/widgets/paging';
 
 export const viewFunction = ({
-  options,
+  options, pager, paging,
 }: App): JSX.Element => (
   <DataGridLight
     id="container"
     dataSource={options.dataSource}
     columns={options.columns}
-    paging={options.paging}
-    pager={options.pager}
-  />
+  >
+    { /* eslint-disable-next-line react/jsx-props-no-spreading */ }
+    <Paging {...paging} />
+    { /* eslint-disable-next-line react/jsx-props-no-spreading */ }
+    <GridPager {...pager} />
+  </DataGridLight>
 );
 @ComponentBindings()
 class AppProps { }
@@ -34,27 +39,42 @@ export class App extends JSXComponent<AppProps>() {
       { id: 4, text: 'text 4' },
       { id: 5, text: 'text 5' },
     ],
-    paging: {
-      pageSize: 2,
-      pageIndex: 0,
-      enabled: true,
-    },
-    pager: {
-      visible: true,
-      allowedPageSizes: [2, 4, 'all'],
-      showPageSizeSelector: true,
-      displayMode: 'full',
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } as any,
+  };
+
+  @InternalState()
+  paging: Partial<PagingProps> = {
+    pageSize: 2,
+    pageIndex: 0,
+    enabled: true,
+  };
+
+  @InternalState()
+  pager: Partial<GridPagerProps> = {
+    visible: true,
+    allowedPageSizes: [2, 4, 'all'],
+    showPageSizeSelector: true,
+    displayMode: 'full',
   };
 
   @Effect({ run: 'once' })
   optionsUpdated(): void {
     (window as unknown as { onOptionsUpdated: (unknown) => void })
       .onOptionsUpdated = (newOptions) => {
+        const { paging, pager, ...rest } = newOptions;
+
         this.options = {
           ...this.options,
-          ...newOptions,
+          ...rest,
+        };
+
+        this.pager = {
+          ...this.pager,
+          ...pager,
+        };
+
+        this.paging = {
+          ...this.paging,
+          ...paging,
         };
       };
   }
