@@ -17,7 +17,6 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
-import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import { normalizeKeyName } from 'events/utils/index';
 import { getWidth, getHeight } from 'core/utils/size';
 
@@ -5801,11 +5800,7 @@ QUnit.module('single line mode', {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
-
-        const expectedScrollPosition = isScrollInverted ? 0 : scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
+        const expectedScrollPosition = 0;
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on rendering');
 
@@ -5820,11 +5815,7 @@ QUnit.module('single line mode', {
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
-
-        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        const expectedScrollPosition = -($container.get(0).scrollWidth - $container.outerWidth());
 
         this.instance.focus();
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the end');
@@ -5993,18 +5984,14 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
-
         this.instance.focus();
         this.instance.option('value', [this.items[0]]);
 
-        let expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        let expectedScrollPosition = -($container.get(0).scrollWidth - $container.outerWidth());
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
 
         this.instance.option('value', this.items);
-        expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        expectedScrollPosition = -($container.get(0).scrollWidth - $container.outerWidth());
 
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
@@ -6098,10 +6085,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        const expectedScrollPosition = -($container.get(0).scrollWidth - $container.outerWidth());
 
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
