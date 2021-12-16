@@ -1,6 +1,7 @@
 const { spawnSync } = require('child_process');
 const path = require('path');
 const minimatch = require("minimatch");
+const { platform } = require('os');
 
 function camelCase(str) {
     return str

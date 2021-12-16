@@ -124,27 +124,35 @@ stylingMods.forEach((stylingMode) => {
   });
 });
 
-stylingMods.forEach((stylingMode) => {
-  themes.forEach((theme) => {
-    test(`Floating label for opened Lookup ${theme} stylingMode=${stylingMode}`, async (t) => {
-      await setTheme(theme);
+labelMods.forEach((labelMode) => {
+  stylingMods.forEach((stylingMode) => {
+    themes.forEach((theme) => {
+      test(`Label for Lookup labelMode=${labelMode} stylingMode=${stylingMode} ${theme}`, async (t) => {
+        await setTheme(theme);
 
-      const componentOption = {
-        width: 300,
-        label: 'label text',
-        labelMode: 'floating',
-        dropDownCentered: false,
-        items: [...Array(10)].map((_, i) => `item${i}`),
-        stylingMode,
-      };
+        const componentOption = {
+          width: 300,
+          label: 'label text',
+          labelMode,
+          dropDownCentered: false,
+          items: [...Array(10)].map((_, i) => `item${i}`),
+          stylingMode,
+        };
 
-      await createWidget('dxLookup', {
-        ...componentOption,
-      }, true);
+        await createComponent('dxLookup', { ...componentOption }, '#container');
 
-      await t.click(Selector('.dx-lookup-field'));
+        await createComponent('dxLookup', { ...componentOption }, '#otherContainer');
 
-      await t.expect(await compareScreenshot(t, `floating-label-opened-lookup-${theme}-styleMode=${stylingMode}.png`)).ok();
+        await t.click('#otherContainer');
+
+        await t.expect(await compareScreenshot(t, `label-lookup-${theme}-labelMode=${labelMode}-styleMode=${stylingMode}.png`)).ok();
+      }).before(async () => {
+        await ClientFunction(() => {
+          $('#otherContainer').css({
+            'margin-top': '20px',
+          });
+        })();
+      });
     });
   });
 });

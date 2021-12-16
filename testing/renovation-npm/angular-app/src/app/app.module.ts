@@ -1,21 +1,19 @@
-/* eslint-disable @typescript-eslint/no-unused-vars-experimental */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { Button } from '@devextreme/angular/ui/button';
+/* eslint-disable */
 import { AppComponent } from './app.component';
+import { DxButtonModule } from '@devextreme/angular';
 
-const button = Button;
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
+    DxButtonModule
   ],
   providers: [],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export class AppModule { }

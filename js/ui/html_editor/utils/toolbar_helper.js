@@ -784,7 +784,7 @@ function applyTableDimensionChanges(module, { $table, newHeight, newWidth, table
             const $columns = getColumnElements($table);
             const oldTableWidth = getOuterWidth($table);
 
-            unfixTableWidth($table, tableBlot);
+            unfixTableWidth($table, { tableBlot });
 
             each($columns, (i, element) => {
                 const $element = $(element);
@@ -833,7 +833,7 @@ function applyCellDimensionChanges(module, { $cell, newHeight, newWidth, tableBl
         const tableWidth = getOuterWidth($table);
 
         if(newWidth > tableWidth) {
-            unfixTableWidth($table, tableBlot);
+            unfixTableWidth($table, { tableBlot });
         }
 
         setLineElementsFormat(module, {
@@ -846,7 +846,7 @@ function applyCellDimensionChanges(module, { $cell, newHeight, newWidth, tableBl
         const shouldUpdateNearestColumnWidth = getAutoSizedElements($table).length === 0;
 
         if(shouldUpdateNearestColumnWidth) {
-            unfixTableWidth($table, tableBlot);
+            unfixTableWidth($table, { tableBlot });
             if($nextColumnCell.length === 1) {
                 $verticalCells = getLineElements($table, index + 1);
                 const nextColumnWidth = getOuterWidth($verticalCells.eq(0)) - widthDiff;

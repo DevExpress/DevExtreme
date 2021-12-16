@@ -2407,7 +2407,9 @@ export const editingModule = {
                     }
 
                     if(eventName === 'click' && startEditAction === 'dblClick' && !isEditedCell) {
-                        editingController.closeEditCell();
+                        const isError = false;
+                        const withoutSaveEditData = row?.isNewRow;
+                        editingController.closeEditCell(isError, withoutSaveEditData);
                     }
 
                     if(allowEditing && eventName === startEditAction) {

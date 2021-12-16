@@ -7,18 +7,21 @@ export const viewFunction = (viewModel: DataRow): JSX.Element => (
     className="dx-row dx-data-row dx-column-lines"
     role="row"
     aria-selected="false"
-    aria-rowindex={viewModel.props.rowIndex + 1}
+    // TODO uncomment after https://trello.com/c/kVXfSWI7
+    // aria-rowindex={viewModel.props.rowIndex + 1}
   >
-    {viewModel.props.columns.map((dataField, index) => (
+    {viewModel.cellTexts.map((text, index) => (
       <td
         // eslint-disable-next-line react/no-array-index-key
         key={index}
-        aria-describedby={`dx-col-${index + 1}`}
+        // TODO uncomment after https://trello.com/c/kVXfSWI7
+        // aria-describedby={`dx-col-${index + 1}`}
         aria-selected="false"
         role="gridcell"
-        aria-colindex={index + 1}
+        // TODO uncomment after https://trello.com/c/kVXfSWI7
+        // aria-colindex={index + 1}
       >
-        {String(viewModel.props.data[dataField])}
+        {text}
       </td>
     ))}
   </tr>
@@ -41,4 +44,8 @@ export class DataRowProps {
   view: viewFunction,
 })
 export class DataRow extends JSXComponent(DataRowProps) {
+  get cellTexts(): string[] {
+    const { columns, data } = this.props;
+    return columns.map((dataField) => String(data[dataField]));
+  }
 }

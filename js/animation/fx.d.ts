@@ -115,6 +115,7 @@ export type AnimationConfig = {
 export type animationConfig = AnimationConfig;
 
 /**
+ * @public
  * @docid
  * @section utils
  * @namespace DevExpress

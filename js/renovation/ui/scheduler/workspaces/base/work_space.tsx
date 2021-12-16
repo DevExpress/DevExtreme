@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 /* eslint-disable rulesdir/no-non-null-assertion */
 /* eslint-disable class-methods-use-this */
 import {
@@ -10,9 +11,15 @@ import {
   Ref,
   RefObject,
 } from '@devextreme-generator/declarations';
-import { subscribeToScrollEvent } from '../../../../utils/subscribe_to_event';
+import {
+  subscribeToDXPointerDownEvent,
+  subscribeToDXPointerMoveEvent,
+  subscribeToScrollEvent,
+} from '../../../../utils/subscribe_to_event';
 import { combineClasses } from '../../../../utils/combine_classes';
 import {
+  CellsSelectionControllerType,
+  CellsSelectionState,
   CorrectedVirtualScrollingState,
   DateHeaderCellData,
   DateHeaderData,
@@ -38,7 +45,10 @@ import {
   createCellElementMetaData,
   createVirtualScrollingOptions,
   DATE_TABLE_MIN_CELL_WIDTH,
+  getCellIndices,
   getDateTableWidth,
+  getSelectedCells,
+  isCellAllDay,
 } from './utils';
 import { ViewRenderConfig, WorkSpaceProps } from '../props';
 import { getViewRenderConfigByType } from './work_space_config';
@@ -49,6 +59,7 @@ import { getViewDataGeneratorByViewType } from '../../../../../ui/scheduler/work
 import { calculateIsGroupedAllDayPanel } from '../../view_model/to_test/views/utils/base';
 import { DateHeaderDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/date_header_data_generator';
 import { TimePanelDataGenerator } from '../../../../../ui/scheduler/workspaces/view_model/time_panel_data_generator';
+import { CellsSelectionController } from '../../../../../ui/scheduler/workspaces/cells_selection_controller';
 import { getGroupPanelData } from '../../view_model/group_panel/utils';
 import { ScrollEventArgs, ScrollOffset } from '../../../scroll_view/common/types';
 import type { dxSchedulerScrolling } from '../../../../../ui/scheduler';
@@ -56,6 +67,14 @@ import { getWindow } from '../../../../../core/utils/window';
 import domAdapter from '../../../../../core/dom_adapter';
 import { EffectReturn } from '../../../../utils/effect_return';
 import { ConfigContext, ConfigContextValue } from '../../../../common/config_context';
+import pointerEvents from '../../../../../events/pointer';
+import eventsEngine from '../../../../../events/core/events_engine';
+import { isMouseEvent } from '../../../../../events/utils/index';
+import { ALL_DAY_PANEL_CELL_CLASS, DATE_TABLE_CELL_CLASS } from '../const';
+///#DEBUG
+import { DiagnosticUtils } from '../../../../utils/diagnostic';
+///#ENDDEBUG
+const DATA_CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_PANEL_CELL_CLASS}`;
 
 interface VirtualScrollingSizes {
   cellHeight: number;
@@ -299,6 +318,12 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   @InternalState()
   virtualScrollingData?: VirtualScrollingData;
 
+  @InternalState()
+  cellsSelectionState: CellsSelectionState | null = null;
+
+  @InternalState()
+  isPointerDown = false;
+
   @ForwardRef()
   dateTableRef!: RefObject<HTMLTableElement>;
 
@@ -483,11 +508,22 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     );
   }
 
+  get viewDataMapWithSelection(): ViewDataMap {
+    if (!this.cellsSelectionState) {
+      return this.viewDataMap;
+    }
+
+    return this.viewDataGenerator.markSelectedAndFocusedCells(
+      this.viewDataMap,
+      this.cellsSelectionState,
+    );
+  }
+
   get viewData(): GroupedViewData {
     const { groups } = this.props;
     const result = this.viewDataGenerator.getViewDataFromMap(
       this.completeViewDataMap,
-      this.viewDataMap,
+      this.viewDataMapWithSelection,
       {
         ...this.correctedVirtualScrollingState,
         isProvideVirtualCellsWidth: this.renderConfig.isProvideVirtualCellsWidth,
@@ -550,6 +586,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       {
         isGenerateWeekDaysHeaderData: this.renderConfig.isGenerateWeekDaysHeaderData,
         isProvideVirtualCellsWidth: this.renderConfig.isProvideVirtualCellsWidth,
+        isMonthDateHeader: this.renderConfig.isMonthDateHeader,
         startDayHour,
         endDayHour,
         hoursInterval,
@@ -627,7 +664,6 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
 
     viewDataProvider.completeViewDataMap = this.completeViewDataMap;
     viewDataProvider.viewDataMap = this.viewDataMap;
-    viewDataProvider.viewData = this.viewData;
 
     const generationOptions = prepareGenerationOptions(
       {
@@ -699,6 +735,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       intervalCount,
       allDayPanelExpanded,
       groups,
+      scrolling,
     } = this.props;
 
     return combineClasses({
@@ -717,6 +754,7 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
       'dx-scheduler-group-column-count-two': this.isVerticalGrouping && groups.length === 2,
       'dx-scheduler-group-column-count-three': this.isVerticalGrouping && groups.length === 3,
       'dx-scheduler-work-space-both-scrollbar': this.props.crossScrollingEnabled,
+      'dx-scheduler-work-space-virtual': scrolling.mode === 'virtual',
       'dx-scheduler-work-space': true,
     });
   }
@@ -732,6 +770,14 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   get isCalculateTablesWidth(): boolean {
     return this.props.crossScrollingEnabled && this.renderConfig.defaultGroupOrientation !== 'vertical';
   }
+
+  ///#DEBUG
+  /* istanbul ignore next: Test performace */
+  @Effect({ run: 'always' })
+  diagnosticEffect(): void {
+    DiagnosticUtils.incrementRenderCount('scheduler_workspace');
+  }
+  ///#ENDDEBUG
 
   @Effect({ run: 'always' })
   headerEmptyCellWidthEffect(): void {
@@ -856,6 +902,24 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
   }
 
   @Effect()
+  pointerEventsEffect(): EffectReturn {
+    const disposePointerDown = subscribeToDXPointerDownEvent(
+      this.widgetElementRef.current,
+      this.onPointerDown,
+    );
+    const disposePointerMove = subscribeToDXPointerMoveEvent(
+      this.widgetElementRef.current,
+      this.onPointerMove,
+    );
+
+    return (): void => {
+      disposePointerDown!();
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+      disposePointerMove!();
+    };
+  }
+
+  @Effect()
   onViewRendered(): void {
     const {
       intervalCount,
@@ -928,6 +992,11 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
     }
   }
 
+  @Effect({ run: 'once' })
+  disposeEffect(): void {
+    eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this.onPointerUp);
+  }
+
   createDateTableElementsMeta(totalCellCount: number): DOMRect[][] {
     const dateTableCells = this.dateTableRef.current!.querySelectorAll('td:not(.dx-scheduler-virtual-cell)');
     const dateTableRect = this.dateTableRef.current!.getBoundingClientRect();
@@ -998,6 +1067,84 @@ export class WorkSpace extends JSXComponent<WorkSpaceProps, 'currentDate' | 'onV
         state: nextState,
         sizes: this.virtualScrollingData!.sizes,
       };
+    }
+  }
+
+  onPointerDown(e: MouseEvent | TouchEvent): void {
+    const cell = (e.target as HTMLElement).closest(DATA_CELL_SELECTOR) as HTMLElement;
+
+    if (cell && isMouseEvent(e) && (e as MouseEvent).button === 0) {
+      const isAllDay = isCellAllDay(cell);
+      const cellIndices = getCellIndices(cell);
+
+      const cellData = this.viewDataProvider.getCellData(
+        cellIndices.rowIndex, cellIndices.columnIndex, isAllDay,
+      );
+
+      eventsEngine.off(domAdapter.getDocument(), pointerEvents.up, this.onPointerUp);
+      eventsEngine.on(domAdapter.getDocument(), pointerEvents.up, this.onPointerUp);
+
+      this.cellsSelectionState = {
+        focusedCell: {
+          cellData,
+          position: cellIndices,
+        },
+        selectedCells: [cellData],
+        firstSelectedCell: cellData,
+      };
+      this.isPointerDown = true;
+    }
+  }
+
+  onPointerUp(e: MouseEvent | TouchEvent): void {
+    if (isMouseEvent(e) && (e as MouseEvent).button === 0) {
+      this.isPointerDown = false;
+    }
+  }
+
+  onPointerMove(e: Event): void {
+    const cell = (e.target as HTMLElement).closest(DATA_CELL_SELECTOR) as HTMLElement;
+
+    if (cell && this.isPointerDown) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const cellsSelectionController: CellsSelectionControllerType = new CellsSelectionController();
+      const cellIndices = getCellIndices(cell);
+
+      const isAllDay = isCellAllDay(cell);
+      const cellData = this.viewDataProvider.getCellData(
+        cellIndices.rowIndex, cellIndices.columnIndex, isAllDay,
+      );
+
+      const nextFocusedCell = cellsSelectionController.moveToCell({
+        isMultiSelection: true,
+        isMultiSelectionAllowed: true, // TODO
+        focusedCellData: this.cellsSelectionState!.focusedCell.cellData,
+        currentCellData: cellData,
+      });
+
+      if (nextFocusedCell === cellData
+          && this.cellsSelectionState!.focusedCell.cellData.index !== cellData.index) {
+        const firstCell = this.cellsSelectionState!.firstSelectedCell;
+        const lastCell = cellData;
+
+        const selectedCells = getSelectedCells(
+          this.viewDataProvider,
+          firstCell,
+          lastCell,
+          !!firstCell.allDay,
+        );
+
+        this.cellsSelectionState = {
+          focusedCell: {
+            cellData,
+            position: cellIndices,
+          },
+          selectedCells,
+          firstSelectedCell: this.cellsSelectionState!.firstSelectedCell,
+        };
+      }
     }
   }
 }
