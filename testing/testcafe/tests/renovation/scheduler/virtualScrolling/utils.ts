@@ -138,5 +138,5 @@ export const scrollConfig = [{
 }];
 
 export const setZoomLevel = ClientFunction((zoomLevel: number) => {
-  $('body').css('zoom', `${zoomLevel}%`);
+  (document.body.style as any).zoom = `${zoomLevel}%`;
 });
