@@ -1651,6 +1651,22 @@ QUnit.module('clearButton', moduleSetup, () => {
 
         assert.equal($input.val(), '', 'input is empty');
     });
+
+    QUnit.test('click on clear button should filter dataSource by null (T1051100)', function(assert) {
+        $('#selectBox')
+            .dxSelectBox({
+                items: [1, 11],
+                searchEnabled: true,
+                minSearchLength: 1,
+                value: 1,
+                showClearButton: true
+            });
+
+        $(toSelector(CLEAR_BUTTON_AREA)).trigger('dxclick');
+        const items = $(toSelector(LIST_ITEM_CLASS));
+
+        assert.strictEqual(items.length, 0, 'items are re-filtered, and no item is shown because of minSearchLength=1');
+    });
 });
 
 QUnit.module('showSelectionControls', moduleSetup, () => {
