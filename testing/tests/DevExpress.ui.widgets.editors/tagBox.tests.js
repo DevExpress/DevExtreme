@@ -588,7 +588,7 @@ QUnit.module('tags', moduleSetup, () => {
         $($listItems.eq(0)).trigger('dxclick');
         $($listItems.eq(1)).trigger('dxclick');
         $($element.find('.dx-clear-button-area')).trigger('dxclick');
-        $($listItems.eq(2)).trigger('dxclick');
+        getListItems($element).eq(2).trigger('dxclick');
 
         assert.equal($element.find('.' + TAGBOX_TAG_CLASS).length, 1, 'one item is chosen');
     });
