@@ -1,5 +1,7 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { AppointmentContent, AppointmentContentProps, viewFunction } from '../content';
+import { AppointmentDetails } from '../details/layout';
+import { AppointmentContent, AppointmentContentProps, viewFunction } from '../layout';
+import { AppointmentTitle } from '../title/layout';
 
 const CLASSES = {
   content: 'dx-scheduler-appointment-content',
@@ -19,50 +21,38 @@ describe('AppointmentContent', () => {
         text: '',
         dateText: '',
         isRecurrent: false,
+        isReduced: false,
+        index: 0,
+        data: null,
+        appointmentTemplate: jest.fn(),
       },
       ...viewModel,
     }));
 
     it('should has correct render', () => {
-      const appointmentContent = render({});
-
-      expect(appointmentContent.hasClass(`${CLASSES.content}`))
-        .toBe(true);
-
-      expect(appointmentContent.is('div'))
-        .toBe(true);
-    });
-
-    it('should has correct title', () => {
       const appointmentContent = render({
         props: {
           text: 'Appointment Text',
-        },
-      });
-
-      const title = appointmentContent.find(`.${CLASSES.title}`);
-
-      expect(title.length)
-        .toBe(1);
-
-      expect(title.text())
-        .toBe('Appointment Text');
-    });
-
-    it('should has correct dateText', () => {
-      const appointmentContent = render({
-        props: {
           dateText: 'Date Text',
         },
       });
 
-      const dateText = appointmentContent.find(`.${CLASSES.dateText}`);
+      const title = appointmentContent.childAt(0);
+      expect(title.type())
+        .toBe(AppointmentTitle);
+      expect(title.props())
+        .toEqual({
+          text: 'Appointment Text',
+        });
 
-      expect(dateText.length)
-        .toBe(1);
+      const details = appointmentContent.childAt(1);
+      expect(details.type())
+        .toBe(AppointmentDetails);
 
-      expect(dateText.text())
-        .toBe('Date Text');
+      expect(details.props())
+        .toEqual({
+          dateText: 'Date Text',
+        });
     });
 
     it('should not render recurrent and reduced icons', () => {
@@ -102,6 +92,34 @@ describe('AppointmentContent', () => {
       expect(reducedIcon)
         .toHaveLength(1);
     });
+
+    it('it should has correct render with template', () => {
+      const templateProps = {
+        data: { test: 'Test Data' },
+        index: 1234,
+      };
+      const template = '<div class="some-template">Some Template</div>';
+      const content = render({
+        props: {
+          ...templateProps,
+          appointmentTemplate: template,
+        },
+      });
+
+      expect(content.children())
+        .toHaveLength(1);
+
+      const appointmentTemplate = content.children();
+
+      expect(appointmentTemplate.type())
+        .toBe(template);
+
+      expect(appointmentTemplate)
+        .toHaveLength(1);
+
+      expect(appointmentTemplate.props())
+        .toEqual(templateProps);
+    });
   });
 
   describe('Logic', () => {
@@ -115,6 +133,9 @@ describe('AppointmentContent', () => {
             dateText: '',
             isRecurrent: false,
             isReduced: false,
+            index: 0,
+            data: undefined,
+            appointmentTemplate: undefined,
           });
       });
     });

@@ -95,7 +95,6 @@ describe('Simulated > View', () => {
       forceGeneratePockets: false,
       inertiaEnabled: true,
       needScrollViewContentWrapper: false,
-      needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
       pullDownEnabled: false,
       pulledDownText: 'Release to refresh...',
