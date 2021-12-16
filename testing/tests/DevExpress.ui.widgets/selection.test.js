@@ -2226,6 +2226,32 @@ QUnit.test('Pass filter to load when selection filter', function(assert) {
     assert.deepEqual(selectedKeys, [1, 2, 6], 'selected keys');
 });
 
+QUnit.test('Remove template property from filter value', function(assert) {
+    const selection = this.createDeferredSelection(this.data, {
+        selectionFilter: [['id', '=', { id: 2, template: 'content' }]]
+    });
+
+    selection.getSelectedItemKeys().done();
+
+    assert.strictEqual(this.load.lastCall.args[0].filter[0][2].template, undefined);
+});
+
+QUnit.test('Remove template property from each filter value', function(assert) {
+    const selection = this.createDeferredSelection(this.data, {
+        selectionFilter: [
+            ['id', '=', { id: 1, template: 'content' }],
+            ['id', '=', { id: 2, template: 'content' }],
+            ['id', '=', { id: 3, template: 'content' }]
+        ]
+    });
+
+    selection.getSelectedItemKeys().done();
+
+    assert.strictEqual(this.load.lastCall.args[0].filter[0][2].template, undefined);
+    assert.strictEqual(this.load.lastCall.args[0].filter[1][2].template, undefined);
+    assert.strictEqual(this.load.lastCall.args[0].filter[2][2].template, undefined);
+});
+
 QUnit.test('not pass filter to loadOptions', function(assert) {
     let selectedKeys;
     const selection = this.createDeferredSelection(this.data, {

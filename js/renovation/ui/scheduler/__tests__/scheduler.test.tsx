@@ -144,11 +144,14 @@ describe('Scheduler', () => {
       const tree = renderComponent({
         onViewRendered: () => {},
         workSpaceKey: 'workSpaceKey',
+        currentViewConfig: {
+          ...defaultCurrentViewConfig,
+          ...templates,
+        },
         props: {
           height: 500,
           width: 600,
         },
-        ...templates,
       });
 
       const workSpace = tree.find(WorkSpace);
@@ -250,7 +253,10 @@ describe('Scheduler', () => {
         const scheduler = renderComponent({
           props,
           appointmentsViewModel,
-          ...templates,
+          currentViewConfig: {
+            ...defaultCurrentViewConfig,
+            ...templates,
+          },
         });
 
         const workspace = scheduler.find(WorkSpace);
@@ -833,9 +839,6 @@ describe('Scheduler', () => {
                 crossScrollingEnabled: false,
                 height: undefined,
                 width: undefined,
-                tabIndex: 0,
-                accessKey: undefined,
-                focusStateEnabled: true,
               },
               new Date(2021, 1, 1),
             );
@@ -1458,77 +1461,6 @@ describe('Scheduler', () => {
 
           expect(scheduler.workSpaceKey)
             .toBe('day_horizontal_3_0');
-        });
-      });
-
-      describe('Cell Templates', () => {
-        it('should return cell templates', () => {
-          const templates = {
-            dateCellTemplate: jest.fn(),
-            dataCellTemplate: jest.fn(),
-            timeCellTemplate: jest.fn(),
-            resourceCellTemplate: jest.fn(),
-          };
-
-          const scheduler = new Scheduler({
-            ...new SchedulerProps(),
-            ...templates,
-          });
-
-          expect(scheduler.dateCellTemplate)
-            .toBe(templates.dateCellTemplate);
-          expect(scheduler.dataCellTemplate)
-            .toBe(templates.dataCellTemplate);
-          expect(scheduler.timeCellTemplate)
-            .toBe(templates.timeCellTemplate);
-          expect(scheduler.resourceCellTemplate)
-            .toBe(templates.resourceCellTemplate);
-        });
-      });
-
-      describe('Appointment templates', () => {
-        it('should return templates', () => {
-          const templates = {
-            appointmentTemplate: jest.fn(),
-            appointmentCollectorTemplate: jest.fn(),
-          };
-
-          const scheduler = new Scheduler({
-            ...new SchedulerProps(),
-            ...templates,
-          });
-
-          expect(scheduler.appointmentTemplate)
-            .toBe(templates.appointmentTemplate);
-          expect(scheduler.appointmentCollectorTemplate)
-            .toBe(templates.appointmentCollectorTemplate);
-        });
-
-        it('should return templates from view', () => {
-          const templates = {
-            appointmentTemplate: jest.fn(),
-            appointmentCollectorTemplate: jest.fn(),
-          };
-
-          const viewTemplates = {
-            appointmentTemplate: jest.fn(),
-            appointmentCollectorTemplate: jest.fn(),
-          };
-
-          const scheduler = new Scheduler({
-            ...new SchedulerProps(),
-            views: [{
-              type: 'day',
-              ...viewTemplates,
-            }],
-            currentView: 'day',
-            ...templates,
-          });
-
-          expect(scheduler.appointmentTemplate)
-            .toBe(viewTemplates.appointmentTemplate);
-          expect(scheduler.appointmentCollectorTemplate)
-            .toBe(viewTemplates.appointmentCollectorTemplate);
         });
       });
     });

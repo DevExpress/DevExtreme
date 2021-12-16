@@ -79,7 +79,7 @@ function buildSeries(steps, context) {
 
 function addCompilationTask(frameworkData) {
     const context = {
-        source: `artifacts/${frameworkData.name}/renovation`,
+        source: `artifacts/${frameworkData.artifactsFolder || frameworkData.name}/renovation`,
         destination: `artifacts/npm-${frameworkData.name}`,
         extensions: ['.js', '.ts', '.d.ts', '.tsx'],
         production: (process.env['NPM_PRODUCTION'] || '').toLowerCase() === 'true',
@@ -149,6 +149,7 @@ addCompilationTask({
 });
 addCompilationTask({
     name: 'angular',
+    artifactsFolder: 'angular-typescript',
     generator: 'generate-angular-typescript',
 
     switches: {
