@@ -102,6 +102,14 @@ jobs:
         npm run install-all ${{ matrix.framework }}
         npm run start ${{ matrix.framework }} &
 
+        for i in {1..20}; do
+          if [ "$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:3000)" == "200" ]; then
+            exit 0
+          fi
+          sleep 10
+        done
+        exit 1
+
     - name: Run tests
       working-directory: ./testing/renovation-npm
       run: |
