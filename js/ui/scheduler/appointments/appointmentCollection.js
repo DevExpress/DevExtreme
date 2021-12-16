@@ -585,14 +585,15 @@ class SchedulerAppointments extends CollectionWidget {
 
         const resourceFields = resourceList.map(resource => getFieldExpr(resource));
 
-        resourceFields.forEach(fieldName => {
-            const resourceValue = getDataAccessors(this.option('getResourceDataAccessors')(), fieldName, 'getter')(rawAppointment);
-            const values = wrapToArray(resourceValue);
+        resourceFields.forEach(resourceFieldName => {
+            const getResourceValue = getDataAccessors(this.option('getResourceDataAccessors')(), resourceFieldName, 'getter');
+            const resourceValue = getResourceValue(rawAppointment);
 
+            if(isDefined(resourceValue)) {
+                const values = wrapToArray(resourceValue);
 
-            const attr = `data-${normalizeKey(fieldName.toLowerCase())}-`;
-            for(let i = 0; i < values.length; i++) {
-                $appointment.attr(attr + normalizeKey(values[i]), true);
+                const prefixAttr = `data-${normalizeKey(resourceFieldName.toLowerCase())}-`;
+                values.forEach(value => $appointment.attr(prefixAttr + normalizeKey(value), true));
             }
         });
     }
