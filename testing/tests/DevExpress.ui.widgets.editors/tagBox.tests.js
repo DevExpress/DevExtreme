@@ -17,8 +17,8 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
-import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 import { normalizeKeyName } from 'events/utils/index';
+import browser from 'core/utils/browser';
 
 import 'generic_light.css!';
 
@@ -5796,37 +5796,45 @@ QUnit.module('single line mode', {
         assert.equal(scrollView.scrollTop(), 2, 'list should not be scrolled to the top after value changed');
     });
 
-    QUnit.testInActiveWindow('tag container should be scrolled to the start after rendering and focusout in the RTL mode (T390041)', function(assert) {
-        this.instance.option('rtlEnabled', true);
 
-        const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
+    QUnit.module('scroll rtl behavior', {
+        beforeEach: function() {
+            const isIe = browser.msie && browser.version < 12;
+            this.scrollBehavior = isIe
+                ? { decreasing: false, positive: true }
+                : { decreasing: true, positive: false };
+        }
+    }, () => {
+        QUnit.testInActiveWindow('tag container should be scrolled to the start after rendering and focusout in the RTL mode (T390041)', function(assert) {
+            this.instance.option('rtlEnabled', true);
 
-        const expectedScrollPosition = isScrollInverted ? 0 : scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
+            const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+            const isScrollInverted = this.scrollBehavior.decreasing ^ this.scrollBehavior.positive;
+            const scrollSign = this.scrollBehavior.positive ? 1 : -1;
 
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on rendering');
+            const expectedScrollPosition = isScrollInverted ? 0 : scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
 
-        this.instance.focus();
-        this.instance.blur();
+            assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on rendering');
 
-        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'scroll position is correct on focus out');
-    });
+            this.instance.focus();
+            this.instance.blur();
 
-    QUnit.test('tags container should be scrolled to the end on focusin in the RTL mode (T390041)', function(assert) {
-        this.instance.option('rtlEnabled', true);
+            assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'scroll position is correct on focus out');
+        });
 
-        const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+        QUnit.test('tags container should be scrolled to the end on focusin in the RTL mode (T390041)', function(assert) {
+            this.instance.option('rtlEnabled', true);
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
+            const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+            const isScrollInverted = this.scrollBehavior.decreasing ^ this.scrollBehavior.positive;
+            const scrollSign = this.scrollBehavior.positive ? 1 : -1;
 
-        this.instance.focus();
-        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the end');
+            const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+
+            this.instance.focus();
+            assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the end');
+        });
     });
 
     QUnit.test('tags container should be scrolled on mobile devices', function(assert) {
@@ -5981,31 +5989,67 @@ QUnit.module('keyboard navigation through tags in single line mode', {
         assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), 'tags container is scrolled to the end');
     });
 
-    QUnit.test('tags container should be scrolled to the start on value change in the RTL mode', function(assert) {
-        this.reinit({
-            items: this.items,
-            value: this.items,
-            multiline: false,
-            focusStateEnabled: true,
-            rtlEnabled: true
+    QUnit.module('scroll rtl behavior during kbn', {
+        beforeEach: function() {
+            const isIe = browser.msie && browser.version < 12;
+            this.scrollBehavior = isIe
+                ? { decreasing: false, positive: true }
+                : { decreasing: true, positive: false };
+        }
+    }, () => {
+        QUnit.test('tags container should be scrolled to the start on value change in the RTL mode', function(assert) {
+            this.reinit({
+                items: this.items,
+                value: this.items,
+                multiline: false,
+                focusStateEnabled: true,
+                rtlEnabled: true
+            });
+
+            const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+
+            const isScrollInverted = this.scrollBehavior.decreasing ^ this.scrollBehavior.positive;
+            const scrollSign = this.scrollBehavior.positive ? 1 : -1;
+
+            this.instance.focus();
+            this.instance.option('value', [this.items[0]]);
+
+            let expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+            assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
+
+            this.instance.option('value', this.items);
+            expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+
+            assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
         });
 
-        const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+        QUnit.test('tags container should be scrolled to the start after the last tag loses focus during navigation to the left in the RTL mode', function(assert) {
+            this.reinit({
+                items: this.items,
+                value: this.items,
+                multiline: false,
+                focusStateEnabled: true,
+                acceptCustomValue: true,
+                rtlEnabled: true
+            });
 
-        const scrollBehavior = getScrollRtlBehavior();
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
+            this.keyboard
+                .focus()
+                .press('right')
+                .press('right')
+                .press('right')
+                .press('left')
+                .press('left')
+                .press('left');
 
-        this.instance.focus();
-        this.instance.option('value', [this.items[0]]);
+            const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        let expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
-        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
+            const scrollSign = this.scrollBehavior.positive ? 1 : -1;
+            const isScrollInverted = this.scrollBehavior.decreasing ^ this.scrollBehavior.positive;
+            const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
 
-        this.instance.option('value', this.items);
-        expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
-
-        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
+            assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
+        });
     });
 
     QUnit.test('the focused tag should be visible during keyboard navigation to the right in the RTL mode', function(assert) {
@@ -6074,35 +6118,6 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('left');
 
         assert.roughEqual(this.getFocusedTag().position().left, 0, 1.01, 'focused tag is not hidden at left');
-    });
-
-    QUnit.test('tags container should be scrolled to the start after the last tag loses focus during navigation to the left in the RTL mode', function(assert) {
-        this.reinit({
-            items: this.items,
-            value: this.items,
-            multiline: false,
-            focusStateEnabled: true,
-            acceptCustomValue: true,
-            rtlEnabled: true
-        });
-
-        this.keyboard
-            .focus()
-            .press('right')
-            .press('right')
-            .press('right')
-            .press('left')
-            .press('left')
-            .press('left');
-
-        const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-
-        const scrollBehavior = getScrollRtlBehavior();
-        const scrollSign = scrollBehavior.positive ? 1 : -1;
-        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
-        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
-
-        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
 });
 
