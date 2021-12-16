@@ -60,7 +60,7 @@ export type dxEvent = EventObject;
  * @section commonObjectStructures
  * @public
  */
-export class EventObject {
+export type EventObject = {
     /**
      * @docid
      * @public
@@ -120,7 +120,7 @@ export class EventObject {
      * @public
      */
     stopPropagation(): void;
-}
+};
 
 /**
  * @docid

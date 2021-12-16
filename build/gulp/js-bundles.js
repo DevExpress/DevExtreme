@@ -57,6 +57,7 @@ function prepareDebugMeta(watch) {
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
     debugConfig.mode = watch ? "development" : "production";
+    debugConfig.optimization.minimize = false;
 
     if(!ctx.uglify) {
         debugConfig.devtool = 'eval-source-map';

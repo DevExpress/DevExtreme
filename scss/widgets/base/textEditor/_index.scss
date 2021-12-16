@@ -73,8 +73,10 @@
 
   @include user-select(text);
 
-  &:-webkit-autofill + .dx-placeholder {
-    display: none;
+  &:autofill {
+    + .dx-placeholder {
+      display: none !important; // stylelint-disable-line declaration-no-important
+    }
   }
 
   &:-moz-ui-invalid {

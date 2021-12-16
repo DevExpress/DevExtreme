@@ -5,6 +5,9 @@ import 'ui/html_editor/converters/markdown';
 import { deferUpdate } from 'core/utils/common';
 import { Event as dxEvent } from 'events/index';
 
+import devices from 'core/devices';
+import eventsEngine from 'events/core/events_engine';
+
 import keyboardMock from '../../../helpers/keyboardMock.js';
 
 const FOCUS_STATE_CLASS = 'dx-state-focused';
@@ -41,8 +44,10 @@ const createModuleConfig = function({ initialOptions = {}, beforeCallback, after
 
             this.options = initialOptions;
 
+            this.$container = $('#htmlEditor');
+
             this.createEditor = (options) => {
-                this.instance = $('#htmlEditor')
+                this.instance = this.$container
                     .dxHtmlEditor(options || this.options)
                     .dxHtmlEditor('instance');
             };
@@ -455,5 +460,19 @@ testModule('ValueChanged event', createModuleConfig({}), function() {
         this.instance.setSelection(0, 3);
 
         $('.dx-htmleditor-toolbar .dx-button').trigger('dxclick');
+    });
+
+    test('dxpointermove event propagation should be stopped on HtmlEditor content to fix selection (T1045869)', function(assert) {
+        const isIos = devices.current().platform === 'ios';
+        assert.expect(1);
+        this.createEditor();
+
+        const $editorContent = this.$container.find('.dx-htmleditor-content');
+
+        eventsEngine.on($editorContent, 'dxpointermove', (e) => {
+            assert.strictEqual(e.isPropagationStopped(), isIos);
+        });
+
+        $editorContent.trigger('dxpointermove');
     });
 });

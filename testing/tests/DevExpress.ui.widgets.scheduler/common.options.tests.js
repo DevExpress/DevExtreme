@@ -650,6 +650,33 @@ QUnit.module('Options', {
         assert.ok(repaintStub.calledOnce, 'Sheduler was repainted');
     });
 
+    QUnit.test('Appointment popup form should be recreated after changing resources', function(assert) {
+        const resources = [{
+            fieldExpr: 'TestResources',
+            dataSource: [
+                {
+                    text: 'Test-01',
+                    id: 0,
+                }
+            ]
+        }];
+        const scheduler = createWrapper({
+            currentDate: new Date(2017, 11, 18),
+            indicatorTime: new Date(2017, 11, 18, 16, 45),
+            views: ['timelineWeek'],
+            view: 'timelineWeek',
+        });
+
+        const spyAppointmentPopupForm = sinon.spy(
+            scheduler.instance,
+            '_createAppointmentPopupForm'
+        );
+
+        scheduler.instance.option('resources', resources);
+
+        assert.ok(spyAppointmentPopupForm.calledOnce, 'Appointment form was recreated');
+    });
+
     QUnit.test('Filter options should be updated when dataSource is changed', function(assert) {
         const scheduler = createWrapper({
             currentDate: new Date(2016, 2, 15),

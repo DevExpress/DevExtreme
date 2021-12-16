@@ -11,6 +11,7 @@ import messageLocalization from '../../localization/message';
 import { when, Deferred } from '../../core/utils/deferred';
 import domAdapter from '../../core/dom_adapter';
 import * as accessibility from '../shared/accessibility';
+import browser from '../../core/utils/browser';
 
 const BORDERS_CLASS = 'borders';
 const TABLE_FIXED_CLASS = 'table-fixed';
@@ -182,8 +183,21 @@ const ResizingController = modules.ViewController.inherit({
         this._toggleBestFitModeForView(this._columnHeadersView, 'dx-header', isBestFit);
         this._toggleBestFitModeForView(this._footerView, 'dx-footer', isBestFit);
 
+        this._toggleContentMinHeight(isBestFit); // T1047239
+
         if(this._needStretch()) {
             $rowsTable.get(0).style.width = isBestFit ? 'auto' : '';
+        }
+    },
+
+    _toggleContentMinHeight: function(isBestFit) {
+        if(this.option('wordWrapEnabled')) {
+            const scrollable = this._rowsView.getScrollable();
+            const $contentElement = this._rowsView._findContentElement();
+
+            if(scrollable?.option('useNative') === false) {
+                $contentElement.css({ minHeight: isBestFit ? gridCoreUtils.getContentHeightLimit(browser) : '' });
+            }
         }
     },
 

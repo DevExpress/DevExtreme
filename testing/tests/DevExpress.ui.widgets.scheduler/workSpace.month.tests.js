@@ -31,7 +31,7 @@ module('Work Space Month', () => {
                 this.instance.option('showAllDayPanel', false);
                 this.instance.option('showAllDayPanel', true);
 
-                const $allDayPanel = this.instance.$element().find('.dx-scheduler-all-day-panel');
+                const $allDayPanel = this.instance.$element().find('.dx-scheduler-all-day-table-cell');
 
                 assert.equal($allDayPanel.length, 0, 'allDay panel is invisible');
             });

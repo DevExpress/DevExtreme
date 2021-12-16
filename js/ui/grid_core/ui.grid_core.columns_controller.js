@@ -494,7 +494,7 @@ export const columnsControllerModule = {
             };
 
             function checkUserStateColumn(column, userStateColumn) {
-                return column && userStateColumn && (userStateColumn.name === column.name || !column.name) && (userStateColumn.dataField === column.dataField || column.name);
+                return column && userStateColumn && (userStateColumn.name === (column.name || column.dataField)) && (userStateColumn.dataField === column.dataField || column.name);
             }
 
             const applyUserState = function(that) {
@@ -1431,7 +1431,8 @@ export const columnsControllerModule = {
                         let isPlain = true;
 
                         columns.forEach(function(column) {
-                            let parentIndex = column.ownerBand;
+                            const ownerBand = column.ownerBand;
+                            let parentIndex = isObject(ownerBand) ? ownerBand.index : ownerBand;
                             const parent = columns[parentIndex];
 
                             if(column.hasColumns) {
