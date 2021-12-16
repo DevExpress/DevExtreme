@@ -20,6 +20,7 @@ import {
 } from './common/types';
 
 import { ScrollViewProps } from './common/scrollview_props';
+import { ScrollViewLoadPanel } from './internal/load_panel';
 
 export const viewFunction = (viewModel: ScrollView): JSX.Element => {
   const {
@@ -64,7 +65,6 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       reachBottomText={reachBottomText}
       forceGeneratePockets
       needScrollViewContentWrapper
-      needScrollViewLoadPanel
       // Native
       useSimulatedScrollbar={useSimulatedScrollbar}
       // Simulated
@@ -75,6 +75,7 @@ export const viewFunction = (viewModel: ScrollView): JSX.Element => {
       onStart={onStart}
       onEnd={onEnd}
       onBounce={onBounce}
+      loadPanelTemplate={ScrollViewLoadPanel}
 
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...restAttributes}
