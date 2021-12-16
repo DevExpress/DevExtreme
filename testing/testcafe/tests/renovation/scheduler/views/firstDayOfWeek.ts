@@ -18,7 +18,7 @@ test('WorkWeek should generate correct start view date',
     await t.expect(await compareScreenshot(
       t,
       'work-week-first-day-of-week.png',
-      scheduler.workSpace,
+      scheduler.element,
       screenshotComparerOptions,
     ))
       .ok();
