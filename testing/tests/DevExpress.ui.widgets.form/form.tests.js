@@ -28,7 +28,8 @@ import {
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_ITEM_LABEL_CLASS,
     FORM_GROUP_CAPTION_CLASS,
-    FORM_UNDERLINED_CLASS
+    FORM_UNDERLINED_CLASS,
+    FORM_VALIDATION_SUMMARY
 } from 'ui/form/constants';
 
 import {
@@ -775,6 +776,24 @@ QUnit.test('Change options -> check _itemsOptionChangedHandler/_formDataOptionCh
     testConfig('xxx_formData_xxx.', 'formData; ');
     testConfig('xxx_items_xxx', 'default; ');
     testConfig('xxx_items_xxx.', 'items; default; ');
+});
+
+QUnit.test('Keep validation summary in an item with Form in its template', function(assert) {
+    const $testContainer = $('#form');
+
+    $testContainer.dxForm({
+        showValidationSummary: true,
+        items: [{
+            template: () => {
+                return $('<div></div>').dxForm({
+                    showValidationSummary: true,
+                    items: []
+                });
+            }
+        }]
+    });
+
+    assert.strictEqual($testContainer.find('.' + FORM_VALIDATION_SUMMARY).length, 2, 'FORM_VALIDATION_SUMMARY');
 });
 
 QUnit.module('Tabs', {

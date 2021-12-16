@@ -292,7 +292,11 @@ const Form = Widget.inherit({
     },
 
     _clean: function() {
+        this._$validationSummary?.remove();
+        this._$validationSummary = undefined;
+
         this.callBase();
+
         this._groupsColCount = [];
         this._cachedColCountOptions = [];
         this._lastMarkupScreenFactor = undefined;
@@ -314,18 +318,15 @@ const Form = Widget.inherit({
     },
 
     _renderValidationSummary: function() {
-        const $validationSummary = this.$element().find('.' + FORM_VALIDATION_SUMMARY);
-
-        if($validationSummary.length > 0) {
-            $validationSummary.remove();
-        }
+        this._$validationSummary?.remove();
+        this._$validationSummary = undefined;
 
         if(this.option('showValidationSummary')) {
-            const $validationSummary = $('<div>')
+            this._$validationSummary = $('<div>')
                 .addClass(FORM_VALIDATION_SUMMARY)
                 .appendTo(this._getContent());
 
-            this._validationSummary = $validationSummary.dxValidationSummary({
+            this._validationSummary = this._$validationSummary.dxValidationSummary({
                 validationGroup: this._getValidationGroup()
             }).dxValidationSummary('instance');
         }
