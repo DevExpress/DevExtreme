@@ -100,31 +100,54 @@ describe('Pager', () => {
 
   describe('Callbacks', () => {
     describe('onPageIndexChange', () => {
-      const pager = new GridPager({});
-      pager.plugins = {
-        getValue: () => ({ setPageIndex: (n) => { pager.pageIndex = n; } }),
-      } as any;
-
       it('should be zero based', () => {
+        const pager = new GridPager({});
+        pager.plugins = {
+          getValue: () => ({ setPageIndex: (n) => { pager.pageIndex = n; } }),
+        } as any;
+
         pager.onPageIndexChange(10);
         expect(pager.pageIndex).toEqual(9);
+      });
+
+      it('should work when paging plugin is empty', () => {
+        const pager = new GridPager({});
+        pager.plugins = {
+          getValue: () => null,
+        } as any;
+
+        expect(() => pager.onPageIndexChange(10)).not.toThrow();
       });
     });
 
     describe('onPageSizeChange', () => {
-      const pager = new GridPager({});
-      pager.plugins = {
-        getValue: () => ({ setPageSize: (n) => { pager.pageSize = n; } }),
-      } as any;
-
       it('should update pager.pageSize', () => {
+        const pager = new GridPager({});
+        pager.plugins = {
+          getValue: () => ({ setPageSize: (n) => { pager.pageSize = n; } }),
+        } as any;
+
         pager.onPageSizeChange(10);
         expect(pager.pageSize).toEqual(10);
       });
 
       it('should set pager.pageSize to "all" when called with zero', () => {
+        const pager = new GridPager({});
+        pager.plugins = {
+          getValue: () => ({ setPageSize: (n) => { pager.pageSize = n; } }),
+        } as any;
+
         pager.onPageSizeChange(0);
         expect(pager.pageSize).toEqual('all');
+      });
+
+      it('should work when paging plugin is empty', () => {
+        const pager = new GridPager({});
+        pager.plugins = {
+          getValue: () => null,
+        } as any;
+
+        expect(() => pager.onPageSizeChange(10)).not.toThrow();
       });
     });
   });

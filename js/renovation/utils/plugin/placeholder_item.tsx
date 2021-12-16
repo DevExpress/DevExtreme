@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import {
   JSXComponent, Component, ComponentBindings, OneWay, Fragment, Slot,
 } from '@devextreme-generator/declarations';
@@ -8,7 +11,7 @@ export const viewFunction = ({
   currentComponent, props: {
     componentTypes, column, index, children,
   },
-}: PlaceholderItem) => (
+}: PlaceholderItem): JSX.Element => (
   <Fragment>
     {
   currentComponent ? currentComponent(

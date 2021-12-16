@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   JSXComponent, Component, ComponentBindings, OneWay, Consumer, Effect, Template, Fragment,
 } from '@devextreme-generator/declarations';

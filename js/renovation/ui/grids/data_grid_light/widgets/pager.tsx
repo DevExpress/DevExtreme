@@ -99,9 +99,9 @@ export class GridPager extends JSXComponent(GridPagerProps) {
     const setPageSize = this.plugins.getValue(PagingPlugin)?.setPageSize;
 
     if (pageSize === 0) {
-      setPageSize('all');
+      setPageSize?.('all');
     } else {
-      setPageSize(pageSize);
+      setPageSize?.(pageSize);
     }
   }
 
