@@ -1,7 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import {
-  GridPager, viewFunction as GridPagerView, GridPagerProps,
+  Pager, viewFunction as GridPagerView, PagerProps,
 } from '../pager';
 import { PagerContent } from '../../../../pager/content';
 import { Plugins } from '../../../../../utils/plugin/context';
@@ -10,9 +10,9 @@ import { PlaceholderExtender } from '../../../../../utils/plugin/placeholder_ext
 describe('Pager', () => {
   describe('View', () => {
     it('default render', () => {
-      const props = new GridPagerProps();
+      const props = new PagerProps();
 
-      const viewProps: Partial<GridPager> = {
+      const viewProps: Partial<Pager> = {
         props,
         pageCount: 10,
         totalCount: 20,
@@ -39,7 +39,7 @@ describe('Pager', () => {
     });
 
     it('should pass zero to pager component when pageSize is "all"', () => {
-      const props = new GridPagerProps();
+      const props = new PagerProps();
 
       const viewProps = {
         props,
@@ -47,7 +47,7 @@ describe('Pager', () => {
         totalCount: 20,
         pageIndex: 30,
         pageSize: 'all',
-      } as Partial<GridPager>;
+      } as Partial<Pager>;
 
       const placeholderTree = mount(<GridPagerView {...viewProps as any} /> as any);
       const { template: PagerTemplate } = placeholderTree.find(PlaceholderExtender).props();
@@ -71,13 +71,13 @@ describe('Pager', () => {
   describe('Getters', () => {
     describe('allowedPageSizes', () => {
       it('should be equal to prop if it is array', () => {
-        expect(new GridPager({
+        expect(new Pager({
           allowedPageSizes: [1, 2, 3],
         }).allowedPageSizes).toEqual([1, 2, 3]);
       });
 
       it('should be calculated when auto', () => {
-        const grid = new GridPager({
+        const grid = new Pager({
           allowedPageSizes: 'auto',
         });
 
@@ -87,7 +87,7 @@ describe('Pager', () => {
       });
 
       it('should be empty when auto and pageSize is all', () => {
-        const grid = new GridPager({
+        const grid = new Pager({
           allowedPageSizes: 'auto',
         });
 
@@ -101,7 +101,7 @@ describe('Pager', () => {
   describe('Callbacks', () => {
     describe('onPageIndexChange', () => {
       it('should update pageIndex', () => {
-        const pager = new GridPager({});
+        const pager = new Pager({});
         pager.plugins = {
           getValue: () => ({ setPageIndex: (n) => { pager.pageIndex = n; } }),
         } as any;
@@ -111,7 +111,7 @@ describe('Pager', () => {
       });
 
       it('should work when paging plugin is empty', () => {
-        const pager = new GridPager({});
+        const pager = new Pager({});
         pager.plugins = {
           getValue: () => null,
         } as any;
@@ -122,7 +122,7 @@ describe('Pager', () => {
 
     describe('onPageSizeChange', () => {
       it('should update pager.pageSize', () => {
-        const pager = new GridPager({});
+        const pager = new Pager({});
         pager.plugins = {
           getValue: () => ({ setPageSize: (n) => { pager.pageSize = n; } }),
         } as any;
@@ -132,7 +132,7 @@ describe('Pager', () => {
       });
 
       it('should set pager.pageSize to "all" when called with zero', () => {
-        const pager = new GridPager({});
+        const pager = new Pager({});
         pager.plugins = {
           getValue: () => ({ setPageSize: (n) => { pager.pageSize = n; } }),
         } as any;
@@ -142,7 +142,7 @@ describe('Pager', () => {
       });
 
       it('should work when paging plugin is empty', () => {
-        const pager = new GridPager({});
+        const pager = new Pager({});
         pager.plugins = {
           getValue: () => null,
         } as any;
@@ -156,7 +156,7 @@ describe('Pager', () => {
     describe('subscribeToPagingPluginUpdates', () => {
       it('should update paging props', () => {
         const watchMock = jest.fn();
-        const pager = new GridPager({});
+        const pager = new Pager({});
 
         pager.plugins = {
           watch: watchMock,

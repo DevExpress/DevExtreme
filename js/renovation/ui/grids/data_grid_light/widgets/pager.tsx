@@ -14,7 +14,7 @@ import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
 const DATAGRID_PAGER_CLASS = 'dx-datagrid-pager';
 
-export const viewFunction = (viewModel: GridPager): JSX.Element => (
+export const viewFunction = (viewModel: Pager): JSX.Element => (
   <PlaceholderExtender
     type={FooterPlaceholder}
     order={1}
@@ -42,7 +42,7 @@ export const viewFunction = (viewModel: GridPager): JSX.Element => (
 );
 
 @ComponentBindings()
-export class GridPagerProps {
+export class PagerProps {
   @OneWay()
   allowedPageSizes: (number | 'all')[] | 'auto' = 'auto';
 
@@ -69,7 +69,7 @@ export class GridPagerProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class GridPager extends JSXComponent(GridPagerProps) {
+export class Pager extends JSXComponent(PagerProps) {
   @Consumer(PluginsContext)
   plugins = new Plugins();
 

@@ -4,7 +4,7 @@ import {
 } from '@devextreme-generator/declarations';
 import React from 'react';
 import { DataGridLight, DataGridLightProps } from '../../../../js/renovation/ui/grids/data_grid_light/data_grid_light';
-import { GridPager, GridPagerProps } from '../../../../js/renovation/ui/grids/data_grid_light/widgets/pager';
+import { Pager, PagerProps } from '../../../../js/renovation/ui/grids/data_grid_light/widgets/pager';
 import { Paging, PagingProps } from '../../../../js/renovation/ui/grids/data_grid_light/widgets/paging';
 
 export const viewFunction = ({
@@ -22,7 +22,7 @@ export const viewFunction = ({
       pageSize={paging.pageSize}
       pageSizeChange={setPageSize}
     />
-    <GridPager
+    <Pager
       visible={pager.visible}
       allowedPageSizes={pager.allowedPageSizes}
       showPageSizeSelector={pager.showPageSizeSelector}
@@ -58,7 +58,7 @@ export class App extends JSXComponent<AppProps>() {
   };
 
   @InternalState()
-  pager: Partial<GridPagerProps> = {
+  pager: Partial<PagerProps> = {
     visible: true,
     allowedPageSizes: [2, 4, 'all'],
     showPageSizeSelector: true,
