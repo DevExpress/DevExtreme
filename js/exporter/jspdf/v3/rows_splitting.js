@@ -24,8 +24,18 @@ function splitCellsHorizontalByPages(cells, pageWidth, topLeft) {
 
     while(cellsToSplit.length > 0) {
         const currentPageCells = [];
+
+        let currentPageMaxCellRight = 0;
         cellsToSplit.filter(cell => {
-            return (cell._rect.x + cell._rect.w) <= pageWidth;
+            const currentCellRightX = cell._rect.x + cell._rect.w;
+            if(currentCellRightX <= pageWidth) {
+                if(currentPageMaxCellRight < currentCellRightX) {
+                    currentPageMaxCellRight = currentCellRightX;
+                }
+                return true;
+            } else {
+                return false;
+            }
         }).forEach(cell => currentPageCells.push(cell));
 
         currentPageCells.forEach(cell => {
@@ -35,19 +45,14 @@ function splitCellsHorizontalByPages(cells, pageWidth, topLeft) {
             }
         });
 
-        let moveBufferCellsToLeftOffset = 0;
-        currentPageCells.forEach((cell) => {
-            const offset = (cell._rect.x + cell._rect.w) - topLeft.x;
-            moveBufferCellsToLeftOffset = moveBufferCellsToLeftOffset > offset ? moveBufferCellsToLeftOffset : offset;
-        });
-
         cellsToSplit.forEach(cell => {
-            cell._rect.x = moveBufferCellsToLeftOffset ? (cell._rect.x - moveBufferCellsToLeftOffset) : cell._rect.x;
+            cell._rect.x = (currentPageMaxCellRight !== undefined) ? (cell._rect.x - currentPageMaxCellRight + topLeft.x) : cell._rect.x;
         });
 
         if(currentPageCells.length > 0) {
             pages.push(currentPageCells);
         } else {
+            pages.push(cellsToSplit);
             break;
         }
     }

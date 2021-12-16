@@ -377,6 +377,77 @@ const JSPdfSplittingTests = {
                     done();
                 });
             });
+
+            QUnit.test('2 cols - 1 rows, topLeft.x = 0, columnWidth = 200, pageWidth = 200', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    width: 600,
+                    columns: [
+                        { dataField: 'f1' },
+                        { dataField: 'f2' },
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v2_1' }]
+                });
+
+                const expectedLog = [
+                    'text,F1,0,24.2,{baseline:middle}',
+                    'text,v1_1,0,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,200,18.4',
+                    'addPage,',
+                    'text,F2,0,24.2,{baseline:middle}',
+                    'text,v2_1,0,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,0,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,0,33.4,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 0, y: 15 }, columnWidths: [ 200, 200 ], pageWidth: 200 }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
+
+            QUnit.test('2 cols - 1 rows, topLeft.x = 10, columnWidth = 200, pageWidth = 200', function(assert) {
+                const done = assert.async();
+                const doc = createMockPdfDoc();
+
+                const dataGrid = createDataGrid({
+                    width: 600,
+                    columns: [
+                        { dataField: 'f1' },
+                        { dataField: 'f2' },
+                    ],
+                    dataSource: [{ f1: 'v1_1', f2: 'v2_1' }]
+                });
+
+                const expectedLog = [
+                    'text,F1,20,24.2,{baseline:middle}',
+                    'text,F2,220,24.2,{baseline:middle}',
+                    'text,v1_1,20,42.6,{baseline:middle}',
+                    'text,v2_1,220,42.6,{baseline:middle}',
+                    'setLineWidth,1',
+                    'rect,20,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,220,15,200,18.4',
+                    'setLineWidth,1',
+                    'rect,20,33.4,200,18.4',
+                    'setLineWidth,1',
+                    'rect,220,33.4,200,18.4'
+                ];
+
+                exportDataGrid(doc, dataGrid, { topLeft: { x: 10, y: 15 }, columnWidths: [ 200, 200 ], pageWidth: 200 }).then(() => {
+                    // doc.save(assert.test.testName + '.pdf');
+                    assert.deepEqual(doc.__log, expectedLog);
+                    done();
+                });
+            });
         });
     }
 };
