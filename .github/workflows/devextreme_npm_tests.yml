@@ -60,8 +60,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # framework: [angular, react]
-        framework: [react]
+        framework: [angular, react]
 
     steps:
     - name: Get sources
