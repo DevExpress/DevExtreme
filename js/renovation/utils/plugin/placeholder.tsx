@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   JSXComponent, Component, ComponentBindings, OneWay, Consumer, InternalState, Effect, Slot,
 } from '@devextreme-generator/declarations';
 
 import { PlaceholderItem } from './placeholder_item';
 import {
-  createPlaceholder, /* PluginPlaceholder, */ PluginsContext, Plugins,
+  PluginsContext, Plugins,
 } from './context';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
