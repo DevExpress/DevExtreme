@@ -18,7 +18,6 @@ import { ensureDefined, noop } from '../core/utils/common';
 import Guid from '../core/guid';
 import { getElementWidth, getSizeValue } from './drop_down_editor/utils';
 import messageLocalization from '../localization/message';
-import { each } from '../core/utils/iterator';
 
 // STYLE dropDownButton
 
