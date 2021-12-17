@@ -18,6 +18,7 @@ import { ensureDefined, noop } from '../core/utils/common';
 import Guid from '../core/guid';
 import { getElementWidth, getSizeValue } from './drop_down_editor/utils';
 import messageLocalization from '../localization/message';
+import { each } from '../core/utils/iterator';
 
 // STYLE dropDownButton
 
@@ -420,10 +421,8 @@ const DropDownButton = Widget.inherit({
 
     _popupHidingHandler() {
         this.option('opened', false);
-        this.setAria({
-            expanded: false,
-            owns: undefined
-        });
+
+        this._setAriaExpanded(false);
     },
 
     _popupOptionChanged: function(args) {
@@ -451,10 +450,24 @@ const DropDownButton = Widget.inherit({
 
     _popupShowingHandler() {
         this.option('opened', true);
-        this.setAria({
-            expanded: true,
-            owns: this._popupContentId
+        this._setAriaExpanded(true);
+    },
+
+    _setAriaExpanded(value) {
+        const $ariaElements = this._getExpandedAriaElements();
+        each($ariaElements, (i, ariaElement) => {
+            this.setAria({
+                expanded: value,
+                owns: undefined,
+            },
+            $(ariaElement));
         });
+    },
+
+    _getExpandedAriaElements() {
+        const buttonElements = this._buttonGroup.$element().find('.dx-button').toArray();
+
+        return [ ...buttonElements, this.$element() ];
     },
 
     _renderButtonGroup() {
@@ -471,6 +484,8 @@ const DropDownButton = Widget.inherit({
         this._buttonGroup.registerKeyHandler('escape', this._escHandler.bind(this));
 
         this._bindInnerWidgetOptions(this._buttonGroup, 'buttonGroupOptions');
+
+        this._setAriaExpanded(this.option('opened'));
     },
 
     _updateArrowClass() {
