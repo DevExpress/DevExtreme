@@ -455,7 +455,7 @@ const DropDownButton = Widget.inherit({
 
     _setAriaExpanded(value) {
         const $ariaElements = this._getExpandedAriaElements();
-        each($ariaElements, (i, ariaElement) => {
+        $ariaElements.forEach((ariaElement) => {
             this.setAria({
                 expanded: value,
                 owns: value ? this._popupContentId : undefined,
