@@ -1,58 +1,54 @@
 import { isDefined } from '../../../core/utils/type';
 
-function applySplitting(pdfCellsInfo, options) {
+function splitRectsByPages(rects, options) {
     if(!isDefined(options.pageWidth)) {
-        return [ pdfCellsInfo ];
+        return [ rects ];
     }
 
     const topLeft = options?.topLeft ?? { x: 0, y: 0 };
     const pageWidth = options.pageWidth;
 
-    const cellsByPage = splitCellsHorizontalByPages(pdfCellsInfo, pageWidth, topLeft);
-    // TODO: splitCellsVerticalByPages
+    const rectsByPage = splitRectsHorizontalByPages(rects, pageWidth, topLeft);
+    // TODO: splitRectsVerticalByPages
 
-    return cellsByPage;
+    return rectsByPage;
 }
 
-function splitCellsHorizontalByPages(cells, pageWidth, topLeft) {
+function splitRectsHorizontalByPages(rects, pageWidth, topLeft) {
     const pages = [];
-    const cellsToSplit = cells.map(cell => {
-        const result = Object.assign({}, cell);
-        result.rect = Object.assign({}, cell.rect);
-        return result;
-    });
+    const rectsToSplit = rects;
 
-    while(cellsToSplit.length > 0) {
-        const currentPageCells = [];
+    while(rectsToSplit.length > 0) {
+        const currentPageRects = [];
 
-        let currentPageMaxCellRight = 0;
-        cellsToSplit.filter(cell => {
-            const currentCellRightX = cell._rect.x + cell._rect.w;
-            if(currentCellRightX <= pageWidth) {
-                if(currentPageMaxCellRight < currentCellRightX) {
-                    currentPageMaxCellRight = currentCellRightX;
+        let currentPageMaxRectRight = 0;
+        rectsToSplit.filter(rect => {
+            const currentCellRight = rect.x + rect.w;
+            if(currentCellRight <= pageWidth) {
+                if(currentPageMaxRectRight < currentCellRight) {
+                    currentPageMaxRectRight = currentCellRight;
                 }
                 return true;
             } else {
                 return false;
             }
-        }).forEach(cell => currentPageCells.push(cell));
+        }).forEach(rect => currentPageRects.push(rect));
 
-        currentPageCells.forEach(cell => {
-            const index = cellsToSplit.indexOf(cell);
+        currentPageRects.forEach(rect => {
+            const index = rectsToSplit.indexOf(rect);
             if(index !== -1) {
-                cellsToSplit.splice(index, 1);
+                rectsToSplit.splice(index, 1);
             }
         });
 
-        cellsToSplit.forEach(cell => {
-            cell._rect.x = (currentPageMaxCellRight !== undefined) ? (cell._rect.x - currentPageMaxCellRight + topLeft.x) : cell._rect.x;
+        rectsToSplit.forEach(rect => {
+            rect.x = (currentPageMaxRectRight !== undefined) ? (rect.x - currentPageMaxRectRight + topLeft.x) : rect.x;
         });
 
-        if(currentPageCells.length > 0) {
-            pages.push(currentPageCells);
+        if(currentPageRects.length > 0) {
+            pages.push(currentPageRects);
         } else {
-            pages.push(cellsToSplit);
+            pages.push(rectsToSplit);
             break;
         }
     }
@@ -60,4 +56,4 @@ function splitCellsHorizontalByPages(cells, pageWidth, topLeft) {
     return pages;
 }
 
-export { applySplitting };
+export { splitRectsByPages };
