@@ -431,6 +431,15 @@ QUnit.module('basic', () => {
         assert.ok(toolbarButtons.eq(1).hasClass('dx-button-mode-text'), 'button has dx-button-mode-text class');
         devices.current(devices.real());
     });
+
+    QUnit.test('disabled=true should add "dx-state-disabled" class to popup content (T1046427)', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            disabled: true
+        }).dxPopup('instance');
+
+        assert.ok(popup.$content().hasClass('dx-state-disabled'));
+    });
 });
 
 QUnit.module('dimensions', {
