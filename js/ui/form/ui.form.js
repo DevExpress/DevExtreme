@@ -292,8 +292,7 @@ const Form = Widget.inherit({
     },
 
     _clean: function() {
-        this._$validationSummary?.remove();
-        this._$validationSummary = undefined;
+        this._clearValidationSummary();
 
         this.callBase();
 
@@ -317,9 +316,14 @@ const Form = Widget.inherit({
         return this.option('scrollingEnabled') ? $(this._scrollable.content()) : this.$element();
     },
 
-    _renderValidationSummary: function() {
+    _clearValidationSummary: function() {
         this._$validationSummary?.remove();
         this._$validationSummary = undefined;
+        this._validationSummary = undefined;
+    },
+
+    _renderValidationSummary: function() {
+        this._clearValidationSummary();
 
         if(this.option('showValidationSummary')) {
             this._$validationSummary = $('<div>')
