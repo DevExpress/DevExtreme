@@ -1,4 +1,4 @@
-import { PlatformType } from '../../helpers/multi-platform-test/platform-type';
+import type { PlatformType } from '../../helpers/multi-platform-test/platform-type';
 import Scrollable from './internal/scrollable';
 
 const getScrollView = (platform: PlatformType) => class ScrollView extends Scrollable {

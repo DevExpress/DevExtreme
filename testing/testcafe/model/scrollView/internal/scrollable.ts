@@ -1,10 +1,10 @@
 import { ClientFunction, Selector } from 'testcafe';
-import { getComponentInstance } from '../../../helpers/multi-platform-test/getComponentInstance';
+import { getComponentInstance } from '../../../helpers/multi-platform-test';
 import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/renovation/ui/scroll_view/common/consts';
 
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
-import { PlatformType } from '../../../helpers/multi-platform-test/platform-type';
+import type { PlatformType } from '../../../helpers/multi-platform-test/platform-type';
 
 const CLASS = {
   scrollable: 'dx-scrollable',
@@ -25,7 +25,6 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
 
   platform: string;
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(id: string | Selector, options?: any, name = 'dxScrollable') {
     super(id);
 
