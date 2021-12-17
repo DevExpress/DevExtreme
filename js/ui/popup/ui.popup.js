@@ -676,9 +676,6 @@ const Popup = Overlay.inherit({
                 this._renderTitle();
                 this._renderBottom();
                 break;
-            case 'animation':
-                this._updateResizeCallbackSkipCondition();
-                break;
             case 'showTitle':
             case 'title':
             case 'titleTemplate':
