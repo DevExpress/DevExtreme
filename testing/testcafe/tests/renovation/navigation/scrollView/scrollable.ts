@@ -1,6 +1,6 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import Scrollable from '../../../../model/scrollView/internal/scrollable';
-import { ScrollableProps } from '../../../../../../js/renovation/ui/scroll_view/common/scrollable_props';
+import type { ScrollableProps } from '../../../../../../js/renovation/ui/scroll_view/common/scrollable_props';
 import { multiPlatformTest, updateComponentOptions } from '../../../../helpers/multi-platform-test';
 import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH } from '../../../../../../js/renovation/ui/scroll_view/common/consts';
 import { ScrollableDirection } from '../../../../../../js/renovation/ui/scroll_view/common/types';
