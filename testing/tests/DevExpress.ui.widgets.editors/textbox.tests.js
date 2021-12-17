@@ -4,6 +4,8 @@ import devices from 'core/devices';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 import { getWidth, getOuterWidth } from 'core/utils/size';
 
+import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
+
 import 'generic_light.css!';
 
 QUnit.testStart(() => {
@@ -306,18 +308,19 @@ QUnit.module('label integration', {
             this.textBox = this.$textBox.dxTextBox('instance');
         };
 
-        this.LabelMock = {
-            updateMaxWidth: sinon.stub(),
-            updateBeforeWidth: sinon.stub()
-        };
-        this.constructorMock = sinon.stub().returns(this.LabelMock);
-        TextBox.mockTextEditorLabel(this.constructorMock);
+        class TextEditorLabelMock extends TextEditorLabel {
+            updateMaxWidth = sinon.stub()
+            updateBeforeWidth = sinon.stub()
+        }
+
+        this.TextEditorLabelMock = (args) => { this.labelArgs = args; return this.labelMock = new TextEditorLabelMock(args); };
+        TextBox.mockTextEditorLabel(this.TextEditorLabelMock);
     },
     afterEach: function() {
-        Object.values(this.LabelMock, (stub) => {
+        Object.values(this.labelMock, (stub) => {
             stub.reset();
         });
-        this.constructorMock.reset();
+
         TextBox.restoreTextEditorLabel();
     }
 },
@@ -335,8 +338,7 @@ QUnit.module('label integration', {
         const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
         const expectedBeforeWidth = buttonsContainerWidth + searchIconOuterWidth;
 
-        const beforeWidth = this.constructorMock.getCall(0).args[0].beforeWidth;
-        assert.strictEqual(beforeWidth, expectedBeforeWidth);
+        assert.strictEqual(this.labelArgs.beforeWidth, expectedBeforeWidth);
     });
 
     QUnit.test('editor should pass containerWidth equal to input container width - buttons container width - search icon outer width', function(assert) {
@@ -353,8 +355,8 @@ QUnit.module('label integration', {
         const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
         const expectedContainerWidth = inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth;
 
-        const containerWidth = this.constructorMock.getCall(0).args[0].containerWidth;
-        assert.strictEqual(containerWidth, expectedContainerWidth);
+        const borderWidth = 2;
+        assert.strictEqual(this.labelArgs.containerWidth + borderWidth, expectedContainerWidth);
     });
 
     QUnit.test('mode option change should call label updateMaxWidth and updateBeforeWidth methods with correct parameters', function(assert) {
@@ -368,7 +370,7 @@ QUnit.module('label integration', {
         const newLabelMaxWidth = inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth;
         const newLabelBeforeWidth = buttonsContainerWidth + searchIconOuterWidth;
 
-        assert.strictEqual(this.LabelMock.updateMaxWidth.getCall(0).args[0], newLabelMaxWidth, 'updateMaxWidth parameter is correct');
-        assert.strictEqual(this.LabelMock.updateBeforeWidth.getCall(0).args[0], newLabelBeforeWidth, 'updateBeforeWidth parameter is correct');
+        assert.strictEqual(this.labelMock.updateMaxWidth.getCall(0).args[0], newLabelMaxWidth, 'updateMaxWidth parameter is correct');
+        assert.strictEqual(this.labelMock.updateBeforeWidth.getCall(0).args[0], newLabelBeforeWidth, 'updateBeforeWidth parameter is correct');
     });
 });
