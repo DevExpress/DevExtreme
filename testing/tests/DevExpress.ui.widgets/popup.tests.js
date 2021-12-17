@@ -94,6 +94,7 @@ const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 const PREVENT_SAFARI_SCROLLING_CLASS = 'dx-prevent-safari-scrolling';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
@@ -423,7 +424,36 @@ QUnit.module('basic', () => {
             disabled: true
         }).dxPopup('instance');
 
-        assert.ok(popup.$content().hasClass('dx-state-disabled'));
+        assert.ok(popup.$content().hasClass(DISABLED_STATE_CLASS));
+
+        popup.option('disabled', false);
+        assert.notOk(popup.$content().hasClass(DISABLED_STATE_CLASS), 'class is removed after runtime change to false');
+    });
+
+    QUnit.test('disabled=true should pass disabled to toolbars', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            disabled: true,
+            toolbarItems: [{
+                location: 'before',
+                name: 'topButton',
+                visible: true,
+                widget: 'dxButton'
+            }, {
+                location: 'after',
+                toolbar: 'bottom',
+                name: 'bottomButton',
+                visible: true,
+                widget: 'dxButton'
+            }]
+        }).dxPopup('instance');
+
+        assert.ok(popup.topToolbar().hasClass(DISABLED_STATE_CLASS), 'top toolbar has disabled class');
+        assert.ok(popup.bottomToolbar().hasClass(DISABLED_STATE_CLASS), 'bottom toolbar has disabled class');
+
+        popup.option('disabled', false);
+        assert.notOk(popup.topToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from top toolbar');
+        assert.notOk(popup.bottomToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from bottom toolbar');
     });
 });
 
