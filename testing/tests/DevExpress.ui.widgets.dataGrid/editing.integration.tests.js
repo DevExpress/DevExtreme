@@ -2045,9 +2045,6 @@ QUnit.module('Editing', baseModuleConfig, () => {
         this.clock.tick(1000);
 
         // assert
-        const $firstCellInput = $(grid.getCellElement(0, 0)).find('.dx-texteditor-input');
-        assert.equal($firstCellInput.length, 1, 'editor is not closed');
-        assert.ok($firstCellInput.is(':focus'), 'editor is focused');
         assert.equal(items.length, 1, 'new item is not saved');
     });
 
