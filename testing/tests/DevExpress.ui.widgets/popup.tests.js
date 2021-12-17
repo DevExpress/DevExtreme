@@ -441,6 +441,32 @@ QUnit.module('basic', () => {
         popup.option('disabled', false);
         assert.notOk(popup.$content().hasClass(DISABLED_STATE_CLASS), 'class is removed after runtime change to false');
     });
+
+    QUnit.test('disabled=true should pass disabled to toolbars', function(assert) {
+        const popup = $('#popup').dxPopup({
+            visible: true,
+            disabled: true,
+            toolbarItems: [{
+                location: 'before',
+                name: 'topButton',
+                visible: true,
+                widget: 'dxButton'
+            }, {
+                location: 'after',
+                toolbar: 'bottom',
+                name: 'bottomButton',
+                visible: true,
+                widget: 'dxButton'
+            }]
+        }).dxPopup('instance');
+
+        assert.ok(popup.topToolbar().hasClass(DISABLED_STATE_CLASS), 'top toolbar has disabled class');
+        assert.ok(popup.bottomToolbar().hasClass(DISABLED_STATE_CLASS), 'bottom toolbar has disabled class');
+
+        popup.option('disabled', false);
+        assert.notOk(popup.topToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from top toolbar');
+        assert.notOk(popup.bottomToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from bottom toolbar');
+    });
 });
 
 QUnit.module('dimensions', {

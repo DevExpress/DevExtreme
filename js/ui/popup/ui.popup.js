@@ -294,6 +294,7 @@ const Popup = Overlay.inherit({
     },
 
     _renderTemplateByType: function(optionName, data, $container, additionalToolbarOptions) {
+        const { rtlEnabled, useDefaultToolbarButtons, useFlatToolbarButtons, disabled } = this.option();
         const template = this._getTemplateByOption(optionName);
         const toolbarTemplate = template instanceof EmptyTemplate;
 
@@ -301,9 +302,10 @@ const Popup = Overlay.inherit({
             const integrationOptions = extend({}, this.option('integrationOptions'), { skipTemplates: ['content', 'title'] });
             const toolbarOptions = extend(additionalToolbarOptions, {
                 items: data,
-                rtlEnabled: this.option('rtlEnabled'),
-                useDefaultButtons: this.option('useDefaultToolbarButtons'),
-                useFlatButtons: this.option('useFlatToolbarButtons'),
+                rtlEnabled,
+                useDefaultButtons: useDefaultToolbarButtons,
+                useFlatButtons: useFlatToolbarButtons,
+                disabled,
                 integrationOptions
             });
 
@@ -669,6 +671,14 @@ const Popup = Overlay.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case 'disabled':
+                this.callBase(args);
+                this._renderTitle();
+                this._renderBottom();
+                break;
+            case 'animation':
+                this._updateResizeCallbackSkipCondition();
+                break;
             case 'showTitle':
             case 'title':
             case 'titleTemplate':
