@@ -34,6 +34,14 @@ function getPageFilePath(platform: PlatformType, page: string): string {
   return `${platformsSiteRootPath}/${platform}/dist/${page}.html`;
 }
 
+function getTestingPlatforms(platforms: PlatformType[]): PlatformType[] {
+  const { platform: testingPlatform } = process.env;
+
+  return testingPlatform
+    ? platforms.filter((t) => t === testingPlatform)
+    : platforms;
+}
+
 export const multiPlatformTest = ({
   page, platforms = ['jquery', 'react', 'angular'],
 }:
@@ -48,7 +56,7 @@ export const multiPlatformTest = ({
   ) => Promise<any>,
 ): MultiPlatformTest => {
   const wrappedTest = new MultiPlatformTest();
-  platforms.forEach((platform) => {
+  getTestingPlatforms(platforms).forEach((platform) => {
     const pageUrl = getPageFilePath(platform, page);
     const testOptions: {
       platform: PlatformType; screenshotComparerOptions: Partial<IComparerOptions>;
