@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, InternalState, Effect, Fragment,
+  Component, ComponentBindings, JSXComponent, InternalState, Effect, Fragment, Ref, RefObject,
 } from '@devextreme-generator/declarations';
 import React from 'react';
 import { ScrollableProps } from '../../../../js/renovation/ui/scroll_view/common/scrollable_props';
@@ -14,10 +14,11 @@ const getContent = () => {
   return content;
 };
 
-export const viewFunction = ({ options }: App): JSX.Element => (
+export const viewFunction = ({ componentInstance, options }: App): JSX.Element => (
   <Fragment>
     {options && (
     <Scrollable
+      ref={componentInstance}
       id="container"
       width={options.width}
       height={options.height}
@@ -46,6 +47,8 @@ class AppProps { }
   jQuery: { register: true },
 })
 export class App extends JSXComponent<AppProps>() {
+  @Ref() componentInstance!: RefObject<Scrollable>;
+
   @InternalState() options?: Partial<ScrollableProps>;
 
   @Effect({ run: 'once' })
@@ -58,5 +61,12 @@ export class App extends JSXComponent<AppProps>() {
           ...newOptions,
         };
       };
+  }
+
+  @Effect({ run: 'always' })
+  initializeInstance(): void {
+    // eslint-disable-next-line no-restricted-globals
+    (window as unknown as { componentInstance: unknown })
+      .componentInstance = this.componentInstance.current ?? this.componentInstance;
   }
 }

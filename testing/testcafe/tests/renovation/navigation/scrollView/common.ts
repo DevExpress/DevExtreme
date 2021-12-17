@@ -1,6 +1,6 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import Scrollable from '../../../../model/scrollView/internal/scrollable';
-import ScrollView from '../../../../model/scrollView/scrollView';
+import { ScrollableFactory } from '../../../../model/scrollView/internal/scrollable';
+import { ScrollViewFactory } from '../../../../model/scrollView/scrollView';
 import { ScrollableProps } from '../../../../../../js/renovation/ui/scroll_view/common/scrollable_props';
 import { multiPlatformTest, updateComponentOptions } from '../../../../helpers/multi-platform-test';
 import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL, DIRECTION_BOTH } from '../../../../../../js/renovation/ui/scroll_view/common/consts';
@@ -34,12 +34,14 @@ const config: Partial<ScrollableProps>[] = [];
 });
 
 [{
+  widgetName: 'dxScrollable',
   page: 'scrollable',
-  Component: Scrollable,
+  Component: ScrollableFactory,
 }, {
+  widgetName: 'dxScrollView',
   page: 'scrollView',
-  Component: ScrollView,
-}].forEach(({ page, Component }) => {
+  Component: ScrollViewFactory,
+}].forEach(({ widgetName, page, Component }) => {
   const test = multiPlatformTest({
     page: `declaration/${page}`,
     platforms: ['jquery', 'react', 'angular'],
@@ -49,8 +51,8 @@ const config: Partial<ScrollableProps>[] = [];
 
   config.forEach((props) => {
     test(`Should render ${page}, ${JSON.stringify(props)}`,
-      async (t, { screenshotComparerOptions }) => {
-        const component = new Component(COMPONENT_SELECTOR, props);
+      async (t, { platform, screenshotComparerOptions }) => {
+        const component = new Component[platform](COMPONENT_SELECTOR, props, widgetName);
         const { direction, useNative, rtlEnabled } = props;
 
         await t
@@ -68,8 +70,8 @@ const config: Partial<ScrollableProps>[] = [];
       }));
 
     test(`${page}.scrollTo({ top: 50, left: 50 }), ${JSON.stringify(props)}`,
-      async (t, { screenshotComparerOptions }) => {
-        const component = new Component(COMPONENT_SELECTOR, props);
+      async (t, { platform, screenshotComparerOptions }) => {
+        const component = new Component[platform](COMPONENT_SELECTOR, props, widgetName);
         const { direction, useNative, rtlEnabled } = props;
 
         await component.apiScrollTo({ top: 50, left: 50 });
