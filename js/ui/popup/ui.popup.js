@@ -44,6 +44,7 @@ const POPUP_FULL_SCREEN_WIDTH_CLASS = 'dx-popup-fullscreen-width';
 const POPUP_NORMAL_CLASS = 'dx-popup-normal';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
 const POPUP_TITLE_CLASS = 'dx-popup-title';
@@ -537,6 +538,12 @@ const Popup = Overlay.inherit({
         } else {
             this._$bottom && this._$bottom.detach();
         }
+    },
+
+    _toggleDisabledState: function(value) {
+        this.callBase(...arguments);
+
+        this.$content().toggleClass(DISABLED_STATE_CLASS, Boolean(value));
     },
 
     _toggleClasses: function() {

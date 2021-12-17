@@ -104,6 +104,7 @@ const POPUP_CONTENT_FLEX_HEIGHT_CLASS = 'dx-popup-flex-height';
 const POPUP_CONTENT_INHERIT_HEIGHT_CLASS = 'dx-popup-inherit-height';
 const POPUP_BOTTOM_RIGHT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-bottom-right';
 const POPUP_TOP_LEFT_RESIZE_HANDLE_CLASS = 'dx-resizable-handle-corner-top-left';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const POPUP_DRAGGABLE_CLASS = 'dx-popup-draggable';
 
@@ -438,7 +439,10 @@ QUnit.module('basic', () => {
             disabled: true
         }).dxPopup('instance');
 
-        assert.ok(popup.$content().hasClass('dx-state-disabled'));
+        assert.ok(popup.$content().hasClass(DISABLED_STATE_CLASS));
+
+        popup.option('disabled', false);
+        assert.notOk(popup.$content().hasClass(DISABLED_STATE_CLASS), 'class is removed after runtime change to false');
     });
 });
 
