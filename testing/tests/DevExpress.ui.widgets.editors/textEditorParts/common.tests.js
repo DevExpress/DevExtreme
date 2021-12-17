@@ -580,7 +580,6 @@ QUnit.module('label integration', {
         }
     }, () => {
         QUnit.test('width', function(assert) {
-            this.init();
             this.textEditor.option('width', 300);
             const inputWidth = getWidth(this.$input);
 
