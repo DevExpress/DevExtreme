@@ -52,7 +52,7 @@ const installPackage = (packageName, cb) => {
             cb(new Error(`Package does not exist: ${packageName}`));
         }
         const relativeFileName = path.relative(dirname(), pkg);
-        run(`npm i --no-package-lock ./${relativeFileName}`, cb);
+        run(`npm i --no-package-lock --force ./${relativeFileName}`, cb);
     });
 };
 gulp.task('install-devextreme', (cb) => {
@@ -68,7 +68,7 @@ gulp.task('install-all', (cb)=>{
             cb(new Error(`Expected 2 packages but got ${packageNames.length}:\n ${JSON.stringify(packageNames, null, 2)}`));
             return;
         }
-        run(`npm i --no-package-lock ./${packageNames.map(x => `./${x}`).join(' ')}`, cb);
+        run(`npm i --no-package-lock --force ./${packageNames.map(x => `./${x}`).join(' ')}`, cb);
     });
 });
 
