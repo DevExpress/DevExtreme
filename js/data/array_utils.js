@@ -87,7 +87,7 @@ function cloneInstance(instance) {
     for(const name in instanceWithoutPrototype) {
         const prop = instanceWithoutPrototype[name];
 
-        if(isObject(prop) && !isPlainObject(prop)) {
+        if(isObject(prop) && !isPlainObject(prop) && prop !== instance) {
             instanceWithoutPrototype[name] = cloneInstance(prop);
         }
     }
