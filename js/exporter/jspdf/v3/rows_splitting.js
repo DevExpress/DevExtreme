@@ -1,12 +1,9 @@
 import { isDefined } from '../../../core/utils/type';
 
-function splitRectsByPages(rects, options) {
-    if(!isDefined(options.pageWidth)) {
+function splitRectsByPages(rects, topLeft, pageWidth) {
+    if(!isDefined(pageWidth)) {
         return [ rects ];
     }
-
-    const topLeft = options?.topLeft ?? { x: 0, y: 0 };
-    const pageWidth = options.pageWidth;
 
     const rectsByPage = splitRectsHorizontalByPages(rects, pageWidth, topLeft);
     // TODO: splitRectsVerticalByPages
