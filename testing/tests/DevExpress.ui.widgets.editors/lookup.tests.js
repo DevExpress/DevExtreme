@@ -93,7 +93,7 @@ const getList = function() {
 };
 
 const getSearchBox = (lookup) => {
-    return $(lookup.content()).find('.dx-searchbox');
+    return lookup._$searchBox;
 };
 
 const getSearchWrapper = (lookup) => {
