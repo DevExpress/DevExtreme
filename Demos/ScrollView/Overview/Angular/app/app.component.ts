@@ -30,7 +30,7 @@ export class AppComponent implements AfterViewInit {
 
   content: string;
 
-  updateContentTimer: number;
+  updateContentTimer: unknown;
 
   scrollByContent = true;
 
@@ -70,7 +70,7 @@ export class AppComponent implements AfterViewInit {
 
   updateContent = (args, eventName) => {
     const updateContentText = `<br /><div>Content has been updated on the ${eventName} event.</div><br />`;
-    if (this.updateContentTimer) { clearTimeout(this.updateContentTimer); }
+    if (this.updateContentTimer) { clearTimeout(this.updateContentTimer as number); }
     this.updateContentTimer = setTimeout(() => {
       this.content = (eventName == 'PullDown' ? updateContentText + this.content : this.content + updateContentText);
       args.component.release();

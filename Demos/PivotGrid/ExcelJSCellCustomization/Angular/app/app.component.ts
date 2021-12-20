@@ -116,12 +116,12 @@ export class AppComponent {
     }
     const { value } = cell;
     if (value < 20000) {
-      return { font: '9C0006', fill: 'FFC7CE' };
+      return { font: '9C0006', fill: 'FFC7CE', bold: false };
     }
     if (value > 50000) {
-      return { font: '006100', fill: 'C6EFCE' };
+      return { font: '006100', fill: 'C6EFCE', bold: false };
     }
-    return { font: '9C6500', fill: 'FFEB9C' };
+    return { font: '9C6500', fill: 'FFEB9C', bold: false };
   }
 }
 

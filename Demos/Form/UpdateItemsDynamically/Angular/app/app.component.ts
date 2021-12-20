@@ -55,6 +55,8 @@ export class AppComponent implements AfterViewInit {
     };
   }
 
+  ngAfterViewInit(): void {}
+
   getPhonesOptions(phones: any) {
     const options = [];
     for (let i = 0; i < phones.length; i++) {

@@ -2,7 +2,7 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxPivotGridModule } from 'devextreme-angular';
-import { Workbook } from 'exceljs';
+import { Workbook, WorksheetViewFrozen } from 'exceljs';
 import { saveAs } from 'file-saver-es';
 // Our demo infrastructure requires us to use 'file-saver-es'. We recommend that you use the official 'file-saver' package in your applications.
 import { exportPivotGrid } from 'devextreme/excel_exporter';
@@ -11,13 +11,13 @@ import { Service, Sale } from './app.service';
 if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
-
 @Component({
   selector: 'demo-app',
   templateUrl: 'app/app.component.html',
   styleUrls: ['app/app.component.css'],
   providers: [Service],
 })
+
 export class AppComponent {
   sales: Sale[];
 
@@ -72,10 +72,9 @@ export class AppComponent {
       const headerRow = worksheet.getRow(2);
       headerRow.height = 30;
 
-      const columnFromIndex = worksheet.views[0].xSplit + 1;
+      const columnFromIndex = (worksheet.views[0] as WorksheetViewFrozen).xSplit + 1;
       const columnToIndex = columnFromIndex + 3;
       worksheet.mergeCells(2, columnFromIndex, 2, columnToIndex);
-
       const headerCell = headerRow.getCell(columnFromIndex);
       headerCell.value = 'Sales Amount by Region';
       headerCell.font = { name: 'Segoe UI Light', size: 22, bold: true };
