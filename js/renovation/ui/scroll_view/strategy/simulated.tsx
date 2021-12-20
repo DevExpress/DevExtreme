@@ -182,9 +182,6 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onBounce={onBounce}
               onEnd={onEnd}
               containerHasSizes={containerHasSizes}
-
-              onLock={lock}
-              onUnlock={unlock}
             />
           )}
           {needRenderScrollbars && direction.isVertical && (
