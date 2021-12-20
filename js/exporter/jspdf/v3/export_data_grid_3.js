@@ -99,7 +99,7 @@ function exportDataGrid(doc, dataGrid, options) {
             const docStyles = getDocumentStyles(doc);
 
             const rects = pdfCellsInfo.map(cellInfo => Object.assign({}, cellInfo._rect, { sourceCellInfo: cellInfo }));
-            const rectsByPages = splitRectsByPages(rects, options.topLeft, options.pageWidth);
+            const rectsByPages = splitRectsByPages(rects, options.topLeft, options.pageWidth); // ??? options.pageWidth -> doc.internal.pageSize.getWidth()
             const pdfCellsInfoByPages = rectsByPages.map(rects => {
                 return rects.map(rect => Object.assign({}, rect.sourceCellInfo, { _rect: rect }));
             });
