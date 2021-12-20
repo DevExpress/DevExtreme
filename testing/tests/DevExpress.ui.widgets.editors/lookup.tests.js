@@ -28,10 +28,6 @@ import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
 
 import 'generic_light.css!';
 
-const getSearchBox = () => {
-    return $('.dx-overlay-content .dx-searchbox');
-};
-
 QUnit.testStart(function() {
     const markup =
         '<div id="lookup"></div>\
@@ -76,7 +72,6 @@ const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 
 const LOOKUP_SEARCH_CLASS = 'dx-lookup-search';
-const LOOKUP_SEARCH_WRAPPER_CLASS = 'dx-lookup-search-wrapper';
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 const CLEAR_BUTTON_CLASS = 'dx-popup-clear';
 const APPLY_BUTTON_CLASS = 'dx-popup-done';
@@ -99,6 +94,14 @@ const getList = function() {
     return $('.dx-list').dxList('instance');
 };
 
+const getSearchBox = (lookup) => {
+    return $(lookup.content()).find('.dx-searchbox');
+};
+
+const getSearchWrapper = (lookup) => {
+    return $(lookup.content()).find('.dx-lookup-search-wrapper');
+};
+
 QUnit.module('Lookup', {
     beforeEach: function() {
         fx.off = true;
@@ -118,7 +121,7 @@ QUnit.module('Lookup', {
             this.$list = $('.dx-list');
             this.list = this.$list.dxList('instance');
 
-            this.$search = getSearchBox();
+            this.$search = getSearchBox(this.instance);
             this.search = this.instance._searchBox;
         };
     },
@@ -1561,7 +1564,7 @@ QUnit.module('options', {
         }).dxLookup('instance');
 
         const popup = instance._popup;
-        const $search = getSearchBox();
+        const $search = getSearchBox(instance);
 
         assert.ok($(popup.$wrapper()).hasClass('dx-lookup-popup-search'));
         assert.ok($search.is(':visible'), 'default value');
@@ -1955,7 +1958,7 @@ QUnit.module('options', {
             opened: true
         }).dxLookup('instance');
 
-        assert.equal($(instance.content()).find('.' + LOOKUP_SEARCH_WRAPPER_CLASS).length, 0, 'search wrapper is not rendered');
+        assert.equal(getSearchWrapper(instance).length, 0, 'search wrapper is not rendered');
     });
 
     QUnit.test('search wrapper should be rendered if the \'searchEnabled\' option is true', function(assert) {
@@ -1964,7 +1967,7 @@ QUnit.module('options', {
             opened: true
         }).dxLookup('instance');
 
-        assert.equal($(instance.content()).find('.' + LOOKUP_SEARCH_WRAPPER_CLASS).length, 1, 'search wrapper is rendered');
+        assert.equal(getSearchWrapper(instance).length, 1, 'search wrapper is rendered');
     });
 
     QUnit.test('clear button option runtime change', function(assert) {
@@ -2593,7 +2596,7 @@ QUnit.module('focus policy', {
 
         instance.option('opened', true);
 
-        const $searchBox = getSearchBox();
+        const $searchBox = getSearchBox(instance);
         assert.ok($searchBox.hasClass(FOCUSED_CLASS), '\'focus\' method focus searchBox with opened overlay');
     });
 
@@ -2676,7 +2679,7 @@ QUnit.module('keyboard navigation', {
         const instance = $element.dxLookup('instance');
 
         assert.ok(instance.option('opened'));
-        assert.ok(getSearchBox().hasClass(FOCUSED_CLASS), 'searchBox has focus after open popup');
+        assert.ok(getSearchBox(instance).hasClass(FOCUSED_CLASS), 'searchBox has focus after open popup');
     });
 
     QUnit.testInActiveWindow('lookup-list should be focused after \'down\' key pressing', function(assert) {
@@ -2693,7 +2696,7 @@ QUnit.module('keyboard navigation', {
         });
         const instance = $element.dxLookup('instance');
 
-        const keyboard = keyboardMock(getSearchBox().find('.dx-texteditor-input'));
+        const keyboard = keyboardMock(getSearchBox(instance).find('.dx-texteditor-input'));
         keyboard.keyDown('down');
 
         assert.ok(instance._$list.find('.dx-list-item').first().hasClass(FOCUSED_CLASS), 'list-item is focused after down key pressing');
@@ -2736,7 +2739,7 @@ QUnit.module('keyboard navigation', {
         });
         const instance = $element.dxLookup('instance');
 
-        const keyboard = keyboardMock(getSearchBox().find('.dx-texteditor-input'));
+        const keyboard = keyboardMock(getSearchBox(instance).find('.dx-texteditor-input'));
         keyboard.keyDown('down');
         keyboard.keyDown('down');
         keyboard.keyDown('enter');
@@ -2758,7 +2761,7 @@ QUnit.module('keyboard navigation', {
         });
         const instance = $element.dxLookup('instance');
 
-        const keyboard = keyboardMock(getSearchBox().find('.dx-texteditor-input'));
+        const keyboard = keyboardMock(getSearchBox(instance).find('.dx-texteditor-input'));
         keyboard.keyDown('down');
         keyboard.keyDown('down');
         keyboard.keyDown('space');
@@ -2829,7 +2832,7 @@ QUnit.module('keyboard navigation', {
             focusStateEnabled: true,
             searchEnabled: true
         }).dxLookup('instance');
-        const keyboard = keyboardMock(getSearchBox().find('.dx-texteditor-input'));
+        const keyboard = keyboardMock(getSearchBox(instance).find('.dx-texteditor-input'));
 
         assert.ok(instance.option('opened'), 'overlay opened');
 
