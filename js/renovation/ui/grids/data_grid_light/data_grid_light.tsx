@@ -4,9 +4,7 @@ import {
   OneWay, Effect, InternalState, Provider, Slot,
 } from '@devextreme-generator/declarations';
 
-import {
-  createGetter, Plugins, PluginsContext, createPlaceholder,
-} from '../../../utils/plugin/context';
+import { createGetter, Plugins, PluginsContext } from '../../../utils/plugin/context';
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
@@ -14,9 +12,7 @@ import type { RowData } from './types';
 
 import { TableContent } from './views/table_content';
 import { TableHeader } from './views/table_header';
-import { Placeholder } from '../../../utils/plugin/placeholder';
-
-export const FooterPlaceholder = createPlaceholder();
+import { Footer } from './views/footer';
 
 export const VisibleItems = createGetter<RowData[]>([]);
 
@@ -39,7 +35,7 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
     <div className="dx-datagrid dx-gridbase-container" role="grid" aria-label="Data grid">
       <TableHeader columns={viewModel.props.columns} />
       <TableContent columns={viewModel.props.columns} dataSource={viewModel.visibleItems} />
-      <Placeholder type={FooterPlaceholder} />
+      <Footer />
       { viewModel.props.children }
     </div>
   </Widget>

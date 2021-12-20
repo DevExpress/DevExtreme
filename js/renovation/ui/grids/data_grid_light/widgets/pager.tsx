@@ -9,7 +9,7 @@ import messageLocalization from '../../../../../localization/message';
 
 import { PagerContent } from '../../../pager/content';
 import { PagingPlugin, PagingPluginData } from './paging';
-import { FooterPlaceholder } from '../data_grid_light';
+import { FooterPlaceholder } from '../views/footer';
 import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
 const DATAGRID_PAGER_CLASS = 'dx-datagrid-pager';
