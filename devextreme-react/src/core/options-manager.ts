@@ -99,6 +99,7 @@ class OptionsManager {
 
     this.isUpdating = false;
     this.instance.off('optionChanged', optionChangedHandler);
+    this.currentConfig = config;
 
     changedOptions.forEach(([name, value]) => {
       const currentPropValue = config.options[name];
@@ -106,7 +107,6 @@ class OptionsManager {
         this.setValue(name, currentPropValue);
       }
     });
-    this.currentConfig = config;
     this.instance.endUpdate();
   }
 
