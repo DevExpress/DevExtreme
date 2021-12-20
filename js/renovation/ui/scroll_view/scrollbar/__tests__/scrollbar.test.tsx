@@ -293,38 +293,6 @@ describe('Scrollbar', () => {
         expect(viewModel.active).toEqual(true);
       });
 
-      each([
-        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: 0, expected: 10 },
-        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -150, expected: 10 },
-        { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -300, expected: 10 },
-        { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: 0, expected: -52 },
-        { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: -150, expected: -52 },
-        { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: -300, expected: -52 },
-        { eventData: { pageX: 87, pageY: 87 }, scrollLocation: 0, expected: -138 },
-        { eventData: { pageX: 87, pageY: 87 }, scrollLocation: -150, expected: -138 },
-        { eventData: { pageX: 87, pageY: 87 }, scrollLocation: -300, expected: -138 },
-        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: 0, expected: -346 },
-        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -150, expected: -346 },
-        { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -300, expected: -346 },
-      ]).describe('testData: %o', (testData) => {
-        it('moveToMouseLocation(event)', () => {
-          const viewModel = new Scrollbar({
-            direction,
-            containerSize: 100,
-            contentSize: 400,
-            maxOffset: -300,
-            scrollLocation: testData.scrollLocation,
-          });
-
-          viewModel.moveTo = jest.fn();
-
-          viewModel.moveToMouseLocation(testData.eventData, 40);
-
-          expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
-          expect(viewModel.moveTo).toHaveBeenCalledWith(testData.expected);
-        });
-      });
-
       test.each([
         { prevScrollLocation: -499, scrollLocation: -500.25, expected: { needFireScroll: true } },
         { prevScrollLocation: -399, scrollLocation: -400, expected: { needFireScroll: true } },
@@ -454,12 +422,6 @@ describe('Scrollbar', () => {
 
   describe('Getters', () => {
     each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
-      it('axis()', () => {
-        const viewModel = new Scrollbar({ direction });
-
-        expect((viewModel as any).axis).toBe(direction === 'horizontal' ? 'x' : 'y');
-      });
-
       it('dimension()', () => {
         const viewModel = new Scrollbar({ direction });
 

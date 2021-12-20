@@ -52,7 +52,6 @@ describe('AnimatedScrollbar', () => {
     { name: 'isThumb', calledWith: ['arg1'] },
     { name: 'setActiveState', calledWith: [] },
     { name: 'moveTo', calledWith: ['arg1'] },
-    { name: 'moveToMouseLocation', calledWith: ['arg1', 'arg2'] },
   ]).describe('Method: %o', (methodInfo) => {
     it(`${methodInfo.name}() method should call according scrollbar method`, () => {
       const viewModel = new AnimatedScrollbar({});
@@ -77,6 +76,12 @@ describe('AnimatedScrollbar', () => {
   });
 
   each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('direction: %o', (direction) => {
+    it('axis()', () => {
+      const viewModel = new AnimatedScrollbar({ direction });
+
+      expect(viewModel.axis).toBe(direction === DIRECTION_HORIZONTAL ? 'x' : 'y');
+    });
+
     each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
       each([true, false]).describe('reachBottomEnabled: %o', (reachBottomEnabled) => {
         each([0, 55]).describe('bottomPocketSize: %o', (bottomPocketSize) => {
@@ -579,6 +584,38 @@ describe('Effects', () => {
   });
 
   each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL]).describe('direction: %o', (direction) => {
+    each([
+      { eventData: { pageX: 50, pageY: 50 }, scrollLocation: 0, expected: 10 },
+      { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -150, expected: 10 },
+      { eventData: { pageX: 50, pageY: 50 }, scrollLocation: -300, expected: 10 },
+      { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: 0, expected: -52 },
+      { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: -150, expected: -52 },
+      { eventData: { pageX: 65.5, pageY: 65.5 }, scrollLocation: -300, expected: -52 },
+      { eventData: { pageX: 87, pageY: 87 }, scrollLocation: 0, expected: -138 },
+      { eventData: { pageX: 87, pageY: 87 }, scrollLocation: -150, expected: -138 },
+      { eventData: { pageX: 87, pageY: 87 }, scrollLocation: -300, expected: -138 },
+      { eventData: { pageX: 139, pageY: 139 }, scrollLocation: 0, expected: -346 },
+      { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -150, expected: -346 },
+      { eventData: { pageX: 139, pageY: 139 }, scrollLocation: -300, expected: -346 },
+    ]).describe('testData: %o', (testData) => {
+      it('moveToMouseLocation(event)', () => {
+        const viewModel = new AnimatedScrollbar({
+          direction,
+          containerSize: 100,
+          contentSize: 400,
+          maxOffset: -300,
+          scrollLocation: testData.scrollLocation,
+        });
+
+        viewModel.moveTo = jest.fn();
+
+        viewModel.moveToMouseLocation(testData.eventData, 40);
+
+        expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+        expect(viewModel.moveTo).toHaveBeenCalledWith(testData.expected);
+      });
+    });
+
     each([true, false]).describe('rtlEnabled: %o', (rtlEnabled) => {
       each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
         each([true, false]).describe('containerHasSizes: %o', (containerHasSizes) => {
@@ -600,7 +637,7 @@ describe('Effects', () => {
                   viewModel.moveTo = jest.fn();
 
                   viewModel.rightScrollLocation = rightScrollLocation;
-                  viewModel.prevScrollLocation = -100;
+                  // viewModel.prevScrollLocation = -100;
                   viewModel.prevMaxOffset = prevMaxOffset;
 
                   viewModel.syncScrollLocation();
@@ -617,12 +654,12 @@ describe('Effects', () => {
                       expectedLocation = maxOffset - expectedRightScrollLocation;
                     }
 
-                    if (expectedLocation === -100 /* prev location */) {
-                      expect(viewModel.moveTo).not.toBeCalled();
-                    } else {
-                      expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
-                      expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
-                    }
+                    // if (expectedLocation === -100 /* prev location */) {
+                    //   expect(viewModel.moveTo).not.toBeCalled();
+                    // } else {
+                    expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
+                    expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
+                    // }
                   } else {
                     expect(viewModel.moveTo).not.toBeCalled();
                   }

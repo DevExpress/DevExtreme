@@ -7,7 +7,6 @@ import {
   Effect,
   Method,
   Mutable,
-  // Consumer,
 } from '@devextreme-generator/declarations';
 
 import { combineClasses } from '../../../utils/combine_classes';
@@ -29,10 +28,8 @@ import {
   subscribeToMouseLeaveEvent,
 } from '../../../utils/subscribe_to_event';
 
-import { DxMouseEvent } from '../common/types';
 import { ScrollbarProps } from '../common/scrollbar_props';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
-// import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 export const THUMB_MIN_SIZE = 15;
 
@@ -135,19 +132,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
   }
 
   @Method()
-  moveToMouseLocation(event: DxMouseEvent, offset: number): void {
-    const mouseLocation = event[`page${this.axis.toUpperCase()}`] - offset;
-    const delta = mouseLocation / this.containerToContentRatio - this.props.containerSize / 2;
-
-    this.moveTo(Math.round(-delta));
-  }
-
-  // @Effect()
-  // move(): void {
-  //   this.moveTo(this.props.scrollLocation);
-  // }
-
-  @Method()
   moveTo(location: number): void {
     const scrollDelta = Math.abs(this.prevScrollLocation - location);
     this.prevScrollLocation = location;
@@ -157,10 +141,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
       location: -location,
       needFireScroll: scrollDelta > 0,
     });
-  }
-
-  get axis(): 'x' | 'y' {
-    return this.isHorizontal ? 'x' : 'y';
   }
 
   get fullScrollProp(): 'scrollLeft' | 'scrollTop' {

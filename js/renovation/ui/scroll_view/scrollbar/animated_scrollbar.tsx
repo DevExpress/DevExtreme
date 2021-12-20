@@ -101,7 +101,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @Mutable() rightScrollLocation = 0;
 
-  @Mutable() prevScrollLocation = 0;
+  // @Mutable() prevScrollLocation = 0;
 
   @Mutable() prevMaxOffset = 0;
 
@@ -338,9 +338,9 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
         newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
       }
 
-      if (this.prevScrollLocation !== newScrollLocation) {
-        this.moveTo(newScrollLocation);
-      }
+      // if (this.prevScrollLocation !== newScrollLocation) {
+      this.moveTo(newScrollLocation);
+      // }
     }
   }
 
@@ -420,7 +420,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   moveTo(value: number): void {
-    this.prevScrollLocation = value;
+    // this.prevScrollLocation = value;
     this.rightScrollLocation = this.props.maxOffset - value;
 
     // this.newScrollLocation = value;
@@ -428,7 +428,11 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   moveToMouseLocation(event: DxMouseEvent, offset: number): void {
-    this.scrollbarRef.current!.moveToMouseLocation(event, offset);
+    const mouseLocation = event[`page${this.axis.toUpperCase()}`] - offset;
+    const containerToContentRatio = this.props.containerSize / this.props.contentSize;
+    const delta = mouseLocation / containerToContentRatio - this.props.containerSize / 2;
+
+    this.moveTo(Math.round(-delta));
   }
 
   resetThumbScrolling(): void {
@@ -516,5 +520,9 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   get isHorizontal(): boolean {
     return this.props.direction === DIRECTION_HORIZONTAL;
+  }
+
+  get axis(): 'x' | 'y' {
+    return this.isHorizontal ? 'x' : 'y';
   }
 }
