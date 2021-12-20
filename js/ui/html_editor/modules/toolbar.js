@@ -39,7 +39,16 @@ if(Quill) {
 
     const USER_ACTION = 'user';
 
-    const FORMAT_HOTKEYS = ['b', 'i', 'u'];
+    const FORMAT_HOTKEYS = [{
+        key: 'b',
+        format: 'bold'
+    }, {
+        key: 'i',
+        format: 'italic'
+    }, {
+        key: 'u',
+        format: 'underline'
+    }];
 
     const localize = (name) => {
         return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
@@ -193,9 +202,18 @@ if(Quill) {
                 const key = originalEvent && normalizeKeyName(originalEvent);
 
                 if(key) {
-                    each(FORMAT_HOTKEYS, (index, keyName) => {
-                        if(key.toLowerCase() === keyName && isCommandKeyPressed(originalEvent)) {
-                            this.updateFormatWidgets(true);
+                    each(FORMAT_HOTKEYS, (index, hotKeyData) => {
+                        if(key.toLowerCase() === hotKeyData.key && isCommandKeyPressed(originalEvent)) {
+                            const formatWidget = this._toolbarWidgets.getByName(hotKeyData.format);
+                            const format = this.quill.getFormat();
+                            const formatValue = format[hotKeyData.format];
+
+                            if(formatValue) {
+                                this._markActiveFormatWidget(hotKeyData.format, formatWidget, format);
+                            } else {
+                                this._resetFormatWidget(hotKeyData.format, formatWidget);
+                            }
+
                             return false;
                         }
                     });
