@@ -1,9 +1,10 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, JSXComponent, ComponentBindings,
-  OneWay, Effect, InternalState, Nested,
+  OneWay, Effect, InternalState, Provider, Slot,
 } from '@devextreme-generator/declarations';
 
+import { createGetter, Plugins, PluginsContext } from '../../../utils/plugin/context';
 import { Widget } from '../../common/widget';
 import { BaseWidgetProps } from '../../common/base_props';
 
@@ -11,8 +12,9 @@ import type { RowData } from './types';
 
 import { TableContent } from './views/table_content';
 import { TableHeader } from './views/table_header';
+import { Footer } from './views/footer';
 
-import { GridPager, GridPagerUserProps } from './widgets/pager';
+export const VisibleItems = createGetter<RowData[]>([]);
 
 export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
   <Widget // eslint-disable-line jsx-a11y/no-access-key
@@ -33,33 +35,11 @@ export const viewFunction = (viewModel: DataGridLight): JSX.Element => (
     <div className="dx-datagrid dx-gridbase-container" role="grid" aria-label="Data grid">
       <TableHeader columns={viewModel.props.columns} />
       <TableContent columns={viewModel.props.columns} dataSource={viewModel.visibleItems} />
-      <GridPager
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        pager={viewModel.props.pager}
-        pageCount={viewModel.pagingPageCount}
-        totalCount={viewModel.props.dataSource.length}
-
-        pageIndex={viewModel.pagingPageIndex}
-        pageIndexChange={viewModel.onPageIndexChange}
-
-        pageSize={viewModel.pagingPageSize}
-        pageSizeChange={viewModel.onPageSizeChange}
-      />
+      <Footer />
+      { viewModel.props.children }
     </div>
   </Widget>
 );
-
-@ComponentBindings()
-export class PagingProps {
-  @OneWay()
-  enabled = true;
-
-  @OneWay()
-  pageIndex = 0;
-
-  @OneWay()
-  pageSize: number | 'all' = 20;
-}
 
 @ComponentBindings()
 export class DataGridLightProps extends BaseWidgetProps {
@@ -69,15 +49,8 @@ export class DataGridLightProps extends BaseWidgetProps {
   @OneWay()
   columns: string[] = [];
 
-  @Nested()
-  pager: GridPagerUserProps = new GridPagerUserProps();
-
-  @Nested()
-  paging: PagingProps = {
-    pageSize: 20,
-    pageIndex: 0,
-    enabled: true,
-  };
+  @Slot()
+  children?: JSX.Element | JSX.Element[];
 }
 
 const aria = {
@@ -95,47 +68,23 @@ export class DataGridLight extends JSXComponent(DataGridLightProps) {
     return aria;
   }
 
-  get visibleItems(): RowData[] {
-    if (!this.props.paging.enabled || this.pagingPageSize === 'all') {
-      return this.props.dataSource;
-    }
-
-    const start = this.pagingPageIndex * this.pagingPageSize;
-    const end = start + this.pagingPageSize;
-
-    return this.props.dataSource.slice(start, end);
-  }
-
-  get pagingPageCount(): number {
-    if (this.pagingPageSize === 'all') {
-      return 1;
-    }
-
-    return Math.ceil(this.props.dataSource.length / this.pagingPageSize);
-  }
+  @Provider(PluginsContext)
+  plugins = new Plugins();
 
   @InternalState()
-  pagingPageIndex = 0;
-
-  @InternalState()
-  pagingPageSize: number | 'all' = 20;
+  visibleItems: RowData[] = [];
 
   @Effect()
-  updatePagingProps(): void {
-    this.pagingPageIndex = this.props.paging.pageIndex;
-
-    if (this.props.paging.pageSize === 0) {
-      this.pagingPageSize = 'all';
-    } else {
-      this.pagingPageSize = this.props.paging.pageSize;
-    }
+  updateVisibleItems(): () => void {
+    return this.plugins.watch(VisibleItems, (items) => {
+      this.visibleItems = items;
+    });
   }
 
-  onPageSizeChange(pageSize: number | 'all'): void {
-    this.pagingPageSize = pageSize;
-  }
-
-  onPageIndexChange(pageIndex: number): void {
-    this.pagingPageIndex = pageIndex;
+  @Effect()
+  setDataSourceToVisibleItems(): () => void {
+    return this.plugins.extend(
+      VisibleItems, -1, () => this.props.dataSource,
+    );
   }
 }
