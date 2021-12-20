@@ -41,13 +41,13 @@ if(Quill) {
 
     const FORMAT_HOTKEYS = [{
         key: 'b',
-        format: 'bold'
+        formatName: 'bold'
     }, {
         key: 'i',
-        format: 'italic'
+        formatName: 'italic'
     }, {
         key: 'u',
-        format: 'underline'
+        formatName: 'underline'
     }];
 
     const localize = (name) => {
@@ -199,26 +199,30 @@ if(Quill) {
 
             eventsEngine.off(this.editorInstance._getQuillContainer(), namespace);
             eventsEngine.on(this.editorInstance._getQuillContainer(), namespace, ({ originalEvent }) => {
-                const key = originalEvent && normalizeKeyName(originalEvent);
+                const pressedKey = originalEvent && normalizeKeyName(originalEvent);
 
-                if(key) {
-                    each(FORMAT_HOTKEYS, (index, hotKeyData) => {
-                        if(key.toLowerCase() === hotKeyData.key && isCommandKeyPressed(originalEvent)) {
-                            const formatWidget = this._toolbarWidgets.getByName(hotKeyData.format);
-                            const format = this.quill.getFormat();
-                            const formatValue = format[hotKeyData.format];
-
-                            if(formatValue) {
-                                this._markActiveFormatWidget(hotKeyData.format, formatWidget, format);
-                            } else {
-                                this._resetFormatWidget(hotKeyData.format, formatWidget);
-                            }
+                if(pressedKey) {
+                    each(FORMAT_HOTKEYS, (index, { key, formatName }) => {
+                        if(pressedKey.toLowerCase() === key && isCommandKeyPressed(originalEvent)) {
+                            this._updateButtonState(formatName);
 
                             return false;
                         }
                     });
                 }
             });
+        }
+
+        _updateButtonState(formatName) {
+            const formatWidget = this._toolbarWidgets.getByName(formatName);
+            const currentFormat = this.quill.getFormat();
+            const formatValue = currentFormat[formatName];
+
+            if(formatValue) {
+                this._markActiveFormatWidget(formatName, formatWidget, currentFormat);
+            } else {
+                this._resetFormatWidget(formatName, formatWidget);
+            }
         }
 
         _prepareToolbarItems() {
