@@ -453,7 +453,7 @@ const DropDownButton = Widget.inherit({
     },
 
     _setAriaExpanded(value) {
-        const $ariaElements = this._getExpandedAriaElements();
+        const $ariaElements = [ ...this._$buttonElements, this.$element() ];
         $ariaElements.forEach((ariaElement) => {
             this.setAria({
                 expanded: value,
@@ -463,12 +463,6 @@ const DropDownButton = Widget.inherit({
         });
     },
 
-    _getExpandedAriaElements() {
-        const buttonElements = this._buttonGroup.$element().find('.dx-button').toArray();
-
-        return [ ...buttonElements, this.$element() ];
-    },
-
     _renderButtonGroup() {
         const $buttonGroup = (this._buttonGroup && this._buttonGroup.$element()) || $('<div>');
         if(!this._buttonGroup) {
@@ -476,6 +470,8 @@ const DropDownButton = Widget.inherit({
         }
 
         this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
+
+        this._$buttonElements = this._buttonGroup.$element().find('.dx-button').toArray();
 
         this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
