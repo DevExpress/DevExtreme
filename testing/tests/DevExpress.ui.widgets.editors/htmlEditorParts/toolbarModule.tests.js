@@ -45,6 +45,7 @@ const BOLD_FORMAT_CLASS = 'dx-bold-format';
 const SIZE_FORMAT_CLASS = 'dx-size-format';
 const HEADER_FORMAT_CLASS = 'dx-header-format';
 const ITALIC_FORMAT_CLASS = 'dx-italic-format';
+const UNDERLINE_FORMAT_CLASS = 'dx-underline-format';
 const ALIGNCENTER_FORMAT_CLASS = 'dx-aligncenter-format';
 const CODEBLOCK_FORMAT_CLASS = 'dx-codeblock-format';
 const COLOR_FORMAT_CLASS = 'dx-color-format';
@@ -105,6 +106,9 @@ const simpleModuleConfig = {
                 _createComponent: ($element, widget, options) => {
                     return new widget($element, options);
                 },
+                _getQuillContainer: () => {
+                    return this.$element;
+                },
                 _saveValueChangeEvent: noop,
                 option: noop,
                 on: noop
@@ -164,6 +168,9 @@ const dialogModuleConfig = {
                 },
                 _createComponent: ($element, widget, options) => {
                     return new widget($element, options);
+                },
+                _getQuillContainer: () => {
+                    return this.$element;
                 },
                 _saveValueChangeEvent: noop,
                 on: noop,
@@ -702,6 +709,39 @@ testModule('Active formats', simpleModuleConfig, () => {
 
         assert.equal($activeFormats.length, 1, 'Bold format button is active');
         assert.ok($activeFormats.hasClass(BOLD_FORMAT_CLASS), 'it\'s a bold button');
+    });
+
+    [{
+        key: 'b',
+        format: { bold: true },
+        class: BOLD_FORMAT_CLASS
+    }, {
+        key: 'i',
+        format: { italic: true },
+        class: ITALIC_FORMAT_CLASS
+    }, {
+        key: 'u',
+        format: { underline: true },
+        class: UNDERLINE_FORMAT_CLASS
+    }].forEach((formatConfig) => {
+        test(`format buttons can change active state after ctrl + ${formatConfig.key} hotkey pressing`, function(assert) {
+            this.quillMock.getFormat = () => { return formatConfig.format; };
+            this.options.items = ['bold', 'italic', 'underline'];
+
+            new Toolbar(this.quillMock, this.options);
+
+            this.$element.trigger($.Event('keydown', {
+                originalEvent: {
+                    key: formatConfig.key,
+                    ctrlKey: true
+                }
+            }));
+
+            const $activeFormats = this.$element.find(`.${ACTIVE_FORMAT_CLASS}`);
+
+            assert.equal($activeFormats.length, 1);
+            assert.ok($activeFormats.hasClass(formatConfig.class));
+        });
     });
 
     test('several simple format', function(assert) {

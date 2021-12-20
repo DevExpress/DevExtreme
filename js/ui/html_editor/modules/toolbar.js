@@ -18,7 +18,7 @@ import localizationMessage from '../../../localization/message';
 import { titleize, camelize } from '../../../core/utils/inflector';
 
 import eventsEngine from '../../../events/core/events_engine';
-import { addNamespace } from '../../../events/utils/index';
+import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '../../../events/utils/index';
 
 import { getTableFormats, TABLE_OPERATIONS } from '../utils/table_helper';
 import { getFormatHandlers, getDefaultClickHandler, ICON_MAP, applyFormat } from '../utils/toolbar_helper';
@@ -38,6 +38,8 @@ if(Quill) {
     const SELECTION_CHANGE_EVENT = 'selection-change';
 
     const USER_ACTION = 'user';
+
+    const FORMAT_HOTKEYS = ['b', 'i', 'u'];
 
     const localize = (name) => {
         return localizationMessage.format(`dxHtmlEditor-${camelize(name)}`);
@@ -115,6 +117,8 @@ if(Quill) {
                 e.preventDefault();
             });
 
+            this._detectKeyboardFormatChanging();
+
             this.toolbarInstance = this.editorInstance._createComponent(this._$toolbar, Toolbar, this.toolbarConfig);
 
             this.editorInstance.on('optionChanged', ({ name }) => {
@@ -179,6 +183,24 @@ if(Quill) {
                     }
                 });
             }
+        }
+
+        _detectKeyboardFormatChanging() {
+            const namespace = addNamespace('keydown', this.editorInstance.NAME);
+
+            eventsEngine.off(this.editorInstance._getQuillContainer(), namespace);
+            eventsEngine.on(this.editorInstance._getQuillContainer(), namespace, ({ originalEvent }) => {
+                const key = originalEvent && normalizeKeyName(originalEvent);
+
+                if(key) {
+                    each(FORMAT_HOTKEYS, (index, keyName) => {
+                        if(key.toLowerCase() === keyName && isCommandKeyPressed(originalEvent)) {
+                            this.updateFormatWidgets(true);
+                            return false;
+                        }
+                    });
+                }
+            });
         }
 
         _prepareToolbarItems() {
