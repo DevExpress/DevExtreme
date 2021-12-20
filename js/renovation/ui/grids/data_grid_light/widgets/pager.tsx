@@ -1,38 +1,48 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable max-classes-per-file */
 import {
-  Component, JSXComponent, ComponentBindings, OneWay, TwoWay,
+  Component, JSXComponent, ComponentBindings, OneWay, InternalState, Consumer, Effect,
 } from '@devextreme-generator/declarations';
+import { PlaceholderExtender } from '../../../../utils/plugin/placeholder_extender';
 
 import messageLocalization from '../../../../../localization/message';
 
 import { PagerContent } from '../../../pager/content';
+import { PagingPlugin, PagingPluginData } from './paging';
+import { FooterPlaceholder } from '../views/footer';
+import { Plugins, PluginsContext } from '../../../../utils/plugin/context';
 
 const DATAGRID_PAGER_CLASS = 'dx-datagrid-pager';
 
-export const viewFunction = (viewModel: GridPager): JSX.Element => (
-  <PagerContent
-    className={DATAGRID_PAGER_CLASS}
-    pageSizes={viewModel.allowedPageSizes}
-    displayMode={viewModel.props.pager.displayMode}
-    infoText={viewModel.props.pager.infoText}
-    showInfo={viewModel.props.pager.showInfo}
-    showNavigationButtons={viewModel.props.pager.showNavigationButtons}
-    showPageSizes={viewModel.props.pager.showPageSizeSelector}
-    pageCount={viewModel.props.pageCount}
-    visible={viewModel.visible}
-    totalCount={viewModel.props.totalCount}
+export const viewFunction = (viewModel: Pager): JSX.Element => (
+  <PlaceholderExtender
+    type={FooterPlaceholder}
+    order={1}
+    template={(): JSX.Element => (
+      <PagerContent
+        className={DATAGRID_PAGER_CLASS}
+        pageSizes={viewModel.allowedPageSizes}
+        displayMode={viewModel.props.displayMode}
+        infoText={viewModel.props.infoText}
+        showInfo={viewModel.props.showInfo}
+        showNavigationButtons={viewModel.props.showNavigationButtons}
+        showPageSizes={viewModel.props.showPageSizeSelector}
+        pageCount={viewModel.pageCount}
+        visible={viewModel.props.visible}
+        totalCount={viewModel.totalCount}
 
-    pageIndex={viewModel.props.pageIndex}
-    pageIndexChange={viewModel.onPageIndexChange}
+        pageIndex={viewModel.pageIndex}
+        pageIndexChange={viewModel.onPageIndexChange}
 
-    pageSize={viewModel.pageSize === 'all' ? 0 : viewModel.pageSize}
-    pageSizeChange={viewModel.onPageSizeChange}
+        pageSize={viewModel.pageSize === 'all' ? 0 : viewModel.pageSize}
+        pageSizeChange={viewModel.onPageSizeChange}
+      />
+    )}
   />
 );
 
 @ComponentBindings()
-export class GridPagerUserProps {
+export class PagerProps {
   @OneWay()
   allowedPageSizes: (number | 'all')[] | 'auto' = 'auto';
 
@@ -52,72 +62,71 @@ export class GridPagerUserProps {
   showPageSizeSelector = false;
 
   @OneWay()
-  visible: boolean | 'auto' = 'auto';
-}
-
-@ComponentBindings()
-export class GridPagerProps {
-  @OneWay()
-  pager: GridPagerUserProps = new GridPagerUserProps();
-
-  @TwoWay()
-  pageSize: number | 'all' = 20;
-
-  @TwoWay()
-  pageIndex = 0;
-
-  @OneWay()
-  pageCount = 0;
-
-  @OneWay()
-  totalCount = 0;
+  visible = true;
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class GridPager extends JSXComponent(GridPagerProps) {
+export class Pager extends JSXComponent(PagerProps) {
+  @Consumer(PluginsContext)
+  plugins = new Plugins();
+
+  @InternalState()
+  pageIndex = 0;
+
+  @InternalState()
+  pageSize: number | 'all' = 0;
+
+  @InternalState()
+  totalCount = 0;
+
+  @InternalState()
+  pageCount = 0;
+
+  @Effect()
+  subscribeToPagingPluginUpdates(): void {
+    this.plugins.watch(PagingPlugin, (prop: PagingPluginData) => {
+      this.pageIndex = prop.pageIndex;
+      this.pageSize = prop.pageSize;
+      this.totalCount = prop.totalCount;
+      this.pageCount = prop.pageCount;
+    });
+  }
+
   onPageSizeChange(pageSize: number): void {
+    const setPageSize = this.plugins.getValue(PagingPlugin)?.setPageSize;
+    if (!setPageSize) {
+      return;
+    }
+
     if (pageSize === 0) {
-      this.props.pageSize = 'all';
+      setPageSize('all');
     } else {
-      this.props.pageSize = pageSize;
+      setPageSize(pageSize);
     }
   }
 
   onPageIndexChange(pageIndex: number): void {
-    this.props.pageIndex = pageIndex;
-  }
-
-  get visible(): boolean {
-    if (this.props.pager.visible === 'auto') {
-      return this.props.pageCount > 1;
-    }
-
-    return this.props.pager.visible;
+    this.plugins.getValue(PagingPlugin)?.setPageIndex?.(pageIndex);
   }
 
   get allowedPageSizes(): (number | 'all')[] {
-    if (this.props.pager.allowedPageSizes === 'auto') {
-      if (this.pageSize === 'all') {
+    // eslint-disable-next-line prefer-destructuring
+    const pageSize = this.pageSize;
+
+    if (this.props.allowedPageSizes === 'auto') {
+      if (pageSize === 'all') {
         return [];
       }
       return [
-        Math.floor((this.pageSize as number) / 2),
-        this.pageSize as number,
-        (this.pageSize as number) * 2,
+        Math.floor(pageSize / 2),
+        pageSize,
+        pageSize * 2,
       ];
     }
 
-    return this.props.pager.allowedPageSizes;
-  }
-
-  get pageSize(): number | 'all' {
-    if (this.props.pageSize === 0) {
-      return 'all';
-    }
-
-    return this.props.pageSize;
+    return this.props.allowedPageSizes;
   }
 }
