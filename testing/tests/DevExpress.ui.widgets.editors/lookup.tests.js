@@ -1574,6 +1574,18 @@ QUnit.module('options', {
         assert.ok($search.is(':hidden'), 'hidden');
     });
 
+    QUnit.test('excess main input placeholder should not be rendered when deferRendering=false (T1054252)', function(assert) {
+        const lookup = $('#lookup').dxLookup({
+            deferRendering: false
+        }).dxLookup('instance');
+
+        const $searchWrapper = getSearchWrapper(lookup);
+        const $placeholders = $searchWrapper.find('.dx-placeholder');
+
+        assert.strictEqual($placeholders.length, 1, 'search wrapper contains the single placeholder');
+        assert.strictEqual($placeholders.eq(0).attr('data-dx_placeholder'), 'Search', 'it is search placeholder');
+    });
+
     QUnit.test('cleanSearchOnOpening', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'test does not actual for mobile devices');
