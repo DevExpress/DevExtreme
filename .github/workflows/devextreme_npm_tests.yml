@@ -60,8 +60,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # framework: [angular, react]
-        framework: [react]
+        framework: [angular, react]
 
     steps:
     - name: Get sources
@@ -77,14 +76,22 @@ jobs:
     - name: Install packages in devextreme repo
       run: npm install --no-audit --no-fund
 
-    - name: Build Renovated NPM
-      run: npm run build-npm-renovation:${{ matrix.framework }}
-
     - name: Download DevExtreme package
       uses: actions/download-artifact@v2
       with:
         name: devextreme-npm
         path: ./testing/renovation-npm/${{ matrix.framework }}-app
+
+    - name: Prepare artifacts
+      run: |
+        mkdir -p ./artifacts/npm
+        cp $(ls ./testing/renovation-npm/${{ matrix.framework }}-app/devextreme-*.tgz) ./artifacts/npm/devextreme.tgz
+        cd ./artifacts/npm
+        tar -xzf devextreme.tgz
+        mv package devextreme
+
+    - name: Build Renovated NPM
+      run: npm run build-npm-renovation:${{ matrix.framework }}
 
     - name: Prepare test project
       working-directory: ./testing/renovation-npm
@@ -94,6 +101,14 @@ jobs:
         npm run pack:renovation ${{ matrix.framework }}
         npm run install-all ${{ matrix.framework }}
         npm run start ${{ matrix.framework }} &
+
+        for i in {1..20}; do
+          if [ "$(curl -o /dev/null -s -w "%{http_code}\n" http://localhost:3000)" == "200" ]; then
+            exit 0
+          fi
+          sleep 10
+        done
+        exit 1
 
     - name: Run tests
       working-directory: ./testing/renovation-npm

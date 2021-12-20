@@ -23,7 +23,6 @@ import {
   subscribeToDXPointerDownEvent,
   subscribeToDXPointerUpEvent,
 } from '../../../utils/subscribe_to_event';
-import { ScrollViewLoadPanel } from '../internal/load_panel';
 
 import { AnimatedScrollbar } from '../scrollbar/animated_scrollbar';
 import { Widget } from '../../common/widget';
@@ -106,10 +105,11 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
     props: {
       aria, height, width, rtlEnabled, children, visible,
       forceGeneratePockets, needScrollViewContentWrapper,
-      needRenderScrollbars, needScrollViewLoadPanel,
+      needRenderScrollbars,
       showScrollbar, scrollByThumb, pullingDownText, pulledDownText, refreshingText,
       reachBottomText, useKeyboard, bounceEnabled, inertiaEnabled,
       pullDownEnabled, reachBottomEnabled, refreshStrategy,
+      loadPanelTemplate: LoadPanelTemplate,
     },
     restAttributes,
   } = viewModel;
@@ -182,6 +182,9 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onBounce={onBounce}
               onEnd={onEnd}
               containerHasSizes={containerHasSizes}
+
+              onLock={lock}
+              onUnlock={unlock}
             />
           )}
           {needRenderScrollbars && direction.isVertical && (
@@ -218,12 +221,12 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
           )}
         </div>
       </div>
-      { needScrollViewLoadPanel && (
-        <ScrollViewLoadPanel
-          targetElement={scrollableRef}
-          refreshingText={refreshingText}
-          visible={isLoadPanelVisible}
-        />
+      { LoadPanelTemplate && (
+      <LoadPanelTemplate
+        targetElement={scrollableRef}
+        refreshingText={refreshingText}
+        visible={isLoadPanelVisible}
+      />
       )}
     </Widget>
   );

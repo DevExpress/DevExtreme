@@ -1,18 +1,12 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import each from 'jest-each';
-import {
-  RefObject,
-} from '@devextreme-generator/declarations';
 
 import {
   Scrollable,
   viewFunction,
 } from '../scrollable';
 
-import {
-  ScrollViewLoadPanel,
-} from '../internal/load_panel';
 import { ScrollableNative } from '../strategy/native';
 import { ScrollableSimulated } from '../strategy/simulated';
 
@@ -52,7 +46,6 @@ describe('Scrollable', () => {
       forceGeneratePockets: false,
       inertiaEnabled: true,
       needScrollViewContentWrapper: false,
-      needScrollViewLoadPanel: false,
       needRenderScrollbars: true,
       pullDownEnabled: false,
       pulledDownText: 'Release to refresh...',
@@ -466,25 +459,6 @@ describe('Scrollable', () => {
           expect(viewModel.scrollableRef)
             .toEqual(useNative ? 'native' : 'simulated');
         });
-      });
-    });
-  });
-
-  describe('LoadPanel integration', () => {
-    describe('Getters', () => {
-      it('position, targetElement: undefined', () => {
-        const viewModel = new ScrollViewLoadPanel({ });
-
-        expect(viewModel.position).toEqual(undefined);
-      });
-
-      it('position, targetElement is scrollableRef', () => {
-        const scrollableElement = { width: '100' };
-        const scrollableRef = { current: { width: '100' } } as RefObject;
-
-        const viewModel = new ScrollViewLoadPanel({ targetElement: scrollableRef });
-
-        expect(viewModel.position).toEqual({ of: scrollableElement });
       });
     });
   });

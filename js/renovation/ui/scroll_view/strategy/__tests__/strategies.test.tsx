@@ -28,8 +28,6 @@ import {
   ScrollableSimulated,
 } from '../simulated';
 
-import getScrollRtlBehavior from '../../../../../core/utils/scroll_rtl_behavior';
-
 import { ScrollableTestHelper as ScrollableSimulatedTestHelper } from './simulated_test_helper';
 import { ScrollableTestHelper as ScrollableNativeTestHelper } from './native_test_helper';
 
@@ -57,7 +55,6 @@ jest.mock('../../utils/subscribe_to_resize', () => ({
   subscribeToResize: jest.fn(),
 }));
 
-jest.mock('../../../../../core/utils/scroll_rtl_behavior');
 jest.mock('../../../../../ui/themes', () => ({
   isMaterial: jest.fn(() => false),
   isGeneric: jest.fn(() => true),
@@ -330,149 +327,129 @@ each(strategies).describe('Scrollable ', (strategy: SimulatedStrategy | NativeSt
             each([true, false]).describe('forceGeneratePockets: %o', (forceGeneratePockets) => {
               each([true, false]).describe('PullDownEnabled: %o', (pullDownEnabled) => {
                 each([true, false]).describe('ReachBottomEnabled: %o', (reachBottomEnabled) => {
-                  each([
-                    { decreasing: true, positive: false },
-                    { decreasing: true, positive: true },
-                    { decreasing: false, positive: true },
-                  ]).describe('rtlBehavior: %o', (rtlBehavior) => {
-                    const isNativeINChrome86 = Scrollable === ScrollableNative && rtlEnabled
-                      && rtlBehavior.decreasing && !rtlBehavior.positive;
-                    const isNativeINIE11 = Scrollable === ScrollableNative && rtlEnabled
-                      && !rtlBehavior.decreasing && rtlBehavior.positive;
+                  const getRequiredOffsetLeft = (value) => {
+                    const maxLeftOffset = 100;
 
-                    const getRequiredOffsetLeft = (value) => {
-                      const maxLeftOffset = 100;
+                    if (Scrollable === ScrollableNative && rtlEnabled) {
+                      return value - maxLeftOffset;
+                    }
 
-                      if (isNativeINChrome86) {
-                        return value - maxLeftOffset;
-                      }
+                    return value;
+                  };
 
-                      if (isNativeINIE11) {
-                        return -value + maxLeftOffset;
-                      }
-
-                      return value;
-                    };
-
-                    const pulledDown = Scrollable === ScrollableSimulated
+                  const pulledDown = Scrollable === ScrollableSimulated
                       && pullDownEnabled && forceGeneratePockets;
-                    each([
-                      [{ top: -81, left: getRequiredOffsetLeft(-81) }, {
-                        scrollOffset: { top: -81, left: -81 },
-                        reachedTop: true,
-                        reachedBottom: false,
-                        reachedLeft: true,
-                        reachedRight: false,
-                      }],
-                      [{ top: -1, left: getRequiredOffsetLeft(-1) }, {
-                        scrollOffset: { top: -1, left: -1 },
-                        reachedTop: true,
-                        reachedBottom: false,
-                        reachedLeft: true,
-                        reachedRight: false,
-                      }],
-                      [{ top: 0, left: getRequiredOffsetLeft(0) }, {
-                        scrollOffset: { top: 0, left: 0 },
-                        reachedTop: true,
-                        reachedBottom: false,
-                        reachedLeft: true,
-                        reachedRight: false,
-                      }],
-                      [{ top: 1, left: getRequiredOffsetLeft(1) }, {
-                        scrollOffset: { top: 1, left: 1 },
-                        reachedTop: false,
-                        reachedBottom: false,
-                        reachedLeft: false,
-                        reachedRight: false,
-                      }],
-                      [{ top: 99, left: getRequiredOffsetLeft(99) }, {
-                        scrollOffset: { top: 99, left: 99 },
-                        reachedTop: false,
-                        reachedBottom: false,
-                        reachedLeft: false,
-                        reachedRight: false,
-                      }],
-                      [{ top: 100, left: getRequiredOffsetLeft(100) }, {
-                        scrollOffset: { top: 100, left: 100 },
-                        reachedTop: false,
-                        reachedBottom: !forceGeneratePockets || !reachBottomEnabled,
-                        reachedLeft: false,
-                        reachedRight: true,
-                      }],
-                      [{ top: 101, left: getRequiredOffsetLeft(101) }, {
-                        scrollOffset: { top: 101, left: 101 },
-                        reachedTop: false,
-                        reachedBottom: !forceGeneratePockets || !reachBottomEnabled,
-                        reachedLeft: false,
-                        reachedRight: true,
-                      }],
-                      [{ top: 154, left: getRequiredOffsetLeft(154) }, {
-                        scrollOffset: { top: 154, left: 154 },
-                        reachedTop: false,
-                        reachedBottom: !forceGeneratePockets || !reachBottomEnabled,
-                        reachedLeft: false,
-                        reachedRight: true,
-                      }],
-                      [{ top: 155, left: getRequiredOffsetLeft(155) }, {
-                        scrollOffset: { top: 155, left: 155 },
-                        reachedTop: false,
-                        reachedBottom: true,
-                        reachedLeft: false,
-                        reachedRight: true,
-                      }],
-                      [{ top: 156, left: getRequiredOffsetLeft(156) }, {
-                        scrollOffset: { top: 156, left: 156 },
-                        reachedTop: false,
-                        reachedBottom: true,
-                        reachedLeft: false,
-                        reachedRight: true,
-                      }],
-                    ]).describe('ScrollOffset: %o', (scrollOffset, expected) => {
-                      it('emit "dxscroll" event, should be called with correct arguments', () => {
-                        // chrome 86 - true {decreasing: true, positive: false} - [-max, 0]
-                        // chrome 84 - false {decreasing: true, positive: true} - [0 -> max]
-                        // ie11 - true [max -> 0] - {decreasing: false, positive: true}
-                        (getScrollRtlBehavior as jest.Mock)
-                          .mockReturnValue(rtlBehavior);
-                        (getTranslateValues as jest.Mock).mockReturnValue({
-                          top: pulledDown ? -80 : 0,
-                          left: 0,
-                        });
-
-                        const onScrollHandler = jest.fn();
-
-                        const event = { ...defaultEvent } as any;
-                        const helper = new ScrollableTestHelper({
-                          direction,
-                          pullDownEnabled,
-                          reachBottomEnabled,
-                          forceGeneratePockets,
-                          rtlEnabled,
-                          onScroll: onScrollHandler,
-                        });
-
-                        helper.viewModel.eventForUserAction = event;
-                        helper.viewModel.scrolling = true;
-                        helper.initContainerPosition(scrollOffset);
-                        (helper.viewModel as any).handlePocketState = jest.fn();
-
-                        helper.viewModel.scrollEffect();
-                        emit('scroll');
-
-                        const expectedArgs = expected;
-                        expectedArgs.event = { ...defaultEvent };
-
-                        if (helper.options.direction === 'vertical') {
-                          delete expectedArgs.reachedLeft;
-                          delete expectedArgs.reachedRight;
-                        } else if (helper.options.direction === 'horizontal') {
-                          delete expectedArgs.reachedTop;
-                          delete expectedArgs.reachedBottom;
-                        }
-
-                        expect(onScrollHandler).toBeCalledTimes(1);
-                        expect(onScrollHandler).toBeCalledWith(expectedArgs);
+                  each([
+                    [{ top: -81, left: getRequiredOffsetLeft(-81) }, {
+                      scrollOffset: { top: -81, left: -81 },
+                      reachedTop: true,
+                      reachedBottom: false,
+                      reachedLeft: true,
+                      reachedRight: false,
+                    }],
+                    [{ top: -1, left: getRequiredOffsetLeft(-1) }, {
+                      scrollOffset: { top: -1, left: -1 },
+                      reachedTop: true,
+                      reachedBottom: false,
+                      reachedLeft: true,
+                      reachedRight: false,
+                    }],
+                    [{ top: 0, left: getRequiredOffsetLeft(0) }, {
+                      scrollOffset: { top: 0, left: 0 },
+                      reachedTop: true,
+                      reachedBottom: false,
+                      reachedLeft: true,
+                      reachedRight: false,
+                    }],
+                    [{ top: 1, left: getRequiredOffsetLeft(1) }, {
+                      scrollOffset: { top: 1, left: 1 },
+                      reachedTop: false,
+                      reachedBottom: false,
+                      reachedLeft: false,
+                      reachedRight: false,
+                    }],
+                    [{ top: 99, left: getRequiredOffsetLeft(99) }, {
+                      scrollOffset: { top: 99, left: 99 },
+                      reachedTop: false,
+                      reachedBottom: false,
+                      reachedLeft: false,
+                      reachedRight: false,
+                    }],
+                    [{ top: 100, left: getRequiredOffsetLeft(100) }, {
+                      scrollOffset: { top: 100, left: 100 },
+                      reachedTop: false,
+                      reachedBottom: !forceGeneratePockets || !reachBottomEnabled,
+                      reachedLeft: false,
+                      reachedRight: true,
+                    }],
+                    [{ top: 101, left: getRequiredOffsetLeft(101) }, {
+                      scrollOffset: { top: 101, left: 101 },
+                      reachedTop: false,
+                      reachedBottom: !forceGeneratePockets || !reachBottomEnabled,
+                      reachedLeft: false,
+                      reachedRight: true,
+                    }],
+                    [{ top: 154, left: getRequiredOffsetLeft(154) }, {
+                      scrollOffset: { top: 154, left: 154 },
+                      reachedTop: false,
+                      reachedBottom: !forceGeneratePockets || !reachBottomEnabled,
+                      reachedLeft: false,
+                      reachedRight: true,
+                    }],
+                    [{ top: 155, left: getRequiredOffsetLeft(155) }, {
+                      scrollOffset: { top: 155, left: 155 },
+                      reachedTop: false,
+                      reachedBottom: true,
+                      reachedLeft: false,
+                      reachedRight: true,
+                    }],
+                    [{ top: 156, left: getRequiredOffsetLeft(156) }, {
+                      scrollOffset: { top: 156, left: 156 },
+                      reachedTop: false,
+                      reachedBottom: true,
+                      reachedLeft: false,
+                      reachedRight: true,
+                    }],
+                  ]).describe('ScrollOffset: %o', (scrollOffset, expected) => {
+                    it('emit "dxscroll" event, should be called with correct arguments', () => {
+                      (getTranslateValues as jest.Mock).mockReturnValue({
+                        top: pulledDown ? -80 : 0,
+                        left: 0,
                       });
+
+                      const onScrollHandler = jest.fn();
+
+                      const event = { ...defaultEvent } as any;
+                      const helper = new ScrollableTestHelper({
+                        direction,
+                        pullDownEnabled,
+                        reachBottomEnabled,
+                        forceGeneratePockets,
+                        rtlEnabled,
+                        onScroll: onScrollHandler,
+                      });
+
+                      helper.viewModel.eventForUserAction = event;
+                      helper.viewModel.scrolling = true;
+                      helper.initContainerPosition(scrollOffset);
+                      (helper.viewModel as any).handlePocketState = jest.fn();
+
+                      helper.viewModel.scrollEffect();
+                      emit('scroll');
+
+                      const expectedArgs = expected;
+                      expectedArgs.event = { ...defaultEvent };
+
+                      if (helper.options.direction === 'vertical') {
+                        delete expectedArgs.reachedLeft;
+                        delete expectedArgs.reachedRight;
+                      } else if (helper.options.direction === 'horizontal') {
+                        delete expectedArgs.reachedTop;
+                        delete expectedArgs.reachedBottom;
+                      }
+
+                      expect(onScrollHandler).toBeCalledTimes(1);
+                      expect(onScrollHandler).toBeCalledWith(expectedArgs);
                     });
                   });
                 });

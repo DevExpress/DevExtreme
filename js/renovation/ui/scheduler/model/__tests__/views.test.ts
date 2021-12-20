@@ -232,10 +232,6 @@ describe('Model views', () => {
         height: 500,
         width: 500,
         scrolling: { mode: 'standard' },
-
-        tabIndex: 3,
-        accessKey: undefined,
-        focusStateEnabled: true,
       } as any;
       const currentViewProps = {
         type: 'month',
