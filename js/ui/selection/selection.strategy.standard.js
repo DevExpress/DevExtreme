@@ -44,6 +44,9 @@ export default SelectionStrategy.inherit({
             const item = items[i];
             const key = keyOf(item);
             if(isDeselect) {
+                if(item.disabled) {
+                    continue;
+                }
                 keyIndex = this.removeSelectedItem(key, keyIndicesToRemoveMap);
                 if(keyIndicesToRemoveMap && keyIndex >= 0) {
                     keyIndicesToRemoveMap[keyIndex] = true;
