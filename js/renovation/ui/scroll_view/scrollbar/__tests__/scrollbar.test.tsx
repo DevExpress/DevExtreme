@@ -267,63 +267,6 @@ describe('Scrollbar', () => {
     });
   });
 
-  each([DIRECTION_VERTICAL, DIRECTION_HORIZONTAL]).describe('direction: %o', (direction) => {
-    each([{ rtlEnabled: true }, { rtlEnabled: false }, undefined]).describe('ConfigContext: %o', (ConfigContext) => {
-      each([-600, -500, -100, -50, 0, 50, 100]).describe('scrollLocation: %o', (scrollLocation) => {
-        each([true, false, undefined]).describe('containerHasSizes: %o', (containerHasSizes) => {
-          each([0, -300]).describe('maxOffset: %o', (prevMaxOffset) => {
-            each([0, -300]).describe('maxOffset: %o', (maxOffset) => {
-              it('syncScrollLocation() should call moveTo(location)', () => {
-                const viewModel = new Scrollbar({
-                  showScrollbar: 'always',
-                  direction,
-                  scrollLocation,
-                  containerHasSizes,
-                  maxOffset,
-                });
-
-                viewModel.config = ConfigContext;
-
-                [0, -50, -100, -250, -400].forEach((rightScrollLocation) => {
-                  viewModel.moveTo = jest.fn();
-
-                  viewModel.rightScrollLocation = rightScrollLocation;
-                  viewModel.prevScrollLocation = -100;
-                  viewModel.prevMaxOffset = prevMaxOffset;
-
-                  viewModel.syncScrollLocation();
-
-                  let expectedRightScrollLocation = rightScrollLocation;
-                  if (containerHasSizes) {
-                    let expectedLocation = scrollLocation;
-
-                    if (Math.abs(maxOffset - prevMaxOffset) > 0 && direction === 'horizontal' && ConfigContext?.rtlEnabled) {
-                      if (maxOffset === 0) {
-                        expectedRightScrollLocation = 0;
-                      }
-
-                      expectedLocation = maxOffset - expectedRightScrollLocation;
-                    }
-
-                    if (expectedLocation === -100 /* prev location */) {
-                      expect(viewModel.moveTo).not.toBeCalled();
-                    } else {
-                      expect(viewModel.moveTo).toHaveBeenCalledTimes(1);
-                      expect(viewModel.moveTo).toHaveBeenCalledWith(expectedLocation);
-                    }
-                  } else {
-                    expect(viewModel.moveTo).not.toBeCalled();
-                  }
-                  expect(viewModel.rightScrollLocation).toEqual(expectedRightScrollLocation);
-                });
-              });
-            });
-          });
-        });
-      });
-    });
-  });
-
   describe('Methods', () => {
     each([DIRECTION_HORIZONTAL, DIRECTION_VERTICAL]).describe('Direction: %o', (direction) => {
       it('moveTo(), should not raise any errors when scrollLocationChange events not defined', () => {

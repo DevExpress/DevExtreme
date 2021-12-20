@@ -7,7 +7,7 @@ import {
   Effect,
   Method,
   Mutable,
-  Consumer,
+  // Consumer,
 } from '@devextreme-generator/declarations';
 
 import { combineClasses } from '../../../utils/combine_classes';
@@ -32,7 +32,7 @@ import {
 import { DxMouseEvent } from '../common/types';
 import { ScrollbarProps } from '../common/scrollbar_props';
 import { ScrollableSimulatedProps } from '../common/simulated_strategy_props';
-import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
+// import { ConfigContextValue, ConfigContext } from '../../../common/config_context';
 
 export const THUMB_MIN_SIZE = 15;
 
@@ -60,14 +60,9 @@ export type ScrollbarPropsType = ScrollbarProps
 })
 
 export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
-  @Consumer(ConfigContext)
-  config?: ConfigContextValue;
-
   @Ref() scrollbarRef!: RefObject<HTMLDivElement>;
 
   @Ref() scrollRef!: RefObject<HTMLDivElement>;
-
-  @Mutable() rightScrollLocation = 0;
 
   @Mutable() prevScrollLocation = 0;
 
@@ -147,38 +142,21 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.moveTo(Math.round(-delta));
   }
 
+  // @Effect()
+  // move(): void {
+  //   this.moveTo(this.props.scrollLocation);
+  // }
+
   @Method()
   moveTo(location: number): void {
     const scrollDelta = Math.abs(this.prevScrollLocation - location);
     this.prevScrollLocation = location;
-    this.rightScrollLocation = this.props.maxOffset - location;
 
     this.props.scrollLocationChange?.({
       fullScrollProp: this.fullScrollProp,
       location: -location,
       needFireScroll: scrollDelta > 0,
     });
-  }
-
-  @Effect()
-  syncScrollLocation(): void {
-    if (this.props.containerHasSizes) {
-      let newScrollLocation = this.props.scrollLocation;
-
-      const maxOffsetChanged = Math.abs(this.props.maxOffset - this.prevMaxOffset) > 0;
-      this.prevMaxOffset = this.props.maxOffset;
-      if (maxOffsetChanged && this.isHorizontal && this.config?.rtlEnabled) {
-        if (this.props.maxOffset === 0) {
-          this.rightScrollLocation = 0;
-        }
-
-        newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
-      }
-
-      if (this.prevScrollLocation !== newScrollLocation) {
-        this.moveTo(newScrollLocation);
-      }
-    }
   }
 
   get axis(): 'x' | 'y' {

@@ -183,6 +183,8 @@ export const viewFunction = (viewModel: ScrollableSimulated): JSX.Element => {
               onEnd={onEnd}
               containerHasSizes={containerHasSizes}
 
+              rtlEnabled={rtlEnabled}
+
               onLock={lock}
               onUnlock={unlock}
             />
