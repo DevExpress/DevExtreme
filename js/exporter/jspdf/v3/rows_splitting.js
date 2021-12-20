@@ -16,13 +16,11 @@ function splitRectsByPages(rects, options) {
 
 function splitRectsHorizontalByPages(rects, pageWidth, topLeft) {
     const pages = [];
-    const rectsToSplit = rects;
+    const rectsToSplit = [...rects];
 
     while(rectsToSplit.length > 0) {
-        const currentPageRects = [];
-
         let currentPageMaxRectRight = 0;
-        rectsToSplit.filter(rect => {
+        const currentPageRects = rectsToSplit.filter(rect => {
             const currentCellRight = rect.x + rect.w;
             if(currentCellRight <= pageWidth) {
                 if(currentPageMaxRectRight < currentCellRight) {
@@ -32,7 +30,7 @@ function splitRectsHorizontalByPages(rects, pageWidth, topLeft) {
             } else {
                 return false;
             }
-        }).forEach(rect => currentPageRects.push(rect));
+        });
 
         currentPageRects.forEach(rect => {
             const index = rectsToSplit.indexOf(rect);
