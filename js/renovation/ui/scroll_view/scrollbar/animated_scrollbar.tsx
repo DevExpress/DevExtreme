@@ -35,12 +35,12 @@ export const BOUNCE_ACCELERATION_SUM = (1 - ACCELERATION ** BOUNCE_FRAMES) / (1 
 
 export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
   const {
-    scrollbarRef, newScrollLocation,
+    scrollbarRef,
     props: {
       direction,
       contentSize, containerSize,
       showScrollbar, scrollByThumb, bounceEnabled, scrollLocationChange,
-      visible,
+      visible, scrollLocation,
       minOffset, maxOffset,
       containerHasSizes,
     },
@@ -55,7 +55,7 @@ export const viewFunction = (viewModel: AnimatedScrollbar): JSX.Element => {
       visible={visible}
       minOffset={minOffset}
       maxOffset={maxOffset}
-      scrollLocation={newScrollLocation}
+      scrollLocation={scrollLocation}
       scrollLocationChange={scrollLocationChange}
       scrollByThumb={scrollByThumb}
       bounceEnabled={bounceEnabled}
@@ -101,7 +101,7 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
 
   @Mutable() rightScrollLocation = 0;
 
-  @Mutable() prevScrollLocation = 0;
+  // @Mutable() prevScrollLocation = 0;
 
   @Mutable() prevMaxOffset = 0;
 
@@ -338,9 +338,9 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
         newScrollLocation = this.props.maxOffset - this.rightScrollLocation;
       }
 
-      if (this.prevScrollLocation !== newScrollLocation) {
-        this.moveTo(newScrollLocation);
-      }
+      // if (this.prevScrollLocation !== newScrollLocation) {
+      this.moveTo(newScrollLocation);
+      // }
     }
   }
 
@@ -420,11 +420,11 @@ export class AnimatedScrollbar extends JSXComponent<AnimatedScrollbarPropsType>(
   }
 
   moveTo(value: number): void {
-    this.prevScrollLocation = value;
+    // this.prevScrollLocation = value;
     this.rightScrollLocation = this.props.maxOffset - value;
 
-    this.newScrollLocation = value;
-    // this.scrollbarRef.current!.moveTo(value);
+    // this.newScrollLocation = value;
+    this.scrollbarRef.current!.moveTo(value);
   }
 
   moveToMouseLocation(event: DxMouseEvent, offset: number): void {

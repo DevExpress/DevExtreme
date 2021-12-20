@@ -131,11 +131,6 @@ export class Scrollbar extends JSXComponent<ScrollbarPropsType>() {
     this.active = true;
   }
 
-  @Effect()
-  move(): void {
-    this.moveTo(this.props.scrollLocation);
-  }
-
   @Method()
   moveTo(location: number): void {
     const scrollDelta = Math.abs(this.prevScrollLocation - location);
