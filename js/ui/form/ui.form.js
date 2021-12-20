@@ -292,7 +292,10 @@ const Form = Widget.inherit({
     },
 
     _clean: function() {
+        this._clearValidationSummary();
+
         this.callBase();
+
         this._groupsColCount = [];
         this._cachedColCountOptions = [];
         this._lastMarkupScreenFactor = undefined;
@@ -313,19 +316,21 @@ const Form = Widget.inherit({
         return this.option('scrollingEnabled') ? $(this._scrollable.content()) : this.$element();
     },
 
-    _renderValidationSummary: function() {
-        const $validationSummary = this.$element().find('.' + FORM_VALIDATION_SUMMARY);
+    _clearValidationSummary: function() {
+        this._$validationSummary?.remove();
+        this._$validationSummary = undefined;
+        this._validationSummary = undefined;
+    },
 
-        if($validationSummary.length > 0) {
-            $validationSummary.remove();
-        }
+    _renderValidationSummary: function() {
+        this._clearValidationSummary();
 
         if(this.option('showValidationSummary')) {
-            const $validationSummary = $('<div>')
+            this._$validationSummary = $('<div>')
                 .addClass(FORM_VALIDATION_SUMMARY)
                 .appendTo(this._getContent());
 
-            this._validationSummary = $validationSummary.dxValidationSummary({
+            this._validationSummary = this._$validationSummary.dxValidationSummary({
                 validationGroup: this._getValidationGroup()
             }).dxValidationSummary('instance');
         }
