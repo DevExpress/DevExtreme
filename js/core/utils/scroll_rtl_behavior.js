@@ -25,7 +25,7 @@ const getScrollRtlBehavior = callOnce(function() {
     document.body.removeChild(elementToScroll);
 
     return {
-        'decreasing': negative || defaultScrollLeft,
+        'decreasing': negative || (defaultScrollLeft > 0),
         'positive': !negative
     };
 });
