@@ -2484,7 +2484,6 @@
           {
             "Title": "Bullets",
             "Name": "SimpleBullets",
-            "DocUrl": "Guide/UI_Components/Bullet/Visual_Elements/",
             "Widget": "Charts",
             "DemoType": "Viz",
             "Equivalents": "scaleValue"
@@ -3024,7 +3023,6 @@
           {
             "Title": "Overview",
             "Name": "SankeyChart",
-            "DocUrl": "Guide/UI_Components/Sankey/Overview/",
             "Widget": "Charts",
             "DemoType": "Viz"
           }
@@ -3132,7 +3130,6 @@
               {
                 "Title": "Export and Printing API",
                 "Name": "ExportAndPrintingAPI",
-                "DocUrl": "Guide/UI_Components/Chart/Client-Side_Exporting_and_Printing/#API",
                 "Credits": "en.wikipedia.org",
                 "Widget": "Charts",
                 "DemoType": "Viz"
@@ -4128,7 +4125,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/Autocomplete/Overview/",
             "Widget": "Autocomplete",
             "MvcAdditionalFiles": [
               "/Models/SampleData/Names.cs",
@@ -4146,7 +4142,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/Calendar/Overview/",
             "Widget": "Calendar"
           }
         ]
@@ -4159,7 +4154,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/CheckBox/Overview/",
             "Widget": "CheckBox",
             "Badge": "Updated",
             "MvcAdditionalFiles": [
